@@ -41,6 +41,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-13: Current staged evidence behind legacy rule admission
 - 2026-09-13: Retention decision D08 versus legacy exclusions and duplicate removal
 - 2026-10-01 -- GICS sector labels depend on rebuild order (found during the Fidelity wrapper v2 export)
+- 2026-10-04 -- Why review-queue periods carried a midnight suffix and review_ids collided across quarters
 
 ## Source reconciliation & blocker chains ([source_reconciliation.md](source_reconciliation.md))
 - BDC source reconciliation blockers - 2026-05-19
@@ -72,6 +73,9 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-14 - Foreign FV reached USD sums after source-unit resolution
 - 2026-09-15 - E3-v2: certifying no-filing lifecycle exclusions from positive EDGAR evidence
 - 2026-09-16 - V11b source selection, cash retention and quarterly failure attribution
+- 2026-10-04 -- Jev pilot: possible primary/supplemental position overlap
+- 2026-10-04: exploratory TCW survivor defect outside the frozen experiment
+- 2026-10-14: Top-ten production versus accepted Claude sandboxes
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals
@@ -81,6 +85,8 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-06-05 - Ares Core Infrastructure cached HTML wrapper check
 - 2026-06-05 - Barings Private Credit wrapper residual closeout
 - 2026-06-05 - MidCap Financial wrapper residual closeout
+- 2026-10-04 -- Crescent null issuers encountered in Jev pilot
+- 2026-10-05 -- HPS Corporate Lending (0001838126): holdings exceed the filed investments total (gap 1 of the v0.5 sample)
 
 ## Conservation / shadow-panel engine ([conservation_shadow_engine.md](conservation_shadow_engine.md))
 - 2026-06-15 - Top overshoot 0001851322 2025-12-31 = duplicate filing (10-K + 10-K/A)
@@ -114,6 +120,28 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-06 - mg3 assessment: where position-match errors come from and what to change
 - 2026-09-07 - Match-gold batch mg4_contested: promotion gate for the contested-assignment flag
 - 2026-09-07 - Match-gold batch mg5_recall: random interior-singleton stratum (recall)
+- 2026-10-03 - B1 source-investigation traces and a Jev-ready evidence bundle
+- 2026-10-03 - Jev value-check smoke test prepared with source-reviewed packets
+- 2026-10-03 - Jev value-check smoke test completed: 18/18 cases, confidence order sensitivity
+- 2026-10-03 - Whole-SOI Jev context cost and size estimates
+- 2026-10-03 - B1 reference corpus and first Jev source-context ablation
+- 2026-10-03 - Experimental C107/X08 bundle builder and hybrid boundary
+- 2026-10-03 - Jev experiment on automatically assembled C107/X08 bundles
+- 2026-10-03 - Expanded Jev natural-case test across new filers and periods
+- 2026-10-03 - Isolated Jev hybrid screening build and bounded shadow evaluation
+- 2026-10-04 - Jev source completeness and presentation stability
+- 2026-10-04 -- Jev pilot: context completeness, size and deterministic comparison
+- 2026-10-04 -- Jev pilot: retrieval and source-feature stress checks
+- 2026-10-04 -- Jev pilot: evidence recovery, explanations and workload
+- 2026-10-04 -- Jev pilot: note parsing, size limits and headerless anchors
+- 2026-10-04 -- Jev pilot: review-group membership and queue date identity
+- 2026-10-04: source-wide disclosure-role inventory
+- 2026-10-04: supplementary disclosure navigation
+- 2026-10-05 -- Rule carry-forward between the Q4-2025 and Q1-2026 sign-offs
+- 2026-10-05 -- Five largest funds: what the confirmed-but-unfixed findings are
+- 2026-10-08: B1 reviewer against the interactive Claude agent on the five v0.5 funds
+- 2026-10-08: Frozen B1 test set and blind answer key (baseline run NOT done)
+- 2026-10-08: B1 baseline on the frozen test set (two runs, unchanged B1)
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)
@@ -128,4 +156,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-16 - V11b named identity regressions and source-defined scope
 - 2026-09-17 - V12 identity regressions: five packets attributed
 - 2026-09-17 - Joint-borrower rule recorded as intentional
+
+## Uncategorized (needs mapping) ([uncategorized.md](uncategorized.md))
+- 2026-10-20 - Listed BDC filings and share-price reaction: evidence and measurement limits
 

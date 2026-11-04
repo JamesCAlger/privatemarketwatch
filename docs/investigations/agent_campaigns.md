@@ -1187,3 +1187,1083 @@ all singletons -- is therefore invisible to this instrument, and its +1 WRONG
 is exactly what the continuation metric (`score_continuation.py`) exists to
 close: it samples rows rather than the build's own edges, so zero-FV positions
 are in the frame.
+
+## 2026-10-03 - B1 source-investigation traces and a Jev-ready evidence bundle
+
+**Question:** What does B1 actually do to investigate source, and which inputs would
+a bounded decision classifier need to replace its classification work?
+
+**Method and limits:** Read existing item.completed command_execution events from
+1,496 stdout JSONL traces in ens2_pilot (122), ens2_rest_r3 (631), and
+q1p3b1_20260831 (743). These are historical run attempts, not 1,496 independent
+adjudications. Use ens2_rest_r3 for the quantitative claims: zero malformed event
+lines, 14 nonzero-exit evidence commands out of 6,499. The other two batches have
+substantial environment failures; the later batch also has 134 malformed lines
+and 75 traces with no captured completed evidence command. Do not interpret those
+75 as successful source-free judgments. Shell-command counts are not generally
+CLI invocation counts (later agents batch commands and loop); ens2_rest_r3 has
+one identified evidence method occurrence per captured evidence command.
+All 631 worklist hints say class1_single_cell, but inspected agents actually
+handle within-row and aggregate questions too: the hint is not a reliable
+complexity label. This is an investigation of behavior, not an accuracy audit.
+
+**Measured behavior (ens2_rest_r3):**
+- 631/631 read overview and tables; 612 use totals, 549 use roam, 603 use grid.
+- Median evidence shell commands 9, 90th percentile 17, maximum 36.
+- 2,680 roam commands; 2,674 exit successfully. Their parsed outputs include
+  1,361 zero-hit searches (50.9%) and 203 truncated results (7.6%).
+- Tools read parsed cached filing HTML tables, including cell coordinates; this
+  is source investigation, but much of it is table discovery/search/navigation.
+  Tool-call frequency alone does not measure necessary reasoning or correctness.
+
+**Inspected cases (trace paths relative to data/output/agent_b/batch/):**
+- ens2_rest_r3/logs/RVQ_REV_0a39a3b68c74.stdout.jsonl (C107): overview/totals/tables,
+  three issuer searches (AmSpec, ADC Therapeutics, ACP Falcon), then grid table 12
+  rows 8..28. Reads negative parenthetical costs alongside positive funded loans,
+  revolvers and warrants. Returns false_alarm with an explicit representative-row
+  coverage caveat. The ORIGINAL bundle captured in the trace says 40 flagged rows,
+  includes 25 source_artifact_rows, and an independent 25-row holdings_slice.
+- ens2_rest_r3/logs/RVQ_REV_12d304d56052.stdout.jsonl (X08): 15 evidence commands,
+  including ten searches and two grids. Original two issue records have row_key,
+  column, value and generic message, without issuer identity; holdings_slice is a
+  separate sample. Searches for '2,574,000' and '2,574' are split by commas into
+  OR terms and hit the 80-result cap. Eventually '574' finds Mooring preferred
+  units (cost 2,574, FV 3) beside distinct common units (cost 3, FV 2,574).
+  '508' finds Skillsoft (cost 508, FV 21). Returns source-faithful false_alarm.
+  The exact instrument and column identity matter, not just issuer/value matching.
+- ens2_rest_r3/logs/RVQ_REV_057998134ddc.stdout.jsonl (C104): an overlong name search
+  fails; grid table 10 supplies headers, Legacy Class B's dashes, adjacent Class A
+  and preferred equity, and totals. Returns false_alarm for source-supported zero.
+- ens2_rest_r3/logs/RVQ_REV_1a3b203ea2fa.stdout.jsonl (PCT01): five grid requests
+  across schedule totals and headers; compares current/prior and cash-inclusive
+  percentage totals. Reports comparative_leak, but does not prove an exact
+  row-level mechanism. Treat that diagnosis as a hypothesis, not gold truth.
+- ens2_rest_r3/logs/RVQ_REV_26e4239cdd07.stdout.jsonl (PCT01): reads parent and
+  BCRED Emerald JV schedule headers, periods and totals. Reports look-through
+  scope mismatch, without proving exact contributing rows. Again a B1 diagnosis.
+- q1p3b1_20260831/logs/RVQ_BLK_4234e3f4ba7e.stdout.jsonl (agentA_spread_vs_xbrl):
+  searches Dan Newlin, distinguishes revolver from term loan; cites table 16 row
+  22, source spread 6.50% versus stored 4.75%. A localized comparison once the
+  correct row and column are supplied. A harvested rollout also exists with prefix
+  RVQ_BLK_4234e3f4ba7e__rollout-2026-08-31T15-04-20.
+- q1p3b1_20260831/logs/RVQ_BLK_a333e99aeaff.stdout.jsonl (SRC_BDC01): searches IRGSE
+  and Structured Credit Partners, reads adjacent class/continuation rows, and
+  identifies claimed missing positions. Source presence alone cannot prove output
+  absence; a replacement needs independently computed output match candidates.
+- q1p3b1_20260831/logs/RVQ_REV_0c1e0ff08775.stdout.jsonl (C107): returns false_alarm
+  with residual risk explicitly 'Uninspected members of the 144-row batch'. This
+  is a concrete coverage limitation; do not train automated whole-group clearance
+  to reproduce it.
+
+**Bundle recommendation (proposed, not implemented):**
+1. One flagged position/field per decision, with parent group ID and total group
+   coverage. Supply the actual joined output row, not an arbitrary fund sample.
+   Include instrument/tranche, dates, currencies, all related rate/value fields,
+   source context/dimension identifiers and build fingerprint. Snapshot row_key
+   is local to its build; raw production position_id is not cross-build identity.
+2. Candidate source rows with stable evidence IDs, accession/file hash, parser
+   version, table/row/cell coordinates and verbatim cell text. Include plausible
+   alternatives when correspondence is ambiguous. Do not choose a source row
+   just because it matches the disputed value: that would hide extraction errors.
+3. Table/schedule title, owner, as-of period, column headers, scale/currency,
+   inherited section labels, nearby tranche/continuation rows and relevant
+   footnotes. Preserve dashes, parentheses and footnote markers alongside normalized
+   values; unresolved mappings must remain unresolved.
+4. Exact rule predicate and versioned platform semantics, not upstream verdicts,
+   confidence or B1's diagnosis. Compute arithmetic, scale conversions, date
+   comparisons and scope-specific residuals deterministically with input provenance.
+5. For aggregate flags, separately scoped parent/JV/current/comparative anchors,
+   cash inclusion, source-backed totals and output contribution summaries. For
+   duplicate/omission flags, source-to-output match candidates and dimension paths.
+   A printed row alone does not establish duplication or absence from output.
+6. Evidence readiness: missing/truncated source, ambiguous match, unparsed header,
+   inspected/total rows. None is evidence of false_alarm. Use explicit abstention.
+7. Classifier chooses from supplied candidate evidence IDs and bounded reason codes;
+   code assembles the citation and short templated explanation. Independently
+   re-read evidence and check identity/period/scope and numeric comparisons before
+   accepting clearance. Full-group false_alarm requires coverage of every member
+   (or a separately justified deterministic proof), not a representative sample.
+
+**Assessment:** Traces strengthen the case for replacing repeated source lookup
+with deterministic evidence preparation and using Jev for bounded semantic
+judgments. Several numeric comparisons then need no model. They do not establish
+that arbitrary whole-filing B1 investigations can be replaced by a single Jev
+call, nor a percentage of work safely replaceable. First test candidate-evidence
+recall against the traced decisive locations, then independently reviewed decision
+accuracy on held-out funds/periods. B1-selected excerpts can define an initial
+oracle-evidence experiment, but production retrieval must be evaluated separately.
+
+**Artifacts/verification:** Bounded scripts and machine-readable census in
+scratch/2026-10-03_b1_trace_review/. Scripts exited successfully; reads were from
+existing logs/code. No SEC downloads, model API calls, pipeline/output changes,
+pytest, rebuild, semantic diff or baseline refresh. Investigation index rebuilt.
+
+
+## 2026-10-03 - Jev value-check smoke test prepared with source-reviewed packets
+
+**Question:** Can Jev consume correctly scoped rule-family bundles and distinguish
+source-faithful values, extraction defects, and unavailable evidence?
+
+**Prepared, not yet run:** scratch/2026-10-03_jev_pilot/pilot.py prepares and calls
+the pinned TypeSafe model jev-1.13.0 via https://api.typesafe.ai/v1/systemone.
+At preparation, no TYPESAFE_API_KEY was available in the session or root .env;
+the runner stopped before making a request. No Jev accuracy result exists yet.
+
+**Design:** Six observed positions from the current canonical holdings CSV,
+checked against three cached filings (Oaktree 0001872371, Monroe 0001742313,
+Bain 0001899017). Two each for C107 negative cost, C104 zero fair value and X08
+low FV/cost. All six observed values agree with the reviewed source cells.
+Six separate artificial defects modify cost/FV or set the value of a different
+same-issuer instrument to zero. Six missing-source controls remove source evidence.
+18 cases, each with normal/reversed decision-option order = 36 API requests.
+Controls are explicitly labeled in the local manifest, never in model inputs.
+
+**Packet contents:** Exact output row, distinct tranche/share-class candidates,
+source file hash and coordinates, verbatim cells and headers, date/unit title
+context, normalized monetary cells and code-computed per-candidate differences.
+Candidate coordinates and column mappings are manually reviewed, not autonomous
+retrieval. No B1 verdict/rationale is sent. Two independent questions: source
+candidate selection and real_error/false_alarm/ambiguous. Cases contain at most
+6,591 JSON characters. Relevant-note paragraphs were not recovered by the small
+paragraph extractor; these cases test direct monetary-cell fidelity, not novel
+footnote interpretation. This limitation matters before broadening to PIK/scope.
+
+**Validation:** Named bounded selection/source-inspection scripts finished; offline
+verify_packets.py PASS for 36 request hashes/schema, 18 expected outcomes derived
+from reviewed source mappings, rule predicates preserved in injected controls,
+blinding, and mocked response validation including rejection of an invalid response.
+Source audit and readable case_review.txt are alongside the requests. The runner
+reads the key privately from .env, has 5s connect/20s read timeouts, stops after
+HTTP failure without retries, allows at most 36 calls, and resumes saved results.
+
+**Limits:** This is a hand-curated smoke test with synthetic positives, not a
+representative B1-replacement benchmark or production retrieval evaluation.
+The headline must count 18 cases, not 36 independent examples. Report natural
+cases, injected errors, abstentions and option-order sensitivity separately.
+No production/pipeline changes, SEC downloads, pytest, output rebuild/diff or
+baseline refresh. Only scratch artifacts and investigation documentation changed.
+
+
+## 2026-10-03 - Jev value-check smoke test completed: 18/18 cases, confidence order sensitivity
+
+**Question:** Does the prepared source-reviewed value-check pilot work with real
+Jev calls? Follow-up to the preparation entry above; the key is now configured.
+
+**Run:** Pinned jev-1.13.0, direct TypeSafe API. 36/36 planned responses received
+and schema-validated, using 18 case inputs with two decision-option orders. All
+frozen request hashes checked. Expected outcomes and variants remained outside
+the model request. Source candidate selection was a separate question in each call.
+
+| Case type | Cases | Correct disposition | Correct source selection |
+|---|---:|---:|---:|
+| Observed source-faithful flagged positions | 6 | 6 | 6 |
+| Artificial extraction/value defects | 6 | 6 | 6 |
+| Missing-source controls | 6 | 6 | 6 |
+
+- Across both option orders: 36/36 dispositions and 36/36 source choices matched
+  expected outcomes. Decision-option reversal caused zero label changes in 18 pairs.
+- Confidence was order-sensitive despite stable labels: AmSpec C107 injected
+  scale error 0.64 -> 0.30; Mooring X08 injected FV scale error 0.76 -> 0.55;
+  ACP Falcon C107 0.84 -> 0.66; Skillsoft X08 0.89 -> 0.72. Do not infer that a
+  confidence threshold is calibrated for this application from this test.
+- API-reported input usage: 75,044 tokens. Estimated inference cost at the configured
+  $0.042/M input rate: $0.003151848, excluding evidence preparation and other costs.
+- Client-measured request/validation/save elapsed: median 0.749s, range
+  0.652..0.893s, summed 27.410s across 36 calls. This excludes initial evidence
+  preparation and process startup; it is not an end-to-end B1 speed comparison.
+
+**Interpretation:** Passes the narrow smoke test: with manually located source
+rows, mapped columns, resolved units/periods and precomputed differences, Jev can
+select distinct instruments and classify these simple value checks. This is not
+18 independent natural-world error discoveries: all six natural cases were false
+alarms and all positive defects were injected. No production retrieval, historical
+B1 agreement, aggregate reconciliation or PIK reasoning was evaluated. The test
+does not isolate value added over deterministic comparisons after source mapping.
+Next meaningful evaluation: automatically assembled evidence on a frozen,
+independently reviewed natural-error/false-alarm sample across held-out funds,
+with a deterministic comparator baseline and separate retrieval-recall accounting.
+
+**Artifacts:** scratch/2026-10-03_jev_pilot/{manifest.json,case_review.txt,
+source_audit.json,requests/,responses/,results.json,summary.json}; runner pilot.py.
+Offline verify_packets.py passed; no pytest/full suite, SEC requests, production
+artifact changes, rebuild, semantic diff or baseline refresh. Only authorized
+TypeSafe inference calls and scratch/documentation writes.
+
+## 2026-10-03 - Whole-SOI Jev context cost and size estimates
+
+**Question:** Can Jev receive the source SOI and all pipeline holdings for a
+fund-quarter, and what would that cost?
+
+**Official documentation checked:** https://docs.typesafe.ai/models currently
+quotes jev-1.13.0 at $0.042 per million input tokens, free output, 64k total
+request tokens, and 32k for shared state plus the longest individual question.
+Shared state is ingested once per request with multiple questions. Thus a 32k
+input request costs $0.001344; the 64k request limit is not a 64k shared-state
+allowance. The model's jaggedness page warns about irrelevant long context and
+numeric reasoning: https://docs.typesafe.ai/model-jaggedness/jev-1.13.
+
+**Local measurements:** Bounded cache-only script
+`scratch/2026-10-03_jev_pilot/measure_full_schedules.py`, results in
+`full_schedule_sizes.json`. Counts use cl100k_base as a TOKEN PROXY, not Jev's
+tokenizer or measured API usage. Source tables are rendered as coordinate-labelled
+TSV; output is CSV. Main title text, prose footnotes and questions are excluded,
+so these are incomplete evidence-packet estimates. Full output has 100 columns;
+the compact variant retains all rows but 20 identity/value/rate/scope columns.
+
+| Fund-quarter | Output rows | Source table tokens | Output 20-column tokens | Combined 20-column | Combined all-column |
+|---|---:|---:|---:|---:|---:|
+| Monroe 0001742313, 2025-06-30 | 862 | 66,942 | 71,705 | 138,647 | 550,680 |
+| Diameter 0001916099, 2026-03-31 | 172 | 14,575 | 22,512 | 37,087 | 133,096 |
+| Bain 0001899017, 2023-09-30 | 3 | 701 | 332 | 1,033 | 2,612 |
+
+Source ranges: Monroe tables 15-41 (current SOI including derivatives), Diameter
+11-19 (main SOI; supplemental unfunded-commitment tables and prose notes excluded),
+Bain 10-11 (SOI plus affiliated-investment rollforward). These are sample
+serializations, not minimum possible token counts or audited source completeness.
+
+**Retrieval finding:** The existing auto-detector selected Monroe tables 42-68,
+which are the comparative schedule, and labelled table 42 as 2025-06-30 even
+though the immediately preceding printed heading says December 31, 2024. The
+final measurement uses manually checked boundaries instead. This reinforces
+the need to verify schedule/period selection independently; it does not establish
+that the production XBRL output selected the wrong period. No fix made here.
+
+**Conclusion:** Inference price is small; context capacity and decision quality
+are the constraints. Whole schedules are plausible for small portfolios. Large
+ones require partitions or targeted context, with aggregate calculations in code.
+Multiple item questions can share one admissible state; arbitrary row truncation
+would invalidate absence and reconciliation judgments.
+
+**Verification:** Script completed in 15 seconds under a 55-second watchdog and
+5,000-row result bound. No new model API calls, SEC requests, pytest, rebuild,
+production artifact edits, semantic diff or baseline refresh.
+
+## 2026-10-03 - B1 reference corpus and first Jev source-context ablation
+
+**Question:** Can the existing Codex B1 answers support experiments on Jev bundle
+construction?
+
+**Corpus audit:** Audited all 631 ens2_rest_r3 worklist runs against original
+stdout traces. Recovered 629 original bundles with successful source-tool
+payloads and a saved verdict unambiguously confirmed by the original final
+message; two runs failed that verdict-confirmation check. Frozen source/trace
+and verdict hashes prevent mixing a later pipeline build with a historical
+decision. The 629 references comprise 252 real_error, 336 false_alarm and 41
+ambiguous across 30 rules. There are 101 single-unit cases and 127 cases whose
+final/rationale text mentions representative, sampled or uninspected coverage.
+The latter is a screening heuristic, not a complete coverage audit. These are
+Codex reference labels, not independently established truth.
+
+The older `trial_2026-06-18/gold/gold_labels.csv` separately contains 24 filled
+labels (18 real_error, six false_alarm), with 21 blanks. It was not used in this
+experiment. `data/gold/labels/position_labels.jsonl` is a separate human-confirmed
+position dataset, not a substitute for historical B1 flag labels. PIK conventions
+changed over time, so historical policies must be checked before scoring those
+rules.
+
+**Frozen experiment:** 13 single-unit cases across seven CIKs and six monetary
+rules (C103, C104, C107, C404, X07, X08); eight B1 false alarms and five B1 real
+errors. The whole-CIK development/holdout split is fixed by a salted SHA-256
+modulo before calls; no holdout cases were submitted by this experiment. Selection
+was seeded, up to two cases per rule/verdict stratum, at most three per CIK.
+Known partial coverage and multiple artifact rows were excluded. Five candidate
+cases exceeded the predeclared 26k cl100k proxy-token budget, four hit the fund
+cap, and one lacked recoverable cited coordinates. This is a development sample,
+not a representative evaluation of the full corpus.
+
+Both arms receive the SAME original flag records and clearly labelled historical
+holdings sample. B1 verdict, reasoning, confidence and mechanism are excluded:
+- broad_b1_evidence: all successful source-tool payloads from B1's trace, with
+  exact duplicate payloads removed.
+- focused_b1_evidence: B1-cited coordinates plus available adjacent rows and
+  headers drawn from those same payloads. Citation coordinates guide retrieval;
+  quoted B1 interpretations are not supplied. This is oracle-assisted retrieval,
+  not the proposed automatic retriever, and not a whole-SOI comparison.
+
+Each arm uses one decision question and two option orders: 52 frozen requests.
+50 returned schema-valid responses. The thirteenth broad packet returned HTTP
+400 twice (one diagnostic retry); the response handler did not recover its error
+message, so the cause remains unknown. Its reversed-order equivalent was skipped
+without an API call; its focused requests succeeded. In total: 52 HTTP attempts,
+50 successful, two failed attempts for one request. No token-limit cause is
+asserted. Paired comparisons below use only the 12 common cases and the forward
+option order; reversed orders measure robustness, not independent sample size.
+
+| Arm | B1 agreement | Jev ambiguous | B1 real_error cleared by Jev |
+|---|---:|---:|---:|
+| Broad retrieved source | 6/12 | 5/12 | 1/12 |
+| Focused cited context | 5/12 | 6/12 | 1/12 |
+
+The common sample has eight B1 false alarms and four B1 real errors. Neither arm
+returned real_error for any of the latter: three abstentions and one clearance.
+There were zero broad option-order flips and one focused flip (Cordance C107,
+ambiguous -> false_alarm). Successful-call usage totals 711,562 input tokens,
+estimated $0.0298856 at the published rate; median latency 0.917 seconds. This
+does not establish billing treatment of failed requests.
+
+**Disagreement inspection:** The anonymous C104 flags provide only a row ordinal
+and FV=0, while B1's explanation asserts HOP Energy or HydroSource correspondence.
+That exact output-to-position join is not established by the original packet.
+Jev's abstention is therefore not automatically evidence of a worse classifier.
+Conversely, both Jev arms cleared X08 RVQ_REV_f71f315f3287, which B1 labelled real:
+the source Wholesale Supplies Plus Class A row has cost $3,400,000 and FV
+$2,974,150, inconsistent with the flag's <5% ratio. The original flag supplies
+only cost $3,400,000 and a row ordinal; its 25-row output sample contains no
+Wholesale position and does not provide that flagged position's extracted FV.
+Thus the packet is inadequate for full field verification. Jev's clearance is
+not justified by source agreement on cost alone, while the historical identity
+join still needs independent confirmation before treating B1 as gold truth.
+
+**Next experiments:** First reconstruct exact frozen flagged rows (or draw and
+freeze fresh complete cases where old rows cannot be recovered). Supply both
+sides of multi-field rules and explicit units/periods, with code-computed
+comparisons. Then compare (1) B1-selected source context, (2) independently
+retrieved rule-specific bundles, and (3) whole schedules where they fit, on the
+same cases. Track source retrieval coverage, abstention, reference disagreement,
+real-error clearance, cost and option-order stability separately. Review
+disagreements AND a sample of agreements independently; reserve entire funds for
+final scoring. Do not tune to maximise Codex agreement by forcing uncertain
+cases to match its decisions.
+
+**Artifacts/verification:** `scratch/2026-10-03_jev_b1_benchmark/` contains audit.py,
+experiment.py, verify.py, inventory, frozen cases, split, manifest, requests,
+responses, results, summary and verification.json. Offline verification PASS for
+all 52 request hashes, original trace/verdict hashes, label blinding, option-order
+pairing, common inputs across arms, response schema/probabilities and fund cap.
+An initial combined audit hit its 55-second bound; rerunning the single batch
+completed in 6.5 seconds. No production code/data changes, SEC downloads, pytest,
+rebuild, semantic diff, re-attestation or baseline refresh.
+
+## 2026-10-03 - Experimental C107/X08 bundle builder and hybrid boundary
+
+**Question:** Can an automatic, cache-only builder supply the exact output row
+and sufficient source evidence for negative-cost and low-FV/cost flag review?
+
+**Implementation:** `pipeline/jev_bundles.py` and
+`scripts/build_jev_bundles.py` create versioned, fingerprinted packets from current
+row-validation flags and the exact canonical holdings row. Row IDs are checked
+within the captured snapshot, with identity, scope, flagged-value and predicate
+checks; historical row ordinals are never used as a fallback. These are current
+snapshot rechecks, not reconstructed historical B1 inputs. X08 uses the current
+positive-cost AND positive-FV predicate and includes both values.
+
+Cached filing retrieval uses issuer tokens and retains sibling tranches. It
+preserves source coordinates, colspan/header geometry, owner/title context,
+current-versus-comparative dates, inline monetary units/scales and numbered SOI
+notes. Decimal arithmetic computes differences and display-rounding intervals.
+Shared rows, headers and notes are deduplicated in the Jev state. Required gaps,
+ambiguous joins, unsupported layouts, conflicting units/notes and size limits
+block request creation. The CLI makes no API calls and does not update the
+review ledger. `tiktoken` is an explicit dependency for a conservative 26,000
+cl100k_base token proxy cap; this is not Jev's actual tokenizer or a certified
+provider context-limit check.
+
+**Observed coverage:** Four previously source-inspected C107/X08 flags from
+Oaktree and Monroe produced complete packets automatically. Ten additional
+current flags produced six complete and four incomplete packets: 10/14 overall.
+All four incomplete packets came from CIK 0001860424 and exposed unresolved
+period, numeric-cell and/or footnote capture. They are bundle-coverage failures,
+even though the builder correctly refuses to create classification requests.
+This convenience sample is not an estimate of population coverage or Jev
+accuracy. No B1 decisions/citation coordinates are inputs to the builder; the
+four earlier coordinates are used only for offline retrieval verification.
+
+**Scope/limitations:** The first implementation supports BDC inline-XBRL monetary
+tables with explicit recognizable headers. It does not certify issuer retrieval
+recall, exact tranche selection, ownership scope or adjudication. It deliberately
+leaves unsupported rowspans/nested tables, untagged or ambiguous monetary units,
+unresolved source periods and missing required notes unresolved. There is no
+automatic fallback dispatch or promotion wiring. A hybrid is the working
+direction: evaluate Jev on complete evidence and retain B1 investigation for
+unresolved cases. Per-filer maintenance costs and missed retrieval must be
+measured alongside inference savings before considering a rollout.
+
+**Owner-required validation contract (2026-10-03):** Validate every bundle builder
+against **changing filer structures and different filer types**, not just the
+filings used during development. Before expansion or promotion:
+
+- Hold out entire filers and later filing periods, including structure changes
+  within the same filer. Report coverage by filer, quarter and layout family;
+  correlated failures in one filing are not independent observations.
+- Exercise title/date changes, current and comparative schedules, column moves,
+  units/scales, footnotes outside tables, continuation rows, instrument/share
+  classes, and parent/JV/subsidiary ownership scope.
+- Validate each supported filer/source type separately. BDC results do not
+  establish support for other vehicle types, HTML-only or N-PORT structures;
+  testing those does not expand the BDC-only public-product scope.
+- Measure exact output-row resolution, source candidate recall, evidence
+  completeness, rejection/abstention, incorrect clearances and maintenance effort
+  separately. Independently inspect disagreements and sampled agreements.
+- Unfamiliar layouts must remain unresolved; never silently reuse a previous
+  template, force a guessed source match or relax evidence requirements to
+  increase apparent coverage.
+
+Frozen examples and the bounded offline audit are under
+`scratch/2026-10-03_jev_builder/`; `final/manifest.json` is the consolidated
+14-case build. No SEC downloads, Jev calls, holdings rebuild, frontend export,
+re-attestation or baseline refresh were requested or performed for this prototype.
+
+**Verification and scope follow-up:** Final focused suite: 24 passed; the pytest
+production-write backstop passed. Offline verification passed for all 14 frozen
+packets, available request/source hashes and the four prior source-coordinate
+checks. Ten ready requests use 5,389-14,896 cl100k_base proxy tokens. The full test
+suite was not run. The required repository-wide `diff_outputs.py --semantic`
+comparison was started, then stopped when the owner narrowed the scope; no clean
+semantic-diff result is claimed. This scan is broader than the pilot itself.
+
+The owner requires **all further experiment scope to remain smaller than the v1
+fund set**. The current pilot is 14 flags across three funds. Use an explicitly
+selected small subset for further retrieval, filer-structure and Jev tests;
+do not expand to the entire v1 cohort or the wider discovered universe by default.
+
+## 2026-10-03 - Jev experiment on automatically assembled C107/X08 bundles
+
+**Question:** Can Jev classify the complete prototype bundles reliably, including
+wrong output values and changes in answer-option order?
+
+**Frozen scope and method:** Used the existing 14 current flags across three BDCs
+(CIKs 0001742313, 0001860424 and 0001872371), well below the v1 fund cohort. Ten
+complete bundles from Monroe and Oaktree were submitted unchanged. All four
+incomplete bundles from 0001860424 remained blocked and were not submitted.
+Before API calls, audited all ten reference positions against cached source
+cells, exact inline-XBRL contexts, dates and values using the existing independent
+HTML table extractor. These references are agent-reviewed false alarms, not
+independent human gold or replays of historical B1 decisions.
+
+Added four explicitly synthetic value-error cases using four of those positions.
+The rule still fires in each control. Only the output amount, its redundant output
+field where applicable, derived comparisons/ratio and snapshot provenance changed;
+source evidence and identity were unchanged. Each of the resulting 14 cases was
+sent twice to jev-1.13.0, with both source and decision option orders reversed.
+Requests were frozen and interleaved in a seeded order before submission. No
+prompt or source tuning followed the responses. Four offline missing-field controls
+also verified that the builder rejects incomplete output evidence before API use.
+
+**Results:** All 28 API calls succeeded.
+
+| Group | Normal option order | Reversed option order | Source selection |
+|---|---|---|---|
+| 10 observed false alarms | 10/10 reference dispositions | 10/10 reference dispositions | 19/20 selections matched; one abstention |
+| 4 injected value errors | 3/4 detected | 2/4 detected | 8/8 selections matched |
+| 4 incomplete original bundles | Not submitted | Not submitted | Still unresolved |
+| 4 missing-field controls | Blocked offline | Not submitted | No API calls |
+
+The synthetic errors expose failures even when the correct source and explicit
+numeric mismatch are available:
+
+| Position / rule | Source amount | Injected output | Normal / reversed Jev decision |
+|---|---:|---:|---|
+| AmSpec First Lien Revolver / C107 | cost -235,000 | -2,350,000 | false_alarm / false_alarm |
+| ACP Falcon First Lien Revolver / C107 | cost -149,000 | -1,490,000 | real_error / false_alarm |
+| Mooring preferred units / X08 | FV 3,000 | 15,000 | real_error / real_error |
+| Skillsoft Class A shares / X08 | FV 21,000 | 1,000 | real_error / real_error |
+
+All three false clearances of injected errors selected the correct source row.
+All cost comparisons in those mutated requests explicitly said the amounts did
+not agree. Footnotes explain why negative cost can be legitimate, but cannot
+justify a tenfold output error. The cause of Jev's decision is not observable;
+these results do not establish that a footnote caused it. They do show that
+missing source evidence is not a sufficient explanation for these failures.
+ACP Falcon changed disposition under option reversal; this pair alone cannot
+separate option-order effects from ordinary response variability.
+
+The observed Seres Therapeutics warrant selected insufficient_evidence in the
+normal order while returning false_alarm with decision confidence 0.71. Under
+reversal it selected the correct source. This contradictory pair of answers
+makes a decision-confidence threshold alone an inadequate clearance rule.
+
+**Guardrail implication:** Do not use the decision answer alone. A clearance must
+require a selected source, established identity/date/scope and agreement on every
+rule field within displayed precision. Once identity is established, monetary
+comparison should be deterministic. Uncertain source selection or a contradiction
+between model disposition and comparison must remain unresolved for B1. A complete
+packet does not independently certify source identity or retrieval recall.
+
+A POST-HOC, offline simulation vetoed the four unsupported clearances: the three
+injected mismatches and Seres's source abstention. It yielded 19 observed false
+alarms plus one ambiguous, and five detected injected errors plus three ambiguous
+(across both orders). This does not repair the model's raw accuracy, independently
+validate the guardrail, or authorize automatic promotions. No routing was changed.
+
+**Usage:** 323,950 provider-reported input tokens; estimated inference charge
+$0.0136059 at the published jev-1.13.0 input price of $0.042/million tokens, with
+free output tokens (https://docs.typesafe.ai/models). Median request latency was
+0.295 seconds. This excludes bundle construction, source auditing and maintenance.
+
+**Validation and limits:** Offline verification passed for 28 frozen requests and
+responses, 14 reversal pairs, all original packet links, all recomputed candidate
+comparisons, and all eight submitted control mutations. The control audit verified
+unchanged source evidence. Four missing-field checks blocked correctly. No pytest,
+full-suite run, repository-wide semantic diff, rebuild, frontend export, SEC
+request or baseline refresh was performed in this experiment. Production code and
+data were not changed. Prior prototype tests remain a separate 24-test result.
+
+This is a development convenience sample, not a representative accuracy estimate.
+All natural examples are false alarms; synthetic errors do not establish recall
+on natural production defects. Reversals are not independent cases. Evidence
+coverage remains 10/14 flags from only two of three selected filers. Held-out
+filers, later periods, changing layouts and different filer/source types remain
+required under the validation contract above, within an explicitly bounded subset.
+
+Frozen requests, responses, reference mappings and receipts:
+`scratch/2026-10-03_jev_bundle_experiment/`. See `summary.json`, `results.json`,
+`verification.json` and `posthoc_audit.json`. The bounded runner is `experiment.py`;
+`audit_results.py` performs the additional offline mutation and comparison audit.
+
+## 2026-10-03 - Expanded Jev natural-case test across new filers and periods
+
+**Question:** Does the C107/X08 prototype generalize to more real flags, especially
+natural errors, changed filing layouts and position-identity conflicts?
+
+**Scope and selection:** Targeted eight explicit v1-cohort BDCs, well below the
+70-fund cohort. Selected 27 current flags from seven funds, spanning 2023-2026;
+Ares Core Infrastructure (0002031750) had no current C107/X08 flags and contributed
+no cases. Six of the seven represented filers were not used to develop the bundle
+builder. Historical B1 findings guided scenario selection, but their labels were
+not copied onto current holdings. No output values were injected or altered.
+
+Frozen selection and original builder outputs are in
+`scratch/2026-10-03_jev_real_cases/selection.json` and `bundles/`. The builder code,
+its eligibility rules and original Jev question wording were unchanged. This was
+a purposive stress sample, not a random sample or an estimate of cohort coverage.
+
+**Automatic bundle coverage:** Only 4/27 packets passed the builder's own checks;
+23 were withheld. Runtime was 58.424 seconds, including input fingerprinting.
+
+| Filer | Flags | Builder marked ready | Main issue |
+|---|---:|---:|---|
+| Carlyle Credit Solutions, 0001702510 | 4 | 0 | Unrecognized issuer-column header |
+| Varagon, 0001784700 | 5 | 0 | No eligible table candidates; one unresolved output cost currency |
+| TCW Direct Lending VIII, 0001825265 | 4 | 4 | All four nevertheless have incorrect source-cost normalization |
+| Onex Direct Lending, 0001860424 | 4 | 0 | Unresolved source-table periods |
+| Ares Strategic Income, 0001918712 | 1 | 0 | Missing referenced notes |
+| Senior Credit Investments, 0001959568 | 5 | 0 | Unresolved output currency, split numeric cells and notes |
+| Fortress Private Lending, 0002012139 | 4 | 0 | No eligible table candidates; one unresolved output cost currency |
+
+The four TCW packets expose a false readiness result: the filing prints full-dollar
+cost amounts but tags those cost facts with inline scale=3. The builder multiplied
+the printed costs by 1,000, producing incorrect source-cost comparisons. Visible
+schedule totals (debt cost $405,255,392, investment cost $687,902,445, NAV
+$324,485,328) corroborate the displayed dollar basis. Some sibling facts also have
+conflicting scales. Inline units/scales cannot be assumed authoritative merely
+because a fact exists. These are not four fully correct automatic bundles.
+
+The actual current TCW fair values are independently wrong: source FV is in full
+dollars while pipeline FV is divided by 1,000. That genuine FV defect remains
+established even though the automatic packet invents an additional cost mismatch.
+All four errors share one filer, quarter and underlying scale mechanism.
+
+**Separate source-reviewed comparison:** Manually assembled evidence for 12 of the
+27 natural cases across six funds, with complete local visible tables, sibling
+positions, raw XBRL context/facts, subsequent filing context and computed monetary
+comparisons. Original holdings fields and source cells were retained unchanged.
+Manually reviewed coordinates, displayed-unit judgments and source windows are
+privileged inputs; this arm does not count as automatic coverage. The TCW manual
+arm uses displayed-dollar comparisons and explicitly preserves/discloses the raw
+inline-scale conflict rather than silently hiding it.
+
+Before API submission, froze references for four real errors, seven false alarms
+and one identity-ambiguous case. These are agent-reviewed references, not
+independent human gold. Submitted all 12 reviewed cases twice with reversed source
+and decision option order (24 calls), plus the four automatic packets unchanged
+in both orders (eight calls). Requests were interleaved in a frozen seeded order.
+No requests, prompts, source evidence or references were tuned after responses.
+
+**Results: all 32 requests succeeded.**
+
+| Arm / reference | Distinct cases | Calls | Jev result |
+|---|---:|---:|---|
+| Source-reviewed natural FV scale errors | 4 | 8 | 8 real_error; all correct source rows |
+| Source-reviewed false alarms | 7 | 14 | 14 false_alarm; all correct source rows |
+| Source-reviewed identity ambiguity | 1 | 2 | 2 false_alarm; unsafe clearance in both orders |
+| Automatic TCW packets with bad source-cost normalization | 4 | 8 | 8 real_error; correct final labels despite defective evidence |
+
+Reviewed-arm agreement is 11/12 distinct cases or 22/24 calls, with no paired label
+or source-choice flips. The automatic arm is not four additional independent
+cases: it repeats four of the reviewed cases. No population-accuracy claim follows.
+
+**Real-case findings:**
+
+- TCW HOP Energy: source FV $21,218,503 versus output $21,218.503. Other confirmed
+  scale errors: Red Robin $11,880,379 versus $11,880.379; Black Rock Coffee
+  $18,551,101 versus $18,551.101; Resco $18,166,993 versus $18,166.993. Jev detected
+  all four in both orders. Reviewed-arm decision confidence was 0.69-0.82.
+- Negative costs legitimately disclosed: Carlyle Spotless Brands in September and
+  December 2023, Carlyle Bitnova in March 2026, and Fortress Xponential in March
+  2026. Xponential's current output cost is -$29,000, matching the source; the old
+  B1 investigation concerned a -$39,000 cost. That old label is not a current label.
+- Genuine low valuations: Carlyle Buckeye equity, Varagon VG Target's specific
+  SOFR loan position, and Onex IMB Class A common units. Onex current source
+  table 10 row 18 and its 2023-09-30 XBRL context show cost $3,400,000 and FV $29,750,
+  matching the current output. The historical B1 citation at table 14 row 5 shows
+  $2,974,150 but its XBRL context is 2022-12-31. This confirms a wrong-period source
+  citation in the B1 rationale. The historical packet did not preserve actual
+  output FV, so this does not establish whether its final label happened to be
+  correct on that old build. It cannot serve as audited gold for this current row.
+- Ares Amerivet: the output and XBRL context c-187 say Class A units, but the visible
+  source row containing cost $768,400 and FV $9,900 says Class C units. The separate
+  visible Class A row has cost $1,575,000 and FV $195,400. The source itself has
+  inconsistent identity evidence. Reference disposition was ambiguous pending
+  investigation, not a confirmed numeric extraction defect. Jev chose the Class C
+  row and cleared it twice, with decision confidence 0.68/0.66 and source confidence
+  0.71/0.82. These were unsafe clearances of ambiguity, not two missed confirmed
+  numeric errors. All compared numbers match that chosen row, so the previous
+  numeric-agreement veto would fail to intercept either clearance.
+
+**Implications:** In this broader sample, automatic evidence preparation is the
+main coverage bottleneck. Prioritize general header/date/continuation handling,
+explicit unit-conflict detection and independent identity checks. Exact XBRL
+context equality is not sufficient when the context's dimension label disagrees
+with the visible share class. Confidence above 0.50 would still accept both unsafe
+clearances; higher thresholds require held-out calibration and coverage measurement.
+Correct final dispositions must not conceal incorrect intermediate evidence.
+
+No production builder fix, routing change, ledger disposition or promotion was
+made. These findings are development evidence for the hybrid boundary: unresolved
+units, layouts or identity conflicts require investigation. Continue to validate
+held-out filers and changed periods within an explicit small subset. All current
+cases are BDCs; HTML-only, N-PORT and non-BDC source types remain unvalidated.
+
+**Usage and verification:** 609,836 provider-reported input tokens, estimated
+$0.025613112 at the published $0.042/million input rate (free outputs;
+https://docs.typesafe.ai/models). Median call latency was 0.363 seconds. This does
+not price manual source preparation or maintenance. Offline audits passed for all
+32 frozen requests/responses, 16 reversal pairs, unchanged original holdings fields,
+27 packet hashes, 12 cached source-file hashes, 96 candidate-field comparisons and
+raw-grid preservation. Independent raw-source checks confirmed the Onex period and
+Ares class conflict. Arithmetic passing against incorrectly normalized evidence
+is explicitly not an evidence-quality pass.
+
+Artifacts: `scratch/2026-10-03_jev_real_cases/summary.json`, `results.json`,
+`verification.json`, `audit.json`, frozen `requests/` and `responses/`, and bounded
+selection/build/source-inspection/runner scripts. No pytest/full suite, repository-
+wide semantic diff, holdings rebuild, frontend export, SEC download, re-attestation
+or baseline refresh was run. No production code or data was changed.
+
+These seven tested filers/periods are now development evidence for subsequent builder changes, not an untouched holdout. This includes Carlyle (0001702510) and Ares Strategic Income (0001918712), which appeared in the older B1 benchmark's reserved filer split. Keep future validation separate from the examples used to repair the builder.
+
+## 2026-10-03 - Isolated Jev hybrid screening build and bounded shadow evaluation
+
+**Question:** Can reliable bundles let Jev screen weak flags cheaply while B1 retains
+low-confidence, difficult-evidence and high-error work, without reducing audited-data quality?
+
+**Boundary:** Owner instructed continuous work until stopped, with no production
+changes. Implementation is on branch `jev-screening-pilot-20261003` in
+`.claude/worktrees/jev-screening-pilot`. Cached sources are read-only. No queue
+suppression, corrections, production rebuild/export or gate/baseline changes.
+Cumulative scope is 16 of 70 cohort funds, including all earlier smoke/replay funds;
+this session is capped at 100 provider attempts.
+
+**Unseen-fund result:** Frozen selection contained 20 C107 flags from Crescent and
+Goldman over December 2025 and March 2026. The untouched builder produced **0/20
+complete bundles**. After consuming those cases for general header and numeric-cell
+repairs, development readiness reached 15/20. The repaired result is not holdout
+validation. There was no X08 holdout stratum.
+
+| Frozen model run | Flags | Calls | Label agreement | Source agreement | Both confidence cutoffs | Input tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| Original C107/X08 development | 41 | 15 | 15/15 | 14/15 | 7 | 173,507 |
+| Consumed two-fund development | 20 | 15 | 15/15 | 15/15 | 3 | 189,937 |
+| C104 weak-rule development | 4 | 2 | 2/2 | 2/2 | 0 | 16,839 |
+| Synthetic rounding controls, separate | 8 | 8 | 7/8 | 7/8 | 0 | 120,836 |
+
+All natural-case scored references were false alarms. These runs cannot estimate
+true-error recall. Four synthetic cost errors were not cleared: three were labelled
+real errors and one ambiguous. Four within-rounding controls were false alarms.
+No control qualified for screening clearance. Total usage is 40 calls and 501,119
+input tokens; monetary pricing has not been reverified in this session.
+
+The 0.75 decision and 0.75 source-confidence thresholds are experimental, not
+calibrated probabilities. Confidence alone would admit 10 of 65 natural flags at
+their frozen bundle versions. Full independent candidate-recall, note-scope and
+identity certification is incomplete: **no actual clearance or B1 saving occurred**.
+One original development answer selected insufficient source evidence while
+labelling the flag a false alarm; the router retains it for B1.
+
+**What the builder needed:** Mechanism-based repairs block contradictory TCW
+scales and Ares share classes; resolve continuation periods from source contexts;
+retain nested notes; handle issuer-header variants and split parentheses; preserve
+symbol markers and distinguish `+` from `(+)`; and prevent borrowing missing notes
+from later same-period note blocks. Source review also caught missed bare numbers
+in explicitly labelled footnote columns, now covered by focused tests. Unrecognised
+note syntax blocks instead of being partially interpreted. Nearest-note retrieval
+is still a retrieval heuristic, not independent owner/scope certification.
+
+C104 required correct numeric-zero handling and a fair-value primary field. It is
+opt-in for a small probe and is not added to default routing eligibility. A first
+selector found one Crescent 2024 flag outside the intended quarter window; it was
+blocked before source parsing and excluded. The corrected probe contains four
+flags across Varagon and Goldman. A headerless continuation and USD/AUD conflict
+remain B1 work.
+
+**Incremental value:** Given manually reviewed source identity and builder values,
+a numeric comparator agrees with all 40 scored observations. That conditional
+baseline is not automatic source investigation. It shows that arithmetic is not
+the main reason to use Jev; resolving identity/context reliably without equally
+expensive manual review is the unresolved benefit. Manual source-review effort
+must be included in any cost-saving claim.
+
+Lossless grid/context encoding reconstructs all 40 requests exactly but reduces
+cl100k token estimates by only 3.57%. It remains disabled and was not tested with
+additional provider calls. This token proxy is not the provider billing tokenizer.
+
+**Verification at this checkpoint:** 123 focused tests pass across bundle, routing,
+transport and compaction files. Three bounded metadata checks found zero monitored
+production changes. The check excludes large output archive directories and is not
+a full filesystem attestation. No full suite or production semantic-diff script
+was run: the latter writes a production report and traverses the full baseline.
+Known scale/identity conflicts remain blocked. An additional real-case replay is
+in progress after the explicit-note-column fix; earlier readiness counts are not
+retroactively substituted into frozen model results.
+
+**Artifacts:** `data/pilot/jev_screening/20261003_shadow/` contains frozen selection,
+original/repaired packets, source-review extracts, requests, responses, references,
+routing receipts, conditional-baseline reports and protection checks. The active
+run log is `docs/jev_screening/05_run_log.md`. References are agent-reviewed
+development evidence, not an untouched human gold set. No fresh B1 fleet or
+non-BDC/source-type validation was performed.
+
+## 2026-10-04 - Jev source completeness and presentation stability
+
+Question: Does better bundle construction support cheap weak-rule screening with
+B1 fallback, and do high-confidence decisions remain stable on equivalent input?
+
+The isolated pilot now covers 67 natural flags within 16 funds. Its 40 natural
+Jev calls match all source-reviewed labels and 39 source selections, but all called
+natural references are false alarms. Four reviewed TCW errors are blocked before
+submission. Natural missed-error risk therefore remains unmeasured.
+
+Source review found omitted inherited portfolio notes, footnote tables and rate
+legends. The builder now retains or explicitly blocks these mechanisms. The
+original 20-case blind holdout had zero ready bundles and was consumed for repair;
+its latest development replay has 9 ready and 11 blocked. A two-case new-accession
+temporal check matched labels/sources, but subsequent inspection found incomplete
+Crescent context. Correct labels do not certify the bundles.
+
+Twenty-four synthetic numeric controls include one erroneous false_alarm decision
+at confidence 0.13; the router retains it for B1. Eight further presentation calls
+on four repaired X08 cases preserve all labels/source selections, but confidence
+eligibility changes in three pairs. No pair passes both cutoffs in both orders.
+This is one call per presentation, so provider variability is not separately
+estimated. Selecting the higher-confidence order would be invalid tuning.
+
+Cumulative current-session usage: 72 successful calls and 1,073,704 provider input
+tokens, with no production integration or certified clearance. Natural, synthetic
+and presentation denominators remain separate. The exact-context deterministic
+baseline resolves 37/40 natural model cases with reviewed-source agreement but
+shares builder inputs; neither comparator nor Jev establishes independent audit.
+
+Artifacts: data/pilot/jev_screening/20261003_shadow, especially the immutable
+order_comparison reports and source review extracts. Active limitations and
+remaining experiments: docs/jev_screening/06_interim_assessment.md. No fresh B1
+fleet, B1 time saving, confidence calibration or non-BDC validation is claimed.
+
+### Follow-up: cost pathway changes the required evidence
+
+Independent review of the ten remaining C107 cases found four matching reported
+negative costs, one Krayden identity ambiguity and five intentional cost proxies.
+For the five proxies, cost_source is first_observed_fv_proxy and cost_reported is
+absent in the unchanged holdings snapshot. Differences from current SOI cost are
+not automatically extraction errors; donor observation, position chain and proxy
+policy need review. Three AB Centers source contexts are in unfunded-commitment
+rather than amortized-cost tables. They remain unscorable under this pilot's
+reported-cost contract; no production row is removed or changed.
+
+The isolated v4 bundle adds cost_source and requires cost_reported to equal
+published cost for C107/X08; C104 remains FV-only. Krayden's own context says Term
+Loan while its negative cost/FV tags are on a visible Revolver, so matching values
+cannot resolve identity. Supplemental raw evidence and references are preserved
+as additional_C107_*_01.json. No Jev calls were added for this review.
+
+## 2026-10-04 -- Jev pilot: context completeness, size and deterministic comparison
+
+Question: does broader source context improve the proposed cheap weak-rule
+screening workflow, and can changing filing structures make incomplete bundles
+appear ready?
+
+On 12 current-builder rechecks, Jev and a raw-preserving deterministic comparator
+both match all reviewed labels and source rows. All called references are false
+alarms. Four natural scale-error controls remain blocked before submission.
+This does not establish incremental model value or an error-detection rate.
+Eight exact-request repeats also show variable confidence, including one cutoff
+crossing without a request change. No score-based production clearances exist.
+
+Four existing filings were sized offline. Current states are 8.2-13.1k cl100k
+proxy tokens; broad visible tables plus selected published columns are
+24.8-183.7k. Complete SOI recall is not certified. Provider documentation states
+32k for state plus longest question, 64k total. Current provider usage is 30-36%
+above the runner's whole-JSON cl100k estimate, so a proxy below 32k does not
+establish fit. The 94 successful calls used 1,502,036 reported input tokens,
+approximately $0.0631 at the published $0.042/M rate; engineering and B1 costs
+remain unmeasured. Sources and full sizing are in docs/jev_screening/08_context_size_and_cost.md.
+
+Eighteen synthetic structure probes across three existing filings initially
+passed intended invariance/fallback checks. Deeper Fortress probes found missing
+monetary context definitions, instant dates or entities still appeared ready.
+Four failing focused tests reproduced this, and explicit context requirements
+now block those cases. A valid nonmonetary duration context remains allowed.
+The current 67-flag replay remains 34 ready / 33 blocked with unchanged candidate
+sets. This is a repaired synthetic failure mechanism, not another discovered
+production data error or proof of future-filer coverage.
+
+Source-first review inputs now cover all 67 existing flags, withholding model
+answers and builder outcomes; every review remains unfinished. Independent B1
+review and timing are still outstanding. Production remains untouched.
+
+## 2026-10-04 -- Jev pilot: retrieval and source-feature stress checks
+
+Question: can apparently complete bundles silently omit source identity anchors,
+misread unsupported monetary facts or lose footnote references?
+
+A copied Fortress issuer-name mutation omitted the target while leaving a sibling
+ready. The builder now inventories declared-context monetary anchors separately
+and blocks known omissions. Six checks pass across three already sampled filers.
+Further fixtures exposed nil/continued/excluded-content facts, invalid signs and
+USD suffixes with unrelated or missing currency namespaces. Explicit blockers and
+valid counterexamples now pass; 13 copied-source inline/currency checks pass.
+The currency_namespace_v4_37 replay remains 34 ready / 33 blocked across 67 real
+flags, with unchanged candidate sets. These synthetic mechanisms do not count as
+new naturally occurring errors or establish future-filer recall.
+
+Four additional model controls tested synthetic cost errors with/without hostile
+instructions inside copied source notes. All four classified the error and source
+correctly and routed to B1. Session accounting is now 98 successful calls and
+1,561,219 provider input tokens across only 42 unique called natural flags; repeated,
+revised and synthetic calls remain separate. No independent clearances exist.
+The approximate published-rate inference cost is $0.0656; total operating cost and
+B1 savings remain unmeasured. See docs/jev_screening/10_source_note_stress.md.
+
+A markup inventory inspected 167 unique candidate rows across 23 source files and
+found no superscript markup on those rows. Synthetic bare superscript references
+nevertheless exposed a dropped-note failure. The isolated builder now retains
+those references and blocks missing or unparsed annotations; the targeted suite
+passes 305 tests. A fresh replay is recorded separately. This inventory excludes
+headers, section headings and unretrieved rows, so it is not full filing coverage.
+
+All implementation remains in the isolated worktree. Production metadata audits
+remain unchanged; no SEC downloads, production rebuilds, queue changes or merges.
+
+## 2026-10-04 -- Jev pilot: evidence recovery, explanations and workload
+
+Question: Can reusable evidence handling expand coverage while preserving source uncertainty and a reviewable handoff?
+
+A bounded reference-rate note association recovered three Crescent bundles without changing source identities, values or candidate sets. The latest replay is 37 ready / 30 blocked across the existing 67 flags. Section-scope ambiguity remains blocked. Deterministic explanations render recorded model answers, source comparisons and routing reasons; they do not invent causal diagnoses. See docs/jev_screening/11_remaining_bundle_work.md and 12_factual_explanations.md.
+
+Read-only counts within the reserved 16 funds show Q1-2026 C107 510 review issues, C104 448 track-only issues and X08 18 track-only issues. Flag counts are not B1 job counts or estimates of safe savings. AGG01 has 13,078 issues without row IDs or reporting dates, so its volume cannot establish a model-ready queue. See 13_rule_workload.md.
+
+Offline confidence sensitivity retains the six observation categories. First-natural candidates change from 23 at joint 0.70 to 17 at 0.75 and 7 at 0.80. All 42 natural references are false alarms, preventing missed-error calibration; cutoffs remain unchanged. Four focused tests pass. See 14_confidence_sensitivity.md.
+
+The refreshed source-first handoff binds the latest builder for all 67 development cases; zero completed independent reviews. Calls remain 98/100, with no new funds, production integration or B1 suppression. Twentieth bounded production metadata audit reports zero changed paths.
+
+## 2026-10-04 -- Jev pilot: note parsing, size limits and headerless anchors
+
+**Question:** Which remaining bundle gaps are recoverable parsing defects, and which require a different evidence contract?
+
+**Results:** Jackson Paper's reference-only cell was mistaken for a note definition; Spotless's attached double-star marker was shortened to a single star. Generic repairs recover both while retaining nearest-real-note-block scope. Explicit Index/Spread geometry prevents Oaktree rate operators from becoming false footnotes. Frozen replay note_formula_v4_48 has 39/67 evidence-ready bundles, 28 evidence fallbacks, with unchanged source identities, amounts and candidate sets. Three ready Ares packets exceed the current 22,000 whole-request token proxy cap, leaving 36 within both requirements.
+
+Optional v2 grid encoding preserves all rows/cells/notes and reconstructs all 39 requests exactly; proxy sum falls from 467,757 to 420,709 and maximum from 25,355 to 20,236. It remains disabled because encoding equivalence is not model equivalence or provider-fit validation. The 100-call cap is exhausted: 1,580,960 provider input tokens, approximately USD 0.0664 published-rate inference estimate, 42 unique natural flags called, no independent clearances or B1 savings established.
+
+Three remaining missing-candidate flags have exact-context anchors in headerless tables. Krayden also has a visible revolver versus term-loan context contradiction and a custom cost concept. The review helper now inventories all exact-context numeric facts without guessing their financial role. Header inheritance remains unsupported pending geometry, period, owner and concept validation.
+
+Validation: 391 targeted Jev tests passed after note repairs; later focused compaction tests 11/11 and source-review tests 18/18 passed. Twenty-four bounded production metadata audits found zero changes. No production rebuild/export or production-writing semantic diff. Detailed artifacts and limitations: docs/jev_screening/08_context_size_and_cost.md and 11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: review-group membership and queue date identity
+
+The 67 frozen flags belong to 33 fund/period/rule groups containing 1,063 current issue rows: C107 44 selected of 919 rows in 18 groups; X08 19 of 30 in 11 groups; C104 4 of 114 in four groups. Twelve groups are fully selected; nine are also entirely evidence-ready before size, policy, model or audit checks. These are population-coverage counts, not completed reviews.
+
+A native join to queue CIK/report_date finds none of the 33 groups. The ledger casts inferred timestamps to strings such as `2026-03-31 00:00:00`, while `pipeline/review_queue.py` localizes only exact YYYY-MM-DD strings. Existing affected queue rows have blank CIK/report_date. The review-ID input includes the blank localized date rather than raw period, producing repeated IDs across quarters.
+
+A diagnostic-only join using unit_label and normalized period locates all 18 C107 groups, with n_units matching all current issue counts. Six review IDs repeat across 16 of those 18 entries. X08/C104 have no matched queue entries in these sampled groups; their tracking-only statuses do not imply current B1 jobs. Date normalization here does not certify a parent link or repair existing IDs, bundles, verdicts or locks.
+
+Only three queued C107 groups are fully selected: the three Ares single-row groups. All three currently exceed the ordinary runner's size cap. Other queued groups retain unselected members. Optional compact encoding remains unvalidated with the model. Thus these data do not demonstrate a fully screened current B1 job, even before independent audit is required.
+
+Before any queue integration: normalize and validate the ledger's date contract, require unique review IDs across periods, account for every parent member, and assess migration of existing IDs/verdicts/locks. Do not silently relabel existing records or reuse a verdict through an ambiguous ID. Production changes remain prohibited in this session.
+
+Artifact: review_group_profile_cc98b0808f2e7934.json. Inputs are hashed; queue timestamp 2026-09-30 19:24:52 UTC, issues timestamp 2026-09-30 17:34:23 UTC. Read-only diagnostic on the same 11 funds, no new model calls. Earlier strict-join report review_group_profile_1af497f03efcc785.json is retained as the initial observation.
+
+## 2026-10-04: source-wide disclosure-role inventory
+
+The bounded inventory now scans every table in all 26 selected cached filings, using the frozen source-first review inputs to include filings absent from early-refused bundles. It inspects 2,641 tables: 184 have explicit position-value headers, six have explicit unfunded-commitment headers, and 2,451 are unknown to the deliberately narrow role helper. These counts include other periods, owners and irrelevant tables; they are not relevance or accuracy scores.
+
+Only 14 of the 190 recognized tables are in the existing candidate-table inventory. All six commitment tables are outside it, in two Senior Credit filings: Q3-2024 tables 15/18 and Q1-2026 tables 19/20/30/31. The parser associates Q3-2024 with table 15, leaves table 18's period unresolved, associates Q1-2026 with 19/20, and Q4-2025 with 30/31. These are retained parser findings, not independently certified scope.
+
+An initial pass using only declared builder paths covered 25 filings and found two commitment tables. The source-first bindings add the Senior Credit Q1-2026 filing represented by an early-blocked proxy-cost case: another 73 tables, including 16 position-value and four commitment tables. This demonstrates why a builder-conditioned inventory cannot establish coverage of all selected filings.
+
+Design implication: create a cached, source-wide disclosure inventory before selecting evidence for an individual rule. Preserve unknown roles and unresolved owner/period associations. Use the inventory to test whether relevant supplemental disclosures were considered, not to append every table or automatically certify recall. Current candidate packets and readiness remain unchanged; no source truth, duplicate exposure or inclusion correction is inferred.
+
+Artifact: disclosure_role_profile_1e72bd5b76d52c95.json. Earlier 25-filing diagnostic: disclosure_role_profile_dbb4aad701f83096.json. The final report binds the prepared review manifest, parser and role-helper hashes, verifies all 67 prepared packet bindings, and checks each source hash before/after parsing. Unknown-table counts are retained; their full cells are deliberately omitted from this diagnostic. No new funds, model calls or production changes.
+
+## 2026-10-04: supplementary disclosure navigation
+
+Added an optional table-search helper that retains exact-context anchors and contiguous issuer-phrase matches across all parsed table roles and periods. It preserves source cells, header evidence, context definitions and original coordinates, including unknown/hidden content. Search limits refuse incomplete results rather than silently truncating. This is navigation, not sibling identity, independent recall or a model-ready bundle; no existing candidates are replaced.
+
+Across the same 67 development flags and 26 source files, exact published-name search succeeds for 65 cases and refuses two one-word names. Forty-six have lexical matches; all 65 have an exact-context anchor. Fifty cases have navigation coordinates absent from their builder candidates, while 14 have builder coordinates missed by this search. These are complementary retrieval results, not 50 improved bundles. Exact-anchor fallback also preserves the two refused-name cases.
+
+A separate source-column method reads the issuer cell only where an exact-context row has explicit, separate issuer/instrument headers. It preserves the unmodified text and provenance; unknown/hidden headers, combined investment descriptions and unsupported names remain unresolved. It supplies queries for 23 flags across four funds and adds coordinates beyond published-name search for 11 flags across three funds. The additions include other instruments, comparative periods and tables with unknown roles. They require relevance review and do not certify complete evidence.
+
+Concrete examples: AB Centers' source issuer column recovers the clean name from both polluted commitment-row labels, finding three main-schedule rows plus two commitment rows without Petvet. TCW's separate exploratory position remains unsupported by automatic source-column recovery because its rollforward header is Name of Investment and combines issuer/instrument/rate. A manually source-confirmed Superior Industries phrase finds nine mentions, including the primary schedule, comparative rows and other disclosures; that manual arm is not automatic coverage. For Oaktree BioXcel, broader navigation includes loans, common stock, warrants, acquisition-date tables and both current/comparative schedules, illustrating why a borrower match cannot select a position.
+
+Artifacts: disclosure_search_profile_da03743e49495fec.json (all 67) and disclosure_search_31d4e77534df5bba.json (two investigated sources). Earlier published-name-only profile ddb2f2b271e77fcf is retained. Twenty-seven focused search/seed tests pass. The helper remains unintegrated; replay dependency_bound_v4_55, 39/28 readiness, request payloads and 100-call accounting are unchanged. No independent audits or production changes.
+
+## 2026-10-05 -- Rule carry-forward between the Q4-2025 and Q1-2026 sign-offs
+
+Question: how much per-CIK rule work carried from the Q4-2025 sign-off (tag `signoff-2025-12-31`, 2026-08-20) to the Q1-2026 sign-off (tag `signoff-2026-03-31`, 2026-09-04), and how much new per-filer work did Q1 need? Baseline for the filer-profile programme objective (a rule made in quarter x should keep working in x+1).
+
+Method: `scratch/2026-10-05_carry_forward/carry_forward.py` (read-only; git objects at the two tags plus the cohort manifest; output `carry_forward_rules.csv` beside it). Live files only (no `_`-prefixed path component, no `.proposed.`). A rule is PINNED when its selector names a row_id, report_date, accession or context id, or its scope names quarters; otherwise GENERAL.
+
+Results, 70-CIK wrapper cohort (rule files in `agent_investigate_rules` + `agent_b2_corrections`):
+
+- Live at Q4: 109 rules. All 109 are byte-identical at the Q1 tag (none edited, none removed).
+- Of those 109, 69 are pinned (63 pct) and 40 general (37 pct). A pinned rule cannot act on a later filing by construction.
+- Added for Q1: 35 rules across 27 of 70 CIKs. 30 pinned, 5 general.
+- Five largest funds by 2026-03-31 FV (0001803498, 0001812554, 0001287750, 0001838126, 0001837532): 8 rules at Q4 (7 pinned), 4 added for Q1 across 3 CIKs (3 pinned).
+- Per-filer files: wrappers 70 of 70 unchanged; rate_convention unchanged; identifier grammars 25 unchanged, 13 modified, 5 added (anchors 24 / 13 / 5); conservation_scope 5 added.
+
+Limits:
+
+- "Unchanged" means the file bytes did not change. It is NOT evidence that a general rule still matched the right rows in Q1; per-quarter application is not recorded (`agent_fix_application_audit.csv` has one row per rule per build).
+- The two sign-offs are 15 days apart and both quarters' filings were already cached, so this is not a clean quarter-over-quarter test. Q2-2026 would be the first.
+- PINNED / GENERAL is a text classification of the selector. A rule scoped to all quarters can still match rows in one quarter only.
+- Counts are rule files, not rows or fair value.
+
+## 2026-10-05 -- Five largest funds: what the confirmed-but-unfixed findings are
+
+Question: for the five largest cohort funds (0001803498, 0001812554, 0001287750, 0001838126, 0001837532), why do findings that B1 adjudicated as real errors have no fix, and would more B2 fix types close them?
+
+Method: `scratch/2026-10-05_carry_forward/top5_unfixed_dump.py` (read-only) joins state `real_error_unremediated` in `data/output/quarter_pass/q1p3_20260831/findings_ledger_post.csv` (all periods) to the B1 verdict files; output `top5_unfixed_findings.csv`. Buckets were assigned by the session agent per (rule, mechanism, fix_class) group from the first 420 characters of each group's sample rationale. Group-level judgement, not a row-level audit.
+
+Results: 132 findings (BCRED 47, Apollo 36, Ares 19, HPS 18, Blue Owl 12; 31 at 2026-03-31).
+
+- B1 fix_class: column_remap 64, comparative_period_filter 22, blank 18, classification_fix 16, unit_rescale 3, rate_rescale 3, rule_scope 3, missing_position_add 2, dedup 1. B1 mechanism: extraction_gap 81.
+- Bucket 1, fits an existing B2 fix type (43): comparative rows (PP03 16, others 5), classification blanks and misclassifications (about 13), rate rescale C115 (3), identifier-vs-structured disagreements (4), one missing position, one cash-equivalent leak.
+- Bucket 2, systematic extraction or pipeline gap, not a row correction (82): no USD conversion of non-USD principal FX01 (18); pct_of_net_assets not extracted A07 (12); rates present in source but not captured X02 / dl_rate_fill / C01 / fmt_basis_spread (15); cost and fair-value currency fields taken from the wrong column FX02 / FX03 (11); footnote non-accrual status not carried (8); JV-schedule tranches collapsing on the position key B02 (4); commitment-schedule rows read as positions C107 (3); issuer-name parse leak C206 (2); HPS 0001838126 fund-financial NAV per share read as 1000 (4); HPS 2026-03-31 holdings sum 26,587.2M vs filed 25,007.9M, three findings on one defect (3); other (2).
+- Bucket 3, as filed or rule problem (7): Heubach maturity before report date is in the source (4); rule_scope items (2); JV look-through positions excluded by policy (1).
+- No finding needed a fix type that does not exist as a row correction; the gap is that 62 pct are not row corrections at all. "column_remap" is used by B1 as a catch-all for extraction gaps, so `has_fix_route=True` overstates how many findings B2 could act on (inference from the rationales; not tested by dispatching).
+
+Limits: B1 mechanisms were measured at 64 pct stable across repeat runs; several rationales say only a sample of the flagged rows was proven; the ledger is the 2026-08-31 state and some items may have been fixed since; the same defect is counted once per quarter it fires in. The HPS overshoot was not re-derived here beyond the raw 2026-03-31 sum in the published parquet (26.59B); whether the excess rows are flagged out of the published basis was not checked.
+
+## 2026-10-08: B1 reviewer against the interactive Claude agent on the five v0.5 funds
+
+**Question.** On findings both ruled on, which was right more often: the B1 fleet reviewer or the
+interactive Claude agent of 2026-10-05 to 2026-10-08?
+
+**Method.** `scratch/2026-10-08_b1_vs_claude/` (read-only scripts, re-runnable). `overlap.csv`: 222
+findings of the five funds from 2022 with a real B1 verdict, traced through the sandbox ledgers
+`five` to `five19` and `q2e`. 86 disagree on a three-class scale; 16 of those are vocabulary
+(non-accrual flag, Heubach maturity) and 15 are A07, not keyed. `answer_key.csv` labels the other 55
+against the filing: context dates in the XBRL (PP03, B02), the printed-page reader of `five19`
+(missing rates), and six printed lines read directly.
+
+**Result (55 findings).** B1 right 20 (one only for the build it saw), partly 4, wrong 29, not
+testable 2. Claude final call right 43, partly 6, wrong 1, no call 5; first call right 34, partly
+13, wrong 3. B1's misses are mostly rule misfires called errors (PP03 17, B02 6) and three false
+alarms on real errors (F16, FX01, FX03). Claude's misses are real errors closed as filed: Blue Owl
+no-rate rows (fixed later), and Apollo 2025-09-30, where the MRO Holdings and TITAN BW revolver
+rows are swapped against the printed page (filer swapped the context labels; still in `five19`).
+
+**Limits.** The key is not blind: one agent set it knowing both calls. B1 judged an older build, so
+"wrong" means wrong on the sandbox data. Claude read B1's verdicts and had the whole filing and the
+owner. The 55 are the disagreements only; the 79 agreements were not checked. No repeat-run test.
+
+## 2026-10-08: Frozen B1 test set and blind answer key (baseline run NOT done)
+
+**Question.** How often does the current B1 reviewer, unchanged, miss a real error or call a false
+alarm, measured on a fixed sample with a key set blind to its verdicts?
+
+**Method.** `scratch/2026-10-08_b1_testset/` (scripts re-runnable; nothing in published data touched).
+- Build: `scratch/fund_sandbox/b1f`, a frozen copy of sandbox `five` (five v0.5 funds, built
+  2026-10-05, git HEAD then 30d806b, tree state not recorded). Hashes in `freeze_manifest.json`.
+  Owner chose `five` over `five19`: the post-fix `five19` queue (343 findings) holds almost no real
+  errors and only 1 of the earlier B1/Claude agreements, so misses could not be measured on it.
+- Sandbox read check: `run_review discover`, `review_bundles`, the preflight and the evidence CLI all
+  follow `PM_OUTPUT_DIR`. Exceptions: the evidence CLI `flagged` command hard-codes the published
+  holdings path (not in the B1 prompt), and the identity, conservation and weak engines read
+  `shadow/*_gate_*.csv`, which no sandbox writes and which are 1 to 4 months old in `data/output`.
+- Test set: `select_testset.py`, seed 20261008. 136 of 928 in-scope queue findings, 59 rules,
+  largest rule 5.1 pct, dev 68 / test 68 (split exact by rule, uneven by fund: Apollo 25/14).
+  35 are in the earlier `overlap.csv` (16 agree, 13 disagree), 10 in the earlier answer key.
+- Bundles: 136 built by the current builder (`bundles/`). `bundle_check.py`: 112 dispatchable; 18
+  auto-resolve to "ambiguous" with no worker (evidence file missing, above); 6 source_recon bundles
+  are rejected by the B1 preflight (`unexpected bundle schema_version`).
+- Key: 14 fresh agents, each given the bundle, a bounded query tool over the frozen build, the cached
+  filing and the rule code at 30d806b, and told not to read verdicts, ledgers, dispositions, docs or
+  git history. Labels WRONG / AS_FILED / RULE / MIXED with basis and confidence
+  (`labels/`, merged to `answer_key_blind.csv`). PP03 and B02 used the context-date test
+  (`mech_context_dates.py`).
+
+**Result.**
+- Key: 136 of 136 labelled with a basis, 0 "cannot tell". WRONG 62, MIXED 28, RULE 30, AS_FILED 16
+  (dev 31/15/12/10, test 31/13/18/6). Confidence high 88, medium 48.
+- One owner ruling applied (`key_rulings.csv`): a non-USD loan with no USD par published is WRONG,
+  since the pipeline has FX conversion. It moved 5 FX01 labels (2 from AS_FILED, 3 from MIXED).
+- Against the earlier non-blind key (10 shared findings): 6 same, 4 differ, all four blind MIXED
+  against earlier "WRONG, then residual as filed" (B01, C107, X02 x2). Same side of the error line.
+  Listed in `key_vs_old_key.csv`, not reconciled.
+- **B1 baseline: not run.** A two-worker canary failed in 5 seconds per worker: `elevated Windows
+  sandbox requires effective :root read access`. Codex CLI is 0.160.0 (installed 2026-10-01); the
+  last working fleets (2026-09-01, 2026-09-07) ran 0.149.1. The worker config written by
+  `setup_codex_worker_harness.ps1` no longer satisfies the CLI. Affects every fleet lane. Not
+  patched: owner decision (pin the CLI back, or change the harness).
+- Scorer `score_b1.py` works end to end; exercised only on B1's OLD verdicts for the 35 shared
+  findings (older builds, so indicative only, not the baseline): 34 decided, 22 agree with the key,
+  4 misses, 8 false alarms.
+
+**Limits.**
+- Blindness is by instruction, not enforced: labellers could read the whole repo. None reported
+  opening a barred file. They shared one temp folder; one saw other labellers' file names.
+- No second labeller per finding, so no measure of label agreement. 48 labels are medium confidence.
+  Large findings were sampled (typically 8 to 30 rows of up to 600).
+- 28 MIXED labels lean on three conventions the owner has not ruled on: (a) a rule fires for a bad
+  reason but the fund-quarter holds wrong rows it did not detect; (b) a printed coupon withheld from
+  `interest_rate` (blank on every row of this build, kept in `interest_rate_reported`); (c) a
+  floating PIK loan published with the margin in `pik_rate` and no reference rate or spread.
+- The build predates the 2026-10-06 to 10-08 fixes, so the errors in it are mostly ones already
+  fixed since (JV schedules published as fund rows, double FX conversion, issuer subtotals,
+  pct of net assets times 100). The set measures B1 on that data, not on today's queue.
+- A clean score on this set would be a proxy: agreement with the key on 136 findings, not proof
+  the data is right.
+
+## 2026-10-08: B1 baseline on the frozen test set (two runs, unchanged B1)
+
+**Question.** Same as the entry above; this is the run it could not do.
+
+**Method.** `scratch/2026-10-08_b1_testset/run_b1.ps1`: current B1 (prompt, contract, bundles, evidence
+CLI unchanged) on the 136-finding set from frozen build `b1f`, twice, Codex CLI 0.160.0, MaxParallel 2,
+verdicts to `runs/r1` and `runs/r2`. Mechanical start-up failures retried one worker at a time. Scored
+by `score_b1.py` against `answer_key_blind.csv` (`score_baseline.md`, per-finding CSV beside it).
+Key after rulings: 76 real errors (WRONG 62, MIXED 14), 60 fine (RULE 42, AS_FILED 18). Rulings in
+`key_rulings.csv`: owner FX ruling (5 labels) and three provisional conventions the owner delegated
+("use your views": scope 5 labels, withheld coupon 10, floating PIK 1).
+
+**Result (run 1 / run 2, all 136).**
+- Missed, B1 says false alarm on a real error: 3 / 2 of 76 (dev 0 / 0 of 38, test 3 / 2 of 38).
+- False alarm, B1 says real error on a fine finding: 12 / 13 of 60 (dev 7 / 7 of 30, test 5 / 6 of 30).
+- No decision: 68 / 70 of 136. Worker "ambiguous" 44 / 46 (41 of 44 "source checked" in run 1), auto
+  "ambiguous" with no worker 18 (no evidence file in a sandbox), bundle rejected by preflight 6.
+- Right, of those decided: 53 of 68 / 51 of 66.
+- Sensitivity: 10 of the 13 distinct false alarms are rate findings that the labellers called MIXED
+  and the withheld-coupon convention moved to RULE or AS_FILED. Scored on the labellers' own labels
+  (no rulings): false alarms 5 / 5 of 48, misses 3 / 2 of 88, right of decided 60 of 68 / 59 of 66.
+- Cited rows (issuer-name match to the rule's flagged rows; 57 verdicts where the rule has a row
+  list): at least one citation on a flagged row in 39 / 41; real_error verdicts 19 of 29 / 21 of 31;
+  all citations 69 of 158 / 69 of 156.
+- Run-to-run, 112 findings with a worker verdict in both: same verdict 103 (92 pct), same verdict and
+  mechanism 94 (84 pct). One finding flipped between false_alarm and real_error; 8 moved in or out
+  of ambiguous.
+- Cost: median 121 / 123 s per worker, 3.96 / 3.99 worker-hours, mean input 294K / 314K tokens
+  (about 87 pct cached). No dollar figure (ChatGPT login).
+- Misses: Apollo C103 2023-09-30 and Apollo C107 2025-06-30 (both runs), Blue Owl X07 2025-03-31
+  (run 1). False alarms other than the rate group: html_agg x2, Blue Owl A07 2026-03-31.
+
+**Limits.**
+- Everything in the previous entry applies (blindness by instruction, one labeller, sampling, an
+  old build). The false-alarm rate depends on a labelling convention: 20 pct with it, 10 pct without.
+- 34 of 112 workers failed at start in each main pass (Windows sandbox logon race, error 1326), all
+  recovered by serial retry. A verdict from a retried worker is still a single first attempt.
+- Worker logs were searched for reads of the key, labels, decision log, dispositions, ledgers, old
+  verdicts and the published holdings: none found. Logs hold only each finding's last attempt.
+- Cited-row validity cannot tell two tranches of one borrower apart, and 51 verdicts are on rules
+  with no row list.
+- Whether a worker shell sees `PM_OUTPUT_DIR` was not checked; bundles carry absolute sandbox paths,
+  so the evidence a worker reads comes from the sandbox either way.
+- A clean score here would be a proxy, and this one is not clean: B1 decides half the set.

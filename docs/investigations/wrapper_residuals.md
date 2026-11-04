@@ -366,3 +366,29 @@ outside the XBRL identifier text. Conversely, some may be issuer subtotals
 beside explicit child tranches. Without source-table coordinate evidence, the
 safe status is review-required rather than automated suppression.
 
+
+## 2026-10-04 -- Crescent null issuers encountered in Jev pilot
+
+Question: Are three blocked negative-cost bundles missing source identity, or does published identity extraction fail?
+
+Read-only inspection of existing pilot cases locates LTC Ally Inc (Q1-2026 t15r32), Angels of Care (Q1-2026 t14r27) and Numera (Q4-2025 t40r9) in cached visible rows and exact contexts. Published costs match signed USD source facts; published issuer names are null. Each row already has C201 BLOCK_VERIFIED and X02 REVIEW as well as C107 REVIEW.
+
+The active Crescent hierarchy branch condition is true but its issuer regex returns empty. Its industry vocabulary contains Health Care Equipment & Services and Financial Services, while these identifiers use Health Care Equipment and Services and Financial Service. A bounded DuckDB diagnostic changing only those labels recovers all three source-visible names. This reproduces the branch, not a full historical rebuild. Production wrappers, code and holdings remain unchanged.
+
+Do not fill names only in Jev bundles or infer position correctness from matching negative cost. Details and frozen artifacts: docs/jev_screening/16_missing_issuer_mechanism.md. Any future correction needs per-CIK, cross-period validation and position-tranche preservation.
+
+## 2026-10-05 -- HPS Corporate Lending (0001838126): holdings exceed the filed investments total (gap 1 of the v0.5 sample)
+
+Question: why does HPS's published holdings sum exceed the fund's filed investments at fair value, and in which quarters?
+
+Method: read-only scripts under `scratch/2026-10-05_hps_overshoot/` (`hps_diag1.py` to `hps_diag5.py`) on the published 2026-10-01 holdings parquet, `fund_financials`, and the cached filing 0001628280-26-033248 (XBRL instance and HTML).
+
+Results:
+
+- Residual against filed `investments_at_fair_value`, all 13 quarters: 2023-03-31 -1.77 pct, 2023-06-30 -1.86, 2023-09-30 -1.75, 2023-12-31 +2.51, 2024-03-31 +3.95, 2024-06-30 +6.44, 2024-09-30 +6.78, 2024-12-31 +6.54, 2025-03-31 +5.70, 2025-06-30 +5.18, 2025-09-30 +4.67, 2025-12-31 -0.26, 2026-03-31 +6.32 (holdings 26,587.2M vs filed 25,007.9M, excess 1,579.4M).
+- 2026-03-31 mechanism, confirmed in the filing: 22 published rows (contexts c-3653 to c-3684, 1,609.0M) are the schedule of investments and the unfunded-commitment table of ULTRA III, a joint venture described in the notes at about 93 pct of the document. They carry `InvestmentOwnedAtFairValue`, cost, principal, rate and spread on `InvestmentIdentifierAxis` only. Every main-schedule position in this filing also carries an issuer-affiliation member; these rows do not. The pipeline publishes them as `parent_schedule`, `is_subsidiary = 0`. Removing them leaves 24,978.2M, -0.12 pct against the filed total.
+- One further row without an affiliation member, CCI Topco preferred stock (c-905, 2.2M), sits in the main schedule at about 40 pct of the document: a real position the filer did not tag. A rule keyed only on "no affiliation member" would wrongly remove it.
+- 2025-12-31 reconciles because promoted rule `agent_investigate_rules/1838126/1838126_2025q4_bare_axis_leak_exclusion.json` excludes rows without `Non-Affiliated Issuer`, with a named exception list, for `quarters = ['2025-12-31']` only. The same leak recurred one quarter later because the rule is pinned to its quarter. It also drops the rows rather than retaining them as `underlying_schedule` (owner ruling 2026-09-30).
+- Format change: before 2025-12-31 no HPS row carries an affiliation member (all rows are identifier-axis only), so that discriminator does not exist for 2023-03-31 to 2025-09-30. The +2.5 to +6.8 pct excess from 2023-12-31 to 2025-09-30 is NOT yet traced (hypothesis: earlier joint-venture schedules, same mechanism). The -1.8 pct shortfall in the first three quarters of 2023 is a separate, untraced item.
+
+Not done: no fix, no trial build (a full rebuild was running). Earlier quarters' filings not opened.

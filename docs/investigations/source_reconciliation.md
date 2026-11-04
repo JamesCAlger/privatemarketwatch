@@ -1072,3 +1072,107 @@ Question: which V11b failures are implementation defects, and which are measured
 - Lord Abbett Q4-2025 adds 144 public rows/$1,528.269m: 111 parent rows/$1,247.432m and 33 underlying rows/$280.837m. The independent parent anchor is$1,309.928m. Known uncovered Arkas equity facts c-304/$888k and c-306/$2k plus SBLA parent interest c-312/$61.606m bridge the parent gap exactly. Source0000930413-26-000841 SHA256 031821ae515ce44340d7c7682d3114e7f5c95f4ba68af7722bb6e6440f08e750. The initial single-missing-interest hypothesis was rejected after finding the two equity facts. Keep the existing wrapper residuals and failing legacy public-total comparison visible; do not offset the discrepancy or drop underlying rows.
 
 Confidence is high for the observed parser/selection/retention mechanisms and exact source arithmetic. Final-candidate effects are not established: repairs were applied 13:00 UTC and focused verification is running with failures to diagnose. The source-attributed gate review permits implementation continuation only, with no new sign-off, numerical amendment or production adoption. Detailed immutable inputs: scratch/2026-09-16_refactor_continuation/{flagged-fv-source-mechanisms-v1.json,v11b-acceptance-review-v2.json,bcred-retention-migration-v1/}.
+
+## 2026-10-04 -- Jev pilot: possible primary/supplemental position overlap
+
+**Question:** Can source-supported negative-cost rows still leave a published-position inclusion issue unresolved?
+
+Four existing pilot rows for CIK 1959568/Q3-2024 represent AB Centers delayed-draw and revolver disclosures in both the main SOI (t12r6/r7) and supplemental commitments (t15r2/r3). All carry parent_schedule scope. Main FVs total -23,000; supplemental FVs total -24,000, also used as proxy costs. Combined published FV is -47,000. These are descriptive sums, not an audited correction target.
+
+The note describes wholly or partly unfunded positions and allows commitment expiration before maturity. Similar instrument names and revolver values make presentation overlap a hypothesis, but different DDTL FV (-21,000/-22,000) and unresolved contractual links prevent a duplicate conclusion. No rows were removed and no frozen flag labels changed. Position linkage, funded/unfunded treatment and independent source-total reconciliation remain B1 work.
+
+The same filing's note 9 leads across a page boundary to a 62-row commitment table, beyond the current generic note-table retrieval contract. Both affected reported-cost flags retain separate annotated-scope blockers. Detailed source hash, frozen row identifiers and next validation requirements are in docs/jev_screening/07_proxy_cost_evidence.md and 11_remaining_bundle_work.md. No production changes or new API calls.
+
+Follow-up on the same four rows: existing row validation has C107 on both main rows and C107/X02 on the supplemental rows. Exact-dimension source reconciliation treats the main rows as matched and the proxy rows as nonblocking cost diagnostics, so source matching does not settle possible economic overlap. The two proxy rows also carry an equity/principal diagnostic reason despite LOAN category, cost-only mismatch and absent principal on both sides. Read-only SQL inspection and a four-case precedence probe reproduce an unparenthesized OR followed by AND conditions in the reason branch. This is an explanation mechanism, not a full reconciliation rebuild or a demonstrated blocking-status change. Artifact: overlap_routing_f9d3f6a9fd99796e.json; production unchanged.
+
+## 2026-10-04: exploratory TCW survivor defect outside the frozen experiment
+
+While checking historical C104 references, one additional current position was investigated separately: TCW Direct Lending VIII, CIK 0001825265, Q3-2025, ROW-ecc8c78a0d433f52. This is not a new Jev call or an addition to the frozen 67-case experiment. It adds one exploratory source investigation in an already included fund, using a filing outside the prior 26-file frozen set.
+
+The published issuer includes the affiliation prefix and instrument text; instrument_description is `%`, cost is 12,115,467 with first_observed_fv_proxy provenance, and rate/principal are missing. Its existing X02 flag requests review for missing rate data. The source context C_e7164d57-af08-45d5-bb0f-37f8d69a00cc is table 10 row 3, an affiliate rollforward. It contains current FV 12,115,467 and a 10.00% rate, but no cost fact.
+
+The same filing's main schedule, table 5 row 7, has context C_f1dd68ce-9df4-4ad8-9279-784ba8aaf308 and explicitly reports the Superior term loan's cost 20,376,019, FV 12,115,467, principal 21,367,666, maturity 2028-12-15 and displayed rate 11.66% including PIK. Those cost/FV/principal facts are present in raw bdc_holdings.csv. The main context is absent from current unified holdings; the only current equal-FV/context candidate is the rollforward row. Different stated rates across the two disclosures are preserved as evidence, not reconciled by assumption.
+
+The existing promoted rule superior-affiliation-axis-dedup-2025q3 groups by report_date/fair_value and keeps first. Its rationale says this preserves the detailed row. The current applier instead sorts by a source anchor before choosing first; row_id is not assigned until after the correction stage, so accession/context provide the tie-break. The rollforward context sorts before the detailed term-loan context. An in-memory six-row reproduction using the unmodified applier retains the rollforward term loan in both original and reversed input order, while preserving the detailed delayed-draw and common-stock rows. Main/worktree module text is identical after newline normalization; raw hashes are recorded separately.
+
+Current application audit reports status ok, three rows removed and FV 15,046,605, exactly matching authored counts/amounts with no drift. Those metrics cannot distinguish the wrong surviving term-loan representation: its FV is identical. The main-schedule cost exceeds the published proxy by 8,260,552. This is a source-backed field-retention discrepancy, not a completed correction or full pipeline replay; no production changes were made.
+
+Implications for screening: a missing-rate question can expose a wrong source representation rather than a legitimate missing disclosure. A role-aware bundle must locate the primary schedule and relevant rollforward, preserve conflicting terms, and route the suspected extraction/correction issue to B1. A matched FV, valid donor proxy, deterministic output or high-confidence weak-flag answer would not establish audited holdings. Before any future repair, verify position identity, correction precedence, all three surviving instruments and field-level source reconciliation; do not simply flip keep to last or drop all affiliate disclosures.
+
+Artifacts: exploratory_context_089f24a29d1a0ec6.json and survivor_rule_probe_b725defdd3b05c9b.json. Original source: data/raw/filings/bdc_html/1825265/000119312525276913.html, SHA-256 e2346b7f6529af80f91b369ca6c6f34a1c43d2245a0e9a051551d976f69b8fd7. Earlier source-only extracts are retained. The probe records source/output/rule/module/audit hashes and makes no API calls. This finding was discovered by source investigation, not by Jev, and does not establish Jev's incremental benefit.
+
+## 2026-10-14: Top-ten production versus accepted Claude sandboxes
+
+Question: compare production with the sandboxes used for item-by-item findings remediation.
+Read-only comparison; no pipeline/data changes, downloads, rebuild, pytest or re-attestation.
+Production: data/output/private_markets_holdings.parquet, written 2026-10-01 08:21 local;
+canonical CSV checked for Q1 aggregate FV, row count and rate-field non-null parity (all equal).
+Public metadata asOfDate is 2026-03-31. Scope: ten largest wrapper-cohort funds by production
+published-basis Q1 fair value, not the entire universe. Both sides exclude underlying_schedule;
+cash stays included in the headline. Sandbox selection: accepted_sandboxes.json on 2026-10-14:
+owsp3 for BCRED/Blue Owl, ap2 for Apollo, t10a for the other seven. These are mixed build vintages.
+
+| Fund | Production FV $M | Sandbox FV $M | Change $M | Rows before / after |
+|---|---:|---:|---:|---:|
+| BCRED | 80,910.650 | 80,469.381 | -441.269 | 1280 / 1288 |
+| Blue Owl Credit Income | 35,500.450 | 35,500.450 | 0 | 863 / 863 |
+| Ares Capital | 29,530.800 | 29,499.300 | -31.500 | 1421 / 1419 |
+| HPS Corporate Lending | 26,587.210 | 25,007.853 | -1,579.357 | 831 / 813 |
+| Apollo Debt Solutions | 25,354.912 | 25,308.482 | -46.430 | 773 / 773 |
+| Ares Strategic Income | 21,332.904 | 21,332.904 | 0 | 1260 / 1260 |
+| Goldman Sachs Private Credit | 17,053.825 | 16,852.129 | -201.696 | 765 / 764 |
+| Golub Capital Private Credit | 9,843.424 | 10,000.112 | +156.688 | 1029 / 1049 |
+| Sixth Street Lending Partners | 8,632.315 | 8,632.315 | 0 | 122 / 122 |
+| Oaktree Strategic Credit | 7,019.058 | 7,019.058 | 0 | 367 / 367 |
+
+Total: $261,765.549M to $259,621.984M, -$2,143.565M (-0.819%). Rows 8,711 to 8,718;
+39 added, 32 removed, matching unique row_id within each fund and quarter (uniqueness asserted).
+Position IDs were not used as cross-build keys. Counts are records, not unique borrowers.
+All ten sandbox Q1 totals match sandbox fund_financials investments_at_fair_value after excluding
+CASH for Apollo ($159.399M), Goldman ($343.539M) and Golub ($71.891M). This is a stored-anchor
+reconciliation, not a fresh independent filing audit; those cash amounts remain in the table.
+
+Field changes on matched Q1 rows and coverage:
+- HPS principal_amount populated: 130 to 638; 521 matched principal values changed; 522
+  shares_held values changed. D-149 documents principal previously tagged as units.
+- interest_rate populated: zero to 5,498 across these ten. Sandbox kinds include all_in/cash/unresolved;
+  this is changed extraction/interpretation, not proof that every added rate is correct. Blue Owl
+  still has only 9 and Apollo 44 populated interest_rate values. Do not infer income accuracy.
+- Blue Owl cost populated: 863 to 526 (337 values removed); cost sum $36,040.496M to $36,037.820M.
+  D-106 records the owner ruling against inferred cost where none is filed.
+- Issuer names changed on 1,414 matched Ares Capital rows, 1,211 Ares Strategic rows, 648 BCRED,
+  591 HPS, 333 Oaktree and 97 Sixth Street rows. Instrument descriptions change too; matching
+  remains position-level. Industry labels changed substantially; the counts do not certify labels.
+- Apollo principal currency changes on 616 matched rows; Goldman on 749; Sixth Street on 107.
+- pct_of_net_assets remains entirely absent in seven of the ten funds at Q1. Presence is not a
+  correctness gate and absence alone does not establish an extraction defect.
+
+Latest selected sandbox ledgers: 575 findings across periods since 2022, 4 outstanding.
+Blue Owl: field_coverage_drop 2025-03-31, PP02 2024-06-30 and 2024-09-30.
+Ares Strategic: X11 2026-03-31. Thus Q1 has one outstanding; all others are in other quarters.
+Eight funds have zero outstanding. This is not an apples-to-apples before/after finding reduction:
+validation rules and dispositions changed, and no fresh production ledger was generated.
+D-164 describes the two PP02 cases as zero-value duplicate lines. Accepted sandbox registration
+is not universal gate approval: owsp3 explicitly has no fund-gate report. No publish recommendation
+or full-cohort sign-off is implied. A clean ledger or reconciled total is not proof of correct data.
+
+Q2 sandbox FV is available separately in summary.csv; do not compare it to production Q1 as a fix.
+Reproducible bounded DuckDB diagnostics and CSV detail: scratch/2026-10-14_top10_comparison/
+(compare.py, check_basis.py, summary.csv, field_changes.csv, coverage.csv, ledger.json, logs).
+Both diagnostic processes completed inside their 120-second timeout; 2GB memory and 2 threads.
+
+### 2026-10-20 - Remaining nine v1 funds: March 2026 position count
+
+Question: why were five NAVs blank, and how many published positions do the nine remaining in-scope funds have? The shared companyfacts net_assets map omits AssetsNet and MembersEquity. Four per-fund corrections existed but were absent from the published financials CSV; Lord Abbett's missing correction was added and all five March values populated in this session (see agent changelog). This does not repair global concept mapping or other dates.
+
+Read-only DuckDB query of canonical private_markets_holdings.csv at 2026-03-31, excluding underlying_schedule and using only the 70 manifest entries: 30,143 population rows. Nine funds: NexPoint 21; SCP 24; TCW Star 52; PIMCO Capital Solutions 73; Onex 85; BlackRock Direct Lending 247; Stellus 326; Audax 456; TriplePoint Private Venture 464. Total 1,748, or 5.7990 percent of population positions. Each of the nine has identical row count and distinct nonblank position_id count; no borrower aggregation. Saratoga is held back and excluded. These are current published counts, not post-clearing sandbox counts or an accuracy attestation. Reproduction and JSON: scratch/2026-10-20_nav_backfill/count_positions.py and position_counts.json. No production data changed by this count.
+
+### 2026-10-20 - NAV coverage across dates and owner-deferred v1 tail
+
+Question: why were NAVs absent, repair the global mapping across dates, and defer the nine smallest remaining in-scope funds before a largest-first ledger-clearing run.
+
+Cause: the balance-sheet NAV map omitted exact us-gaap AssetsNet and MembersEquity concepts, including dates where a filer changed tags. Existing source-backed figure wrappers also had unpublished corrections. The new fallback fills missing dates only, keeping existing mapped dates intact. Cached old/new extraction comparison found 486 additional dates across 78 BDCs without changing already-mapped NAVs. The bounded publication filled 428 blank cells and added 29 dates, replacing eight older/undated fund-quarter observations; 12 NAV/share values changed as a direct mapping consequence. Existing quarterly returns were held constant in the controlled comparison. Unrelated candidate financial-data changes were excluded. Detailed CSV diffs, backups and tests are in scratch/2026-10-20_scope_nav/.
+
+Owner deferred NexPoint, SCP, PIMCO Capital Solutions, BlackRock Direct Lending, TCW Star, Onex, TriplePoint Private Venture Credit, Audax and Stellus Private Credit: active manifest entries 70 -> 61. Original records are preserved as deferred_entries; findings are not resolved or suppressed. March 2026 NAV of these nine is 1,822,054,907 (0.891460377 percent of prior 70-fund covered NAV); 1,748 published position observations (5.799 percent). Saratoga was already held back and is not one of the nine. AGENTS.md received only the requested bounded scope amendment, preserving pre-existing edits.
+
+Starting clearing-workflow inventory: 2,051 outstanding findings across retained 61 funds, from latest per-fund sandbox ledgers dated October 18-20, covering quarters from 2022 onward. This is a pre-run inventory, not a newly rebuilt or independently reaccepted ledger. Fresh fund builds can change it. Run order is descending March 2026 published fair value, beginning BCRED, Blue Owl Credit Income, Ares Capital, HPS, Apollo Debt Solutions.

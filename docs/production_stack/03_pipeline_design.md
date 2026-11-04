@@ -2,6 +2,8 @@
 
 Consolidated 2026-09-12. Implements the [data contract](02_data_contract.md) under [decisions](01_decisions.md). Section 1 describes the pipeline as it runs today, with confirmed defects. Sections 2-7 describe the target. Nothing in sections 2-7 is deployed except the candidate runner in section 5.
 
+Storage retention update, 2026-10-03: the owner requested keeping only candidates V11b and V12. See the [candidate history and cleanup record](candidate_history_2026-10-03.md) for the older versions, preserved evidence and completion status. Historical paths below may refer to retired candidates.
+
 ## 1. Current writer order and confirmed defects
 
 Execution scope follows the September 14 owner ruling in [decisions](01_decisions.md): build and verify the refactored architecture using isolated cached candidates. Agent dispatch and new enrichment to remediate the measured dataset run afterward. The existing proposal, verification, promotion and enrichment replay interfaces must work; operating campaigns is not required to prove those interfaces. Integration evaluations retain genuine data FAIL/UNASSESSABLE outcomes without claiming production readiness.

@@ -2,7 +2,7 @@
 
 Append-only log of agent-completed work. The human owner consolidates significant entries into AGENTS.md periodically.
 
-Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what changed, which files, and any new contracts or updated counts.
+Format: `### YYYY-MM-DD â€” Brief title`, then bullet points describing what changed, which files, and any new contracts or updated counts.
 
 ---
 
@@ -63,8 +63,8 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 - `docs/production_stack/production_data_stack_plan.md` updated (docs only, no code/data changes):
   - Phase 0 gate: R2 backup verified via `rclone check` (checksums) + subset restore drill, replacing `rclone lsd` listing.
   - Phase 1 gate: semantic diff may show individually-explained type-fidelity deltas (all-NULL->INT32, CIK padding) instead of strict zero; each documented, no bulk waivers.
-  - Phase 2: spike success criterion added — model-boundary test failure must round-trip into a B1-bundlable packet with better mechanism localization than the residual classifier; "keep Python SQL" is a valid spike outcome. Open-decisions table updated to match.
-  - Phase 2: write-guard replacement mandated — DuckDB/dbt native IO bypasses the `builtins.open` monkeypatch guard in `tests/conftest.py`; replacement (scratch-dir dbt profile + post-suite filesystem manifest check) ships with the first materialized model. Also added to Risks.
+  - Phase 2: spike success criterion added â€” model-boundary test failure must round-trip into a B1-bundlable packet with better mechanism localization than the residual classifier; "keep Python SQL" is a valid spike outcome. Open-decisions table updated to match.
+  - Phase 2: write-guard replacement mandated â€” DuckDB/dbt native IO bypasses the `builtins.open` monkeypatch guard in `tests/conftest.py`; replacement (scratch-dir dbt profile + post-suite filesystem manifest check) ships with the first materialized model. Also added to Risks.
   - Phase 2 gates: twin-build determinism now per-increment (window/ROW_NUMBER tiebreak drift); phase completion requires provenance re-verifier verified-FV >= 99.9% on migrated output.
 - Verification: none required (pure docs change).
 
@@ -2117,7 +2117,7 @@ Implemented full frontend and pipeline export narrowing from all vehicle types (
 - **staging_bdc.py**: Hoisted `_pr_instrument_re` before the per-CIK loop (shared between bypass and hierarchy filter). Added `_prefix_rules_hierarchy_parts` list and `_prefix_hierarchy_filter` combined SQL expression.
 - **Followup fix**: Prefix match in conditions 2a/2b/2d used `\s` after prefix which missed dash separators (`Prefix- Sector`) and bare prefix (`Prefix` at end-of-string). Changed to `(?:\s|-|$)`. Also widened 2b from `starts_with(_lower_id, 'total ')` to `regexp_matches(_lower_id, '(?:^|\s)total\s')` to catch embedded "Total" after sector names (e.g. "...United States Total Applied Digital Corporation").
 - **Oracle results**: Trinity (0001786108) A04/E01 now passes ALL 12 quarters with financials (0.0-0.7% divergence). Previous state was 24-29% overshoot on all quarters. Trinity overall: 161 pass / 18 fail (remaining fails are A07 pct_sum and unrelated checks). Ares (0001287750) unchanged at 198 pass / 16 fail.
-- **Row counts**: Unified holdings 794,982 (down 112 from 795,094 — subtotals removed across all Trinity quarters). BDC total: 575,217 rows.
+- **Row counts**: Unified holdings 794,982 (down 112 from 795,094 â€” subtotals removed across all Trinity quarters). BDC total: 575,217 rows.
 - **Tests**: 774 passed, 2 deselected (pre-existing MSD hierarchy test failures from prior worktree changes, not caused by this change).
 
 ### 2026-06-01 -- Fix oracle failures for Ares Capital and Trinity Capital
@@ -2129,7 +2129,7 @@ Implemented full frontend and pipeline export narrowing from all vehicle types (
 - **test_unified_holdings.py**: Updated pre-existing test (`test_long_noncontrol_dimension_path_filtered_pre_strip` -> `test_long_noncontrol_dimension_path_with_entity_kept_pre_strip`) to match worktree `bdc_identifier.py` changes where expanded entity/leaf signals protect the identifier.
 - Test results: 2593 passed, 2 failed (pre-existing X06 column validation), 13 skipped, 32 deselected (5 pre-existing worktree failures: 2 MSD hierarchy, 1 Trinity wrapper v3, 2 column validation).
 
-### 2026-05-28 — SC TO-I extraction regex expansion and universe validation
+### 2026-05-28 â€” SC TO-I extraction regex expansion and universe validation
 
 - Updated `pipeline/sc_toi_filings.py` and `tests/test_sc_toi_filings.py` for SC TO-I/A tender-offer result extraction.
 - Added result-oriented share-count parsing with fractional shares, blocked prospective original-offer language such as "Shares that are tendered", and required direct tendered/accepted result evidence before emitting a result row.
@@ -2140,7 +2140,7 @@ Implemented full frontend and pipeline export narrowing from all vehicle types (
 - Final extracted field counts: `shares_tendered` 596/625, `shares_accepted` 403/625, `repurchase_price_per_share` 567/625, `offer_expiration_date` 612/625. Parse progress statuses: 738 `ok`, 47 `partial`, 2,062 `no_data`, 2 `no_html`.
 - Blackstone Private Credit Fund (`CIK 1803498`) now has 20 completed result rows with 100% fill for tendered, accepted, price, and expiration. The previous 21st row was a prospective original SC TO-I filed 2026-05-01 for an offer expiring 2026-05-29 and is correctly excluded from result output.
 
-### 2026-05-28 — Test workflow guidance and slow-test markers
+### 2026-05-28 â€” Test workflow guidance and slow-test markers
 
 - Added proportional test workflow guidance in `docs/testing_workflow.md` and registered pytest markers in `pytest.ini`: `slow`, `integration`, and `data_rebuild`.
 - Marked known slow integration tests in unified holdings, holdings validation, interval source review, and position matching so agents can run `python -m pytest tests/ -m "not slow" --ignore=tests/test_column_validation.py --tb=short` for broad fast checks.
@@ -2656,7 +2656,7 @@ Implemented the MSD Investment Corp. (CIK 0001849894) wrapper correction after v
 
 **Status: partial_wrapper** -- dispatch classification is production-ready with 0 baseline delta. Issuer extraction improvement requires code change to support per-CIK hierarchy_extract regexes (tracked limitation). PIK leaf exclusion is a pre-existing pipeline issue, not introduced by this wrapper.
 
-### 2026-06-04 — HPS Corporate Lending Fund wrapper (CIK 0001838126, v3)
+### 2026-06-04 â€” HPS Corporate Lending Fund wrapper (CIK 0001838126, v3)
 
 - Created dispatch-only wrapper at `data/overrides/bdc_xbrl_wrappers/0001838126.json`
 - HPS uses bare company names as XBRL identifiers (no instrument keywords for debt) with trailing position numbers. Pipe-delimited affiliation suffix appeared from Q4 2025.
@@ -4552,7 +4552,7 @@ A downstream review consumer should filter status='not_found' AND in_unified ->
 quirk). Tests: 32 in fields suite (unchanged; producer-level merge validated by
 the re-run). Unified rebuild still pending explicit go.
 
-## 2026-06-16 — Stable position_id registry (opt-in, dark-landed)
+## 2026-06-16 â€” Stable position_id registry (opt-in, dark-landed)
 
 What changed:
 - New module `pipeline/position_id_registry.py`: drift-resistant per-row
@@ -4562,7 +4562,7 @@ What changed:
   registry (inherit / mint / merge-with-retirement / split-guard) instead of
   the unstable global sort-rank ordinal.
 - `pipeline/position_matching.py`: `assign_position_ids()` gains keyword-only
-  `use_registry`/`registry_path`/`retirements_path` (default off → behavior
+  `use_registry`/`registry_path`/`retirements_path` (default off â†’ behavior
   identical). When on, both the empty-matches and main branches resolve ids
   through the registry. Component formation is UNCHANGED.
 - `pipeline/config.py`: `POSITION_ID_REGISTRY_FILE`, `POSITION_ID_RETIREMENTS_FILE`.
@@ -4572,20 +4572,20 @@ Why / evidence (see `docs/position_id_stable_identifier_design.md`):
 - Measured: new-quarter ingestion re-sequences 99.99% of closed-quarter labels
   today; issuer_name drifts 12%, rawid 1.6% (2.7% wrapped), fair_value 0% but a
   restatement hazard; the composite key residual-collides at 0.012%.
-- Registry inherits ids by chain membership → closed-quarter ids stable across
+- Registry inherits ids by chain membership â†’ closed-quarter ids stable across
   rebuilds; merges retire the younger id with an audit row; rawid drift is
   carried forward via the chain (no separate remap CSV in v1).
 
 Guardrails / scope:
 - Opt-in only; production path unchanged until seeded + flag flipped (needs
   sign-off). rawid drift on a closed quarter with no adjacent chained quarter
-  would still re-mint — known residual.
+  would still re-mint â€” known residual.
 - Tests: +10 in `tests/test_position_id_registry.py` (replay determinism,
-  closed-quarter stability under reorder + new quarter, merge→retirement,
+  closed-quarter stability under reorder + new quarter, mergeâ†’retirement,
   split uniqueness, rawid carry-forward, roundtrip). Existing
   `tests/test_position_matching.py` 97/97 still pass (no default-path regression).
 
-## 2026-06-16 — position_id registry: Q1/Q2 hardening
+## 2026-06-16 â€” position_id registry: Q1/Q2 hardening
 
 What changed:
 - `position_id_registry.compute_natural_keys`: base-key collisions now resolved
@@ -4660,7 +4660,7 @@ Estimated gain once rebuilt: DIRECT_LENDING lien coverage 71.0% -> ~91.3%
 (99,358 of 141,851 blank-lien DL rows recoverable via reconciled iXBRL lien).
 Requires a unified rebuild to take effect (not yet run).
 
-## 2026-06-16 — Overhaul-proof gates for J06 identifier-drift mis-matches
+## 2026-06-16 â€” Overhaul-proof gates for J06 identifier-drift mis-matches
 
 What changed:
 - Spot-checked the J06 fuzzy-match oracle flags. Confirmed one real production
@@ -4683,7 +4683,7 @@ for the agentic wrapper loop: 1930087, 1901612.
 
 Tests: +3 (1 pass, 2 strict-xfail). No production data or matching logic changed.
 
-## 2026-06-16 — Registry activated: position_id repopulated from seed (--returns --stable-position-ids)
+## 2026-06-16 â€” Registry activated: position_id repopulated from seed (--returns --stable-position-ids)
 
 What ran: `python -m pipeline.main --returns --stable-position-ids` (cache-only).
 Pre-run safety snapshot: pre_run_2026-06-16_173612.
@@ -4707,7 +4707,7 @@ the live file's labels had been wiped). Registry at data/output/position_id_regi
 Open item: registry is stateful but lives in the rebuild-target dir -- move to a
 non-regenerated path (e.g. data/overrides/) before routine --clean rebuilds.
 
-## 2026-06-16 — Split audit + registry moved out of data/output/
+## 2026-06-16 â€” Split audit + registry moved out of data/output/
 
 What changed:
 - `position_id_registry.resolve_position_ids`: chain SPLITS are now audited.
@@ -6143,9 +6143,9 @@ scores the whole surfaced/suppressed population at once).
   LLM re-adjudication expensive). Updated stale top status header (substrate + B0/B0.5/B1 pilot
   built; B2/B3/B4 + C not built) and added the outer-loop pointer above the B0 stage.
 
-## 2026-06-23 — V1 scope clarified + homepage FV reconciliation (exact match) + index removal
+## 2026-06-23 â€” V1 scope clarified + homepage FV reconciliation (exact match) + index removal
 
-- **AGENTS.md**: added a "V1 Scope (Current Public Product)" section — v1 ships only position-level holdings + analytics for the ~70 unlisted BDC wrapper-cohort sample; no indices, BDCs only.
+- **AGENTS.md**: added a "V1 Scope (Current Public Product)" section â€” v1 ships only position-level holdings + analytics for the ~70 unlisted BDC wrapper-cohort sample; no indices, BDCs only.
 - **Homepage FV reconciliation**: headline "Fair Value", the instrument-type donut, and the industry-exposure donut now reconcile EXACTLY (to the dollar) to one current-quarter portfolio total = sum of `private_markets_holdings.csv` for the cohort across all index classifications ($385,082,457,522 at 2026q1).
   - Root cause was three different sources/scopes: headline = DL-only unified holdings; instrument donut = `position_returns.csv` (matched + per-issuer-deduped subset, ~$206B); industry donut = unified holdings + an inflated reconciled-BDC sector overlay (~$461B). Matching coverage itself is ~99% by FV; the old $206B was a per-issuer dedup artifact, not a coverage gap.
   - `pipeline/export/index_exports.py` `_export_portfolio_characteristics`: added `portfolioFv` (full-portfolio total) + `classificationFv` (FV by index_classification) to `portfolio_characteristics.json`; `portfolioFv` is exactly the sum of the rounded classification buckets. `totalFv` stays DL-only (denominator for lien/rate/WAC).
@@ -6154,7 +6154,7 @@ scores the whole surfaced/suppressed population at once).
 - **Fund blurbs**: `_compose_blurb` now states lien/rate composition as a share of total fair value (debt_pct * split), matching the on-page donut denominator; 65 live `fund_details/*.json` blurbs patched in place.
 - **Index product removal (frontend)**: removed `/indices` routes (incl. deleting the `[slug]` dynamic route that broke static export), nav/footer/sitemap index links, index methodology section + `INDICES`/`INDEX_METHODOLOGY` usage, and rendered index copy (terms page, fund Performance "NAV/Share Index" label -> "NAV per Share"). Orphaned index-only components (IndexCard, PerfSection, TotalReturnChart's index comment, ConstituentTable, ReturnSummaryTable, etc.) remain as dead code, not rendered.
 
-## 2026-06-23 — Agent B (Adjudicator) M1: Codex-fleet plumbing + verdict-leaf validator
+## 2026-06-23 â€” Agent B (Adjudicator) M1: Codex-fleet plumbing + verdict-leaf validator
 
 Built M1 of the Agent B build plan (`docs/adjudication_architecture/B_build_plan_codex_fleet.md`),
 reusing Agent A's Codex worker harness. Cached-only, no LLM run; unit-tested.
@@ -6900,7 +6900,7 @@ these need source-anchored checks, not row-local predicates.
   (30), shadow/conservation/promote selection (46). Wave 1 itself (promotion +
   rebuild + semantic diff + battery re-run) NOT executed -- operator-gated.
 
-## 2026-07-10 — Disk reclamation: worker-fleet scratch + pre-run snapshot retention
+## 2026-07-10 â€” Disk reclamation: worker-fleet scratch + pre-run snapshot retention
 
 **What changed:**
 - Diagnosed `data/` at ~600 GB: 853 stale `codex.exe` copies (257 GB) in `worker_home\.sandbox-bin` dirs under `data/output` (Codex copies its ~300 MB binary into every fresh CODEX_HOME), plus ~40 MB/~5,000-file plugin caches per worker, plus 29 unpruned `pre_run_*` snapshots (154 GB) in `data/snapshots`.
@@ -6911,7 +6911,7 @@ these need source-anchored checks, not row-local predicates.
 - `pipeline/main.py` `_snapshot_outputs()`: now prunes to the newest 3 `pre_run_*` snapshots after each auto-snapshot (`_PRE_RUN_SNAPSHOTS_KEEP = 3`); named snapshots never touched.
 - `docs/reference/codex_worker_dispatch.md`: added "Disk hygiene" section.
 
-**Tests:** new `tests/test_snapshot_prune.py` (5 tests, passing). No production data outputs touched — deletions were sandbox scratch and snapshot copies only.
+**Tests:** new `tests/test_snapshot_prune.py` (5 tests, passing). No production data outputs touched â€” deletions were sandbox scratch and snapshot copies only.
 
 ## 2026-07-10 -- Wave 1 executed: first production application of promoted agent fixes
 
@@ -10916,32 +10916,32 @@ discover work, and resolving the packets involves validation-semantics judgment.
   (21 tests fail under pandas 3.x -- known deferred migration). Ruleset 22149712 on main:
   required checks python-tests + frontend-build, no force-push/deletion, admin bypass enabled.
 
-## 2026-09-03: data/output CSV triage — 18 stale files removed/archived, baseline manifest pruned
+## 2026-09-03: data/output CSV triage â€” 18 stale files removed/archived, baseline manifest pruned
 
 **What changed:**
 - Triaged all 149 top-level `data/output/*.csv` against every code/doc reference
   (12,046 refs; two-hop: config-constant resolution + dynamic-filename stems).
   Full method + per-file verdicts: `scratch/2026-09-03_csv_triage/triage_report.md`.
 - 131 KEEP (real consumers). Removed: `nport_holdings_with_excluded.csv` (2.25 GB
-  orphan, no writer/reader since ~May, pre-exclusion variant); 13 stale Apr–Jun
+  orphan, no writer/reader since ~May, pre-exclusion variant); 13 stale Aprâ€“Jun
   investigation snapshots zipped to scratch (`archived_stale_snapshots.zip`);
   3 `scratch_sweep_manifest_*.csv` moved to scratch per scratch policy.
 - Baseline governance kept coherent: same 14 files pruned from
   `data/snapshots/baseline/data/output/` and `docs/refactoring/baseline_manifest.json`
-  (37,213 -> 37,199 entries). These were never rebuild products — the snapshot
+  (37,213 -> 37,199 entries). These were never rebuild products â€” the snapshot
   inherited them as debris; no rebuild-produced artifact touched.
 - NOT touched: `fund_strategy_correction_candidates.pinned.csv` (operator pin
   from q1p3 window, flagged for owner).
 
 **Validation:**
 - `python scripts/diff_outputs.py` post-change: zero failures attributable to the
-  triage — all 34 "missing" entries are pre-existing baseline staleness
+  triage â€” all 34 "missing" entries are pre-existing baseline staleness
   (`_pytest_cache/`, `agent_a/proposals/`); 1,784 content divergences are
   pre-existing q1p3-era drift vs the post-Phase-6 baseline, not from this change.
 
 **Counts:** data/output top-level CSVs 149 -> 131; footprint 7.19 GB -> ~4.9 GB.
 
-## 2026-09-03: Phase-1 PR-1 — typed Parquet companions live for 11 core artifacts
+## 2026-09-03: Phase-1 PR-1 â€” typed Parquet companions live for 11 core artifacts
 
 **What changed:**
 - `pipeline/output_schemas.py` (new): typed schema contracts for the 11 phase-1
@@ -10951,7 +10951,7 @@ discover work, and resolving the packets involves validation-semantics judgment.
   kept for non-contract files). 10 writer sites newly wired (all 15 sites now
   emit companions). `scripts/parquet_csv_parity.py` (new): CSV-vs-Parquet parity
   checker. `tests/conftest.py`: native-IO write backstop (session-level
-  mtime+size manifest of data/output + frontend/public/data — DuckDB/pyarrow
+  mtime+size manifest of data/output + frontend/public/data â€” DuckDB/pyarrow
   bypass the open() guard).
 - Plan: `docs/production_stack/phase1_parquet_migration_plan.md`. Ordering
   decision: PR-1/PR-2 proceed before the R2 gate; PR-3 waits.
@@ -12645,22 +12645,22 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 ### 2026-09-17 - BCRED reporting-portfolio recognition covers every reviewed form (Task 2, v13 repairs)
 
 - `pipeline/source_encodings.py` legacy branch of `reporting_suffix_expression` replaced the legal-suffix (Inc/LLC/Ltd/LP/...) requirement with a pure separator requirement: the label must be its own comma- or ordinal(space-digit-space)-separated segment, trailing or leading. Borrower legal-form words (LLLP, LLP, Co., S.a r.l., S.p.A, bare Bidco, plain names) are no longer required. Controller ruling dropped the brief's `own_interest` guard as unreachable dead code (the terminal pattern already requires a comma/ordinal immediately before the label, so bare "BCRED Emerald JV LP" and trailing joint forms never match it) and kept only the leading-form joint-"and" veto, which is load-bearing because "Emerald JV LP, and Acme LLC" matches the leading pattern. `legal=` line removed.
-- `tests/test_source_encodings.py`: added 10 positive fixtures (prefix form, LLLP/LLP/Co./S.a r.l./S.p.A/bare-Bidco/plain-name borrowers, ordinal-space form) and 5 negative fixtures (bare label, `BCRED Verdelite JV LP 2`, leading+joint "and", trailing+joint "and", label-inside-longer-name). RED confirmed exactly the 10 positive cases failed as `0001803498|parent` before the fix; all 41 cases pass after. `tests/test_source_encodings.py` (41), `tests/test_refactor_staging.py`, `tests/test_unified_holdings.py` (978 total) and `tests/test_bdc_xbrl_wrapper.py` (523) all pass unchanged — no fixture encoded the old legal-suffix rule, so no test needed updating for D08.
+- `tests/test_source_encodings.py`: added 10 positive fixtures (prefix form, LLLP/LLP/Co./S.a r.l./S.p.A/bare-Bidco/plain-name borrowers, ordinal-space form) and 5 negative fixtures (bare label, `BCRED Verdelite JV LP 2`, leading+joint "and", trailing+joint "and", label-inside-longer-name). RED confirmed exactly the 10 positive cases failed as `0001803498|parent` before the fix; all 41 cases pass after. `tests/test_source_encodings.py` (41), `tests/test_refactor_staging.py`, `tests/test_unified_holdings.py` (978 total) and `tests/test_bdc_xbrl_wrapper.py` (523) all pass unchanged â€” no fixture encoded the old legal-suffix rule, so no test needed updating for D08.
 - `data/overrides/bdc_xbrl_wrappers/0001803498.json` quirk `bcred_legacy_typed_reporting_portfolio` description rewritten to cite the reviewed evidence contexts (MH Sub I, 2U prefix form, Freeport LNG/Monk Holding/Confine Visual/Symphony Technology, AlixPartners, Auris Luxembourg/Tangerine Bidco) and drop the legal-suffix framing.
-- Real-data verification (`scratch/2026-09-17_v13_repairs/verify_scope_forms_v2.py`, read-only against the immutable V12 identity bundle `data/programme/candidates/production-20260916-v12/attempts/identity-01/bundle/private_markets_holdings.parquet`): of 16,088 CIK-0001803498 rows V12 classified `parent_schedule`, the new expression flips **874 rows / USD 10,409.764 million** to underlying (513 rows / $6.24B at 2023-03-31, exactly matching the documented count). This is close to but not identical to the "791 rows / $10,474.5M" figure recorded against `scripts/candidate_footprint.py`'s independently-built own-interest-exclusion regex in the "Candidate footprint gate added" entry above — the two mechanisms are structurally different (footprint gate matches the label anywhere via `(^|[ ,])`+label with an own-interest guard; this fix anchors the label at the absolute start or end of the identifier with no guard needed for the terminal case), so a small population difference between them is expected and not a red flag by itself.
-- **Residual finding (out of scope for this task, not fixed):** the verification script's issuer_name-based check found 41 rows still parent-scoped while containing a JV label (top patterns: `BCRED Emerald/Verdelite JV LP`, correctly still-parent). A deeper diagnostic against `bdc_dimensions_raw` directly (not run as part of the committed script) found a materially larger residual: **53 rows / USD 13,156,885,000** remain `parent_schedule` under the new rule because the borrower and label are joined by a bare space with no comma and no ordinal digit (e.g. `Polyphase Elevator Holding Co. Emerald JV LP`, `Auris Luxembourg III Sarl Verdelite JV LP`, `TeamSystem SpA Emerald JV LP`), concentrated in 2023-12-31 through 2026-03-31 ($1.6-1.9B per quarter in the later periods). This bare-space form is not among the forms enumerated in the Task 2 brief or the controller's ruling and was not implemented — flagging for owner review rather than widening the regex without a reviewed evidence basis, per the anti-sycophancy guardrail against chasing a number without a mechanism. It is larger in dollar terms than the entire fix implemented here and should be scoped as a follow-up (a fourth legacy separator form, or a possible convention change partway through 2023).
-  - **CORRECTION (2026-09-17, fix round 1):** the 53-row / USD 13,156,885,000 figure above is WRONG by roughly two orders of magnitude in dollar terms. The diagnostic that produced it tested the whole `bdc_dimensions_raw` column instead of `split_part(bdc_dimensions_raw,'|',1)` (the member basis `reporting_suffix_expression` actually uses), which swept in the already-correctly-classified post-2025-12-31 pipe form (725 and 722 rows classified `underlying_schedule` at 2025-12-31 and 2026-03-31 respectively via the non-legacy `labels` branch — control-checked and confirmed unaffected). Measured correctly on the member basis (`scratch/2026-09-17_v13_repairs/bare_space_residual_v2.py`), the genuine bare-space residual is **34 rows / USD 297.5 million**, spanning 2023-09-30 through 2024-03-31 only (1 row at 2023-09-30, 30 at 2023-12-31, 3 at 2024-03-31). This is fixed in the same round below, not deferred.
+- Real-data verification (`scratch/2026-09-17_v13_repairs/verify_scope_forms_v2.py`, read-only against the immutable V12 identity bundle `data/programme/candidates/production-20260916-v12/attempts/identity-01/bundle/private_markets_holdings.parquet`): of 16,088 CIK-0001803498 rows V12 classified `parent_schedule`, the new expression flips **874 rows / USD 10,409.764 million** to underlying (513 rows / $6.24B at 2023-03-31, exactly matching the documented count). This is close to but not identical to the "791 rows / $10,474.5M" figure recorded against `scripts/candidate_footprint.py`'s independently-built own-interest-exclusion regex in the "Candidate footprint gate added" entry above â€” the two mechanisms are structurally different (footprint gate matches the label anywhere via `(^|[ ,])`+label with an own-interest guard; this fix anchors the label at the absolute start or end of the identifier with no guard needed for the terminal case), so a small population difference between them is expected and not a red flag by itself.
+- **Residual finding (out of scope for this task, not fixed):** the verification script's issuer_name-based check found 41 rows still parent-scoped while containing a JV label (top patterns: `BCRED Emerald/Verdelite JV LP`, correctly still-parent). A deeper diagnostic against `bdc_dimensions_raw` directly (not run as part of the committed script) found a materially larger residual: **53 rows / USD 13,156,885,000** remain `parent_schedule` under the new rule because the borrower and label are joined by a bare space with no comma and no ordinal digit (e.g. `Polyphase Elevator Holding Co. Emerald JV LP`, `Auris Luxembourg III Sarl Verdelite JV LP`, `TeamSystem SpA Emerald JV LP`), concentrated in 2023-12-31 through 2026-03-31 ($1.6-1.9B per quarter in the later periods). This bare-space form is not among the forms enumerated in the Task 2 brief or the controller's ruling and was not implemented â€” flagging for owner review rather than widening the regex without a reviewed evidence basis, per the anti-sycophancy guardrail against chasing a number without a mechanism. It is larger in dollar terms than the entire fix implemented here and should be scoped as a follow-up (a fourth legacy separator form, or a possible convention change partway through 2023).
+  - **CORRECTION (2026-09-17, fix round 1):** the 53-row / USD 13,156,885,000 figure above is WRONG by roughly two orders of magnitude in dollar terms. The diagnostic that produced it tested the whole `bdc_dimensions_raw` column instead of `split_part(bdc_dimensions_raw,'|',1)` (the member basis `reporting_suffix_expression` actually uses), which swept in the already-correctly-classified post-2025-12-31 pipe form (725 and 722 rows classified `underlying_schedule` at 2025-12-31 and 2026-03-31 respectively via the non-legacy `labels` branch â€” control-checked and confirmed unaffected). Measured correctly on the member basis (`scratch/2026-09-17_v13_repairs/bare_space_residual_v2.py`), the genuine bare-space residual is **34 rows / USD 297.5 million**, spanning 2023-09-30 through 2024-03-31 only (1 row at 2023-09-30, 30 at 2023-12-31, 3 at 2024-03-31). This is fixed in the same round below, not deferred.
 - `python scripts/diff_outputs.py --semantic`: reported the pre-existing baseline divergence (161 divergent artifacts total, matching the count other 2026-09-17 tasks recorded against the same September-10 divergence baseline), non-zero exit. This task made zero `data/output/`/`frontend/public/data/` writes (no rebuild was run), so none of the reported divergence is attributable to this change. (Per controller instruction, not re-run in fix round 1; this backstop stands for both rounds.)
 - Changes BCRED 2023 conservation sums: Q1-2023 (2023-03-31) previously had zero underlying rows and now has 513; downstream FV-conservation and quarter-acceptance artifacts for CIK 0001803498 will shift on the next rebuild/quarter pass.
 
 ### 2026-09-17 - BCRED bare-space reporting-portfolio form admitted (Task 2 fix round 1)
 
-- Corrects the residual measurement error above and closes the genuine gap it found. `pipeline/source_encodings.py` legacy branch: added a third terminal alternative (`bare`) admitting the label at the end of the member preceded by a single space, where the character before that space is not a comma, digit, or space (double spaces are already collapsed by `_normal` upstream, so no special-casing needed there). Restored `own_interest` (`^investmentidentifieraxis=[a-z]+ <label>( [0-9]+)?$`) and `trailing_joint` (`\band,?\s+<label>( [0-9]+)?$`) as `AND NOT` guards — both are now load-bearing specifically for the bare-space form: without `own_interest`, the fund's own `BCRED Emerald JV LP` interest would match `bare`; without `trailing_joint`, `Acme LLC and Verdelite JV LP` would too. Neither guard is reachable through the comma/ordinal or leading forms alone, which is exactly why the first pass at this task dropped them as dead code — extending to bare space is what makes them live again. The pre-existing `leading_joint` veto is unchanged and unrelated.
+- Corrects the residual measurement error above and closes the genuine gap it found. `pipeline/source_encodings.py` legacy branch: added a third terminal alternative (`bare`) admitting the label at the end of the member preceded by a single space, where the character before that space is not a comma, digit, or space (double spaces are already collapsed by `_normal` upstream, so no special-casing needed there). Restored `own_interest` (`^investmentidentifieraxis=[a-z]+ <label>( [0-9]+)?$`) and `trailing_joint` (`\band,?\s+<label>( [0-9]+)?$`) as `AND NOT` guards â€” both are now load-bearing specifically for the bare-space form: without `own_interest`, the fund's own `BCRED Emerald JV LP` interest would match `bare`; without `trailing_joint`, `Acme LLC and Verdelite JV LP` would too. Neither guard is reachable through the comma/ordinal or leading forms alone, which is exactly why the first pass at this task dropped them as dead code â€” extending to bare space is what makes them live again. The pre-existing `leading_joint` veto is unchanged and unrelated.
 - Source evidence, all CIK 0001803498, structurally identical to the reviewed comma forms, admitted 2023-09-30 through 2024-03-31 only: 0001803498-23-000021 c-3367 (`Polyphase Elevator Holding Co. Emerald JV LP`); 0001803498-24-000007 c-3689 (`Auris Luxembourg III Sarl Emerald JV LP`), c-4713 (`... Verdelite JV LP`), c-3813 (`Corporation Service Company Emerald JV LP`), c-4730 (`Alterra Mountain Company  Verdelite JV LP`, double space), c-3831 (`Confine Visual Bidco Emerald JV LP`), c-3801 (`Freeport LNG Investments, LLLP Emerald JV LP`), c-3928 (`Jayhawk Holdings, LP - A-2 Common Units Emerald JV LP`), c-3923 (`Box Co-Invest Blocker, LLC - Series C Units Emerald JV LP`), c-3924 (`GSO DL Co-Invest EIS LP (EIS Acquisition Holdings, LP - Class A Common Units) Emerald JV LP`).
-- `tests/test_source_encodings.py`: added 6 positive bare-space fixtures (one per citation shape, including the double-space case) and comments re-asserting the four existing guard-proving negatives (`BCRED Emerald JV LP`, `BCRED Verdelite JV LP 2`, `Acme LLC and Verdelite JV LP`, `Acme LLC and Emerald JV LP 1`) are now load-bearing rather than dead. All pre-existing negatives (`Emerald JV LP Services LLC`, `Acme IncEmerald JV LP`, the pipe-delimited `industryaxis` case, bare `Emerald JV LP`) still pass unchanged. `python -m pytest tests/test_source_encodings.py -q`: 47 passed. `python -m pytest tests/test_refactor_staging.py -q`: 3 passed (`tests/test_unified_holdings.py` not re-run per controller instruction — a later task owns the full suite).
+- `tests/test_source_encodings.py`: added 6 positive bare-space fixtures (one per citation shape, including the double-space case) and comments re-asserting the four existing guard-proving negatives (`BCRED Emerald JV LP`, `BCRED Verdelite JV LP 2`, `Acme LLC and Verdelite JV LP`, `Acme LLC and Emerald JV LP 1`) are now load-bearing rather than dead. All pre-existing negatives (`Emerald JV LP Services LLC`, `Acme IncEmerald JV LP`, the pipe-delimited `industryaxis` case, bare `Emerald JV LP`) still pass unchanged. `python -m pytest tests/test_source_encodings.py -q`: 47 passed. `python -m pytest tests/test_refactor_staging.py -q`: 3 passed (`tests/test_unified_holdings.py` not re-run per controller instruction â€” a later task owns the full suite).
 - `data/overrides/bdc_xbrl_wrappers/0001803498.json` quirk `bcred_legacy_typed_reporting_portfolio` description extended to add the bare-space form and its cited contexts.
 - Re-ran `scratch/2026-09-17_v13_repairs/verify_scope_forms_v2.py`: total flip is now **908 rows / USD 10,707.298 million** (up from 874 / $10,409.764M), matching the controller's expected "roughly 874 plus 34, about 908 rows / USD 10,707 million" exactly. The issuer_name-based residual check dropped from 41 to 19 rows, all now either the correctly-still-parent `BCRED Emerald/Verdelite JV LP` (14 rows) or unrelated small-FV patterns unconnected to any of the three admitted forms.
-- Re-measured with `scratch/2026-09-17_v13_repairs/bare_space_residual_v2.py`: it still reports the same static 34 rows / $297.5M, because it filters on the immutable V12 candidate's frozen `accounting_record_class` column and does not call the pipeline code — that count is a fixed measurement of the input population, not a post-fix check. Wrote `scratch/2026-09-17_v13_repairs/bare_space_residual_v3_postfix.py` to re-evaluate those same 34 rows against the NEW `scope_expression`: **0 of 34 remain classified parent** — the genuine bare-space residual is closed.
+- Re-measured with `scratch/2026-09-17_v13_repairs/bare_space_residual_v2.py`: it still reports the same static 34 rows / $297.5M, because it filters on the immutable V12 candidate's frozen `accounting_record_class` column and does not call the pipeline code â€” that count is a fixed measurement of the input population, not a post-fix check. Wrote `scratch/2026-09-17_v13_repairs/bare_space_residual_v3_postfix.py` to re-evaluate those same 34 rows against the NEW `scope_expression`: **0 of 34 remain classified parent** â€” the genuine bare-space residual is closed.
 - `scripts/diff_outputs.py --semantic` was not re-run, per controller instruction; the round-1 result above stands for this change too, since this round also made zero `data/output/`/`frontend/public/data/` writes.
 
 ### 2026-09-18 - Repin the reviewed BCRED wrapper hash after the identifier-form changes (Task 2 fix round 2)
@@ -12669,7 +12669,7 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Computed the wrapper's current hash with the repo's own `pipeline.programme.core.sha` helper and confirmed it equals `0b66428928ff35a14799d5de26904e3a76a60a13c0cd4deda62d291d50e2e8fb` before editing anything.
 - Updated the `0001803498.json` entry in `pipeline/programme/source_refresh.py`: `sha256` from `f2f51b6a82149731e32f3bed60436dc078dd0d60b27c3af5a86461435998c724` to `0b66428928ff35a14799d5de26904e3a76a60a13c0cd4deda62d291d50e2e8fb`; `reason` extended to `'D08 exact cash identity and Emerald/Verdelite reporting-portfolio suffixes, including the reviewed comma, ordinal, leading and bare-space identifier forms'`. No other `REFRESH_SUPPORT` entry touched.
 - `python -m pytest tests/test_programme_source_snapshot.py -q`: 14 passed. `python -m pytest tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py -q`: 570 passed. Full-suite figure reported by the coordinator: 5,957 passed, 1 failed (the hash-pin mismatch above, now fixed) out of 5,961.
-- Both required verification runs (targeted tests here plus the earlier real-data verification and semantic backstop) must be repeated once more before the source can be frozen, because this edit changes the pinned source inventory itself — that repeat is the controller's to run, not part of this task.
+- Both required verification runs (targeted tests here plus the earlier real-data verification and semantic backstop) must be repeated once more before the source can be frozen, because this edit changes the pinned source inventory itself â€” that repeat is the controller's to run, not part of this task.
 
 ### 2026-09-18 - Tier B directional residual recorded
 
@@ -12947,6 +12947,690 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Found by the frontend export after the Fidelity wrapper v2 fix: about 490 rows across about 25 unrelated funds changed sector label in both directions. Reported mechanism: the unified build reads company names from the previous run's entity file before the GICS cache is applied (`pipeline/unified_holdings.py` `_apply_gics_cache`), so sector output depends on the prior build. Not yet independently verified; recorded in `docs/investigations/data_quality_audits.md` (2026-10-01).
 - Regenerated frontend JSON left uncommitted. Fix direction: input-derived entity identity for GICS application plus a twin-build determinism test on the sector columns.
 
+## 2026-10-03 -- Retain the two newest programme candidates and document older builds
+
+- Owner requested removal of all older directories under `data/programme/candidates/`, replacing them with a history document. Retained `production-20260915-v11b` and `production-20260916-v12`; removed the other 18 candidates, including partial/cancelled snapshots. No automatic future retention policy was installed.
+- Added `docs/production_stack/candidate_history_2026-10-03.md` with per-version changes, failures, stage counts, remaining defects and the loss of direct replay of removed versions. Added `candidate_cleanup_2026-10-03.json` with snapshot/base fingerprints, manifest path deltas, result hashes, deletion receipts and retained-proof hashes. Linked the history from `03_pipeline_design.md`.
+- Storage: 20 -> 2 candidate directories, 165,708 -> 44,580 files, 995.524 -> 275.482 GiB logical size; removed 121,128 files / 773,138,203,652 bytes (720.041 GiB logical). Immediate observed C: free-space increase was 512.875 GiB; subsequent preservation check measured 529.688 GiB free (28.4% of 1,862.147 GiB). Logical size differs from allocated disk usage because some files are compressed.
+- Preservation PASS: all 44,580 retained file paths/sizes/mtime unchanged, all 86 selected manifest/stage/dependency SHA-256 hashes unchanged. Scanned 76 retained dependency records; no paths to removed candidates found. Resolved deletion targets and descendants checked for reparse points; no active data/archive worker or programme lock. Native .NET deletion in PowerShell completed V9/V10 after PowerShell access/path errors, without changing permissions.
+- Raw production cache, production outputs, frontend JSON, baseline and sibling programme archive/restore/tranche directories were outside deletion scope. No pipeline code or financial/data semantics changed. No pytest, semantic baseline diff, rebuild/export, re-attestation, download or baseline refresh run; verification was filesystem preservation and documentation checks. Session scripts/inventories: `scratch/2026-10-03_candidate_cleanup/`.
+
+## 2026-10-03 -- Jev source-reviewed value-check smoke test
+
+- Ran 18 curated cases across C107/C104/X08 twice with reversed decision options
+  (36 calls, jev-1.13.0). Six observed false alarms, six injected value defects,
+  six missing-source controls. All dispositions and source selections matched
+  expected outcomes; maximum paired confidence shift 0.34 despite stable labels.
+- 75,044 input tokens, estimated inference cost $0.00315; median call 0.749s.
+  Manual source mappings and computed differences make this a bundle-comprehension
+  smoke test, not representative B1-replacement accuracy or retrieval validation.
+- Results appended to docs/investigations/agent_campaigns.md; INDEX.md refreshed.
+  Requests, responses and bounded runner under scratch/2026-10-03_jev_pilot/.
+  Offline input/response checks passed. No production code/data changes, SEC calls,
+  pytest, rebuild, semantic diff or baseline refresh.
+
+
+## 2026-10-03 -- Jev comparison against frozen B1 reference decisions
+
+- Audited ens2_rest_r3: 629 of 631 runs have recoverable original bundles/source
+  payloads and verdicts confirmed by original final messages (252 real_error,
+  336 false_alarm, 41 ambiguous). These are Codex references, not audited truth.
+- Ran a frozen 13-case, six-rule development experiment comparing broad B1 source
+  evidence with focused cited context, twice with reversed options. 50 successful
+  responses; one broad request returned HTTP 400 twice, its reversal was skipped.
+  On 12 paired cases: agreement 6/12 broad, 5/12 focused; both clear one B1 real
+  error. Historical packets omit exact position joins and, for X08, the flagged
+  FV. No claim of production retrieval validation or replacement readiness.
+- Successful usage 711,562 input tokens, estimated $0.02989. Offline provenance,
+  blinding, pairing and response checks passed. Findings in agent_campaigns.md;
+  frozen inputs/results in scratch/2026-10-03_jev_b1_benchmark/. No production
+  changes, SEC calls, pytest, rebuild, semantic diff or baseline refresh.
+
+## 2026-10-03 -- Experimental Jev bundle builder for C107 and X08
+
+- Added `pipeline/jev_bundles.py`, `scripts/build_jev_bundles.py` and
+  `tests/test_jev_bundles.py`; added the explicit `tiktoken` dependency. Current
+  flags join exact holdings rows within hashed snapshots, with no historical
+  ordinal fallback. Cache-only source retrieval retains sibling positions,
+  headers, dates, owner context, units and notes; arithmetic is precomputed.
+- CLI emits audit packets and Jev requests only when required evidence is
+  complete. Unsupported layouts, incomplete joins/notes/units, unknown periods
+  and size limits remain unresolved. No review-ledger routing/promotion or API
+  calls are implemented. Current X08 positive-cost/positive-FV semantics retained.
+- Four previously inspected examples plus ten fresh flags: 14 packets, 10 ready
+  for model review, four incomplete (all CIK 0001860424). These are coverage
+  failures, not Jev decisions. Ready requests span 5,389-14,896 cl100k_base proxy
+  tokens; the provider tokenizer/context limit is not certified by this estimate.
+- Validation: 24 focused tests passed, including the production-write backstop;
+  offline packet/request/source hashes and four independently located source-row
+  checks passed. Frozen final build: `scratch/2026-10-03_jev_builder/final/`.
+- Recorded the owner's requirement to validate every builder against changing
+  filing structures over time and different filer/source types, with held-out
+  filers/periods and explicit unresolved outcomes. Hybrid direction and limits
+  documented in `docs/investigations/agent_campaigns.md`. No SEC/Jev calls,
+  holdings rebuild, frontend export, re-attestation or baseline refresh.
+
+- Owner scope follow-up: keep experiments below the size of the v1 fund set;
+  current scope is 14 flags across three funds, with explicit subset selection
+  for further work. Repository-wide `diff_outputs.py --semantic` was started and
+  stopped following this narrowed scope. No clean semantic-diff result claimed;
+  the 24-test production-write backstop and bounded artifact audit passed. Full
+  pytest suite not run.
+
+## 2026-10-03 -- Jev evaluation of automatic C107/X08 bundles
+
+- Ran 28 frozen Jev requests: ten complete observed bundles and four synthetic
+  value-error controls, each with reversed source/decision option order. Scope
+  remains 14 original flags across three BDCs; four incomplete packets were not
+  submitted. Four missing-field controls were rejected before API use.
+- Observed dispositions matched 20/20 agent-reviewed references, but source
+  selection abstained once while the decision still cleared the flag. Injected
+  errors were detected in 5/8 calls (3/4 normal, 2/4 reversed); all eight selected
+  the correct source. Three false clearances occurred despite explicit value
+  mismatches. No claim of independent human-gold or production accuracy.
+- Documented that clearance needs source identity/scope and deterministic value
+  agreement. An offline post-hoc veto would leave the four unsupported clearances
+  ambiguous; no production routing, model prompts or promotion rules changed.
+- 323,950 input tokens, estimated $0.0136059; all API calls succeeded. Frozen
+  request/response, pairing, mutation and arithmetic audits passed. Artifacts in
+  scratch/2026-10-03_jev_bundle_experiment/; findings in agent_campaigns.md and INDEX.
+- No production code/data writes, SEC downloads, pytest, full-suite run, semantic
+  diff, rebuild/export, re-attestation or baseline refresh in this experiment.
+
+## 2026-10-03 -- Expanded Jev natural-case and filing-structure evaluation
+
+- Froze 27 current C107/X08 flags across seven BDCs (eight targeted; one had no
+  current flags), spanning 2023-2026. Six filers were new to the prototype. No
+  synthetic output mutations or changes to builder code/eligibility rules.
+- Only 4/27 automatic packets marked ready; 23 blocked on headers/periods, currency,
+  notes or numeric geometry. All four ready TCW packets incorrectly scaled source
+  cost using conflicting inline tags; final model labels alone conceal this defect.
+- Ran 32 Jev calls: 12 separately source-reviewed natural cases in both option
+  orders, plus four unchanged automatic packets in both orders. Reviewed arm:
+  all four real FV scale errors and seven false alarms correct; one Ares Class A/C
+  identity conflict wrongly cleared twice (confidence 0.68/0.66). Numeric agreement
+  and exact source-context equality do not establish identity when visible class
+  and XBRL dimensions conflict. Automatic TCW arm labels 8/8 correct despite bad
+  source-cost normalization. Four natural errors share one filer/quarter/mechanism.
+- Verified an old Onex B1 source citation was for 2022-12-31, not the flagged
+  2023-09-30; current row is source-supported. Historical output FV was not preserved,
+  so old final-label correctness remains unknown. B1 references are not human gold.
+- 609,836 input tokens, estimated $0.025613112; all calls succeeded. Offline audits
+  passed: 32 request/response hashes/schema checks, 16 reversal pairs, original
+  output-field preservation, 27 packet hashes, 12 source hashes, 96 comparisons and
+  bounded source identity/period checks. Audit distinguishes arithmetic validity
+  from evidence quality. Artifacts: scratch/2026-10-03_jev_real_cases/.
+- Findings appended to agent_campaigns.md; INDEX refreshed. No production code/data
+  changes, SEC calls, pytest/full suite, semantic diff, rebuild/export, ledger
+  updates, re-attestation or baseline refresh. Manual preparation is not automatic
+  coverage; held-out structure/source-type validation remains required.
+- Holdout accounting: these seven tested filers/periods are now development evidence; Carlyle and Ares Strategic Income also appeared in the older B1 reserved filer split. Do not reuse them as an untouched holdout for subsequent builder fixes.
+
+## 2026-10-03 -- Jev screening and B1 investigation implementation plan
+
+- Added docs/jev_screening/ with an overview, routing/bundle contract, phased
+  implementation and validation plan, and a traceable experimental evidence record.
+- Proposed weak-rule screening with B1 for difficult bundles, suspected errors,
+  low confidence and known high-error rules; 0.75 remains a pilot cutoff.
+  Clearance requires independent evidence checks, sampled audits and versioned
+  receipts; grouped review items retain unresolved members. Nothing is enabled.
+- Planned filer/layout/period validation and comparisons against both the existing
+  B1 workflow and deterministic checks alone. Proposed cumulative cap: 16 BDCs;
+  next holdout: at most four new funds, 40 natural flags and 100 Jev calls.
+- Validation: four documents and 12 local links checked; historical experiment
+  counts cross-checked against investigations. Documentation only; no pytest,
+  pipeline/data changes, API calls, rebuild/export or semantic-diff run.
+
+## 2026-10-03 -- Eight-hour Jev build and test execution plan
+
+- Added docs/jev_screening/04_eight_hour_execution_plan.md and linked it from the
+  folder README. Allocates eight hours to bundle repairs, regression coverage,
+  shadow routing, blind evaluation, a conditional weak-rule probe and handoff.
+- Defines checkpoints and fallback priorities, preserves the sub-v1 fund cap,
+  limits the session to 100 total Jev calls, and keeps production clearance off.
+  Requires separate deterministic/B1/Jev comparisons and honest accounting for
+  incomplete blind reviews, manual bundles and estimated workload savings.
+- Validation: five plan documents and 15 local links passed link/whitespace
+  checks. Documentation only; execution has not started. No tests, API calls,
+  pipeline/data changes, rebuild or semantic-diff run.
+
+## 2026-10-03 -- Isolated Jev screening build: first checkpoint
+
+- Work is isolated in .claude/worktrees/jev-screening-pilot on branch
+  jev-screening-pilot-20261003; main-worktree production code/data are unchanged.
+  Added docs/jev_screening/05_run_log.md and an overview link.
+- Experimental repairs block contradictory TCW scales and Ares share classes,
+  recover continuation periods, and retain nested source notes. Two completed
+  41-flag replays yielded 10 and then 11 builder-ready packets; readiness is not
+  independently validated clearance. Added pure shadow routing and a bounded API
+  runner with separate evidence reviews, frozen inputs and no B1 suppression.
+- Validation: 78 focused tests passed in the isolated tree; bounded production
+  metadata comparison found zero changed paths. Source/packet hashes checked.
+  No new API calls at this checkpoint; no production semantic diff, full suite,
+  rebuild/export, corrections, queue writes or baseline refresh.
+- Scope audit includes older smoke/replay experiments: 14 consumed funds. Reserve
+  only Crescent (0001954360) and Goldman Sachs (0001920145) to retain a cumulative
+  16-fund cap below the 70-fund cohort. Artifacts: data/pilot/jev_screening/20261003_shadow/.
+
+## 2026-10-03 -- Isolated Jev pilot: holdout failure and controlled tests
+
+- Production remains untouched. Changes live in .claude/worktrees/jev-screening-pilot;
+  evidence lives in data/pilot/jev_screening/20261003_shadow.
+- Original development: 15/41 builder-ready. Untouched two-fund holdout: 0/20 ready.
+  Consuming it for general header/parenthesis repairs yields 15/20 development-ready;
+  these repaired cases must not be reported as untouched holdout performance.
+- Jev: 15/15 label agreement in each of two development runs; both confidence
+  cutoffs passed by 7 and 3 cases respectively. Full independent audit coverage
+  remains incomplete and all B1 work is retained. 30 calls used 363,444 input tokens.
+- Eight synthetic rounding controls: 7/8 label agreement. All four injected errors
+  avoided false-alarm classification (three errors, one ambiguous); none qualified
+  for clearance. These eight calls used 120,836 input tokens, separate from natural
+  cases. Session total: 38 of at most 100 attempts; cumulative fund cap remains 16.
+- Added C104 zero-FV experimental bundle support and fixed numeric-zero handling.
+  Default screening policy still excludes C104; a six-case weak-rule probe is
+  explicitly scoped to three already consumed funds. 98 focused tests passed.
+- No full suite, production semantic diff, rebuild/export, correction, queue write,
+  baseline change or production integration. See docs/jev_screening/05_run_log.md.
+
+## 2026-10-03 -- Jev pilot: source anchors and sibling-value controls
+
+- Isolated pilot only: added context-anchor baseline, Choice response-contract
+  validation and a selected-source numeric/currency veto in the shadow router.
+- Natural results: 65 unique flags, 36 Jev calls, 14 confidence-only candidates,
+  zero independently certified clearances. Context-anchor baseline resolves
+  33/36 natural cases with reviewed-source agreement; this shares builder inputs.
+- Eight paired sibling-cost controls: four synthetic errors yield one real_error,
+  two ambiguous and one false_alarm at 0.13 decision confidence. None passes both
+  0.75 cutoffs. This exposes a model decision failure beyond bundle construction.
+- Cumulative 52 calls / 685,946 input tokens within the 100-call, 16-fund pilot.
+  152 combined tests passed, then 71 router/runner tests passed after four added
+  veto regressions. Fourth bounded production metadata check: zero changes.
+- Main production code/data/queues/gates/baselines untouched. Full suite and
+  production semantic diff not run. Details: docs/jev_screening/05_run_log.md.
+
+## 2026-10-03 -- Jev pilot: inherited annotations and source review
+
+- Isolated builder now retains instrument/portfolio section annotations, adjacent
+  footnote tables and explicit same-block rate-code definitions. Unknown scope,
+  conflicting definitions and interrupted continuations remain blocked.
+- Five additional X08 source reviews found matching disclosed values. Three
+  remain blocked by incomplete alternatives; the policy was not relaxed. Two
+  repaired Varagon cases match Jev labels/sources but fail screening confidence.
+- Cumulative 62 calls / 854,979 input tokens; 65 natural flags / 38 natural calls.
+  14 historical confidence-only candidates, no audited clearances or B1 savings.
+- 188 combined tests passed; subsequent temporal-freeze test brings runner file
+  to 29 passing tests. Fifth bounded production metadata check: zero changes.
+- A maximum four-case within-filer temporal check is frozen next; no new funds,
+  production integration, data writes, full suite or production semantic diff.
+  See docs/jev_screening/05_run_log.md for evidence versions and limitations.
+
+## 2026-10-04 -- Jev pilot: temporal validation and numeric format guards
+
+- Isolated builder validates supported inline transform names against their
+  registry namespace and blocks visible/fixed-zero contradictions. Replays retain
+  four X08 ready cases, two C104 ready/two blocked, and both temporal cases ready.
+- Frozen new-accession check: two September 2025 C107 cases build without repair
+  and match Jev labels/sources; one passes both cutoffs. Missing X08 strata remain
+  empty. Same consumed funds; no claim of unseen-filer accuracy.
+- Totals: 64 calls / 886,816 input tokens; 67 natural flags / 40 natural calls;
+  15 historical confidence-only candidates, no audited clearances or B1 savings.
+- 205 focused tests pass; 64/64 saved response contracts valid. Sixth bounded
+  production metadata audit: zero monitored changes. Main production untouched;
+  full suite and production-writing semantic diff not run.
+- Replay preflight rejects missing prior packets/duplicates before writes. An
+  incomplete old-manifest diagnostic is explicitly excluded in the run log.
+
+## 2026-10-04 -- Jev pilot: prevent silent annotation loss across pages
+
+- Further raw-source review found Crescent repeated schedule titles without the
+  word continued and a note table referenced mid-paragraph. Isolated builder now
+  retains uncertain inherited annotations as explicit scope blockers and detects
+  below/following-table references, with bounded adjacent-table retrieval.
+- 122 bundle tests pass. Prior frozen readiness was 38/67, with 13/15 historical
+  confidence candidates still ready; that count predates these additional guards.
+  No audited clearances or additional API calls. Temporal 2/2 label agreement
+  must not be interpreted as complete evidence validation. Production untouched.
+
+## 2026-10-04 -- Jev pilot: tranche checks and confidence stability
+
+- Isolated bundle/router reject explicit instrument contradictions and selected
+  wrong tranches despite matching amounts. 177 targeted bundle/router tests pass.
+- Consumed 20-case replay is 9 ready / 11 blocked after note/scope guards; four
+  reviewed X08 packets remain ready. This is development, not blind validation.
+- Eight paired presentation calls preserve all labels and source selections but
+  change confidence-only eligibility for 3/4 flags. No flag passes both cutoffs
+  in both orders. Single calls do not separate order effects from provider noise.
+- Session totals: 72 calls / 1,073,704 input tokens; 67 natural flags / 40 natural
+  calls unchanged. All 72 response contracts valid; all B1 work retained.
+- Added docs/jev_screening/06_interim_assessment.md. Production untouched; local
+  checkpoint ff950eb was not merged or pushed. Full suite/semantic diff not run.
+
+## 2026-10-04 -- Jev pilot v4: preserve cost provenance
+
+- Isolated bundle v4/state v2 preserves cost_source and requires reported cost for
+  C107/X08. Intentional first-observed-FV proxies need donor-lineage review; their
+  mismatch with current SOI cost is not automatically an extraction error.
+- Ten remaining C107 references reviewed: four source-matching negative costs,
+  one Krayden term-loan/revolver identity ambiguity, five unscorable proxy-cost
+  cases. Added explicit Type of Investment grammar to identity checks.
+- 235 focused tests pass, including review-source path/context guards. Rebuilding
+  the same 67 flags with full cost provenance from the identical holdings hash.
+  Session API totals remain 72 calls / 1,073,704 tokens. Main production untouched.
+
+## 2026-10-04 -- Jev grouped-header retrieval and review accounting
+
+- Isolated grouped-note headers now preserve every comma-separated marker. Two
+  Fortress reported-cost cases become ready; Jev and deterministic baselines
+  match both source-reviewed outcomes. Neither is an audited clearance.
+- Same 67 natural flags: 42 natural calls, 42 label / 41 source agreements, all
+  called references false alarms. Supplemental review ledger: 49 false alarms,
+  four known errors, two ambiguous and 12 unscorable. These denominators differ
+  deliberately; historical frozen scoring labels are not overwritten.
+- 239 focused tests pass. 74 total API calls / 1,103,934 input tokens. Eighth
+  bounded production metadata audit: zero changed paths. Production unchanged;
+  no full suite, production semantic diff, merge or push.
+
+## 2026-10-04 -- Jev candidate recall and repeated confidence observations
+
+- Isolated retrieval now retains blank-name siblings with dash/missing cost;
+  three failing regressions reproduced the omission. Same 67-case real replay
+  changes no candidate sets: 34 ready / 33 blocked, with no audited clearances.
+- Exact repeats of eight presentation requests preserve all correct labels and
+  sources but show confidence variation; one identical request crosses 0.75.
+  Two presentation eligibility differences persist. No threshold tuning/retry
+  policy introduced. All B1 work retained.
+- 251 focused tests pass. 82 calls / 1,290,822 input tokens; all response contracts
+  valid. Natural sample: 67 flags from 11 funds, 42 calls. Sixteen refers to the
+  cumulative programme reservation, including prior research, not this sample.
+- Local checkpoint 105ee13 is unmerged/unpushed. Production remains untouched.
+
+## 2026-10-04 -- Jev pilot: B1-only proxy donor packets
+
+- Added isolated bounded lineage/source-review helpers for the six existing
+  proxy-cost flags. Frozen release and audit hashes verify; all six donor links
+  reproduce policy, and raw FV/date comparisons match their donor source rows.
+- Two donors are earlier-quarter observations; four are self-donors. This does
+  not verify position chains or proxy suitability, and adds no Jev eligibility.
+  All six remain B1 work. See docs/jev_screening/07_proxy_cost_evidence.md.
+- Eleven focused lineage tests pass. Ninth bounded production audit: zero
+  changed paths. API totals unchanged at 82 calls / 1,290,822 input tokens.
+
+## 2026-10-04 -- Jev pilot: observed layout coverage
+
+- Added isolated coverage profiler: 67 flags, 11 funds, 26 filing/period groups,
+  25 observed header/grid shapes and 12 flags without candidates. Four focused
+  tests separate value changes from geometry/transform changes.
+- Shape sets are diagnostic only. Cell merges and differing sampled instrument
+  tables explain some variation; neither shape equality nor a previously seen
+  filer certifies source completeness. No source-type eligibility was expanded.
+
+- Combined pilot verification: 266 focused tests pass; tenth bounded production metadata audit reports zero changed paths. Full suite and production-writing semantic diff not run.
+
+## 2026-10-04 -- Jev pilot: raw-preserving deterministic comparator
+
+- Added isolated opt-in context-anchor-raw.v1 while preserving the original
+  comparator. Exact raw dimension plus a narrow observed affiliation-prefix
+  normalization explains the remaining Onex VTC/Montana/IMB exceptions.
+- Six new identity-veto tests pass. Historical natural inputs: 42/42 source and
+  label agreement for the raw comparator versus Jev 42 labels / 41 sources.
+  Shared evidence and all-false-alarm references prevent clearance/safety claims.
+- No API calls or production changes; checkpoint 1a68d8d remains local only.
+
+## 2026-10-04 -- Jev pilot: common-builder recheck
+
+- Rechecked 12 previously called natural cases on one current builder, plus four
+  pre-model TCW error controls. Jev and the raw-preserving deterministic baseline
+  both match all 12 called labels/sources; six pass both model cutoffs.
+- Four eligibility results differ from older bundles. All 16 cases remain B1,
+  with no clearance audits completed or production changes. This is consumed
+  development evidence, not a new holdout or confidence calibration.
+- 94 total successful calls / 1,502,036 input tokens; all response contracts valid.
+  Six calls remain reserved. Historical intake counts are not overwritten.
+
+## 2026-10-04 -- Jev pilot: context sizing and checkpoint verification
+
+- Added isolated bounded offline context sizing across four existing BDC cases.
+  Entire visible SOI selection plus selected published columns estimates
+  24.8-183.7k tokens; complete source recall is not certified. No API calls.
+- Documented verified provider context limits and published-rate inference cost
+  estimate ($0.0631 for 94 successful calls), excluding engineering/B1 costs.
+- 272 targeted tests pass; eleventh bounded production metadata audit reports
+  zero changed paths. No production writes, rebuilds, full suite or semantic diff.
+
+## 2026-10-04 -- Jev pilot: independent-review inputs
+
+- Added isolated source-first review preparation and four passing tests. Generated
+  67 unfinished inputs, 11 funds, 26 cached filings; answer/model/builder outcomes
+  are withheld by allowlist. Snapshot and source hashes retain traceability.
+- No independent reviews completed, B1 dispatch, API calls or production changes.
+  Documented two-stage source findings then bundle comparison and timing limits.
+
+## 2026-10-04 -- Jev pilot: changed-source probes and token headroom
+
+- Eighteen bounded offline mutations of three existing real filings pass intended
+  invariance/fallback checks. Synthetic changes do not certify future layouts.
+- Provider usage exceeds cl100k whole-request proxy by 30-36% on 12 current calls.
+  Isolated runner now limits new requests to 22k proxy tokens (previously 26k),
+  explicitly heuristic; 31 runner tests pass. Historical artifacts unchanged.
+- No new API calls, source downloads or production changes.
+
+## 2026-10-04 -- Jev pilot: monetary context completeness
+
+- Synthetic real-source probes exposed ready bundles with missing monetary XBRL
+  context definitions, instants or entities. Added explicit blockers, including
+  missing contextRef; fixed fixture declarations and retained a valid-duration
+  counterexample. All changes remain in the isolated worktree.
+- 283 targeted tests pass. Twelve post-fix source probes pass across three filers.
+  Current 67-flag replay stays 34 ready / 33 blocked with unchanged candidates.
+- No new model calls or production changes. Thirteenth bounded metadata audit
+  reports zero changed paths. Historical scores/audit forms remain version-bound.
+
+## 2026-10-04 -- Jev pilot: source-note stress controls
+
+- Built four synthetic cost-error controls on two existing filings; two include
+  misleading classification instructions in copied source notes. Pre-call
+  verification preserves original candidate identity and numeric evidence.
+- Four correct error/source decisions, confidence 0.20-0.54; all B1. No production
+  source changes, independent audits or new natural flags. Robustness not certified.
+- 98 successful calls / 1,561,219 input tokens; 98 valid response contracts. Two
+  calls remain within the existing 100-call cap. Details in docs/jev_screening/10_source_note_stress.md.
+
+## 2026-10-04 -- Jev pilot: source-context retrieval veto
+
+- Isolated builder now blocks monetary rows tied to the declared output context
+  when name-based retrieval omits them. This repairs a synthetic Fortress failure
+  without fuzzy alias expansion. Six source probes pass across three existing filers.
+- Replay anchor_recall_v4_33 remains 34 ready / 33 blocked, unchanged candidates.
+  Model-visible diagnostics change; historical scores remain version-bound.
+- Added an immutable observation ledger: all 98 calls accounted for, 42 unique
+  natural flags called among 67, no new funds or model calls. No production changes.
+
+## 2026-10-04 -- Jev pilot: inline semantics and currency evidence
+
+- Isolated parser blocks nil/continued/excluded-content monetary facts and invalid
+  signs; five Fortress mutation checks pass. The 67-flag replay stays 34/33 with
+  unchanged candidates. These are synthetic failure mechanisms, not new real errors.
+- Currency parsing now requires an ISO currency namespace and a direct measure,
+  retaining valid namespace aliases. Eight new negative tests failed before the
+  repairs; positive counterexamples remain supported. 297 targeted tests pass.
+- No API calls, new funds, production modifications or clearance activation.
+
+## 2026-10-04 -- Jev pilot: superscript notes and build timing
+
+- Isolated builder preserves bare superscript note references and blocks missing
+  or unparsed annotations. Eight focused regressions/counterexamples added;
+  combined targeted suite passes 305 tests. Full replay remains 34/33 across 67.
+- Bounded inventory finds no superscript markup on 167 candidate rows in 23 files;
+  this is a synthetic failure repair, not additional observed production errors.
+- Four local build timing pairs reproduce frozen packets exactly: empty parser
+  cache 3.67-9.57s, reused cache 0.039-0.114s. B1/maintenance costs not measured.
+- No model calls, production modifications, source downloads or clearance changes.
+
+## 2026-10-04 -- Jev pilot: recover bounded reference-rate note tables
+
+- Isolated builder associates explicit reference-rate tables across noncompeting
+  intervening notes, retaining their content and enforcing header/name/period and
+  size boundaries. Generic notes still require an adjacent table.
+- Seven Crescent bundles gain full tables across three filings; three regain
+  readiness. Current 67-flag replay is 37 ready / 30 blocked. Structured delta
+  verification confirms identical position identity, amounts and candidate sets.
+- 316 targeted tests pass; eighteenth bounded production metadata audit reports
+  zero changed paths. No new model calls, audits, production writes or B1 suppression.
+- Added blocker profile and documented remaining work in docs/jev_screening/11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: distinguish section evidence in drift profiles
+
+- Isolated layout profiler now records local versus other-table section evidence,
+  unresolved-scope reasons and note-table association paths. Six profiler tests
+  pass, including two new checks against conflating missing or inherited coordinates.
+- Source inspection documents repeated versus inherited portfolio annotations
+  across sampled Crescent quarters. Continuation policy remains conservative.
+- No builder changes, model calls, production writes or independent clearance.
+
+## 2026-10-04 -- Jev pilot: deterministic factual explanations
+
+- Added isolated pipeline/jev_explanation.py and bounded offline renderer. Summaries
+  bind to bundle/receipt hashes, retain source citations and recompute arithmetic;
+  they report recorded answers and routes without inventing model rationales.
+- Rendered 20 existing records: eight natural recheck observations, four blocked
+  records and eight synthetic controls. No new calls or independently audited cases.
+- 326 targeted tests pass. Nineteenth bounded production metadata audit reports
+  zero changed paths. No production integration, B1 suppression or baseline change.
+- Examples and limits are documented in docs/jev_screening/12_factual_explanations.md.
+
+## 2026-10-04 -- Jev pilot: bounded rule workload inventory
+
+- Read-only DuckDB inventory within the reserved 16 funds, with source and script hashes.
+- Q1-2026 recorded issues include C107 510 review, C104 448 track-only and X08 18 track-only; these are not measured B1 jobs or safe clearances.
+- AGG01 contributes 13,078 undated issues without row IDs, so its headline volume cannot establish a model-ready queue.
+- Added docs/jev_screening/13_rule_workload.md. No new model calls, intake cases or production changes; no tests required for this offline inventory.
+
+## 2026-10-04 -- Jev pilot: confidence sensitivity without calibration claims
+
+- Added isolated offline analysis of all 98 existing calls, separating natural, revised, repeated and synthetic observations.
+- First-natural confidence candidates fall from 23 at joint 0.70 to 17 at 0.75 and 7 at 0.80; the all-false-alarm natural references cannot estimate missed-error risk.
+- Four focused tests pass. No cutoff changes, new API calls, production writes or independently cleared flags.
+
+## 2026-10-04 -- Jev pilot: source-first findings validation
+
+- Refreshed 67 unfinished review inputs against the latest builder, preserving older inputs.
+- Added isolated pipeline/jev_review_findings.py and bounded freeze CLI. Enforces immutable evidence envelopes, source citations, explicit unresolved outcomes, valid timing and arithmetic consistency for false-alarm findings.
+- Twenty focused validator tests pass; CLI help checked. Findings explicitly remain pre-audit records and do not certify independence or grant clearance.
+- No real-case completed forms, new API calls, production integration or B1 suppression.
+
+## 2026-10-04 -- Jev pilot: paired C104 control and call-cap completion
+
+- Added two synthetic zero-FV controls on one existing Specialized Dental position; copied source FV changed from explicit zero to USD 1,000 while output stayed zero. Full candidate delta verification preserves all unrelated evidence and original cache.
+- Jev correctly labels/selects both; false alarm .72/.56 and real error .77/.42 confidence, both B1. Deterministic source comparator also resolves both.
+- 100 successful calls, 1,580,960 provider input tokens, about USD 0.0664 published-rate inference estimate. All 100 response contracts pass; 42 unique natural flags called, 30 synthetic calls, zero audited clearances.
+- 355 targeted Jev tests pass. Twenty-first bounded production metadata audit finds zero changed paths. No full suite, rebuild/export or production-writing semantic diff run.
+- Call cap exhausted; continuous work remains offline. Production unchanged.
+
+## 2026-10-04 -- Jev pilot: position-level flag overlap
+
+- Extended the isolated read-only workload inventory with exact snapshot-local row-ID overlaps for Q1-2026 within the reserved 16 funds.
+- C104/X08: 466 positions, 216 already have review/block issues and 250 only tracking issues. C107: 416 of 510 positions retain another review/block issue; only 94 have no other recorded review issue.
+- Counts are not actual B1 jobs and omit unallocatable fund-wide/missing-ID issues. Documents distinguish marginal flag work from whole-investigation savings.
+- No new API calls, natural-case selection, production changes or test-suite run for this aggregate-only change.
+
+## 2026-10-04 -- Jev pilot: reject inconsistent replay artifacts
+
+- Isolated replay reader validates exact membership, filenames, flag identity, status/reasons, snapshot/builder identity and readiness totals. New enriched replay summaries include full packet fingerprints; rebuild parent reads use the checked loader.
+- Seven previously accepted inconsistent-fixture cases now reject; nine focused replay tests and a 22-test reader/consumer set pass. Existing holdout and 100-call accounting artifacts retain their results.
+- Historical summaries are not rewritten; their lack of original content hashes remains an explicit limitation. No production writes, new calls or builder changes.
+
+## 2026-10-04 -- Jev pilot: verify earlier review bindings
+
+- Added bounded offline verification of replay packets against the previously frozen source-first handoff.
+- All 67 current packet fingerprints and 26 original source hashes match; holdings and prepared-input hashes also match. No completed reviews or clearance status inferred.
+- Refreshed the documentation index with current 100-call accounting. No new tests needed for the read-only verification script; no API calls or production writes.
+
+## 2026-10-04 -- Jev pilot: missing-issuer mechanism on three existing cases
+
+- Read-only Crescent source investigation locates LTC Ally, Angels of Care and Numera in original rows/contexts, with matching negative costs.
+- Active wrapper issuer regex returns empty on unrecognised industry-label variants; changing only the label in a bounded diagnostic recovers the visible names. This reproduces the branch, not a full pipeline replay.
+- All three already carry C201 BLOCK_VERIFIED and X02 REVIEW in addition to C107. No names filled inside bundles or production; existing references and readiness unchanged.
+- Fixed isolated source-review helper null-name crash. Five new checks; 14 source-review tests pass. No API calls or new natural cases.
+
+## 2026-10-04 -- Jev pilot: date the observed issuer-label gap
+
+- Read-only aggregate across 11 Crescent periods shows the health-care 'and' variant from Q3-2023 in the current snapshot; singular Financial Service appears in Q4-2025 only under this projection.
+- Q1-2026 has 357 positions and 153 missing issuer names: 49 of 55 health-care-variant positions lack names; 104 missing names lie outside the two probed variants. Six variant rows already have names, so correction precedence matters.
+- Counts do not establish the same mechanism for every row or date a source-template change. No added source-review cases, production remediation or API calls.
+
+## 2026-10-04 -- Jev pilot: bound the future missing-rate evidence contract
+
+- Exact-context raw fact inventory for the same three Crescent cases finds cost/FV/pct facts but no principal/rate facts. No new cases or X02 labels assigned.
+- Documented that an unfunded-portion note and displayed dash do not certify the whole position as undrawn or establish complete rate-disclosure absence.
+- Added future X02 evidence requirements to docs/jev_screening/13_rule_workload.md. No builder eligibility changes, API calls or production writes.
+
+## 2026-10-04 -- Jev pilot: measured mechanism reuse
+
+- Read-only candidate profile separates reusable patterns from single-filer evidence: monetary header spans in ten funds, negative signs in eight, zero transforms in four, adjacent note tables in three; the newer reference-rate association is observed only in Crescent.
+- Counts overlap and readiness is not independent validation. No CIK-specific builder readiness overrides were introduced; future transfer and maintenance cost remain unmeasured.
+- Added mechanism profile and documentation. No new tests required for aggregate-only work, API calls or production changes.
+
+## 2026-10-04 -- Jev pilot: note-definition and symbol retrieval repairs
+
+- Isolated builder rejects reference-only lists as note definitions, preserves attached symbol markers, and distinguishes split Index/Spread formulas using header geometry and percentage evidence. Added positive/negative regressions; 391 targeted Jev tests pass.
+- Frozen replay 48 recovers Jackson Paper and Spotless: 39/67 evidence-ready, 28 blocked; all source identities, values and candidate sets unchanged. Three ready packets exceed the runner proxy cap, so 36/67 meet evidence and size requirements. No score transfer or independent clearance claim.
+- Added bounded note diagnostics, delta verification and request-size profiling; hardened historical comparison to use the validated replay loader. Refreshed unfinished source-first inputs and documentation.
+- Zero new API calls; 100-call cap remains exhausted. Twenty-third bounded production metadata audit reports zero changes. No production edits, rebuild/export or semantic diff.
+
+## 2026-10-04 -- Jev pilot: optional lossless note-table encoding
+
+- Extended isolated optional compactor with explicit v2 cell arrays for source and note tables; preserved default v1 and ordinary runner requests. Eleven focused tests pass.
+- Exact reconstruction succeeds for all 39 ready frozen requests. V2 reduces aggregate proxy size from 467,757 to 420,709 and largest request from 25,355 to 20,236; all three current size fallbacks fit the proxy only under the unenabled format.
+- Documented that representation changes require fresh model/error-control and provider-token validation. No API calls, production changes or historical score transfer.
+
+## 2026-10-04 -- Jev pilot: headerless anchors and custom source concepts
+
+- Inspected the same three no-current-candidate flags. MES, Krayden and CMG have declared-context source anchors in headerless HTML tables, so absence from the candidate set is not a simple issuer search failure.
+- Krayden retains a visible revolver versus term-loan-context contradiction; its custom cost concept was omitted by the standard-cost-only review view. Added an all-exact-context fact inventory preserving custom attributes, markup and coordinates without inferring concept equivalence. Eighteen focused source-review tests pass.
+- Documented future header-continuation requirements and retained all three B1 fallbacks. No builder/readiness/label changes, API calls or production edits.
+
+## 2026-10-04 -- Jev pilot: readiness funnel and supplemental-row overlap
+
+- Computed all 67 frozen dispositions under default C107/X08 and explicit C104-probe policies: 39 evidence-ready, 36 also size-fit, 34 eligible under default policy. No current model/audit inputs or historical score transfer.
+- Inspected the final two note-table gaps: AB Centers note 9 crosses a page boundary to a 62-row commitment table; scope blockers remain. No retrieval-limit widening.
+- Recorded possible primary/supplemental presentation overlap for four existing AB Centers rows. Source-value agreement does not certify row inclusion; no duplicate conclusion, row deletion or frozen-label change. Reindexed source-reconciliation investigation.
+- Offline diagnostics only; no API calls or production edits. No tests needed for documentation/aggregate-only additions.
+
+## 2026-10-04 -- Jev pilot: source-reconciliation explanation precedence
+
+- Read-only query verifies all four AB Centers source/output amounts against frozen bundles. Main rows reconcile; supplemental proxy rows have nonblocking cost diagnostics. Neither proves economic uniqueness across schedules.
+- Observed incorrect equity/principal reason text on two LOAN/cost-only records. A bounded SQL probe reproduces the current unparenthesized OR/AND reason-branch mechanism; the parenthesized counterfactual produces the generic secondary-field reason. Documented follow-up regression requirements without editing production.
+- No new flags, truth-label changes, API calls or production writes. This is a scoped reason-code investigation, not a full historical reconciliation replay.
+
+## 2026-10-04 -- Jev pilot: explicit disclosure-role evidence
+
+- Isolated optional helper distinguishes position-value and unfunded-commitment header bands while preserving coordinates and abstaining on ambiguity. Applied to four frozen AB Centers source rows; exact source contexts verified.
+- Thirteen focused tests pass. One-filing evidence only; no builder integration, deduplication, API calls or production edits. Source agreement still does not prove unique economic exposure.
+
+
+## 2026-10-04 -- Jev pilot: disclosure-role coverage boundary
+
+- Profiled 51 candidate tables across 23 existing filings/11 funds: 14 recognized position-value tables across five funds, 37 unknown across six. Preserved header evidence and abstentions; no broadening to improve coverage.
+- Documented that supplemental AB Centers commitments are absent from the candidate-conditioned sample, so these counts cannot establish full-schedule recall. No builder, API, routing or production changes.
+
+
+## 2026-10-04 -- Jev pilot: grouped workload and queue identity risk
+
+- Read-only membership profile: 67 selected flags across 33 groups/1,063 issue rows. Twelve groups fully sampled, nine evidence-ready before other gates; no whole B1 job savings established.
+- Native queue joins fail because timestamp-form periods leave localized CIK/date blank. Diagnostic normalization locates 18 C107 groups with matching counts; six IDs repeat across 16 entries. No queue repair, verdict migration or production change performed.
+- Documented unique-ID/date/member-accounting prerequisites and kept all production suppression disabled. No API calls.
+
+
+## 2026-10-04 -- Jev pilot: parent-inventory refusal contract
+
+- Added isolated optional parent/member preflight with 26 focused passing tests. Canonical identity, unique IDs and exact complete membership are required; no implicit date or ID repair.
+- Existing affected queue rows are rejected for missing numeric CIK. Output does not claim global queue uniqueness, verified file hashes, source truth or production clearance. No production integration, model calls or bundle changes.
+
+
+## 2026-10-04 -- Jev pilot: explicit hidden-source evidence refusal
+
+- Isolated parser now preserves and blocks explicitly hidden candidate/header/section/note content instead of treating it as visible evidence. CSS rendering remains outside this narrow check.
+- 454 targeted Jev tests pass. Replay 52 remains 39 ready/28 blocked with zero structured evidence changes across 67 flags. New builder/request bindings and unfinished source-first forms 53 verified against all 26 cached source hashes.
+- No model calls, independent clearances, B1 suppression or production changes. Full suite/rebuild/export/production-writing semantic diff not run.
+
+
+## 2026-10-04 -- Jev pilot: review coordinate consistency
+
+- Isolated findings validator rejects duplicate candidate coordinates and false-alarm records whose selected row, source coordinates and citation disagree. Presentation-only whitespace/case normalization; no inferred source equivalence.
+- 31 targeted findings/CLI tests pass. No completed real reviews, builder changes or production edits. Thirtieth bounded metadata audit: zero changed paths.
+
+
+## 2026-10-04 -- Jev pilot: historical B1 partial-group references
+
+- Filtered the earlier inventory to 40 C107/C104/X08 review items within the existing fund reservation. Re-read three known partial C107 traces and verified their original trace/verdict hashes.
+- Groups of 89/42/40 issues had 25-row initial excerpts and explicit representative/sample caveats in final messages. These are not whole-group gold labels or additional current test flags.
+- Recorded snapshot and coverage limits; no new funds, classifier calls or production changes.
+
+
+## 2026-10-04 -- Jev pilot: current deterministic anchor coverage
+
+- Added current-replay profiling to the existing comparator diagnostic. On replay 52, exact anchors are consistent in 35 cases; raw-preserving anchors in all 39 ready cases, with four Onex prefix-normalization matches. All 28 blocked cases remain unresolved.
+- This is structured-evidence consistency, not independent correctness or safe clearance. No historical labels/scores transferred, model calls made or production routing changed.
+
+
+## 2026-10-04 -- Jev pilot: queue date conversion reproduction
+
+- Read-only two-case probe confirms date-only CSV values become timestamp strings through DuckDB inference, lose queue CIK/date localization, and collide across quarters.
+- In-memory date-only counterfactual produces distinct IDs; no production repair, migration or dispatch. Input hashes verified before/after. Details in docs/jev_screening/13_rule_workload.md.
+
+
+## 2026-10-04 -- Jev pilot: source-wide table roles
+
+- Expanded the isolated role diagnostic to all 26 selected cached filings, bound through source-first inputs: 2,641 tables, 184 position-value roles, six commitment roles, 2,451 unknown. All six commitment tables are outside candidate retrieval; no claim that all are relevant to a selected flag.
+- Early-refused packets omitted one complete filing from a builder-path-only inventory. Preserved period uncertainty and source hashes; no bundle/routing changes or model calls.
+- Corrected stale current-versus-historical counts in interim documentation. No production changes; diagnostic execution only, no new pytest run.
+
+
+## 2026-10-04 -- Jev pilot: historical error snapshot drift
+
+- Three bounded historical error groups no longer supply the same current flagged positions: TCW zero-FV groups changed membership; the Ares Strategic X08 group no longer fires. Named HydroSource/Alcresta current amounts match historical cited amounts, without a new source-truth claim.
+- Preserved trace/verdict/input hashes and avoided historical ordinal joins. No new experiment cases, model calls, funds or production changes.
+
+
+## 2026-10-04 -- Jev pilot: exploratory TCW dedup survivor defect
+
+- Separate one-position source investigation finds a sparse affiliate-rollforward survivor replacing a detailed Superior term-loan context in Q3-2025 TCW holdings. Main schedule/raw extraction cost is 20,376,019; published proxy cost is 12,115,467 (difference 8,260,552).
+- Six-row in-memory reproduction identifies deterministic context-anchor ordering in the existing dedup rule; current application audit matches expected three rows/FV and misses field retention loss. No production fix or full replay.
+- One exploratory case in an existing fund, separate from the frozen 67 cases; no new classifier calls. Full source and mechanism evidence in docs/jev_screening/07_proxy_cost_evidence.md.
+
+
+## 2026-10-04 -- Jev pilot: optional explicit rollforward role
+
+- Added a narrow header-role descriptor with dated FV/movement columns and conservative refusal. Twenty-three focused tests pass; the exploratory TCW primary/rollforward distinction reproduces.
+- Original 26-file inventory is unchanged (no new recognized rollforward tables). Helper remains unintegrated; builder, routing, model accounting and production unchanged.
+
+
+## 2026-10-04 -- Jev pilot: parser dependency provenance
+
+- Isolated cache/replay now binds the shared date helper and Python/HTML-parser versions, detects dependency changes, and rejects mixed replay metadata. No production code changes.
+- Same 67 cached cases retain 39 ready / 28 blocked; source evidence is unchanged. Prepared review inputs refreshed to version 56, all unfinished. API accounting remains 100 calls and zero independent clearances.
+- 484 targeted tests passed, then 17 replay-integrity tests after two added cases. Protection audit 37 reports no production metadata changes; no production rebuild or full suite.
+
+## 2026-10-04 -- Jev pilot: disclosure navigation and historical usage
+
+- Added optional table navigation and source issuer-column seeds in the isolated worktree. On the same 67 flags, 23 have supported source seeds and 11 gain additional navigation coordinates; unknown/combined descriptions remain unsupported. Twenty-seven focused tests pass. No bundle/readiness or model changes.
+- Two-source probe recovers AB Centers commitment/main rows while keeping TCW's manual name recovery separate. Results and limitations recorded in docs/jev_screening/11_remaining_bundle_work.md and agent_campaigns investigation.
+- Read 40 existing historical B1 usage records across 13 reserved funds: 13,216,420 reported input tokens, 557 completed commands, 22 failures. No invoice, active-time or avoided-work claim; grouped historical work differs from current per-flag tests.
+
+## 2026-10-04 -- Jev pilot: supplementary context sizing
+
+- Measured hypothetical disclosure appendices on the same 39 ready requests: full records add 22.2% aggregate proxy tokens and one additional over-cap request; locator-only records add 8.9% but omit adjudication evidence.
+- BioXcel's 14 extra rows raise its request from 13,657 to 24,360 proxy tokens. This is payload sizing, not model-quality or billing evidence. No API calls, runtime integration or production changes.
+
+## 2026-10-04 -- Jev pilot: bounded continuation geometry
+
+- Added an optional non-mutating header-continuation diagnostic and 17 passing focused tests. CMG's 16 cost/16 FV facts align between matching adjacent headers; both Varagon cases remain unresolved.
+- No header inheritance or readiness promotion. Ownership, notes, units and source identity remain separate checks; production and model accounting unchanged. Evidence in docs/jev_screening/11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: later-period transfer without model calls
+
+- Added an isolated deterministic two-case C104 probe in an existing fund's later filing. Both remain blocked by note 13 beyond the parser's bounded table association, although direct source tags encode zero FV.
+- Core 67-case results are unchanged; separate offline scope is two additional flags/one filing, same 11 funds. No new API calls, independent audits, production changes or clearance. Direct diagnostic execution only; details in docs/jev_screening/11_remaining_bundle_work.md.
+
+## 2026-10-04 -- Jev pilot: explicit footnote links and owner pause
+
+- Added an optional isolated fact/footnote resolver, source probes and 31 passing focused tests. Full link resolution on 53/67 core flags is availability evidence only; five cases exceed the bounded relationship limit.
+- Two additional later-period cases have direct missing-note links. Continuation investigation shows that explicit objects can span multiple numbered notes/tables, so no automatic attachment or readiness promotion was applied.
+- Owner requested pause after this item. Handover records current artifacts, unresolved validation and production boundaries. Core 39/67 readiness, 100 API calls and zero independent clearances remain unchanged.
+
+## 2026-10-04 -- Promoted inputs that fail to load now fail the acceptance gate; eight invalid classification leaves retired
+
+- Found: eight promoted B2 leaves `data/overrides/agent_b2_corrections/<cik>/classification_fix.json` carry values outside the column vocabularies (`pipeline/column_validation.py` ENUM_VALUES). The loader has rejected them on every build since a4c163c (correct: applying them would corrupt the column), but nothing gated on it. `input_admission_audit.csv` recorded `rejected_contract` (16 rows = 8 files x 2 loader passes) while `promoted_rule_health` read only `agent_fix_application_audit.csv`, where a rejected file never appears.
+- Retired (git mv to `_retired_classification_fix.json`, original bytes preserved, plus a `_retired_classification_fix.review.json` record following the 0001911066 convention: status, previous/original file, original_sha256, mechanism, action, sources). No value was remapped and no enum widened. index_classification: 0001702510 `SOFR`, 0001849894 `SOFR`, 0001920145 `Non-accrual`. exposure_type: 0001784700 `Senior Secured First Lien Loans`, 0001841514 `lookthrough`, 0002011498 `INDIRECT`. asset_class: 0001901612 `Debt`, 0002031750 `debt`. The review findings behind these leaves remain unresolved; retirement removes a non-applying file, it does not fix any row.
+- Gate change (`pipeline/quarter_acceptance.py`): `promoted_rules.n_not_ok` (the metric `promoted_rule_health` gates on, threshold `<= 0` unchanged) is now application failures PLUS distinct promoted files with a load-failure status in the admission audit of the same build (read from the directory of `audit_path`; `--admission` overrides). New metrics: `n_apply_not_ok`, `n_load_rejected`, `load_rejected_paths`, `admission_measured`; new `inputs.admission`. No tenth check, `data/reference/quarter_acceptance_thresholds.json` NOT edited. This widens what the signed-off v3 check `promoted_rule_health` measures; owner should note it against the threshold version.
+- Loader change (`pipeline/agent_promoted.py`, `pipeline/rule_admission.py`): `LOAD_FAILURE_STATUSES` = `rejected_contract`, `unreadable`, `rejected_not_object`, `rejected_no_applier`, `rejected_no_cik`. A non-object JSON leaf, a fix_class with no production applier, a leaf with no usable cik, and an unreadable file now each write an audit row (loaded=False) and an ASCII warning; previously the first stayed `loaded=True` and the next two left no row. Applier-less / cik-less leaves are now dropped in the loader instead of in the applier (same net effect on the frame). `load_promoted_rules` records `unreadable` and non-CIK directory names the same way.
+- Residual risk: a missing admission audit is fail-open (warning, `admission_measured=false`), matching the existing behaviour for a missing application audit. `raw_staging_exclusions` still silently skips a comparative_period_filter leaf with no `template.report_date`. `not_admitted` rows (manifest present, file unlisted) are not counted.
+- Tests: `tests/test_quarter_acceptance.py` +5, `tests/test_agent_promoted.py` +8 (5 parametrized), `tests/test_correction_classification_contract.py` +9 (8 parametrized retirements, real-store zero-load-failure check). Targeted run of those three plus `test_rule_admission.py`, `test_retired_column_remap.py`: 120 passed. Adjacent run (`test_legacy_acceptance_wiring`, `test_retired_retention_rules`, `test_rule_promotion`, `test_financial_conventions`, `test_reattest_quarters`): 88 passed. Full suite NOT run.
+- `diff_outputs.py --semantic`: 680 divergent artifacts, 45,993 checked, 18,548 skipped -- unchanged from the 2026-10-01 figure (no output artifact rebuilt).
+- Unified rebuild NOT run: the last `rebuild_outputs.py --unified` took 4,315 s (scratch/2026-10-01_fidelity_wrapper/rebuild_unified.log), not about a minute, other agents were running pytest against the protected output roots, and the GICS rebuild-order defect makes a rebuild move unrelated rows. So `data/output/input_admission_audit.csv` is still the 2026-10-01 build (16 `rejected_contract` rows) and holdings are untouched (783,763 rows; classification value sets unchanged by construction). The real store was instead verified through the loader in a test: zero load-failure rows, eight `proposed_or_retired`.
+- `reattest_quarters.py check`: both quarters REGRESSED as before. `promoted_rule_drift` FAIL (n_drift 18, pre-existing). `promoted_rule_health` now FAIL for 2025-12-31 and 2026-03-31 (n_not_ok 8 = n_load_rejected 8, n_apply_not_ok 0); it passed on 2026-10-01. That is the new gate reading the stale audit; it should clear on the next unified rebuild and must be re-checked then.
+- Owner items: (1) should AGL 0002011498 look-through positions carry an `exposure_type` value of their own? Vocabulary decision; today `is_subsidiary=1` carries it on all 71 rows. (2) 192 override inputs load as `legacy_unverified` with no admission evidence.
+
 ## 2026-10-04 -- Ledger adapter strips midnight suffix from report dates; review_id collisions across quarters fixed
 
 - Found: 16,344 of 41,731 rows in `data/output/review_queue/review_queue.csv` (built 2026-09-30) had `period` = 'YYYY-MM-DD 00:00:00', so `pipeline/review_queue.py` left `cik`/`report_date` blank and hashed the review_id without a date. 1,810 ids were shared by 15,754 rows (same fund + rule, different quarters). By engine: row_validation 12,299 of 12,368 (2,548 blocker lane), oracle 3,665, fund_strategy 380. No bundle or verdict file existed under an affected id in the shared `review_bundles/` and `verdicts/` dirs (last bundle 2026-09-01), so no B1 run consumed them.
@@ -12967,6 +13651,1429 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Tests: `tests/test_review_queue.py` +3 (quarter-label ids distinct, dated id unchanged, global run timestamp excluded). `test_review_queue.py` + `test_shadow_adapter.py`: 35 passed. Full suite, `quarter_acceptance`, `reattest_quarters.py check` and `diff_outputs.py --semantic` NOT run.
 - Correction to the entry above: "no other column changed" excludes `priority_rank`. 45 of the 245 re-identified rows (fund_financials 23, cross_source 22) moved rank among otherwise tied rows, by at most 20 places, because review_id is the last sort tie-breaker. No row with an unchanged id moved rank.
 
+## 2026-10-04 -- Fix: GICS sector labels no longer depend on the previous run's entity lookup
+
+- Mechanism (confirmed, with one correction to the 2026-10-01 description). `build_unified_holdings` filled `entity_id` / `canonical_name` by LEFT JOIN on `data/output/entity_lookup.csv` (old `pipeline/unified_holdings.py:1162-1183`), then `_apply_gics_cache` -> `gics_classification._apply_gics_to_holdings` (`pipeline/gics_classification.py:707-731`) used `canonical_name` as its pass-3 fallback when the issuer name itself misses `company_gics_cache.csv`. That lookup file is written AFTER the build, by the finalizer (`pipeline/holdings_finalizer.py:136-139` -> `entity_resolution.build_entity_lookup`, published by `write_final_identity`). So the cycle is: build N's sectors read lookup N-1; lookup N is then built from holdings N. It is a one-build lag, not a random walk: the lookup itself never depends on GICS, so a second rebuild from identical inputs converges. It moves labels in both directions because a variant can gain a canonical name that hits the cache, lose one (variant absent from the stale lookup), or switch cluster. Correction: the published `entity_id` / `canonical_name` were already input-determined (the finalizer overwrites them); only `gics_sub_industry` (and `gics_sector` derived from it) carried the stale read.
+- Fix (mechanism a, in-build pass): new `_resolve_entities_in_build` in `pipeline/unified_holdings.py` runs the same resolver (`entity_resolution.build_entity_lookup`, `enrich=False`, temp dir) on the frame's own five entity input columns immediately before `_apply_gics_cache`, and merges the result in pandas (row order and count preserved, `validate=many_to_one`). The read of `ENTITY_LOOKUP_FILE` is deleted; the name stays importable only because tests and `scripts/programme_rules/audit.py` patch it. The step moved from before the correction layers to after the final sort: nothing in between reads the two columns (checked `unified_holdings.py`, `agent_promoted.py`, and promoted-rule predicates under `data/overrides/`).
+- Rejected: (b) key GICS on a per-row normalised issuer name -- deterministic but drops the canonical fallback, measured at 46,385 rows / 5.9 points of fill (56.994% -> 51.075%); (c) treat the lookup as a pinned reference input -- adds a refresh procedure and hash for something that is cheaply derivable from the build itself, and a stale pin reproduces the same staleness by design.
+- Before fill rate (`private_markets_holdings.parquet`, 2026-10-01 08:21 build, DuckDB): `gics_sub_industry` non-blank on 446,691 / 783,763 rows = 56.993% (FV-weighted 77.501%); bdc 61.894% rows / 81.835% FV; nport 44.448% / 62.867%.
+- Expected effect on real rows, measured BEFORE any rebuild by running the new function on all 783,763 published rows twice (read-only, `scratch/2026-10-04_gics_determinism/gics_inbuild_proof.py`, 339 s, about 160 s per resolution): the two runs are identical; in-build `canonical_name` equals the published (finalizer) `canonical_name` on 783,763 / 783,763 rows; replaying the GICS cache gives 3 rows blank -> set, 0 rows set -> blank, fill 56.993% -> 56.994%. The other 595 replay differences are all REIT-pattern rows written by `_apply_re_fund_gics_overrides`, which runs after the cache and is not part of the replay. So the current build is already 3 rows from the input-determined answer (Dreyfus Government Cash Management, two Carlyle CLO rows); the 490-row churn seen on 2026-10-01 was the previous build catching up. Expect about 3 sector changes at the next rebuild, all gains, plus about 135-160 s of build time.
+- Not input-determined and out of scope here: final `entity_id` values come from the durable identity registry in the finalizer (in-build ids differ from published ids on 780,169 rows while canonical names agree on all rows; the in-build ids are overwritten). The resolver still reads `identifier_extraction_lookup.csv`, `company_gics_cache.csv` and `gics_label_cache.csv` from `data/output/`; these are LLM caches used as inputs, not rebuilt by `--unified`, but they sit in the output directory and are not hashed into the build.
+- `rebuild_outputs.py --entities` and `--returns` do not re-apply GICS. An entity-override change therefore reaches sector labels only through `--unified`.
+- Tests: `tests/test_unified_holdings.py::TestEntityEnrichment` rewritten (6 tests): three-way determinism (no prior lookup / hostile lookup mapping every variant to a different GICS-cached company / stale lookup) on entity and sector columns; canonical-name fallback still classifies; lookalike companies do not share a sector (false-positive guard); helper preserves row order/index and leaves unresolvable names blank; column order; entity columns populated with no lookup. Written first and seen failing on the old code. Targeted run: `TestEntityEnrichment`, `TestIndustryEnrichment`, `TestBuildUnifiedHoldings`, `TestDimensionPathDedup`, `test_gics_classification.py`, `test_entity_resolution.py`, `test_entity_input_determinism.py`, `test_holdings_finalizer.py`, `test_accounting_scope_integration.py`: 248 passed in 1366.77 s, protected-output backstop clean. Three old tests that asserted the prior-lookup behaviour were replaced, not kept.
+- Known gap found on the way: `entity_resolution.build_entity_lookup` raises KeyError when no issuer name survives its variant filter. The in-build helper checks `_build_variant_table` first and leaves both columns blank; the finalizer path still has the crash on such input (not hit by production data).
+- Owner suggestion evaluated -- twin build on a fund subset. Feasible only with a script: `rebuild_outputs.py --unified` has no CIK scope or output override (`--ciks` applies to `--bdc-holdings` only) and `rebuild_unified_cik_trial.py` is single-CIK and writes under `data/output/`. `scratch/2026-10-04_gics_determinism/twin_subset_build.py` calls `build_unified_holdings(bdc_df, nport_df, output_file=, orphan_file=)` on the parquet inputs for 38 CIKs (ten largest cohort funds by 2026-03-31 FV plus the 37 funds whose holdings rows moved on 2026-10-01; 379,064 raw BDC rows, 193,886 unified rows, 25% of the build), once with no prior lookup and once with a perturbed copy (every second variant renamed to a GICS-cached company, every fifth dropped), all outputs in the system temp dir, and requires identical `entity_id` / `canonical_name` / `gics_sub_industry` by `row_id`. WRITTEN BUT NOT RUN (no-rebuild window); syntax-checked only. Estimated 15-25 min per build (unmeasured). What it does not show: entity resolution is cross-fund, so canonical names and fuzzy clusters in a subset differ from the full cohort; A-vs-B equality is meaningful, the labels themselves are not production labels. For this mechanism that limit does not weaken the determinism claim (the prior lookup is no longer read at all, whatever the names), and the full-cohort cross-fund behaviour is already covered by the 783,763-row step proof above. The subset twin is still worth one run as an end-to-end check and as a negative control against the pre-fix commit; it is not a substitute for the post-rebuild replay check.
+- NOT run: any rebuild (`--unified`, `--returns`, export), full pytest suite, `diff_outputs.py --semantic`, `reattest_quarters.py check`, quarter acceptance. The rest of `tests/test_unified_holdings.py` (about 900 tests, 29 further builds) was not run. Rebuild order for the fix to take effect: `python scripts/rebuild_outputs.py --unified` (about 4,450 s; no prior `--entities` needed, the stale lookup is no longer read), then `--returns` (about 1,160 s; RI07 export guard), then `python scratch/2026-10-04_gics_determinism/gics_inbuild_proof.py` (expect 0 canonical differences, 0 blank -> set, 0 set -> blank), then `python -m pipeline.main --export-frontend` (about 1,630 s), then `diff_outputs.py --semantic` and `reattest_quarters.py check`.
+- This entry is appended to a file with other sessions' uncommitted changes and is NOT committed by this task.
+
+## 2026-10-04 -- GICS rebuild attempt: review fixes committed, subset determinism proven, production rebuild STOPPED at step 1 (not completed)
+
+- Status: the production rebuild did NOT complete. `rebuild_outputs.py --unified` was stopped by the session harness after 52 min (16:08 -> 17:00) because the machine was critically low on memory; it was not restarted (harness instruction: restart only when asked). Published outputs are unchanged: `data/output` top-level listing (mtime/size) is identical to the pre-run snapshot, `frontend/public/data` untouched, holdings still the 2026-10-01 08:21 build (783,763 rows). The GICS fix is committed but NOT yet in the published data.
+- Review fixes (three commits on `ensemble-fp-experiment`, code and tests only):
+  - `dd99a9d` `pipeline/quarter_acceptance.py`, `pipeline/legacy_acceptance_inputs.py`: a missing `input_admission_audit.csv` now leaves `promoted_rules.n_load_rejected` and `n_not_ok` as None (unmeasured), so `promoted_rule_health` fails closed like `investigations.n_stale`; previously it read 0. In the extended gate the check now depends on `{"audit","admission"}`; "admission" binds through the existing `input_admission_audit` evidence record (sibling of the application audit in `run_production_acceptance.py`), so an unbound admission audit is UNASSESSABLE. Thresholds file not edited. This again changes what the signed-off check measures: any caller that supplies an application audit without its sibling admission audit now fails that check.
+  - `c0ac4f8` new `rule_admission.is_retired_path` (file name or any directory component below the store starting with `_`); `admitted()` uses it, behaviour unchanged. `scripts/restamp_row_selectors.py`, `scripts/agent_b2/replay_gate.py`, `scripts/programme_rules/audit.py`, `scripts/fingerprint_blast_radius.py` now skip retired files. Before this, `restamp_row_selectors.py --apply` could rewrite a `_retired_*.json` leaf (only `_`-prefixed directories were skipped).
+  - `e59f5b6` `pipeline/holdings_finalizer.py`: the finalizer checks `entity_resolution._build_variant_table` before `build_entity_lookup`; with no resolvable issuer it writes an empty lookup and blanks the entity columns instead of raising KeyError. No stats file is written on that path.
+  - Tests: `test_quarter_acceptance.py` +2 and one rewritten (the old test asserted the fail-open behaviour), `test_legacy_acceptance_inputs.py` +1, `test_restamp_row_selectors.py` +2 (one false-positive guard), `test_holdings_finalizer.py` +1. Targeted run of those four plus `test_legacy_acceptance_wiring`, `test_rule_admission`, `test_quarter_evidence`, `test_reattest_quarters`: 111 passed in 112 s. `test_agent_promoted` + `test_correction_classification_contract`: 91 passed. Only the finalizer test was observed failing before its fix; the others were written before the code but not run red. `replay_gate.py`, `audit.py` and `fingerprint_blast_radius.py` have no tests (compile-checked only).
+- Subset determinism proof (`scratch/2026-10-04_gics_determinism/twin_subset_build.py`, fixed code, 38 CIKs, 379,064 raw BDC rows -> 193,886 unified rows per build): PASS. `entity_id`, `canonical_name`, `gics_sub_industry` differ on 0 of 193,886 rows between the no-prior-lookup build and the perturbed-lookup build; fill 60.084% both. Wall time 1,951 s (builds 934 s + 1,003 s). `data/output` top-level listing identical before and after; temp dir removed.
+  - The script needed two edits (scratch, git-ignored): progress output plus try/finally cleanup, and a defect fix. Its first run crashed after 701 s: it passed a pandas frame whose DATE columns had become datetime64, which DuckDB registers as TIMESTAMP, so `CAST(report_date AS VARCHAR)` gave 'YYYY-MM-DD 00:00:00', the promoted `comparative_period_filter` matched 0 rows for 0001287750 and the row_id-selected `all_pik_normalization` leaf then failed ("row_selector matched no rows"). Dates are now formatted as 'YYYY-MM-DD' strings before the build. Production is not affected (it stages the parquet inside DuckDB), but any caller that hands `build_unified_holdings` a DataFrame read from the typed parquet can hit the same trap (`rebuild_unified_cik_trial.py` loads this way; not tested here). Same class as the timestamp-suffix defects fixed in 0f28433 and in the adapter entry above.
+- Negative control (pre-fix code): FAIL as expected. Same script and subset in a temporary `git worktree` of 2ab127e (parent of b665895) under the system temp dir, with `data/output` top-level files, `data/reference` and `data/overrides` COPIED in and `data/raw` linked by junction (read only by the build); `config` resolves paths from the checkout, so old code could not address MAIN `data/output`. Result: `entity_id` and `canonical_name` differ on 155,516 of 193,886 rows, `gics_sub_industry` on 41,004; fill 53.227% vs 74.376%. Wall time 1,875 s. MAIN `data/output` listing and `frontend/public/data` unchanged; junction unlinked first, then worktree removed. Limit: output subdirectories were not copied, so optional inputs read from them were absent in the control; that does not affect an A-vs-B comparison.
+- Before-state (DuckDB over the published CSV, `scratch/2026-10-04_gics_rebuild/before.txt`): 783,763 rows, 783,763 distinct row_id (783,584 src_anchor, 179 natural_key); `gics_sector` and `gics_sub_industry` set on 446,691 rows (56.993%); blank sector 337,072; Industrials 113,668; Information Technology 85,218; Health Care 80,631; Financials 67,285; Consumer Discretionary 36,353; Materials 14,603; Consumer Staples 14,024; Communication Services 12,465; Real Estate 11,759; Energy 6,688; Utilities 3,997. Distinct canonical names 37,285 (37,293 entity ids). `input_admission_audit.csv`: legacy_unverified 192, rejected_contract 16 (8 files), proposed_or_retired 13, proposed 2, promoted 1 -- still the 2026-10-01 audit.
+- Rebuild commands and durations: `python scripts/rebuild_outputs.py --unified` started 16:08:22, stopped about 17:00:41 (no exit code; killed while the session was idle) just after row_id assignment, before the finalizer. Nothing was published; the only trace was the private `.holdings-build-*` directory under `data/output` (two small files), removed by this session. Log: `scratch/2026-10-04_gics_rebuild/3a_unified.log`. `--returns`, `gics_inbuild_proof.py`, `--export-frontend`, `diff_outputs.py --semantic` and `reattest_quarters.py check` were NOT run.
+- Unverified observations from the stopped build's log (in-memory frame, never published; do not treat as results): row_id assigned on 783,764 rows (783,585 src_anchor), ONE more than the published 783,763 and than the pre-registered "row count unchanged" expectation; entity enrichment 780,170 rows; GICS cache classified 446,694 rows (published 446,691, i.e. the expected +3); in-build resolver 37,293 entities; RE-fund override 595 rows; application audit 163 entries, 18 flagged. The extra row is unexplained and was not investigated. Check it at the next rebuild before accepting the row count.
+- Not measured, because nothing was rebuilt: after-state counts, sector changes by direction and fund, admission audit load-failure count (still 16 rows / 8 files in the stale audit), headline vs donut reconciliation on new data (the existing 2026-10-01 export reconciles exactly at 383,037,720,090.519818975486 for headline, instrument donut and industry donut, 30,143 positions each), semantic diff count (last known 680), reattest per check. `promoted_rule_health` therefore still reads FAIL on both signed-off quarters until a unified rebuild writes a fresh admission audit.
+- Memory: the machine has 23.8 GB; the build was past its GICS stage with other interactive sessions open. 15.9 GB was free after the stop. The peak of the build itself was not measured. The next attempt should be started by the owner or on request, ideally with the other sessions closed.
+- NOT run: full pytest suite; baseline refresh; the pilot's totals chain; any step after `--unified`. No push. Nothing under `data/` or `frontend/public/data/` committed. This entry is appended to a file with other sessions' uncommitted changes and is NOT committed by this task.
+
+## 2026-10-05 -- Acceptance thresholds v4: outstanding_findings blocks sign-off (branch outstanding-findings-gate, NOT merged)
+
+- Owner ruling 2026-10-05: a quarter is not signed off while findings are outstanding or waiting on a human. Scope: the five largest cohort funds by 2026-03-31 fair value (0001287750, 0001803498, 0001812554, 0001837532, 0001838126), sign-off quarter only, every unresolved state.
+- Why: both signed-off quarters passed on the FV-share bars with findings open. Cohort at the sign-off quarter, final pass ledgers: Q4-2025 434 of 796 outstanding, Q1-2026 525 of 888. The pass computed `dry=false` and it was advisory.
+- Commit 1907eaf on branch `outstanding-findings-gate` (worktree `.claude/worktrees/outstanding-findings-gate`, off e59f5b6). Not merged into `ensemble-fp-experiment`: a unified rebuild was running in the main checkout.
+- `pipeline/quarter_acceptance.py`: new input `findings_ledger_path` (CLI `--findings-ledger`, default `data/output/agent_b2/findings_ledger.csv`); new metrics `findings.n_outstanding`, `by_state`, `scope_ciks`, `measured`; new `inputs.findings_ledger`. Outstanding = any state outside `RESOLVED_FINDING_STATES` (adjudicated_false_alarm, remediated_promoted, resolved_upstream, gone_unadjudicated), so needs_human, evidence_backlog, review-lane opens and unknown states all count. Missing ledger = unmeasured (None) = check fails closed. Extended gate: `outstanding_findings` depends on `findings_ledger`; nothing binds that input yet, so it reads UNASSESSABLE there.
+- `data/reference/quarter_acceptance_thresholds.json`: version 3 -> 4 (provisional); tenth check `outstanding_findings` (`findings.n_outstanding <= 0`); new top-level `findings_scope.ciks`. The nine v3 bars are unchanged. Without `findings_scope` the check covers the whole cohort.
+- `scripts/run_quarter_pass.py`: each acceptance stage is passed the findings ledger its own battery wrote (`findings_ledger_pre.csv` / `_post.csv` in the pass dir). `.claude/skills/quarter-pass-operator/SKILL.md`: sign-off section states the new condition.
+- What it would have read (`scratch/2026-10-05_carry_forward/outstanding_top5.py`, read-only, final pass ledgers): Q4-2025 42 outstanding of 66 in scope (real_error_unremediated 19, remediation_pulled 16, needs_human 6, open 1); Q1-2026 43 of 62 (real_error_unremediated 31, needs_human 8, remediation_staged 2, evidence_backlog 1, open 1). Both signed-off quarters will FAIL this check on re-attestation until cleared; that is intended.
+- Tests (worktree, no data cache): 8 new, written first and seen failing (7 in `tests/test_quarter_acceptance.py`, 1 in `tests/test_run_quarter_pass.py`); the v3 file test now asserts the first nine checks. `test_quarter_acceptance`, `test_run_quarter_pass`, `test_reattest_quarters`, `test_quarter_evidence`, `test_legacy_acceptance_wiring`, `test_legacy_acceptance_inputs`: 107 passed. Full suite NOT run. No acceptance run on real data, no reattest, no `diff_outputs.py --semantic`.
+- Residual: `reattest_quarters.py check` reads the default ledger path and nothing checks that the ledger is from the same build as the other inputs; a finding that stops firing without adjudication (`gone_unadjudicated`) counts as resolved; `resolved_upstream` is not re-verified outside closure mode.
+
+## 2026-10-05 -- AGENTS.md consolidated at the owner's request (v0.5 scope, update protocol, acceptance v4, tracks)
+
+- Owner-directed edit of `AGENTS.md` in the main checkout, left UNCOMMITTED for owner review. Docs only; no code, data or threshold change in this entry.
+- New section "Scope: v0.5": the five largest cohort funds (0001803498, 0001812554, 0001287750, 0001838126, 0001837532) are the working and sign-off scope; the public site stays on the ~70-fund cohort until the owner decides otherwise (owner: "work and sign-off for now, then public site later").
+- Agent Update Protocol: AGENTS.md changes only by the owner, or by an agent the owner explicitly asks in the live session (one bounded edit, unverified items stated, uncommitted unless told, "Last consolidated" line updated).
+- Also updated: published-basis wording for the headline; JV look-through rule; position-identity bullet (durable registry, cross-rebuild stability not re-measured); date-string trap for ids; rebuild duration and memory; no edits or pytest in a checkout mid-rebuild; acceptance v4 sign-off rule and its rationale; re-attestation regression warning; In flight block; Current Tracks.
+- Not re-verified in this pass: the 2026-09-09 to 2026-09-28 programme/refactor entries, the module inventory, the reference docs dated 2026-05-28. AGENTS.md describes acceptance v4 as the contract while 1907eaf is still unmerged; the In flight block says so.
+
+## 2026-10-05 -- Unified rebuild stopped again for low memory (third attempt); acceptance v4 merged and re-attested
+
+- `python scripts/rebuild_outputs.py --unified` started 10:58 at e59f5b6 with 16.4 GB free (Firefox closed with the owner's consent, VS Code left open) and was stopped by the session harness at about 11:51 for critically low memory, immediately after `row_id: 783764 assigned`, before the finalizer. Nothing was published: `private_markets_holdings.csv` is still the 2026-10-01 08:21 build. Log `scratch/2026-10-05_rebuild/unified.log`. Not restarted.
+- Three stops in a row since 2026-10-04: 16:08 run (after row_id, before the finalizer), 17:03 run (inside the finalizer, Python at 10.9 GB with 2.6 GB free), and this one. The last completed build (2026-10-01) predates b665895, which added an in-process entity resolution to the build. Whether that raised the peak is NOT established; no memory trace was taken on this run. A 50,000-row sample puts the all-string holdings frame at about 4.4 GB in pandas.
+- The stopped build again assigned 783,764 row ids against 783,763 published, so the extra row is reproducible; still unexplained.
+- Two dead private build directories remain under `data/output/`: `.holdings-build-i6j68oan` (2026-10-04, about 1.3 GB) and `.holdings-build-k9957bbl` (2026-10-05). Not removed.
+- Acceptance v4 (1907eaf) fast-forward merged into `ensemble-fp-experiment` after the stop. Six related test files in the main checkout: 107 passed. `python scripts/reattest_quarters.py check`: exit 1, both quarters REGRESSED as before; `outstanding_findings` reads False on both. Check flips 2025-12-31: flagged_fv_share, promoted_rule_drift, promoted_rule_health, reconcile_rate, verified_fv_share True->False; outstanding_findings and unfinished_investigations fail; over_inclusion passes. 2026-03-31: the same five flips; outstanding_findings and over_inclusion fail; unfinished_investigations passes. Log `scratch/2026-10-05_rebuild/reattest_v4.log`.
+- Defect found: outside a quarter pass the new check reads `data/output/agent_b2/findings_ledger.csv`, last written 2026-08-16. The re-attestation reading above therefore used a stale ledger. No staleness guard exists.
+- NOT run: `--returns`, frontend export, `diff_outputs.py --semantic`, the full suite, the GICS in-build proof.
+
+## 2026-10-05 -- Why the unified rebuild runs out of memory: the financial preparation step (diagnosis only, no code change)
+
+- Evidence 1 (existing trace, `scratch/2026-10-04_gics_rebuild/unified_retry.mem.txt` aligned to its log by `scratch/2026-10-05_rebuild/align_mem_log.py`): the Python working set sits at 3-8 GB for the first 65 minutes, then jumps from 7.8 to 11.5 GB within 90 seconds of `row_id: ... assigned`, with free memory at 0.32 GB (so the true peak is higher; pages were being compressed). A second climb to 10.9 GB and rising occurs in the finalizer after entity resolution, where that run was stopped. The 2026-10-04 16:08 run and the 2026-10-05 run were both stopped at the first point.
+- Location: the code between `_assign_row_ids` and the CSV write in `build_unified_holdings` is `financial_finalization.prepare_artifact` -> `financial_conventions.prepare` -> `accounting_scope.annotate`. The finalizer calls `prepare_artifact` a second time on the re-read holdings (`holdings_finalizer.py`), which is the second climb.
+- Mechanism (`pipeline/financial_conventions.py`, code dated 2026-09-15, a4c163c / f23959f): `frame.copy()` plus `astype('string')` on about 25 text columns; then a DuckDB connection with `memory_limit = -1` (no limit, so it never spills to disk) builds three chained full-width in-memory tables (`typed AS SELECT *`, `conventions AS SELECT typed.*`, `calculated AS SELECT *`), each carrying all 100 columns including `src_facts`; then `SELECT i.* REPLACE(...)` with a JSON merge on every row and `.fetchdf()` of the whole frame; then `annotate` does another `SELECT *`. The caller's frame stays alive throughout.
+- Measurement (`scratch/2026-10-05_rebuild/measure_prepare_mem.py`, read-only, sample rows of the dead build's staged CSV, temp dir output): 50,000 rows -> peak 0.73 GB above the loaded frame; 100,000 rows -> 1.34 GB. Slope 12.2 MB per 1,000 rows, so about 9.6 GB above baseline at 783,764 rows, on top of the 5-8 GB the build already holds. Estimated peak 15-17 GB on a 23.8 GB machine. Linear extrapolation from the first 100,000 rows of the file; not measured at full size.
+- Not the cause: the 2026-10-04 in-build entity resolution (b665895). It adds about 2 GB of working set for a few minutes before this step and three transient frame copies, but the spike is in code that predates it. Why the 2026-10-01 build completed is not established (no memory trace exists for it); the likeliest reading is that the step has been this expensive since mid-September and builds completed only when enough memory happened to be free.
+- Fix candidates, none applied: keep only `row_id` plus the computed fields in the three intermediate tables instead of `SELECT *`; give the DuckDB connection a memory limit and a temp directory so it can spill; drop the pandas copy. Any change must be shown output-identical (old vs new `prepare` on a row sample, frame equality) before a rebuild.
+
+## 2026-10-05 -- Rebuild memory stops: what changed is how the build is launched, not the build (follow-up to the diagnosis above)
+
+- Tested and rejected: the in-build entity resolution (b665895) as the cause. `scratch/2026-10-05_rebuild/measure_entity_step_mem.py` on the full 783,764-row staged frame: +2.53 GB transient during the step, 0.15 GB retained after it. It is the only build-path commit since the last completed build (2026-10-01); 6b0b140, dd99a9d, 2ab127e, c0ac4f8 and 1907eaf do not run inside `--unified`, and e59f5b6 is a guard on an empty-input path.
+- What differs: the three stopped builds (2026-10-04 16:08 and 17:03, 2026-10-05 10:58) were each started as a Claude Code background task and each ended with the harness's "critically low on memory" stop. No memory stop is recorded anywhere in this changelog before 2026-10-04. The 2026-09-30 full builds were started as detached processes (`scratch/2026-09-30_base_build/rebuild.pid`), which the harness cannot stop; how the 2026-10-01 build was started is not recorded.
+- The build can survive the squeeze when it is not stopped: in the 2026-10-04 17:03 run free memory fell to 0.32 GB at 18:12 and the build went on to finish the unified stage at 18:16.
+- Reading: the financial preparation step has needed an estimated 15-17 GB at peak since mid-September. Earlier builds rode through it on Windows paging; builds launched as harness background tasks are stopped at that moment. Confidence moderate: no memory trace exists for a completed build, so "the peak is unchanged" is inferred from the code history and the entity-step measurement, not measured.
+- Not done: a detached, traced rebuild to confirm; any code change.
+
+## 2026-10-05 -- Owner direction: v0.5 sample is five funds from 2022 onward; fixes made interactively, gap by gap
+
+- Sample (owner): the five v0.5 funds, 2022 onward. In the published holdings (published basis) that is 69 fund-quarters and 56,665 position rows: Ares and BCRED 2022-09-30 to 2026-03-31 (15 quarters each), Blue Owl, Apollo and HPS 2023-03-31 to 2026-03-31 (13 each). `scratch/2026-10-05_carry_forward/sample_quarters.py`.
+- Method (agent proposal, owner confirmed the sample but not each step): one gap at a time with a test; develop on quarters up to 2025-12-31; sweep earliest to latest; 2026-03-31 held back as the carry-forward test (not blind); 2026-06-30 is the first clean out-of-sample quarter and needs the owner's go to download.
+- Paused, not cancelled: B1/B2 fleet work, filer profiles, the unconstrained-agent experiment, the per-rule resolution-contract table.
+- New owner-facing file `docs/project_map.md` (plain-English map and glossary). `AGENTS.md` NOT edited for the 2022-onward sample; that needs the owner's instruction under the update protocol.
+- Rebuild: started 12:56 through `scripts/run_rebuild_detached.ps1` at 60d3e36 (run dir `scratch/2026-10-05_rebuild/125559`); still running when this entry was written.
+
+## 2026-10-05 -- Rebuild stopped by the identity gate: a promoted rule read a column the GICS fix made late; HPS joint-venture fix; sample trial build
+
+- Rebuild via `scripts/run_rebuild_detached.ps1` (60d3e36, 12:56 to 14:00): survived memory (peak private 16.92 GB during position matching, lowest free 1.96 GB; trace `scratch/2026-10-05_rebuild/125559/mem.csv`) and exited 1 at `durable_identity.allocate`: "Unreviewed identity merge". Nothing published. The memory peak is position matching in the finalizer, not the financial preparation step named in the earlier entry (that step is the smaller, earlier peak of about 11.5 GB).
+- Cause (confirmed): b665895 (2026-10-04) moved entity resolution to after the promoted-rule layer and recorded that no promoted predicate read the entity columns. One did: `agent_investigate_rules/81955/81955_2025q4_canonical_duplicate_debt_notes.json` selected the Mobile RN Holdings duplicate by `canonical_name`, now blank when rules run. Rows removed fell from 5 (12,421,280) to 4 (9,889,453); the retained duplicate ROW-259ebbf96c02e208 (2,531,827, Term Note at 14%) is the "extra row" seen in every build since (783,764 vs 783,763) and joined two published identities. The identity gate was right to stop the build. `_drift` did not flag 4 of 5 rows.
+- Fix (3f5867e, merged): the rule names the two issuer spellings instead of the entity column; `agent_promoted.load_promoted_rules` rejects any rule whose predicate names `canonical_name`, `entity_id`, `gics_sub_industry` or `gics_sector` (`rejected_contract`, so `promoted_rule_health` fails). Tests: +3 in `tests/test_agent_promoted.py`; two of them now name the real store explicitly because `conftest` redirects the default rule directory (as first written they read an empty store). Real store: 133 live rules over 66 CIKs, none reads a late column.
+- HPS 0001838126 (7f3ce08, merged): new wrapper encoding `source_encodings.detached_schedule_labels` (schema `wrapper_v3.schema.json`, loader and `tag_detached_schedules` in `pipeline/source_encodings.py`, called at the start of `staging_bdc._prepare_bdc`). Within one filing and period, position contexts from the first jump of 200 or more in context order onward get the label as a bare dimension segment and resolve to `underlying_schedule`: retained, flagged, not published. Enabled for HPS as "joint venture schedule". On the raw extraction this isolates 2 to 22 rows per quarter from 2023-12-31 to 2026-03-31 (361.7M to 1,609.0M) and none in the first three quarters of 2023; raw minus those rows equals the filed investments total to 0.1M in all 13 quarters (`scratch/2026-10-05_hps_overshoot/hps_diag7.py`). The 2025-12-31-only exclusion rule is retired (`_retired_1838126_2025q4_bare_axis_leak_exclusion.json` plus review record). Tests: +9 in `tests/test_source_encodings.py`. Effect on published output NOT yet verified (trial build running when this was written).
+- New `scripts/rebuild_sample_trial.py` (1a45755): builds the acceptance-scope funds into `scratch/trial_builds/<label>` and compares two runs, or a run with production, by row_id. `tests/test_rebuild_sample_trial.py` 6 tests.
+- Open: HPS published totals are short of the raw extraction (about 118 to 135M in the first three quarters of 2023, 30 to 66M in the last two), so real rows are lost between extraction and publication; Rand has a second duplicate (Mobile RN Class A Common Units, 500,000 twice) not covered by any rule; published row order is not deterministic (unordered join in `financial_conventions.prepare`); the reconciliation band for the five funds is to be tightened to exact within rounding (owner). Full suite NOT run; no full rebuild since the fixes.
+
+## 2026-10-05 (evening): HPS gaps 1 and 2 fixed on trial builds; identity continuity suspended; fund-level trial
+
+Owner direction: fix HPS without hour-long runs; keep every fix scoped to the fund through a
+wrapper opt-in; one full rebuild for the batch later. Published data is still the 2026-10-01 build.
+
+- **Full rebuild 143337 (git 05da916) failed at 15:39, exit 1, "Unreviewed identity merge".** It
+  passed the memory peak (17.29 GB private, 1.95 GB free) under `scripts/run_rebuild_detached.ps1`.
+  Cause, reproduced on HPS alone in 97 s (`scratch/2026-10-05_identity_gate/identity_probe.py`):
+  the HPS joint-venture fix (7f3ce08) restores the JV rows the retired rule removed for 2025-12-31
+  only, so 13 JV chains (plus one own-schedule pair) now join two prior identities, and 25 groups
+  sit in the JV scope while their prior identity is in the parent scope. The finalizer passes
+  `revisions=()` and `revise()` cannot move scope, so there was no approval route.
+- **Identity continuity suspended (owner ruling, 7b2a715).** `config.IDENTITY_CONTINUITY_ENABLED =
+  False`: the finalizer no longer pins the previous registry; identities are allocated fresh
+  (deterministic for unchanged chains); the replaced registry is still archived under
+  `identity_registry_history`. Lost: the guard against silent re-chaining between builds. Checked:
+  no override store carries durable identity ids; the frontend only displays `position_id`.
+  Re-enable at sign-off.
+- **HPS rows lost between extraction and publication (9d66d17).** Traced with a stage-by-stage
+  probe of staging (`scratch/2026-10-05_hps_lost_rows/stage_probe.py`): 55 rows in 13 quarters
+  dropped at `no_prefix_hierarchy` because the wrapper classified names with no company suffix
+  (Renaissance Financiere, SDC US Smilepay SPV, Express Wash Concepts, Carlyle Global Market
+  Strategies, Shackleton Lower JVCO ULC, Forgent Intermediate IV) as `debt_category_rollup`. New
+  wrapper dispatch setting `flat_schedule` (schema updated), on for 0001838126 only. Eight other
+  missing rows have no fair value and stay dropped.
+- **Five-fund trial `hps_fix3` vs `hps_fix2`:** 55 rows added, 0 removed, 0 changed; other four
+  funds identical. HPS published vs filed: exact in 10 of 13 quarters; +5.7, +4.5, +6.0 USD M
+  (0.06-0.08 pct) at 2023-06-30/09-30/12-31. Residual = nine International Entertainment
+  Investments rows whose fair value is FX-converted although the filed total shows it is already
+  USD. Open, belongs to the foreign-currency gap.
+- **HPS NAV per share (777dfa9).** The 1000 is filed: fact f-12727 in 0001628280-26-033248 tags
+  the "$1,000 of indebtedness" of the senior-securities footnote as `NetAssetValuePerShare` with
+  no class. The real value is tagged per class (I, D, F, S), equal across classes. New opt-in in
+  the fund highlights wrapper (`source_preferences.nav_per_share = "share_class_consensus"`,
+  first file in `data/overrides/fund_highlights_wrappers/`): `_dedup_highlights` prefers the
+  quarter-end instant over a cover-page date, and `class_nav_consensus` feeds `_prepare_bdc`, which
+  uses the class value when it satisfies nav * shares = net assets within 2 pct and the
+  entity-level value is missing or does not. Only HPS opts in.
+- **New `scripts/fund_level_trial.py`** (highlights + BDC fund financials for a few funds, scratch
+  only): HPS alone 3 s, five funds 36 s. HPS 2022-12-31 to 2026-03-31: 14 quarters now
+  23.88-25.59, identity gap at most 0.02 pct (was blank or 1000). Other four funds unchanged.
+- Not run: `rebuild_outputs.py --highlights/--financials` (stopped by the owner before any file
+  was written), full rebuild, quarter-pass checks. So no finding is yet shown cleared in a ledger.
+- Removed `tests/test_hps_bare_axis_rule.py` (tested the rule retired in 7f3ce08; it had been
+  failing since). Tests run: wrapper, finalizer, fund financials, highlights files (all pass).
+- Correction to earlier grouping of HPS findings: PP03 is comparative-period rows, C103/C107 are
+  negative fair value/cost, X01 is an equity row carrying a rate.
+
+## 2026-10-05 (late): one-fund check run
+
+- New `scripts/fund_check_trial.py` (+ tests): for one fund, re-runs column-contract row rules,
+  oracle checks and fair-value conservation on a trial build (optionally with a fund-level
+  trial's NAV fields) and labels each outstanding finding in a ledger `still_fires`,
+  `no_longer_fires` or `not_rerun`. Scratch only, about 1 minute.
+- HPS, trial `hps_fix3` + fund trial `nav_fix`, against `q1p3_20260831/findings_ledger_post.csv`
+  (184 outstanding since 2022): 78 still fire, 38 no longer fire, 68 not re-run.
+  No longer firing: fv_conservation 12, A04 6, E01 6, E04 6, X01 5, FX02 3. X01 and FX02 were
+  already absent from the published 2026-10-01 row issues, so they are not due to today's fixes.
+  Still firing: A07 13, FX01 13, X02 11, X06 11, C107 11, C01 5, C103 4, C04 4, B02 3, FX03 3.
+- Limits: "still fires" is rule-level and stricter than the ledger (the ledger lists a warn only
+  when the fund-quarter also has a tight failure). Not re-run: cost_conservation, F11/F28/F30,
+  nav/income identity, nonaccrual_flag, dl_rate_fill, PP03, SRC_BDC01, and E07 (reads the
+  production source-reconciliation detail). Oracle checks that read position matches use the
+  published matches, not trial ones.
+
+## 2026-10-05 (night): fund sandbox produces a real per-fund ledger
+
+Owner direction: never run the 70-fund rebuild in this phase; rebuild and validate fund by fund.
+
+- **`PM_OUTPUT_DIR`** (pipeline/config.py): when set, `OUTPUT_DIR` and every path derived from it
+  point at that folder. Raw caches, reference data and overrides are not redirected. Unset,
+  nothing changes (tests/test_output_root_override.py).
+- **`scripts/fund_ledger_trial.py`** (9e7f58d): seeds `scratch/fund_sandbox/<label>/output` with
+  the published inputs cut down to the chosen funds (files with a `cik` column are filtered,
+  the rest copied; holdings, matches, provenance ledger, row issues and the identity registry
+  are not seeded), then runs the production stages unchanged with `PM_OUTPUT_DIR` set:
+  highlights, financials, unified rebuild, oracle, non-accrual, validate, provenance, shadow,
+  queue, findings ledger. Verdicts and promoted corrections are read from the production
+  stores. The run fails if any published file under data/output (top level, shadow, oracle,
+  review_queue, agent_b2, provenance) changed. `--from <stage>` resumes; `--summary` prints.
+- **Timing:** HPS about 3.5 min (rebuild 104 s, validate 41 s); Ares about 8 min (rebuild 221 s,
+  validate 164 s on a cold reconciliation cache).
+- **Test on Ares** (no fixes today) against `q1p3_20260831/findings_ledger_post.csv`, 2022 on:
+  139 of 141 official findings reproduced, all 139 with the same state. Absent: X01 x2 (also
+  absent from the published 2026-09-30 row issues). Extra: `financial_convention_unresolved`
+  x15 (provenance_reverify; not in the August ledger).
+- **Latent defect found and fixed:** `source_reconciliation._assemble_legacy_reconciliation_outputs`
+  wrote a boolean `blocking_issue` as True/False when the detail came from one freshly computed
+  fund; the Parquet companion cast failed and `validate_holdings` swallowed the error (stage
+  exit 0), which silently dropped the SRC_BDC0x row issues. Now written as 0/1 when boolean.
+- **HPS sandbox ledger** (with all of today's HPS fixes): 167 findings, 150 outstanding since
+  2022 (official August ledger: 184). Gone: fv_conservation, cost_conservation, A04, E01, E04,
+  F11, F30, nav_identity. Read before the reconciliation fix above; re-run pending.
+- Differences from an official ledger that remain by design: values computed across all funds
+  (entity ids, industry labels) come from the subset; identities are allocated fresh.
+- `scripts/rebuild_sample_trial.py --finalize` exists but has not been run (30d806b made it
+  opt-in). Earlier statement in session that the script was unchanged was wrong.
+
+## 2026-10-06 (early): five-fund baseline from the sandbox; three fixes; proposed dispositions
+
+Measure: `scripts/fund_ledger_trial.py` sandbox ledgers, 2022 onward. No 70-fund rebuild was run;
+published data is still the 2026-10-01 build.
+
+- **Baseline, five funds (sandbox `five`, before the fixes below, with the earlier HPS fixes):**
+  928 findings, 869 outstanding. Apollo 219, Blue Owl 186, BCRED 167, HPS 153, Ares 144.
+  States: 716 open, 109 real_error_unremediated, 28 needs_human, 9 staged, 6 pulled, 1 evidence.
+  A five-fund pass takes 20 to 28 minutes.
+- **Foreign-currency principal (74beff5).** `data/reference/fx_rates.csv` has held only a header
+  since May, so staging converted no foreign principal. New wrapper opt-in
+  `source_encodings.principal_usd_reference = ["fred_h10"]`: `monetary_fx.principal_reference_table`
+  builds per-fund (currency, report date) rates from the admitted FRED H.10 quotes
+  (`data/reference/monetary_conversion`, owner ruling 2026-09-15) under the fair-value date rule
+  (report date, or latest quote within seven days before). On for the five funds. HPS: 922 rows
+  in nine currencies converted. Five-fund sandbox `five2`: 832 outstanding (BCRED 152, Blue Owl
+  176, HPS 141, Ares 144, Apollo 219). Apollo still shows FX01 in 13 quarters (5,412 rows);
+  cause not found.
+- **Blue Owl affiliate roll-forward rows (f975715).** Rule
+  `1812554/exclude_affiliate_rollforward_issuer_only_rows.json`, scope all quarters: identifier
+  with no instrument phrase and no principal, shares or pct of net assets. Source: the
+  transactions-with-affiliates table (verified in 0001812554-24-000043, fact f-4167, c-848).
+  Sandbox `owl`: published equals filed in 11 of 13 quarters; +0.1M at 2024-12-31, +24.6M
+  (0.07 pct) at 2025-09-30 (one other non-schedule fact, c-954, not selected). Outstanding
+  176 -> 132. Authored interactively; not through the fleet promotion gate. The two older
+  quarter-pinned Blue Owl rules are still in place.
+- **BCRED 2022 joint-venture rows.** 2022 filings name the JV with
+  `legalentityaxis=BCRED...JVLPMember`. New wrapper setting
+  `source_encodings.legal_entity_members` ("axis=Member -> label"), set for BCRED. Sandbox
+  `bcred`: gap 10.69 -> 0.40 pct (2022-09-30), 13.30 -> -0.13 pct (2022-12-31); outstanding
+  152 -> 129. BCRED remains 0.08 to 0.30 pct below filed in 2023-03 to 2025-09 and 0.55 pct
+  above at 2026-03-31 (692.8M in the cash class).
+- **Per-fund sandbox readings after all fixes:** HPS 141, Blue Owl 132, BCRED 129, Ares 144,
+  Apollo 219 = 765. Not re-run as one five-fund pass after the last two fixes.
+- **Proposed dispositions:** `docs/investigations/v05_proposed_dispositions.md`. None accepted.
+  Largest: E07 counts prior-period source rows (62 findings, rule defect); nonaccrual_flag (61)
+  and PP03 (46) are presence or track-only signals by their own definitions;
+  financial_convention_unresolved (69) needs one convention decision per fund.
+- Not fixed: Apollo totals (money-market rows plus issuer-level rows), pct of net assets not
+  extracted (Ares, Apollo, HPS), debt rows without a rate, source rows missing from output,
+  duplicate position keys.
+
+## 2026-10-06 (day): five funds 765 -> 630 outstanding; totals reconcile in 61 of 69 fund-quarters
+
+Fund sandbox only (`scripts/fund_ledger_trial.py`); no 70-fund rebuild, no published file
+touched. Readings: `five3` 765, `five4` 676, `five5` 630 (BCRED 105, Blue Owl 125, Ares 123,
+HPS 132, Apollo 145). Commits aa399ba, 56f2ec8, 003580b, 2eb6b04, 38700f8 on
+`ensemble-fp-experiment`, not pushed.
+
+- **Dollar values under foreign unit tags (aa399ba).** New wrapper setting
+  `source_encodings.foreign_unit_values = ["reported_in_usd"]` (Apollo, HPS, BCRED):
+  `monetary_units.resolve_bdc_units` records such a fair value or cost as USD with status
+  `reported_in_usd`, so the automatic conversion (owner ruling 2026-09-15) does not fire. All 79
+  converted rows in the five funds were already in dollars: fair value over local principal sits
+  at the exchange rate (Apollo Amey 2025-06-30: 169.1M over GBP 125.4M = 1.349, rate 1.372),
+  and the untouched values sum to the filed total. **The automatic conversion was wrong for
+  every row it touched in these funds; the other cohort funds were not checked.**
+- **Principal currency from unit definitions (aa399ba, every fund).** `principal_amount_unit`
+  is replaced by the currency its document defines. Apollo names units `U_USD`, `U_EUR`; no
+  Apollo row had a dollar principal before.
+- **Apollo wrapper (aa399ba, 2eb6b04).** Catch-all family so heading rows become aggregates;
+  "us bank gcts" cash marker; issuer and instrument split on the instrument phrase (255 rows
+  lacked or split "Investment Type").
+- **Text spreads (2eb6b04, every fund).** A text spread of 25 or more is basis points and is
+  stored as percent; a tagged rate plus a text spread is floating.
+- **BCRED (56f2ec8).** `dispatch.flat_schedule = true`: 4 to 13 positions a quarter (61.9M to
+  230.6M) were classed `*_category_rollup` and dropped; the amounts equal the fund's shortfall
+  to the dollar in most quarters. Cash-line family added. `exclude_cash_from_investment_conservation`
+  scope widened from a quarter list ending 2025-12-31 to all quarters.
+  `recover_dropped_2025_investment_rows` retired (`_retired_` prefix): the wrapper now keeps
+  those rows, the rule would add them twice.
+- **Ares (56f2ec8).** Rule `1287750/exclude_issuer_only_supplemental_rows.json` (all quarters):
+  identifier with no instrument word, no principal, no units. Wrapper `staging` added
+  (`hierarchy_extract`, split at the last comma when the last part reads as an instrument):
+  issuer_name no longer carries the instrument (18,195 of 18,374 rows did).
+- **Apollo rules and anchor (56f2ec8).** `exclude_industry_instrument_subtotal_rows` (all
+  quarters), `exclude_2023q3_genesys_repeated_facts` (pinned). Anchor
+  `agent_anchor/1837532/2026-03-31.json` moved from `investments_ex_cash` 25,149,083,000 to
+  `published_rows` 25,308,482,000, the filing's own
+  `InvestmentOwnedAtFairValueAfterCashEquivalents` fact.
+- **Income ratio (003580b, every fund).** `_extract_duration_series(..., ratio=True)` keeps an
+  annualised year-to-date ratio as filed. Cohort scan of cached companyfacts: 39 funds always
+  annualise, 14 nearly always, 6 file a running total, 17 file none.
+- **Percent of net assets scale (38700f8, every fund).** Read per filing: 20 or more tagged
+  values summing past 20 means percent, no row rescaling.
+- **Reconciliation (38700f8, every fund).** `staging_normalized_investment_identifier` trimmed
+  on both sides; a name ending in punctuation could never prefix-match its positions.
+  `test_bdc_xbrl_wrappers_can_be_disabled_for_baseline_comparison` updated: the parent now
+  clears through the plain prefix path and its tied children are covered (blocking 2 -> 0).
+- **Blue Owl wrapper (38700f8).** Lines starting "Total" get a family so the listed aggregate
+  markers apply.
+- **Totals against filed (five5):** HPS exact in 13 of 13 quarters; Blue Owl 12 of 13; Ares 13
+  of 15; BCRED 11 of 15; Apollo 12 of 13 (against filed plus cash rows). The eight exceptions
+  and their sizes are in `docs/investigations/v05_proposed_dispositions.md` section E.
+- **New rules are not gate-promoted.** There is no admission manifest in
+  `data/overrides/agent_investigate_rules`, so they load as legacy inputs. They were checked by
+  sandbox reconciliation and unit tests only.
+- **Global changes not checked on the other 65 funds:** principal unit resolution, text spread
+  scale and coupon type, income ratio, percent scale, reconciliation trim. Run the semantic diff
+  after the next full rebuild before accepting them.
+- **Tests:** new files `test_apollo_wrapper_subtotals`, `test_ares_apollo_supplemental_rules`,
+  `test_bcred_wrapper_flat_schedule`, `test_blue_owl_wrapper_totals`, `test_income_ratio_duration`;
+  additions to `test_monetary_units`, `test_unified_holdings`, `test_validate_holdings`. Targeted
+  runs pass. The full suite was not run.
+- **Remaining 630:** 158 wait on the coupon convention (no credit row of the five funds has a
+  published interest_rate), 256 are rules firing by construction, 165 are presence or track-only
+  signals, 23 are as filed, 28 are still open. Evidence per family in the proposals file. None
+  accepted.
+- A stray `python -` process from 2026-10-05 19:21 (about 12 CPU-hours) was found and stopped.
+
+## 2026-10-06 (afternoon): five funds 630 -> about 627; totals reconcile in 63 of 69 fund-quarters
+
+Continuation of the entry above. Sandbox readings: `five6` 623 (BCRED 105, Blue Owl 123, Ares
+118, HPS 132, Apollo 145); Ares re-run alone after its last rules (`ares4`) 122. Commits 6b1644f,
+c6fb005, not pushed.
+
+- **Ares flat schedule (6b1644f).** `dispatch.flat_schedule = true`. Three positions whose issuer
+  has no legal suffix ("ARES 2007-3R, Subordinated notes", Nordic Ferry subordinated loans, CREST
+  preferred shares) were classed `*_category_rollup` and dropped. Pinned rule
+  `add_ares_2007_3r_2023q2` retired: its added row had no classification or accession and raised
+  five findings.
+- **Ares values on the issuer-name axis (c6fb005).** In 0001287750-25-000020 and
+  0001287750-25-000038 four positions carry units or principal on the InvestmentIdentifierAxis
+  context and cost and fair value on the following context under InvestmentIssuerNameAxis
+  (Infinity Home Services, Rawlings loan 2, Silk Holdings common stock, VPROP Class A units).
+  Rules `recover_2025q1_values_tagged_on_issuer_axis` and `recover_2025q2_...` add the eight rows
+  with the filed values (94.3M and 33.2M, the shortfall to the dollar). They raise SRC_BDC02 and
+  anchor_missing in both quarters (4 findings): a rule-added row has no source position context.
+  **Extractor gap, not fixed:** values are read from the position context only. Of the five funds only Ares is affected (checked on `five6`); the other cohort funds were
+  not checked.
+- **Blue Owl (c6fb005).** Rule `exclude_bocso_issuer_only_rows` (all quarters). Published equals
+  filed in 13 of 13 quarters.
+- **Apollo (c6fb005).** `source_encodings.cash_identifiers = ["US BANK GCTS0095"]`; 2025-03-31
+  cash rows equal the filed 625.0M.
+- **Totals against filed:** HPS 13 of 13, Blue Owl 13 of 13, Ares 14 of 15, Apollo 12 of 13,
+  BCRED 11 of 15, within 0.45M. Largest exception 43.0M (BCRED 2024-12-31, 0.06 pct).
+- **Remaining, by what moves it (five6):** coupon convention 158; rules firing by construction
+  256; presence and track-only signals 164; as filed 31; open 14 (issuer subtotals the
+  reconciliation cannot tie when names differ). Evidence per family in
+  `docs/investigations/v05_proposed_dispositions.md`. None accepted.
+- **Found, not fixed:** Ares 2022-09-30 SDLP certificates principal filed as 269,806,000,000
+  (fair value 1,121,000,000); BCRED four quarters 9.5M to 43.0M above filed.
+- **Tests:** targeted files pass. A run of `test_unified_holdings`, `test_fund_financials` and
+  five smaller files was started at 09:07 and was still running when this entry was written; see
+  `scratch/2026-10-05_fund_loop/pytest_final.log`. It started before commits 6b1644f and c6fb005
+  (wrapper and rule files only). The full suite and the semantic diff were not run.
+
+## 2026-10-06 (late afternoon): filed interest rates published for four of the five funds
+
+Owner instruction in session ("Implement the fix"). Sandbox `five7`: 617 outstanding (BCRED 105,
+Blue Owl 123, Ares 124, HPS 127, Apollo 138).
+
+- **New wrapper setting `source_encodings.filed_rate_reading` = `["all_in"]` or `["cash_leg"]`.**
+  `financial_conventions.prepare(..., rate_readings=None)` reads it (default: from the wrappers)
+  for rows whose rate tag does not name its own kind. `all_in`: the filed rate is published as
+  `interest_rate`; `interest_rate_cash` is filed minus PIK where a PIK rate exists. A row whose
+  PIK rate exceeds the filed rate contradicts the reading and stays `unresolved`. `cash_leg`
+  maps to the existing cash rule (all-in needs a PIK rate on the row). A stored kind of
+  `unresolved` no longer blocks the reading.
+- **Set to `all_in` for BCRED, HPS, Apollo and Ares.** Evidence (sandbox `five6`): fully PIK
+  loans whose filed rate equals the PIK rate in BCRED (10 rows, e.g. Inovalon Holdings 2:
+  16.18 and 16.18), HPS (24) and Apollo (50); for Ares, 34 loans also held by BCRED or HPS with
+  the same spread and PIK carry the same filed rate in 30 and never differ by the PIK. Scripts
+  `scratch/2026-10-05_fund_loop/rate_kind_test.py` and `rate_kind_test2.py`.
+  **`data/output/rate_convention.csv` labels Ares `cash_leg`; this evidence contradicts it.**
+  Blue Owl files no rates and has no setting.
+- **Effect:** published `interest_rate` on credit rows 1 -> 29,493 (Ares 11,728, BCRED 11,834,
+  HPS 5,624, Apollo 307). Held back by the guard: 13 Ares rows (194.2M) and 2 Apollo rows
+  (124.9M). X02 56 -> 46, C01 16 -> 11, dl_rate_fill 17 -> 12. New: X01 9 (equity units that
+  file a stated rate, e.g. HPS OneTeam Partners Class D Units 8.0).
+- **`financial_convention_unresolved` is unchanged at 69.** Every remaining row tagged
+  `interest_rate:coupon_unresolved` has no filed rate at all, except the 15 guarded rows. The
+  finalizer adds that tag whenever the published rate is empty, whatever the reason. Not changed
+  here: narrowing it to rows that do file a rate would clear findings by editing a rule's reach.
+- **Income formula:** `pipeline/index_returns.py` already uses the rate without adding PIK, so an
+  all-in published rate is consistent with it. Returns were not recomputed.
+- **Test run note:** the two-hour run started at 09:07 reported 86 failures, all
+  "Invalid source encodings ... 0001287750.json": the new key was added to the wrappers while
+  that process still held the old loader. Those 86 were re-run on the current code (result in
+  `scratch/2026-10-05_fund_loop/pytest_rerun.log`).
+
+## 2026-10-06 (evening): data contract brought up to date
+
+`docs/production_stack/02_data_contract.md` updated at the owner's request. No code or data change.
+
+- "Today" statements corrected against the published file (100 columns live; `position_id` and
+  `entity_id` are UUIDs; `gics_sector` is a column; the all-in rate flip is in code and the income
+  formula does not add PIK).
+- New rules written into section 3: filers that state dollar values under a foreign unit tag
+  (`foreign_unit_values`), principal currency from the unit definition, percent-of-net-assets
+  scale per filing, and the order in which a filed rate's kind is decided (`filed_rate_reading`).
+- New section 10 lists eleven places where the published data departs from the contract, with
+  counts. Cohort-wide figures found while checking: `interest_rate` is published on 4,229 of
+  563,602 BDC rows (349,045 filed rates withheld); automatic FV conversion touched 822 rows in 35
+  funds, of which the 79 in the v0.5 funds were all wrong and the other 743 are unchecked.
+- Not re-verified: sections 5, 6 and 9, and invariants M01, M02, M04, M07 to M10.
+- `AGENTS.md`: the sentence "Don't use mannered prose." added on line 2 at the owner's request.
+
+## 2026-10-06 (night): a plain filed rate with no PIK is published for every fund
+
+Owner instruction in session: "Change the shared behaviour for all funds, but check them for the 5
+in v0.5".
+
+- **Rule (every filer).** `financial_conventions.prepare`: a rate from the plain rate tag, or
+  read from the row text, is kind `all_in` when the row has no PIK rate (empty or zero) and
+  neither its identifier nor its instrument text names PIK. It sits before the fund readings.
+  Tags that name another quantity (paid in cash, end of term, cap, minimum, unfunded, maximum
+  PIK, effective yield) are untouched.
+- **Check on the five funds.** Sandbox `five8` against `five7`: 617 outstanding in both; no row
+  gained, lost or changed a rate (the four funds that file rates already publish through their
+  reading). The rule was then exercised alone, on the same rows with no fund readings
+  (`scratch/2026-10-05_fund_loop/nopik_exercise.py`): it publishes 37,110 rows, every one equal
+  to the value published with the reading; it publishes nowhere the reading did not; all 2,439
+  rows with a PIK rate stay empty; one BCRED row is held back because its text names PIK.
+- **Not checked: the other funds.** Estimate from the published file
+  (`nopik_estimate.py`): 317,313 rows in 173 funds would gain a rate. Of those, 5,142 have a
+  filed rate below 1, 41 above 25, and 6,490 are not credit rows; none was examined. Still
+  withheld: 27,273 rows with a PIK rate (144 funds), 11,778 paid-in-cash rows with no PIK rate,
+  770 rows whose text names PIK, about 3,500 on other tags.
+- Two tests written earlier the same day asserted the previous behaviour and were updated.
+  Finalizer test files: 96 passed.
+
+## 2026-10-06 (late): v0.5 autonomous run, findings 617 to 35 for the five funds
+
+Owner permission given in session ("I give permissions") for four things, for this run: repair a
+rule shown from the data to fire by construction; accept an agent's own disposition when a
+re-runnable check supports it; decide whether presence signals count as outstanding; change shared
+code on five-fund evidence. Every judgment call is in `docs/investigations/v05_decision_log.md`
+(D-001 to D-019), each with evidence, a re-run command and what it does not cover.
+
+- **Rule repairs (shared code, every fund):** E07, A07, B02, html_agg/html_carry, principal cap,
+  X06 unfunded marker, GAV with cash rows (7f2e435); coupon-unresolved tag only on a filed rate,
+  purity check takes the latest matching period (f0dd32b); rate fill measured on funded loans,
+  "equity investment" keyword, percent identity on published rows with a rounding band (6efcf14);
+  D07 needs 30 rated rows in both quarters.
+- **New mechanism:** standing dispositions. Store `data/overrides/finding_dispositions/`, module
+  `pipeline/finding_dispositions.py`, read by `scripts/findings_ledger.py`. Three new terminal
+  states (`dispositioned_informational`, `dispositioned_as_filed`, `dispositioned_not_applicable`)
+  counted as resolved by `pipeline/quarter_acceptance.py` and the fund sandbox. As-filed and
+  not-applicable entries must name funds and quarters; a reviewer's real-error verdict stands
+  unless the entry carries filing evidence and says so. 43 entries written, covering 183
+  fund-quarters plus two informational rules.
+- **New wrapper setting:** `source_encodings.pik_only_tag_reading: ["coupon"]` (Ares only): a loan
+  filed with only a PIK rate publishes it as `interest_rate`. Schema guard
+  (`financial_coupon_consistency`) and provenance re-verifier extended to match. Not safe as a
+  default: HPS files a margin in the same tag.
+- **One row correction:** Apollo Material Holdings 2024-12-31 spread 16.0 to 6.1
+  (`data/overrides/row_corrections.csv`).
+- **Evidence scripts** moved to `scripts/v05_evidence/` (tracked) so re-run commands resolve.
+- **Result, sandbox `five13`:** 35 outstanding of 316 findings (617 at the start of the day).
+  Published equals filed within 0.5M in 64 of 69 fund-quarters. Credit rows with a published rate:
+  Ares 11,985 of 12,957, BCRED 11,834 of 12,014, HPS 5,624 of 7,060, Apollo 307 of 6,259 (files
+  spreads), Blue Owl 0 of 8,142 (files no all-in rate).
+- **Open, with cause** (table in the decision log): Ares rate facts under differently spelled
+  members; an untagged Apollo text rate; ten rows classed as common equity that are preferred
+  units, a loan or a bond; Blue Owl Amergin class; Apollo 2026-03-31 3.3M below the printed total;
+  four findings with a staged or pulled fix from earlier runs.
+- **Not run:** the full test suite, the semantic diff, any 70-fund build. The shared-code changes
+  are unchecked outside the five funds. The published data is unchanged (2026-10-01 build).
+- **Not the same as correct:** 281 findings were closed by a recorded disposition, not by a data
+  change. A disposition says the published value is what the fund filed or that the rule does not
+  apply; it does not say the value is right. Known wrong-but-filed: Ares SDLP principal 269.8B.
+- Tests run: oracle rules 140, finalizer and schema guard 99, provenance re-verifier 67, wrappers
+  and encodings with dispositions 639, identity rules 18. All passed.
+
+## 2026-10-06 (night): v0.5 remaining 35 findings to 0 for the five funds
+
+Owner instruction: "Fix the remaining 35". Decisions D-020 to D-022 in
+`docs/investigations/v05_decision_log.md`.
+
+- **New wrapper setting** `source_encodings.rate_only_contexts: ["adopt_adjacent"]` (Ares):
+  staging joins a rate-only context to the adjacent value row of the same issuer
+  (`pipeline/source_encodings.adopt_rate_only_contexts`, called from `_prepare_bdc`). Five rows.
+- **`pik_only_tag_reading`** also set for Apollo (one row whose text reads "11.45% PIK").
+- **Row corrections:** 13 rows, 31 values, each from a printed line. `asset_category` and
+  `issuer_category` are now correctable fields. Two are Apollo fair-value sign errors that
+  explain the whole 3,272K shortfall at 2026-03-31.
+- **Dispositions:** an evidenced entry may now replace a fix that was staged or pulled and never
+  promoted. Store regenerated: 48 entries, 206 fund-quarters. Generator no longer drops entries
+  whose findings are already closed.
+- **Result, sandbox `five14`:** 307 findings, 0 outstanding (279 by disposition, 27 earlier
+  false-alarm verdicts, 1 promoted fix). Published equals filed within 0.5M in 65 of 69
+  fund-quarters; the four misses are BCRED and no rule flags them.
+- **Correction to the previous entry:** "Ares rate facts under differently spelled members
+  (about 35 loans)" was wrong. Five loans; the rest have no rate printed or tagged.
+- **Not run:** semantic diff, any 70-fund build. Shared changes are gated by wrapper settings or
+  are row-pinned, except the wider correctable-field list. Published data unchanged.
+
+## 2026-10-06 (night, 2): BCRED totals reconcile in every quarter
+
+Decision D-023 in `docs/investigations/v05_decision_log.md`.
+
+- JV schedule rows whose label the filer misspelled ("Emerald JV LP2", "Verdelite JV 2LP 1") were
+  published as the fund's own: 10 rows in three quarters, 9.5M, 10.6M and 43.0M. The label match in
+  `pipeline/source_encodings.reporting_suffix_expression` accepts an ordinal fused into the label
+  in the comma form. Only BCRED sets `reporting_entity_identifier_suffixes`.
+- New rule file `agent_investigate_rules/1803498/exclude_footnote_figures_tagged_on_issuer.json`:
+  a non-accrual footnote figure (35.6M at 2024-06-30) was published as a position.
+- Found with `scripts/v05_evidence/unprinted_values.py`: published fair values that do not appear
+  in the printed schedule.
+- **Result, sandbox `five15`:** 305 findings, 0 outstanding; published equals filed within 0.5M
+  in 69 of 69 fund-quarters (65 before). Dispositions: 50 entries.
+- This supersedes "the four misses are BCRED" in the previous entry.
+- Not run: semantic diff, any 70-fund build. Published data unchanged.
+
+## 2026-10-06 (late night): owner's data choices applied in the sandbox
+
+Owner ruling in session: "go with your recommendations". Decisions D-024 to D-027 in
+`docs/investigations/v05_decision_log.md`. Owner also accepted the v0.5 dispositions, asked for
+nothing to reach production for now, and for permissions to be requested again each session.
+
+- **Proxy cost:** no proxy when the first observed value is negative (`cost_proxies`). Every fund.
+- **New field `net_expenses`** in `fund_financials` (companyfacts); `total_expenses` stays gross;
+  the income identity uses net where filed and not above gross.
+- **`pik_only_tag_reading: ["margin"]`** (HPS): 60 loan rows publish the PIK margin as
+  `basis_spread`. Re-verifier checks it against the PIK fact.
+- **Acceptance record** `docs/investigations/v05_rule_acceptance.md`; no live admission manifest.
+- **Result, sandbox `five16`:** 300 findings, 0 outstanding (272 by disposition); published equals
+  filed within 0.5M in 69 of 69 fund-quarters.
+- **New item for the owner:** fourth-quarter income, expenses and net investment income in the
+  fund-level table are the annual figure divided by four, not the quarter. Pre-existing.
+- **Not done:** the PIK margin for Blue Owl (reference rate is not tagged on those rows).
+- **Not run:** semantic diff, any 70-fund build. Published data unchanged.
+
+## 2026-10-07: Blue Owl reference rate read from the printed column; PIK margin published as the spread
+
+Owner request in session. Decision D-028 in `docs/investigations/v05_decision_log.md`. Not committed.
+
+- **Wrapper settings (new, `source_encodings`):** `reference_rate_columns` (printed header labels
+  of the filer's reference-rate column) and `reference_rate_codes` ("CODE=BENCHMARK"). Set for
+  Blue Owl only, with `pik_only_tag_reading: ["margin"]`. Schema `wrapper_v3.schema.json` and
+  `pipeline/source_encodings.py` (`reference_rate_reading`) updated.
+- **Reader:** `pipeline/bdc_xbrl_html_bridge.py` `field_status` and
+  `propose_field_bridges_from_ixbrl` take the filer's reading; a fund without the setting reads as
+  before.
+- **New script:** `scripts/refresh_ixbrl_field_status.py --ciks ...` re-reads the named funds into
+  `bdc_ixbrl_field_status.csv` and keeps every other fund's rows. Refuses `data/output` without
+  `--published`. The published artifact is still the 2026-06-16 one.
+- **Result, sandbox `owlref` (Blue Owl only):** 310 rows gain a reference rate; 182 of 247 PIK-only
+  loan rows publish the margin as `basis_spread`; 65 stay unresolved (fixed coupons, "N/A", codes
+  C/B/BB). 63 findings, 0 outstanding.
+- **Open for the owner:** Blue Owl's other reference rates are inferred by date and disagree with
+  the printed code on 745 of 6,379 rows; the printed value does not replace an inferred one.
+- **Tests:** 13 new (bridge fields 4, source encodings 6 cases, refresh 3); one renamed
+  (`..._set_for_hps_and_blue_owl`). Run: the three files plus the PIK tests of
+  `test_financial_conventions.py`, all pass. **Not run:** full suite, five-fund sandbox, semantic
+  diff, any 70-fund build. Published data unchanged.
+
+## 2026-10-07 (2): Blue Owl PIK-only rows read as margin or fixed coupon, row by row
+
+Owner request in session ("do it"). Decision D-029. Not committed.
+
+- **`reference_rate_codes`** entries may be dated: `C=CDOR to 2024-03-31`, `C=CORRA from 2024-06-30`.
+  `reference_rate_reading(cik, encodings, report_date)` resolves them; overlapping entries fail to load.
+- **New artifact status `not_applicable`** (`reference_rate_status` in `bdc_ixbrl_field_status.csv`):
+  the filer's named column prints nothing or "N/A" and the row names no benchmark. Only for funds
+  with `reference_rate_columns`. `apply_ixbrl_field_status_overlay` sets a blank `coupon_type` to
+  Fixed on such a loan row with a rate and no reference rate; `staging_bdc.py` passes the status in.
+- **`pik_only_tag_reading` admits `["coupon", "margin"]`** (schema and loader). In
+  `financial_conventions.prepare` a fund in both sets publishes the coupon only on a row with
+  `coupon_type` Fixed and no reference rate. Set for Blue Owl; `pik_only_coupon_funds()` now
+  includes it.
+- **Result, sandbox `owlref3`:** all 247 Blue Owl PIK-only loan rows resolved (182 margins, 65
+  fixed coupons). 63 findings, 0 outstanding. Holdings columns and value sets unchanged.
+- **Tests:** 7 more (bridge fields 4, financial conventions 1, source encodings 5 added cases in
+  one test; two edited). 764 pass across the six affected files. **Not run:** full suite,
+  five-fund sandbox, semantic diff, any 70-fund build. Published data unchanged.
+
+## 2026-10-07 (3): three new identity rules; Blue Owl spread published as the total margin
+
+Owner requests in session. Decisions D-030 and D-031. Not committed.
+
+- **Rules** (`scripts/shadow_identity_engine.py`, now 7): `fourth_quarter_income` (every fund),
+  `reference_rate_printed` and `spread_printed` (funds whose wrapper sets
+  `reference_rate_columns`). Two derived sources, `year_end_income` and `printed_reference`; a
+  source whose input file is absent is skipped.
+- **`bdc_ixbrl_field_status.csv` gains `printed_margin`** (DOUBLE, after `reference_rate_status`;
+  contract in `pipeline/output_schemas.py`). The published artifact (2026-06-16) lacks it.
+  `scripts/refresh_ixbrl_field_status.py` now accepts a re-read with added columns.
+- **Wrapper setting `printed_margin_reading: ["cash_plus_pik"]`** (Blue Owl): the overlay replaces
+  a cash-only spread with spread plus PIK where the page prints that total; transform
+  `basis_spread:cash_plus_pik_margin`; `pipeline/provenance_reverify.py` replays it.
+- **Results:** five-fund sandbox `five17` (first two rules): 332 findings, 32 outstanding, all
+  new-rule findings. Blue Owl sandbox `owlref4` (all three rules and the spread fix): 111 spreads
+  corrected, 84 findings, 21 outstanding (13 reference rate, 4 fourth quarter, 4 spread).
+- **Tests:** 867 pass across nine affected files. **Not run:** full suite, five-fund sandbox after
+  the spread change, semantic diff, any 70-fund build. Published data unchanged.
+
+## 2026-10-07 (4): fixes behind the new rules; five v0.5 funds at 0 outstanding in the sandbox
+
+Owner request in session. Decisions D-032 to D-036. Sandbox `five18`.
+
+- **`pipeline/fund_financials.py`:** new `quarter_income_sql`; a year-end quarter's six flow
+  figures are annual less the three filed quarters (every fund). `bdc_fund_income.csv` unchanged.
+- **`pipeline/extract_companyfacts.py`:** a multi-quarter figure with no earlier year-to-date
+  figure is split using known quarters; spec key `quarter_only` (set for `net_expenses`) drops the
+  value instead of averaging.
+- **`pipeline/bdc_xbrl_html_bridge.py`:** for funds with `reference_rate_columns`, a confirmed
+  printed code replaces a date-inferred reference rate (692 Blue Owl rows).
+- **`data/overrides/row_corrections.csv`:** 6 Blue Owl spread corrections (D-032).
+- **`wrapper_v3.schema.json`:** declares `b2_provenance` and `unclassified_rate.max_fv_pct`.
+- **New evidence scripts:** `schema_fit.py`, `fourth_quarter.py`.
+- **Result:** 299 findings, 0 outstanding; totals match in 69 of 69 fund-quarters; contract fit
+  and CSV/Parquet parity pass in the sandbox.
+- **Not run:** semantic diff, any 70-fund build. The fourth-quarter change alters fund-level
+  year-end figures for every fund with a 10-K. Published data unchanged.
+
+## 2026-10-08: printed-page rate checks on all five v0.5 funds; Q2 2026 downloaded and run in a sandbox
+
+Owner requests in session. Decisions D-037 to D-044 in `docs/investigations/v05_decision_log.md`.
+Sandboxes `five19`, `q2a` (held-out first reading), `q2e` (final). Nothing published, committed or pushed.
+
+- **Network (owner-approved):** 10-Qs for 2026-06-30 and companyfacts for the five v0.5 funds.
+  New `scripts/download_quarter_filings.py` and `scripts/download_companyfacts.py`; receipts in
+  `data/raw/filings/quarter_downloads/`. **The five companyfacts files in the live cache
+  (`data/raw/companyfacts_cache`) were replaced** (backups under `quarter_downloads/companyfacts_2026-06-30/before`).
+  The published filings index does not list the new filings.
+- **New `scripts/sandbox_add_quarter.py`:** adds downloaded filings to a fund sandbox's index and
+  re-derives its per-filing inputs from cache. Refuses to run outside `scratch/fund_sandbox`.
+- **Wrappers:** `reference_rate_columns` and `reference_rate_codes` for BCRED, Ares, HPS, Apollo;
+  `printed_margin_reading` for Apollo; Ares `staging` patterns accept "Issuer | Instrument".
+- **`pipeline/bdc_xbrl_html_bridge.py`** (all for funds that name their reference-rate column):
+  three more printed margin forms; codes with a reset period or leading the cell; a printed code
+  replaces a reference rate read from the label; a date-guessed reference rate is withdrawn where
+  the page prints none; a spread tag on such a row is treated as the fixed coupon (new transforms
+  `basis_spread:fixed_coupon`, `interest_rate:from_spread_tag`); a member on two printed rows
+  confirms a field only where the rows agree.
+- **`pipeline/provenance_reverify.py`:** replays the two new transforms.
+- **`scripts/shadow_identity_engine.py`:** `reference_rate_printed` also fails a published reference
+  rate on a row whose column prints none; both page rules now run for five funds.
+- **`data/overrides/row_corrections.csv`:** 30 lines added (13 rate and spread rows, D-040; 3 rows at
+  2026-06-30, D-043).
+- **New evidence scripts** in `scripts/v05_evidence/`: `printed_rate_columns.py`,
+  `printed_rate_shapes.py`, `printed_rates_check.py`, `printed_rates_rows.py`,
+  `printed_rates_effect.py`, `new_quarter_reading.py`, `ares_member_format.py`, `lien_gate.py`.
+- **Result, `q2e`:** 331 findings, 27 outstanding (12 before 2026-06-30, 15 at it); published
+  equals filed in 74 of 74 fund-quarters; fair value unchanged on all 55,595 earlier rows.
+- **Open defect found:** re-reading BCRED's pages withholds lien position on 3,304 rows
+  (2022-09-30 to 2024-06-30) because of the lien gate's grain selection and duplicated cik rows
+  in `bdc_lien_breakdown.csv`. See the decision log, open item 1. Fix before the field-status
+  artifact is regenerated for publication.
+- **Tests:** the four affected files (`test_bdc_xbrl_html_bridge_fields.py`,
+  `test_provenance_reverify.py`, `test_shadow_identity_rules.py`, `test_source_encodings.py`).
+  **Not run:** full suite, `tests/test_unified_holdings.py`, semantic diff, any 70-fund build.
+  The reader and overlay changes are gated by wrapper settings held only by the five funds.
+
+## 2026-10-08 -- Low-memory stops: measured causes for the full suite and the unified rebuild; memory pre-flight added
+
+Measurement only, plus one new read-only script. No pipeline code, test guard or published data changed. All artifacts under `scratch/2026-10-07_memory/`.
+
+- **Full suite, cause of the 2026-10-07 stop (measured).** Each of the 222 test files was run in its own pytest process, launched outside the session (`sweep_pytest.py`, result `sweep/pytest_file_peaks.csv`, per-test memory in `sweep/per_test/`). 218 files peak below 1 GB working set. Four do not, and in each one test is responsible:
+  - `test_interval_source_review.py::test_build_bundle_includes_ncsr_html_and_entity_context`: 7.1 to 7.6 GB, about 145 s.
+  - `test_position_matching.py::TestFvRatioGuards::test_tier_b1_rejects_extreme_fv_ratio`: 4.7 to 5.0 GB. It calls `match_positions(unified_df=...)` without `bdc_raw_df`, so the matcher reads the full published `bdc_holdings.csv` (code reading).
+  - `test_anchor_adjudicator.py::test_override_feeds_back_into_anchor_candidates`: 3.3 GB, and the process still holds 2.0 GB after the file's last test.
+  - `test_validate_holdings.py::TestValidateHoldings::test_full_integration`: 2.4 GB.
+  The stopped run had printed 3,064 results. The 7.6 GB test is result number 3,065 in suite order. So the suite was stopped while that test ran: its own spike, on a machine with 9 to 15 GB free, is what took free memory to the harness's stop point. The owner's applications set the starting level (Firefox held 8.25 GB private at the time of measurement), but the trigger was the test.
+- **Not established:** why the interval-review and anchor tests need that much (the mechanism is confirmed only for the position-matching test); the peak of the suite as one process (not run as one job by instruction; adding the 2.0 GB the anchor file retains to the 7.6 GB spike suggests roughly 10 GB, an estimate).
+- **Pytest start-up (measured).** `tests/conftest.py` walks 239,355 files under `data/output` (133,725 of them in `agent_b`): 51 s at session start and 49 s at session finish, 96 MB. It costs time, not memory. The same snapshot through `os.scandir` took 11.8 s against 58.3 s with zero differences (`time_walk_scandir.py`). Not applied: `conftest.py` is the output guard.
+- **Sweep totals.** 6,335 passed, 2 failed, 13 skipped, 2 xfailed across 222 files; 9 h 40 min, of which about 6 h is the walk paid 222 times. `test_unified_holdings.py` alone: 2 h 38 min, peak 0.95 GB. Failures: `test_anchor_adjudicator.py::test_override_agreeing_with_companyfacts_yields_high` (tier NONE, expected HIGH; the failure already seen on 2026-10-07) and `test_programme_source_snapshot.py::test_registered_refresh_support_matches_reviewed_cached_wrapper` ("Reviewed refresh support changed: data/overrides/bdc_xbrl_wrappers/0001803498.json"; that wrapper has uncommitted edits from another session). Caveat: another session edited pipeline and test files in this checkout while the sweep ran, so this is not a clean pass of one commit.
+- **Unified rebuild, 70 funds (existing traces, no new full build).** `scratch/2026-10-05_rebuild/125559` and `143337` were both taken after the `prepare()` narrowing (60d3e36). The financial preparation step still reaches about 11.5 GB private (from a 7.3 to 8.0 GB level before it). The peak is later: 16.9 and 17.3 GB private in position matching Tier B, with free memory down to 1.95 GB. Both builds were launched detached with 16.1 GB free and passed the peak. So the earlier "11 GB" is real but is not the peak, and AGENTS.md's "well over 11 GB" understates it.
+- **Five-fund sandbox (measured, label `memprobe`, 65,649 rows).** Whole chain: process tree peak 3.76 GB private, lowest free memory 6.6 GB. Peak working set by stage: highlights 0.50, financials 0.28, rebuild 2.16 (3.25 committed; the peak is early, in BDC staging, not the finalizer), oracle 0.68, nonaccrual 0.33, validate 2.09, provenance 1.58, shadow 0.81, queue 0.09, ledger 0.06 GB. The trial script's own process (seeding) 1.61 GB. 299 findings, 0 outstanding, published files untouched.
+- **DuckDB memory cap on position matching (tested on five funds, no pipeline edit: `matcher_cap_probe.py` wraps `duckdb.connect`).** Uncapped: 1.16 GB peak. Cap 1 GB: 1.11 GB. Cap 768 MB: 1.06 GB, identical `position_matches.csv`. Caps of 512, 384, 256 and 128 MB: DuckDB out-of-memory error. A cap removes under 10 pct of the peak and then turns into a hard failure, because most of the memory is pandas frames held next to DuckDB. Not a fix. Not tested at 70-fund size.
+- **Commit limit.** The machine can commit 32 GB (23.8 GB RAM plus an 8.2 GB page file). With the owner's applications open, headroom was 9.6 GB: a 17 GB build would depend on Windows growing the page file.
+- **New: `scripts/memory_preflight.py`** (+ `tests/test_memory_preflight.py`, 5 tests). Exit 3 when free memory is below the measured floor for the job (`rebuild-full` 16 GB, `pytest-file` 9 GB, `sandbox-five` 5 GB, `pytest-light` 2.5 GB), when commit headroom is below the measured peak plus 1 GB, or when another long job is running. Limit: it is a start-time check. On 2026-10-07 the suite started with about 14.8 GB free and would have passed it; the stop came 4 hours later. What does cover that case is a check before each file, as the sweep does (wait below 4 GB free, kill below 1.5 GB); in 222 files it never had to act.
+- **Recommendations, none applied (each needs the owner's go):** (1) make the four tests stop reading published files; this removes the suite's spike at the source. (2) Until then run the suite in pieces, launched outside the session, with the per-file memory check; tested here end to end. (3) Switch the conftest walk to `os.scandir` (about 90 s saved per pytest run, identical snapshot). (4) Full rebuild: launch only through `scripts/run_rebuild_detached.ps1` and raise its default floor from 12 to 16 GB, the only level a build has been seen to complete from. (5) To lower the rebuild peak itself, the target is the pandas copies held during position matching, not a DuckDB cap; untested.
+- NOT run: any 70-fund rebuild; the suite as one job; `diff_outputs.py --semantic`; any change to the four heavy tests.
+
+## 2026-10-08 (later): dispositions carry forward through a check; two rule fixes; Blue Owl equity labels
+
+Owner request in session ("start on step 1 and 2"). Decisions D-045 to D-047 in
+`docs/investigations/v05_decision_log.md`. Sandbox `q2f`. Nothing published, committed or pushed.
+
+- **New `pipeline/disposition_validity.py`:** a standing disposition may carry
+  `carry_forward: {from, check, params}`. It then covers a quarter it does not list only when the
+  named check passed on that fund-quarter's outputs. Checks: `values_as_filed`,
+  `no_rate_in_source`, `missing_source_rows_known`. `pipeline/finding_dispositions.py` validates
+  the field and `match()` takes the recorded passes.
+- **`scripts/findings_ledger.py`:** new `--validity <csv>`; new ledger column `disposition_basis`
+  (`listed` or `carried_forward`). Without the file nothing is carried, so a standalone ledger or
+  a quarter pass behaves as before. `scripts/fund_ledger_trial.py` runs the checks before its
+  ledger stage and writes `<sandbox>/disposition_validity.csv`.
+- **`scripts/v05_evidence/make_dispositions.py`:** lists no quarter after 2026-03-31; adds the
+  carry-forward checks to the C107, C103, X06 and X02 entries and to Blue Owl's two source-row entries.
+- **`pipeline/column_validation.py` (shared rules, all funds):** X02 skips asset category FUND and
+  index class PRIVATE_CREDIT_FUND; SRC_BDC01 skips a source row the reconciliation's source-only
+  classification marks non-blocking. Neither changes published data. Effect on the other 65
+  funds not measured (no 70-fund build).
+- **New wrapper setting `equity_instrument_labels`** (`pipeline/source_encodings.py`,
+  `pipeline/classification.py`, `pipeline/staging_bdc.py`, wrapper schema), set for Blue Owl only.
+- **`pipeline/unified_holdings.py`:** `cost_currency` is a correctable field of `row_corrections.csv`
+  (one row added). Blue Owl's roll-forward exclusion rule knows "investment partnership".
+- **New `scripts/v05_evidence/holdings_field_diff.py`:** every published field that differs
+  between two sandboxes.
+- **Result, `q2f`:** 325 findings, 17 outstanding (12 before 2026-06-30, 5 at it; `q2e` had 27).
+  10 findings at 2026-06-30 closed by a passing carry-forward check. Published equals filed in 74
+  of 74 fund-quarters. Against `q2e`: 5 Blue Owl rows change class, 1 cost, 1 new zero-value row.
+- **Found, not fixed:** the oracle did not evaluate Apollo's per-quarter checks at 2026-06-30 on
+  the first passes (`q2a` to `q2e`); a re-run from the holdings stage did. The X02 check fails on
+  36 of 46 fund-quarters already accepted "as filed". Blue Owl C04 now fires at 2026-06-30.
+- **Tests:** 222 pass across `test_source_encodings.py`, `test_disposition_validity.py` (new, 8),
+  `test_finding_dispositions.py`, `test_column_validation.py`, `test_findings_ledger.py`,
+  `test_blue_owl_rollforward_rule.py`, `test_quarter_acceptance.py`; 13 row-correction tests of
+  `test_unified_holdings.py`. **Not run:** full suite, the rest of `test_unified_holdings.py`,
+  semantic diff, any 70-fund build.
+
+## 2026-10-08 (evening): oracle read a stale input; old X02 dispositions read on the page
+
+Owner rulings in session. Decisions D-048 to D-050 in `docs/investigations/v05_decision_log.md`.
+Sandbox `q2g`. Nothing published, committed or pushed.
+
+- **Defect found (affects past quarter passes):** oracle checks A01, B01, B07 and E07 read
+  `source_reconciliation_detail.csv`, written by the validate stage, and both the sandbox and
+  `scripts/run_quarter_pass.py` run the oracle before validate. Those checks described the
+  previous build and skipped a quarter that build lacked. Sandbox order changed
+  (`scripts/fund_ledger_trial.py`: oracle now after validate); `pipeline/oracle_runner.py` logs
+  "STALE INPUT" when the detail is older than the holdings. **The quarter pass order is not
+  changed**: owner decision.
+- **`data/overrides/row_corrections.csv`:** 9 Ares rows from printed lines (D-049): 4 rates the
+  page prints and the tags lack; 5 equity lines the filer tagged under a loan member.
+- **`pipeline/disposition_validity.py`:** `no_rate_in_source` counts a negative cost as undrawn.
+- **Dispositions store:** DS-029 (HPS Thrasio X07 at 2026-06-30, owner accepted). Regenerated
+  from `q2g`: 49 entries.
+- **New `scripts/v05_evidence/x02_page_read.py`:** printed line of each X02 row a disposition's
+  reason does not explain.
+- **Measured:** of 33 Ares rows accepted "as filed" under X02, 14 were not (9 print a rate, 5 are
+  equity). 4 of the 9 cannot take a row correction (positions restored after corrections apply).
+- **Result, `q2g`:** 325 findings, 15 outstanding (12 before 2026-06-30, 3 at it). Published
+  equals filed in 74 of 74 fund-quarters. Against `q2f`: 9 Ares rows change, nothing else.
+- **Tests:** 338 pass across ten affected files (dispositions, ledger, oracle, column validation, encodings, the Blue Owl rule). **Not run:** full suite, semantic diff, any 70-fund build.
+
+## 2026-10-08: B1 dispatcher passes -AuthSyncBack; worker harness broken under Codex CLI 0.160.0
+
+- **`scripts/dispatch_agent_b_workers.ps1`:** the worker wrapper now passes
+  `-AuthSyncBack <operator auth.json>` to `run_codex_worker.ps1`, as the match-gold dispatcher
+  already does. Owner approved in session. Without it a token rotated inside a worker was deleted
+  with the worker scratch and the operator login was stranded. Seen working: a rotation during a
+  two-worker canary was synced back and `codex login status` stayed logged in. Uncommitted.
+- **Open defect, all fleet lanes:** with Codex CLI 0.160.0 (installed 2026-10-01) every worker dies
+  at session start: `failed to prepare windows sandbox wrapper: elevated Windows sandbox requires
+  effective :root read access`. Last working fleets ran 0.149.1 (2026-09-01, 2026-09-07). The
+  config written by `scripts/setup_codex_worker_harness.ps1` (`:minimal` read plus named folders)
+  is the likely cause. Not changed: owner decision between pinning the CLI and widening the grant.
+- **Also found, not changed:** B1 preflight rejects source_recon bundles
+  (`bdc-cik-review-bundle.v1`), and one such row aborts a whole batch; identity, conservation and
+  weak findings get no evidence in a fund sandbox (`shadow/*_gate_*.csv` are not written there and
+  are stale in `data/output`), so B1 auto-answers "ambiguous" for them.
+- **New, scratch only:** frozen B1 test set, blind answer key and scorer in
+  `scratch/2026-10-08_b1_testset/`; frozen build `scratch/fund_sandbox/b1f`. See
+  `docs/investigations/agent_campaigns.md`, entry of this date.
+- **Not run:** the B1 baseline itself, pytest, any rebuild, semantic diff. No published data written.
+
+## 2026-10-08 (night): lien reader and gate repaired; quarter pass runs the oracle after validate
+
+Owner rulings in session. Decisions D-051 and D-052 in `docs/investigations/v05_decision_log.md`.
+Sandbox `q2h`. Committed on `ensemble-fp-experiment`; nothing published or pushed.
+
+- **`scripts/run_quarter_pass.py` (owner ruling):** stage order is now `rebuild -> nonaccrual ->
+  validate -> oracle -> provenance -> ...` in the pre and post rounds. Oracle checks A01, B01, B07
+  and E07 read the reconciliation detail validate writes; in every earlier pass they described
+  the previous build. AGENTS.md still names the old order (owner's file).
+- **`pipeline/bdc_xbrl_html_bridge.py` (shared page reader):** a lien section ends at its own
+  total row; headings "Structured Finance Obligations", "Equity", "Equity and other", "First
+  Lien", "Second Lien" and any heading with an affiliation suffix are recognised; in a schedule
+  laid out in lien sections the row's words no longer supply a tier. The lien gate compares each
+  tier with the page's own tagged section total where one is printed, else with the filed
+  breakdown (new `filed_lien_subtotals`: distinct rows, one grain per fund-quarter), and withholds
+  per tier, not per filing. The reader returns `printed_lien_totals`.
+- **Effect (five funds, sandbox):** `lien_position` changes on 5,345 rows (BCRED 5,314, HPS 30,
+  Ares 1) and on no other column. BCRED ties to its printed section totals in 14 of 16 quarters;
+  2022-09-30 and 2022-12-31 stay without lien. The published artifact
+  (`bdc_ixbrl_field_status.csv`) is not regenerated; the other 65 funds were not re-read.
+- **New evidence scripts:** `scripts/v05_evidence/page_sections.py`; `lien_gate.py` rewritten.
+- **Result, `q2h`:** 325 findings, 15 outstanding; published equals filed in 74 of 74 fund-quarters.
+- **Not run:** full suite, semantic diff, any 70-fund build.
+
+## 2026-10-08 (late night): owner rulings applied; five funds validated at 0 outstanding; next five prepared
+
+Owner rulings in session. Decisions D-053 to D-056 in `docs/investigations/v05_decision_log.md`.
+Sandboxes `final5` (clean build from an empty sandbox) and `next5a`. Nothing published or pushed.
+
+- **Network (owner request):** 10-Qs for 2026-06-30 and companyfacts for 0001918712, 0001920145,
+  0001930087, 0001925309, 0001872371. The five companyfacts files in the live cache were replaced
+  (backups kept). `scripts/download_quarter_filings.py` now merges into the quarter's index.
+- **New wrapper settings:** `unspecified_reference_labels` (Ares: "Base Rate"; a guessed or
+  name-read reference rate is withdrawn, 380 rows); `equity_instrument_labels` rows now publish a
+  unit count tagged as principal (`shares_held:from_principal_tag`, replayed by the re-verifier).
+- **`pipeline/unified_holdings.py`:** row corrections may set `reference_rate_type`,
+  `reference_rate_source` and `coupon_type`; an empty value is stored as a missing value (empty
+  text broke a numeric cast in the rebuild).
+- **`pipeline/oracle_runner.py`:** the stale-input warning now tests coverage (fund-quarters in
+  the holdings with no reconciliation detail), not file age, which gave a false alarm.
+- **Row corrections:** 10 rows (Blue Owl Aptive, seven quarters; Ares UP Intermediate, three rows).
+- **Dispositions:** DS-030 to DS-032 and one quarter added to DS-010, all by the owner.
+- **Result, five v0.5 funds (`final5`):** 316 findings, 0 outstanding; published equals filed
+  within 0.5M in 74 of 74 fund-quarters; 71,434 rows with unique ids; schemas fit.
+- **Result, next five (`next5a`, nothing fixed):** 501 findings, 409 outstanding; published
+  equals filed within 0.5M in 49 of 67 fund-quarters. `findings_scope` is unchanged.
+- **Tests:** 479 pass across ten affected files, 16 row-correction tests of `test_unified_holdings.py`.
+  **Not run:** full suite, semantic diff, any 70-fund build.
+
+## 2026-10-08 (night, 2): next five funds started (Oaktree, Ares Strategic Income)
+
+Owner request in session. Decisions D-057, D-058 in `docs/investigations/v05_decision_log.md`.
+Sandbox `n2a`. Uncommitted; nothing published.
+
+- **Wrappers:** 0001918712 gains label patterns (`staging`), instrument classification
+  (`dispatch`, as Ares Capital's) and `source_encodings`; 0001872371 gains `source_encodings`.
+- **New promoted rule:** `data/overrides/agent_investigate_rules/1872371/exclude_edl_jv_note_row.json`.
+- **Found in the published data too (not rebuilt):** Ares Strategic Income issuer names include
+  the instrument for every quarter to 2026-03-31.
+- **Result:** the two funds go from 120 outstanding findings to 65; published equals filed within
+  0.5M in 27 of 28 fund-quarters. Goldman Sachs, Golub and Sixth Street not started.
+- **Tests:** `test_source_encodings.py`, `test_bdc_xbrl_wrapper.py` (638 pass). No code change.
+
+## 2026-10-08 (night, 3): next five funds, Golub, Sixth Street and Goldman Sachs
+
+Owner request in session. Decisions D-059 to D-061 in `docs/investigations/v05_decision_log.md`.
+Sandbox `n3a`. Uncommitted; nothing published.
+
+- **Promoted rule pulled:** `agent_investigate_rules/1920145/restore_2026q1_principal_only_debt_positions.json`
+  moved to `_pulled_fabricated_fair_value_2026-10-08/`. It added two undrawn commitments with the
+  principal as fair value (349.4M at 2026-03-31, Goldman Sachs Private Credit). **The published
+  build of 2026-10-01 carries those rows.**
+- **Wrappers:** 0001920145 (label patterns for the 2026-06-30 form, rate settings,
+  `foreign_unit_values`), 0001930087 (label patterns, rate settings), 0001925309 (rate settings,
+  issuer strip).
+- **`pipeline/staging_bdc.py` and the wrapper schema:** new optional `leaf_guard.issuer_trailing_strip_re`.
+- **Found in the published data too (not rebuilt):** Golub issuer names include the instrument
+  for every quarter to 2025-12-31; Goldman Sachs 2026-03-31 converts 19 dollar values as foreign.
+- **Result:** the three funds go from 289 outstanding findings to 202; the next five together
+  from 409 to 267; published equals filed within 0.5M in 51 of 67 fund-quarters.
+- **Tests:** `test_source_encodings.py`, `test_refactor_staging.py`, `test_bdc_xbrl_wrapper.py`
+  (641 pass). **Not run:** full suite, semantic diff, any 70-fund build, the five funds together.
+
+## 2026-10-08 (later): worker harness works on Codex CLI 0.160.0; B1 baseline run
+
+- **`scripts/setup_codex_worker_harness.ps1`** (owner: stay on the updated CLI): the permission
+  profile now grants `":root" = "read"` in place of `":minimal"`, and denies `~\.codex` and
+  `~\.ssh` by name. This supersedes the open defect in the entry above. Consequence: a worker can
+  read outside the repo; the prompt's allowed-reads list is the only limit there. The deny entries
+  were accepted by the CLI and respected by a probe worker, but file-system enforcement was not
+  tested. Applies to every lane that uses the harness; only B1 was exercised. Uncommitted.
+- **Measured on 0.160.0, B1 lane, MaxParallel 2:** 34 of 112 workers failed at session start in each
+  of two main passes (`CreateProcessWithLogonW failed: 1326`), up from about 20 pct on 0.149.1. Two
+  workers that start in the same second both fail, so a retry round at MaxParallel 2 fails in
+  lockstep (1 of 34 recovered). Retrying at MaxParallel 1 recovered all of them. The B1 dispatcher
+  itself has no retry; `scratch/2026-10-08_b1_testset/run_b1.ps1` does it from outside.
+- **B1 baseline:** two runs of the unchanged B1 on a frozen 136-finding test set; result in
+  `docs/investigations/agent_campaigns.md`. Verdicts went to scratch, not to
+  `data/output/review_queue/verdicts`. Token rotation was handled by the sync-back; login intact.
+- **Not run:** pytest, any rebuild, semantic diff. No published data written. Nothing committed.
+
+## 2026-10-08 (night, 4): next five funds, totals gaps traced; three new wrapper options; proposals
+
+Fund sandboxes only (`n5b` to `n5e`, the five next funds built together). No published data
+written, nothing pushed. Decisions D-062 to D-069 in `docs/investigations/v05_decision_log.md`.
+
+- **New module `pipeline/page_labelled_contexts.py`** and `bdc_filings.parse_filing_contexts`:
+  two readings a wrapper can switch on, applied wherever contexts are parsed (extractor, source
+  reconciliation, PIK and non-accrual evidence).
+  - `source_encodings.page_labelled_contexts`: a position the filer tags on its group's subtotal
+    context is named from the cached page (Golub: 18 rows a quarter, 73M to 85M, from 2025-12-31).
+  - `source_encodings.misdated_contexts`: a context the filer dated to the wrong period is
+    re-dated (Ares Strategic Income: one 31.2M loan at 2025-03-31).
+  - The source-fact cache key takes a filer's settings; other filers' keys are unchanged (checked
+    on one CIK).
+- **`staging.distinct_member_suffix_re`** (wrapper): a trailing member token joins the duplicate-row
+  keys in `staging_bdc` and `unified_holdings`, so two real tranches with equal figures are both
+  kept (Goldman Sachs: one tranche lost in six quarters).
+- **`staging.issuer_bridges`** now load for any staging strategy (was `issuer_bridge` only). Used
+  for 32 Sixth Street labels with no issuer.
+- **`pipeline/bdc_fund_income.py` (shared code, every fund):** a concept naming both an incentive
+  fee and net investment income no longer feeds `net_investment_income`. Sixth Street 2025-03-31:
+  21,359 becomes 152,562. Cohort effect not measured.
+- **Wrappers:** 0001918712 (misdated context), 0001920145 (twin members, rate codes from the
+  legend, dollar principal), 0001925309 (bridges, prefix, markers, rate codes), 0001930087
+  (page-labelled contexts).
+- **Promoted rules:** new `1925309/exclude_2025q3_green_shoot_comparative_fair_value`, new
+  `1930087/exclude_affiliate_rollforward_issuer_only_rows`; `1925309/add_healthcare_ordinary_shares_2024q4`
+  moved to `_pulled_superseded_2026-10-08/`.
+- **Proposed dispositions (not accepted):** `scripts/v05_evidence/make_proposed_dispositions.py`,
+  `data/overrides/finding_dispositions_proposed/next5_2026-10-08.json` (not read by the ledger),
+  `docs/investigations/next5_proposed_dispositions.md`.
+- **New read-only evidence scripts** in `scripts/v05_evidence/`: `page_fact_sum.py`,
+  `page_vs_flat.py`, `page_untagged_rows.py`, `page_row_contexts.py`, `page_axis_facts.py`,
+  `page_block_sums.py`, `page_heading_sums.py`, `page_labelled_dry_run.py`, `rate_code_enum.py`.
+- **Result (sandbox `n5e`):** next five 267 outstanding to 246; 109 if every proposal were
+  accepted. Published equals filed within 0.5M in 65 of 67 fund-quarters; the other two are as
+  filed. 95 findings have no proposal.
+- **Tests:** new `tests/test_page_labelled_contexts.py` (7), one test added to
+  `tests/test_unified_holdings.py` and one to `tests/test_bdc_fund_income.py`; affected files run
+  (see the session log). **Not run:** the full suite, the semantic diff, any 70-fund build.
+- **Found in the published data too (not rebuilt):** each defect above exists in the 2026-10-01
+  build for these funds.
+
+## 2026-10-09: conservation check compares like with like, by wrapper setting (owner ruling)
+
+Fund sandbox `n5e` only (check stages re-run). No published data written. Uncommitted.
+Decisions D-070 to D-072 in `docs/investigations/v05_decision_log.md`.
+
+- **`scripts/shadow_conservation_engine.py`:** for a filer whose wrapper declares
+  `source_encodings.investments_total_excludes: ["cash_rows"]`, the fair-value rule compares an
+  investments-only anchor with the published rows that are not cash, checks the cash rows against
+  the filed cash-equivalents figure, and uses the investments-plus-cash anchor only when that
+  figure equals the schedule's cash rows. Cash rows stay published and stay in `value_sum`.
+  New result columns `compared_sum`, `cash_sum`, `filed_cash`, `cash_status` (appended; the
+  results CSV gains four columns). **Every fund without the declaration is unchanged.**
+- **Declared for** 0001920145 (Goldman Sachs) and 0001872371 (Oaktree), with page evidence.
+- **Measured read-only on the published build:** five fund-quarters change, all from failing to
+  reconciled. A version without the wrapper setting was measured first and rejected: it moved 49
+  fund-quarters, about 20 of them from reconciled to short.
+- **`pipeline/source_encodings.py`, wrapper schema:** the new key.
+- **Dispositions:** first owner-accepted entry for the next five,
+  `data/overrides/finding_dispositions/next5_owner_accepted.json` (Goldman Sachs B01, five
+  quarters). 27 proposals remain in `finding_dispositions_proposed/`.
+- **New read-only scripts:** `scripts/v05_evidence/conservation_like_for_like_effect.py`,
+  `pct_rows_on_page.py` (87 failing percent rows read on the page: all published as printed).
+- **Result:** next five 246 outstanding to 236; 109 if the remaining proposals were accepted.
+- **Tests:** `test_agent_promoted.py` (five new or changed), `test_source_encodings.py`,
+  `test_bdc_xbrl_wrapper.py`, `test_finding_dispositions.py`, `test_disposition_validity.py`
+  (728 pass). **Not run:** full suite, semantic diff, any 70-fund build, the sandbox build itself
+  (only its check stages).
+
+## 2026-10-09 (later): next five funds, unread findings read; Oaktree issuer split; row corrections
+
+Fund sandboxes only (`n5f` to `n5h`). No published data written. Decision D-074 in
+`docs/investigations/v05_decision_log.md`. Uncommitted at the time of writing.
+
+- **Wrapper 0001872371 (Oaktree):** `staging` patterns for the "Issuer, Instrument" label used to
+  2026-03-31. Issuer names were unsplit in every quarter (368 issuers for 368 rows at 2025-09-30;
+  now 162). **The published build has the unsplit names.**
+- **`pipeline/validate_holdings.py` (gross-asset reconciliation):** honours
+  `source_encodings.investments_total_excludes` the way the conservation engine does (D-070).
+  Filers without the declaration are unchanged.
+- **`pipeline/unified_holdings.py`:** `maturity_date` added to the fields a row correction may set.
+- **`data/overrides/row_corrections.csv`:** 30 values on 11 rows of four funds, each from the
+  printed page (cost, principal sign, maturity, fixed against floating, a rate, a PIK rate tagged
+  as a spread, a warrant tagged on a loan member).
+- **`scripts/v05_evidence/make_row_corrections.py`:** skips specs for funds a sandbox does not
+  hold. **`make_proposed_dispositions.py`:** check-backed entries go to the live store under the
+  owner's standing instruction (D-073); 18 reading-based proposals remain proposals.
+- **Result (sandbox `n5h`):** next five 145 outstanding to 119; 59 if the 18 proposals were
+  accepted; 43 findings have no proposal. Totals unchanged (65 of 67 within 0.5M).
+- **Tests:** `test_validate_holdings.py -k gav` (four new cases), `test_unified_holdings.py -k
+  TestApplyRowCorrections` (one new), plus the files listed in the session log. **Not run:** full
+  suite, semantic diff, any 70-fund build.
+
+## 2026-10-09 (evening): two oracle checks repaired; fund-level and holdings defects of the next five fixed
+
+Fund sandbox `n5i` only. No published data written. Decision D-075 in
+`docs/investigations/v05_decision_log.md`. Uncommitted at the time of writing.
+
+- **`pipeline/oracle_checks.py` (shared, every fund):**
+  - A01 compares a subtotal with the rows of its own period (it summed the comparative period's
+    rows as well). Published build, read-only: 39 fund-quarters fail to pass, none the other way.
+  - A04 / E01: with no filed investments figure, total assets stand in with a one-sided band
+    (85 pct to 105 pct, owner ruling D-076) in place of the 5 pct band. Published build: 12 fund-quarters fail to
+    pass, none the other way. The floor is the 10th percentile of filed investments over total assets.
+- **`pipeline/bdc_xbrl_html_bridge.py` (shared page reader):** a filer's own reference-rate code is
+  read before the shared reading, and a row shifted off its header is read from the cell beside
+  the named column when that cell starts with one of the filer's codes. First five funds: no
+  reading changes (measured on their pages). Sixth Street: 414 more rows read, 11 change from
+  SOFR to SONIA.
+- **New wrapper keys:** `source_encodings.fair_value_concepts` (a filer's own fair-value concept;
+  extractor, source reconciliation and re-verifier), `source_encodings.untagged_values` (a value
+  the printed row shows and the tags lack; fills a missing value only), and
+  `figure_corrections` in the fund-level wrapper (`pipeline/fund_highlights_wrapper.py`, applied
+  in `fund_financials.build_fund_financials` before scale detection; never adds a fund that was
+  not loaded).
+- **Wrappers:** 0001930087 (fair-value concept, cash identifiers, investments total excludes cash
+  rows), 0001925309 (untagged value). New fund-level wrappers 0001930087, 0001872371, 0001925309.
+- **Promoted rules pulled as superseded:** `1930087/add_2025q4_money_market_rows` (its cash rows
+  had covered for 84.5M of missing positions), `1925309/add_elysium_convertible_preference_2024q4`.
+- **New read-only scripts:** `scripts/v05_evidence/oracle_check_effect.py`,
+  `companyfacts_concept.py`.
+- **Result (sandbox `n5i`):** next five 119 outstanding to 92; 45 if the 15 reading-based
+  proposals were accepted; 29 findings have no proposal. Totals unchanged.
+- **Known inconsistency left:** Golub's money market rows publish from 2025-12-31 only; earlier
+  filings tag their carrying value and no fair value.
+- **Tests:** 15 files covering the changed modules, 1,290 tests pass after one fix (a figure
+  correction created rows for a fund that was not loaded; two existing tests caught it).
+  **Not run:** full suite, semantic diff, any 70-fund build. The sandbox was built before that
+  last fix; it does not change a fund that is loaded.
+
+## 2026-10-09 (night): next five read to the end; shared fixes to fund income and derivatives
+
+Fund sandbox `n5j` only. No published data written. Decision D-077 in
+`docs/investigations/v05_decision_log.md`. Uncommitted at the time of writing.
+
+- **`pipeline/bdc_fund_income.py` (shared):** `InvestmentIncomeOperatingAfterExpenseAndTax` fills a
+  missing net investment income (never replaces one, never makes a period row on its own); a first
+  period under two months is no longer scaled up to a quarter (20 periods in 20 funds in the
+  published build).
+- **`pipeline/bdc_derivatives.py` (shared):** facts counted once, least-dimensioned contexts only,
+  parent member not added to its parts. 281 type-quarters change in 24 of the 77 wrapper funds
+  (`scripts/v05_evidence/derivative_effect.py`, read-only).
+- **`pipeline/provenance_reverify.py`, `pipeline/page_labelled_contexts.py`:** a wrapper-declared
+  untagged value is verified against its declaration (`untagged_value`).
+- **Wrappers:** 0001925309 (own headings in the leaf-guard prefix; also strips from 0001508655
+  through the chained prefixes), 0001930087, 0001918712, 0001872371 (`reference_rate_codes`),
+  0001930087 (`pik_only_tag_reading`).
+- **`data/overrides/row_corrections.csv`:** 16 field corrections (Sixth Street, Ares Strategic Income).
+- **`data/overrides/finding_dispositions/next5_owner_accepted.json`:** six quarters moved out of
+  check-accepted entries into proposals that replace an earlier reviewer's verdict (they could not
+  close those quarters). Proposals file and list regenerated: 34 entries, none accepted.
+- **New read-only scripts:** `scripts/v05_evidence/filing_before.py`, `printed_code_counts.py`,
+  `derivative_facts.py`, `derivative_effect.py`, `cohort_by_size.py`.
+- **Result:** next five 92 outstanding to 82; all read; 0 if the 34 proposals were accepted.
+- **Tests:** targeted files pass (see D-077). **Not run:** full suite, semantic diff, 70-fund build.
+
+## 2026-10-09 (late night): smallest-first batch 1 (five funds); two new wrapper keys
+
+Fund sandboxes `s1a` to `s1c` only. No published data written. Decision D-078 in
+`docs/investigations/v05_decision_log.md`. Uncommitted at the time of writing.
+
+- **New wrapper key `dispatch.leaf_marker_re`** (`pipeline/bdc_xbrl_wrapper.py`, oracle regex list,
+  schema): a pattern that marks a position where no leaf keyword does. Off unless a wrapper sets it.
+- **New wrapper key `source_encodings.context_identifiers`** (`pipeline/page_labelled_contexts.py`
+  `name_declared_contexts`, `pipeline/bdc_filings.py` `parse_filing_contexts`,
+  `pipeline/source_encodings.py`, schema): names a position context a filing leaves without an
+  identifier member. Part of the per-filer cache signature; other filers' key unchanged
+  (`319a2aa69bc8`).
+- **Wrappers changed:** 0001377936 (legal entity member, two leaf markers, category pattern),
+  0001588272 (20 context identifiers), 0001743415 (category pattern), 0001905824 (leaf pattern,
+  one leaf marker), 0001834543 (`filed_rate_reading`). New fund-level wrapper 0001743415 (eleven
+  figure corrections). New promoted rule `1743415/exclude_affiliate_rollforward_rows`.
+- **`data/overrides/finding_dispositions/small1_accepted_by_check.json`:** 12 entries, reasons the
+  owner already accepted, applied by their checks (D-073).
+- **New scripts:** `scripts/v05_evidence/make_batch_dispositions.py`, `unnamed_position_rows.py`;
+  `scratch/2026-10-07_printed_rates/run_batch.sh` (chain for funds with no new quarter).
+- **Test expectation changed:** `test_pimco_warrant_under_debt_prefix` (was category rollup, now a
+  position; reason in the test).
+- **Result:** five funds, 520 outstanding to 329 (274 with the check-accepted entries). Totals:
+  see D-078.
+- **Not run:** full suite, semantic diff, 70-fund build.
+
+## 2026-10-09 (late night, 2): smallest-first batch 2 first reading
+
+Fund sandbox `s2a` only. Decision D-079. One row correction added for TCW Star (0001916608,
+2025-06-30, a value tagged in thousands on a schedule printed in dollars); not yet rebuilt.
+Onex 2023-03-31 is 26.4M under its filed total, cause not found. No code change in this entry.
+
+## 2026-10-10: largest-first batch 3 (MSD, North Haven, Monroe, Blue Owl Technology Income, Barings Private Credit)
+
+Fund sandboxes `l3a` to `l3d` only. No published data written. Decision D-080. No pipeline code
+changed in this entry.
+
+- **Wrappers:** 0001849894, 0001851322, 0001859919 (`filed_rate_reading`), 0001849894, 0001851322,
+  0001869453 (`principal_usd_reference`), 0001851322, 0001869453 (`foreign_unit_values`),
+  0001869453 (reference-rate column and codes, `pik_only_tag_reading`, `printed_margin_reading`).
+- **New promoted rules:** `1742313/exclude_affiliate_rollforward_rows`,
+  `1859919/exclude_affiliate_rollforward_rows`, `1859919/exclude_affiliate_rollforward_rows_2024q4_on`,
+  `1849894/exclude_2025q1_lj_perimeter_subtotal`.
+- **`large3_accepted_by_check.json`:** 16 entries by check (D-073).
+- **Test changed:** `test_source_encodings.py`, the pinned set of funds with a printed margin
+  reading now includes 0001869453.
+- **Result:** five funds, 550 outstanding to 349 (263 with check-accepted entries); published
+  equals filed in every fund-quarter but one (Barings 2023-06-30).
+
+## 2026-10-10 (2): largest-first batch 4 (TPG Twin Brook, Antares Strategic Credit, Ares Core Infrastructure, Sixth Street Specialty Lending, Stepstone)
+
+Fund sandboxes `l4a` to `l4c` only. Decision D-081. No pipeline code changed.
+Wrappers: 0001950803 (`distinct_member_suffix_re`, category pattern), 0001993402, 0001913724,
+0001508655 (`filed_rate_reading`, `principal_usd_reference`; Antares also `foreign_unit_values`),
+0001508655 (leaf guard: own headings and instrument markers). `large4_accepted_by_check.json`: 17
+entries by check. Result: 456 outstanding to 380 (311 with check-accepted entries).
+
+## 2026-10-10 (3): largest-first batch 5 (KKR FS Income Trust, Goldman Sachs BDC, T. Rowe Price OHA, MidCap Financial, Stone Point Credit)
+
+Fund sandboxes `l5a`, `l5b` only. Decision D-082. No pipeline code changed. Wrappers: 0001572694
+(ten prefix rules, category pattern), 0001901164 (`foreign_unit_values`). New promoted rule
+`1278752/exclude_group_name_subtotal_rows`. `large5_accepted_by_check.json`: 14 entries by check.
+Result: 707 outstanding to 645 (555 with check-accepted entries). KKR FS Income Trust publishes
+13M to 571M above its filed total because its schedule is gross of undrawn commitments: left for
+the owner.
+
+## 2026-10-10 (4): largest-first batch 6 (Diameter, Carlyle Credit Solutions, Fidelity Private Credit Fund, Trinity Capital, Golub Capital BDC 4)
+
+Fund sandboxes `l6a`, `l6b` only. Decision D-083. No pipeline code changed. Wrappers: 0001916099,
+0001920453, 0001702510 (`filed_rate_reading`; Carlyle also `principal_usd_reference`), 0001901612
+(rate reading, reference-rate column and codes, `pik_only_tag_reading`, `page_labelled_contexts`).
+`large6_accepted_by_check.json` written. Result: 423 outstanding to 366 (296 with check-accepted
+entries).
+
+## 2026-10-10 (5): largest-first batch 7 (Nuveen Churchill PCAP, BlackRock Private Credit, HPS Corporate Capital Solutions, T Series BDC, New Mountain Guardian IV)
+
+Fund sandboxes `l7a`, `l7b` only. Decision D-084. No pipeline code changed. Wrappers: 0001885968,
+0001911066, 0001925531, 0001989817 (`filed_rate_reading`; T Series also `principal_usd_reference`
+and `foreign_unit_values`; HPS CCS also `principal_usd_reference`). `large7_accepted_by_check.json`:
+19 entries. Result: 347 outstanding to 250 (150 with check-accepted entries).
+
+## 2026-10-10 (6): largest-first batch 8 (New Mountain Private Credit, Blackstone Private RE Credit, AB Private Credit Investors, KKR FS Income Trust Select, Bain Capital Private Credit)
+
+Fund sandboxes `l8a`, `l8b` only. Decision D-085. No pipeline code changed. Wrappers: 0001634452,
+0001899017, 0002037804 (`filed_rate_reading`), 0001899017, 0001975736 (`principal_usd_reference`).
+`large8_accepted_by_check.json`: 12 entries. Result: 392 outstanding to 357 (301 with
+check-accepted entries).
+
+## 2026-10-10 (7): largest-first batch 9 (APS BDC, Jefferies Credit Partners, Antares Private Credit, Fortress Private Lending, Fidelity Private Credit Co)
+
+Fund sandboxes `l9a`, `l9b` only. Decision D-086. No pipeline code changed. Wrappers: 0001899996,
+0001976336 (`filed_rate_reading`; Antares also `principal_usd_reference`), 0001959604, 0002012139
+(`foreign_unit_values`). New fund-level wrapper 0001976336 (one figure correction).
+`large9_accepted_by_check.json`: 14 entries. Result: 254 outstanding to 211 (162 with
+check-accepted entries).
+
+## 2026-10-10 (8): largest-first batch 10 (VISTA, 26North, Goldman Sachs PMMC II, Crescent Capital BDC, Apollo Origination II Levered)
+
+Fund sandboxes `l10a`, `l10b` only. Decision D-087. No pipeline code changed. Wrappers:
+0001633336, 0001772704, 0001919369, 0001950976 (`filed_rate_reading`), 0002052152 (seven settings
+copied from 0001837532). Test `test_source_encodings.py`: pinned printed-margin set extended.
+`large10_accepted_by_check.json`: 18 entries. Result: 297 outstanding to 251 (166 with
+check-accepted entries).
+
+## 2026-10-10 (9): largest-first batch 11 (Overland Advantage, NMF SLF I, Lord Abbett Private Credit, TCW Direct Lending VIII, AGL Private Credit Income)
+
+Fund sandbox `l11a` only. Decision D-088. No pipeline code changed. Wrappers: 0001766037,
+0001825265 (`filed_rate_reading`), 0002052153, 0002006758 (six settings copied from 0001837532,
+ahead of their own batch). `large11_accepted_by_check.json` written for three funds. Lord Abbett
+(up to 199M under) and Overland (up to 215M under) are open, cause not found.
+
+## 2026-10-10 (10): largest-first batch 12 (Silver Point Specialty Lending, TCW Direct Lending VII, MidCap Apollo Institutional, Phillip Street, Crescent Private Credit Income)
+
+Fund sandbox `l12a` only. Decision D-089. No code or wrapper change beyond D-088.
+`large12_accepted_by_check.json`: 22 entries (seven funds). 631 outstanding for the five as built.
+
+## 2026-10-10 (11): largest-first batch 13; every cohort fund has had a first sandbox pass
+
+Fund sandbox `l13a` only. Decision D-090 (with the cohort table). `large13_accepted_by_check.json`:
+22 entries. No code or wrapper change in this entry.
+
+## 2026-10-10 (later): owner rulings on KKR and Fidelity; every fund read against its filings (in progress); new wrapper settings
+
+Owner: "1. net each loan 2. yes 3. explain the pik only loans with spread issue" and "i want the
+same attention given to the largest first batches than to the first 10. read against filings."
+Fund sandboxes only; nothing published, pushed or committed. Detail: decisions D-091 to D-095 in
+`docs/investigations/v05_decision_log.md`; per-fund readings in `docs/investigations/v05_readings/`;
+real errors and their state in `docs/investigations/v05_reading_backlog.md`.
+
+- **New modules:** `pipeline/unfunded_commitments.py` (`source_encodings.unfunded_rows:
+  ["net_of_tagged_commitment"]`: a schedule row that is an undrawn commitment is published net of
+  the commitment the filing tags; extractor, source reconciliation, re-verifier event
+  `net_of_commitment:<amount>`); `pipeline/schedule_row_tags.py` (`source_encodings.schedule_row_tags`,
+  tests `cost_or_percent_unrounded`, `quantity_or_percent`, `not_commitment_only`: contexts of
+  another note that reuse a schedule member are not positions; extractor and source reconciliation).
+- **New wrapper keys:** `dispatch.bare_entity_rows: "positions"` (the bare-entity subtotal filter of
+  prefix-rule filers is skipped), `dispatch.issuer_name_strip_re` (a filer's row number removed from
+  `issuer_name` at the END of the unified build; the raw identifier keeps it). Schema
+  `wrapper_v3.schema.json` updated for all four.
+- **Shared behaviour changed:** `_DOUBLE_INVESTMENTS_HIERARCHY_RE` (staging) also strips the comma,
+  em-dash and truncated forms (three filers declare the prefix; totals of the third, MSD, unchanged
+  in a sandbox); a named reference-rate header matches a printed header ending in footnote marks
+  (`bdc_xbrl_html_bridge._named_header`); the provenance summary no longer fails on a run with no
+  cohort fund.
+- **issuer_name changes for BCRED and HPS** (first five): 1,257 to 833 and 794 to 404 distinct
+  issuers at 2026-03-31; totals unchanged in a sandbox; position ids and matching not re-measured.
+- **Rules and corrections retired:** KKR 1930679 and 1975736 "exact par" exclusions (git rm);
+  Barings' four roll-forward rules, Bain and Stepstone `column_remap` corrections (moved under
+  `_pulled_*`).
+- **Measured across all 77 wrapper funds** (`scripts/v05_evidence/cohort_field_health.py`):
+  reference rate inferred from the date on more than 60 pct of loan rows in 31 funds; issuer not
+  split from the label in every quarter for 11 funds; 12 funds with no interest rate on 90 pct or
+  more of loans. None of it is a finding today.
+- **Tests:** `tests/test_unfunded_commitments.py` (8), `tests/test_schedule_row_tags.py` (6); the
+  wrapper, encoding, staging-refactor, page-context, signature and promoted-rule files pass (737 in
+  the last run). **Not run:** full suite, semantic diff, any 70-fund build, re-attestation.
+
+## 2026-10-11: funds one at a time, largest first; seven funds (decisions D-099 to D-105)
+
+Owner instruction: "keep processing funds, one at a time, from largest to smallest". Fund sandboxes
+only; nothing published, pushed or committed. Detail per fund in
+`docs/investigations/v05_decision_log.md` (D-099 to D-105) and the 2026-10-11 table in
+`docs/investigations/v05_reading_backlog.md`.
+
+- Funds: MSD 0001849894, North Haven 0001851322, Monroe 0001742313, Blue Owl Technology Income
+  0001869453, Barings 0001859919, TPG Twin Brook 0001913724, Antares Strategic Credit 0001993402.
+  Published equals the filed investments figure in every quarter of all seven except Antares
+  2025-03-31 (0.3M over).
+- Code (all switched by a fund's wrapper):
+  - `pipeline/unified_holdings.py` `_strip_issuer_names`; new `dispatch.issuer_name_strip_to_instrument`
+    (`pipeline/staging_bdc.py`). Tests `tests/test_issuer_name_strip.py` (6).
+  - `pipeline/schedule_row_tags.py`: a context is a note row when a value column is filed ONLY
+    rounded (was: any rounded fact). One test added.
+  - `pipeline/page_labelled_contexts.py`: `context_identifiers` may name a context whose member the
+    fund's `category_marker_re` reads as a category row. One test added.
+  - `pipeline/provenance_reverify.py`: for a `rate_tag_reading` fund the plain rate tag is re-read.
+  - Effect of the two refined tests on the eight other funds using them: none in 86 fund-quarters
+    (rows and fair value; sandbox `chk1`).
+- Overrides: seven wrappers; four new fund-level wrappers (North Haven, Monroe, Blue Owl
+  Technology, Antares Strategic); `row_corrections.csv` +715 lines; North Haven rule
+  `exclude_fair_value_hierarchy_nav_row`; Twin Brook rule extended; pulled: Twin Brook
+  `column_remap` (wrong), Antares `add_blackrock_short_term_investment_2025` (plugged value) and
+  its fleet `missing_position_add`; check-accepted entries updated in `large3` / `large4`.
+- Scripts: `scripts/v05_evidence/make_fund_proposals.py` (new), `make_row_corrections.py` (blocks
+  for the seven funds). Proposals: `data/overrides/finding_dispositions_proposed/fund_<cik>.json`
+  (seven files, 152 findings, none accepted).
+- Tests run: `test_issuer_name_strip`, `test_schedule_row_tags`, `test_page_labelled_contexts`,
+  `test_source_encodings`, `test_provenance_reverify`, `test_rate_tag_reading`: all pass (200).
+  NOT run: the full suite, `tests/test_unified_holdings.py`, the semantic diff, any 70-fund build,
+  re-attestation.
+- Open defects reported to the owner: the cost proxy invents cost along a position chain; fund-level
+  year-end and per-share income errors; loans printed with a PIK part and a spread (D-092).
+
+## 2026-10-11 (later): owner rulings on cost proxy and cash-axis members; Ares Core (D-106 to D-108)
+
+- Commit 911dc26 holds D-099 to D-105. What follows is uncommitted.
+- Owner ruling: a row with no filed cost publishes no cost. `pipeline/config.py`
+  `COST_PROXY_ENABLED = False`; `financial_conventions.cost_proxies(..., enabled=)`;
+  `identity_finalization.finish` passes the switch. All funds. Cohort effect not measured.
+- Owner ruling: a cash-axis member that names no cash is not cash. `pipeline/staging_bdc.py` drops
+  a cash-axis member that names a fair-value-hierarchy category. On the published build one member
+  of 46 (North Haven, 2 rows). North Haven's fund rule for it removed.
+- Ares Core Infrastructure 0002031750 (`ac1b`): names split, two unit counts corrected.
+- Finding, not fixed (D-108): `gics_sub_industry` is a language-model guess keyed on the company
+  name and cached; it is not the filer's printed industry, and name clean-up empties it where the
+  labeller cannot run.
+- Tests: `test_financial_conventions` + `test_identity_finalization` 83 pass (one added; three
+  adapted); 17 cash tests of `test_unified_holdings` pass. Full suite NOT run.
+
+## 2026-10-12: industry read from the printed heading (D-109)
+
+- Owner ruling 2026-10-11. The heading the page reader records for a row is now published in
+  `extracted_industry` (`pipeline/staging_bdc.py`, `pipeline/bdc_xbrl_html_bridge.py`), and where
+  it maps to GICS without a model call it replaces the name-keyed label
+  (`pipeline/unified_holdings.py` `_apply_printed_industry`; 25 headings added to
+  `pipeline/gics_mapping.py`). All funds.
+- Eight funds built together (`in2a`): rows with no standard label about 26,800 to about 2,100;
+  rows, fair value unchanged. Cohort-wide effect not measured; frontend not exported.
+- Commits: 911dc26 (D-099 to D-105), 69f9daa (D-106 to D-108).
+- Tests: `tests/test_printed_industry.py` new; 192 pass with the mapping and page-reader files.
+
+## 2026-10-13 - Cohort funds 30 to 62 by size, one at a time (D-123 to D-143); fund sandboxes only
+
+Continues the run of 2026-10-12. Nothing published, nothing pushed, no full rebuild, no downloads.
+Per-fund detail: `docs/investigations/v05_decision_log.md` D-123 to D-143; table in
+`docs/investigations/v05_reading_backlog.md`; owner questions in
+`docs/investigations/v05_owner_decisions_2026-10-12.md` (items 6 to 17 are new).
+
+Shared code changed (each with a test; targeted test files only were run):
+- `pipeline/bdc_xbrl_html_bridge.py`: a column header is recognised when it carries a glued
+  superscript ('Cost3') or a footnote list ('Fair Value (4,5)'); 'Software, continued' is read as
+  'Software'; a country name or a page footer is not an industry heading.
+- `pipeline/unified_holdings.py`: new wrapper option `dispatch.instrument_description_strip_re`
+  (loader in `pipeline/staging_bdc.py`); the member-text industry (`industry_from_identifier_re`)
+  is read again after a non-industry heading is withdrawn, and a rare catch that maps to nothing is
+  not taken; a rate left behind the industry by a non-breaking space is removed.
+- `pipeline/gics_mapping.py`: about 30 more filer headings in the reviewed table (representative
+  picks where the filer's term is broader than one sub-industry; owner item 14).
+- `scripts/v05_evidence/make_row_corrections.py`: Bain (four unscaled rows) and Crescent (one row
+  named for the wrong issuer) blocks.
+
+Wrappers changed: 0001911066, 0001925531, 0001634452, 0001975736, 0001899017, 0002083477,
+0001976336, 0002012139, 0001899996, 0001920453, 0001919369, 0001950976, 0001772704, 0001633336,
+0002052152, 0002052153, 0002006758, 0001965934, 0001766037, 0002008748, 0002011498 and the last
+three of D-143 where stated. Rules: two Antares Private Credit add rules pulled (replaced by the
+filing's tagged row); one Crescent Capital exclusion added (issuer subtotal, two quarters).
+
+Not run: the full test suite, `tests/test_unified_holdings.py` in full, any 70-fund build, the
+semantic diff against the baseline, re-attestation. The shared changes above therefore have a
+measured effect only on the funds built after each change; their effect on the first five funds
+and on funds built earlier in the run is not measured. Do that before any publish.
+
+"Findings outstanding" in these sandboxes is not "data correct": no rule checks a wrong rate on
+the right row or the meaning of a field.
+
+## 2026-10-13 (later) - Top ten with Q2 2026: owner rulings on the next five; new holdings column `bdc_acquisition_date` (D-146, D-147)
+
+- **Schema change:** `private_markets_holdings` gains `bdc_acquisition_date` (DATE; the filer's
+  us-gaap:InvestmentAcquisitionDate, BDC rows only). Declared in `pipeline/unified_holdings.py`
+  (UNIFIED_COLUMNS), `pipeline/staging_bdc.py`, `pipeline/staging_nport.py` (blank),
+  `pipeline/output_schemas.py`. Not yet reflected in the production-stack contract documents, the
+  baseline, or the frontend types. Measured in fund sandboxes only.
+- **Rule change:** oracle B01 no longer counts a no-value context whose member, filing and period
+  also have a valued context (`pipeline/oracle_checks.py`, two tests).
+- Owner accepted the next five funds' dispositions by reason (`next5_owner_accepted.json`);
+  `make_proposed_dispositions.py` can now record an owner acceptance of an entry that replaces a
+  reviewer's verdict.
+- Sixth Street Lending Partners: one missing loan restored (Hippo XPA Bidco 2024-03-31, 7.1M) and
+  the printed total supplied for that quarter. Golub: unit counts on LP-unit rows.
+- Sandboxes with 2026-06-30: `t5q` (first five: 316 findings, 0 outstanding), `n5s` (next five:
+  246 findings, 2 outstanding). Chain: `scratch/2026-10-13_q2/run_q2_batch.sh`.
+- Tests run: test_oracle_checks, test_output_schemas, test_holdings_history,
+  test_matching_financial_contract, test_source_encodings (253 passed) and 45 column / source
+  tests of test_unified_holdings. Not run: the full suite, a 70-fund build, the semantic diff.
+
+## 2026-10-13 (evening) - Top ten to 3 outstanding; cost tagged in two units; industry column (D-153)
+
+- **New module** `pipeline/cost_in_two_units.py` and wrapper setting
+  `source_encodings.cost_in_two_units: ["foreign_is_par"]` (Apollo Debt Solutions only): a context
+  with one dollar and one foreign InvestmentOwnedAtCost fact publishes the dollar fact as cost and
+  the foreign one as principal in that currency. Called from `pipeline/bdc_filings.py` and
+  `pipeline/source_reconciliation.py`; `pipeline/provenance_reverify.py` re-reads the fact of the
+  unit named in the event (`cost:of_two_units:<unit>`, `principal_amount:from_foreign_cost_tag:<unit>`);
+  the reconciliation cache signature includes the setting.
+- **New wrapper setting** `source_encodings.industry_columns` (Oaktree Strategic Credit only): the
+  inline page reader (`pipeline/bdc_xbrl_html_bridge.py`) takes a row's industry from the named
+  printed column instead of the last lone heading.
+- **Changed:** `source_encodings.untagged_values` accepts an optional currency code after a
+  principal ('... principal_amount 40000000 EUR'); it sets the principal's unit.
+- Schema `schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json` and `pipeline/source_encodings.py` carry
+  the two new keys.
+- Data: five wrappers (Apollo, Ares Capital, BCRED, Sixth Street Lending Partners, Oaktree), nine
+  row-correction lines (Ares Murchison, Apollo Version 1), one Ares exclusion rule (Viant company
+  total, 2024-03-31), three dispositions on reasons the owner had accepted
+  (`finding_dispositions/accepted_reasons_2026-10-13.json`), three proposals for the owner
+  (`finding_dispositions_proposed/top10_2026-10-13.json`).
+- Sandboxes with 2026-06-30: `t10a` (the ten largest funds built together) and `ap2` (Apollo
+  rebuilt after two corrections to the fix). Top ten: 517 findings, 3 outstanding. Published equals
+  filed within 0.5M in 139 of 141 fund-quarters.
+- Tests: new `tests/test_cost_in_two_units.py` (5) and one test in
+  `tests/test_bdc_xbrl_html_bridge_fields.py`. Run: those two files, test_source_encodings,
+  test_finding_dispositions, test_disposition_validity, test_page_labelled_contexts,
+  test_unfunded_commitments, test_provenance_reverify (all passed). Not run: the full suite,
+  `tests/test_unified_holdings.py`, any 70-fund build, the semantic diff, re-attestation.
+- The new settings are switched on per fund; no fund outside the ten was rebuilt to confirm that
+  nothing else moved.
+
+## 2026-10-14 - First overnight run of the fund-clearing skill (D-154 to D-163)
+
+- New skill `.claude/skills/v05-fund-clearing/` (one subagent per fund, orchestrator runs a
+  mechanical gate): `scripts/v05_evidence/fund_gate.py` (snapshot, check, park),
+  `build_fund.sh`, `owner_queue.py` (owner decision ledger, `docs/investigations/v05_owner_queue.*`),
+  `observations.py` (`docs/investigations/v05_observations.csv`), `regression_check.py`
+  (`docs/investigations/v05_readings/accepted_sandboxes.json`), reasons acceptable by check as
+  data (`data/reference/accepted_disposition_reasons.json`).
+- Rule repairs: PP03 reads the row's own context; field_coverage_drop counts valued rows only.
+  New disposition check `par_not_printed`; the page artifact gains `printed_row` (schema change to
+  `bdc_ixbrl_field_status.csv`).
+- Funds run (sandbox, verdict): MSD msdxc PASS; North Haven nhxb PASS; Monroe moxe PASS; Blue Owl
+  Technology Income otxe PASS; Barings bpxe NEEDS_ORCHESTRATOR; TPG Twin Brook tbxd INCOMPLETE;
+  Antares Strategic Credit asxc NEEDS_ORCHESTRATOR. Every outstanding finding has a proposal or a
+  parked entry; none accepted.
+- Shared code changed, all switched per fund: highlights-wrapper figure fields and income-concept
+  keys, `first_income_year_ends`, `interest_rate_kind` correctable. Regression rebuild of the ten
+  funds accepted before the run (`t10b`): no published value or row changed in any of them.
+- Not run: full test suite, whole `tests/test_unified_holdings.py`, any 70-fund build, semantic
+  diff, re-attestation. Nothing pushed or published.
+
+### 2026-10-14 -- Per-field error sample: published rows read against the printed line
+
+- New `scripts/v05_evidence/field_sample.py` (draw | cards | check | score). Draws a fixed-seed
+  sample (20 rows per fund, seed 20261014) from each v0.5-programme fund's accepted sandbox
+  (`docs/investigations/v05_readings/accepted_sandboxes.json`, 17 funds, 340 rows). For each row it
+  finds the printed `<tr>` in the cached inline-XBRL filing by context id (no text search) and
+  writes a card: cells with the facts tagged in each, sibling-context and hidden facts, the lines
+  around it, the table header, the member text and the published values.
+- Readers (subagents, brief `docs/investigations/v05_field_sample/reader_brief.md`) labelled each
+  of 13 fields twice over: published vs page, and the filer's tag vs its own page. Results in
+  `docs/investigations/v05_field_sample/results.md`; labels in `labels/`.
+- Headline (one sample, sandbox builds, after the 2026-10-14 overnight fixes on 7 funds): fair
+  value 0 of 340 wrong; cost, principal, rates, spread and percent of net assets 0 to 1.3 pct;
+  issuer name 7.6 pct and instrument/class 6.5 pct wrong, all our member-text splitting (BCRED
+  joint-venture names, Blue Owl Credit Income instrument left in the issuer). Filer tags with a
+  wrong value or label: 15 of the roughly 2,000 tagged fields; maturity and reference rate are
+  untagged on about two thirds of rows (published from text, right on all but 7).
+- Second reader on 40 cards agreed on 520 of 520 fields; that batch was easy, so agreement on the
+  hard cases is not measured. Nothing in the pipeline changed.
+
+### 2026-10-14 -- Issuer/instrument split: two wrappers, a shared splitter (off), GICS keeps the filed-name label, gate and skill
+
+- Wrappers: Blue Owl Credit Income gets `issuer_name_strip_re` + `issuer_name_strip_to_instrument`;
+  BCRED strips the joint-venture holder label and row numbers, and blanks an instrument that is
+  only the label (new key `instrument_description_strip_may_empty`, `pipeline/staging_bdc.py`,
+  `pipeline/unified_holdings._strip_instrument_text`).
+- New `pipeline/issuer_instrument_split.py`, run after the per-fund strips, switched by
+  `data/reference/issuer_instrument_split.json` (enabled: false). Dry run on the 2026-10-01
+  holdings: 37.5 pct of BDC rows in 125 funds change name. Needs a cohort rebuild and semantic diff
+  before it is switched on.
+- `pipeline/gics_classification._apply_gics_to_holdings`: a name a strip shortened keeps the label
+  of its filed form (helper column `_issuer_name_filed`, dropped after the cache is applied).
+- Gate (`scripts/v05_evidence/fund_gate.py`): new `names` check (over 1 pct of rows with an
+  instrument, row number or holder label in the issuer name fails unless declared). Skill
+  `v05-fund-clearing`: step 7b, a 20-row page sample read by a separate agent after a clean gate;
+  `field_sample.py` gains `--dir`, `--label`, `--cik` and a published-errors table.
+- Sandbox `owsp3` against `t10a`: name shapes 70.5 pct / 23.6 pct of rows to under 1 pct; distinct
+  positions 8,392 to 7,587; two new zero-value PP02 findings (D-164). Tests 119 passed in four
+  files; full suite not run.
+
+## 2026-10-14 - PIK accretion and Lincoln-style bad-PIK proxy (worktree `pik-accretion`, NOT merged)
+
+- Branch `pik-accretion` in worktree `.claude/worktrees/pik-accretion` (from ffaf125), uncommitted. A sandbox build (`spon3`) was running in the main checkout, so nothing was edited here.
+- New `pipeline/pik_accretion.py` (DuckDB SQL), CLI `python -m pipeline.pik_accretion [--with-status] [--reference-holdings PATH]`. Three new artifacts in OUTPUT_DIR (config `PIK_ACCRETION_FILE`, `PIK_LINCOLN_SUMMARY_FILE`, `PIK_RECONCILIATION_FILE`):
+  - `pik_accretion.csv`: per position-quarter with pik_rate > 0. `payment_evidence` (confirmed_tagged / accreting / flat / not_paying_tagged / undetermined + reason) from principal growth vs pik_rate x elapsed days since the fund's previous filed quarter (0.5x-1.6x band; two-quarter window after a flat quarter for semi-annual capitalization). `pik_timing` (started_after_cash, at_origination via bdc_acquisition_date, cross-filer history by borrower name + maturity month, left_censored, origin_unknown). `lincoln_class` bad/good/unknown for payers only. Stress flags (non-accrual, mark < 90, 5pt drop).
+  - `pik_lincoln_summary.csv`: per fund-quarter and cik='ALL', first-lien positions with FV > 0, count and FV shares, plus *_max upper bounds counting unknown-origin payers as bad.
+  - `pik_reconciliation.csv`: implied PIK from terms and observed accretion vs the fund's reported quarterly PIK income (undimensioned facts; three-month fact else YTD difference). Measurement, not a gate.
+- `bdc_position_pik.py`: evidence rows gain `period_start` (additive column) so quarter vs YTD facts can be told apart. Shared context parser unchanged.
+- Wiring: `fund_ledger_trial.py` new stage `pik` after `nonaccrual` (re-extracts evidence, rebuilds position_pik_status and proxy, then accretion with published holdings as read-only reference); `rebuild_outputs.py --pik-status` also builds accretion.
+- Tests: `tests/test_pik_accretion.py` 30 tests; with `tests/test_pik_status.py` 46 pass. Full suite NOT run.
+- Sandbox `pik1` (copy of t10b inputs, top ten, PIK stage only, ~2 min): at 2026-06-30 cohort 5,917 first-lien positions, 4.1 pct paying PIK by count (7.7 pct FV), bad share 57.3 pct count (59.4 pct FV) with upper bound 99.2 pct, shadow default 2.33 pct count (4.61 pct FV; max 4.04 count). Lincoln Q2 2026: 11.1 x 55.4 = 6.2 pct (different universe: private companies < $250M EBITDA). Only 2 'good' payers: acquisition dates exist only for Sixth Street LP (and 6 pct Goldman), so the good/unknown split is not usable yet. Reconciliation median implied/reported 0.85-0.97 for ARCC, BCRED, OSCF, SSLP, GCRED; OCIC 0.45 (reported concept includes dividends), ADS 0.63, HLEND 0.73.
+- Bug found and fixed in the run: a principal drop then rebound (ARCC WSHP FC 76.7m -> 23.5m -> 76.7m) passed the semi-annual rule; prior quarter must now be flat, not down (regression test).
+- Caution: the worktree's `data/raw` is a JUNCTION to the main raw cache. Remove it with `cmd /c rmdir` before `git worktree remove`.
+
+## 2026-10-15 - Opt-in schedule-row test `cost_or_percent` (fund-clearing D-185, T Series BDC)
+
+- `pipeline/schedule_row_tags.py`: new test `cost_or_percent` (a context is a position only with a
+  cost or percent tag; no rounding clause). `pipeline/source_encodings.py` and
+  `schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json` accept it. On only in the wrapper of 0001885968.
+- Why: Fetch Insurance (fair value 1,690,000 tagged at decimals -4, 10-K for 2024-12-31) was dropped
+  by `cost_or_percent_unrounded`. Funds on that test (Barings, Carlyle, KKR FS) may lose real rows the
+  same way; not measured.
+- Tests: `tests/test_schedule_row_tags.py` 9 passed (2 new); with encodings, wrapper and highlights 690.
+
+## 2026-10-15 - Short first annual statement in quarterly income (fund-clearing D-186, New Mountain Guardian IV)
+
+- `pipeline/fund_financials.py` `quarter_income_sql`: for a fund that declares `first_income_year_ends`,
+  an annual statement of 4 to 13 months is scaled by months / 3 (full years still x 4). Guardian IV
+  (0001925531) Q4 2022 income 2,204 -> 3,164.
+- Regression: 0001869453 (the only other fund declaring it) rebuilt alone: fund_financials identical.
+- Tests: `tests/test_fourth_quarter_income.py` 2 new; with `test_fund_financials` 141 passed.
+
+## 2026-10-16 - Opt-in `section_total_reading: label_then_total` (fund-clearing D-192, APS BDC)
+
+- `pipeline/bdc_xbrl_html_bridge.py` `_closed_section`: with the setting, '<section> Total' closes a
+  section as 'Total <section>' does. `pipeline/source_encodings.py` validates it
+  (`section_total_label_first`); schema key added. On only for 0002083477.
+- Why: APS BDC prints 'First Lien Debt Total'; the reader took the Level 3 table's total as the
+  section's and withheld lien on every first-lien loan (1.9B at 2026-06-30).
+- Tests: 3 new in `tests/test_bdc_xbrl_html_bridge_fields.py`; bridge, encodings, wrapper, highlights 758 passed.
+
+## 2026-10-16 - Fund financials scale override removed; opt-in `scale_fix_exempt_dates` (fund-clearing D-195)
+
+- `pipeline/config.py`: `FUND_FINANCIALS_SCALE_OVERRIDES` emptied. Its only entry (0002012139, labelled
+  'Owl Rock', x1000) was Fortress Private Lending Fund and published 2025-06-30 net assets 1,000x.
+  `pipeline/fund_financials.py` builds with an empty dict (`WHEN FALSE THEN 1`).
+- New highlights-wrapper key `scale_fix_exempt_dates` (`pipeline/fund_highlights_wrapper.py`, schema):
+  a seed quarter printed with total assets hundreds of times net assets is left out of the TA/NA scale fix.
+- Regression: 0001869453 rebuilt alone, fund_financials identical. Tests (agent): 811 passed in four files.
+
 ### 2026-10-16 - Resume VISTA fund clearing, localize industry heading
 - Continued inherited VISTA (0001919369) run in sandbox viya after vixa/vixb/vixc. Removed inherited global Pharmaceuticals alias; pipeline/gics_mapping.py now matches the original run snapshot. Scoped Life Sciences heading to VISTA hierarchy regex alternatives instead of adding it to the shared industry-label placeholder union.
 - Fund report: docs/investigations/v05_readings/reports/0001919369.json. viya has 454 holdings; versus vixc only four GICS sub-industry and four sector values become null, preserving the broad filed heading without unsupported precision. No new/removed rows; no published artifacts changed.
@@ -12982,3 +15089,324 @@ V12 preparation update: the readiness receipt now seals 30 reviewed snapshot cha
 - Final sandbox gpyf after six builds: 3,235 holdings, all 14 FV quarters exactly tie ex-cash. Gate INCOMPLETE: 102 findings, 38 outstanding, 27 proposed, 11 uncovered. Two identical-key Diligent principal errors additionally parked. Missing early cost anchors and residual cost/distribution/rate issues remain explicit.
 - Independent sample first found six field errors on five of 20 cards; fund-wide repairs followed. Final 20-card sample finds zero published errors, not whole-fund correctness. Name cleanup changed 63 GICS sub-industries/52 sectors through cached mappings, no coverage loss; full GICS correctness not established.
 - Verification: 125 focused tests and actual name-strip dry run passed; protected outputs unchanged. No full suite/cohort rebuild/export/re-attestation. Earlier run semantic backstop timed out; no verdict. No production writes or new reasons accepted.
+
+### 2026-10-16 - Crescent single-fund continuation (ccye, review incomplete)
+
+- Read fund-agent brief and continued CIK0001633336 from spon2 using five cached single-fund builds; no publish, download, commit or shared pipeline change. Final sandbox ccye has7573holdings:604more than filtered spon2 (573new-quarter rows plus20separated instruments and11MHS twin loans),0removed.
+- Fund wrapper now recognizes missing industry hierarchy labels, printed benchmark codes, four untagged principal/cost pairs, distinct MHS625/650loan members and the investment/cash boundary. Added34source-backed correction cells through make_row_corrections.py and its fund spec: unit counts, cost signs, rates, maturities and Service Logic identifier. Full evidence in docs/investigations/v05_readings/reports/0001633336.json; proposed dispositions in data/overrides/finding_dispositions_proposed/fund_0001633336.json.
+- Mechanical self-gate passes stages, corrections, names, fields,62quotes and prior-verdict answers; files intentionally unchecked without orchestrator snapshot. All14published quarters have anchors and are within gate tolerance, not exactly reconciled. Final ledger110current findings (121raw),53outstanding;40covered by11unaccepted proposal entries,13specific parks. Parks include unfinished X02reviews, contradictory printed rate/PIK conventions, confirmed missing Painters revolver and historical HTMLcarry review. No clean-data or quarter-signoff claim.
+- Initial focused wrapper/source-encoding tests100passed; final wrapper tests4passed with protected-output checks. ccye versus ccyd changes exactly onecost, onerate, twomaturities and associated status/audit fields,0row changes. Full suite, cohort semantic backstop and frontend export not run; parent previously reported semantic backstop timeout. Independent20row source sample and snapshot gate pending; onebuild remains available.
+
+## 2026-10-16 - Investigation completeness enforced separately from repair
+
+Owner-authorized workflow change: added scripts/v05_evidence/investigation_review.py and integrated it into fund_gate.py (INVESTIGATION_INCOMPLETE, exit 4; read-only investigation audit). Exact outstanding IDs, row coverage, source quotes, detector decisions, request classifications and independent reviews are required. Review digest binds full report, outstanding records and applicable proposals. Validator protected against fund-agent edits. Updated fund-clearing skill and added investigation-review.md; no financial rule/threshold/disposition acceptance changes.
+Validation: 66 focused tests passed with production-output protections; skill validator passed. Independent code/workflow review performed. Read-only legacy replay: VISTA14, Goldman38, Crescent53 outstanding IDs all fail new contract; not counts of proven data errors. Goldman boilerplate and Crescent8 explicitly unfinished groups substantively confirm review gaps. Evaluation: docs/investigations/v05_readings/investigation_gate_evaluation_2026-10-16.md. Full suite/rebuild/reattest not run; earlier full semantic diff timed out, not repeated. No published data writes. Historical reports/verdicts unchanged; unfinished evidence is not certified by adding schema fields.
+
+### 2026-10-16 - Apollo Origination II Levered fund run (aoyac, independent review pending)
+
+- Processed CIK0002052152 with three cached single-fund builds, through2026-06-30; final aoyac754holdings versus725fresh baseline, restoring29source-declared zero-FV positions. Versus historical spon3:187added (158new-quarter plus29restored),0removed. No production rebuild, download, commit or threshold/rule change.
+- Fund wrapper: source-declared missing cost (including Datavant37.442m), cash/investment boundary, dated TORF/TONAR mappings, hierarchy repair and exact legal-name guards removing673repeated group prefixes. Added fund highlights wrapper correcting annualized NIIratio2.49->9.96 and exempting prelaunch balance sheet from incorrect scale adjustment. Existing no_seed policy subsequently suppresses all prelaunch financials; this is explicitly recorded, not claimed as repaired published seed data.
+- Added13fund correction specs/24cells for fixed coupons, floating margins, PIK, JPY principal currency/FX and3common membership counts. Appended only this fund's block/cells to already-dirty correction helper/CSV, preserving Crescent work; existing C107 accepted-by-check applied through approved helper only.
+- Final ledger16current findings (19raw),11outstanding versus23fresh baseline outstanding. All11 have exact affected/reviewed coverage, source evidence, hypotheses and next action. Six have unaccepted proposals (X11twoquarters, C115, fmt_basis_spread, PP02, F27); five C04remain source-ambiguous on preferred face-amount versus units. Eleven observations include recurrence-detector proposals; no new detector installed.
+- Report: docs/investigations/v05_readings/reports/0002052152.json. Final self-gate passes stages, corrections, names, fields, prior-verdict answers and156cached-source quotes;6/6operating-quarter FV comparisons within tolerance, not exact equality. No GICS labels lost or new derived_proxy shares after name cleanup. Files require parent snapshot check; independent20-row page sample and all-findings review remain outstanding, so status is INVESTIGATION_INCOMPLETE and no acceptance registered.
+- Verification:124focused highlights/source-encoding tests passed with protected-output guard; all754names dry-run including already-clean legal-name false positives. Full suite, full-cohort semantic diff, frontend export and re-attestation not run. Scratch evidence and resumable notes under scratch/fund_runs/0002052152/. No changes to AGENTS.md or shared pipeline logic.
+
+### 2026-10-16 - Apollo independent sample repairs (aoyad, review pending)
+
+- Independent sample C020 found an Elk loan published as Victors. Read all 33 Elk/Victors positions across six quarters: confirmed three wrong issuer/industry assignments, including two December 2025 delayed-draw contexts with exchanged members. Added six exact-key correction cells; 17 genuine Victors names/industries remain unchanged. Cleaned the Eagle Railcar group prefix on 13 additional Elk rows. No amounts, rates or maturities changed.
+- Orchestrator approved adding extracted_industry to _CORRECTABLE_FIELDS. Existing correction-store inventory contained zero such entries before the three new corrections. Source labels feed existing GICS mapping; no GICS field was patched directly. One initial patch hit UNIFIED_COLUMNS instead; orchestrator caught it before any build, the owned test job was aborted, and that schema edit was removed. The corrected code diff only adds the allowed correction field.
+- TestApplyRowCorrections: 22 passed, including source-industry-to-GICS and four wrong-key negative cases; protected outputs unchanged. Build aoyad: 754 rows, 16 current findings (19 raw), 11 outstanding. Versus aoyac: 16 issuer names, 3 industry/subindustry/sector/audit/canonical values, 31 entity IDs and 7 position IDs changed; 92 columns unchanged, no rows added or removed.
+- Identity audit shows two consistent term-loan chains (Elk: five quarters, maturity 2032-06-14; Victors: three quarters, maturity 2032-12-23), with no same-quarter merges. The previous chain incorrectly linked March Elk to June Victors; the source-name correction removes it. Report extends the wrong-member observation and detector proposal to cover this unflagged chain defect.
+- Sample C015 followup found 17 mis-scaled floor tags in December 2025. Unified holdings have no floor field; raw source tags are preserved and a source-quality detector is proposed. Report now has 13 observations, complete structured coverage for all 11 outstanding IDs, and six unaccepted disposition proposals. Mechanical self-check passes except intentionally omitted snapshot; independent r2 sample, all-finding review and orchestrator-scoped shared-code regression remain pending. No acceptance, production publication or commit.
+
+### 2026-10-16 - Apollo Origination II independent-review identity and FV repair
+
+- Build aoyae (5 of 6) adds one exact FV correction and four existing per-CIK reject-only match overrides. No new pipeline/gate/registry edits. December Elk DDT inline sign was wrong: printed +18,000 and independent issuer/industry subtotals support correcting -18,000 to +18,000; quarter holdings now exactly match filed 1,517,967,000.
+- Full 33-row Elk/Victors family audit includes unchanged IDs. Three wrong B1b identity edges and one erroneous term pair rejected; eight DDT component memberships repaired, seven final IDs changed, all other 746 memberships unchanged. Historical Elk revolver fragmentation retained; no force-pair. Five columns changed vs aoyad: FV/provenance/correction audit/calculated percent each one, position ID seven.
+- Corrected-input replay tested exact four-rejection scope and wrong CIK/date/name negatives. All 754 cached source contexts reread/mapped; no new pytest/full-cohort run. Existing 22 focused tests remain prior validation; parent owns shared-code regression.
+- Two new source-reconciliation findings expose the intended disagreement with the bad tag, both fully investigated and proposed false alarms against corrected output, not accepted. Final report: 13 outstanding findings, 13 structured investigations, 14 observations, 8 proposals and 5 preferred-unit source ambiguities. Fresh independent sample/review pending; no clean-data claim.
+- Clarification: all 754 source contexts were remapped programmatically to cached filing facts; manual source-family investigation covered all 33 Elk/Victors rows, not a fresh manual review of every fund holding.
+
+- 2026-10-16 documentation correction after final review: wrong-company/maturity impurity is removed, but Victors December DDT remains a singleton separate from its March/June chain, alongside Elk revolver fragmentation. Report and override evidence metadata now state both residuals; no executable directives or output changed. R3 sample: 20 cards/260 labels, zero published errors; no eligible coupon, shares or reported percent-NAV observations. No new build/tests.
+
+### 2026-10-17 - Apollo Origination II investigation evaluation and blocked regression handoff
+
+- Completed Apollo 0002052152 sandbox aoyae, independent all-finding review and third page sample.
+  Final original-snapshot gate: INCOMPLETE; investigation COMPLETE (zero problems); 18 findings,
+  13 outstanding, eight proposed dispositions and five C04 preferred-unit source ambiguities.
+  Six operating quarters reconcile within tolerance. Sample: 20 cards, 260 fields, zero published
+  errors, with explicit missing-field coverage limits. Neither result certifies data correctness.
+- Fund repairs and evidence are recorded in v05_readings/reports/0002052152.json and
+  0002052152_orchestrator.md. Shared unified_holdings change adds extracted_industry to exact-row
+  correction allowlist; focused tests cover correction-to-GICS and wrong-key negatives. Four
+  Apollo-only reject match overrides remove wrong-company links; residual chain fragmentation
+  remains. Fourteen observations registered, with detection decisions; no new rules accepted.
+- Strengthened investigation-review workflow is exercised: independent review rejected both
+  unchanged wrong-company ID chains and an overbroad continuity claim before final approval.
+  New investigation/gate targeted checks: 66 passed; correction tests: 22 passed.
+- All 48 previously accepted funds rebuilt at accepted scope: 34 UNCHANGED, 14 MOVED. Reviews
+  explain legacy classification precedence, batch-dependent canonical names, formerly skipped
+  KKR provenance findings and numeric-equal representations. One MidCap Asurion historical GICS
+  result remains unexplained. Acceptance is blocked; no registry update or acceptance commit.
+- Full pytest: 6650 passed, five failed, 13 skipped, two xfailed, 743 warnings (15716.86 seconds).
+  No protected-output violation. Independent two-node rerun with Apollo changes disabled still
+  fails anchor/migration expectations. FX scope and source-refresh pins lag committed inputs;
+  exact Lord Abbett extra-row attribution remains unverified. No assertions/pins weakened.
+  Durable diagnosis: v05_readings/reports/0002052152_test_failure_review.md.
+- Existing semantic aggregates ran against active baseline with scratch-only reporting: holdings
+  14 delta groups, matches seven, position returns 12, index returns nine, financials zero.
+  Holdings 783763 versus baseline780455; existing published drift, not session attribution.
+  Full historical manifest byte walk stopped after core semantic comparison; not a full-byte
+  pass. No production rebuild, SEC downloads, baseline refresh, publication or push.
+- Owner queue rebuilt without accepting proposals. All processes exited; dirty work preserved.
+
+### 2026-10-18 - Five page rules switched on in the findings ledger (D-207, merge 505a5bf)
+- New `pipeline/candidate_rules.py` (issuer name, unit count, PIK, industry coverage, preferred-as-common) over published rows joined to the page reader's printed row; `scripts/shadow_identity_engine.py` `ensure_page_rules` feeds five identity rules `issuer_name_printed`, `units_printed`, `pik_printed`, `industry_coverage`, `preferred_printed` (tier tight) into the shadow ledger, review queue and findings ledger. A fund-quarter with no tested row gets no result (rule 1 blind spots in `page_rules_name_blind_spots.csv`). Weaker kinds (`units_scale_unclear`, `pik_member_text_only`, `preferred_heading_only`) informational only.
+- Independent false-alarm samples: rules 1-3 30/30 real, rule 4 30/30 fillable, rule 5 29/30; rule 1 near-spelling slice 15/20 (5 false alarms from unrecognised instrument first cells; stop-list fix pending). Tests: test_candidate_rules.py, test_shadow_identity_rules.py.
+- Regression on the 53 accepted fund sandboxes (rgA1-rgA6, `docs/investigations/v05_readings/regression_2026-10-18.md`): no published holdings value changed by the 2026-10-17/18 commits; +616 outstanding page-rule fund-quarters on 49 funds (320 / 126 / 81 / 59 / 30); quarter acceptance drift/health unaffected; `outstanding_findings` for the five scope funds goes 0 -> 10 at 2026-03-31 and 0 -> 9 at 2026-06-30.
+
+### 2026-10-18 - Printed schedule rows without an XBRL context (D-207, D-208)
+- Opt-in wrapper key `source_encodings.printed_rows_without_context` (`pipeline/printed_rows.py`): publishes a row the filer printed but did not tag, from the verbatim printed line; loader refuses any value not in the line and any row the filing tags. Context `printed_page:<hash>`, `*_source` = printed_page. Declared rows get non-blocking `printed_page_declared` in source reconciliation, SRC_BDC02 (new INFO rule SRC_BDC02P), oracle E07, the provenance re-verifier and the shadow adapter; never verified; an undeclared row without context still blocks. printed_page maturities get day precision. First use: TCW Direct Lending VIII 2023-09-30 (3 rows, 92.4M). Also opt-in highlights `interest_expense` fallback concept. Tests: test_printed_rows.py (36), test_income_interest_fallback.py, test_financial_conventions.py, test_provenance_reverify.py; test_unified_holdings.py 955 pass.
+
+### 2026-10-19 - Three opt-in verification keys for Silver Point Specialty Lending (SPL-R1..R3)
+- Verified on cached filings and sandbox spld before implementing. R1: published cash rows = filed CashEquivalentsAtCarryingValue + RestrictedCashEquivalents in all 12 quarters 2023-09-30..2026-06-30 (2023-09-30: 92.1M = 49.9M + 42.2M). R2: 95 missing_from_pipeline source rows are printed subtotals (e.g. 'Total United States of America Equities 474,538 2,349,171', 0000950170-24-095339). R3: non-cash cost ties filed InvestmentOwnedAtCost within 0.1 pct in all 13 quarters; with cash it exceeds the 5 pct band in the 8 flagged quarters (2023-06-30: 948.4M vs 863.2M).
+- New wrapper keys under `source_encodings` (schema + loader validation): `cash_rows_include_concepts` (filed concepts added to filed cash equivalents in the conservation engine's cash anchor/cash status and in the GAV reconciliation -> gav_reconciliation, F20, GAV_BDC02/03; read from cached companyfacts), `subtotal_members` (RE2 patterns; unmatched source rows -> non-blocking excluded_aggregate_candidate; included in the reconciliation override hash), `cost_total_excludes` (cost_conservation applies the fair-value cash split; needs investments_total_excludes). Set only for 0001646614. A04/E01 unchanged (they have no cash anchor).
+- Files: pipeline/source_encodings.py, pipeline/source_reconciliation.py, pipeline/validate_holdings.py, scripts/shadow_conservation_engine.py, schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json, data/overrides/bdc_xbrl_wrappers/0001646614.json. Tests: new tests/test_filer_cash_and_subtotal_keys.py (36). Not rebuilt; fund ledger not re-run. Logic/override hash change makes every CIK's cached source reconciliation recompute on the next build.
+
+### 2026-10-20 - Manulife Private Credit Fund requests MLF-R1..R3 (net_of_other_commitment, bare equity rows, misdated-context replay)
+- Verified on cached filings before implementing. R1: the commitments note's us-gaap:OtherCommitment facts (LegalEntityAxis x CreditFacilityAxis) sum to the printed 'Less unfunded loan commitments' line in 9 of 10 quarters (2026-06-30: note 89,644,684 vs printed 89,958,006; the 313,322 gap is Founders Table Holdings, 156,661 Revolver + 156,661 DDTL tagged on one context with no facility axis). R2: 'Rapid Aggregator LLC 138 111,939' and 'P.J. Fitzpatrick LLC 2,833 345,667' (0001193125-26-219274) plus five unit-class rows sum to the printed Equity total 1,103,687. R3: Integrated Openings DDTL 2024-12-31 fair value 4,059,066 sits on the re-dated context PAsOn02_24_2025_... and equals the printed line.
+- R1: new opt-in `source_encodings.unfunded_rows: ["net_of_other_commitment"]` and `unfunded_note_aliases` ('NOTE NAME => SCHEDULE NAME', fallback only when the note spelling names no row). pipeline/unfunded_commitments.py: issuer = first printed cell of the note row holding the fact (cached page); amount to the issuer's undrawn rows of the facility (no rate) by par, then the single drawn row, then the single drawn '(C)' row; remainder logged, never forced; report-date column only (the 2025 10-K prints its 2024-12-31 column a row off); contexts the dedup merges are one row and every member records `net_of_commitment:<amount>`. KKR's net_of_tagged_commitment path and cache signature unchanged. Loader + schema extended; encoding_signature now via `reading_signature`. Set for 0001988280 with two aliases (PAK 'Acqusition', WWEC 'II' printed for member WwecHoldingsIiiCorp). Read-only simulation (scratch/fund_runs/0001988280/impl/sim_r1.py): netted = printed line in 8 of 10 quarters; 2025-12-31 1,813,287 unplaced (Leap, OIS: several drawn (C) rows), 2026-06-30 313,322 unplaced (no facility tag).
+- R2: wrapper 0001988280 drops the third category_marker_re alternative and sets dispatch.bare_entity_rows 'positions'; only the two names change disposition (aggregate -> debt_issuer_rollup) across all 2,573 raw identifiers. Test renamed test_manulife_private_credit_bare_equity_rows_are_positions_not_aggregates (D-222). Family stays 'debt' at wrapper level: equity classing not checked.
+- R3: pipeline/provenance_reverify.py `_replay_misdated_fills`: a filled_field whose only possible source is a listed misdated context (same re-dated date, identifier and dimensions; read through parse_filing_contexts) is replayed with the row's events; cheap status `misdated_context_filled`, raw_match -> verified, mismatch -> filing_mismatch. Cohort: on the 2026-10-01 published parquet no row of the 9 misdated_contexts funds changes (33 Trinity interest_rate fills unmatched); sandbox mlfe: 1 row (Manulife) merged_context_excluded -> verified.
+- Tests: test_unfunded_commitments 23 (15 new), test_provenance_reverify 87 (5 new), test_source_encodings 97, test_bdc_xbrl_wrapper 557, plus page_labelled/cost_in_two_units/explicit_contexts/source_reconciliation_cache 112: all pass. No build, no ledger re-run.
+
+### 2026-10-20 - Fill five missing Q1-2026 NAVs and recalculate remaining-fund share
+
+- Owner requested population of the five blank net_assets values at 2026-03-31. Added data/overrides/fund_highlights_wrappers/0002008748.json for Lord Abbett (672,019,000), supported by cached accession 0000930413-26-001612 balance sheet and AssetsNet companyfacts. Reused existing source-backed corrections for TCW Direct Lending (218,052,984), New Mountain Guardian IV (1,180,992,000), Jefferies Credit Partners (815,679,000) and APS (1,417,228,661). All five independently matched cached companyfacts. No global concept precedence change.
+- Applied the production apply_figure_corrections path to the selected funds and persisted only those five net_assets cells in canonical data/output/fund_financials.csv; exact before/after comparison confirms every other cell and row count unchanged. No financials Parquet companion exists. Backup, bounded scripts and verification records: scratch/2026-10-20_nav_backfill/. Corrections persist on future financials builds through the wrappers.
+- Regenerated fund details using the existing exporter with full cohort rankings, after the production identity export guard passed; copied only the five affected JSONs. Exact comparison confirms five net_assets changes and four derived gross_return_pct additions, with all other fields unchanged. An initial five-fund-only export altered size-ranking text; caught by verification and replaced with full-cohort output before completion. No site deployment or SEC downloads.
+- Current v1 manifest entries: 70 funds, all 70 now have March 2026 NAV; total 204,389,892,577. The original ten remaining clearing-workflow funds include Saratoga, which is held back and outside v1. Their nine in-scope funds have NAV 1,822,054,907, or 0.8914603770 percent of covered NAV. This is published CSV plus the five requested corrections, not a full financial-data accuracy attestation.
+- Verification: TestFigureCorrections 10 passed; exact CSV and regenerated JSON comparisons passed. Standard diff_outputs.py --semantic was started, then stopped during its historical full-byte walk after approximately 2.5 minutes. Its existing semantic_diff function was run separately against the active baseline: holdings 14, matches 7, position returns 12, index returns 9 delta groups (existing drift); financials one group reflecting the NAV backfill. Report in session scratch. Full byte diff, full pytest, unified rebuild, frontend TypeScript build and quarter re-attestation not run; no executable production code changed. Existing dirty work preserved; no commit.
+
+### 2026-10-20 - Owner defers nine funds from v1; global NAV aliases across dates
+
+- Owner explicitly deferred NexPoint, SCP, PIMCO Capital Solutions, BlackRock Direct Lending, TCW Star, Onex, TriplePoint Private Venture Credit, Audax and Stellus Private Credit. The authoritative wrapper manifest now has 61 active entries and preserves the nine original records in deferred_entries; seven prior held-back CIKs are unchanged. Raw/canonical data, fixes and findings remain retained. No finding was dispositioned by changing product scope. AGENTS.md received the requested bounded scope amendment; other historical sections were not re-verified. Methodology discloses the deferral and its 2026-03-31 basis (0.89146 percent of prior covered NAV; 1,748 positions, 5.799 percent).
+- extract_companyfacts.py now fills dates missing NAV from exact USD instant AssetsNet, then MembersEquity, after existing concepts. Existing mapped dates retain precedence. Cached raw audit: 486 additional NAV dates across 78 BDCs, zero existing mapped NAV changes. Publication comparison used old/new mappings with identical cached quarterly returns, isolating this change from unrelated pending financial-data changes. Published 428 blank NAV cells, 29 new reporting dates replacing eight older/undated quarterly observations, and 12 mapping-derived NAV/share values: 6,216 -> 6,237 rows; populated NAV 5,440 -> 5,896. Retained-date populated NAVs and unrelated columns are unchanged. One displaced seed observation (AG Twin Brook, 2019-06-05) is replaced by the newer 2019-06-30 date under existing quarterly date selection. Evidence and exact comparisons: scratch/2026-10-20_scope_nav/.
+- cohort_by_size.py now reads only active manifest entries, rather than recursively including held-back/deferred CIKs. Public totals probe reports actual cohort size. Full export initially rejected the older finalized holdings schema, which predates bdc_acquisition_date. holdings_history.py now accepts that exact historical schema while preserving source fields and rejecting every other schema mismatch; no holdings were rebuilt or altered.
+- Tests: 148 passed (fund_financials, cohort_guard, holdings_history), including exact legacy-schema support and rejection of other missing columns. Existing semantic_diff function ran against the active baseline: unchanged pre-existing holdings/matches/position-return/index-return delta groups (14/7/12/9); financials one group, +21 rows and +503,732,826,203 summed historical NAV versus baseline. No claim that summed historical NAV is current AUM. Full byte walk, full pytest suite and unified rebuild not run. Frontend export/validation follow below.
+- Public export completed successfully (cache-only, 1,499.5 seconds). Archived only the nine deferred fund_details JSONs and holdings_history directories under session scratch. Verified active fund list/details/history membership equals the 61 manifest entries; 2026-03-31 published FV is 380,649,390,445.519818975486 across 28,395 positions. Headline, instrument and GICS sector totals reconcile exactly; history has 238,432 rows and zero typed read-back differences, with unchanged canonical holdings hash. All 61 detail files and peer distributions were regenerated from canonical data. No site deployment.
+- Frontend npm run build passed (73 static routes). Full pytest suite, unified rebuild and quarter re-attestation were not run; this export is not a quarter sign-off. Starting per-fund clearing inventory is 2,051 outstanding items from latest retained-fund sandbox ledgers (October 18-20), subject to fresh builds. All edits remain uncommitted for owner review; no unrelated dirty work was reverted.
+
+### 2026-10-20 BCRED largest-first fund clearing, D-224
+
+- Per-fund sandbox nvbcd: five Pigments issuer/instrument splits and three source-backed maturity fills in row_corrections.csv, generated through make_row_corrections.py. No shared pipeline change; canonical outputs untouched. Unsafe Minerva rename rejected after an experiment changed two tranche identities; final 24,672 rows and identities unchanged from bcpf.
+- Gate INCOMPLETE with independent investigation COMPLETE: 27 findings, one unresolved two-row issuer-name finding, no eligible whole-finding proposal, 16/16 totals tie. Proposal withdrawals preserve audit; partial Petco evidence cannot dispose of Minerva. Report, independent review, sample, observations, sandbox registry and D-224 record updated.
+- Separate Sol sample/review identified 214 Estimated Yield rows stored as coupons and 41 par/units ambiguities; retained D-209 CLO-equity convention. These unresolved observations carry source evidence and detector/repair next actions. Tests: two targeted correction tests pass; semantic backstop has only existing documented drift. No full suite, production publication or re-attestation; zero findings would not prove correctness.
+
+### 2026-10-20 Blue Owl Credit Income fund clearing, D-225
+
+- Sandbox nvboe: fund-only issuer split and shares normalization opt-out;136 source-backed correction fields through new row_correction_specs/0001812554.json and existing maker. Final11,135 rows/9,719 published;14/14 filed totals tie;32 outstanding reduced to5, four proposed and unaccepted. Unsafe BCTO stock/notes merge withdrawn; final23 changed IDs independently source-audited.
+- Independent investigation COMPLETE (five findings/six observations);747 printed equity quantities verified;20-card sample has no published errors but no share-count or interest-rate coverage. Report, review, sample, proposal file, observations, registry and D-225 updated. Confirmed unresolved200 Q1-2026 commitment-attribution contexts include97 nonzero/-19.265M FV; totals do not reveal this problem. Other unresolved name/maturity/chain/GICS issues explicitly enumerated.
+- Two focused tests passed; semantic backstop only existing drift. No shared pipeline code changes, canonical publication, full suite or re-attestation. Preexisting dirty context-correction and accepted-disposition files preserved. Zero findings would not prove correctness.
+
+### 2026-10-20 Ares source-rate verification repair (ARES-VERIFY-PRINTED-RATES-001)
+
+- Orchestrator implemented opt-in source_encodings.rate_verification_anchors in new pipeline/rate_verification_anchors.py, source_encodings.py, wrapper v3 schema and provenance_reverify.py. A declaration names an actual cached rate fact (exact accession/target field/context/source concept/context, explicit fractional units, printed-row evidence); it cannot supply a numeric answer. No extractor default, rule, threshold or acceptance reason changed. Existing untagged_values unchanged.
+- Needed because Ares prints whole coupons under PaidInKind and PIK components under the ordinary rate concept on12 reviewed mixed rows; two entirely PIK rows use a neighbouring rate-only context. Selected facts verify directly in percentage points; old mislabelled-field transform events do not apply. Missing/conflicting facts and wrong publication fail; stale raw metadata still reports raw_stale. Current financial_conventions.py already carries total and cash rate separately; old AGENTS cash-leg wording is stale and was not edited here.
+- Tests:201 passed (new anchor tests plus provenance_reverify and source_encodings); cache-only replay of16anchors/14actual rows gave16correct-value matches and16wrong-value rejections. Semantic backstop matches prior14/7/12/9/1groups, no canonical outputs written. Request preserved with implemented response in Ares report. Fund rebuild, independent review, accepted-fund regression and full-suite handoff checks remain pending.
+
+## 2026-10-20 Ares source corrections and independent clearing review (D-226)
+
+Recorded nvard INCOMPLETE with investigation COMPLETE: 81 findings,20 outstanding,6 proposed,16/16 totals tie. Retained130 correction fields; withdrew167 identity-affecting fields after unsafe joins; final introduces zero chain drift versus nvarb. Wrapper, row correction specification/maker, proposals, report, sample, review and registry updated. Root rate-anchor verifier change independently reviewed:201 targeted tests,16correct/16wrong cached cases; end-of-run regression/full suite pending. Sample0/20 published errors does not prove correctness. Existing baseline3264ID/6658membership-row drift remains unresolved. Current all-in storage implementation differs from stale AGENTS cash-leg wording; no migration or AGENTS edit. No sandbox published.
+
+## 2026-10-20 HPS source corrections, rollback and independent review (D-227)
+
+Recorded nvhpg INCOMPLETE/investigation COMPLETE:80live findings,9outstanding,14/14totals,8593rows. New fund-opt-in printed industry labels retain3874source headings without fabricated GICS; wrapper/schema/source_encodings/unified_holdings/focused tests updated. 119equity-count specs and safe rate/name fixes retained;138unsupported debt-principal quantity changes rolled back in explicitly authorized seventh safety-only build. Predirty context file restored byte-for-byte; zero position/chain drift. Independent source audit and sample1/20 verify remaining524currency gaps and149debt-category errors. Targeted tests passed; full unified/industry-integration runs interrupted, canonical semantic drift remains, cohort regression/full suite pending. No sandbox publication; cleared findings would not prove correctness.
+
+### 2026-10-20 Apollo source clearing candidate nvape (independent review pending)
+- CIK0001837532: five cached-only fund builds; candidate nvape has7254holdings,14quarters all tie on ex_cash basis,84ledger rows/78active/14outstanding issuer-name findings. No production outputs or acceptance reasons changed; no commit.
+- Fund wrapper/exact correction specs repair source company prefixes, whole-unit counts, actual industry headings,116currency labels/cached FX and rate/PIK parsing errors. Soho fixed cash5.38+PIK5.38 uses existing cash-kind convention to publish all-in10.76. Shared generator gains Apollo-only exact-spec loader; no shared pipeline defaults changed.
+- Report docs/investigations/v05_readings/reports/0001837532.json covers14exactreviewIDs/524flaggedrows and18observations.7254exactsourcepagequotes;738acceptedsource-onlycontexts classified;1120negativecost+2negativeFVcolumnvaluesverified. Published1600identitymemberships unchanged vs untouched;17pre-existing null matcher endpoints remain provenance limitations. MaterialDec2024spread6.1 vsactual16 remains blocked by oldD016correction, awaiting independentcheck and bounded supersession.
+- Tests:111Apollo/source-encoding tests and138financial-convention/index-return tests passed. Report field/name/quote/total checks pass; independent20row sample/review and root gate pending. Existing semantic scratch adapter PID2692/session4633 remains running; root monitors. Evidence/notes under scratch/fund_runs/0001837532/.
+
+### 2026-10-20 Apollo final reserved candidate nvapf
+
+- Sixth cached-only build completed: 7,254 rows, zero additions/removals versus rg1b; 80 active findings, 16 outstanding, two source-as-filed proposals awaiting owner. All 14 quarters tie ex_cash.
+- Independently verified exact D016 replacement publishes Material Dec-2024 spread 16.0 instead of 6.1; PIK 8.03 and coupon unchanged. Historical D016 preserved; every other correction CSV byte unchanged. New range flags retain exact current/comparative evidence and 546-row weak population coverage.
+- Full position membership (1,600 groups) and 4,771 matcher records unchanged versus untouched nvapa; 17 pre-existing unanchored endpoints remain limitations. Independent 20-card sample unchanged, one printed cash-margin discrepancy retained; 139 cash-plus source cells audited under existing D031/D217 distinctions.
+- All mechanical fund gate checks pass; required final independent review pending. Prior 111 focused and 138 financial tests passed; no new tests for this exact data-only replacement. Canonical semantic backstop reports existing baseline drift (682 divergent / 45,993 checked / 18,548 skipped), not a clean pass or sandbox regression. No production publication, acceptance changes, or commit.
+
+## 2026-10-20 Apollo final independent review and registration (D-228)
+
+Registered nvapf INCOMPLETE/investigation COMPLETE:80 active findings,16 outstanding,2 proposals,14/14 totals,7254 holdings. Independent review verified source populations and all19 observations; mandatory proposal reason keys repaired without data changes. D016 exact Material correction superseded from6.1 to source16.0; new range flags stay outstanding. All1600 identity memberships unchanged versus untouched; unsafe name/currency repairs withdrawn. 111 wrapper/source and138 financial/returns tests passed; existing682-artifact baseline drift remains. Retained61 latest ledgers now1966 outstanding versus2051 start. No sandbox publication; full suite/cohort regression/re-attestation pending.
+
+## 2026-10-20 - ASIF source clearing and optional correction context
+
+Ares Strategic Income Fund (0001918712), sandbox nvasd, four of six builds used. Report: docs/investigations/v05_readings/reports/0001918712.json. 10,175 positions across 14 quarters retained; one actual OAKC position restored and one exact numeric subtotal excluded. Q1-2025 published FV now equals printed $13,655,084,900 (net -$2,524,100); inherited subtotal exception rejected. All 14 quarter totals reconcile. Final ledger: 46 active findings, 13 outstanding; no clearance or acceptance claimed.
+
+Fund wrapper opts out of the audited shares power10 heuristic (30 affected rows, 25 numeric counts changed); exact corrections restore printed PIK terms, issuer labels and JPMMT units. Existing context_identifiers, printed-value declarations and rate anchors restore the actual c806 OAKC row without fabricated provenance. Optional suffix cleanup and unsafe Hub/Steward issuer changes were withdrawn. All 105 affected chain membership records and 12 concrete edge changes source-checked; 174 final match records lack at least one published endpoint and remain an explicit audit limitation.
+
+Main row_corrections.csv adds optional src_context_id already supported by pipeline. scripts/v05_evidence/correction_csv.py and make_row_corrections.py preserve legacy blank-context behavior, exact scoped keys and existing column order. All 20,938 non-own historical corrections preserve all original field values; 65 own dates use 2026-10-20. Pre-dirty separate context CSV and accepted stores untouched. tests/test_correction_csv.py covers blank/scoped matching, sibling-context false positives, dedup/header behavior and source metadata scope. Targeted runs: 32 passed (190.67s), 101 passed (61.78s), 48 passed (57.14s), final 5 passed (59.34s). No full suite; final semantic backstop delegated to root with scratch report destination.
+
+Full source investigations include accepted X02/X06/X11 populations (163/20/144 rows) and all outstanding findings. Parked issues include systematic printed-CLO index taxonomy, 2022 pretax versus after-tax income meaning, and unsafe name-only identity corrections. Three advisory proposal groups do not change ledger acceptance. Independent sample and review remain required.
+
+ASIF report-only initial-gate correction: final count is44active/46physical/13outstanding (2adjudicated false alarms excluded from active); prior46active wording above was physical count. All historical evidence retained separately from13outstanding investigations. All observations have exact quarters, unsupported CFC/BradyPlus quotes corrected, and root's rejected acceptance-reach implementation request recorded as history without owner disposition. No data/build changes.
+
+### 2026-10-20 - ASIF final sandbox rollback and evidence freeze
+
+Ares Strategic Income Fund0001918712 final nvasf(6/6builds) preserves10175holdings/14quarters;14/14filed totals tie.46physical/44active findings,13outstanding,3advisoryproposals; no acceptance-standard change. Withdrawn11optionalissuer fields after full75introduced-pair source audit;54own fieldcorrections remain,20938nonown historical correctionrows/priorfields identical. Final16PIDchanges/58membershiprecords/5concreteedgedeltas;48newco-membershippairs source-reviewed,175missingmatchendpoints qualified. All19StewardPIDs restored to untouchedbaseline; inherited first-lien/subordinated conflict remains unresolved. Original20samplecards unchanged across18published fields; prior sample labels/review retained and freshreview required. Data-onlyrollback: no additionalpytest; previous32/101/48/5focusedtests retained. Root semanticbackstop reports existing682divergent/45993checked/18548skipped, not a newpass. Main correctionCSV optionalcontext schema/helper change documented previously; no sharedpipeline/check edits in final rollback. Report and scratchnotes checkpointed; productionoutputs untouched.
+
+## 2026-10-20 ASIF final independent review and registration (D-229)
+
+Registered nvasf INCOMPLETE/investigation COMPLETE:44 active findings,13 outstanding,3 proposals,14/14 totals,10175 holdings. Exact CLO subtotal replaced by real cached context fixes2.5241M excess; inheritedD065 explanation superseded. Final54 context-scoped correction fields,20938 non-own records preserved; correctionCSV optional context/helper tested. Unsafe name-induced chains rolled back; independent review checks48introducedpairs,58membershiprecords,191nameflags and7observations. Sample20cards/175applicable/0published errors, noPIK/NAVpercentage coverage. Targeted32/101/48/5test runs pass; semantic existing682baseline divergences. Retained61 ledgers1955outstanding versus2051start. No publication; fullsuite/cohortregression/reattestation pending.
+
+## 2026-10-21 Selected unreviewed findings: Golub Private Credit
+
+Reviewed 15 previously unreviewed rgA1 findings across 38 source rows. All confirmed errors; independent Sol review supports all 15 and one instrument observation. New scoped evidence/review JSON under docs/investigations/v05_readings/unreviewed_2026-10-21/. Existing investigation validator passes selected scope with source quotes; no whole-fund acceptance, correction, disposition, build or test. Original misleading member labels observed; pipeline mapping cause not assumed. 432 of the frozen 447 review targets remain.
+
+
+## 2026-10-21 Selected unreviewed findings: Sixth Street Lending Partners
+
+Independently reviewed32 rgA1 findings across140 occurrences/137 distinct rows in14 cached filings:29 confirmed-error findings,3 X11 false alarms; mixed issuer subrows contain formatting/continuation false positives. Four related observations recorded. Evidence and separate review JSON under unreviewed_2026-10-21; selected-scope validator and quotes pass. No repairs, dispositions, builds, tests or whole-fund acceptance. Cumulative47 of447 selected findings reviewed;400 remain.
+
+
+## 2026-10-21 Selected unreviewed findings: Oaktree Strategic Credit
+
+Reviewed8 rgA1 findings across87 source rows:82 error rows and5 spacing false positives; each selected finding contains a real error. Independent review supports all8 and one instrument/currency audit observation. Buttercup physical dollar symbol conflicts with original GBP inline principal unit; no proven pipeline currency corruption or automatic USD repair. Selected-scope validator passes. No data/disposition changes, builds, tests or fund acceptance. Cumulative55/447 reviewed;392 remain.
+
+
+## 2026-10-21 Selected unreviewed findings: MSD Investment
+
+Independent source review supports4 selected rgA2 confirmed errors:3 position rows (share-scale/two names) and1 F28 aggregate missing2026Q2 holdings despite cached filing. Prior36reviewed findings excluded. New scoped reports/review validate with no quote/coverage problems. No repairs, dispositions, builds, tests or fund acceptance. Cumulative59/447 reviewed;388 remain.
+
+
+## 2026-10-21 Selected unreviewed findings: North Haven
+
+Independent review supports12 selected rgA2 findings and1observation,37position-rule incidences/36unique rows plus1F28 aggregate. Corrected earlier provisional40/39counts; originalcontexts confirm stale member identities rather than reader joins. Prior23reviewed findings excluded. Selectedscope/quote validator passes; no repairs/dispositions/tests/builds/fundacceptance. Added review-run progress README. Cumulative71/447 reviewed:68confirmed-error findings,3false alarms;376remain.
+
+
+## 2026-10-21 Selected unreviewed findings: Monroe Capital Income Plus
+
+Independent review supports13 selected rgA2 findings across873 memberships/805 distinct positions plusF28. Names include62contamination,4truncations,2printed/member suffix discrepancies(no economicidentity conclusion),28cosmetic and9wrapped false positives. All768industry flags have originalsourceheadings:765rawindustry blanks,3ClassAshares substitutions; fineGICS unproven. Two affiliate-context schedulecrosswalks independentlyverified. Q22026cachedFV5,956.417m withnosandboxholdings confirmed; oldD159 no-industry explanation contradicted by newsourceevidence, historicalentry preserved. Selectedchecker passes; no repairs/dispositions/tests/builds. Cumulative84/447reviewed,81confirmed-error findings3falsealarms;363remain.
+
+
+## 2026-10-21 Selected unreviewed findings: Blue Owl Technology Income
+
+Independent review supports5selected rgA2 findings:3confirmed errors,2source ambiguities;9issuerrows+F28metric. Sixpriorreviewed findings excluded. OneNAV-per-share observation limited to historicalrgA2 snapshot; currentcanonical/public NAV and Oct20backfill effect not checked. Checker passes noquote/coverage problems. No repairs/dispositions/tests/builds/fundacceptance. Cumulative89/447reviewed:84confirmed-error findings,3falsealarms,2sourceambiguities;358remain.
+
+
+### 2026-10-21 - Exclude legacy narrative reviews from selected review queue
+- The structured initial selection missed 42 exact findings previously reviewed in substantive narrative reports. Removed these from this review-only selection, preserving exact records and prior evidence in unreviewed_2026-10-21/prior_review_exclusions.json; no ledger, acceptance or data changes.
+- Queue is now 405 findings across 39 funds (initial447/40); 89 independently reviewed across seven funds,316pending. Generic parked placeholders remain selected. Prior review exclusion does not imply completeness or resolution.
+
+
+### 2026-10-21 - Barings selected findings independently reviewed
+- Added selected report and distinct review for CIK0001859919, sandbox rgA2:17findings,69position rows plus F28 metric. All17aggregate findings contain errors; row-level32errors,32false alarms,5legal-name ambiguities. Ocelot instrument-description observation supported; PIK claims concern terms only.
+- Selected-scope unchanged investigation checker COMPLETE, all quotes and coverage valid. Running total106/405;299pending. No repairs, dispositions, acceptance, builds or tests; original data untouched.
+
+
+### 2026-10-21 - Twin Brook selected review complete
+- Independent review of3selected findings (3position rows plus F28metric), all contain confirmed errors in rgA2. Two CAD PIK rows distinct from prior reviewed USD facility; Ever Fresh issuer/instrument mismatch and comparative Engelman context verified. Additional instrument observation supported.
+- Scope checker COMPLETE, no unchecked rows or quote defects. F28 historical sandbox coverage only; PIK terms only. Running109/405,296remaining. No data changes, repairs, acceptance, tests or builds.
+
+
+### 2026-10-21 - Antares Strategic selected review complete
+- Independently reviewed16findings,135position flags and2fundmetrics:15contain errors,1cover-date F28falsealarm. Rows123errors/4punctuationfalsepositives/8nameambiguities;3observations. Wrong own-row units established separately from unresolved absolute scale; PIK terms only.
+- Selected checker COMPLETE, no quote or coverage defects. June coverage gap limited to rgA2. Running125/405reviewed,280remaining;119confirmed,4false,2ambiguous findings. No data/ledger changes, repairs, acceptance, builds or tests.
+
+
+### 2026-10-21 - Ares Core selected review complete
+- Two issuer findings independently verified on both AEJV rows, March/June2026 rgA6: instrument wording retained in issuer field. One observation references existing detector.
+- Selected checker COMPLETE, quotes/coverage valid. Running127/405,278remaining. Review only; no fixes, dispositions, whole-fund sample/acceptance, builds or tests.
+
+
+### 2026-10-21 - Sixth Street Specialty selected review complete
+- Exact old ReliaQuest PIK observation excluded as prior review (audit in prior_review_exclusions.json):43legacyexclusions total,404selected. Remaining15findings independently checked on49distinctrows (38issuer/2units/9preferred),45errors and4Copper continuation false positives; all15finding groups contain errors. Seven observations supported, including Mach/Murchison mixed fields from reused source context.
+- Root selected checker COMPLETE, no coverage/quote defects. Running142/404,262remaining. Counts49 verified independently, correcting preliminary48. No data/ledger changes, repairs, acceptance, tests or builds.
+
+
+### 2026-10-21 - Goldman Sachs BDC selected review complete
+- Excluded exact March2026cash-name prior review, preserving evidence;44legacyexclusions leaves403selected. Independently checked12remaining findings64rows (60errors4falsepositives); all12groups contain errors. Two rate observations remain source ambiguity, not no-PIK/zero-rate conclusions.
+- Selected checker COMPLETE, no quote/coverage defects. Running154/403,249remaining. No repairs, dispositions, fund acceptance, tests or builds; canonical data unchanged.
+
+
+### 2026-10-21 - T. Rowe OHA selected review complete
+- Eight findings independently reviewed across21rows:7confirmed-error findings,1source ambiguity (Kaseya PIK formula numeric leg). Names and positive printed PIK terms versus negative tags checked against original contexts and comparative dates. No additional observations.
+- Selected checker COMPLETE with valid quotes/coverage. Running162/403,241remaining;155confirmed4false3ambiguous. No data/ledger changes, repairs, acceptance, tests or builds.
+
+
+### 2026-10-21 - Stone Point selected review complete
+- Independently verified20findings:18confirmed-error2false-alarm,445row memberships/433holdings. Fifty names (35display errors15equivalent renderings) and395raw-industry capture gaps,2observations. TwoTen/2-10 equivalence anchored original context/tranche/maturity/numeric facts. Raw headings do not establish precise GICS.
+- Selected checker COMPLETE, valid coverage/quotes. Running182/403,221remaining;173confirmed6false3ambiguous. No repairs, current-canonical comparison, ledger changes, fund acceptance, builds or tests.
+
+
+### 2026-10-21 - Diameter selected review complete
+- Eight confirmed issuer-display findings independently verified across12rows: instrument fragments, missing ICAT name, plural spelling differences. Same economic row does not make display typos false alarms. No new observations.
+- Selected checker COMPLETE, valid source quotes/coverage. Running190/403,213remaining;181confirmed6false3ambiguous. No repairs, ledger dispositions, fund acceptance, tests or builds.
+
+
+### 2026-10-21 - Carlyle Credit selected review complete
+- Nine finding groups independently reviewed across66rows:4name3unit1PIK1industry. Industry mixed29raw-label omissions and29StructuredCredit taxonomy ambiguities; precise GICS not asserted. Source unit scales/signs independently verified. No additional observations.
+- Selected checker COMPLETE, quotes/coverage valid. Running199/403,204remaining;190confirmed6false3ambiguous finding groups. No data/ledger changes, fixes, acceptance, builds or tests.
+
+
+### 2026-10-21 - Fidelity Private Credit selected review complete
+- Eleven issuer findings independently checked across33rows:10confirmed-error findings32rows,1false-alarm CIFC Fdg/Funding abbreviation. One Roofing delayed-draw instrument observation and15neighbor checks supported; no external borrower-identity verification claimed.
+- Selected checker COMPLETE, valid quotes/coverage. Running210/403,193remaining;200confirmed7false3ambiguous. No repairs, data/ledger changes, fund acceptance, tests or builds.
+
+
+### 2026-10-21 - Trinity selected review complete
+- Six finding groups independently reviewed across118position contexts plus1metric:5wrong-company rows, industry46raw-null+23bad headings+44valid broad labels with unresolved GICS. Three observations supported. SAFE printed monetary basis conflicts with shares tag; flag source contradiction, no automatic scalar fix.
+- Selected checker COMPLETE, coverage/quotes valid. Running216/403,187remaining;206confirmed7false3ambiguous finding groups. No repairs, ledger changes, acceptance, tests or builds.
+
+
+### 2026-10-21 - Golub BDC 4 selected review complete
+- Three issuer findings independently verified on4rows:2Entomo instrument-text parsing failures and2IntegrityMarketing printed rows with IntegratedSpecialty source members. Source identity conflict established; external legal identity not verified.
+- Selected checker COMPLETE, quotes/coverage valid. Running219/403,184remaining;209confirmed7false3ambiguous. No data/ledger changes, repairs, acceptance, tests or builds.
+
+
+### 2026-10-21 - Nuveen Churchill selected review complete
+- One issuer-display finding/position and one existing-detector observation independently verified: T-Fund Institutional printed versus Treasury source member. No distinct economic security claim. Raw share-digit mismatch rejected as proof of scale issue after units/header review.
+- Selected checker COMPLETE, quotes/coverage valid. Running220/403,183remaining;210confirmed7false3ambiguous. No data/ledger changes, repairs, acceptance, tests or builds.
+
+
+### 2026-10-21 - BlackRock Private Credit selected review complete
+- Fourteen finding groups independently checked across60rows:50display errors6formatting false positives4Numerix ambiguities; all14groups contain errors. Two provenance-detector observations supported. NFP/Integrity and CreativeArtists/Discovery conflicts verified against original source contexts and neighboring rows.
+- Selected checker COMPLETE, valid coverage/quotes. Running234/403,169remaining;224confirmed7false3ambiguous groups. No data/ledger changes, repairs, acceptance, tests or builds.
+
+
+### 2026-10-21 - Selected finding review paused after HPS investigation
+Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-finding memberships / 281 distinct rows, one observation. Source quote and row coverage checks passed; independent review remains pending. Exact GICS assignments, economic aliases and preferred-unit replacement remain unresolved. Owner requested pause after this agent; no further agent started. Progress: 234/403 selected findings independently reviewed, 169 pending including HPS 13. No repairs, ledger dispositions, acceptance, builds or tests; report and pause notes left uncommitted. Resume checkpoint: scratch/2026-10-21_review_queue/CHECKPOINT.md.
+
+
+### 2026-10-26 - v0.5 fix run (2026-10-25 to 2026-10-26): 17 funds cleared with fixes
+- Funds (D-230 to D-250, local commits 9d0d730 .. 3c7595b): HPS CCS, T Series, NMG IV, AB PCI, Bain, Jefferies, Antares, Fortress, Fidelity PC Co, 26North, Vista, GS PMMC II, Crescent, Overland, NMF SLF, Lord Abbett, TCW DL VIII. 14 gate PASS, 3 INCOMPLETE (NMG IV, NMF SLF: owner industry-coverage question; Crescent: 5 findings), all with independent investigation review COMPLETE and a 20-card page sample.
+- Shared code: pipeline/candidate_rules.py pik_printed whole-coupon repair (d7df345, tests/test_candidate_rules.py 36 pass); pipeline/unified_holdings.py opt-in gics_industry_carry_back + schema key + tests/test_gics_industry_carry_back.py (6 pass) (1699f03). tests/test_unified_holdings.py: 968 pass, 1 fail (Commonwealth fixture stale since d33a2e3; real data unaffected, D-251).
+- Data overrides: per-fund wrappers, ~6,000 appended row_corrections.csv lines (context-keyed; no HEAD line removed), untagged_values for printed dash lines, one exclusion rule (AB French Warrants subtotal), one position-match reject (Lord Abbett). Staged-but-unapplied fixes under docs/investigations/v05_readings/staged/ (GS PMMC II, Crescent, NMF SLF).
+- Regression: sandbox rgR1 (Silver Capital, Commonwealth) UNCHANGED; their reviews re-bound after the repair (D-251). No cohort rebuild, semantic diff, export or publish was run; nothing pushed.
+- Counts: owner queue 184 reasons (183 awaiting); open observation keys 414.
+
+### 2026-11-04 - Owner queue rulings; check repairs merged (A04/E01, cost/fv conservation, PP02, F20, A01, B01, pik_printed)
+- Owner queue: owner accepted groups A (as printed) and B (source row not a position). 91 reasons recorded via scratch/2026-11-04_owner_queue/batch_rule.py (one ledger build; owner_queue.rule unchanged); ledger 92 accepted / 1 more_evidence / 91 proposed. 60 A/B reasons refused by finding_dispositions.validate (42 missing rerun, 20 class false_alarm): proposals need rewriting by the fund loop. 3 held for unverified quotes.
+- Group C (check misfires, rule_problem): owner ruled repair the checks, not dispositions. Merged into ensemble-fp-experiment: 37fa881 (A04/E01 + cost_conservation + fv_conservation anchor on the filed total's cash basis; PP02 distinct-member broad version; F20 raw source rows), 59e8629 (A01 report-date rollups, prefix child match, one context per filing; B01 current-period leaves, skip acquisition-date-only contexts), 6d3a5ba (pik_printed bps margins, benchmark-in-own-cell, floating PIK leg). Measured on all 66 accepted sandboxes by the worktree agents: A04 -35/+0, cost -10/+0, fv -3/+0, F20 -1/+0, PP02 -65 (56 outside its reason, none with a real-error verdict)/+0, A01 -16/+0, B01 -83/+9 (the 9 are current leaves without value previously masked by comparative rows; e.g. 1920145 30-36 contexts with principal, no FV), pik_printed -51 rows/+0. Targeted tests: 518 passed (8 files). No full suite, rebuild, semantic diff or re-attestation yet.
+- Not merged: B02 distinct-member repair (would clear 4 real-error verdicts: aglf 2026-03-31, rfbne 2025-12-31, rf26c 2025-12-31, spxf 2025-12-31); extractor whole-coupon PIK (branch pik-whole-coupon-repair c8359c7, opt-in wrapper key, owner decision pending on HPS Corporate Lending and other funds); F16 annualisation (branch f16-annualise-ytd-ratio cf49e49, 130 funds / 646 fund-quarters, owner decision on convention pending).
+- Apollo (0001837532, sandbox nvapf) check before the B01 merge: current no-value leaves are mostly undrawn commitments (165 zero/negative cost). Unpublished positions found: SK Neptune Husky Group Sarl (Heubach) 9.588M par, ~9.4M cost, no FV tagged, every quarter 2024-12-31..2026-06-30; Material Holdings second tranche ~1.66M par (2025-03-31..2025-12-31). For the fund loop. Queries: scratch/2026-11-04_check_repairs/apollo_b01*.sql.
+- Also committed 1ad291d (2026-10-20 NAV alias fill from AssetsNet/MembersEquity, previously uncommitted).
+
+
+### 2026-11-04 - NII ratio on one annualised basis (owner queue f16-income-ratio-printed-not-annualised); branch f16-annualise-ytd-ratio, NOT merged
+- `pipeline/extract_companyfacts.py`: a ratio (`income_yield_pct`, InvestmentCompanyInvestmentIncomeLossRatio) is no longer split or averaged. Each fiscal period is classified from votes (same-start YTD pairs growing like a running total; a 3-month figure beside a YTD one; pairs whose earlier figure is under 1.5 pct do not vote; one-vote or tied periods take a fund default that needs two running periods). Running-total periods are annualised (x4/quarters, so a 10-K year is unchanged); all others are kept as filed. This also ends the old fallback that divided a 10-K-only annual ratio by four.
+- Blast radius, read-only on cached companyfacts (scratch/2026-11-04_check_repairs/f16/): 130 of 167 ratio funds, 646 fund-quarters change (2022+: 81 funds / 318 fq; manifest cohort 31 funds / 118 fq, 2022+ 23 / 60). v0.5 five: only Ares changes, 10 fq, all 2013-2021 10-K values that were divided by four. F16 FAIL 573 -> 215 (cohort 105 -> 48), no PASS -> FAIL. Residual misclassifications: CIK 17313, 1930679 (masked by wrapper), 2020354 (startup ramps of annualised filers); 5 funds left on an unannualised as-filed figure. Wrapper figure_corrections for income_yield_pct on running-total filers carry the unannualised printed value and would need annualising if merged.
+- Tests: `tests/test_income_ratio_duration.py` (5 new, 1 rewritten), `tests/test_fourth_quarter_income.py` (ratio no longer spread). No rebuild, export, semantic diff or full suite.
+
+### 2026-11-04 - F16 convention approved; per-fund as-filed override (same branch, NOT merged)
+- Owner approved income_yield_pct = annualised year-to-date for every fund. New opt-in highlights-wrapper key `income_ratio_as_filed` {from_period_start?, evidence} (schema + `fund_highlights_wrapper.income_ratio_as_filed_from`, read by `extract_companyfacts._extract_bdc_balance_sheet`) keeps the ratio as filed from that fiscal period.
+- Set for 0001930679 (all periods), 0002020354 (all; new wrapper), 0000017313 (from 2022-04-01; new wrapper, plus figure corrections 2022-09-30 12.07 and 2022-12-31 13.03 from the restated annualised comparatives). Existing income_yield_pct figure corrections all agree with the new basis (1930679 4.60/8.05/9.59 are printed annualised); none changed.
+- Re-measure: 130 funds / 642 fund-quarters change; false positives 0 on filing-level wording; 5 funds remain on an unannualised as-filed figure (1512931, 1817825, 1890107, 2031750, 2061174; 15 fq). F16 FAIL 573 -> 215. Tests: +5 in test_income_ratio_duration.py.
+
+
+### 2026-11-04 - Whole-coupon PIK: pik_printed repair and opt-in extraction rule (D-232)
+- Check (pipeline/candidate_rules.py, commit a5809b6): pik_printed D-232 exemption reads basis-point margins (S + 1075 PIK), a benchmark in its own cell (EURIBOR | 10.00% PIK) and the floating PIK leg (SOFR + 2.00% PIK + 5.00% R%: pik_rate = R - 5.00). On 66 accepted sandboxes: Crescent 38 rows / 9 qtrs, Bain 0001899017 9 / 7, Commonwealth Vardiman 4 / 2 cleared; nothing added; Continental Battery stays.
+- Extractor: new pipeline/whole_coupon_pik.py, called in staging_bdc after the field-status overlay; new wrapper key source_encodings.pik_margin_reading ["whole_coupon"] (source_encodings.py, wrapper_v3 schema); financial_conventions.prepare reads the transform pik_rate:whole_coupon_printed as all-in (cash leg 0). Opt-in, set for 0001633336, 0001885968, 0001674760, 0001841514, 0001899017. Not a default: TPG Twin Brook 0001913724 prints the same form and its par grows by margin/4.
+- Measured (5-fund sandboxes pkw1104b/c, worktree): with the 186 whole-coupon correction lines removed the extractor reproduces 130 of 145 corrected rows (163 lines redundant); with corrections kept, identical to accepted sandboxes except 4 Crescent rows (Mario Purchaser last-out 2025-03-31 fixed to 15.17 / cash 0; smarTours x2, Action Signature newly whole-coupon). Row corrections not edited.
+- Blast radius (not opted in): HPS Corporate Lending, HPS CCS, Goldman BDC, GS PMMC II, GS Private Credit, North Haven PIF print the form with par growing by coupon/4 on many rows; owner decision. Tests: 431 targeted passed. No unified rebuild, no export, no publish.

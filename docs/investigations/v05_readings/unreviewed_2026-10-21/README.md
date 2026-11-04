@@ -30,3 +30,5 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Golub Capital BDC 4, Inc. | 3 | 3 | 0 | 0 | [Report](0001901612.json) / [independent review](reviews/0001901612.json) |
 | Nuveen Churchill Private Capital Income Fund | 1 | 1 | 0 | 0 | [Report](0001911066.json) / [independent review](reviews/0001911066.json) |
 | BlackRock Private Credit Fund | 14 | 14 | 0 | 0 | [Report](0001902649.json) / [independent review](reviews/0001902649.json) |
+
+Paused at owner request on 2026-10-21. HPS Corporate Capital Solutions (0001989817): investigation saved for 13 findings; independent review pending. 234 of 403 selected findings independently reviewed; 169 remain, including those 13. No ledger resolutions or fund acceptance implied.
