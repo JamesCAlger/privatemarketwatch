@@ -269,6 +269,48 @@ class TestA01SubtotalArithmetic:
         assert [r.status for r in results] == ["pass"]
         assert "1/1 rollups" in results[0].message
 
+    @staticmethod
+    def _tree(rollup_key, rollup_fv, leaves):
+        rows = [{"source_wrapper_disposition": "mixed_category_rollup", "source_wrapper_family": "mixed",
+                 "source_wrapper_parent_key": rollup_key, "source_fair_value": rollup_fv}]
+        rows += [{"source_wrapper_disposition": "mixed_position_leaf", "source_wrapper_family": "mixed",
+                  "source_wrapper_parent_key": key, "source_fair_value": fv} for key, fv in leaves]
+        return check_A01_subtotal_arithmetic(_source_detail(rows))
+
+    def test_issuer_name_text_containing_the_rollup_key_is_not_a_child(self):
+        """Fidelity Private Credit 2023-06-30: the 'investments' total took as its only child the
+        money fund 'Fidelity Investments Money Market ...'; BCP Special Opportunities: 'media'
+        took 'Sovos Brands Intermediate' rows. Children must sit under the key in the path."""
+        results = self._tree("investments", "1216949424", [
+            ("affiliated mutual funds money market mutual funds fidelity investments money market", "1353796"),
+        ])  # no child: nothing to compare
+        assert [r.status for r in results] == ["pass"]
+        assert results[0].detail is None or results[0].detail.empty
+        results = self._tree("media", "9198672", [
+            ("media nep group inc first lien term loan", "4088620"),
+            ("media streamland media midco llc first lien term loan", "5110052"),
+            ("food products sovos brands intermediate inc first lien term loan", "497840"),
+            ("insurance alliant holdings intermediate llc first lien term loan", "2109604"),
+        ])
+        assert [r.status for r in results] == ["pass"]
+
+    def test_a_member_that_repeats_its_heading_or_drops_a_space_is_still_a_child(self):
+        results = self._tree("investments non controlled secured debt aerospace", "10000000", [
+            ("investments non controlled secured debt aerospace acme term loan", "6000000"),
+            ("investments investments non controlled secured debt aerospace bleriot term loan", "3000000"),
+            ("investments non controlled secured debt aerospacered ventures term loan", "1000000"),
+        ])
+        assert [r.status for r in results] == ["pass"]
+
+    def test_a_rollup_missing_a_child_under_its_key_still_fails(self):
+        """False-positive guard: the structural match must not hide a real shortfall."""
+        results = self._tree("media", "9198672", [
+            ("media nep group inc first lien term loan", "4088620"),
+            ("food products sovos brands intermediate inc first lien term loan", "5110052"),
+        ])
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].detail["child_sum_fv"].tolist() == [4088620.0]
+
     def test_a_current_subtotal_that_does_not_tie_still_fails_beside_a_comparative_one(self):
         """False-positive guard: dropping comparative subtotals must not hide a current mismatch."""
         base = {"report_date": "2023-03-31", "source_wrapper_family": "debt"}

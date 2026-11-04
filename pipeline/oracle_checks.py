@@ -149,6 +149,14 @@ def _make_result(
 # CATEGORY A: ARITHMETIC INVARIANTS
 # ===================================================================
 
+def _a01_child_key_pattern(parent_key: str) -> str:
+    """Regex for leaf keys under a rollup key: the key at the start, optionally after a repeat
+    of the key's own leading words (filer members that print a heading twice)."""
+    words = parent_key.split()
+    repeats = "|".join(re.escape(" ".join(words[:i])) for i in range(len(words), 0, -1))
+    return (f"(?:(?:{repeats}) )?" if repeats else "") + re.escape(parent_key)
+
+
 def check_A01_subtotal_arithmetic(
     source_detail_df: pd.DataFrame,
     *,
@@ -201,12 +209,16 @@ def check_A01_subtotal_arithmetic(
             if not parent_key:
                 continue
 
-            # Find child leaves whose parent_key contains this rollup's parent_key
-            child_mask = (
-                _col_str(group_leaves, "source_wrapper_parent_key").str.contains(
-                    re.escape(parent_key), na=False, regex=True
-                )
-            )
+            # Child leaves sit under this rollup in the key path: the leaf key starts with the
+            # rollup key. A substring test matched issuer text further down the path
+            # ('investments' in 'Fidelity Investments Money Market ...', 'media' in 'Sovos Brands
+            # Intermediate'; owner ruling 2026-11-04, reason a01-parent-key-matches-issuer-name-text).
+            # Two filer spellings stay children: a member that repeats the leading heading words
+            # ('Debt Investments Debt Investments Manufacturing ...', 'Investments Investments
+            # Non-Controlled ...'), and one printed without the space between heading and issuer
+            # ('MediaRed Ventures'), so no word break is required after the key.
+            child_mask = _col_str(group_leaves, "source_wrapper_parent_key").str.match(
+                _a01_child_key_pattern(parent_key), na=False)
             # ... and that belong to the rollup's own period. A filing carries the prior period's
             # rows and subtotals too; summing both periods' rows against one period's subtotal
             # failed every subtotal of a filer whose subtotal members carry no period in their
