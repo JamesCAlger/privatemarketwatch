@@ -53,6 +53,30 @@ MAX_FV_RATIO_IDENTIFIER = 50.0     # Tiers B1/B2/C: tighter
 # Maximum maturity date gap (days) for C/D/E tier matches
 MAX_MATURITY_GAP_DAYS = 365
 
+# Columns the matcher reads from the unified holdings (every name the tier SQL
+# and matching_contract reference).  match_positions registers only these, so
+# `unified_base` and the tiers' `SELECT *` / `u.*` CTEs do not carry the
+# provenance columns (the source-facts JSON and ~65 others no tier reads).  On a
+# full build those wide CTEs were the Tier B memory peak (2026-11-05 trace).
+# A column added to a tier must be added here; a missing name is a DuckDB
+# binder error, not a silent change.
+MATCH_UNIFIED_COLUMNS = (
+    "source", "cik", "entity_name", "accession_number", "filing_date", "report_date",
+    "issuer_name", "instrument_description", "cusip", "fair_value", "cost", "cost_reported",
+    "shares_held", "principal_amount", "principal_amount_usd", "asset_category",
+    "issuer_category", "index_classification", "asset_class", "interest_rate", "basis_spread",
+    "coupon_type", "maturity_date", "maturity_precision", "bdc_investment_identifier",
+    "bdc_dimensions_raw", "nport_holding_id", "is_subsidiary", "entity_id", "lien_position",
+    "position_key", "position_id", "row_id", "row_id_basis",
+)
+
+# Raw BDC columns Tier A reads (_match_bdc_within_filing).
+TIER_A_RAW_COLUMNS = (
+    "cik", "entity_name", "accession_number", "form_type", "filing_date", "report_date",
+    "period", "investment_identifier", "fair_value", "cost", "principal_amount",
+    "interest_rate", "basis_spread", "shares_held",
+)
+
 # Tokens that do not make a position_key independently identifying.  These
 # are useful instrument descriptors, but a key made only of these words can
 # merge unrelated issuers into one position chain.
@@ -2253,13 +2277,19 @@ def match_positions(
 
     if bdc_raw_df is None:
         logger.info("Loading raw BDC holdings from %s", BDC_HOLDINGS_FILE.name)
-        bdc_raw_df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
+        bdc_raw_df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str,
+                                 usecols=lambda c: c in TIER_A_RAW_COLUMNS)
         logger.info("  Loaded %d raw BDC rows", len(bdc_raw_df))
+    else:
+        bdc_raw_df = bdc_raw_df[[c for c in bdc_raw_df.columns if c in TIER_A_RAW_COLUMNS]]
 
     if unified_df.empty:
         logger.warning("Empty unified holdings -- nothing to match")
         return pd.DataFrame(columns=MATCH_COLUMNS)
 
+    # Narrow before the sort copy and the DuckDB registration (see
+    # MATCH_UNIFIED_COLUMNS).  Column order is kept.
+    unified_df = unified_df[[c for c in unified_df.columns if c in MATCH_UNIFIED_COLUMNS]]
     if "principal_amount_usd" not in unified_df.columns:
         unified_df = unified_df.copy()
         unified_df["principal_amount_usd"] = unified_df.get("principal_amount", "")

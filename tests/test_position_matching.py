@@ -3178,3 +3178,74 @@ class TestSupplementaryEdgeOrder:
         assert pm.BIPARTITE_CAND_ORDER == "ORDER BY ALL"
         source = inspect.getsource(pm._bipartite_dedup)
         assert 'f"SELECT * FROM {cand_table} {BIPARTITE_CAND_ORDER}"' in source
+
+
+# ---------------------------------------------------------------------------
+# Matcher input narrowing (2026-11-05 finalizer memory investigation)
+# ---------------------------------------------------------------------------
+
+class TestMatcherInputNarrowing:
+    """match_positions registers only MATCH_UNIFIED_COLUMNS / TIER_A_RAW_COLUMNS.
+
+    The tiers' wide `SELECT *` CTEs over a full-width unified_base were the
+    finalizer's memory peak. Narrowing must not change any match.
+    """
+
+    @staticmethod
+    def _fixture():
+        bdc_raw = _make_bdc_raw([
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Acme Corp - Loan", "fair_value": "1000000", "cost": "950000"},
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Acme Corp - Loan", "fair_value": "980000", "cost": "950000"},
+        ])
+        rows = []
+        for date, fv in (("2023-12-31", "980000"), ("2024-03-31", "990000"), ("2024-06-30", "1000000")):
+            rows.append({"source": "bdc", "cik": "100", "entity_name": "TestBDC", "report_date": date,
+                         "issuer_name": "Acme Corp", "fair_value": fv, "index_classification": "DIRECT_LENDING",
+                         "bdc_investment_identifier": "Acme Corp - Loan", "maturity_date": "2029-01-01"})
+            rows.append({"source": "bdc", "cik": "100", "entity_name": "TestBDC", "report_date": date,
+                         "issuer_name": "Beta Holdings, LLC (2nd Lien)" if date != "2024-06-30" else "Beta Holdings LLC",
+                         "fair_value": "500000", "cusip": "123456AB7" if date == "2023-12-31" else "",
+                         "index_classification": "DIRECT_LENDING", "maturity_date": "2030-01-01"})
+            rows.append({"source": "nport", "cik": "200", "entity_name": "Fund", "report_date": date,
+                         "issuer_name": "Gamma Inc", "fair_value": "250000", "cusip": "987654ZZ1",
+                         "index_classification": "DIRECT_LENDING", "maturity_date": "2028-06-30"})
+        return _make_unified(rows), bdc_raw
+
+    def test_extra_columns_do_not_change_matches(self):
+        from pipeline.position_matching import MATCH_UNIFIED_COLUMNS, TIER_A_RAW_COLUMNS
+        unified, bdc_raw = self._fixture()
+        baseline = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        wide_u, wide_raw = unified.copy(), bdc_raw.copy()
+        for c in wide_u.columns:
+            if c not in MATCH_UNIFIED_COLUMNS:
+                wide_u[c] = '{"junk": "' + c + '"}'
+        for c in wide_raw.columns:
+            if c not in TIER_A_RAW_COLUMNS:
+                wide_raw[c] = "junk"
+        wide = match_positions(unified_df=wide_u, bdc_raw_df=wide_raw)
+        assert len(baseline) > 0
+        pd.testing.assert_frame_equal(baseline, wide)
+
+    def test_no_tier_references_a_column_outside_the_whitelist(self):
+        import re
+        from pathlib import Path
+        from pipeline import position_matching as pm
+        from pipeline.unified_holdings import UNIFIED_COLUMNS
+        root = Path(pm.__file__).parent
+        source = (root / "position_matching.py").read_text(encoding="utf-8")
+        head, rest = source.split("MATCH_UNIFIED_COLUMNS = (", 1)
+        source = head + rest.split(")", 1)[1]
+        source += (root / "matching_contract.py").read_text(encoding="utf-8")
+        outside = [c for c in UNIFIED_COLUMNS if c not in pm.MATCH_UNIFIED_COLUMNS
+                   and re.search(r"\b" + re.escape(c) + r"\b", source)]
+        assert outside == []
+
+    def test_sort_and_row_number_keys_are_kept(self):
+        """The input order (stable sort) and _row_id keys must survive narrowing."""
+        from pipeline import position_matching as pm
+        assert set(pm.UNIFIED_SORT_COLUMNS) <= set(pm.MATCH_UNIFIED_COLUMNS)
+        assert {"cost_reported", "row_id", "maturity_precision"} <= set(pm.MATCH_UNIFIED_COLUMNS)

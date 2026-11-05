@@ -100,6 +100,44 @@ def test_parquet_duplicate_multiplicity_is_validated(tmp_path):
             verify_pair(path, connection)
 
 
+def _sector_audit_pair(tmp_path, n=12):
+    path = tmp_path / 'sector_enrichment_audit.csv'
+    rows = ''.join('R%02d,D%d,Value %d,applied,inferred\n' % (i, i % 3, i) for i in range(n))
+    path.write_text('row_id,decision_id,value,status,derivation\n' + rows + 'R00,D0,Value 0,applied,inferred\n')
+    return path
+
+
+def test_partitioned_verify_accepts_an_equal_pair(tmp_path, monkeypatch):
+    from pipeline.programme import artifacts
+    monkeypatch.setattr(artifacts, 'VERIFY_PARTITION_ROWS', 4)
+    path = _sector_audit_pair(tmp_path)
+    assert len(artifacts._verify_partitions(artifacts.SCHEMAS[path.name], 13)) == 4
+    with duckdb.connect() as connection:
+        assert finalize_pair(path, connection) == {'rows': 13, 'columns': 5, 'typed_multiset_difference': 0}
+
+
+@pytest.mark.parametrize('alteration', [
+    "SELECT * REPLACE (CASE WHEN row_id = 'R07' THEN 'changed' ELSE value END AS value) FROM read_parquet(?)",
+    'SELECT DISTINCT * FROM read_parquet(?)',
+    "SELECT * FROM read_parquet(?) WHERE row_id <> 'R11'",
+])
+def test_partitioned_verify_still_rejects_a_differing_pair(tmp_path, monkeypatch, alteration):
+    from pipeline.programme import artifacts
+    monkeypatch.setattr(artifacts, 'VERIFY_PARTITION_ROWS', 4)
+    path = _sector_audit_pair(tmp_path)
+    with duckdb.connect() as connection:
+        finalize_pair(path, connection)
+        connection.execute('CREATE TABLE altered AS ' + alteration, [str(path.with_suffix('.parquet'))])
+        connection.execute("COPY altered TO '" + path.with_suffix('.parquet').as_posix() + "' (FORMAT PARQUET)")
+        with pytest.raises(ContractError):
+            verify_pair(path, connection)
+
+
+def test_verify_without_text_key_is_one_partition():
+    from pipeline.programme import artifacts
+    assert artifacts._verify_partitions(artifacts.SCHEMAS['identity_aliases.csv'], 10**7) == ('',)
+
+
 @pytest.mark.parametrize('layer', ['raw_bdc_staging', 'layer_c', 'agent_b2'])
 def test_any_admitted_rule_execution_error_blocks_seal(tmp_path, layer):
     path = tmp_path / 'agent_fix_application_audit.csv'
