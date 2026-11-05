@@ -81,7 +81,10 @@ def typed_query(path, schema):
     if header != list(schema):
         raise ContractError('Wrong ordered CSV columns: ' + str(path))
     return ('SELECT ' + ', '.join(_contract_cast_expr(name, kind) for name, kind in schema.items()) +
-            ' FROM read_csv(' + literal(Path(path).as_posix()) + ', header=true, all_varchar=true)')
+            # Quote and escape are named, not sniffed: a file whose first quoted field lies past
+            # the sniff sample was read with no quoting and split on the comma (2026-11-05).
+            ' FROM read_csv(' + literal(Path(path).as_posix()) + ", header=true, all_varchar=true,"
+            " delim=',', quote='\"', escape='\"')")
 
 
 def finalize_pair(path, connection):

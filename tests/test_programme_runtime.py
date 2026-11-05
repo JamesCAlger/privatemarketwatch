@@ -82,6 +82,20 @@ def test_empty_required_artifact_gets_complete_typed_companion(tmp_path):
         assert schema[5][:2] == ('occurrence_count', 'BIGINT')
 
 
+def test_quoted_comma_after_the_sniff_sample_is_one_field(tmp_path):
+    # 2026-11-05 rebuild: identity_aliases.csv had no quoted field in DuckDB's 20,480-row sniff
+    # sample, so the quote was detected as empty and a later quoted comma split the row.
+    path = tmp_path / 'identity_aliases.csv'
+    rows = ['position,plain-%d,POS-%d,id-%d' % (i, i, i) for i in range(25000)]
+    rows.append('position,"0001377936|reporting_entity=saratoga investment corp. clo 2013-1, ltd.",POS-X,id-X')
+    path.write_text('kind,scope,legacy_id,identity_id\n' + '\n'.join(rows) + '\n')
+    with duckdb.connect() as connection:
+        assert finalize_pair(path, connection)['rows'] == 25001
+        scope = connection.execute("SELECT scope FROM read_parquet(?) WHERE legacy_id = 'POS-X'",
+                                   [str(path.with_suffix('.parquet'))]).fetchone()[0]
+    assert scope == '0001377936|reporting_entity=saratoga investment corp. clo 2013-1, ltd.'
+
+
 def test_auxiliary_bad_numeric_value_fails_instead_of_becoming_null(tmp_path):
     path = tmp_path / 'entity_lookup.csv'
     path.write_text('entity_id,canonical_name,normalized_name,issuer_name_variant,source,occurrence_count,cluster_method,cusip,lei\nE1,A,A,A,bdc,not-a-count,exact,,\n')
