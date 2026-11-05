@@ -113,7 +113,10 @@ def verify_pair(path, connection):
                                          ') UNION ALL (' + companion + ' EXCEPT ALL ' + side + '))').fetchone()[0]
     if difference:
         raise ContractError('CSV/Parquet values differ: ' + path.name)
-    return {'rows': rows, 'columns': len(schema), 'typed_multiset_difference': 0}
+    # Keep the Parquet count as the last statement, as before: a connection holds the files
+    # of its last result open, and callers rewrite the CSV afterwards (Windows locks it).
+    return {'rows': connection.execute('SELECT count(*) FROM (' + companion_query + ')').fetchone()[0],
+            'columns': len(schema), 'typed_multiset_difference': 0}
 
 
 # Rows per EXCEPT ALL in verify_pair. DuckDB's EXCEPT ALL holds both sides in memory and
