@@ -104,12 +104,33 @@ def verify_pair(path, connection):
     if [(row[0], row[1]) for row in description] != list(schema.items()):
         raise ContractError('Wrong typed companion schema: ' + path.name)
     # EXCEPT ALL preserves duplicate multiplicity. Typed dates remove only representational differences.
-    difference = connection.execute('SELECT count(*) FROM ((' + query + ' EXCEPT ALL ' + companion_query +
-                                    ') UNION ALL (' + companion_query + ' EXCEPT ALL ' + query + '))').fetchone()[0]
+    rows = connection.execute('SELECT count(*) FROM (' + companion_query + ')').fetchone()[0]
+    difference = 0
+    for where in _verify_partitions(schema, rows):
+        side, companion = ('SELECT * FROM (' + query + ')' + where,
+                           'SELECT * FROM (' + companion_query + ')' + where)
+        difference += connection.execute('SELECT count(*) FROM ((' + side + ' EXCEPT ALL ' + companion +
+                                         ') UNION ALL (' + companion + ' EXCEPT ALL ' + side + '))').fetchone()[0]
     if difference:
         raise ContractError('CSV/Parquet values differ: ' + path.name)
-    return {'rows': connection.execute('SELECT count(*) FROM (' + companion_query + ')').fetchone()[0],
-            'columns': len(schema), 'typed_multiset_difference': 0}
+    return {'rows': rows, 'columns': len(schema), 'typed_multiset_difference': 0}
+
+
+# Rows per EXCEPT ALL in verify_pair. DuckDB's EXCEPT ALL holds both sides in memory and
+# does not spill (2026-11-05: about 2 GB at 98K holdings rows). Splitting the check by a
+# hash of one text key bounds that. A row has the same key value on both sides, so it
+# lands in the same part: the multiset difference is zero overall iff it is zero in every
+# part. Same verdict, more scans.
+VERIFY_PARTITION_ROWS = 100_000
+_VERIFY_PARTITION_KEYS = ('row_id', 'position_id')
+
+
+def _verify_partitions(schema, rows):
+    key = next((k for k in _VERIFY_PARTITION_KEYS if schema.get(k) == 'VARCHAR'), None)
+    parts = -(-rows // VERIFY_PARTITION_ROWS) if key else 1
+    if parts <= 1:
+        return ('',)
+    return tuple(' WHERE hash("%s") %% %d = %d' % (key, parts, part) for part in range(parts))
 
 
 def verify_audit(path, connection):
