@@ -240,7 +240,15 @@ def compute_acceptance(
     over_inclusion_fv_m = sum(over_by_fund.values())
 
     # --- source-reconciliation blockers (review queue, blocker lane) ---
+    # A blocker the findings ledger has resolved (disposition, false alarm, fix) is not
+    # blocking (owner ruling 2026-11-06). One the ledger does not know, or every blocker when
+    # the ledger is missing, still counts: the check fails closed.
+    findings_path = findings_ledger_path or FINDINGS_LEDGER_FILE
+    resolved_ids = ({row.get("review_id") for row in _read_rows(findings_path)
+                     if row.get("state") in RESOLVED_FINDING_STATES} - {None, ""}
+                    if findings_path.exists() else set())
     blockers: dict[str, dict[str, float]] = {}
+    n_blockers_raw = n_blockers_resolved = 0
     if queue_path.exists():
         for row in _read_rows(queue_path):
             if (
@@ -250,6 +258,10 @@ def compute_acceptance(
             ):
                 cik = str(row.get("cik") or "").zfill(10)
                 if cik in cohort:
+                    n_blockers_raw += 1
+                    if row.get("review_id") in resolved_ids:
+                        n_blockers_resolved += 1
+                        continue
                     b = blockers.setdefault(cik, {"n": 0, "fv_m": 0.0})
                     b["n"] += 1
                     b["fv_m"] += _f(row.get("fv_at_risk_m"))
@@ -310,7 +322,7 @@ def compute_acceptance(
     # --- outstanding findings (sign-off quarter, every unresolved state) ---
     # Scope comes from the thresholds file; absent, it is the whole cohort. A missing
     # ledger is UNMEASURED (None) so the check fails closed, like n_stale above.
-    findings_path = findings_ledger_path or FINDINGS_LEDGER_FILE
+    # findings_path is set with the source blockers above.
     findings_scope = sorted(str(c).zfill(10) for c in
                             (thresholds.get("findings_scope") or {}).get("ciks") or cohort)
     findings_measured = findings_path.exists()
@@ -398,6 +410,8 @@ def compute_acceptance(
         "source_blockers": {
             "n_funds": len(blockers),
             "n_items": sum(int(b["n"]) for b in blockers.values()),
+            "n_items_raw": n_blockers_raw,
+            "n_items_resolved": n_blockers_resolved,
             "blocking_fv_m": round(blocking_fv_m, 3),
             "blocking_fv_share_pct": _share(blocking_fv_m),
         },
@@ -509,7 +523,8 @@ def extend_acceptance(result, observations, *, thresholds_path=None,bound_legacy
     checks=[dict(row,status="PASS" if row["pass"] else "FAIL")
             for row in result["checks"] if row["id"]!="fund_coverage"]
     dependencies={"reconcile_rate":{"ledger"},"flagged_fv_share":{"ledger"},
-        "source_blocking_fv_share":{"queue"},"verified_fv_share":{"ledger","queue"},
+        "source_blocking_fv_share":{"queue","findings_ledger"},
+        "verified_fv_share":{"ledger","queue","findings_ledger"},
         "promoted_rule_drift":{"audit"},"promoted_rule_health":{"audit","admission"},
         "over_inclusion_fv_share":{"ledger"},"unfinished_investigations":{"investigate"},
         "outstanding_findings":{"findings_ledger"}}

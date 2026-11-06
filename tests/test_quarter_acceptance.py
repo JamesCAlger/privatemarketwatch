@@ -177,6 +177,54 @@ def test_blockers_put_fund_under_review_and_fv_weighted(tmp_path):
     assert sb["blocking_fv_share_pct"] == round(100.0 * 20.0 / 300.0, 3)
 
 
+def _blocker_setup(tmp_path, ledger_states: dict[str, str] | None):
+    # Fund 2 has two source blockers (RVQ_B1 12.5M, RVQ_B2 7.5M); ledger_states maps review_id -> state.
+    kw = _setup(
+        tmp_path,
+        ledger_rows=[_cons_row(c, "pass") for c in ("0000000001", "0000000002", "0000000003")],
+        queue_rows=[
+            {"review_id": "RVQ_B1", "lane": "blocker", "engine": "source_recon",
+             "cik": "0000000002", "report_date": Q, "fv_at_risk_m": "12.5"},
+            {"review_id": "RVQ_B2", "lane": "blocker", "engine": "source_recon",
+             "cik": "0000000002", "report_date": Q, "fv_at_risk_m": "7.5"},
+        ],
+    )
+    path = tmp_path / "findings_ledger.csv"
+    if ledger_states is not None:
+        _csv(path, FINDINGS_HEADER, [dict(_finding(0, state, cik="0000000002", lane="blocker"),
+                                          review_id=rid, engine="source_recon")
+                                     for rid, state in ledger_states.items()])
+    return dict(kw, findings_ledger_path=path)
+
+
+def test_dispositioned_blockers_do_not_hold_a_fund_under_review(tmp_path):
+    # Owner ruling 2026-11-06: a blocker the findings ledger has resolved is not blocking.
+    kw = _blocker_setup(tmp_path, {"RVQ_B1": "dispositioned_not_applicable",
+                                   "RVQ_B2": "dispositioned_as_filed"})
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    assert {f["cik"]: f["tier"] for f in res["_funds"]}["0000000002"] == "verified"
+    sb = res["metrics"]["source_blockers"]
+    assert sb["n_items"] == 0 and sb["blocking_fv_m"] == 0.0
+    assert sb["n_items_raw"] == 2 and sb["n_items_resolved"] == 2
+    assert res["metrics"]["cohort"]["verified_fv_share_pct"] == 100.0
+
+
+def test_one_open_blocker_still_holds_the_fund_under_review(tmp_path):
+    # False-positive guard: resolving one blocker must not clear a fund with another open one,
+    # and a blocker the ledger does not know is outstanding.
+    for states in ({"RVQ_B1": "dispositioned_as_filed", "RVQ_B2": "open"},
+                   {"RVQ_B1": "dispositioned_as_filed"}):
+        res = qa.compute_acceptance(target_quarter=Q, **_blocker_setup(tmp_path, states))
+        assert {f["cik"]: f["tier"] for f in res["_funds"]}["0000000002"] == "under_review"
+        assert res["metrics"]["source_blockers"]["blocking_fv_m"] == 7.5
+
+
+def test_blockers_all_count_when_the_findings_ledger_is_missing(tmp_path):
+    res = qa.compute_acceptance(target_quarter=Q, **_blocker_setup(tmp_path, None))
+    assert {f["cik"]: f["tier"] for f in res["_funds"]}["0000000002"] == "under_review"
+    assert res["metrics"]["source_blockers"]["n_items"] == 2
+
+
 def test_promoted_rule_drift_fails_contract(tmp_path):
     kw = _setup(
         tmp_path,
