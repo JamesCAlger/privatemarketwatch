@@ -523,6 +523,10 @@ _B02_TERM_COLUMNS = ("accounting_scope_id", "maturity_date", "interest_rate_repo
                      "pik_rate", "principal_amount", "shares_held", "fair_value")
 
 
+# The word a filer adds to the member of a second printed twin line ('... One', '... Two').
+_TWIN_WORD = r"\b(?:One|Two|Three|Four|Five)\b"
+
+
 def _twin_line_filers() -> frozenset[str]:
     """Filers whose wrapper declares twin_lines_on_distinct_members (source_encodings)."""
     from pipeline.source_encodings import load_encodings
@@ -575,6 +579,27 @@ def check_B02_unique_position_keys(
                 and "bdc_investment_identifier" in group.columns):
             terms = terms + ["bdc_investment_identifier"]
         identity = group.loc[non_empty.index, terms].astype(str).assign(_key=non_empty)
+        # Undrawn twin lines (owner ruling 2026-11-10, b02-twin-undrawn-lines-printed-separately):
+        # a lender prints two undrawn lines of one borrower with the same terms, no par and the
+        # same (often zero) value, each on its own member, the second named like the first plus
+        # 'One' ('Galanthus ... 12/24/2031' and '... 12/24/2031 One'), or told apart by the
+        # acquisition date (26North, Coding Solutions 8/7/2024 and 5/15/2025). With no par every
+        # figure B02 compares is equal, so for undrawn rows (no par, no shares, fair value 0 or
+        # below) the twin word and the acquisition date join the identity, for every filer.
+        # Not the member as a whole and not the cost: a fact repeated on a second dimension path
+        # has its own member text and may carry the cost on one path only, so neither separates a
+        # repeated line from a twin. A fact repeated on one member, or on two paths without a
+        # twin word or a different acquisition date, still fails. Drawn rows, equity and positive
+        # values are unchanged.
+        if "bdc_investment_identifier" in group.columns and key_col != "bdc_investment_identifier":
+            rows = group.loc[non_empty.index]
+            undrawn = (_col_float(rows, "principal_amount").eq(0.0) & _col_float(rows, "shares_held").eq(0.0)
+                       & _col_float(rows, "fair_value").le(0.0))
+            member = _col_str(rows, "bdc_investment_identifier")
+            twin_word = member.str.findall(_TWIN_WORD).str.join(" ")
+            acquired = _col_str(rows, "bdc_acquisition_date").str.strip().str[:10]
+            identity = identity.assign(_twin_word=twin_word.where(undrawn, ""),
+                                       _acquired=acquired.where(undrawn, ""))
         dupes = non_empty[identity.duplicated(keep=False)]
         status = "pass" if dupes.empty else "fail"
 

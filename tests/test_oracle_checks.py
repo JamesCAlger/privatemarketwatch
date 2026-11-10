@@ -589,6 +589,54 @@ class TestB02UniquePositionKeys:
         results = check_B02_unique_position_keys(self._twins(self.KITE + " One"), twin_line_filers=frozenset())
         assert [r.status for r in results] == ["fail"]
 
+    # Owner ruling 2026-11-10 (b02-twin-undrawn-lines-printed-separately): undrawn twin lines.
+    GALANTHUS = ("High Tech Industries Galanthus Group Holdings, Limited First Lien Senior Secured Loan"
+                 " - Delayed Draw Maturity Date 12/24/2031")
+
+    def _undrawn(self, rows):
+        base = {"position_key": "galanthus group holdings delayed draw", "principal_amount": "",
+                "shares_held": "", "fair_value": "-28000", "cost": "-28000", "bdc_acquisition_date": ""}
+        return _holdings([{**base, **r} for r in rows])
+
+    def _status(self, holdings):
+        return [r.status for r in check_B02_unique_position_keys(holdings, twin_line_filers=frozenset())]
+
+    def test_undrawn_twin_named_one_passes(self):
+        """Bain 2025-12-31: '... 12/24/2031' and '... 12/24/2031 One', no par, -28 each."""
+        assert self._status(self._undrawn([{"bdc_investment_identifier": self.GALANTHUS},
+                                           {"bdc_investment_identifier": self.GALANTHUS + " One"}])) == ["pass"]
+
+    def test_undrawn_twins_told_apart_by_acquisition_date_pass(self):
+        """26North / AG Twin Brook Coding Solutions: two undrawn DDTLs bought 8/7/2024 and 5/15/2025."""
+        rows = [{"bdc_investment_identifier": "Coding Solutions DDTL | 8/7/2024 | 8/7/2031",
+                 "bdc_acquisition_date": "2024-08-07", "fair_value": "0", "cost": "-36000"},
+                {"bdc_investment_identifier": "Coding Solutions DDTL | 5/15/2025 | 8/7/2031",
+                 "bdc_acquisition_date": "2025-05-15", "fair_value": "0", "cost": "-27000"}]
+        assert self._status(self._undrawn(rows)) == ["pass"]
+
+    def test_undrawn_fact_on_one_member_twice_still_fails(self):
+        """Real error still fails: the same undrawn line repeated (same member, or a second path
+        without a twin word or another acquisition date)."""
+        same = [{"bdc_investment_identifier": self.GALANTHUS}, {"bdc_investment_identifier": self.GALANTHUS}]
+        assert self._status(self._undrawn(same)) == ["fail"]
+        second_path = [{"bdc_investment_identifier": self.GALANTHUS},
+                       {"bdc_investment_identifier": "Debt Investments " + self.GALANTHUS}]
+        assert self._status(self._undrawn(second_path)) == ["fail"]
+
+    def test_undrawn_rows_differing_only_by_cost_still_fail(self):
+        """False-positive guard: cost alone does not separate (a second path may carry it alone)."""
+        rows = [{"bdc_investment_identifier": self.GALANTHUS, "cost": "-25000"},
+                {"bdc_investment_identifier": "Debt " + self.GALANTHUS, "cost": "-26000"}]
+        assert self._status(self._undrawn(rows)) == ["fail"]
+
+    def test_drawn_twins_are_unchanged(self):
+        """A drawn line with par is outside the undrawn rule: equal figures on '... One' still fail
+        for an undeclared filer (as before the ruling)."""
+        rows = [{"bdc_investment_identifier": self.GALANTHUS, "principal_amount": "5000000", "fair_value": "4990000"},
+                {"bdc_investment_identifier": self.GALANTHUS + " One", "principal_amount": "5000000",
+                 "fair_value": "4990000"}]
+        assert self._status(self._undrawn(rows)) == ["fail"]
+
     def test_prefers_unified_position_key_when_present(self):
         holdings = _holdings([
             {"bdc_investment_identifier": "same raw id", "position_key": "acme corp term loan"},
