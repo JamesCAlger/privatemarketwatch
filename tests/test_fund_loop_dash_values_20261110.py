@@ -173,3 +173,13 @@ def test_a_printed_foreign_par_keeps_its_currency():
     hits = [r for r in _apollo_corrections() if "SumUp" in r["bdc_investment_identifier"]
             and r["field"] == "principal_amount_currency" and r["value"] == "USD"]
     assert not hits
+
+
+def test_ds010_is_narrowed_to_undrawn_lines_and_keeps_its_history():
+    from pipeline import finding_dispositions as fd
+    entry = next(e for e in fd.load() if e["disposition_id"] == "DS-010-1837532")
+    assert not fd.validate(entry)
+    assert entry["statement"].startswith("Position contexts with no fair value fact that are undrawn lines")
+    assert "two spellings" not in entry["statement"]
+    assert any("two spellings" in h["statement"] for h in entry["statement_history"])
+    assert entry["ciks"] == ["0001837532"] and entry.get("legacy_unscoped") is True
