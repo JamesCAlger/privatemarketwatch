@@ -461,7 +461,7 @@ DATABASE_URL = os.environ.get(
 # Frontend display cutoff -- exclude incomplete quarters from the frontend.
 # Set to None to include all available quarters.
 # ---------------------------------------------------------------------------
-INDEX_DISPLAY_END_QUARTER: str | None = "2026q1"
+INDEX_DISPLAY_END_QUARTER: str | None = "2026q2"
 
 # ---------------------------------------------------------------------------
 # N-PORT holdings extraction settings
