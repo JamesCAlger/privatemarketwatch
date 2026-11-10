@@ -24,7 +24,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c C103 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-C103-1993402",
@@ -46,7 +47,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c C103 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-C107-1508655",
@@ -69,7 +71,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c C107 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-C107-1913724",
@@ -100,7 +103,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c C107 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-C107-1950803",
@@ -129,7 +133,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c C107 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-C107-1993402",
@@ -158,7 +163,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py as1d C107 3",
    "decided_by": "check passed on sandbox as1d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-F28-1508655",
@@ -183,7 +189,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-F28-1913724",
@@ -208,7 +215,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-F28-1950803",
@@ -230,7 +238,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-F28-1993402",
@@ -253,7 +262,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-F28-2031750",
@@ -276,7 +286,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-X02-1508655",
@@ -298,7 +309,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py l4c 0001508655",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-X02-1950803",
@@ -320,7 +332,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py l4c 0001950803",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-X02-1993402",
@@ -345,7 +358,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py as1d 0001993402",
    "decided_by": "check passed on sandbox as1d; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-X06-1508655",
@@ -379,7 +393,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c X06 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-X06-1913724",
@@ -402,7 +417,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c X06 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE4-X06-1993402",
@@ -426,7 +442,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l4c X06 3",
    "decided_by": "check passed on sandbox l4c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   }
  ]
 }

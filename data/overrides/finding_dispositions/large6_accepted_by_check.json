@@ -23,7 +23,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b C103 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-C103-1901612",
@@ -55,7 +56,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b C103 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-C107-1702510",
@@ -86,7 +88,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b C107 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-C107-1901612",
@@ -116,7 +119,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b C107 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-C107-1916099",
@@ -143,7 +147,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py di1b C107 3",
    "decided_by": "check passed on sandbox di1b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-C107-1920453",
@@ -174,7 +179,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b C107 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-F28-1702510",
@@ -199,7 +205,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-F28-1786108",
@@ -224,7 +231,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-F28-1901612",
@@ -249,7 +257,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-F28-1916099",
@@ -272,7 +281,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-F28-1920453",
@@ -294,7 +304,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-X02-1901612",
@@ -317,7 +328,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py l6b 0001901612",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-X02-1920453",
@@ -341,7 +353,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py l6b 0001920453",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-X06-1786108",
@@ -364,7 +377,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b X06 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE6-X06-1920453",
@@ -386,7 +400,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l6b X06 3",
    "decided_by": "check passed on sandbox l6b; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   }
  ]
 }

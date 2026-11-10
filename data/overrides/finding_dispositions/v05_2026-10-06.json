@@ -20,7 +20,8 @@
    ],
    "quarters": [
     "all"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-002",
@@ -46,7 +47,8 @@
    ],
    "quarters": [
     "all"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-003-1287750",
@@ -73,7 +75,8 @@
    "quarters": [
     "2022-03-31",
     "2022-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-003-1803498",
@@ -100,7 +103,8 @@
    "quarters": [
     "2022-03-31",
     "2022-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-003-1812554",
@@ -129,7 +133,8 @@
     "2022-06-30",
     "2022-09-30",
     "2022-12-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-003-1837532",
@@ -158,7 +163,8 @@
     "2022-06-30",
     "2022-09-30",
     "2022-12-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-003-1838126",
@@ -187,7 +193,8 @@
     "2022-06-30",
     "2022-09-30",
     "2022-12-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-004-1812554",
@@ -215,7 +222,8 @@
     "2024-03-31",
     "2024-06-30",
     "2024-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-004-1838126",
@@ -256,7 +264,8 @@
       "cost"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-004A-1837532",
@@ -302,14 +311,15 @@
       "cost"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-005-1287750",
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "X06",
-   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed. At 2022-09-30 the finding also lists the Senior Direct Lending Program subordinated certificates, printed '269,806.0 1,121.0 1,121.0' ($ millions; principal, cost, fair value): a filer typo in the principal column (adjacent quarters publish a principal of about 1,274M to 1,328M), neither a partly drawn commitment nor a markdown. Published as printed: principal 269,806,000,000, fair value 1,121,000,000.",
    "evidence": [
     {
      "source": "query",
@@ -318,6 +328,14 @@
     {
      "source": "filing",
      "quote": "Ares 2022-09-30 (0001287750-22-000052): Senior Direct Lending Program subordinated certificates, printed schedule line '269,806.0 1,121.0 1,121.0' and tag InvestmentOwnedBalancePrincipalAmount = 269806000000. The principal is wrong in the filing itself; no filed alternative exists. See DS-022."
+    },
+    {
+     "source": "filing",
+     "cik": "0001287750",
+     "quarter": "2022-09-30",
+     "accession": "0001287750-22-000052",
+     "verbatim": "Senior Direct Lending Program, LLC (5)(17) Co-investment vehicle Subordinated certificates 11.75 % LIBOR (Q) 8.00 % 7/2016 12/2036 269,806.0 1,121.0 1,121.0",
+     "quote": "The SDLP subordinated certificates row as printed (principal 269,806.0, a filer typo), published as printed. Verified on the cached page 2026-11-10."
     }
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py five10 X06 3",
@@ -346,7 +364,16 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true,
+   "statement_history": [
+    {
+     "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on loans the fund has marked down, as filed.",
+     "replaced_on": "2026-11-10",
+     "replaced_by": "owner, 2026-11-10, D-253: \"do as recommended\" (audit sample scratch/2026-11-10_audit_sample/audit.md); rewrite the statements of #2, #25 and #27 so each matches what the finding contains",
+     "reason": "audit card 2: the statement did not describe the SDLP subordinated certificates row in the 2022-09-30 finding"
+    }
+   ]
   },
   {
    "disposition_id": "DS-005-1803498",
@@ -385,7 +412,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-005-1812554",
@@ -421,7 +449,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-005-1837532",
@@ -459,7 +488,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-005-1838126",
@@ -506,7 +536,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-006-1812554",
@@ -554,7 +585,8 @@
     "from": "2026-06-30",
     "check": "no_rate_in_source",
     "params": {}
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-006-1838126",
@@ -600,7 +632,8 @@
     "from": "2026-06-30",
     "check": "no_rate_in_source",
     "params": {}
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-006A-1287750",
@@ -645,7 +678,8 @@
     "from": "2026-06-30",
     "check": "no_rate_in_source",
     "params": {}
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-006B-1837532",
@@ -673,7 +707,8 @@
     "from": "2026-06-30",
     "check": "no_rate_in_source",
     "params": {}
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-012-1287750",
@@ -700,7 +735,8 @@
    "quarters": [
     "2024-03-31",
     "2025-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-012-1838126",
@@ -728,7 +764,8 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-007-1812554",
@@ -763,7 +800,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-007-1837532",
@@ -798,7 +836,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-007-1838126",
@@ -838,7 +877,8 @@
       "fair_value"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-008-1837532",
@@ -866,7 +906,8 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-010-1837532",
@@ -898,7 +939,8 @@
     "2025-06-30",
     "2026-03-31",
     "2026-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-011-1812554",
@@ -920,7 +962,14 @@
    ],
    "quarters": [
     "2023-09-30"
-   ]
+   ],
+   "legacy_unscoped": true,
+   "revoked": {
+    "revoked_on": "2026-11-10",
+    "revoked_by": "owner, 2026-11-10, D-253: \"do as recommended\" (audit sample scratch/2026-11-10_audit_sample/audit.md); revoke or narrow the disposition behind audit #17 so it cannot close a recurrence",
+    "audit_ref": "scratch/2026-11-10_audit_sample/audit.md card 17",
+    "reason": "The statement ('equity rows filed without a unit count') was false when accepted: the page prints the units, e.g. 2023-09-30 (0001812554-23-000030) 'Minerva Holdco, Inc.(16)(24) Series A Preferred Stock 10.75 % PIK N/A 100,000 $ 114,204 $ 109,540'. It was an extraction gap (33 of 44 equity rows without units in sandbox five10), since fixed (43 of 44 carry units; Minerva published 100,000). The entry closes no finding at n1110_q1. Revoked whole, so a recurrence is reviewed again."
+   }
   },
   {
    "disposition_id": "DS-011-1838126",
@@ -945,7 +994,8 @@
     "2023-06-30",
     "2023-09-30",
     "2023-12-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-013-1287750",
@@ -975,7 +1025,8 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-014-1837532",
@@ -997,7 +1048,8 @@
    ],
    "quarters": [
     "2024-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-015-1287750",
@@ -1025,7 +1077,14 @@
     "2025-03-31",
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "legacy_unscoped": true,
+   "revoked": {
+    "revoked_on": "2026-11-10",
+    "revoked_by": "owner, 2026-11-10, D-253: \"do as recommended\" (audit sample scratch/2026-11-10_audit_sample/audit.md); revoke or narrow the dispositions behind audit #4/#5 so they cannot close a recurrence",
+    "audit_ref": "scratch/2026-11-10_audit_sample/audit.md cards 4 and 5",
+    "reason": "The statement was false when accepted: the page prints the all-in coupon with its PIK part, so the all-in coupon is derivable. 2023-06-30 (0001287750-23-000036): 'First lien senior secured revolving loan 10.99 % ( 2.00 % PIK)'; 2025-09-30 (0001287750-25-000046): 'Senior subordinated loan 14.00 % ( 7.00 % PIK)', '12.16 % ( 4.50 % PIK)'. In the decision sandbox rate and PIK had been read swapped (an extraction gap, since fixed: published 10.99 / 2.0, 14.0 / 7.0 and 12.16 / 4.5 equal the page). The entry closes no finding at n1110_q1. Revoked whole, so a recurrence in any listed quarter is reviewed again instead of closed by this explanation."
+   }
   },
   {
    "disposition_id": "DS-016-1287750",
@@ -1053,14 +1112,15 @@
     "2022-09-30",
     "2022-12-31",
     "2023-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-016-1812554",
    "class": "not_applicable",
    "engine": "row_validation",
    "rule_name": "SRC_BDC01",
-   "statement": "Source rows the reconciliation reads as missing positions are issuer-level or subtotal rows, not positions.",
+   "statement": "The one source row the reconciliation reads as a missing position at 2025-09-30, 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' 24,600,000, is the joint venture's own portfolio total from footnote (34) ('the portfolio consists of one investment with a cost and fair value of $ 24.6 million'), not an issuer subtotal and not a position of the fund. The fund's stake is printed '11,669 11,669 11,667' and published at 11,667,000.",
    "evidence": [
     {
      "source": "query",
@@ -1069,6 +1129,22 @@
     {
      "source": "query",
      "quote": "Published totals equal filed totals in these fund-quarters (sandbox five6), so no position is missing."
+    },
+    {
+     "source": "filing",
+     "cik": "0001812554",
+     "quarter": "2025-09-30",
+     "accession": "0001812554-25-000081",
+     "verbatim": "As of September 30, 2025, the portfolio consists of one investment with a cost and fair value of $ 24.6 million and $ 24.6 million, respectively.",
+     "quote": "Footnote (34): BOCSO's own portfolio, the 24.6M the source row carries. Verified on the cached page 2026-11-10."
+    },
+    {
+     "source": "filing",
+     "cik": "0001812554",
+     "quarter": "2025-09-30",
+     "accession": "0001812554-25-000081",
+     "verbatim": "Blue Owl Cross-Strategy Opportunities LLC(3)(5)(24)(30)(31)(34) Specialty finance equity investment N/A N/A 11,669 11,669 11,667",
+     "quote": "The fund's stake as printed, published at 11,667,000. Verified on the cached page 2026-11-10."
     }
    ],
    "rerun": "python scripts/v05_evidence/issues2.py five10 SRC_BDC01 1287750",
@@ -1089,7 +1165,16 @@
       "\\| (?:Non-)?Controlled Affiliates$"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true,
+   "statement_history": [
+    {
+     "statement": "Source rows the reconciliation reads as missing positions are issuer-level or subtotal rows, not positions.",
+     "replaced_on": "2026-11-10",
+     "replaced_by": "owner, 2026-11-10, D-253: \"do as recommended\" (audit sample scratch/2026-11-10_audit_sample/audit.md); rewrite the statements of #2, #25 and #27 so each matches what the finding contains",
+     "reason": "audit card 27: the missing row is the JV's own portfolio total from footnote (34), not an issuer-level or subtotal row"
+    }
+   ]
   },
   {
    "disposition_id": "DS-017-1287750",
@@ -1113,7 +1198,8 @@
     "2022-09-30",
     "2022-12-31",
     "2023-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-017-1812554",
@@ -1147,7 +1233,8 @@
       "\\| (?:Non-)?Controlled Affiliates$"
      ]
     }
-   }
+   },
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-027-1803498",
@@ -1173,7 +1260,8 @@
    ],
    "quarters": [
     "2024-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-028-1803498",
@@ -1195,7 +1283,8 @@
    ],
    "quarters": [
     "2024-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-018-1287750",
@@ -1218,7 +1307,8 @@
    "quarters": [
     "2025-03-31",
     "2025-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-019-1287750",
@@ -1241,7 +1331,8 @@
    "quarters": [
     "2025-03-31",
     "2025-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-020-1803498",
@@ -1268,7 +1359,8 @@
    "quarters": [
     "2023-03-31",
     "2025-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-020-1812554",
@@ -1300,7 +1392,8 @@
     "2024-03-31",
     "2024-06-30",
     "2024-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-021-1812554",
@@ -1326,7 +1419,8 @@
    ],
    "quarters": [
     "2022-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-021-1838126",
@@ -1352,7 +1446,8 @@
    ],
    "quarters": [
     "2022-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-022-1287750",
@@ -1374,7 +1469,8 @@
    ],
    "quarters": [
     "2022-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-023-1287750",
@@ -1396,7 +1492,8 @@
    ],
    "quarters": [
     "2022-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-024-1812554",
@@ -1421,7 +1518,8 @@
     "2023-12-31",
     "2024-06-30",
     "2024-12-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-025-1837532",
@@ -1443,7 +1541,8 @@
    ],
    "quarters": [
     "2026-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-026-1837532",
@@ -1465,7 +1564,8 @@
    ],
    "quarters": [
     "2026-03-31"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-029-1838126",
@@ -1487,7 +1587,8 @@
    ],
    "quarters": [
     "2026-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-030-1287750",
@@ -1509,7 +1610,8 @@
    ],
    "quarters": [
     "2026-06-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-031-1837532",
@@ -1532,7 +1634,8 @@
    "quarters": [
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-032-1837532",
@@ -1555,7 +1658,8 @@
    "quarters": [
     "2025-06-30",
     "2025-09-30"
-   ]
+   ],
+   "legacy_unscoped": true
   }
  ]
 }

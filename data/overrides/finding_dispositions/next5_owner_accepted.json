@@ -39,7 +39,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_before.py 1925309 000095017024016336 761,855 3600 1 50",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-B01-1920145",
@@ -68,7 +69,8 @@
    ],
    "rerun": "python scripts/v05_evidence/b01.py n5i 1920145",
    "decided_by": "owner, in session 2026-10-09",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-B07-1930087-READ",
@@ -90,7 +92,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/gol6.sql",
    "decided_by": "owner, in session 2026-10-13, after the page re-read",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C103-1872371",
@@ -112,7 +115,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e C103 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C103-1920145",
@@ -143,7 +147,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e C103 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C103-1930087",
@@ -169,7 +174,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5i C103 3",
    "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C103-1930087-VERDICT",
@@ -196,7 +202,8 @@
    "rerun": "python scripts/v05_evidence/issue_shape.py n5r C103 3",
    "decided_by": "owner, in session 2026-10-13, after the page re-read",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C107-1872371",
@@ -227,7 +234,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C107-1920145",
@@ -259,7 +267,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C107-1925309",
@@ -281,7 +290,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-C107-1930087",
@@ -309,7 +319,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e C107 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F16-1920145-READ",
@@ -331,7 +342,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/ff3.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F25-1920145-READ",
@@ -353,7 +365,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/ff3.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F25-1925309-READ",
@@ -375,7 +388,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/ff3.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F26-1918712-READ",
@@ -397,7 +411,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/ff3.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F26-1920145-READ",
@@ -419,7 +434,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/ff3.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F28-1872371",
@@ -444,7 +460,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F28-1918712",
@@ -466,7 +483,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F28-1920145",
@@ -489,7 +507,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F28-1925309",
@@ -513,7 +532,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F28-1930087",
@@ -536,7 +556,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5e scratch/2026-10-07_printed_rates/n5_tot.sql",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-F33-1925309-READ",
@@ -567,7 +588,8 @@
    ],
    "rerun": "python scripts/v05_evidence/companyfacts_concept.py 1925309 DistributionToShareholdersPerShare 2024",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-FX03-1872371-READ",
@@ -593,7 +615,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/oak5.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-PP02-1920145",
@@ -624,7 +647,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issues.py n5r PP02 1920145",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-PP03-1872371-READ",
@@ -650,7 +674,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/oak6.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-SRC_BDC01-1925309-READ",
@@ -677,7 +702,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000095017025021144 html \"Artisan Bidco, Inc. (\" 3 420",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-SRC_BDC03-1872371-READ",
@@ -699,7 +725,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/oak4.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1872371",
@@ -724,7 +751,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py n5e <cik>",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1872371-READ",
@@ -758,7 +786,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_grep.py 1872371 000187237123000017 html \"BioXcel Therapeutics, Inc.\" 20 330",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1918712",
@@ -781,7 +810,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py n5i <cik>",
    "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1918712-READ",
@@ -816,7 +846,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000191871225000065 html \"STKPK 2022-1\" 8 330",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1918712-READ-VERDICT",
@@ -861,7 +892,8 @@
    "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000191871225000065 html \"STKPK 2022-1\" 8 330",
    "decided_by": "owner, in session 2026-10-13",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1918712-VERDICT",
@@ -894,7 +926,8 @@
    "rerun": "python scripts/v05_evidence/x02_page_read.py n5r <cik>",
    "decided_by": "owner, in session 2026-10-13",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1930087",
@@ -923,7 +956,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py n5i <cik>",
    "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X02-1930087-READ",
@@ -945,7 +979,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py n5r 1930087",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X06-1872371",
@@ -971,7 +1006,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X06-1918712",
@@ -996,7 +1032,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5i X06 3",
    "decided_by": "check passed on sandbox n5i; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X06-1918712-VERDICT",
@@ -1027,7 +1064,8 @@
    "rerun": "python scripts/v05_evidence/issue_shape.py n5r X06 3",
    "decided_by": "owner, in session 2026-10-13, after the page re-read",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X06-1920145",
@@ -1060,7 +1098,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-X06-1925309",
@@ -1083,7 +1122,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py n5e X06 3",
    "decided_by": "check passed on sandbox n5e; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-blocking_fair_value_disagreement-1872371-READ",
@@ -1105,7 +1145,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/oak4.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-blocking_source_pct_leaf_parser_mismatch-1925309-READ",
@@ -1128,7 +1169,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000119312525266848 html \"EUR 5,107\" 12",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-fmt_interest_rate-1918712",
@@ -1150,7 +1192,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000191871225000065 html \"Riviera Loan Funding Warehouse 72\" 12 260",
    "decided_by": "owner, in session 2026-10-13, after the page re-read",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-income_identity-1918712-READ",
@@ -1176,7 +1219,8 @@
    ],
    "rerun": "python scripts/v05_evidence/filing_before.py 1918712 000191871224000048 \"Expense support\" 700 2 400",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-merged_context_excluded-1930087",
@@ -1198,7 +1242,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py n5r scratch/2026-10-07_printed_rates/prov4.sql",
    "decided_by": "owner, in session 2026-10-13, after the page re-read",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-nonaccrual_flag-1925309-VERDICT",
@@ -1225,7 +1270,8 @@
    "rerun": "python scripts/v05_evidence/filing_grep.py 1925309 000119312526051289 html non-accrual 4 200",
    "decided_by": "owner, in session 2026-10-13",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-nonaccrual_flag-1930087-VERDICT",
@@ -1252,7 +1298,8 @@
    "rerun": "python scripts/v05_evidence/filing_grep.py 1930087 000193008726000024 html non-accrual 4 200",
    "decided_by": "owner, in session 2026-10-13",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-pct_of_net_assets_identity-1925309",
@@ -1284,7 +1331,8 @@
    ],
    "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5r 1925309",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-pct_of_net_assets_identity-1925309-VERDICT",
@@ -1315,7 +1363,8 @@
    "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5r 1925309",
    "decided_by": "owner, in session 2026-10-13",
    "decided_on": "2026-10-13",
-   "supersedes_real_error_verdict": true
+   "supersedes_real_error_verdict": true,
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-N5-pct_of_net_assets_identity-1930087",
@@ -1352,7 +1401,8 @@
    ],
    "rerun": "python scripts/v05_evidence/pct_rows_on_page.py n5r 1930087",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   }
  ]
 }

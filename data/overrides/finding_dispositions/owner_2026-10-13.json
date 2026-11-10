@@ -38,7 +38,8 @@
     }
    },
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-X11-1803498-PIGMENTS",
@@ -64,7 +65,8 @@
    ],
    "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_q2/pig.sql",
    "decided_by": "owner, in session 2026-10-13",
-   "decided_on": "2026-10-13"
+   "decided_on": "2026-10-13",
+   "legacy_unscoped": true
   }
  ]
 }
