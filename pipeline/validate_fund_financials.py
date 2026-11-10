@@ -47,6 +47,43 @@ STATUS_SKIP = "SKIP"
 # does not describe the portfolio and F27 is skipped (owner ruling 2026-10-17, D-202).
 F27_MIN_RATED_SHARE = 0.5
 
+F27_EXPECTED = ("income_yield_pct <= WAC + 200bps, or total_investment_income x4 / average "
+                "investments_at_fair_value <= WAC + 200bps")
+
+
+def _f27_asset_yield(row: pd.Series | dict) -> Optional[float]:
+    """F27's like-for-like income yield: on gross investments, not net assets.
+
+    The holdings WAC is a coupon on investments at fair value. income_yield_pct is net
+    investment income over NET assets, so a fund holding about 2x its net assets fired on
+    leverage alone (owner ruling 2026-11-10, D-252). The figure is the quarter's total
+    investment income x4 over average filed investments at fair value (this quarter and the
+    adjacent previous one; this quarter alone otherwise). On production 2026-11-10 that sits a
+    median 1.0pp above the WAC (IQR 0.5 to 1.5), where net investment income scaled to
+    investments sits 4.5pp below it (expenses), so the scaled figure is not used: it would
+    almost never fire. Returns the yield in pct, or None when income or investments are missing.
+    """
+    def num(key: str) -> Optional[float]:
+        val = row.get(key)
+        try:
+            val = float(val)
+        except (TypeError, ValueError):
+            return None
+        return val if math.isfinite(val) else None
+
+    inv = num("inv_fv")
+    tii = num("tii")
+    if inv is not None and inv > 0 and tii is not None:
+        avg_inv = inv
+        prev_inv = num("prev_inv_fv")
+        prev_date = pd.to_datetime(row.get("prev_report_date"), errors="coerce")
+        this_date = pd.to_datetime(row.get("report_date"), errors="coerce")
+        if (prev_inv is not None and prev_inv > 0 and pd.notna(prev_date) and pd.notna(this_date)
+                and 80 <= (this_date - prev_date).days <= 100):
+            avg_inv = (inv + prev_inv) / 2
+        return tii * 4 / avg_inv * 100
+    return None
+
 RESULT_COLUMNS = [
     "dataset", "cik", "report_quarter", "report_date", "check_code",
     "status", "severity", "evidence_strength", "value", "expected",
@@ -168,9 +205,11 @@ def _append_threshold_results(
     expected: str,
     severity: str,
     evidence_strength: str,
-    note: str,
+    note: str | pd.Series,
 ) -> None:
+    """``note`` may be a Series aligned with ``df`` (a per-row note on FAIL rows)."""
     for idx, row in df.iterrows():
+        row_note = note.loc[idx] if isinstance(note, pd.Series) else note
         if bool(missing_mask.loc[idx]):
             rows.append(_result(row, check_code, STATUS_SKIP, expected=expected,
                                 note="required field missing"))
@@ -179,7 +218,7 @@ def _append_threshold_results(
                                 value=value.loc[idx], expected=expected,
                                 severity=severity,
                                 evidence_strength=evidence_strength,
-                                note=note))
+                                note=row_note))
         else:
             rows.append(_result(row, check_code, STATUS_PASS,
                                 value=value.loc[idx], expected=expected))
@@ -336,14 +375,34 @@ def validate_fund_source(df: pd.DataFrame) -> pd.DataFrame:
             SEVERITY_WARN, EVIDENCE_WEAK, note,
         )
 
-    f16_value = distribution_rate - income_yield_pct * 1.5
+    # F16 (owner rulings 2026-11-10: D-252 like-for-like basis, D-253 either basis passes).
+    # distribution_rate is the quarter's distribution per share x4 over NAV per share. The old
+    # income side, income_yield_pct, is a year-to-date ratio: in a ramp-up year it lags the
+    # quarter, and where a filer's unannualised ratio survives it is a quarter's figure. The
+    # like-for-like side is the quarter's net investment income per share on the same footing
+    # (income_per_share x4 / nav_per_share). A row passes when either basis passes; it fails
+    # only when the old basis fails and the like-for-like one fails or cannot be formed. Rows
+    # the old basis cannot evaluate stay SKIP, so the repair clears and never adds.
+    income_per_share = _num(fund["income_per_share"])
+    per_share_yield = (income_per_share * 4 / nav * 100).where(nav > 0)
+    f16_old_value = distribution_rate - income_yield_pct * 1.5
+    f16_new_value = distribution_rate - per_share_yield * 1.5
+    f16_new_pass = f16_new_value <= 0  # False when the per-share figure is missing
+    f16_value = f16_old_value.where(~((f16_old_value > 0) & f16_new_pass), f16_new_value)
     f16_missing = distribution_rate.isna() | income_yield_pct.isna()
-    f16_fail = f16_value > 0
+    f16_fail = (f16_old_value > 0) & ~f16_new_pass
     _append_threshold_results(
         rows, fund, "F16", f16_value, f16_fail, f16_missing,
-        "distribution_rate <= income_yield_pct * 1.5",
+        "distribution_rate <= income_yield_pct * 1.5, or <= 1.5 x quarter income yield "
+        "(income_per_share x4 / nav_per_share)",
         SEVERITY_INFO, EVIDENCE_WEAK,
-        "distribution rate exceeds income yield heuristic",
+        pd.Series(
+            ["distribution rate exceeds income yield heuristic; basis=income_yield_pct+per_share"
+             if flag else
+             "distribution rate exceeds income yield heuristic; basis=income_yield_pct "
+             "(per-share income missing)"
+             for flag in per_share_yield.notna()],
+            index=fund.index),
     )
 
     # CASH_EQUIV_EXCEEDS_INVESTMENTS: cash_equivalents_at_fair_value feeds the
@@ -468,8 +527,17 @@ def validate_cross_level(
                 TRY_CAST(net_assets AS DOUBLE) AS net_assets,
                 TRY_CAST(investments_at_fair_value AS DOUBLE) AS inv_fv,
                 TRY_CAST(borrowings AS DOUBLE) AS borrowings,
-                TRY_CAST(income_yield_pct AS DOUBLE) AS income_yield_pct
+                TRY_CAST(income_yield_pct AS DOUBLE) AS income_yield_pct,
+                TRY_CAST(total_investment_income AS DOUBLE) AS tii
             FROM ff
+        ),
+        fund_lag AS (
+            -- F27 averages investments over the quarter: the fund's previous filed quarter
+            -- (used only when it is the adjacent quarter, checked in Python).
+            SELECT *,
+                LAG(inv_fv) OVER (PARTITION BY cik ORDER BY report_date) AS prev_inv_fv,
+                LAG(report_date) OVER (PARTITION BY cik ORDER BY report_date) AS prev_report_date
+            FROM fund
         ),
         hold AS (
             SELECT
@@ -518,6 +586,9 @@ def validate_cross_level(
                 fund.inv_fv,
                 fund.borrowings,
                 fund.income_yield_pct,
+                fund.tii,
+                fund.prev_inv_fv,
+                fund.prev_report_date,
                 hold.holdings_fv,
                 hold.pct_sum,
                 hold.position_count,
@@ -525,7 +596,7 @@ def validate_cross_level(
                 hold.wac_rated_share,
                 fund.cik IS NOT NULL AS has_fund,
                 hold.cik IS NOT NULL AS has_holdings
-            FROM fund
+            FROM fund_lag AS fund
             FULL OUTER JOIN hold
               ON fund.cik = hold.cik
              AND fund.report_quarter = hold.report_quarter
@@ -689,16 +760,29 @@ def validate_cross_level(
         wac = row.get("wac")
         income_yield = row.get("income_yield_pct")
         rated_share = row.get("wac_rated_share")
+        # Either basis passes (owner ruling 2026-11-10, D-253): the old income_yield_pct
+        # comparison decides whether the row is evaluated at all; a failure there stands only
+        # when the like-for-like figure also fails or cannot be formed.
         if (pd.isna(wac) or pd.isna(income_yield) or pd.isna(rated_share)
                 or rated_share < F27_MIN_RATED_SHARE):
-            add("F27", STATUS_SKIP, expected="income_yield_pct <= WAC + 200bps")
+            add("F27", STATUS_SKIP, expected=F27_EXPECTED)
         else:
-            diff = income_yield - wac
-            add("F27", STATUS_FAIL if diff > 2.0 else STATUS_PASS,
+            old_diff = income_yield - wac
+            asset_yield = _f27_asset_yield(row)
+            new_diff = None if asset_yield is None else asset_yield - wac
+            if old_diff <= 2.0:
+                status, diff = STATUS_PASS, old_diff
+            elif new_diff is not None and new_diff <= 2.0:
+                status, diff = STATUS_PASS, new_diff
+            else:
+                status, diff = STATUS_FAIL, old_diff
+            basis = ("income_yield_pct+tii_over_avg_investments" if new_diff is not None
+                     else "income_yield_pct (total income or investments missing)")
+            add("F27", status,
                 value=round(diff, 4),
-                expected="income_yield_pct <= WAC + 200bps",
+                expected=F27_EXPECTED,
                 evidence=EVIDENCE_WEAK,
-                note="income yield exceeds holdings WAC heuristic")
+                note=f"income yield exceeds holdings WAC heuristic; basis={basis}")
 
         has_fund = bool(row.get("has_fund"))
         has_holdings = bool(row.get("has_holdings"))

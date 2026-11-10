@@ -341,6 +341,149 @@ def test_f27_still_fails_when_rated_loans_cannot_explain_income():
     assert _status(result, "F27") == STATUS_FAIL
 
 
+# F27 (owner rulings 2026-11-10: D-252 like-for-like basis, D-253 either basis passes): the old
+# income_yield_pct comparison, or total investment income over average investments, against
+# the coupon + 200bp. Base fund: investments 900,000, net assets 600,000 (1.5x); coupon 10.
+
+def _f27(result):
+    return result[result["check_code"] == "F27"].iloc[0]
+
+
+def test_f27_levered_fund_passes_on_income_over_investments():
+    """Fidelity/1901612 shape: NII over net assets 15 (1.5x levered) against a coupon of 10
+    fired on leverage alone; income over investments is 11.5, inside the 200bp."""
+    result = validate_cross_level(
+        _fund_df([{"income_yield_pct": "15", "total_investment_income": "25875"}]), _holdings_df([{}, {}]))
+    f27 = _f27(result)
+    assert f27["status"] == STATUS_PASS
+    assert float(f27["value"]) == 1.5
+    assert "tii_over_avg_investments" in f27["note"]
+
+
+def test_f27_real_gap_on_both_bases_still_fails():
+    """Real-error guard: 13 on net assets and 13 on investments against a coupon of 10."""
+    result = validate_cross_level(
+        _fund_df([{"income_yield_pct": "13", "total_investment_income": "29250"}]), _holdings_df([{}, {}]))
+    f27 = _f27(result)
+    assert f27["status"] == STATUS_FAIL
+    assert float(f27["value"]) == 3.0
+    assert "basis=income_yield_pct+tii_over_avg_investments" in f27["note"]
+
+
+def test_f27_failing_only_on_the_new_basis_passes():
+    """D-253: the old basis passing (11 against 10) is enough; nothing is added."""
+    result = validate_cross_level(
+        _fund_df([{"income_yield_pct": "11", "total_investment_income": "29250"}]), _holdings_df([{}, {}]))
+    f27 = _f27(result)
+    assert f27["status"] == STATUS_PASS
+    assert float(f27["value"]) == 1.0
+
+
+def test_f27_without_income_yield_stays_skipped():
+    """No old basis, no evaluation: total income alone does not add a finding."""
+    result = validate_cross_level(
+        _fund_df([{"income_yield_pct": "", "total_investment_income": "29250"}]), _holdings_df([{}, {}]))
+    assert _f27(result)["status"] == STATUS_SKIP
+
+
+def test_f27_averages_investments_with_the_adjacent_quarter():
+    fund = _fund_df([
+        {"report_quarter": "2023q4", "report_date": "2023-12-31", "investments_at_fair_value": "700000",
+         "total_investment_income": "20000"},
+        {"income_yield_pct": "15", "total_investment_income": "25875", "investments_at_fair_value": "1100000"},
+    ])
+    holdings = pd.concat([_holdings_df([{}, {}]),
+                          _holdings_df([{"report_date": "2023-12-31"}, {"report_date": "2023-12-31"}])])
+    result = validate_cross_level(fund, holdings)
+    f27 = result[(result["check_code"] == "F27") & (result["report_date"] == "2024-03-31")].iloc[0]
+    assert f27["status"] == STATUS_PASS
+    assert float(f27["value"]) == 1.5  # 25,875 x4 over (700,000 + 1,100,000) / 2 = 11.5
+
+
+def test_f27_does_not_average_with_a_non_adjacent_quarter():
+    fund = _fund_df([
+        {"report_quarter": "2023q2", "report_date": "2023-06-30", "investments_at_fair_value": "100000",
+         "total_investment_income": "2000"},
+        {"income_yield_pct": "15", "total_investment_income": "25875"},
+    ])
+    result = validate_cross_level(fund, _holdings_df([{}, {}]))
+    f27 = result[(result["check_code"] == "F27") & (result["report_date"] == "2024-03-31")].iloc[0]
+    assert float(f27["value"]) == 1.5  # this quarter's 900,000 alone
+
+
+def test_f27_without_total_income_keeps_the_previous_comparison():
+    """No like-for-like figure, no clear: income_yield_pct over net assets still decides."""
+    result = validate_cross_level(_fund_df([{"income_yield_pct": "15"}]), _holdings_df([{}, {}]))
+    f27 = _f27(result)
+    assert f27["status"] == STATUS_FAIL
+    assert "total income or investments missing" in f27["note"]
+
+
+# F16 (owner rulings 2026-11-10: D-252 like-for-like basis, D-253 either basis passes): the old
+# income_yield_pct comparison, or the quarter's income per share x4 / NAV, against the
+# distribution rate.
+
+def _f16(result):
+    return result[result["check_code"] == "F16"].iloc[0]
+
+
+def test_f16_ramp_up_year_passes_on_the_quarters_income():
+    """0001919369 2024-06-30: distribution 0.26 a share (rate 5.29) against the six-month NII
+    ratio annualised (2.74) failed; the quarter's NII per share is 0.30 (yield 6.10)."""
+    result = validate_fund_source(_fund_df([{
+        "distribution_per_share": "0.26", "nav_per_share": "19.67", "distribution_rate": "5.287239",
+        "income_yield_pct": "2.74", "income_per_share": "0.30"}]))
+    f16 = _f16(result)
+    assert f16["status"] == STATUS_PASS
+    assert float(f16["value"]) < 0
+
+
+def test_f16_unannualised_quarter_ratio_no_longer_fires():
+    """0001702510 2026-03-31 as the sandbox published it: ratio 2.20 for the quarter, not
+    annualised, against an annualised distribution rate of 10.66; NII per share 0.40."""
+    result = validate_fund_source(_fund_df([{
+        "distribution_per_share": "0.49", "nav_per_share": "18.39", "distribution_rate": "10.658",
+        "income_yield_pct": "2.20", "income_per_share": "0.40"}]))
+    assert _status(result, "F16") == STATUS_PASS
+
+
+def test_f16_real_over_distribution_on_both_bases_still_fails():
+    """Real-error guard: 0.49 paid on 0.20 earned, and a ratio of 4 against a rate of 10.66."""
+    result = validate_fund_source(_fund_df([{
+        "distribution_per_share": "0.49", "nav_per_share": "18.39", "distribution_rate": "10.658",
+        "income_yield_pct": "4", "income_per_share": "0.20"}]))
+    f16 = _f16(result)
+    assert f16["status"] == STATUS_FAIL
+    assert "basis=income_yield_pct+per_share" in f16["note"]
+
+
+def test_f16_failing_only_on_the_new_basis_passes():
+    """D-253: the old basis passing (10.66 <= 12 x 1.5) is enough; nothing is added."""
+    result = validate_fund_source(_fund_df([{
+        "distribution_per_share": "0.49", "nav_per_share": "18.39", "distribution_rate": "10.658",
+        "income_yield_pct": "12.0", "income_per_share": "0.20"}]))
+    assert _status(result, "F16") == STATUS_PASS
+
+
+def test_f16_without_income_yield_stays_skipped():
+    result = validate_fund_source(_fund_df([{"income_yield_pct": "", "income_per_share": "0.05"}]))
+    assert _status(result, "F16") == STATUS_SKIP
+
+
+def test_f16_without_income_per_share_keeps_income_yield():
+    """No per-share income: the previous comparison stands (fails 8 > 4 x 1.5, passes 7 x 1.5)."""
+    result = validate_fund_source(_fund_df([
+        {"cik": "0000001001", "income_yield_pct": "4"},
+        {"cik": "0000001002", "income_yield_pct": "7"},
+        {"cik": "0000001003", "income_yield_pct": "4", "income_per_share": "0.5", "nav_per_share": ""},
+    ]))
+    f16 = result[result["check_code"] == "F16"].set_index("cik")
+    assert f16.loc["0000001001", "status"] == STATUS_FAIL
+    assert "per-share income missing" in f16.loc["0000001001", "note"]
+    assert f16.loc["0000001002", "status"] == STATUS_PASS
+    assert f16.loc["0000001003", "status"] == STATUS_FAIL  # no NAV, so no per-share yield
+
+
 def test_validate_cross_level_without_class_column_keeps_all_rows():
     holdings = _jv_holdings().drop(columns=["accounting_record_class"])
     result = validate_cross_level(_fund_df([{}]), holdings)
