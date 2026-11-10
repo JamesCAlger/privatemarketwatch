@@ -1,0 +1,121 @@
+review_id,cik,report_date,rule,family,reason,priority
+RVQ_REV_fd2d66684e16,0001287750,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,1
+RVQ_REV_c8e64b3c3e79,0001812554,2026-03-31,F22,pct,pct_of_net_assets still not populated on published rows,1
+RVQ_REV_d1ca3d43009e,0001812554,2026-03-31,FX01,row,"printed non-USD par now published as USD/blank currency (no conversion): RL Datix Holdings (USA), Inc.",1
+RVQ_REV_cf68f0df8c19,0001837532,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,1
+RVQ_REV_51c522b0e5ac,0001838126,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,1
+RVQ_REV_3d02e8e6cde3,0001838126,2025-12-31,A07,pct,pct_of_net_assets still not populated on published rows,2
+RVQ_BLK_d8be368fe479,0001572694,2025-12-31,html_agg,total_fv,published sum(fair_value) still differs from the filed total by 1.095%,3
+RVQ_REV_3f4ec86ecac7,0001572694,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_efdf3c8a7818,0001603480,2026-03-31,cost_conservation,total_cost,published sum(cost) still differs from the filed total by -55.571%,3
+RVQ_REV_c3c95c12efc4,0001633336,2026-03-31,PP03,pp03,comparative-period row still published at the report date,3
+RVQ_REV_68b8b128f256,0001634452,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_1f02f57c3f67,0001646614,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 2.028%,3
+RVQ_BLK_929b1bdfdf7f,0001674760,2025-12-31,cost_conservation,total_cost,published sum(cost) still differs from the filed total by 40.028%,3
+RVQ_REV_70f18f30f4e6,0001674760,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_1f4af35a332a,0001674760,2026-03-31,cost_conservation,total_cost,published sum(cost) still differs from the filed total by 50.835%,3
+RVQ_BLK_d60a5ec6111b,0001715933,2026-03-31,cost_conservation,total_cost,published sum(cost) still differs from the filed total by -41.281%,3
+RVQ_REV_e21f9bc7633f,0001772704,2025-12-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_ef403afb986d,0001772704,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_ac32aa962e08,0001784700,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 1.584%,3
+RVQ_REV_f539eee63c8e,0001784700,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_994b63150cb1,0001784700,2026-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 1.881%,3
+RVQ_BLK_b42e8156ae5b,0001885968,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 1.083%,3
+RVQ_REV_3091ae2b4192,0001899017,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_302bdf2c5c9b,0001899996,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_7f0a35d30598,0001913724,2026-03-31,FX01,row,"printed non-USD par now published as USD/blank currency (no conversion): CR Services Intermediate, LLC",3
+RVQ_REV_f43438da69aa,0001916099,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_1b3e8a505baf,0001918712,2025-12-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_f8a497fb9ed1,0001918712,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_59da0bc6c9d0,0001920145,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_c0081da2d2bc,0001920453,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_b4c9dad50397,0001930087,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 0.825%,3
+RVQ_BLK_025c7a932e1c,0001930087,2026-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 0.724%,3
+RVQ_REV_1f6bbf157bb4,0001948368,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_713dad309107,0001959568,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_119356d8b4e3,0001959604,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_BLK_aa36cbf948c2,0001965934,2025-12-31,A04,total_fv,published sum(fair_value) still differs from the filed total by 0.650%,3
+RVQ_BLK_b21f4fe457c4,0001965934,2025-12-31,E01,total_fv,published sum(fair_value) still differs from the filed total by 0.650%,3
+RVQ_REV_7047e9f49957,0001989817,2025-12-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_b0d02abceed3,0001989817,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_c20f1795c96f,0001993402,2026-03-31,PP03,pp03,comparative-period row still published at the report date,3
+RVQ_REV_9a60f777bf64,0002006758,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_792a52843223,0002031750,2025-12-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_aae07ed1928e,0002031750,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_744f5db1066e,0002052152,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,3
+RVQ_REV_ce359ecacfa1,0001287750,2022-09-30,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_REV_4210a7c18721,0001287750,2023-09-30,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_REV_33b232e04381,0001287750,2023-09-30,PP03,pp03,comparative-period row still published at the report date,4
+RVQ_REV_3595b713a641,0001287750,2024-06-30,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_REV_d7aea928763e,0001287750,2024-09-30,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_REV_46b842b21a3a,0001287750,2025-03-31,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_REV_fccc9cae6ed1,0001287750,2025-06-30,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_REV_1962c2f355b5,0001837532,2024-03-31,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_BLK_eeb4da185c7d,0001837532,2025-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 3.586%,4
+RVQ_REV_fec34d74725d,0001837532,2025-09-30,A07,pct,pct_of_net_assets still not populated on published rows,4
+RVQ_BLK_5d1f4d573e5a,0001572694,2024-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 0.726%,5
+RVQ_BLK_9bff04aa59e0,0001603480,2024-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by -51.754%,5
+RVQ_REV_90405832513d,0001633336,2024-09-30,FX01,row,printed non-USD par now published as USD/blank currency (no conversion): Crusoe Bidco Limited; Nurture Landscapes,5
+RVQ_REV_953c0b925709,0001634452,2025-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_BLK_a88f5197b0af,0001646614,2025-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 8.767%,5
+RVQ_REV_4b49ce42b9af,0001742313,2024-12-31,PP03,pp03,comparative-period row still published at the report date,5
+RVQ_REV_2e92c79a4eb2,0001772704,2024-12-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_1f1a0ce670ef,0001784700,2023-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_18669cfc280d,0001841514,2025-03-31,X02,row,cited rows still have no interest_rate or basis_spread,5
+RVQ_REV_50c08724a7aa,0001872371,2023-12-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_7c138b86fba2,0001872371,2024-03-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_e1253db4f680,0001899017,2023-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_BLK_05948da2a162,0001899017,2023-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 9.855%,5
+RVQ_REV_89dca909b144,0001899017,2024-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_9cee52ccafda,0001916099,2024-12-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_6df6b4e837d8,0001916099,2025-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_507d93e23cfa,0001918712,2023-03-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_7a65200f69a0,0001918712,2023-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_80dc25dc7b45,0001918712,2023-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_30876cb1124f,0001918712,2023-12-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_6a267af38719,0001918712,2024-03-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_604b43f0c6ad,0001918712,2024-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_284f6eed99e5,0001918712,2024-12-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_fe386dfececc,0001918712,2025-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_70dfe48c9c24,0001920453,2023-03-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_39da1120d79e,0001930087,2024-03-31,PP03,pp03,comparative-period row still published at the report date,5
+RVQ_REV_de3fa4d8c54f,0001930087,2024-06-30,PP03,pp03,comparative-period row still published at the report date,5
+RVQ_BLK_e970a178ec58,0001954360,2025-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 2.265%,5
+RVQ_REV_58309a1aeb5f,0001959568,2024-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_8e9bea73ddb8,0001959604,2024-12-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_BLK_54a6da2e7bdf,0001965934,2025-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 3.402%,5
+RVQ_REV_731401ab263c,0001989817,2024-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_ffafe123de07,0001989817,2024-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_ccf412113888,0002006758,2025-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_a4f0debb73c3,0002006758,2025-09-30,PP03,pp03,comparative-period row still published at the report date,5
+RVQ_REV_7421c594a74f,0002031750,2025-03-31,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_f2e046400fcf,0002031750,2025-06-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_REV_bd74235c1d82,0002031750,2025-09-30,A07,pct,pct_of_net_assets still not populated on published rows,5
+RVQ_BLK_61d891cb586f,0000081955,2025-12-31,html_agg,total_fv,published sum(fair_value) still differs from the filed total by 4.002%,9
+RVQ_BLK_aa3b3773c40f,0001487918,2025-12-31,html_agg,total_fv,published sum(fair_value) still differs from the filed total by 28.042%,9
+RVQ_BLK_3d7167541d99,0001504619,2025-12-31,html_agg,total_fv,published sum(fair_value) still differs from the filed total by 2.265%,9
+RVQ_BLK_ef99addccb44,0001513363,2025-12-31,html_agg,total_fv,published sum(fair_value) still differs from the filed total by 5.207%,9
+RVQ_REV_0fa8eaa8ae50,0001588272,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_b5d07d2636f0,0001633858,2023-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_7f7898f2bb56,0001633858,2024-09-30,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_632a7a199f85,0001633858,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_4be69641695a,0001743415,2024-06-30,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_BLK_1adb1d67d2ef,0001743415,2024-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 1086.488%,9
+RVQ_REV_954aa869e77e,0001743415,2025-09-30,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_2777b729ac58,0001743415,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_a2b9bce6988c,0001792509,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_6d457b192125,0001834543,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_55c84c0d5e5a,0001850938,2026-03-31,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_3c6a7d958384,0001901037,2022-09-30,FX01,row,"printed non-USD par now published as USD/blank currency (no conversion): Monitorus Holding, LLC",9
+RVQ_REV_a721e01ee286,0001901037,2024-06-30,FX01,row,"printed non-USD par now published as USD/blank currency (no conversion): Monitorus Holding, LLC; Monitorus Holding, LLC; Monitorus Holding, LLC",9
+RVQ_REV_399b8e8d11b5,0001901037,2024-09-30,FX01,row,"printed non-USD par now published as USD/blank currency (no conversion): Monitorus Holding, LLC",9
+RVQ_BLK_08c4614f7c46,0001916608,2026-03-31,A04,total_fv,published sum(fair_value) still differs from the filed total by 2.367%,9
+RVQ_BLK_27ba5f2a5570,0001916608,2026-03-31,E01,total_fv,published sum(fair_value) still differs from the filed total by 2.367%,9
+RVQ_BLK_9624a2f28209,0001916608,2026-03-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 2.367%,9
+RVQ_BLK_4b3396f505a0,0001930679,2025-06-30,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 22.782%,9
+RVQ_BLK_f3a1d59ac35e,0001930679,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 20.521%,9
+RVQ_REV_590fa8ad5840,0001974793,2024-06-30,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_REV_902ea4a4b247,0001975736,2025-06-30,A07,pct,pct_of_net_assets still not populated on published rows,9
+RVQ_BLK_85b619fe3110,0001975736,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 20.473%,9
+RVQ_BLK_646875d101fd,0001988280,2025-12-31,cost_conservation,total_cost,published sum(cost) still differs from the filed total by -100.000%,9
+RVQ_BLK_eb92e749f131,0001988280,2025-12-31,fv_conservation,total_fv,published sum(fair_value) still differs from the filed total by 33.493%,9
