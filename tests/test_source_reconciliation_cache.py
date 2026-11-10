@@ -10,6 +10,10 @@ from pipeline import source_reconciliation as sr
 def _patch_cache_paths(monkeypatch, tmp_path: Path) -> None:
     source_dir = tmp_path / "cache" / "bdc_source_facts"
     recon_dir = tmp_path / "cache" / "source_reconciliation"
+    # the page artifact is production data; these tests run without it
+    from pipeline import page_verified_corrections as pvc
+    monkeypatch.setattr(pvc, "load_printed_rows",
+                        lambda path=None, ciks=None: pd.DataFrame(columns=pvc.PRINTED_ROW_COLUMNS))
     monkeypatch.setattr(sr, "BDC_SOURCE_FACTS_CACHE_DIR", source_dir)
     monkeypatch.setattr(sr, "BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE", source_dir / "manifest.csv")
     monkeypatch.setattr(sr, "SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR", recon_dir / "detail_by_cik")
@@ -633,7 +637,7 @@ def test_forced_reconciliation_recomputes_each_cik_partition(tmp_path, monkeypat
     ])
     calls: list[tuple[tuple[str, ...], tuple[str, ...]]] = []
 
-    def fake_reconcile(source_part, holdings_part):
+    def fake_reconcile(source_part, holdings_part, **_kwargs):
         calls.append((
             tuple(sorted(source_part["cik"].astype(str).unique())),
             tuple(sorted(holdings_part["cik"].astype(str).unique())),
@@ -681,7 +685,7 @@ def _two_fund_run(monkeypatch, tmp_path):
                                     {"cik": "0000000456", "holdings_hash": "h-b", "holdings_row_count": 1}])
     calls: list[str] = []
 
-    def fake_reconcile(source_part, holdings_part):
+    def fake_reconcile(source_part, holdings_part, **_kwargs):
         calls.append(str(source_part["cik"].iloc[0]))
         return pd.DataFrame(columns=sr.DETAIL_COLUMNS), pd.DataFrame(columns=sr.METRIC_COLUMNS)
 
