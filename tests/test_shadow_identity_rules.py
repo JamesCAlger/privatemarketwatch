@@ -287,8 +287,71 @@ def _spread_holds(spread, margin):
     con.register("status", pd.DataFrame([_printed(member, "SOFR", margin=margin)]))
     source = engine.printed_reference_sql("unified", "status", ["0001812554"])
     gate = " AND ".join("TRY_CAST(%s AS DOUBLE) IS NOT NULL" % c for c in rule.needed_cols)
-    typed = ", ".join("TRY_CAST(%s AS DOUBLE) AS %s" % (c, c) for c in rule.needed_cols)
+    typed = ", ".join("TRY_CAST(%s AS DOUBLE) AS %s" % (c, c) for c in rule.needed_cols + rule.optional_cols)
     return [bool(r[0]) for r in con.execute(f"SELECT ({rule.holds_sql}) FROM (SELECT {typed} FROM {source} WHERE {gate})").fetchall()]
+
+
+def _cash_plus_holds(quarters, cik="0002052153"):
+    """spread_printed per quarter for one position: quarters = [(report_date, published spread, printed margin,
+    printed row, position_id, maturity)]."""
+    import duckdb
+    import pandas as pd
+    rule = next(r for r in engine.RULES if r.name == "spread_printed")
+    hold, stat = [], []
+    for i, (day, spread, margin, printed, pid, maturity) in enumerate(quarters):
+        member = f"Zeus Company LLC {i} | Non-Affiliated Issuer"
+        h = _holding(f"c{i}", member, "SOFR", cik=cik, spread=spread)
+        hold.append(dict(h, report_date=day, accession_number=f"A{i}", position_id=pid, issuer_name="Zeus Company LLC",
+                         maturity_date=maturity))
+        stat.append(dict(_printed(member, "SOFR", cik=cik, margin=margin), report_date=day, accession_number=f"A{i}",
+                         printed_row=printed))
+    con = duckdb.connect()
+    con.register("unified", pd.DataFrame(hold))
+    con.register("status", pd.DataFrame(stat))
+    source = engine.printed_reference_sql("unified", "status", [cik])
+    typed = ", ".join("TRY_CAST(%s AS DOUBLE) AS %s" % (c, c) for c in rule.needed_cols + rule.optional_cols)
+    rows = con.execute(f"SELECT report_date, ({rule.holds_sql}) FROM (SELECT report_date, {typed} FROM {source}) "
+                       "WHERE basis_spread IS NOT NULL AND printed_margin IS NOT NULL").fetchall()
+    return {d: bool(h) for d, h in rows}
+
+
+def test_spread_printed_cash_plus_figure_that_another_quarter_prints_as_the_total_holds():
+    # 0002052153 Zeus: 'S+600 Cash plus 3.00% PIK' at 2025-12-31 and 2026-03-31, printed 'S+600 Cash (includes 3.00%
+    # PIK)' at 2025-09-30 (margin not read): 6.00 is the total margin, the published 6.00 is right
+    out = _cash_plus_holds([
+        ("2025-09-30", 6.0, None, "Term Loan | S+600 Cash (includes 3.00% PIK), 0.75% Floor | 2/28/2031", "p1", "2031-02-28"),
+        ("2025-12-31", 6.0, "9.0", "Term Loan | S+600 Cash plus 3.00% PIK, 0.75% Floor | 2/28/2031", "p1", "2031-02-28"),
+        ("2026-03-31", 6.0, "9.0", "Zeus Company LLC | Term Loan | S+600 Cash plus 3.00% PIK | 2/28/2031", "p1", "2031-02-28"),
+    ])
+    assert out == {"2025-12-31": True, "2026-03-31": True}
+    # Deerfield: 'S+575 Cash plus 2.75% PIK' and, a quarter later, 'S+300 Cash plus 2.75% PIK' (5.75 in all);
+    # matched by position_id across a one-day maturity change
+    out = _cash_plus_holds([
+        ("2025-12-31", 5.75, "8.5", "Term Loan | S+575 Cash plus 2.75% PIK | 9/13/2032", "p2", "2032-09-13"),
+        ("2026-06-30", 5.75, "5.75", "Term Loan | S+300 Cash plus 2.75% PIK, 0.75% Floor | 9/13/2032", "p2", "2032-09-12"),
+    ])
+    assert out == {"2025-12-31": True, "2026-06-30": True}
+
+
+def test_spread_printed_cash_plus_still_fires_without_evidence_or_on_a_third_value():
+    out = _cash_plus_holds([
+        # the cash leg published, and no other quarter shows X as a cash-and-PIK total: the check's case
+        ("2025-12-31", 6.0, "9.0", "Term Loan | S+600 Cash plus 3.00% PIK | 2/28/2031", "p1", "2031-02-28"),
+        # an earlier all-cash quarter at the same figure is not evidence (a PIK leg may have been added)
+        ("2025-09-30", 6.0, "6.0", "Term Loan | S+600, 0.75% Floor | 2/28/2031", "p1", "2031-02-28"),
+    ])
+    assert out == {"2025-12-31": False, "2025-09-30": True}
+    out = _cash_plus_holds([
+        # a published spread equal to neither X nor X+Y
+        ("2025-12-31", 7.0, "9.0", "Term Loan | S+600 Cash plus 3.00% PIK | 2/28/2031", "p1", "2031-02-28"),
+        ("2025-09-30", 6.0, None, "Term Loan | S+600 Cash (includes 3.00% PIK) | 2/28/2031", "p1", "2031-02-28"),
+        # another position's total is not evidence
+        ("2026-03-31", 6.0, "9.0", "Term Loan | S+600 Cash plus 3.00% PIK | 2/28/2031", "p9", "2033-01-01"),
+    ])
+    assert out == {"2025-12-31": False, "2026-03-31": False}
+    # the sum X+Y still holds as before
+    out = _cash_plus_holds([("2025-12-31", 9.0, "9.0", "Term Loan | S+600 Cash plus 3.00% PIK | 2/28/2031", "p1", "2031-02-28")])
+    assert out == {"2025-12-31": True}
 
 
 def test_spread_printed_compares_the_published_spread_with_the_printed_margin():
