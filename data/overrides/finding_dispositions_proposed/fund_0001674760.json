@@ -467,7 +467,7 @@
   },
   {
    "disposition_id": "PD-financial_convention_unresolved-1674760-11",
-   "class": "source_ambiguity",
+   "class": "as_filed",
    "engine": "provenance_reverify",
    "rule_name": "financial_convention_unresolved",
    "ciks": [
@@ -477,7 +477,7 @@
     "2025-09-30"
    ],
    "reason_key": "convention-printed-pik-above-printed-rate",
-   "statement": "Streamland Media Midco's line prints an interest rate of 9.76 % and 'S + 6.50 % (Incl. 10.06 % PIK)': the PIK part exceeds the all-in rate, so neither all-in nor cash-leg reading fits and the build publishes no interest_rate (spread 6.50, pik_rate 10.06 as tagged). The sibling line prints '10.00 % S + 5.50 % (Incl. 9.07 % PIK)'. Which figure is the coupon is not settled by the page. No fix applies without the owner's reading.",
+   "statement": "Streamland Media Midco's line prints an interest rate of 9.76 % and 'S + 6.50 % (Incl. 10.06 % PIK)': the PIK part exceeds the all-in rate, so neither all-in nor cash-leg reading fits and the build publishes no interest_rate (spread 6.50, pik_rate 10.06 as tagged). The sibling line prints '10.00 % S + 5.50 % (Incl. 9.07 % PIK)'. Which figure is the coupon is not settled by the page. No fix applies without the owner's reading. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
    "basis": "read",
    "evidence": [
     {
@@ -495,7 +495,8 @@
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
    "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
-   "decided_on": "2026-10-20"
+   "decided_on": "2026-10-20",
+   "class_proposed": "source_ambiguity"
   },
   {
    "disposition_id": "PD-maturity_not_past-1674760-12",

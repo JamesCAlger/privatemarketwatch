@@ -406,7 +406,7 @@
   },
   {
    "disposition_id": "PD-financial_convention_unresolved-1772704-rfgs",
-   "class": "source_ambiguity",
+   "class": "as_filed",
    "engine": "provenance_reverify",
    "rule_name": "financial_convention_unresolved",
    "ciks": [
@@ -416,7 +416,7 @@
     "2025-09-30"
    ],
    "reason_key": "convention-printed-pik-above-printed-rate",
-   "statement": "Streamland Media Midco's line prints a rate of 9.76 with a PIK part of 10.06 inside it; neither the all-in nor the cash-leg reading fits, so the coupon is withheld and the spread 6.50 and PIK 10.06 are published as printed. No fix applies without a printed coupon.",
+   "statement": "Streamland Media Midco's line prints a rate of 9.76 with a PIK part of 10.06 inside it; neither the all-in nor the cash-leg reading fits, so the coupon is withheld and the spread 6.50 and PIK 10.06 are published as printed. No fix applies without a printed coupon. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
    "basis": "read",
    "evidence": [
     {
@@ -428,7 +428,8 @@
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001772704.json (sandbox rfgsf)",
    "decided_by": "PROPOSED by agent claude-fund-agent-gspmmc2-rfgs; not owner accepted",
-   "decided_on": "2026-10-26"
+   "decided_on": "2026-10-26",
+   "class_proposed": "source_ambiguity"
   },
   {
    "disposition_id": "PD-maturity_not_past-1772704-rfgs-a",

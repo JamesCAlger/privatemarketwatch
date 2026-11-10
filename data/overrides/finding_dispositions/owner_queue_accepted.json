@@ -101,6 +101,91 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-0001603480-C115-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday\" 1 156",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "The flagged row is the Ruby Tuesday 02/01/23 Incremental Term Loan, printed 'SOFR + 16.00 %'; basis_spread 16.0 is the printed margin (all PIK, so cash margin 0 plus PIK margin 16, counted once, D-031). As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765",
+     "quote": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765 (2023-06-30 Ruby Tuesday Operations LLC, context C_35d8adbd-7643-4663-9e7b-4571bdc57966, published pct 0.7000000000000001 spread 16.0 pik 21.26)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138",
+     "quote": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138 (2023-12-31 Ruby Tuesday Operations LLC, context C_12c176f9-172b-4ea9-96ed-e62b233ca6f7, published pct 0.8 spread 16.0 pik 21.46)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863 (2024-03-31 Ruby Tuesday Operations LLC, context C_2976daa4-013e-42e1-b86a-0fa310fcf6ba, published pct 0.8 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192 (2024-06-30 Ruby Tuesday Operations LLC, context C_8267d664-fbeb-4efa-9970-50afbd06d819, published pct 0.8999999999999999 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %",
+     "quote": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 % (2024-09-30 Ruby Tuesday Operations LLC, context C_ac5092e3-ef6c-47f1-9453-96a967b84527, published pct 1.0 spread 16.0 pik 21.32)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 % (2024-12-31 Ruby Tuesday Operations LLC, context C_56af22cc-62c6-4a82-9891-dbd3c22ac94b, published pct 1.0999999999999999 spread 16.0 pik 20.65)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 % (2025-06-30 Ruby Tuesday Operations LLC, context C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 % (2025-09-30 Ruby Tuesday Operations LLC, context C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0, published pct 1.2 spread 16.0 pik 20.39)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday",
+     "quote": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday (2026-06-30 Ruby Tuesday Operations LLC, context C_791967f4-84d2-4f79-866f-97af145e0066, published pct 1.6 spread 16.0 pik 19.73)"
+    }
+   ],
+   "addresses_verdict": {
+    "2024-12-31": "The earlier reviewer read basis_spread 16.0 as the Overton Chicago Gear Term Loan A's 16.0 % of net assets. In this build the Overton Term Loan A row (fixed 6.00 %, all PIK) has no spread; the only row with spread 16.0 is the Ruby Tuesday 02/01/23 Incremental Term Loan, which the page prints as 'SOFR + 16.00 %'. The cited row does not carry the flagged value; the verdict does not stand for this build."
+   },
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-0001603480-C117-1",
    "class": "as_filed",
    "engine": "row_validation",
@@ -470,6 +555,106 @@
    ],
    "decided_by": "owner, 2026-11-04, reason f33-no-distribution-declared-in-the-quarter: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-0001603480-fmt_basis_spread-4",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday\" 1 156",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Same row as C115: Ruby Tuesday 02/01/23 Incremental Term Loan, printed 'SOFR + 16.00 %'. The published spread is the printed margin. As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328",
+     "quote": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328 (2023-03-31 Ruby Tuesday Operations LLC, context C_f0448690-9c99-4742-ab11-90cba005a8f7, published pct 0.8 spread 16.0 pik 20.73)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646",
+     "quote": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646 (2023-09-30 Ruby Tuesday Operations LLC, context C_545fc2a4-6594-4bcc-9890-2285f0b420d2, published pct 0.7000000000000001 spread 16.0 pik 21.43)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138",
+     "quote": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138 (2023-12-31 Ruby Tuesday Operations LLC, context C_12c176f9-172b-4ea9-96ed-e62b233ca6f7, published pct 0.8 spread 16.0 pik 21.46)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863 (2024-03-31 Ruby Tuesday Operations LLC, context C_2976daa4-013e-42e1-b86a-0fa310fcf6ba, published pct 0.8 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192 (2024-06-30 Ruby Tuesday Operations LLC, context C_8267d664-fbeb-4efa-9970-50afbd06d819, published pct 0.8999999999999999 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %",
+     "quote": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 % (2024-09-30 Ruby Tuesday Operations LLC, context C_ac5092e3-ef6c-47f1-9453-96a967b84527, published pct 1.0 spread 16.0 pik 21.32)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 % (2024-12-31 Ruby Tuesday Operations LLC, context C_56af22cc-62c6-4a82-9891-dbd3c22ac94b, published pct 1.0999999999999999 spread 16.0 pik 20.65)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 % (2025-03-31 Ruby Tuesday Operations LLC, context C_f5d916d9-88a5-46e7-ad69-d72153ea68b7, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 % (2025-09-30 Ruby Tuesday Operations LLC, context C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0, published pct 1.2 spread 16.0 pik 20.39)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 %",
+     "quote": "02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 % (2025-12-31 Ruby Tuesday Operations LLC, context C_457b3dbf-f28c-42fa-a80d-d084b6b66530, published pct 1.3 spread 16.0 pik 19.98)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday",
+     "quote": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday (2026-06-30 Ruby Tuesday Operations LLC, context C_791967f4-84d2-4f79-866f-97af145e0066, published pct 1.6 spread 16.0 pik 19.73)"
+    }
+   ],
+   "addresses_verdict": {
+    "2023-12-31": "The earlier reviewer said a 20.00 % fixed coupon (Retail & Animal Intermediate Delayed Draw Priming Term Loan) was read as a spread. In this build that row has no spread; the only row with a spread above 15 is the Ruby Tuesday Incremental Term Loan, printed 'SOFR + 16.00 %'. The verdict does not stand.",
+    "2025-12-31": "The earlier reviewer said Noramco's 0.38 % PIK leg was read as the spread. In this build Noramco publishes basis_spread 8.38 (printed 'SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK') and pik_rate 0.38; the flagged row is the Ruby Tuesday Incremental Term Loan at the printed 'SOFR + 16.00 %'. The verdict does not stand."
+   },
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-0001603480-fmt_pik_rate-2",
@@ -1529,6 +1714,38 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-0001715933-C115-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2025-03-31"
+   ],
+   "statement": "The spreads above 15 are printed on the rows: WDE TorcSill SOFR + 18.75 % and PRIME + 18.25 %, Red Lobster SOFR + 15.50 %. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78,",
+     "quote": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78, (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-0001715933-C117-14",
    "class": "as_filed",
    "engine": "row_validation",
@@ -1998,6 +2215,91 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
    "decided_by": "owner, 2026-11-04, reason filed-cash-equivalents-zero-while-schedule-prints-money-fund: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-0001715933-SRC_BDC03-17",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The page prints 134,113 for the row and for the issuer subtotal; the inline fact on C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 is tagged us-gaap:InvestmentOwnedAtFairValue with format ixt:fixed-zero, which makes the instance value 0 whatever the displayed text. Published 134,113 by row correction from the printed line; the source check compares with the instance value 0, so the two disagree by construction.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113",
+     "quote": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113 (printed value; tag format fixed-zero)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tag-format-is-fixed-zero: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001715933-blocking_fair_value_disagreement-18",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The page prints 134,113 for the row and for the issuer subtotal; the inline fact on C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 is tagged us-gaap:InvestmentOwnedAtFairValue with format ixt:fixed-zero, which makes the instance value 0 whatever the displayed text. Published 134,113 by row correction from the printed line; the source check compares with the instance value 0, so the two disagree by construction.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113",
+     "quote": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113 (printed value; tag format fixed-zero)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tag-format-is-fixed-zero: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001715933-fmt_basis_spread-13",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2025-06-30"
+   ],
+   "statement": "The spreads above 15 are printed on the rows: WDE TorcSill SOFR + 18.75 % and PRIME + 18.25 %, Red Lobster SOFR + 15.50 %. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78,",
+     "quote": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78, (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10",
+   "addresses_verdict": {
+    "2024-03-31": "An earlier reviewer found AGY Holdings rows built from shortened affiliate roll-forward text without spread or maturity. Those roll-forward contexts are no longer published (schedule_row_tags); the two rows now above 15 are the Red Lobster term loans whose printed spread is SOFR + 15.50 %."
+   }
   },
   {
    "disposition_id": "DS-0001715933-fmt_interest_rate-11",
@@ -2605,6 +2907,31 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-0001825265-C115-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001825265"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "The spread above 15 is Signature Brands' 9th Amendment Term Loan A, printed 'SOFR + 17.50 %' with a coupon of 22.03 % all PIK (2025-06-30). Published 17.5 / 22.03 as printed; from 2025-09-30 the filer prints the same loan as '17.50 %, Fixed Coupon'. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107434",
+     "verbatim": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469",
+     "quote": "printed margin 17.50"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-0001825265-C117-7",
    "class": "as_filed",
    "engine": "row_validation",
@@ -2791,6 +3118,99 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
    "decided_by": "owner, 2026-11-04, reason f33-no-distribution-declared-in-the-quarter: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-0001825265-SRC_BDC03-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001825265"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "The value mismatch is the D&D Buyer revolver of 2023-12-31. The 10-K tags Alorica's fair value 33,046,946 on the revolver's context (C_55ae7aaf-0205-4376-954b-fd4d37c2891f) and the revolver's 1,130,534 on a third context that carries nothing else (C_0ef4405c-e370-487d-bbbc-08d1e3cf4aee, not a position under schedule_row_tags). The published revolver holds the printed 1,130,534 (row correction) and Alorica its printed 33,046,946 (untagged_values on its own context C_fa46a8e5-251b-4eb9-a091-957d935f5374, which carries its cost and par and no value). Published fair value and cost then equal the printed totals (742,916,128 and 738,207,203). The source check compares the revolver with the wrong tag; no further fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534",
+     "quote": "printed revolver value 1,130,534"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946",
+     "quote": "33,046,946 is Alorica's printed value"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "Total Debt Investments (2) 161.5 % 738,207,203 742,916,128",
+     "quote": "totals tie with the corrections"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tags-are-cross-tagged: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001825265-blocking_fair_value_scale_or_unit_candidate-10",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001825265"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "Same row as the SRC_BDC03 finding: source reconciliation reads the D&D Buyer revolver's context fact 33,046,946 (Alorica's value, tagged on the wrong context) against the published 1,130,534 printed for the revolver, and labels the 29x difference a scale candidate. It is not a scale error: both printed values are published on their own rows and the quarter's fair value and cost equal the printed totals.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534",
+     "quote": "printed revolver value"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946",
+     "quote": "the tagged 33,046,946 belongs to Alorica"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
+   "decided_by": "owner, 2026-11-10, reason src-fv-tagged-on-neighbour-context-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001825265-fmt_basis_spread-6",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001825265"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "The spread above 15 in this quarter is Signature Brands' printed SOFR + 17.50 % (the C115 row). Published as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107434",
+     "verbatim": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK)",
+     "quote": "printed margin 17.50"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-0001825265-fmt_pik_rate-8",
@@ -3098,6 +3518,65 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-0001954360-SRC_BDC03-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "statement": "The filer splits a printed figure at a space and tags only the trailing digits (WCT '3,43 4' tagged 343; Pinnacle '3, 607 3, 575' tagged 607 / 575). Published values are the printed figures; the industry subtotals and the quarter totals tie with them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-tag-drops-leading-digit-printed-in-own-cell: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001954360-SRC_BDC03-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "MB2 Dental delayed-draw fair value tagged -38,000 where the page prints 38 unbracketed; published 38,000 by row correction. With it the Health Care block equals its printed subtotal less the untagged second line (23).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23",
+     "quote": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-fv-sign-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-0001954360-X02-1",
    "class": "as_filed",
    "engine": "row_validation",
@@ -3173,6 +3652,96 @@
    "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
    "decided_by": "owner, 2026-11-04, reason x11-undrawn-line-par-printed-as-dash: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-0001954360-blocking_fair_value_disagreement-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "The filer splits a printed figure at a space and tags only the trailing digits (WCT '3,43 4' tagged 343; Pinnacle '3, 607 3, 575' tagged 607 / 575). Published values are the printed figures; the industry subtotals and the quarter totals tie with them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-tag-drops-leading-digit-printed-in-own-cell: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001954360-blocking_fair_value_disagreement-2",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "MB2 Dental delayed-draw fair value tagged -38,000 where the page prints 38 unbracketed; published 38,000 by row correction. With it the Health Care block equals its printed subtotal less the untagged second line (23).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23",
+     "quote": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-fv-sign-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-0001954360-blocking_fair_value_scale_or_unit_candidate-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "statement": "The filer splits a printed figure at a space and tags only the trailing digits (WCT '3,43 4' tagged 343; Pinnacle '3, 607 3, 575' tagged 607 / 575). Published values are the printed figures; the industry subtotals and the quarter totals tie with them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-tag-drops-leading-digit-printed-in-own-cell: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-0001954360-fmt_principal_amount-1",
@@ -3661,6 +4230,50 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-A01-1849894-5",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001849894"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "The 10-K for 2024-12-31 tags the 49,277 Accession Risk Management delayed-draw loan on a second Titan Purchaser member under Automotive, so the Banking, Finance, Insurance & Real Estate subtotal 308,744 finds rows of 259,467; the 10-Q for 2025-03-31 repeats those tags in its comparative schedule. The 10-K also carries the prior-year Second Lien Services: Business subtotal 50,363 on a current-period context. The published row is corrected to Accession Risk Management (row correction of D-099) and carries the Banking industry; the member the filer chose cannot be changed, so the check keeps firing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-042155",
+     "verbatim": "Automotive Titan Purchaser, Inc. S + 6.00 % 1.00 % 10.32 % 3/1/2030 10,979 10,893 11,075 0.46 Banking, Finance, Insurance & Real Estate Accession Risk Management - Delayed Draw Term Loan S + 4.75 % 0.75 % 9.34 % 11/1/2029 49,277 48,703 49,277 2.05",
+     "quote": "'Automotive Titan Purchaser, Inc. S + 6.00 % 1.00 % 10.32 % 3/1/2030 10,979 10,893 11,075 0.46 Banking, Finance, Insurance & Real Estate Accession Risk Management - Delayed Draw Term Loan S + 4.75 % 0.75 % 9.34 % 11/1/2029 49,277 48,703 49,277 2.05': the printed line is under Banking; its tags sit on a Titan Purchaser member."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-042155",
+     "verbatim": "Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco",
+     "quote": "'Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco': the printed Banking subtotal; 308,744 - 259,467 = 49,277."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071644",
+     "verbatim": "Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco",
+     "quote": "'Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco': the same subtotal in the 2024-12-31 comparative schedule of the 10-Q for 2025-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-042155",
+     "verbatim": "Trace3 Inc. (8) L + 7.76 % 0.50 % 13.17 % 10/8/2029 33,750 32,995 33,080 3.53 50,189 50,363 5.37 Services: Consumer",
+     "quote": "'Trace3 Inc. (8) L + 7.76 % 0.50 % 13.17 % 10/8/2029 33,750 32,995 33,080 3.53 50,189 50,363 5.37 Services: Consumer': 50,363 is printed in the December 31, 2023 schedule of the 10-K."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
+   "decided_by": "owner, 2026-11-10, reason a01-row-tagged-on-another-issuers-member: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-A01-1902649-3",
    "class": "as_filed",
    "engine": "oracle",
@@ -3684,6 +4297,32 @@
    "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-25-067060 \"151,169,360\" 1 50 2600",
    "decided_by": "owner, 2026-11-04, reason a01-subtotal-tagged-on-wrong-member: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-A01-1902649-4",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001902649"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "2023-12-31: the Sotheby's line printed under Diversified Consumer Services (899,649) is tagged on a PointClickCare member under Health Care Technology, so the check's Diversified Consumer Services children are 899,649 short and its Health Care Technology children 899,649 over (7,429,583 against 6,529,934; 6,997,327 against 7,896,976). The row is now published as Sotheby's by row correction; its industry still follows the member (observation). No further fix applies through the row-correction fields. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-024153",
+     "verbatim": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 % 7,339,829 7,429,583 1.76 %",
+     "quote": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 % 7,339,829 7,429,583 1.76 % - Sotheby's closes the Diversified Consumer Services section; its values are on context C_ad22e590 whose member names PointClickCare"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-24-024153 \"Sotheby\" 4 150 40",
+   "decided_by": "owner, 2026-11-10, reason a01-row-tagged-on-another-issuers-member: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "class_proposed": "false_alarm"
   },
   {
    "disposition_id": "DS-A07-1766037-1",
@@ -3942,6 +4581,56 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-AOYA-RVQ_REV_47d165bc0c84",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0002052152"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "Reconstructed flagged population: one Vantage December2025 loan; basis_spread15.74 equals printed675bps cash margin plus8.99percent PIK. Tested decimal error and omitted PIK hypotheses: source explicitly prints8.99percent, so reducing it to0.899 or omitting it would contradict source. This is source conformity only; the unusually high PIK may itself be a filing error. No economic correctness claim. Propose as-filed disposition for the printed total spread15.74; retain both cash-margin and PIK source evidence, no threshold widening.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104533",
+     "verbatim": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)",
+     "quote": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-AOYA-RVQ_REV_509b000aa387",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0002052152"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "Reconstructed flagged population: one Vantage December2025 loan; basis_spread15.74 equals printed675bps cash margin plus8.99percent PIK. Tested decimal error and omitted PIK hypotheses: source explicitly prints8.99percent, so reducing it to0.899 or omitting it would contradict source. This is source conformity only; the unusually high PIK may itself be a filing error. No economic correctness claim. Propose as-filed disposition for the printed total spread15.74; retain both cash-margin and PIK source evidence, no threshold widening.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104533",
+     "verbatim": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)",
+     "quote": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-AOYA-RVQ_REV_7d8625d17374",
    "class": "as_filed",
    "engine": "row_validation",
@@ -4121,6 +4810,65 @@
    "rerun": "nvasd; report docs/investigations/v05_readings/reports/0001918712.json",
    "decided_by": "owner, 2026-11-04, reason numeric-only-exact-source-subtotal: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04",
+   "execution_restriction": "Authorized accepted store pre-dirty and immutable; gate line72 forbids unique accepted store. Subtotal additionally requires owner acceptance-standard decision."
+  },
+  {
+   "disposition_id": "DS-ASIF-X11-20261020",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)",
+     "quote": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4 (6)(13)",
+     "quote": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "TI VI Holdings 1, L.P. (12) Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5 (6)(13)",
+     "quote": "TI VI Holdings 1, L.P. (12) Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Tikehau Green Diamond II CFO Equity LP (12) Private asset-backed investment 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,865.6 (6)(13)",
+     "quote": "Tikehau Green Diamond II CFO Equity LP (12) Private asset-backed investment 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,865.6 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Tikehau Ruby CLO Equity LP (12) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 424.6 491.0 (6)(8)(13)",
+     "quote": "Tikehau Ruby CLO Equity LP (12) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 424.6 491.0 (6)(8)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Tikehau Topaz LP (12) Private asset-backed investment 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,240.3 2,278.6 (6)(8)(13)",
+     "quote": "Tikehau Topaz LP (12) Private asset-backed investment 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,240.3 2,278.6 (6)(8)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    }
+   ],
+   "addresses_verdict": {
+    "2026-03-31": "Prior proposal hid a missing printed JPMMT count and was rejected as insufficient; count now repaired. Owner D151/D152 explicitly preserve counts as units rather than inventing principal. Q22026 separate JPMMT36,628.1K principal tranche and1,276,413,070-unit tranche remain separate. Propose existing x11-count-in-units-column-no-principal after repair; automatic acceptance not run because authorized fundloop accepted store was pre-dirty and gate line72 forbids a unique store."
+   },
+   "rerun": "nvasd; report docs/investigations/v05_readings/reports/0001918712.json",
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
    "execution_restriction": "Authorized accepted store pre-dirty and immutable; gate line72 forbids unique accepted store. Subtotal additionally requires owner acceptance-standard decision."
   },
   {
@@ -6324,6 +7072,128 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-C115-1508655-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "American Achievement's small first-lien loan prints a margin of SOFR + 15.10 % (incl. PIK). Published as printed. (The fixed-rate loans that C115 also flagged, Volante, Equinox and others, are fixed: spread withdrawn, coupon Fixed.)",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-332725",
+     "verbatim": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 %",
+     "quote": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 % -- 2026-06-30"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-C115-1572694-8",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "2026-06-30: MPI Engineered Technologies prints 'S + 17.00 % PIK'; the published spread 17.00 is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-338331",
+     "verbatim": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355",
+     "quote": "'MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355': the printed line."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-C115-1742313-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "One loan, Evolve Biologics Inc. (fair value 17.5M to 20.4M), is printed with a spread of 16.00 in each of the seven filings: the reference rate plus 16.00 is the printed coupon, half paid in cash and half in kind. Published is the page. No fix applies: the figure is the filer's own and is consistent with the printed coupon.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %': 2023-03-31, spread column 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %': 2023-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-002414",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %': 2023-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000006",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %': 2023-12-31; cash 10.67 plus PIK 10.67 is the reference rate plus 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %",
+     "quote": "'Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %': 2024-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000084",
+     "verbatim": "Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %",
+     "quote": "'Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %': 2024-09-30."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-C115-1742313-3",
    "class": "as_filed",
    "engine": "row_validation",
@@ -6367,6 +7237,38 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
    "decided_by": "owner, 2026-11-04, reason c115-negative-spread-is-a-printed-margin-under-prime: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-C115-1901612-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001901612 0001901612-23-000051 \"Goldcup 31018 AB(7)(8)(11)(18) One stop E + 16.46 % (b) 9.71 % cash/ 9.96 % PIK 07/2029 72,324 68,965 0.1 71,059\" 1 122 && python scripts/v05_evidence/page_line.py 0001901612 0001901612-24-000027 \"Salon Lofts Group, LLC(5) Second lien SF + 17.00 % N/A(6) 09/2029 - ( 13 ) - ( 11 )\" 1 93",
+   "ciks": [
+    "0001901612"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31"
+   ],
+   "statement": "The one row flagged each quarter prints a spread above 15: Goldcup 31018 AB 'E + 16.46 %' at 2023-06-30 (the cash and PIK margins together; rate 9.71 % cash plus 9.96 % PIK, published 19.67 all-in) and the undrawn Salon Lofts second-lien line 'SF + 17.00 %' at 2023-12-31. Published as printed; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001901612-23-000051",
+     "verbatim": "Goldcup 31018 AB(7)(8)(11)(18) One stop E + 16.46 % (b) 9.71 % cash/ 9.96 % PIK 07/2029 72,324 68,965 0.1 71,059",
+     "quote": "2023-06-30: spread printed 16.46 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901612-24-000027",
+     "verbatim": "Salon Lofts Group, LLC(5) Second lien SF + 17.00 % N/A(6) 09/2029 - ( 13 ) - ( 11 )",
+     "quote": "2023-12-31: spread printed 17.00 % on an unfunded line"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-C117-1634452-6",
@@ -6583,6 +7485,69 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-CONV-1901037-1",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "statement": "One Sapphire Aggregator convertible bond per quarter (fair value 41,533 and 42,848) prints a coupon below its PIK rate: '7.80 %' (2025-03-31) and '7.760 %' (2025-09-30) in the coupon column with cash 0.00 % and PIK 8.00 %. The filer tags the coupon 0.078 / 0.0776 with the plain rate concept and PIK 0.08; under the fund's all-in reading a PIK above the coupon is unresolved, so no rate is published. The sibling bonds print 8.0 % / 8.00 %. Which printed figure is the accruing rate cannot be told from the page; no correction is made.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %': coupon 7.80 % printed below PIK 8.00 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-25-112365",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %': coupon 7.760 % printed below PIK 8.00 %"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-COVERAGE-1812554-202503",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "field_coverage_drop",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "basis": "read",
+   "statement": "The percent-of-net-assets coverage falls from 490/490 funded published rows to 0/506. The March 2025 filing still has the column heading but prints percentage figures on aggregate lines instead of individual positions. The tagged position facts and printed position cells supply no percent to extract. Do not allocate an aggregate percent or relabel calculated percent as filed. No source-backed position-value correction applies.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001812554-25-000030",
+     "verbatim": "IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(7) First lien senior secured loan S+ 5.00 % 12/2028 228,932 $ 228,932 $ 228,932 IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(6)(18) First lien senior secured revolving loan S+ 5.00 % 12/2027 1,598 1,598 1,598 Monotype Imaging Holdings Inc.(6)(18) First lien senior secured loan S+ 5.50 % 2/2031 170,317 169,141 170,317 Project Boost Purchaser, LLC (dba J.D. Power)(7)(21) First lien ",
+     "quote": "IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(7) First lien senior secured loan S+ 5.00 % 12/2028 228,932 $ 228,932 $ 228,932 IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(6)(18) First lien senior secured revolving loan S+ 5.00 % 12/2027 1,598 1,598 1,598 Monotype Imaging Holdings Inc.(6)(18) First lien senior secured loan S+ 5.50 % 2/2031 170,317 169,141 170,317 Project Boost Purchaser, LLC (dba J.D. Power)(7)(21) First lien  Individual position rows end at fair value; no row percent is printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-25-000030",
+     "verbatim": "Boxer Parent Company Inc. (f/k/a BMC)(7)(21) First lien senior secured loan S+ 3.00 % 7/2031 68,250 68,213 66,981 Capstone Acquisition Holdings, Inc.(6) First lien senior secured loan S+ 4.50 % 11/2029 85,142 84,581 84,716 ConnectWise, LLC(7)(21) First lien senior secured loan S+ 3.50 % 9/2028 44,282 44,360 44,198 CoolSys, Inc.(8)(21) First lien senior secured loan S+ 4.75 % 8/2028 13,701 12,987 12,331 CoreTrust Purchasing Group LLC(6) First lien senior secured loan S+ 5.25 % 10/2029 112,333 111",
+     "quote": "Boxer Parent Company Inc. (f/k/a BMC)(7)(21) First lien senior secured loan S+ 3.00 % 7/2031 68,250 68,213 66,981 Capstone Acquisition Holdings, Inc.(6) First lien senior secured loan S+ 4.50 % 11/2029 85,142 84,581 84,716 ConnectWise, LLC(7)(21) First lien senior secured loan S+ 3.50 % 9/2028 44,282 44,360 44,198 CoolSys, Inc.(8)(21) First lien senior secured loan S+ 4.75 % 8/2028 13,701 12,987 12,331 CoreTrust Purchasing Group LLC(6) First lien senior secured loan S+ 5.25 % 10/2029 112,333 111 Individual position rows end at fair value; no row percent is printed."
+    }
+   ],
+   "rerun": "scratch/fund_runs/0001812554/read_fund_findings.py; coverage_population.csv",
+   "decided_by": "owner, 2026-11-10, reason coverage-percent-of-net-assets-no-longer-printed: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-CWA-B01",
    "class": "as_filed",
    "engine": "oracle",
@@ -6668,6 +7633,31 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
    "decided_by": "owner, 2026-11-04, reason undrawn-line-negative-cost-from-unamortized-fees: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-CWA-D06",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "D06",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "statement": "Issuer continuity 2024-06-30 to 2024-09-30 is 25 of 53 by exact name because the 10-Q 2024-09-30 renamed the portfolio companies to their legal names (footnote 13), e.g. 'Hasa' -> 'Hasa Acquisition, LLC'. The published names are the printed ones; the companies continue.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125642",
+     "verbatim": "(13) The Company updated certain descriptions of its portfolio companies presented in the consolidated financial statements as of September 30, 2024 to align with the legal issuer name, where applicable.",
+     "quote": "(13) The Company updated certain descriptions of its portfolio companies presented in the consolidated financial statements as of September 30, 2024 to align with the legal issuer name, where applicable. -- names changed by the filer, not exits"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "owner, 2026-11-10, reason d06-issuer-spelling-differs-between-filings: \"do as recommended\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-CWA-F30",
@@ -11583,6 +12573,74 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-PROPOSED-nvapf-C115-1837532-20241231",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038785",
+     "verbatim": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)",
+     "quote": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+    },
+    {
+     "source": "investigation",
+     "path": "scratch/fund_runs/0001837532/material_independent_review.json",
+     "quote": "non-filing record: scratch/fund_runs/0001837532/material_independent_review.json"
+    }
+   ],
+   "addresses_verdict": {
+    "2024-12-31": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged."
+   },
+   "rerun": "python scripts/v05_evidence/flagged.py nvapf C115 1837532 2024-12-31",
+   "proposed_by": "/root/apollo_sol",
+   "proposed_on": "2026-10-20",
+   "decided_by": "owner, 2026-11-10, reason c115-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-PROPOSED-nvapf-fmt_basis_spread-1837532-20241231",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001837532"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038785",
+     "verbatim": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)",
+     "quote": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+    },
+    {
+     "source": "investigation",
+     "path": "scratch/fund_runs/0001837532/material_independent_review.json",
+     "quote": "non-filing record: scratch/fund_runs/0001837532/material_independent_review.json"
+    }
+   ],
+   "addresses_verdict": {
+    "2024-12-31": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged."
+   },
+   "rerun": "python scripts/v05_evidence/flagged.py nvapf fmt_basis_spread 1837532 2024-12-31",
+   "proposed_by": "/root/apollo_sol",
+   "proposed_on": "2026-10-20",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-RAMP-1899017-11",
    "class": "as_filed",
    "engine": "oracle",
@@ -11726,6 +12784,100 @@
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/fund_financials_validation_current.csv | grep F25",
    "decided_by": "owner, 2026-11-04, reason growth-heuristics-while-fund-ramps: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-SCALE-1899017-5",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "Four rows are tagged decimals 0 with the thousands figure as the value (KAMC Holdings term loan and revolver at 2025-09-30, fair value only; Spotless Brands delayed draw and Spindrift subordinated debt at 2025-12-31, all three money facts). The published rows carry the printed figures through row corrections (D-127) and published fair value equals the filed total in both quarters; the source check compares with the raw tag and keeps firing. No fix applies to the filing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-283129",
+     "verbatim": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556",
+     "quote": "'KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556': value 32,556 thousand, tagged 32,556 at decimals 0."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
+     "verbatim": "Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618",
+     "quote": "'Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618': tagged 9,618 / 9,586 / 9,618 dollars."
+    }
+   ],
+   "rerun": "grep 1899017 data/overrides/row_corrections.csv",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SCALE-1916099-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001916099"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Two rows of the 10-Q for 2026-06-30, L2 Brands Holdings term loan and CWC Fund II (Cresset) preferred, are tagged with the printed thousands figure at decimals 0 (13,835 and 9,949), in a schedule whose other facts are decimals -3. The published values are the printed ones (row corrections, each with its printed line); with them published equals the filed total 2,807,208 (23.8M short before).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342470",
+     "verbatim": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835",
+     "quote": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835 -- tagged InvestmentOwnedAtFairValue 13835 decimals 0 (context C_9bc50948)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342470",
+     "verbatim": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949",
+     "quote": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949 -- tagged 9949 decimals 0 (context C_9b2f1289)"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 0001916099 000119312526342470 xml C_9bc50948-995f-400f-ab0a-bcddf6e211f8",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SCI-BDCSRC-UNSCALED",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "Same two Chartwell rows as PD-SCI-SRC-UNSCALED: the source reconciliation sees published 6,671,000 / 443,000 against tagged 6,671 / 443 and calls it a scale candidate. It is one: the filer omitted the thousands scale on these two facts.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7 -- printed in thousands"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7 -- printed in thousands"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "owner, 2026-11-10, reason fact-tagged-without-thousands-scale-published-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-SCI-C04-FIREBIRD",
@@ -11951,6 +13103,37 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-SCI-SRC-UNSCALED",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "Chartwell's two loans at 2023-12-31 are tagged with cost and fair value at decimals 0 (6,506 / 6,671 and 432 / 443 dollars) beside principal at decimals -3 (6,773,000 / 450,000) in a schedule printed in thousands. The build publishes the printed thousands (row correction); the source check compares with the unscaled tag. Without the correction the quarter is 7.1M short of the printed total; with it the quarter ties exactly.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7 -- printed in thousands: 6,506 cost, 6,671 fair value"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7 -- printed in thousands: 432 cost, 443 fair value"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "owner, 2026-11-10, reason fact-tagged-without-thousands-scale-published-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-SEED-A07-2012139",
    "class": "as_filed",
    "engine": "oracle",
@@ -12138,6 +13321,68 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-SRC-1786108-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001786108"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "Empower Financial's May 15, 2024 loan: the page prints each amount with its leading digit in a cell of its own ('1 4,495 1 4,511 1 4,511'), and the filer tagged only the second cell (4,495 / 4,511 / 4,511 thousand). The issuer total needs 14,495 / 14,511 / 14,511. Published fair value 14,511 (the promoted rule) and, from this run, cost 14,511 and par 14,495 (row corrections) equal the page; the source check compares with the tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-092284",
+     "verbatim": "Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)",
+     "quote": "leading digit printed in its own cell"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-092284",
+     "verbatim": "Total Empower Financial, Inc. 37,720 36,860 37,449",
+     "quote": "issuer total requires 14,495 / 14,511 / 14,511"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001786108 0000950170-24-092284 \"Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)\" 1 138 && python scripts/v05_evidence/page_line.py 0001786108 0000950170-24-092284 \"Total Empower Financial, Inc. 37,720 36,860 37,449\" 1 50",
+   "decided_by": "owner, 2026-11-10, reason src-tag-drops-leading-digit-printed-in-own-cell: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC-1825384-3",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001825384"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "Three rows of the 10-K for 2025-12-31 (Helpsystems second lien, MRI Software delayed draw and revolver) are tagged with the printed thousands figure at decimals 0 and no scale, in a schedule whose other facts are scaled: fair value 8,182 for a printed 8,182 thousand. The published values are the printed ones (row corrections of D-117, each with its printed line); the source check compares with the tag and keeps the 10.56M difference. The quarter ties to the filed total 2,882,954.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096955",
+     "verbatim": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 %",
+     "quote": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 % -- printed in thousands; tagged 8182 at decimals 0, published 8,182,000 (D-117)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096955",
+     "verbatim": "MRI Software LLC First Lien Delayed Draw Term Loan (10) SOFR + 4.75 %, 1.00 % Floor 8.42 % 2/10/2028 1,971 1,929 1,888 0.1 %",
+     "quote": "MRI Software LLC First Lien Delayed Draw Term Loan (10) SOFR + 4.75 %, 1.00 % Floor 8.42 % 2/10/2028 1,971 1,929 1,888 0.1 % -- same; the revolver (506 / 495 / 494) likewise"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001825384.md section 1",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-SRC01-1916099-1",
    "class": "not_applicable",
    "engine": "row_validation",
@@ -12176,6 +13421,56 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-SRC03-1786108-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001786108"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "The same Empower Financial row: published 14,511 (page) against the tagged 4,511 (the filer tagged only the second of two cells).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-092284",
+     "verbatim": "Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)",
+     "quote": "leading digit printed in its own cell"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001786108 0000950170-24-092284 \"Secured Loan May 15, 2024 May 1, 2028 Variable interest rate Prime + 4.8 % or Floor rate 11.5 %; EOT 3.8 % 1 4,495 1 4,511 1 4,511 (8)(19)\" 1 138",
+   "decided_by": "owner, 2026-11-10, reason src-tag-drops-leading-digit-printed-in-own-cell: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC03-1916099-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001916099"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The same two rows (L2 Brands, CWC Fund II): the published value differs from the tagged fact because the tag lacks the thousands scale.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342470",
+     "verbatim": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835",
+     "quote": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835 -- in thousands"
+    }
+   ],
+   "rerun": "see PD-SCALE-1916099-1",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-SRCBLK-1920453-1",
    "class": "as_filed",
    "engine": "source_recon",
@@ -12205,6 +13500,31 @@
    ],
    "decided_by": "owner, 2026-11-04, reason src-missing-row-is-an-excluded-printed-subtotal: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-SRCFV-1899017-22",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Atlas Bidco's undrawn AUD revolver at 2026-06-30: the page prints cost ( 3 ) and value ( 3 ) thousand; the fair value fact (context C_d1954ba6) is 3000 with no sign while the cost fact on the same context carries it. The published value is the printed -3,000 (row correction of round 2, D-238). The source check compares with the raw tag (3,000) and fires on the sign. The finding exists only because of the correction. No fix applies to the filing. Before the correction X11 fired on the same row because +3,000 made it look like a drawn loan.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
+     "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
+     "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, value printed in brackets (negative), published -3,000."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001899017 0001193125-26-349812 \"Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )\" 1 107",
+   "decided_by": "owner, 2026-11-10, reason src-fv-sign-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-SRCPM-1916099-1",
@@ -12799,6 +14119,403 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-SRC_BDC02-1766037-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC02",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The pipeline-only row at 2026-03-31 is DigiCert's first lien, corrected from the printed line: the filer tagged it one column off (c-242 principal 7,016 = printed cost, cost 7,010 = printed value, fair value 0.0073 = printed percent; spread 5.75 and principal 7,063 on c-241 under a Bonterra member). Published 7,063 / 7,016 / 7,010, spread 5.75, as printed; no source fact carries 7,010 as a fair value, so the source check cannot pair it. The promoted rescale rule that published 7,300 is withdrawn. Published fair value equals the filed 1,457,048.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %",
+     "quote": "'DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %': the corrected row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tags-are-cross-tagged: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC02-1851322-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC02",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "One row (fair value 1.09M) is added from the printed page by rule add_missing_atlas_purchaser_first_lien_2025_03: the filing prints the line and tags none of its values, so the row has no source context to reconcile or re-verify against. Its values are the printed ones. No fix applies: a value can be declared on an existing context only, and this line has none.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000044",
+     "verbatim": "Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03",
+     "quote": "'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03': 2025-03-31, the first of two printed Atlas Purchaser lines. The instance holds no fact of 1,093,000 and no cost fact of 915,000 on an Atlas member (members 'Atlas Purchaser, Inc.', '... 1', '... 2' exist; the second printed line, 2,524 / 1,674 / 1,287, is tagged and published)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/fact_members.py 0001851322 0001851322-25-000044 1093000",
+   "decided_by": "owner, 2026-11-10, reason page-added-row-has-no-tagged-fact: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1572694-11",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The value mismatch is the AI Titan Parent row of 2026-03-31 whose fair value was corrected from the printed line (the filer cross-tagged the two AI Titan values). Published 294 on the 1,433 par line and 7,024 on the 7,167 par line, as printed; the tagged facts are the other way round.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294",
+     "quote": "'AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294': the printed pairing."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tags-are-cross-tagged: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1772704-rfgs-202309",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The filer's fair-value fact disagrees with the printed line (scale: -70 and -27 for printed ( 70 ) and ( 27 ) thousand); the published value follows the page and the quarter's total ties to the printed total. The finding is the source check reading the defective tag. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749",
+     "quote": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199",
+     "quote": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json (sandbox rfgsf)",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1772704-rfgs-202312",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "The filer's fair-value fact disagrees with the printed line (digits: -13 thousand for a printed ( 13 5 )); the published value follows the page and the quarter's total ties to the printed total. The finding is the source check reading the defective tag. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026141",
+     "verbatim": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924",
+     "quote": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json (sandbox rfgsf)",
+   "decided_by": "owner, 2026-11-10, reason fv-digit-split-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1825384-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001825384"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The three value mismatches are the same three rows as the source-reconciliation finding of this quarter: the tag holds the printed thousands figure unscaled, the published row holds the printed value (D-117 row corrections). The source fact is the one that is wrong; publishing it would put the quarter 10.55M under the filed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096955",
+     "verbatim": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 %",
+     "quote": "Helpsystems Holdings, Inc. Second Lien Term Loan SOFR + 9.00 % PIK, 2.00 % Floor 12.97 % 11/19/2027 10,175 10,003 8,182 0.6 % -- one of the three rows; 0.6 pct of 1,369,382 net assets is about 8.2M, not 8 thousand"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/0001825384.md section 1",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1899017-21",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Atlas Bidco's undrawn AUD revolver at 2026-06-30: the page prints cost ( 3 ) and value ( 3 ) thousand; the fair value fact (context C_d1954ba6) is 3000 with no sign while the cost fact on the same context carries it. The published value is the printed -3,000 (row correction of round 2, D-238). The source check compares with the raw tag (3,000) and fires on the sign. The finding exists only because of the correction. No fix applies to the filing. Before the correction X11 fired on the same row because +3,000 made it look like a drawn loan.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
+     "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
+     "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, value printed in brackets (negative), published -3,000."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001899017 0001193125-26-349812 \"Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )\" 1 107",
+   "decided_by": "owner, 2026-11-10, reason src-fv-sign-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1899017-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "The two rows a quarter flagged as differing from their source fact are the same four unscaled rows (KAMC Holdings x2 at 2025-09-30; Spotless Brands and Spindrift at 2025-12-31): published at the printed value by row correction, tagged a thousand times smaller. No fix applies to the filing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
+     "verbatim": "Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574",
+     "quote": "'Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574': tagged 1,574 / 1,536 / 1,574 dollars."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-283129",
+     "verbatim": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556",
+     "quote": "'KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556': fair value tagged 32,556 dollars."
+    }
+   ],
+   "rerun": "grep SRC_BDC03 scratch/fund_sandbox/bnxd/output/row_validation_issues.csv",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1902649-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001902649"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "The Sumo Logic revolver's fair value is tagged +7,379; the page prints ( 7,379 ). The published row holds the printed -7,379 (row correction). With it published fair value equals the filed investments total (it was 14,758 = 2 x 7,379 over). The tagged fact is the wrong one. untagged_values cannot express it (it fills only a missing value).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-038004",
+     "verbatim": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )",
+     "quote": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 ) - value printed in brackets; tagged +7,379 on C_9911f711"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1902649 000095017023038004 xml C_9911f711-fe4a-4d96-ae02-13be7b350623",
+   "decided_by": "owner, 2026-11-10, reason fv-sign-corrected-from-page-where-tag-drops-brackets: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1930679-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "statement": "The published cost and fair value of three undrawn commitment rows differ from their tagged facts because they are netted as the owner ruled (D-091) by row correction: the filer tagged the commitments on another issuer's member (2025-03-31: 923 on Discover, 4,130 on Lennar) or under the borrower's former name (2025-12-31: Curia Global, 10,333), so the shared netting did not match them. With them netted, 2025-03-31 and 2025-12-31 tie to the filed totals. The source check compares with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923",
+     "quote": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923 -- undrawn commitment row whose commitment the filer tagged on a Discover Financial Services member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130",
+     "quote": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130 -- undrawn commitment row whose commitment the filer tagged on a Lennar Corp member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-017326",
+     "verbatim": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437",
+     "quote": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437 -- undrawn commitment row listed in the commitments note under the former name; netted by row correction to 104"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1950803-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001950803"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The same five rows: published value differs from the tagged fact because the tag lacks the thousands scale.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224111",
+     "verbatim": "AKAM Buyer, Inc. Term A Loan (3)(4)(5)(7)(13) 1M SOFR + 4.75 % / 0.75 % 8.42 % 2/27/2032 2,158 2,126 2,137 0.10 %",
+     "quote": "AKAM Buyer, Inc. Term A Loan (3)(4)(5)(7)(13) 1M SOFR + 4.75 % / 0.75 % 8.42 % 2/27/2032 2,158 2,126 2,137 0.10 % -- printed in thousands; tagged 2137 with decimals 0, published 2,137,000 by the D-112 row correction"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001950803/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1975736-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "statement": "Undrawn commitment rows netted by row correction as the owner ruled (D-091, 'net each loan'): the filer tagged the commitment on another issuer's member (2025-06-30: Discover 7 on a Powin member, EW Scripps 5,697 on a Trinseo member; 2026-03-31: BGB Group 1,959 and Bond Aviation 7,093 on other members) or at an amount 1 thousand off the row's cost (Community Brands 568 and 1,455 at 2024-09-30), so the shared netting did not match them. With them netted, published equals the filed total in these quarters (it was 2.0M, 5.7M and 9.05M over). The source checks compare with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452",
+     "quote": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452 -- footnote (f) 'Security is an unfunded commitment'; the note lists 'Community Brands Inc 1,455'; netted cost 0, value -3"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697",
+     "quote": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697 -- footnote (h) 'Security is an unfunded commitment'; netted to 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697",
+     "quote": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697 -- the commitments note lists both rows; the tags sit on Powin and Trinseo members"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034547",
+     "verbatim": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093",
+     "quote": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093 -- footnote (i) undrawn; the note lists 'Bond Aviation Holdings LLC, Term Loan 7,093'; netted to 0"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-SRC_BDC03-1976336-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001976336"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "Two undrawn lines whose fair value fact carries a minus sign where the page prints the value without brackets: Oeconnection LLC's revolver at 2025-12-31 (context C_db5c99e4, tagged -3,000, printed 'cost ( 3 ) fair value 3') and Movati Athletic's delayed draw at 2026-03-31 (context C_42332ffe, tagged -7,000, printed 'cost ( 6 ) fair value 7'). The published values are the printed +3,000 and +7,000 (row corrections, rf run). With them the published rows equal the printed totals exactly: 'Total Investments at fair value 1,665,503' at 2025-12-31 (the tagged rows were 6 thousand short, the gap the 2026-10-10 reading could not place) and 'Total Secured Debt Investments 1,654,411' at 2026-03-31 (14 thousand short with the tags). The source check compares the published value with the instance fact and fires on the sign; the finding exists only because of the correction. No wrapper setting applies: source_encodings.bracketed_unsigned_values reads brackets that this filer prints in separate cells and would flip about 400 correctly signed facts in the 10-K for 2024-12-31 alone (dry run scratch/fund_runs/0001976336/sign_dry.py).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115260",
+     "verbatim": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -",
+     "quote": "'Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -': 2025-12-31, fair value printed 3 without brackets (tag -3,000); published +3,000."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115260",
+     "verbatim": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20",
+     "quote": "'Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20': published rows sum to 1,665,503 with the printed sign."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221684",
+     "verbatim": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -",
+     "quote": "'Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -': 2026-03-31, fair value printed 7 without brackets (tag -7,000); published +7,000."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221684",
+     "verbatim": "Total Secured Debt Investments 1,674,082 1,654,411 207.92",
+     "quote": "'Total Secured Debt Investments 1,674,082 1,654,411 207.92': secured-debt rows sum to 1,654,411 with the printed sign."
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001976336/printed_vs_published.py <label>",
+   "decided_by": "owner, 2026-11-10, reason src-fv-sign-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10",
+   "re_read": "re-read 2026-10-25 by claude-fund-agent-antares-rfap on sandbox rfapd; finding and evidence unchanged"
+  },
+  {
    "disposition_id": "DS-X01-1508655-6",
    "class": "as_filed",
    "engine": "row_validation",
@@ -13069,6 +14786,41 @@
    "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
    "decided_by": "owner, 2026-11-04, reason x02-no-rate-printed-on-the-row: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-X02-1646614-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "X02 at 2026-03-31: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state. X02 at 2026-06-30: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-218912",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "addresses_verdict": {
+    "2026-03-31": "The earlier reviewer listed six non-credit rows (SP-CREH equity, TH Liquidating Trust interests, cash rows) classed as private credit. None of them is flagged now: X02 at 2026-03-31 flags one row, Amerijet, whose rate is withheld by the convention step, not a classification problem."
+   }
   },
   {
    "disposition_id": "DS-X02-1674760-9",
@@ -13616,6 +15368,38 @@
    "rerun": "re-read 2026-10-25 against sandbox rftsc (fund-agent-rfts-0001885968): every flagged quarter read on the page; see docs/investigations/v05_readings/reports/0001885968.json",
    "decided_by": "owner, 2026-11-04, reason x02-no-rate-printed-on-the-row: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-X02-1901037-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "statement": "X02 flags the same two Sapphire Aggregator convertible bonds as PD-CONV-1901037-1: no interest rate is published because the printed coupon (7.80 %, 7.760 %) is below the printed PIK rate (8.00 %) and the reading is unresolved; the PIK rate 8.0 is published. Fixed coupon, so no spread.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %': coupon 7.80 % printed below PIK 8.00 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-25-112365",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %': coupon 7.760 % printed below PIK 8.00 %"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-X02-1901612-4",
@@ -14626,6 +16410,199 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-X11-1287750-2007-3R",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "statement": "ARES 2007-3R subordinated notes: the filer reports 20,000,000 in the Shares/Units column, nothing in the Principal column, a dash for cost and a fair value of 0.1M. No principal fact is filed. The count stays a unit count (the reason the owner accepted for Ares Strategic Income, D-151).",
+   "evidence": [
+    {
+     "source": "filing_note",
+     "quote": "0001287750-24-000028 (2024-03-31), header '... Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets': 'ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6)'. The same line is printed at 2023-12-31 (0001287750-24-000011)."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox ax3: the row carries a share-count fact of 20,000,000, cost 0, fair value 100,000 and no principal fact in each of the six quarters. The cost is zero, so the near-cost test of par_tagged_as_units cannot say whether the count is a par."
+    },
+    {
+     "source": "filing",
+     "accession": "0001287750-24-000028",
+     "verbatim": "Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets",
+     "quote": "'Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets' (0001287750-24-000028)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001287750-24-000028",
+     "verbatim": "ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6)",
+     "quote": "'ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6)' (0001287750-24-000028)"
+    }
+   ],
+   "rerun": "python scratch/2026-10-13_left/pg.py 1287750 000128775024000028 \"ARES 2007-3R\" 2 300 300",
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-X11-1287750-2022-12-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-12-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000010",
+     "verbatim": " Assets ACAS Equity Holdings Corporation (5) Investment company Common stock 1/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 1/2017 4/2021 20.0 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 1/2017 8.50",
+     "quote": " Assets ACAS Equity Holdings Corporation (5) Investment company Common stock 1/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 1/2017 4/2021 20.0 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 1/2017 8.50"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001287750 0001287750-23-000010 \" Assets ACAS Equity Holdings Corporation (5) Investment company Common stock 1/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 1/2017 4/2021 20.0 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 1/2017 8.50\" 1 279"
+  },
+  {
+   "disposition_id": "DS-X11-1287750-2023-03-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000021",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001287750 0001287750-23-000021 \"hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5\" 1 287"
+  },
+  {
+   "disposition_id": "DS-X11-1287750-2023-06-30",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000036",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001287750 0001287750-23-000036 \"hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5\" 1 287"
+  },
+  {
+   "disposition_id": "DS-X11-1287750-2023-09-30",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000045",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001287750 0001287750-23-000045 \"hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5\" 1 287"
+  },
+  {
+   "disposition_id": "DS-X11-1287750-2023-12-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-24-000011",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest (8.50% inte",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest (8.50% inte"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001287750 0001287750-24-000011 \"hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest (8.50% inte\" 1 287"
+  },
+  {
+   "disposition_id": "DS-X11-1287750-2024-03-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-24-000028",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Constellation Wealth Capital Fund, L.P. (16) Specialist alternative asset management platform Limit",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Constellation Wealth Capital Fund, L.P. (16) Specialist alternative asset management platform Limit"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001287750 0001287750-24-000028 \"hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Constellation Wealth Capital Fund, L.P. (16) Specialist alternative asset management platform Limit\" 1 287"
+  },
+  {
    "disposition_id": "DS-X11-1825384-1",
    "class": "as_filed",
    "engine": "row_validation",
@@ -14950,6 +16927,34 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-X11-1918712-2026Q1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The six flagged rows are tranches the filer reports in the Shares/Units column with no principal (the reason of DS-X11-1918712). Five carry a share-count fact. The sixth, JPMMT 2026-ACES1, prints 1,405,613,866 in that column and the filer tagged it with its percent-of-shares concept, so the row publishes neither a count nor a par. Not covered by the accepted entry, whose check requires a share-count fact.",
+   "evidence": [
+    {
+     "source": "filing_note",
+     "quote": "0001628280-26-034133: 'JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)'. Context c-778: InvestmentInterestRate 0.0466, asif:InvestmentOwnedBalancePercentOfShares 1405613866, cost 75,618,200, fair value 75,244,400; no principal and no share-count fact."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)",
+     "quote": "'JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)' (0001628280-26-034133)"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1918712 000162828026034133 xml c-778",
+   "decided_by": "owner, 2026-11-10, reason x11-count-in-units-column-no-principal: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-X11-1920453-1",
    "class": "as_filed",
    "engine": "row_validation",
@@ -14994,6 +16999,84 @@
    ],
    "decided_by": "owner, 2026-11-04, reason x11-undrawn-line-par-printed-as-dash: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-X11-1925309-NOPAR",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001925309"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "Three Sixth Street Lending Partners lines for which the page prints no par and the filing tags no principal: the second Galileo Parent line at 2023-06-30 (the par is printed once for two lines) and the Cordance Operations loan at 2025-06-30 and 2025-09-30, whose par is printed as a dash (an undrawn line carried at a negative cost and a small positive value). The reason the owner accepted for BCRED Pigments Services (D-152).",
+   "evidence": [
+    {
+     "source": "filing_note",
+     "quote": "0000950170-23-038548 (2023-06-30): 'Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %'. Context C_012cef69-358f-4851-8931-cca0016c3e6f carries rate, cost 9,745,000, fair value 10,020,000 and percent; no principal fact."
+    },
+    {
+     "source": "filing_note",
+     "quote": "0000950170-25-101397 (2025-06-30): 'Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 9.00 % - ( 443 ) 225 0.0 %'. 0001193125-25-266848 (2025-09-30): 'First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %'."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-038548",
+     "verbatim": "Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %",
+     "quote": "'Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %' (0000950170-23-038548)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-101397",
+     "verbatim": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 9.00 % - ( 443 ) 225 0.0 %",
+     "quote": "'Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 9.00 % - ( 443 ) 225 0.0 %' (0000950170-25-101397)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-266848",
+     "verbatim": "First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %",
+     "quote": "'First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %' (0001193125-25-266848)"
+    }
+   ],
+   "rerun": "python scratch/2026-10-13_left/pg.py 1925309 000095017025101397 \"Cordance\" 1 420",
+   "decided_by": "owner, 2026-11-10, reason x11-no-par-printed-on-the-row: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-X11-1950803-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001950803"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "statement": "The CIFC Stone Warehouse subordinated lender interest prints a dash in the principal column; no par is tagged.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-076567",
+     "verbatim": "CIFC Stone Warehouse Ltd. - Subordinated Lender (1)(3)(5)(10)(11) N/A N/A N/A $ - $ 29,250,000 $ 29,250,000 8.77 %",
+     "quote": "CIFC Stone Warehouse Ltd. - Subordinated Lender (1)(3)(5)(10)(11) N/A N/A N/A $ - $ 29,250,000 $ 29,250,000 8.77 % -- par printed as a dash"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-138529",
+     "verbatim": "CIFC Stone Warehouse Ltd.-Subordinated Lender (1)(3)(5)(10)(11) N/A N/A N/A - $ 29,250,000 $ 29,250,000 $ 6.83 %",
+     "quote": "CIFC Stone Warehouse Ltd.-Subordinated Lender (1)(3)(5)(10)(11) N/A N/A N/A - $ 29,250,000 $ 29,250,000 $ 6.83 % -- par printed as a dash"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001950803/notes.md",
+   "decided_by": "owner, 2026-11-10, reason x11-no-par-printed-on-the-row: \"do as recommended\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-X11-2012139-1",
@@ -15095,6 +17178,374 @@
    "rerun": "see scratch/fund_runs/0001975736/notes.md",
    "decided_by": "owner, 2026-11-04, reason balance-identity-preferred-shares-between-liabilities-and-net-assets: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_disagreement-1902649-13",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001902649"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Same row as the SRC_BDC03 entry: Sumo Logic revolver tagged +7,379, printed ( 7,379 ), published -7,379. No fix applies to the tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-038004",
+     "verbatim": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )",
+     "quote": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 ) - value printed in brackets"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/filing_grep.py 1902649 000095017023038004 xml C_9911f711-fe4a-4d96-ae02-13be7b350623",
+   "decided_by": "owner, 2026-11-10, reason fv-sign-corrected-from-page-where-tag-drops-brackets: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_disagreement-1930679-13",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "The published cost and fair value of three undrawn commitment rows differ from their tagged facts because they are netted as the owner ruled (D-091) by row correction: the filer tagged the commitments on another issuer's member (2025-03-31: 923 on Discover, 4,130 on Lennar) or under the borrower's former name (2025-12-31: Curia Global, 10,333), so the shared netting did not match them. With them netted, 2025-03-31 and 2025-12-31 tie to the filed totals. The source check compares with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923",
+     "quote": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923 -- undrawn commitment row whose commitment the filer tagged on a Discover Financial Services member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130",
+     "quote": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130 -- undrawn commitment row whose commitment the filer tagged on a Lennar Corp member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-017326",
+     "verbatim": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437",
+     "quote": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437 -- undrawn commitment row listed in the commitments note under the former name; netted by row correction to 104"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_disagreement-1975736-2",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "statement": "Undrawn commitment rows netted by row correction as the owner ruled (D-091, 'net each loan'): the filer tagged the commitment on another issuer's member (2025-06-30: Discover 7 on a Powin member, EW Scripps 5,697 on a Trinseo member; 2026-03-31: BGB Group 1,959 and Bond Aviation 7,093 on other members) or at an amount 1 thousand off the row's cost (Community Brands 568 and 1,455 at 2024-09-30), so the shared netting did not match them. With them netted, published equals the filed total in these quarters (it was 2.0M, 5.7M and 9.05M over). The source checks compare with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452",
+     "quote": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452 -- footnote (f) 'Security is an unfunded commitment'; the note lists 'Community Brands Inc 1,455'; netted cost 0, value -3"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697",
+     "quote": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697 -- footnote (h) 'Security is an unfunded commitment'; netted to 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697",
+     "quote": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697 -- the commitments note lists both rows; the tags sit on Powin and Trinseo members"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034547",
+     "verbatim": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093",
+     "quote": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093 -- footnote (i) undrawn; the note lists 'Bond Aviation Holdings LLC, Term Loan 7,093'; netted to 0"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_disagreement-1976336-8",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001976336"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "Two undrawn lines whose fair value fact carries a minus sign where the page prints the value without brackets: Oeconnection LLC's revolver at 2025-12-31 (context C_db5c99e4, tagged -3,000, printed 'cost ( 3 ) fair value 3') and Movati Athletic's delayed draw at 2026-03-31 (context C_42332ffe, tagged -7,000, printed 'cost ( 6 ) fair value 7'). The published values are the printed +3,000 and +7,000 (row corrections, rf run). With them the published rows equal the printed totals exactly: 'Total Investments at fair value 1,665,503' at 2025-12-31 (the tagged rows were 6 thousand short, the gap the 2026-10-10 reading could not place) and 'Total Secured Debt Investments 1,654,411' at 2026-03-31 (14 thousand short with the tags). The source check compares the published value with the instance fact and fires on the sign; the finding exists only because of the correction. No wrapper setting applies: source_encodings.bracketed_unsigned_values reads brackets that this filer prints in separate cells and would flip about 400 correctly signed facts in the 10-K for 2024-12-31 alone (dry run scratch/fund_runs/0001976336/sign_dry.py).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115260",
+     "verbatim": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -",
+     "quote": "'Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -': 2025-12-31, fair value printed 3 without brackets (tag -3,000); published +3,000."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115260",
+     "verbatim": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20",
+     "quote": "'Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20': published rows sum to 1,665,503 with the printed sign."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221684",
+     "verbatim": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -",
+     "quote": "'Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -': 2026-03-31, fair value printed 7 without brackets (tag -7,000); published +7,000."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221684",
+     "verbatim": "Total Secured Debt Investments 1,674,082 1,654,411 207.92",
+     "quote": "'Total Secured Debt Investments 1,674,082 1,654,411 207.92': secured-debt rows sum to 1,654,411 with the printed sign."
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001976336/printed_vs_published.py <label>",
+   "decided_by": "owner, 2026-11-10, reason src-fv-sign-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10",
+   "re_read": "re-read 2026-10-25 by claude-fund-agent-antares-rfap on sandbox rfapd; finding and evidence unchanged"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_scale_or_unit_candidate-1572694-13",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "2026-03-31: the filer cross-tagged the fair values of the two AI Titan Parent lines (the 1,433 par line's context carries 7,024, the 7,167 par line's carries 294). Both are corrected from the printed line by row correction, so the published value differs from the tagged fact on that context by 6.73M. The 10-Q for 2026-06-30 tags them the right way round. The quarter total is unchanged.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "verbatim": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294",
+     "quote": "'AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294': the printed pairing of par, cost and value."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tags-are-cross-tagged: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_scale_or_unit_candidate-1772704-rfgs-202309",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "The filer's fair-value fact disagrees with the printed line (scale: -70 and -27 for printed ( 70 ) and ( 27 ) thousand); the published value follows the page and the quarter's total ties to the printed total. The finding is the source check reading the defective tag. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749",
+     "quote": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199",
+     "quote": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json (sandbox rfgsf)",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_scale_or_unit_candidate-1772704-rfgs-202312",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "The filer's fair-value fact disagrees with the printed line (digits: -13 thousand for a printed ( 13 5 )); the published value follows the page and the quarter's total ties to the printed total. The finding is the source check reading the defective tag. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026141",
+     "verbatim": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924",
+     "quote": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json (sandbox rfgsf)",
+   "decided_by": "owner, 2026-11-10, reason fv-digit-split-corrected-from-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_scale_or_unit_candidate-1930679-14",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001930679"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The published cost and fair value of three undrawn commitment rows differ from their tagged facts because they are netted as the owner ruled (D-091) by row correction: the filer tagged the commitments on another issuer's member (2025-03-31: 923 on Discover, 4,130 on Lennar) or under the borrower's former name (2025-12-31: Curia Global, 10,333), so the shared netting did not match them. With them netted, 2025-03-31 and 2025-12-31 tie to the filed totals. The source check compares with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923",
+     "quote": "Florida Food Products LLC, Revolver (i)(k) Food, Beverage & Tobacco SF + 4.8 % 1.0 % 06/28 $ 923 923 923 -- undrawn commitment row whose commitment the filer tagged on a Discover Financial Services member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-025410",
+     "verbatim": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130",
+     "quote": "Opendoor Labs Inc, Structured Mezzanine (i)(k) Real Estate Management & Development 12.5 % 02/29 $ 4,130 4,130 4,130 -- undrawn commitment row whose commitment the filer tagged on a Lennar Corp member; netted by row correction"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-017326",
+     "verbatim": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437",
+     "quote": "Curia Receivables II SPV LLC (FKA Curia Global Inc), Revolver (i)(k) Pharmaceuticals, Biotechnology & Life Sciences SF + 6.3 % 1.0 % 01/29 $ 10,333 10,333 10,437 -- undrawn commitment row listed in the commitments note under the former name; netted by row correction to 104"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001930679/notes.md",
+   "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_scale_or_unit_candidate-1950803-11",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001950803"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "Five rows of the 10-Q for 2026-03-31 are tagged with the printed thousands figure and decimals 0 (15,319 printed, 15 tagged). The published values are the printed ones (row corrections of D-112, each with its printed line); the source check compares with the tag and keeps the 15.3M difference. The quarter ties to the filed total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224111",
+     "verbatim": "AKAM Buyer, Inc. Term A Loan (3)(4)(5)(7)(13) 1M SOFR + 4.75 % / 0.75 % 8.42 % 2/27/2032 2,158 2,126 2,137 0.10 %",
+     "quote": "AKAM Buyer, Inc. Term A Loan (3)(4)(5)(7)(13) 1M SOFR + 4.75 % / 0.75 % 8.42 % 2/27/2032 2,158 2,126 2,137 0.10 % -- printed in thousands; tagged 2137 with decimals 0, published 2,137,000 by the D-112 row correction"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001950803/notes.md",
+   "decided_by": "owner, 2026-11-10, reason src-value-tagged-in-thousands-corrected-from-the-page: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_scale_or_unit_candidate-1975736-3",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "statement": "Undrawn commitment rows netted by row correction as the owner ruled (D-091, 'net each loan'): the filer tagged the commitment on another issuer's member (2025-06-30: Discover 7 on a Powin member, EW Scripps 5,697 on a Trinseo member; 2026-03-31: BGB Group 1,959 and Bond Aviation 7,093 on other members) or at an amount 1 thousand off the row's cost (Community Brands 568 and 1,455 at 2024-09-30), so the shared netting did not match them. With them netted, published equals the filed total in these quarters (it was 2.0M, 5.7M and 9.05M over). The source checks compare with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452",
+     "quote": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452 -- footnote (f) 'Security is an unfunded commitment'; the note lists 'Community Brands Inc 1,455'; netted cost 0, value -3"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697",
+     "quote": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697 -- footnote (h) 'Security is an unfunded commitment'; netted to 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697",
+     "quote": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697 -- the commitments note lists both rows; the tags sit on Powin and Trinseo members"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034547",
+     "verbatim": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093",
+     "quote": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093 -- footnote (i) undrawn; the note lists 'Bond Aviation Holdings LLC, Term Loan 7,093'; netted to 0"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-blocking_pipeline_only_position-1766037-7",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_pipeline_only_position",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The pipeline-only row at 2026-03-31 is DigiCert's first lien, corrected from the printed line: the filer tagged it one column off (c-242 principal 7,016 = printed cost, cost 7,010 = printed value, fair value 0.0073 = printed percent; spread 5.75 and principal 7,063 on c-241 under a Bonterra member). Published 7,063 / 7,016 / 7,010, spread 5.75, as printed; no source fact carries 7,010 as a fair value, so the source check cannot pair it. The promoted rescale rule that published 7,300 is withdrawn. Published fair value equals the filed 1,457,048.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %",
+     "quote": "'DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %': the corrected row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "owner, 2026-11-10, reason fv-corrected-from-page-where-tags-are-cross-tagged: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-blocking_source_pct_leaf_parser_mismatch-1278752-1",
@@ -15830,6 +18281,100 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-field_coverage_drop-1812554-PERCENT",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "field_coverage_drop",
+   "ciks": [
+    "0001812554"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "From the 10-Q for 2025-03-31 Blue Owl Credit Income keeps the '% of Net Assets' column header and prints no percent on its position rows, and tags none. The filed percent goes from 494 rows to 0; the recomputed percent is published for every row.",
+   "evidence": [
+    {
+     "source": "filing_note",
+     "quote": "0001812554-25-000030 (2025-03-31): '... LP Interest N/A N/A 989 989 1,239 Bird Holding B.V. ...' (par or units, cost, fair value, then the next company). 0001812554-25-000009 (2024-12-31): 'PetVet Care Centers, LLC(6) First lien senior secured loan S+ 6.00 % 11/2030 240,536 238,412 230,313 1.6 %'."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox t5u: rows with a filed percent 494 at 2024-12-31 and 0 from 2025-03-31 through 2026-06-30; rows with a recomputed percent equal the row count in every quarter."
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-25-000030",
+     "verbatim": "LP Interest N/A N/A 989 989 1,239 Bird Holding B.V.",
+     "quote": "'LP Interest N/A N/A 989 989 1,239 Bird Holding B.V.' (0001812554-25-000030)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-25-000009",
+     "verbatim": "PetVet Care Centers, LLC(6) First lien senior secured loan S+ 6.00 % 11/2030 240,536 238,412 230,313 1.6 %",
+     "quote": "'PetVet Care Centers, LLC(6) First lien senior secured loan S+ 6.00 % 11/2030 240,536 238,412 230,313 1.6 %' (0001812554-25-000009)"
+    }
+   ],
+   "rerun": "python scratch/2026-10-07_printed_rates/q.py t5u scratch/2026-10-13_left/owl.sql",
+   "decided_by": "owner, 2026-11-10, reason coverage-percent-of-net-assets-no-longer-printed: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-field_coverage_drop-1869453-3",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "field_coverage_drop",
+   "ciks": [
+    "0001869453"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "One field of eight drops at 2025-03-31: percent of net assets, from 225 of 225 funded rows at 2024-12-31 to none of 227. From the 10-Q for 2025-03-31 the filer moves the '% of Net Assets' column to the industry subtotal lines and prints no percent on position rows, and tags none (the reason proposed for the sibling Blue Owl Credit Income). The recomputed percent (pct_of_net_assets_calculated) is published for every row. No fix applies: there is no printed or tagged per-row percent to publish.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000011",
+     "verbatim": "AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 06/2029 20,052 19,867 19,851 0.7 %",
+     "quote": "'AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 06/2029 20,052 19,867 19,851 0.7 %': 10-K for 2024-12-31, a percent on the position row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000021",
+     "verbatim": "AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 6/2029 20,052 19,875 19,901 Anaplan, Inc.(8)",
+     "quote": "'AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 6/2029 20,052 19,875 19,901 Anaplan, Inc.(8)': 10-Q for 2025-03-31, the same row with no percent; the next row follows the fair value."
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001869453/sql.py otxe scratch/fund_runs/0001869453/prof.sql",
+   "decided_by": "owner, 2026-11-10, reason coverage-percent-of-net-assets-no-longer-printed: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-financial_convention_unresolved-1572694-5",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "2025-09-30: Streamland Media Midco's line prints an interest rate of 9.76 and a PIK part of 10.06 inside it ('S + 6.50 % (Incl. 10.06 % PIK)'). A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the filed rate is withheld. The figures are the filer's; no reading makes them consistent.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-269840",
+     "verbatim": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 17,327 17,040 16,634",
+     "quote": "'Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 17,327 17,040 16,634': the printed line."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
    "disposition_id": "DS-financial_convention_unresolved-1634452-2",
    "class": "as_filed",
    "engine": "provenance_reverify",
@@ -15878,6 +18423,272 @@
    "decided_on": "2026-11-04"
   },
   {
+   "disposition_id": "DS-financial_convention_unresolved-1634452-3",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2026-03-31"
+   ],
+   "statement": "In these two quarters some funded loans print an interest rate below their own PIK part or below the margin: CHV Holdings' PIK bridge loan 14.18 with 16.50 PIK (2024-03-31); Penn TRGRP 1.44, Gryphon-Redwood 3.78, Smile Brands 5.76 and Magaya 1.5 with PIK parts of 4.75 to 6.00 (2026-03-31; the 10-K a quarter earlier prints 11.42 and 13.78 for Penn and Gryphon). The tags carry the printed figures. A printed rate below its PIK part cannot be read under the fund's all-in convention, so the build withholds it. No fix applies: the page itself prints a figure that is not the coupon.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-138418",
+     "verbatim": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840",
+     "quote": "'CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840': 2024-03-31, printed rate 14.18 below the 16.50 PIK part."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "verbatim": "Penn TRGRP Holdings LLC Software & Tech Services Term Loan 1.44 % ( S + 1.75 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 7,281,745 7,165,664 6,717,410",
+     "quote": "'Penn TRGRP Holdings LLC Software & Tech Services Term Loan 1.44 % ( S + 1.75 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 7,281,745 7,165,664 6,717,410': 2026-03-31, printed rate 1.44 below the margin and the 6.00 PIK."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "verbatim": "Gryphon-Redwood Acquisition LLC Software & Tech Services Term Loan 3.78 % (S + 5.00 %; 1.00 % Floor; 5.00 % PIK) 9/18/2028 4,050,567 4,013,122 3,888,544",
+     "quote": "'Gryphon-Redwood Acquisition LLC Software & Tech Services Term Loan 3.78 % (S + 5.00 %; 1.00 % Floor; 5.00 % PIK) 9/18/2028 4,050,567 4,013,122 3,888,544': 2026-03-31, printed rate 3.78 below the 5.00 margin."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-financial_convention_unresolved-1646614-4",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "financial_convention_unresolved at 2026-03-31: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state. financial_convention_unresolved at 2026-06-30: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-218912",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-financial_convention_unresolved-1674760-11",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "Streamland Media Midco's line prints an interest rate of 9.76 % and 'S + 6.50 % (Incl. 10.06 % PIK)': the PIK part exceeds the all-in rate, so neither all-in nor cash-leg reading fits and the build publishes no interest_rate (spread 6.50, pik_rate 10.06 as tagged). The sibling line prints '10.00 % S + 5.50 % (Incl. 9.07 % PIK)'. Which figure is the coupon is not settled by the page. No fix applies without the owner's reading. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551 (5) (7)",
+     "quote": "'Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551 (5) (7)': PIK 10.06 above the printed rate 9.76"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Streamland Media Midco LLC Entertainment 10.00 % S + 5.50 % (Incl. 9.07 % PIK) 04/0",
+     "quote": "'Streamland Media Midco LLC Entertainment 10.00 % S + 5.50 % (Incl. 9.07 % PIK) 04/0': sibling line, PIK 9.07 against 10.00"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "class_proposed": "source_ambiguity"
+  },
+  {
+   "disposition_id": "DS-financial_convention_unresolved-1772704-rfgs",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "Streamland Media Midco's line prints a rate of 9.76 with a PIK part of 10.06 inside it; neither the all-in nor the cash-leg reading fits, so the coupon is withheld and the spread 6.50 and PIK 10.06 are published as printed. No fix applies without a printed coupon. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277541",
+     "verbatim": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK)",
+     "quote": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json (sandbox rfgsf)",
+   "decided_by": "owner, 2026-11-10, reason convention-printed-pik-above-printed-rate: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "class_proposed": "source_ambiguity"
+  },
+  {
+   "disposition_id": "DS-fmt_basis_spread-1508655-8",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001508655"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "The spread above 15 in these quarters is American Achievement's printed SOFR + 15.10 %. Published as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-332725",
+     "verbatim": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 %",
+     "quote": "First-lien loan ($ 1,319 par, due 9/2027 ) 6/10/2021 SOFR + 15.10 % 18.72 % (incl. 18.22 % PIK) 1,319 99 0.0 % -- 2026-06-30"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001508655/notes.md",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-fmt_basis_spread-1572694-15",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001572694"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "2026-06-30: MPI Engineered Technologies prints 'S + 17.00 % PIK'; the published spread 17.00 is the printed one (fully PIK margin after a restructuring; the loan is on non-accrual).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-338331",
+     "verbatim": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355",
+     "quote": "'MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355': the printed line."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001572694/notes.md",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "disposition_id": "DS-fmt_basis_spread-1742313-4",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001742313"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "statement": "The check is the same range test as C115 (spread between 0 and 15). One loan, Evolve Biologics Inc. (fair value 17.5M to 20.4M), is printed with a spread of 16.00 in each of the seven filings: the reference rate plus 16.00 is the printed coupon, half paid in cash and half in kind. Published is the page. No fix applies: the figure is the filer's own and is consistent with the printed coupon.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.33 % PIK 12/20/2022 12/18/2026 17,620 17,291 17,532 2.0 %': 2023-03-31, spread column 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001769",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.58 % PIK 12/20/2022 12/18/2026 18,093 17,774 18,003 1.9 %': 2023-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-002414",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % PIK 12/20/2022 12/18/2026 18,588 18,276 18,495 1.6 %': 2023-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000006",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.67 % Cash/ 10.67 % PIK 12/20/2022 12/18/2026 19,093 18,785 18,997 1.5 %': 2023-12-31; cash 10.67 plus PIK 10.67 is the reference rate plus 16.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000027",
+     "verbatim": "Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %",
+     "quote": "'Evolve Biologics Inc. (~) (<) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 20,107 19,812 20,006 1.3 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %",
+     "quote": "'Evolve Biologics Inc. (6)(11) SF 16.00 % 10.66 % Cash/ 10.66 % PIK 12/20/2022 12/18/2026 17,767 17,523 17,678 1.0 %': 2024-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000084",
+     "verbatim": "Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %",
+     "quote": "'Evolve Biologics Inc. (12) SF 16.00 % 10.60 % Cash/ 10.60 % PIK 12/20/2022 12/18/2026 18,270 18,030 20,417 1.1 %': 2024-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001410578-23-001083",
+     "verbatim": "8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %",
+     "quote": "'8.66 % Cash/ Arcstor Midco, LLC (~) (~~) SF 7.60 % 3.75 % PIK 3/16/2021 3/16/2027 12,191 12,025 10,750 1.3 %': the row the 2023-03-31 reviewer cited; the cash part 8.66 is printed on the line above the name and was not tagged. Now published: rate 12.41 (8.66 cash plus 3.75 PIK), spread 7.60."
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-24-000046",
+     "verbatim": "300 N. Michigan Mezz, LLC (6)(11) SF 14.57 % 19.90 % PIK 7/15/2020 7/15/2024 1,000 1,000 1,000 0.1 %",
+     "quote": "'300 N. Michigan Mezz, LLC (6)(11) SF 14.57 % 19.90 % PIK 7/15/2020 7/15/2024 1,000 1,000 1,000 0.1 %': the row the 2024-06-30 reviewer cited: the whole coupon is printed as PIK beside a spread of 14.57, which is inside the check's range."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10",
+   "addresses_verdict": {
+    "2023-03-31": "The reviewer cited Arcstor Midco ('SF 7.60 % 3.75 % PIK', 10,750) as a loan published with no rate. That was a real gap and is fixed in this run: the cash part, printed '8.66 % Cash/' on the line above the name and not tagged, is set by row correction and the row publishes 12.41 (8.66 cash plus 3.75 PIK). It is not what this check reports; the flagged row is Evolve Biologics, spread 16.00 as printed.",
+    "2024-06-30": "The reviewer cited 300 N. Michigan Mezz ('SF 14.57 % 19.90 % PIK', 1,000) as published with no rate. The page prints the whole coupon as PIK beside a spread; the build publishes PIK 19.90 and spread 14.57 and leaves the rate empty, which is how every PIK-with-spread loan of this fund is published pending the owner's decision D-092. It was not changed. It is not what this check reports: 14.57 is inside the range; the flagged row is Evolve Biologics, spread 16.00 as printed."
+   }
+  },
+  {
    "disposition_id": "DS-fmt_basis_spread-1742313-5",
    "class": "as_filed",
    "engine": "weak",
@@ -15921,6 +18732,38 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
    "decided_by": "owner, 2026-11-04, reason fmt-basis-spread-negative-is-a-printed-margin-under-prime: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-fmt_basis_spread-1901612-3",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001901612 0001901612-23-000051 \"Goldcup 31018 AB(7)(8)(11)(18) One stop E + 16.46 % (b) 9.71 % cash/ 9.96 % PIK 07/2029 72,324 68,965 0.1 71,059\" 1 122 && python scripts/v05_evidence/page_line.py 0001901612 0001901612-24-000027 \"Salon Lofts Group, LLC(5) Second lien SF + 17.00 % N/A(6) 09/2029 - ( 13 ) - ( 11 )\" 1 93",
+   "ciks": [
+    "0001901612"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31"
+   ],
+   "statement": "The weak range test flags one row per quarter, the same rows as C115: Goldcup 31018 AB 'E + 16.46 %' (2023-06-30) and Salon Lofts second lien 'SF + 17.00 %' (2023-12-31). Published as printed; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001901612-23-000051",
+     "verbatim": "Goldcup 31018 AB(7)(8)(11)(18) One stop E + 16.46 % (b) 9.71 % cash/ 9.96 % PIK 07/2029 72,324 68,965 0.1 71,059",
+     "quote": "2023-06-30: spread printed 16.46 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0001901612-24-000027",
+     "verbatim": "Salon Lofts Group, LLC(5) Second lien SF + 17.00 % N/A(6) 09/2029 - ( 13 ) - ( 11 )",
+     "quote": "2023-12-31: spread printed 17.00 %"
+    }
+   ],
+   "decided_by": "owner, 2026-11-10, reason fmt-basis-spread-above-15-is-the-printed-spread: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-fmt_interest_rate-1930679-10",
@@ -16383,6 +19226,104 @@
    "rerun": "grep 0002037804 scratch/fund_sandbox/<label>/output/bdc_fund_highlights_oracle.csv | grep 2024q4",
    "decided_by": "owner, 2026-11-04, reason income-identity-quarter-splices-predecessor-and-successor: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-issuer_name_printed-1948368-10",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "The 10-Q for 2025-06-30 prints 'Priority Holdings, LLC (dba Priority Payment)'; the member names 'Priority Technology Holdings, LLC' and the other quarters print 'Priority Technology Holdings, Inc.'. Same loan (S + 4.75 %, 05/16/31, par 18,430). Publishing the printed variant would split the issuer's chain for one quarter; the published name is the member's. No fix applied. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107350",
+     "verbatim": "Priority Holdings, LLC (dba Priority Payment) Financial Services 9.08 % S + 4.75 % 05/16/31 18,430 18,363 18,449",
+     "quote": "'Priority Holdings, LLC (dba Priority Payment) Financial Services 9.08 % S + 4.75 % 05/16/31 18,430 18,363 18,449': the 2025-06-30 printed name"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070320",
+     "verbatim": "Priority Technology Holdings, Inc. (dba Priority Payment) Financial Services 9.07 % S + 4.75 % 05/16/31",
+     "quote": "'Priority Technology Holdings, Inc. (dba Priority Payment) Financial Services 9.07 % S + 4.75 % 05/16/31': the same loan printed in the quarter before"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "owner, 2026-11-10, reason issuer-name-printed-variant-of-same-issuer: \"do as recommended\"",
+   "decided_on": "2026-11-10",
+   "class_proposed": "source_ambiguity"
+  },
+  {
+   "disposition_id": "DS-issuer_name_printed-1950976-2",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "One term loan, the same in every quarter (acquired 11/22/2024, maturity 11/5/2029, par 69,521 to 68,892 thousand). The 10-K for 2024-12-31 prints the company as 'Alegeus Technologies Holdings Corp.'; from 2025-03-31 the page shortens it to 'Alegeus Technologies'. The filer's member names 'Alegeus Technologies Holdings Corp.' in all seven quarters, and that is published, so the issuer is one entity (98b5e55f) and one position chain across 2024-12-31 to 2026-06-30. Correcting the six later quarters to the shortened form would publish two names for one borrower and split it from 2024-12-31; the shortened form is the page's abbreviation, not another issuer. Owner choice: keep the legal name the filer prints first and tags throughout (proposed), or publish each quarter's printed form.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-030258",
+     "verbatim": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %",
+     "quote": "'Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan ... 69,521 67,827 67,783 19.25 %': the 10-K for 2024-12-31 prints the full legal name that is published."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-065764",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.053 % 11/22/2024 11/5/2029 69,260 67,676 67,528 14.39 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.053 % 11/22/2024 11/5/2029 69,260 67,676 67,528 14.39 %': 2025-03-31 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104137",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.030 % 11/22/2024 11/5/2029 69,000 67,492 67,278 14.17 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.030 % 11/22/2024 11/5/2029 69,000 67,492 67,278 14.17 %': 2025-06-30 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272386",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.058 % 11/22/2024 11/5/2029 68,739 67,293 67,362 11.19 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.058 % 11/22/2024 11/5/2029 68,739 67,293 67,362 11.19 %': 2025-09-30 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.340 % 11/22/2024 11/5/2029 68,478 67,100 67,446 11.05 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.340 % 11/22/2024 11/5/2029 68,478 67,100 67,446 11.05 %': 2025-12-31 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214004",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.167 % 11/22/2024 11/5/2029 80,236 78,919 79,887 9.77 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.167 % 11/22/2024 11/5/2029 80,236 78,919 79,887 9.77 %': 2026-03-31 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-340235",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.163 % 11/22/2024 11/5/2029 68,892 67,716 68,662 7.02 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.163 % 11/22/2024 11/5/2029 68,892 67,716 68,662 7.02 %': 2026-06-30 prints the shortened name for the same loan (same dates)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
+   "decided_by": "owner, 2026-11-10, reason issuer-name-printed-variant-of-same-issuer: \"do as recommended\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-maturity_not_past-1278752-1",
@@ -17332,6 +20273,31 @@
    "rerun": "python scripts/v05_evidence/merged.py <label> 0002037804",
    "decided_by": "owner, 2026-11-04, reason merged-context-value-equals-printed-row: \"accept A and B (as printed; source row not a position)\"",
    "decided_on": "2026-11-04"
+  },
+  {
+   "disposition_id": "DS-no_provenance-1851322-7",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "no_provenance",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "One row (fair value 1.09M) is added from the printed page by rule add_missing_atlas_purchaser_first_lien_2025_03: the filing prints the line and tags none of its values, so the row has no source context to reconcile or re-verify against. Its values are the printed ones. No fix applies: a value can be declared on an existing context only, and this line has none.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000044",
+     "verbatim": "Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03",
+     "quote": "'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03': 2025-03-31, the first of two printed Atlas Purchaser lines. The instance holds no fact of 1,093,000 and no cost fact of 915,000 on an Atlas member (members 'Atlas Purchaser, Inc.', '... 1', '... 2' exist; the second printed line, 2,524 / 1,674 / 1,287, is tagged and published)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/fact_members.py 0001851322 0001851322-25-000044 1093000",
+   "decided_by": "owner, 2026-11-10, reason page-added-row-has-no-tagged-fact: \"run the recommendation for the first 13\"",
+   "decided_on": "2026-11-10"
   },
   {
    "disposition_id": "DS-nonaccrual_flag-1851322-12",

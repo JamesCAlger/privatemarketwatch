@@ -690,7 +690,8 @@
      "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
      "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, value printed in brackets (negative), published -3,000."
     }
-   ]
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001899017 0001193125-26-349812 \"Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )\" 1 107"
   },
   {
    "disposition_id": "PD-SRCFV-1899017-22",
@@ -713,7 +714,8 @@
      "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
      "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, value printed in brackets (negative), published -3,000."
     }
-   ]
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001899017 0001193125-26-349812 \"Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )\" 1 107"
   }
  ]
 }

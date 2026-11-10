@@ -413,7 +413,7 @@
   },
   {
    "disposition_id": "PD-issuer_name_printed-1948368-10",
-   "class": "source_ambiguity",
+   "class": "as_filed",
    "engine": "identity",
    "rule_name": "issuer_name_printed",
    "reason_key": "issuer-name-printed-variant-of-same-issuer",
@@ -423,7 +423,7 @@
    "quarters": [
     "2025-06-30"
    ],
-   "statement": "The 10-Q for 2025-06-30 prints 'Priority Holdings, LLC (dba Priority Payment)'; the member names 'Priority Technology Holdings, LLC' and the other quarters print 'Priority Technology Holdings, Inc.'. Same loan (S + 4.75 %, 05/16/31, par 18,430). Publishing the printed variant would split the issuer's chain for one quarter; the published name is the member's. No fix applied.",
+   "statement": "The 10-Q for 2025-06-30 prints 'Priority Holdings, LLC (dba Priority Payment)'; the member names 'Priority Technology Holdings, LLC' and the other quarters print 'Priority Technology Holdings, Inc.'. Same loan (S + 4.75 %, 05/16/31, par 18,430). Publishing the printed variant would split the issuer's chain for one quarter; the published name is the member's. No fix applied. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
    "basis": "read",
    "evidence": [
     {
@@ -441,7 +441,8 @@
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
    "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
-   "decided_on": "2026-10-19"
+   "decided_on": "2026-10-19",
+   "class_proposed": "source_ambiguity"
   },
   {
    "disposition_id": "PD-merged_context_excluded-1948368-11",
