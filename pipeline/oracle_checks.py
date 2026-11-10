@@ -1025,12 +1025,38 @@ def check_D03_count_fv_divergence(
     return results
 
 
+# Legal-form suffixes whose punctuation D06 ignores (owner ruling 2026-11-10).
+_D06_LEGAL_FORMS = r"(?:llc|llp|lp|inc|corp|co|ltd|plc|sarl|sa|nv|bv|gmbh)"
+
+
+def _d06_issuer_key(names: pd.Series) -> pd.Series:
+    """Issuer name for continuity matching: lower case, and the punctuation of a legal-form suffix
+    ignored, nothing else ('Galway Borrower, LLC' == 'galway borrower llc'; 'Avalara, Inc.' ==
+    'avalara inc'; 'L.L.C.' == 'LLC', 'L.P.' == 'LP'). Words, word order and the suffix itself are
+    kept, so a rename still reads as a new issuer."""
+    s = names.fillna("").astype(str).str.lower().str.strip()
+    for dotted, plain in ((r"l\.\s?l\.\s?c", "llc"), (r"l\.\s?l\.\s?p", "llp"), (r"l\.\s?p", "lp"),
+                          (r"s\.\s?a\.\s?r\.\s?l", "sarl"), (r"s\.\s?a", "sa"), (r"n\.\s?v", "nv"),
+                          (r"b\.\s?v", "bv")):
+        s = s.str.replace(rf"\b{dotted}\b\.?", plain, regex=True)
+    # a comma before the suffix, and a period after it
+    s = s.str.replace(rf",\s*(?={_D06_LEGAL_FORMS}\b)", " ", regex=True)
+    s = s.str.replace(rf"\b({_D06_LEGAL_FORMS})\.(?=\s|$|[,)\]])", r"\1", regex=True)
+    return s.str.replace(r"\s+", " ", regex=True).str.strip()
+
+
 def check_D06_position_continuity(
     holdings_df: pd.DataFrame,
     *,
     min_continuity: float = 0.50,
 ) -> list[CheckResult]:
-    """D06: >=50% of positions in Q-1 still present in Q (by issuer_name)."""
+    """D06: >=50% of positions in Q-1 still present in Q (by issuer_name).
+
+    Names compare case- and legal-form-punctuation-insensitive (owner ruling 2026-11-10, reason
+    d06-issuer-spelling-differs-between-filings): one filing's members drop the comma before the
+    legal form and the next keep it ('Galway Borrower LLC' / 'Galway Borrower, LLC'), which read
+    as most issuers leaving (CIK 0001634452, 2023-09-30 to 2023-12-31: about 20 pct
+    continuity). See _d06_issuer_key; nothing beyond the suffix is normalised."""
     results = []
     if holdings_df.empty or "issuer_name" not in holdings_df.columns:
         return [_make_result("D06", "global", "skip", 0, min_continuity, "No holdings data")]
@@ -1040,18 +1066,13 @@ def check_D06_position_continuity(
         quarters = sorted(cik_group["report_date"].dropna().unique())
         if len(quarters) < 2:
             continue
+        issuer_key = _d06_issuer_key(_col_str(cik_group, "issuer_name"))
 
         for i in range(1, len(quarters)):
             prev_q = quarters[i - 1]
             curr_q = quarters[i]
-            prev_names = set(
-                _col_str(cik_group[cik_group["report_date"] == prev_q], "issuer_name")
-                .str.lower().str.strip()
-            ) - {""}
-            curr_names = set(
-                _col_str(cik_group[cik_group["report_date"] == curr_q], "issuer_name")
-                .str.lower().str.strip()
-            ) - {""}
+            prev_names = set(issuer_key[cik_group["report_date"] == prev_q]) - {""}
+            curr_names = set(issuer_key[cik_group["report_date"] == curr_q]) - {""}
 
             if not prev_names:
                 continue

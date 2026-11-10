@@ -831,6 +831,33 @@ class TestD06PositionContinuity:
         results = check_D06_position_continuity(holdings)
         assert any(r.status == "fail" for r in results)
 
+    @staticmethod
+    def _two_quarters(prev, curr):
+        return check_D06_position_continuity(_holdings(
+            [{"report_date": "2023-09-30", "issuer_name": n} for n in prev]
+            + [{"report_date": "2023-12-31", "issuer_name": n} for n in curr]))
+
+    def test_legal_form_punctuation_is_not_a_new_issuer(self):
+        """CIK 0001634452 2023-09-30 -> 2023-12-31: the 10-Q members drop the comma before the legal
+        form, the 10-K keeps it (owner ruling 2026-11-10)."""
+        results = self._two_quarters(
+            ["Galway Borrower LLC", "8x8 Inc", "AB Equity Investors L.P", "AOM Acquisition LLC.", "Avetta L.L.C."],
+            ["Galway Borrower, LLC", "8x8, Inc.", "AB Equity Investors, L.P.", "AOM Acquisition, LLC", "Avetta, LLC"])
+        assert [r.status for r in results] == ["pass"]
+        assert results[0].metric_value == 1.0
+
+    def test_a_rename_still_lowers_continuity(self):
+        """False-positive guard: names that differ beyond the legal-form punctuation stay different
+        (CIK 0001841514 2024-09-30 renamed its issuers to their legal names)."""
+        results = self._two_quarters(
+            ["Galway Borrower LLC", "Acme Holdings Inc", "Beta Topco LLC"],
+            ["Galway Partners Holdings, LLC", "Acme Holdings Corp.", "Beta Midco, LLC"])
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].metric_value == 0.0
+        # the suffix itself is part of the name: LLC is not LP, Inc is not Corp
+        results = self._two_quarters(["Gamma LLC", "Delta Inc"], ["Gamma, L.P.", "Delta Corp"])
+        assert results[0].metric_value == 0.0
+
 
 class TestD07RateStability:
     def test_skip_no_rate_data(self):
