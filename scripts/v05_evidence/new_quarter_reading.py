@@ -18,7 +18,7 @@ REPO = Path(__file__).resolve().parents[2]
 new, old, quarter = sys.argv[1], sys.argv[2], sys.argv[3]
 FUNDS = {"0001803498": "BCRED", "0001812554": "Blue Owl", "0001287750": "Ares", "0001838126": "HPS", "0001837532": "Apollo"}
 RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated",
-            "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable"}
+            "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable", "verdict_retired"}
 
 
 def out(name):

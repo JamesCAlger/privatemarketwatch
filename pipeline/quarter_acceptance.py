@@ -50,6 +50,10 @@ FINDINGS_LEDGER_FILE = config.OUTPUT_DIR / "agent_b2" / "findings_ledger.csv"
 # this module has never seen, is outstanding (owner ruling 2026-10-05).
 RESOLVED_FINDING_STATES = frozenset({"adjudicated_false_alarm", "remediated_promoted",
                                      "resolved_upstream", "gone_unadjudicated",
+                                     # owner-retired real-error verdict, check silent
+                                     # (pipeline.verdict_retirements). real_error_check_silent
+                                     # is deliberately absent: it stays outstanding.
+                                     "verdict_retired",
                                      # standing dispositions (pipeline.finding_dispositions)
                                      "dispositioned_informational", "dispositioned_as_filed",
                                      "dispositioned_not_applicable"})
