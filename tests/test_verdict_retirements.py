@@ -62,7 +62,14 @@ def test_match_is_exact_on_hash_and_identity(tmp_path):
 
 def test_the_recorded_store_loads():
     root = Path(__file__).resolve().parents[1]
-    store = vr.load(root / "data" / "overrides" / "verdict_retirements")
-    assert len(store) == 8
+    d = root / "data" / "overrides" / "verdict_retirements"
+    store = vr.load(d)
+    owner = json.loads((d / "owner_2026-11-10.json").read_text(encoding="utf-8"))["retirements"]
+    assert len(owner) == 8
+    standing = json.loads((d / "standing_rule_2026-11-10.json").read_text(encoding="utf-8"))["retirements"]
+    # standing rule D-252: each entry records the deterministic check and the owner's words
+    assert standing and all("D-252" in e["owner_words"] and e["rerun"].startswith("python scratch/")
+                            for e in standing)
+    assert len(store) == len(owner) + len(standing)
     # the two live real errors (Apollo, ssxf B01 2026-03-31) are deliberately not retired
     assert "RVQ_REV_4cdfa40d7a7a" not in store and "RVQ_REV_3049f7519633" not in store
