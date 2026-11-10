@@ -1537,6 +1537,8 @@ def propose_field_bridges_from_ixbrl(
     repeated: set[str] = set()
     read_contexts: set[str] = set()
     readings: dict[str, list[dict[str, Any]]] = {}
+    relocated: list[dict[str, str]] = []
+    fact_rows: tuple[dict, dict, dict] | None = None  # _fact_rows, built on first need
     cur_lien = ""
     cur_sector = ""
     cur_header: dict[int, str] = {}
@@ -1565,9 +1567,11 @@ def propose_field_bridges_from_ixbrl(
         if (el.get("name") or "").rsplit(":", 1)[-1] == fv_concept:
             fv_idents.add(rl)
     commitment_ids = sorted(any_idents - fv_idents)
+    tr_index = -1  # position among the document's <tr> elements (same order as _fact_rows)
     for tr in root.iter():
         if _ixbrl_local(tr.tag) != "tr":
             continue
+        tr_index += 1
         grid = _row_grid(tr)
         cells = [c for c in grid]  # grid is the colspan-expanded cell list
         nonempty = [c for c in cells if c]
@@ -1618,6 +1622,19 @@ def propose_field_bridges_from_ixbrl(
                 break
         if not ident:
             continue
+        # The row is the position whose other facts it carries (par, cost, rate, maturity), not
+        # whichever context its fair-value fact names: a filer that tags a neighbour's fair value on
+        # this context (0001825265 2023-12-31: Alorica's 33,046,946 on D&D Buyer's revolver context)
+        # would otherwise lend this line to the neighbour (owner ruling 2026-11-10).
+        # Only where the fair value is shown to belong elsewhere (_fair_value_misplaced); a fair value on
+        # a misspelt twin of the line's own member stays as read.
+        own = _row_own_context(tr, contexts, rd, fv_concept)
+        if fact_rows is None and own is not None and own[0] != ident:
+            fact_rows = _fact_rows(root, contexts, rd, fv_concept)
+        if own is not None and own[0] != ident and _fair_value_misplaced(ident, own[0], tr_index, fact_rows):
+            relocated.append({"fv_context": cref, "row_context": own[1], "fv_identifier": ident,
+                              "row_identifier": own[0]})
+            ident, cref = own
         section_positions += 1
         # Column-aware field resolution: each field carries value + status
         # (value / validation_needed / blank) + the source column it came from.
@@ -1708,7 +1725,88 @@ def propose_field_bridges_from_ixbrl(
 
     return {"schema_version": BRIDGE_SCHEMA_VERSION, "cik": cik_norm, "version": 1,
             "source": "bdc_xbrl_ixbrl", "bridges": bridges, "rejected": rejected,
-            "commitment_ids": commitment_ids, "printed_lien_totals": printed_lien_totals}
+            "commitment_ids": commitment_ids, "printed_lien_totals": printed_lien_totals,
+            "relocated_rows": relocated}
+
+
+# Fewest facts other than the fair value a row must carry before they, not the fair-value fact,
+# say which position the row is.
+_OWN_CONTEXT_MIN_FACTS = 2
+
+
+def _row_own_context(tr: Any, contexts: dict[str, tuple[str, str]], report_date: str,
+                     fv_concept: str) -> tuple[str, str] | None:
+    """(identifier, contextRef) of a row's facts other than its fair value, when there are at least
+    _OWN_CONTEXT_MIN_FACTS of them at the report date and every one names the same position; else None.
+
+    The context is the one most of those facts use (ties: first in the row)."""
+    idents: set[str] = set()
+    crefs: dict[str, int] = {}
+    n = 0
+    for el in tr.iter():
+        if _ixbrl_local(el.tag) not in ("nonFraction", "nonNumeric"):
+            continue
+        if (el.get("name") or "").rsplit(":", 1)[-1] == fv_concept:
+            continue
+        cref = el.get("contextRef") or ""
+        i, inst = contexts.get(cref, ("", ""))
+        if not i or inst != report_date:
+            continue
+        idents.add(i)
+        crefs[cref] = crefs.get(cref, 0) + 1
+        n += 1
+    if n < _OWN_CONTEXT_MIN_FACTS or len(idents) != 1:
+        return None
+    best = max(crefs.items(), key=lambda kv: kv[1])[0]
+    return next(iter(idents)), best
+
+
+def _fact_rows(root: Any, contexts: dict[str, tuple[str, str]], report_date: str,
+               fv_concept: str) -> tuple[dict[str, set[int]], dict[str, set[int]], dict[int, set[str]]]:
+    """({identifier: rows holding its fair-value facts}, {identifier: rows holding its other facts},
+    {row: identifiers of its other facts}), rows as the position of the <tr> among the document's <tr>
+    elements, facts at the report date only."""
+    fv_rows: dict[str, set[int]] = {}
+    other_rows: dict[str, set[int]] = {}
+    row_others: dict[int, set[str]] = {}
+    index = -1
+    for tr in root.iter():
+        if _ixbrl_local(tr.tag) != "tr":
+            continue
+        index += 1
+        for el in tr.iter():
+            if _ixbrl_local(el.tag) not in ("nonFraction", "nonNumeric"):
+                continue
+            i, inst = contexts.get(el.get("contextRef") or "", ("", ""))
+            if not i or inst != report_date:
+                continue
+            is_fv = (el.get("name") or "").rsplit(":", 1)[-1] == fv_concept
+            (fv_rows if is_fv else other_rows).setdefault(i, set()).add(index)
+            if not is_fv:
+                row_others.setdefault(index, set()).add(i)
+    return fv_rows, other_rows, row_others
+
+
+def _fair_value_misplaced(fv_ident: str, row_ident: str, row: int,
+                          fact_rows: tuple[dict[str, set[int]], dict[str, set[int]], dict[int, set[str]]]) -> bool:
+    """True where a line's fair-value fact names a position that is not the line's own (row_ident, the
+    member of its other facts):
+
+    (a) the fair value's position has other facts, and none of them on this line (they sit on its own
+        line elsewhere; 0001825265: Alorica's line carries D&D Buyer revolver's fair value), or
+    (b) the fair value's position has no other fact anywhere, and the line's own position has its fair
+        value on another line whose other facts name a third position (the revolver's line carries the
+        fair value of an otherwise empty 'Term Loan' context while the revolver's own fair value sits on
+        Alorica's line).
+
+    A fair value on a misspelt twin of the line's member ('Litify Holdings' / 'Holdinds', no other fact
+    and no fair value elsewhere) or next to a subtotal context is neither, and stays as read."""
+    fv_rows, other_rows, row_others = fact_rows
+    own_rows = other_rows.get(fv_ident, set())
+    if own_rows:
+        return row not in own_rows
+    return any(t != row and row_others.get(t) and row_ident not in row_others[t]
+               for t in fv_rows.get(row_ident, set()))
 
 
 def filed_lien_subtotals(lien: "pd.DataFrame") -> dict[tuple[str, str], dict[str, float]]:

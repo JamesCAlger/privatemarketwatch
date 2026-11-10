@@ -57,11 +57,15 @@ def test_issuer_member_name_not_the_printed_company_flags():
 
 
 def test_issuer_spacing_only_is_its_own_kind():
+    # owner 2026-11-10: a whitespace-only difference is its own, informational kind; a difference in
+    # punctuation (a lost apostrophe) that the folded comparison cannot see stays spacing_only
     out = _run(cr.issuer_name_differs_from_page, [
         {"row_id": "ct", "issuer_name": "Circus Trix Holdings LLC",
          "printed_row": "CircusTrix Holdings LLC | First Lien Secured Debt | SOFR+675, 1.00% Floor | 07/18/28 | 4,000"},
+        {"row_id": "ob", "issuer_name": "OBrien Holdings LLC",
+         "printed_row": "O'Brien Holdings LLC | First Lien Secured Debt | SOFR+675, 1.00% Floor | 07/18/28 | 4,000"},
     ])
-    assert list(out["kind"]) == ["spacing_only"]
+    assert dict(zip(out["row_id"], out["kind"])) == {"ct": "whitespace_only", "ob": "spacing_only"}
 
 
 def test_issuer_fund_label_printed_as_the_name_is_not_flagged():
@@ -702,3 +706,145 @@ def test_ledger_rows_keep_weaker_kinds_out_of_findings():
         (r.rule_name, r.row_id) for r in tested.itertuples())  # tested, but not findings
     assert {"units_scale_unclear", "preferred_heading_only"} <= set(info["kind"])
     assert set(tested["rule_name"]) <= set(cr.LEDGER_NAMES.values()) and not blind.empty
+
+
+# ---------------------------------------------------------------- check repairs, owner ruling 2026-11-10
+
+def test_issuer_whitespace_only_joins_are_informational():
+    # rf26c Penn TRGRP 2024-03-31 / 2024-09-30 (a <br/> or block div inside the company cell) and rfabf
+    # Mykaarma 2023-12-31 (two spans): the reader joined the words; the published name is the printed one
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "penn", "issuer_name": "Penn TRGRP Holdings LLC",
+         "printed_row": "Penn TRGRP HoldingsLLC (2) | First Lien Senior Secured Term Loan | Diversified Financial Services | "
+                        "SOFR + 7.750% | 13.059 | % | 06/2028 | 9,900"},
+        {"row_id": "penn_q3", "issuer_name": "Penn TRGRP Holdings LLC",
+         "printed_row": "Penn TRGRP HoldingsLLC(2) | First Lien Senior Secured Term Loan | Diversified Financial Services | "
+                        "SOFR + 7.750 | % | 12.354 | %"},
+        {"row_id": "myk", "issuer_name": "Mykaarma Acquisition LLC", "pik_rate": 3.75,
+         "printed_row": "Mykaarma AcquisitionLLC(2) (6) | Software & Tech Services | Revolver | 8.38% (S + 3.00%; 3.75% PIK; "
+                        "1.00% Floor) | 03/21/2028 | 100"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"penn": "whitespace_only", "penn_q3": "whitespace_only",
+                                                     "myk": "whitespace_only"}
+    con = duckdb.connect()
+    frame = pd.DataFrame([{"row_id": "penn", "issuer_name": "Penn TRGRP Holdings LLC",
+                           "printed_row": "Penn TRGRP HoldingsLLC (2) | First Lien Senior Secured Term Loan | 9,900"}])
+    frame["cik"], frame["report_date"], frame["accession_number"] = "0000000001", "2024-03-31", "a"
+    cr.prepare(con, frame)
+    tested, info, _ = cr.ledger_rows(con)
+    names = tested[tested["rule_name"] == "issuer_name_printed"]
+    assert list(names["finding"]) == [0.0] and "whitespace_only" in set(info["kind"])
+
+
+def test_issuer_whitespace_rule_still_flags_real_differences():
+    out = _run(cr.issuer_name_differs_from_page, [
+        # a letter differs as well as the space
+        {"row_id": "letter", "issuer_name": "Penn TRGRP Holdings LLC",
+         "printed_row": "Penn TRGRP HoldingLLC (2) | First Lien Senior Secured Term Loan | 9,900"},
+        # the joined name runs on into another word: 'Acme Fund' is not the printed 'AcmeFund2 Holdings'
+        {"row_id": "runon", "issuer_name": "Acme Fund",
+         "printed_row": "AcmeFund2 Holdings | First Lien Senior Secured Term Loan | 9,900"},
+        # a different company on the row
+        {"row_id": "other", "issuer_name": "Mykaarma Acquisition LLC",
+         "printed_row": "Zendesk, Inc.(2) (6) | Software & Tech Services | Revolver | 6.25% | 100"},
+        # rg2 (0001742313) 2023-03-31: the build spelt the letters apart; the page prints 'LVF', 'MCP', 'LLC'
+        {"row_id": "lvf", "issuer_name": "L V F Holdings, Inc.",
+         "printed_row": "LVF Holdings, Inc. (~) | SF | 6.40 | % | 11.30 | % | 6/10/2021"},
+        {"row_id": "mcp", "issuer_name": "M C P Shaw Acquisitionco, L L C",
+         "printed_row": "MCP Shaw Acquisitionco, LLC (~~) (~~~) | SF | 6.00 | % | 11.16 | %"},
+        # bpxh (0001902649) 2025-06-30: the published name lost its closing bracket
+        {"row_id": "cut", "issuer_name": "WH Borrower, LLC (WHP",
+         "printed_row": "WH Borrower, LLC (WHP) | First Lien Term Loan | SOFR(Q) | 0.50 | % | 4.75 | %"},
+        # mfxi (0001278752) 2024-09-30: the page prints a space the published name lacks; a reader join
+        # cannot add a space, so this is a spelling difference and stays a finding
+        {"row_id": "garda", "issuer_name": "GardaWorld Security Corporation",
+         "printed_row": "Garda World Security Corporation | First Lien Secured Debt - Term Loan | SOFR+350 | 1,000"},
+    ])
+    kinds = dict(zip(out["row_id"], out["kind"]))
+    assert set(kinds) == {"letter", "runon", "other", "lvf", "mcp", "cut", "garda"}
+    assert kinds["other"] == "not_the_printed_name"
+    assert not ({"whitespace_only"} & set(kinds.values()))
+    assert set(kinds.values()) <= cr.FINDING_KINDS["issuer_name_differs_from_page"]
+
+
+def test_issuer_dash_cell_is_not_a_name_and_cash_heading_is_the_name():
+    out = _run(cr.issuer_name_differs_from_page, [
+        # rfovb (Overland) 2024-12-31: the em dash after the bill was read as its name cell
+        {"row_id": "tb_dash", "issuer_name": "U.S. Treasury Bill", "extracted_industry": "U.S. Treasury Bill",
+         "asset_category": "CASH", "index_classification": "CASH", "report_date": "2024-12-31",
+         "printed_row": "U.S. Treasury Bill | — | 4.27% | 5/1/2025 | 137,000 | $ | 135,140 | $ | 135,117 | 31.49 | %"},
+        # 2025-06-30: no printed row joined; the name is the heading the fund prints over its cash rows
+        {"row_id": "tb_none", "issuer_name": "U.S. Treasury Bill", "asset_category": "CASH", "index_classification": "CASH",
+         "report_date": "2025-06-30"},
+    ])
+    assert out.empty, out[["row_id", "kind"]]
+
+
+def test_issuer_cash_heading_exemption_false_positives():
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "tb_head", "issuer_name": "U.S. Treasury Bill", "extracted_industry": "U.S. Treasury Bill",
+         "asset_category": "CASH", "index_classification": "CASH",
+         "printed_row": "U.S. Treasury Bill | — | 4.27% | 5/1/2025 | 137,000"},
+        # a loan named after the fund's cash heading is still an industry label as a name
+        {"row_id": "loan", "issuer_name": "U.S. Treasury Bill", "asset_category": "LOAN"},
+        # a cash row named after a GICS label still flags
+        {"row_id": "gics", "issuer_name": "Health Care Equipment", "extracted_industry": "Health Care Equipment",
+         "asset_category": "CASH", "index_classification": "CASH"},
+        # a cash row named with a section word still flags
+        {"row_id": "sect", "issuer_name": "Cash Equivalents", "asset_category": "CASH", "index_classification": "CASH"},
+        # a dash cell does not hide a different printed company
+        {"row_id": "dash_other", "issuer_name": "Acme Holdings LLC",
+         "printed_row": "Zenith Partners LLC | – | First Lien | 9,900"},
+    ])
+    kinds = dict(zip(out["row_id"], out["kind"]))
+    assert kinds == {"loan": "equals_industry_label", "gics": "equals_industry_label",
+                     "sect": "begins_with_section_word", "dash_other": "not_the_printed_name"}
+
+
+def _pik_convention(rows, funds=("0001885968",), exclusions=()):
+    con = duckdb.connect()
+    frame = pd.DataFrame(rows)
+    for col, default in (("cik", "0001885968"), ("report_date", "2025-09-30"), ("accession_number", "a1")):
+        if col not in frame:
+            frame[col] = default
+        frame[col] = frame[col].fillna(default)
+    cr.prepare(con, frame)
+    return cr.pik_printed_not_published(con, whole_coupon_funds=set(funds), whole_coupon_exclusions=set(exclusions))
+
+
+def test_pik_whole_coupon_convention_without_benchmark_passes():
+    # rftsc Continental Battery 2025-09-30 (D-232): opted-in fund, no benchmark printed on the line
+    out = _pik_convention([
+        {"row_id": "cont", "pik_rate": 11.29, "printed_row": "Continental Battery Company | (5) (11) (12) (13) | First Lien Debt | "
+                                                             "7.00% PIK | 11.29% | 07/20/2028 | 6,473 | 6,415 | 1,992 | 0.1"},
+        # the margin still passes
+        {"row_id": "margin", "pik_rate": 7.0, "printed_row": "Continental Battery Company | First Lien Debt | 7.00% PIK | 11.29%"},
+        # a row the build marked as whole coupon, in a fund that is not opted in
+        {"row_id": "marked", "cik": "0000000009", "pik_rate": 11.29, "src_transforms": "pik_rate:whole_coupon_printed",
+         "printed_row": "Acme | First Lien Debt | 7.00% PIK | 11.29% | 1,000"},
+    ])
+    assert out.empty, out[["row_id", "kind", "printed"]]
+
+
+def test_pik_whole_coupon_convention_false_positives():
+    out = _pik_convention([
+        # outside the convention: today's comparison (the same line flags)
+        {"row_id": "not_opted", "cik": "0000000009", "pik_rate": 11.29,
+         "printed_row": "Continental Battery Company | First Lien Debt | 7.00% PIK | 11.29% | 07/20/2028"},
+        # a row the fund lists as "not ACCESSION CONTEXT": left on today's comparison
+        {"row_id": "excluded", "pik_rate": 11.29, "src_context_id": "c-9", "accession_number": "acc-9",
+         "printed_row": "Continental Battery Company | First Lien Debt | 7.00% PIK | 11.29% | 07/20/2028"},
+        # opted in, pik_rate equal to neither the margin nor the coupon
+        {"row_id": "neither", "pik_rate": 9.5,
+         "printed_row": "Continental Battery Company | First Lien Debt | 7.00% PIK | 11.29% | 07/20/2028"},
+        # opted in, pik_rate equal to a printed percent below the PIK figure (a floor)
+        {"row_id": "floor", "pik_rate": 1.0,
+         "printed_row": "Acme | First Lien Debt | 7.00% PIK, 1.00% Floor | 11.29% | 1,000"},
+        # opted in, pik_rate a percent far above the margin (a 23-point benchmark is not a coupon reading)
+        {"row_id": "far", "pik_rate": 30.0, "printed_row": "Acme | First Lien Debt | 7.00% PIK | 30.00% | 1,000"},
+        # opted in, floating PIK leg with a fixed cash leg: the whole rate is not all PIK (D-218)
+        {"row_id": "leg", "pik_rate": 12.3, "printed_row": "VardimanBlack Holdings, LLC - Term Loan | SOFR + 2.00% PIK + 5.00% | "
+                                                           "12.30% | 3/18/2027"},
+    ], exclusions=(("0001885968", "acc-9", "c-9"),))
+    assert dict(zip(out["row_id"], out["kind"])) == {k: "pik_value_mismatch" for k in (
+        "not_opted", "excluded", "neither", "floor", "far", "leg")}

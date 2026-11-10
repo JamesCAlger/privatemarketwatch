@@ -33,6 +33,7 @@ preferred_published_as_common   an equity row classed common whose text says pre
 
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 
 import duckdb
@@ -52,7 +53,7 @@ INPUT_COLUMNS = {
     "fair_value": "DOUBLE", "shares_held": "DOUBLE", "shares_held_source": "VARCHAR", "pik_rate": "DOUBLE",
     "interest_rate": "DOUBLE", "basis_spread": "DOUBLE", "asset_category": "VARCHAR",
     "index_classification": "VARCHAR", "extracted_industry": "VARCHAR", "gics_sub_industry": "VARCHAR",
-    "gics_sector": "VARCHAR", "printed_row": "VARCHAR",
+    "gics_sector": "VARCHAR", "printed_row": "VARCHAR", "src_transforms": "VARCHAR", "src_context_id": "VARCHAR",
 }
 
 # Rule 4: a fund-quarter with fewer funded rows says nothing (same floor as field_coverage_drop).
@@ -92,7 +93,9 @@ _STOP_CELL = (r"(?i)^\s*(first|second|third|1st|2nd|senior|junior|unitranche|ter
               r"lp interests?|llc interests?|units|shares|warrants?|loan obligation|subordinated (debt|notes?|certificates?)|"
               r"structured( (secured|senior|subordinated|mezzanine))? notes?|notes? - class|"
               r"asset[- ]backed)\b")
-_STOP_SYMBOLS = r"^[\s$()%0-9.,?*#~<>+/\-]*$"
+# a dash cell of any kind ('-', en dash, em dash, minus) is not a name (owner 2026-11-10: Overland's
+# 'U.S. Treasury Bill | &#8212; | 4.27%' read the em dash as the name)
+_STOP_SYMBOLS = r"^[\s$()%0-9.,?*#~<>+/\-\x{2013}\x{2014}\x{2212}]*$"
 _STOP_RATE = r"(?i)^\s*[SLEP]\s*\+"
 
 # Shape-only fallback (rows not located on the page): section and axis words a company name does
@@ -129,6 +132,21 @@ def _macros(con: duckdb.DuckDBPyConnection) -> None:
         length(a) > 0 AND length(b) > 0
         AND levenshtein(replace(a, ' ', ''), replace(b, ' ', ''))
             <= greatest(2, floor(0.1 * greatest(length(replace(a, ' ', '')), length(replace(b, ' ', '')))))""")
+    # 'cell' is 'name' with some of its spaces dropped (owner 2026-11-10: the page reader joins the lines
+    # of a cell, 'Penn TRGRP HoldingsLLC (2)' for 'Penn TRGRP Holdings LLC'): every other character as
+    # published, case included, and nothing after it but footnote marks ('(2)', '(~~)'). The reader can drop
+    # a space but not add one, so a page that prints a space the published name lacks ('Garda World' for
+    # 'GardaWorld') is not covered. Not covered either: "O'Brien" for 'OBrien', 'WH Borrower, LLC (WHP)' for
+    # the cut 'WH Borrower, LLC (WHP', and a published name that spells letters apart ('L V F Holdings',
+    # '..., L L C' for the printed 'LVF', 'LLC': a build defect, not a reader join).
+    con.execute(r"""CREATE OR REPLACE MACRO cr_ws_join(cell, name) AS
+        length(trim(coalesce(name, ''))) > 0
+        AND NOT regexp_matches(name, '(^|[^A-Za-z0-9])[A-Za-z][\s\x{00a0}]+[A-Za-z]([^A-Za-z0-9]|$)')
+        AND regexp_full_match(trim(coalesce(cell, '')),
+              array_to_string(list_transform(string_split_regex(trim(name), '[\s\x{00a0}]+'),
+                                             t -> regexp_replace(t, '([.^$*+?()\[\]{}|\\-])', '\\\1', 'g')),
+                              '[\s\x{00a0}]?')
+              || '[\s\x{00a0}]*(\([^()]{1,4}\)[\s\x{00a0}]*)*')""")
     # 'name' starts 'cell' at a word boundary (a footnote digit right after the name is allowed)
     con.execute("""CREATE OR REPLACE MACRO cr_prefix(cell, name) AS
         length(name) > 0 AND starts_with(cell, name)
@@ -240,6 +258,14 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
     label, begins with a section or axis word, begins with the row's own industry heading, or
     holds category-path words. Any row whose name equals an industry label is flagged on either
     basis (kind ``equals_industry_label``).
+
+    Owner ruling 2026-11-10 (check repair): a printed name that is the published one with spaces dropped
+    (the page reader joined the lines of a cell at a <br/> or block element: 'Penn TRGRP HoldingsLLC') is kind
+    ``whitespace_only``, informational, not a finding (macro cr_ws_join). Any other difference still flags:
+    a character, a space the page prints and the name lacks, a cut name, letters spelt apart ('L V F');
+    ``spacing_only`` keeps those the folded comparison cannot see (a lost apostrophe). A dash cell is not a
+    name cell. A cash row whose name is the heading the fund prints over its cash rows ('U.S. Treasury
+    Bill') is not flagged as equal to an industry label.
     """
     labels = industry_labels(con, table)
     own = [r[0] for r in con.execute(
@@ -279,6 +305,8 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                -- the same letters with spaces ignored ('Circus Trix' / 'CircusTrix', 'CLO4' / 'CLO 4')
                list_bool_or(list_transform(coalesce(name_cells, []),
                    c -> starts_with(replace(cr_norm(c), ' ', ''), replace(nname, ' ', '')))) AS spacing_ok,
+               -- the printed name is the published one with spaces dropped (reader join; owner 2026-11-10)
+               list_bool_or(list_transform(coalesce(name_cells, []), c -> cr_ws_join(c, issuer_name))) AS whitespace_ok,
                -- printed in the lead cells at all, before label and heading cells are set aside
                coalesce(list_bool_or(list_transform(coalesce(lead_cells, []), c -> cr_prefix(cr_norm(c), nname))), false) AS lead_ok
         FROM r""")
@@ -298,6 +326,12 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
         SELECT DISTINCT cik, cr_key(c) AS key
         FROM (SELECT cik, unnest(name_cells) AS c FROM _cr_names WHERE comparable)
         WHERE length(cr_key(c)) > 0""")
+    # the headings the fund prints over its cash rows (Overland 'U.S. Treasury Bill'): a cash row named
+    # after its own section heading is named as printed (owner 2026-11-10); GICS labels are not included
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE _cr_cash_heads AS
+        SELECT DISTINCT cik, cr_norm(extracted_industry) AS label FROM {table}
+        WHERE (asset_category = 'CASH' OR index_classification = 'CASH') AND length(cr_norm(extracted_industry)) >= 4
+          AND cr_norm(extracted_industry) NOT IN (SELECT label FROM _cr_gics)""")
     # per fund-quarter: how much of it the page test can see
     con.execute(f"""CREATE OR REPLACE TEMP TABLE _cr_blind AS
         SELECT cik, report_date, count(*) AS n_rows,
@@ -312,7 +346,10 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
             -- a GICS label as the name is flagged even when the page prints it (New Mountain 'Software'); a
             -- fund's own label only when the page does not print it as the name (Overland 'U.S. Treasury Bill')
             SELECT n.*, (nname IN (SELECT label FROM _cr_gics)
-                         OR (nname IN (SELECT label FROM _cr_labels) AND NOT lead_ok)) AS is_label,
+                         OR (nname IN (SELECT label FROM _cr_labels) AND NOT lead_ok
+                             AND NOT ((coalesce(n.asset_category, '') = 'CASH' OR coalesce(n.index_classification, '') = 'CASH')
+                                      AND EXISTS (SELECT 1 FROM _cr_cash_heads ch
+                                                  WHERE ch.cik = n.cik AND ch.label = n.nname)))) AS is_label,
                    (a.row_id IS NOT NULL) AS after_label_ok,
                    regexp_matches(issuer_name, '{_SECTION_START}') AS section_start,
                    -- the row's own industry heading at the front of its name ('Software Zendesk ...');
@@ -330,6 +367,8 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
             SELECT *, CASE
                 WHEN is_label THEN 'equals_industry_label'
                 WHEN comparable AND (suppressed OR elsewhere_ok) THEN NULL
+                WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok AND coalesce(whitespace_ok, false)
+                     THEN 'whitespace_only'
                 WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok AND coalesce(spacing_ok, false)
                      THEN 'spacing_only'
                 WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok THEN 'not_the_printed_name'
@@ -471,7 +510,29 @@ _PIK_LEG_FIXED = _BENCH_PLUS + r"(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*%\s*PIK[\s|]
 _PERCENT_FIGURE = _PIK_NUMBER + r"\s*%"
 
 
-def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand_rows") -> pd.DataFrame:
+@lru_cache(maxsize=1)
+def _disk_whole_coupon() -> tuple[frozenset, frozenset]:
+    from pipeline.source_encodings import load_encodings, whole_coupon_pik_exclusions, whole_coupon_pik_funds
+    enc = load_encodings()
+    return frozenset(whole_coupon_pik_funds(enc)), frozenset(whole_coupon_pik_exclusions(enc))
+
+
+def _whole_coupon_config(funds=None, exclusions=None) -> tuple[set, set]:
+    """({cik10} declaring the whole-coupon PIK reading, {(cik10, accession, context)} listed against it);
+    either defaults to the wrappers on disk (read once per process)."""
+    if funds is None or exclusions is None:
+        disk_funds, disk_exclusions = _disk_whole_coupon()
+        funds = disk_funds if funds is None else funds
+        exclusions = disk_exclusions if exclusions is None else exclusions
+    return set(funds), set(exclusions)
+
+
+# A benchmark is at most this far below the coupon (same bound as pipeline.whole_coupon_pik.MAX_BENCHMARK).
+WHOLE_COUPON_MAX_BENCHMARK = 8.0
+
+
+def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand_rows",
+                              whole_coupon_funds=None, whole_coupon_exclusions=None) -> pd.DataFrame:
     """The row or its member text prints a PIK figure and the published pik_rate is empty or differs.
 
     Figures: 'N % PIK' (percent), and a bare 'N PIK' / '(including N PIK)' / 'plus N PIK' read as basis
@@ -492,7 +553,20 @@ def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand
     after a benchmark printed in its own cell ('EURIBOR | 10.00% PIK | 13.25%'); a floating PIK leg with a
     fixed cash leg ('SOFR + 2.00 % PIK + 5.00 % Fixed 12.30 %', D-218) passes when pik_rate = R - f (7.30),
     and is not treated as a whole coupon (12.30 still flags).
+
+    Owner ruling 2026-11-10 (check repair): where the build applies the whole-coupon convention (the fund
+    declares ``source_encodings.pik_margin_reading: ["whole_coupon"]`` and the row is not listed as
+    "not ACCESSION CONTEXT", or the row carries ``pik_rate:whole_coupon_printed``), pik_rate may be the
+    printed coupon with no benchmark on the row (Continental Battery 2025-09-30 '7.00 % PIK | 11.29 %'): a
+    printed percent that is not a PIK figure, above the largest PIK figure and at most
+    WHOLE_COUPON_MAX_BENCHMARK above it. Outside the convention the comparison is unchanged; a pik_rate
+    equal to neither the margin nor the coupon still flags. ``whole_coupon_funds`` / ``whole_coupon_exclusions``
+    default to the wrappers on disk.
     """
+    funds, excluded = _whole_coupon_config(whole_coupon_funds, whole_coupon_exclusions)
+    funds_sql = ", ".join("'%s'" % c for c in sorted(funds)) or "''"
+    excluded_sql = ", ".join("'%s'" % "|".join(e).replace("'", "''") for e in sorted(excluded)) or "''"
+
     def clean(expr: str) -> str:
         return (f"regexp_replace(regexp_replace(coalesce({expr}, ''), '([0-9]) \\| %', '\\1 %', 'g'), "
                 f"'{_PIK_NOT_A_FIGURE}', '\\1 X', 'g')")
@@ -544,13 +618,25 @@ def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand
                      OR (bench_pik IS NOT NULL AND pik_leg_fixed IS NOT NULL
                         AND coalesce(list_bool_or(list_transform(page_pcts,
                                 c -> c > bench_pik + pik_leg_fixed AND abs(pik_rate - (c - pik_leg_fixed)) <= 0.011)), false))
-                        AS whole_coupon_pik
+                        AS whole_coupon_pik,
+                     -- the build's whole-coupon convention applies to this row (owner 2026-11-10)
+                     ((cik IN ({funds_sql})
+                       AND (cik || '|' || coalesce(accession_number, '') || '|' || coalesce(src_context_id, ''))
+                           NOT IN ({excluded_sql}))
+                      OR contains(coalesce(src_transforms, ''), 'pik_rate:whole_coupon_printed'))
+                     AND pik_leg_fixed IS NULL AND len(page_figs) > 0 AND NOT list_contains(page_figs, 100.0)
+                     AND coalesce(list_bool_or(list_transform(page_pcts,
+                             c -> abs(pik_rate - c) <= 0.011 AND c > list_max(page_figs)
+                                  AND c - list_max(page_figs) <= {WHOLE_COUPON_MAX_BENCHMARK}
+                                  AND NOT coalesce(list_bool_or(list_transform(page_figs, p -> abs(c - p) <= 0.011)), false))), false)
+                        AS convention_coupon
               FROM g0),
         k AS (
             SELECT *, CASE
                 WHEN len(page_figs) > 0 AND coalesce(pik_rate, 0) = 0 THEN 'pik_printed_not_published'
                 WHEN len(page_figs) > 0 AND {agrees.format(f='page_figs')} THEN NULL
                 WHEN len(page_figs) > 0 AND whole_coupon_pik THEN NULL
+                WHEN len(page_figs) > 0 AND convention_coupon THEN NULL
                 WHEN len(page_figs) > 0 THEN 'pik_value_mismatch'
                 WHEN len(member_figs) > 0 AND coalesce(pik_rate, 0) = 0 THEN 'pik_member_text_only'
                 WHEN len(member_figs) > 0 AND NOT {agrees.format(f='member_figs')} THEN 'pik_member_text_only'

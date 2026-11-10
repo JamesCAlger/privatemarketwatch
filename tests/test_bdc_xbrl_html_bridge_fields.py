@@ -1325,3 +1325,81 @@ def test_a_page_footer_is_not_an_industry():
     for heading in ("See accompanying notes", "See accompanying notes to consolidated financial statements"):
         assert re.search(_NOT_AN_INDUSTRY_RE, heading), heading
     assert not re.search(_NOT_AN_INDUSTRY_RE, "Financial Services")
+
+
+# --- a row is the position its own facts name (owner ruling 2026-11-10) ---
+
+def _ix_fact(name, cref, value):
+    return f'<td><ix:nonFraction name="us-gaap:{name}" contextRef="{cref}">{value}</ix:nonFraction></td>'
+
+
+def _ix_full_row(name_cell, own, fv_cref, par, cost, fv):
+    """A schedule line: company cell, par and cost tagged on ``own``, fair value tagged on ``fv_cref``."""
+    return (f"<tr><td>{name_cell}</td><td>10/04/28</td>" + _ix_fact("InvestmentOwnedBalancePrincipalAmount", own, par)
+            + _ix_fact("InvestmentOwnedAtCost", own, cost) + _ix_fact("InvestmentOwnedAtFairValue", fv_cref, fv) + "</tr>")
+
+
+def test_a_row_whose_fair_value_is_tagged_on_a_neighbours_context_is_read_as_its_own(tmp_path):
+    # 0001825265 2023-12-31: Alorica's fair value 33,046,946 carries the D&D Buyer revolver context, and the
+    # revolver's fair value carries a context with no other fact. The lines are read by their par and cost.
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("alo", "Alorica Inc. Term Loan"), _ix_context("dd", "D&amp;D Buyer, LLC Revolver"),
+            _ix_context("ddtl", "D&amp;D Buyer, LLC Term Loan")]
+    rows = [_ix_full_row("Alorica Inc.", "alo", "dd", "33,686,999", "33,285,743", "33,046,946"),
+            _ix_full_row("D&amp;D Buyer, LLC", "dd", "ddtl", "1,153,606", "1,153,606", "1,130,534")]
+    p = _write_ixbrl(tmp_path, ctxs, rows)
+    out = propose_field_bridges_from_ixbrl(cik="0001825265", accession_number="A", report_date="2025-12-31", html_path=p)
+    by_id = {b["raw_id_lower"]: b for b in out["bridges"]}
+    assert by_id["alorica inc. term loan"]["printed_row"].startswith("Alorica Inc.")
+    assert by_id["d&d buyer, llc revolver"]["printed_row"].startswith("D&D Buyer, LLC")
+    assert by_id["d&d buyer, llc revolver"]["match_evidence"]["context_ref"] == "dd"
+    assert "d&d buyer, llc term loan" not in by_id  # its only fact is a fair value on another line
+    assert [(r["fv_context"], r["row_context"]) for r in out["relocated_rows"]] == [("dd", "alo"), ("ddtl", "dd")]
+
+
+def test_a_row_is_still_read_by_its_fair_value_where_its_other_facts_do_not_agree(tmp_path):
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("a", "Acme Term Loan"), _ix_context("b", "Beta Term Loan"), _ix_context("c", "Gamma Term Loan")]
+    rows = [
+        # the usual line: every fact on one context
+        _ix_full_row("Acme", "a", "a", "1,000", "990", "995"),
+        # par and cost on two different positions: no single owner, the fair value decides
+        "<tr><td>Beta</td>" + _ix_fact("InvestmentOwnedBalancePrincipalAmount", "c", "2,000")
+        + _ix_fact("InvestmentOwnedAtCost", "a", "1,990") + _ix_fact("InvestmentOwnedAtFairValue", "b", "1,995") + "</tr>",
+        # one other fact only: too little to overrule the fair value
+        "<tr><td>Gamma</td>" + _ix_fact("InvestmentOwnedAtCost", "a", "2,990")
+        + _ix_fact("InvestmentOwnedAtFairValue", "c", "2,995") + "</tr>",
+    ]
+    p = _write_ixbrl(tmp_path, ctxs, rows)
+    out = propose_field_bridges_from_ixbrl(cik="0000000001", accession_number="A", report_date="2025-12-31", html_path=p)
+    by_id = {b["raw_id_lower"]: b["printed_row"] for b in out["bridges"]}
+    assert by_id["acme term loan"].startswith("Acme")
+    assert by_id["beta term loan"].startswith("Beta")
+    assert by_id["gamma term loan"].startswith("Gamma")
+    assert out["relocated_rows"] == []
+
+
+def test_a_fair_value_on_a_misspelt_twin_of_the_lines_own_member_stays_as_read(tmp_path):
+    # mfxi (0001278752) 2023-09-30: the fair value is on 'Litify Holdings', par and cost on the misspelt
+    # 'Litify Holdinds'; neither position appears on another line, so the line keeps the fair value's member
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("ok", "Litify Holdings Inc. Common"), _ix_context("typo", "Litify Holdinds Inc. Common")]
+    rows = [_ix_full_row("Litify Holdings Inc.", "typo", "ok", "1,000", "990", "995")]
+    p = _write_ixbrl(tmp_path, ctxs, rows)
+    out = propose_field_bridges_from_ixbrl(cik="0001278752", accession_number="A", report_date="2025-12-31", html_path=p)
+    assert [b["raw_id_lower"] for b in out["bridges"]] == ["litify holdings inc. common"]
+    assert out["relocated_rows"] == []
+
+
+def test_a_line_whose_other_facts_name_a_subtotal_keeps_its_fair_value_member(tmp_path):
+    # 0001899996 2023-06-30 shape: 'Bron Holding' has only its fair value; the line's other facts carry a
+    # 'Total ...' context whose own fair value sits on a total line with no other fact
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    ctxs = [_ix_context("bron", "Equity, Packaging, Bron Holding, LLC"), _ix_context("tot", "Equity, Total Packaging")]
+    rows = [_ix_full_row("Bron Holding, LLC", "tot", "bron", "1,000", "990", "995"),
+            "<tr><td>Total Packaging</td>" + _ix_fact("InvestmentOwnedAtFairValue", "tot", "5,000") + "</tr>"]
+    p = _write_ixbrl(tmp_path, ctxs, rows)
+    out = propose_field_bridges_from_ixbrl(cik="0001899996", accession_number="A", report_date="2025-12-31", html_path=p)
+    by_id = {b["raw_id_lower"]: b["printed_row"] for b in out["bridges"]}
+    assert by_id["equity, packaging, bron holding, llc"].startswith("Bron Holding")
+    assert out["relocated_rows"] == []

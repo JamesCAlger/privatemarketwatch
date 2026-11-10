@@ -96,20 +96,27 @@ def printed_reference_sql(unified_sql: str, status_sql: str, ciks: list[str]) ->
     ``reference_rate_agrees`` is 1 when the two are the same benchmark, 0 when they differ or
     the page prints none, and empty where no reference rate is published. ``printed_margin``
     is the total margin read from the page (empty where it was not read, or the artifact
-    predates the column).
+    predates the column). ``cash_plus_total_elsewhere`` (owner 2026-11-10) is 1 where the row prints
+    '<code> + X Cash plus Y % PIK', publishes X as its spread, and another quarter of the same position
+    (position_id, or issuer and maturity) prints X as the total of a cash-and-PIK margin ('X Cash
+    (includes Y % PIK)', or 'C Cash plus Y % PIK' with C + Y = X); an all-cash quarter at X is not evidence.
     """
     named = ", ".join("'%s'" % c for c in ciks) or "''"
     return f"""(
+        WITH p AS (
         SELECT lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cik,
                CAST(h.report_date AS VARCHAR)[:10] AS report_date, h.bdc_investment_identifier,
                CASE WHEN nullif(trim(CAST(h.reference_rate_type AS VARCHAR)), '') IS NULL THEN NULL
                     WHEN s.reference_rate_status = 'value'
                          AND upper(trim(CAST(h.reference_rate_type AS VARCHAR))) = upper(trim(s.reference_rate_type))
                     THEN 1.0 ELSE 0.0 END AS reference_rate_agrees,
-               h.basis_spread, s.printed_margin
-        FROM {unified_sql} h
+               h.basis_spread, s.printed_margin,
+               CAST(h.position_id AS VARCHAR) AS _position, lower(trim(CAST(h.issuer_name AS VARCHAR))) AS _issuer,
+               CAST(h.maturity_date AS VARCHAR)[:10] AS _maturity, CAST(s.printed_row AS VARCHAR) AS _printed
+        FROM (SELECT * FROM {unified_sql}
+              UNION ALL BY NAME SELECT NULL AS position_id, NULL AS issuer_name, NULL AS maturity_date WHERE false) h
         JOIN (SELECT * FROM (SELECT * FROM {status_sql}
-                             UNION ALL BY NAME SELECT CAST(NULL AS VARCHAR) AS printed_margin WHERE false)
+                             UNION ALL BY NAME SELECT CAST(NULL AS VARCHAR) AS printed_margin, NULL AS printed_row WHERE false)
               WHERE period_role = 'current' AND reference_rate_status IN ('value', 'not_applicable', 'unspecified')) s
           ON lpad(regexp_replace(CAST(s.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
                = lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0')
@@ -117,8 +124,42 @@ def printed_reference_sql(unified_sql: str, status_sql: str, ciks: list[str]) ->
          AND s.raw_id_lower = lower(trim(regexp_replace(regexp_replace(CAST(h.bdc_dimensions_raw AS VARCHAR),
                '^[^=]*=', ''), '[ ]+', ' ', 'g')))
         WHERE lpad(regexp_replace(CAST(h.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN ({named})
-          AND coalesce(CAST(h.accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'
+          AND coalesce(CAST(h.accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'),
+        -- '<code> + X Cash plus Y % PIK': X and Y; '<code> + T Cash (includes Y % PIK)': T. A bare figure is
+        -- basis points ('S+625'), a figure with '%' is percent.
+        f AS (
+        SELECT *,
+               {_margin_figure('_printed', _CASH_PLUS_RE)} AS _cash_plus_x,
+               TRY_CAST(regexp_extract(_printed, '{_CASH_PLUS_RE}', 3) AS DOUBLE) AS _cash_plus_y,
+               {_margin_figure('_printed', _CASH_INCLUDES_RE)} AS _includes_total
+        FROM p),
+        -- the total of a cash-and-PIK margin as this row prints it: T of 'Cash (includes ...)', X + Y of 'Cash plus'
+        t AS (SELECT *, coalesce(_includes_total, _cash_plus_x + _cash_plus_y) AS _pik_form_total FROM f)
+        SELECT t.cik, t.report_date, t.bdc_investment_identifier, t.reference_rate_agrees, t.basis_spread, t.printed_margin,
+               -- owner ruling 2026-11-10 (spread-printed-cash-plus-figure-is-already-the-total-margin): the row
+               -- prints 'X Cash plus Y % PIK', publishes X, and another quarter of the same position (position_id,
+               -- or issuer and maturity) prints X as the total of a cash-and-PIK margin
+               CASE WHEN t._cash_plus_x IS NOT NULL AND abs(t.basis_spread - t._cash_plus_x) <= 0.011
+                         AND EXISTS (SELECT 1 FROM t o
+                                     WHERE o.cik = t.cik AND o.report_date <> t.report_date
+                                       AND (o._position = t._position OR (o._issuer = t._issuer AND o._maturity = t._maturity))
+                                       AND abs(o._pik_form_total - t._cash_plus_x) <= 0.011)
+                    THEN 1.0 ELSE 0.0 END AS cash_plus_total_elsewhere
+        FROM t
     )"""
+
+
+# '<code> + X [%] Cash plus Y % PIK' (groups: X, '%' or '', Y) and '<code> + T [%] Cash (includes Y % PIK)' (T, '%').
+_CASH_PLUS_RE = (r"(?i)[A-Z]{1,8}\s*\+\s*([0-9]+(?:\.[0-9]+)?)\s*(%?)\s*Cash\s+plus\s+([0-9]+(?:\.[0-9]+)?)\s*%\s*PIK")
+_CASH_INCLUDES_RE = (r"(?i)[A-Z]{1,8}\s*\+\s*([0-9]+(?:\.[0-9]+)?)\s*(%?)\s*Cash\s*\(\s*includ\w*\s+"
+                     r"[0-9]+(?:\.[0-9]+)?\s*%\s*PIK")
+
+
+def _margin_figure(col: str, pattern: str) -> str:
+    """SQL: group 1 of ``pattern`` in ``col`` as a percent (a bare figure is basis points), else NULL."""
+    return (f"CASE WHEN regexp_extract({col}, '{pattern}', 2) = '%' "
+            f"THEN TRY_CAST(nullif(regexp_extract({col}, '{pattern}', 1), '') AS DOUBLE) "
+            f"ELSE TRY_CAST(nullif(regexp_extract({col}, '{pattern}', 1), '') AS DOUBLE) / 100.0 END")
 
 
 # Fields a published row of a given kind is expected to carry: (label, rows that count, rows that carry it).
@@ -373,10 +414,14 @@ RULES: list[IdentityRule] = [
     ),
     # The published spread against the total margin printed on the row (same funds). Catches a
     # spread tag that holds only the cash part of a cash-plus-PIK margin, or a mis-scaled spread.
+    # Owner ruling 2026-11-10: a row printed '<code> + X Cash plus Y % PIK' whose published spread is X
+    # holds when another quarter of the same position prints X as the total of a cash-and-PIK margin
+    # (cash_plus_total_elsewhere, see printed_reference_sql); X+Y is still accepted as before.
     IdentityRule(
         name="spread_printed", table="printed_reference",
         needed_cols=("basis_spread", "printed_margin"),
-        holds_sql="abs(basis_spread - printed_margin) <= 0.011",
+        optional_cols=("cash_plus_total_elsewhere",),
+        holds_sql="abs(basis_spread - printed_margin) <= 0.011 OR coalesce(cash_plus_total_elsewhere, 0) = 1",
         residual_sql="basis_spread - printed_margin",
         tol_note="published spread = total margin printed on the row, to the second decimal",
     ),
