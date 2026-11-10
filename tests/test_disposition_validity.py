@@ -39,7 +39,11 @@ def _issue(row_id, rule, cik=HPS, quarter="2026-06-30", name=None):
 
 def _entry(rule, check, params=None, cik=HPS, did="D-1"):
     return {"disposition_id": did, "class": "as_filed", "ciks": [cik], "engine": "row_validation", "rule_name": rule,
-            "quarters": ["2026-03-31"], "statement": "As filed.", "evidence": [{"source": "query", "quote": "q"}],
+            "quarters": ["2026-03-31"], "statement": "As filed.",
+            "evidence": [{"source": "query", "quote": "q"},
+                         {"source": "filing", "quote": "the line", "accession": "0001838126-26-000001",
+                          "verbatim": "Borrower R1 revolver ( 48 ) ( 50 ) 1,990", "quarter": "2026-03-31"}],
+            "rows": [{"cik": cik, "quarter": "2026-03-31", "row_id": "R1"}],
             "rerun": "x", "decided_by": "agent", "decided_on": "2026-10-08",
             "carry_forward": {"from": "2026-06-30", "check": check, "params": params or {}}}
 
@@ -149,7 +153,7 @@ def test_the_ledger_closes_a_new_quarter_through_a_pass_and_says_so(tmp_path):
                "rows_tested": 3, "rows_failing": 1, "failing_fair_value_m": 2.0, "detail": "Proxy Co revolver"}], validity)
     empty = tmp_path / "none"
     kwargs = dict(queue_path=queue, staged_dir=empty, promoted_dir=empty, archive_dir=empty, wrapper_dir=empty,
-                  verdict_dirs=(empty,), dispositions_dir=store)
+                  verdict_dirs=(empty,), dispositions_dir=store, flagged_rows=lambda *a: frozenset({"row_id:R1"}))
     rows = {r["review_id"]: r for r in build_ledger(validity_path=validity, **kwargs)}
     assert (rows["RQ-1"]["state"], rows["RQ-1"]["disposition_basis"]) == ("dispositioned_as_filed", "listed")
     assert (rows["RQ-2"]["state"], rows["RQ-2"]["disposition_basis"]) == ("dispositioned_as_filed", "carried_forward")

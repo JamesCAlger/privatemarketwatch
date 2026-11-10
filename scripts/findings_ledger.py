@@ -17,7 +17,10 @@ finding (union of current review queue + adjudicated verdicts) gets exactly one 
     dispositioned_*           an otherwise unresolved finding covered by a standing disposition
                               (pipeline.finding_dispositions: informational, as_filed,
                               not_applicable). A reviewer's real-error verdict is left standing
-                              unless the disposition is informational or carries filing evidence.
+                              unless the disposition is informational or answers it with filing
+                              evidence (supersedes_real_error_verdict, or addresses_verdict for
+                              the quarter). An entry that names its rows closes only when every
+                              flagged row is named (disposition_row_check says why not).
   Terminal for agents (human basket):
     needs_human               ambiguous / anchor_bad / ESCALATE / PATCH_PROPOSED
                               with no promotable route
@@ -58,7 +61,7 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pipeline import disposition_validity, finding_dispositions, verdict_retirements  # noqa: E402
+from pipeline import disposition_validity, finding_dispositions, finding_rows, verdict_retirements  # noqa: E402
 from scripts.check_tier_coverage import VERDICT_DIRS, load_verdict  # noqa: E402
 
 DEFAULT_QUEUE = ROOT / "data" / "output" / "review_queue" / "review_queue.csv"
@@ -248,7 +251,7 @@ def build_ledger(
     seed_paths: Iterable[Path] = (), quarter: str | None = None,
     manifest_path: Path | None = None, closure_mode: bool = False,
     dispositions_dir: Path | None = None, validity_path: Path | None = None,
-    retirements_dir: Path | None = None,
+    retirements_dir: Path | None = None, rows_dir: Path | None = None, flagged_rows=None,
 ) -> list[dict]:
     """Build the lifecycle ledger.
 
@@ -256,6 +259,11 @@ def build_ledger(
     retained even when absent from the current queue, and closure mode fails closed
     on that absence.  ``quarter`` + ``manifest_path`` make the requested scope a
     first-class operation rather than a report-side filter.
+
+    ``flagged_rows`` (callable ``(cik, engine, rule, quarter) -> frozenset | None``) gives the rows
+    a finding flags, for dispositions that name their rows; by default
+    ``pipeline.finding_rows.FlaggedRows`` over ``rows_dir`` (default: the output dir holding the
+    queue, ``<rows_dir>/review_queue/review_queue.csv``), read only when such an entry matches.
     """
     cohort = _manifest_ciks(manifest_path)
     queue_rows: dict[str, dict] = {}
@@ -320,8 +328,25 @@ def build_ledger(
         disposition = finding_dispositions.match(
             dispositions, cik=q.get("cik"), engine=q.get("engine"),
             rule_name=q.get("rule_name"), report_date=q.get("report_date"), passes=validity_passes)
-        if disposition is not None and finding_dispositions.closes(disposition, state):
-            state = finding_dispositions.STATE_BY_CLASS[disposition["class"]]
+        quarter_key = str(q.get("report_date") or "")[:10]
+        row_check = ""
+        if disposition is not None and finding_dispositions.closes(disposition, state, quarter_key):
+            carried = not ("all" in disposition["quarters"] or quarter_key in disposition["quarters"])
+            flagged = None
+            if finding_dispositions.is_scoped(disposition) and not carried:
+                if flagged_rows is None:
+                    flagged_rows = finding_rows.FlaggedRows(rows_dir if rows_dir is not None
+                                                            else Path(queue_path).resolve().parent.parent)
+                flagged = flagged_rows(q.get("cik"), q.get("engine"), q.get("rule_name"), quarter_key)
+            covered, row_check = finding_dispositions.covers_rows(
+                disposition, cik=q.get("cik"), quarter=quarter_key, flagged=flagged, carried_forward=carried)
+            if covered:
+                state = finding_dispositions.STATE_BY_CLASS[disposition["class"]]
+            else:
+                # Named rows do not cover this finding (a recurrence elsewhere, or rows that cannot
+                # be resolved): the finding keeps its state; the column says why.
+                row_check = disposition["disposition_id"] + ":" + row_check
+                disposition = None
         else:
             disposition = None
         ledger.append({
@@ -330,6 +355,7 @@ def build_ledger(
             "disposition_basis": ("" if not disposition else "listed" if (
                 "all" in disposition["quarters"] or str(q.get("report_date") or "")[:10] in disposition["quarters"])
                 else "carried_forward"),
+            "disposition_row_check": row_check,
             "population_origin": ("frozen_and_live" if rid in queue_rows and rid in seed_rows
                                   else "live" if rid in queue_rows else "frozen"),
             "verdict_status": vstatus, "verdict_detail": vdetail,
@@ -426,11 +452,15 @@ def main(argv=None) -> int:
                          "without it no disposition reaches a quarter it does not list")
     ap.add_argument("--closure-mode", action="store_true",
                     help="fail closed on frozen absence and missing B1 fix routes")
+    ap.add_argument("--rows-dir", type=Path, default=None,
+                    help="output dir whose row artifacts give each finding's flagged rows "
+                         "(default: the dir holding review_queue/ of --queue)")
     args = ap.parse_args(argv)
 
     ledger = build_ledger(queue_path=args.queue, seed_paths=args.seed,
                           quarter=args.quarter, manifest_path=args.manifest,
-                          closure_mode=args.closure_mode, validity_path=args.validity)
+                          closure_mode=args.closure_mode, validity_path=args.validity,
+                          rows_dir=args.rows_dir)
     summary = write_ledger(ledger, args.out, compare_path=args.compare,
                            closure_mode=args.closure_mode)
     print(json.dumps(summary, indent=2))

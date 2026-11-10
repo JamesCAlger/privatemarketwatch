@@ -24,7 +24,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l11a C107 3",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE11-C107-2008748",
@@ -52,7 +53,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l11a C107 3",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE11-C107-2011498",
@@ -77,7 +79,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py l11a C107 3",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE11-F28-1965934",
@@ -100,7 +103,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE11-F28-2008748",
@@ -123,7 +127,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE11-F28-2011498",
@@ -147,7 +152,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-LARGE11-X02-2008748",
@@ -171,7 +177,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py l11a 0002008748",
    "decided_by": "check passed on sandbox l11a; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   }
  ]
 }

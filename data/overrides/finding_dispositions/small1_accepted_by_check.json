@@ -20,7 +20,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py s1c C103 3",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-C107-1588272",
@@ -42,7 +43,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py s1c C107 3",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-C107-1834543",
@@ -72,7 +74,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py s1c C107 3",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-F28-1377936",
@@ -104,7 +107,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-F28-1588272",
@@ -129,7 +133,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-F28-1743415",
@@ -156,7 +161,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-F28-1834543",
@@ -181,7 +187,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-F28-1905824",
@@ -207,7 +214,8 @@
    ],
    "rerun": "python scripts/v05_evidence/cohort_by_size.py",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-X02-1377936",
@@ -235,7 +243,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py s1c 0001377936",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-X02-1834543",
@@ -257,7 +266,8 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py s1c 0001834543",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-X06-1588272",
@@ -282,7 +292,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py s1c X06 3",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   },
   {
    "disposition_id": "DS-SMALL1-X06-1834543",
@@ -305,7 +316,8 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py s1c X06 3",
    "decided_by": "check passed on sandbox s1c; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
-   "decided_on": "2026-10-09"
+   "decided_on": "2026-10-09",
+   "legacy_unscoped": true
   }
  ]
 }

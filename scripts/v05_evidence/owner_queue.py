@@ -12,7 +12,10 @@ rebuilds) with a readable view beside it (.md).
 
 ``rule ... accept`` is the only way a proposal becomes an accepted disposition: it copies the
 row's proposals into data/overrides/finding_dispositions/owner_queue_accepted.json with the
-owner's words. Nothing here adds a reason to the by-check list
+owner's words, and only when every proposal in the row meets the acceptance bar (owner ruling D-253,
+2026-11-10; ``bar_problems``): a filing quote found on the cached page for EACH (cik, quarter) it
+closes, and a ``rows`` list naming the rows it covers. A row that fails is refused whole, nothing
+written. Nothing here adds a reason to the by-check list
 (data/reference/accepted_disposition_reasons.json): that needs a check that has passed its
 negative tests, and is a separate owner decision. ``reject`` and ``more`` only record the ruling;
 the findings stay outstanding.
@@ -72,6 +75,23 @@ def _quotes_verified(entry: dict) -> tuple[int, int]:
                 good += 1
                 break
     return good, len(cited)
+
+
+def bar_problems(entry: dict) -> list[str]:
+    """Why an entry may not be accepted (empty: it may). The store's validator (shape, including the
+    D-253 bar: a filing quote for each (cik, quarter) member and the rows it covers), then each
+    member's verbatim read on the cached page of that fund's filing. A grandfathered entry
+    (legacy_unscoped) is never accepted anew through the queue."""
+    from fund_gate import normalise, page_text
+    from pipeline import finding_dispositions as fd
+    if fd.is_legacy(entry):
+        return ["legacy_unscoped is for entries accepted before D-253; a new acceptance must meet the bar"]
+    problems = fd.validate(entry)
+    if problems:
+        return problems
+    if entry.get("class") in fd.SCOPED_CLASSES:
+        problems = fd.member_quote_problems(entry, page_text, normalise)
+    return problems
 
 
 def build() -> list[dict]:
@@ -144,6 +164,8 @@ def show(key: str | None) -> None:
         print("   " + " ".join(str(entry.get("statement")).split()))
         for item in entry.get("evidence", []):
             print("   - [%s] %s" % (item.get("source"), " ".join(str(item.get("verbatim") or item.get("quote")).split())[:400]))
+        problems = bar_problems({k: v for k, v in entry.items() if k not in ("reason_key", "recommended")})
+        print("   acceptance bar: " + ("met" if not problems else "NOT met: " + "; ".join(problems)[:600]))
 
 
 def rule(key: str, ruling: str, words: str) -> int:
@@ -162,9 +184,9 @@ def rule(key: str, ruling: str, words: str) -> int:
             entry["disposition_id"] = "DS-" + str(proposal["disposition_id"]).removeprefix("PD-")
             entry["decided_by"] = "owner, %s, reason %s: \"%s\"" % (today, key, words)
             entry["decided_on"] = today
-            problems = fd.validate(entry)
+            problems = bar_problems(entry)
             if problems:
-                print("not accepted, entry invalid:", entry["disposition_id"], problems)
+                print("not accepted, entry fails the acceptance bar:", entry["disposition_id"], problems)
                 return 2
             held[entry["disposition_id"]] = entry
         ACCEPTED.write_text(json.dumps({"dispositions": [held[k] for k in sorted(held)]}, indent=1) + "\n", encoding="utf-8")
