@@ -914,7 +914,7 @@
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "B01",
-   "statement": "Position contexts with no fair value fact: undrawn lines with nothing filed, and a few positions the filer tagged under two spellings.",
+   "statement": "Position contexts with no fair value fact that are undrawn lines: revolvers and delayed draws printed with a dash for par and fair value (some with a bracketed cost), and the Quikrete unfunded backstop commitments printed '- - -'. Funded positions printed with a dash for fair value are not covered: they are published at 0 from the page (source_encodings.untagged_values), including the SK Neptune Husky term loan and the Material+ PIK term loan.",
    "evidence": [
     {
      "source": "query",
@@ -923,10 +923,30 @@
     {
      "source": "filing",
      "quote": "2026-03-31 (0001193125-26-215667): the reviewer's verdict rested on the published total being 3,272 below the printed 'Total Investments before Cash Equivalents $ 25,426,426 $ 25,149,083'. That gap was two delayed-draw lines tagged with the wrong sign (Rocket Youth, printed 1,884, tagged -1,884; SavATree, printed ( 248 ), tagged 248), corrected in decision D-021. Published now equals the printed total in all 13 quarters (sandbox five14)."
+    },
+    {
+     "source": "filing",
+     "cik": "0001837532",
+     "quarter": "2024-12-31",
+     "accession": "0000950170-25-038785",
+     "verbatim": "First Lien Secured Debt - Delayed Draw S+ 300 , 0.50 % Floor 12/11/2031 - ( 1 ) - (11)(28)",
+     "quote": "2024-12-31, Signia Aerospace delayed draw, undrawn: dash par, cost ( 1 ), dash fair value."
+    },
+    {
+     "source": "filing",
+     "cik": "0001837532",
+     "quarter": "2024-12-31",
+     "accession": "0000950170-25-038785",
+     "verbatim": "Unfunded Commitment Secured Debt - Backstop Loan Variable 8/24/2025 - - - (4)(28)(32)",
+     "quote": "2024-12-31, Quikrete unfunded backstop commitment printed '- - -'."
+    },
+    {
+     "source": "query",
+     "quote": "Sandbox apx5 (2026-11-10, branch fund-loop-apollo-ssxf-2026-11-10): B01 fires for this fund at 2024-12-31 only, 33 contexts: 29 named revolver or delayed draw, the two Quikrete backstops, the Golden Hippo line the page prints as a revolver ('- ( 132 ) -'), and one Relativity ODA term-loan context that carries only a maturity of a row published from its value context. The Relativity context is not an undrawn line and is outside this statement (reported to the owner)."
     }
    ],
-   "rerun": "python scripts/v05_evidence/b01.py five10 1837532",
-   "decided_by": "agent, owner permission given in session 2026-10-06; 2026-06-30 accepted by the owner in session 2026-10-08",
+   "rerun": "python scripts/v05_evidence/b01.py apx5 1837532",
+   "decided_by": "agent, owner permission given in session 2026-10-06; 2026-06-30 accepted by the owner in session 2026-10-08; statement narrowed by owner, 2026-11-10, D-252: \"run as recommended\"; the ruling: 'Apollo (0001837532) DS-010 narrowed to the undrawn lines it describes; SK Neptune Husky Group Sarl term loan (par 9,588k, cost 9,466k, absent from published rows since 2024-12-31) reopened as a missing-position real error for the fund loop'",
    "decided_on": "2026-10-06",
    "supersedes_real_error_verdict": true,
    "ciks": [
@@ -940,7 +960,15 @@
     "2026-03-31",
     "2026-06-30"
    ],
-   "legacy_unscoped": true
+   "legacy_unscoped": true,
+   "statement_history": [
+    {
+     "statement": "Position contexts with no fair value fact: undrawn lines with nothing filed, and a few positions the filer tagged under two spellings.",
+     "replaced_on": "2026-11-10",
+     "replaced_by": "owner, 2026-11-10, D-252: \"run as recommended\"; the ruling: 'Apollo (0001837532) DS-010 narrowed to the undrawn lines it describes; SK Neptune Husky Group Sarl term loan (par 9,588k, cost 9,466k, absent from published rows since 2024-12-31) reopened as a missing-position real error for the fund loop'",
+     "reason": "the statement also covered funded positions (SK Neptune Husky term loan, Material+ PIK term loan) whose dash-valued lines the build dropped; those are now published at 0 and the statement covers the undrawn lines only"
+    }
+   ]
   },
   {
    "disposition_id": "DS-011-1812554",
