@@ -5619,3 +5619,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Apollo (0001837532) DS-010 narrowed to the undrawn lines it describes; SK Neptune Husky Group Sarl term loan (par 9,588k, cost 9,466k, absent from published rows since 2024-12-31) reopened as a missing-position real error for the fund loop.
 - Card 8 (0001925531, 2026-03-31, merged_context_excluded): the owner confirms the GBP reading of the SONIA loan printed "EUR 643" (D-186 row correction stands: adjacent quarters print GBP 646 and GBP 641; 643 GBP converts to about the printed USD 850).
 - Promoted-rule drift (18 at the n1110_q1 pass): agent to classify each rule and bring a retire/re-scope list.
+
+### D-253 Owner rulings of 2026-11-10, later (audit sample, drift, F16/F27, unclear verdicts)
+
+- Audit sample (30 accepted members, scratch/2026-11-10_audit_sample/audit.md): 8 misfits (27 pct, 95 pct CI 14-45; v0.5 members 5/8, all from batch v05_2026-10-06.json). Owner ("do as recommended"): fix BlackRock Private Credit Fund 0001902649 2022-12-31 (whole quarter missing; HTML schedule printed) and 0001920145 Esperanto 2024-09-30 cost sign; revoke or narrow the dispositions behind audit #4/#5 (Ares financial_convention_unresolved) and #17 (Blue Owl C04) so they cannot close a recurrence; rewrite #2, #25, #27 statements; re-audit the whole v05_2026-10-06 batch member by member from page reads; from now on dispositions need per-member page evidence and must name the rows they cover; a stratified ~100-member audit of the rest; fix the accepted disposition not applied after 904cd7d6 (#26, 0002006758).
+- Promoted-rule drift (scratch/2026-11-10_rule_drift/drift_review.md): retire 8 (incl. Carlyle set_comar_aggregator_equity_fv_2026q1, which writes the comparative value), re-scope 3 (WhiteHorse, Monroe, Twin Brook; each gated in a sandbox), repair Rand 81955 dedup to match on shares, repair the drift check so rules whose quarters are not in the build read as pending.
+- F16/F27 repair merged narrowly: a row passes if either the old or the new basis passes; the ~5 likely input errors among the would-be adds are checked by an agent.
+- Evidence cards for the ~10 unclear v0.5 verdicts from the standing-rule batch.
+- Publishing Q2 follows once these land.
