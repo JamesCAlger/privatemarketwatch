@@ -33,6 +33,7 @@ from pipeline.config import (
     UNIFIED_HOLDINGS_FILE,
     UNIFIED_HOLDINGS_PARQUET_FILE,
 )
+from pipeline.companyfacts_store import companyfacts_path
 from pipeline.published_basis import CIK10_SQL, PUBLISHED_ROWS_WHERE_SQL, REPORT_DATE_KEY_SQL
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -159,8 +160,8 @@ def ensure_companyfacts_cost(con: duckdb.DuckDBPyConnection) -> int:
     ciks = [r[0] for r in con.execute("SELECT cik FROM wrapped").fetchall()]
     rows: list[tuple[str, str, float]] = []
     for cik in ciks:
-        p = COMPANYFACTS_CACHE_DIR / f"{cik}.json"
-        if not p.exists():
+        p = companyfacts_path(cik, COMPANYFACTS_CACHE_DIR)
+        if p is None:
             continue
         try:
             node = json.loads(p.read_text()).get("facts", {}).get("us-gaap", {}).get("InvestmentOwnedAtCost")

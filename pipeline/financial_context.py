@@ -6,6 +6,7 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
+from pipeline.companyfacts_store import companyfacts_path
 from pipeline.programme.artifacts import literal
 from pipeline.programme.core import sha
 
@@ -43,8 +44,8 @@ def compatible_nav(holdings,financials_file,companyfacts_dir,encodings=None):
         ciks=[r[0] for r in con.execute("SELECT DISTINCT lpad(cast(cik AS VARCHAR),10,'0') FROM holdings WHERE source='bdc' ORDER BY 1").fetchall()]
         for cik in ciks:
             if not cik.isdigit(): raise ValueError('Invalid NAV source CIK')
-            path=Path(companyfacts_dir)/(cik+'.json')
-            if not path.is_file(): continue
+            path=companyfacts_path(cik,companyfacts_dir)
+            if path is None or not path.is_file(): continue
             before=sha(path)
             data=json.loads(path.read_text(encoding='utf-8'))
             declared_cik=data.get('cik')

@@ -1501,8 +1501,9 @@ def _auto_detect_dollar_unit(
 
     # Try companyfacts
     cik_padded = cik.zfill(10)
-    cache_path = Path(str(COMPANYFACTS_CACHE_DIR)) / f"{cik_padded}.json"
-    if cache_path.exists():
+    from pipeline.companyfacts_store import companyfacts_path
+    cache_path = companyfacts_path(cik_padded, COMPANYFACTS_CACHE_DIR)
+    if cache_path is not None:
         try:
             with open(cache_path) as f:
                 facts = json.load(f)

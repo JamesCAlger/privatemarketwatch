@@ -201,6 +201,9 @@ def _finish_identity(working: Path, destination: Path, *, rebuild_entities: bool
             'financial_finalization.py','identity_finalization.py','durable_identity.py',
             'matching_contract.py','position_matching.py','sector_enrichment.py')},
         fx_reference_sha256=sha(Path(__file__).parents[1]/'scripts/programme_closeout/fx.py'),
+        # Which companyfacts snapshots fed NAV/financials (pipeline.companyfacts_store).
+        companyfacts_pin_sha256=read_json(working.parent/'financial_contract.json').get('companyfacts_pin_sha256')
+            if (working.parent/'financial_contract.json').is_file() else None,
         contract='financial-contract.v2/durable-identity.v1'))
     release_id='holdings-'+input_fingerprint
     matches = position_matching.match_positions(

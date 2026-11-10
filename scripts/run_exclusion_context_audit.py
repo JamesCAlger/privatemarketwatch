@@ -34,6 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import duckdb
+from pipeline.companyfacts_store import nominal_companyfacts_path
 from pipeline.context_inventory import scan_instance
 from pipeline.programme.core import atomic_json, now, sha
 from pipeline.programme.runner import candidate_path, heavy_lock
@@ -195,7 +196,8 @@ def run(dest, *, register=REGISTER, index=INDEX, companyfacts_dir=COMPANYFACTS_D
         cf_status = {}
         cf_unknown = {}
         for cik in ciks:
-            path = Path(companyfacts_dir) / (cik + ".json")
+            # Pinned snapshot (pipeline.companyfacts_store); an explicit test directory reads directly.
+            path = nominal_companyfacts_path(cik, companyfacts_dir)
             status = dict(path=str(path), complete=False, errors=[], unknown_concepts=[],
                           unknown_concept_facts={}, unresolved_total_units=[])
             cf_unknown[cik] = {}

@@ -49,12 +49,27 @@ def include_sources(root,frozen):
     universe=frozen/'data/output/combined_universe.csv'
     holdings=frozen/'data/output/private_markets_holdings.csv'
     bdc=frozen/'data/output/bdc_holdings.csv'
+    # Companyfacts: freeze the published pin and each pinned snapshot (the
+    # versions a build reads); the legacy per-CIK cache only when root has no pin.
+    pin_relative='data/reference/companyfacts_pins/published.json'
+    pin_file=root/pin_relative
+    pins=None
+    if pin_file.is_file():
+        from pipeline.programme.core import read_json
+        pins=read_json(pin_file).get('pins') or {}
+        inputs.add(pin_relative)
     with duckdb.connect(config={'threads':2,'memory_limit':'-1'}) as con:
         if universe.is_file():
             ciks=con.execute("SELECT DISTINCT lpad(cik,10,'0') FROM read_csv(?,all_varchar=true) WHERE vehicle_type='bdc'",[str(universe)]).fetchall()
             for cik, in ciks:
                 if not cik.isdigit(): raise ContractError('Invalid source CIK')
-                inputs.add('data/raw/companyfacts_cache/'+cik+'.json')
+                if pins is None:
+                    inputs.add('data/raw/companyfacts_cache/'+cik+'.json')
+                elif pins.get(cik):
+                    snapshot=str(pins[cik])
+                    if not re.fullmatch(r'[0-9]{10}/[0-9]{8}T[0-9]{6}Z_[0-9a-f]{12}\.json',snapshot) or not snapshot.startswith(cik+'/'):
+                        raise ContractError('Invalid companyfacts pin for '+cik)
+                    inputs.add('data/raw/companyfacts_snapshots/'+snapshot)
         if holdings.is_file():
             # Only BDC observations in the contracted history window need HTML.
             docs=con.execute("SELECT cik,accession_number,count(*) FROM read_csv(?,all_varchar=true) WHERE source='bdc' AND report_date BETWEEN '2023-03-31' AND '2026-03-31' GROUP BY cik,accession_number",[str(holdings)]).fetchall()

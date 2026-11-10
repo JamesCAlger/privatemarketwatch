@@ -242,13 +242,12 @@ def cash_rows_filed_addends(encodings=None,cache_dir=None):
     declared={cik:list(e['cash_rows_include_concepts']) for cik,e in configured.items() if e.get('cash_rows_include_concepts')}
     if not declared:
         return []
-    if cache_dir is None:
-        from pipeline.config import COMPANYFACTS_CACHE_DIR as cache_dir
+    from pipeline.companyfacts_store import companyfacts_path
     from pipeline.extract_companyfacts import _extract_concept_series
     rows=[]
     for cik,concepts in sorted(declared.items()):
-        path=Path(cache_dir)/(cik+'.json')
-        if not path.exists():
+        path=companyfacts_path(cik,cache_dir)
+        if path is None:
             continue
         facts=json.loads(path.read_text(encoding='utf-8'))
         totals={}
