@@ -1,0 +1,293 @@
+{
+ "_note": "Owner retirements of 12 unclear v0.5 verdicts, 2026-11-10 ('then retire'); cards in scratch/2026-11-10_unclear_v05/cards.md. The checks stay active.",
+ "retirements": [
+  {
+   "retirement_id": "VR-OWN-20261110-01",
+   "review_id": "RVQ_REV_d30fb34e4475",
+   "verdict_sha256": "adb191be03b9d54fa406ba6e28fe86207328d591b82a46f9ce927dd577d6826a",
+   "cik": "0001803498",
+   "engine": "row_validation",
+   "rule_name": "PP03",
+   "report_date": "2026-03-31",
+   "reason": "## 1. BCRED / 0001803498 / 2026-03-31 / row_validation PP03 (RVQ_REV_d30fb34e4475) - **Verdict:** says 12 JV rows held under 2026-03-31 are December rows. It cites Aramark at \"SOFR + 1.75 % 5.47 % ... 259 259 260\", in a block that ties to the Verdelite December total of 714,200. - **Filing** (0001803498-26-000031): the March line is \"Aramark Services, Inc. (8) SOFR + 1.75 % 5.42 % 8/12/2025 4/6/2028 259 259 260 0.23\" and the December line is \"... 5.47 % ... 0.20\". The JV totals print as \"Emerald ... Total investments, at fair value $ 7,072,749 $ 6,496,980\" and \"Verdelite ... $ 613,258 $ 714,200\". - **Published:** the 03-31 Aramark row carries 5.42, the March rate. The 03-31 underlying rows sum to 7,686.0M, which is 7,072,749 + 613,258 (the March totals). All of them are `underlying_schedule`, so none is published. - **Options:** retire, because the cited December rows are no longer under",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 1. BCRED / 0001803498 / 2026-03-31 / row_validation PP03 (RVQ_REV_d30fb34e4475) - **Verdict:** says 12 JV rows held under 2026-03-31 are December rows. It cites Aramark at \"SOFR + 1.75 % 5.47 % ... 259 259 260\", in a block that ties to the Verdelite December total of 714,200. - **Filing** (0001803498-26-000031): the March line is \"Aramark Services, Inc. (8) SOFR + 1.75 % 5.42 % 8/12/2025 4/6/2028 259 259 260 0.23\" and the December line is \"... 5.47 % ... 0.20\". The JV totals print as \"Emerald ... Total investments, at fair value $ 7,072,749 $ 6,496,980\" and \"Verdelite ... $ 613,258 $ 714,200\". - **Published:** the 03-31 Aramark row carries 5.42, the March rate. The 03-31 underlying rows sum to 7,686.0M, which is 7,072,749 + 613,258 (the March totals). All of them are `underlying_schedule`, so none is published. - **Options:** retire, because the cited December rows are no longer under 03-31. Dispositions and a check repair do not apply. - **Rec:** retire, high. Deciding fact: the 03-31 row has the March-only rate of 5.42, and the underlying sum ties to the March JV totals."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 1, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 1 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-02",
+   "review_id": "RVQ_REV_aa3368147490",
+   "verdict_sha256": "d4c1df35305ab02cddf3e13773bd627df8e4a329baee117b27fd30c51252db97",
+   "cik": "0001812554",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "report_date": "2026-03-31",
+   "reason": "## 2. Blue Owl CIC / 0001812554 / 2026-03-31 / oracle B02 (RVQ_REV_aa3368147490) - **Verdict:** says there are 100 duplicate keys because the AAM Series 1.1 labels in the commitments table and the affiliate roll-forward were ingested as extra positions. - **Filing** (0001812554-26-000027): \"Total Investments $ 36,024,256 $ 35,500,450 185.4 %\". AAM prints in the schedule at 33,249 (equity), with the roll-forward row \"(c) ... 93,306\". - **Published:** 863 rows with FV 35,500,450K, which ties exactly. AAM has a debt row of 60,057K, an equity row of 33,249K, and the commitment fact at FV 0. The roll-forward row is not published. Today's B02 reads \"0 duplicate position keys\" at both quarters for all five funds; B02 was repaired under D-003. - **Options:** retire, because the duplicates are gone. - **Rec:** retire, high. Deciding fact: today's B02 counts 0 duplicates and FV ties to the printed",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 2. Blue Owl CIC / 0001812554 / 2026-03-31 / oracle B02 (RVQ_REV_aa3368147490) - **Verdict:** says there are 100 duplicate keys because the AAM Series 1.1 labels in the commitments table and the affiliate roll-forward were ingested as extra positions. - **Filing** (0001812554-26-000027): \"Total Investments $ 36,024,256 $ 35,500,450 185.4 %\". AAM prints in the schedule at 33,249 (equity), with the roll-forward row \"(c) ... 93,306\". - **Published:** 863 rows with FV 35,500,450K, which ties exactly. AAM has a debt row of 60,057K, an equity row of 33,249K, and the commitment fact at FV 0. The roll-forward row is not published. Today's B02 reads \"0 duplicate position keys\" at both quarters for all five funds; B02 was repaired under D-003. - **Options:** retire, because the duplicates are gone. - **Rec:** retire, high. Deciding fact: today's B02 counts 0 duplicates and FV ties to the printed total."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 2, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 2 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-03",
+   "review_id": "RVQ_REV_691f78b69dc0",
+   "verdict_sha256": "db8db1f1ab21b84dc4de549a279120ddef2fe986d9969e1a280fce3bf49430cc",
+   "cik": "0001812554",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "report_date": "2026-03-31",
+   "reason": "## 3. Blue Owl CIC / 0001812554 / 2026-03-31 / row_validation C107 (RVQ_REV_691f78b69dc0) - **Verdict:** says the AI Titan revolver's cost of -42,000 is really the commitment-table fair value \"(42)\", because that table has no cost column. - **Filing** (0001812554-26-000027): at 03-31 the line is \"AI Titan Parent, Inc. (dba Prometheus Group) First lien senior secured revolving loan 8/2031 - 4,245 ( 127 )\". The \"(42)\" is the December comparative column of the same 10-Q. - **Published:** no Blue Owl row has a negative cost at either quarter, so C107 has nothing to fire on. At 12-31 we publish AI Titan revolver FV -42,000, which matches the December print. - **New defect B:** at 03-31 we publish the AI Titan revolver at FV 0 and Activate Holdings at -127,000, against the printed \"352 ( 7 )\". The filer's XBRL shifts labels against values across this block: context c-806 is labelled Activate b",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 3. Blue Owl CIC / 0001812554 / 2026-03-31 / row_validation C107 (RVQ_REV_691f78b69dc0) - **Verdict:** says the AI Titan revolver's cost of -42,000 is really the commitment-table fair value \"(42)\", because that table has no cost column. - **Filing** (0001812554-26-000027): at 03-31 the line is \"AI Titan Parent, Inc. (dba Prometheus Group) First lien senior secured revolving loan 8/2031 - 4,245 ( 127 )\". The \"(42)\" is the December comparative column of the same 10-Q. - **Published:** no Blue Owl row has a negative cost at either quarter, so C107 has nothing to fire on. At 12-31 we publish AI Titan revolver FV -42,000, which matches the December print. - **New defect B:** at 03-31 we publish the AI Titan revolver at FV 0 and Activate Holdings at -127,000, against the printed \"352 ( 7 )\". The filer's XBRL shifts labels against values across this block: context c-806 is labelled Activate but carries 4,245/-127,000 (AI Titan's line), and c-808 is labelled AI Titan but carries 5,565/27,827/0. The amounts are small and the block total is unchanged, but the row attribution is wrong. - **Options:** retire this verdict, because the cited cost is gone. Handle B separately: either fix the data (realign this block to the printed lines with a per-CIK correction), or record an `as_filed` disposition on the XBRL. The project treats the printed page as the authority, which favours the fix. - **Rec:** retire, high. Open B as a new finding, medium. Its extent is not yet measured (seen on c-803 to c-808)."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 3, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 3 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-04",
+   "review_id": "RVQ_REV_923e24be00a5",
+   "verdict_sha256": "1fe3aa9364aaac5ae3a8ed00b12470240f5393e6fe46945d39ac35e1487189ba",
+   "cik": "0001837532",
+   "engine": "row_validation",
+   "rule_name": "FX02",
+   "report_date": "2026-03-31",
+   "reason": "## 4. Apollo Debt Solutions / 0001837532 / 2026-03-31 / row_validation FX02 (RVQ_REV_923e24be00a5) - **Verdict:** says 8 rows had fair_value_currency set to U_GBP, U_EUR, U_AUD and so on, taken from the notional columns of forward contracts. - **Filing** (0001193125-26-215667): the forwards are a derivative schedule. The balance sheet shows \"... on foreign currency forward contracts 36,969\". They are not schedule positions. - **Published:** all 773 rows at 03-31 have fair_value_currency = USD, and no forward rows are published. FX02 fires on a BDC row with a non-USD FV unit, and no such row exists. - **Options:** retire, because the cited rows are correctly excluded. - **Rec:** retire, high. Deciding fact: 0 non-USD FV rows and 0 forward rows are published.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 4. Apollo Debt Solutions / 0001837532 / 2026-03-31 / row_validation FX02 (RVQ_REV_923e24be00a5) - **Verdict:** says 8 rows had fair_value_currency set to U_GBP, U_EUR, U_AUD and so on, taken from the notional columns of forward contracts. - **Filing** (0001193125-26-215667): the forwards are a derivative schedule. The balance sheet shows \"... on foreign currency forward contracts 36,969\". They are not schedule positions. - **Published:** all 773 rows at 03-31 have fair_value_currency = USD, and no forward rows are published. FX02 fires on a BDC row with a non-USD FV unit, and no such row exists. - **Options:** retire, because the cited rows are correctly excluded. - **Rec:** retire, high. Deciding fact: 0 non-USD FV rows and 0 forward rows are published."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 4, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 4 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-05",
+   "review_id": "RVQ_BLK_382e3af30498",
+   "verdict_sha256": "550594302e0338f4f5302613b5bbc5ccb66556ff8cb6d1865095dcb2ffe1b70d",
+   "cik": "0001287750",
+   "engine": "oracle",
+   "rule_name": "E07",
+   "report_date": "2025-12-31",
+   "reason": "## 7. Ares Capital / 0001287750 / 2025-12-31 / oracle E07 (RVQ_BLK_382e3af30498) - **Verdict:** says affiliate FV is under-captured: output 1,413M against 600 + 4,013 = 4,613M. - **What E07 measured:** row counts, not FV. The queue metric was 0.696, which is 1,413 output rows against 4,654 wrapper leaves under the old E07. The reviewer read the counts as $M. E07 was repaired under D-001 (10-06). Today it reads \"source=1409 vs output=1409 (0.0% diff)\". - **Filing** (0001287750-26-000006): \"Total Investments $ 29,249.9 $ 29,484.8 (17) 205.93 %\". The balance sheet prints \"Non-controlled affiliate company investments 600 707 Controlled affiliate company investments 4,013 3,868\". - **Published:** 1,409 rows with FV 29,484.8M, which ties exactly. The affiliate split cannot be checked, because the holdings carry no affiliation axis. - **Options:** retire, because the error was never there: the ",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 7. Ares Capital / 0001287750 / 2025-12-31 / oracle E07 (RVQ_BLK_382e3af30498) - **Verdict:** says affiliate FV is under-captured: output 1,413M against 600 + 4,013 = 4,613M. - **What E07 measured:** row counts, not FV. The queue metric was 0.696, which is 1,413 output rows against 4,654 wrapper leaves under the old E07. The reviewer read the counts as $M. E07 was repaired under D-001 (10-06). Today it reads \"source=1409 vs output=1409 (0.0% diff)\". - **Filing** (0001287750-26-000006): \"Total Investments $ 29,249.9 $ 29,484.8 (17) 205.93 %\". The balance sheet prints \"Non-controlled affiliate company investments 600 707 Controlled affiliate company investments 4,013 3,868\". - **Published:** 1,409 rows with FV 29,484.8M, which ties exactly. The affiliate split cannot be checked, because the holdings carry no affiliation axis. - **Options:** retire, because the error was never there: the verdict misread a count, and the count now matches. - **Rec:** retire, high. Deciding fact: the metric was a row count, and today's E07 is 1409 = 1409."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 7, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 7 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-06",
+   "review_id": "RVQ_BLK_2aafeeb0812d",
+   "verdict_sha256": "7509bcabc34b8866f65215f9f9a638e34f37bc2151b24f5d23980438fdaa1978",
+   "cik": "0001803498",
+   "engine": "row_validation",
+   "rule_name": "C301",
+   "report_date": "2025-12-31",
+   "reason": "## 8. BCRED / 0001803498 / 2025-12-31 / row_validation C301 (RVQ_BLK_2aafeeb0812d) - **Verdict:** says 11 cash and money-market rows have a blank index_classification. - **Filing** (0001803498-26-000014): \"Total Investment Portfolio 82,916,241 82,199,346 172.60 Cash and Cash Equivalents BlackRock Select Treasury Based Liquidity Fund 3.61 % 28,155 28,155 0.06 ...\". Cash is printed below the investment total, outside it. - **Published:** no cash or money-market rows. 0 rows have a blank index_classification. FV of 82,199,346K ties exactly. - **Options:** retire, because the cited rows are correctly excluded (they are not investments). - **Rec:** retire, high. Deciding fact: cash sits outside the printed total, and we publish none of it.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 8. BCRED / 0001803498 / 2025-12-31 / row_validation C301 (RVQ_BLK_2aafeeb0812d) - **Verdict:** says 11 cash and money-market rows have a blank index_classification. - **Filing** (0001803498-26-000014): \"Total Investment Portfolio 82,916,241 82,199,346 172.60 Cash and Cash Equivalents BlackRock Select Treasury Based Liquidity Fund 3.61 % 28,155 28,155 0.06 ...\". Cash is printed below the investment total, outside it. - **Published:** no cash or money-market rows. 0 rows have a blank index_classification. FV of 82,199,346K ties exactly. - **Options:** retire, because the cited rows are correctly excluded (they are not investments). - **Rec:** retire, high. Deciding fact: cash sits outside the printed total, and we publish none of it."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 8, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 8 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-07",
+   "review_id": "RVQ_BLK_1953959046aa",
+   "verdict_sha256": "afd945c1b10ed124c4718ce28f7faa7e279511a3433ac8b25a664f887d3c0d6d",
+   "cik": "0001803498",
+   "engine": "row_validation",
+   "rule_name": "C303",
+   "report_date": "2025-12-31",
+   "reason": "## 9. BCRED / 0001803498 / 2025-12-31 / row_validation C303 (RVQ_BLK_1953959046aa) - **Verdict:** the same cash block, this time for a blank exposure_type. - **Filing and published:** as in card 8. 0 rows have a blank exposure_type. - **Rec:** retire, high. Deciding fact: the cash rows are not published, and they are correctly outside the printed total.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 9. BCRED / 0001803498 / 2025-12-31 / row_validation C303 (RVQ_BLK_1953959046aa) - **Verdict:** the same cash block, this time for a blank exposure_type. - **Filing and published:** as in card 8. 0 rows have a blank exposure_type. - **Rec:** retire, high. Deciding fact: the cash rows are not published, and they are correctly outside the printed total."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 9, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 9 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-08",
+   "review_id": "RVQ_BLK_b177b3e05c6c",
+   "verdict_sha256": "874852cfbb2375dd498aa62185d2e5346df6cff3a474bcf363570d20a85ffd97",
+   "cik": "0001803498",
+   "engine": "row_validation",
+   "rule_name": "C304",
+   "report_date": "2025-12-31",
+   "reason": "## 10. BCRED / 0001803498 / 2025-12-31 / row_validation C304 (RVQ_BLK_b177b3e05c6c) - **Verdict:** says 11 foreign-currency forward rows have a blank asset_class. - **Filing** (0001803498-26-000014): \"... Settlement Date Unrealized Appreciation (Depreciation) Deutsche Bank AG USD 588,180 CAD 806,500 03/25/2026 $ ( 1,961 ) ...\". This is a derivative table, separate from the schedule. - **Published:** no forward rows. 0 rows have a blank asset_class. - **Rec:** retire, high. Deciding fact: forwards are not schedule positions and none is published.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 10. BCRED / 0001803498 / 2025-12-31 / row_validation C304 (RVQ_BLK_b177b3e05c6c) - **Verdict:** says 11 foreign-currency forward rows have a blank asset_class. - **Filing** (0001803498-26-000014): \"... Settlement Date Unrealized Appreciation (Depreciation) Deutsche Bank AG USD 588,180 CAD 806,500 03/25/2026 $ ( 1,961 ) ...\". This is a derivative table, separate from the schedule. - **Published:** no forward rows. 0 rows have a blank asset_class. - **Rec:** retire, high. Deciding fact: forwards are not schedule positions and none is published."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 10, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 10 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-09",
+   "review_id": "RVQ_BLK_d7e3a1b527a3",
+   "verdict_sha256": "6c7e0a439809c750585201f32a67110e78bd9b2213675c928106fec17ffe8731",
+   "cik": "0001803498",
+   "engine": "conservation",
+   "rule_name": "fv_conservation",
+   "report_date": "2025-12-31",
+   "reason": "## 11. BCRED / 0001803498 / 2025-12-31 / conservation fv_conservation (RVQ_BLK_d7e3a1b527a3) - **Verdict:** says the sum of 89,619.9M overshoots 82,199.3M by 7,420.6M, because the JV schedules (6,496,980 + 714,200) were counted on top of the LP interests. - **Filing** (0001803498-26-000014): \"BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,815,000 1,678,745 3.53\" and \"Total Investment Portfolio 82,916,241 82,199,346\". - **Published:** FV 82,199,346K and cost 82,916,241K, both exact. The JV rows are `underlying_schedule` and unpublished. The LP interests are published at 1,678,745K and 113,068K, but with issuer_name 'BCRED' (also at 03-31), so the batch's name match missed them. - **Options:** retire, because the overshoot is gone and the cited rows are published at their printed values. Separately, fix data C: set issuer_name to 'BCRED Emerald JV LP' and 'BCRED Verdelite JV LP' (a ",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 11. BCRED / 0001803498 / 2025-12-31 / conservation fv_conservation (RVQ_BLK_d7e3a1b527a3) - **Verdict:** says the sum of 89,619.9M overshoots 82,199.3M by 7,420.6M, because the JV schedules (6,496,980 + 714,200) were counted on top of the LP interests. - **Filing** (0001803498-26-000014): \"BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,815,000 1,678,745 3.53\" and \"Total Investment Portfolio 82,916,241 82,199,346\". - **Published:** FV 82,199,346K and cost 82,916,241K, both exact. The JV rows are `underlying_schedule` and unpublished. The LP interests are published at 1,678,745K and 113,068K, but with issuer_name 'BCRED' (also at 03-31), so the batch's name match missed them. - **Options:** retire, because the overshoot is gone and the cited rows are published at their printed values. Separately, fix data C: set issuer_name to 'BCRED Emerald JV LP' and 'BCRED Verdelite JV LP' (a wrapper or issuer-name parse fix). - **Rec:** retire, high. Fix C at low priority: it is cosmetic for FV but shows in issuer lists."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 11, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 11 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-10",
+   "review_id": "RVQ_BLK_d2c3087b9359",
+   "verdict_sha256": "265f052cb6739cfffbcf1e7f4285bb490a04141305cd3e1b76955e52da7fcfa3",
+   "cik": "0001812554",
+   "engine": "oracle",
+   "rule_name": "E07",
+   "report_date": "2025-12-31",
+   "reason": "## 12. Blue Owl CIC / 0001812554 / 2025-12-31 / oracle E07 (RVQ_BLK_d2c3087b9359) - **Verdict:** says FV of 37,448.2M exceeds 35,918.9M, because the AAM \"(c)\" roll-forward row (93,464) was added as an extra holding. - **Filing** (0001812554-26-000011): the roll-forward prints \"AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(c) 75,112 13,778 ( 86 ) 4,660 - 93,464\". The 10-Q prints the 12-31 total as \"Total Investments $ 35,983,158 $ 35,918,948 181.8 %\". - **Published:** 882 rows with FV 35,918,948K, which ties exactly. AAM is published as debt 58,702K plus equity 34,762K (= 93,464), with no roll-forward row. Today's E07 reads \"source=886 vs output=882 (0.5% diff)\", a pass. - **Rec:** retire, high. Deciding fact: FV ties exactly, and the roll-forward row is not published.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 12. Blue Owl CIC / 0001812554 / 2025-12-31 / oracle E07 (RVQ_BLK_d2c3087b9359) - **Verdict:** says FV of 37,448.2M exceeds 35,918.9M, because the AAM \"(c)\" roll-forward row (93,464) was added as an extra holding. - **Filing** (0001812554-26-000011): the roll-forward prints \"AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(c) 75,112 13,778 ( 86 ) 4,660 - 93,464\". The 10-Q prints the 12-31 total as \"Total Investments $ 35,983,158 $ 35,918,948 181.8 %\". - **Published:** 882 rows with FV 35,918,948K, which ties exactly. AAM is published as debt 58,702K plus equity 34,762K (= 93,464), with no roll-forward row. Today's E07 reads \"source=886 vs output=882 (0.5% diff)\", a pass. - **Rec:** retire, high. Deciding fact: FV ties exactly, and the roll-forward row is not published."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 12, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 12 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-11",
+   "review_id": "RVQ_BLK_4885081beed2",
+   "verdict_sha256": "78728254db8595b1adf1a9fe7e6656891539913b9fea72c461134c80a6414d5f",
+   "cik": "0001812554",
+   "engine": "conservation",
+   "rule_name": "cost_conservation",
+   "report_date": "2025-12-31",
+   "reason": "## 13. Blue Owl CIC / 0001812554 / 2025-12-31 / conservation cost_conservation (RVQ_BLK_4885081beed2) - **Verdict:** says cost of 38,194.8M exceeds 35,983.2M by 2,211.6M. The reviewer could not find which rows cause it. - **Filing:** \"Total Investments $ 35,983,158 $ 35,918,948\". - **Published:** cost of 35,999,282K, which is 16,124K (0.045%) over. At 03-31 the gap is +13,564K (36,037,820 against the printed 36,024,256). The cost band is 5% (`tolerance_pct=0.05`), so the check is silent. - **Residual:** not localized. The filer's own identifier-axis cost facts sum to 36,499.3M against the 35,983.2M total, so the leaf tags overshoot by themselves. I found no single row worth 16.1M. - **Options:** retire, because the cited 2.2B overshoot is gone. Optionally log the residual as an investigation item. An informational disposition is not needed while the check is silent. - **Rec:** retire, hi",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 13. Blue Owl CIC / 0001812554 / 2025-12-31 / conservation cost_conservation (RVQ_BLK_4885081beed2) - **Verdict:** says cost of 38,194.8M exceeds 35,983.2M by 2,211.6M. The reviewer could not find which rows cause it. - **Filing:** \"Total Investments $ 35,983,158 $ 35,918,948\". - **Published:** cost of 35,999,282K, which is 16,124K (0.045%) over. At 03-31 the gap is +13,564K (36,037,820 against the printed 36,024,256). The cost band is 5% (`tolerance_pct=0.05`), so the check is silent. - **Residual:** not localized. The filer's own identifier-axis cost facts sum to 36,499.3M against the 35,983.2M total, so the leaf tags overshoot by themselves. I found no single row worth 16.1M. - **Options:** retire, because the cited 2.2B overshoot is gone. Optionally log the residual as an investigation item. An informational disposition is not needed while the check is silent. - **Rec:** retire, high. The residual's cause is unknown (low confidence): it is small, has the same sign at both quarters, and is unexplained."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 13, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 13 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  },
+  {
+   "retirement_id": "VR-OWN-20261110-12",
+   "review_id": "RVQ_REV_5ac82c66bbce",
+   "verdict_sha256": "f9c90b5f7a7619f5d3760f2eaccd0cb15372bfc1c705a63584c3a487a35adc4c",
+   "cik": "0001837532",
+   "engine": "row_validation",
+   "rule_name": "FX02",
+   "report_date": "2025-12-31",
+   "reason": "## 14. Apollo / 0001837532 / 2025-12-31 / row_validation FX02 (RVQ_REV_5ac82c66bbce) - **Verdict:** says fair_value_currency was U_GBP, U_EUR and U_CAD. The GBP and EUR came from the \"British Pound / European Euro\" lines, and the CAD came from Cascade Parent. - **Filing** (0001193125-26-102386): the GBP and EUR lines are in the foreign-currency borrowing table, not the schedule. Cascade prints \"Cascade Parent Inc. First Lien Secured Debt - Term Loan S + 575 , 0.50 % Floor 9/24/2031 152,685 150,460 150,395\", with no currency code. - **Published:** all 753 rows have fair_value_currency = USD, so FX02 has nothing to fire on. - **New defect A:** the filer tagged Cascade's principal `unitRef=\"U_GBP\"` (152,685,000) at 12-31 and `U_EUR` (152,304,000) at 03-31. We publish principal_amount_currency GBP and EUR, and principal_amount_usd of 205.3M and 175.4M against printed par of 152.7M and 152.3M",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "## 14. Apollo / 0001837532 / 2025-12-31 / row_validation FX02 (RVQ_REV_5ac82c66bbce) - **Verdict:** says fair_value_currency was U_GBP, U_EUR and U_CAD. The GBP and EUR came from the \"British Pound / European Euro\" lines, and the CAD came from Cascade Parent. - **Filing** (0001193125-26-102386): the GBP and EUR lines are in the foreign-currency borrowing table, not the schedule. Cascade prints \"Cascade Parent Inc. First Lien Secured Debt - Term Loan S + 575 , 0.50 % Floor 9/24/2031 152,685 150,460 150,395\", with no currency code. - **Published:** all 753 rows have fair_value_currency = USD, so FX02 has nothing to fire on. - **New defect A:** the filer tagged Cascade's principal `unitRef=\"U_GBP\"` (152,685,000) at 12-31 and `U_EUR` (152,304,000) at 03-31. We publish principal_amount_currency GBP and EUR, and principal_amount_usd of 205.3M and 175.4M against printed par of 152.7M and 152.3M. FX01 does not fire, because the USD value is filled. - **Options:** retire FX02, because the error is gone. Fix A with a per-CIK override of principal currency to USD for these two rows: printed USD columns, and no currency code on the line, unlike the \"EUR 40,000\" printed on SumUp. - **Rec:** retire, high. Fix A, medium-high."
+    },
+    {
+     "source": "measurement",
+     "quote": "Decision card 14, scratch/2026-11-10_unclear_v05/cards.md (read-only review of today's published holdings, oracle results and the n1110_q1 ledger)."
+    }
+   ],
+   "rerun": "python scratch/2026-11-10_unclear_v05/q.py  (card 14 in scratch/2026-11-10_unclear_v05/cards.md)",
+   "owner_words": "then retire",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10"
+  }
+ ]
+}
