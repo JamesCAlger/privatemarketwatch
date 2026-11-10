@@ -9,7 +9,13 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 cik, year = sys.argv[1].zfill(10), sys.argv[2]
-facts = json.loads((REPO / "data/raw/companyfacts_cache" / (cik + ".json")).read_text(encoding="utf-8"))["facts"]
+sys.path.insert(0, str(REPO))
+from pipeline.companyfacts_store import companyfacts_path  # noqa: E402  pinned snapshot
+
+source = companyfacts_path(cik)
+if source is None:
+    sys.exit("no pinned companyfacts snapshot for " + cik)
+facts = json.loads(source.read_text(encoding="utf-8"))["facts"]
 want = re.compile(r"waiv|reimburs|expense support|NetExpenses|ExpensesNet|OperatingExpenses$|NetInvestmentIncome$|InvestmentIncomeOperating|GrossInvestmentIncome|Revenues$", re.I)
 print("tag | period end | months | value | form")
 for taxonomy, tags in facts.items():

@@ -22,7 +22,7 @@ LEGACY_DIRECTORIES = (
     'data/raw/filings/nport_xml', 'data/raw/filings/bdc_html',
     'data/raw/filings/ncsr_html', 'data/raw/filings/sc_toi_html',
     'data/raw/third_party', 'data/raw/n2_headers_cache',
-    'data/raw/filing_templates', 'data/raw/companyfacts_cache',
+    'data/raw/filing_templates', 'data/raw/companyfacts_cache', 'data/raw/companyfacts_snapshots',
     'data/raw/sec_reference', 'data/raw/listed_prices',
     'data/reference', 'data/overrides/fund_highlights_wrappers',
     'data/output/cache/sec_download_locks',

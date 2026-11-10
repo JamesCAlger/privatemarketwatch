@@ -50,8 +50,20 @@ BDC_HTML_CACHE_DIR = RAW_DIR / "filings" / "bdc_html"
 # HTML template-based extraction
 HTML_TEMPLATE_DIR = RAW_DIR / "filing_templates"
 
-# companyfacts API cache (one JSON per CIK, ~100KB each)
+# companyfacts API cache (one JSON per CIK, ~100KB each). LEGACY since 2026-11-10:
+# readers resolve through pipeline.companyfacts_store (immutable snapshots + pins)
+# and use this directory only when no pin file exists.
 COMPANYFACTS_CACHE_DIR = RAW_DIR / "companyfacts_cache"
+# Immutable, content-addressed companyfacts snapshots: <cik10>/<stamp>_<sha12>.json
+# plus manifest.jsonl. Written only by pipeline.companyfacts_store.add_snapshot.
+COMPANYFACTS_SNAPSHOT_DIR = RAW_DIR / "companyfacts_snapshots"
+# Published pin (tracked): which snapshot each CIK reads in production builds.
+COMPANYFACTS_PUBLISHED_PIN_FILE = REFERENCE_DIR / "companyfacts_pins" / "published.json"
+# PM_COMPANYFACTS_PIN points candidate/sandbox builds at another pin file, the
+# same way PM_OUTPUT_DIR redirects outputs. pipeline.companyfacts_store also
+# re-reads the variable at call time.
+COMPANYFACTS_PIN_FILE = (Path(os.environ["PM_COMPANYFACTS_PIN"]).resolve()
+                         if os.environ.get("PM_COMPANYFACTS_PIN") else COMPANYFACTS_PUBLISHED_PIN_FILE)
 
 # Fund highlights wrapper overrides
 FUND_HIGHLIGHTS_WRAPPER_DIR = OVERRIDES_DIR / "fund_highlights_wrappers"

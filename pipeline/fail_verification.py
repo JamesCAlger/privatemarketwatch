@@ -884,7 +884,8 @@ def _build_fund_evidence_bundle(
         source_rows,
     ))
 
-    companyfacts_path = PROJECT_ROOT / "data" / "raw" / "companyfacts_cache" / f"{cik}.json"
+    from pipeline.companyfacts_store import nominal_companyfacts_path
+    companyfacts_path = nominal_companyfacts_path(cik)
     companyfacts_summary = _companyfacts_cache_summary(companyfacts_path)
     evidence_items.append(_evidence(
         "companyfacts_cache",

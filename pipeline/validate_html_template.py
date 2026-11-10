@@ -47,17 +47,23 @@ def _fetch_companyfacts(
     cik: str,
     client: Optional[object] = None,
 ) -> dict:
-    """Fetch companyfacts JSON for *cik*, with 7-day disk cache.
+    """Companyfacts JSON for *cik*: the pinned snapshot, else a fetch from SEC.
 
-    Returns parsed JSON dict, or empty dict on failure.
+    A pinned snapshot (pipeline.companyfacts_store) is returned as-is, whatever its
+    age: the pin, not file freshness, decides which version builds read. Only in
+    legacy mode (no pin file) does the old 7-day cache-age rule apply. A fetch
+    is stored as a new immutable snapshot (source api_download); it never moves
+    the published pin. Returns parsed JSON dict, or empty dict on failure.
     """
-    cik_padded = str(cik).zfill(10)
-    cache_path = COMPANYFACTS_CACHE_DIR / f"{cik_padded}.json"
+    from pipeline import companyfacts_store as store
 
-    # Check cache freshness
-    if cache_path.exists():
-        age = time.time() - cache_path.stat().st_mtime
-        if age < _CACHE_MAX_AGE_SECONDS:
+    cik_padded = str(cik).zfill(10)
+    cache_path = store.companyfacts_path(cik_padded)
+    pinned = store.load_pin() is not None
+
+    if cache_path is not None:
+        fresh = pinned or (time.time() - cache_path.stat().st_mtime) < _CACHE_MAX_AGE_SECONDS
+        if fresh:
             try:
                 with open(cache_path) as f:
                     return json.load(f)
@@ -76,13 +82,14 @@ def _fetch_companyfacts(
         logger.warning("Failed to fetch companyfacts for CIK %s: %s", cik, exc)
         return {}
 
-    # Save to cache
+    # Store as a new snapshot; the published pin is not moved.
     try:
-        cache_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(cache_path, "w") as f:
-            json.dump(data, f)
-    except OSError as exc:
-        logger.debug("Cache write failed for CIK %s: %s", cik, exc)
+        row, created = store.add_snapshot(cik_padded, json.dumps(data).encode("utf-8"),
+                                          source="api_download")
+        logger.info("Companyfacts %s: snapshot %s (%s; not pinned)", cik_padded, row["path"],
+                    "new" if created else "already stored")
+    except (OSError, ValueError, store.CompanyfactsStoreError) as exc:
+        logger.warning("Companyfacts snapshot write failed for CIK %s: %s", cik, exc)
 
     return data
 

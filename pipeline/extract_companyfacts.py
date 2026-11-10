@@ -14,10 +14,12 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 def _load_companyfacts_cached(cik: str, companyfacts_cache_dir=COMPANYFACTS_CACHE_DIR) -> dict:
-    """Read companyfacts JSON from disk cache. No network calls."""
-    cik_padded = str(cik).zfill(10)
-    cache_path = companyfacts_cache_dir / f"{cik_padded}.json"
-    if not cache_path.exists():
+    """Read the pinned companyfacts snapshot (pipeline.companyfacts_store). No network calls.
+
+    An explicit directory other than the legacy cache is read directly (tests)."""
+    from pipeline.companyfacts_store import companyfacts_path
+    cache_path = companyfacts_path(cik, companyfacts_cache_dir)
+    if cache_path is None:
         return {}
     try:
         with open(cache_path) as f:
@@ -637,12 +639,12 @@ def _extract_all_companyfacts(
     """
     all_rows: list[dict] = []
 
-    # Identify CIKs needing fetch
+    # Identify CIKs needing fetch (no pinned snapshot). A fetch stores a new
+    # snapshot but never moves the published pin, so it is read only once pinned.
+    from pipeline.companyfacts_store import companyfacts_path
     uncached = []
     for cik in bdc_ciks:
-        cik_padded = str(cik).zfill(10)
-        cache_path = companyfacts_cache_dir / f"{cik_padded}.json"
-        if not cache_path.exists():
+        if companyfacts_path(cik, companyfacts_cache_dir) is None:
             uncached.append(cik)
 
     if uncached:

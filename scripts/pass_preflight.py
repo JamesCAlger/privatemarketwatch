@@ -42,6 +42,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from pipeline import config  # noqa: E402
+from pipeline.companyfacts_store import companyfacts_path  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -134,13 +135,15 @@ def check_anchor_assessability(quarter: str, *, shadow_ledger: Path = DEFAULT_SH
         for cik in sorted(cohort):
             s = status.get(cik, "no_ledger_row")
             if s in ("skip", "no_ledger_row"):
-                cache = Path(cache_dir) / f"{cik}.json"
+                # The version builds read: the pinned snapshot (legacy file only
+                # for an explicit test directory or when no pin file exists).
+                cache = companyfacts_path(cik, cache_dir)
                 age_days = None
-                if cache.exists():
+                if cache is not None:
                     age_days = round((now - datetime.fromtimestamp(
                         cache.stat().st_mtime, tz=timezone.utc)).days, 1)
                 lagging.append({"cik": cik, "status": s,
-                                "companyfacts_cached": cache.exists(),
+                                "companyfacts_cached": cache is not None,
                                 "cache_age_days": age_days})
     detail = (f"anchored_rate {rate} vs min {min_pct} "
               f"(pass {n_pass} / fail {n_fail} / skip {n_skip})")

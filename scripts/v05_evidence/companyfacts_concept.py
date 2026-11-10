@@ -13,7 +13,13 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 cik, pattern = sys.argv[1].zfill(10), re.compile(sys.argv[2], re.I)
 prefix = sys.argv[3] if len(sys.argv) > 3 else ""
-data = json.loads((REPO / "data/raw/companyfacts_cache" / (cik + ".json")).read_text(encoding="utf-8"))
+sys.path.insert(0, str(REPO))
+from pipeline.companyfacts_store import companyfacts_path  # noqa: E402  pinned snapshot
+
+source = companyfacts_path(cik)
+if source is None:
+    sys.exit("no pinned companyfacts snapshot for " + cik)
+data = json.loads(source.read_text(encoding="utf-8"))
 shown = 0
 for taxonomy, concepts in data.get("facts", {}).items():
     for name, body in sorted(concepts.items()):

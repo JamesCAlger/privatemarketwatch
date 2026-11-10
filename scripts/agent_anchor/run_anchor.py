@@ -62,8 +62,9 @@ _CF_FORMS = ("10-K", "10-Q", "10-K/A", "10-Q/A")
 def _companyfacts_cash(cik: str) -> dict[str, float]:
     """{report_date -> cash} from the cached companyfacts (not in fund_financials.csv). A BDC's
     non-investment assets are mostly cash; subtracting it sharpens the incomplete-anchor screen."""
-    p = config.COMPANYFACTS_CACHE_DIR / f"{str(cik).zfill(10)}.json"
-    if not p.exists():
+    from pipeline.companyfacts_store import companyfacts_path
+    p = companyfacts_path(cik)
+    if p is None:
         return {}
     try:
         facts = json.loads(p.read_text(encoding="utf-8")).get("facts", {}).get("us-gaap", {})
