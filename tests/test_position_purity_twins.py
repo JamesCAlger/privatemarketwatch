@@ -67,3 +67,48 @@ def test_a_row_without_a_member_is_still_a_duplicate_candidate():
     rows = [_row(KITE, "investmentidentifieraxis=" + KITE),
             _row("", "industryaxis=Advertising")]
     assert _duplicate_rows(rows) == 2
+
+
+# Owner ruling 2026-11-10 (pp02-distinct-zero-valued-commitments-have-different-rate-terms):
+# rows with different printed rate terms are different tranches even without distinct members.
+HERITAGE = "Heritage Environmental Services, Inc. First Lien Secured Debt - Revolver"
+
+
+def _revolver(identifier, dims, spread="", rate="", reference=""):
+    row = _row(identifier, dims)
+    row.update({"cik": "0002052153", "issuer_name": "Heritage Environmental Services, Inc.",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "fair_value": "0.0", "cost": "0.0", "principal_amount": "0.0",
+                "basis_spread": spread, "interest_rate": rate, "reference_rate_type": reference})
+    return row
+
+
+def test_zero_valued_revolvers_with_different_spreads_are_not_duplicates():
+    """Heritage 2025-03-31: 'S + 500, 0.75% Floor' and 'S + 550, 4.50% Floor', zero par, cost and
+    value. Here both rows share one member, so only the rate terms tell them apart."""
+    rows = [_revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE, spread="5.0", reference="SOFR"),
+            _revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE + "; legalentityaxis=SPV I",
+                      spread="5.5", reference="SOFR")]
+    assert _duplicate_rows(rows) == 0
+
+
+def test_same_member_same_rate_terms_is_still_a_duplicate():
+    rows = [_revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE, spread="5.0", rate="9.3"),
+            _revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE + "; legalentityaxis=SPV I",
+                      spread="5.0", rate="9.3")]
+    assert _duplicate_rows(rows) == 2
+
+
+def test_rate_on_one_path_only_is_still_a_duplicate():
+    """False-positive guard: a fact repeated on a second path often carries the spread on one path
+    only; a missing term is not a different term."""
+    rows = [_revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE, spread="5.0"),
+            _revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE + "; legalentityaxis=SPV I", spread="")]
+    assert _duplicate_rows(rows) == 2
+
+
+def test_two_rows_with_the_same_terms_beside_a_third_still_flag_the_group():
+    rows = [_revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE, spread="5.0"),
+            _revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE + "; legalentityaxis=SPV I", spread="5.0"),
+            _revolver(HERITAGE, "investmentidentifieraxis=" + HERITAGE + "; legalentityaxis=SPV II", spread="5.5")]
+    assert _duplicate_rows(rows) == 3
