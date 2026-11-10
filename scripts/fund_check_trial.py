@@ -33,7 +33,7 @@ from scripts.rebuild_sample_trial import TRIAL_ROOT, _protected_state  # noqa: E
 
 logger = logging.getLogger("fund_check_trial")
 RESOLVED = frozenset({"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream",
-                      "gone_unadjudicated"})
+                      "gone_unadjudicated", "verdict_retired"})
 RERUN_ENGINES = ("row_validation", "oracle", "conservation")
 FIRING = ("fail", "warn")
 # Engines whose stale inputs make a re-run unreliable for specific rules.

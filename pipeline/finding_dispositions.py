@@ -97,7 +97,8 @@ def closes(entry: dict, state: str) -> bool:
     filing evidence, that the published value is what the fund filed."""
     if state in ("open", "needs_human", "evidence_backlog", "b1_route_missing"):
         return True
-    if state == "real_error_unremediated":
+    # real_error_check_silent: the same verdict, its check no longer firing (findings_ledger).
+    if state in ("real_error_unremediated", "real_error_check_silent"):
         return entry["class"] == "informational" or bool(entry.get("supersedes_real_error_verdict"))
     # A fix that was drafted (staged) or drafted and withdrawn (pulled) never changed the data. It
     # yields only to an entry that replaces the verdict behind it, which requires filing evidence.

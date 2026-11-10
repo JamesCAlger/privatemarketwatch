@@ -7,8 +7,13 @@ finding (union of current review queue + adjudicated verdicts) gets exactly one 
 
   Terminal (no further agent work):
     adjudicated_false_alarm   false_alarm / NO_PATCH_NEEDED
-    remediated_promoted       real_error with a promoted correction referencing it
-    resolved_upstream         real_error adjudicated, finding no longer in the queue
+    remediated_promoted       real_error with a promoted correction referencing it (a leaf
+                              under a `_pulled_*` folder of the promoted store is pulled, not
+                              promoted)
+    verdict_retired           real_error verdict retired by the owner (pipeline.verdict_retirements)
+                              and the check no longer fires
+    resolved_upstream         historic: no longer assigned (2026-11-10); a real_error that left
+                              the queue is now real_error_check_silent unless retired or fixed
     dispositioned_*           an otherwise unresolved finding covered by a standing disposition
                               (pipeline.finding_dispositions: informational, as_filed,
                               not_applicable). A reviewer's real-error verdict is left standing
@@ -16,6 +21,11 @@ finding (union of current review queue + adjudicated verdicts) gets exactly one 
   Terminal for agents (human basket):
     needs_human               ambiguous / anchor_bad / ESCALATE / PATCH_PROPOSED
                               with no promotable route
+    real_error_check_silent   adjudicated real, no fix promoted, and the check no longer fires.
+                              Outstanding (acceptance counts it) until the owner retires the
+                              verdict or a fix is promoted: a repaired check may have been taught
+                              to miss the error (owner ruling 2026-11-10). Not in the fleet dry
+                              pool (agents cannot retire a verdict); in the closure pool.
   Actionable (the dispatch pool for the next round):
     open                      in queue, no valid adjudication yet          -> B1
     real_error_unremediated   adjudicated real, no correction staged       -> B2
@@ -40,6 +50,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Iterable
@@ -47,7 +58,7 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pipeline import disposition_validity, finding_dispositions  # noqa: E402
+from pipeline import disposition_validity, finding_dispositions, verdict_retirements  # noqa: E402
 from scripts.check_tier_coverage import VERDICT_DIRS, load_verdict  # noqa: E402
 
 DEFAULT_QUEUE = ROOT / "data" / "output" / "review_queue" / "review_queue.csv"
@@ -73,15 +84,27 @@ CLOSURE_ACTIONABLE_STATES = (
     "open", "real_error_unremediated", "remediation_pulled", "remediation_staged",
     "b1_route_missing", "b1_re_adjudication_required", "b2_execution_unproven",
     "b3_pass_pending_promotion", "promoted_pending_verification", "unverified_absence",
+    "real_error_check_silent",
 )
 
+SILENT_REAL_ERROR_STATE = "real_error_check_silent"
+RETIRED_STATE = verdict_retirements.RETIRED_STATE
 
-def _leaf_review_ids(root: Path) -> set[str]:
-    """source_review_ids referenced by any correction leaf under ``root`` (recursive)."""
+
+def _leaf_review_ids(root: Path, *, pulled_dirs: bool | None = None) -> set[str]:
+    """source_review_ids referenced by any correction leaf under ``root`` (recursive).
+
+    ``pulled_dirs``: None counts every leaf; False skips leaves under a folder whose name starts
+    with '_' (the operator pull convention, ``<cik>/_pulled_<reason>_<date>/``, which the
+    production loaders never read); True counts only those."""
     ids: set[str] = set()
     if not root.exists():
         return ids
     for p in root.rglob("*.json"):
+        if pulled_dirs is not None:
+            in_pulled = any(part.startswith("_") for part in p.relative_to(root).parts[:-1])
+            if in_pulled != pulled_dirs:
+                continue
         try:
             leaf = json.loads(p.read_text(encoding="utf-8-sig"))
         except (OSError, json.JSONDecodeError):
@@ -110,9 +133,14 @@ def classify_finding(
     rid: str, *, in_queue: bool, verdict_status: str,
     staged_ids: set[str], promoted_ids: set[str], pulled_ids: set[str],
     seeded: bool = False, has_fix_route: bool = True, closure_mode: bool = False,
+    verdict_retired: bool = False,
 ) -> str:
     """Pure state assignment for one finding. ``verdict_status`` is
-    check_tier_coverage.load_verdict's status ('MISSING' when no verdict file)."""
+    check_tier_coverage.load_verdict's status ('MISSING' when no verdict file).
+    ``verdict_retired``: the owner retired this real-error verdict (pipeline.verdict_retirements);
+    the finding is then unadjudicated."""
+    if verdict_retired and verdict_status == "verdict_real_error":
+        return "open" if in_queue else RETIRED_STATE
     if verdict_status.startswith("verdict_"):
         verdict = verdict_status[len("verdict_"):]
         if verdict in FALSE_ALARM_VERDICTS:
@@ -130,7 +158,9 @@ def classify_finding(
             if rid in pulled_ids:
                 return "remediation_pulled"
             if not in_queue:
-                return "unverified_absence" if closure_mode and seeded else "resolved_upstream"
+                # The check stopped firing, but nothing fixed the error the reviewer found.
+                # The verdict stands until retired or remediated (owner ruling 2026-11-10).
+                return SILENT_REAL_ERROR_STATE
             if closure_mode and not has_fix_route:
                 return "b1_route_missing"
             return "real_error_unremediated"
@@ -183,6 +213,34 @@ def _has_fix_route(verdict_path: Path | None) -> bool:
     return bool(str(raw.get("fix_class") or "").strip())
 
 
+_META_KEYS = ("cik", "engine", "rule_name", "report_date", "lane")
+_BDCSRC_ID = re.compile(r"BDCSRC_(\d{10})_(\d{4}-\d{2}-\d{2})_")
+
+
+def _verdict_meta(rid: str, verdict_path: Path | None) -> dict:
+    """Fund, engine, rule, quarter and lane of a verdict whose finding is in neither the live
+    queue nor a seed: read from the review bundle the reviewer was given
+    (``<verdict dir>/../review_bundles/<rid>.json``), else parsed from a source-recon id.
+    Empty when unknown."""
+    meta: dict = {}
+    if verdict_path is not None:
+        bundle = Path(verdict_path).parent.parent / "review_bundles" / Path(verdict_path).name
+        if bundle.exists():
+            try:
+                raw = json.loads(bundle.read_text(encoding="utf-8-sig"))
+            except (OSError, json.JSONDecodeError):
+                raw = {}
+            if isinstance(raw, dict) and raw.get("review_id") in (None, rid):
+                meta = {k: str(raw.get(k) or "") for k in _META_KEYS}
+    m = _BDCSRC_ID.match(rid)
+    if m and not meta.get("cik"):
+        meta.update(cik=m.group(1), report_date=m.group(2), engine=meta.get("engine") or "source_recon")
+    if meta.get("cik"):
+        meta["cik"] = meta["cik"].zfill(10)
+    meta["report_date"] = str(meta.get("report_date") or "")[:10]
+    return meta
+
+
 def build_ledger(
     *, queue_path: Path = DEFAULT_QUEUE, staged_dir: Path = DEFAULT_STAGED,
     promoted_dir: Path = DEFAULT_PROMOTED, archive_dir: Path = DEFAULT_ARCHIVE,
@@ -190,6 +248,7 @@ def build_ledger(
     seed_paths: Iterable[Path] = (), quarter: str | None = None,
     manifest_path: Path | None = None, closure_mode: bool = False,
     dispositions_dir: Path | None = None, validity_path: Path | None = None,
+    retirements_dir: Path | None = None,
 ) -> list[dict]:
     """Build the lifecycle ledger.
 
@@ -219,28 +278,44 @@ def build_ledger(
                 verdict_paths.setdefault(p.stem, p)
 
     staged_ids = _leaf_review_ids(Path(staged_dir))
-    promoted_ids = _leaf_review_ids(Path(promoted_dir)) | _wrapper_provenance_ids(Path(wrapper_dir))
-    pulled_ids = _leaf_review_ids(Path(archive_dir)) - promoted_ids - staged_ids
+    # A leaf moved into a `_pulled_*` folder of the promoted store is not applied by the build
+    # (pipeline.agent_promoted reads <cik>/<fix>.json only), so it is pulled, not promoted.
+    promoted_ids = (_leaf_review_ids(Path(promoted_dir), pulled_dirs=False)
+                    | _wrapper_provenance_ids(Path(wrapper_dir)))
+    pulled_ids = ((_leaf_review_ids(Path(archive_dir)) | _leaf_review_ids(Path(promoted_dir), pulled_dirs=True))
+                  - promoted_ids - staged_ids)
 
     dispositions = finding_dispositions.load(dispositions_dir)
+    retirements = verdict_retirements.load(retirements_dir)
     # Carry-forward checks that passed on this build; without the file no entry leaves its listed quarters.
     validity_passes = disposition_validity.load_passes(validity_path)
     ledger = []
     universe = set(queue_rows) | set(seed_rows)
-    # In scoped closure mode, do not accidentally pull every historic verdict into
-    # a quarter-only artifact.  Existing unscoped behavior remains unchanged.
+    verdicts = {rid: load_verdict(p) for rid, p in verdict_paths.items()}
+    # Fund/rule/quarter of a verdict whose finding left the queue (bundle or id), so a real error
+    # whose check went silent stays attributed to its fund-quarter.
+    verdict_meta = {rid: _verdict_meta(rid, verdict_paths[rid]) for rid, (st, _) in verdicts.items()
+                    if st == "verdict_real_error" and rid not in queue_rows and rid not in seed_rows}
     if quarter is None and cohort is None:
         universe |= set(verdict_paths)
+    else:
+        # Scoped: no historic verdict of other funds or quarters, but a real-error verdict of
+        # this scope stays in it after its check goes silent.
+        universe |= {rid for rid, meta in verdict_meta.items()
+                     if meta.get("cik") and _in_scope(meta, quarter=quarter, cohort=cohort)}
     for rid in sorted(universe):
-        vstatus, vdetail = ("MISSING", "")
-        if rid in verdict_paths:
-            vstatus, vdetail = load_verdict(verdict_paths[rid])
+        vstatus, vdetail = verdicts.get(rid, ("MISSING", ""))
+        q = queue_rows.get(rid) or seed_rows.get(rid) or verdict_meta.get(rid) or {}
+        retirement = None
+        if vstatus == "verdict_real_error":
+            retirement = verdict_retirements.match(
+                retirements, rid, verdict_path=verdict_paths.get(rid), cik=q.get("cik"),
+                engine=q.get("engine"), rule_name=q.get("rule_name"), report_date=q.get("report_date"))
         state = classify_finding(
             rid, in_queue=rid in queue_rows, verdict_status=vstatus,
             staged_ids=staged_ids, promoted_ids=promoted_ids, pulled_ids=pulled_ids,
             seeded=rid in seed_rows, has_fix_route=_has_fix_route(verdict_paths.get(rid)),
-            closure_mode=closure_mode)
-        q = queue_rows.get(rid, seed_rows.get(rid, {}))
+            closure_mode=closure_mode, verdict_retired=retirement is not None)
         # A standing disposition closes a finding that is still unresolved.
         disposition = finding_dispositions.match(
             dispositions, cik=q.get("cik"), engine=q.get("engine"),
@@ -258,6 +333,7 @@ def build_ledger(
             "population_origin": ("frozen_and_live" if rid in queue_rows and rid in seed_rows
                                   else "live" if rid in queue_rows else "frozen"),
             "verdict_status": vstatus, "verdict_detail": vdetail,
+            "retirement_id": retirement["retirement_id"] if retirement else "",
             "has_fix_route": _has_fix_route(verdict_paths.get(rid)),
             "cik": q.get("cik", ""), "rule_name": q.get("rule_name", ""),
             "report_date": q.get("report_date", ""), "lane": q.get("lane", ""),

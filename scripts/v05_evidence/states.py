@@ -6,7 +6,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated",
-            "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable"}
+            "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable", "verdict_retired"}
 csv.field_size_limit(10**9)
 grid = Counter()
 with open(REPO / "scratch/fund_sandbox" / sys.argv[1] / "findings_ledger.csv", newline="", encoding="utf-8-sig") as fh:

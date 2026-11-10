@@ -1,0 +1,118 @@
+{
+  "_note": "Owner rulings 2026-11-10. Each entry retires one real-error verdict file whose cited error is no longer in the published data (checked against data/output/private_markets_holdings.parquet and oracle/check_results.csv built 2026-11-10). Live real-error verdicts NOT retired: RVQ_REV_4cdfa40d7a7a (Apollo 0001837532 B01 2026-03-31, 24 current leaves without value) and RVQ_REV_3049f7519633 (ssxf 0001508655 B01 2026-03-31, 4 leaves without value).",
+  "retirements": [
+    {
+      "retirement_id": "VR-001",
+      "review_id": "RVQ_REV_66eeb8c7f2ab",
+      "verdict_sha256": "1542c4f50972bf3a79d41fccbbef3b522bdcbf60f5715ab682b9f22654dbae8f",
+      "cik": "0001950803", "engine": "oracle", "rule_name": "B02", "report_date": "2025-12-31",
+      "reason": "The verdict says the position key collapses three Minds Buyer Second Amendment Incremental Term Loan lines with different footnotes and amounts; all three are published as separate rows with the filed par, cost and value and distinct position ids, and the correction the verdict led to was pulled 2026-10-10.",
+      "evidence": [
+        {"source": "query", "quote": "private_markets_holdings 0001950803 2025-12-31 Minds Buyer Second Amendment: 3 parent_schedule rows, par/cost/fv 3,838/3,823/3,826, 3,366/3,346/3,356, 4,057/4,024/4,044 thousand; position_id 7b4b9f1d, ad94a7a2, 0040a143 (distinct). Matches the three lines the verdict quotes."},
+        {"source": "commit", "quote": "ffe67b4 (B02 SPX twin lines): on 66 accepted sandboxes clears spxf 9 fund-quarters, adds 0; B02 since D-003 (2026-10-06) does not flag rows with different figures."},
+        {"source": "code", "quote": "data/overrides/agent_b2_corrections/0001950803/_pulled_wrong_remap_2026-10-10/column_remap.json: the fix the verdict led to, pulled."}
+      ],
+      "rerun": "duckdb: SELECT issuer_name, principal_amount, cost, fair_value, position_id FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0001950803' AND report_date='2025-12-31' AND issuer_name ILIKE '%minds buyer%'",
+      "owner_words": "do as suggested to fix",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-002",
+      "review_id": "RVQ_REV_d43a1de77cfb",
+      "verdict_sha256": "3d71b1a41f4b3e38939f0dbb9b51b891bc7942bfa067e11c594fc966ff56d5fc",
+      "cik": "0001899017", "engine": "oracle", "rule_name": "B02", "report_date": "2025-12-31",
+      "reason": "The verdict says the ATS first-lien loan from the main schedule (FV 11,875) and from the SLP II schedule (FV 4,949) share one key space; today the SLP II row is accounting_record_class underlying_schedule (excluded from the published basis) and the published basis holds one ATS row at the filed 11,875.",
+      "evidence": [
+        {"source": "query", "quote": "0001899017 2025-12-31 ATS: parent_schedule par 11,874 cost 11,771 fv 11,875 position_id 46ebdae7; underlying_schedule (is_subsidiary 1) par 4,950 cost 4,899 fv 4,949 position_id 79866115. Distinct ids, filed values, SLP II row outside the published basis."},
+        {"source": "commit", "quote": "e829cc96 measurement (branch check-repair-oracle-pp02-cons-2026-11-10): what still fails B02 for rfbne 2025-12-31 is an undrawn twin pair, not the ATS rows this verdict cites."}
+      ],
+      "rerun": "duckdb: SELECT issuer_name, principal_amount, cost, fair_value, accounting_record_class, position_id FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0001899017' AND report_date='2025-12-31' AND issuer_name ILIKE 'ATS%'",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-003",
+      "review_id": "RVQ_REV_d6646b0748f7",
+      "verdict_sha256": "7027c7e158e130551ef613846b12a420b0160c3ada57307f6d533b282f0e634b",
+      "cik": "0001950976", "engine": "oracle", "rule_name": "B02", "report_date": "2025-12-31",
+      "reason": "The verdict says the key collapses four distinct Alert SRC Newco positions; all four are published as separate rows with the filed par, cost and value and distinct position ids.",
+      "evidence": [
+        {"source": "query", "quote": "0001950976 2025-12-31 Alert SRC Newco LLC: term loan 22,240/21,960/22,018; DDTL 7,233/7,134/7,160 (acq 2024-12-11); DDTL 343/292/239 (acq 2025-09-19); revolver 0/(28)/(22). Four parent_schedule rows, four position ids. Matches the four lines the verdict quotes."},
+        {"source": "commit", "quote": "e829cc96 measurement: what still fails B02 for rf26c 2025-12-31 is an undrawn twin pair, not the Alert SRC rows this verdict cites."}
+      ],
+      "rerun": "duckdb: SELECT instrument_description, principal_amount, cost, fair_value, bdc_acquisition_date, position_id FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0001950976' AND report_date='2025-12-31' AND issuer_name ILIKE '%alert src%'",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-004",
+      "review_id": "RVQ_REV_f52b4a8d5165",
+      "verdict_sha256": "361ffa62310803264a433c77ee090f11e69e335df57516426a7757356ce861f7",
+      "cik": "0002011498", "engine": "oracle", "rule_name": "B02", "report_date": "2026-03-31",
+      "reason": "The verdict calls the second Saturn Sound delayed-draw line (cost 0, FV (7)) a comparative-period leak; today it is published as accounting_record_class underlying_schedule (a separate accounting scope, excluded from the published basis), and the published basis holds the parent line at the filed cost (49) and FV (20).",
+      "evidence": [
+        {"source": "query", "quote": "0002011498 2026-03-31 Saturn Sound Bidco DDTL: parent_schedule cost (49) fv (20) position_id d9300c16; underlying_schedule (is_subsidiary 1) cost 0 fv (7) position_id 932bc81c. Term loan likewise 56,648 parent / 15,876 underlying."},
+        {"source": "commit", "quote": "e829cc96 measurement: what still fails B02 for aglf 2026-03-31 is undrawn twin pairs (Galanthus, Coding Solutions), once per scope; not the Saturn rows this verdict cites."}
+      ],
+      "rerun": "duckdb: SELECT instrument_description, cost, fair_value, accounting_record_class, position_id FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0002011498' AND report_date='2026-03-31' AND issuer_name ILIKE '%saturn%'",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-005",
+      "review_id": "RVQ_REV_64c6f298504f",
+      "verdict_sha256": "66b70d62a960445b6adad97c57d1a5f77e9b03720f3321a037e0e911ebbe9236",
+      "cik": "0001841514", "engine": "oracle", "rule_name": "B01", "report_date": "2025-12-31",
+      "reason": "The verdict says dash fair-value cells on leaf rows were left missing (255/315 leaves valued); today every current leaf has a value and no published row lacks a fair value.",
+      "evidence": [
+        {"source": "query", "quote": "data/output/oracle/check_results.csv (2026-11-10): B01 0001841514/2025-12-31: 151/151 leaves have fair_value (100.0%)."},
+        {"source": "query", "quote": "private_markets_holdings 0001841514 2025-12-31: 151 rows, 0 with null fair_value, 22 at 0, total 648.055m (verdict's filed total 648,055 thousand)."}
+      ],
+      "rerun": "duckdb: SELECT count(*), count(*) FILTER (WHERE fair_value IS NULL), sum(fair_value) FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0001841514' AND report_date='2025-12-31'",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-006",
+      "review_id": "RVQ_REV_8042302abd8a",
+      "verdict_sha256": "64e642cc209f0501c62ee05476e874d680b18c4f71f53bfe7f063a74e667a458",
+      "cik": "0002006758", "engine": "oracle", "rule_name": "B01", "report_date": "2026-03-31",
+      "reason": "The verdict says em-dash fair values (e.g. a delayed-draw line and an 876-unit equity line) were left missing on 44 leaves; today every current leaf has a value and the two cited lines are published at 0.",
+      "evidence": [
+        {"source": "query", "quote": "data/output/oracle/check_results.csv (2026-11-10): B01 0002006758/2026-03-31: 303/303 leaves have fair_value (100.0%)."},
+        {"source": "query", "quote": "private_markets_holdings 0002006758 2026-03-31: 301 rows, 0 null fair_value, total 934.425m (verdict's filed total). SEKO Global Logistics DDTL fv 0; SEKO Common Equity - Equity Unit 876 shares cost 2,736 fv 0."}
+      ],
+      "rerun": "duckdb: SELECT issuer_name, instrument_description, shares_held, cost, fair_value FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0002006758' AND report_date='2026-03-31' AND (fair_value IS NULL OR fair_value=0)",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-007",
+      "review_id": "RVQ_REV_aefca8faf0b4",
+      "verdict_sha256": "af07c27080190628cf2b5de131fd867d0e647fc6f1f5c34ed05b023bb06e15f3",
+      "cik": "0001674760", "engine": "oracle", "rule_name": "B01", "report_date": "2025-12-31",
+      "reason": "The verdict says 38 leaves (dash cells such as Wine.com) lacked fair value; today every current leaf has a value and the cited Wine.com and Streamland lines are published with their filed values (dash = 0, Streamland unitranche 7,506).",
+      "evidence": [
+        {"source": "query", "quote": "data/output/oracle/check_results.csv (2026-11-10): B01 0001674760/2025-12-31: 50/50 leaves have fair_value (100.0%)."},
+        {"source": "query", "quote": "private_markets_holdings 0001674760 2025-12-31: 51 rows, 0 null fair_value. Streamland Media Midco unitranche par 10,879 cost 9,410 fv 7,506; Wine.com, Inc. unsecured fv 0 (x3); Wine.com, LLC preferred 337,425 sh cost 2,900 fv 0."}
+      ],
+      "rerun": "duckdb: SELECT issuer_name, instrument_description, principal_amount, cost, fair_value FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0001674760' AND report_date='2025-12-31' AND (issuer_name ILIKE '%wine.com%' OR issuer_name ILIKE '%streamland%')",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    },
+    {
+      "retirement_id": "VR-008",
+      "review_id": "RVQ_REV_cdf010931814",
+      "verdict_sha256": "59ccb861c41981c0c7fb9698edd5433ae2524b76b004dd89d26469d1f1f37ee6",
+      "cik": "0001674760", "engine": "oracle", "rule_name": "B01", "report_date": "2026-03-31",
+      "reason": "The verdict says em-dash fair values (Wine.com, Inc.; Streamland Media Holdings) were left null (74/115 leaves); today every current leaf has a value and both cited lines are published at 0.",
+      "evidence": [
+        {"source": "query", "quote": "data/output/oracle/check_results.csv (2026-11-10): B01 0001674760/2026-03-31: 43/43 leaves have fair_value (100.0%)."},
+        {"source": "query", "quote": "private_markets_holdings 0001674760 2026-03-31: 44 rows, 0 null fair_value. Wine.com, Inc. unsecured fv 0 (x3); Streamland Media Holdings common 100,941 sh cost 4,055 fv 0."}
+      ],
+      "rerun": "duckdb: SELECT issuer_name, instrument_description, shares_held, cost, fair_value FROM 'data/output/private_markets_holdings.parquet' WHERE cik='0001674760' AND report_date='2026-03-31' AND (issuer_name ILIKE '%wine.com%' OR issuer_name ILIKE '%streamland%')",
+      "owner_words": "do as recommended on all three points",
+      "decided_by": "owner", "decided_on": "2026-11-10"
+    }
+  ]
+}

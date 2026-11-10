@@ -58,9 +58,9 @@ SANDBOXES = REPO / "scratch" / "fund_sandbox"
 TOLERANCE = 5e5
 SINCE = "2022-01-01"
 RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated",
-            "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable"}
+            "dispositioned_informational", "dispositioned_as_filed", "dispositioned_not_applicable", "verdict_retired"}
 # An earlier reviewer found a real error here (verdict on record; python scripts/v05_evidence/verdicts.py <label>).
-PRIOR_REAL_ERROR = {"real_error_unremediated", "remediation_staged", "remediation_pulled"}
+PRIOR_REAL_ERROR = {"real_error_unremediated", "remediation_staged", "remediation_pulled", "real_error_check_silent"}
 # Recomputed across whichever funds share a sandbox, so they differ between any two builds.
 INFORMATIONAL_COLUMNS = {"entity_id", "canonical_name"}
 WATCHED = ("pipeline", "scripts", "schemas", "tests", "data/overrides", "data/reference", "docs/investigations",
