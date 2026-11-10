@@ -36,6 +36,10 @@ ACTION_TRACK_ONLY = "TRACK_ONLY"
 # Source-reconciliation output row declared from its printed line (status 'printed_page_declared',
 # source_encodings.printed_rows_without_context; OVR-T8Z-R1): INFO / TRACK_ONLY, non-blocking.
 PRINTED_PAGE_RULE_ID = "SRC_BDC02P"
+# A value mismatch whose published value an audited correction set from the printed line, read back
+# from the page (calibrated_status 'page_verified_correction'; owner ruling 2026-11-10): INFO /
+# TRACK_ONLY, non-blocking, listed per row in place of SRC_BDC03.
+PAGE_VERIFIED_RULE_ID = "SRC_BDC03P"
 
 GAV_BDC_FAIL_RULE = "GAV_BDC01"
 GAV_BDC_WARN_RULE = "GAV_BDC02"
@@ -1370,6 +1374,28 @@ def _adapt_source_reconciliation(
             "message": DECLARED_STATUS + ": BDC row published from a declared printed schedule line; no XBRL source fact, not verified",
             "evidence": str(row.get("calibration_reason", "") or row.get("evidence", "")),
         })
+    # The tagged fact is defective and the published value is the printed one, read from the page
+    # (pipeline.page_verified_corrections). Not blocking; the case stays listed as SRC_BDC03P.
+    from pipeline.page_verified_corrections import PAGE_VERIFIED_STATUS
+    if "calibrated_status" in df.columns:
+        verified = df[df["status"].astype(str).eq("value_mismatch")
+                      & df["calibrated_status"].astype(str).eq(PAGE_VERIFIED_STATUS)]
+        for _, row in verified.iterrows():
+            rows.append({
+                "source": "bdc",
+                "cik": row.get("cik", ""),
+                "report_date": row.get("report_date", ""),
+                "row_key": str(row.get("output_row_id", "")),
+                "column": str(row.get("mismatched_fields", "")),
+                "rule_id": PAGE_VERIFIED_RULE_ID,
+                "severity": SEVERITY_INFO,
+                "evidence_strength": EVIDENCE_MODERATE,
+                "action": ACTION_TRACK_ONLY,
+                "value": str(row.get("raw_investment_identifier", "")),
+                "message": PAGE_VERIFIED_STATUS + ": tagged fact disagrees with the printed line; the "
+                           "published value is the printed one (audited correction, read from the page)",
+                "evidence": str(row.get("calibration_reason", "")) + " | " + str(row.get("evidence", "")),
+            })
     return _make_issue_frame(rows)
 
 

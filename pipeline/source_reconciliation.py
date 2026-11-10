@@ -223,6 +223,11 @@ MECHANISM_RECOMMENDED_ACTIONS = {
         "source_encodings.printed_rows_without_context; re-check the wrapper entry against the filing, "
         "not row matching. Not matched, not verified."
     ),
+    "documented_page_verified_correction": (
+        "Keep documented as non-blocking: the filer's tagged fact disagrees with its printed line and an "
+        "audited correction published the printed value, read back from the page artifact. Re-check if "
+        "the correction or the printed row changes."
+    ),
     "documented_comparative_period": "Keep documented as non-blocking comparative-period source fact.",
     "documented_no_fair_value": "Keep documented as non-blocking source row without fair value.",
     "documented_aggregate_candidate": "Keep documented as non-blocking aggregate/header candidate.",
@@ -279,6 +284,11 @@ MECHANISM_REASONS = {
         "Pipeline row was declared from the filer's printed schedule line (owner ruling 2026-10-18, "
         "printed_rows_without_context); the filing carries no XBRL context for it, so source "
         "reconciliation structurally cannot match it."
+    ),
+    "documented_page_verified_correction": (
+        "Matched row's published value was set from the printed line by an audited row correction or "
+        "promoted rule because the tagged fact is defective; the page artifact prints the published "
+        "principal, cost and fair value at the filing's printed scale (owner ruling 2026-11-10)."
     ),
     "documented_comparative_period": "Source row is from a comparative period, not the current report date.",
     "documented_no_fair_value": "Source row has no fair-value fact available for position reconciliation.",
@@ -1725,12 +1735,20 @@ def reconcile_bdc_source_to_holdings(
     *,
     enable_bdc_xbrl_wrappers: bool = True,
     audited_value_rescales: Optional[pd.DataFrame] = None,
+    printed_rows: Optional[pd.DataFrame] = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Reconcile BDC source facts to unified BDC holdings rows.
 
     ``audited_value_rescales`` (cik, field, factor) defaults to the promoted
     agent value_rescale rules; pass an empty frame to disable source-side
     scale normalization in isolation-sensitive tests.
+
+    ``printed_rows`` (cik, accession_number, raw_id_lower, printed_row; see
+    ``pipeline.page_verified_corrections.load_printed_rows``) lets a blocking
+    value mismatch whose corrected published value is the printed one, read
+    from the page, become non-blocking (``page_verified_correction``). None
+    (the default) leaves every row as the comparison found it; the production
+    runners pass the page artifact.
     """
     if source_df.empty and holdings_df.empty:
         return _empty_detail(), _empty_metrics()
@@ -3480,6 +3498,12 @@ def reconcile_bdc_source_to_holdings(
     # the pre-anchor regime; only the published detail id columns change.
     detail = _publish_anchor_row_ids(detail, source, output)
     con.close()
+    if printed_rows is not None and not printed_rows.empty:
+        from pipeline.page_verified_corrections import PAGE_VERIFIED_STATUS, apply_page_verification
+        detail = apply_page_verification(detail, holdings_df, printed_rows)
+        if detail["calibrated_status"].astype(str).eq(PAGE_VERIFIED_STATUS).any():
+            # Only blocking counts move; the other metric inputs are unchanged by the anchor swap.
+            metrics = build_source_reconciliation_metrics(detail)
 
     # Log wrapper-vs-staging diagnostic disagreements
     _diag_cols = [
@@ -3786,6 +3810,14 @@ def build_source_reconciliation_residual_classification(
     df["mechanism"] = ""
     for status, mechanism in DOCUMENTED_MECHANISMS.items():
         df.loc[df["status"].astype(str).eq(status), "mechanism"] = mechanism
+    # A corrected value mismatch whose published value is the printed one, read from the page
+    # (pipeline.page_verified_corrections, owner ruling 2026-11-10): an audit row, not a blocker.
+    from pipeline.page_verified_corrections import PAGE_VERIFIED_MECHANISM, PAGE_VERIFIED_STATUS
+    df.loc[
+        df["status"].astype(str).eq("value_mismatch")
+        & df["calibrated_status"].astype(str).eq(PAGE_VERIFIED_STATUS),
+        "mechanism",
+    ] = PAGE_VERIFIED_MECHANISM
 
     df.loc[
         df["calibrated_status"].astype(str).eq("diagnostic_field_mismatch"),
@@ -4537,6 +4569,8 @@ def compute_bdc_holdings_hashes(unified_df: pd.DataFrame) -> pd.DataFrame:
         "bdc_investment_identifier", "bdc_dimensions_raw", "issuer_name",
         "instrument_description", "index_classification", "asset_category",
         "issuer_category", "maturity_date", *VALUE_COLUMNS, *RATE_COLUMNS,
+        # which fields a correction set decides whether a value mismatch may be page-verified
+        "corrected_fields",
     ]
     df = unified_df.copy()
     for col in columns:
@@ -4560,6 +4594,29 @@ def compute_bdc_holdings_hashes(unified_df: pd.DataFrame) -> pd.DataFrame:
     """).fetchdf()
     con.close()
     return hashes
+
+
+def _fold_printed_row_hashes(holdings_hashes: pd.DataFrame, printed_rows: pd.DataFrame) -> pd.DataFrame:
+    """Fold each fund's printed rows (page artifact) into its holdings hash.
+
+    A fund with no printed rows keeps its holdings hash unchanged."""
+    if holdings_hashes.empty or printed_rows is None or printed_rows.empty:
+        return holdings_hashes
+    con = duckdb.connect()
+    con.register("printed", printed_rows[["cik", "accession_number", "raw_id_lower", "printed_row"]])
+    printed_hashes = con.execute("""
+        SELECT lpad(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') AS cik,
+               sha256(string_agg(accession_number || chr(31) || raw_id_lower || chr(31) || printed_row,
+                                 chr(30) ORDER BY accession_number, raw_id_lower)) AS printed_hash
+        FROM printed GROUP BY 1""").fetchdf()
+    con.close()
+    out = holdings_hashes.merge(printed_hashes, on="cik", how="left")
+    has = out["printed_hash"].notna()
+    out.loc[has, "holdings_hash"] = [
+        hashlib.sha256((h + "\x1f" + p).encode("utf-8")).hexdigest()
+        for h, p in zip(out.loc[has, "holdings_hash"].astype(str), out.loc[has, "printed_hash"].astype(str))
+    ]
+    return out.drop(columns=["printed_hash"])
 
 
 def _compute_source_hashes(source_manifest: pd.DataFrame) -> pd.DataFrame:
@@ -4597,6 +4654,9 @@ def compute_reconciliation_logic_hash() -> str:
     # the printed_page_declared status (OVR-T8Z-R1) is keyed by this predicate
     from pipeline import printed_rows as _printed_rows
     pieces += [inspect.getsource(_printed_rows.condition_sql), inspect.getsource(_printed_rows.declaration_sql)]
+    # the page_verified_correction re-label (owner ruling 2026-11-10)
+    from pipeline import page_verified_corrections as _page_verified
+    pieces.append(inspect.getsource(_page_verified))
     return hashlib.sha256("\n\n".join(pieces).encode("utf-8")).hexdigest()
 
 
@@ -4753,8 +4813,9 @@ def _read_cached_detail_for_adapter() -> pd.DataFrame:
     df = con.execute(f"""
         SELECT {", ".join(_sql_ident(c) for c in DETAIL_COLUMNS)}
         FROM read_parquet({path_list}, union_by_name=true)
-        WHERE status IN ('missing_from_pipeline', 'extra_in_pipeline', 'value_mismatch')
-          AND COALESCE(blocking_issue, false)
+        WHERE (status IN ('missing_from_pipeline', 'extra_in_pipeline', 'value_mismatch')
+               AND COALESCE(blocking_issue, false))
+           OR (status = 'value_mismatch' AND calibrated_status = 'page_verified_correction')
     """).fetchdf()
     con.close()
     return df
@@ -4778,7 +4839,15 @@ def run_bdc_source_reconciliation_cached(
         force=force,
         filings_index_df=filings_index_df,
     )
-    holdings_hashes = compute_bdc_holdings_hashes(unified_df)
+    # The page artifact's printed rows decide which corrected value mismatches are verified on the
+    # page; a change to a fund's printed rows recomputes that fund's partition.
+    from pipeline.page_verified_corrections import load_printed_rows
+    bdc_ciks: set[str] = set()
+    if "cik" in unified_df.columns:
+        is_bdc = unified_df.get("source", pd.Series("", index=unified_df.index)).astype(str).str.lower().eq("bdc")
+        bdc_ciks = {_normalize_cik(c) for c in unified_df.loc[is_bdc, "cik"].astype(str).unique()} - {""}
+    printed_rows = load_printed_rows(ciks=bdc_ciks)
+    holdings_hashes = _fold_printed_row_hashes(compute_bdc_holdings_hashes(unified_df), printed_rows)
     logic_hash = compute_reconciliation_logic_hash()
     override_hash = _compute_override_hash()
     plan = plan_dirty_reconciliation_ciks(
@@ -4834,7 +4903,10 @@ def run_bdc_source_reconciliation_cached(
         if cik in dirty_ciks:
             source_part = source_df.loc[source_norm_cik.eq(cik)].copy()
             holdings_part = bdc_holdings_df.loc[holdings_norm_cik.eq(cik)].copy()
-            detail_part, metrics_part = reconcile_bdc_source_to_holdings(source_part, holdings_part)
+            printed_part = printed_rows[printed_rows["cik"].astype(str).eq(cik)]
+            detail_part, metrics_part = reconcile_bdc_source_to_holdings(
+                source_part, holdings_part, printed_rows=printed_part,
+            )
             _write_df_parquet_atomic(detail_part, detail_artifact, DETAIL_COLUMNS)
             _write_df_parquet_atomic(metrics_part, metrics_artifact, METRIC_COLUMNS)
             detail_count = len(detail_part)
@@ -4906,4 +4978,7 @@ def run_bdc_source_reconciliation(
             return _empty_detail(), _empty_metrics()
         unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
     source_df = extract_bdc_source_facts_from_xbrl(filings_index_df=filings_index_df)
-    return reconcile_bdc_source_to_holdings(source_df, unified_df)
+    from pipeline.page_verified_corrections import load_printed_rows
+    ciks = ({_normalize_cik(c) for c in unified_df["cik"].astype(str).unique()} - {""}
+            if "cik" in unified_df.columns else None)
+    return reconcile_bdc_source_to_holdings(source_df, unified_df, printed_rows=load_printed_rows(ciks=ciks))
