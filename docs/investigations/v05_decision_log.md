@@ -5627,3 +5627,10 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - F16/F27 repair merged narrowly: a row passes if either the old or the new basis passes; the ~5 likely input errors among the would-be adds are checked by an agent.
 - Evidence cards for the ~10 unclear v0.5 verdicts from the standing-rule batch.
 - Publishing Q2 follows once these land.
+
+### D-254 Queued for the next fund-loop session (owner, 2026-11-10: "do both")
+
+- Blue Owl CIC (0001812554) 2026-03-31 unfunded-commitment block: XBRL labels shifted one row against the values (c-803..c-808 at least); AI Titan revolver published at 0 where printed (127), Activate at -127,000 where printed (7). Fix by realigning to the printed lines; measure how far the shift extends. Evidence: scratch/2026-11-10_unclear_v05/cards.md defect B.
+- BCRED (0001803498) 2025-12-31 and 2026-03-31: Emerald JV LP and Verdelite JV LP interests published with issuer_name 'BCRED'; values correct. Fix the issuer name. Evidence: same file, defect C.
+- Apollo Cascade Parent principal currency (defect A) added to the running Apollo/ssxf fund-loop agent instead.
+- Paused at the owner's request to save usage (resume on request): re-audit of batch v05_2026-10-06; stratified ~100-member disposition audit (should include the 53 verdict-answer closures from 841a463a); promoted-rule drift application; BlackRock PCF 2022-12-31 missing quarter and 0001920145 Esperanto cost sign.
