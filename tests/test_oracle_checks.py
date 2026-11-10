@@ -549,6 +549,46 @@ class TestB02UniquePositionKeys:
         results = check_B02_unique_position_keys(holdings)
         assert any(r.status == "fail" for r in results)
 
+    KITE = "Kite Midco II LTD Term Loan B1 | 6M SOFR + 4.50% | 11/19/2031"
+
+    def _twins(self, second_id):
+        return _holdings([
+            {"bdc_investment_identifier": self.KITE, "position_key": "kite midco ii ltd term loan"},
+            {"bdc_investment_identifier": second_id, "position_key": "kite midco ii ltd term loan"},
+        ])
+
+    def test_declared_twin_line_filer_passes_twins_on_distinct_members(self):
+        """SPX: the same printed line once per financing facility, each on its own member."""
+        results = check_B02_unique_position_keys(self._twins(self.KITE + " One"),
+                                                 twin_line_filers=frozenset({"0001786108"}))
+        assert [r.status for r in results] == ["pass"]
+
+    def test_declared_filer_still_fails_a_fact_repeated_on_one_member(self):
+        """False-positive guard: one member twice is a repeated fact, and so are rows without one."""
+        filers = frozenset({"0001786108"})
+        assert [r.status for r in check_B02_unique_position_keys(self._twins(self.KITE),
+                                                                 twin_line_filers=filers)] == ["fail"]
+        blank = _holdings([{"bdc_investment_identifier": "", "position_key": "kite"},
+                           {"bdc_investment_identifier": "", "position_key": "kite"}])
+        assert [r.status for r in check_B02_unique_position_keys(blank, twin_line_filers=filers)] == ["fail"]
+
+    def test_the_twin_line_declaration_is_spx_only_and_validated(self, tmp_path):
+        import json
+        from pipeline.oracle_checks import _twin_line_filers
+        from pipeline.source_encodings import load_encodings
+        assert _twin_line_filers() == frozenset({"0001950803"})
+        bad = {"schema_version": "bdc-xbrl-wrapper.v3", "cik": "0000000001",
+               "source_encodings": {"twin_lines_on_distinct_members": ["any_pair"]}}
+        (tmp_path / "0000000001.json").write_text(json.dumps(bad), encoding="utf-8")
+        with pytest.raises(ValueError, match="twin-line reading"):
+            load_encodings(tmp_path)
+
+    def test_undeclared_filer_unchanged(self):
+        """Other filers' equal-figure pairs on distinct members (Galanthus sterling and dollar
+        undrawn lines, Bain 2025-12-31) still fail: the ruling covers the declared filer only."""
+        results = check_B02_unique_position_keys(self._twins(self.KITE + " One"), twin_line_filers=frozenset())
+        assert [r.status for r in results] == ["fail"]
+
     def test_prefers_unified_position_key_when_present(self):
         holdings = _holdings([
             {"bdc_investment_identifier": "same raw id", "position_key": "acme corp term loan"},

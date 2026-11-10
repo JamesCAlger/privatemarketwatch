@@ -523,8 +523,16 @@ _B02_TERM_COLUMNS = ("accounting_scope_id", "maturity_date", "interest_rate_repo
                      "pik_rate", "principal_amount", "shares_held", "fair_value")
 
 
+def _twin_line_filers() -> frozenset[str]:
+    """Filers whose wrapper declares twin_lines_on_distinct_members (source_encodings)."""
+    from pipeline.source_encodings import load_encodings
+    return frozenset(c for c, e in load_encodings().items() if e.get("twin_lines_on_distinct_members"))
+
+
 def check_B02_unique_position_keys(
     holdings_df: pd.DataFrame,
+    *,
+    twin_line_filers: frozenset[str] | None = None,
 ) -> list[CheckResult]:
     """B02: No two rows of one schedule repeat a position key with the same terms and values.
 
@@ -554,6 +562,18 @@ def check_B02_unique_position_keys(
         keys = _col_str(group, key_col)
         non_empty = keys[keys.str.strip().ne("")]
         terms = [c for c in _B02_TERM_COLUMNS if c in group.columns]
+        # Twin lines (owner ruling 2026-11-04, b02-twin-lines-by-financing-facility-printed-
+        # separately): a filer whose wrapper declares twin_lines_on_distinct_members prints one
+        # line per financing facility, each on its own investment member (SPX: '... 11/19/2031'
+        # and '... 11/19/2031 One'). For that filer the member is part of the identity, so twins
+        # pass and a fact repeated on one member, or rows without a member, still fail. Other
+        # filers are unchanged: their equal-figure pairs on distinct members (undrawn lines with
+        # different acquisition dates, a sterling and a dollar line) are not covered by the ruling.
+        if twin_line_filers is None:
+            twin_line_filers = _twin_line_filers()
+        if (cik_s.zfill(10) in twin_line_filers and key_col != "bdc_investment_identifier"
+                and "bdc_investment_identifier" in group.columns):
+            terms = terms + ["bdc_investment_identifier"]
         identity = group.loc[non_empty.index, terms].astype(str).assign(_key=non_empty)
         dupes = non_empty[identity.duplicated(keep=False)]
         status = "pass" if dupes.empty else "fail"

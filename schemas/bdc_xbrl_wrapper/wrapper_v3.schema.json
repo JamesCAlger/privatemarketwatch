@@ -769,6 +769,13 @@
           "items": {"enum": ["cash_rows"]},
           "description": "Needs investments_total_excludes cash_rows. The cost conservation check then compares the filed investments cost (InvestmentOwnedAtCost) with the published cost of the rows that are not cash, as the fair-value check does; the cash rows stay in value_sum and are anchored by the fair-value check only. Set where the filed cost total leaves the cash rows out like the fair-value total (Silver Point Specialty Lending, 10-Q 2023-06-30: 'Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975' with 'Total Cash Equivalents 84,630,043' printed below it). Evidence required: published non-cash cost equal to the filed cost in each quarter."
         },
+        "twin_lines_on_distinct_members": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"enum": ["financing_facility"]},
+          "description": "The filer prints the same schedule line once per financing facility (told apart only by a footnote) and tags each line on its own investment member, often the first member's name plus 'One'. Oracle check B02 then counts the member as part of a row's identity: twins on distinct members pass, a fact repeated on one member still fails. Owner ruling 2026-11-04 (b02-twin-lines-by-financing-facility-printed-separately), SPX Private Credit Fund: 'Kite Midco II LTD Term Loan B1 (3)(4)(5)(7) ... 5,290 5,226 5,211' and the same line with footnote (11). Evidence required: printed twin lines with footnoted facilities, and no repeated key in the build holding two rows on one member."
+        },
         "fair_value_concepts": {
           "type": "array",
           "minItems": 1,

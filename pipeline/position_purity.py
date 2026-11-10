@@ -55,6 +55,8 @@ def _prepare_holdings(df: pd.DataFrame) -> pd.DataFrame:
         "shares_held", "cusip", "isin",
         # the context the published row was read from: its period is the row's period
         "src_context_id",
+        # printed rate terms: rows whose terms all differ are distinct tranches
+        "basis_spread", "interest_rate", "reference_rate_type",
     ]
     for col in needed:
         if col not in prepared.columns:
@@ -198,6 +200,12 @@ def build_position_purity_diagnostics(
             TRY_CAST(cost AS DOUBLE) AS cost_num,
             TRY_CAST(principal_amount AS DOUBLE) AS principal_num,
             TRY_CAST(shares_held AS DOUBLE) AS shares_num,
+            CASE WHEN isnan(TRY_CAST(basis_spread AS DOUBLE)) THEN NULL
+                 ELSE ROUND(TRY_CAST(basis_spread AS DOUBLE), 6) END AS rate_spread_key,
+            CASE WHEN isnan(TRY_CAST(interest_rate AS DOUBLE)) THEN NULL
+                 ELSE ROUND(TRY_CAST(interest_rate AS DOUBLE), 6) END AS rate_all_in_key,
+            CASE WHEN lower(trim(CAST(reference_rate_type AS VARCHAR))) IN ('', 'nan', 'none', 'null') THEN NULL
+                 ELSE lower(trim(CAST(reference_rate_type AS VARCHAR))) END AS rate_reference_key,
             ({agg_expr}) AS is_subtotal_candidate,
             (
                 lower(COALESCE(CAST(source AS VARCHAR), '')) = 'bdc'
@@ -247,6 +255,24 @@ def build_position_purity_diagnostics(
                AND NOT (
                    COUNT(NULLIF(TRIM(CAST(bdc_investment_identifier AS VARCHAR)), '')) = COUNT(*)
                    AND COUNT(DISTINCT NULLIF(TRIM(CAST(bdc_investment_identifier AS VARCHAR)), '')) = COUNT(*)
+               )
+               -- Different printed rate terms are different tranches (owner ruling 2026-11-10,
+               -- pp02-distinct-zero-valued-commitments-have-different-rate-terms). Two undrawn
+               -- Heritage Environmental revolvers, same issuer and maturity, zero par, cost and
+               -- value, print 'S + 500, 0.75% Floor' and 'S + 550, 4.50% Floor': equal amounts
+               -- are not one position. A group whose every row carries a spread (or a rate, or a
+               -- reference rate) and no two rows share it is therefore not a candidate. Still
+               -- candidates: rows with the same terms, and a row without the term (a fact repeated
+               -- on a second dimension path often carries the rate on one path only). The floor is
+               -- not an extracted field, so rows that differ only by floor stay candidates.
+               AND NOT (
+                   COUNT(rate_spread_key) = COUNT(*) AND COUNT(DISTINCT rate_spread_key) = COUNT(*)
+               )
+               AND NOT (
+                   COUNT(rate_all_in_key) = COUNT(*) AND COUNT(DISTINCT rate_all_in_key) = COUNT(*)
+               )
+               AND NOT (
+                   COUNT(rate_reference_key) = COUNT(*) AND COUNT(DISTINCT rate_reference_key) = COUNT(*)
                )
         ),
         duplicate_rows AS (
