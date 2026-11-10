@@ -352,6 +352,123 @@ class TestA01SubtotalArithmetic:
         assert results[0].detail["rollup_fv"].tolist() == [3000000000.0]
 
 
+class TestA01PrintedHeadingPairing:
+    """Owner ruling 2026-11-10: a subtotal whose children by member key do not tie is paired with
+    the published rows printed under its heading; it passes only on an exact tie."""
+
+    ACC = "0001786108-25-000001"
+
+    @classmethod
+    def _case(cls, subtotal, leaves, extra_rollups=(), holdings_overrides=None):
+        """leaves: (ctx, member key, source fv, printed heading, published fv or None for unpublished)."""
+        rows = [{"source_wrapper_disposition": "debt_category_rollup", "source_wrapper_family": "debt",
+                 "source_wrapper_parent_key": "debt investments", "source_fair_value": "999999999999",
+                 "context_id": "C_sec"}]
+        rows += [{"source_wrapper_disposition": "debt_industry_rollup", "source_wrapper_family": "debt",
+                  "source_wrapper_parent_key": subtotal[0], "source_fair_value": subtotal[1], "context_id": "C_r"}]
+        rows += [{"source_wrapper_disposition": "debt_industry_rollup", "source_wrapper_family": fam,
+                  "source_wrapper_parent_key": key, "source_fair_value": fv, "context_id": f"C_x{i}"}
+                 for i, (key, fv, fam) in enumerate(extra_rollups)]
+        rows += [{"source_wrapper_disposition": f"{fam}_position_leaf", "source_wrapper_family": fam,
+                  "source_wrapper_parent_key": key, "source_fair_value": fv, "context_id": ctx}
+                 for ctx, key, fv, _, _, fam in leaves]
+        holdings = _holdings([{"accession_number": cls.ACC, "src_context_id": ctx, "extracted_industry": heading,
+                               "fair_value": pub, "accounting_record_class": "parent_schedule"}
+                              for ctx, _, _, heading, pub, _ in leaves if pub is not None])
+        if holdings_overrides:
+            holdings = holdings_overrides(holdings)
+        return _source_detail(rows), holdings
+
+    @staticmethod
+    def _sixth_street_education(kyriba_heading="Financial Services"):
+        """Sixth Street 2023-09-30: Education 148,585 printed over Astra, Destiny and EMS Linq; the
+        Kyriba revolver (1,415) is tagged on an Education member but printed under Financial Services."""
+        return [
+            ("C_astra", "debt investments education astra acquisition corp second lien loan", "34566000", "Education", "34566000", "debt"),
+            ("C_destiny", "debt investments education destiny solutions first lien loan", "59103000", "Education", "59103000", "debt"),
+            ("C_ems", "debt investments education ems linq inc first lien loan", "54916000", "Education", "54916000", "debt"),
+            ("C_kyriba", "debt investments education kyriba corp first lien revolving loan", "1415000", kyriba_heading, "1415000", "debt"),
+        ]
+
+    def _run(self, subtotal_fv, leaves, key="debt investments education", extra_rollups=(), with_holdings=True,
+             holdings_overrides=None):
+        detail, holdings = self._case((key, subtotal_fv), leaves, extra_rollups, holdings_overrides)
+        # the section rollup ('debt investments') is not under test: give it its exact child sum
+        sec = detail["source_wrapper_parent_key"].eq("debt investments")
+        leaf = (detail["source_wrapper_disposition"].str.endswith("_position_leaf")
+                & detail["source_wrapper_parent_key"].str.startswith("debt investments "))
+        detail.loc[sec, "source_fair_value"] = str(int(pd.to_numeric(detail.loc[leaf, "source_fair_value"]).sum()))
+        results = check_A01_subtotal_arithmetic(detail, holdings if with_holdings else None)
+        assert len(results) == 1
+        return results[0]
+
+    def test_subtotal_equal_to_the_rows_printed_under_its_heading_passes(self):
+        r = self._run("148585000", self._sixth_street_education())
+        assert r.status == "pass"
+        assert "1 tie by printed heading" in r.message
+
+    def test_without_printed_headings_the_member_key_shortfall_still_fails(self):
+        r = self._run("148585000", self._sixth_street_education(), with_holdings=False)
+        assert r.status == "fail"
+        assert r.detail["child_sum_fv"].tolist() == [150000000.0]
+
+    def test_near_miss_beyond_rounding_still_fails(self):
+        """148,587 against printed rows of 148,585: inside A01's 0.5 pct band but not exact."""
+        r = self._run("148587000", self._sixth_street_education())
+        assert r.status == "fail"
+
+    def test_a_printed_row_missing_from_the_published_rows_still_fails(self):
+        """Real error: a row printed under the heading was not published (or published short)."""
+        leaves = self._sixth_street_education()
+        leaves[1] = leaves[1][:4] + (None, "debt")
+        assert self._run("148585000", leaves).status == "fail"
+        leaves = self._sixth_street_education()
+        leaves[1] = leaves[1][:4] + ("50000000", "debt")
+        assert self._run("148585000", leaves).status == "fail"
+
+    def test_a_published_row_counted_twice_still_fails(self):
+        def dup(h):
+            return pd.concat([h, h[h["src_context_id"].eq("C_astra")].assign(src_context_id="C_astra2")], ignore_index=True)
+        leaves = self._sixth_street_education() + [
+            ("C_astra2", "debt investments education astra acquisition corp second lien loan", "", "Education", None, "debt")]
+        assert self._run("148585000", leaves, holdings_overrides=dup).status == "fail"
+
+    def test_rows_printed_under_the_heading_in_another_section_are_not_paired(self):
+        """False-positive guard: Education is printed in the debt and the equity section; only the
+        debt section's rows meet the debt subtotal."""
+        equity = ("C_eq", "equity and other investments education ems linq inc class b units", "4763000", "Education", "4763000", "debt")
+        assert self._run("148585000", self._sixth_street_education() + [equity]).status == "pass"
+        # a subtotal that ties only with the equity row added still fails
+        assert self._run("153348000", self._sixth_street_education() + [equity]).status == "fail"
+
+    def test_a_heading_word_missing_from_the_subtotal_member_needs_a_unique_heading(self):
+        """'debt investments specialty' (Retail missing): paired with 'Specialty Retail' when that is
+        the one printed heading one word longer; ambiguous beside 'Specialty Chemicals'."""
+        leaves = [
+            ("C_a", "debt investments specialty les schwab term loan", "1248826", "Specialty Retail", "1248826", "debt"),
+            ("C_b", "debt investments specialty woof holdings term loan", "633480", "Specialty Retail", "633480", "debt"),
+            ("C_c", "debt investments specialty other co term loan", "500000", "Health Care", "500000", "debt"),
+        ]
+        assert self._run("1882306", leaves, key="debt investments specialty").status == "pass"
+        ambiguous = leaves + [("C_d", "debt investments chemicals acme term loan", "700000", "Specialty Chemicals", "700000", "debt")]
+        assert self._run("1882306", ambiguous, key="debt investments specialty").status == "fail"
+
+    def test_heading_compares_without_case_punctuation_or_and(self):
+        leaves = [
+            ("C_a", "debt investments oil gas and consumable fuels laramie energy first lien loan", "26724000", "Oil, Gas & Consumable Fuels", "26724000", "debt"),
+            ("C_b", "debt investments oil gas and consumable fuels trp assets first lien loan", "65000000", "Oil, Gas & Consumable Fuels", "65000000", "debt"),
+            ("C_c", "debt investments oil gas and consumable fuels murchison first lien loan", "29388000", "Electric Utilities", "29388000", "debt"),
+        ]
+        assert self._run("91724000", leaves, key="debt investments oil gas and consumable fuels").status == "pass"
+
+    def test_a_subtotal_whose_key_repeats_in_the_filing_is_not_paired(self):
+        """Ambiguity: two subtotals on one member key (Sixth Street Lending Partners 2025-03-31)."""
+        r = self._run("148585000", self._sixth_street_education(),
+                      extra_rollups=[("debt investments education", "1021000", "debt")])
+        assert r.status == "fail"
+        assert 148585000.0 in r.detail["rollup_fv"].tolist()
+
+
 class TestA04GavReconciliation:
     def test_pass_within_tolerance(self):
         holdings = _holdings([{"fair_value": "95000000"}])
@@ -753,6 +870,33 @@ class TestD06PositionContinuity:
         ])
         results = check_D06_position_continuity(holdings)
         assert any(r.status == "fail" for r in results)
+
+    @staticmethod
+    def _two_quarters(prev, curr):
+        return check_D06_position_continuity(_holdings(
+            [{"report_date": "2023-09-30", "issuer_name": n} for n in prev]
+            + [{"report_date": "2023-12-31", "issuer_name": n} for n in curr]))
+
+    def test_legal_form_punctuation_is_not_a_new_issuer(self):
+        """CIK 0001634452 2023-09-30 -> 2023-12-31: the 10-Q members drop the comma before the legal
+        form, the 10-K keeps it (owner ruling 2026-11-10)."""
+        results = self._two_quarters(
+            ["Galway Borrower LLC", "8x8 Inc", "AB Equity Investors L.P", "AOM Acquisition LLC.", "Avetta L.L.C."],
+            ["Galway Borrower, LLC", "8x8, Inc.", "AB Equity Investors, L.P.", "AOM Acquisition, LLC", "Avetta, LLC"])
+        assert [r.status for r in results] == ["pass"]
+        assert results[0].metric_value == 1.0
+
+    def test_a_rename_still_lowers_continuity(self):
+        """False-positive guard: names that differ beyond the legal-form punctuation stay different
+        (CIK 0001841514 2024-09-30 renamed its issuers to their legal names)."""
+        results = self._two_quarters(
+            ["Galway Borrower LLC", "Acme Holdings Inc", "Beta Topco LLC"],
+            ["Galway Partners Holdings, LLC", "Acme Holdings Corp.", "Beta Midco, LLC"])
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].metric_value == 0.0
+        # the suffix itself is part of the name: LLC is not LP, Inc is not Corp
+        results = self._two_quarters(["Gamma LLC", "Delta Inc"], ["Gamma, L.P.", "Delta Corp"])
+        assert results[0].metric_value == 0.0
 
 
 class TestD07RateStability:

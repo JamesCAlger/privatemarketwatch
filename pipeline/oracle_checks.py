@@ -157,13 +157,109 @@ def _a01_child_key_pattern(parent_key: str) -> str:
     return (f"(?:(?:{repeats}) )?" if repeats else "") + re.escape(parent_key)
 
 
+def _a01_heading_key(text: pd.Series) -> pd.Series:
+    """A printed heading or a member heading as a comparable key: case, punctuation, '&' and the
+    word 'and' ignored ('Oil, Gas & Consumable Fuels' == 'oil gas and consumable fuels')."""
+    return (text.fillna("").astype(str).str.lower()
+            .str.replace(r"[^a-z0-9]+", " ", regex=True)
+            .str.replace(r"(?:^| )and(?= |$)", " ", regex=True)
+            .str.replace(r" +", " ", regex=True).str.strip())
+
+
+def _a01_heading_rows(holdings_df: pd.DataFrame | None, source_detail_df: pd.DataFrame) -> pd.DataFrame:
+    """Published current-period rows with the heading the page prints them under
+    (holdings.extracted_industry) and the member key, family and period of their source context.
+    Empty when the holdings carry no printed heading or context id."""
+    need = {"extracted_industry", "src_context_id", "accession_number", "fair_value", "cik", "report_date"}
+    if holdings_df is None or holdings_df.empty or not need <= set(holdings_df.columns):
+        return pd.DataFrame()
+    h = holdings_df[published_fv_mask(holdings_df)]
+    h = pd.DataFrame({
+        "cik": _col_str(h, "cik").str.zfill(10), "report_date": _col_str(h, "report_date").str[:10],
+        "accession_number": _col_str(h, "accession_number").str.strip(),
+        "context_id": _col_str(h, "src_context_id").str.strip(),
+        "heading": _col_str(h, "extracted_industry").str.strip(),
+        "published_fv": _col_float(h, "fair_value"),
+    })
+    h = h[h["context_id"].ne("") & h["heading"].ne("")]
+    if h.empty or "context_id" not in source_detail_df.columns:
+        return pd.DataFrame()
+    leaves = source_detail_df[_col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")]
+    src = pd.DataFrame({
+        "cik": _col_str(leaves, "cik").str.zfill(10), "report_date": _col_str(leaves, "report_date").str[:10],
+        "accession_number": _col_str(leaves, "accession_number").str.strip(),
+        "context_id": _col_str(leaves, "context_id").str.strip(),
+        "member_key": _col_str(leaves, "source_wrapper_parent_key"),
+        "family": _col_str(leaves, "source_wrapper_family"),
+        "period": _col_str(leaves, "period").str.strip().str[:10],
+    }).drop_duplicates(["cik", "report_date", "accession_number", "context_id"])
+    rows = h.merge(src, on=["cik", "report_date", "accession_number", "context_id"], how="inner")
+    rows = rows[rows["period"].eq("") | rows["period"].eq(rows["report_date"])].copy()
+    rows["heading_key"] = _a01_heading_key(rows["heading"])
+    rows["member_norm"] = (rows["member_key"].str.lower().str.replace(r"[^a-z0-9]+", " ", regex=True)
+                           .str.replace(r" +", " ", regex=True).str.strip())
+    return rows
+
+
+def _a01_printed_heading_sum(
+    rollup_key: str, family: str, rows: pd.DataFrame,
+) -> tuple[float, int, str] | None:
+    """(sum, rows, heading) of the published rows printed under this subtotal's heading, or None.
+
+    The subtotal's heading is the longest printed heading of the filing (same family) that ends
+    its member key, compared case-, punctuation- and 'and'-insensitive ('debt investments oil gas
+    and consumable fuels' ends with 'Oil, Gas & Consumable Fuels'); the words before it are the
+    section ('debt investments'). The paired rows are the filing's current published rows printed
+    under that heading whose own member sits in that section. Where no heading ends the key, one
+    that differs from the key's last words by exactly one word is taken, only when it is the one
+    such heading ('... consumer discretionary distribution and retail savers', a key carrying an
+    issuer, against the printed 'Consumer Discretionary Distribution & Retail'). None when no
+    heading or several fit, or no row is paired."""
+    words = [w for w in re.sub(r"[^a-z0-9]+", " ", rollup_key.lower()).split()]
+    tokens = [w for w in words if w != "and"]
+    pool = rows[rows["family"].eq(family)] if family else rows
+    candidates = {c: c.split() for c in set(pool["heading_key"]) - {""}}
+    exact = [c for c, ct in candidates.items() if len(ct) <= len(tokens) and tokens[-len(ct):] == ct]
+    if exact:
+        heading = max(exact, key=len)
+        taken = len(candidates[heading])
+    else:
+        near = {(c, n) for c, ct in candidates.items() for n in (len(ct) - 1, len(ct) + 1)
+                if 1 <= n <= len(tokens) and len(set(tokens[-n:]) ^ set(ct)) == 1}
+        if len(near) != 1:
+            return None
+        heading, taken = next(iter(near))
+    # the section: the key's words before the heading's last `taken` tokens ('and' not counted)
+    cut = len(words)
+    while taken and cut:
+        cut -= 1
+        if words[cut] != "and":
+            taken -= 1
+    section = " ".join(words[:cut]).removesuffix(" and").strip()
+    in_section = pool
+    if section:
+        in_section = pool[pool["member_norm"].str.match(_a01_child_key_pattern(section) + r"(?: |$)", na=False)]
+    paired = in_section[in_section["heading_key"].eq(heading)]
+    if paired.empty:
+        return None
+    return float(paired["published_fv"].sum()), len(paired), heading
+
+
 def check_A01_subtotal_arithmetic(
     source_detail_df: pd.DataFrame,
+    holdings_df: pd.DataFrame | None = None,
     *,
     tolerance_pct: float = 0.005,
     tolerance_abs: float = 1000,
 ) -> list[CheckResult]:
-    """A01: For each rollup row, verify rollup_fv == sum(child_leaf_fv)."""
+    """A01: For each rollup row, verify rollup_fv == sum(child_leaf_fv).
+
+    A subtotal whose children by member key do not tie is then paired with the published rows the
+    page prints under its heading (owner ruling 2026-11-10, reasons
+    a01-printed-subtotals-equal-published-rows and
+    a01-subtotal-and-rows-on-differently-spelled-members): it passes only when the subtotal equals
+    their sum to the check's rounding (tolerance_abs), never the percentage band. See
+    _a01_printed_heading_sum for the pairing and what stays a failure."""
     results = []
     if source_detail_df.empty:
         return [_make_result("A01", "global", "skip", 0, tolerance_pct,
@@ -189,6 +285,7 @@ def check_A01_subtotal_arithmetic(
     if "period" in rollups.columns:
         rollup_period = _col_str(rollups, "period").str.strip().str[:10]
         rollups = rollups[rollup_period.eq("") | rollup_period.eq(_col_str(rollups, "report_date").str[:10])]
+    heading_rows = _a01_heading_rows(holdings_df, df)
 
     for group_key, group in rollups.groupby(
         ["cik", "report_date", "accession_number"], dropna=False
@@ -201,6 +298,9 @@ def check_A01_subtotal_arithmetic(
         ]
 
         failures = []
+        group_heading_rows = None
+        cleared_by_heading = 0
+        group_keys = list(zip(_col_str(group, "source_wrapper_parent_key"), _col_str(group, "source_wrapper_family")))
         for _, rollup_row in group.iterrows():
             rollup_fv = _safe_float(rollup_row.get("source_fair_value", 0))
             parent_key = str(rollup_row.get("source_wrapper_parent_key", "") or "")
@@ -244,6 +344,21 @@ def check_A01_subtotal_arithmetic(
             child_sum = _col_float(children, "source_fair_value").sum()
             diff = abs(rollup_fv - child_sum)
             if rollup_fv != 0 and diff > tolerance_abs and _pct_diff(child_sum, rollup_fv) > tolerance_pct:
+                # Children by member key do not tie: pair the subtotal with the rows printed under
+                # its heading (owner ruling 2026-11-10). Sixth Street 2023-09-30: Education
+                # 148,585 is Astra 34,566 + Destiny 59,103 + EMS Linq 54,916, the rows printed
+                # under it; the Kyriba revolver 1,415 is tagged on an Education member but printed
+                # under Financial Services. Exact to the check's rounding only; a subtotal whose
+                # key repeats in the filing is not paired.
+                if group_heading_rows is None:
+                    group_heading_rows = heading_rows[
+                        heading_rows["cik"].eq(cik.zfill(10)) & heading_rows["report_date"].eq(rd[:10])
+                        & heading_rows["accession_number"].eq(acc.strip())] if len(heading_rows) else heading_rows
+                paired = (None if group_heading_rows.empty or group_keys.count((parent_key, family)) != 1
+                          else _a01_printed_heading_sum(parent_key, family, group_heading_rows))
+                if paired is not None and abs(rollup_fv - paired[0]) <= tolerance_abs:
+                    cleared_by_heading += 1
+                    continue
                 failures.append({
                     "cik": cik,
                     "report_date": rd,
@@ -263,7 +378,8 @@ def check_A01_subtotal_arithmetic(
         results.append(_make_result(
             "A01", "cik_quarter", status, metric, 1.0 - tolerance_pct,
             f"{cik}/{rd}: {n_pass}/{n_rollups} rollups pass arithmetic check"
-            + (f"; {len(failures)} failures" if failures else ""),
+            + (f"; {len(failures)} failures" if failures else "")
+            + (f"; {cleared_by_heading} tie by printed heading" if cleared_by_heading else ""),
             detail=fail_df, cik=cik, report_date=rd,
         ))
 
@@ -929,12 +1045,38 @@ def check_D03_count_fv_divergence(
     return results
 
 
+# Legal-form suffixes whose punctuation D06 ignores (owner ruling 2026-11-10).
+_D06_LEGAL_FORMS = r"(?:llc|llp|lp|inc|corp|co|ltd|plc|sarl|sa|nv|bv|gmbh)"
+
+
+def _d06_issuer_key(names: pd.Series) -> pd.Series:
+    """Issuer name for continuity matching: lower case, and the punctuation of a legal-form suffix
+    ignored, nothing else ('Galway Borrower, LLC' == 'galway borrower llc'; 'Avalara, Inc.' ==
+    'avalara inc'; 'L.L.C.' == 'LLC', 'L.P.' == 'LP'). Words, word order and the suffix itself are
+    kept, so a rename still reads as a new issuer."""
+    s = names.fillna("").astype(str).str.lower().str.strip()
+    for dotted, plain in ((r"l\.\s?l\.\s?c", "llc"), (r"l\.\s?l\.\s?p", "llp"), (r"l\.\s?p", "lp"),
+                          (r"s\.\s?a\.\s?r\.\s?l", "sarl"), (r"s\.\s?a", "sa"), (r"n\.\s?v", "nv"),
+                          (r"b\.\s?v", "bv")):
+        s = s.str.replace(rf"\b{dotted}\b\.?", plain, regex=True)
+    # a comma before the suffix, and a period after it
+    s = s.str.replace(rf",\s*(?={_D06_LEGAL_FORMS}\b)", " ", regex=True)
+    s = s.str.replace(rf"\b({_D06_LEGAL_FORMS})\.(?=\s|$|[,)\]])", r"\1", regex=True)
+    return s.str.replace(r"\s+", " ", regex=True).str.strip()
+
+
 def check_D06_position_continuity(
     holdings_df: pd.DataFrame,
     *,
     min_continuity: float = 0.50,
 ) -> list[CheckResult]:
-    """D06: >=50% of positions in Q-1 still present in Q (by issuer_name)."""
+    """D06: >=50% of positions in Q-1 still present in Q (by issuer_name).
+
+    Names compare case- and legal-form-punctuation-insensitive (owner ruling 2026-11-10, reason
+    d06-issuer-spelling-differs-between-filings): one filing's members drop the comma before the
+    legal form and the next keep it ('Galway Borrower LLC' / 'Galway Borrower, LLC'), which read
+    as most issuers leaving (CIK 0001634452, 2023-09-30 to 2023-12-31: about 20 pct
+    continuity). See _d06_issuer_key; nothing beyond the suffix is normalised."""
     results = []
     if holdings_df.empty or "issuer_name" not in holdings_df.columns:
         return [_make_result("D06", "global", "skip", 0, min_continuity, "No holdings data")]
@@ -944,18 +1086,13 @@ def check_D06_position_continuity(
         quarters = sorted(cik_group["report_date"].dropna().unique())
         if len(quarters) < 2:
             continue
+        issuer_key = _d06_issuer_key(_col_str(cik_group, "issuer_name"))
 
         for i in range(1, len(quarters)):
             prev_q = quarters[i - 1]
             curr_q = quarters[i]
-            prev_names = set(
-                _col_str(cik_group[cik_group["report_date"] == prev_q], "issuer_name")
-                .str.lower().str.strip()
-            ) - {""}
-            curr_names = set(
-                _col_str(cik_group[cik_group["report_date"] == curr_q], "issuer_name")
-                .str.lower().str.strip()
-            ) - {""}
+            prev_names = set(issuer_key[cik_group["report_date"] == prev_q]) - {""}
+            curr_names = set(issuer_key[cik_group["report_date"] == curr_q]) - {""}
 
             if not prev_names:
                 continue
@@ -3154,7 +3291,7 @@ def check_J08_suspected_refinancing_detection(
 
 # Maps check_id to (function, required_inputs_description)
 CHECK_REGISTRY: dict[str, tuple[Any, str]] = {
-    "A01": (check_A01_subtotal_arithmetic, "source_detail_df"),
+    "A01": (check_A01_subtotal_arithmetic, "source_detail_df, holdings_df"),
     "A04": (check_A04_gav_reconciliation, "holdings_df, fund_financials_df"),
     "A07": (check_A07_pct_of_net_assets_sum, "holdings_df"),
     "B01": (check_B01_leaf_completeness, "source_detail_df"),
