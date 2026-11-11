@@ -1,0 +1,350 @@
+{
+ "reviewer_id": "independent-reviewer-0001918712-nbasd-2026-11-11",
+ "report_digest": "043b4492a2bdf9e4c1c82fea3c29778d7844da55f1ee4f33d02eaf4ab7a5b55e",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_879a09eaf0ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: rule output flags one row, c-57 ROW-7c8c77cc6311303f (Cloud Software 2024-06-30), equal to affected_rows. Read on the page by context: c-57 is the group's third line 'Corporate bond 8.25 % 06/2032 100.0 100.0 101.9' with a blank company cell; the group's first line prints 'Cloud Software Group, Inc. and Picard Parent, Inc.', which is the published issuer; all four Cloud rows c-55..c-58 publish principal, cost, fair value, rate and maturity as printed. false_alarm is correct; the misfire is the REQ-NBAS-1 class (continuation line compared without its group company).",
+   "evidence": [
+    {
+     "accession": "0001918712-24-000099",
+     "text": "Corporate bond 8.25 % 06/2032 100.0 100.0 101.9 (2)"
+    },
+    {
+     "accession": "0001918712-24-000099",
+     "text": "Cloud Software Group, Inc. and Picard Parent, Inc. First lien senior secured loan 9.83 % SOFR (Q) 4.50 % 03/2031 15,000.0 14,890.0 15,030.5 (2)(7)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d3ec85fcac98",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the rule output (sandbox nbasd output/shadow/page_rule_findings.csv) flags exactly the one row in affected_rows for this quarter, the first Cannon Bridge line of the group; published issuer still carries the member's ', Private asset-backed investment 1' while the page prints the company alone, so confirmed_error stands. I verified the parked reasoning independently: all 29 Cannon Bridge rows in nbasd are identical to nvasf (same position_id, name, instrument; 29/29), and in nbasb (strip applied) the chains re-pair across tranches: counting links up to 2025-09-30 by benchmark+spread, nvasf/nbasd have 7 right / 4 wrong and nbasb 3 right / 4 wrong, as the report says. Withholding the strip keeps the data exactly at nvasf quality; the next action (matcher tie-break on benchmark/spread, then strip) is specific. No disposition is proposed, correctly. Note: the hypothesis that the other 19 nbasa rows of this finding are 'fixed by the strip' holds for issuer_name, but the strip also wrote the wrong instrument on two GCM HVAC rows of this quarter (c-432 page prints 'First lien senior secured loan', c-433 'Class A common units'; both now publish 'Private asset backed investment[ 1]'), see the observation review.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000014",
+     "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 10.56 % Euribor (S) 7.50 % 10/2033 678.9 695.0 680.0 (5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000014",
+     "text": "Private asset-backed investment 5.71 % Euribor (S) 2.65 % 10/2033 678.9 695.0 680.0 (5)(12) Private asset-backed investment 12.32 % SOFR (S) 7.50 % 10/2033 43.9 44.9 43.9 (5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000014",
+     "text": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC First lien senior secured loan 14.00 % 09/2031 2,702.7 2,642.5 2,639.9 (12) Class A common units 09/2024 1,486,487 1,486.5 1,486.5 (12)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_dd84118d0209",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the rule output (sandbox nbasd output/shadow/page_rule_findings.csv) flags exactly the one row in affected_rows for this quarter, the first Cannon Bridge line of the group; published issuer still carries the member's ', Private asset-backed investment 1' while the page prints the company alone, so confirmed_error stands. I verified the parked reasoning independently: all 29 Cannon Bridge rows in nbasd are identical to nvasf (same position_id, name, instrument; 29/29), and in nbasb (strip applied) the chains re-pair across tranches: counting links up to 2025-09-30 by benchmark+spread, nvasf/nbasd have 7 right / 4 wrong and nbasb 3 right / 4 wrong, as the report says. Withholding the strip keeps the data exactly at nvasf quality; the next action (matcher tie-break on benchmark/spread, then strip) is specific. No disposition is proposed, correctly. The c-541/c-542 row corrections cited as fixing the rest of this finding were read on the page: c-541 prints Hub International Limited 64,514.5/64,534.8/64,194.5, c-542 prints Hyperion Refinance S.a r.l. 41,709.7/41,715.8/41,367.7, both published as written.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 10.57 % Euribor (S) 7.50 % 10/2033 723.2 708.4 722.4 (2)(5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Hub International Limited First lien senior secured loan 6.79 % SOFR (S) 2.50 % 06/2030 64,514.5 64,534.8 64,194.5 (2)(7)"
+    },
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_380f28aac563",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the rule output (sandbox nbasd output/shadow/page_rule_findings.csv) flags exactly the one row in affected_rows for this quarter, the first Cannon Bridge line of the group; published issuer still carries the member's ', Private asset-backed investment 1' while the page prints the company alone, so confirmed_error stands. I verified the parked reasoning independently: all 29 Cannon Bridge rows in nbasd are identical to nvasf (same position_id, name, instrument; 29/29), and in nbasb (strip applied) the chains re-pair across tranches: counting links up to 2025-09-30 by benchmark+spread, nvasf/nbasd have 7 right / 4 wrong and nbasb 3 right / 4 wrong, as the report says. Withholding the strip keeps the data exactly at nvasf quality; the next action (matcher tie-break on benchmark/spread, then strip) is specific. No disposition is proposed, correctly. The c-1272 correction cited for the rest of this finding was read on the page: it prints WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0/3,980.1/3,994.2, published exactly so.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000065",
+     "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 5.40 % PIK Euribor (Q) 2.65 % 10/2033 1,296.7 1,200.2 1,291.8 (2)(5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000065",
+     "text": "WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0 3,980.1 3,994.2 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6a62c3cf4cf9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the rule output (sandbox nbasd output/shadow/page_rule_findings.csv) flags exactly the one row in affected_rows for this quarter, the first Cannon Bridge line of the group; published issuer still carries the member's ', Private asset-backed investment 1' while the page prints the company alone, so confirmed_error stands. I verified the parked reasoning independently: all 29 Cannon Bridge rows in nbasd are identical to nvasf (same position_id, name, instrument; 29/29), and in nbasb (strip applied) the chains re-pair across tranches: counting links up to 2025-09-30 by benchmark+spread, nvasf/nbasd have 7 right / 4 wrong and nbasb 3 right / 4 wrong, as the report says. Withholding the strip keeps the data exactly at nvasf quality; the next action (matcher tie-break on benchmark/spread, then strip) is specific. No disposition is proposed, correctly. The Dynamo c-1422 correction cited for the rest of this finding was read on the page (Dynamo Midco B.V., 13,476.7/13,480.3/13,510.4) and is published as written.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000092",
+     "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 4.90 % PIK Euribor (Q) 2.65 % 10/2033 1,309.2 1,222.9 1,304.0 (2)(5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000092",
+     "text": "Dynamo Midco B.V. First lien senior secured loan 7.78 % SOFR (M) 3.50 % 10/2031 13,476.7 13,480.3 13,510.4 (2)(5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ef1c70908764",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: rule output flags one row, c-1053 ROW-291b1f72f871e766, equal to affected_rows. The page prints the four-company Steward name on the group's first line; the published issuer is the member's two-company form, so confirmed_error is right. Parking with identity is reasonable: the nvasf archive records that a context-free name correction merged loan and warrant positions, and the next action (context-keyed corrections for every Steward line of both quarters plus a chain audit of the 19 Steward positions) is specific. No disposition proposed, correctly. Note: the claim that the other 27 nbasa rows are fixed holds for issuer names, but in this quarter the strip wrote 'Private asset-backed investment' as the instrument of six rows whose page instrument differs (MidOcean, Quintain Class B units, TI VI, three Tikehau preferred lines); see the observation review.",
+   "evidence": [
+    {
+     "accession": "0001918712-26-000018",
+     "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.47 % SOFR (M) 4.75 % 10/2028 6,887.2 6,777.4 6,887.2 (2)(6)(8)(13)"
+    },
+    {
+     "accession": "0001918712-26-000018",
+     "text": "TI VI Holdings 1, L.P. (12) Preferred shares 9.31 % PIK 06/2025 3,292 3,387.2 3,450.6 (6)(13)"
+    },
+    {
+     "accession": "0001918712-26-000018",
+     "text": "MidOcean CLO Equity Fund I, LP Limited partnership interest 9.00 % 10/2024 35,996,269 35,966.6 35,996.3 (6)(13)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d53bef61568a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: rule output flags three rows c-1072 (Steward), c-688 (CAIF), c-994 (Cannon Bridge), equal to affected_rows. Read on the page: Steward prints the four-company name (confirmed error, parked with identity); Cannon Bridge c-994 keeps the member's glued name (confirmed error, parked for the matcher; data identical to nvasf); CAIF c-688 is the group's second line (10.89 % SONIA 7.15, 13,396.7/13,053.5/13,133.8) with a blank company cell and publishes the printed company 'CAIF 1' with every value as printed, so that row is a REQ-NBAS-1 misfire. The mixed conclusion and next action are supported.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-034133",
+     "text": "Cannon Bridge Designated Activity Company (11) Private asset-backed investment 14.10 % Euribor (Q) 12.00 % 07/2027 2,449.1 2,483.4 2,374.4 (6)(13)"
+    },
+    {
+     "accession": "0001628280-26-034133",
+     "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.42 % SOFR (M) 4.75 % 10/2028 14,131.7 14,031.1 14,131.7 (2)(6)(8)(13)"
+    },
+    {
+     "accession": "0001628280-26-034133",
+     "text": "CAIF 1 Commercial mortgage-backed security 9.49 % SONIA (Q) 5.75 % 08/2035 26,378.0 26,131.8 26,221.5 (6)(13) Commercial mortgage-backed security 10.89 % SONIA (Q) 7.15 % 08/2035 13,396.7 13,053.5 13,133.8 (6)(13)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d01b971419cd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: rule output flags two rows, c-623 (CAIF) and c-704 (JPMMT), equal to affected_rows. Both are second lines of their groups with blank company cells; c-623 publishes CAIF 1 at 10.90 % SONIA 7.15 13,422.5/13,063.1/13,182.1 and c-704 publishes JPMMT 2026-ACES1 at 1.63 % with 1,276,413,070 units, 36,154.4/36,141.1, as printed. false_alarm is correct; outstanding until the owner rules on REQ-NBAS-1.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-054923",
+     "text": "CAIF 1 Commercial mortgage-backed security 9.50 % SONIA (Q) 5.75 % 08/2035 26,428.8 26,141.7 26,145.2 (6)(13) Commercial mortgage-backed security 10.90 % SONIA (Q) 7.15 % 08/2035 13,422.5 13,063.1 13,182.1 (6)(13)"
+    },
+    {
+     "accession": "0001628280-26-054923",
+     "text": "JPMMT 2026-ACES1 Residential mortgage-backed security 7.86 % 04/2066 36,628.1 36,843.1 36,711.6 (6)(13) Residential mortgage-backed security 1.63 % 04/2066 1,276,413,070 36,154.4 36,141.1 (6)(13)"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "instrument-text-glued-to-issuer-name",
+   "outcome": "rejected",
+   "rationale": "The name half is right: every one of the 237 issuer-changed rows was read on its own printed line by context; 235 publish the printed company (the two exceptions are HarbourVest 2026-03-31 c-769 publishing '...Feeder LP.' where the page prints 'Feeder L.P.', inherited from the member, and a page-break parse artifact for Orange Barrel). But 'fixed' is not supported for the instrument half: issuer_name_strip_to_instrument copied the member's 'Private asset-backed investment' into instrument_description on 8 rows whose printed instrument is different: 2024-12-31 GCM HVAC c-432 (page 'First lien senior secured loan') and c-433 ('Class A common units'); 2025-12-31 MidOcean c-743 ('Limited partnership interest', 36.0M), Quintain c-1541 ('Class B common units'), TI VI c-1062 ('Preferred shares'), Tikehau Green Diamond c-869, Ruby c-870, Topaz c-871 ('Preferred shares'); about 49.6M FV. In nvasf these rows had a blank instrument; now they carry a wrong one, so on this field nbasd is worse than nvasf for those 8 rows. This is the same failure mode as the other fund tonight. The report does not mention it and the 19 strip tests do not cover it. Needed: limit strip_to_instrument to rows whose printed instrument cell is the asset-backed phrase (or set those 8 by context-keyed correction) and add a test that a non-ABS printed instrument is not overwritten. instrument_type is unchanged (null before and after on all 237 rows).",
+   "evidence": [
+    {
+     "accession": "0001918712-26-000018",
+     "text": "TI VI Holdings 1, L.P. (12) Preferred shares 9.31 % PIK 06/2025 3,292 3,387.2 3,450.6 (6)(13)"
+    },
+    {
+     "accession": "0001918712-26-000018",
+     "text": "Tikehau Topaz LP (12) Preferred shares 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,436.9 2,474.2 (6)(8)(13)"
+    },
+    {
+     "accession": "0001918712-26-000018",
+     "text": "MidOcean CLO Equity Fund I, LP Limited partnership interest 9.00 % 10/2024 35,996,269 35,966.6 35,996.3 (6)(13)"
+    },
+    {
+     "accession": "0001918712-25-000014",
+     "text": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC First lien senior secured loan 14.00 % 09/2031 2,702.7 2,642.5 2,639.9 (12) Class A common units 09/2024 1,486,487 1,486.5 1,486.5 (12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Read c-541, c-542 (2025-03-31) and c-1272 (2025-06-30) on the page by context: the values on each context are Hub, Hyperion and WhiteWater respectively, and nbasd publishes those printed companies and (c-1272) the printed instrument with all values unchanged. issuer_name_printed flagged them in nbasa, so the existing detector catches recurrence.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Hub International Limited First lien senior secured loan 6.79 % SOFR (S) 2.50 % 06/2030 64,514.5 64,534.8 64,194.5 (2)(7)"
+    },
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)"
+    },
+    {
+     "accession": "0001918712-25-000065",
+     "text": "WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0 3,980.1 3,994.2 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Chain audit vs nvasf confirms the defect and the repair: nvasf linked Hyperion 2024-12-31 (SOFR 3.00, 02/2031) to the Hub values (SOFR 2.50, 06/2030) and Pallas NZ 2025-03-31 (BBSY 6.15, 07/2026) to WhiteWater (SOFR 2.25, 06/2032); nbasd has one chain each for Hyperion (3 rows), Pallas NZ (8 rows, BBSY 6.15 07/2026 throughout), Hub (13 rows) and WhiteWater (3 rows) with no benchmark or maturity jump at the repaired links. The proposed link-level check is concrete. Not mentioned in the report: the two forced records in position_matches.csv keep the original end row's principal (Hyperion pair end_principal_amount 64,514,500 = Hub's; Pallas pair 4,000,000 = WhiteWater's) while FV, cost and rate are replaced, so any consumer of match-level principal gets a mixed record; holdings rows are correct.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)"
+    },
+    {
+     "accession": "0001918712-25-000065",
+     "text": "Pallas NZ Funding Trust No. 1 (10) Private asset-backed investment 9.90 % BBSY (M) 6.15 % 07/2026 2,283.0 2,230.6 2,283.0 (5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000065",
+     "text": "WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0 3,980.1 3,994.2 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "Recounted independently from the three builds: nvasf/nbasd 7 right / 4 wrong links up to 2025-09-30, nbasb 3 right / 4 wrong; all wrong links join different benchmark/spread tranches while a matching tranche exists next quarter, so the proposed benchmark/spread chain check would flag them. Parking is correct: Cannon Bridge rows in nbasd equal nvasf on every compared field.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000014",
+     "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 10.56 % Euribor (S) 7.50 % 10/2033 678.9 695.0 680.0 (5)(12)"
+    },
+    {
+     "accession": "0001918712-25-000014",
+     "text": "Private asset-backed investment 5.71 % Euribor (S) 2.65 % 10/2033 678.9 695.0 680.0 (5)(12) Private asset-backed investment 12.32 % SOFR (S) 7.50 % 10/2033 43.9 44.9 43.9 (5)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "outcome": "supported",
+   "rationale": "Dynamo c-1422/c-1491/c-1531 and Opal c-1470 read on the page by context: each prints the new company and publishes it with unchanged values; chains continue through the rename (Dynamo 8 rows incl. 2026-06-30 newly joined, Opal 6 rows incl. 2026-03-31/06-30). issuer_name_printed is the existing detector. canonical_name on those chains now carries the old names (Dynamo US Bidco Inc., Opal US LLC), an undeclared but non-published-value change.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000092",
+     "text": "Dynamo Midco B.V. First lien senior secured loan 7.78 % SOFR (M) 3.50 % 10/2031 13,476.7 13,480.3 13,510.4 (2)(5)"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-misnames-instrument",
+   "outcome": "supported",
+   "rationale": "SV Newco 2024-12-31 read by context: c-476 is the printed undrawn revolver (dashes) and now publishes 'First lien senior secured revolving loan' with 0 values; c-477 is the term loan at 16,218.9/15,996.0/16,218.9, issuer now 'SV Newco 2, Inc.'. Exactly two rows. B02 is the existing detector.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000014",
+     "text": "SV Newco 2, Inc. (10) First lien senior secured revolving loan 06/2031 - - - (2)(5)(7)(8)(12) First lien senior secured loan 9.26 % SOFR (Q) 4.75 % 06/2031 16,218.9 15,996.0 16,218.9 (2)(5)(7)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-not-rederived-after-instrument",
+   "outcome": "supported",
+   "rationale": "Verified: 874 rows have 'revolving' in instrument_description and exactly one (SV Newco c-476) lacks instrument_type 'Revolver'. The proposed text check is deterministic; leaving it is right since row corrections cannot set instrument_type.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000014",
+     "text": "SV Newco 2, Inc. (10) First lien senior secured revolving loan 06/2031 - - - (2)(5)(7)(8)(12) First lien senior secured loan 9.26 % SOFR (Q) 4.75 % 06/2031 16,218.9 15,996.0 16,218.9 (2)(5)(7)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "outcome": "supported",
+   "rationale": "Isthmus c-956 read by context: page prints the residual piece with dashes for principal and cost and 21.4 fair value; nbasd now publishes EQUITY_COMMON / COMMON_EQUITY / PRIVATE_EQUITY with no principal, matching its other ten quarters; chain of 11 rows is consistent. The chain-consistency detector proposal is narrow.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000065",
+     "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,290.8 1,279.4 1,290.8 (5)(12) Private asset-backed investment - - 21.4 (5)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "The 34 hyphen-only cases are real and harmless; the proposed punctuation-insensitive comparison is the right detector and would also catch the 8 strip-introduced wrong instruments named in the strip observation review (word differences, not punctuation).",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Pallas NZ Funding Trust No. 1 Private asset-backed investment 10.11 % BBSY (M) 6.15 % 07/2026 1,350.9 1,425.5 1,350.9 (5)(12)"
+    },
+    {
+     "accession": "0001918712-26-000018",
+     "text": "TI VI Holdings 1, L.P. (12) Preferred shares 9.31 % PIK 06/2025 3,292 3,387.2 3,450.6 (6)(13)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-truncated-in-member",
+   "outcome": "supported",
+   "rationale": "c-1110 2025-03-31 read by context: page prints 'Pallas NZ Funding Trust No. 1' at 1,350.9/1,425.5/1,350.9; nbasd publishes that name and the printed instrument. A token-level name comparison is a sound detector.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000030",
+     "text": "Pallas NZ Funding Trust No. 1 Private asset-backed investment 10.11 % BBSY (M) 6.15 % 07/2026 1,350.9 1,425.5 1,350.9 (5)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-from-another-issuer-in-build",
+   "outcome": "supported",
+   "rationale": "Confirmed Pallas NZ rows carry canonical_name 'Pallas Funding Trust No.2' (pre-existing). The token-difference check is cheap. Same class seen on Dynamo/Opal 2026 rows whose canonical_name now shows the pre-rename names.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000065",
+     "text": "Pallas NZ Funding Trust No. 1 (10) Private asset-backed investment 9.90 % BBSY (M) 6.15 % 07/2026 2,283.0 2,230.6 2,283.0 (5)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-row-number-left",
+   "outcome": "supported",
+   "rationale": "Twin lines of one issuer in this filer's members are distinguished only by the trailing number (Cannon Bridge, Switch Master, CAIF); a detector would fire on every twin by design under the D-256 cohort convention, so not_feasible is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001918712-25-000014",
+     "text": "Private asset-backed investment 5.71 % Euribor (S) 2.65 % 10/2033 678.9 695.0 680.0 (5)(12) Private asset-backed investment 12.32 % SOFR (S) 7.50 % 10/2033 43.9 44.9 43.9 (5)(12)"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_reviews": [
+  {
+   "request_id": "REQ-NBAS-1",
+   "outcome": "supported",
+   "rationale": "Classification verification_bug is right: the flagged rows Cloud c-57 (2024-06-30), CAIF c-688 (2026-03-31), CAIF c-623 and JPMMT c-704 (2026-06-30) are continuation lines with a blank company cell, and each publishes the company printed on its group's first line with values as printed. Deferring to the owner with REQ-NBAR-1 is the contract's path (check repair needs an owner ruling, focused tests and a cohort measurement); findings stay outstanding meanwhile, which the ledger shows. One inaccuracy: the request says five such rows; there are four.",
+   "evidence": [
+    {
+     "accession": "0001918712-24-000099",
+     "text": "Corporate bond 8.25 % 06/2032 100.0 100.0 101.9 (2)"
+    },
+    {
+     "accession": "0001628280-26-034133",
+     "text": "CAIF 1 Commercial mortgage-backed security 9.49 % SONIA (Q) 5.75 % 08/2035 26,378.0 26,131.8 26,221.5 (6)(13) Commercial mortgage-backed security 10.89 % SONIA (Q) 7.15 % 08/2035 13,396.7 13,053.5 13,133.8 (6)(13)"
+    },
+    {
+     "accession": "0001628280-26-054923",
+     "text": "JPMMT 2026-ACES1 Residential mortgage-backed security 7.86 % 04/2066 36,628.1 36,843.1 36,711.6 (6)(13) Residential mortgage-backed security 1.63 % 04/2066 1,276,413,070 36,154.4 36,141.1 (6)(13)"
+    }
+   ]
+  }
+ ]
+}

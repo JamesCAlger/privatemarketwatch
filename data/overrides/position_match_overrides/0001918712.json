@@ -1,0 +1,42 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0001918712",
+  "overrides": [
+    {
+      "begin_report_date": "2024-12-31",
+      "end_report_date": "2025-03-31",
+      "begin_issuer_name": "Hyperion Refinance S.a.r.l.",
+      "end_issuer_name": "Hub International Limited",
+      "begin_fair_value": 40438100.0,
+      "end_fair_value": 64194500.0,
+      "match_method": "B1b_position_key",
+      "action": "force_pair",
+      "replace_end_issuer_name": "Hyperion Refinance S.a r.l.",
+      "replace_end_fair_value": 41367700.0,
+      "mechanism": "In the 10-Q for 2025-03-31 (0001918712-25-000030) the filer's members are shifted one line: context c-541 carries Hub's printed values under a Hyperion member and c-542 carries Hyperion's under a Keystone member. nbas row corrections give both rows their printed company; the position key is built from the member, so B1b still paired Hyperion 2024-12-31 (SOFR 3.00, 02/2031) with the Hub line (SOFR 2.50, 06/2030). The end side is moved to the printed Hyperion line (41,709.7 / 41,367.7, SOFR 3.00, 02/2031).",
+      "evidence": "Printed 2025-03-31: 'Hub International Limited First lien senior secured loan 6.79 % SOFR (S) 2.50 % 06/2030 64,514.5 64,534.8 64,194.5 (2)(7) Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)'. Printed 2024-12-31 (0001918712-25-000014): 'Hyperion Refinance S.a.r.l. First lien senior secured loan 7.36 % SOFR (M) 3.00 % 02/2031 40,209.7 40,220.9 40,438.1 (2)(5)(7)'. Chain audit: scratch/fund_runs/0001918712/nbas/chains.py.",
+      "confidence": 0.95,
+      "residual_risk": "Natural key (name, date, FV within 1 pct or 1,000); exactly one 2025-03-31 row is named Hyperion after the corrections. Hub 2024-12-31 (40,134.6) to Hub 2025-03-31 is not forced and may stay a gap.",
+      "created_by": "fund-agent-0001918712-nbas-2026-11-11",
+      "review_id": "RVQ_BLK_dd84118d0209"
+    },
+    {
+      "begin_report_date": "2025-03-31",
+      "end_report_date": "2025-06-30",
+      "begin_issuer_name": "Pallas NZ Funding Trust No. 1",
+      "end_issuer_name": "WhiteWater Matterhorn Holdings, LLC",
+      "begin_fair_value": 1350900.0,
+      "end_fair_value": 3994200.0,
+      "match_method": "B1b_position_key",
+      "action": "force_pair",
+      "replace_end_issuer_name": "Pallas NZ Funding Trust No. 1",
+      "replace_end_fair_value": 2283000.0,
+      "mechanism": "The filer tagged WhiteWater's 2025-06-30 loan (context c-1272) on the same malformed Pallas NZ member as the 2025-03-31 Pallas line (c-1110), so B1b paired a BBSY 6.15 07/2026 trust note with a SOFR 2.25 06/2032 loan. nbas row corrections give both rows their printed company; the end side is moved to the printed 2025-06-30 Pallas NZ line (2,283.0, BBSY 6.15, 07/2026).",
+      "evidence": "Printed 2025-06-30 (0001918712-25-000065): 'Pallas NZ Funding Trust No. 1 (10) Private asset-backed investment 9.90 % BBSY (M) 6.15 % 07/2026 2,283.0 2,230.6 2,283.0 (5)(12)' and 'WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0 3,980.1 3,994.2 (2)'. Printed 2025-03-31 (0001918712-25-000030): 'Pallas NZ Funding Trust No. 1 Private asset-backed investment 10.11 % BBSY (M) 6.15 % 07/2026 1,350.9 1,425.5 1,350.9 (5)(12)'.",
+      "confidence": 0.95,
+      "residual_risk": "Natural key (name, date, FV within 1 pct or 1,000); exactly one 2025-06-30 row is named Pallas NZ Funding Trust No. 1 after the corrections.",
+      "created_by": "fund-agent-0001918712-nbas-2026-11-11",
+      "review_id": "RVQ_BLK_380f28aac563"
+    }
+  ]
+}

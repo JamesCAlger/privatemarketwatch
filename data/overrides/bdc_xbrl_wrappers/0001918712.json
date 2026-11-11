@@ -6,6 +6,8 @@
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "ARES_STRATEGIC_INCOME",
+    "issuer_name_strip_re": "(?<!^Cannon Bridge Designated Activity Company)\\s*,\\s*(?:Private asset[- ]backed investment|(?:Commercial|Residential) mortgage-backed security)(?:\\s+\\d{1,2})?$",
+    "issuer_name_strip_to_instrument": true,
     "shares_pow10_normalise": false,
     "prefix_rules": {},
     "flat_schedule": true,

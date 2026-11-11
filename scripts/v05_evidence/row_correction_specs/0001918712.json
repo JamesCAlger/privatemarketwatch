@@ -583,5 +583,246 @@
   },
   "reason": "Restored issuer-axis position: c805 tags rate/principal on the same printed row as c806 cost/FV. No PIK or floating reference printed. Actual section heading is Investment Funds and Vehicles. Printed: 'OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)'.",
   "correction_context": "c-806"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "SV Newco 2, Inc., First lien senior secured loan",
+  "accession": "0001918712-25-000014",
+  "row_id": "ROW-828c3b9326d77d70",
+  "context": "c-476",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First lien senior secured revolving loan"
+  },
+  "reason": "nbas run (B02 verdict RVQ_REV_705d857f2318): context c-476 carries principal, cost and fair value 0, the printed undrawn revolver; its member names the term loan, so the revolver published as a second 'First lien senior secured loan'. Printed: 'SV Newco 2, Inc. (10) First lien senior secured revolving loan 06/2031 - - - (2)(5)(7)(8)(12) First lien senior secured loan 9.26 % SOFR (Q) 4.75 % 06/2031 16,218.9 15,996.0 16,218.9 (2)(5)(7)(12)'."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "SV Newco 2, Inc, First lien senior secured loan",
+  "accession": "0001918712-25-000014",
+  "row_id": "ROW-841f7e06ef343143",
+  "context": "c-477",
+  "exact": true,
+  "fields": {
+   "issuer_name": "SV Newco 2, Inc."
+  },
+  "reason": "nbas run (B02 verdict RVQ_REV_705d857f2318): the member drops the period of 'Inc.'; the page prints one company for both lines. Printed: 'SV Newco 2, Inc. (10) First lien senior secured revolving loan 06/2031 - - - (2)(5)(7)(8)(12) First lien senior secured loan 9.26 % SOFR (Q) 4.75 % 06/2031 16,218.9 15,996.0 16,218.9 (2)(5)(7)(12)'."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "A8 - A (Feeder) L.P., Limited partnership interest",
+  "accession": "0001918712-26-000018",
+  "row_id": "ROW-7fd9de04f9320c77",
+  "context": "c-485",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Limited partnership interests"
+  },
+  "reason": "nbas run (C202 verdict RVQ_REV_4e4a5b29d72e): the member says 'interest', the page prints the plural in this filing (earlier filings print the singular, as published). Printed: 'A8 - A (Feeder) L.P. (12) Limited partnership interests 03/2025 0.44 % 1,000.3 718.3 (6)'."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Pallas NZ Funding Trust No. , Private asset backed investment 2",
+  "accession": "0001918712-25-000065",
+  "row_id": "ROW-f3d1a2353e0da4ba",
+  "context": "c-1272",
+  "exact": true,
+  "fields": {
+   "issuer_name": "WhiteWater Matterhorn Holdings, LLC",
+   "instrument_description": "First lien senior secured loan"
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_380f28aac563): the filer tagged WhiteWater's loan on a Pallas NZ member; the context's values (4,000.0 / 3,980.1 / 3,994.2, 6.57 %, 06/2032) are the WhiteWater line, whose chain continues at 2025-09-30 (SOFR 2.25, 06/2032). Printed: 'WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0 3,980.1 3,994.2 (2)'."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Pallas NZ Funding Trust No. , Private asset backed investment 2",
+  "accession": "0001918712-25-000030",
+  "row_id": "ROW-42f0a85342291512",
+  "context": "c-1110",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Pallas NZ Funding Trust No. 1",
+   "instrument_description": "Private asset-backed investment"
+  },
+  "reason": "nbas run: the member drops the '1' of the trust's name ('Pallas NZ Funding Trust No. , ... 2'); every other filing and this page print 'No. 1'. Printed: 'Pallas NZ Funding Trust No. 1 Private asset-backed investment 10.11 % BBSY (M) 6.15 % 07/2026 1,350.9 1,425.5 1,350.9 (5)(12)'."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Hyperion Refinance S.a r.l., First lien senior secured loan",
+  "accession": "0001918712-25-000030",
+  "row_id": "ROW-658784fd1786f841",
+  "context": "c-541",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Hub International Limited"
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_dd84118d0209): members shifted one line in this filing; the context carrying Hub's values (64,514.5 / 64,534.8 / 64,194.5, SOFR 2.50, 06/2030) is named Hyperion. Printed: 'Hub International Limited First lien senior secured loan 6.79 % SOFR (S) 2.50 % 06/2030 64,514.5 64,534.8 64,194.5 (2)(7)'."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Keystone Agency Partners LLC, First lien senior secured loan",
+  "accession": "0001918712-25-000030",
+  "row_id": "ROW-d04aa99d1d551b1b",
+  "context": "c-542",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Hyperion Refinance S.a r.l."
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_dd84118d0209): members shifted one line in this filing; the context carrying Hyperion's values (41,709.7 / 41,715.8 / 41,367.7, SOFR 3.00, 02/2031) is named Keystone (Keystone's own lines are c-543/c-544). Printed: 'Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)'."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Dynamo US Bidco Inc., First lien senior secured loan",
+  "accession": "0001918712-25-000092",
+  "row_id": "ROW-e2cb0c04a5cc2c30",
+  "context": "c-1422",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Dynamo Midco B.V."
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_6a62c3cf4cf9): from this filing the page names the borrower Dynamo Midco B.V. (2025-06-30 printed 'Dynamo US Bidco Inc.'); the member keeps the old name. Printed: 'Dynamo Midco B.V. First lien senior secured loan 7.78 % SOFR (M) 3.50 % 10/2031 13,476.7 13,480.3 13,510.4 (2)(5)'."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Dynamo US Bidco Inc., First lien senior secured loan",
+  "accession": "0001918712-26-000018",
+  "row_id": "ROW-2ab1a440978dd9ec",
+  "context": "c-1491",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Dynamo Midco B.V."
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_ef1c70908764): the page names the borrower Dynamo Midco B.V.; the member keeps the old name. Printed: 'Dynamo Midco B.V. First lien senior secured loan 7.09 % SOFR (M) 3.25 % 09/2031 18,430.5 18,462.6 18,591.8 (2)(6)'."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Dynamo US Bidco Inc., First lien senior secured loan",
+  "accession": "0001628280-26-034133",
+  "row_id": "ROW-062ca3fe2ccd4133",
+  "context": "c-1531",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Dynamo Midco B.V."
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_d53bef61568a): the page names the borrower Dynamo Midco B.V. (as 2026-06-30 publishes); the member keeps the old name. Printed: 'Dynamo Midco B.V. First lien senior secured loan 6.92 % SOFR (M) 3.25 % 09/2031 18,384.4 18,416.1 15,971.5 (2)(6)'."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Opal US LLC, First lien senior secured loan",
+  "accession": "0001918712-26-000018",
+  "row_id": "ROW-012c5ce1305e0d56",
+  "context": "c-1470",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Opal Bidco SAS"
+  },
+  "reason": "nbas run (issuer_name_printed RVQ_BLK_ef1c70908764): the page names the borrower Opal Bidco SAS (as 2026-03-31 publishes); the member keeps 'Opal US LLC'. Printed: 'Opal Bidco SAS First lien senior secured loan 6.69 % SOFR (Q) 3.00 % 04/2032 60,525.4 60,429.6 60,846.8 (2)'."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Isthmus Capital LLC, Private asset-backed investment 2",
+  "accession": "0001918712-25-000065",
+  "row_id": "ROW-24132be5de92d17d",
+  "context": "c-956",
+  "exact": true,
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_amount_currency": ""
+  },
+  "reason": "nbas run: Isthmus's second line is the residual equity piece (cost '-', 4 units in the 2024-12-31 and 2025-09-30 filings; published EQUITY_COMMON / COMMON_EQUITY in every other quarter). In this filing its context tags principal 0 instead of the unit count, so the row was published as OTHER with a zero USD principal; the page prints dashes for units and cost. Printed: 'Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,290.8 1,279.4 1,290.8 (5)(12) Private asset-backed investment - - 21.4 (5)(12)'."
+ },
+ {
+  "quarter": "2024-12-31", "identifier": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC, Private asset backed investment",
+  "accession": "0001918712-25-000014", "row_id": "ROW-25d5293f6740a9ce", "context": "c-432", "exact": true,
+  "fields": {"issuer_name": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC", "instrument_description": "First lien senior secured loan"},
+  "reason": "nbas run, review round 2: the member names the line 'Private asset backed investment' but the page prints a first lien loan; issuer set to the printed company too so the asset-backed strip leaves the printed instrument alone. Printed: 'GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC | First lien senior secured loan | 14.00% | 09/2031 | 2,702.7 | 2,642.5 | 2,639.9 | (12)'."
+ },
+ {
+  "quarter": "2024-12-31", "identifier": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC, Private asset backed investment 1",
+  "accession": "0001918712-25-000014", "row_id": "ROW-bc92c746083c9d53", "context": "c-433", "exact": true,
+  "fields": {"issuer_name": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC", "instrument_description": "Class A common units"},
+  "reason": "nbas run, review round 2: the member says 'Private asset backed investment 1'; the page prints the second GCM HVAC line as Class A common units. Printed: 'Class A common units | 09/2024 | 1,486,487 | 1,486.5 | 1,486.5 | (12)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "MidOcean CLO Equity Fund I, LP, Private asset-backed investment",
+  "accession": "0001918712-26-000018", "row_id": "ROW-05075299e60bc03b", "context": "c-743", "exact": true,
+  "fields": {"issuer_name": "MidOcean CLO Equity Fund I, LP", "instrument_description": "Limited partnership interest"},
+  "reason": "nbas run, review round 2: in this filing the page prints the MidOcean holding as a limited partnership interest; the member keeps 'Private asset-backed investment'. Printed: 'MidOcean CLO Equity Fund I, LP | Limited partnership interest | 9.00% | 10/2024 | 35,996,269 | 35,966.6 | 35,996.3 | (6)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "TI VI Holdings 1, L.P., Private asset-backed investment",
+  "accession": "0001918712-26-000018", "row_id": "ROW-f2859608851af0fa", "context": "c-1062", "exact": true,
+  "fields": {"issuer_name": "TI VI Holdings 1, L.P.", "instrument_description": "Preferred shares"},
+  "reason": "nbas run, review round 2: the page prints preferred shares; the member keeps 'Private asset-backed investment'. Printed: 'TI VI Holdings 1, L.P. (12) | Preferred shares | 9.31% PIK | 06/2025 | 3,292 | 3,387.2 | 3,450.6 | (6)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "Tikehau Green Diamond II CFO Equity LP, Private asset-backed investment",
+  "accession": "0001918712-26-000018", "row_id": "ROW-c06e8dc84c0e0ded", "context": "c-869", "exact": true,
+  "fields": {"issuer_name": "Tikehau Green Diamond II CFO Equity LP", "instrument_description": "Preferred shares"},
+  "reason": "nbas run, review round 2: the page prints preferred shares. Printed: 'Tikehau Green Diamond II CFO Equity LP (12) | Preferred shares | 9.77% | Euribor (Q) | 7.75% | 12/2024 | 12/2030 | 3,405,672 | 2,419.3 | 2,914.1 | (6)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "Tikehau Ruby CLO Equity LP, Private asset-backed investment",
+  "accession": "0001918712-26-000018", "row_id": "ROW-b13b3cd4ea4870ba", "context": "c-870", "exact": true,
+  "fields": {"issuer_name": "Tikehau Ruby CLO Equity LP", "instrument_description": "Preferred shares"},
+  "reason": "nbas run, review round 2: the page prints preferred shares. Printed: 'Tikehau Ruby CLO Equity LP (12) | Preferred shares | 12.02% | Euribor (Q) | 10.00% | 03/2024 | 1,815,364 | 514.6 | 588.9 | (6)(8)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "Tikehau Topaz LP, Private asset-backed investment",
+  "accession": "0001918712-26-000018", "row_id": "ROW-654b6a3db99809a8", "context": "c-871", "exact": true,
+  "fields": {"issuer_name": "Tikehau Topaz LP", "instrument_description": "Preferred shares"},
+  "reason": "nbas run, review round 2: the page prints preferred shares. Printed: 'Tikehau Topaz LP (12) | Preferred shares | 12.67% | SOFR (Q) | 9.00% | 06/2024 | 3,314,856 | 2,436.9 | 2,474.2 | (6)(8)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "Quintain Investments Holdings Limited, Private asset-backed investment 2",
+  "accession": "0001918712-26-000018", "row_id": "ROW-1e2c75e8f8157ff6", "context": "c-1541", "exact": true,
+  "fields": {"issuer_name": "Quintain Investments Holdings Limited", "instrument_description": "Class B common units"},
+  "reason": "nbas run, review round 2: the page prints Quintain's second line as Class B common units. Printed: 'Class B common units | 08/2024 | 54,289 | - | - | (6)(13)'."
+ },
+ {
+  "quarter": "2026-03-31", "identifier": "HarbourVest Structured Solutions 2025 L.P. and HarbourVest Structured Solutions 2025 Feeder LP., Private asset-backed investment",
+  "accession": "0001628280-26-034133", "row_id": "ROW-233234e02107aff1", "context": "c-769", "exact": true,
+  "fields": {"issuer_name": "HarbourVest Structured Solutions 2025 L.P. and HarbourVest Structured Solutions 2025 Feeder L.P.", "instrument_description": "Private asset-backed investment"},
+  "reason": "nbas run, review round 2: the member spells the second fund 'Feeder LP.'; the page prints one company for the group, 'Feeder L.P.' (the row is the group's third line). Printed: 'HarbourVest Structured Solutions 2025 L.P. and HarbourVest Structured Solutions 2025 Feeder L.P. (11)(12) Private asset-backed investment 12.25 % 03/2041 3,489.9 3,421.2 3,420.1 (6)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "ALP CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P., Private asset-backed investment 1",
+  "accession": "0001918712-26-000018", "row_id": "ROW-ac871622ea1e94e7", "context": "c-505", "exact": true,
+  "fields": {"issuer_name": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P.", "instrument_description": "Private asset-backed investment 1"},
+  "reason": "nbas run, review round 2: from this filing the page prints 'Alp CFO 2025, L.P.' (2025-09-30 printed 'ALP'); instrument kept as the strip publishes it. Printed: 'Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (11)(12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "ALP CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P., Private asset-backed investment 2",
+  "accession": "0001918712-26-000018", "row_id": "ROW-03a7c7f59109dcf5", "context": "c-506", "exact": true,
+  "fields": {"issuer_name": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P.", "instrument_description": "Private asset-backed investment 2"},
+  "reason": "nbas run, review round 2: the page prints 'Alp CFO 2025, L.P.' for the group. Printed: 'Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (11)(12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13) Private asset-backed investment 08/2025 11,666,532 11,666.5 12,343.2 (6)(13)'."
+ },
+ {
+  "quarter": "2025-12-31", "identifier": "ALP CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P., Private asset-backed investment 3",
+  "accession": "0001918712-26-000018", "row_id": "ROW-ccf53f04a04301a9", "context": "c-507", "exact": true,
+  "fields": {"issuer_name": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P.", "instrument_description": "Private asset-backed investment 3"},
+  "reason": "nbas run, review round 2: the page prints 'Alp CFO 2025, L.P.' for the group. Printed: 'Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (11)(12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)'."
+ },
+ {
+  "quarter": "2026-03-31", "identifier": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P., Private asset-backed investment 1",
+  "accession": "0001628280-26-034133", "row_id": "ROW-397a6741b503a837", "context": "c-625", "exact": true,
+  "fields": {"issuer_name": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P.", "instrument_description": "Private asset-backed investment 1"},
+  "reason": "nbas run, review round 2: the member and page read 'Alp'; the build's casing vote published 'ALP'. Printed: 'Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)'."
+ },
+ {
+  "quarter": "2026-03-31", "identifier": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P., Private asset-backed investment 2",
+  "accession": "0001628280-26-034133", "row_id": "ROW-9e1f2d9cb10d42df", "context": "c-626", "exact": true,
+  "fields": {"issuer_name": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P.", "instrument_description": "Private asset-backed investment 2"},
+  "reason": "nbas run, review round 2: the member and page read 'Alp'; the build's casing vote published 'ALP'. Printed: 'Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)'."
+ },
+ {
+  "quarter": "2026-03-31", "identifier": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P., Private asset-backed investment 3",
+  "accession": "0001628280-26-034133", "row_id": "ROW-04189ce16134c12f", "context": "c-627", "exact": true,
+  "fields": {"issuer_name": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P.", "instrument_description": "Private asset-backed investment 3"},
+  "reason": "nbas run, review round 2: the member and page read 'Alp'; the build's casing vote published 'ALP'. Printed: 'Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)'."
  }
 ]
