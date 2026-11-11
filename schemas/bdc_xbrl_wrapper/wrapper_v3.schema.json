@@ -790,6 +790,13 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*$"},
           "description": "Position contexts a filing leaves without an identifier member, each as 'ACCESSION CONTEXT => IDENTIFIER', the identifier written as the filer writes it in its other filings (NexPoint Capital, 10-Qs for 2025-06-30 and 2025-09-30: ten of the printed rows sit on industry, affiliation and type members only). A context that already names a position is never renamed. Evidence required: the printed row whose fair-value tag uses the context."
         },
+        "relabelled_contexts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ :: .*[A-Za-z].* :: .*[A-Za-z].*$"},
+          "description": "Position contexts whose identifier member names another line than the printed row that carries the context's facts, each as 'ACCESSION CONTEXT :: MEMBER IDENTIFIER :: PRINTED IDENTIFIER' (Blue Owl Credit Income, 10-Q for 2026-03-31: 200 unfunded-commitment contexts with members shifted against the values, e.g. c-806 carries the printed AI Titan revolver line '4,245 ( 127 )' on a member naming Activate Holdings). The context is renamed to the printed identifier, written in the filer's own identifier form, only while it carries exactly the listed member identifier; the issuer, instrument and position identity then follow the printed line. Evidence required: the printed row (the table row holding the context's fair-value fact)."
+        },
         "units_tagged_as_par": {
           "type": "array",
           "minItems": 1,

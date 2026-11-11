@@ -14,6 +14,7 @@ _ACCESSION_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6}')
 # par_tagged_as_units entry for a filing whose share-count facts hold the par in thousands (printed scale)
 _ACCESSION_X1000_RE=re.compile('([0-9]{10}-[0-9]{2}-[0-9]{6}):x1000')
 _CONTEXT_IDENTIFIER_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*')
+_RELABELLED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ :: .*[A-Za-z].* :: .*[A-Za-z].*')
 _NOT_CONTEXT_RE=re.compile('not [0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+')
 _MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
 
@@ -34,7 +35,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','pik_margin_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels','gics_industry_carry_back',
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','relabelled_contexts','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels','gics_industry_carry_back',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
                 'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors',
@@ -124,6 +125,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A fair-value concept is one local name, no prefix: '+str(path))
             if key=='context_identifiers' and any(not _CONTEXT_IDENTIFIER_RE.fullmatch(v) for v in values):
                 raise ValueError('A context identifier reads "ACCESSION CONTEXT => IDENTIFIER": '+str(path))
+            if key=='relabelled_contexts' and any(not _RELABELLED_CONTEXT_RE.fullmatch(v) or v.count(' :: ')!=2 for v in values):
+                raise ValueError('A relabelled context reads "ACCESSION CONTEXT :: MEMBER IDENTIFIER :: PRINTED IDENTIFIER": '+str(path))
             if key=='untagged_values' and any(not _UNTAGGED_VALUE_RE.fullmatch(v) for v in values):
                 raise ValueError('An untagged value reads "ACCESSION CONTEXT fair_value|cost|principal_amount NUMBER": '+str(path))
             if key=='schedule_row_tags' and set(values)-{'cost_or_percent_unrounded','cost_or_percent','quantity_or_percent','not_commitment_only'}:

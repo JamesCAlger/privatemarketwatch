@@ -182,6 +182,52 @@ def name_declared_contexts(contexts: dict[str, dict[str, Any]], filing_meta: dic
     return named
 
 
+_RELABELLED_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) :: (.+?) :: (.+)")
+
+
+@lru_cache(maxsize=1)
+def _relabelled_by_accession() -> dict[tuple[str, str], dict[str, tuple[str, str]]]:
+    from pipeline.source_encodings import load_encodings
+    result: dict[tuple[str, str], dict[str, tuple[str, str]]] = {}
+    for cik, encoding in load_encodings().items():
+        for value in encoding.get("relabelled_contexts", []):
+            accession, context, member, printed = _RELABELLED_RE.fullmatch(value.strip()).groups()
+            result.setdefault((cik, accession), {})[context] = (member.strip(), printed.strip())
+    return result
+
+
+def relabel_declared_contexts(contexts: dict[str, dict[str, Any]], filing_meta: dict[str, str]) -> int:
+    """Rename position contexts whose member names another line than the printed row, in place.
+
+    A filer can shift its identifier members against the values in a block of its schedule (Blue Owl
+    Credit Income, 10-Q for 2026-03-31, unfunded-commitment table: context c-806 carries the
+    printed AI Titan revolver line, 4,245 and (127), on a member naming Activate Holdings; 200
+    contexts, every one a printed line two rows up or down). Opt-in per filing: the wrapper's
+    ``source_encodings.relabelled_contexts`` lists each as 'ACCESSION CONTEXT :: MEMBER IDENTIFIER
+    :: PRINTED IDENTIFIER'. A context is renamed only while it carries exactly the listed member
+    identifier, so a refiled or re-read filing whose member differs is left alone and logged.
+    Returns the number renamed.
+    """
+    cik = re.sub(r"\D", "", str(filing_meta.get("cik", ""))).zfill(10)
+    listed = _relabelled_by_accession().get((cik, str(filing_meta.get("accession_number", ""))))
+    if not listed:
+        return 0
+    renamed = 0
+    for context, (member, printed) in listed.items():
+        info = contexts.get(context)
+        current = str((info or {}).get("investment_identifier", "")).strip()
+        if info is None or not info.get("is_investment") or current != member:
+            logger.warning("relabelled context %s %s %s: member is %r, not the listed %r; left alone",
+                           cik, filing_meta.get("accession_number", ""), context, current, member)
+            continue
+        info["investment_identifier"] = printed
+        renamed += 1
+    if renamed:
+        logger.info("relabelled contexts: %s %s renamed %d of %d listed",
+                    cik, filing_meta.get("accession_number", ""), renamed, len(listed))
+    return renamed
+
+
 _MISDATED_RE = re.compile(r"(\d{10}-\d{2}-\d{6}) (\S+) (\d{4}-\d{2}-\d{2}) -> (\d{4}-\d{2}-\d{2})")
 
 

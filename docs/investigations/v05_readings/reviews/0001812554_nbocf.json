@@ -1,0 +1,196 @@
+{
+  "reviewer_id": "independent-reviewer-0001812554-nbocf-2026-11-11",
+  "report_digest": "9f78b32c3b75174d2c47d04f012fd79be7807e70dd3c047487f8199dccb5c9d0",
+  "review_scope_notes": [
+    "Verdict retirements: re-ran scratch/fund_runs/0001812554/nboc_retirements.py nbocf (read-only, no --write): 9/9 PASS. Recorded verdict_sha256 values equal the current verdict files. Every filing quote in the retirement file is on the cached page (reviewer_nbocf/quotes.py). I also read each verdict's cited rows: X07 AAM 2.1 and Amergin, C107 AI Titan (42) and Accommodations Plus (11), FX01 Aurelia/RL Datix/Vermont (all flagged rows covered by the zero-offender test), C01/dl_rate_fill (filer prints spread over SOFR only; AAM Series 1.1 12.00% sits in the PIK column and is tagged InvestmentInterestRatePaidInKind, published pik 12.0), fv_conservation (ties exactly) and cost_conservation (published cost 36,037,820 plus printed misc. debt commitments cost (13,564) equals the printed 36,024,256). VR-FL-1812554-05 passes only on the sandbox: data/output still publishes RL Datix 2026-03-31 with the wrong currency (0 matching rows, 3 contradicting rows) until fold-back. VR-FL-1812554-09 rests on a total identity with a printed aggregate, not on cited rows; I accept it because the verdict cites only totals.",
+    "relabelled_contexts (201 entries, 0001812554-26-000027): reviewer_nbocf/relabel_check.py found every inline-XBRL fact of each renamed context and the printed <tr> holding it. 201 of 201 sit on a printed row whose company and commitment-type cells equal the relabel target (the ' N' suffix dropped), and 201 of 201 publish that issuer and instrument in nbocf. I read 22 random entries by eye (seed 20261111) with commitment, unfunded amount and fair value, for example c-795 Vestwell (216), c-733 Jawbreaker 4/2026 50,797 (889), c-721 HIG DDTL B (13) and c-804 Activate (7). All signs and values agree. A scan of all 14 filings from 2023-03-31 to 2026-06-30 (reviewer_nbocf/name_scan.py) finds 0 issuer-to-printed-row mismatches after the fix, except 5 Limited/Ltd. spellings at 2023-03-31, which the report lists in not_done.",
+    "Twin suffixes: an identity disambiguator is acceptable here, and the revised report now records it as observation twin-commitment-lines-distinguished-only-by-ordinal with a detector proposal (publish the printed expiration date and match chains on company, type and expiration). Reviewed below.",
+    "Principal currency (44 corrections): reviewer_nbocf/ccy_check.py read the printed <tr> of every context. 44 of 44 agree with the printed par marker (none = USD, EUR/GBP/A$/C$) and with the printed reference-rate code. In nbocf all 44 publish the corrected currency, rate and USD principal (reviewer_nbocf/corr_applied.py).",
+    "Round 1 found that Fullsteam 2023-03-31 (context ieb877267d12341fb977506205e1d62d3_I20230331) publishes 'First lien senior secured delayed draw term loan First lien senior secured loan' although the row correction says 'First lien senior secured loan'. The revised report records it as NOT fixed (fixes, declared_changes, parked, two observations). I confirmed the stated mechanism in code: pipeline/unified_holdings.py applies _apply_row_corrections (line 1532) before _strip_issuer_names (line 1569). With the wrapper's issuer_name_strip_to_instrument true, the 'front' branch prefixes the tranche words stripped from the member-derived issuer onto a non-empty instrument that does not already contain them. nboc_corr_check.txt (1 of 211 not as written) agrees with my corr_applied.py.",
+    "Round 2 counts. Chains: my own SQL (reviewer_nbocf/chains.sql) gives 9,719 rows in both builds, chains 3,189 to 3,122 and singletons 1,972 to 1,875, matching nboc_chain_count.txt. I did not recompute the merge and split decomposition (94 merges, 48 splits) or test it link by link; the report itself says 'not proven correct link by link'. Twins: re-running nboc_twin_ordinals.py nboca reproduces nboc_twin_ordinals.txt byte for byte (90 groups, 186 rows, ordinal changed in 21 of 74). An independent count from the printed pages (reviewer_nbocf/twins_page.py, rows holding the fair-value fact, the 7 filings from 2024-12-31) gives 88 groups and 181 rows. The investigator's key strips all punctuation and mine does not, which is the likely cause of the 2-group, 5-row difference. That is not established, but it is immaterial to the observation. Before 2025 my page count doubles every line, so it is not usable there; the investigator's figure is limited to the commitment-concept filings. The round-1 '10 of 27' figure is withdrawn in the report. KOBHG wording and the oracle path are corrected.",
+    "Not done by me: the 20-row random page sample (orchestrator step), cross-fund effect of the shared code, and any reading of position_id stability."
+  ],
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_REV_b9e4796ca20a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fund-level A07 finding, key 0001812554/2025-12-31/pct_of_net_assets_sum, matches the ledger record (state remediation_staged, verdict_real_error). nbocf publishes 0 of 882 rows with a percent. In 0001812554-26-000011, 542 percent facts sit on published (current-period) contexts and all 542 are empty. The 639 valued percent facts are on unpublished contexts: industry subtotals, the totals and the 2024-12-31 comparative schedule (its 'Total Investments 26,383,665 | 26,378,894 | 180.2 %' row). Current-period position lines end at fair value. The oracle in nbocf reads 'skip: no pct_of_net_assets reported' for this fund-quarter (output/oracle/check_results.csv). The published FV total equals the printed 35,918,948. A zero sum of position percents is the filed state, so false_alarm and the as_filed proposal PD-A07-1812554-2025-12-31 for owner acceptance are supported. The oracle path in the report is now correct.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000011",
+          "text": "ABB/Con-cise Optical Group LLC(3)(4)(9) First lien senior secured loan S+ 7.50 % 2/2028 33,306 33,089 33,057"
+        },
+        {
+          "accession": "0001812554-26-000011",
+          "text": "Total Investments $ 35,983,158 $ 35,918,948 181.8 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_c8e64b3c3e79",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fund-level F22 finding, key 0001812554/2026-03-31/pct_of_net_assets_sum, matches the ledger record (state real_error_check_silent). nbocf publishes 0 of 863 rows with a percent. In 0001812554-26-000027 no published context carries a percent fact at all; the 163 valued percent facts are subtotals, totals and the 2025-12-31 comparative schedule ('Total Investments | 35,983,158 | 35,918,948 | 181.8 %'). F22 no longer fires. The published FV equals the printed 35,500,450. false_alarm and owner acceptance of PD-F22-1812554-2026-03-31 are supported.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 35,490 - 35,180 34,294"
+        },
+        {
+          "accession": "0001812554-26-000027",
+          "text": "Total Investments $ 36,024,256 $ 35,500,450 185.4 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "commitment-context-issuer-misattribution",
+      "outcome": "supported",
+      "rationale": "Independently verified: all 201 relabelled contexts carry facts printed on the target row, and after the fix 0 mismatches remain across 14 filings apart from 5 legal-form spellings at 2023-03-31. The proposed fact-to-printed-row name check would catch recurrence. To keep false positives low it needs legal-form normalisation (Limited/Ltd., dba suffix).",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "AI Titan Parent, Inc. (dba Prometheus Group) First lien senior secured revolving loan 8/2031 - 4,245 ( 127 )"
+        },
+        {
+          "accession": "0001812554-26-000027",
+          "text": "Klick Inc. First lien senior secured delayed draw term loan 11/2027 - 18,088 ( 90 )"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-from-member-differs-from-printed-row",
+      "outcome": "supported",
+      "rationale": "Revised to 'parked'. The report now says the three 2026-03-31 rows publish the printed cell (verified: Walker Edison c-311 'First lien senior secured loan', c-312 delayed draw, Vensure c-490 loan) and that Fullsteam 2023-03-31 is NOT fixed. The published value is the concatenated string, which I verified. Its cause sits in a separate observation, also verified. The detector would flag the Fullsteam residual. Residual: the Fullsteam row stays wrong in the published data until a rebuild with the issuer_name correction the parked entry describes.",
+      "evidence": [
+        {
+          "accession": "0001812554-23-000014",
+          "text": "Fullsteam Operations, LLC(7) First lien senior secured loan L + 12.30 % ( 7.80 % PIK) 10/2027 82,009 80,243 81,189"
+        },
+        {
+          "accession": "0001812554-26-000027",
+          "text": "Vensure Employer Services, Inc.(3)(4)(9) First lien senior secured loan S+ 5.00 % 9/2031 235,638 - 233,033 233,282"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-description-empty-old-member-format",
+      "outcome": "supported",
+      "rationale": "Spot-checked Hissho Sushi Holdings Class A Units (2023-03-31) and Associations DDTL (2024-03-31): both publish the printed instrument. All 33 instrument corrections except Fullsteam publish as written. Row-level comparison of empty instruments against the printed cell is a feasible detector; field_coverage does not cover it.",
+      "evidence": [
+        {
+          "accession": "0001812554-23-000014",
+          "text": "Hissho Sushi Holdings, LLC(24)(26) Class A Units N/A N/A 941,780 $ 9,418 $ 10,404 0.2 %"
+        },
+        {
+          "accession": "0001812554-24-000027",
+          "text": "Associations, Inc.(7)(16)(18) First lien senior secured delayed draw term loan SR + 6.50 % ( 2.50 % PIK) 06/2024 61,268 60,878"
+        }
+      ]
+    },
+    {
+      "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+      "outcome": "supported",
+      "rationale": "44 of 44 corrected rows agree with the printed par marker and the printed reference-rate code, and all are published. FX01 tests only blank USD principal, so a currency check against the reference-rate code is a genuine gap-filler. The 2023 Sensor/Bamboo exclusion (no printed marker) is reasoned and left as is.",
+      "evidence": [
+        {
+          "accession": "0001812554-25-000009",
+          "text": "Vermont Aus Pty Ltd(14)(23) First lien senior secured AUD term loan B+ 5.75 % 03/2028 A$ 70,715 47,947 43,564 0.3 %"
+        },
+        {
+          "accession": "0001812554-26-000027",
+          "text": "RL Datix Holdings (USA), Inc.(3)(4)(19) First lien senior secured GBP term loan SA+ 5.00 % 4/2031 GBP 30,607 - 41,306 39,656"
+        }
+      ]
+    },
+    {
+      "observation_key": "position-chain-follows-shifted-member",
+      "outcome": "supported",
+      "rationale": "Re-ran nboc_chains.sql: multi-issuer chains 73 in nboca and 77 in nbocf, as reported. The new position_chain_count field explains the chain total (3,189 to 3,122, singletons 1,972 to 1,875, both confirmed by my SQL) as relabelled commitment rows joining their printed line's chain. An issuer-key change within a chain is a reasonable detector. It will fire on renames (f/k/a, dba changes), so it suits a review flag, not a gate.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "AI Titan Parent, Inc. (dba Prometheus Group) First lien senior secured revolving loan 8/2031 - 4,245 ( 127 )"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-cleaning-joins-stock-and-convertible-note-chain",
+      "outcome": "supported",
+      "rationale": "BCTO WIW 2025-09-30 now publishes the printed issuer and 'Senior convertible notes'. Chain 9cc985ce carries LOAN and EQUITY_COMMON. Parking it as source-ambiguous is reasonable. The corrected list of the 5 pre-existing category-change chains (KOBHG LOAN/EQUITY_COMMON, Insight CP OTHER/EQUITY_COMMON, Evolution Parent and CD&R EQUITY_COMMON/FUND, LSI EQUITY_PREFERRED/EQUITY_COMMON) matches my run of nboc_chains.sql.",
+      "evidence": [
+        {
+          "accession": "0001812554-25-000081",
+          "text": "BCTO WIW Holdings, Inc. (dba When I Work)(3)(4)(6) Senior convertible notes N/A 5.50 % 8/2030 3,823 3,823 3,823"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+      "outcome": "supported",
+      "rationale": "Mechanism confirmed in pipeline/unified_holdings.py: row corrections at line 1532 run before _strip_issuer_names at line 1569. For this fund (issuer_name_strip_to_instrument true) the stripped tranche words are put in front of a non-empty instrument that lacks them. The published issuer is 'Fullsteam Operations, LLC' and the instrument is the concatenation, as stated. 1 of 211 corrections is affected (my corr_applied.py and nboc_corr_check.txt agree). The proposed post-strip 'corrected value still equals correction' check is deterministic, has essentially no false positives, and belongs in shared code for all funds. Parking it without a rebuild is honest. The workaround (an issuer_name correction for the same context) is unverified until a build runs it.",
+      "evidence": [
+        {
+          "accession": "0001812554-23-000014",
+          "text": "Fullsteam Operations, LLC(7) First lien senior secured loan L + 12.30 % ( 7.80 % PIK) 10/2027 82,009 80,243 81,189"
+        }
+      ]
+    },
+    {
+      "observation_key": "twin-commitment-lines-distinguished-only-by-ordinal",
+      "outcome": "supported",
+      "rationale": "Verified on the page: twins print the same company and type and differ only by expiration (Himalaya 6/2027 and 12/2027, both 7,290 (91)). Commitment rows publish maturity_date null. Re-running nboc_twin_ordinals.py reproduces 90 groups, 186 rows and 21 of 74 ordinal changes. My page-only count is 88 groups and 181 rows, a basis difference that does not change the finding. The CivicPlus delayed draw ' 1' to ' 2' chain example is in nboc_chain_count.txt. Six ordinals were assigned by this run, disclosed. The detector (publish expiration, chain on company/type/expiration, flag expiration change within a chain) would catch recurrence; as a review flag the false-positive risk is low. 'left' is acceptable, but the six run-assigned ordinals are not filer text: instrument_description on those rows differs from the printed cell by the suffix.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "Himalaya Topco LLC (dba HealthEdge) First lien senior secured delayed draw term loan 6/2027 - 7,290 ( 91 )"
+        },
+        {
+          "accession": "0001812554-26-000027",
+          "text": "Himalaya Topco LLC (dba HealthEdge) First lien senior secured delayed draw term loan 12/2027 - 7,290 ( 91 )"
+        }
+      ]
+    },
+    {
+      "observation_key": "gics-label-keyed-on-built-issuer-name",
+      "outcome": "supported",
+      "rationale": "The commitment table prints no industry, so leaving GICS empty is better than inventing a heading. Detecting an issuer that has a label on some rows and none on others within one fund-quarter is cheap, with few false positives.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "DCCM, LLC First lien senior secured revolving loan 6/2032 - 10,493 ( 79 )"
+        }
+      ]
+    },
+    {
+      "observation_key": "commitment-cost-printed-only-as-aggregate",
+      "outcome": "supported",
+      "rationale": "Verified at 2026-03-31: published cost 36,037,820 plus the printed (13,564) equals the printed total 36,024,256. No row can carry the aggregate. not_feasible is reasonable for a row-level detector. The suggested cost-conservation adjustment is an acceptance change for the owner, not something an agent applies.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "misc. debt commitments(22)(23)(Note 8) $ 1,238 $ ( 13,564 ) $ ( 33,600 ) ( 0.2 )"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "request_resolution_reviews": [
+    {
+      "request_id": "nboc-REQ-1",
+      "outcome": "supported",
+      "rationale": "Verified: in nvboe C103 2026-03-31 flags exactly c-738, published as 'Jellyfish US Finco, Inc. (dba JTC) | First lien senior secured loan', FV -0.09M. The c-738 fact sits on the printed Klick delayed draw line ('( 90 )'). In nbocf C103 flags 0 rows at 2026-03-31. DS-007-1812554 cites that misattributed row. Classifying this as an acceptance change for the owner (revoke or narrow) is correct; it does not weaken a check. Resolution check: the orchestrator's response (deferred to the owner) matches what I saw. c-738 was Klick's delayed draw published under a Jellyfish label; C103 flags 0 rows at 2026-03-31 in nbocf; DS-007-1812554 now closes nothing live but would close a recurrence. Deferring an acceptance change to the owner, rather than an agent revoking it, is the correct route. Note: the investigation checker does not validate request_resolution_reviews, so this entry is not machine-checked.",
+      "evidence": [
+        {
+          "accession": "0001812554-26-000027",
+          "text": "Klick Inc. First lien senior secured delayed draw term loan 11/2027 - 18,088 ( 90 )"
+        }
+      ],
+      "resolution_reviewed": "deferred"
+    }
+  ]
+}

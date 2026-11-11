@@ -696,10 +696,11 @@ def parse_filing_contexts(tree: etree._ElementTree, filing_meta: dict[str, Any])
     (``misdated_contexts``). Needs ``cik`` and ``accession_number`` in ``filing_meta``.
     """
     from pipeline.page_labelled_contexts import (adopt_page_labelled_contexts, correct_misdated_contexts,
-                                                 name_declared_contexts)
+                                                 name_declared_contexts, relabel_declared_contexts)
     contexts = _parse_xbrl_contexts(tree)
     adopt_page_labelled_contexts(contexts, filing_meta)
     name_declared_contexts(contexts, filing_meta)
+    relabel_declared_contexts(contexts, filing_meta)
     correct_misdated_contexts(contexts, filing_meta)
     return contexts
 
