@@ -1,0 +1,102 @@
+{
+ "reviewer_id": "independent-reviewer-0001838126-nbhpc-2026-11-11",
+ "report_digest": "5ab134013775ed88b5f9f0a86534f8a85dc060e51e32a3fab6ef17cf39e71f7e",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_410dcdf61c0e",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage holds: the nbhpc ledger has exactly one outstanding finding (this one, state remediation_pulled, no proposal). The FX01 condition now returns 0 of 110 non-USD private-credit rows at 2025-12-31 without principal_amount_usd. The three cited contexts c-936/c-937/c-938 publish GBP par 1,181/1,225/2,030 with cost 1,542/1,600/2,651 and fair value 1,592/1,652/2,737 thousand, matching the printed lines. Rejected on reasoning and next action. (1) The investigation says the whole-coupon reading for the SONIA rows needs 'the par-growth evidence the owner used' and routes the question to the owner as if that evidence were missing. It is in the cached filings and in the investigator's own sandbox. The same tranches print GBP 1,124 / 1,166 / 1,931 at 2025-06-30 and 2025-09-30, 1,181 / 1,225 / 2,030 at 2025-12-31 and 2026-03-31, and 1,238 / 1,284 / 2,127 at 2026-06-30. That is semi-annual capitalisation of 4.8 to 5.1 pct per half-year, about half of the printed 9.73 pct coupon, against about 3.0 pct for the 6.00 pct margin. This is the D-232 whole-coupon shape that earlier runs applied by row correction on par-growth evidence (D-246 'AX VI semi-annual'). It is not an open owner question. (2) The hypotheses miss a second published field on the cited rows that is not at a printed reading: coupon_type 'Fixed' on a loan printed 'SN + 6.00 %' with reference_rate_type SONIA. Next action should be: apply the D-232 whole-coupon reading to the SN rows on that par-growth evidence (row corrections, or the shared benchmark-list change with a cohort measurement), fix coupon_type, then re-run nbhp_retirements.py with the FX01 check restored.",
+   "evidence": [
+    {"accession": "0001628280-26-020206", "text": "Artemis Bidco Limited (4)(5)(7)(20)(31) SN + 6.00 % PIK 9.73 % 9/8/2028 GBP 1,181 1,542 1,592"},
+    {"accession": "0001838126-25-000073", "text": "Artemis Bidco Limited (4)(5)(7)(19)(20) SN + 6.00 % PIK 9/8/2028 GBP 1,124 1,542 1,511"},
+    {"accession": "0001628280-26-056772", "text": "Artemis Bidco Limited (4)(5)(7)(20)(32) SN + 6.00 % PIK 9.73 % 9/8/2028 GBP 1,238 1,631 1,623"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Reconstructed independently by joining nvhpg to nbhpc on accession and context at 2026-03-31. 138 rows changed: 136 EQUITY_COMMON to LOAN and 2 FUND to LOAN (TruGreen c-225, ABPCI c-848). All 136 carry a maturity date and blank instrument. I read 37 of them on the page, including 2080 Media 2/5, AB Centers 5, ABC Legal 2/3, Baart, Chord Searchlight 2, DCA 1-3, Foundation Automotive x3, Plasma 1-4, Kona x2, SI Swan 2/3, Bottomline 1, Huskies 3, Victors 2/3, Riley 1, Femur Buyer 2, CohnReznick 2, Titan BW 3, Sentinel 1, Zenith 3, Integrity 1/2 and Yes Energy 4. Every one is a printed debt line, with par, cost, fair value and maturity equal to the published values. All 36 equity and fund rows left at 2026-03-31 name an instrument (Ordinary Shares, Units, Warrants, Preferred Stock, LP Interest, LLC Interest), so no equity row of that filing was converted. The proposed detector (equity or fund class plus maturity date, no instrument and no equity word) is concrete. A real equity row has no maturity, so the false-positive risk is low.",
+   "evidence": [
+    {"accession": "0001628280-26-033248", "text": "2080 Media, Inc. (4)(6)(9) 3/14/2028 13,795 ( 90 ) -"},
+    {"accession": "0001628280-26-033248", "text": "Plasma Buyer LLC (4)(9)(19)(25) SF + 5.75 % PIK 5/12/2029 89,021 81,936 49,777"}
+   ]
+  },
+  {
+   "observation_key": "company-name-keyword-classes-loan-as-fund",
+   "outcome": "supported",
+   "rationale": "TruGreen is printed under First Lien Debt with SOFR + 4.00 % and a 2027 maturity in every quarter I read (2023-03-31, 2024-06-30, 2025-09-30, 2026-03-31). The ABPCI CLO XVII note is a Class E floating note in the Structured Finance section (2025-06-30, 2025-12-31, 2026-03-31). Published values after correction match the page: TruGreen 9,889/9,772/9,156, 8,531/8,456/8,241, 8,420/8,374/8,283 and 8,376/8,341/7,999; ABPCI 3,500/3,519/3,583 and 3,500/3,518/3,455. The FUND-with-maturity-and-rate detector is concrete and specific. Residual the report does not mention: TruGreen publishes lien_position blank in all 13 quarters, although it is printed under First Lien Debt.",
+   "evidence": [
+    {"accession": "0001838126-24-000061", "text": "TruGreen Limited Partnership (9) SF + 4.00 % 9.44 % 11/2/2027 8,531 8,456 8,241"},
+    {"accession": "0001838126-25-000055", "text": "ABPCI Direct Lending Fund CLO XVII LLC (5)(7) SF + 8.00 % 12.28 % 8/1/2036 3,500 3,519 3,583"}
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Page-checked every renamed context. Integrity c-401 2024-09-30 (64,951/64,555/64,930, 8/27/2028) and Illuminate c-67 2024-03-31 (15,111/14,906/15,147, 12/31/2029) match. NP Kaba c-387/c-388/c-389 2026-03-31 (173,342/172,496/171,454; 11,480/(57)/(125); 20,394/3,979/3,857) are printed as 'NP Kaba Megersub'. The correction uses the spelling the next 10-Q prints, which is a defensible correction of a filer typo. issuer_name_printed is the existing detector and fired on these rows in the untouched build.",
+   "evidence": [
+    {"accession": "0001838126-24-000079", "text": "Integrity Marketing Acquisition LLC (4)(9) SF + 5.00 % 10.08 % 8/27/2028 64,951 64,555 64,930"},
+    {"accession": "0001628280-26-033248", "text": "NP Kaba Megersub, Inc. (4)(6)(8) 1/31/2033 11,480 ( 57 ) ( 125 )"}
+   ]
+  },
+  {
+   "observation_key": "instrument-text-glued-to-issuer-name",
+   "outcome": "supported",
+   "rationale": "c-911/c-886/c-884 now publish issuer 'The ONE Group Hospitality, Inc.' with instrument 'Preferred Stock' and 1,000 units, cost 877 and fair value 1,134 / 1,075 / 1,128, as printed in the three filings. The trailing-instrument-with-blank-instrument detector is concrete and cheap.",
+   "evidence": [
+    {"accession": "0001628280-26-020206", "text": "The ONE Group Hospitality, Inc. (4)(22) - Preferred Stock 1,000 877 1,134"}
+   ]
+  },
+  {
+   "observation_key": "instrument-blank-where-member-has-company-only",
+   "outcome": "supported",
+   "rationale": "SLF V AD1 c-967 2025-12-31 now publishes 'LLC Interest', 10,101 units, cost 9,891 and fair value 9,298, matching the printed line. A neighbour-quarter blank-instrument detector on the position chain is a reasonable recurrence check.",
+   "evidence": [
+    {"accession": "0001628280-26-020206", "text": "SLF V AD1 Holdings, LLC (4)(20)(21)(22) - LLC Interest 10,101 9,891 9,298"}
+   ]
+  },
+  {
+   "observation_key": "whole-coupon-pik-rule-misses-filer-benchmark-codes",
+   "outcome": "supported",
+   "rationale": "Verified in code: pipeline/whole_coupon_pik.py _BENCH has no 'SN', and 'S' followed by 'N' does not match, so HPS's 'SN + m % PIK c %' rows are not read, although the wrapper declares SN=SONIA in reference_rate_codes and pik_margin_reading whole_coupon (3b6c14ad). The proposed coverage report over declared reference codes is concrete. The statement that the SONIA rows' par growth 'has not been read' is a gap the investigator could have closed: see the FX01 review, where the same tranches compound about 4.8 to 5.1 pct per half-year. That does not change the detector decision.",
+   "evidence": [
+    {"accession": "0001628280-26-020206", "text": "Artemis Bidco Limited (4)(5)(7)(20)(31) SN + 6.00 % PIK 9.73 % 9/8/2028 GBP 1,181 1,542 1,592"}
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "Row corrections cannot set position_id, and reverting the names would re-publish wrong companies. Parking the two links for a shared matcher repair is the right route. The maturity-plus-par-ratio predicate is concrete and excludes ordinary amend-and-extend shapes.",
+   "evidence": [
+    {"accession": "0001838126-24-000079", "text": "Integrity Marketing Acquisition LLC (4)(9) SF + 5.00 % 10.08 % 8/27/2028 64,951 64,555 64,930"}
+   ]
+  },
+  {
+   "observation_key": "industry-heading-published-as-representative-sub-industry",
+   "outcome": "rejected",
+   "rationale": "The observation describes the carry-back as writing 'a company's later GICS industry heading' onto earlier rows. For structured credit that is false, and the carry-back spreads a wrong label backwards. From 2025-12-31 the filer prints the CLO notes under 'Structured Finance / Structured Finance Investments', directly after a 'Software' heading in the Unsecured Debt block. The printed-industry reader carries 'Software' into the CLO section, so all CLO rows from 2025-12-31 publish extracted_industry 'Software' and gics_sub_industry 'Application Software' (15/14/13 rows, 52.9/47.9/43.9M; already so in nvhpg). gics_industry_carry_back then copied 'Application Software' to 89 earlier rows of 14 CLO issuers (Voya CLO, Shackleton 2019-XV, Dryden 108, Monroe MML XVII, Bain 2024-3, 720 East V, ARES CLO, Columbia Cent 33, Rad CLO, Barings 2024-IV, BSP XXXVI, OCP 2024-33, Fort Washington 2019-1, ABPCI XVII). It replaced NULL, Diversified Financial Services or Multi-Sector Holdings. Every labelled structured-credit row 2023-03-31 to 2025-09-30 (22-63M a quarter) now carries Application Software; the rest stay NULL. The 'not_feasible' detection decision is wrong for this defect: a check that flags STRUCTURED_CREDIT rows with an operating-company sub-industry, or a printed-industry read that crosses a section heading, is cheap. The other 30 carried labels I sampled are plausible against the later printed GICS heading (QBS, Eisner, Solis, IP Operations, Sugar PPC, Zelis, Thrasio, Aurelia, Harp, Global Gruppe, Constellation, Bamboo, Meralm, Lackawanna, Dwyer, Madison Safety, Indigo, NDT, Summit, Wasserman, Artemis, NE SPV, Associations, Gusto, Vermont, Braya, Specialty Ingredients, More Cowbell, BLY, Alchemy). Separately, D-232 (b) was ruled 'opt-in for this fund only' for HPS Corporate Capital Solutions (D-232, D-236). Applying it to HPS Corporate Lending needs its own owner ruling, or at least a recorded D-207 orchestrator extension; the report records neither.",
+   "evidence": [
+    {"accession": "0001628280-26-020206", "text": "Total Unsecured Debt $ 50,929 $ 49,883 0.39 % Structured Finance Structured Finance Investments 720 East CLO V Ltd"},
+    {"accession": "0001628280-26-020206", "text": "Software Elements Midco 1 Limited (4)(5)(8)(31) SN + 8.25 % PIK 12.00 %"}
+   ]
+  },
+  {
+   "observation_key": "principal-currency-blank-on-par-from-share-tag",
+   "outcome": "supported",
+   "rationale": "Confirmed on the converted rows (principal_amount_currency blank, principal_amount_usd = par) and on sample card C019 Orthrus c-299 2026-03-31 (12,133 par, blank currency, USD line). The values are right and only the label is missing. A blank-currency-with-par field test is a sound, specific detector, and the shared staging repair is the right route rather than 659 row corrections.",
+   "evidence": [
+    {"accession": "0001628280-26-033248", "text": "Orthrus Ltd (4)(5)(10)(25) SF + 6.25 % (incl 2.75 % PIK) 9.92 % 12/5/2031 12,133 11,958 11,989"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "notes": {
+  "verdict_retirements": "Re-ran python scratch/fund_runs/0001838126/nbhp_retirements.py nbhpc (no --write): 10 of 10 PASS. Verdict sha256 of all 10 match the current verdict files, and pipeline.verdict_retirements.validate returns no problems. Cited rows were read on the page: A07 x2 total lines; the fv and cost totals line; NAV 25.22, net assets 12,436,831 and the class share counts; OneTeam c-915; forwards total (1,231); SRC_BDC01 Bright Light c-250, SLF c-967, Sentinel c-169/c-168 at printed values, plus 13 ULTRA III lines printed after the JV heading, held as underlying_schedule and none published. Caveats on X01 (c-915): the published issuer reads 'Oneteam Partners, LLC' where the page prints 'OneTeam' (global casing normalisation, same in data/output), and coupon_type is 'Floating' because the filer tagged an 8 pct spread. The printed spread column also shows 8.00 %, so this is as filed. The check script compares a subset of fields for X01 and SRC_BDC01 (no lien, coupon type or reference-rate type). I read those fields myself and found nothing else.",
+  "page_sample": "samples/0001838126-nbhpc 0/20. I re-read 7 cards on the page (C001 Earps, C002 Arcfield, C004 Kryptona, C011 TMC, C013 AI Circle, C015 Club Car Wash, C019 Orthrus): all match.",
+  "row_corrections": "61 appended lines, none removed. Read 19 corrected rows on the page (OneTeam x3, Integrity, Illuminate, NP Kaba x3, TruGreen x4, ABPCI x3, ONE Group x3, SLF): all at printed values."
+ }
+}

@@ -95,7 +95,7 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A net-assets concept is one local name, no prefix: '+str(path))
             if key=='whole_dollar_scale_filings' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('whole_dollar_scale_filings lists accession numbers: '+str(path))
-            if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost')
+            if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost','listed_rows_without_instrument')
                     and not _ACCESSION_RE.fullmatch(v) and not _ACCESSION_X1000_RE.fullmatch(v) for v in values):
                 raise ValueError('par_tagged_as_units lists accession numbers (optionally ":x1000") or a row mode: '+str(path))
             if key=='thousands_scale_filings' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
@@ -472,6 +472,38 @@ def par_tagged_as_units_rows_expression(cik,encodings=None,mode='rows_near_cost'
     parts=[_cik_condition(cik,key) for key,encoding in sorted(configured.items())
         if mode in encoding.get('par_tagged_as_units',[])]
     return '('+' OR '.join(parts)+')' if parts else 'false'
+
+
+def par_tagged_unclassed_rows_expression(cik,accession,category,instrument,raw_id,principal,shares,encodings=None):
+    """True for a row the share-count heuristic classed as equity (or a name keyword as a fund) in a filing
+    whose par column was tagged with the share-count concept (source_encodings.par_tagged_as_units lists
+    the accession AND the mode 'listed_rows_without_instrument').
+
+    HPS Corporate Lending, 10-Q 2026-03-31 (0001628280-26-033248): the debt rows carry no instrument text
+    ('2080 Media, Inc. 2'), so with the par tagged as a count and no rate tagged on undrawn lines the
+    classifier's field heuristic reads them as common equity (136 rows), and 'TruGreen Limited
+    Partnership' is a fund by its name; the plain listed-filing reading converts only rows already
+    classed as loans. Every equity row of that filing names its instrument after the company
+    ('OneTeam Partners, LLC - Class D Units', 'Creek Feeder, L.P. - LP Interest'). In this mode a row
+    of the listed filing classed EQUITY_COMMON or FUND with a count, no principal, no instrument text
+    and no equity word in its identifier publishes the count as its principal; the caller reclasses
+    an EQUITY_COMMON one as a loan. A row that names any instrument keeps its count. Off unless both
+    the accession and the mode are declared."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        values=encoding.get('par_tagged_as_units',[])
+        filings=[v for v in values if _ACCESSION_RE.fullmatch(v)]
+        if filings and 'listed_rows_without_instrument' in values:
+            parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('
+                         +','.join(_literal(v) for v in filings)+'))')
+    if not parts:
+        return 'false'
+    equity_word=("regexp_matches(lower(coalesce(CAST("+instrument+" AS VARCHAR), '') || ' ' || coalesce(CAST("+raw_id
+                 +" AS VARCHAR), '')), '(^|[^a-z])(units?|shares?|stock|membership|warrants?|interests?|preferred|equity)([^a-z]|$)')")
+    return ('(('+' OR '.join(parts)+') AND '+category+" IN ('EQUITY_COMMON', 'FUND') AND "+principal+' IS NULL AND '
+            +shares+' IS NOT NULL AND '+shares+" > 0 AND coalesce(trim(CAST("+instrument+" AS VARCHAR)), '') = '' AND NOT "
+            +equity_word+')')
 
 
 def cash_identifier_expression(cik,identifier,encodings=None):

@@ -100,7 +100,10 @@
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|\\|\\s*Non-Affiliated Issuer|\\|\\s*Affiliated Issuer)\\s*$",
     "issuer_name_strip_re": "\\s+\\d{1,2}$",
-    "shares_pow10_normalise": false
+    "shares_pow10_normalise": false,
+    "lien_from_identifier": {
+      "First Lien": "^(?i:trugreen limited partnership)$"
+    }
   },
   "archetypes": {
     "warrant": {
@@ -306,7 +309,11 @@
     ],
     "par_tagged_as_units": [
       "0001628280-26-033248",
-      "rows_near_cost"
+      "rows_near_cost",
+      "listed_rows_without_instrument"
+    ],
+    "gics_industry_carry_back": [
+      "through 2025-09-30"
     ],
     "printed_industry_labels": [
       "Aerospace and Defense",
@@ -339,6 +346,7 @@
       "Real Estate Investment and Services",
       "Retailers",
       "Software and Computer Services",
+      "Structured Finance",
       "Technology Hardware and Equipment",
       "Telecommunications Equipment",
       "Telecommunications Service Providers",

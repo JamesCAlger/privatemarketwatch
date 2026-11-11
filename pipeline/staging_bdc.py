@@ -909,7 +909,13 @@ def _prepare_bdc(
     # A fund can also declare single rows ('rows_near_cost'): there the count is taken only where it lies
     # within 0.8 to 1.25 times the row's cost, the range a par amount of a loan bought near par sits in.
     from pipeline.source_encodings import (par_tagged_as_units_expression, par_tagged_as_units_rows_expression,
-                                           par_tagged_as_units_thousands_expression)
+                                           par_tagged_as_units_thousands_expression,
+                                           par_tagged_unclassed_rows_expression)
+    # 'listed_rows_without_instrument' with a listed filing: a debt row the field heuristic classed as equity
+    # (or a name keyword as a fund) because its par is a count, with no instrument text, also publishes the
+    # count as its par; an EQUITY_COMMON one becomes a loan (HPS Corporate Lending 2026-03-31).
+    _unclassed = par_tagged_unclassed_rows_expression('cik', 'accession_number', 'asset_category_final',
+                                                      'instrument_description', '_raw_id', '_pa', '_sh')
     # The count carries no scale attribute, so a filer that prints in thousands or millions can file it
     # unscaled (Goldman Sachs Private Credit: 8,770 against a cost of 8,770,000; Ares: 1,289 against
     # 1,288.8M). The scale is the one power of a thousand that puts the count in the band; the bands of
@@ -930,7 +936,8 @@ def _prepare_bdc(
                      "'(^|[^a-z])(units?|shares?|stock|membership|warrants?)([^a-z]|$)')")
     # A filing listed as '<accession>:x1000' tags the count at the printed scale, thousands (Phillip Street
     # Middle Market Lending 2023-03-31, 2023-12-31 to 2024-06-30): every loan row's count times 1,000.
-    par_scale = ("CASE WHEN NOT (asset_category_final = 'LOAN' AND _pa IS NULL AND _sh IS NOT NULL AND _sh > 0) THEN NULL"
+    par_scale = ("CASE WHEN " + _unclassed + " THEN 1.0"
+                 " WHEN NOT (asset_category_final = 'LOAN' AND _pa IS NULL AND _sh IS NOT NULL AND _sh > 0) THEN NULL"
                  " WHEN " + par_tagged_as_units_thousands_expression('cik', 'accession_number') + " THEN 1000.0"
                  " WHEN " + par_tagged_as_units_expression('cik', 'accession_number') + " THEN 1.0"
                  " WHEN " + _names_equity + " THEN NULL"
@@ -2828,7 +2835,9 @@ def _prepare_bdc(
     with_par AS (
         SELECT * REPLACE (
             CASE WHEN {par_scale} IS NOT NULL THEN _sh * ({par_scale}) ELSE _pa END AS _pa,
-            CASE WHEN {par_scale} IS NOT NULL THEN NULL ELSE _sh END AS _sh),
+            CASE WHEN {par_scale} IS NOT NULL THEN NULL ELSE _sh END AS _sh,
+            CASE WHEN {_unclassed} AND asset_category_final = 'EQUITY_COMMON' THEN 'LOAN'
+                 ELSE asset_category_final END AS asset_category_final),
             {par_scale} AS _par_scale
         FROM no_mm
     ),

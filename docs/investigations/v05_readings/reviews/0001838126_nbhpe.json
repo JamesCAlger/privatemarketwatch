@@ -1,0 +1,111 @@
+{
+ "reviewer_id": "independent-reviewer-0001838126-nbhpc-2026-11-11",
+ "report_digest": "69a62479109ea02ea7c17a0894e9c57ee70d539efee387b163bcff9a5f072378",
+ "finding_reviews": [],
+ "observation_reviews": [
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Unchanged from my nbhpc review. 136 EQUITY_COMMON-to-LOAN rows plus TruGreen and ABPCI at 2026-03-31. I read 37 of them on the page: all are printed debt lines, and par, cost, fair value and maturity equal the published values. All 36 equity and fund rows left in that filing name an instrument. nbhpe kept the same 8,593 rows as nbhpc. The detector (equity or fund class with a maturity date, no instrument and no equity word) is specific.",
+   "evidence": [{"accession": "0001628280-26-033248", "text": "2080 Media, Inc. (4)(6)(9) 3/14/2028 13,795 ( 90 ) -"}]
+  },
+  {
+   "observation_key": "company-name-keyword-classes-loan-as-fund",
+   "outcome": "supported",
+   "rationale": "TruGreen (13 quarters) and the ABPCI CLO XVII Class E note (5 quarters) are page-checked and published at printed values. nbhpe also gives TruGreen lien First Lien in every quarter, matching its First Lien Debt section. The FUND-with-maturity-and-rate detector is concrete.",
+   "evidence": [{"accession": "0001838126-24-000061", "text": "TruGreen Limited Partnership (9) SF + 4.00 % 9.44 % 11/2/2027 8,531 8,456 8,241"}]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Integrity c-401, Illuminate c-67 and NP Kaba c-387/388/389 were page-checked in my nbhpc review, and nbhpe leaves these rows unchanged. issuer_name_printed is the existing detector.",
+   "evidence": [{"accession": "0001838126-24-000079", "text": "Integrity Marketing Acquisition LLC (4)(9) SF + 5.00 % 10.08 % 8/27/2028 64,951 64,555 64,930"}]
+  },
+  {
+   "observation_key": "instrument-text-glued-to-issuer-name",
+   "outcome": "supported",
+   "rationale": "ONE Group preferred x3 publish the printed company and 'Preferred Stock' (page-checked earlier, unchanged in nbhpe). The trailing-instrument-with-blank-instrument check is concrete.",
+   "evidence": [{"accession": "0001628280-26-020206", "text": "The ONE Group Hospitality, Inc. (4)(22) - Preferred Stock 1,000 877 1,134"}]
+  },
+  {
+   "observation_key": "instrument-blank-where-member-has-company-only",
+   "outcome": "supported",
+   "rationale": "SLF V AD1 c-967 2025-12-31 publishes 'LLC Interest' with 10,101 units, cost 9,891 and fair value 9,298, as printed. A neighbour-quarter blank-instrument detector is reasonable.",
+   "evidence": [{"accession": "0001628280-26-020206", "text": "SLF V AD1 Holdings, LLC (4)(20)(21)(22) - LLC Interest 10,101 9,891 9,298"}]
+  },
+  {
+   "observation_key": "whole-coupon-pik-rule-misses-filer-benchmark-codes",
+   "outcome": "supported",
+   "rationale": "I read 15 of the 29 corrected rows on the page and compared par growth with the coupon. Elements Midco, quarterly: 1,583 -> 1,635 -> 1,688 -> 1,743 GBP at coupons 13.24 / 12.99 / 12.74 (+3.3 / +3.2 / +3.3 pct against coupon/4 of 3.3 / 3.2 pct; margin/4 would be 2.0), and 1,911 -> 2,028 later. Inflexion BFVI tranche 1: 20,789 -> 21,240 -> 21,694 -> 22,135 (+2.17 / +2.14 / +2.03 pct against 8.72/4 = 2.18, 8.47/4 = 2.12, 8.22/4 = 2.06; margin/4 = 1.1). Tranche 2: 19,550 -> 19,947 (+2.0 pct). Artemis 9.73 tranches, semi-annual: 1,124 -> 1,181 -> 1,238 (+5.1 / +4.8 pct against 9.73/2 = 4.9); the 2026-03-31 rows print 9.76 and publish 9.76. Aesthetics Australia: 61,678 at 2025-12-31 -> 65,738 at 2026-06-30 (+6.6 pct per half-year against 13.2/2). Published values: pik = printed coupon, cash leg 0, spread = printed margin, Floating. Each matches the page. The weakest link is Aesthetics 2025-09-30: the PIK form first appears that quarter, and the 6.7 pct jump to 2025-12-31 is read as semi-annual. That is plausible but rests on one interval. One wording error: the report calls the Artemis 6.75 pct tranches 'par flat'. c-939 is near-flat (1,461 -> 1,465 -> 1,465 -> 1,468), but c-940 grows 790 -> 827 -> 857 -> 867 (+4.7 / +3.6 / +1.2 pct), which fits neither reading cleanly. Leaving those rows as filed is still the right call. The coverage-report detector is concrete.",
+   "evidence": [
+    {"accession": "0001838126-24-000061", "text": "Elements Midco 1 Limited (4)(5)(8) SN + 8.00 % PIK 13.24 % 4/29/2032 GBP 1,583 1,939 1,952"},
+    {"accession": "0001838126-24-000079", "text": "Elements Midco 1 Limited (4)(5)(8) SN + 8.00 % PIK 12.99 % 4/29/2032 GBP 1,635 2,008 2,184"},
+    {"accession": "0001838126-25-000055", "text": "Inflexion BFVI Financing Limited (4)(5)(7) SN + 4.50 % PIK 8.72 % 4/30/2030 GBP 20,789"},
+    {"accession": "0001838126-25-000073", "text": "Inflexion BFVI Financing Limited (4)(5)(7) SN + 4.50 % PIK 8.47 % 4/30/2030 GBP 21,240"},
+    {"accession": "0001628280-26-056772", "text": "Aesthetics Australia Group Pty Ltd (4)(5)(8)(19)(37) B + 9.38 % PIK 3/21/2028 AUD 65,738 39,575 25,549"}
+   ]
+  },
+  {
+   "observation_key": "coupon-type-fixed-on-floating-pik-line",
+   "outcome": "supported",
+   "rationale": "nbhpc to nbhpe shows 54 rows that changed coupon_type or spread without a PIK change, plus the 29 whole-coupon rows: 83 in all. I read 13 of the 54 on the page: Logo Holdings 2025-09-30 (SF + 7.50 % PIK 11.80 %), Stanford Midco 2025-12-31 (SN + 10.00 % PIK 13.79 %), PCP CW 2024-03-31 (SF + 9.25 % PIK 14.72 %), Thrasio c-115 2024-06-30 (SF + 10.00 % PIK 15.45 %), ERC Topco 2025-12-31 (SF + 6.50 % PIK 10.43 %), Link Apartments c-824/c-825 2026-06-30 (SF + 8.00 % PIK 11.73 %), New Era 2025-12-31 (SF + 6.25 %), TecoStar 2026-06-30 (SF + 6.75 %), Global Bidco 2026-06-30 (E + 7.75 %), Solis Finco 2026-03-31 (E + 7.75 %) and Wash & Wax 2025-12-31 / 2026-06-30 (SF + 5.50 %). In each, the published basis_spread equals the printed margin, coupon_type is Floating and the rate equals the printed coupon. The detector (Fixed with a printed '<benchmark> +') is concrete.",
+   "evidence": [
+    {"accession": "0001838126-25-000073", "text": "Logo Holdings III Corporation (4)(10)(20) SF + 7.50 % PIK 11.80 % 5/1/2028 5,397 5,249 5,397"},
+    {"accession": "0001628280-26-020206", "text": "Stanford Midco Limited (4)(5)(7)(31) SN + 10.00 % PIK 13.79 % 8/5/2026 GBP 16,916 22,224 22,552"},
+    {"accession": "0001628280-26-056772", "text": "Global Bidco GmbH (4)(5)(7)(30) E + 7.75 % PIK 10.18 % 4/28/2034 EUR 1,558 1,802 1,754"}
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "nbhpc to nbhpe shows exactly 46 rows with a principal_amount_currency change. I read 13 on the page; every new currency matches the printed marker. Esdec 2023-09-30 EUR 17,183; Denali 2023-09-30 GBP 8,078 and 23,265; Bamboo 2023-09-30 EUR 61,588; AI Learning 2023-09-30 S$ (43,183 SGD at 0.732 = 31.6M USD against cost 30,994). These five had published USD. Yes Energy 2024-03-31 10,000; Meralm 2025-09-30 SOFR line 14,008; Storable 5,725; Cadence 41,633; UMP 2024-03-31 50,098; Kryptona 2025-09-30 158,023; Bakelite 6,191; Cobham 4,614; Frontgrade 6,864. These print no marker and now publish USD. The 8 'kr' rows parked as SEK-or-NOK is honest. The page shows Meralm's NIBOR line printed 'NOK 269,391' at 2025-09-30, so the next action is answerable from the page. The marker comparison detector is concrete.",
+   "evidence": [
+    {"accession": "0001838126-23-000080", "text": "Denali Bidco Limited (4)(5)(7) SN + 6.00 % 11.19 % 8/29/2030 GBP 23,265 28,702 27,685"},
+    {"accession": "0001838126-24-000038", "text": "United Musculoskeletal Partners Acquisition Holdings, LLC (4)(6)(9) SF + 5.75 % 11.06 % 7/17/2028 50,098 31,959 31,656"},
+    {"accession": "0001838126-25-000073", "text": "Meralm Bidco AB (4)(5)(8) N + 6.00 % (incl 2.25 % PIK) 10.32 % 8/29/2031 NOK 269,391 25,086 25,657"}
+   ]
+  },
+  {
+   "observation_key": "industry-heading-carried-into-next-section",
+   "outcome": "supported",
+   "rationale": "q_sf_label.sql: structured_with_operating_label 153 on nbhpc, 0 on nbhpe. Breakdown on nbhpe: all 227 rows labelled 'Structured Finance' are 173 CLO rows with no sub-industry, 24 Diversified Financial Services (ARES CLO, Voya CLO), 8 Multi-Sector Holdings (Barings 2024-IV), 12 Alp CFO 2025 with no sub-industry and 10 Ares Secondaries PBN as Specialized Finance. Alp CFO and Ares Secondaries are DIRECT_LENDING by class, but their members sit in the Structured Finance block of the 10-K. No structured row carries Software or Telecommunications any more (the remaining 'Software' hits on a CLO name filter are Cloud Software Group, correctly software). The section-boundary check is concrete.",
+   "evidence": [{"accession": "0001628280-26-020206", "text": "Total Unsecured Debt $ 50,929 $ 49,883 0.39 % Structured Finance Structured Finance Investments 720 East CLO V Ltd"}]
+  },
+  {
+   "observation_key": "lien-blank-where-page-overlay-key-is-ambiguous",
+   "outcome": "supported",
+   "rationale": "nbhpe TruGreen lien_position is First Lien in all 13 quarters, through the existing wrapper key dispatch.lien_from_identifier, matching its First Lien Debt section. The detector against the reader's own status is a sound field test.",
+   "evidence": [{"accession": "0001628280-26-033248", "text": "TruGreen Limited Partnership (9)(25) SF + 4.00 % 7.77 % 11/2/2027 8,376 8,341 7,999"}]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "The Integrity and Pareto/NP Kaba links stay parked for a shared matcher repair, which is the right route. I also checked the 12 new position_id changes: all are United Musculoskeletal. In nbhpc the delayed draw (2023-09-30 50,256 and 2023-12-31 50,181, cost about 29-32M) sat on the term loan's chain (3cbeec4a). The 2024-03-31 delayed draw (50,098, cost 31,959) was published EUR and stood on its own chain. With the currency fix, the delayed draw is one chain from 2023-09-30 to 2026-06-30 (123d2a70). The 43.4M -> 42.2M term loan is one chain from 2023-03-31 (a7d01b97). Both splits follow the printed lines; this is a repair, not a new cross-tranche link.",
+   "evidence": [{"accession": "0001838126-24-000038", "text": "United Musculoskeletal Partners Acquisition Holdings, LLC (4)(9) SF + 5.75 % 11.07 % 7/17/2028 43,180 42,539 42,259"}]
+  },
+  {
+   "observation_key": "industry-heading-published-as-representative-sub-industry",
+   "outcome": "supported",
+   "rationale": "The defect behind my nbhpc rejection is fixed: the 89 carried CLO labels and the 2025-12-31-onward Software labels are gone (q_sf_label.sql 0 on nbhpe), and the representative-sub-industry question stays an owner item (D-236 (1)). The orchestrator's condition, recorded in orchestrator_decisions under D-207 for the owner to reverse, was a correct label at fund level on every CLO / structured row. I judge it met, with one note: 42 structured rows carry a financial GICS label from the issuer-name cache (Diversified Financial Services, Multi-Sector Holdings, Specialized Finance) while 185 carry none. That is consistent, not wrong. Whether the carry-back belongs on this fund at all is still for the owner. D-232 was ruled 'opt-in for this fund only' for HPS Corporate Capital Solutions, and the D-207 extension is recorded as reversible. The detector is concrete.",
+   "evidence": [{"accession": "0001838126-23-000040", "text": "Total Unsecured Debt $ 17,099 $ 16,890 0.46 % Structured Finance Structured Finance Investments ALM 2020 Ltd"}]
+  },
+  {
+   "observation_key": "cash-leg-float-residue-from-unrounded-subtraction",
+   "outcome": "supported",
+   "rationale": "Confirmed on the corrected rows: interest_rate_cash is +/-1.78e-15 on several whole-coupon rows (Aesthetics 2025-12-31, Elements 2024-06-30 to 2024-12-31, Inflexion 2025-09-30 and 2025-12-31 c-837). It is zero to display precision, but a negative cash leg can trip sign checks. Leaving it for the shared rounding fix, with a plain numeric detector, is reasonable.",
+   "evidence": [{"accession": "0001628280-26-020206", "text": "Artemis Bidco Limited (4)(5)(7)(20)(31) SN + 6.00 % PIK 9.73 % 9/8/2028 GBP 1,181 1,542 1,592"}]
+  },
+  {
+   "observation_key": "principal-currency-blank-on-par-from-share-tag",
+   "outcome": "supported",
+   "rationale": "Still true on nbhpe: the 2026-03-31 rows with par from the share-count fact carry a blank currency (e.g. UMP c-418/c-419/c-420, Orthrus c-299), while principal_amount_usd equals par. Only the label is missing. A shared staging repair is the right route.",
+   "evidence": [{"accession": "0001628280-26-033248", "text": "Orthrus Ltd (4)(5)(10)(25) SF + 6.25 % (incl 2.75 % PIK) 9.92 % 12/5/2031 12,133 11,958 11,989"}]
+  }
+ ],
+ "request_reviews": [],
+ "notes": {
+  "verdict_retirements": "Re-ran python scratch/fund_runs/0001838126/nbhp_retirements.py nbhpe: 11 of 11 PASS. Verdict sha256 of all 11 entries match the current verdict files, and validate reports no problems. FX01 (RVQ_REV_410dcdf61c0e): the check now compares every listed field including coupon_type, and the three cited Artemis rows c-936/c-937/c-938 publish GBP 1,181/1,225/2,030, cost 1,542/1,600/2,651, fair value 1,592/1,652/2,737, rate 9.73, spread 6.00, PIK 9.73, cash leg 0, Floating, maturity 2028-09-08, USD par at H.10. That matches the printed line and the whole-coupon reading backed by par growth. No non-USD loan of the quarter lacks a USD par. The other 10 pass as on nbhpc.",
+  "outstanding": "fund_gate outstanding_findings('nbhpe') is empty; the report's investigations list is correctly empty.",
+  "not_verified": "The fresh 20-row page sample on nbhpe is being run separately and is not part of this review. I did not re-read the remaining 33 currency rows, 41 coupon-type rows or 14 whole-coupon rows."
+ }
+}
