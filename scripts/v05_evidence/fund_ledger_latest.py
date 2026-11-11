@@ -12,7 +12,7 @@ import duckdb
 
 REPO = Path(__file__).resolve().parents[2]
 ROOT = REPO / "scratch/fund_sandbox"
-RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated"}
+RESOLVED = {"adjudicated_false_alarm", "remediated_promoted", "resolved_upstream", "gone_unadjudicated", "verdict_retired"}  # as pipeline.quarter_acceptance RESOLVED_FINDING_STATES (dispositioned_* counted separately below)
 ciks = [a.zfill(10) for a in sys.argv[1:] if not a.startswith("--")]
 show_rules = "--rules" in sys.argv
 csv.field_size_limit(10**9)

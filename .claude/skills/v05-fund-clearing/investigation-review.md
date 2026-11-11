@@ -43,6 +43,13 @@ The orchestrator supplies the final report, sandbox label, CIK and output review
 ledger and cached sources independently; write ONLY the separate review JSON. Do not edit the
 fund report, fixes, gate or ledger. Use your actual agent identity, distinct from the investigator.
 
+Carried entries (owner scope 2026-11-10): an investigation marked `carried_from` was not re-read
+by the investigator. Verify that (a) the carried source exists and was supported by an earlier
+independent review or is otherwise a recorded review, and (b) the finding's currently flagged rows
+equal the carried `affected_rows`. Reject it if either fails. Verdict retirements the investigator
+wrote under the owner's standing rule (`data/overrides/verdict_retirements/`) are checked by
+re-running each entry's check and reading cited rows on the page; name any that fails.
+
 Review every outstanding finding, not just parked entries. Reconstruct the flagged population
 from rule output and compare it with affected_rows. Check every row claimed reviewed against the
 cited source. Test the reasoning, hypotheses and next action. Read every observation and assess

@@ -1,6 +1,6 @@
 ---
 name: v05-fund-clearing
-description: Use when asked to clear, work through or sign off a fund's outstanding ledger findings in the v0.5 programme, to run the fund-by-fund clearing loop over several funds unattended, or to take a new quarter into funds already cleared
+description: Use when asked to process, clear, work through or sign off outstanding ledger items or findings (one fund, the v0.5 funds or the whole v1 cohort), to re-run or refresh the ledger to see what remains, to run the fund-by-fund clearing loop over several funds unattended, to take a new quarter into funds already cleared, or to fold cleared sandboxes back into production
 metadata:
   argument-hint: <cik> [<cik> ...] | next <n>
 allowed-tools: Bash PowerShell Read Write Edit Grep Glob Agent SendMessage Monitor TaskStop
@@ -31,6 +31,32 @@ setting, a column, a member format); work pinned to one quarter does not carry f
 5. Commit locally after each fund that passes (owner instruction 2026-10-13: unattended runs
    allowed). Stage only the files the gate lists as changed, plus the fund's report.
 6. A zero is not "data correct". Say so in every report.
+
+## Step 0 of every run: what is outstanding (owner 2026-11-10)
+
+"Process outstanding ledger items" starts here, never from a remembered count.
+
+1. `python scripts/v05_evidence/outstanding_status.py --refresh [--skip <labels a build is using>]`
+   (ledger stage only, about 10 s per sandbox, ~10 min for the cohort). Read
+   `docs/investigations/v05_readings/outstanding_status.md`. Quote counts only from it, with its
+   timestamp. It says what a refresh does NOT cover: rules added and extraction fixes since a
+   sandbox's build need a fund build (`build_fund.sh`); production is a different build (column
+   "Production", from the latest quarter-pass ledger).
+2. "Sandbox used" differs from "Accepted sandbox": registry drift. `BEFORE` stays the accepted
+   sandbox; note the newer build in the decision-log entry.
+3. Scope of agent review (owner 2026-11-10): only findings in category `unreviewed` or
+   `investigated`, plus finding ids a rebuild newly produces. Reviewed findings (proposal, verdict,
+   review_supported, narrative) carry their earlier investigation forward unchanged with
+   `"carried_from": "<file>"`; one whose flagged rows differ from the carried `affected_rows` is
+   back in scope. Fixing errors earlier reviews confirmed stays in scope. Put this paragraph in
+   every fund-agent and reviewer prompt.
+4. The registry (`accepted_sandboxes.json`) is the record of each fund's current state. Update it
+   whenever a fund is accepted (step 9), and also when a regression rebuild or a merge produces a
+   newer gated build of an accepted fund. A fund-loop branch merged without registering its
+   sandbox is drift (Apollo `apx5`, Sixth Street `ssq0`, 2026-11-10).
+
+Outstanding is the gate's definition (`pipeline.quarter_acceptance.RESOLVED_FINDING_STATES`):
+`verdict_retired` is closed, `real_error_check_silent` is open.
 
 ## Per fund
 
@@ -155,6 +181,16 @@ reading (findings cleared by carry-forward against findings newly open) before a
    per reason: `owner_queue.py rule <reason key> accept|reject|more --words "<their words>"`.
    Only that command turns a proposal into an accepted disposition.
 
+4. **Fold back into production (owner's go each time; about 6 hours, ~14 GB free).** Launch
+   detached: `Start-Process powershell -ArgumentList '-File','scripts\v05_evidence\foldback_chain.ps1','-Tag','<tag>','-Quarters','2026-06-30,2026-03-31' -WindowStyle Hidden`.
+   No fund build, pytest or edit in this checkout while it runs. It re-extracts the cohort, rebuilds
+   the chain, runs the quarter passes, then `sandbox_parity.py --prod-ledger ...`: production rows
+   and FV against each registered sandbox, and finding ids outstanding in production but not in the
+   sandbox ledger (`NEW_OUTSTANDING_IN_PRODUCTION`, `ledger_diff.csv`). Equal counts are not enough;
+   read every new id before calling it a regression (production computes entity ids and industry
+   labels on all funds). A quarter a sandbox lacks is unchecked, not passing. Ends with
+   `outstanding_status.py`. Never publish or push from it.
+
 One report to the owner:
 
 | Fund | Verdict | Findings | Outstanding | With a proposal | Quarters tying | Fixed | Parked |
@@ -168,6 +204,9 @@ build showed; what was not run. Lead with what failed.
 
 | Need | Command |
 |---|---|
+| What is outstanding (start here) | `python scripts/v05_evidence/outstanding_status.py --refresh` -> `docs/investigations/v05_readings/outstanding_status.md` |
+| Fold back into production | `scripts/v05_evidence/foldback_chain.ps1 -Tag <t> -Quarters <q,...>` (detached, owner's go) |
+| Production vs sandboxes | `python scripts/v05_evidence/sandbox_parity.py --quarters <q ...> --prod-ledger <ledger.csv>` |
 | Fund order | `python scripts/v05_evidence/cohort_by_size.py` |
 | Latest ledger of a fund | `python scripts/v05_evidence/fund_ledger_latest.py <cik> --rules` |
 | Build | `bash scripts/v05_evidence/build_fund.sh <label> [--add-quarter D] <cik>` |

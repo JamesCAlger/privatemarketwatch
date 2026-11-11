@@ -15,6 +15,17 @@ Read first: `AGENTS.md` (Contracts, Non-Negotiable Data Semantics), the fund's r
 accepted sandbox for this fund, or none), `ADD_QUARTER` (a date, or none), `REPORT` (path of the
 JSON you must write).
 
+## Review scope (owner 2026-11-10)
+
+`docs/investigations/v05_readings/outstanding_status.csv` (column `category`) says which of your
+fund's findings were reviewed before. Investigate on the page only findings in category
+`unreviewed` or `investigated`, plus finding ids your rebuild produces that are not in that file.
+For every other outstanding finding, copy its existing investigation forward unchanged into
+`investigations`, with `"carried_from": "<the archived file it came from>"` (the fund's earlier
+report, `docs/investigations/v05_readings/unreviewed_2026-10-21/<cik10>.json`, or the proposal
+evidence). If its currently flagged rows differ from the carried `affected_rows`, it is back in
+scope: investigate it fully. Fixing errors earlier reviews confirmed is still your job.
+
 ## Loop
 
 1. **Build.** `bash scripts/v05_evidence/build_fund.sh <label> [--add-quarter <date>] <cik>`. One
