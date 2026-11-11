@@ -475,5 +475,393 @@
    "instrument_description": "Preferred Shares"
   },
   "reason": "Member names issuer and class in one cell joined by '.-' with no separator space; the class is the instrument (the 2024-09-30 member splits them: 'RSC Topco, Inc. - Preferred Shares'). Printed: 'RSC Topco, Inc. - Preferred Shares (4) 100 97 110' (0001803498-24-000044)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1109",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Galaxy 34 Clo Ltd (4)(6) Estimated Yield: 16.18 % 9/26/2024 10/20/2037 20,000,000 $ 18,500 $ 18,500 0.05 % MidO' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1110",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'MidOcean Credit CLO XV Ltd - Subordinated Notes (4)(6) Estimated Yield: 12.28 % 5/10/2024 7/21/2037 5,000,000 3,550 3,734 0.01 New Mountain' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1111",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'New Mountain CLO 6 Ltd (4)(6) Estimated Yield: 15.01 % 8/23/2024 10/15/2037 18,750,000 16,238 16,051 0.04 New Mounta' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1114",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'RAD CLO 26 Ltd (4)(6) Estimated Yield: 16.71 % 8/7/2024 10/20/2037 7,180,000 6,156 6,173 0.02 Signal Peak C' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1113",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'RAD CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 12.90 % 5/16/2024 7/20/2037 5,000,000 4,317 4,461 0.01 RAD CLO 26 Lt' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1115",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Signal Peak CLO 11 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.84 % 6/5/2024 7/18/2037 5,000,000 4,450 4,595 0.01 Sixth Street' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1116",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Sixth Street CLO XXI Ltd (4)(6) Estimated Yield: 15.28 % 9/29/2022 10/15/2035 8,000,000 5,760 6,023 0.02 Vibrant CLO X' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1117",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Vibrant CLO XVI, Ltd (4)(6) Estimated Yield: 17.95 % 4/14/2023 4/15/2036 12,000,000 9,600 9,600 0.03 Total Struct' (0001803498-24-000062).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1222",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Birch Grove CLO 11 Ltd - Subordinated Notes (4)(6) Estimated Yield: 11.01 % 11/15/2024 1/22/2038 11,000,000 $ 11,000 $ 11,000 0.03 % Elmw' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1223",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Elmwood CLO II Ltd - Subordinated Notes (4)(6) Estimated Yield: 15.82 % 11/21/2024 4/20/2034 8,650,000 5,981 6,132 0.02 Galaxy 34 CLO' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1224",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Galaxy 34 CLO Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.32 % 9/26/2024 10/20/2037 20,000,000 18,500 18,446 0.05 MidOcean C' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1225",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'MidOcean Credit CLO XV Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.20 % 5/10/2024 7/21/2037 5,000,000 3,550 3,402 0.01 New Mountain' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1226",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'New Mountain CLO 6 Ltd - Subordinated Notes (4)(6) Estimated Yield: 13.24 % 8/23/2024 10/15/2037 18,750,000 16,051 16,346 0.04 New Mounta' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1227",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'New Mountain CLO 6 Ltd - Subordinated Notes (4)(6) 8/23/2024 10/15/2037 1,875,000 0 411 0.00 Pikes Peak CLO 10 -' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1228",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Pikes Peak CLO 10 - Subordinated Notes (4)(6) Estimated Yield: 17.27 % 12/10/2024 1/22/2038 5,200,000 3,310 3,309 0.01 Rad CLO 25 Lt' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1230",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'RAD CLO 26 Ltd - Subordinated Notes (4)(6) Estimated Yield: 15.87 % 8/7/2024 10/20/2037 7,180,000 6,156 6,440 0.02 RAD CLO 2024-' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1231",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'RAD CLO 2024-2 WH Ltd - Units (4)(6)(7) Estimated Yield: 15.44 % 12/11/2024 1/15/2038 14,800,600 14,801 14,801 0.04 Signal Pea' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1229",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01 RAD CLO 26 Lt' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1232",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Signal Peak CLO 11 Ltd - Subordinated Notes (4)(6) Estimated Yield: 13.87 % 6/5/2024 7/18/2037 5,000,000 4,450 4,865 0.01 Signal Peak C' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1233",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Signal Peak CLO 14 Ltd - Subordinated Notes (4)(6) Estimated Yield: 16.24 % 12/20/2024 1/22/2038 26,000,000 20,345 20,735 0.05 Sixth Stre' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1234",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Sixth Street CLO 27 Ltd - Subordinated Notes (4)(6) Estimated Yield: 12.25 % 11/1/2024 1/17/2038 16,500,000 13,430 13,794 0.04 Sixth Stre' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1235",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Sixth Street CLO XXI Ltd - Subordinated Notes (4)(6) Estimated Yield: 15.03 % 9/29/2022 10/15/2035 8,000,000 5,759 6,562 0.02 Vibrant CLO X' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1236",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Vibrant CLO XVI, Ltd - Subordinated Notes (4)(6) Estimated Yield: 16.75 % 4/14/2023 4/15/2036 12,000,000 9,600 10,627 0.03 Total Struc' (0001803498-25-000021).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1097",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Ballyrock CLO 20, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 12.38 % 2/24/2025 10/15/2036 6,000,000 $ 4,763 $ 4,744 0.01 % Birch G' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1098",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Birch Grove CLO 11 Ltd - Subordinated Notes (4)(6) Estimated Yield: 10.52 % 11/15/2024 1/22/2038 11,000,000 11,000 11,175 0.03 Elmwood CL' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1099",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Elmwood CLO 18, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 13.31 % 3/4/2025 7/17/2037 4,000,000 2,264 2,198 0.01 Elmwood CLO I' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1100",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Elmwood CLO II Ltd - Subordinated Notes (4)(6) Estimated Yield: 12.29 % 11/21/2024 4/20/2034 8,650,000 5,981 4,892 0.01 Galaxy 34 Clo' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1101",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Galaxy 34 Clo Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.93 % 9/26/2024 10/20/2037 20,000,000 18,000 18,417 0.04 Galaxy 35' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1103",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Generate CLO 7 Ltd - Subordinated Notes (4)(6) Estimated Yield: 13.16 % 1/31/2025 4/22/2037 10,000,000 5,850 5,640 0.01 HPS Loan Man' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1104",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'HPS Loan Management 2025-24, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 13.25 % 3/11/2025 4/25/2038 10,000,000 8,900 8,900 0.02 MidOcean Cre' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1105",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'MidOcean Credit CLO XV Ltd - Subordinated Notes (4)(6) Estimated Yield: 12.21 % 5/10/2024 7/21/2037 5,000,000 3,550 3,303 0.01 New Mountain' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1106",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'New Mountain CLO 6 Ltd - Subordinated Notes (4)(6) Estimated Yield: 13.80 % 8/23/2024 10/15/2037 18,750,000 16,051 16,109 0.04 New Mounta' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1108",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'New Mountain CLO 7, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 14.19 % 8/23/2024 3/31/2038 19,368,300 16,899 16,899 0.04 Pikes Peak' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1109",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Pikes Peak CLO 10 - Subordinated Notes (4)(6) Estimated Yield: 14.56 % 12/10/2024 1/22/2038 5,200,000 3,302 3,304 0.01 Rad Clo 25 Lt' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1111",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'RAD CLO 26 Ltd - Subordinated Notes (4)(6) Estimated Yield: 16.28 % 8/7/2024 10/20/2037 7,180,000 6,156 6,307 0.02 RAD CLO 27 Lt' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1112",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'RAD CLO 27 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.98 % 12/11/2024 1/15/2038 29,325,000 26,823 27,105 0.06 Signal Pea' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1110",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Rad Clo 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 13.51 % 5/16/2024 7/20/2037 5,000,000 4,317 3,947 0.01 RAD CLO 26 Lt' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1113",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Signal Peak CLO 11 Ltd - Subordinated Notes (4)(6) Estimated Yield: 13.21 % 6/5/2024 7/18/2037 5,000,000 4,450 4,632 0.01 Signal Peak C' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1114",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Signal Peak CLO 14 Ltd - Subordinated Notes (4)(6) Estimated Yield: 16.31 % 12/20/2024 1/22/2038 26,000,000 20,345 20,975 0.05 Sixth Stre' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1115",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Sixth Street CLO 27 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.34 % 11/1/2024 1/17/2038 16,500,000 13,430 13,913 0.03 Sixth Stre' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1116",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Sixth Street CLO XXI Ltd - Subordinated Notes (4)(6) Estimated Yield: 15.84 % 9/29/2022 10/15/2035 8,000,000 5,760 5,432 0.01 Vibrant CLO X' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-1117",
+  "fields": {
+   "principal_amount_currency": "USD"
+  },
+  "reason": "Par moved from the share-count tag (src_transforms principal_amount:from_shares_tag), which carries no currency unit, so the currency was left blank; the printed line shows a dollar par with no currency code: 'Vibrant CLO XVI, Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.62 % 4/14/2023 4/15/2036 12,000,000 9,600 9,714 0.02 Total Struct' (0001803498-25-000038).",
+  "date_added": "2026-11-10"
+ },
+ {
+  "quarter": "2024-12-31",
+  "src_context_id": "c-1231",
+  "fields": {
+   "issuer_name": "RAD CLO 2024-2 WH Ltd",
+   "instrument_description": "Units"
+  },
+  "reason": "Member 'RAD CLO 27 Ltd' (the CLO the warehouse later became) carries the line printed 'RAD CLO 2024-2 WH Ltd - Units (4)(6)(7) Estimated Yield: 15.44 % 12/11/2024 1/15/2038 14,800,600 14,801 14,801 0.04' (0001803498-25-000021); RAD CLO 27 is first printed at 2025-03-31.",
+  "date_added": "2026-11-10"
  }
 ]

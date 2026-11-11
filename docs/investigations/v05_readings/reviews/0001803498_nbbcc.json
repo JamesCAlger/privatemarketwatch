@@ -1,0 +1,296 @@
+{
+ "reviewer_id": "independent-reviewer-bcred-nbbcc-20261110",
+ "report_digest": "23793fcc51127e5e4373c6656c296fe9af091f9cad66f4e8e97626a5565421a8",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_5a7ac8ea794a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry checked against the owner's carry rule. (a) Source: carried_from names this report path; the prior version (scratch/fund_runs/0001803498/report_before_nbbc.json, label nvbcd) holds the identical investigation, and the independent review docs/investigations/v05_readings/reviews/0001803498_nvbcd.json (reviewer /root/bcred_review_sol) records it as supported with coverage and source comparison verified. (b) Rows: the only outstanding since-2022 ledger record for BCRED in nbbcc is RVQ_BLK_5a7ac8ea794a (open, identity issuer_name_printed 2022-09-30), and nbbcc shadow/page_rule_findings.csv flags exactly ROW-fb32f9352d6dcfba (Petco Health & Wellness Co, Inc., FV 4,612,000) and ROW-6900c35a75241a00 (Minerva Merger Sub, Inc., FV 5,663,000) for BCRED, equal to the carried affected_rows. I re-read both printed lines in 0001803498-22-000021: the Minerva row prints 'Athenahealth, Inc.' with 7,146/7,146/5,663 (confirmed wrong published name); the current Petco line is truncated and the comparative line prints the full legal name with a different maturity, so Petco is a source ambiguity, not a disposition. Parking with a matcher repair first is supported by the recorded nvbcc ID-change test. This verifies the investigation, not data correctness; 'all findings cleared' would not prove the data right. Verdict retirements (standing rule D-252) verified by reviewer: 24 of 24 meet the rule. I re-ran scratch/fund_runs/0001803498/nbbc_retirements.py nbbcc (no --write): 24 entries, 0 problems, context-period leak rows sandbox 0 / data/output 0; all 24 verdict files match their verdict_sha256; all 24 findings are frozen-population (not produced live by nbbcc). My own check (scratch/fund_runs/0001803498/reviewer_nbbcc/ret_check.py) confirmed every filing quote is on the cached page and, for every published row matching the cited names in sandbox and data/output, that the row comes from a current-period context and its units-or-par/cost/fair-value triple is printed on the page; the seven non-matches were all '$'-prefixed first rows (Caerus 2023-12-31, AGI JV 2025-03-31, US Oral Surgery 2025-09-30, Pigments 2024-12-31, GTCR parent 2023-09-30, ABG parent 2025-12-31), which I read on the page and which match. PCT01 published-basis sums are 215.63/214.37/200.47/185.14 vs printed 215.60/214.36/200.47/185.14 (row-rounding residual <=0.03 over 700+ rows; the generator's 'now equals' overstates slightly). SRC_BDC01: the verdict's ACI quote (128,528/127,691/123,387) is the Dec-2024 comparative JV line; the current JV line 132,828/132,224/106,262 is the published underlying row. C006: 0 blank accessions all quarters. SRC_BDC02: published-basis FV 82,199,346k equals the printed total. Caveats, not failures: (1) the rerun script displays rows but asserts only sandbox-vs-data/output equality, so it would not itself fail on a printed-value mismatch; a future retirement rerun should assert against the printed line. (2) B02 and X01 rows are underlying_schedule and pass on the 'correctly excluded' limb; Huntington (printed par 620) and GTCR JV (printed par 3,335) carry no par and the B02 key-collision mechanism itself is not tested, only that rows are distinct and excluded.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there). Quote re-found on page. propose_detector with a concrete build-time check is appropriate since a historical repair is not proof a current detector fires.",
+   "evidence": [
+    {
+     "accession": "0001803498-26-000048",
+     "text": "Point Broadband Holdings, LLC - Class B Common Units (4) 10/1/2021 685,760 1,955 1,783"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Carried with an added 2024-12-31 case. I verified sandbox nbbcc publishes 'RAD CLO 2024-2 WH Ltd - Units' at 2024-12-31 (14,801k) with its own position_id, while data/output publishes it as 'RAD CLO 27 Ltd' sharing the Class E chain id d7d16e81; the context-keyed fix is real. The detector proposal (member name vs printed name) would catch recurrence; false positives limited to legitimate renames.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Smile Doctors, LLC (4)(7)(10) L + 5.75 % 9.42 % 12/23/2028 449,679 439,765 438,872"
+    }
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found. Detection decision unchanged and reasonable.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329"
+    }
+   ]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-precision-unknown-for-page-read-maturity",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-name-year-printed-differs-from-member",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "OCP CLO 2020-22, Ltd. (4)(6)(8) L + 6.50 % 9.21 % 10/20/2034 4,250 4,069 3,587"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-series-number-cut-as-row-number",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Pikes Peak CLO 10 - Subordinated Notes"
+    }
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Chemicals Pigments LP Int (4)(6)(16) - - 0.00"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000008",
+     "text": "athenahealth, Inc. (7)(9) SOFR + 3.50 % 7.82 % 2/15/2029 36,931 36,518 33,015"
+    }
+   ]
+  },
+  {
+   "observation_key": "explicit-interest-instrument-classed-other",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Chemicals Pigments LP Int (4)(6)(16) - - 0.00"
+    }
+   ]
+  },
+  {
+   "observation_key": "partial-row-disposition-covers-whole-finding",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found. The Petco/Minerva finding above shows the case it describes.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"
+    }
+   ]
+  },
+  {
+   "observation_key": "estimated-yield-tagged-as-coupon",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "combined-par-units-column-semantic-ambiguity",
+   "outcome": "supported",
+   "rationale": "Carried unchanged from nvbcd (supported there); quote re-found. The RAD CLO 2024-2 WH units line (14,800,600 published as principal) is another instance.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Verified: data/output has 16 BCRED rows with issuer_name exactly 'BCRED' (2024-09-30..2026-06-30); sandbox nbbcc has 0 and publishes 'BCRED Emerald JV LP' / 'BCRED Verdelite JV LP' with the same position_ids and values. The suggested check (issuer_name equals the fund's own short name or is a strict leading token of the printed name) would catch recurrence with few false positives. Note: fair_value_m 1660.4 is a single-quarter figure; the 16 rows sum to 14,476.7M across quarters.",
+   "evidence": [
+    {
+     "accession": "0001803498-26-000031",
+     "text": "BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,836,000 1,539,677 3.41"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "rationale": "Verified in sandbox: Emerald JV interest is ffcddc49 (OTHER, no instrument) through 2024-06-30 and 3c3c1725 (FUND, 'LP Interest') from 2024-09-30 with unchanged cost 1,815,000; Verdelite likewise 100e4d2c -> 129d67ad at cost 117,706. Leaving it is reasonable (values right, needs matcher decision). The proposed chain-restart-with-unchanged-cost check is concrete and would catch it.",
+   "evidence": [
+    {
+     "accession": "0001803498-24-000044",
+     "text": "BCRED Emerald JV LP - LP Interests (6)(16) 1,815,000 1,830,280 5.37"
+    }
+   ]
+  },
+  {
+   "observation_key": "jv-underlying-row-missing-printed-par-or-maturity",
+   "outcome": "supported",
+   "rationale": "Verified: sandbox underlying_schedule LOAN rows with null maturity are 350/350 at 2022-09-30 and 620/621 at 2022-12-31; Huntington 2022-12-31 has no par (printed 620) and GTCR JV 2023-09-30 has no par (printed 3,335). Not published, so 'left' is defensible; a coverage report on retained underlying rows is the right detector since published-basis checks cannot see them.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Huntington Bancshares Inc (8) 4.44 % 4.44 % 8/4/2028 620 598 592 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-row-number-left",
+   "outcome": "supported",
+   "rationale": "Verified: underlying row 'Pigments Services, Inc 1.' at 2024-12-31 (7,125/4,670/2,367) matches the printed JV line. Unpublished; extending the name-shape warning to underlying rows is a cheap, low-false-positive detector.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Pigments Services, Inc. (4)(11)(17) SOFR + 8.25 % 12.69 % PIK 4/14/2023 4/14/2029 7,125 4,670 2,367 0.10"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-equity-tranche-has-no-asset-category",
+   "outcome": "supported",
+   "rationale": "Updated from nvbcd (supported there). Quote of the 'Structured Finance Obligations - Equity Instruments' heading re-found on page. Leaving under D-209 is correct; the measuring detector (section says equity, asset_category LOAN) is concrete and non-blocking, so false positives cost nothing.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000062",
+     "text": "Structured Finance Obligations - Equity Instruments - non-controlled/non-affiliated Financial Services Ballyrock CLO 20, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 13.22 % 2/24/2025 10/15/2036"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-from-share-tag-loses-currency",
+   "outcome": "supported",
+   "rationale": "Verified: data/output has 42 published BCRED rows with principal_amount set and blank principal_amount_currency; sandbox nbbcc has 0. The shared staging cause and the proposed check (par set, currency blank) are concrete and would catch other par_tagged_as_units funds. Note: the 42 rows sum to 397.9M FV in data/output, not the 498.0M stated; the count matches.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_reviews": [
+  {
+   "request_id": "REQ-NBBC-1",
+   "resolution": "deferred",
+   "outcome": "supported",
+   "rationale": "Acceptance change, correctly classed. DS-003-1803498 states the cache holds no position schedule before the first structured filing; the cached 0001803498-22-000013 contains 'Blackstone Private Credit Fund Consolidated Schedule of Investments March 31, 2022 (in thousands)' with position lines, and 22-000017 likewise for June 2022. The disposition's own evidence admits earlier schedules were not checked. Revoking it reopens F28 2022-03-31/2022-06-30 as a holdings gap; that is an owner decision, as the request says. Resolution review: response accurate to the evidence (cached 22-000013/22-000017 hold printed schedules; revocation reopens F28 2022-03-31/06-30, inside the 2022-01-01 gate window, as a holdings gap). Deferral is correct: an acceptance_change to an accepted disposition is the owner's call.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total investments at fair value (cost of $37,776,621 and $30,698,023 at March 31, 2022 and December 31, 2021, respectively)"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Total investments at fair value (cost of $47,141,027 and $30,698,023 at June 30, 2022 and December 31, 2021, respectively)"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-NBBC-2",
+   "resolution": "deferred",
+   "outcome": "supported",
+   "rationale": "Verification bug, correctly classed. nbbcc fund_financials has BCRED 2019-12-31 net_assets 0 and 2020-12-31 net_assets 52,000 with no investments or income, and the cached N-2 states operations had not commenced; F28 still fires (RVQ_REV_be43d1396db3, RVQ_REV_0a643cbc76e0). The proposed repair keeps 2021-09-30 failing because that row carries income, and requires a still-fails test, per the 2026-11-04 ruling. Resolution review: response accurate (2019/2020 rows have no investments or income; repair keeps 2021-09-30 failing; both quarters precede SINCE 2022-01-01, so no gate finding depends on it). Deferral rather than implementation is correct: AGENTS.md requires an owner ruling, focused tests, a still-fails test and a cohort measurement for any check repair.",
+   "evidence": [
+    {
+     "accession": "0001193125-21-069991",
+     "text": "As of December 31, 2020, we had not commenced operations and have not made any investments."
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-NBBC-3",
+   "resolution": "deferred",
+   "outcome": "supported",
+   "rationale": "Verification bug, correctly classed. nbbcc source_reconciliation_metrics for BCRED 2025-12-31: missing 0, extra_in_pipeline 0, blocking_issue_count 0, RECONCILED; published-basis FV equals the printed total 82,199,346. The frozen BDCSRC PIPELINE_ONLY finding is needs_human from a 2026-07-24 draft. Caveat: its 11 rows are not listed, so only the sampled identifiers were read; closing should rest on the current check reporting zero, not on the sample. Resolution review: response accurate (nbbcc reconciliation 0 blocking / 0 extra-in-pipeline, RECONCILED; 11 rows never listed). Deferral is correct: closing a frozen needs_human ledger finding is a ledger change outside the fund loop. Minor: the finding is undated and outside the gate's outstanding list, so it does not block BCRED either way.",
+   "evidence": [
+    {
+     "accession": "0001803498-26-000014",
+     "text": "Apidos CLO XXV - Class E1R3 (4)(6)(8) SOFR + 5.35 % 9.68 % 12/17/2024 1/20/2037 4,000 4,000 4,010 0.01"
+    },
+    {
+     "accession": "0001803498-26-000014",
+     "text": "Total Investment Portfolio 82,916,241 82,199,346 172.60"
+    }
+   ]
+  }
+ ]
+}
