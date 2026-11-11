@@ -9,6 +9,9 @@
     "prefix_rules": {},
     "flat_schedule": true,
     "shares_pow10_normalise": false,
+    "issuer_name_strip_re": "(?:\\s*(?:(?:First|Second) lien senior secured (?:revolving )?loan|Senior subordinated loan|Z\\d preferred shares|Membership interest|Limited partnership interest))+(?:\\s+\\d{1,2})?$",
+    "issuer_name_strip_to_instrument": true,
+    "instrument_description_strip_re": "^First lien senior secured loan (?=First lien senior secured loan$)",
     "leaf_markers_by_family": {},
     "aggregate_markers": [
       "sub-total",

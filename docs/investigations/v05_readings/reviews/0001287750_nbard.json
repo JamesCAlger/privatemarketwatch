@@ -1,0 +1,371 @@
+{
+  "reviewer_id": "independent-reviewer-0001287750-nbard-2026-11-11",
+  "report_digest": "dcafa069d6cf14b162d3b7157e54a57b5e5b9bf6338358ad78aa0ba2d08e27d1",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_fc83027d0a56",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Carried entry. (a) Source exists: nvard report archive (scratch/fund_runs/0001287750/nvard_report_archive.json) holds this finding with conclusion confirmed_error, and the nvard independent review (reviews/0001287750_nvard.json) recorded it as supported. (b) The current nbard issuer_name_printed population for 2022-12-31, rebuilt from output/shadow/page_rule_findings.csv, is exactly ROW-805313e54fbbe696, equal to the carried affected_rows. I also read each flagged row's printed line on the cached page: the published names are the filer's member names for the right borrower group but not the printed legal form/co-obligor list; values and terms match the printed line; classification as confirmed name mismatch follows the nvard review and is routed to the owner by REQ-NBAR-2. ",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000010",
+          "text": "Alcami Corporation and ACM Note Holdings, LLC $ 66 Athenahealth, Inc., VVC Holding Corp., Virence Intermediate Holding Corp., and Virence Holdings LLC 38 Primrose Holding Corporation 29 IRI Holdings, Inc., IRI Group Holdings,"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_341d2ddc90a6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Carried entry. (a) Source exists: nvard report archive (scratch/fund_runs/0001287750/nvard_report_archive.json) holds this finding with conclusion confirmed_error, and the nvard independent review (reviews/0001287750_nvard.json) recorded it as supported. (b) The current nbard issuer_name_printed population for 2023-03-31, rebuilt from output/shadow/page_rule_findings.csv, is exactly ROW-23784f6253722c05, ROW-43f7b16bce102ebd, ROW-9927511d0cf3b445, equal to the carried affected_rows. I also read each flagged row's printed line on the cached page: the published names are the filer's member names for the right borrower group but not the printed legal form/co-obligor list; values and terms match the printed line; classification as confirmed name mismatch follows the nvard review and is routed to the owner by REQ-NBAR-2. ",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000021",
+          "text": "Pyramid-BMC IntermediateCo I, LLC and Pyramid Investors, LLC (15) Hotel operator First lien senior secured loan 12.85 % SOFR (Q) 8.00 % 01/2023 01/2027 7.7 7.7 7.5 (2)(11) Preferred membership units 07/2016 996,833 1.0 1.0 8.7"
+        },
+        {
+          "accession": "0001287750-23-000021",
+          "text": "Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.91 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.1 (2)(11) Senior subordinated loan 8.00 % PIK"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cab275031954",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Carried entry. (a) Source exists: nvard report archive (scratch/fund_runs/0001287750/nvard_report_archive.json) holds this finding with conclusion false_alarm, and the nvard independent review (reviews/0001287750_nvard.json) recorded it as supported. (b) The current nbard issuer_name_printed population for 2023-09-30, rebuilt from output/shadow/page_rule_findings.csv, is exactly ROW-9bdb8e5b5bca7a2f, equal to the carried affected_rows. I also read each flagged row's printed line on the cached page: the rows are continuation lines (participation rights / second business-description line) of the correctly published company block, a check misfire covered by REQ-NBAR-1. ",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000045",
+          "text": "Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 10.9 12.7 (2) Class B common units 07/2022 100,000 0.1 0.1 (2) 51.6 53.4 AthenaHealth Group Inc., Minerva Holdco, Inc. and BCPE"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c0f022200d85",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Carried entry. (a) Source exists: nvard report archive (scratch/fund_runs/0001287750/nvard_report_archive.json) holds this finding with conclusion confirmed_error, and the nvard independent review (reviews/0001287750_nvard.json) recorded it as supported. (b) The current nbard issuer_name_printed population for 2023-12-31, rebuilt from output/shadow/page_rule_findings.csv, is exactly ROW-94d0cbf0b747e7fc, ROW-d92b14c3db5ff953, equal to the carried affected_rows. I also read each flagged row's printed line on the cached page: the published names are the filer's member names for the right borrower group but not the printed legal form/co-obligor list; values and terms match the printed line; classification as confirmed name mismatch follows the nvard review and is routed to the owner by REQ-NBAR-2. ",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000011",
+          "text": "Riser Interco, LLC (15) Insurance program administrator First lien senior secured loan 11.19 % SONIA (Q) 6.00 % 10/2023 10/2029 1.1 1.0 1.1 (2)(11) First lien senior secured loan 11.35 % SOFR (Q) 6.00 % 10/2023 10/2029 7.6 7.6"
+        },
+        {
+          "accession": "0001287750-24-000011",
+          "text": "Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured loan 12.20 % SOFR (Q) 6.75 % 12/2022"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c3c2666634a7",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Carried entry. (a) Source exists: nvard report archive (scratch/fund_runs/0001287750/nvard_report_archive.json) holds this finding with conclusion false_alarm, and the nvard independent review (reviews/0001287750_nvard.json) recorded it as supported. (b) The current nbard issuer_name_printed population for 2024-03-31, rebuilt from output/shadow/page_rule_findings.csv, is exactly ROW-9db68e8a9ef6ffe7, equal to the carried affected_rows. I also read each flagged row's printed line on the cached page: the rows are continuation lines (participation rights / second business-description line) of the correctly published company block, a check misfire covered by REQ-NBAR-1. ",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000028",
+          "text": "Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the residential and commercial markets First lien senior secured loan 11.71 % SOFR (Q) 6.25 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d1fa4e536429",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Carried entry. (a) Source exists: nvard report archive (scratch/fund_runs/0001287750/nvard_report_archive.json) holds this finding with conclusion false_alarm, and the nvard independent review (reviews/0001287750_nvard.json) recorded it as supported. (b) The current nbard issuer_name_printed population for 2024-06-30, rebuilt from output/shadow/page_rule_findings.csv, is exactly ROW-7816323a4a05ffe3, ROW-9e915f66f980dba4, equal to the carried affected_rows. I also read each flagged row's printed line on the cached page: the rows are continuation lines (participation rights / second business-description line) of the correctly published company block, a check misfire covered by REQ-NBAR-1. ",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000039",
+          "text": "Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the residential and commercial markets First lien senior secured loan 11.48 % SOFR (Q) 6.00 %"
+        },
+        {
+          "accession": "0001287750-24-000039",
+          "text": "Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 11.5 12.2 (2) Class B common units 07/2022 100,000 0.1 0.1 (2) 56.3 57.0 Amerivet Partners Management, Inc. and AVE Holdings LP"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a0182d6e8c91",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2024-09-30 issuer_name_printed population from output/shadow/page_rule_findings.csv: 2 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-4baf254a71f11451, ROW-5ad062ab8e389c12. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): none. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000054",
+          "text": "Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the residential and commercial markets First lien senior secured loan 11.41 % SOFR (Q) 6.00 %"
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "Trading platform for securities finance Class A common units 08/2024 1,859 1.9 1.9 8.0 7.9 Envestnet, Inc. Provider of comprehensive wealth management software, services, and solutions First lien senior secured loan 8.10 % SOFR"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5842e1a34f2e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2024-12-31 issuer_name_printed population from output/shadow/page_rule_findings.csv: 5 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-47bfb0a649b581dc. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-06546d42fa1089b9, ROW-4400ac80c0a97bb6, ROW-524aad83ed1c45bd, ROW-8704f9105506a971. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000007",
+          "text": "Infinity Home Services Holdco, Inc., D'Angelo & Sons Construction Limited and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured revolving loan"
+        },
+        {
+          "accession": "0001287750-25-000007",
+          "text": "NBLY 2021-1 and KKR Nest Co-Invest L.P. Operator of multiple franchise concepts primarily related to home maintenance or repairs Limited partner interest 09/2021 9,725,000 9.7 12.1 (2) Neptune Bidco US Inc. and Elliott Metron"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_69cff9b0d03b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2025-03-31 issuer_name_printed population from output/shadow/page_rule_findings.csv: 3 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-4fc45b7f582fe37a. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-35571ac127f4cc08, ROW-a64ff5ddaf0633a8. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000020",
+          "text": "3 Step Sports LLC (14) Provider of integrated youth sports solutions First lien senior secured loan 12.30 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 11.7 (2)(10) Aventine Intermediate LLC & Aventine Holdings II LLC"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": "Participation rights 02/2024 02/2054 1 - - (2) 8.8 7.9 PestCo Holdings, LLC and PestCo, LLC (14) Provider of pest control services to the residential and commercial markets First lien senior secured loan 9.57 % SOFR (M) 5.25 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_84ce425fbf99",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2025-06-30 issuer_name_printed population from output/shadow/page_rule_findings.csv: 4 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-3198b4875d6d6071. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-4f41fc5cda306314, ROW-680e2a3a1d789731, ROW-dbabc5a83a301f2a. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000038",
+          "text": "Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo, LLC (14) Provider of pest control services to the residential and commercial markets First lien senior secured loan 10.68 % SOFR (Q) 6.25 %"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_90b4580dc765",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2025-09-30 issuer_name_printed population from output/shadow/page_rule_findings.csv: 8 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-187238af91b05c14, ROW-c55da5d355678972. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-0b6e4a69c95d3c00, ROW-39d129f34637a07c, ROW-65a9d0038c5893d7, ROW-8ae09a8932fbc556, ROW-9dc0aff9e061d384, ROW-f9046893d48efd4d. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000046",
+          "text": "Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP (13) Provider of global transportation safety and productivity applications First lien senior secured revolving loan 06/2025 02/2031 - - - (2)(9)(11)"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 12.7 11.6 (2) Class B common units 07/2022 100,000 0.1 - (2) 64.9 63.7 Amerivet Partners Management, Inc. and AVE Holdings LP"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_025a8155c6fc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2025-12-31 issuer_name_printed population from output/shadow/page_rule_findings.csv: 11 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-743994c2da334caf, ROW-b8bd5f823ab6d669. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-11688b200b4348f6, ROW-14a12cb2fbbdc1e4, ROW-350011f5c036882a, ROW-5d42fa039f4b906c, ROW-92387b1949aa7a57, ROW-95182b19a3967ba0, ROW-d1f333aa71788b92, ROW-d7acc849a7e7c4fb, ROW-f67aa78083e5486b. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001287750-26-000006",
+          "text": "NCWS Holdings LP Manufacturer and supplier of car wash equipment, parts and supplies to the conveyorized car wash market Class A-2 common units 12/2020 12,296,000 12.9 2.3 (2) OPH NEP Investment, LLC (4) Provider of energy"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "Higginbotham Insurance Agency, Inc., HIG Operations Holdings, Inc., and HIG Intermediate, Inc. (13) Independent retail insurance broker First lien senior secured loan 8.22 % SOFR (M) 4.50 % 08/2023 06/2031 9.1 9.1 9.1 (2)(9)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bba6b0998b9f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2026-03-31 issuer_name_printed population from output/shadow/page_rule_findings.csv: 4 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-908468be9ba9e5cb. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-0c096671554c3cad, ROW-8755243e66aca46f, ROW-e74774628443e37c. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-027688",
+          "text": "GHX Ultimate Parent Corporation and Nexus TopCo LP (13) On-demand supply chain automation solutions provider to the healthcare industry First lien senior secured loan 8.70 % ( 2.50 % PIK) SOFR (Q) 5.00 % 12/2024 02/2033 92.0 92.0"
+        },
+        {
+          "accession": "0001628280-26-027688",
+          "text": "Merit Financial Group, LLC and CWC Fund I (MFA) LP (13) Registered investment adviser platform First lien senior secured revolving loan 8.42 % SOFR (Q) 4.75 % 08/2025 08/2032 0.8 0.8 0.8 (2)(6)(9) First lien senior secured"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e8bc75fbdf5d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Rebuilt the 2026-06-30 issuer_name_printed population from output/shadow/page_rule_findings.csv: 2 rows, identical to affected_rows and reviewed_rows. Read each printed line on the cached page. Continuation-line misfires (block continues with an instrument or a second business-description line under the correctly published company): ROW-b54027f8357f1219. Remaining rows publish the filer's member name for the same borrower group in another legal form or co-obligor list (values and terms match the printed line): ROW-24f57db18696412f. No row in this quarter publishes a different company after this run's corrections. Routing (REQ-NBAR-1 check repair, REQ-NBAR-2 owner ruling, no disposition) is consistent with the 2026-11-04 rule. Caveat: the conclusion field reads confirmed_error although the investigator recommends treating the name rows as variants; the owner ruling decides which. Two rows of this kind elsewhere (Steward Partners, Mustang Prospects, 2025-12-31) are pure reorderings of the same entity names, i.e. check misfires rather than acceptance questions.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-050307",
+          "text": "Paris US Holdco, Inc. and Trimaster Manufacturing Inc. (13) Manufacturer of high-tolerance precision machined components and assemblies for the aerospace and defense industry First lien senior secured revolving loan 8.39 % SOFR"
+        },
+        {
+          "accession": "0001628280-26-050307",
+          "text": "Participation rights 02/2024 02/2054 1 - - (2) 9.7 7.3 PestCo Holdings, LLC and PestCo, LLC (13) Provider of pest control services to the residential and commercial markets First lien senior secured revolving loan 10.50 % Base"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "issuer-name-from-member-differs-from-page",
+      "outcome": "supported",
+      "rationale": "Independently diffed nvard->nbard and read the printed line owning each corrected context's fair-value fact: Generator Buyer (c-1256) and GSV Purchaser (c-1257) 2024-09-30, Bellwether (c-919) 2025-06-30, Premise Health revolver (c-485) 2025-09-30, Einstein (c-126) 2026-03-31, YE Brands (c-1113, c-1114) 2026-06-30, and the PCG pair 2025-03-31..2025-12-31 (the 0.4-0.5 FV / 4.4-4.5 cost context sits on the printed PCG-Ares Sidecar Investment line, the 6.7-6.9 FV / zero cost context on the PCG-TAC-CV line). All 17 corrections match the page. A block-level comparison (row's own printed line inherits the block company) would catch the unflagged continuation rows; false positives are bounded to legal-form variants the rule already reports.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-050307",
+          "text": "YE Brands Holdings, LLC (13) Sports camp operator First lien senior secured loan 8.48 % SOFR (Q) 4.75 % 10/2021 10/2027 0.1 0.1 0.1 (2)(9) First lien senior secured loan 8.48 % SOFR (Q) 4.75 % 09/2023 10/2027 3.6 3.6 3.6 (2)(9) 3.7 3.7 ZBS Mechanical Group Co-Invest Fund 2, LLC and ZBS Mechanical"
+        }
+      ]
+    },
+    {
+      "observation_key": "issuer-name-is-instrument-text",
+      "outcome": "supported",
+      "rationale": "Symplr c-659 (2026-06-30) and PumpTech c-1289 (2026-03-31) both print after a page break with no company on the line; the corrected issuer/instrument match the preceding block, and both rows now chain to their 16-quarter (Symplr) and 6-quarter (PumpTech) positions with constant 16,201 shares / 752,822 units. The proposed issuer-starts-with-instrument-phrase plus blank-instrument check is cheap and specific.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-050307",
+          "text": "Series C-3 preferred shares 11.00 % PIK 10/2021 16,201 27.0 17.3 (2) 421.9 276.8 Tempus AI, Inc. Provider of technology"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-text-glued-to-issuer-name",
+      "outcome": "rejected",
+      "rationale": "The observation says all 22 glued rows were fixed by the strip and kept as the printed instrument. 21 are right, but 2025-12-31 Zeppelin c-1832 (ROW-0e3478bdc6071267, par 11.0, cost 11.0, FV 10.9, 8.42 %, maturity 08/2032) now publishes instrument_description 'First lien senior secured revolving loan' (instrument_type Revolver) while its fair-value fact sits on the printed 'First lien senior secured loan 8.42 % SOFR (Q) 4.75 % 07/2025 08/2032 11.0 11.0 10.9' line; no revolver is printed for Zeppelin that quarter. The strip copied the filer's wrong member word into the instrument field, so the 'fixed' claim is unsupported for that row, and the proposed detector (name ending in instrument text with blank instrument) cannot catch a strip that moves a wrong instrument word. Needed: context correction of c-1832 instrument to the printed term loan, and a strip guard or check comparing the stripped instrument with the printed line (e.g. revolver label on a row whose par equals the printed term-loan par).",
+      "evidence": [
+        {
+          "accession": "0001287750-26-000006",
+          "text": "Zeppelin US Buyer Inc. and Providence Equity Partners IX-C L.P. (13)(14) Specialty logistics platform for high-stakes projects in music, sports, production, fine art, and automotive industries First lien senior secured loan 8.42 % SOFR (Q) 4.75 % 07/2025 08/2032 11.0 11.0 10.9 (2)(9) Limited partnership interest 07/2025"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-blank-where-member-has-company-only",
+      "outcome": "supported",
+      "rationale": "Expereo c-1727/c-1775/c-1809 and Opal c-1723/c-1756/c-1791: the rate, PIK and spread facts of each context sit on the printed 'First lien senior secured loan' line; Dundee c-1328 prints 'Limited partnership interest 11/2024 4,234,000 4.2 4.2'. All 7 instrument values match. A blank-instrument-on-valued-row check is mechanical and low in false positives.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000020",
+          "text": "Expereo USA, Inc. and Ristretto Bidco B.V. (14) Global internet managed service provider First lien senior secured loan 10.80 % ( 3.50 % PIK) SOFR (Q) 6.50 % 12/2024 12/2030 60.8 60.8 60.2 (2)(6)(10) 60.8 60.2 0.44 % See accompanying notes"
+        }
+      ]
+    },
+    {
+      "observation_key": "twin-tranche-labels-swapped-by-member",
+      "outcome": "supported",
+      "rationale": "c-856 fair-value fact sits on the printed Z1 line (12.00 % PIK), c-857 on the Z2 line (12.00 % (6.00 % PIK)); the published Z1/Z2 labels now follow the page. Z1 2025-09-30 joins the Z1 chain (c-427, c-408, c-430). The same-label/different-terms check is cheap and reviewable.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000046",
+          "text": "MC Accelerate Co-Invest Feeder LP and MC CIF Wealth Management (UK) Ltd. Global wealth management firm Z1 preferred shares 12.00 % PIK 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Z2 preferred shares 12.00 % ( 6.00 % PIK) 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Membership interest 08/2025 1,000 - - (2)(6) 25.6 25.6 Medlar Bidco"
+        }
+      ]
+    },
+    {
+      "observation_key": "position-chain-breaks-at-issuer-rename",
+      "outcome": "supported",
+      "rationale": "Creek first-lien term loan pid 593abd0f now runs 2024-12-31..2026-06-30 with continuous par 208.7->206.1, maturity 12/2031, SOFR; the CCreek contexts (c-1436, c-1475, c-1504, c-1508) print under the Creek block or its page-break continuation. Sound link. The proposed two-names-same-printed-company / identical-terms chain-break check would catch recurrence.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000046",
+          "text": "Creek Parent, Inc. and Creek Feeder, L.P. (13) Provider of delivery technologies, development, drug manufacturing, biologics, gene therapies and consumer health products First lien senior secured revolving loan 12/2024 12/2031 - - - (2)(9) First lien senior secured loan 9.14 % SOFR (M) 5.00 % 12/2024 12/2031 207.6 207.6 207.6"
+        }
+      ]
+    },
+    {
+      "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+      "outcome": "supported",
+      "rationale": "Confirmed: pid 51663137 links Elemica's 09/2019-acquired loan maturing 09/2026 (59.3, to 2025-12-31) to the 02/2026 loan maturing 02/2032 (113.0). That is a refinancing link across maturity, not a continuation of the printed tranche, and it is correctly left as a matcher policy question rather than presented as fixed. Note the suggested check (maturity AND acquisition date both change) would not catch the Sport Maska cross-tranche link this run created (see review_notes), where maturity and acquisition date are equal but the reference rate/currency changes.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-027688",
+          "text": "Elemica, Inc. and EZ Elemica Holdings, Inc. (13) SaaS based supply chain management software provider focused on chemical markets First lien senior secured loan 8.45 % SOFR (Q) 4.75 % 02/2026 02/2032 113.0 113.0 110.8 (2)(9)"
+        }
+      ]
+    },
+    {
+      "observation_key": "position-chain-not-rejoined-after-label-fix",
+      "outcome": "supported",
+      "rationale": "Confirmed: 2025-09-30 Z2 (c-857) is a singleton pid 5e04ea81 while 2025-12-31..2026-06-30 Z2 rows sit on e60ca23a; the 2025-12-31 member reads '(UK) Ltd' without the period. Mechanism unestablished and left; the adjacency check is deterministic and reviewable.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000046",
+          "text": "MC Accelerate Co-Invest Feeder LP and MC CIF Wealth Management (UK) Ltd. Global wealth management firm Z1 preferred shares 12.00 % PIK 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Z2 preferred shares 12.00 % ( 6.00 % PIK) 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Membership interest 08/2025 1,000 - - (2)(6) 25.6 25.6 Medlar Bidco"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "request_resolution_reviews": [
+    {
+      "request_id": "REQ-NBAR-1",
+      "outcome": "supported",
+      "evidence": [
+        {
+          "accession": "0001628280-26-027688",
+          "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 9.7 9.7 8.7 (2) Participation rights 02/2024 02/2054 1 - - (2) 9.7 8.7 See accompanying notes to consolidated financial"
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "Endeavor Bidco LLC and Endeavor TopCo, Inc. Global securities finance trading platform First lien senior secured loan 9.38 % SOFR (Q) 4.25 % 08/2024 08/2029 6.1 6.1 6.0 (2)(11) Trading platform for securities finance Class A common units 08/2024 1,859 1.9 1.9 8.0 7.9 Envestnet, Inc. Provider of"
+        }
+      ],
+      "rationale": "Correctly classed verification_bug. Counted the misfire rows in the nbard rule output: OTG participation rights 10 (2024-03-31..2026-06-30), AHR second business-description line 4 (2023-09-30, 2024-06-30, 2025-09-30, 2025-12-31), Endeavor Class A units 1 (2024-09-30) = 15; on each page the line continues the correctly published company block. Deferral to the owner is right: a check repair needs the owner's ruling, tests (OTG passes, Einstein/Elemica-type mismatch still fails) and a measurement on every accepted sandbox; the findings stay outstanding meanwhile."
+    },
+    {
+      "request_id": "REQ-NBAR-2",
+      "outcome": "supported",
+      "evidence": [
+        {
+          "accession": "0001287750-26-000006",
+          "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (13) Outsourced supply chain solutions provider to operators of distribution centers First lien"
+        },
+        {
+          "accession": "0001628280-26-027688",
+          "text": "GHX Ultimate Parent Corporation and Nexus TopCo LP (13) On-demand supply chain automation solutions provider to the healthcare industry First lien senior secured loan 8.70 % ( 2.50 % PIK) SOFR (Q)"
+        }
+      ],
+      "rationale": "Correctly classed acceptance_change and correctly deferred: the nvard review asked these not be closed as as-filed, so applying the accepted variant reason needs an owner ruling. Count reproduces: 28 name rows in the 8 new investigations + 6 carried confirmed rows = 34. Caveats for the owner: (1) Steward Partners and Mustang Prospects (2025-12-31) are pure reorderings of identical entity names, i.e. check misfires (verification_bug), not acceptance questions; (2) several rows are not legal-form variants but different group entities or co-obligor lists (GHX 'Commerce Parent/Commerce Topco' vs printed 'Nexus TopCo LP'; Paris '1001028292 Ontario' vs 'Trimaster Manufacturing'; Priority, Murchison and NBLY equity printed in their own blocks under a narrower name), so any acceptance should be per row, not a blanket reason. The recommendation (a) is reasonable for borrower identity; it does not make the names printed-correct."
+    }
+  ],
+  "verdict_retirement_review": {
+    "file": "data/overrides/verdict_retirements/standing_rule_fundloop_0001287750_2026-11-11.json",
+    "rerun": "python scratch/fund_runs/0001287750/nbar_retirements.py nbard -> passing 13 of 13",
+    "passing": 13,
+    "failing": [],
+    "notes": "All 13 verdict files hash-match verdict_sha256; ledger shows verdict_retired for each. A07 x8: independently parsed the inline XBRL for 2022-09-30, 2023-09-30, 2024-09-30, 2025-06-30, 2026-03-31: percent facts sit on EquitySecuritiesByIndustryAxis (industry subtotals) and undimensioned totals; printed money-money-pct lines equal the industry subtotal count; no position line prints a percentage. Weakness: the investigator's script screens only InvestmentIdentifierAxis; 2026-03-31 has one percent fact on InvestmentIssuerNameAxis (member CapitalGoodsMember, the Capital Goods industry subtotal 11.21 %) and 2024-09-30 one on the equity-method investee axis (OPH NEP issuer subtotal line), neither a position, so the conclusion holds. PP03 Balrog: Sept 2023 schedule prints the second lien at 12.43 % SOFR (comparative Dec 2022 line is 11.73 % LIBOR); published once at current values. PP03 ADG: June 2024 schedule prints 7,343,253 units (Dec 2023 comparative 10,000,000); published at current. X08 Symplr, fv_conservation PRG, SRC_BDC01 Align/Centric/Visual Edge: cited rows at printed values, published-basis sums equal printed totals. A retirement shows the cited error is gone, not that the fund-quarter is correct."
+  },
+  "review_notes": [
+    "Zeppelin 2025-12-31 c-1832 (ROW-0e3478bdc6071267, FV 10.9M): published as a revolving loan / instrument_type Revolver; the page prints a first lien term loan and no revolver. Introduced into instrument_description by this run's strip (the name already carried the wrong word). Not in any flagged population; the report does not mention it.",
+    "Sport Maska position_id d290bb92 (changed by this run): links the SOFR revolver (2025-09-30 c-1640 8.9, 2025-12-31 c-1646 2.3) to the CORRA revolver (2026-03-31 c-1648 0.5, 2026-06-30 c-1668 3.9). The 2026 SOFR revolver (c-1647, c-1669) sits on 5bbfcaa7 and the 2025-09-30 CORRA revolver c-1639 on singleton 50cee59f. This is a cross-tranche (cross-currency) link created by the run; the report lists it as a 'Sport Maska revolver' rejoin. Unsound.",
+    "Bellwether pid d3611799: the new 2025-06-30 c-919 link to the 14.7 term-loan chain is sound, but the chain it joins already continues into a 0.8 revolver (2026-03-31) and a 1.1 term loan (2026-06-30), a pre-existing cross-tranche link not mentioned.",
+    "position_id changes: 44 rows. Sound: PCG-Ares Sidecar (16-quarter chain ad12d382), PCG-TAC-CV (a7233098), Creek (593abd0f), Einstein (5e5174b5), PumpTech LP (1fdcd819), Symplr C-3 (8937ccc2), Dundee (8f2ac930), YE Brands x2 (28c7fe7c, 5ef739c3), Bellwether c-919, MC Z1 (f50dc559). Questionable/left: Elemica refinancing link (51663137, acknowledged), MC Z2 singleton (acknowledged). Unsound: Sport Maska c-1648/c-1668 (unacknowledged).",
+    "Row corrections: all 37 added rows and all 22 strip rows were compared with the printed line owning each context's fair-value fact (scratch/fund_runs/0001287750/reviewer_nbard/r11_diff.log, r15_instr.py). 36/37 corrections and 21/22 strips match; the exception is Zeppelin c-1832 above (strip). Every wrong-company fix (Einstein/Elemica, YE Brands/Vista x2, Generator/GSV/Harvey Tool, Bellwether/Benecon, Premise/PetVet, PCG swap x8) matches the page.",
+    "The 20-row page sample (samples/0001287750-nbard) reported 0 published errors; it is a random sample and did not cover the two defects above.",
+    "Not run by this reviewer: pytest, rebuild, semantic diff, re-attestation. ARES-VERIFY-PRINTED-RATES-001 (history) was reviewed in the nvard review and not re-reviewed here."
+  ]
+}

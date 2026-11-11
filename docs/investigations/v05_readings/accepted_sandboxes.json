@@ -10,9 +10,9 @@
   "basis": "D-256: PASS, investigation COMPLETE; 60 findings, 2 outstanding (A07, F22), both proposed (accepted reason coverage-percent-of-net-assets-no-longer-printed); 14/14 tie; 201 relabelled 2026-03-31 commitment contexts (new opt-in key relabelled_contexts), 44 currencies, 29 instruments, 4 tranche labels fixed; 9 verdicts retired (verified 9/9); sample 0/20; Fullsteam 2023-03-31 instrument parked; nboc-REQ-1 deferred"
  },
  "0001287750": {
-  "label": "nvard",
-  "accepted_on": "2026-10-20",
-  "basis": "D-226: INCOMPLETE, investigation COMPLETE; 81 findings, 20 outstanding, 6 proposed; 16/16 totals tie; 130 correction fields retained; sample0/20; no introduced identity changes; baseline chain drift unresolved"
+  "label": "nbare",
+  "accepted_on": "2026-11-11",
+  "basis": "D-257: INCOMPLETE, investigation COMPLETE; 81 findings, 14 outstanding (27 before), all issuer_name_printed (27 legal-form variants + 3 one-filing short names under deferred REQ-NBAR-2; 17 continuation/reordering misfires under deferred REQ-NBAR-1); 16/16 tie; 22 glued names stripped, 43 context corrections (wrong-company fixes Einstein, YE Brands, Generator/GSV, Bellwether, Premise, PCG swap; GHX/Paris renamed from page); 13 verdicts retired (verified 13/13); sample 0/20; Zeppelin instrument_type Revolver and Sport Maska cross-currency chain parked (shared)"
  },
  "0001838126": {
   "label": "nvhpg",
