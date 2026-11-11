@@ -1,0 +1,539 @@
+{
+ "reviewer_id": "independent-reviewer-0001837532-nbapd-2026-11-11",
+ "report_digest": "c5d88fa4a93abfdb839e1fe9be479d4a9ea0aebd9e61d8f7de6e9a5b571a2d68",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_002974133379",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-23-021206): the flagged row_id set equals affected_rows exactly (1 rows: Investment Company 24 Bidco Limited x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 575 , 0.00 % Floor 7/11/2029 GBP 6,559 7,604 7,848 (3)(4)(8) (9)(19) First Lien Secured Debt E+ 575 , 0.00 % Floor 7/11/2029 EUR 5,406 4,646 4,976 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a0962818f16b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-23-041830): the flagged row_id set equals affected_rows exactly (2 rows: Investment Company 24 Bidco Limited x2), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 565 , 0.00 % Floor 7/11/2029 GBP 6,559 7,626 8,080 (3)(4)(8) (9)(19) First Lien Secured Debt E+ 565 , 0.00 % Floor 7/11/2029 EUR 4,029 3,958 4,265 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ddc1b455b5b5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-23-061985): the flagged row_id set equals affected_rows exactly (2 rows: Investment Company 24 Bidco Limited x2), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 540 , 0.00 % Floor 7/11/2029 GBP 6,559 7,632 7,763 (3)(4)(8) (9)(19) First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 5,406 4,656 4,850 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e741d2ec00c7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-24-031479): the flagged row_id set equals affected_rows exactly (2 rows: Investment Company 24 Bidco Limited x2), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 540 , 0.00 % Floor 7/11/2029 GBP 6,559 7,638 8,277 (3)(4)(8) (9)(17) First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 4,029 3,964 4,404 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6c8019668645",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-24-058684): the flagged row_id set equals affected_rows exactly (3 rows: Investment Company 24 Bidco Limited x3), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058684",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 540 , 0.00 % Floor 7/11/2029 GBP 6,559 7,644 8,196 (3)(4)(8)(9)(17) First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 4,029 3,967 4,304 (3)(4)("
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f8735779a837",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-24-094137): the flagged row_id set equals affected_rows exactly (3 rows: Investment Company 24 Bidco Limited x3), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,650 8,208 (3)(4)(8)(9)(17) First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7dfbf6db93b7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-24-124223): the flagged row_id set equals affected_rows exactly (3 rows: Investment Company 24 Bidco Limited x3), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,657 8,681 (3)(4)(8)(9)(17) First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_da633c9b20b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-25-038785): the flagged row_id set equals affected_rows exactly (4 rows: Investment Company 24 Bidco Limited x4), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. Conclusion false_alarm is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,663 8,150 (3)(4)(8)(9)(17) First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_479b0a9e5a2a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-25-068013): the flagged row_id set equals affected_rows exactly (5 rows: Investment Company 24 Bidco Limited x3, Mariani CI x1, SAVATREE CI x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. SAVATREE CI / Mariani CI: the page prints the group heading row ('SAVATREE', 'Mariani') and the company cell 'CI' (2025-03-31 C_9edac68b: printed 'SAVATREE' then 'CI First Lien Secured Debt - Term Loan S + 500 ...'). The published name is not the printed company, so confirmed_error is right; stripping would publish the bare name 'CI' for two borrowers, so parking for the owner is the right next action (no disposition proposed). Conclusion confirmed_error is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,670 8,409 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 515 , 0.00 % Floor 7/11/2029 EUR"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,716 23,362 23,361 (4)(17) First Lien Secured Debt - Delayed Draw S + 550 , 1.00 % Floor 3/27/2030 - ( 83 ) ( 169 ) (4)(5)(12)(32) First Lien Secure"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "SAVATREE CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,242 17,083 16,800 (4)(16) First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 6/6/2031 - ( 31 ) ( 60 ) (4)(5)(12)(32) 17,052 16,740 SERVPRO O"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f951651e820c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0000950170-25-105984): the flagged row_id set equals affected_rows exactly (5 rows: Investment Company 24 Bidco Limited x3, Mariani CI x1, SAVATREE CI x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. SAVATREE CI / Mariani CI: the page prints the group heading row ('SAVATREE', 'Mariani') and the company cell 'CI' (2025-03-31 C_9edac68b: printed 'SAVATREE' then 'CI First Lien Secured Debt - Term Loan S + 500 ...'). The published name is not the printed company, so confirmed_error is right; stripping would publish the bare name 'CI' for two borrowers, so parking for the owner is the right next action (no disposition proposed). Conclusion confirmed_error is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,677 8,958 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 515 , 0.00 % Floor 7/11/2029 EUR"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,716 23,376 23,361 (4)(9)(16) First Lien Secured Debt - Delayed Draw S + 550 , 1.00 % Floor 3/27/2030 1,016 930 849 (4)(9)(12)(32) First Lien Secure"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "SAVATREE CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,201 17,027 16,996 (4)(15) First Lien Secured Debt - Delayed Draw S + 500, 0.75 % Floor 10/12/2028 - ( 50 ) ( 119 ) (4)(5)(12)(32) First Lien Secure"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_384e01068bca",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0001193125-25-277723): the flagged row_id set equals affected_rows exactly (5 rows: Investment Company 24 Bidco Limited x3, Mariani CI x1, SAVATREE CI x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. SAVATREE CI / Mariani CI: the page prints the group heading row ('SAVATREE', 'Mariani') and the company cell 'CI' (2025-03-31 C_9edac68b: printed 'SAVATREE' then 'CI First Lien Secured Debt - Term Loan S + 500 ...'). The published name is not the printed company, so confirmed_error is right; stripping would publish the bare name 'CI' for two borrowers, so parking for the owner is the right next action (no disposition proposed). Conclusion confirmed_error is supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 6,559 7,685 8,777 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,657 23,331 23,347 (4)(9)(16) First Lien Secured Debt - Delayed Draw S + 550 , 1.00 % Floor 3/27/2030 1,443 1,359 1,297 (4)(9)(12)(16)(33) First Lie"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "SAVATREE CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,160 16,993 16,954 (4)(15) First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 10/12/2028 - ( 48 ) ( 120 ) (4)(5)(12)(33) First Lien Secur"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0cb91d765604",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0001193125-26-102386): the flagged row_id set equals affected_rows exactly (5 rows: Investment Company 24 Bidco Limited x3, Mariani CI x1, SAVATREE CI x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. SAVATREE CI / Mariani CI: the page prints the group heading row ('SAVATREE', 'Mariani') and the company cell 'CI' (2025-03-31 C_9edac68b: printed 'SAVATREE' then 'CI First Lien Secured Debt - Term Loan S + 500 ...'). The published name is not the printed company, so confirmed_error is right; stripping would publish the bare name 'CI' for two borrowers, so parking for the owner is the right next action (no disposition proposed). Conclusion confirmed_error is supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 6,559 7,692 8,797 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,598 23,288 23,281 (4)(9)(16) First Lien Secured Debt - Delayed Draw S + 550 , 1.00 % Floor 3/27/2030 5,842 5,733 5,693 (4)(9)(12)(16)(32) First Lie"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "SAVATREE CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,117 16,955 16,905 (4)(15) First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 6/6/2031 - ( 46 ) ( 124 ) (4)(5)(12)(32) First Lien Secured"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7ab0693ee9d4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0001193125-26-215667): the flagged row_id set equals affected_rows exactly (5 rows: Investment Company 24 Bidco Limited x3, Mariani CI x1, SAVATREE CI x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. SAVATREE CI / Mariani CI: the page prints the group heading row ('SAVATREE', 'Mariani') and the company cell 'CI' (2025-03-31 C_9edac68b: printed 'SAVATREE' then 'CI First Lien Secured Debt - Term Loan S + 500 ...'). The published name is not the printed company, so confirmed_error is right; stripping would publish the bare name 'CI' for two borrowers, so parking for the owner is the right next action (no disposition proposed). Conclusion confirmed_error is supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-215667",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 465 , 0.00 % Floor 07/11/2029 GBP 6,559 7,701 8,465 (3)(4)(8)(9)(19) First Lien Secured Debt - Term Loan E + 465 , 0.00 % Floor 07/11/2029 E"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 03/27/2030 23,538 23,244 23,148 (4)(9)(16) First Lien Secured Debt - Delayed Draw S + 550 , 1.00 % Floor 03/27/2030 5,873 5,770 5,689 (4)(9)(12)(16)(35) First L"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "SAVATREE CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/06/2031 17,077 16,922 16,653 (4)(15) First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 06/06/2031 - ( 44 ) ( 248 ) (4)(5)(12)(35) First Lien Sec"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0d897294eebd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage reconstructed independently from scratch/fund_sandbox/nbapd/output/shadow/page_rule_findings.csv (rule issuer_name_printed, this fund, 0001193125-26-341358): the flagged row_id set equals affected_rows exactly (6 rows: Investment Company 24 Bidco Limited x3, Mariani CI x1, SAVATREE CI x1, Tivity Health Health, Inc. x1), and reviewed_rows equals it. The ledger row is state open, no proposal. Investment Company 24 Bidco Limited rows: read on the page by context (e.g. 2023-03-31 C_48e2552c, 2024-12-31 C_8ae88196, 2026-06-30 C_e4ae8a12): the block is headed by the group row 'Version 1' and the company row 'Investment Company 24 Bidco Limited', and the published name equals the printed company; the rule fires with kind begins_with_section_word because pipeline/candidate_rules.py _SECTION_START starts with '^(investments?\\b'. A check misfire: under the owner ruling of 2026-11-04 it clears only by a check repair, which REQ-NBAP-1 asks for and the orchestrator deferred to the owner, so the finding correctly stays outstanding. SAVATREE CI / Mariani CI / Tivity Health Health, Inc.: the page prints the group heading row ('SAVATREE', 'Mariani', 'Tivity Health') and the company cell 'CI' (2025-03-31 C_9edac68b: printed 'SAVATREE' then 'CI First Lien Secured Debt - Term Loan S + 500 ...'; 2026-06-30 C_628d5e4b: printed 'Tivity Health' then 'Health, Inc. First Lien ... 110,728 109,906 110,728', a filer misprint). The published name is not the printed company, so confirmed_error is right; stripping would publish the bare name 'CI' for two borrowers, so parking for the owner is the right next action (no disposition proposed). Conclusion confirmed_error is supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-341358",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 465 , 0.00 % Floor 07/11/2029 GBP 6,559 7,709 8,489 (3)(4)(8)(9)(20) First Lien Secured Debt - Term Loan E + 465 , 0.00 % Floor 07/11/2029 E"
+    },
+    {
+     "accession": "0001193125-26-341358",
+     "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 03/27/2030 23,479 23,201 23,155 (4)(9)(17) First Lien Secured Debt - Delayed Draw S + 550 , 1.00 % Floor 03/27/2030 7,107 7,030 6,968 (4)(9)(12)(17)(34) First L"
+    },
+    {
+     "accession": "0001193125-26-341358",
+     "text": "SAVATREE CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/06/2031 17,351 17,202 16,945 (4)(17) First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 06/06/2031 332 288 102 (4)(12)(17)(34) First Lien Secured"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "rejected",
+   "rationale": "The fix itself checks out (sample of 18 of the 85 new strip alternatives: every prefixed name in nbapa is gone in nbapd and the printed company follows the group row, e.g. 'Gannett Co., Inc.' / 'Gannett Holdings, LLC', 'Cablevision Systems' / 'CSC Holdings, LLC', 'KDC' / 'KDC/ONE Development Corporation, Inc.'; all 32 name corrections read on the page by context, 32/32 correct). But the observation's claim 'fixed for all but 13 parked rows' is false and its detection decision does not hold. 18 published continuation-line rows in nbapd still carry the group heading plus a member spelling, none flagged by issuer_name_printed: Ironclad Ironhorse Purchaser LLC x9 (2024-06-30..2025-12-31; page prints group 'Ironclad', company 'Ironhorse Purchaser, LLC'), Dr. Scholls DRS Holdings III, Inc x3 (2025-03-31..2025-09-30; printed 'DRS Holdings III, Inc.'), Jensen Hughes Jensen Hughes, Inc. x2 (2025-09-30; printed 'Jensen Hughes, Inc'), Novotech Novotech SG Holdings pte. Ltd/... x2 (2024-09-30, 2024-12-31), Treace Medical Concepts Treace Medical Concepts, Inc x2 (2024-06-30). These are the same shape as the 14 continuation lines this run corrected. 'existing_detector issuer_name_printed' cannot be the recurrence control when that rule is silent on exactly these rows. Required: fix or list these 18 rows (they also split the entity and chain from the term loan), restate the count, and change the detection decision (e.g. a proposed check: a published name that equals '<other published name of the same fund and quarter>' with leading words, after punctuation folding).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Ironhorse Purchaser, LLC First Lien Secured Debt - Term Loan S+ 676 , 1.00 % Floor 9/30/2027 3,052 2,998 2,991 (4)(9)(14)"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "DRS Holdings III, Inc. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 11/1/2028 22,159 22,049 22,049 (4)(16)"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Jensen Hughes, Inc First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 9/1/2031 78,054 77,020 77,469 (4)(16)"
+    }
+   ]
+  },
+  {
+   "observation_key": "negative-cost-published-positive",
+   "outcome": "supported",
+   "rationale": "All 36 sign changes nbapa -> nbapd (2023-09-30 20, 2023-12-31 2, 2024-06-30 1, 2025-06-30 13) read on the page by context: every one prints the cost in brackets (e.g. Certinia 4,039 (118) (121), K Hovnanian $ - $ (1,573) $ (1,925)). A full scan of 5,941 published nbapd rows (every quarter) finds no published positive cost whose printed cost is bracketed and no negative cost printed unbracketed. The proposed detector (undrawn line with positive cost and negative FV, or cost total gap beyond the no-value lines) is concrete and narrow.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "First Lien Secured Debt - Revolver S+ 725 , 1.00 % Floor 8/4/2029 4,039 ( 118 ) ( 121 ) (4)(5)(9)(11) (27)"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 6/30/2026 $ - $ ( 1,573 ) $ ( 1,925 ) (4)(5)(8)(9)(12)(32)"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-sign-reader-misses-bracket-in-next-cell",
+   "outcome": "supported",
+   "rationale": "Confirmed: nbapa_sign_scan.txt shows pipeline.printed_sign reading 2024-12-31 facts as 'plain' with a negative tag (216 in 0000950170-25-038785, e.g. Truck-Lite cost 309 / FV 147) while the page prints '( 309 ) ( 147 )'; my independent page scan finds every published negative cost at 2024-12-31 and 2025-03-31 bracketed on the page, so listing those filings would flip correct values. Not listing them and using context corrections for 2025-06-30 is the safe choice. The proposed guard (refuse to flip a fact already signed '-', report flips per filing) is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Revolver S+ 575 , 0.75 % Floor 2/13/2030 - ( 309 ) ( 147 ) (4)(5)(11)(28)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "rationale": "The removed-edge list (nbapb_vs_nbapa_chains.txt REMOVED 13; my nbapd vs nbapa count 11 removed, 83 added) contains the six rename links (Heritage -> Arcwood x2, Pavement Partners -> Pave America x2, Legacy Merger Sub -> Legacy Service Partners, Cube A&D -> Cube Industrials); each pair has the same maturity and margin and par within a few pct on the page. A force_pair cannot create a pair the matcher never proposed, so parking for a shared matcher change is right; the proposed continuity check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Arcwood Environmental, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 87,320 86,246 88,193 (4)(9)(16)"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Legacy Service Partners Legacy Merger Sub, LLC First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 11/10/2031 81,667 81,615 81,035 (4)(16)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "Verified in my own added-edge scan (83 added edges, 20 flagged for currency/maturity/type/lien): Carvana 2029-09-01 unsecured -> 2028-12-01 first lien and 2030-05-01 unsecured -> 2030-06-01 first lien, and Celsius 26.0M 2032-03-21 -> 2.5M 2032-04-01, as stated. Incomplete, not wrong: this run also added Coretrust 2024-03-31 untyped S+675 line (cost (56)) -> 2024-06-30 Revolver, while the 2024-03-31 Revolver line (cost (112), the cost-continuous successor of the 2023-12-31 revolver (117) and predecessor of 2024-06-30 (107)) is left a single-row chain; the proposed lien/maturity check would not catch that one (same lien and maturity). The other flagged edges are benign (2024-03-31 members lack the tranche word; Janus 3,083 line keeps par/margin/maturity while the filer prints SONIA in 2024-12-31 and E+ around it; ERC Topco amendment with one-day maturity change).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Celsius Celsius Holdings Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 4/1/2032 $ 2,500 $ 2,488 $ 2,518 (8)(16)"
+    },
+    {
+     "accession": "0000950170-24-058684",
+     "text": "First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 4,737 ( 56 ) ( 118 ) (4)(5)(11)(28)"
+    },
+    {
+     "accession": "0000950170-24-058684",
+     "text": "First Lien Secured Debt - Revolver S+ 675 , 0.75 % Floor 10/1/2029 4,737 ( 112 ) ( 118 ) (4)(5)(11)(28)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "outcome": "supported",
+   "rationale": "Accurate. For all 45 rows of the four agentA findings I located each context's facts on the printed row: basis_spread / maturity_date equal the printed line on every row, while instrument_description still carries the member's margin/maturity (Hanger 'S+550, 1.00% Floor' vs printed S + 350, 0.00 % Floor; LHS revolver 'P+425' vs S + 525; and on relabelled rows another company's terms: CT Technologies revolver carries MRO Parent's 'S+475 ... 6/9/2032' vs printed S+ 500 09/02/2031, SupplyHouse revolver carries Vybond's 'S+500, 0.75% Floor ... 2/3/2032' vs printed S + 400, 0.50 % Floor 7/1/2032). The proposed detector is concrete. Consequence the report does not draw: the four agentA verdict retirements rest on the structured fields only, while a published field on the cited rows still differs from the page (see verdict_retirement_reviews).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Hanger, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 10/23/2031 25,499 25,409 25,615 (15)"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "All 3 currency fixes read on the page by context (2024-06-30: Coretrust delayed draw C_2c818a88 '- ( 85 ) ( 79 )', Coretrust revolver C_122e0e22 '- ( 107 ) ( 47 )', Lotus delayed draw C_d5567248 '- ( 44 ) ( 88 )'): SOFR margin, dash par, no currency marker; published now USD, principal 0, rate 1, source_usd. The proposed check is concrete; FX01 does not cover it.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "First Lien Secured Debt - Revolver S+ 525 , 0.75 % Floor 10/1/2029 - ( 107 ) ( 47 ) (4)(5)(11)(27)"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Lotus Topco Inc. First Lien Secured Debt - Term Loan S+ 475 , 1.00 % Floor 6/7/2030 11,765 11,590 11,588 (4)(15)"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-picks-member-variant",
+   "outcome": "supported",
+   "rationale": "Reproduced on nbapd: 1,770 published rows, 152 entities, 53,640.2M where canonical_name LIKE '% ' || issuer_name. canonical_name is recomputed by shared entity resolution and is not a fund setting; the exact suffix test is a concrete, low-false-positive detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Chemicals AOC LSF11 A5 HoldCo LLC First Lien Secured Debt S+ 435 , 0.50 % Floor 10/15/2028 $ 8,148 $ 7,942 $ 8,100 (16)"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-total-margin-with-pik-separate-is-convention",
+   "outcome": "supported",
+   "rationale": "Card C009 is the only 'wrong' among 260 field labels in samples/0001837532-nbapd. Homecare 2025-12-31 prints 'S + 263 Cash plus 2.93 % PIK'; published basis_spread 5.56, pik_rate 2.93: D-031 convention (total margin, PIK separate). Same convention every quarter I read (2024-12-31 'S+ 525 (Includes 2.93 % PIK)' -> 5.25/2.93; 2026-03-31 8.48/2.93; 2026-06-30 5.25, no PIK). Not a data error; the proposed pre-grade only matches when both printed margins reproduce exactly.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Homecare Software Solutions LLC First Lien Secured Debt - Term Loan S + 263 Cash plus 2.93 % PIK, 0.00 % Floor 6/14/2031 77,720 77,720 77,720 (4)(15)"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_reviews": [
+  {
+   "request_id": "REQ-NBAP-1",
+   "outcome": "supported",
+   "rationale": "Mechanism verified: pipeline/candidate_rules.py line 103 _SECTION_START = '(?i)^(investments?\\b|...' matches 'Investment Company 24 Bidco Limited'; the flagged Investment Company rows total 38 over 14 quarters (1+2+2+2+3+3+3+4+3+3+3+3+3+3) and each is the printed company under group 'Version 1'. It changes what counts as a finding, so deferral to the owner with tests (this name passes; 'Investments Software ...' / 'Investment, Identifier [Axis]' still fail) and a cohort measurement is the right route; the label verification_bug is loose (it is a check repair), but the routing does not weaken any check. Authority cites D-258, which is not yet in docs/investigations/v05_decision_log.md (last entry D-257).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 575 , 0.00 % Floor 7/11/2029 GBP 6,559 7,604 7,848 (3)(4)(8) (9)(19)"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-NBAP-2",
+   "outcome": "supported",
+   "rationale": "DS-007-1837532 (C103, as_filed, 'Small negative fair values on undrawn lines whose identifier does not name the instrument') covered 2023-09-30 rows whose bracketed costs were published positive; I verified the 20 cost flips for 2023-09-30 on the page and C103 no longer appears for this fund in the nbapd ledger. Revoking or narrowing an accepted disposition is an acceptance change for the owner; deferring it keeps the gate unchanged.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "First Lien Secured Debt - Revolver S+ 725 , 1.00 % Floor 8/4/2029 4,039 ( 118 ) ( 121 ) (4)(5)(9)(11) (27)"
+    }
+   ]
+  }
+ ],
+ "verdict_retirement_reviews": [
+  {
+   "retirement_id": "VR-FL-1837532-01",
+   "review_id": "RVQ_REV_1962c2f355b5",
+   "rule": "A07",
+   "quarter": "2024-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-02",
+   "review_id": "RVQ_REV_fec34d74725d",
+   "rule": "A07",
+   "quarter": "2025-09-30",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-03",
+   "review_id": "RVQ_REV_0ca46a2f7fe3",
+   "rule": "A07",
+   "quarter": "2025-12-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-04",
+   "review_id": "RVQ_REV_cf68f0df8c19",
+   "rule": "A07",
+   "quarter": "2026-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-05",
+   "review_id": "RVQ_REV_e7cf02804b50",
+   "rule": "B02",
+   "quarter": "2024-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-06",
+   "review_id": "RVQ_REV_698ab70cc897",
+   "rule": "PP03",
+   "quarter": "2024-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-07",
+   "review_id": "RVQ_REV_5ed197cb29ac",
+   "rule": "C115",
+   "quarter": "2025-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-08",
+   "review_id": "RVQ_BLK_eeb4da185c7d",
+   "rule": "fv_conservation",
+   "quarter": "2025-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-09",
+   "review_id": "RVQ_REV_a48dd26537a9",
+   "rule": "C206",
+   "quarter": "2023-03-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-10",
+   "review_id": "RVQ_REV_107367842c83",
+   "rule": "FX01",
+   "quarter": "2025-12-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-11",
+   "review_id": "RVQ_REV_f5a24a6c35ec",
+   "rule": "fmt_principal_amount",
+   "quarter": "2025-12-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-12",
+   "review_id": "RVQ_REV_efbe4e9c0eac",
+   "rule": "X02",
+   "quarter": "2025-12-31",
+   "outcome": "passes",
+   "note": "Re-ran nbap_retirements.py nbapd: PASS; cited rows/totals read on the page and match."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-13",
+   "review_id": "RVQ_BLK_b17a5a9e4624",
+   "rule": "agentA_maturity_vs_xbrl",
+   "quarter": "2025-12-31",
+   "outcome": "fails_standing_rule",
+   "note": "Re-run passes and every flagged context's structured margin/maturity, par, cost and FV sit on the printed row I located by context; but the cited rows' published instrument_description still carries the member margin/maturity the page does not print (and on relabelled rows another company's terms). The verdict's cited error (identifier/member values differ from the schedule) is therefore still present in a published field; under D-252 'cited error still present ... judgement needed' goes to the owner, or fix instrument_description to the printed instrument (as D-252 did for 2 rows) and re-run."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-14",
+   "review_id": "RVQ_BLK_18c9d2a2df9e",
+   "rule": "agentA_maturity_vs_xbrl",
+   "quarter": "2026-03-31",
+   "outcome": "fails_standing_rule",
+   "note": "Re-run passes and every flagged context's structured margin/maturity, par, cost and FV sit on the printed row I located by context; but the cited rows' published instrument_description still carries the member margin/maturity the page does not print (and on relabelled rows another company's terms). The verdict's cited error (identifier/member values differ from the schedule) is therefore still present in a published field; under D-252 'cited error still present ... judgement needed' goes to the owner, or fix instrument_description to the printed instrument (as D-252 did for 2 rows) and re-run."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-15",
+   "review_id": "RVQ_BLK_8ff6df9082aa",
+   "rule": "agentA_spread_vs_xbrl",
+   "quarter": "2025-12-31",
+   "outcome": "fails_standing_rule",
+   "note": "Re-run passes and every flagged context's structured margin/maturity, par, cost and FV sit on the printed row I located by context; but the cited rows' published instrument_description still carries the member margin/maturity the page does not print (and on relabelled rows another company's terms). The verdict's cited error (identifier/member values differ from the schedule) is therefore still present in a published field; under D-252 'cited error still present ... judgement needed' goes to the owner, or fix instrument_description to the printed instrument (as D-252 did for 2 rows) and re-run."
+  },
+  {
+   "retirement_id": "VR-FL-1837532-16",
+   "review_id": "RVQ_BLK_e17a4aad5652",
+   "rule": "agentA_spread_vs_xbrl",
+   "quarter": "2026-03-31",
+   "outcome": "fails_standing_rule",
+   "note": "Re-run passes and every flagged context's structured margin/maturity, par, cost and FV sit on the printed row I located by context; but the cited rows' published instrument_description still carries the member margin/maturity the page does not print (and on relabelled rows another company's terms). The verdict's cited error (identifier/member values differ from the schedule) is therefore still present in a published field; under D-252 'cited error still present ... judgement needed' goes to the owner, or fix instrument_description to the printed instrument (as D-252 did for 2 rows) and re-run."
+  }
+ ],
+ "review_scope": {
+  "outstanding_findings": 14,
+  "flagged_rows": 51,
+  "corrections_read_on_page": "57 correction rows / 48 contexts: 32 names, 13 costs, 3 currency rows (12 fields), 48/48 correct",
+  "strip_alternatives_sampled": "18 of 85 (seed 20261111), all correct",
+  "sign_changes_read": "36 of 36 bracketed on page; residual scan 5,941 rows, 0 mismatches",
+  "chain_edges": "nbapa 1,609 -> nbapd 1,537 chains; 83 added / 11 removed edges; 20 flagged edges read, 12 random unflagged read",
+  "verdict_retirements": "16 re-run (all PASS); 12 pass the standing rule, 4 agentA fail (owner)",
+  "page_sample": "samples/0001837532-nbapd: 1 wrong label of 260 (C009, D-031 convention)",
+  "diagnostics": "scratch/fund_runs/0001837532/reviewer_nbapd/",
+  "network": "none",
+  "tests_and_builds": "not run by reviewer"
+ },
+ "limitations": [
+  "Supported means the investigation's coverage and conclusions hold; it is not fund clearance or data correctness.",
+  "Not reported by the investigator: ledger row BDCSRC_0001837532_2024-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_84444a638c is state needs_human (verdict_ESCALATE) with a blank cik column, so fund_gate.outstanding_findings drops it (1,264 BDCSRC ledger rows have a blank cik); pre-existing since nvapf, a shared ledger/gate defect.",
+  "Cost totals: published non-cash cost exceeds the printed total in all 14 quarters by 0.04M-2.8M (2024-03-31: +0.88M; nbap_cost_totals.py reads the wrong printed total for that quarter). Reported in totals_note and not_done; adequately disclosed, not explained line by line outside 2025-06-30..2025-12-31.",
+  "Janus Bidco 2025-03-31 USD term loan (68,523) publishes a blank principal currency; not part of this run's changes."
+ ]
+}
