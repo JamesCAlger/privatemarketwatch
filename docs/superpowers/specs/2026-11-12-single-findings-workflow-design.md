@@ -107,12 +107,12 @@ the ledger, the gate, the status view and work selection. An unknown detailed st
 |---|---|
 | Needs agent review | `open` with no verdict |
 | Needs data fix | `real_error_unremediated`, `remediation_staged`, `remediation_pulled`, `real_error_check_silent` |
-| Needs check repair | `check_repair_pending` (new): a `check_repair_request` stands, or a false-alarm verdict names the check as its cause, and no batch has yet shown the repaired check silent |
+| Needs check repair | `check_repair_pending` (new): a `check_repair_request` stands and the check still fires |
 | Needs owner ruling | `needs_human`, `evidence_backlog`, or a `disposition_proposal` that meets the bar and has no accepting check |
 | Fix awaiting build | `fix_queued` (new): a `fix_record` newer than the current batch names the finding |
-| Closed | `RESOLVED_FINDING_STATES` as defined in `quarter_acceptance.py`, less check-caused false alarms (decision 7) |
+| Closed | `RESOLVED_FINDING_STATES` as defined in `quarter_acceptance.py` |
 
-Outstanding = not Closed. The gate's definition changes in one respect only: decision 7.
+The gate's definition of outstanding does not change: outstanding = not Closed.
 
 ### 4. Status view
 
@@ -162,19 +162,15 @@ Codex fleets remain available as the worker type for step 2; the unit of work is
 - Batch comparison: synthetic ledgers for a fix that worked, a failed fix, unexplained silence,
   unexpected movement, a new finding.
 - Migration parity (step 2).
-- Gate: existing tests unchanged except for decision 7, which gets its own tests (a check-caused
-  false alarm is outstanding; a repaired, silent one closes).
+- Gate: existing tests unchanged; same ledger gives the same verdict.
 
 ## Further owner decisions (2026-11-12, "go with recommended approaches on all three points")
 
-7. A false-alarm verdict whose cause is the check maps to "Needs check repair", not Closed
-   (`adjudicated_false_alarm` is Closed today, against the 2026-11-04 ruling). A false-alarm
-   verdict must therefore name its cause: `check` (stays outstanding until the check is repaired
-   and a batch shows it silent) or `data_as_filed` (closes only through a disposition). This is
-   an acceptance change and will raise the outstanding count. Existing false-alarm verdicts carry
-   no cause field; the migration counts them and they are classified before the first batch is
-   quoted (deterministically where the verdict's mechanism text allows, otherwise by agent
-   review). Until classified they show as "Needs agent review".
+7. Withdrawn by the owner the same day. `adjudicated_false_alarm` stays Closed, as today.
+   Existing false-alarm verdicts are not counted or reclassified. If a rule keeps raising false
+   alarms when a new fund or quarter goes through, the question (repair the check or not) is
+   decided then. Known tension, left as is: the 2026-11-04 ruling says a check-caused false alarm
+   clears only by check repair.
 8. `gone_unadjudicated` stays Closed (a never-reviewed finding that stops firing) and is listed
    in the batch report. Only reviewed findings stay open under `unexplained_silence`.
 9. A batch runs on the owner's go each time, not on a schedule, while the build is unreliable.
@@ -182,8 +178,8 @@ Codex fleets remain available as the worker type for step 2; the unit of work is
 ## Risks
 
 - Everything waits on the production build. `--unified` has been killed for low memory several
-  times on this machine. If a batch cannot complete, nothing closes. Making the build reliable is
-  a precondition.
+  times on this machine, though it completed on 2026-11-10. If a batch cannot complete, nothing
+  closes.
 - Feedback is slower: an agent learns whether a fix worked only after the next batch.
 - One batch carries many fixes; a regression is not always attributable automatically (`expects`
   narrows it, a scratch sandbox bisects it).
@@ -194,4 +190,6 @@ Codex fleets remain available as the worker type for step 2; the unit of work is
 ## Not in scope
 
 Per-fund production updates; new detectors (including page checks on more fields); frontend
-changes; clearing the current backlog; making `--unified` reliable (separate, prior work).
+changes; clearing the current backlog. Build reliability: the last full `--unified` completed on
+2026-11-10 (holdings written 19:48, quarter passes n1110_q1c / n1110_q2 followed); the owner
+accepts that as sufficient, so it is not a precondition phase here.
