@@ -15,6 +15,13 @@ one place and changes in one way.
 | The ledger | `data/output/batches/<batch_id>/findings_ledger.csv`, current = `batches/latest.json` | Only `scripts/run_batch.py` writes one |
 | Fund sandboxes | `scratch/fund_sandbox/<label>` | Scratch for testing a fix. No status, nothing quotable |
 
+## First check: is there a batch?
+
+If `data/output/batches/latest.json` does not exist, no production batch has run under this
+workflow and `scripts/status.py` will stop with "no batch yet". Do not improvise: say so, and use
+the `v05-fund-clearing` skill (status from `scripts/v05_evidence/outstanding_status.py`) until the
+owner has had the first batch run. Decisions can still be recorded with `scripts/decide.py`.
+
 ## The six statuses (`pipeline/finding_status.py`)
 
 | Status | Who acts | What they do |
@@ -81,6 +88,13 @@ The detailed lifecycle states stay in the ledger's `state` column. Do not quote 
    | closed_other | disposition, retirement, or a never-reviewed finding that stopped firing | read a sample |
    | new_finding / reopened | - | agent review |
    | outside_expected_funds = True | a fund no fix named moved | regression until explained |
+
+   Also read `batches/<id>/holdings_diff.csv` (the `holdings` entry of `batch.json` summarises it):
+   every fund whose published rows changed against the previous batch, the fields that changed, and
+   whether a recorded fix named the fund. A fund that moved with `named_by_fix` False is a
+   regression until explained, even when no finding moved: no rule sees a lost lien or a changed
+   rate. A shared-code change that should move many funds says so in its `fix_record`
+   (`expects.ciks: ["*"]`).
 
    Then step 1 again. A failed batch writes no ledger and leaves the previous one current.
 
