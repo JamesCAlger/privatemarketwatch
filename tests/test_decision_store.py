@@ -243,3 +243,22 @@ def test_adapters_expose_the_existing_stores(tmp_path):
     assert [e["type"] for e in entries] == ["disposition_proposal"]
     assert entries[0]["ciks"] == [CIK] and entries[0]["origin"] == "proposals:fund_x.json"
     assert facts(entries).proposal_class == "rule_problem"
+
+
+# ---------------------------------------------------------------- scripts/decide.py
+
+def test_decide_append_file_checks_everything_before_writing(tmp_path):
+    from scripts import decide
+    good, bad = verdict(), verdict(statement="second", evidence=[
+        {"source": "filing", "accession": "0000000000-26-000009", "quote": "Total Software 9,999 not printed"}])
+    path = tmp_path / "entries.json"
+    path.write_text(json.dumps([good, bad]), encoding="utf-8")
+    on_page = lambda cik, accession, quote: accession.endswith("000001")
+    with pytest.raises(ValueError, match="nothing recorded: entry 2"):
+        decide.append_file(path, actor="agent:fund-agent-x", directory=tmp_path / "d", quote_ok=on_page)
+    assert not (tmp_path / "d").exists()
+    path.write_text(json.dumps([good]), encoding="utf-8")
+    with pytest.raises(ValueError, match="is not the actor"):
+        decide.append_file(path, actor="agent:someone-else", directory=tmp_path / "d", quote_ok=on_page)
+    written = decide.append_file(path, actor="agent:fund-agent-x", directory=tmp_path / "d", quote_ok=on_page)
+    assert len(written) == 1 and len(ds.load_native(tmp_path / "d")) == 1
