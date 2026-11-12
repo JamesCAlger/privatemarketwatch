@@ -363,3 +363,33 @@ def test_disposition_with_filing_evidence_may_close_a_silent_real_error():
     entry = {"class": "as_filed", "supersedes_real_error_verdict": True}
     assert _fd.closes(entry, "real_error_check_silent") is True
     assert _fd.closes({"class": "as_filed"}, "real_error_check_silent") is False
+
+def test_ledger_rows_carry_a_status(tmp_path):
+    """status = who acts next, from the state and the decision store (pipeline.finding_status)."""
+    from pipeline import decision_store, finding_status
+    d = _seed_stores(tmp_path)
+    _write_queue(d["queue"], ["RVQ_open", "RVQ_fa", "RVQ_unrem", "RVQ_fixed", "RVQ_misfire"])
+    _verdict_file(d["verdicts"], "RVQ_fa", "false_alarm")
+    _verdict_file(d["verdicts"], "RVQ_unrem", "real_error")
+    _verdict_file(d["verdicts"], "RVQ_fixed", "real_error")
+    decisions, proposals = tmp_path / "decisions", tmp_path / "proposed"
+    proposals.mkdir()
+    base = {"cik": "0000000001", "quarters": [], "evidence": [], "decided_by": "agent:a", "decided_on": "2026-11-12"}
+    decision_store.append(dict(base, type="fix_record", finding_ids=["RVQ_fixed"], statement="fixed in the wrapper",
+                               expects={"finding_ids": ["RVQ_fixed"], "ciks": ["0000000001"]},
+                               files=["w.json"], tested_in="sbx"), actor="agent:a", directory=decisions)
+    decision_store.append(dict(base, type="check_repair_request", finding_ids=["RVQ_misfire"], request_id="REQ-9",
+                               statement="check misfires", check="conservation", resolution="open"),
+                          actor="agent:a", directory=decisions)
+    kwargs = dict(queue_path=d["queue"], staged_dir=d["staged"], promoted_dir=d["promoted"],
+                  archive_dir=d["archive"], wrapper_dir=d["wrappers"], verdict_dirs=(d["verdicts"],),
+                  dispositions_dir=tmp_path / "no_dispositions", retirements_dir=tmp_path / "no_retirements",
+                  decisions_dir=decisions, proposals_dir=proposals)
+    status = {r["review_id"]: r["status"] for r in fl.build_ledger(build_time="2026-01-01T00:00:00", **kwargs)}
+    assert status == {"RVQ_open": "needs_agent_review", "RVQ_fa": "closed", "RVQ_unrem": "needs_data_fix",
+                      "RVQ_fixed": "fix_awaiting_build", "RVQ_misfire": "needs_check_repair"}
+    # without a build time no fix counts as queued; the verdict still stands
+    later = {r["review_id"]: r for r in fl.build_ledger(**kwargs)}
+    assert later["RVQ_fixed"]["status"] == "needs_data_fix"
+    assert all(r["status"] == finding_status.status_of(r["state"]) for rid, r in later.items()
+               if rid not in ("RVQ_misfire",))
