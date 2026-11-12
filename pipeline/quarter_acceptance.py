@@ -275,13 +275,23 @@ def compute_acceptance(
     blocking_fv_m = sum(b["fv_m"] for b in blockers.values())
 
     # --- promoted-rule application health (rebuild audit; global, not per-quarter) ---
+    # A rule labelled 'pending' (every target quarter absent from the build, owner ruling
+    # D-253) is listed, not counted: it has nothing to match yet. A rule whose quarters ARE
+    # in the build and changes 0 rows keeps its 'noop' label and still counts.
+    from pipeline.agent_promoted import PENDING
     n_rules = n_noop = n_drift = 0
+    pending_rules: list[dict[str, str]] = []
     if audit_path.exists():
         for row in _read_rows(audit_path):
             n_rules += 1
             if str(row.get("status") or "").lower() != "ok":
                 n_noop += 1
-            if str(row.get("drift") or "").strip():
+            drift_label = str(row.get("drift") or "").strip()
+            if drift_label == PENDING:
+                pending_rules.append({"cik": str(row.get("cik") or ""),
+                                      "rule_id": str(row.get("rule_id") or ""),
+                                      "message": str(row.get("message") or "")})
+            elif drift_label:
                 n_drift += 1
     else:
         logger.warning("promoted-rule audit missing, drift metrics empty: %s", audit_path)
@@ -430,6 +440,8 @@ def compute_acceptance(
             "load_rejected_paths": sorted(load_rejected),
             "admission_measured": admission_measured,
             "n_drift": n_drift,
+            "n_pending": len(pending_rules),
+            "pending_rules": pending_rules,
         },
         "investigations": {
             "n_stale": len(stale) if inv_measured else None,

@@ -540,6 +540,31 @@ def _applied_impact(audit: dict) -> tuple[int, float]:
     return rows, fv
 
 
+_ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+# Drift label for a noop rule none of whose target quarters is in the build yet
+# (owner ruling D-253, 2026-11-10). Not drift: listed by the acceptance check, not counted.
+PENDING = "pending"
+
+
+def target_quarters(rule: dict) -> set[str]:
+    """Quarters a rule is written for: its scope list, or, for an 'all' scope, the
+    quarters of its authoring-time measured_impact (the evidence quarters)."""
+    qs = [str(q) for q in ((rule.get("scope") or {}).get("quarters") or [])]
+    if qs and "all" not in qs:
+        return {q[:10] for q in qs if _ISO_DATE_RE.fullmatch(q[:10])}
+    mi = rule.get("measured_impact")
+    return ({str(q)[:10] for q in mi if _ISO_DATE_RE.fullmatch(str(q)[:10])}
+            if isinstance(mi, dict) else set())
+
+
+def pending_quarters(rule: dict, present: set[str]) -> list[str]:
+    """Sorted target quarters when NONE of them is in ``present`` (the CIK's build
+    quarters), else []. A rule with no identifiable target quarter is never pending."""
+    target = target_quarters(rule)
+    return sorted(target) if target and not (target & set(present)) else []
+
+
 def _drift(rule: dict, applied_rows: int) -> str:
     """'' (ok) | 'noop' | 'row_drift' -- the re-validation routing signal."""
     if applied_rows == 0:
@@ -655,6 +680,19 @@ def apply_promoted_rules(
                 message = (f"superseded: {n_skipped} position(s) already present "
                            f"natively (dup-skipped); rule is redundant") + (
                            f"; {message}" if message else "")
+            # PENDING, not drift (owner ruling D-253): a noop rule whose every target
+            # quarter is absent from this CIK's build (a Q2 rule while the build ends at
+            # Q1) has nothing to match yet. A rule with any target quarter present that
+            # changes 0 rows stays noop drift.
+            if drift == "noop":
+                present = set(sub["report_date"].astype(str).str[:10].unique()) \
+                    if "report_date" in sub.columns else set()
+                waiting = pending_quarters(r, present)
+                if waiting:
+                    drift = PENDING
+                    message = (f"pending: target quarter(s) {', '.join(waiting)} not in build "
+                               f"(latest {max(present) if present else 'none'})") + (
+                               f"; {message}" if message else "")
             # Carry-over re-test (spec 2026-09-07 s.4d): a quarter-scoped predicate rule that
             # still matches rows OUTSIDE its scope is a rule that expired silently (TCW VII:
             # a Q3/Q4-25 dedup matched 27 Q1-26 rows / $355.9M and did nothing). Flag as drift
@@ -685,6 +723,8 @@ def apply_promoted_rules(
             if a.get("status") != "ok":
                 logger.warning("promoted rule %s (cik=%s) did not apply: %s",
                                a.get("rule_id"), cik, a.get("errors") or a.get("message"))
+            elif drift == PENDING:
+                logger.info("promoted rule %s (cik=%s) pending: %s", a.get("rule_id"), cik, message)
             elif drift:
                 logger.warning("promoted rule %s (cik=%s) DRIFT=%s: applied rows=%d vs "
                                "authored rows=%s -- route to re-validation",
@@ -737,6 +777,6 @@ def write_application_audit(audit_rows: list[dict], path: Path) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(audit_rows, columns=AUDIT_COLUMNS).to_csv(path, index=False)
-    n_drift = sum(1 for r in audit_rows if r.get("drift"))
+    n_drift = sum(1 for r in audit_rows if r.get("drift") and r.get("drift") != PENDING)
     logger.info("agent-fix application audit: %d entries (%d flagged) -> %s",
                 len(audit_rows), n_drift, path.name)

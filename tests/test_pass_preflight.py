@@ -123,6 +123,15 @@ def test_rule_hygiene_fails_on_noop_and_drift(tmp_path):
     assert "_pulled_" in c["detail"]                    # retirement convention named
 
 
+def test_rule_hygiene_pending_is_not_drift_but_noop_is(tmp_path):
+    # Owner ruling D-253: 'pending' (target quarters not in the build) does not fail hygiene.
+    c = pp.check_rule_hygiene(_audit(tmp_path, [("1", "rule_q2", "ok", "pending")]))
+    assert c["pass"]
+    c = pp.check_rule_hygiene(_audit(tmp_path, [("1", "rule_q2", "ok", "pending"),
+                                                ("2", "rule_stale", "ok", "noop")]))
+    assert not c["pass"] and {x["rule_id"] for x in c["items"]} == {"rule_stale"}
+
+
 def test_rule_hygiene_missing_audit_fails(tmp_path):
     assert not pp.check_rule_hygiene(tmp_path / "absent.csv")["pass"]
 
