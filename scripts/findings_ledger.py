@@ -467,12 +467,15 @@ def main(argv=None) -> int:
     ap.add_argument("--rows-dir", type=Path, default=None,
                     help="output dir whose row artifacts give each finding's flagged rows "
                          "(default: the dir holding review_queue/ of --queue)")
+    ap.add_argument("--build-time", default="",
+                    help="when the holdings behind the queue were built (YYYY-MM-DDTHH:MM:SS); a fix "
+                         "recorded after it shows status fix_awaiting_build")
     args = ap.parse_args(argv)
 
     ledger = build_ledger(queue_path=args.queue, seed_paths=args.seed,
                           quarter=args.quarter, manifest_path=args.manifest,
                           closure_mode=args.closure_mode, validity_path=args.validity,
-                          rows_dir=args.rows_dir)
+                          rows_dir=args.rows_dir, build_time=args.build_time)
     summary = write_ledger(ledger, args.out, compare_path=args.compare,
                            closure_mode=args.closure_mode)
     print(json.dumps(summary, indent=2))
