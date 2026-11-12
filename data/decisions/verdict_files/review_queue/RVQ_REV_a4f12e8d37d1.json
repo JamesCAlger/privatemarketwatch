@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_a4f12e8d37d1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.06666666666666667,
+  "anchor_value": 0.0,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 15,
+      "quoted_text": "95 Percent Buyer, LLC (~~) (~~~) (~~~~) | SF | 5.60 | % | 10.94 | % | 11/24/2021 | 11/24/2026 | 16,067 | 15,863 | 16,067 | 1.2 | %"
+    },
+    {
+      "table_index": 61,
+      "row_index": 9,
+      "quoted_text": "95 Percent Buyer, LLC (~) (~~) (~~~) | L | 5.50 | % | 9.62 | % | 11/24/2021 | 11/24/2026 | 17,865 | $ | 17,575 | $ | 17,905 | 2.4 | %"
+    },
+    {
+      "table_index": 43,
+      "row_index": 3,
+      "quoted_text": "Adept AG Holdings, LLC (~~~) | SF | 7.15 | % | 11.00 % Cash/ 1.50 % PIK | 8/11/2022 | 8/11/2027 | 6,437 | $ | 6,337 | $ | 5,950 | 0.5 | %"
+    },
+    {
+      "table_index": 57,
+      "row_index": 46,
+      "quoted_text": "Adept AG Holdings, LLC (~~~) | SF | 5.50 | % | 10.21 | % | 8/11/2022 | 8/11/2027 | 6,484 | 6,362 | 6,445 | 0.9 | %"
+    }
+  ],
+  "rationale": "D06 is an aggregate issuer-continuity flag with no detail rows. The raw filing source is readable and contains both the 2023 and 2022 investment schedules; targeted source checks show apparent continuity for issuers such as 95 Percent Buyer, LLC and Adept AG Holdings, LLC across the current and comparative schedules. However, the evidence available through the CLI does not provide a deterministic continuity anchor or row-disposition structure proving whether the aggregate 26/390 count is wrong or merely below the rule threshold. Under the contract's skeptic default, this is source-checked ambiguous rather than a grounded real_error or false_alarm."
+}

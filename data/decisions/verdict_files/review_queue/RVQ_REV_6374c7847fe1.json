@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_6374c7847fe1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -251000.0,
+  "anchor_value": -55000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 21,
+      "quoted_text": "ASP Integrity Acquisition Co LLC | Diversified Support Services | First Lien Term Loan | SOFR+ | 5.00 % | 3/6/2032 | - | ( 55 ) | ( 251 ) | (5)(8)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged fair_value -251000 as negative without a matching negative cost or unfunded-commitment marker. The raw SOI row shows the same investment with source-presented cost (55) and fair value (251), both negative in the same row, plus note marker (9). Because the negative fair value has a matching negative cost in the source, the rule fire is a false alarm rather than a data error."
+}

@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_d9ff7b715577",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -14000,
+  "anchor_value": -14000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "Ligado Networks LLC - DIP Facility - Backstop Incremental | (6)(11) | N/A | N/A | 17.50 % PIK | 12/31/2026 | 401 | 401 | ( 14 | ) | -"
+    },
+    {
+      "table_index": 41,
+      "row_index": 45,
+      "quoted_text": "Ligado Networks LLC | Delayed Draw | 12/31/2026 | 1,726 | ( 337 | )"
+    }
+  ],
+  "rationale": "The flagged fair_value of -14000 corresponds to the filing's investment schedule fair value of (14) thousand for Ligado Networks LLC - DIP Facility - Backstop Incremental, not an extraction error. The same issuer is present in the unfunded commitment schedule, and the investment row carries footnote (11), so the negative mark is a filer-presented commitment/backstop-style mark that the C103 check failed to recognize."
+}

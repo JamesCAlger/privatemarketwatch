@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_ef51a5684069",
+    "verdict":  "real_error",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  37,
+    "anchor_value":  0,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  43,
+                                  "row_index":  13,
+                                  "quoted_text":  "Amberfield Acquisition Co.^ | One stop | SF + | 5.50 | % | (h) | 9.50 | % | 05/2030 | 69 | 69 | -- | 69",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  3,
+                                  "row_index":  7,
+                                  "quoted_text":  "Consolidated Schedules of Investments as of December 31, 2025 (unaudited) and September 30, 2025 | 8",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "PP03 rows are September 30, 2025 comparative schedule positions retained under the December 31, 2025 report date; one sampled Amberfield row is present in the comparative schedule as a separate source row from the December schedule.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  43,
+                                          "row_index":  13
+                                      }
+                     }
+                 ],
+    "rationale":  "The filing contains investment schedules for both December 31, 2025 and September 30, 2025. The flagged issue count is 37 rows whose source period is earlier than the report date. Raw source shows the sampled Amberfield flagged position in the September comparative schedule at table 43 row 13, while the current-period schedule also carries corresponding December rows separately. Retaining those September comparative-period positions as December 31 holdings is a real comparative-period leak."
+}

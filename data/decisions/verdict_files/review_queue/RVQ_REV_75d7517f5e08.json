@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_75d7517f5e08",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 16.0,
+  "anchor_value": 16.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 8,
+      "quoted_text": "Ruby Tuesday Operations LLC - Incremental Term Loan - 20.44% inc PIK (SOFR + 16.00%, 1.25% Floor, all PIK)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell review. The flagged basis_spread value is 16.0. The raw SOI source for table 4 row 8 states the Ruby Tuesday Operations LLC Incremental Term Loan bears SOFR + 16.00%, so 16.0 is the correct whole-number percentage spread. The warning is therefore a threshold/rule-scope false alarm rather than a data extraction error."
+}

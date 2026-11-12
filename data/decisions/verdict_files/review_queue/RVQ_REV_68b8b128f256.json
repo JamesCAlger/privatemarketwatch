@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_68b8b128f256",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 265.02,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 42,
+      "quoted_text": "Total Investments - (265.02%) | cost 1,934,491,247 | fair value 1,898,691,121",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed a 0.0% aggregate, but the raw March 31, 2026 investment schedule reports Total Investments at 265.02% of net assets and fair value of $1,898,691,121. The filing schedule total therefore directly contradicts the extracted zero; the percentage was omitted or not propagated into the aggregate check."
+}

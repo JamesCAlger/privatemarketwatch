@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_a852dfbe92b3",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 83.319,
+  "anchor_value": 83.319,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 8,
+      "quoted_text": "Total interest and dividend income | 83,319 | 62,673",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 30,
+      "quoted_text": "Maple Raptor Acquisition Inc. (dba Rentsync) | Secured Loan | April 28, 2025 | April 28, 2030 | Variable interest rate CORRA 3 Month Term + 9.4 %; EOT 0.0 % | $ | 19,707 | $ | 19,353 | $ | 19,724 | (8)(10)(20)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "F27 compares a source-supported income yield with a holdings WAC that cannot represent floating coupons disclosed as reference rate plus spread when no single all-in numeric rate is available.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 25,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "The filing reports three-month total interest and dividend income of 83.319 million, agreeing with the extracted fund-financial numerator. The schedule also shows material floating-rate debt as CORRA 3 Month Term plus 9.4%, not as a single numeric coupon. A holdings WAC built from available numeric interest_rate values is therefore incomplete and is not an independent like-for-like ceiling for the filing income yield. The F27 breach is a bad-anchor/rule-scope false alarm, not evidence that the reported fund-financial value is wrong."
+}

@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_bb5f7df501ee",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 329.255,
+  "anchor_value": 329.255,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 10,
+      "quoted_text": "CDM Fitness Holdings, LLC | Consumer Staples Distribution & Retail | 10.07 % | S + 6.25 % | 06/17/26 | 25,800 | 25,718 | 25,671 | (7) (8)"
+    },
+    {
+      "table_index": 36,
+      "row_index": 12,
+      "quoted_text": "CDM Fitness Holdings, LLC | Consumer Staples Distribution & Retail | 10.07 % | S + 6.25 % | 06/17/26 | 538 | 536 | 535 | (7) (8)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 2,
+      "quoted_text": "Good Feet Worldwide LLC | Specialty Retail | 8.99 % | S + 5.00 % | 12/10/27 | 17,084 | 16,910 | 16,913 | (7) (8)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 3,
+      "quoted_text": "Good Feet Worldwide LLC | Specialty Retail | 8.99 % | S + 5.00 % | 12/10/27 | 2,136 | 2,114 | 2,114 | (7) (8)"
+    }
+  ],
+  "rationale": "B02 flags duplicate normalized position keys, but the raw SOI shows the repeated keys are separate source rows, not duplicated extraction rows: CDM rows 10 and 12 have the same issuer, industry, coupon, spread, and maturity but different par, cost, and fair value, and Good Feet rows 2 and 3 show the same pattern. The filing's own investment total ties at $329.255 million, so there is no aggregate double-counting anchor issue. The rule is over-scoped for source-faithful multi-line positions with identical printed terms."
+}

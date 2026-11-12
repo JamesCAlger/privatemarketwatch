@@ -1,0 +1,27 @@
+{
+    "review_id":  "RVQ_REV_6f3d914868a2",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "schedule_total",
+    "observed_value":  5819755,
+    "anchor_value":  5819755,
+    "confidence":  0.35,
+    "escalate":  true,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  44,
+                                  "row_index":  12,
+                                  "quoted_text":  "Adept AG Holdings, LLC | (12)(21)(22) | SF | 6.40 | % | 6.09 % Cash/ 4.00 % PIK | 3/31/2025 | 8/11/2027 | 5,480 | 5,143 | 5,644 | 0.2 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  70,
+                                  "row_index":  35,
+                                  "quoted_text":  "TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Class 3 aggregate nonaccrual footnote flag. The filing source was readable: SOI rows show flagged positions bearing footnote (21), for example Adept AG Holdings, LLC at table 44 row 12, and the 2025 SOI total ties to the filing total investments at fair value of 5,819,755. However, targeted raw-source CLI searches for non-accrual/nonaccrual/non accrual, not accruing, non-performing, non income producing, Denotes, and Represents returned no legend or textual definition proving that footnote (21) means nonaccrual. Because the decisive footnote definition is not exposed in the checked source, the flag cannot be confirmed as a real data error or dismissed as a false alarm without guessing."
+}

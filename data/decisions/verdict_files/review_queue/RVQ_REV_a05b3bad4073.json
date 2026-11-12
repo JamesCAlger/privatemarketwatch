@@ -1,0 +1,51 @@
+{
+  "review_id": "RVQ_REV_a05b3bad4073",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 15.25 and 16.0",
+  "anchor_value": "source shows these values as PIK coupon terms, not floating-rate spreads",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 32,
+      "quoted_text": "International Construction Products, LLC (4)(5)(7) | 15.25 % PIK | 15.25 % | 9/5/2034 | 1,075 | 1,075 | 1,075"
+    },
+    {
+      "table_index": 15,
+      "row_index": 33,
+      "quoted_text": "Kowalski Trust (4)(5)(7) | 16.00 % PIK | 16.00 % | 5/31/2034 | 18,030 | 17,722 | 18,030"
+    },
+    {
+      "table_index": 17,
+      "row_index": 31,
+      "quoted_text": "Equinox Holdings, Inc. (4)(7) | 16.00 % PIK | 16.00 % | 6/30/2027 | 1,478 | 1,452 | 1,453"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 15.25 value came from a fixed PIK coupon term in the source Reference Rate and Spread column, so it should not be stored as basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 32,
+        "quoted_text": "International Construction Products, LLC (4)(5)(7) | 15.25 % PIK | 15.25 % | 9/5/2034 | 1,075 | 1,075 | 1,075"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 16.00 value appears in source as a PIK coupon term, so it should not be stored as basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 33,
+        "quoted_text": "Kowalski Trust (4)(5)(7) | 16.00 % PIK | 16.00 % | 5/31/2034 | 18,030 | 17,722 | 18,030"
+      }
+    }
+  ],
+  "rationale": "C115 flagged basis_spread values 15.25 and 16.0 as outside the expected spread range. The raw schedule rows show those values as PIK coupon terms, with the same percentages shown as the interest rate, rather than as a reference-rate spread such as 'SF + 2.50 %'. This indicates a field extraction/mapping error: PIK coupon text was stored in basis_spread. The 16.00 source value has multiple matching PIK rows, but each matching raw source row supports the same defect mechanism."
+}

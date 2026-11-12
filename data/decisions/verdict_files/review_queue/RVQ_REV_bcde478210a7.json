@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_bcde478210a7",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.3362,
+  "anchor_value": 0.0455169556276342,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 18,
+      "quoted_text": "Debt (net of unamortized debt issuance costs) | 1,152,791,515",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 35,
+      "quoted_text": "Total Net Assets | 1,332,667,798",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 18,
+      "quoted_text": "Total First Lien Debt | 2,269,175,571 | 2,247,861,274 | 168.78%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 23,
+      "quoted_text": "Total Unsecured Debt | 17,286,214 | 17,193,750 | 1.29%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | 2,513,533,478 | 2,487,588,823 | 186.80%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw filing anchors contradict the flagged 0.3362 divergence. Fund leverage from debt divided by net assets is 1,152,791,515 / 1,332,667,798 = 0.8650. The schedule holdings debt share is (2,247,861,274 first lien plus 17,193,750 unsecured) / 2,487,588,823 total portfolio = 0.9105, a divergence of only 0.0455, within the 0.20 threshold. The reported holdings proxy therefore omits or misclassifies debt exposure; the aggregate source structure localizes the defect to holdings-side classification, but not to a single position."
+}

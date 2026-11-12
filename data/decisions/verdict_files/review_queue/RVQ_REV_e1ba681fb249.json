@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_e1ba681fb249",
+  "verdict": "ambiguous",
+  "mechanism": "source_evidence_unavailable_due_to_environment_process_launch_failure",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 1.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "ambiguity_basis": "source_unavailable",
+  "rationale": "Raw-source adjudication could not be performed because both allowed read attempts failed before process execution with Windows CreateProcessWithLogonW error 1326. No usable source was returned, so the item cannot be grounded as a real error or false alarm and requires infrastructure escalation."
+}

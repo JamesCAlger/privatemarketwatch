@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_b8f3fda1293c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 72949.0,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "X07 flagged a row where fair_value exceeds 10x cost, with the issue artifact identifying column cost, row_key 449181, and observed cost 72949.0. Raw source was available through the evidence CLI, but searches for the internal row_key and exact value did not identify a source row; source-format searches for 72/949 returned many non-unique rows and the closest inspected SOI cluster did not match the flagged value. Without a source coordinate tying the flagged extracted row to a filing row, the source does not decide whether the value is a real extraction error or a valid extreme appreciation case."
+}

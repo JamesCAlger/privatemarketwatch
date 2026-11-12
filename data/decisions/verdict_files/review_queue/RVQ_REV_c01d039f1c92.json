@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_c01d039f1c92",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1000.0,
+  "anchor_value": 25.22,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 6,
+      "quoted_text": "Net asset value per share | $ | 25.22 | $ | 25.59"
+    },
+    {
+      "table_index": 14,
+      "row_index": 14,
+      "quoted_text": "December 31, 2025 | $ | 25.22 | $ | 25.22 | $ | 25.22 | $ | 25.22"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "The stored NAV per share is 1000.0, but the filing reports December 31, 2025 NAV per share of 25.22 for all share classes.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 54,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "F30 flags NAV per share outside 0.01 to 1000. The source financial statement table reports net asset value per share of $25.22 at December 31, 2025, corroborated by the monthly NAV table showing $25.22 for all classes on December 31, 2025. The extracted observed value of 1000.0 is not supported by the source."
+}

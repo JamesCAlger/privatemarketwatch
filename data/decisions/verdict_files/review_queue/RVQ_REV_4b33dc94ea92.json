@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4b33dc94ea92",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The Class 3 html_carry aggregate flag requires raw-source anchor triangulation, but the evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query. No usable raw source was available, so the item cannot be adjudicated without retrying source resolution."
+}

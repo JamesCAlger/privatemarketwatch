@@ -1,0 +1,60 @@
+{
+  "review_id": "RVQ_REV_1ccaaba71e67",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 77.3,
+  "anchor_value": 77.3,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 27,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2028 | 13,795 | ( 101 ) | -"
+    },
+    {
+      "table_index": 71,
+      "row_index": 30,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2029 | 27,282 | ( 249 ) | -"
+    },
+    {
+      "table_index": 82,
+      "row_index": 5,
+      "quoted_text": "2080 Media, Inc. | 1st Lien Senior Secured Revolving Loan | 13,795 | -"
+    },
+    {
+      "table_index": 60,
+      "row_index": 11,
+      "quoted_text": "Carbon Topco, Inc. (4)(6)(9) | 5/1/2030 | 11,985 | ( 189 ) | -"
+    },
+    {
+      "table_index": 83,
+      "row_index": 38,
+      "quoted_text": "Carbon Topco, Inc. | 1st Lien Senior Secured Revolving Loan | 11,985 | -"
+    },
+    {
+      "table_index": 62,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC (4)(6)(9) | 8/13/2032 | 24,138 | ( 235 ) | 241"
+    },
+    {
+      "table_index": 82,
+      "row_index": 8,
+      "quoted_text": "ABC Legal Holdings, LLC | 1st Lien Senior Secured Delayed Draw Loan | 24,138 | 241"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The rate-fill warning is driven by source-blank unfunded delayed-draw and revolving loan rows, not by missed disclosed interest-rate cells.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 71,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "The raw SOI schedule explicitly has Reference Rate and Interest Rate columns. Funded loan rows for the same issuers show rates, for example 2080 Media rows 26/28/29/31 have SF spreads and 8.42%-8.57% interest rates, while adjacent 2080 Media rows 27 and 30 omit both rate fields and carry negative cost/zero fair value. The commitment table separately identifies those omitted-rate rows as delayed draw or revolving loan commitments. The same source-blank pattern appears for ABC Legal Holdings and Carbon Topco. Therefore the low direct-lending rate fill is caused by the check counting source-blank unfunded commitment rows as violations, not by a data extraction error."
+}

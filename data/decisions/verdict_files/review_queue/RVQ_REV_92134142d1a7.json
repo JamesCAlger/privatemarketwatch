@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_92134142d1a7",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "2013-08-06",
+    "anchor_value":  "2023-09-30",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  16,
+                                  "row_index":  38,
+                                  "quoted_text":  "PAMCO CLO 1997-1A B (5) (9) (10) (12) (14) (15) | 8/6/2013 | 295,435 | 169,875 | 12",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The flagged maturity_date is correctly extracted from the raw September 30, 2023 schedule: table 16 row 38 lists PAMCO CLO 1997-1A B with maturity 8/6/2013 and current fair value 12. X10 flags the date because it precedes the report date, but the source shows this matured asset is still reported, so the data value is correct and the monitoring rule is out of scope for a data-error verdict."
+}

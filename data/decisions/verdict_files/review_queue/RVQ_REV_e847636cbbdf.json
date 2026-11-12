@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_REV_e847636cbbdf",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PRIVATE_EQUITY rows with interest_rate values 6.00, 8.00, 10.00, 10.50, 11.50, and 14.35",
+  "anchor_value": "source schedule labels the instruments as preferred equity and prints the same rates",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 95,
+      "row_index": 6,
+      "quoted_text": "AVE Holdings I Corp. - Series A-1 Preferred Shares | (4) | 11.50 % | 2/25/2022 | 12,237,213 | $ | 11,870 | $ | 7,465 | 0.02 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 95,
+      "row_index": 7,
+      "quoted_text": "CD&R Artemis Holdco 2, Limited - Preferred Shares | (4)(6) | 10.00 % | 8/19/2021 | 33,000,000 | 43,662 | 62,315 | 0.13",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 95,
+      "row_index": 19,
+      "quoted_text": "Healthcomp Holding Company, LLC - Preferred Interest | (4) | 6.00 % | 11/8/2023 | 18,035 | 1,804 | 487 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 96,
+      "row_index": 20,
+      "quoted_text": "Community Management Holdings Parent, LP - Series A Preferred Units | (4) | 8.00 % | 11/1/2024 | 1,783,823 | 1,784 | 1,962 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 10,
+      "quoted_text": "Knockout Intermediate Holdings I, Inc. - Perpetual Preferred Stock | (4) | SOFR + | 10.75 % | 14.35 % | 6/23/2022 | 26,899 | 26,226 | 43,172 | 0.09",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 11,
+      "quoted_text": "Mandolin Technology Holdings, Inc. - Series A Preferred Shares | (4) | 10.50 % | 7/30/2021 | 31,950,000 | 30,992 | 37,098 | 0.08",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 98,
+      "row_index": 8,
+      "quoted_text": "Ncp Helix Holdings, LLC - Preferred Shares | (4) | 8.00 % | 8/3/2021 | 1,128,694 | 877 | 1,500 | 0.00",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row review. X01 flags PRIVATE_EQUITY rows because they carry interest_rate values, but raw source rows show preferred equity instruments, including Preferred Shares, Preferred Units, Preferred Interest, Senior Preferred Interest, and Perpetual Preferred Stock, with those rates printed in the schedule's Interest Rate column. The stored rates are source-supported and the PRIVATE_EQUITY classification is consistent with the preferred-equity instrument labels, so this is a rule-scope/classification-lookthrough false alarm rather than a data defect."
+}

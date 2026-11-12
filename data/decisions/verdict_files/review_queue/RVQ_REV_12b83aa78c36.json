@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_12b83aa78c36",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 71.6,
+  "anchor_value": 71.6,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 9,
+      "quoted_text": "Equity Investments / Enthusiast Auto Holdings, LLC / Asset Type Common / Reference Rate and Spread -- / Interest Rate -- / Maturity Date --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 10,
+      "quoted_text": "Quality Automotive Services, LLC / Asset Type Common / Reference Rate and Spread -- / Interest Rate -- / Maturity Date --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 18,
+      "quoted_text": "Total Equity Investments | 86,880 | 91,148 | 4.23",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 3,
+      "quoted_text": "Alert Media, Inc. / First Lien Term Loan / S + 5.25% / Interest Rate 8.92% / Maturity Date 4/12/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The rate-fill check appears to count equity/LP/common positions whose source schedule correctly has dashes in the rate columns, depressing the fill metric without proving missing debt rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 45,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "The raw SOI has explicit columns for Asset Type, Reference Rate and Spread, Interest Rate, and Maturity Date. Representative debt rows populate the rate fields, while rows under Equity Investments with asset types Common, Preferred, and LP Units show dashes for Reference Rate, Interest Rate, and Maturity Date. The schedule also reports a Total Equity Investments section. Therefore a low dl_rate_fill aggregate is explained by the rule including non-rate-bearing equity instruments, not by a source-backed missing-rate data error."
+}

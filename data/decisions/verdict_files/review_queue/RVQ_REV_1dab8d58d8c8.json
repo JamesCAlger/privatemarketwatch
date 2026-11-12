@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_1dab8d58d8c8",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 20.55593869731803,
+  "anchor_value": 8.53,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 29,
+      "quoted_text": "Total cash distributions | $ | 8.41",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 89,
+      "row_index": 4,
+      "quoted_text": "Common stock distributions from distributable earnings | 2025 | ( 0.91 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 89,
+      "row_index": 16,
+      "quoted_text": "Net investment income to average net asset value (4) | 2025 | 10.4 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "F16 used a distribution rate of 20.5559%, but the 2025 financial highlights show common stock distributions of 0.91 per share, implying an annual distribution rate of about 8.53% against average NAV per share and below the 15.6% heuristic threshold.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 89,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The distribution-history table includes a cumulative Total cash distributions line of 8.41 that should not be used as the 2025 annual distribution amount.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 25,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing-level financial-highlight schedule gives 2025 common stock distributions from distributable earnings of 0.91 per share and net investment income to average net asset value of 10.4%. Using average net assets of 252.683m and weighted average shares of 23.689363m implies average NAV per share of about 10.67 and an annual distribution rate of about 8.53%, which is below 10.4% * 1.5 = 15.6%. The flagged observed value of 20.55593869731803% is therefore not supported by the 2025 annual source rows and is consistent with leakage from the cumulative Total cash distributions row of 8.41 in the distribution-history table."
+}

@@ -1,0 +1,36 @@
+{
+  "review_id": "RVQ_REV_4c94436b4489",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "EUR 3,585,699 source principal requiring USD conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 200,
+      "row_index": 45,
+      "quoted_text": "Monitorus Holding, LLC delayed draw term loan row shows principal amount in EUR: 3,585,699, with amortized cost 3,619,085 and fair value 3,582,895.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 204,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted Euro."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A debt position has non-USD source principal of EUR 3,585,699 while principal_amount_usd is blank, so explicit FX conversion is missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 200,
+        "row_index": 45
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level FX issue. The raw schedule states debt par is USD unless otherwise noted as Euro, and the Monitorus delayed draw term loan row is explicitly Euro-denominated. The flagged artifact reports blank principal_amount_usd for FX01 rows, so the non-USD source principal lacks the required explicit USD principal conversion. This grounds a real extraction gap; no aggregate anchor is needed for this row-validation rule."
+}

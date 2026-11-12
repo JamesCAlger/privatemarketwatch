@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_ec2502dd2e78",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_GBP/U_EUR",
+  "anchor_value": "USD",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 42,
+      "quoted_text": "Meteor UK Bidco Limited delayed draw: GBP symbol is in Principal/Shares; Cost 726 and Market Value 720 are separate fields.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 44,
+      "quoted_text": "Meteor UK Bidco Limited loan: GBP symbol is in Principal/Shares; Cost 1,214 and Market Value 1,202 are separate fields.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 45,
+      "quoted_text": "Reconomy loan: GBP symbol is in Principal/Shares; Cost 3,114 and Market Value 3,277 are separate fields.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 48,
+      "quoted_text": "Reconomy loan: EUR symbol is in Principal/Shares; Cost 1,023 and Market Value 1,080 are separate fields.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 49,
+      "quoted_text": "Environmental Industries Total explicitly presents both Cost 47,673 and Market Value 47,934 with USD dollar signs.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The four flagged foreign units match the three nonblank GBP principal rows and one EUR principal row at table 14 rows 42, 44, 45, and 48. In each row the foreign symbol occupies the Principal/Shares column, not Cost or Market Value. The immediately following subtotal at row 49 explicitly marks both Cost and Market Value in USD. The pipeline therefore propagated the principal denomination into fair_value_currency; the flagged fair-value currency cells are real extraction errors and should be USD."
+}

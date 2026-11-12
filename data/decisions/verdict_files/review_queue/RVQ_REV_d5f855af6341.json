@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d5f855af6341",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 2.84,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Raw source was readable and shows the Schedule of Investments contains source-disclosed Reference Rate and Spread cells such as E + 7.00 %, S + 5.25 %, E + 7.11 %, and N + 7.00 % in the 2024 debt investment table. However, the review bundle does not identify the exact four violating units for fmt_basis_spread, and the adjudication contract has no rule-specific standard stating whether these source-disclosed one-letter foreign-rate bases should be treated as data defects or acceptable source-faithful terms. Because the source confirms the unusual format but does not decide the platform convention question, the item remains ambiguous rather than a grounded real_error or false_alarm."
+}

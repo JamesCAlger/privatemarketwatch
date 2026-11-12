@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_375d43ec08e4",
+  "verdict": "false_alarm",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 34,
+      "quoted_text": "Total non-controlled/non-affiliated - debt commitments | $ | 879,695 | $ | 4,967,706 | $ | ( 33,600 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 11,
+      "quoted_text": "Total Portfolio Company Commitments | $ | 1,589,157 | $ | 5,431,921 | $ | ( 33,790 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "SRC_BDC01 treated a category subtotal as an eligible missing position row.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 48,
+        "row_index": 34
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "SRC_BDC01 treated the portfolio-company commitments grand total as an eligible missing position row.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 49,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The raw commitment schedule identifies both flagged labels as aggregates. Table 48 row 34 is a 'Total' category row followed by a new equity-commitments section and underlying company rows; table 49 row 11 is the grand total after controlled/affiliated category totals. Neither is an individual portfolio-company position eligible for a holdings output row. The two reported missing rows therefore reflect subtotal/total leakage in SRC_BDC01 eligibility, not missing pipeline data."
+}

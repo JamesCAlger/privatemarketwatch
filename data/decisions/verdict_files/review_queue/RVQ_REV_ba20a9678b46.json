@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ba20a9678b46",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Issuer | Instrument | Ref | Floor | Spread | Total Coupon | Maturity | Principal | Cost | Fair Value | % of Total Cash and Investments | Notes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | 1.00 % | 7.01 % | 10.68 % | 3/31/2026 | $ 766,715 | $ 766,197 | $ 765,181 | 0.30 % | F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 46,
+      "quoted_text": "Total Cash and Investments - 98.58 % of Net Assets | 257,239,895 | 100.00 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule contains nonzero row percentages and a 100.00% total, but the extracted A07 percentage sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate triangulation shows the filing has a valid percentage structure: the SOI header includes '% of Total Cash and Investments', source rows carry nonzero percentages, and the schedule total is 100.00%. The flag's observed pct_sum=0.0% is therefore not supported by the raw source and indicates the percentage column was not extracted or mapped."
+}

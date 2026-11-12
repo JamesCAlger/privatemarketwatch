@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_704184b297af",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -275792000,
+  "anchor_value": 0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 33,
+      "quoted_text": "Accumulated overdistributed earnings | ( 275,792 | ) | ( 188,380 | )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2025 members' capital extraction omitted accumulated overdistributed earnings of -275,792 thousand, exactly matching the balance sheet identity residual.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 33,
+        "quoted_text": "Accumulated overdistributed earnings | ( 275,792 | ) | ( 188,380 | )"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the source balance sheet totals balance at 1,205,245 thousand for Total Assets and Total Liabilities and Members' Capital, with Total Liabilities of 769,481 thousand and Total Members' Capital of 435,764 thousand. The flagged residual is -275,792,000, which exactly matches the source balance sheet line Accumulated overdistributed earnings of (275,792) thousand. This indicates the extraction/identity row omitted that negative equity component rather than the source filing failing the balance sheet identity."
+}

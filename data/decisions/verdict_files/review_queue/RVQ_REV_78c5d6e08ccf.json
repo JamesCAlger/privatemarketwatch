@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_78c5d6e08ccf",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -14000,
+  "anchor_value": -14000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 11, "row_index": 17, "quoted_text": "Allied OMS Intermediate Company, LLC - Delayed Draw Term Loan (4) ... Amortized Cost (14)", "ties_to_residual": false},
+    {"table_index": 11, "row_index": 18, "quoted_text": "Allied OMS Intermediate Company, LLC - Revolving Credit Line (4) ... Amortized Cost (9)", "ties_to_residual": false},
+    {"table_index": 11, "row_index": 20, "quoted_text": "Aspire General Holding Company LLC - Delayed Draw Term Loan (4) ... Amortized Cost (26)", "ties_to_residual": false},
+    {"table_index": 11, "row_index": 21, "quoted_text": "Aspire General Holding Company LLC - Revolving Credit Line (4) ... Amortized Cost (7)", "ties_to_residual": false},
+    {"table_index": 14, "row_index": 7, "quoted_text": "Narcote, LLC - Revolving Credit Line (1)(4) ... Amortized Cost (5)", "ties_to_residual": false},
+    {"table_index": 13, "row_index": 18, "quoted_text": "Kemper Sports Management, LLC - Revolving Credit Line (4) ... Amortized Cost (29)", "ties_to_residual": false},
+    {"table_index": 14, "row_index": 17, "quoted_text": "OAO Acquisitions, Inc. - Revolving Credit Line (4) ... Amortized Cost (6)", "ties_to_residual": false},
+    {"table_index": 14, "row_index": 19, "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4)(12) ... Amortized Cost (8)", "ties_to_residual": false},
+    {"table_index": 15, "row_index": 8, "quoted_text": "PDDS Holdco, Inc. - Revolving Credit Line (4)(11) ... Amortized Cost (10)", "ties_to_residual": false},
+    {"table_index": 16, "row_index": 18, "quoted_text": "West Creek Financial SPV- Debt Facility VI, LLC - Delayed Draw Term Loan B (1)(4) ... Amortized Cost (26)", "ties_to_residual": false}
+  ],
+  "rationale": "Class 1 review of the ten flagged cost cells. The March 31, 2026 raw schedule presents each flagged Amortized Cost in parentheses, including (14), (9), (26), (7), (5), (29), (6), (8), (10), and (26), in thousands. The extracted values -14000, -9000, -26000, -7000, -5000, -29000, -6000, -8000, -10000, and -26000 therefore faithfully preserve the filing. Negative amortized cost is unusual but source-supported here; C107 is an overbroad advisory flag for these rows rather than evidence of a data error."
+}

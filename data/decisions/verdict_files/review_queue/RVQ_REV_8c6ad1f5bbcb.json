@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_8c6ad1f5bbcb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 60,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. (3)(7) | N/A | N/A | N/A | 25,000 | 359 | 158 | 0.08%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The common stock row has 25,000 in the filing's Par Amount/Shares column, but the extracted equity row has no shares, causing C04 to fail.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 60
+      }
+    }
+  ],
+  "rationale": "C04 failed because 0 of 1 extracted equity rows have shares. The source table header includes a Par Amount/ Shares column, and the West Marine/Rising Tide Holdings common stock row shows 25,000 in that column with cost 359 and fair value 158. The extracted holding retained the row and values but omitted shares, so the flag is a real extraction error."
+}

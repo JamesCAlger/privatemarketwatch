@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_382e3af30498",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1413,
+  "anchor_value": 4613,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 8,
+      "quoted_text": "Non-controlled affiliate company investments | 600 | 707",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 9,
+      "quoted_text": "Controlled affiliate company investments | 4,013 | 3,868",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 138,
+      "row_index": 32,
+      "quoted_text": "Total Investments | $ | 29,249.9 | $ | 29,484.8 | (17) | 205.93 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Affiliate investment fair value is undercaptured: output is 1413 million while raw source affiliate fair value is 600 + 4013 = 4613 million.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 72,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Filing total investments tie tightly between the schedule of investments (29484.8 million) and balance sheet total investments (29485 million), so the raw filing anchor is usable. Within that filing, affiliate investments at fair value are explicitly disclosed as 600 million non-controlled affiliate plus 4013 million controlled affiliate, or 4613 million. The reviewed output value is 1413 million, which materially undercaptures the affiliate/control-classified aggregate. The review artifact's source anchor is 4654 million rather than the 4613 million visible in the raw rows, so confidence is below maximum, but the raw source still decisively shows the 1413 output is not correct for this aggregate."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_cbb7a46b2bde",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": 5601000.0,
+  "anchor_value": 5601000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 16,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | First Lien Senior Secured Term Loan | 5,601 | 4,893 | 398",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 36,
+      "quoted_text": "GPNZ II GmbH | First Lien Senior Secured Term Loan | 544 | 521 | 1",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 16,
+      "quoted_text": "Medical Solutions Parent Holdings, Inc. | Second Lien Senior Secured Term Loan | 4,421 | 4,380 | 354",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw Schedule of Investments confirms all three flagged principal amounts, in $000s, together with similarly sized costs and severely impaired fair values: 5,601 principal / 4,893 cost / 398 fair value; 544 / 521 / 1; and 4,421 / 4,380 / 354. These are genuine distressed-credit marks, not principal scale or FX errors. X06's greater-than-10x ratio threshold is overbroad for deeply impaired loans, so this flag is a false alarm and the rule scope should account for source-confirmed impairment."
+}

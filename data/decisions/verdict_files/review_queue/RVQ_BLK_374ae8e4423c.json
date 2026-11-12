@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_374ae8e4423c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag C304 identifies pipeline row_key 132038 with a blank asset_class, but the review bundle supplies no issuer, instrument, row_id, or source coordinate for that row. The raw filing was readable through the evidence CLI; targeted search for the row key and flagged field returned no match. Therefore the flagged cell cannot be linked to a specific filing row to determine its controlled asset classification, and assigning a class would be a guess."
+}

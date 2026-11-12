@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_c82d6e5ce411",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 469,
+  "anchor_value": 915,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 31,
+      "quoted_text": "Total Investments - 142.1 % of Net Assets | $ | 2,391,096,696 | $ | 2,354,502,240 | 89.43 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 142.2 % of Net Assets | 2,254,646,820 | 2,244,701,289 | 91.04 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows that the 469-row output is the current-period schedule: its $2,354,502,240 fair-value sum exactly matches the March 31, 2026 filing total at table 26 row 31 and the bundle extract total of $2,354.502240 million. The separate comparative schedule closes at $2,244,701,289 at table 40 row 20. The oracle source count 915 equals 469 current-period rows plus 446 comparative-period rows, so E07 mixed both periods while the output correctly retained only the report-date positions. The flag is therefore a comparative-period anchor leak, not missing current-period data."
+}

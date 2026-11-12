@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_f640086fcdf2",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "16.0; 17.5",
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "Preferred Equity / Metropolis Technologies, Inc. | (4) | N/A | 16.00 | % | 5/16/2034 | 4,320 | $ | 4,277 | $ | 4,320 | 0.9 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Preferred Equity / Metropolis Technologies, Inc. | (4) | N/A | 17.50 | % | 5/16/2034 | 480 | 456 | 480 | 0.1",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The X01 warning flags PRIVATE_EQUITY rows carrying interest_rate values, but the raw SOI places both Metropolis Technologies rows in the Preferred Equity section and prints the same interest-rate values in the Interest Rate column. The extracted values and equity classification are source-supported; the check is overbroad for preferred equity rows with disclosed rates."
+}

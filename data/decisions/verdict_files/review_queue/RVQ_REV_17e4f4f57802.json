@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_17e4f4f57802",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "TecoStar Holdings, Inc. Common Stock; cost 500; fair value 3 in thousands",
+  "anchor_value": "Current-period SOI row matches the flagged holding",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 26,
+      "quoted_text": "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 28,
+      "quoted_text": "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged the TecoStar common stock row as a comparative-period retention issue, but raw source shows the same position and values in the current September 30, 2024 Schedule of Investments at table 29 row 26. A December 31, 2023 comparative row with the same values also exists at table 59 row 28, but the current-period source independently supports the reported holding. The data row is therefore not a real data error; the flag is a rule-scope false alarm for this row."
+}

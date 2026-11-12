@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_3850a9955f56",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 197,
+      "row_index": 1,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments September 30, 2022 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 197,
+      "row_index": 27,
+      "quoted_text": "AGI Group Holdings LP - A2 Units (4) | 194 | 208 | 208 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 15,
+      "quoted_text": "NC Ocala Co-Invest Beta, L.P. - LP Interest (4) | 25,687,196 | 25,687 | 25,687 | 0.11",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 119,
+      "row_index": 10,
+      "quoted_text": "NC Ocala Co-Invest Beta, L.P. - LP Interest (4) | 25,687,196 | 25,687 | 25,687 | 0.20",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 is a row-level position-purity/comparative-period warning. The raw source confirms the named positions exist in source tables, but it does not decide the defect: AGI Group Holdings LP - A2 Units with cost and fair value 208 is in a table explicitly headed September 30, 2022, while NC Ocala appears in both a current-period-looking schedule row and a second schedule row with the same cost and fair value. The bundle exposes only row_key and identifier for the flagged rows, not enough source coordinates or full extracted row fields to prove that the retained row is a comparative-period leak rather than a legitimate current-period row or a duplicated name across schedule contexts. Therefore the source was checked but does not ground real_error or false_alarm."
+}

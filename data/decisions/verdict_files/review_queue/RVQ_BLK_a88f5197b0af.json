@@ -1,0 +1,13 @@
+{
+  "review_id": "RVQ_BLK_a88f5197b0af",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 911376799.0,
+  "anchor_value": 891256739.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Class 3 anchor triangulation decides the flag: the extracted 157-position fair-value sum is USD 911,376,799, while both the companyfacts anchor and the filing's Total Investments, March 31, 2025 at table 15 row 36 are USD 891,256,739. The USD 20,120,060 overshoot is therefore a real aggregate extraction defect. The filing's row-disposition structure does not tie that residual to one subtotal or position, so the culprit is not localized."
+}

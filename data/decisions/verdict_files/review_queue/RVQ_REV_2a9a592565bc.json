@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_2a9a592565bc",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 20,
+  "anchor_value": null,
+  "confidence": 0.52,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 16,
+      "quoted_text": "Lifescan Global Corporation | Provider of blood glucose monitoring systems for home and hospital use | First lien senior secured loan | 05/2022 | 12/2026 | 6.7 | 5.1 | 4.4 | (2)(9)(17)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 17,
+      "quoted_text": "Second lien senior secured loan | 05/2022 | 03/2027 | 0.2 | 0.2 | - | (2)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 10,
+      "quoted_text": "Implus Footcare, LLC continuation row | First lien senior secured loan | 06/2016 | 07/2025 | 1.3 | 1.2 | 0.7 | (2)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 3,
+      "quoted_text": "RD Holdco Inc. (5) | Manufacturer and marketer of carpet cleaning machines | Senior subordinated loan | 01/2017 | 10/2026 | 31.4 | 18.3 | 14.2 | (2)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The source was readable and representative flagged positions were located in the raw SOI tables with repeated footnote marker (9), but the evidence CLI did not return any raw text defining that marker as nonaccrual: targeted searches for non-accrual, non accrual, accrual, accruing, status, cash non-accrual status, and not accruing returned no decisive source text. Because the raw source view shows only markers and not the footnote legend needed to prove the nonaccrual meaning/count, the flag cannot be adjudicated as a confirmed data error or false alarm from raw source alone."
+}

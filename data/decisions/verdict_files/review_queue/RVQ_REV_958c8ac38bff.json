@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_958c8ac38bff",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "principal_amount_usd is blank on flagged non-USD debt rows",
+  "anchor_value": "source schedule contains non-USD par amounts requiring explicit USD conversion",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Neon Finance is a 1st Lien Term Loan with GBP 4,082,241 par while cost and fair value are reported in USD columns; principal_amount_usd should not be blank for this non-USD debt position.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 14,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class 1 row-validation issue over the principal_amount_usd cell. The raw SOI header identifies Par Amount, Cost / Amortized Cost, and Fair Value columns, and the cited Neon Finance debt row shows a non-USD par amount (GBP 4,082,241) with USD cost and fair value. Because the flagged extracted field is blank for non-USD source par, the source supports a missing FX conversion/normalization field rather than a false alarm. No aggregate anchor was used."
+}

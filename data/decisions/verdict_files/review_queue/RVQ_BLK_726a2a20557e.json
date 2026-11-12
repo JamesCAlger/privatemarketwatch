@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_726a2a20557e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 6367407000,
+  "anchor_value": 6309679000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (cost of $ 6,356,728 and $ 6,103,560 ) | 6,309,679 | 6,079,019",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Total Portfolio Investments | $ | 6,356,728 | $ | 6,309,679 | 185.13 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The extracted fair-value position sum is 6,367,407,000, while the bundle's companyfacts_fv anchor is 6,309,679,000. Raw filing source independently supports the same 6,309,679 thousand fair-value total on both the balance sheet and the investment schedule total portfolio row. The 57,728,000 overshoot is therefore a real extraction/conservation error, although the available row-disposition evidence did not isolate one exact source row whose fair value equals the full residual."
+}

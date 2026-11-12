@@ -1,0 +1,61 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "The source schedule provides par amount/units for each visible preferred and other equity position, while C04 reports only 60.0 percent share coverage.",
+                         "citation":  {
+                                          "row_index":  1,
+                                          "table_index":  14
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_229032a530ee",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.6,
+    "anchor_value":  1,
+    "rationale":  "C04 failed because only 60.0 percent of equity rows were recorded with shares/units, but the raw investment schedule includes a Par Amount/ Units column and shows units for the preferred and other equity positions in table 14 rows 4, 5, 9, 11, 13, and 15. The source therefore supports full share/unit capture for the localized equity rows; the defect is an extraction gap in the share/unit field, not an absence in the filing.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  4,
+                                  "table_index":  14,
+                                  "quoted_text":  "Metropolis Technologies, Inc. | Preferred Equity | Par Amount/ Units 4,320 | Fair Value 4,320"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  5,
+                                  "table_index":  14,
+                                  "quoted_text":  "Metropolis Technologies, Inc. | Preferred Equity | Par Amount/ Units 480 | Fair Value 480"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  9,
+                                  "table_index":  14,
+                                  "quoted_text":  "Rapyd Financial Network, Ltd. | Other Equity | Par Amount/ Units 80,991 | Fair Value 3,078"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  11,
+                                  "table_index":  14,
+                                  "quoted_text":  "HPC GPFS Arsenal Co-Invest (Cayman) LP | Other Equity | Par Amount/ Units 1,081 | Fair Value 1,080"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  13,
+                                  "table_index":  14,
+                                  "quoted_text":  "Metropolis Technologies, Inc. | Other Equity | Par Amount/ Units 280 | Fair Value 285"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  15,
+                                  "table_index":  14,
+                                  "quoted_text":  "Mews Systems B.V. | Other Equity | Par Amount/ Units 19,200 | Fair Value 1,536"
+                              }
+                          ],
+    "confidence":  0.92
+}

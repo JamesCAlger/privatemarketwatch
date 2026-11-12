@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_7c138b86fba2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 142.47,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 3,519,936 | 100.00 | % | 142.47 | % | $ | 1,927,237 | 100.00 | % | 126.03 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 5,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) | $ | 3,496,473 | $ | 3,519,936",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 reports pct_sum=0.0% for the CIK-quarter, but the raw filing includes investment percentage anchors: the fair-value summary total is 142.47% of net assets and the SOI total line states 142.5% of net assets for non-control/non-affiliate investments. The zero observed percentage is therefore a missing extraction/normalization of the schedule percentage, not a source-supported value."
+}

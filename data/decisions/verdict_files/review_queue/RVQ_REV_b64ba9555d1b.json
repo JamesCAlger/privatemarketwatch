@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_b64ba9555d1b",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 22873.7,
+  "anchor_value": 24973.4,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 91,
+      "row_index": 9,
+      "quoted_text": "ADG, LLC, GEDC Equity, LLC and RC IV GEDC Investor LLC prior-period Class A common units: 10,000,000 shares/units, amortized cost 29.4, fair value 18.6 in the comparative SOI block.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 132,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 22,667.6 | $ | 22,873.7 | (19) | 204.23 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 66,
+      "row_index": 22,
+      "quoted_text": "Total Investments | $ | 24,706.7 | $ | 24,973.4 | (19) | 202.01 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rows flagged by PP03 localize to the December 31, 2023 comparative SOI block retained under the June 30, 2024 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 91,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "PP03 is a real data error. The filing contains distinct June 30, 2024 and December 31, 2023 investment schedules: the current SOI total is 24,973.4 at table 66 row 22, while the comparative SOI total is 22,873.7 at table 132 row 25. A flagged ADG Class A common units row is present in the comparative block at table 91 row 9, separate from its current counterpart at table 21 row 11. Retaining rows sourced from that earlier-period block under the 2024-06-30 holdings report date is a comparative-period leak, not a false alarm."
+}

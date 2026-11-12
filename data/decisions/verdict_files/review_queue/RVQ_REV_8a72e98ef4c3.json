@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_8a72e98ef4c3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The B02 flag reports two duplicate position keys for 0001912963/2024-06-30, but the allowed evidence CLI returned missing_cached_html for overview, tables, totals, and a targeted roam query for the example issuer TA WEG Holdings LLC. Without usable raw source rows, the duplicate disposition cannot be confirmed or rejected."
+}

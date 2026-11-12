@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_8ce93f39acfe",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The evidence CLI did not return usable raw source for overview, tables, totals, or a targeted roam query; each call returned missing_cached_html for accession 0001752724-22-052357. Under the B1 contract, this must be treated as source_unavailable rather than adjudicating the fund_strategy_validation flag from derived artifacts."
+}

@@ -1,0 +1,45 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "fix_class":  "comparative_period_filter",
+                         "detail":  "The duplicate key example is the same Kane Bidco instrument extracted from both the March 31, 2024 SOI and the December 31, 2023 SOI under the March 2024 report date.",
+                         "citation":  {
+                                          "row_index":  8,
+                                          "table_index":  45
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_e7cf02804b50",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  70,
+    "anchor_value":  0,
+    "rationale":  "B02 flags 70 duplicate position keys. The raw filing has separate SOI sections for March 31, 2024 and December 31, 2023. The flagged example resolves to Kane Bidco Limited in the March 31 schedule at table 12 row 8 and again in the December 31 schedule at table 45 row 8 with prior-period cost/fair value. Because the December 31 row is being treated as part of the 2024-03-31 holdings set, the duplicate-key flag reflects a real comparative-period extraction leak, not a valid duplicate current-period position.",
+    "culprit_citations":  [
+                              {
+                                  "row_index":  8,
+                                  "table_index":  5,
+                                  "quoted_text":  "Consolidated Schedule of Investments as of March 31, 2024 (Unaudited) | 7"
+                              },
+                              {
+                                  "row_index":  9,
+                                  "table_index":  5,
+                                  "quoted_text":  "Consolidated Schedule of Investments as of December 31, 2023 | 41"
+                              },
+                              {
+                                  "row_index":  8,
+                                  "table_index":  12,
+                                  "quoted_text":  "Kane Bidco Limited | First Lien Secured Debt - Corporate Bond | SONIA+ 625, 0.00% Floor | 2/15/2028 | par 69,000 | cost 86,212 | fair value 86,416"
+                              },
+                              {
+                                  "row_index":  8,
+                                  "table_index":  45,
+                                  "quoted_text":  "Kane Bidco Limited | First Lien Secured Debt - Corporate Bond | SONIA+ 625, 0.00% Floor | 2/15/2028 | par 69,000 | cost 86,133 | fair value 87,196"
+                              }
+                          ],
+    "confidence":  0.9
+}

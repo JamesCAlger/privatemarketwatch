@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_6ecebc3facb3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_LSNKGWMBD0ITLXWETK7ARG",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | ... | $ | 2,438,339 | ... | $ | 2,480,468 | 2.21 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted Euro."
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency as non-USD, but the extracted unit value is a standard USD token with an internal suffix, and the raw schedule presents fair value in dollar columns. The filing footnote also states par amounts are denominated in U.S. Dollars unless otherwise noted; no non-USD fair value basis is shown for the flagged schedule rows. The source supports USD denomination, so the rule fire is a unit-normalization false alarm rather than a data error."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_424e6ad502bb",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Issuer | Instrument | Ref | Floor | Spread | Total Coupon | Maturity | Principal | Cost | Fair Value | % of Total Cash and Investments | Notes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | 1.00 % | 7.01 % | 10.68 % | 3/31/2026 | $ | 766,715 | $ | 766,197 | $ | 765,181 | 0.30 % | F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 9,
+      "quoted_text": "SellerX Germany GMBH & Co. KG (Germany) | First Lien Term Loan | SOFR(Q) | 0.00 % | 3.00 % | 12.69 % | 12/31/2028 | $ | 321,213 | 321,213 | 221,637 | 0.09 % | B/F",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 asserts non-USD debt principal is missing principal_amount_usd. The raw SOI debt tables label the relevant Principal column and representative flagged debt rows with a dollar sign, including table 17 row 4 and table 18 row 9. The source therefore supports USD-denominated principal, so a blank conversion-only principal_amount_usd field is not evidence of a non-USD FX conversion defect; the check's non-USD premise is the problem."
+}

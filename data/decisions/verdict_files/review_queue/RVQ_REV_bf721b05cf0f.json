@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_bf721b05cf0f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name and identifier collapsed to Maturity Date 6/30/2025 for the AP Edison common equity row",
+  "anchor_value": "AP Edison Co-Invest (UB), L.P. (8,487 units), maturity 6/30/2025, amortized cost 8,487, fair value 8,487",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 22,
+      "quoted_text": "AP Edison Co-Invest (UB), L.P. ( 8,487 units) | N/A | 6/30/2025 | 8,487 | 8,487",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The AP Edison common equity position was extracted with issuer/identifier text as Maturity Date 6/30/2025 instead of the source investment name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 22,
+        "quoted_text": "AP Edison Co-Invest (UB), L.P. ( 8,487 units) | N/A | 6/30/2025 | 8,487 | 8,487"
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level review. Raw source shows the AP Edison row is a real investment position with cost and fair value of 8,487, but the extracted row in the bundle reports issuer_name as Maturity Date 6/30/2025 and omits the AP Edison investment name from the identifier. Other flagged examples checked in source, including Citation Glow, R.R. Donnelley, Intrum, BDO USA, and xAI, are ordinary investment rows rather than subtotals, so the grounded defect is an extraction/localization gap on the AP Edison row rather than a schedule subtotal leak."
+}

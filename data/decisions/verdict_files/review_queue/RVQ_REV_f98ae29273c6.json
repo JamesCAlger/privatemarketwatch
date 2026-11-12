@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_f98ae29273c6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Company (1)(9) | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2) (7) | Fair Value (6) | Percentage of Net Assets"
+    },
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Bestpass, Inc. (3)(5) | First-lien loan ($ 10,000 par, due 5/2029 ) | 5/26/2023 | SOFR + 5.75 % | 10.85 % | $ 9,715 | $ 9,750 | 1.1 %"
+    },
+    {
+      "table_index": 8,
+      "row_index": 10,
+      "quoted_text": "Hornetsecurity Holding GmbH (3)(4) | First-lien loan (EUR 3,150 par, due 11/2029 ) | 11/15/2022 | E + 6.50 % | 9.82 % | 3,149 | $ 3,409 (EUR 3,125 ) | 0.4 %"
+    },
+    {
+      "table_index": 9,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 1,744,507 | $ | 1,758,911 | 194.0 %"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD, but the raw investment schedule presents fair values in USD. The schedule header is Fair Value (6), representative rows show fair value with dollar presentation, foreign-par instruments show USD-leading fair values with local currency only in parentheses, and total investments is explicitly dollar-denominated. The defect is therefore in the rule's treatment of the U_USD unit label, not in the extracted fair value currency."
+}

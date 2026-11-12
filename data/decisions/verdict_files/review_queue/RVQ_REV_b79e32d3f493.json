@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b79e32d3f493",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 280,937 par, due 2/2031 ) | ... | Fair Value (6) | $ | 281,792",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 31,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "fair_value_currency retained the raw XBRL unitRef-style value U_USD even though the source schedule presents fair values in USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 repeated single-field currency normalization issue. Raw source table 35 has a Fair Value column with dollar presentation for the flagged investment row, and the schedule total is also dollar-denominated. The stored fair_value_currency value U_USD is therefore not the normalized USD currency expected for BDC fair-value fields."
+}

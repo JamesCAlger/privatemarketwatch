@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_16e0f241e157",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3000,
+  "anchor_value": 3000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 26,
+      "quoted_text": "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged fair value below 5% of cost, but the raw SOI row confirms the extracted values: TecoStar Holdings, Inc. common stock shows cost 500 and fair value 3 in thousands. The low fair value is source-supported, so this is a distressed position warning rather than a data extraction error."
+}

@@ -1,0 +1,72 @@
+{
+  "review_id": "RVQ_REV_f4a92273ba41",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name contains industry wrapper and investment terms for four flagged rows",
+  "anchor_value": "source company cell contains only the clean issuer name, with investment terms in separate cells and industry wrappers on separate rows",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 15,
+      "quoted_text": "Newark FP Co-Invest, L.P. (8) | Partnership ( 8,555,356 units) | 11/8/2023 | 8,572 | 8,122 | 0.2 | %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 19,
+      "quoted_text": "AF Eagle Parent, L.P. (8) | Partnership Units ( 337,024 units) | 11/27/2023 | 11,364 | 15,881 | 0.4 | %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 30,
+      "quoted_text": "Elysium BidCo Limited (4)(8) | Convertible Preference Shares ( 38,503,125 units) | 12/11/2024 | 49,063 | 58,651 (GBP 43,605 ) | 1.4 | %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 33,
+      "quoted_text": "Ranger Parent I, Inc. (10) | Series A-1 Preferred Shares ( 24,436 shares) | 10/28/2025 | 14.50 | % | 14.50 % PIK | 23,235 | 22,725 | 0.5 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Newark FP Co-Invest issuer_name should be the clean company cell, not the concatenation of Equity and Other Investments, Business Services, partnership terms, and initial acquisition date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AF Eagle Parent issuer_name should be the clean company cell, not the concatenation of Equity and Other Investments, Financial Services, partnership terms, and initial acquisition date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Elysium BidCo Limited issuer_name should be the clean company cell, not the concatenation of Equity and Other Investments, Pharmaceuticals, share terms, and initial acquisition date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ranger Parent I issuer_name should be the clean company cell, not the concatenation of Equity and Other Investments, Transportation, preferred share terms, acquisition date, reference rate, and PIK terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "C206 is a localized issuer_name parse-leak review. The raw SOI table shows industry wrappers on separate rows (for example Business Services, Financial Services, Pharmaceuticals, Transportation) and the company name in the first cell of each cited position row, while investment type, unit count, acquisition date, rates, cost, and fair value are separate cells. The flagged values concatenate those wrappers and terms into issuer_name, so the source confirms a real extraction error rather than a false alarm. No aggregate anchor was needed."
+}

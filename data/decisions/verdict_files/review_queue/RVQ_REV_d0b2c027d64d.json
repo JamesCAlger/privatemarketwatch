@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_d0b2c027d64d",
+    "verdict":  "false_alarm",
+    "mechanism":  "unit_label_alias",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  5,
+                                  "row_index":  1,
+                                  "quoted_text":  "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  4,
+                                  "quoted_text":  "Fenix Intermediate LLC (3) | Term Loan B - 11.81 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 6,000,357 | $ | 6,037,866",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  6,
+                                  "row_index":  24,
+                                  "quoted_text":  "Total Investments ( 133.5 %) | $ | 166,236,768 | $ | 166,549,638",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX03 flagged cost_currency value U_USD as not USD, but the raw SOI presents the valuation columns as dollar-denominated: the table header labels Amortized Cost and Fair Value, individual investment rows show dollar signs in those columns, and the investment total repeats dollar-denominated cost and fair value. The stored U_USD is therefore a unit-label alias for USD rather than a real non-USD source value; the check is over-strict on the unit label."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_41cc5ff2242e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -65000,
+  "anchor_value": -65000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 13,
+      "quoted_text": "Crewline Buyer, Inc. | Systems Software | First Lien Revolver | SOFR+ | 6.75 % | 11/8/2030 | - | ( 100 ) | ( 65 ) | (5)(8)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The C103 flag says fair_value is negative without a matching negative cost or unfunded-commitment marker. The raw schedule row for Crewline Buyer, Inc. shows a First Lien Revolver with principal shown as dash, cost shown as (100), fair value shown as (65), and notes (5)(8)(9). The stored -65000 fair value therefore matches the source and is paired with negative cost and a revolver marker, so the rule fire is a false alarm rather than a data defect."
+}

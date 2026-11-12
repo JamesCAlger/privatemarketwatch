@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_40f12eab2b2a",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -26471000,
+  "anchor_value": 26471000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 27,
+      "quoted_text": "Action Elevator Intermediate Holdings, LLC | (4)(5)(6) | Delayed Draw Term Loan | 8.53 % | SOFR | 4.75 % | 10/31/2024 | 10/31/2030 | 26,932 | 26,471 | 25,957",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan has stored cost -26471000, but the source amortized cost is positive 26471000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "C107 flags negative cost rows. Source checks show many small negative costs are printed in parentheses and are not defects, but the Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan row is stored with cost -26471000 while the source SOI row shows amortized cost 26,471 without parentheses, i.e. positive 26471000. That grounds a real row-level value error."
+}

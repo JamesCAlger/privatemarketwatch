@@ -1,0 +1,36 @@
+{
+  "review_id": "RVQ_REV_6bcb56d4da85",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD-denominated source ($)",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Assured Partners, Inc. Term Loan (8) | SOFR + 3.500 % | 7.827 % | 02/14/2031 | 3,474 | $ | 3,485 | $ | 3,486 | 1.70 %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 248,744 | $ | 244,377 | 119.00 %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX03 flagged cost_currency value UNIT_USD even though the raw SOI presents cost and fair value in dollars; UNIT_USD is a USD unit label, not a non-USD currency.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5,
+        "quoted_text": "Assured Partners, Inc. Term Loan (8) shows cost $ 3,485 and fair value $ 3,486."
+      }
+    }
+  ],
+  "rationale": "Class 1 currency-field check. The flagged rows carry cost_currency=UNIT_USD, and the raw schedule of investments presents the Cost and Fair Value columns in dollars. Table 10 row 5 shows explicit dollar signs for a representative holding's cost and fair value, and table 12 row 28 shows dollar signs on total investments. The source therefore supports USD denomination; the warning is caused by treating the XBRL unit label UNIT_USD as non-USD rather than by a data error in the holding currency."
+}

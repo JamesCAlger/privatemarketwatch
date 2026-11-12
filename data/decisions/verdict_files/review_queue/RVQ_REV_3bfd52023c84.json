@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_3bfd52023c84",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 4,
+      "quoted_text": "Warrant to purchase shares of ordinary shares | cost dash | fair value dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "Isthmus Capital LLC (8) | Common units | cost dash | fair value dash",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged two private_markets_holdings rows because fair_value normalized to 0.0. The raw SOI source shows the corresponding Fair Value cells as dashes for both positions, not positive values omitted by extraction. A numeric zero is therefore a faithful normalization of the source dash, making this review warning a false alarm rather than a data error."
+}

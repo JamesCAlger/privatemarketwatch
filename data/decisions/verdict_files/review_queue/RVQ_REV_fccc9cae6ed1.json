@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_fccc9cae6ed1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 198.72,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 27,580.7 | $ | 27,886.4 | (18) | 198.72 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule reports Total Investments at 198.72% of net assets, but the extracted A07 pct_sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 71,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's SOI total row provides the schedule anchor: fair value $27,886.4 million and 198.72% of net assets. The flagged observed pct_sum is 0.0%, so the extracted percent-of-net-assets total disagrees with the raw schedule total rather than reflecting the source."
+}

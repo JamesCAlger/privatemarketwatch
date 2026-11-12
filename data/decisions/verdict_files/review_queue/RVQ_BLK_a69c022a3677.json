@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_a69c022a3677",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 26319000,
+  "anchor_value": 26319000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 14,
+      "quoted_text": "Net investment income before tax expense | 26,519"
+    },
+    {
+      "table_index": 38,
+      "row_index": 15,
+      "quoted_text": "Excise tax expense | 200"
+    },
+    {
+      "table_index": 38,
+      "row_index": 16,
+      "quoted_text": "Net investment income after tax expense | 26,319"
+    },
+    {
+      "table_index": 38,
+      "row_index": 29,
+      "quoted_text": "Net increase in net assets resulting from operations | $ | 37,865"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The filing's income statement identities reconcile: 42,654 investment income less 16,135 net expenses less 200 tax equals 26,319 net investment income after tax; adding 11,546 net realized and unrealized gain equals 37,865 operations increase.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "The CIK-level income_identity flag reports an aggregate residual, but the raw filing income statement reconciles at the relevant source rows. Table 38 shows total investment income of 42,654, net expenses of 16,135, tax expense of 200, net investment income after tax of 26,319, net realized and unrealized gain of 11,546, and net increase in net assets from operations of 37,865. The source therefore supports the reported income identity rather than a data value error."
+}

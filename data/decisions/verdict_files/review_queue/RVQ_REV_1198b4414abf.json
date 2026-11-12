@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_1198b4414abf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 48,
+      "quoted_text": "Super REGO, LLC^(17) | Subordinated debt | N/A | 15.00 | % | PIK | 03/2030 | 50 | 49 | -- | 49"
+    },
+    {
+      "table_index": 15,
+      "row_index": 55,
+      "quoted_text": "Panzura, LLC^(17) | One stop | N/A | 4.00 | % | cash/ | 15.00 | % | PIK | 08/2027 | 54 | 49 | -- | 48"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Super REGO source row discloses a 15.00% PIK rate, but the extracted private credit row is missing interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 48
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Panzura source row discloses 4.00% cash and 15.00% PIK rate terms, but the extracted private credit row is missing interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 55
+      }
+    }
+  ],
+  "rationale": "X02 flags two private credit rows with no stored interest_rate or basis_spread. The raw schedule rows show rate terms for both implicated N/A-spread instruments: Super REGO has 15.00% PIK, and Panzura has 4.00% cash plus 15.00% PIK. The missing extracted rate fields are therefore a real extraction gap, not a false alarm."
+}

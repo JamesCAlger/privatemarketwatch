@@ -1,0 +1,65 @@
+{
+  "review_id": "RVQ_REV_ff6c23095224",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1183746738,
+  "anchor_value": 1183746738,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Instrument | Industry | Rate (2) | Interest Rate | Original Acquisition Date (34) | Maturity Date | Par Amount (3) | Cost / Amortized Cost (4) | Fair Value | % of Net Assets (5)"
+    },
+    {
+      "table_index": 32,
+      "row_index": 24,
+      "quoted_text": "48Forty Solutions LLC | Common Equities | Transportation & Logistics | N/A | N/A | 11/11/2024 | N/A | 872 | cost -- | fair value --"
+    },
+    {
+      "table_index": 32,
+      "row_index": 25,
+      "quoted_text": "Beauty Health Co | Common Equities | Consumer Services | N/A | N/A | 7/7/2023 | N/A | 913,460 | cost -- | fair value 1,269,709"
+    },
+    {
+      "table_index": 32,
+      "row_index": 26,
+      "quoted_text": "Circle Graphics Parent, LP | Preferred Equities | E-Commerce | N/A | N/A | 6/30/2025 | N/A | 3,574,384 | cost -- | fair value --"
+    },
+    {
+      "table_index": 32,
+      "row_index": 27,
+      "quoted_text": "Monomoy Capital Partners IV-Titan, L.P. (Waupaca Foundry) | Partnership Interests | Industrial Products & Services | N/A | N/A | 2/23/2024 | N/A | 313,577 | cost 217,037 | fair value 284,885"
+    },
+    {
+      "table_index": 32,
+      "row_index": 28,
+      "quoted_text": "Telestream 2 LLC | Common Equities | Software & Services | N/A | N/A | 6/7/2025 | N/A | 425,843 | cost 4,044,696 | fair value 3,936,280"
+    },
+    {
+      "table_index": 33,
+      "row_index": 38,
+      "quoted_text": "Wesco Aircraft Holdings Inc | Common Equities | Industrial Products & Services | N/A | N/A | 1/31/2025 | N/A | 195,566 | cost 7,459,569 | fair value 7,541,025"
+    },
+    {
+      "table_index": 34,
+      "row_index": 10,
+      "quoted_text": "SP-CREH 19 Highline LLC | Common Equities | Multi-Family | N/A | N/A | 6/28/2021 | N/A | 70% | cost 14,608,750 | fair value --"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The SOI equity rows have populated Par Amount or ownership cells, but C04 reports only 1 of 7 equity rows with extracted shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate C04 check. The filing total investment FV anchor ties: schedule total and balance-sheet total are both 1,183,746,738, so this is not a bad FV anchor. The localized equity blocks contain seven equity rows, and the source table header identifies the relevant column as Par Amount (3). Rows 32:24-28, 33:38, and 34:10 each have a populated value in that column (or ownership percentage for SP-CREH), while the queue metric says only 1 of 7 equity rows have shares. The raw source therefore supports a share/par amount extraction gap rather than a false alarm."
+}

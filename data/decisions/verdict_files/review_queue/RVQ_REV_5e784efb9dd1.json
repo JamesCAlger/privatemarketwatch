@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_5e784efb9dd1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 29,
+      "quoted_text": "Series A preferred shares | 10.29 % | SOFR (Q) | 6.00 % | 01/2023 | 01/2029 | 3,834 | 3.8 | 3.8 | (2)(6)(10)"
+    },
+    {
+      "table_index": 70,
+      "row_index": 4,
+      "quoted_text": "Ferrellgas, L.P. and Ferrellgas Partners, L.P. | Distributor of propane and related accessories | Senior preferred units | 8.96 % | 03/2021 | 64,155 | 64.2 | 69.3"
+    },
+    {
+      "table_index": 11,
+      "row_index": 25,
+      "quoted_text": "Series A preferred shares | 10.50 % PIK | 10/2021 | 116,413 | 170.2 | 144.6 | (2)"
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Series A preferred stock | 13.00 % PIK | 04/2025 | 24,499 | 25.0 | 24.4 | (2)"
+    },
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "Preferred units | 8.00 % PIK | 06/2025 | 1,001,000 | 1.0 | 1.0 | (2)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X01 treats PRIVATE_EQUITY with an interest rate as suspicious, but the source explicitly reports coupon-bearing preferred equity instruments for the flagged rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 70,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The flagged condition is PRIVATE_EQUITY rows carrying interest_rate values. The raw schedule of investments shows those rates belong to preferred equity instruments such as Series A preferred shares, senior preferred units, Series A preferred stock, and preferred units, including PIK coupons. Because the source supports both the equity classification and the coupon/rate values, the data is not erroneous; the X01 check is overbroad for coupon-bearing preferred equity."
+}

@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_6b52c6d2680e",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.6459,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 26,
+      "quoted_text": "Total Debt & Equity Investments (7) | 148.3 | % | 809,253,307 | 645,193,114",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 28,
+      "quoted_text": "First American Government Obligation Fund, Yield 3.68 %, Class X (FGXXX) | 2.1 | % | 9,351,973 | 9,351,973 | 9,351,973",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 31,
+      "quoted_text": "U.S. Treasury Bill, Yield 3.62 %, Maturity Date 04/28/26 | 124.8 | % | 550,000,000 | 543,752,917 | 543,752,917",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 6,
+      "quoted_text": "Total Assets | $ | 553,105 | $ | - | $ | 645,193 | $ | 1,198,298",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The BDC schedule separates debt and equity investments with fair value 645,193,114 from cash equivalents and short-term investments, so the reconciliation over-coverage reflects out-of-scope Level 1 assets leaking into the BDC holdings comparison.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 43,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The First American Government Obligation Fund is a cash equivalent with fair value 9,351,973, not a private BDC debt or equity position.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 27,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The U.S. Treasury Bill is a short-term investment with fair value 543,752,917, not a private BDC debt or equity position.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 27,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "GAV_BDC02 is an aggregate reconciliation flag. Raw source shows Total Debt & Equity Investments fair value of 645,193,114, matching the private debt/equity anchor, while the same schedule separately lists cash equivalents and short-term investments and the fair value hierarchy table splits Level 1 assets of 553,105 from Level 3 debt/equity assets of 645,193. The flagged ratio of 1.6459 is therefore source-grounded over-coverage rather than a bad anchor or false alarm."
+}

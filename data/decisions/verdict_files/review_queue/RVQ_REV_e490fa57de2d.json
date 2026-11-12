@@ -1,0 +1,35 @@
+{
+    "review_id":  "RVQ_REV_e490fa57de2d",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  4,
+    "anchor_value":  null,
+    "confidence":  0.62,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  16,
+                                  "row_index":  9,
+                                  "quoted_text":  "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 9,273 | 8,854 | 2,831 | (5)(8)(12)"
+                              },
+                              {
+                                  "table_index":  16,
+                                  "row_index":  10,
+                                  "quoted_text":  "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 254 | 238 | 170 | (5)(8)(12)"
+                              },
+                              {
+                                  "table_index":  16,
+                                  "row_index":  11,
+                                  "quoted_text":  "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 674 | 656 | 452 | (5)(8)(12)"
+                              },
+                              {
+                                  "table_index":  16,
+                                  "row_index":  12,
+                                  "quoted_text":  "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 302 | 298 | 202 | (5)(8)(12)"
+                              }
+                          ],
+    "rationale":  "Raw source schedule rows show four Impel Pharmaceuticals Inc. first lien term loan positions with note (12), matching the footprint of the flag, but the evidence CLI did not expose a footnote legend or source text defining note (12) as non-accrual. Targeted source searches for non-accrual/non accrual/nonaccrual/accrual status returned no decisive hits. Because the raw source checked here does not decide whether the footnote means non-accrual, the item is ambiguous rather than confirmed or cleared."
+}

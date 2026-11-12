@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_106e50e373a1",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1808750592,
+  "anchor_value": 1808750592,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 4,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Term Loan | 8.91 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 9,659,914 | 9,567,427 | 9,587,464 | (8)(15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Delayed Draw Term Loan | 8.91 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 84,366 | 64,005 | 73,794 | (6)(8)(15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 22,
+      "quoted_text": "Total Investments - ( 257.41 %) | $ | 1,808,750,592 | $ | 1,796,706,145",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 1,808,750,592 and $ 1,636,597,753, respectively) | 1,796,706,145 | 1,630,349,305",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The weak fmt_cost flag is not supported by the raw source. Checked position rows print cost in whole-dollar units matching the extracted holdings examples, including RevauAdvanced cost values of 9,567,427 and 64,005. The source schedule total cost is 1,808,750,592 and the balance sheet discloses the same amortized-cost anchor for total investments, while fair value also ties at 1,796,706,145. This supports a weak-screen false alarm rather than a source-backed data defect."
+}

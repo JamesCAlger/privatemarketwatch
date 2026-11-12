@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_84354f517bd3",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 395375030,
+  "anchor_value": 395375030,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 37,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | $ | 438,839,857 | 395,375,030 | 203.7 | % | (19)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Type | Total Commitment | Funded Commitment | Expired/Reduced Commitment | Unfunded Commitment",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 17,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | $ | 531,319,673 | 517,910,117 | 197.3 | % | (16)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The current-period SOI closes at table 51 row 37 with fair value 395,375,030, matching the extracted fund-quarter FV anchor 395,375,030 from the bundle. The alleged E07 mismatch is count-like (source=346 vs output=89), but raw source shows adjacent tables that are not current holdings rows: table 52 is an unfunded commitments schedule, and tables 53-56 are the comparative SOI section closing to the prior-period total 517,910,117. The output total is anchored to the correct current schedule total, so the flag is a scope/count false alarm caused by comparative/non-holdings source rows entering the check's source side."
+}

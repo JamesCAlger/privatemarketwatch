@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_4450aa7ca1a0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0877,
+  "anchor_value": 0.0877,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 243,
+      "row_index": 15
+    },
+    {
+      "table_index": 243,
+      "row_index": 26
+    },
+    {
+      "table_index": 243,
+      "row_index": 23
+    }
+  ],
+  "rationale": "Class 3 aggregate concentration check. The filing schedule is internally anchored: total investments are reported at fair value 565360825 and 169.58% of net assets, matching the source total row. The two apparent concentration rows are source-supported values, not extraction defects: CIFC Stone Warehouse Ltd. - Subordinated Lender is reported at fair value 29250000 and 8.77% of net assets, and Morgan Stanley Institutional Liquidity Funds Treasury Portfolio - Institutional is reported in the cash and cash equivalents section at fair value 16950602 and 5.08% of net assets. Because the source confirms the flagged percentages and does not show a bad value, subtotal leak, or anchor disagreement, the warning is a rule-scope false alarm rather than a data error."
+}

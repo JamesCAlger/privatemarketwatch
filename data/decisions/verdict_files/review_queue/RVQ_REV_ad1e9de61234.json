@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_ad1e9de61234",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "retained in 2026-03-31 holdings",
+  "anchor_value": "comparative investment schedule",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 40,
+      "quoted_text": "Orchard Technologies, Inc. | Equity | January 24, 2025 | 3,009 | Preferred Series 1 | cost 1 | fair value 3",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "A comparative-period Orchard Technologies position was retained as a 2026-03-31 current holding; the flag reports six rows with the same period-leak disposition.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 69,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "PP03 is grounded in the raw filing schedule. The exact flagged Orchard Technologies identity appears at table 69 row 40 in the filing's comparative investment schedule, while the current-period Orchard schedule is separately represented earlier (for example table 38 row 46). Retaining the table 69 row in the 2026-03-31 holdings mixes comparative-period positions into the current position set. This is a real comparative-period extraction leak, not a bad validation check."
+}

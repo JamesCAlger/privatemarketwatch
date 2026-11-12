@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_5d1e29766ce8",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 1.76,
+  "anchor_value": null,
+  "confidence": 0.58,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Raw source was available and checked. The filing contains many SOI rows with interest terms such as S + 525, S + 1225 PIK, 1350 PIK, and E + 1000 (including 1392 PIK), plus a reference-rate table, but the blinded bundle provides only an entity-period weak metric and n_violate=7 with no row coordinates or stored basis_spread values. The raw source therefore does not decide whether the flag is a true extraction/normalization error or a weak-rule false alarm without guessing which seven extracted rows triggered the rule."
+}

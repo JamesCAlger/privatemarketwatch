@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_2e2a1a6f04e9",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 4,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) (22) | N/A | 16.00 | % | 5/16/2034 | 4,320 | $ | 4,277 | $ | 4,320 | 0.7 | %"
+    },
+    {
+      "table_index": 15,
+      "row_index": 5,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) (22) | N/A | 17.50 | % | 5/16/2034 | 480 | 456 | 480 | 0.1"
+    }
+  ],
+  "rationale": "B02 flagged two duplicate position keys for Metropolis Technologies preferred equity. Raw source table 15 shows two separate adjacent preferred-equity positions for the same issuer and maturity, but with different stated interest rates (16.00% and 17.50%) and different par/amortized cost/fair value amounts. The apparent duplicate is caused by an over-coarse duplicate key that ignores distinguishing economics, not by a duplicate source/extraction row."
+}

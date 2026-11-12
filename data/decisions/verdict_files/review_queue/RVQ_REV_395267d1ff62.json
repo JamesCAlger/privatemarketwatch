@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_395267d1ff62",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 2,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 10,
+      "quoted_text": "Pigments Services, Inc. | (4)(6)(11)(16)(17) | SOFR + | 8.35 % | 13.71 % | 4/14/2030 | 18,526 | 15,306 | 9,412 | 0.03",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 14,
+      "quoted_text": "CFCo LLC (Benefytt Technologies, Inc.) | (4)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/13/2038 | 86,098 | 12,571 | 612 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 32,
+      "quoted_text": "Percentage of assets on non-accrual, at amortized cost (5) | 0.1 | % | 0.1 | % | - | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Pigments Services, Inc. row carries footnote (17), consistent with the filing's non-accrual exposure, but the normalized holdings do not preserve a nonaccrual status.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CFCo LLC (Benefytt Technologies, Inc.) row carries footnote (17), consistent with the filing's non-accrual exposure, but the normalized holdings do not preserve a nonaccrual status.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "The raw SOI localizes two current-period debt rows with footnote (17): Pigments Services, Inc. and CFCo LLC (Benefytt Technologies, Inc.). The filing separately reports 0.1% of assets on non-accrual at amortized cost for 2023, which corroborates nonzero non-accrual exposure. The defect is an extraction gap: the source-level nonaccrual status is not preserved in the normalized holdings surface."
+}

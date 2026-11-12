@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_607920543e82",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.432498987444307,
+  "anchor_value": 7.997,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 3,
+      "quoted_text": "December 19, 2024 | December 30, 2024 | January 31, 2025 | $ | 0.90 | $ | 10,023",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 61,
+      "row_index": 8,
+      "quoted_text": "Distributions declared from net investment income to common shareholders (3) | ( 1.99 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 5,
+      "quoted_text": "Net investment income | 2.02",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Distribution total uses 2.89 per share from the payment schedule, including a 0.90 per-share distribution declared in December 2024; current-year financial highlights show 2025 distributions declared from NII of 1.99 per share against NII of 2.02 per share.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 11,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "F16 is a fund-level aggregate heuristic. The raw source decides the issue: table 11 totals payments made in 2025 at 2.89 per share, but row 3 is a December 2024 declaration paid in January 2025. The authoritative current-year financial highlights show only 1.99 per share of distributions declared from net investment income and 2.02 per share of net investment income. The flag is therefore a real extraction-period error: the distribution-rate numerator includes a prior-period declaration, causing the reported 9.4325% distribution rate to be overstated relative to the current-year source anchor of about 8.0%."
+}

@@ -1,0 +1,59 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001911321",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV effect is claimed as the basis for the patch. The change only prevents portfolio-total and balance-sheet labels from remaining in the source-only blocker pool.",
+  "html_citations": [
+    {
+      "cell_indices": [
+        0,
+        14,
+        15,
+        16,
+        19,
+        20
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "The coordinate for Liabilities in Excess of Other Assets is a balance-sheet style total line with dollar amount and percentage cells, not an issuer or tranche row.",
+      "row_classification": "SUBTOTAL_ROW",
+      "row_index": 6,
+      "table_index": 16
+    },
+    {
+      "cell_indices": [
+        0
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "The coordinate for Net Assets is a standalone net-assets line, confirming this source-only label is not a position-level holding.",
+      "row_classification": "SUBTOTAL_ROW",
+      "row_index": 31,
+      "table_index": 7
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify Kennedy Lewis-style portfolio and net-asset labels as non-position total/header rows: Investments Portfolio, Investments-Non-Controlled/Non-Affiliated, Liabilities in Excess of Other Assets, and Net Assets.",
+  "primary_justification": "The four blocker rows are not production positions. Their XBRL labels are portfolio-total or balance-sheet labels, and the HTML coordinates for Liabilities in Excess of Other Assets and Net Assets confirm non-position total-line semantics. The bounded patch adds exact total/header recognition for these labels with regression tests and false-positive coverage.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "Residual risk is limited to exact aggregate labels and tested total/header variants. The change does not broaden parsing of issuer/tranche rows and retains false-positive coverage for issuer-bearing source-only rows.",
+  "review_id": "BDCSRC_0001911321_2024-06-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_7b1abfa0a0",
+  "reviewer_notes": "Manual review found this is not insufficient evidence. The evidence supports a bounded aggregate/header classification; the existing source-reconciliation patch covers the exact labels in this packet.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect is to move these four source-only rows out of the blocking pool as aggregate/header residuals while preserving real position rows.",
+  "tests_validation_plan": "Covered by targeted source reconciliation tests in tests/test_validate_holdings.py; validate this verdict with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

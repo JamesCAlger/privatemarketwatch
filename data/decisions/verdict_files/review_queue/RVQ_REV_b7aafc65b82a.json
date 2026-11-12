@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_b7aafc65b82a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 3.9302082275266628,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 is a fund-financials ratio flag for distribution_rate <= income_yield_pct * 1.5, but the evidence CLI returned no_accession_resolved for overview, tables, totals, and targeted roam queries, so raw source could not be read to adjudicate the distribution rate or income yield."
+}

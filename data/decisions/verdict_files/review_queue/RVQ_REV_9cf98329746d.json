@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_9cf98329746d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 13.142426850258172,
+  "anchor_value": 13.338,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 7,
+      "quoted_text": "Distributions total per share $3.0083 and amount $49,614",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 23,
+      "quoted_text": "Net Investment Income on Per Average Share Basis (1)(2) | $ | 3.10",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 38,
+      "quoted_text": "Net Asset Value Per Share | $ | 23.24",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "F16 appears to compare the source-backed distribution rate of about 12.95% against an understated income_yield_pct; source NII per average share of $3.10 over NAV of $23.24 implies about 13.34%, so the check should not fail.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The raw filing supports the distribution and income-yield inputs. 2025 distributions total $3.0083 per share (about 12.95% of the $23.24 NAV), while net investment income on a per average share basis is $3.10 (about 13.34% of the same NAV). Therefore the source does not show distributions exceeding income yield by 1.5x; the flag is a real fund_financials data/computation defect, most likely an extraction gap in the income_yield_pct input rather than an economic overdistribution."
+}

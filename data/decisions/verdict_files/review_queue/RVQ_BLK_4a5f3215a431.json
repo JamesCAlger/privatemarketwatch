@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_4a5f3215a431",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6.7,
+  "anchor_value": 14.3,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 34,
+      "quoted_text": "A.T. Holdings II LTD | First Lien Senior Secured Term Loan | 6.7 % Cash, 7.6 % PIK | 11/22 | 09/29 | 16,799 | 14,250 | 9,055 | 0.3 | % | (3)(7)(29)(32)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A.T. Holdings II LTD stored interest_rate is the 6.7% cash leg, but the source also discloses 7.6% PIK, so the all-in coupon is 14.3%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 58,
+        "row_index": 34,
+        "quoted_text": "A.T. Holdings II LTD | First Lien Senior Secured Term Loan | 6.7 % Cash, 7.6 % PIK"
+      }
+    }
+  ],
+  "rationale": "E07 uses the PIK-inclusive all-in convention for interest_rate. The extracted holding for A.T. Holdings II LTD stores interest_rate 6.7, which matches only the cash leg. The raw SOI row discloses 6.7% Cash and 7.6% PIK, making the all-in stated coupon 14.3%; storing only 6.7 understates the all-in coupon and is a real extraction gap."
+}

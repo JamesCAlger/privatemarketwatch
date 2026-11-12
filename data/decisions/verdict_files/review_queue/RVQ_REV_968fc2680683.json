@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_968fc2680683",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 35,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | C + | 5.50 % | 10.94 % | 8/10/2029 | CAD | 230,300 | 176,283 | 172,167 | 0.60",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 24,
+      "quoted_text": "Bamboo US BidCo LLC | (4)(6)(11) | E + | 6.00 % | 9.95 % | 9/30/2030 | EUR | 70,854 | 72,851 | 76,460 | 0.27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 13,
+      "quoted_text": "Quantum Bidco, Ltd. | (4)(6)(8) | S + | 5.50 % | 11.05 % | 1/29/2028 | GBP | 12,500 | 16,680 | 14,977 | 0.05",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd for non-USD debt principal rows. The raw SOI table header places currency and amount under Par Amount/Units, followed by separate Cost and Fair Value columns; cited rows show CAD, EUR, and GBP par amounts. Because the reviewed field is blank while the source par is explicitly non-USD and needs USD normalization for par analytics, this is a real extraction/normalization gap, not a false alarm."
+}

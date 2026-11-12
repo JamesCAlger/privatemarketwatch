@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_2e25d2540c5f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -84000,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 37,
+      "quoted_text": "Zarya Intermediate, LLC (dba iOFFICE) | ... | Par 8,383 | Cost - | Fair Value (84)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 29,
+      "quoted_text": "Pluralsight, Inc. | ... | Par 5,474 | Cost - | Fair Value (55)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Zarya Intermediate was flagged with cost -84000, but the SOI row has cost as dash and fair value as (84).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 37
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Pluralsight was flagged with a negative cost matching a parenthetical fair value while the SOI cost cell is dash.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 1 cell check. Several negative costs are source-confirmed parenthetical cost cells, for example table 34 rows 7 and 9, so the rule is not categorically a defect. However, at least one flagged negative cost is not present in the source cost column: table 44 row 37 shows Zarya Intermediate with cost dash and fair value (84), matching the observed -84000 in the extracted cost field. That is a localized extraction/column mapping error, so the aggregate C107 item is a real error."
+}

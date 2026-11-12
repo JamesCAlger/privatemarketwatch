@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_a10294af7e94",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 16.5 and 16.0",
+  "anchor_value": "raw SOI shows 16.50% and 16.00% in the Reference Rate and Spread column with matching PIK interest-rate cells",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Volante Technologies, Inc. | First-lien loan ($ 2,948 par, due 9/2028 ) | 9/29/2023 | 16.50 | % | 16.50 % PIK | 2,928 | 3,021 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Second-lien loan ($ 9,025 par, due 6/2027 ) | 3/13/2024 | 16.00 | % | 16.00 % PIK | 8,813 | 9,183 | 0.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C115 flagged two basis_spread values as outside the expected percentage range, but the raw schedule supports both extracted values: the Volante row shows 16.50% in the Reference Rate and Spread column and 16.50% PIK as the interest rate, and the second-lien row under Equinox shows 16.00% in the same schedule position and 16.00% PIK as the interest rate. The source therefore supports the stored whole-number percentage values, so the range check is over-firing rather than exposing a source-backed data defect."
+}

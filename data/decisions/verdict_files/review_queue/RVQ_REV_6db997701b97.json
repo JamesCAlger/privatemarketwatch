@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_6db997701b97",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_schedule_instrument_terms",
+  "observed_value": 18,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "Alert SRC Newco LLC | First Lien Senior Secured Term Loan | SOFR + 5.000% | 12/11/2024 | 12/11/2030 | fair value 21,962",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 9,
+      "quoted_text": "Alert SRC Newco LLC | First Lien Senior Secured Delayed Draw Term Loan | SOFR + 5.000% | 12/11/2024 | 12/11/2030 | fair value 7,142",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 10,
+      "quoted_text": "Alert SRC Newco LLC | First Lien Senior Secured Delayed Draw Term Loan | SOFR + 5.000% | 9/19/2025 | 12/11/2030 | fair value 238",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 11,
+      "quoted_text": "Alert SRC Newco LLC | First Lien Senior Secured Revolving Loan | SOFR + 5.000% | 12/11/2024 | 12/11/2030 | fair value 848",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "B02's normalized position key collapses distinct source instruments and tranches, including different investment types and acquisition dates, into duplicate keys.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 9,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Raw SOI rows 8-11 in table 9 show four separate Alert SRC Newco positions, distinguished by investment type and, for the two delayed-draw loans, acquisition date (12/11/2024 versus 9/19/2025), with separate par, cost, and fair value amounts. The B02 example therefore results from an under-specified normalized key rather than duplicated source positions. Source instrument terms are the decisive identity anchor; monetary aggregate anchors are not probative for this duplicate-key rule."
+}

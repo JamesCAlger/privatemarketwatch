@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_4f6b6a7d20a7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "GBP",
+  "anchor_value": "USD",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 12,
+      "quoted_text": "Armstrong Bidco Limited(13)(22) | First lien senior secured loan | SA + | 5.25 % | 6/2029 | GBP symbol in Par / Units | 26,570 | Amortized Cost 31,963 | Fair Value 33,527 | 2.5 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 13,
+      "quoted_text": "Armstrong Bidco Limited(13)(17)(19)(22) | First lien senior secured delayed draw term loan | SA + | 5.25 % | 6/2025 | GBP symbol in Par / Units | 12,178 | Amortized Cost 14,642 | Fair Value 15,367 | 1.1 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The pound sterling symbol belongs to Par / Units for the Armstrong Bidco loan, while fair value is in the schedule's USD valuation column; fair_value_currency should not be GBP.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The pound sterling symbol belongs to Par / Units for the Armstrong Bidco delayed draw term loan, while fair value is in the schedule's USD valuation column; fair_value_currency should not be GBP.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 single-cell currency check on fair_value_currency. The source table header separates Par / Units from Amortized Cost and Fair Value. For both flagged Armstrong Bidco rows, the GBP marker appears in the Par / Units column, and the fair value amounts are printed in the filing's dollar-denominated valuation schedule. The stored fair_value_currency of GBP is therefore a real extraction error, not a valid fair-value currency."
+}

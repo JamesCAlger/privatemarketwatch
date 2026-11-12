@@ -1,0 +1,57 @@
+{
+  "review_id": "RVQ_REV_458cec66e065",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "principal_amount_usd is blank on all 8 flagged rows",
+  "anchor_value": "source rows show non-USD par/principal amounts requiring USD principal conversion",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 22
+    },
+    {
+      "table_index": 16,
+      "row_index": 23
+    },
+    {
+      "table_index": 17,
+      "row_index": 25
+    },
+    {
+      "table_index": 18,
+      "row_index": 5
+    },
+    {
+      "table_index": 18,
+      "row_index": 6
+    },
+    {
+      "table_index": 18,
+      "row_index": 15
+    },
+    {
+      "table_index": 20,
+      "row_index": 6
+    },
+    {
+      "table_index": 21,
+      "row_index": 5
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Eight current-period debt rows disclose non-USD par/principal amounts, but the normalized rows flagged by FX01 have blank principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "FX01 is a Class 2 row-validation issue. The bundle lists eight open FX01 warnings where principal_amount_usd is missing for non-USD debt principal. The raw source current-period debt schedule contains exactly eight debt rows with explicit non-USD par/principal symbols: CD&R Madison Parent Ltd EUR and GBP, Excelitas GBP, Hadrian GBP rows, Infront Luxembourg EUR, Trader Corporation CAD, and Stonegate GBP. Because the source establishes non-USD principal exposure while the normalized USD principal field is blank, the flag is a real extraction/normalization gap rather than a false alarm."
+}

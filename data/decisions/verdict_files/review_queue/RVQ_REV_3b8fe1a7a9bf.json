@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3b8fe1a7a9bf",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "fmt_basis_spread weak flag: one formatting violation across 333 units",
+  "anchor_value": "Source SOI rows present basis spread/floor in the Reference Rate Spread/ Floor column as parseable text such as 3M SOFR + 0.50 % / 1.00 % and 3M SOFR + 1.00 % / 0.75 %",
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 26,
+      "quoted_text": "Echo Purchaser, Inc. Delayed Draw Term Loan (Exostar) | (1)(2)(3)(4)(5)(7)(8)(12) | 3M SOFR + 1.00 % / 0.75 % | 1.00 3.50 | % / % | 11/19/2029 | - | ( 175 | ) | - | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "GS Acquisitionco, Inc. Revolving Loan | (1)(2)(3)(4)(5)(7)(8)(14) | 3M SOFR + 0.50 % / 1.00 % | 0.50 | % | 5/25/2028 | - | ( 5,971 | ) | ( 5,971 | ) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 37,
+      "quoted_text": "PDI TA Holdings, Inc. Delayed Draw Term Loan | (1)(2)(3)(4)(5)(7)(8)(14) | 3M SOFR + 0.50 % / 0.75 % | 0.50 | % | 2/3/2031 | - | ( 8,678 | ) | ( 8,867 | ) | 0.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row formatting review. The bundle does not identify a single bad coordinate, but targeted raw-source checks on the suspicious compact downstream terms show the filer disclosed the reference-rate spread/floor in the dedicated SOI column with explicit spread and floor percentages. The apparent issue is a weak formatter/surface-style flag, not a source data defect."
+}

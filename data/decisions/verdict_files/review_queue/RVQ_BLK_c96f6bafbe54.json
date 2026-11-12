@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_c96f6bafbe54",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 7,
+  "anchor_value": 7,
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 review of seven principal_amount cells. The cached raw filing was readable and its investment schedule identifies Principal, Amortized Cost, and Fair Value columns, but the bundle supplies only internal row keys and no issuer names or source coordinates for the seven flags. Targeted evidence searches for each flagged principal value (1829000, 11749000, 34751000, 14436000, 503000, 152000, and 265000; including filing-style variants) returned no matching source row. Therefore none of the flagged cells can be confirmed against its source cell, and the source checked does not distinguish legitimate deeply impaired positions from scale, FX, or extraction defects."
+}

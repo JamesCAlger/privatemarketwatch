@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_3f7ec1dcc8a1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2522500,
+  "anchor_value": 339136000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 3,
+      "quoted_text": "Denali Equity Holdings LLC (2) | Class A units | 09/2024 | 3,749 | $ | 347,531 | $ | 339,136 | 216.77 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 5,
+      "quoted_text": "Denali Equity Holdings, LLC (1) | 15 | $ | 340,995 | $ | 354,399 | $ | 347,531 | $ | 339,136",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Denali fair value was extracted as 2522500, but the source row reports fair value of 339136000 for the comparative Denali investment and 354399000 for the current-period Denali row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 58,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Denali cost was extracted as 347854000 from a funded/purchases amount rather than the Denali investment row, whose source cost is 347531000 in the comparative investment table and 340995000 in the current-period table.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 2 row check. The flagged holdings row says Denali Equity Holdings LLC has cost 347854000 and fair_value 2522500, causing fair value to appear below 5% of cost. Raw source rows for Denali instead show fair value of 339136 (thousands) in the detailed investment table and 354399 (thousands) in the current-period underlying-project table. The low fair value is therefore a real extraction/column-mapping error, not an economically distressed position."
+}

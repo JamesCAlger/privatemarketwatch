@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_f43438da69aa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 189.87,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,833,404 | $ | 2,845,622 | 189.87 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The raw March 31, 2026 schedule reports total investments before cash of $2,845,622 thousand and 189.87% of net assets, while the extracted fair-value total is independently consistent at $2,845.623 million but A07 observes a 0.0% sum. Thus the positions and fair values are present, but the percentage-of-net-assets field was not extracted into the checked data."
+}

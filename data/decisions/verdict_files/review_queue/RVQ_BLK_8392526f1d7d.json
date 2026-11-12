@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_8392526f1d7d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.91,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag for issuer_name at internal row_key 194300. The raw 10-Q source was successfully read through the evidence CLI and contains the investment schedule, but the review bundle supplies no instrument, fair value, context ID, or source coordinate for the flagged row. The internal row key cannot be mapped uniquely to a raw-source cell, so the source cannot establish whether the blank reflects a true missing issuer or a failed carry-forward from a grouped issuer cell. Adjudicating real_error or false_alarm would require guessing."
+}

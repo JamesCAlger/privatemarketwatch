@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_52d8a3301c5f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD ($)",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "A&R Logistics Holdings, Inc. | Road & Rail | Term Loan | SOFR | + | 5.75 % | (Q) | 10.79 % | 05/03/25 | 4,997 | $ | 4,965 | $ | 4,884 | (1)(6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Investments, June 30, 2023 | $ | 677,849 | $ | 659,021 | 161.28 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency value U_USD as not USD, but the raw investment schedule presents fair value amounts in dollar columns: table 10 row 4 has a Fair Value amount preceded by '$', and the June 30, 2023 total investments row also shows fair value preceded by '$'. The source therefore supports USD-denominated fair values; U_USD is a USD unit label rather than evidence of a non-USD fair-value currency."
+}

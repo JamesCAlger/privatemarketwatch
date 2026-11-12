@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_171dc3e1b113",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5581395348837209,
+  "anchor_value": 1.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 3,
+      "quoted_text": "Investments | Footnotes | Security (2) | Coupon | Floor | Cash | PIK | Date | Maturity | Industry | Principal Amount/Shares (3) | Amortized Cost | Fair Value (1) | % of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 0,
+      "quoted_text": "(3) Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "2X Investors LP Class A Units | Equity | 6/5/2023 | Principal Amount/Shares: 50,361 | Amortized Cost: 503,611 | Fair Value: 581,823",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "Sapphire Aggregator S.a r.l. Class A Shares | Equity | 9/1/2022 | Principal Amount/Shares: 1,635,819 | Amortized Cost: 32,722 | Fair Value: 38,114",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The March 31 SOI defines the Principal Amount/Shares column as shares or units for equity investments, but the extracted equity-share coverage is only 24 of 43 rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 0
+      }
+    }
+  ],
+  "rationale": "C04 reports that only 55.8% of 43 extracted equity rows have shares. The raw March 31 SOI pages show a dedicated Principal Amount/Shares column, and footnote (3) states that equity investments use that column for shares or units owned. Representative equity rows such as 2X Investors LP Class A Units and Sapphire Aggregator Class A Shares have populated share/unit counts in that column. The flag is therefore a real extraction gap, not a false alarm caused by unavailable source data."
+}

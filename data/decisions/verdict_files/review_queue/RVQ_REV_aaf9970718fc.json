@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_aaf9970718fc",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.11 % (SOFR + 7.50 %, 2.00 % Floor) | $ | 7,594,859 | $ | 7,721,962",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "Florida Marine Transporters, LLC | Term Loan B - 13.47 % (SOFR + 8.00 %, 2.00 % Floor) | $ | 9,014,571 | $ | 9,158,997",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because the extracted unit string is U_USD. The raw schedule of investments presents the BDC valuation columns as dollar-denominated: the Amortized Cost and Fair Value headers are followed by dollar-sign cells and dollar amounts for the flagged debt rows. No non-USD currency appears in the source; U_USD is consistent with a USD XBRL unit identifier rather than a foreign-currency value. The check should treat this unit form as USD."
+}

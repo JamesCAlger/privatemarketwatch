@@ -1,0 +1,57 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV effect until source reconciliation artifacts are rebuilt. The patch classifies two source-only rows as non-position hierarchy/total rows rather than adding or removing holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 10,
+      "row_index": 15,
+      "cell_indices": [
+        0
+      ],
+      "row_classification": "AGGREGATE_HEADER",
+      "reason": "The Air Freight & Logistics row is a bare industry heading in the non-controlled/non-affiliated investments hierarchy; it has no issuer, instrument, rate, maturity, share, unit, cost, fair-value, or percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 22,
+      "row_index": 12,
+      "cell_indices": [
+        0,
+        17,
+        21,
+        24
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The Total Investments -- non-controlled/ non-affiliate row is an aggregate subtotal with section total label, aggregate cost, aggregate fair value, and aggregate percent of net assets, not a position-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Extended source-only blocker classification to recognize Fidelity's singular non-affiliate total wording and the bare Air Freight & Logistics industry hierarchy line while preserving a false-positive entity case with LLC/Common Units as blocking.",
+  "primary_justification": "Manual review found both blocker rows are non-position rows. The Air Freight & Logistics row is an industry hierarchy header under non-controlled/non-affiliated investments, and Total Investments -- non-controlled/ non-affiliate is a subtotal row. The patch is bounded to header/total classification: it adds singular non-affiliate total wording and the Air Freight & Logistics industry label, and tests that an Air Freight & Logistics issuer row with LLC/Common Units remains a blocking position-like row.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch should only clear this blocker after source reconciliation is rebuilt through the approved pipeline. Residual risk is limited to similarly worded hierarchy labels; the added false-positive test protects entity-bearing Air Freight & Logistics positions from being suppressed.",
+  "review_id": "BDCSRC_0001899996_2025-03-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_fbe02a2b21",
+  "reviewer_notes": "The packet contains two source-only blocker rows and affected source fair value of 1,709,294,297. HTML source-row coordinate candidates show the industry header at table 10 row 15 and the non-affiliate total row at table 22 row 12. This is a bounded non-position classification fix, not a holdings deletion or validation suppression.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected to reclassify the two row 26 source-only blockers as documented non-blocking header/total rows after the source reconciliation output is rebuilt.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate all BDC verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

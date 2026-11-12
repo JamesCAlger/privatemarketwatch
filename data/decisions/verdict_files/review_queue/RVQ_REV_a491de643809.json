@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_a491de643809",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 178,
+      "row_index": 1,
+      "quoted_text": "Investments (1) Non-Controlled, Non-Affiliated Investments | Reference Rate Spread (4) | Interest Rate (5) | Maturity Date | Par Amount/ Shares | Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 178,
+      "row_index": 63,
+      "quoted_text": "K2 Propco Class S Units (3)(6)(8) | N/A | N/A | N/A | 897 | 285 | 953 | 0.55%"
+    },
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60%"
+    }
+  ],
+  "rationale": "FX02 fired on fair_value_currency with observed value UNIT_USD. The raw schedule's investment table labels the fair value column in dollar terms and shows dollar signs on the total investments line; representative flagged holdings such as K2 Propco have fair values under that Fair Value column. UNIT_USD is therefore the expected USD unit, so the flag is a checker/unit-normalization false alarm rather than a source data error."
+}

@@ -1,0 +1,51 @@
+{
+  "review_id": "RVQ_REV_edf9bbedfc30",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 6,
+  "anchor_value": 0,
+  "confidence": 0.45,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 10,
+      "quoted_text": "Kauffman Intermediate, LLC | First Lien Secured Debt - Term Loan | 10.27 % | 09/30/26 | 8,926 | 8,408 | 5,410 | (5)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "Veristat Group Inc. | First Lien Secured Debt - Term Loan | 10.50 % | 03/31/27 | 8,127 | 7,798 | 4,729 | (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 33,
+      "quoted_text": "Parcelshield Holdings LLC | First Lien Secured Debt - Term Loan | 9.32 % | 09/30/27 | 7,763 | 7,440 | 3,885 | (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 54,
+      "row_index": 6,
+      "quoted_text": "FEV Acquisition Corporation | First Lien Secured Debt - Term Loan | 6.50 % | 7/15/2028 | 8,228 | 7,369 | 2,683 | (5)(17)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 54,
+      "row_index": 7,
+      "quoted_text": "First Lien Secured Debt - Delayed Draw | 13.50 % | 7/15/2028 | 176 | 176 | 169 | (5)(17)(19)(20)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 15,
+      "quoted_text": "American West Restaurant Group Holdings LLC | First Lien Secured Debt - Term Loan | 7.75 % | 2/2/2028 | $ | 7,939 | $ | 7,689 | $ | 7,119 | (5)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The allowed evidence CLI returned the six schedule rows carrying footnote marker (5), matching the six bundled nonaccrual candidates, but targeted source queries for non-accrual/accrual wording and footnote-definition wording did not expose the text defining marker (5). Because the raw source window does not show whether (5) means non-accrual, the source checked does not decide whether the flag is a real data error or a false alarm."
+}

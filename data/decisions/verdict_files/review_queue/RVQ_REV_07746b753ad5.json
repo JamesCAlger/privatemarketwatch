@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_07746b753ad5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate and blank basis_spread on X02 private-credit rows",
+  "anchor_value": "raw schedule rows contain non-empty Ref. Rate/Cash/PIK interest terms",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 89,
+      "row_index": 47,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance debt investment | N/A | 12.00 % | 7/2030 | 58,702 | $ | 58,702 | $ | 58,702",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 38,
+      "quoted_text": "ABB/Con-cise Optical Group LLC | First lien senior secured loan | S+ | 7.50 % | 2/2028 | 33,306 | 33,089 | 33,057",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Source investment tables carry separate Ref. Rate, Cash, and PIK columns, but X02 rows were stored with blank interest_rate and blank basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 89,
+        "row_index": 47
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A representative first lien loan has source terms S+ and 7.50% cash, while the extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 75,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "This is a row-validation missing-rate issue. The bundle's X02 rows are private-credit positions with blank stored interest_rate and no basis_spread, but the raw source schedule provides interest terms in the Ref. Rate/Cash/PIK columns for matching debt rows. The source therefore grounds an extraction gap rather than a false alarm. No aggregate anchor was needed."
+}

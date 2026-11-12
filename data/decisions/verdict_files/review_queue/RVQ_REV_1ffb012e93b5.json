@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_1ffb012e93b5",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 11.32,
+  "anchor_value": 11.32,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 24,
+      "quoted_text": "Twin Star International, Inc. | 10/03/24 | 13th Amendment Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) | 0.1 | % | 358,402 | 06/18/26 | 358,402 | 358,402"
+    },
+    {
+      "table_index": 25,
+      "row_index": 23,
+      "quoted_text": "Slogic Holding Corp. (4) | 06/29/18 | Last Out Term Loan - 9.81 % inc PIK ( SOFR + 5.87 %, 1.00 % Floor, all PIK) | 4.0 | % | 28,819,404 | 10/29/26 | 28,819,404 | 17,637,475"
+    }
+  ],
+  "rationale": "The raw current-period SOI rows show the investment cell already carries the PIK-inclusive rate and that rate matches the stored interest_rate for the suspect examples: Twin Star 13th Amendment Term Loan is 11.32% inc PIK in current table 24 row 24, and Slogic Last Out Term Loan is 9.81% inc PIK in current table 25 row 23. A broader source search also shows the 11.98% Twin Star value belongs to a comparative/prior-period table, so the fmt_pik_rate flag is driven by non-current/intermediate text rather than a current-source data error."
+}

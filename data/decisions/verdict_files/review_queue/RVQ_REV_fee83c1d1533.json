@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_fee83c1d1533",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "10 PP03 rows flagged as comparative-period facts",
+  "anchor_value": "current-period SOI tables also contain the flagged positions",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 11,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2023 (Unaudited) and December 31, 2022"
+    },
+    {
+      "table_index": 9,
+      "row_index": 61,
+      "quoted_text": "ReliaQuest, LLC (11)(13) | Class A-1 Units ( 567,683 units) | 11/23/2021 | 1,120 | 1,512 | 0.1 %"
+    },
+    {
+      "table_index": 9,
+      "row_index": 62,
+      "quoted_text": "Class A-2 Units ( 2,580 units) (12) | 6/21/2022 | 6 | 9 | 0.0 %"
+    },
+    {
+      "table_index": 9,
+      "row_index": 66,
+      "quoted_text": "Celtra Technologies, Inc. (11) | Class A Units ( 1,250,000 units) | 11/19/2021 | 1,250 | 1,250 | 0.1 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "Bayshore Intermediate #2, L.P. (11)(13) | Common Units ( 12,330,709 units) | 10/1/2021 | 12,331 | 11,375 | 0.8 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 33,
+      "quoted_text": "Lucidworks, Inc. (11) | Series F Preferred Shares ( 199,054 shares) | 8/2/2019 | 800 | 800 | 0.1 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 34,
+      "quoted_text": "Piano Software, Inc. (11) | Series C-1 Preferred Shares ( 418,527 shares) | 12/22/2021 | 3,000 | 3,000 | 0.2 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 35,
+      "quoted_text": "Series C-2 Preferred Shares ( 27,588 shares) (12) | 11/18/2022 | 198 | 198 | 0.0 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 36,
+      "quoted_text": "SMA Technologies Holdings, LLC (11)(12) | Class A Units ( 1,300 shares) | 11/21/2022 | 1,300 | 1,300 | 0.1 %"
+    }
+  ],
+  "rationale": "The PP03 issue rows were flagged because they were associated with an earlier source period, but raw source shows the same identifiers in the March 31, 2023 SOI section. Table 5 identifies the schedule as covering March 31, 2023 and December 31, 2022; the current-period SOI pages contain the cited ReliaQuest, Celtra, Bayshore, Lucidworks, Piano, and SMA positions. Because the flagged values are supported by current-period source rows, the comparative-period warning is a false alarm rather than a data error."
+}

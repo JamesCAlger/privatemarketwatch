@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d10d8bbd23ab",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 7,
+      "quoted_text": "SellerX Germany GMBH & Co. KG (Germany) | Common Shares | 55,170 | 640 | 1",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 8,
+      "quoted_text": "Vingil Holdings 2 S.a r.l (Germany) | Preferred Units | 3,794,992 | 1,180,243 | 38",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 21,
+      "quoted_text": "Pluralsight, Inc. | Common Stock | 60,932 | 170,000 | 1",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Three comparative-period equity rows were retained as report-date positions even though their current-period counterparts are already present in table 17.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 24,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The raw filing presents the same three instruments in parallel schedule blocks: current-period rows at table 17 rows 7, 8, and 22, and comparative rows at table 24 rows 7, 8, and 21. The flagged records are the latter copies. Retaining those earlier-period facts in the 2026-03-31 holdings population creates three extra positions; the report-date position-purity anchor expects zero comparative rows."
+}

@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_4fd42c723de2",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "schedule_total",
+    "observed_value":  2,
+    "anchor_value":  2,
+    "confidence":  0.55,
+    "escalate":  true,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  20,
+                                  "row_index":  19,
+                                  "quoted_text":  "RCP Encore Acquisition, Inc. | Healthcare | Term Loan | --.% (S + 5.00%; 1.00% Floor) | 6/30/2026 | funded par 2,832,118 | cost 2,764,721 | fair value 28,321 | tickmark (16)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "unknown",
+                         "detail":  "One flagged low fair value row is source-confirmed as RCP Encore Acquisition, Inc. cost 2,764,721 and fair value 28,321; the other flagged normalized cost 1,187,009 could not be matched to a raw SOI row through the evidence CLI.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  20,
+                                          "row_index":  19
+                                      }
+                     }
+                 ],
+    "rationale":  "X08 has two issue rows. The evidence CLI source confirms one low-FV row at table 20 row 19: RCP Encore Acquisition, Inc. has cost 2,764,721 and fair value 28,321, which is below 5% of cost and appears to be a disclosed distressed valuation rather than an obvious extraction error. Targeted checks of the SOI tables did not locate a raw-source row for the second flagged normalized cost value 1,187,009, so the complete two-row flag cannot be adjudicated as either a real data error or a false alarm from raw source alone."
+}

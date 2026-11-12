@@ -1,0 +1,94 @@
+{
+  "changed_files": [],
+  "cik": "0001920145",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 50,
+      "row_index": 4,
+      "cell_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        11,
+        13,
+        14,
+        16
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Financiere N (dba Nemera) is a current-period position row with issuer, industry, interest rate, reference rate/spread, acquisition date, maturity, currency, cost, fair value, and footnote cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 50,
+      "row_index": 9,
+      "cell_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        11,
+        14,
+        16
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Seven BidCo (dba Septeo) is a current-period position row with issuer, industry, interest rate, reference rate/spread, acquisition date, maturity, currency, cost, fair value, and footnote cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 51,
+      "row_index": 4,
+      "cell_indices": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        10,
+        11,
+        13,
+        14,
+        16
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "OMEGA II AB (dba Fortnox) is a current-period position row with issuer, industry, interest rate, reference rate/spread, maturity, currency, cost, fair value, and footnote cells."
+    }
+  ],
+  "missing_evidence": "A bounded patch is not supported by this bundle alone. Missing evidence needed for a safe production fix: a CIK-scoped mechanism proving how Goldman Sachs hierarchy labels with embedded category percentages should be parsed into position rows; treatment rules for near-duplicate or adjustment suffixes such as 'One' and negative fair-value rows; a false-positive analysis separating true position identifiers from country/security-type subtotal labels using the same percentage-bearing hierarchy; and tests showing the fix does not duplicate existing matched Goldman Sachs rows or merge distinct tranches.",
+  "patch_summary": "",
+  "primary_justification": "Manual review shows this packet is a real undercoverage/parser blocker, not an aggregate/header row and not an insufficient-evidence placeholder. The blocker rows are current-period Goldman Sachs positions with issuer names, security type, industry, rates, reference spreads, acquisition dates or maturities, cost, fair value, and percentage hierarchy evidence. HTML coordinates confirm true position rows for Financiere N (dba Nemera), Seven BidCo (dba Septeo), and OMEGA II AB (dba Fortnox). However, the packet spans 59 source-only rows and includes hierarchy prefixes with multiple embedded percentages, repeated issuer/tranche variants, suffixes such as 'One', and negative fair-value adjustment-like rows. A broad parser change for percentage-bearing hierarchy labels would be unsafe without a tested row-identity and duplicate/tranche mechanism.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-12-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker remains unresolved and should be treated as live production undercoverage until a bounded Goldman Sachs parsing fix is implemented and source reconciliation is rebuilt. Adding these rows without a row-identity and duplicate/tranche mechanism could duplicate exposure or mis-handle adjustment rows.",
+  "review_id": "BDCSRC_0001920145_2025-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_2e3dc7beb4",
+  "reviewer_notes": "Reviewed manually as row 51. The correct outcome is escalation: evidence is strong that true source positions are missing, but the supported fix requires a CIK-scoped parser/table-identity investigation rather than a one-row verdict patch.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation packet remains a live blocker requiring a targeted parser/table-identity fix.",
+  "tests_validation_plan": "Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. Before any code patch, add focused tests for Goldman Sachs hierarchy-percentage leaf parsing, duplicate/tranche identity, and negative or adjustment-like rows.",
+  "verdict": "ESCALATE"
+}

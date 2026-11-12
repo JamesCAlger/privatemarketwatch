@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_a721e01ee286",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted in Euros.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "Revolver | (10) | 1st Lien | 14.0 % | 10.00 % | 4.00 % | 5/24/2022 | 5/24/2027 | EUR | 1,289,577 | 1,401,980 | 1,387,960 | 0.97 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 29,
+      "quoted_text": "Delayed Draw Term Loan | (10) | 1st Lien | 14.0 % | 10.00 % | 4.00 % | 5/24/2022 | 5/24/2027 | EUR | 3,694,756 | 3,729,158 | 3,691,866 | 2.59 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 30,
+      "quoted_text": "Sapphire Aggregator S.a r.l. Convertible Bonds | (10) | Unsecured | 8.0 % | -- | 8.00 % | 11/15/2023 | 3/31/2025 | EUR | 16,225 | 17,418 | 17,210 | 0.01 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "Sapphire Aggregator S.a r.l. Convertible Bonds | (10) | Unsecured | 8.0 % | -- | 8.00 % | 3/1/2024 | 6/30/2025 | EUR | 35,907 | 38,984 | 38,086 | 0.03 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current SOI contains debt rows with EUR principal amounts, while the extracted principal_amount_usd field is blank for FX01 rows.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 12,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "FX01 is a real error for the euro-denominated debt rows. The source footnote says par is in USD unless otherwise noted in euros, and table 12 rows 28-31 explicitly mark the principal amount with EUR. The review artifact reports principal_amount_usd as blank, so these non-USD principal rows lack the required USD-normalized principal value."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c87c864a5160",
+  "verdict": "false_alarm",
+  "mechanism": "duplicate_key_collision",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 20,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13 | % | 5/1/2029 | 110,967 | 109,915 | 100,875",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88 | % | 5/1/2030 | 171,258 | 167,710 | 108,503",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 schedule presents the two iHeartCommunications holdings as separate instruments. They have different stated coupons (9.13% and 10.88%), maturity dates (May 1, 2029 and May 1, 2030), principal amounts, amortized costs, and fair values. The check reports two duplicate position keys only because its key collapses these instrument-level distinctions; there are zero genuine duplicate rows in the cited pair."
+}

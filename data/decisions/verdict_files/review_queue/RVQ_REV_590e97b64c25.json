@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_590e97b64c25",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "Rendered source schedule presents amortized cost and fair value in dollars",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Investment Type | Reference Rate and Spread (2) | Floor | Interest Rate (2) | Initial Acquisition Date | Maturity Date | Par/Shares | Amortized Cost (3) | Fair Value (4) | % of Net Assets (17) | Footnotes"
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "LSF12 Phoenix Holdco, LLC | Term Loan | 3M SOFR + 4.50 % | 8.20 % | 3/5/2026 | 3/25/2033 | $ | 3,000,000 | $ | 2,940,000 | $ | 2,973,750 | 1.8 %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 414,055,669 | $ | 352,232,987 | 211.7 %"
+    }
+  ],
+  "rationale": "FX03 flags cost_currency value U_USD as not USD, but the raw source schedule renders the affected BDC valuation columns as dollar-denominated. The table header identifies Amortized Cost and Fair Value, individual rows show dollar-sign cells before par, amortized cost, and fair value, and the schedule total is also dollar-denominated. U_USD is therefore a unit-label normalization artifact rather than source evidence of non-USD valuation fields."
+}

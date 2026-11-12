@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_651d2f079e7e",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3405.689,
+  "anchor_value": 3347.317,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 3,
+      "quoted_text": "Total | $ | 65,095 | $ | 11,630 | $ | ( 5,310 | ) | $ | 3,266 | $ | ( 16,309 | ) | $ | \u2014 | $ | 58,372 | $ | 11 | $ | 10,347",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 43,
+      "row_index": 33,
+      "quoted_text": "Total Investments | $ | 3,323,282 | $ | 3,347,317 | 208.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The output aggregate exceeds the filing's total investments by 58.372 million, matching the controlled-affiliate rollforward total that is already represented by underlying schedule positions.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 45,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor check: the filing schedule reports Total Investments fair value of 3,347.317 million, while the flagged output aggregate is 3,405.689 million. The 58.372 million excess matches table 45's controlled-affiliate rollforward total, which repeats the IRGSE Holding Corp. investment fair value already included in the schedule total, so the output has leaked a rollforward/subtotal line into holdings."
+}

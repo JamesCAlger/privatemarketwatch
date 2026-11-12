@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_3199b57cfc8e",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3228940,
+  "anchor_value": 3228940,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 235.7 % | $ | 3,403,111 | $ | 3,228,940"
+    },
+    {
+      "table_index": 4,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (cost of $ 3,403,111 and $ 3,395,166 ) | $ | 3,228,940 | $ | 3,261,721"
+    },
+    {
+      "table_index": 47,
+      "row_index": 10,
+      "quoted_text": "Total | $ | 3,403,111 | $ | 3,228,940 | $ | 3,395,166 | $ | 3,261,721"
+    }
+  ],
+  "rationale": "GAV_BDC02 fired because the validation artifact reported no comparison denominator. The raw filing source supplies a comparison anchor: the schedule total investments fair value is 3,228,940, the balance-sheet total investments at fair value is also 3,228,940, and the investment-type summary total repeats 3,228,940. Because the source anchor exists and matches the observed extracted schedule total, the flag is a check/anchor availability false alarm rather than a holdings data error."
+}

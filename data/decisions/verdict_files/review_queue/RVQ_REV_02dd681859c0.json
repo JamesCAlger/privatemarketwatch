@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_02dd681859c0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 35750000,
+  "anchor_value": 1184000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Eptam Plastics, Ltd. | Health Care Equipment & Supplies | 10.71 % | S + 5.50 % | 12/06/25 | 1,365 | 1,219 | 1,184 | (5) (6) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "ESO Solutions, Inc | Health Care Technology | 12.25 % | S + 7.00 % | 05/03/27 | 36,294 | 35,789 | 35,750 | (5) (6) (7)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted Eptam Plastics row uses fair value 35,750,000, but that fair value belongs to the next source row for ESO Solutions; the Eptam row's fair value is 1,184,000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted Eptam Plastics cost is 1,184,000, which is the source fair value; the source cost is 1,219,000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "This is a row extraction/localization error, not genuine extreme appreciation. The raw schedule row for Eptam Plastics shows par 1,365, cost 1,219, and fair value 1,184, all in thousands. The extracted row instead carries cost 1,184,000 and fair value 35,750,000; 35,750 is shown in the next source row as ESO Solutions' fair value. Therefore the X07 fire is caused by a real extracted-data defect."
+}

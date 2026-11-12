@@ -1,0 +1,27 @@
+{
+  "review_id": "BDCSRC_0001287750_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_9e316dac79",
+  "cik": "0001287750",
+  "report_date": "2025-12-31",
+  "verdict": "NO_PATCH_NEEDED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence shows three source-only blocker rows for Align Precision Group, Centric Brands, and Visual Edge Technology, but the raw current-period source evidence identifies these as collapsed_duplicate_dimension_path issuer-level rows with no output fair value, while related instrument-level rows carry the investable tranche detail. Adding the issuer wrapper rows as unified positions would duplicate child dimension paths rather than repair a missing production position.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "xbrl_rows_same_accession"
+  ],
+  "html_citations": [],
+  "changed_files": [],
+  "patch_summary": "No patch proposed. The residual is explained by duplicate-dimension issuer wrapper rows rather than a bounded parser miss suitable for adding unified holdings.",
+  "source_reconciliation_effect": "No source-reconciliation patch expected. The blocker should remain subject to duplicate-dimension/wrapper handling rather than being cleared by staging issuer totals as positions.",
+  "gav_effect": "Context only; GAV is already passing and is not used as the primary justification.",
+  "tests_validation_plan": "No code changes to validate. If a future duplicate-dimension classifier change is attempted, run: pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate.",
+  "requires_human_merge": false,
+  "missing_evidence": "",
+  "residual_risk": "The bundle does not include a proposed classifier patch proving these wrapper rows can be safely reclassified across filings; therefore this verdict avoids changing parser behavior and treats the case as no patch needed for this review.",
+  "reviewer_notes": "The worklist reports 3 missing_from_pipeline rows totaling 171.3 million. The source-only blocker rows are position-like by name, but raw current-period source rows show the same issuer wrappers marked collapsed_duplicate_dimension_path, with examples of child rows such as Align Precision first lien loan and Class A-2 units and Centric Brands loan/equity/subordinated tranches. The XBRL/source rows remain the numeric source of truth; HTML coordinate evidence was not needed for this duplicate-dimension diagnosis."
+}

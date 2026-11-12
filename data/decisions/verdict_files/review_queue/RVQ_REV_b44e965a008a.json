@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_b44e965a008a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Lynx BidCo (3)(4) | First-lien loan ($ 40,569 par, due 7/2031 ) | 7/5/2024 | SOFR + 7.11 % | 11.40 % (incl. 5.61 % PIK) | 39,567 | 39,584 | 1.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 34,
+      "quoted_text": "Aurelia Netherlands MidCo 2 B.V. (3)(4) | First-lien loan (EUR 201,909 par, due 5/2031 ) | 5/22/2024 | E + 5.75 % | 8.54 | % | 214,843 | 218,102 (EUR 201,909 ) | 5.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 6,
+      "quoted_text": "Artisan Topco LP (8) | Class A Preferred Units ( 7,882,736 units) | 11/7/2023 | 7,883 | 6,602 | 0.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged identifiers because they include source context such as Debt Investments, Equity and Other Investments, and industry labels. The raw Schedule of Investments shows these are concrete position rows with company, investment, acquisition date, rate or units, cost, fair value, and percentage columns, while true subtotal rows appear separately with only totals. The check is therefore over-scoped for identifiers that concatenate valid category/industry context with a real position."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_0c3ceafc093f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "",
+  "anchor_value": 12.75,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 3,
+      "quoted_text": "Accordion Partners Holdings LLC | Unsecured Note | N/A | 12.75 % PIK | 11/15/2034 | 17,968 | 17,711 | 17,707 | 1.3 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 source check confirms a real extraction gap for flagged row 343850. The extracted holding has blank interest_rate and basis_spread, but the March 31, 2026 schedule row at table 15 row 3 explicitly discloses 12.75% PIK for the unsecured note. The source value should populate the position's interest rate. The other nine issue rows were not independently localized from their numeric row keys, so this verdict establishes that the aggregated ten-row flag contains at least one real error without making unsupported claims about every constituent row."
+}

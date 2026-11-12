@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_b5555872a46c",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Stored bdc_investment_identifier includes schedule headings such as 'Debt Investments Business Services' or 'Equity and Other Investments Business Services' before the actual issuer and instrument.",
+  "anchor_value": "Raw schedule keeps those labels as separate classification heading rows; the position row begins with the issuer and investment only.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 18,
+      "quoted_text": "Lynx BidCo (3)(4) | First-lien loan ($ 42,240 par, due 7/2031 ) | 7/5/2024 | SOFR + 6.50 % | 10.50 | % | 41,213 | 42,423 | 1.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Artisan Topco LP (8) | Class A Preferred Units ( 7,882,736 units) | 11/7/2023 | 7,883 | 6,622 | 0.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 1,
+      "quoted_text": "GreenShoot BidCo B.V. (3)(4) | First-lien loan (EUR 5,107 par, due 5/2030 ) | 5/28/2024 | E + 5.75 % | 7.78 | % | 5,426 | 5,936 (EUR 5,052 ) | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Debt investment identifiers are polluted by separate asset-class and sector headings; the raw Lynx BidCo row starts with issuer plus instrument, not 'Debt Investments Business Services'.",
+      "fix_class": "classification_fix",
+      "citation": {"table_index": 8, "row_index": 18}
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Equity identifiers are polluted by separate asset-class and sector headings; the raw Artisan Topco row starts with issuer plus instrument, not 'Equity and Other Investments Business Services'.",
+      "fix_class": "classification_fix",
+      "citation": {"table_index": 11, "row_index": 6}
+    }
+  ],
+  "rationale": "PP01 flags position-purity candidates in bdc_investment_identifier. The raw source schedule separates classification labels from position rows: for example, table 8 has 'Debt Investments' and 'Business Services' as heading rows, while table 8 row 18 is only Lynx BidCo plus its first-lien loan terms; table 11 similarly has 'Equity and Other Investments' and 'Business Services' headings, while row 6 is only Artisan Topco LP plus preferred-unit terms. The stored flagged values concatenate those headings into the identifier, so the identifier contains classification context that is not part of the source position name. This is a localized extraction/normalization defect, not a subtotal row or false alarm."
+}

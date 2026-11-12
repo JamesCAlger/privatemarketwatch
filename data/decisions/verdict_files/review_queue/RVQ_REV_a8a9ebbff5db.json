@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_a8a9ebbff5db",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1153413327,
+  "anchor_value": 1153413327,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Instrument | Industry | Rate (2) | Interest Rate | Original Acquisition Date (17) | Maturity Date | Par Amount (3) | Cost / Amortized Cost (4) | Fair Value | % of Net Assets (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "175 3rd Street | 1st Lien Term Loan | ... | Cost / Amortized Cost $ 8,961,113 | Fair Value $ 9,012,067",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 1,200,205,656 | $ 1,153,413,327 | 185.82 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 1,200,205,656 and $ 1,222,055,231 , respectively) | 1,153,413,327 | 1,183,746,738",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 reports 297/596 leaves with fair_value, but the raw SOI layout intentionally has paired monetary columns: Cost / Amortized Cost and Fair Value. Representative position rows carry both cost and fair value, and the March 31, 2026 SOI fair-value total of 1,153,413,327 ties to the balance-sheet total investments at fair value. The low fraction is therefore caused by the rule counting cost/amortized-cost leaves in the denominator, not by missing fair-value data."
+}

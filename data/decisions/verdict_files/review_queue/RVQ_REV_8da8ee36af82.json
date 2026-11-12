@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_8da8ee36af82",
+  "verdict": "false_alarm",
+  "mechanism": "rate_range_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 2,
+      "quoted_text": "Catamaran CLO 2014-1 Ltd. | Subordinated Securities, effective interest 36.4 % | CLO Fund Securities | 4/20/30 | 22.2 % | 5/6/14 | $ | 938 | $ | 938 | (3)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Dryden 30 Senior Loan Fund | Subordinated Securities, effective interest 30.2 % | CLO Fund Securities | 11/1/28 | 6.8 % | 10/10/13 | 454 | 455 | (3)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "JMP Credit Advisors CLO IV Ltd. | Subordinated Securities, effective interest 26 % | CLO Fund Securities | 7/17/29 | 57.2 % | 10/22/21 | 1,860 | 1,204 | (3)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "JMP Credit Advisors CLO V Ltd. | Subordinated Securities, effective interest 28.5 % | CLO Fund Securities | 7/17/30 | 57.2 % | 10/22/21 | 4,225 | 3,883 | (3)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 row-validation check of interest_rate. The filing schedule has no separate Interest Rate column for CLO fund securities; the relevant source cells are the Investment descriptions, which explicitly state effective interest 36.4%, 30.2%, 26%, and 28.5% for the flagged CLO subordinated securities. The extracted interest_rate values match those source percentages, so the high-rate range warning is not a data error in the extracted value."
+}

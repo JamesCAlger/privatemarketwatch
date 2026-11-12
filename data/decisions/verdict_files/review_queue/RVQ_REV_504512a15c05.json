@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_504512a15c05",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": -395000.0,
+  "anchor_value": -395000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "Sky Merger Sub, LLC - Revolving Credit Facility | Cost (8): (395) | Fair Value: (396)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Systems Planning and Analysis, Inc. - Revolving Credit Facility | Cost (8): (28) | Fair Value: (37)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 batch of negative-cost cells. The March 31, 2026 raw investment schedule explicitly reports the flagged costs as parenthesized negative amounts in the Cost (8) column, including Sky Merger Sub at (395) thousand and Systems Planning and Analysis at (28) thousand; their fair values are also parenthesized and the rows are revolving credit facilities. The extracted -395000 and -28000 values therefore preserve the filed signs and thousand-dollar scale. C107's generic negative-cost warning is a legitimate monitoring alert but does not identify a data error here. Residual risk is limited to uninspected members of the 36-row batch, although the same source search returned numerous consistent parenthesized revolver rows across tables 13-20."
+}

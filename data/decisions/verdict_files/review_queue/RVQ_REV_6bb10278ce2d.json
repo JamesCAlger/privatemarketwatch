@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_6bb10278ce2d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2657000,
+  "anchor_value": 352185000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 14,
+      "quoted_text": "Denali Equity Holdings LLC (1)(5) | 03/2025 | 3,749 | 330,908 | 352,185 | (2)"
+    },
+    {
+      "table_index": 66,
+      "row_index": 5,
+      "quoted_text": "Denali Equity Holdings, LLC (1) | 15 | $ | 330,908 | $ | 352,185 | $ | 340,995 | $ | 354,399"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Extracted Denali fair value is 2,657,000, but the March 31, 2026 source row reports cost 330,908,000 and fair value 352,185,000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "X08 fired because the extracted Denali row shows fair value far below cost. The raw SOI row for Denali Equity Holdings LLC reports cost 330,908 and fair value 352,185 (in thousands), and the underlying-projects disclosure repeats the same March 31, 2026 cost and fair value. The extracted observed fair value of 2,657,000 is not supported by the raw source, so the row-level flag is a real data error caused by extraction/localization rather than genuine distress."
+}

@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_BLK_386fc0f44151",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4246.035,
+  "anchor_value": 4246.035,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 25,
+      "quoted_text": "Total Investments at fair value | $ | 4,241,699 | $ | 4,246,035 | 210.45 | %"
+    },
+    {
+      "table_index": 109,
+      "row_index": 20,
+      "quoted_text": "Total Investments and Cash Equivalents | $ | 2,194,978 | $ | 2,194,744 | 176.05 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count appears to include the comparative 2024 investment schedule block, while the output is scoped to the 2025 report date and ties to the current filing total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 109,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw filing current-period total investments at fair value is 4,246.035 million at table 72 row 25, matching the bundle's fund_quarter_fv_m of 4246.035. A separate comparative/prior-period investment schedule block is present, ending at table 109 row 20 with 2,194.744 million. The E07 source=2332 versus output=1389 count discrepancy is therefore not grounded as a current-quarter extraction miss; the current-period value anchor ties, and the discrepancy is consistent with the oracle source-count anchor including comparative schedule rows."
+}

@@ -1,0 +1,105 @@
+{
+  "changed_files": [
+    "pipeline/bdc_identifier.py",
+    "pipeline/source_reconciliation.py",
+    "tests/test_unified_holdings.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001902649",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded code changes affect row classification: BlackRock source leaf rows with an Instrument hierarchy are eligible to remain position rows, while terminal percentage total/category rows are classified as documented source-only total/header or category rollup rows.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 12,
+      "row_index": 30,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "reason": "Discovery Purchaser Corporation is a current-period investment row with borrower name, instrument, reference rate, floor, spread, coupon, maturity, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 12,
+      "row_index": 32,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "reason": "Olympus Water US Holding is a current-period investment row with borrower name, instrument, reference rate, floor, spread, coupon, maturity, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 10,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "reason": "Brand safway is a current-period investment row with borrower name, instrument, reference rate, floor, spread, coupon, maturity, cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Teach BDC aggregate detection that a hierarchy segment named Instrument can be a BlackRock leaf-position signal when paired with loan/equity terms and rate or maturity evidence. Also classify terminal percentage total/category labels ending in '% of Net Assets' as documented source-only total/header or category rollup rows rather than leaf parser mismatches.",
+  "primary_justification": "The 2024-09-30 BlackRock packet contains true current-period position rows such as Discovery Purchaser Corporation, Olympus Water US Holding, and Brand safway whose source coordinates show borrower, instrument, rate, maturity, cost, fair value, and percent-of-net-assets fields. These rows use an Instrument hierarchy segment rather than Investment Type, so the bounded identifier patch preserves them as position-level rows only when independent loan/equity and rate or maturity evidence is also present. The same packet also includes terminal percentage total/category labels such as Total Cash and Investments - 151.7% of Net Assets, Total Debt Investments - 147.2% of Net Assets, and Total Investments - 147.3% of Net Assets; the reconciliation patch classifies these exact total/category forms as documented source-only rollups rather than production positions.",
+  "reconciliation_diagnosis": "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+  "report_date": "2024-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "This is a bounded parser/classifier patch, not a hand clearance. Residual risk is that production outputs must still be rebuilt from cached data and source reconciliation rerun before claiming this packet is absent from the current blocker pool.",
+  "review_id": "BDCSRC_0001902649_2024-09-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_f03e179810",
+  "reviewer_notes": "Manual review of this bundle found the same BlackRock Instrument hierarchy failure mode as adjacent BlackRock quarters, plus three total/category terminal percentage labels. The patch is constrained by requiring explicit leaf terms and rate or maturity evidence for Instrument hierarchy rows and by exact/near-exact terminal percentage total/category label matching for the documented source-only rollup rows.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected effect after rebuild: true BlackRock Instrument leaf rows no longer appear as source-only leaf parser mismatches, and terminal percentage total/category rows are documented as source-only total/header or category rollup rows rather than blocking mismatches.",
+  "tests_validation_plan": "Targeted tests were added for Instrument hierarchy leaf retention and false-positive aggregate protection in tests/test_unified_holdings.py, and for terminal '% of Net Assets' total/category classification in tests/test_validate_holdings.py. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

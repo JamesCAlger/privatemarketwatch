@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_480883457125",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6126744000,
+  "anchor_value": 5804557000,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 34,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,916,273 | $ | 5,804,557 | 208.5 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 82,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value | $ | 197 | $ | - | $ | 5,804,360 | $ | 5,804,557",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation proves an aggregate extraction error. The extracted holdings fair value is USD 6,126,744,000, but the March 31, 2026 schedule total is USD 5,804,557,000 and the filing's fair-value hierarchy independently totals the same USD 5,804,557,000. The extracted position sum is therefore overstated by USD 322,187,000. Targeted residual lookup did not match that excess to a disclosed subtotal, so the aggregate error is real but the culprit row and specific mechanism remain unlocalized; escalation is warranted for row-disposition analysis."
+}

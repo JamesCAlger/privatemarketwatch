@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_a0c4882d2a9b",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3568952000,
+  "anchor_value": 2463922000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 8,
+      "quoted_text": "Total investments | $ | 2,469,396 | $ | 2,463,922 | 211.07 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 119,
+      "row_index": 62,
+      "quoted_text": "Total Investments | $ | 970,522 | $ | 957,830",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 66,
+      "row_index": 4,
+      "quoted_text": "Middle Market Credit Fund, LLC, Subordinated Loan and Member's Interest | (a) | (7)(13) | Investment Funds | FIXED | 15.33 % | 15.33 % | 2/29/2016 | 12/31/2030 | $ | 130,500 | $ | 130,501 | $ | 123,114 | 10.55 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 66,
+      "row_index": 5,
+      "quoted_text": "Middle Market Credit Fund, LLC, Mezzanine Loan | (a) | (2)(7)(9)(13) | Investment Funds | SOFR | 5.50 % | 9.15 % | 6/30/2016 | 5/21/2028 | 40,500 | 40,500 | 40,500 | 3.47",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The parent SOI total is 2,463,922 thousand, but extracted holdings sum to 3,568,952 thousand after including a separate fund-level consolidated schedule whose own 2025 fair value total is 957,830 thousand.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 119,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchors decide the issue. The filing's parent schedule total at table 66 row 8 is 2,463,922 thousand, matching the reconciliation anchor, while the observed extracted/indexable position FV is 3,568,952,000. Source rows 66:4 and 66:5 show the parent holds Middle Market Credit Fund only as investment fund positions with fair values of 123,114 and 40,500 thousand; table 119 is a separate consolidated schedule with its own Total Investments of 957,830 thousand. Counting that look-through schedule in addition to the parent schedule overstates parent holdings GAV, so the flag is a real data error."
+}

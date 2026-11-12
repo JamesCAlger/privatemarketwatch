@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_6b798d964f7d",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "fixed_coupon",
+  "anchor_value": "floating_rate",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 22,
+      "quoted_text": "Continental Acquisition Holdings, Inc. | First Lien Debt | S + | 7.00 % PIK | 10.85 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 37,
+      "quoted_text": "Vardiman Black Holdings, LLC | First Lien Debt | S + | 7.00 % PIK | 10.77 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 38,
+      "quoted_text": "Vardiman Black Holdings, LLC | First Lien Debt | S + | 7.00 % PIK | 10.77 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 3,
+      "quoted_text": "KWOR Acquisition, Inc. | Unsecured Debt | S + | 8.00 % PIK | 11.67 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "PIK-marked floating-rate debt was classified as fixed despite an explicit SOFR-plus spread; retain basis_spread and classify the coupon as floating.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 8,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "X04 is a Class 2 within-row issue. Raw SOI rows explicitly place S + in the Reference Rate & Spread field next to the reported spreads, including the cited 7.00% and 8.00% PIK examples. Thus basis_spread is source-supported; the conflicting fixed_coupon classification is wrong, most likely because the PIK label obscured the floating-rate structure. No aggregate anchor is applicable. Residual risk is limited to uncited members of the ten-row issue group, but the repeated source layout and cited rate patterns establish the common mechanism."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_6a06d53c8037",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 batch of three missing interest_rate cells. The raw filing source was successfully read through the evidence CLI, including its investment schedule table inventory, but the flag identifies the affected records only as internal row keys 503239, 503240, and 503241. The bundle provides no issuer names, source context IDs, or filing coordinates for those keys, so the three flagged cells cannot be matched to raw source rows and the source cannot decide whether each missing rate is a true extraction defect or a legitimately non-rate-bearing position. No aggregate anchor applies to this row-level completeness rule."
+}

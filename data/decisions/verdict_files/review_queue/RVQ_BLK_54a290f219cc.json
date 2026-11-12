@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_54a290f219cc",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_row_principal",
+  "observed_value": 611000.0,
+  "anchor_value": 611000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 30,
+      "quoted_text": "Software | First Lien(3)(4) - Undrawn | - | - | - | 03/2025 | 03/2032 | 611 | ( 2 ) | ( 2 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 28,
+      "quoted_text": "First Lien(3)(4) - Undrawn | - | - | - | 08/2025 | 08/2027 | 609 | - | ( 3 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 15,
+      "quoted_text": "Business Services | First Lien(3)(4) - Undrawn | - | - | - | 06/2025 | 12/2030 | 438 | ( 2 ) | ( 2 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X06 is firing on unfunded/undrawn commitment rows where principal amount is expected to exceed near-zero or negative fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 45,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "The checked source rows show Undrawn first-lien investments with disclosed principal/commitment amounts such as 611, 609, and 438 (thousand) and fair values of about (2), (3), or (2). The extracted principal amount therefore matches the raw schedule; the high principal-to-fair-value ratio is a normal unfunded commitment presentation, so the X06 scale/FX error check is mis-scoped rather than identifying a data defect."
+}

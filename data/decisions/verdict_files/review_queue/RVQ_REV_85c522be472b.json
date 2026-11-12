@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_85c522be472b",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2943767000,
+  "anchor_value": 2943879000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 7,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 2,963,987 | $ | 2,943,879",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Derivative Instruments (amortized cost of $ 0 and $ 0 , respectively) | 112 | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Capital Markets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted holding fair value of $2,943,767 thousand is only $112 thousand below the filing's $2,943,879 thousand total, and the source separately presents derivative instruments at exactly $112 thousand. Thus the position values reconcile fully. The schedule also contains structural leaf-like rows such as the Capital Markets heading with no fair-value cell, while actual position rows carry fair values. B01's 658/708 cell-coverage denominator therefore includes rows for which fair value is not a position value; the sub-95% result is a rule-scope/anchor false alarm, not 50 missing valuations."
+}

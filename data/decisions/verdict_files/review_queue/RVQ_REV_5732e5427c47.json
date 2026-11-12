@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_5732e5427c47",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  0,
+    "anchor_value":  0,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  233,
+                                  "row_index":  36,
+                                  "quoted_text":  "TCP Hawker Intermediate LLC Delayed Draw Term Loan | (1)(2)(3)(4)(5)(7)(8)(12) | 3M SOFR + 0.00 % / 0.00 % | 0.00 % | 8/28/2026 | - | - | - | 0.00 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  238,
+                                  "row_index":  31,
+                                  "quoted_text":  "Oakbridge Insurance Agency LLC Delayed Draw Term Loan | (1)(2)(3)(4)(5)(7)(8)(12) | 3M SOFR + 0.00 % / 0.00 % | 0.00 % | 11/1/2029 | - | - | - | 0.00 %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  238,
+                                  "row_index":  33,
+                                  "quoted_text":  "Peter C. Foy \u0026 Associates Insurance Services, LLC Delayed Draw Term Loan D | (1)(2)(3)(4)(5)(7)(8)(12) | 3M SOFR + 0.00 % / 0.75 % | 0.00 % | 11/1/2028 | - | - | - | 0.00 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Class 1 single-cell review of C104 fair_value=0.0 warnings. The raw SOI rows checked show unfunded delayed draw positions (footnote 8) where the fair value amount cell is a dash and the net-asset percentage is 0.00%; normalizing that source dash to numeric 0.0 is source-consistent. C104 is therefore flagging legitimate zero fair values rather than a data error."
+}

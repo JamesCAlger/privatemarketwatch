@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c4796630bf71",
+  "verdict": "false_alarm",
+  "mechanism": "source_confirmed_extreme_appreciation",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 13,
+      "quoted_text": "Series C common units | 10.00 % PIK | 04/2021 | 8,743,368 | 0.7 | 18.1 | (2)"
+    },
+    {
+      "table_index": 48,
+      "row_index": 9,
+      "quoted_text": "Class A units | 08/2019 | 4,549,000 | 0.5 | 8.6 | (2)"
+    }
+  ],
+  "rationale": "Class 2 row-level X07 review. The raw SOI schedule confirms the two flagged rows have amortized cost of 0.7 and 0.5 million and fair value of 18.1 and 8.6 million, respectively. The stored values match the source; the >10x relationship is real appreciation in the filing, not a pipeline data error."
+}

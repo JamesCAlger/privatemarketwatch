@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_7f7898f2bb56",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 140,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 402,390,620 | 100.00 | % | $ | 395,592,598 | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 artifact reports pct_sum=0.0%, but the raw schedule total for September 30, 2024 reports Total Investments at 100.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 140,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check: the flag reports pct_sum=0.0% for the CIK-quarter, while the raw source allocation table explicitly totals September 30, 2024 investments to 100.00%. This is a source-grounded missing or unmapped percentage extraction, not a false alarm."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_f27b69d3d9cc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 3,
+      "quoted_text": "Aspen Renewables Equity Holdings LLC (1)(5) | Ordinary units | 03/2025 | Shares/ Units 4,900 | Cost $407,340 | Fair Value $407,340",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Denali Equity Holdings LLC (1)(5) | Class A units | 09/2024 | Shares/ Units 3,749 | Cost 341,183 | Fair Value 353,033",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule shows Shares/Units populated for both equity rows, but C04 observed only 50% share completeness across two equity rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "C04 reports 0.5 share completeness for two equity rows, but the raw Schedule of Investments table has Shares/Units values for the two equity positions: Aspen Renewables ordinary units has 4,900 and Denali Class A units has 3,749. The filing therefore supports a 1.0 schedule anchor for these two rows, so the missing share coverage is an extraction gap rather than a source omission."
+}

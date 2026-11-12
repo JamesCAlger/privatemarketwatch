@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_0780b2e43acb",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6637686000,
+  "anchor_value": 6342711000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 79,
+      "row_index": 54,
+      "quoted_text": "Total Portfolio Investments | $ | 296,441 | $ | 294,975 | 258.51 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 26,
+      "row_index": 37,
+      "quoted_text": "Total Portfolio Investments | $ | 6,472,428 | $ | 6,342,711 | 196.38 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted sum includes a separately presented subsidiary portfolio with fair value $294.975 million in addition to the consolidated portfolio total.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 79,
+        "row_index": 54
+      }
+    }
+  ],
+  "rationale": "Raw source shows the consolidated schedule total fair value is $6.342711 billion (table 26 row 37), while extracted positions total $6.637686 billion. The $294.975 million excess exactly equals the separately presented subsidiary Total Portfolio Investments at table 79 row 54, proving a nested-schedule double count rather than a bad filing anchor."
+}

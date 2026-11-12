@@ -1,0 +1,43 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "The CAD token is the Par currency, but cost_currency was populated as U_CAD even though Cost is in the USD valuation column.",
+                         "citation":  {
+                                          "row_index":  6,
+                                          "table_index":  39
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_8ba7b8bd1baa",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "U_CAD",
+    "anchor_value":  "USD",
+    "rationale":  "Class 2 within-row localization. The source table header places Par before separate Cost and Fair Value columns. CAD appears in the par-currency position on the cited investment row, while the Canada subtotal prints dollar markers for Cost and Fair Value. The extracted cost_currency value U_CAD therefore reflects leakage from the Par currency column into the Cost currency field, not a valid CAD-denominated BDC valuation field.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  1,
+                                  "table_index":  39,
+                                  "quoted_text":  "Investment (1)(2) | Industry (3) | Interest Rate (4) | Reference Rate and Spread (4) | Maturity | Par (6) | Cost | Fair Value | Footnotes"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  6,
+                                  "table_index":  39,
+                                  "quoted_text":  "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 7.33 % | C + 4.75 % | 11/01/30 | CAD | 7,831 | 5,563 | 5,691 | (7) (8) (9)"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  28,
+                                  "table_index":  39,
+                                  "quoted_text":  "Total Canada | $ | 103,779 | $ | 103,879"
+                              }
+                          ],
+    "confidence":  0.88
+}

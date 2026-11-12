@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_652e8d4e2a40",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 132237899,
+  "anchor_value": 166549638,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 24,
+      "quoted_text": "Total Investments ( 133.5 %) | $ | 166,236,768 | $ | 166,549,638",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 20,
+      "quoted_text": "Total Cash Equivalents | 3.8 | % | 4,734,964 | 4,734,964 | 4,734,964",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 23,
+      "quoted_text": "Total Short-term Investments | 23.7 | % | 30,000,000 | 29,576,775 | 29,576,775",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Extracted fair value appears to stop at Total Debt Investments of 132,237,899, while the source schedule total is 166,549,638 after cash equivalents and short-term investments.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 6,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The flag ratio 0.7842 matches the observed extracted debt-investment fair value of 132,237,899 divided by total assets of 168,619,000, but the raw schedule's Total Investments line is 166,549,638. The residual is explained by schedule rows for Total Cash Equivalents of 4,734,964 and Total Short-term Investments of 29,576,775, which are included in the source investment total but absent from the observed aggregate."
+}

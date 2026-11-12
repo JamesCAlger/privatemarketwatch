@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_2ae2c27828e7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.782608695652174,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 33,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(17) | [blank Reference Rate and Spread] | [blank Interest Rate] | 6/30/2027 | 160 | amortized cost -- | fair value (3)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 6,
+      "quoted_text": "Axiom Buyer, LLC (4)(6)(10) | [blank Reference Rate and Spread] | [blank Interest Rate] | 1/14/2030 | 1,905 | amortized cost (46) | fair value (41)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 7,
+      "quoted_text": "Ribbon Communications Operating Company, Inc (4)(5)(6)(10) | [blank Reference Rate and Spread] | [blank Interest Rate] | 6/21/2029 | 849 | amortized cost (15) | fair value (14)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C01 failed because only 126 of 161 debt rows, or 78.2608695652174%, carry rates against an 80% advisory threshold. The raw SOI has explicit Interest Rate columns, and sampled residual debt rows have blank source cells in both Reference Rate and Spread and Interest Rate while still carrying maturity, par, cost, and fair value. Adjacent rows in the same tables show rates when the filer disclosed them, so the missing rates in these cited rows are source-blank rather than extraction omissions. The flag is therefore a rule-scope/threshold false alarm for this filing, not a real data error."
+}

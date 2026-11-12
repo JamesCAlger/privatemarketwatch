@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_71fba6d7b30f",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  0.66286698235040875,
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "The permitted evidence CLI did not resolve an accession for CIK 0000081955 report date 2022-03-31; overview, tables, totals, and targeted roam queries all returned status no_accession_resolved with no usable raw filing source. Under the adjudication contract this must be treated as source_unavailable ambiguity rather than a data judgment."
+}

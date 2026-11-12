@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_0798bba7fba3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 2,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 14,
+      "quoted_text": "Sigmatron International, Inc. (2)(4) | Warrant, expires 12/1/29 | Par Amount/Shares 26,385 | Fair Value 41,412"
+    },
+    {
+      "table_index": 27,
+      "row_index": 17,
+      "quoted_text": "HydroSource Logistics, LLC (2)(4) | Warrant, expires 4/4/34 | Par Amount/Shares 380 | Fair Value 182,992"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Both 2024 equity warrant rows disclose share counts in the Par Amount/Shares column, but the extracted equity rows are counted as having no shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The HydroSource Logistics warrant discloses 380 shares in the Par Amount/Shares column and should not be treated as missing shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "C04 reports that 0.0% of 2 equity rows have shares. In the raw 2024 schedule of investments, table 27 labels the column as Par Amount/Shares and the two equity warrant rows disclose share counts: Sigmatron International has 26,385 and HydroSource Logistics has 380. The source therefore shows the extracted share field is missing or not mapped for both equity rows."
+}

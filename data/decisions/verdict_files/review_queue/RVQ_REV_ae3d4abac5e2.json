@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_ae3d4abac5e2",
+  "verdict": "real_error",
+  "mechanism": "currency_unit_normalization",
+  "localized": true,
+  "anchor_used": "schedule_source_currency",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.83 % (SOFR + 6.50 %, 1.75 % Floor) | Fair Value | $ | 28,774,966",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "Harvey Gulf Holdings, LLC | Term Loan B - 10.61 % (SOFR + 6.25 %, 2.00 % Floor) | Fair Value | $ | 41,033,611",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "currency_unit_normalization",
+      "detail": "The source Schedule of Investments presents fair value amounts in dollar columns, but the extracted fair_value_currency is the noncanonical unit label U_USD instead of USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX02 is a single-column currency-unit row-validation flag. The raw Schedule of Investments labels the Fair Value column with dollar signs and shows the cited fair value rows as USD-denominated source amounts. The observed extracted currency value U_USD is therefore a normalization/extraction defect; the source-supported canonical value is USD."
+}

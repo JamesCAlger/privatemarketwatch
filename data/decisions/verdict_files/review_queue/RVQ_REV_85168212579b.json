@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_85168212579b",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -68000,
+    "anchor_value":  -68000,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  35,
+                                  "row_index":  20,
+                                  "quoted_text":  "MRI Software, LLC | (4) (6) (10) | SOFR + 5.50 % | N/A | 2/10/2027 | - | ( 68 ) | ( 125 ) | ( 0.2 )",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Class 1 row/cell check. The extracted MRI Software cost of -68000 and fair value of -125000 are supported by the raw schedule, which is in thousands and shows amortized cost (68) and fair value (125) in parentheses. The flag appears to be triggered by a negative formatted cost, but the negative value is source-stated rather than an extraction error."
+}

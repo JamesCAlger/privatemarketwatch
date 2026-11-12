@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_c3e3bb0ec1ca",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "no_comparison",
+  "anchor_value": 334975067,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "Grand Total | 176.6 % | $ | 407,613,644 | $ | 370,055,950 | $ | 334,975,067",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 32,
+      "quoted_text": "Total Loan Investments | $ | 334,975,067",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Loans, at estimated fair value (amortized cost of $ 370,055,950 and $ 430,925,365, respectively) | $ | 334,975,067 | $ | 398,113,300",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The BDC GAV comparison denominator was reported as no_comparison even though the filing provides a March 31, 2026 loan fair value anchor of 334,975,067.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 14,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw filing provides a usable denominator: the Schedule of Investments Grand Total fair value is 334,975,067, and the same amount is corroborated by Total Loan Investments and balance-sheet loans at estimated fair value. The flagged no_comparison state is therefore a real extraction/anchor gap, not an undecidable source issue."
+}

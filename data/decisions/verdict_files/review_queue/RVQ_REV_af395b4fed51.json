@@ -1,0 +1,38 @@
+{
+    "review_id":  "RVQ_REV_af395b4fed51",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -5000,
+    "anchor_value":  -5000,
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  13,
+                                  "quoted_text":  "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | -- | ( 5 ) | -- | --",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  14,
+                                  "quoted_text":  "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | -- | ( 7 ) | -- | --",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  15,
+                                  "quoted_text":  "Action Termite Control, LLC(5) | Senior secured | N/A(6) | 12/2032 | -- | ( 2 ) | -- | ( 2 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  17,
+                                  "quoted_text":  "Action Termite Control, LLC(5) | Senior secured | N/A(6) | 12/2032 | -- | ( 11 ) | -- | ( 11 )",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "C107 flags negative cost values for review, but raw SOI source shows the negative amortized-cost values as parenthesized amounts in the Amortized Cost column. Representative flagged rows match the extracted signs and amounts: ABC Legal rows show (5) and (7), and Action Termite rows show (2) and (11). The data values are source-faithful; the warning is a monitoring/rule-scope false alarm rather than an extraction or data error."
+}

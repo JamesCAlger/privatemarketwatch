@@ -1,0 +1,44 @@
+{
+    "review_id":  "RVQ_REV_83c9a8dd52a6",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  1735720,
+    "anchor_value":  1735720,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  21,
+                                  "quoted_text":  "Steele Solutions, Inc. First Lien - Revolving Credit Facility: par/shares em dash; Amortized Cost (28); Fair Value (30).",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  10,
+                                  "row_index":  25,
+                                  "quoted_text":  "Superior Intermediate LLC First Lien - Delayed Draw Term Loan: par/shares em dash; Amortized Cost (159); Fair Value (313).",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  10,
+                                  "quoted_text":  "Haven Health Acquisition, LLC First Lien - Revolving Credit Facility: par/shares em dash; Amortized Cost (106); Fair Value (106).",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  13,
+                                  "row_index":  5,
+                                  "quoted_text":  "Jupiter Refuel Canada Buyer, Inc. First Lien - Delayed Draw Term Loan: par/shares em dash; Amortized Cost (34); Fair Value (44).",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  13,
+                                  "row_index":  55,
+                                  "quoted_text":  "Total investments: Amortized Cost 1,735,720; Fair Value 1,694,770.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The fmt_cost weak gate flags a recurring source presentation, not a data defect. The raw SOI prints multiple zero-par unfunded revolver/delayed-draw positions with parenthetical negative amortized cost and fair value, and the extracted negative values are faithful to those source cells. The schedule total anchors are internally consistent: total investments amortized cost is 1,735,720 and fair value is 1,694,770 in the SOI, matching the filing total investment fair value anchor. Because the source supports the flagged cost formatting, the check is overbroad for this filing."
+}

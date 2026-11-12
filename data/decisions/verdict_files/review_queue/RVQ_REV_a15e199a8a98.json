@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_a15e199a8a98",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -6466.0,
+  "anchor_value": 0.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 19,
+      "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | 3M SOFR + 5.00 % | 1.00 | % | - | 8/22/2025 | 8/22/2031 | - | - | ( 20,517 | ) | 0.0 | % | (7) (8) (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 22,
+      "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | 3M SOFR + 5.00 % | 1.00 | % | - | 8/22/2025 | 8/22/2031 | - | - | ( 6,466 | ) | 0.0 | % | (7) (8) (11) (13)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Milestone Technologies, Inc. Delayed Draw Term Loan stores cost as -6466, but the current-period amortized cost cell is blank/dash and -6466 appears in the comparative fair value column.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 8,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "C107 flagged ten negative cost rows. The raw schedule shows many flagged negatives are legitimate negative amortized costs, but one flagged row is a real data error: Milestone Technologies, Inc. Delayed Draw Term Loan has no current-period amortized cost in table 8 row 19, while the stored observed cost -6466 matches the comparative schedule value shown in table 13 row 22. Therefore the package contains a source-grounded extraction/comparative-period leak, not a pure false alarm."
+}

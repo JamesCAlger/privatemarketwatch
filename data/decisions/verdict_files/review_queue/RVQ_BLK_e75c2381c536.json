@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_e75c2381c536",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1546856000.0,
+  "anchor_value": 1562470000.0,
+  "confidence": 0.98,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ | 1,618,654 | 231.8 | % | $ | 1,562,470",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 90,
+      "row_index": 20,
+      "quoted_text": "Total investments | $ | 1,562,470 | 100.0 | % | $ | 1,569,418 | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The March 31, 2026 schedule total is $1,562.470 million at table 44 row 21, independently repeated in the industry allocation at table 90 row 20, and it agrees with the companyfacts fair-value anchor of $1,562.470 million. The extracted 574-position sum is only $1,546.856 million, an undershoot of $15.614 million. The schedule places cash and cash equivalents after Total Investments, so cash is outside this anchor and does not explain the residual. The raw row-disposition structure does not identify one position equal to the residual; therefore the aggregate extraction gap is proven but the culprit row is not localized. Escalation is appropriate for row-level remediation review."
+}

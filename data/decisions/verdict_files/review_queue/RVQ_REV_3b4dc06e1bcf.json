@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_3b4dc06e1bcf",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.09047619047619047,
+  "anchor_value": 0.09047619047619047,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 57,
+      "quoted_text": "Total Investments - 109.97 % of Net Assets | 240,567,516 | 234,378,891 | 98.74 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | LIBOR(Q) | 1.00 | % | 6.75 | % | 11.45 | % | 4/15/2026 | $ | 913,532 | $ | 902,561 | $ | 913,532 | 0.42 | % | F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | LIBOR(Q) | 1.00 | % | 6.75 | % | 12.23 | % | 4/15/2026 | $ | 848,280 | $ | 839,739 | $ | 839,797 | 0.35 | % | F",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag: 19 of 210 issuers persisted, metric 0.09047619047619047 against threshold 0.5. The raw source was readable and contains structured June 30, 2023 SOI tables plus prior-period schedule tables in the same filing, with spot-checked issuers such as ALCV/AutoLenders appearing in both periods. However, the evidence CLI/bundle does not expose the exact prior-quarter comparison set underlying the 19/210 metric, so the raw source checks do not decide whether the low continuity is a true portfolio/extraction defect or a comparison-basis artifact. Under the skeptic default, this remains source-checked ambiguous."
+}

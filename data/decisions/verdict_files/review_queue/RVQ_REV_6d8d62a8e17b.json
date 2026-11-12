@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_6d8d62a8e17b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -18000,
+  "anchor_value": -18000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 23,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | S + 5.50 % | 05/08/28 | 2,881 | ( 18 ) | ( 14 ) | (6) (7) (8) (9)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 27,
+      "quoted_text": "BSI3 Menu Buyer, Inc (dba Kydia) | Financial Services | S + 6.00 % | 01/25/28 | 1,924 | ( 18 ) | ( 77 ) | (6) (7) (9)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 16,
+      "quoted_text": "Checkmate Finance Merger Sub, LLC | Entertainment | S + 6.50 % | 12/31/27 | 2,831 | ( 29 ) | ( 35 ) | (6) (7) (8) (9)"
+    },
+    {
+      "table_index": 65,
+      "row_index": 7,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Unfunded Commitment Balances | December 31, 2024 | 2,881"
+    },
+    {
+      "table_index": 65,
+      "row_index": 10,
+      "quoted_text": "BSI3 Menu Buyer, Inc (dba Kydia) | Unfunded Commitment Balances | December 31, 2024 | 1,924"
+    }
+  ],
+  "rationale": "C107 flags negative cost values, but the raw SOI prints these costs in parentheses in the Cost column for the same instruments, and the nearby unfunded-commitment table lists matching commitment balances. The stored negative values therefore reflect source-present contra/commitment rows rather than extraction or normalization errors; the warning is a rule-scope false alarm for this filing."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_48ad4a20cb09",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": "S+ 7.50%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 12,
+      "quoted_text": "ABB/Con-cise Optical Group LLC(3)(4)(9) | First lien senior secured loan | S+ | 7.50 % | 2/2028 | 33,306 | - | 33,112 | 33,057",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The extracted ABB/Con-cise Optical Group LLC first-lien loan has a blank interest_rate, but the raw March 31, 2026 schedule at table 19 row 12 explicitly discloses a floating rate of S+7.50%. This exact row match proves that at least one dl_rate_fill violation is a real extraction gap, and the schedule structure contains dedicated Ref. Rate, Cash, and PIK interest fields."
+}

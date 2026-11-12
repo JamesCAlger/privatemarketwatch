@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_2edcee3db55c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 4,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Excalibur Parent Holdings LP | Common Stock | Par Amount/Shares: 519",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "FH DMI Buyer Inc (11) | Common Stock | Par Amount/Shares: 593",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Great Dane Intermediate Holding I LLC (11) | Preferred Equity | Par Amount/Shares: 21,268",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 6,
+      "quoted_text": "Philz Coffee, Inc. (11) | Common Stock | Par Amount/Shares: 25,831",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "C04 reports that 0 of 4 equity rows have shares, but the March 31, 2026 schedule of investments labels the column Par Amount/Shares and supplies a value for every equity position: 519, 593, 21,268, and 25,831 at table 14 rows 3 through 6. The missing extracted shares are therefore a source-grounded extraction gap, not a valid absence or a bad check."
+}

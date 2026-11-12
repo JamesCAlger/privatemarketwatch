@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_5912583184fb",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD fair value columns marked with $ in the source schedule",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.11% | $ 28,862,619 amortized cost | $ 29,345,648 fair value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 11,
+      "quoted_text": "Total Investments (170.4%) | $ 779,653,930 | $ 784,362,855",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as non-USD. The raw investment schedule labels the valuation columns as Amortized Cost and Fair Value and displays dollar signs for the source fair value cells, including the flagged CSAT row and the schedule total. U_USD is therefore a normalized USD unit label, not source evidence of a non-USD fair value. The check is over-strict on unit representation."
+}

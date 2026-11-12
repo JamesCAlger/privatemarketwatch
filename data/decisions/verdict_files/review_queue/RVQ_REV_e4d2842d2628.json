@@ -1,0 +1,73 @@
+{
+  "review_id": "RVQ_REV_e4d2842d2628",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": [-26000.0, -13000.0, -2000.0, -543000.0],
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 19,
+      "quoted_text": "(19) Position or portion thereof is an unfunded loan commitment, and no interest is being earned on the unfunded portion, although the investment may earn unused commitment fees. Negative cost and fair value, if any, results from unamortized fees, which are capitalized to the cost of the investment.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 37,
+      "quoted_text": "48Forty Solutions, LLC | (6) (10) (19) | First Lien Debt | S + | 6.00 % (incl. 3.50 % PIK) | 10.46 % | 11/30/2029 | 2,705 | 2,496 | ( 26 ) | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 20,
+      "quoted_text": "Caerus US 1, Inc. | (6) (11) (15) (19) | First Lien Debt | S + | 5.00 % | 9.30 % | 5/25/2029 | 109 | 49 | ( 13 ) | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 36,
+      "quoted_text": "Pound Bidco, Inc. | (6) (10) (15) (19) | First Lien Debt | S + | 6.00 % | 10.83 % | 2/1/2027 | -- | -- | ( 2 ) | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 17,
+      "quoted_text": "Securonix, Inc. | (6) (11) (19) | First Lien Debt | S + | 7.00 % (incl. 3.75 % PIK) | 11.29 % | 4/5/2028 | 122 | 5 | ( 543 ) | - 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 3,
+      "quoted_text": "48Forty Solutions, LLC | Revolver | 11/30/2029 | $ | 4,413 | $ | ( 1,693 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 36,
+      "quoted_text": "Pound Bidco, Inc. | Revolver | 02/01/2027 | 388 | ( 2 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 26,
+      "quoted_text": "Securonix, Inc. | Revolver | 04/05/2028 | 5,281 | ( 650 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C103 fired on negative fair values that are source-disclosed unfunded loan commitments carrying footnote 19, which expressly permits negative cost or fair value from unamortized fees.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 34,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "False alarm. The raw SOI rows with negative fair value carry footnote (19), and footnote (19) states the position or portion is an unfunded loan commitment and that negative cost and fair value, if any, result from unamortized fees. The separate unfunded commitment schedule also lists the same issuers/commitment types with negative fair values. The flagged negative fair values are therefore filer presentation for unfunded commitments, not data errors."
+}

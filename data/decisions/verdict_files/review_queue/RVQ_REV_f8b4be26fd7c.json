@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_f8b4be26fd7c",
+  "verdict": "false_alarm",
+  "mechanism": "unit_alias_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.43 % (SOFR + 6.75 %, 1.75 % Floor) | $ | 28,396,579",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 152.7 %) | $ | 1,272,824,189 | $ | 1,250,833,285",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency because the stored unit code is U_USD rather than literal USD. Raw schedule evidence shows the investment fair value column is dollar-denominated: individual fair value rows and the total investments row carry '$' in the Fair Value column. U_USD is therefore a USD unit alias/code, not a non-USD fair value currency."
+}

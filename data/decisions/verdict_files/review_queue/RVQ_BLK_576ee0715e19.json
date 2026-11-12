@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_576ee0715e19",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5511632000,
+  "anchor_value": 4071008000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 36,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 733,390 | $ | 704,292 | 253.7 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 136,
+      "row_index": 16,
+      "quoted_text": "Total Control & Affiliate Investments | $ | 79,087 | $ | 821,152 | $ | 173,414 | $ | ( 230,992 ) | $ | ( 119 ) | $ | ( 27,123 ) | $ | 736,332",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extraction included a separate member-capital investment schedule total of 704,292 even though the parent schedule total is 4,071,008.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 85,
+        "row_index": 36
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extraction included a control and affiliate investments rollforward total of 736,332 as if it were a position fair value.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 136,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag. The filing's own consolidated Schedule of Investments total is 4,071,008 (table 55 row 13 and table 57 row 43), matching the comparison anchor, while the extracted observed value is 5,511,632. The excess is 1,440,624, which ties exactly to source rows for a member-capital schedule total of 704,292 and a control/affiliate rollforward total of 736,332. Those rows are not additional parent-company holdings to reconcile against the 4,071,008 investment fair value anchor."
+}

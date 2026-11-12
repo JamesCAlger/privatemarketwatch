@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_56a0f0f53422",
+  "verdict": "false_alarm",
+  "mechanism": "under_specified_duplicate_key",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": 97,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "PrimeFlight Acquisition, LLC | First Lien Secured Debt - Term Loan | S + 475, 1.00% Floor | 05/01/2029 | par 34,900 | cost 34,564 | fair value 34,376",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "First Lien Secured Debt - Term Loan | S + 525, 0.00% Floor | 05/01/2029 | par 9,925 | cost 9,832 | fair value 9,900",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "under_specified_duplicate_key",
+      "detail": "B02 collapses distinct same-issuer term loans because its position key does not distinguish source terms and balances.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 11,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Raw schedule rows 11:8 and 11:9 are distinct PrimeFlight instruments: both are first-lien term loans maturing 05/01/2029, but one is S+475 with a 1.00% floor and fair value 34,376, while the other is S+525 with a 0.00% floor and fair value 9,900. Thus the cited duplicate key is an identity-key collision, not a duplicated source position. The schedule row pair is the decisive anchor; aggregate fair-value anchors are not needed because B02 concerns position identity rather than totals. Residual risk is that the bundle exposes only an example of the 97 collisions, though the example directly demonstrates the systematic key-design failure behind the aggregate flag."
+}

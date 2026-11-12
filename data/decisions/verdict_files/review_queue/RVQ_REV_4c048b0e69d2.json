@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_4c048b0e69d2",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "TITAN BW BORROWER L.P. | First Lien Secured Debt - Term Loan | S + 250 Cash plus 2.88 % PIK, 0.50 % Floor | 07/24/2032 | 201,190 | 199,370 | 199,178 | (4)(16)"
+    },
+    {
+      "table_index": 44,
+      "row_index": 11,
+      "quoted_text": "Uft Buyer LLC | First Lien Secured Debt - Term Loan | S + 225 Cash plus 2.75 % PIK, 0.50 % PIK | 12/06/2032 | 68,328 | 67,674 | 67,645 | (4)(16)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 3,
+      "quoted_text": "Radiate Holdco, LLC | First Lien Secured Debt - Term Loan | S + 511 Cash plus 1.50 % PIK, 0.75 % Floor | 09/25/2029 | 27,442 | 21,789 | 24,503 | (15)"
+    }
+  ],
+  "rationale": "Class 2 within-row/rate-term issue. The raw SOI source was readable and shows interest-rate cells using basis-spread notation, including plain spread/floor and cash-plus-PIK variants. The review bundle reports only an aggregate weak fmt_basis_spread count of 2 across 705 units and does not identify the two extracted rows or observed parsed values, while the source contains many similar candidate rate strings. Without the exact flagged row/value, the raw source does not decide whether the two violations are genuine extraction/normalization defects or rule false positives. This is therefore source-checked ambiguous rather than source unavailable."
+}

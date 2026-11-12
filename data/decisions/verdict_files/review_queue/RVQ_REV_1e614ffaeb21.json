@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1e614ffaeb21",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 1380848000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Total Assets | $ | 1,380,848 | $ | 1,267,900",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 160.7 %) | $ | 1,332,762,855 | $ | 1,310,254,473",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 601 | $ | - | $ | 1,309,653 | $ | 1,310,254",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The GAV comparison denominator is present in the raw filing as Total Assets of 1,380,848 thousand, but the flagged artifact records no comparison denominator.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "GAV_BDC02 is an aggregate reconciliation flag. The raw filing provides a Total Assets denominator at table 17 row 13 (1,380,848 thousand, or 1,380,848,000) and schedule/fair-value anchors at table 9 row 20 and table 23 row 5 (total investments/fair value 1,310,254 thousand/1,310,254,473). Because the flagged artifact says comparison_source=None/no comparison denominator despite a source denominator being available, this is a real extraction/anchor gap rather than an unsupported reconciliation."
+}

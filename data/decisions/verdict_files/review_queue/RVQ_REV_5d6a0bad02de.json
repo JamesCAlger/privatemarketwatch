@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_5d6a0bad02de",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  209.49999999999974,
+    "anchor_value":  213.4,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  36,
+                                  "row_index":  13,
+                                  "quoted_text":  "Investments and Cash Equivalents Total | $ | 1,607,461 | 213.4 | % | $ | 1,597,879",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  8,
+                                  "quoted_text":  "Total Investments | $ | 1,601,015 | 212.5 | % | $ | 1,591,433",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  4,
+                                  "row_index":  35,
+                                  "quoted_text":  "Total net assets | 748,807 | 742,594",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "PCT01 flagged the extracted pct_of_net_assets quarter sum of 209.5 as outside the expected range, but the raw filing schedule reports Total Investments at 212.5% of net assets and Investments and Cash Equivalents Total at 213.4% of net assets for September 30, 2024. The balance sheet net assets row provides the denominator. The high percentage is source-disclosed leverage relative to net assets, not a data error in the extracted percentage values; the rule expectation is out of scope for this BDC presentation."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_b84d28e1cce7",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 19500000,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 13,
+      "quoted_text": "Series C-3 preferred shares | 11.00 % PIK | 10/2021 | 16,201 | 23.7 | 19.5 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "X08 flags a 23.7 million cost row as fair value below 5% of cost, but the raw schedule row with 23.7 amortized cost reports 19.5 million fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 26,
+        "row_index": 13,
+        "quoted_text": "Series C-3 preferred shares | 11.00 % PIK | 10/2021 | 16,201 | 23.7 | 19.5 | (2)"
+      }
+    }
+  ],
+  "rationale": "Class 2 row-validation review. The bundle reports four X08 low fair-value/cost warnings. Targeted source checks found source-supported distressed equity rows for the 29.4/0.1 ADG Class A common-units row, a 5.1/0.1 preferred-units row, and a 7.7/0.2 preferred-units row. The 23.7 million cost item is contradicted by the raw schedule: the matching current-period row reports 23.7 million amortized cost and 19.5 million fair value, well above the 5% threshold. That indicates a stored fair-value/value-field defect rather than a valid distressed-position warning."
+}

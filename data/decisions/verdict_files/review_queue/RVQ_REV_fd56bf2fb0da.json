@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_fd56bf2fb0da",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -95000,
+    "anchor_value":  -95000,
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  12,
+                                  "quoted_text":  "ACP Falcon Buyer Inc | Systems Software | First Lien Revolver | SOFR+ | 5.50 % | 8/1/2029 | - | ( 95 ) | - | (5)(8)(9)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  21,
+                                  "quoted_text":  "ASP Integrity Acquisition Co LLC | Diversified Support Services | First Lien Term Loan | SOFR+ | 5.00 % | 3/6/2032 | - | ( 53 ) | ( 280 ) | (5)(8)(9)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  13,
+                                  "row_index":  4,
+                                  "quoted_text":  "AVSC Holding Corp. | Specialized Consumer Services | First Lien Revolver | SOFR+ | 5.00 % | 12/5/2029 | - | ( 205 ) | ( 217 ) | (5)(8)(9)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "C107 flags negative cost values for review. The raw Schedule of Investments includes the sampled flagged negative costs in the Cost column: ACP Falcon Buyer Inc First Lien Revolver shows cost (95), ASP Integrity Acquisition Co LLC First Lien Term Loan shows cost (53), and AVSC Holding Corp. First Lien Revolver shows cost (205), matching the extracted negative costs after thousands scaling. Because the flagged values are present in source and the rule text says negative cost can be legitimate but should be monitored, this is not a platform data error."
+}

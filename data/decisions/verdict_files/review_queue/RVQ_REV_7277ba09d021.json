@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_7277ba09d021",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd missing on rows flagged as non-USD",
+  "anchor_value": "raw SOI debt par amounts are dollar-denominated, not non-USD",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 10.76% | Par Amount $ 6,094,579 | Amortized Cost $ 5,965,761 | Fair Value $ 5,869,079"
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Baxters North America, Inc. | Term Loan - 11.07% | Par Amount $ 7,388,837 | Amortized Cost $ 7,286,100 | Fair Value $ 7,411,003"
+    },
+    {
+      "table_index": 7,
+      "row_index": 4,
+      "quoted_text": "Milk Makeup LLC | Revolver - 13.79% inc PIK | Par Amount $ 1,314,635 | Amortized Cost $ 1,314,635 | Fair Value $ 1,264,679"
+    }
+  ],
+  "rationale": "FX01 asserts that non-USD debt principal is missing principal_amount_usd, but the raw SOI debt schedules use dollar-denominated Par Amount columns. The first debt row on each SOI debt page explicitly shows '$' for Par Amount, Amortized Cost, and Fair Value, and the remaining rows continue under those same columns. Source evidence therefore does not support a non-USD conversion requirement for these flagged rows; the check premise is wrong rather than the data."
+}

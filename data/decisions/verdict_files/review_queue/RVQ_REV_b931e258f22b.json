@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_REV_b931e258f22b",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 96,
+      "row_index": 30,
+      "quoted_text": "CD&R Ulysses Equity Holdings, L.P. - Common Shares | (4)(6) | 6,000,000 | 6,090 | 5,040 | 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 6,
+      "quoted_text": "Caerus Midco 2 S.A. R.L - Additional Vehicle Units | (4)(6) | 988,290 | $ | 988 | $ | 109 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 10,
+      "quoted_text": "Oxea Corporation | (6)(8) | L + | 3.25 % | 7.00 % | 10/14/2024 | 6 | 6 | 6 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 186,
+      "row_index": 19,
+      "quoted_text": "Tetra Technologies, Inc. | (4)(11) | L + | 6.25 % | 10.63 % | 9/10/2025 | 22,793 | 22,793 | 22,793 | 0.82",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 26,
+      "quoted_text": "Zoro Common Equity | (4) | 1,195,880 | 11,959 | 11,959 | 0.05",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "CD&R Ulysses Equity Holdings, L.P. - Common Shares is present as a prior-period comparative row while the flagged holding is carried under report_date 2023-12-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 96,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Caerus Midco 2 S.A. R.L - Additional Vehicle Units is present as a prior-period comparative row while the flagged holding is carried under report_date 2023-12-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 97,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Oxea Corporation is present as a prior-period comparative row while the flagged holding is carried under report_date 2023-12-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 75,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Tetra Technologies, Inc. in the BCRED Emerald JV LP December 31, 2022 schedule is retained under the 2023-12-31 report date as Tetra Technologies, Inc. Emerald JV LP.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 186,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Zoro Common Equity is present as a prior-period comparative row while the flagged holding is carried under report_date 2023-12-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 97,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level review. Raw source confirms the five PP03 warnings are comparative-period schedule rows in the 2023 filing, including tables with prior-period headers using Par Amount/Units (16) and the BCRED Emerald JV LP Consolidated Schedule of Investments December 31, 2022. These rows should not be retained as current 2023-12-31 holdings, so the rule fire is a real comparative-period leak rather than a false alarm."
+}

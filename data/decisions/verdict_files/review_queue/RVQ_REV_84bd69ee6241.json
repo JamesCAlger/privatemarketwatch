@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_84bd69ee6241",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_soi_cost_currency",
+  "observed_value": "U_GBP; U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 46,
+      "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Term Loan | par currency GBP | amortized cost $ 21,561 | fair value $ 21,487",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 29,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Term Loan | par currency C$ | amortized cost $ 22,958 | fair value $ 22,981",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 30,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Revolving Credit Facility | par/principal local currency | amortized cost 517 in the same USD cost column | fair value 542 in the same USD fair value column",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ruby Bidco term loan cost_currency is GBP from the par/principal field, but the source amortized cost and fair value are dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 46
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Jupiter Refuel Canada term loan cost_currency is CAD from the par/principal field, but the source amortized cost and fair value are dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Jupiter Refuel Canada revolving credit facility cost_currency is CAD from the local principal context, but the source cost and fair value cells belong to the dollar-denominated valuation columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "FX03 is a row-level cost_currency flag. The raw SOI rows show local currency only on the par/principal side for the foreign-denominated instruments, while amortized cost and fair value are in dollar valuation columns. The stored U_GBP/U_CAD cost_currency therefore reflects the instrument/principal currency rather than the USD-denominated BDC valuation currency."
+}

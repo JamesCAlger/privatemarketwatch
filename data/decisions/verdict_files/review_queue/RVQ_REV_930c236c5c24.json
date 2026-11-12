@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_930c236c5c24",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 572771377,
+  "anchor_value": 572771000,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 16,
+      "quoted_text": "Cedar Ultimate Parent, LLC Class E Common Units; Fair Value em dash",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 38,
+      "quoted_text": "Total Investments (262.7%): fair value $572,771,377",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 7,
+      "quoted_text": "Fair-value hierarchy Total: $572,771 thousand",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "B01 is a Class 3 completeness flag. The raw current-period schedules show fair value for every economic investment leaf; zero-value positions are printed as em dashes (for example table 5 row 16), while blank cells occur on headers, subtotals, and non-investment lines. The schedule total of $572,771,377 at table 5 row 38 agrees within filing rounding with the independent fair-value hierarchy total of $572,771 thousand at table 19 row 7. The flagged 18 missing rows therefore carry no residual fair value and reflect the check counting non-value-bearing structural rows, not missing investment data."
+}

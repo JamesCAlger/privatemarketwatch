@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_e86443ba3852",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_table_currency",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Company (1)(9) | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2) (7) | Fair Value (6) | Percentage of Net Assets"
+    },
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 299,765 par, due 2/2031 ) | 2/13/2024 | SOFR + 5.75 % | 10.06 % | $ | 297,033 | $ | 298,988 | 7.3 %"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency value U_USD as non-USD, but the raw schedule shows the relevant BDC valuation columns as dollar-denominated. The flagged representative row for Truck-Lite has dollar signs in both Amortized Cost and Fair Value, so U_USD is consistent with USD rather than evidence of a foreign-currency cost value."
+}

@@ -1,0 +1,49 @@
+{
+    "review_id":  "RVQ_REV_db30c621ad5e",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD-denominated fair value columns shown with dollar signs in source table",
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  5,
+                                  "row_index":  4,
+                                  "quoted_text":  "Alorica Inc. | Term Loan - 11.57 % (SOFR + 6.88 %, 1.50 % Floor) | $ | 10,108,019 | $ | 10,068,752"
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  7,
+                                  "quoted_text":  "Del Real, LLC | Revolver - 13.53 % (SOFR + 8.50 %, 2.00 % Floor) | 516,200 | 502,004"
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  8,
+                                  "quoted_text":  "Del Real, LLC (3) | Term Loan - 13.53 % inc PIK (SOFR + 8.50 %, 2.00 % Floor, 1.50 % PIK) | 8,224,845 | 8,283,073"
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  11,
+                                  "quoted_text":  "Florida Marine Transporters, LLC | Term Loan B - 13.36 % (SOFR + 8.50 %, 2.00 % Floor) | 10,945,735 | 10,943,176"
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  14,
+                                  "quoted_text":  "Hoffmaster Group, Inc. | Revolver - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | 167,522 | 165,344"
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  15,
+                                  "quoted_text":  "Hoffmaster Group, Inc. | Term Loan - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | 6,559,910 | 6,544,868"
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  26,
+                                  "quoted_text":  "Total Investments ( 252.0 %) | $ | 120,146,865 | $ | 120,131,851"
+                              }
+                          ],
+    "rationale":  "FX02 flagged fair_value_currency value U_USD as not USD. The raw Schedule of Investments table presents the flagged debt positions in the Fair Value column of a dollar-denominated table: row 4 and the total row carry explicit dollar signs for Amortized Cost and Fair Value, while the intervening flagged rows use the same numeric currency columns. Source therefore supports USD fair values; the defect is the validation rule treating U_USD as non-USD, not an extracted data error."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e55ee2d05964",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_source_text",
+  "observed_value": 12.0,
+  "anchor_value": 12.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 8,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan E) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 1,202,179 | 1,202,179 | 1,195,086",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 9,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan F) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 284,608 | 284,608 | 282,928",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 10,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan G) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 50,847 | 50,847 | 50,547",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 11,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan H) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 47,441 | 47,441 | 47,161",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The March 31, 2026 schedule explicitly reports 12% PIK for each MidWave First Lien Term Loan E, F, G, and H, exactly matching the published pik_rate of 12.0. The provenance flag arose because declared_raw and instance_raw were unavailable on the numeric pathway, but the filing's raw text pathway directly supports the values; the check's anchor/pathway is therefore the defect, not the data. Aggregate anchors are not applicable."
+}

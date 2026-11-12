@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_ac60be29b9eb",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 791,
+  "anchor_value": 1591,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 7,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited) and December 31, 2025 | 9",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw filing states that it contains consolidated investment schedules for both March 31, 2026 and December 31, 2025. The oracle's source count of 1591 is approximately twice the report-date output count of 791, consistent with counting both complete comparative schedules against a single-quarter output. The filing's March 31, 2026 schedule total fair value is 4,481.018 million, close to the extracted holdings total of 4,579.623 million and inconsistent with a 50.3 percent current-period omission. The E07 flag is therefore a comparative-period leak in the source-count anchor."
+}

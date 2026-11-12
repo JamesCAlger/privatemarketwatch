@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_813878103e0f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "2 duplicate position keys reported for media telecommunications iheartcommunications inc",
+  "anchor_value": "source schedule shows two distinct iHeartCommunications bond positions with different interest rates, maturity dates, principal amounts, amortized costs, and fair values",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13 | % | 5/1/2029 | 110,967 | 108,484 | 106,963",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 251,
+      "row_index": 22,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88 | % | 5/1/2030 | 171,258 | 163,600 | 148,143",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys for iHeartCommunications, Inc., but the 2025 raw schedule separates the same issuer into two corporate bond instruments. Table 251 row 21 carries 9.13% due 5/1/2029 with principal 110,967, amortized cost 108,484, and fair value 106,963; row 22 carries 10.88% due 5/1/2030 with principal 171,258, amortized cost 163,600, and fair value 148,143. The duplicate-key fire is therefore caused by a key/check that collapses distinct instrument terms, not by duplicated source data."
+}

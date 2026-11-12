@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_dec666845e09",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3.43,
+  "anchor_value": 3.43,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Total net assets | $ | 921,634 | $ | 865,054",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "31,571 | 31,471 | 31,571 | 3.43 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 17,
+      "quoted_text": "30,464 | 30,426 | 30,464 | 3.31 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 1,385,574 | $ | 1,385,068 | 150.28 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "The weak percent-of-net-assets format flag overfires: source SOI percentages are printed on a 100-scale with a separate percent-sign cell and reconcile to fair value divided by total net assets.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 10,
+        "quoted_text": "31,571 | 31,471 | 31,571 | 3.43 | %"
+      }
+    }
+  ],
+  "rationale": "Raw source was readable. The filing reports total net assets of 921,634 at table 8 row 28. Representative SOI rows reconcile on the source's printed 100-scale percent basis: 31,571 / 921,634 * 100 rounds to 3.43 at table 12 row 10, 30,464 / 921,634 * 100 rounds to 3.31 at table 12 row 17, and total investments of 1,385,068 / 921,634 * 100 rounds to about 150.28 at table 29 row 12. A targeted arithmetic pass across the 2024 SOI percent column found no material source discrepancy, so the weak format flag is not a real data error."
+}

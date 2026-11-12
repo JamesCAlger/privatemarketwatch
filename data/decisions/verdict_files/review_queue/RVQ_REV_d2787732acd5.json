@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_d2787732acd5",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 14,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. (5) | Restaurant owner and operator | First lien senior secured loan | 12/2016 | 08/2022 | 9.8 | \u2014 | \u2014 | (2)(10)"
+    }
+  ],
+  "rationale": "C104 flags zero fair_value for review, but the raw investment schedule shows the cited ADF position with a dash in the Fair Value column; normalizing that source dash to 0.0 is source-consistent, so this row-level zero fair-value warning is not a data error."
+}

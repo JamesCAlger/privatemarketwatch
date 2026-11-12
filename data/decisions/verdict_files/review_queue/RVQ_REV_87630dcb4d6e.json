@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_87630dcb4d6e",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Two active March 31, 2023 schedule rows carry maturity_date 12/2022",
+  "anchor_value": "report_date 2023-03-31",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 8,
+      "quoted_text": "Matilda Jane Holdings, Inc. (9) | Senior Secured First Lien Term Loan | 12/2022 | 11,961 | - | 0.0 | 291"
+    },
+    {
+      "table_index": 24,
+      "row_index": 9,
+      "quoted_text": "Matilda Jane Holdings, Inc. (9) | Senior Secured First Lien Revolver | 12/2022 | 1,426 | 196 | 0.0 | 35"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The Matilda Jane term loan remains in the March 31, 2023 schedule with maturity 12/2022, before the report date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 8
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The Matilda Jane revolver remains in the March 31, 2023 schedule with maturity 12/2022, before the report date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "The March 31, 2023 Schedule of Investments header identifies the active report-date schedule, and its Maturity/Dissolution Date column contains 12/2022 for two Matilda Jane Holdings positions. Because 12/2022 is before the 2023-03-31 report date and the weak gate reported n_violate=2, the maturity_not_past flag is source-grounded rather than a false alarm."
+}

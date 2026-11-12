@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_862ebc693cb8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "explicit USD-converted principal required for non-USD debt par",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 30,
+      "quoted_text": "American Academy Holdings, LLC (4)(13) | SF+ | 9.75 % (incl 5.25 % PIK) | 15.21 | % | 6/30/2027 | 6,430 | 6,432 | 6,429"
+    },
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | 6/30/2027 | 160 | -- | --"
+    },
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Travelex Issuerco 2 PLC (4)(5)(12) | SN+ | 8.00 % | 13.21 | % | 9/22/2028 | GBP | 1,770 | 2,093 | 2,241"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "American Academy debt row has non-USD par identified by the CAD source query, but the extracted principal_amount_usd is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "American Academy unfunded/delayed-draw debt row has non-USD par identified by the CAD source query, but the extracted principal_amount_usd is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 31
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Travelex debt row shows GBP par of 1,770 while the extracted principal_amount_usd is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "FX01 is a within-row flag on principal_amount_usd. The source artifact rows show three non-USD debt principal rows with blank principal_amount_usd. Raw source localizes them to two American Academy rows returned by the CAD source query and one Travelex row with a GBP par marker; the source gives par amounts but no explicit USD-converted principal field in those extracted rows, so the missing principal_amount_usd is a real extraction gap rather than a check false alarm."
+}

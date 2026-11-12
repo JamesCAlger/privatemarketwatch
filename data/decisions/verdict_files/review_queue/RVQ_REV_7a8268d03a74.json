@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_7a8268d03a74",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 113,
+  "anchor_value": 112,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 2,
+      "quoted_text": "Dreyfus Government Cash Management | 3.65 % | $ | 38,157 | $ | 38,157 | $ | - | $ | 38,157 | 5.1 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 15,
+      "quoted_text": "Total investments | 112 | 6.8 | % | 4/20/2034 | $ | 1,628,275 | $ | 1,528,317",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "A cash-equivalent instrument, Dreyfus Government Cash Management, is included in the extracted position universe even though the filing's investment total is 112 positions and cash equivalents are presented separately.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 45,
+        "row_index": 2,
+        "quoted_text": "Dreyfus Government Cash Management | 3.65 % | $ | 38,157 | $ | 38,157 | $ | - | $ | 38,157 | 5.1 | %"
+      }
+    }
+  ],
+  "rationale": "The raw schedule reports Total investments as 112 positions with fair value 1,528,317 (table 48 row 15). The flagged artifact reports 113 units. The extra unit localizes to the separate Cash and cash equivalents section: Dreyfus Government Cash Management has fair value 38,157 and is not part of the filing's Total investments position count. Including that cash-equivalent row in position concentration creates a real scope/extraction error, not a false alarm."
+}

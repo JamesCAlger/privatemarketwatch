@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_6e215e55648e",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 849.354,
+  "anchor_value": 849.354,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 84,
+      "row_index": 6,
+      "quoted_text": "Total investments at fair value | $ | - | $ | 83 | $ | 849,271 | $ | 849,354",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 38,
+      "quoted_text": "Total Investments and Cash Equivalents | $ 887,646 | $ 862,804 | 224.94 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E07 compares source=1443 to output=423, but the output investment fair value of 849.354m ties to the filing's investment total; the larger cash-inclusive total is separately disclosed and is not the investment anchor.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 56,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchors were checked before localization. The bundle's fund_quarter_fv_m is 849.354m, and the raw filing schedule reports Total Investments, December 31, 2025 fair value of $849,354 thousand. The fair-value hierarchy independently reports Total investments at fair value of $849,354 thousand. Cash equivalents are separately disclosed, producing Total Investments and Cash Equivalents of $862,804 thousand, so the investment anchor is not missing from output. The E07 source-vs-output row/count comparison is therefore using a bad aggregate/count anchor rather than identifying a source-grounded data error."
+}

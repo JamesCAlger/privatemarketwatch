@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_077fa22465ac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 10000.0,
+  "anchor_value": 9939.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 29,
+      "quoted_text": "Chex Finer Foods, LLC (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 6.00 | % | 10.13 | % | 6/6/2031 | $ | 10,000 | 9,939 | 10,000",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The stored cost is 10000.0, but the source row's Cost column is 9,939; 10,000 appears in the principal and market value cells.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 29,
+        "quoted_text": "Chex Finer Foods, LLC (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 6.00 | % | 10.13 | % | 6/6/2031 | $ | 10,000 | 9,939 | 10,000"
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level review. The raw source row for Chex Finer Foods is a non-equity first lien senior secured loan. In that row, the numeric sequence after the dollar sign is principal 10,000, cost 9,939, and market value 10,000. The flagged cost value of 10000.0 is therefore not the source Cost cell; it appears to have been taken from an adjacent principal or market value cell."
+}

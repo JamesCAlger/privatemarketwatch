@@ -1,0 +1,79 @@
+{
+    "review_id":  "RVQ_REV_272731767cae",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  [
+                           -3000,
+                           -57000,
+                           -20000,
+                           -14000,
+                           -5000,
+                           -22000,
+                           -48000,
+                           -31000,
+                           -10000
+                       ],
+    "anchor_value":  [
+                         -3000,
+                         -57000,
+                         -20000,
+                         -14000,
+                         -5000,
+                         -22000,
+                         -48000,
+                         -31000,
+                         -10000
+                     ],
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  33,
+                                  "quoted_text":  "HLRS Holdco Limited First Lien Senior Secured Loan - Delayed Draw shows Market Value (3), matching fair_value -3000."
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  10,
+                                  "quoted_text":  "ERA Industries, LLC First Lien Senior Secured Loan - Delayed Draw shows Market Value (57), matching fair_value -57000."
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  9,
+                                  "quoted_text":  "ERA Industries, LLC First Lien Senior Secured Loan - Revolver shows Market Value (20), matching fair_value -20000."
+                              },
+                              {
+                                  "table_index":  15,
+                                  "row_index":  8,
+                                  "quoted_text":  "LogRhythm, Inc. First Lien Senior Secured Loan - Revolver shows Market Value (14), matching fair_value -14000."
+                              },
+                              {
+                                  "table_index":  15,
+                                  "row_index":  11,
+                                  "quoted_text":  "SensorTower First Lien Senior Secured Loan - Revolver shows Market Value (5), matching fair_value -5000."
+                              },
+                              {
+                                  "table_index":  15,
+                                  "row_index":  25,
+                                  "quoted_text":  "City Barbeque, LLC First Lien Senior Secured Loan - Revolver shows Market Value (22), matching fair_value -22000."
+                              },
+                              {
+                                  "table_index":  15,
+                                  "row_index":  31,
+                                  "quoted_text":  "Vacation Rental Brands, LLC First Lien Senior Secured Loan - Revolver shows Market Value (48), matching fair_value -48000."
+                              },
+                              {
+                                  "table_index":  16,
+                                  "row_index":  29,
+                                  "quoted_text":  "DTIQ Technologies, Inc. First Lien Senior Secured Loan - Delayed Draw shows Market Value (31), matching fair_value -31000."
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  10,
+                                  "quoted_text":  "Vessco Midco Holdings, LLC First Lien Senior Secured Loan - Revolver shows Market Value (10), matching fair_value -10000."
+                              }
+                          ],
+    "rationale":  "C103 flagged nine negative fair_value cells. The raw schedule reports the same positions with parenthesized Market Value amounts, which are negative values in thousands and match the extracted fair_value amounts. The extraction is therefore source-accurate; the warning is not a real data error."
+}

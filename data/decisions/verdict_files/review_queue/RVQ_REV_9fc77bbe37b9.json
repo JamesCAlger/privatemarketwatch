@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_9fc77bbe37b9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 171621000,
+  "anchor_value": 230604000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 36,
+      "quoted_text": "GCOM (3)(6) | Technology | N/A | 17.000% | 02/16/2029 | par 12,730 | cost 10,011 | fair value 9,938",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 11,
+      "row_index": 37,
+      "quoted_text": "LEAF Home Solutions Note (3)(6) | Consumer Services | N/A | 12.000% | 02/26/2027 | par 32,235 | cost 32,073 | fair value 29,850",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Total Senior Unsecured | cost 42,084 | fair value 39,788 | 16.86%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Total Investments | $ | 233,185 | $ | 230,604 | 97.74%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The September 30, 2023 schedule includes a Senior Unsecured debt section with fair value 39.788 million that is not represented in the extracted holdings behind the 0.7442 GAV ratio.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 11,
+        "row_index": 39
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation supports the flag. The source schedule reports total investments at fair value of 230.604 million in table 12 row 15. The rule metric 0.7442 implies extracted fair value of about 171.6 million, matching the source sections for first lien, second lien, corporate bonds, common stock, and warrants while omitting the Senior Unsecured debt section. Table 11 rows 36-39 show two Senior Unsecured debt investments totaling 39.788 million of fair value; adding that section alone would move the extracted schedule coverage inside the 0.8-1.2 reconciliation band even before considering short-term investments. This is therefore a source-grounded extraction gap, not a bad filing anchor."
+}

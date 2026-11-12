@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_be0c54c38ec5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 48.95,
+  "anchor_value": 152.10,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 1,491,388 | $ | 1,457,048 | 152.10 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 29,
+      "quoted_text": "Total net assets | $ | 957,927 | $ | 979,831",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing's March 31, 2026 schedule reports total investments at fair value of 1,457,048, equal to 152.10% of net assets. The balance sheet reports net assets of 957,927, independently confirming 1,457,048 / 957,927 = 152.10%. The extracted sum of pct_of_net_assets is only 48.95%, so the F22 flag identifies a real aggregate extraction gap. The available aggregate structure proves incompleteness but does not identify one specific omitted row."
+}

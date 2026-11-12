@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_bbf3a939af4b",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.5,
+    "anchor_value":  0.7,
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  17,
+                                  "row_index":  4,
+                                  "quoted_text":  "Yorkshire Parent, Inc.^ | LP units | N/A | N/A | N/A | \\u2014 | $ | 94 | \\u2014 | % | $ | 97",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  7,
+                                  "quoted_text":  "FR Vision Holdings, Inc.^ | LP units | N/A | N/A | N/A | \\u2014 | 109 | \\u2014 | 122",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  16,
+                                  "quoted_text":  "Movement Holdings, LLC^ | LLC units | N/A | N/A | N/A | \\u2014 | 661 | 0.1 | 661",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "C04 fired because only 50.0% of six extracted equity rows have shares against a 70.0% threshold. Raw source table 17 shows the missing share quantities are not extraction omissions: multiple current equity-investment LP/LLC unit rows have a dash in the Principal ($) / Shares column while still reporting cost and fair value. The stored null/missing share values therefore match the source, and the check is overbroad for private equity LP/LLC unit rows."
+}

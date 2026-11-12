@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_f734804f7842",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4.0,
+  "anchor_value": 3.25,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 34,
+      "quoted_text": "Circle Graphics Inc | 1st Lien Term Loan | E-Commerce | S+ 3.25 %, 4.00 % Floor | 7.30 | 6/30/2025 | 3/31/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 9,
+      "quoted_text": "TETRA Technologies Inc | 1st Lien Term Loan | Oilfield Services | S+ 5.85 %, 1.00 % Floor | 9.57 | 1/12/2024 | 1/11/2030",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Circle Graphics source rate is S+3.25% with a 4.00% floor, so stored basis_spread 4.0 is the floor; the correct spread is 3.25.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 34
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "TETRA Technologies source rate is S+5.85% with a 1.00% floor, so basis_spread 5.85 is floating-spread data and the fixed-rate classification is wrong.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 31,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "X04 is a within-row rate-terms issue. The raw SOI shows Circle Graphics has floating rate text S+3.25% with a 4.00% floor, while the flagged observed basis_spread is 4.0, proving the floor was placed in the spread field. The second flagged value, 5.85, appears on TETRA Technologies as S+5.85% with a floor, so the row should be treated as floating; the X04 fixed-coupon condition points to a classification defect rather than absence of a spread."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_443bdd8ae04e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1957256000,
+  "anchor_value": 2018487000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 5,
+      "quoted_text": "Total Cash Equivalents | $ | 61,231 | $ | 61,231 | 4.86 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 7,
+      "quoted_text": "Total Investments and Cash Equivalents | $ | 2,029,384 | $ | 2,018,487 | 160.32 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 1,968,153 | $ | 1,957,256 | 155.46 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Cash equivalents with fair value 61,231 thousand are present in the source and exactly bridge Total Investments 1,957,256 thousand to Total Investments and Cash Equivalents 2,018,487 thousand.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 41,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fair value sum equals the filing's Total Investments fair value of 1,957,256 thousand, while the companyfacts_fv anchor equals the filing's Total Investments and Cash Equivalents fair value of 2,018,487 thousand. The 61,231 thousand residual is exactly the source Total Cash Equivalents line, so the conservation failure is a grounded extraction gap rather than an unclear source issue."
+}

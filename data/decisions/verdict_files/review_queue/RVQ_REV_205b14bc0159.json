@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_205b14bc0159",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Investment Type | Reference Rate and Spread (2) | Floor | Interest Rate (2) | Initial Acquisition Date | Maturity Date | Par/Shares | Amortized Cost (3) | Fair Value (4) | % of Net Assets (17) | Footnotes"
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "LSF12 Phoenix Holdco, LLC | Term Loan | 3M SOFR + 4.50 % | 8.20 % | 3/5/2026 | 3/25/2033 | $ | 3,000,000 | $ | 2,940,000 | $ | 2,973,750 | 1.8 % | (12)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 8,
+      "quoted_text": "Burgess Point Purchaser Corporation | Initial Term Loan (First Lien) | 3M SOFR + 5.25 % | 9.02 % | 11/25/2024 | 7/25/2029 | 4,911,026 | 4,699,020 | 4,296,263 | 2.6 % | (5) (12)"
+    },
+    {
+      "table_index": 9,
+      "row_index": 2,
+      "quoted_text": "BCDI Meteor Acquisition, LLC | Initial Term Loan | 1M SOFR + 7.00 % | 1.00 % | 10.77 % | 12/29/2022 | 6/29/2028 | 23,781,250 | 23,499,091 | 23,493,496 | 14.1 % | (5)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX01 appears to classify ordinary SOI rows as non-USD because later rows omit repeated dollar symbols in the Par/Shares column; source rows show the same dollar-denominated table context and no foreign-currency marker.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 8,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "FX01 flags missing principal_amount_usd for supposedly non-USD debt principal. The raw SOI table header is a standard Par/Shares, Amortized Cost, and Fair Value schedule; the first debt row in the same table prints dollar signs for Par/Shares, Amortized Cost, and Fair Value, while subsequent debt rows omit repeated currency symbols but remain in the same numeric columns. Targeted source searches for EUR, GBP, CAD, Canadian, dollars, and foreign currency returned no non-USD currency disclosure. The source therefore supports USD table formatting, not non-USD source par requiring FX conversion, so the check is the defect."
+}

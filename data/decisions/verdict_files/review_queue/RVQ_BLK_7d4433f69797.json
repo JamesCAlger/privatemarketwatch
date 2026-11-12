@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_7d4433f69797",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 183056000,
+  "anchor_value": 183056000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The flagged identifier 'Total Investments' is an explicit schedule-level total, not an investment position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 179,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "Raw SOI evidence shows the K2 entries are individual Common Stock positions under Chemicals, but the same flagged set includes 'Total Investments', which appears in the source as the schedule-level total with fair value $183.056 million. That confirms a localized subtotal leak rather than a valid position row."
+}

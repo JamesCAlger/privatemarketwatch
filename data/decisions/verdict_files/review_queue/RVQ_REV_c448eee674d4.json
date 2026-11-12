@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c448eee674d4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 178,
+      "row_index": 5,
+      "quoted_text": "Gainwell Acquisition Corp. Term B Loan (7) | SOFR + 4.100 % | 7.772 % | 10/01/2027 | 2,192 | $ | 2,183 | $ | 2,157 | 1.24%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because stored rows carry UNIT_USD, but the raw SOI schedule shows the cost and fair value columns are dollar-denominated. Representative row 178:5 has explicit dollar markers in the Cost and Fair Value columns, and the schedule total at 179:41 is also dollar-denominated. UNIT_USD is therefore a USD unit-label variant, not a non-USD source currency defect."
+}

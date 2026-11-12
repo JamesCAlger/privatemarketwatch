@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_de5e8b9c9df5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -83000.0,
+  "anchor_value": -83000.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Discovery SL Management, LLC - Revolving Credit Line (4) | ... | Amortized Cost | ( 4 ) | Fair Value | ( 2 )"
+    },
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "Hasa Acquisition, LLC - Delayed Draw Term Loan (4)(11) | ... | Amortized Cost | ( 31 ) | Fair Value | ( 13 )"
+    },
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Military Retail Solutions, LLC - Delayed Draw Term Loan (4)(11) | ... | Amortized Cost | ( 16 ) | Fair Value | ( 7 )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4)(12) | ... | Amortized Cost | ( 6 ) | Fair Value | ( 288 )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "PJW Ultimate Holdings, LLC - Revolving Credit Line (4) | ... | Amortized Cost | ( 14 ) | Fair Value | ( 21 )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 22,
+      "quoted_text": "Rushmore Intermediate II, LLC - Revolving Credit Line (4) | ... | Amortized Cost | ( 12 ) | Fair Value | ( 12 )"
+    }
+  ],
+  "rationale": "C107 flagged six negative cost values. The March 31, 2025 schedule of investments itself reports these amortized-cost cells in parentheses, in thousands: (4), (31), (16), (6), (14), and (12), matching the extracted values -4000, -31000, -16000, -6000, -14000, and -12000 after scaling. Because the negative signs are source-faithful, this review flag is not a data error."
+}

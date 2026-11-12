@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_dcc2fdbf3a64",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "P + 9.88 %",
+  "anchor_value": "P + 9.88 %",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 2,
+      "quoted_text": "Astra Acquisition Corp. (3)(14) | Second-lien loan ($ 40,084 par, due 10/2029 ) | 10/22/2021 | P + 9.88 % | 16.63 | % | 39,489 | - | 0.0 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The source uses P + 9.88 % as the Reference Rate and Spread value, so a format rule that rejects this prime-rate abbreviation is over-narrow.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell adjudication. The raw source grid places P + 9.88 % in the Reference Rate and Spread column for Astra Acquisition Corp.; this matches the observed value rather than showing an extraction error. The flag is therefore a false alarm caused by rule scope/normalization not accepting the filing's prime-rate abbreviation."
+}

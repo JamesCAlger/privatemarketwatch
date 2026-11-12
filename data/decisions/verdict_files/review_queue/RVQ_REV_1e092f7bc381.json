@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_1e092f7bc381",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "U_GBP (3 rows); U_EUR (1 row)",
+  "anchor_value": "USD expected by FX03",
+  "confidence": 0.88,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw filing source was successfully checked through the evidence CLI. The rendered source does not expose the inline XBRL unit metadata or map flagged row keys 420194, 420195, 420197, and 420203 to source schedule coordinates, so it cannot establish whether the GBP/EUR units are erroneous tags or valid native-currency facts. The filing separately discloses EUR foreign-exchange contracts (for example table 24 row 5), confirming material foreign-currency exposure and preventing the rule's blanket USD expectation from deciding the issue. Human inspection of the four inline XBRL facts and their contexts/units is required."
+}

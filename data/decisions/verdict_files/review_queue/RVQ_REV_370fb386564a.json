@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_370fb386564a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Class/Series | Industry | Initial Acquisition Date (10) | Shares | Cost | Fair Value | Tickmark"
+    },
+    {
+      "table_index": 23,
+      "row_index": 12,
+      "quoted_text": "INH Group Holdings, LLC | Common Units | Healthcare | 1/31/2019 | 484,552 | 484,552 | -"
+    },
+    {
+      "table_index": 23,
+      "row_index": 30,
+      "quoted_text": "SBS Super Holdings, LLC | Class B Non-Voting Units | Healthcare | 5/12/2023 | 100 | 10 | - | (5)"
+    },
+    {
+      "table_index": 24,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Class/Series | Industry | Initial Acquisition Date (10) | Shares | Cost | Fair Value | Tickmark"
+    },
+    {
+      "table_index": 24,
+      "row_index": 20,
+      "quoted_text": "Content Square SAS | Indemnity Series F Shares Warrants | Software & Tech Services | 11/30/2023 | 2,027 | 8,561 | - | (8)"
+    }
+  ],
+  "rationale": "PP03 flagged three rows as comparative-period facts because the bdc_investment_identifier ends with dates earlier than the 2025-09-30 report date. Raw source shows those dates are in the current-period equity schedule column headed Initial Acquisition Date (10), not a source/reporting period. The flagged holdings values match current filing rows for Content Square SAS warrants, INH Group Holdings common units, and SBS Super Holdings Class B units, so the data is correct and the rule fired on a legitimate acquisition-date field."
+}

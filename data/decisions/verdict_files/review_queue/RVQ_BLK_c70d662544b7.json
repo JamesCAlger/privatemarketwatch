@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_c70d662544b7",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 81772,
+  "anchor_value": 81772,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 2,
+      "quoted_text": "Money market funds (included in cash equivalents and restricted cash equivalents)"
+    },
+    {
+      "table_index": 33,
+      "row_index": 3,
+      "quoted_text": "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582) | 3.64 % | (27) | $ | 65,109 | 1.4 | % | $ | 65,109"
+    },
+    {
+      "table_index": 33,
+      "row_index": 4,
+      "quoted_text": "JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375) | 3.73 % | (27) | 16,663 | 0.4 | 16,663"
+    },
+    {
+      "table_index": 33,
+      "row_index": 5,
+      "quoted_text": "Total money market funds | 81,772 | 1.8 | 81,772"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The two flagged rows are source-labeled money market funds included in cash equivalents; CASH_EQUIVALENT is source-supported rather than an unknown asset class.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 33,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "C304 fired because asset_class carried CASH_EQUIVALENT, but the raw schedule explicitly groups the relevant section as money market funds included in cash equivalents and restricted cash equivalents. The two position rows have fair values of 65,109 and 16,663, tying to the schedule's Total money market funds of 81,772. The source therefore supports the cash-equivalent classification; the blocker is a controlled-vocabulary/rule-scope false alarm, not a bad row value."
+}
+

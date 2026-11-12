@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_67ed93dd0759",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "LOANS: NON-CONTROL/NON-AFFILIATE INVESTMENTS Transportation: Cargo Magnate Investment Type Senior Secured Initial Term Loan (First Lien) Index S+ Spread 5.50% Interest Rate 9.79% Acquisition Date 3/11/2022 Maturity Date 12/29/2028",
+  "anchor_value": "Magnate",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 27,
+      "quoted_text": "Magnate | Senior Secured Initial Term Loan (First Lien) | S+ | 5.50 % | 9.79 % | 3/11/2022 | 12/29/2028 | 951,342 | 939,444 | 934,693",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name should be Magnate; the stored value leaked the section label, industry, investment type, index, spread, interest rate, acquisition date, and maturity into the issuer field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse-leak defect. The raw source row under Transportation: Cargo has the issuer cell as Magnate and separate columns for investment type, index, spread, interest rate, acquisition date, maturity, cost, and fair value. The stored issuer_name instead concatenates the surrounding section/category and those terms into the issuer field."
+}

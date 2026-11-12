@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_889687e90a8f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 82629.165,
+  "anchor_value": 82199.346,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 99,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | 82,916,241 | 82,199,346 | 172.60",
+      "ties_to_residual": true
+    },
+    {
+      "quoted_text": "roam query 'Apidos CLO XXV Class E1R3' scanned 9033 source rows in accession 0001803498-26-000014 and returned n_hits=0"
+    },
+    {
+      "quoted_text": "roam query 'CVC Cordatus Loan Fund XXXIV DAC Subordinated Notes' scanned 9033 source rows in accession 0001803498-26-000014 and returned n_hits=0"
+    },
+    {
+      "quoted_text": "roam query 'Carlyle Euro CLO 2022-5 DAC Subordinated Notes' scanned 9033 source rows in accession 0001803498-26-000014 and returned n_hits=0"
+    },
+    {
+      "quoted_text": "roam query 'Zoro Series A Preferred Shares' scanned 9033 source rows in accession 0001803498-26-000014 and returned n_hits=0"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted BDC holdings total exceeds the current filing schedule fair-value total by 429.819 million, consistent with extra extracted rows that do not have current-period source facts.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 99,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "SRC_BDC02 flags 11 BDC rows as having no matching current-period source fact. Raw-source evidence supports the flag: table 99 row 22 gives the filing's Total Investment Portfolio fair value as 82,199.346 million, while the extracted fund-quarter fair value in the bundle is 82,629.165 million. Targeted roam checks for representative flagged instruments returned zero hits across 9033 source rows in the current accession. The defect is localized to the flagged extracted rows rather than to the source schedule."
+}

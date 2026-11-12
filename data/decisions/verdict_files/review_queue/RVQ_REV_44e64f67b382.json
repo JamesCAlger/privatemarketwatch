@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_44e64f67b382",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6,
+  "anchor_value": 1.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 27,
+      "quoted_text": "Pace Industries, Inc. | Common Stock | Shares 971,418",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 30,
+      "quoted_text": "Total Equity Investments | 74.6% | Amortized Cost 171,528,465 | Fair Value 162,797,111",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 25-row denominator mixes non-current equity positions into a current schedule that has Shares for all 15 position rows.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 9,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "C04 reports 15 of 25 equity rows with shares (0.6), but raw table 5 is the March 31, 2026 equity schedule and contains 15 position rows, each with a nonblank Shares value, so the source-supported coverage is 15/15 (1.0). Table 9 contains the comparative equity population, including Pace Industries Common Stock at row 27, showing how out-of-period positions can enter the denominator. The flag therefore identifies a real comparative-period extraction leak, not missing current-period shares."
+}

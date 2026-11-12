@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_070f3fbcd37d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 1,
+      "quoted_text": "Crescent Capital BDC, Inc. Consolidated Schedule of Investments September 30, 2024 (in thousands, except share and per share data) (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 8,
+      "quoted_text": "Total Investments | $ | 1,601,015 | 212.5 | % | $ | 1,591,433",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 13,
+      "quoted_text": "Investments and Cash Equivalents Total | $ | 1,607,461 | 213.4 | % | $ | 1,597,879",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD, but the raw September 30, 2024 schedule of investments presents fair value amounts as dollar-denominated values in thousands, with schedule totals explicitly shown with dollar signs. The source supports USD-denominated fair values; the flag is caused by the validator treating the XBRL-style unit label U_USD as non-USD rather than by a source currency error."
+}

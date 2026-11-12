@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_31550273c9dd",
+  "verdict": "real_error",
+  "mechanism": "cash_equivalent_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1514882847,
+  "anchor_value": 1480958078,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 38,
+      "quoted_text": "Total Cash Equivalents | 33,924,769 | 33,924,769",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 29,
+      "quoted_text": "TOTAL INVESTMENTS - 265.70 % | 1,490,018,182 | 1,480,958,078",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 1,490,018,182 and $ 1,329,540,850 ) | 1,480,958,078 | 1,311,120,584",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "cash_equivalent_leak",
+      "detail": "The position sum exceeds the companyfacts and schedule investment fair-value anchor by 33,924,769, exactly the schedule's Total Cash Equivalents amount.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 38,
+        "quoted_text": "Total Cash Equivalents | 33,924,769 | 33,924,769"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing balance sheet total investments and the schedule TOTAL INVESTMENTS fair value are both 1,480,958,078, matching the companyfacts_fv anchor. The extracted fair-value position sum is 1,514,882,847, an overshoot of 33,924,769. The source schedule separately reports Total Cash Equivalents of 33,924,769 below TOTAL INVESTMENTS, so the residual is explained by cash-equivalent rows being included in the extracted holdings sum even though they are outside the investment fair-value anchor."
+}

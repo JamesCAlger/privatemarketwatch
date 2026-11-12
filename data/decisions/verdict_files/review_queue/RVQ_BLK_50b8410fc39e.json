@@ -1,0 +1,55 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "rounding_tolerance",
+                         "fix_class":  "rule_scope",
+                         "detail":  "The pct_of_net_assets identity check is firing on exact residuals even though the source % of Net Assets column is rounded to two decimals.",
+                         "citation":  {
+                                          "row_index":  33,
+                                          "table_index":  30
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_BLK_50b8410fc39e",
+    "mechanism":  "rounding_tolerance",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.014992879,
+    "anchor_value":  0.01,
+    "rationale":  "Raw source shows Total net assets of 593,835,119. Representative flagged rows reconcile when the displayed % of Net Assets is treated as a two-decimal rounded disclosure: Smarsh Revolver fair value 89,033 equals 0.01499% of net assets, displayed as 0.01%; GI Apple DDTL fair value 206,691 equals 0.03480%, displayed as 0.03%; Allentown Revolver fair value 84,405 equals 0.01421%, displayed as 0.01%; Amber Energy fair value 45,874 equals 0.00772%, displayed as 0.01%. The residuals are caused by an over-tight exact identity check, not by wrong source data.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  42,
+                                  "table_index":  23,
+                                  "quoted_text":  "Total net assets | 593,835,119 | 544,912,994"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  33,
+                                  "table_index":  30,
+                                  "quoted_text":  "Smarsh Inc | 1st Lien Revolver | fair value 89,033 | % of Net Assets 0.01"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  24,
+                                  "table_index":  28,
+                                  "quoted_text":  "GI Apple Midco LLC (Atlas Technical) | 1st Lien Delayed Draw Term Loan | fair value 206,691 | % of Net Assets 0.03"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  14,
+                                  "table_index":  27,
+                                  "quoted_text":  "Allentown LLC | 1st Lien Revolver | fair value 84,405 | % of Net Assets 0.01"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  33,
+                                  "table_index":  32,
+                                  "quoted_text":  "Amber Energy Inc. | Senior Secured Bonds | fair value 45,874 | % of Net Assets 0.01"
+                              }
+                          ],
+    "confidence":  0.93
+}

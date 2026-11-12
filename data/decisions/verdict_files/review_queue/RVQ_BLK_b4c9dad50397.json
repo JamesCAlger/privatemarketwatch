@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_b4c9dad50397",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 9828933000,
+  "anchor_value": 9913408000,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 46,
+      "quoted_text": "Total investments | 9,839,254 | 221.6 | 9,913,408",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 32,
+      "row_index": 44,
+      "quoted_text": "Total equity investments | 69,229 | 1.6 | 73,483",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 30,
+      "row_index": 49,
+      "quoted_text": "Total debt investments | 9,879,854 | 9,770,025 | 220.0 | 9,839,925",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing's Total investments fair value is 9,913,408 thousand, but the extracted position sum is 9,828,933 thousand, an undershoot of 84,475 thousand.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 32,
+        "row_index": 46
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Equity investments contribute 73,483 thousand of fair value and appear absent from the extracted sum.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 32,
+        "row_index": 44
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt investments alone total 9,839,925 thousand, still 10,992 thousand above the extracted position sum, indicating an additional unlocalized debt extraction gap.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 30,
+        "row_index": 49
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing schedule and companyfacts anchor agree at 9,913,408 thousand for total investments. The extracted fair value sum is 9,828,933 thousand, producing an undershoot of 84,475 thousand. The source structure localizes most of the gap to omitted equity investments of 73,483 thousand, while debt investments alone total 9,839,925 thousand, 10,992 thousand above the extracted sum. The source therefore supports a real conservation error, although the debt portion is not row-localized."
+}

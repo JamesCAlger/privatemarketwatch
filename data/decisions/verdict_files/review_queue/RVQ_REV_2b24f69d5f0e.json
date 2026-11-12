@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_2b24f69d5f0e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 14,
+      "quoted_text": "Clearcourse Partnership Acquireco Finance Limited | IT Services | 13.70 % | SN + 8.75 % (Incl. 9.85 % PIK) | 07/25/28 | GBP | 6,415 | $ | 7,680 | $ | 7,790 | (5) (6) (7) (8)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX03 treats XBRL unit label U_USD as non-USD even though source cost and fair value are presented in dollar columns; non-USD GBP applies to par, not cost.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 36,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "The source schedule separates par currency from valuation currency. In table 36 row 14, par is GBP, but the Cost and Fair Value columns are marked with dollar signs and show 7,680 and 7,790 respectively. The flagged value U_USD is therefore a USD unit identifier for cost, not evidence of non-USD cost. The FX03 fire is a check/normalization false alarm."
+}

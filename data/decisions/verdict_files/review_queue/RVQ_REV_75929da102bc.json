@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_75929da102bc",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -0.2,
+  "anchor_value": -0.2,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 20,
+      "quoted_text": "MRI Software, LLC | (4) (6) (10) | SOFR + 5.50 % | N/A | 2/10/2027 | - | ( 68 ) | ( 125 ) | ( 0.2 )"
+    }
+  ],
+  "rationale": "Class 1 cell check: the flagged pct_of_net_assets value is -0.2, and raw schedule table 35 row 20 discloses MRI Software, LLC with fair value (125) and % of Net Assets (0.2). The extracted negative percent matches the source; C404 is monitoring a legitimate negative disclosure rather than identifying a data error."
+}

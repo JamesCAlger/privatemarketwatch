@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_356cd5ab063e",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "1st Lien/Secured Loans United States of America 1440 Foods Topco, LLC Instrument 1st Lien Term Loan Industry Consumer Products Rate S+6.00%, 1.00% Floor Interest Rate 10.85% Original Acquisition Date 12/20/2023 Maturity Date 12/20/2029",
+    "anchor_value":  "1440 Foods Topco, LLC",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  5,
+                                  "quoted_text":  "Source row separates Portfolio Company=1440 Foods Topco, LLC from Instrument=1st Lien Term Loan, Industry=Consumer Products, Rate=S+ 6.00 %, 1.00 % Floor, Interest Rate=10.85 %, Original Acquisition Date=12/20/2023, Maturity Date=12/20/2029.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "issuer_name is populated with concatenated schedule context and instrument terms instead of the source Portfolio Company cell.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  10,
+                                          "row_index":  5
+                                      }
+                     }
+                 ],
+    "rationale":  "The bundle sample stores issuer_name as a concatenation beginning with asset class/country and continuing through instrument, industry, rate, interest rate, acquisition date, and maturity date. The raw source schedule at table 10 row 5 shows the portfolio company is only 1440 Foods Topco, LLC in the Portfolio Company column; the other terms are separate columns. This makes the issuer-name formatting flag a real extraction defect, not a check false alarm."
+}

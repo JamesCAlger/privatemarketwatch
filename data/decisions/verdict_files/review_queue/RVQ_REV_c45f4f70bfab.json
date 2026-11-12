@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c45f4f70bfab",
+  "verdict": "false_alarm",
+  "mechanism": "unit_alias_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source fair value",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Central Parent, Inc. | SOFR + 3.25 % | 7.25 % | 7/6/2029 | 9,900 | $ | 9,918 | $ | 8,589 | 1.5 %"
+    },
+    {
+      "table_index": 15,
+      "row_index": 21,
+      "quoted_text": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ | 1,182,918 | $ | 1,185,955 | 203.4 | %"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as non-USD, but the raw SOI source presents the fair value column with dollar signs and USD-denominated totals. The source supports USD valuation; the defect is the validation rule treating the U_USD unit label as non-USD."
+}

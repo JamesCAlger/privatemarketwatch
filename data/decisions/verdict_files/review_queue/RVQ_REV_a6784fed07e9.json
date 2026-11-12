@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_a6784fed07e9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated schedule cells",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | Last Out Term Loan - 15.54 % inc PIK ... | $ | 17,833,011 | $ | 17,106,423"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency value U_USD as non-USD, but the raw SOI row shows the Amortized Cost and Fair Value columns are dollar-denominated. The value U_USD is consistent with an unnormalized XBRL unit identifier for USD rather than a non-USD source currency, so the data row is not a real FX error."
+}

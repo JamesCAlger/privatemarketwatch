@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_BLK_0a3114c09c75",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3008.522106,
+  "anchor_value": 3008.628,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 34,
+      "quoted_text": "Total Investments | $ | 3,008,238 | $ | 3,008,628 | 161.57 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The flag message compares source=1916 vs output=1241 at CIK-quarter scope, but the raw source investment-total anchor for December 31, 2025 is $3,008.628m and the extracted fund-quarter FV in the bundle is $3,008.522106m. The aggregate FV anchor therefore ties within about $0.106m, so the row-count discrepancy does not establish missing investment fair value and appears to be a rule-scope/counting false alarm rather than a data defect."
+}
+

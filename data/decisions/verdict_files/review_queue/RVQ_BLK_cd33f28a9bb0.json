@@ -1,0 +1,17 @@
+{
+  "review_id": "RVQ_BLK_cd33f28a9bb0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "filing_metadata",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-221769",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "Raw filing overview: accession 0001193125-26-221769; flagged holdings row_key 544957: accession_number is empty."
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The raw filing overview identifies accession 0001193125-26-221769, but the filing-derived holdings row stores a blank accession_number. The row should inherit the filing accession for source traceability, so the blank is a localized extraction/provenance gap rather than a bad validation rule."
+}

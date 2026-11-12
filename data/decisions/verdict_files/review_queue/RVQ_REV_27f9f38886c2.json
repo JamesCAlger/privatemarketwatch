@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_27f9f38886c2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "12.24 % PIK",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 28,
+      "quoted_text": "22 HoldCo Limited | Sports and entertainment platform | Senior subordinated loan | 12.24 % PIK | SONIA (S) | 7.50 % | 08/2023 | 08/2033 | 62.5 | 61.6 | 62.5 | (2)(6)(10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "22 HoldCo Limited senior subordinated loan has a source coupon of 12.24 % PIK, but the extracted private-credit row has blank interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "Class 2 row-validation issue: the bundle flags private-credit rows with missing rate fields. The raw SOI row for 22 HoldCo Limited discloses a coupon of 12.24 % PIK with SONIA reference and 7.50 % spread, while the corresponding extracted holding in the bundle has interest_rate blank. This grounds a real extraction gap, although not every one of the 67 flagged rows was independently proven from the sampled source rows."
+}

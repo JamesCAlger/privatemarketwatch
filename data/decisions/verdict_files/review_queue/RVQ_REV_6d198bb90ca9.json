@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_6d198bb90ca9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_rows",
+  "observed_value": 73.8,
+  "anchor_value": 73.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 9,
+      "quoted_text": "ABC Legal Holdings, LLC*^ | One stop | SF + | 4.50 | % | (i) | 8.34 | % | 08/2032 | 26,725 | 26,599 | 0.6 | 26,725",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 25 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 38 ) | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The aggregate low direct-lending rate-fill flag is explained by source-disclosed N/A interest-rate rows, not by a missed numeric coupon. In the SOI, the same issuer has a normal one-stop loan with SF+4.50% and 8.34% interest, while adjacent related one-stop rows explicitly show Interest Rate as N/A(6), dash principal, and de minimis negative cost/fair value. A targeted source search found this N/A(6) pattern broadly across 80 rows. Counting those source-N/A rows as missing numeric rates makes the fill-rate screen too broad for this filing."
+}

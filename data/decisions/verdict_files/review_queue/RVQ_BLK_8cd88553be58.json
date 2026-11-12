@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_8cd88553be58",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.62,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Asset Type | Reference Rate and Spread (2) | Interest Rate | Maturity Date | Par Amount / Shares | Amortized Cost (4) | Fair Value | Percentage of Net Assets"
+    }
+  ],
+  "rationale": "C303 flags a missing or unknown exposure_type for internal row_key 527031, but the bundle does not provide the issuer or instrument for that row. The raw filing was readable and shows schedule-of-investments tables with an Asset Type source column, but a targeted raw-source search for 527031 returned no matches because that is an internal identifier. Without a source coordinate tying the flagged extracted row to a specific filing row, raw source does not decide whether the row's exposure_type omission is a true extraction/classification defect or a localization artifact."
+}

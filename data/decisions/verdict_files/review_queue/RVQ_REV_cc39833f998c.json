@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_cc39833f998c",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  0,
+    "confidence":  0.82,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  39,
+                                  "row_index":  36
+                              },
+                              {
+                                  "table_index":  39,
+                                  "row_index":  40
+                              },
+                              {
+                                  "table_index":  146,
+                                  "row_index":  37
+                              }
+                          ],
+    "rationale":  "C104 flags three stored fair_value values of 0. The raw SOI source shows three matching zero-fair-value positions: table 39 row 36 Pigments LP Int, table 39 row 40 CFCo LLC (Benefytt Technologies, Inc.) - Class B Units, and table 146 row 37 Pigments LP Int. In each cited source row, cost and fair value are shown as dashes and the net asset percentage is 0.00, so storing fair_value as zero is source-consistent rather than a data error."
+}

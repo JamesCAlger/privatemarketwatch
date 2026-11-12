@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_643ca3d3e3cf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": "",
+  "anchor_value": "CAD 254,221 par requires USD principal conversion",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 16,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | CA + | 5.00 % | 9.24 % | 8/10/2022 | 8/10/2029 | CAD | 254,221 | 194,362 | 187,939 | 0.52",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row has CAD-denominated par of 254,221, but the flagged extracted row is missing principal_amount_usd for non-USD debt.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "FX01 is a single-field row-validation issue: non-USD debt principal needs an explicit USD-normalized principal amount. The bundle reports principal_amount_usd is blank for the flagged row, and the raw SOI row shows the par amount is denominated in CAD while cost and fair value are reported separately. This confirms a real extraction/normalization gap rather than a false alarm."
+}

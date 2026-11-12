@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_e2f3a05aa666",
+  "verdict": "false_alarm",
+  "mechanism": "unit_alias_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source fair value cells",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 9,
+      "quoted_text": "Rapyd Financial Network, Ltd. | 9/13/2030 | 80,991 | 2,938 | 3,078 | 0.6; grid row places 3,078 under Fair Value in a dollar-denominated schedule."
+    },
+    {
+      "table_index": 14,
+      "row_index": 19,
+      "quoted_text": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ | 767,638 | $ | 770,571 | 154.5 | %"
+    },
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "Mews Systems B.V. | SOFR + 9.00 % | 13.31 | % | 9/14/2029 | 17,254 | $ | 16,095 | $ | 16,934 | 3.4 | %"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency because the stored unit label is U_USD. The raw SOI uses dollar-denominated Fair Value columns and dollar markers for the same investment schedule, including flagged holdings such as Rapyd Financial Network and Mews Systems. U_USD is therefore a USD unit alias/label in this extraction context, not evidence of a non-USD fair value currency. The source supports the flagged value as USD-denominated, so the rule fire is a false alarm."
+}

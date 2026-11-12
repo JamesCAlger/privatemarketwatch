@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_9fb9fd026448",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6127925000,
+  "anchor_value": 5819755000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 33,
+      "quoted_text": "Total Non-Controlled/Affiliate Company Investments | $ | 343,639 | $ | 308,170 | 10.9 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 70,
+      "row_index": 35,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted holdings fair value includes the 308,170 subtotal for Total Non-Controlled/Affiliate Company Investments in addition to the filing total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the source schedule total is 5,819,755 thousand at table 70 row 35, while the flagged extracted holdings fair value is 6,127,925 thousand. The difference is exactly 308,170 thousand, matching table 70 row 33, a subtotal line for Total Non-Controlled/Affiliate Company Investments. This grounds a real subtotal-leak data error."
+}

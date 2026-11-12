@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c87de803b595",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "costs 5000 and 8000; fair_values 75000 and 111000",
+  "anchor_value": "source rows show costs 5 and 8; fair values 75 and 111, in thousands",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 26,
+      "quoted_text": "KWOR Acquisition, Inc. | (6) (10) (19) (20) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.58 % | 2/28/2030 | 75 | 5 | 75 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 27,
+      "quoted_text": "KWOR Acquisition, Inc. | (6) (10) (19) (20) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.58 % | 2/28/2030 | 111 | 8 | 111 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level X07 review. The filing schedule itself reports the two non-equity KWOR Acquisition debt rows with cost 5 and 8 and fair value 75 and 111, respectively, in thousands. The extracted values therefore match the raw source; the rule is flagging legitimate source-disclosed low-cost/high-fair-value rows rather than a data error."
+}

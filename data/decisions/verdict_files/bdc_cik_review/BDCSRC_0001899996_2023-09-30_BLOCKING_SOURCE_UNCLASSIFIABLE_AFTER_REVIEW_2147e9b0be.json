@@ -1,0 +1,42 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so exact total/header rows are documented as non-position exclusions.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 16,
+      "row_index": 23,
+      "cell_indices": [0, 17, 21, 24],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "Visible current-period row is Total Investments -- non-controlled/non-affiliate with cost, fair value, and net-assets percentage columns; it is a total line rather than an issuer-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify Fidelity-style source-only total investments identifiers prefixed by Investments, Total Investments -- non-controlled/non-affiliate(d) as documented non-position total/header rows.",
+  "primary_justification": "Both blocker rows are total investment rows for the non-controlled/non-affiliate(d) section, not production positions. The bundle gives source-only XBRL rows for both spellings and coordinate evidence for the current-period total line.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "The patch is exact to the normalized Investments Total Investments non-controlled non-affiliate(d) shape and preserves real company rows with entity signals. Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code.",
+  "review_id": "BDCSRC_0001899996_2023-09-30_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_2147e9b0be",
+  "reviewer_notes": "Manual review covered source_row_id 937783 Investments, Total Investments -- non-controlled/ non-affiliate with source FV 1,289,629,291 and source_row_id 937836 Investments, Total Investments -- non-controlled/ non-affiliated with source FV 1,289,595,075. The HTML evidence shows the matching total investments row selected by the SOI detector.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_unclassifiable_after_review to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

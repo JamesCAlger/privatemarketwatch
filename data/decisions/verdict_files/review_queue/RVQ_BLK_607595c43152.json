@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_607595c43152",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 2866968106,
+  "anchor_value": 3008628000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 34,
+      "quoted_text": "Total Investments | $ | 3,008,238 | $ | 3,008,628 | 161.57 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 16,
+      "quoted_text": "Total Non-Controlled, Non-Affiliated Debt Investments | $ | 2,963,157 | $ | 2,958,192 | 158.86 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 33,
+      "quoted_text": "Total Non-Controlled, Non-Affiliated Private Credit Funds | $ | 43,092 | $ | 49,937 | 2.68 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source includes non-debt investments within Total Investments, including preferred equity fair value 499 and private credit funds fair value 49,937, which account for 50,436,000 of the residual.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 65,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Even before non-debt investments, the extracted fair-value sum is 91,223,894 below the source debt subtotal of 2,958,192,000.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 65,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows a real conservation failure: the bundle's extracted fair-value sum is 2,866,968,106, while both companyfacts and the filing schedule total investments row show 3,008,628,000. The source total is supported by schedule subtotals: debt investments fair value 2,958,192,000, preferred equity fair value 499,000, and private credit funds fair value 49,937,000. This means the anchor is not bad; the extraction undershoots the source by 141,659,894. The residual decomposes into 91,223,894 below the debt subtotal plus 50,436,000 of non-debt investment rows present in the source total."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_6106a32e6d9f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "10.5; 9.31",
+  "anchor_value": "10.50%; 9.31% in source Coupon (3) cells",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 26,
+      "quoted_text": "Series A preferred shares | 10.50 % | 12/2024 | 33,710 | 33,204.4 | 33,204.4 | (2)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 16,
+      "quoted_text": "TI VI Holdings 1, L.P. (11) | Preferred shares | 9.31 % | 06/2025 | 3,075 | 3,013.1 | 3,009.5 | (5)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row check. The raw SOI table header defines the rate column as Coupon (3), not only debt interest. Both flagged PRIVATE_EQUITY positions are preferred-share investments and the source explicitly prints the same coupons stored by the pipeline: 10.50% for Series A preferred shares and 9.31% for TI VI Holdings preferred shares. The flagged interest_rate values therefore match source; the X01 check is overbroad for coupon-bearing preferred equity rather than a data extraction defect."
+}

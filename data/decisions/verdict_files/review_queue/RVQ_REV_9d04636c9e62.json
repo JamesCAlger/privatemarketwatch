@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_9d04636c9e62",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -55014,
+  "anchor_value": -55014,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 22,
+      "quoted_text": "MIS Acquisition, LLC | Revolving Loan | ... | Amortized Cost (3) | ( 55,014 ) | Fair Value (4) | ( 56,000 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 28,
+      "quoted_text": "Steele Solutions, Inc. | Revolving Loan | ... | Amortized Cost (3) | ( 24,845 ) | Fair Value (4) | ( 53,225 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 13,
+      "quoted_text": "Celerion Buyer, Inc. | Delayed Draw Term Loan | ... | Amortized Cost (3) | ( 46,870 ) | Fair Value (4) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The fmt_cost warning appears to be driven by negative amortized cost values, but the raw SOI presents those costs in parentheses in the Amortized Cost column. The extracted negative cost therefore matches the filer-stated source presentation rather than evidencing a data error; the rule is over-scoped for valid negative cost rows."
+}

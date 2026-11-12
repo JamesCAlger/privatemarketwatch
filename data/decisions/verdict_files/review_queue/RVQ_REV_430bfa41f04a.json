@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_430bfa41f04a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 128,
+      "row_index": 26,
+      "quoted_text": "Bulab Holdings, Inc. and Buckman PPC Co-Invest LP continuation: First lien senior secured loan | 6.65 % | Euribor (M) | 4.75 % | 06/2025 | 07/2032 | 10.1 fair value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 128,
+      "row_index": 27,
+      "quoted_text": "Bulab Holdings, Inc. and Buckman PPC Co-Invest LP continuation: First lien senior secured loan | 8.47 % | SOFR (M) | 4.75 % | 06/2025 | 07/2032 | 51.9 fair value",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 flags duplicate position keys for the CIK-quarter, with the example key pointing to Bulab Holdings, Inc. and Buckman PPC Co-Invest LP first lien senior secured loan. The raw SOI localizes this to table 128: the issuer row at row 25 is followed by multiple continuation investment rows. Rows 26 and 27 both have the same investment label, First lien senior secured loan, but they are not duplicate copies: one is 6.65% Euribor (M) with fair value 10.1, and the other is 8.47% SOFR (M) with fair value 51.9. The duplicate-key rule is therefore too coarse for this schedule structure because it ignores distinguishing coupon/reference-rate and amount attributes."
+}

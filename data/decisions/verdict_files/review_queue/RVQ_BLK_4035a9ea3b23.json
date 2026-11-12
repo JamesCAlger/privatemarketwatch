@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_4035a9ea3b23",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2475.678,
+  "anchor_value": 2483.554,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 9,
+      "quoted_text": "Total investments (cost of $ 2,468,380 and $ 2,396,883, respectively) | 2,483,554 | 2,418,075",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 40,
+      "quoted_text": "Total Portfolio Investments and Cash and Cash Equivalents (214.6% of net assets) | $ | 2,488,011 | $ | 2,503,185",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation rejects the E07 count comparison. The extracted position fair-value sum is 2,475.678 million, while the filing balance-sheet total investments anchor is 2,483.554 million, a difference of only 7.876 million (0.32%), not the flagged 88.9%. The broader schedule total of 2,503.185 million explicitly includes cash and cash equivalents. Thus source=4,150 versus output=461 is not a valid like-for-like position-count anchor; it is inflated by source table structure and does not evidence missing holdings. No individual culprit row is localized because the flag is an aggregate anchor defect."
+}

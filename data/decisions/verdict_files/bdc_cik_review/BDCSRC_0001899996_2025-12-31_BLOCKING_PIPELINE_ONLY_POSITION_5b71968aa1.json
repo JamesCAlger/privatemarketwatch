@@ -1,0 +1,46 @@
+{
+  "review_id": "BDCSRC_0001899996_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_5b71968aa1",
+  "cik": "0001899996",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a source-side filtering/parsing defect for a current-period liquid fund position. The blocker row is classified as extra_in_pipeline with no source fair value, but the same accession's raw XBRL rows include the State Street Institutional Treasury Plus Money Market Fund position with fair value 19087624, and targeted HTML coordinates show the row as a 2025 position row rather than an aggregate, header, or comparative-period row.",
+  "reconciliation_diagnosis": "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "xbrl_rows_same_accession",
+    "html_source_row_coordinate_candidates",
+    "gav_reconciliation"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 56,
+      "row_index": 26,
+      "cell_indices": [
+        0,
+        2,
+        11,
+        15,
+        19
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The source-targeted candidate is selected by the SOI detector for period 2025-12-31 and shows State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units with par/units, cost, and fair value all equal to 19087624."
+    }
+  ],
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_source_reconciliation_cache.py"
+  ],
+  "patch_summary": "Bounded source-reconciliation patch: include current-period BDC XBRL liquid fund or cash-equivalent position rows in the reconciliation source set when they have nonzero fair value and position-row support, while preserving filters for aggregate/header/subtotal and comparative-period rows.",
+  "source_reconciliation_effect": "Expected to match the State Street money market fund row and reduce this CIK/date blocker from one extra_in_pipeline row to zero without clearing unrelated residuals.",
+  "gav_effect": "Context only; GAV already passes and no independent GAV pass/fail claim is made.",
+  "tests_validation_plan": "Add focused source-reconciliation tests for a current-period money market fund position retained as source evidence, plus false-positive cases for an aggregate/header row and a 2024 comparative-period row; run pytest tests/test_source_reconciliation_cache.py tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py and python -m pipeline.main --unified --validate.",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "The diagnosis depends on local bundle samples rather than a full trace through every source-reconciliation filter branch. Human merge should confirm the patch changes only the source-reconciliation source universe for production position rows and does not admit liquidity totals or cash aggregates.",
+  "reviewer_notes": "The 2024 coordinate candidate for the same fund is correctly comparative-period evidence and is not used to justify the patch. The 2025 HTML row and XBRL/raw BDC row support treating the 19087624 pipeline row as a real current-period position whose source-side reconciliation evidence was filtered out."
+}

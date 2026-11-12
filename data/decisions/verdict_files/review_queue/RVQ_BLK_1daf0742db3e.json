@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_1daf0742db3e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank issuer_name in extracted holdings rows for C201",
+  "anchor_value": "source schedule rows contain issuer names in the first column",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 23,
+      "quoted_text": "Restaurant Brands Int'l (1011778 B.C. Unlimited) (6)(7) | Senior Secured First Lien Term Loan | S + 175 | 5.47 % | 09/2030 | 3,735 | 3,739 | 0.8 | 3,744"
+    },
+    {
+      "table_index": 49,
+      "row_index": 35,
+      "quoted_text": "KLICK INC. (4)(5)(6) | Unitranche First Lien Delayed Draw Term Loan | 11/2032 | - | ( 9 | ) | ( 0.0 | ) | ( 18 | )"
+    },
+    {
+      "table_index": 49,
+      "row_index": 37,
+      "quoted_text": "KLICK INC. (6) | Unitranche First Lien Term Loan | S + 500 , 75 Floor | 8.72 % | 11/2032 | 32,967 | 32,802 | 7.1 | 32,802"
+    },
+    {
+      "table_index": 49,
+      "row_index": 41,
+      "quoted_text": "Ontario Gaming GTA (One Toronto) (6)(7) | Senior Secured First Lien Term Loan | S + 425 , 50 Floor | 7.92 % | 08/2030 | 1,995 | 1,877 | 0.4 | 1,851"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C201 is confirmed: extracted holdings rows have blank issuer_name even though the source SOI row's first column contains the issuer name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The bundle flags missing issuer_name in row_validation for this CIK/report date. Raw SOI source rows are readable and show issuer names in the first column for flagged examples whose extracted holdings rows have blank issuer_name, including Restaurant Brands Int'l, KLICK INC., and Ontario Gaming GTA. The check is therefore valid and the defect is an extraction/localization gap, not a false alarm."
+}

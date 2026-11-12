@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_b0a9dde005d3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_rows",
+  "observed_value": [0.0, 4.01],
+  "anchor_value": [3.0, 4.26],
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 8,
+      "quoted_text": "Opal Bidco SAS (Opella) (France) | First Lien Term Loan | SOFR(Q) | - | 3.00 | % | 6.70 | % | 4/23/2032",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 42,
+      "quoted_text": "Polaris Newco, LLC | First Lien Term Loan | SOFR(Q) | 0.50 | % | 4.26 | % | 7.93 | % | 6/2/2028",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Opella spread was extracted as 0.00% although the current-period schedule states 3.00%.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 17, "row_index": 8}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Polaris spread was extracted as 4.01% although the current-period schedule states 4.26%.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 17, "row_index": 42}
+    }
+  ],
+  "rationale": "Class 2 review of the two flagged instruments. The raw March 31, 2026 investment schedule states spreads of 3.00% for Opella and 4.26% for Polaris, while Agent A recorded 0.00% and 4.01%. The source values explain the respective approximately 3.0212 and 0.2412 percentage-point XBRL reconciliation residuals within filing/XBRL precision, so the Agent A spread extraction is wrong. Comparative-period rows were not used as anchors."
+}

@@ -1,0 +1,29 @@
+{
+    "review_id":  "RVQ_REV_54cf4506f516",
+    "verdict":  "false_alarm",
+    "mechanism":  "unit_scale",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD-denominated source schedule",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  8,
+                                  "row_index":  1,
+                                  "quoted_text":  "Company | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2) (7) | Fair Value (6) | Percentage of Net Assets"
+                              },
+                              {
+                                  "table_index":  8,
+                                  "row_index":  4,
+                                  "quoted_text":  "Truck-Lite Co., LLC (3) | First-lien loan ($ 281,645 par, due 2/2031) | 2/13/2024 | SOFR + 5.75% | 10.86% | $ 278,727 | $ 280,864 | 9.1%"
+                              },
+                              {
+                                  "table_index":  8,
+                                  "row_index":  9,
+                                  "quoted_text":  "Artisan Bidco, Inc. first-lien loan (EUR 51,994 par) reports amortized cost 54,875 in the same Amortized Cost column, with foreign currency shown only in par/fair-value parenthetical detail."
+                              }
+                          ],
+    "rationale":  "FX03 flagged cost_currency value U_USD as not USD. The raw Schedule of Investments labels the valuation columns as Amortized Cost and Fair Value, and row 4 shows those columns with dollar signs. Even rows with foreign par amounts remain in the same USD valuation column, while foreign currency appears only as par/fair-value parenthetical detail. The source therefore supports USD-denominated cost; the flag is a unit-label canonicalization false alarm rather than a source data error."
+}

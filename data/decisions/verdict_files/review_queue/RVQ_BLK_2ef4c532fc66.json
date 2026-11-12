@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_BLK_2ef4c532fc66",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 37448222000.0,
+  "anchor_value": 35918948000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 103,
+      "row_index": 12,
+      "quoted_text": "Total | $ | 985,744 | $ | 732,001 | $ | ( 215,990 ) | $ | 15,807 | $ | - | $ | 1,517,562 | $ | 93,298 | $ | 14,144 | $ | 2",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Affiliate roll-forward fair value rows are being captured as additional holdings even though the filing schedule already includes the underlying affiliated debt and equity positions.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 103,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "AAM Series 1.1 roll-forward fair value of 93,464 duplicates the 58,702 debt row plus 34,762 equity row already present in the schedule.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 103,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "AAM Series 2.1 roll-forward fair value of 122,705 duplicates the 76,098 debt row plus 46,607 equity row already present in the schedule.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 103,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing schedule total investments fair value is 35,918,948 thousand, matching the companyfacts anchor of 35,918,948,000, while the extracted position sum is 37,448,222,000. The 1,529,274,000 overshoot is therefore in extraction, not the anchor. Source structure localizes the issue to duplicate capture of affiliate roll-forward rows as holdings: table 103 reports controlled affiliates fair value of 1,517,562 thousand, and examples such as AAM Series 1.1 and AAM Series 2.1 show roll-forward fair values that duplicate debt plus equity rows already in the investment schedule."
+}

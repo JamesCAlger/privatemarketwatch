@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_2ed790af8498",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1898691121,
+  "anchor_value": 1898691121,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "AAH Topco, LLC | Healthcare | Delayed Draw Term Loan | 9.01% (S + 5.25%; 0.75% Floor) | 12/22/2027 | 3,168,295 | 3,139,702 | 3,168,295 | (15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "AAH Topco, LLC | Healthcare | Delayed Draw Term Loan | 9.01% (S + 5.25%; 0.75% Floor) | 12/22/2027 | 6,349,220 | 6,296,428 | 6,349,220 | (15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (amortized cost of $1,934,491,247 and $1,876,212,627) | 1,898,691,121 | 1,861,296,462",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The B02 identity key collapses distinct source positions that share issuer, facility type, rate, and maturity but have different funded par, cost, and fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The filing schedule discloses two separate AAH Topco delayed draw term loan rows with the same descriptive key fields but materially different funded par, cost, and fair value. They are distinct positions, not duplicate extraction. The extracted quarter fair value of $1,898,691,121 also equals the filing total exactly, so the alleged duplicate keys do not create double counting. B02 is therefore firing because its identity key is too coarse."
+}

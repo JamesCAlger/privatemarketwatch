@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_0b176f12e1a8",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.49204771371769385,
+  "anchor_value": 0.95,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Non-controlled, non-affiliated investments, at fair value (amortized cost of $ 330,520,503 and $ 297,791,269 , respectively) | $ | 334,655,126 | $ | 300,732,065",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 43,
+      "quoted_text": "Total Investments | $ | 330,520,503 | $ | 334,655,126 | 202.24 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 297,791,269 | $ | 300,732,065 | 185.19 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The B01 population combines the March 31, 2025 schedule with the December 31, 2024 comparative schedule, producing 1006 leaves but only 495 current-period fair values.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 6,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 reports 495/1006 leaves with fair_value for the 2025-03-31 quarter. The filing source has a current March 31, 2025 investment fair-value anchor of 334,655,126 and a separate December 31, 2024 comparative anchor of 300,732,065. The current schedule closes at 334,655,126 in table 17, while the later comparative schedule closes at 300,732,065 in table 41. This indicates a comparative-period leak into the current-quarter leaf population, not source rows genuinely lacking fair value."
+}

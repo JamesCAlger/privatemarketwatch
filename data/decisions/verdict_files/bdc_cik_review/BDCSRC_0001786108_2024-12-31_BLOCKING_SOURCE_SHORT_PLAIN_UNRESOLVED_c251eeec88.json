@@ -1,0 +1,47 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so Portfolio Company Investment in Securities is documented as a non-position total/header source row rather than treated as a missing holding.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 58,
+      "row_index": 20,
+      "cell_indices": [
+        0,
+        12,
+        13,
+        16,
+        17
+      ],
+      "reason": "The current-period row text is Total Investment in Securities with cost, fair value, and percent-of-net-assets totals; it is a subtotal/total row corresponding to source_row_id 674630, not a position-level borrower or instrument row."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify the exact normalized label Portfolio Company Investment in Securities as a documented source total/header row.",
+  "primary_justification": "Manual review covered the single blocker row. Portfolio Company Investment in Securities maps to the filing row Total Investment in Securities, and the bundled HTML coordinate evidence classifies it as a current-period subtotal row with source fair value 1,725,570,000. The current production output for Trinity 2024-12-31 contains detailed portfolio company debt, equity, and warrant position rows from the same accession. Adding the subtotal row as a holding would duplicate exposure rather than restore a missing position.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch is limited to this exact normalized total label and remains guarded by the existing entity/position signal checks. Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code.",
+  "review_id": "BDCSRC_0001786108_2024-12-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_c251eeec88",
+  "reviewer_notes": "Source-only blocker row reviewed: source_row_id 674630 Portfolio Company Investment in Securities FV 1,725,570,000. The HTML coordinate candidate at table_index 58, row_index 20 is the current-period Total Investment in Securities row; a separate candidate at table_index 82 is comparative-period 2023-12-31 and was not used as primary support.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_short_plain_unresolved to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals after adding Trinity coverage for Portfolio Company Investment in Securities. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

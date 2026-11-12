@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_94bd174f4841",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source fair value columns",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 32,
+      "quoted_text": "Total Debt Investments | $ | 1,249,495,191 | $ | 1,238,987,378 | $ | 1,181,551,976 | 233.9 | %"
+    },
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 1,370,484,937 | $ | 1,343,608,252 | $ | 1,279,792,804 | 253.3 | %"
+    },
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "888 Holdings PLC (4)(8) | Hotels, Restaurants and Leisure | 9.63 % ( S +CSA + 5.25 %) | 7/8/2028 | 5,912,115 | 5,802,351 | 5,687,926 | 1.0 | %"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency=U_USD as not USD, but the raw BDC schedule presents the relevant fair-value columns as dollar-denominated: schedule total rows explicitly show dollar signs before fair value totals, and ordinary holding rows sit under the same Fair Value column. The stored value U_USD is therefore a USD unit token/id rather than evidence of a non-USD fair value."
+}

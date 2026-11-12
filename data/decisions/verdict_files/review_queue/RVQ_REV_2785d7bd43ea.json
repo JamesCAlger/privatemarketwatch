@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_2785d7bd43ea",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 9913.408,
+  "anchor_value": 9913.408,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 112,
+      "row_index": 9,
+      "quoted_text": "Total | $ | 9,913,408 | 100.0 | % | $ | 8,555,251 | 100.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 112,
+      "row_index": 7,
+      "quoted_text": "Structured finance note | 251,122 | 2.5 | 162,943 | 1.9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Jeppesen Holdings, LLC^ | One stop | SF + | 4.75 | % | (i) | 8.59 | % | 11/2032 | 109,176 | 108,776 | 2.4 | 108,357",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "No source-grounded asset-class formatting defect was found. The filing presents ordinary investment-type labels such as One stop and Structured finance note, the classification summary totals 100.0% and ties to total investments of 9,913,408, and the bundled exact-rule source artifact reports fmt_asset_class as pass with n_violate=0. The review flag is therefore not supported by the raw source or the current rule artifact."
+}

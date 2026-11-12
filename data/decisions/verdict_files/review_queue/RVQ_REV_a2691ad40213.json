@@ -1,0 +1,24 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_a2691ad40213",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -15000,
+    "anchor_value":  -15000,
+    "rationale":  "C107 flags negative cost values for review, but targeted raw-source checks show the flagged negative costs are present in the filed schedule itself: ABC Legal Holdings revolver cost is (15) thousand and AD Bidco revolver cost is (33) thousand. The extracted observed values therefore match source-reported schedule values; this is a monitoring false alarm, not a data error.",
+    "culprit_citations":  [
+                              {
+                                  "row_index":  26,
+                                  "table_index":  65,
+                                  "quoted_text":  "ABC Legal Holdings, LLC | Revolver | SOFR + 4.25 %, 8.1 % Cash | 08/25 | 08/32 | - | ( 15 ) | ( 13 ) | - | % | (7)(8)(16)(31) (32)"
+                              },
+                              {
+                                  "row_index":  34,
+                                  "table_index":  65,
+                                  "quoted_text":  "AD Bidco, Inc. | Revolver | SOFR + 5.25 %, 9.0 % Cash | 03/24 | 03/30 | - | ( 33 ) | - | - | % | (7)(8)(16)(31) (32)"
+                              }
+                          ],
+    "confidence":  0.92
+}

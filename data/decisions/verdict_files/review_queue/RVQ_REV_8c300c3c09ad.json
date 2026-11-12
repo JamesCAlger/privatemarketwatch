@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_8c300c3c09ad",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 11.096315789473683,
+  "anchor_value": 16.125,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 7,
+      "quoted_text": "Total Distributions | $ | 2.04 | $ | 120,588"
+    },
+    {
+      "table_index": 30,
+      "row_index": 19,
+      "quoted_text": "Members' Capital at end of period | $ | 1,123,707"
+    },
+    {
+      "table_index": 104,
+      "row_index": 18,
+      "quoted_text": "Ratio of net investment income to average Members' Capital (4) | 10.75 | %"
+    }
+  ],
+  "rationale": "The source supports the fund-level distribution and income metrics rather than a data defect. 2025 distributions are 120,588 and financial highlights report net investment income to average Members' Capital of 10.75%. The flagged observed distribution rate of 11.096315789473683 is below 1.5x that source income-yield ratio (16.125), so the F16 heuristic fire is not supported by the raw filing."
+}

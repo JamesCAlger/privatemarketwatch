@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_090c4fdaac4c",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4735,
+  "anchor_value": 0.0752,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %"
+    },
+    {
+      "table_index": 36,
+      "row_index": 35,
+      "quoted_text": "Total net assets | $ | 383,569"
+    },
+    {
+      "table_index": 94,
+      "row_index": 7,
+      "quoted_text": "Total borrowings outstanding | $ 622,500 | $ 494,600 | $ 492,212 | $ 494,600"
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's schedule total and balance-sheet anchors agree: fair-value investments of 849.354m over net assets of 383.569m equals 221.43%, matching the SOI source row. On a comparable leverage basis, holdings investment leverage is 221.43% - 100% = 121.43%, while source borrowings of 494.600m over net assets of 383.569m are 128.95%; the source-implied gap is about 7.52pp, not the flagged 47.35pp and within the 20pp rule threshold."
+}

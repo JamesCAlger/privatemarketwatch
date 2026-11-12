@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_98c2d0cb6811",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_row_structure",
+  "observed_value": 1,
+  "anchor_value": 2,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 3,
+      "quoted_text": "Lightspeed Solutions, LLC (j)(l) | Term Loan | SOFR + 6.00% | 9.67% | 3/1/2028 | 20,874,167 | 20,701,834 | 20,707,174",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 4,
+      "quoted_text": "Lightspeed Solutions, LLC (j)(q) | Term Loan | SOFR + 6.00% | 9.67% | 3/1/2028 | 1,376,764 | 1,375,780 | 1,365,750",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The normalized position identity drops the source (l) versus (q) discriminator and collapses two distinct Lightspeed positions into one duplicate key.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B02 is a real identity-key defect. Raw source table 12 separately discloses two Lightspeed Solutions term-loan rows with different source markers, par amounts, costs, and fair values. The extracted key described by the flag omits that row-level discriminator, so two genuine positions collide. Remediation must preserve a distinguishing identity attribute; the rows must not simply be deduplicated."
+}

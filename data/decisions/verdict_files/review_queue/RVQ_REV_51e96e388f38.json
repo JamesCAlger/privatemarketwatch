@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_51e96e388f38",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "",
+  "anchor_value": "non-USD par requiring USD conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 12,
+      "quoted_text": "Bulab Holdings, Inc. | (8)(14) | First Lien Term Loan | E + 4.75 % | 6.78 % | 7/1/2032 | EUR 1,352 | 1,588 | 1,580 | 0.21",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 118,
+      "row_index": 4,
+      "quoted_text": "European Euro | 4,688 | 4,998 | 5,507 | ( 509 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par appears in the SOI, but the reviewed rows have blank principal_amount_usd instead of an explicit USD-normalized principal.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 39,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "FX01 is a real row-level normalization defect. The review artifact reports blank principal_amount_usd for non-USD debt rows, and the raw SOI contains debt par denominated in EUR, for example Bulab Holdings at EUR 1,352. The filing also discloses a foreign-currency principal table with local and USD principal columns, confirming that USD-normalized principal is a meaningful required field rather than an unsupported check."
+}

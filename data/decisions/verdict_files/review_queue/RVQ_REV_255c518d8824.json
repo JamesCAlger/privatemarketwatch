@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_255c518d8824",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Schedule header: Par ($) / Shares (4)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 6,
+      "quoted_text": "Saturn Sound Bidco Limited First Lien Term Loan; par 57,365 appears under Par ($) / Shares (4)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 assumes these debt principals are non-USD, but the raw filing schedule explicitly labels the principal column Par ($) / Shares (4). A representative debt row reports 57,365 in that dollar-denominated column. Therefore the non-USD premise is false and missing principal_amount_usd does not establish a required FX conversion; the check is firing from incorrect currency classification."
+}

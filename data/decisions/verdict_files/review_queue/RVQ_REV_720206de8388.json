@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_REV_720206de8388",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -293000,
+  "anchor_value": -293000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 18,
+      "quoted_text": "Alchemy US Holdco 1 LLC (4)(6)(10) | 7/31/2029 | 1,208 | ( 52 ) | ( 51 )"
+    },
+    {
+      "table_index": 12,
+      "row_index": 34,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | 6/30/2027 | 160 | -- | ( 3 )"
+    },
+    {
+      "table_index": 13,
+      "row_index": 25,
+      "quoted_text": "Axiom Buyer, LLC (4)(6)(10) | 1/14/2030 | 1,905 | ( 47 ) | ( 46 )"
+    },
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "NTH Degree Purchaser, Inc (4)(6)(10) | 9/10/2030 | 3,422 | ( 68 ) | ( 68 )"
+    },
+    {
+      "table_index": 13,
+      "row_index": 30,
+      "quoted_text": "NTH Degree Purchaser, Inc (4)(6)(10) | 9/10/2030 | 1,792 | ( 35 ) | ( 36 )"
+    },
+    {
+      "table_index": 12,
+      "row_index": 42,
+      "quoted_text": "Palmetto Solar, LLC (4)(6)(12) | 9/13/2027 | 5,268 | ( 65 ) | ( 65 )"
+    },
+    {
+      "table_index": 15,
+      "row_index": 13,
+      "quoted_text": "Ribbon Communications Operating Company, Inc (4)(5)(6)(10) | 6/21/2029 | 849 | ( 16 ) | ( 8 )"
+    },
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "The One Group, LLC (4)(6)(7) | 10/31/2028 | 887 | ( 24 ) | ( 16 )"
+    }
+  ],
+  "rationale": "C103 fired because eight extracted fair_value cells are negative. The raw SOI prints those fair values in parentheses for unfunded delayed draw or revolving loan commitment rows, and the extracted values match the source signs and amounts. This is therefore a rule-scope review false alarm rather than a data error. No aggregate anchor was needed because the flagged cells were directly source-checked."
+}

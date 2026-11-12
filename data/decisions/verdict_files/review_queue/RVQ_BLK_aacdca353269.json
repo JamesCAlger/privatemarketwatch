@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_aacdca353269",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 7,
+      "quoted_text": "First Brands Group, LLC | (21) | P | 6.00 | % | 12.75 % PIK | 10/2/2025 | 6/29/2026 | 11,749 | 10,547 | 92 | 0.0 | %"
+    },
+    {
+      "table_index": 61,
+      "row_index": 8,
+      "quoted_text": "First Brands Group, LLC | (21) | SF | 7.00 | % | 10.68 % PIK | 10/2/2025 | 6/29/2026 | 34,751 | 28,495 | 1,408 | 0.0 | %"
+    },
+    {
+      "table_index": 61,
+      "row_index": 9,
+      "quoted_text": "First Brands Group, LLC | (21) | SF | 10.61 | % | 14.49 % PIK | 12/11/2023 | 3/30/2028 | 14,436 | 13,903 | 189 | 0.0 | %"
+    },
+    {
+      "table_index": 62,
+      "row_index": 12,
+      "quoted_text": "Vice Acquisition Holdco, LLC | (21) | SF | 8.26 | % | 12.10 % PIK | 7/31/2023 | 1/31/2028 | 503 | 503 | 38 | 0.0 | %"
+    },
+    {
+      "table_index": 62,
+      "row_index": 13,
+      "quoted_text": "Vice Acquisition Holdco, LLC | (21) | SF | 8.26 | % | 12.10 % PIK | 7/31/2023 | 1/31/2028 | 152 | 152 | 11 | 0.0 | %"
+    },
+    {
+      "table_index": 62,
+      "row_index": 14,
+      "quoted_text": "Vice Acquisition Holdco, LLC | (21) | SF | 8.26 | % | 12.10 % PIK | 9/8/2023 | 1/31/2028 | 265 | 265 | 20 | 0.0 | %"
+    }
+  ],
+  "rationale": "Class 2 row validation review. The flagged principal_amount values are not extraction, unit-scale, or FX errors: the raw SOI discloses the same principal figures for all six flagged rows, and the same rows disclose very low fair values. X06 is firing because these distressed/PIK positions have principal greater than 10x fair value, which is economically possible and source-supported. The check is overbroad for these rows, so the flag is a false alarm."
+}

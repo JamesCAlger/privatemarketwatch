@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4cafef21766a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X02 artifact identifies three internal holding row_keys with blank interest_rate/basis_spread, but the bundle does not expose issuer names or source-row coordinates for those row_keys, and the row_keys do not appear in the raw filing source. The raw schedule contains both normal debt rows with rate fields and equity sections where debt-rate fields are absent, including table 47 rows 15-16 for KWOR Intermediate I, Inc.; however, without a row-key-to-source-row bridge, the raw source does not decide whether the exact flagged rows are true private-credit missing-rate errors, equity classification/lookthrough errors, or false alarms."
+}

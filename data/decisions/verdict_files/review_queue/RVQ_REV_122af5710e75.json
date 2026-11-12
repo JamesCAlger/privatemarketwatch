@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_122af5710e75",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_AUD/U_CAD/U_EUR in fair_value_currency",
+  "anchor_value": "USD-denominated fair value columns and dollar-prefixed schedule subtotals",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 6,
+      "quoted_text": "Ancora Bidco PTY LTD row: principal amount AUD 5,191, fair value 3,617; table header has Fair Value column and Australia subtotal row 9 prefixes Fair Value with $ 4,257.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 20,
+      "quoted_text": "Garda World Security Corporation row in Canada section shows fair value 1,600 under the Fair Value column; Canada/Australia subtotals use $ for fair value, not CAD.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 15,
+      "quoted_text": "Olyos row shows EUR symbol only in the principal amount area, with fair value 4,189 under Fair Value; Total Debt Investments France row 19 prefixes Fair Value with $ 18,301.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign principal/geography units were propagated into fair_value_currency even though the SOI fair value columns and subtotals are USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The raw SOI separates the Principal Amount, Par Value or Shares column from Cost and Fair Value, and the cost/fair value subtotal lines carry dollar signs. For Ancora, AUD appears with principal amount while fair value is in the dollar-denominated Fair Value column; for Olyos, EUR appears only in the principal amount area while the France fair value subtotal is dollar-prefixed. A Canada row similarly appears under a country heading while fair value remains in the schedule's dollar-denominated Fair Value column. The stored fair_value_currency values U_AUD, U_CAD, and U_EUR therefore reflect a unit/country bleed into fair_value_currency, not valid non-USD fair value units."
+}

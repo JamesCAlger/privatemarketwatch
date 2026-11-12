@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d7ceb993acb0",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag for interest_rate on internal row_key 313819. The cached raw filing was readable and its investment tables disclose reference-rate/spread and interest-rate columns, but row_key 313819 does not occur in the filing and the bundle provides no issuer, instrument identifier, maturity, cost, or fair value for the flagged row. The specific source row therefore cannot be mapped or checked, so the source does not decide whether the blank rate is a real extraction defect or a legitimate non-rate-bearing position. Escalate for a row locator or enriched bundle evidence."
+}

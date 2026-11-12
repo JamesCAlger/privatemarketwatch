@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_11bd3b2f192a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 32,
+      "quoted_text": "HLRS Holdco Limited first lien delayed draw row shows Principal/Share NZ$ 1,000, with separate Cost 657 and Market Value 657.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 35,
+      "quoted_text": "Reconomy first lien row shows Principal/Share EUR 937, with separate Cost 1,020 and Market Value 1,046.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 13,
+      "quoted_text": "SoftCo first lien row shows Principal/Share EUR 3,600, with separate Cost 3,862 and Market Value 4,017.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign-currency debt principal/share amounts are present in source, but principal_amount_usd is missing for the flagged FX01 population.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "FX01 asks whether non-USD source par lacks explicit USD principal conversion. The raw SOI header identifies a Principal/Share column, and cited debt rows show foreign-currency principal amounts such as NZ$ 1,000 and EUR 937/3,600 while cost and market value are separate schedule amounts. The review bundle's FX01 rows have blank principal_amount_usd for this CIK/quarter, so the flag is a real extraction/normalization gap rather than a false alarm."
+}

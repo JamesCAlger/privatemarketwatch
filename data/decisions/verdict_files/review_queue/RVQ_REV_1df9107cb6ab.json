@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_1df9107cb6ab",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1927237,
+  "anchor_value": 2857808,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments (unaudited) as of December 31, 2023 | 7"
+    },
+    {
+      "table_index": 6,
+      "row_index": 9,
+      "quoted_text": "Consolidated Schedule of Investments as of September 30, 2023 | 16"
+    },
+    {
+      "table_index": 28,
+      "row_index": 16,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 126.0 % of net assets) | $ | 1,922,218 | $ | 1,927,237",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 26,
+      "row_index": 22,
+      "quoted_text": "OneOncology, LLC | Health Care Services | First Lien Term Loan | SOFR+ | 6.25 % | 6/9/2030 | - | ( 107 ) | ( 100 ) | (5)(8)(9)(10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rows from the separate September 30, 2023 schedule of investments were retained in the December 31, 2023 holdings review population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 6,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "PP03 flags comparative-period position rows. The raw filing has distinct SOI sections for December 31, 2023 and September 30, 2023; the September 30 SOI totals to fair value 1,927,237 while the December 31 SOI totals to 2,857,808. Flagged position examples such as OneOncology First Lien Term Loan 2 are present in the September 30 block, so retaining those source-period rows under the December 31 report date is a real comparative-period leak."
+}

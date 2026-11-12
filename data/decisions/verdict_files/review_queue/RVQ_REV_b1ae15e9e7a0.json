@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_b1ae15e9e7a0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.44029850746268656,
+  "anchor_value": 0.95,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 1,
+      "quoted_text": "Portfolio Investments ... Market Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 5,
+      "quoted_text": "American Vision Partners | Unitranche Initial Term Loan | ... | Amortized Cost $ 4,867,782 | Market Value $ 4,789,706",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 37,
+      "quoted_text": "Total Portfolio Investments (aj) | $ | 406,272,865 | $ | 398,843,940",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 62,
+      "row_index": 5,
+      "quoted_text": "American Vision Partners | Unitranche Initial Term Loan | ... | Amortized Cost $ 4,879,828 | Market Value $ 4,856,470",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 71,
+      "row_index": 42,
+      "quoted_text": "Total Portfolio Investments (ag) | $ | 427,700,856 | $ | 420,828,658",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "B01 reports fair_value on only 531 of 1206 leaves even though the SOI schedule exposes Market Value columns and portfolio totals for the investment rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate completeness flag. The filing source is readable and the SOI tables include an explicit Market Value column with populated position cells, e.g. table 15 row 5, and schedule totals, e.g. table 24 row 37. The second schedule block also has populated Market Value cells and totals, e.g. table 62 row 5 and table 71 row 42. Because the source provides fair values while the oracle metric shows only 531/1206 leaves populated against a 0.95 threshold, the flag reflects a real extraction completeness gap rather than missing source evidence."
+}

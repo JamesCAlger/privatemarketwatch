@@ -1,0 +1,76 @@
+{
+  "review_id": "RVQ_BLK_ccd1aa718747",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1761263470.0,
+  "anchor_value": 761051113.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total Investment Portfolio | $ | 755,279,857 | $ | 761,051,113 | 153.61 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 6,
+      "quoted_text": "Total First Lien Debt | 707,937,150 | 713,658,672 | 144.04 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 12,
+      "quoted_text": "Total Second Lien Debt | 9,602,717 | 8,941,400 | 1.81 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 15,
+      "quoted_text": "Total Investments -- non-controlled/ non-affiliate | 730,260,968 | 735,645,043 | 148.48 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 22,
+      "quoted_text": "Total Investments -- non-controlled/ affiliate | 25,018,889 | 25,406,070 | 5.13 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted fair value sum is 1,761,263,470 while the filing schedule total is 761,051,113, and the source schedule contains subtotal rows that should not be treated as positions.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 20,
+        "row_index": 23,
+        "quoted_text": "Total Investment Portfolio | $ | 755,279,857 | $ | 761,051,113 | 153.61 %"
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The schedule row 'Total First Lien Debt' is a subtotal with fair value 713,658,672, matching one of the non-position rows visible in the extracted holdings sample.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 19,
+        "row_index": 6,
+        "quoted_text": "Total First Lien Debt | 707,937,150 | 713,658,672 | 144.04 %"
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The schedule row 'Total Second Lien Debt' is a subtotal with fair value 8,941,400, matching one of the non-position rows visible in the extracted holdings sample.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 19,
+        "row_index": 12,
+        "quoted_text": "Total Second Lien Debt | 9,602,717 | 8,941,400 | 1.81 %"
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 conservation failure. The raw filing's investment schedule total is 761,051,113 at table 20 row 23, consistent with the summary and level-table totals returned by the evidence CLI, while the extracted position sum is 1,761,263,470. The source schedule includes subtotal rows such as Total First Lien Debt, Total Second Lien Debt, Total Investments -- non-controlled/non-affiliate, and Total Investments -- non-controlled/affiliate; the bundle's holdings sample shows at least the debt subtotal rows were ingested as holdings. The check is therefore valid and the data defect is subtotal leakage into extracted positions."
+}

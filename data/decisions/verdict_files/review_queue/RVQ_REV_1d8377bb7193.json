@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_1d8377bb7193",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_soi",
+  "observed_value": 7,
+  "anchor_value": 0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC Super Senior Revolver - 14.27% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 18,
+      "quoted_text": "Live Comfortably Borrower LLC Term Loan - 13.78% inc PIK (SOFR + 10.00%, 3.00% Floor, 2.00% PIK)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 rate-field review. The current-period SOI explicitly prints PIK-bearing coupons, including an all-PIK 14.27% Navistar row and a separately stated 2.00% PIK component on the Live Comfortably row. The extracted position context exposes interest_rate but no pik_rate, while the flag reports 7 of 9 units violating fmt_pik_rate. The raw source is clear and parseable, so the flagged incompleteness is a real PIK-rate extraction gap rather than a source ambiguity or check defect. No financial-total anchor is applicable to this single-field format rule."
+}

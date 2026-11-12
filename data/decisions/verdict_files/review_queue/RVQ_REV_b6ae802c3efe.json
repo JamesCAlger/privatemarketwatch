@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_b6ae802c3efe",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 72,
+  "anchor_value": 72,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 60,
+      "row_index": 4,
+      "quoted_text": "Greencross (Vermont Aus Pty Ltd) (11) | Unitranche First Lien Term Loan | B + 450 | 8.29 % | 03/2028 | AUD 19,270 | $ | 21,283 | 2.7 % | $ | 19,269",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 5,
+      "quoted_text": "Greencross (Vermont Aus Pty Ltd) (11) | Unitranche First Lien Term Loan | B + 450 ( 75 Floor) | 8.29 % | 03/2028 | AUD 3,214 | 3,316 | 0.5 | 3,214",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The B02 example key collapses two adjacent 2025 SOI rows that are not duplicate source positions: the same issuer and investment type have separate interest-term/principal legs, B + 450 and B + 450 (75 Floor), with different principal amounts and fair values. The schedule total anchor is readable and consistent with the filing total, so the duplicate-key fire reflects an over-coarse rule/key scope rather than a raw data duplicate."
+}

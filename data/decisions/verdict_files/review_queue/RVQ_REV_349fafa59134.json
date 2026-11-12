@@ -1,0 +1,63 @@
+{
+  "review_id": "RVQ_REV_349fafa59134",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Nine flagged PRIVATE_CREDIT rows have blank extracted interest_rate and basis_spread fields.",
+  "anchor_value": "Source schedule rows disclose rate terms in the Spread Above Index and/or Interest Rate columns, including SF + 4.50%, SF + 4.75%, SF + 5.00%, SF + 5.50%, and a 13.00% PIK row.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 36,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.50 % | N/A(6) | 08/2031 | - | ( 2 ) | - | -"
+    },
+    {
+      "table_index": 17,
+      "row_index": 37,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.50 % | N/A(6) | 08/2031 | - | ( 3 ) | - | -"
+    },
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "AP Adhesives Holdings, LLC(5) | One stop | SF + | 4.75 % | N/A(6) | 04/2032 | - | ( 3 ) | - | ( 3 )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 22,
+      "quoted_text": "Amberfield Acquisition Co.(5) | One stop | SF + | 5.50 % | N/A(6) | 05/2030 | - | ( 4 ) | - | -"
+    },
+    {
+      "table_index": 18,
+      "row_index": 37,
+      "quoted_text": "Anaplan, Inc. | One stop | SF + | 4.50 % | N/A(6) | 06/2028 | - | - | - | -"
+    },
+    {
+      "table_index": 11,
+      "row_index": 33,
+      "quoted_text": "Any Hour, LLC(24) | One stop | N/A | 13.00 % | PIK | 05/2031 | 2,854 | 2,812 | 0.3 | 2,626"
+    },
+    {
+      "table_index": 11,
+      "row_index": 40,
+      "quoted_text": "Apex Service Partners, LLC(5) | One stop | SF + | 5.00 % | N/A(6) | 10/2029 | - | ( 37 ) | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rows with N/A(6) interest still disclose a floating-rate spread, so basis_spread should not be blank even when interest_rate is not stated.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 17, "row_index": 36}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Any Hour row discloses a 13.00% PIK interest term, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 11, "row_index": 33}
+    }
+  ],
+  "rationale": "Class 2 row-level adjudication. The flag says the affected private-credit rows have no extracted interest_rate or basis_spread. Raw source rows for the flagged issuers show the rate columns are populated: several commitment/negative-cost rows have a spread above index such as SF + 4.50%, SF + 4.75%, SF + 5.00%, or SF + 5.50% while interest is N/A(6), and the Any Hour row explicitly shows 13.00% PIK. Because source provides rate terms that the extraction omitted, the X02 warning is a real data error caused by an extraction gap."
+}

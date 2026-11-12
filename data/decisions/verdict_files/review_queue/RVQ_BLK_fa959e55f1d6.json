@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_fa959e55f1d6",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "issuer_name missing on 71 extracted rows",
+  "anchor_value": "subtotal rows are not issuer positions",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 15,
+      "quoted_text": "[blank issuer and investment fields] | 39,461 | $ | 37,625 | 5.0 | % | 33,805",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "A numeric subtotal row with no company or investment type was emitted as a holding, producing a missing issuer_name failure.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 9,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "Class 1 source confirmation shows that the missing issuer_name is not a legitimate blank on a position. Table 9 row 15 has blank company, investment type, terms, rate, and maturity cells but contains aggregate principal/cost/percentage/fair-value amounts immediately after the Automobiles & Components positions. It is a subtotal row that should not have entered private_markets_holdings; the 71 C201 failures therefore reflect a real subtotal-filtering extraction defect. No aggregate valuation anchor was needed for this required-field adjudication."
+}

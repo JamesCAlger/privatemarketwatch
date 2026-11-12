@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_ed416ec89a0c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 352185000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 14,
+      "quoted_text": "Denali Equity Holdings LLC (1)(5) | 03/2025 | 3,749 | 330,908 | 352,185 | (2)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period Denali Equity Holdings LLC Other equity position with fair value 352,185 thousand is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 11,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 source schedule lists Denali Equity Holdings LLC as the sole position under Equity investments / Other equity, with cost 330,908 thousand and fair value 352,185 thousand at table 11 row 14. Row 15 is separately labeled Total other equity with the same amounts, so row 14 is an eligible position rather than a subtotal. The pipeline has no output row for this source position; observed fair value is therefore 0 versus source-schedule fair value 352,185,000."
+}

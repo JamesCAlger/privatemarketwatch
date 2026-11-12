@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_c7dbdf77e567",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD, shown as $ in the fair value column",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Ovation Parent Inc | First Lien Secured Debt | ... | Cost $ 9,975 | Fair Value $ 10,022"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD, but the raw schedule of investments prints the fair value column in dollars. A representative flagged holding, Ovation Parent Inc, shows a dollar sign in the Fair Value column with value 10,022. The flagged value appears to be a USD XBRL/unit label normalization variant rather than a non-USD denomination in the source. No aggregate anchor is needed for this single-field currency validation batch."
+}

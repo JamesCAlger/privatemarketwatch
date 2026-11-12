@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_38f1998d4f0d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 8,
+      "quoted_text": "Omni Intermediate Holdings, LLC | Transportation | First Lien Senior Secured Term Loan | SOFR + 5.00 %, 10.4 % Cash | 05/21 | 12/26 | 19,971 | 19,795 | 19,861 | 1.6 | % | (5) (6) (7) (8) (16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 9,
+      "quoted_text": "First Lien Senior Secured Term Loan | SOFR + 5.00 %, 10.4 % Cash | 06/22 | 12/26 | 4,962 | 4,878 | 4,931 | 0.4 | % | (5) (6) (7) (16) (29)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The duplicate Omni key represents two distinct current-period tranches with different acquisition dates and amounts, so the extracted identifier is under-specified rather than unique.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 28,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "B02 reports four duplicate position keys. For the example key, the raw September 30, 2023 schedule shows two distinct Omni Intermediate Holdings first-lien term-loan rows: one acquired 05/21 with principal/cost/fair value 19,971/19,795/19,861 and a second acquired 06/22 with 4,962/4,878/4,931. The source supports separate positions, so a duplicate normalized key indicates an extraction/identifier gap that fails to distinguish tranches."
+}

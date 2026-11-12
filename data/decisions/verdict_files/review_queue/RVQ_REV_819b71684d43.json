@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_819b71684d43",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "S + 6.50 % (Incl. 5.50 % PIK)",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 7,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | [blank Interest Rate] | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 10,879 | $ | 9,410 | $ | 7,506 | (6) (8) (11)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row has an empty Interest Rate cell but contains rate terms in Reference Rate and Spread, S + 6.50% including 5.50% PIK, while the extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 37,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level X02 review. The flagged Streamland row in the extracted holdings has blank interest_rate and no extracted basis_spread, but raw source table 37 row 7 contains the matching issuer, maturity, cost, fair value, and the rate-bearing Reference Rate and Spread cell: S + 6.50 % (Incl. 5.50 % PIK). The flag is therefore a real extraction gap rather than a false alarm."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_6498a098eaa7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3.0,
+  "anchor_value": 10.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Delta Leasing SPV II LLC | Specialized Finance | Subordinated Debt Term Loan | 3.00 % | 7.00 % | 8/31/2029 | 10,300 | 10,300 | 10,300 | (8)(9)(10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 39,
+      "quoted_text": "Establishment Labs Holdings Inc. | Health Care Technology | First Lien Term Loan | 3.00 % | 6.00 % | 4/21/2027 | 10,883 | 10,764 | 10,448 | (8)(10)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 2 row-level rate defect. The source SOI header maps the cited rate cells to Cash Interest Rate and PIK. The flagged rows disclose a 3.00% cash interest rate plus a separate PIK leg (7.00% for Delta Leasing, 6.00% for Establishment Labs). The platform convention requires interest_rate to be all-in and PIK-inclusive, so storing only 3.00% makes pik_rate greater than interest_rate and is an extraction gap."
+}

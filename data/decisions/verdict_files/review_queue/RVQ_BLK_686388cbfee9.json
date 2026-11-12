@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_686388cbfee9",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2893.559,
+  "anchor_value": 2893.559,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 68,
+      "row_index": 37,
+      "quoted_text": "Total Portfolio Investments | $ | 2,905,803 | $ | 2,893,559 | 182.19 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 27,
+      "quoted_text": "Total Portfolio Investments | $ | 2,051,457 | $ | 2,053,427 | 171.02 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 1,
+      "quoted_text": "Investments- non-controlled/non-affiliated | Commitment Type | Commitment Expiration Date | Unfunded | Total Commitment Fair Value",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 compares source=651 vs output=377 at the CIK-quarter level, but the raw source shows the 2025 portfolio schedule total is $2,893.559m, which matches the bundle output fair value of $2,893.559m. The filing also contains a separate comparative 2024 portfolio schedule total of $2,053.427m and non-position commitment tables, so the source-side count is over-broad rather than evidence of missing 2025 holdings."
+}

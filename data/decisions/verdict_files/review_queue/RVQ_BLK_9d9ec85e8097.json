@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_9d9ec85e8097",
+  "verdict": "real_error",
+  "mechanism": "cash_equivalent_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 5883158000.0,
+  "anchor_value": 5821583000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 8,
+      "quoted_text": "BNY Mellon Short Term Investment Fund | 61,575 | 61,575",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 44,
+      "row_index": 7,
+      "quoted_text": "Cash equivalents | 61,575 | - | - | 61,575",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "cash_equivalent_leak",
+      "detail": "BNY Mellon Short Term Investment Fund has fair value 61,575 and is classified by the source as cash equivalents, matching the conservation residual.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 22,
+        "row_index": 8,
+        "quoted_text": "BNY Mellon Short Term Investment Fund | 61,575 | 61,575"
+      }
+    }
+  ],
+  "rationale": "The source investment total is 5,821,583, matching the companyfacts_fv anchor, while the extracted position sum is 5,883,158. The 61,575 overshoot equals the BNY Mellon Short Term Investment Fund row, which the fair-value hierarchy identifies as cash equivalents rather than investments. The conservation flag is therefore a real extraction/classification error, not an anchor issue. Values are in source thousands; verdict values are scaled to dollars per the bundle."
+}

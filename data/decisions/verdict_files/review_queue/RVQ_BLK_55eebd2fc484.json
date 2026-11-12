@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_55eebd2fc484",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 2731562000.0,
+  "anchor_value": 2783476000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 20,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,767,878 | $ | 2,783,476 | 199.06 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value | 2,783,476 | 1,216,443",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The extracted fair-value sum is 2,731,562,000, but the companyfacts anchor is 2,783,476,000. The raw filing independently supports the anchor: the SOI total investments before cash and cash equivalents and the balance sheet total investments at fair value both report 2,783,476 thousand for 2025. The residual is an undershoot of 51,914,000, and a targeted residual search did not localize a single omitted source row, so the defect is an unlocalized extraction gap rather than a false alarm."
+}

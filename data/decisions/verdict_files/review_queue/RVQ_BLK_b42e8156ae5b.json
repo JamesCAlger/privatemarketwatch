@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_b42e8156ae5b",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 2201658000.0,
+  "anchor_value": 2185948000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 20,
+      "quoted_text": "Total Portfolio Investments | $ | 2,233,984 | $ | 2,185,948 | 194.57 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (cost of $ 2,233,984 and $ 2,048,601 ) | $ | 2,185,948 | $ | 2,029,756",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The raw filing schedule total and statement of assets both state 2025 total investments at fair value of 2,185,948 thousand, matching the companyfacts_fv anchor of 2,185,948,000. The extracted holdings value_sum is 2,201,658,000, an overshoot of 15,710,000, so the flag is a real conservation error. Source subtotals identify the investment total and some nearby affiliated/cash structures, but the evidence reviewed did not localize the exact 15,710 thousand residual to a single row-level culprit."
+}

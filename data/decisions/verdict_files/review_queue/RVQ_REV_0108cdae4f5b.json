@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_0108cdae4f5b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 13,
+      "quoted_text": "Total Investments | 100.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "A07 reported pct_sum=0.0% for the cik-quarter, but the raw current-period Industry Classification schedule lists industry percentages and its own Total Investments line is 100.0%. The source therefore supports a complete 100.0% schedule, not a zero percent sum."
+}

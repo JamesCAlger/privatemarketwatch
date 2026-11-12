@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_2e43ea0aa4bb",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.72,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 issuer_name flag. Raw source was readable and table 12 contains multiple blank-label numeric subtotal rows (including rows 8, 14, 18, 24, 32, 40, and 48), while genuine position rows carry issuer names. However, the flagged artifact supplies only internal row_key 469805 and no cost, fair value, maturity, or source context that maps that key to one unique source row. The evidence therefore supports subtotal leakage as a likely mechanism but cannot ground whether this exact flagged cell is a leaked subtotal or a position whose issuer extraction failed. Human or pipeline-level row-key provenance is required."
+}

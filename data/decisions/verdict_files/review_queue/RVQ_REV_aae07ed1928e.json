@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_aae07ed1928e",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.8489,
+    "anchor_value":  110.76,
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  20,
+                                  "quoted_text":  "Total investments | $ | 3,293,622 | $ | 3,466,654 | 110.76 | %",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  7,
+                                  "row_index":  39,
+                                  "quoted_text":  "Total net assets | 3,129,997 | 2,094,585",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "A07 observed pct_sum is 0.8489%, but the source SOI total investments line reports 110.76% of net assets for March 31, 2026.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  12,
+                                          "row_index":  20
+                                      }
+                     }
+                 ],
+    "rationale":  "The raw SOI schedule reports total investments at fair value of 3,466,654 and 110.76% of net assets, and the balance sheet reports total net assets of 3,129,997, which independently supports about 110.76%. The queued A07 observed metric/message says pct_sum=0.8489%, so the extracted percentage aggregate is far below the source schedule total. This is a grounded extraction/aggregation gap, not a false alarm."
+}

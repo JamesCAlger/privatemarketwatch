@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_7f003c2df81c",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480.975,
+  "anchor_value": 1249.444,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (cost/amortized cost of $ 1,246,701 and $ 1,350,788, respectively) | 1,249,444 | 1,355,641",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted holdings total includes the separately presented subsidiary portfolio fair value of 231.531 million in addition to the consolidated investment total.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 33,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "The filing reports consolidated investments at fair value of 1,249.444 million and net assets of 531.517 million, a ratio of about 2.351 that is within F21's 0.5 to 2.5 range. The extracted holdings total is 1,480.975 million, exceeding the filing total by exactly 231.531 million. That residual exactly matches the separately presented Total portfolio investments fair value at table 33 row 62, grounding a subsidiary/dimensional double count rather than a valid out-of-range portfolio ratio."
+}

@@ -1,0 +1,52 @@
+{
+  "review_id": "BDCSRC_0001572694_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_362ad5f51a",
+  "cik": "0001572694",
+  "report_date": "2025-12-31",
+  "verdict": "NO_PATCH_NEEDED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence shows five missing_from_pipeline source-only rows with aggregate issuer identifiers under Non-Controlled Affiliates and source fair values totaling 81762000. Raw current-period source rows show the same issuers' underlying debt and equity tranches are already matched to output, so the blocker rows are issuer-level aggregate contexts rather than production positions requiring a parser patch.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 74,
+      "row_index": 5,
+      "cell_indices": [0, 3, 7, 11, 12, 15, 19, 20, 23, 27],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "RPC ABC Investment Holdings LLC appears as an issuer-level non-controlled affiliate roll-forward row; its 11574 fair value matches the aggregate source-only blocker while separate tranche rows are matched in source reconciliation."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 74,
+      "row_index": 14,
+      "cell_indices": [0, 3, 7, 11, 12, 15, 19, 20, 23, 27],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "SDB HOLDCO, LLC appears as an issuer-level non-controlled affiliate roll-forward row; its 602 fair value matches the aggregate source-only blocker while separate Specialty Dental Brands tranche rows are matched in source reconciliation."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 74,
+      "row_index": 15,
+      "cell_indices": [0, 3, 7, 11, 12, 15, 19, 20, 23, 27],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "Pluralsight, Inc. appears as an issuer-level non-controlled affiliate roll-forward row; its 27494 fair value matches the aggregate source-only blocker while separate debt and equity tranche rows are matched in source reconciliation."
+    }
+  ],
+  "changed_files": [],
+  "patch_summary": "No patch proposed; evidence supports treating these source-only rows as aggregate issuer-level affiliate rows rather than parser-missed production positions.",
+  "source_reconciliation_effect": "No source-reconciliation code change expected; the blocker should be resolved by classification/calibration of issuer-level affiliate aggregate contexts, not by adding production holdings.",
+  "gav_effect": "Context only; GAV already passes and is not the primary basis for this verdict.",
+  "tests_validation_plan": "No patch validation run required for NO_PATCH_NEEDED. If calibration is adjusted later, run pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py and python -m pipeline.main --unified --validate.",
+  "requires_human_merge": false,
+  "missing_evidence": "Targeted HTML coordinate candidates were not present for the Thrasio aggregate row, but source-reconciliation rows identify it as an issuer-level Non-Controlled Affiliates source-only context and raw current-period source rows show its underlying Thrasio tranches are matched.",
+  "residual_risk": "HTML coordinate support is partial because Thrasio lacks a targeted coordinate candidate in the bundle; however, the numeric source reconciliation pattern is consistent across all five blockers.",
+  "reviewer_notes": "The source-only fair values reconcile to matched underlying rows: Pluralsight 27494, ABC Plumbing 11574, Specialty Dental Brands 602, SEM/Southeast Mechanical 23184, and Thrasio 18908. These are aggregate affiliate roll-forward or issuer-level contexts, not missing one-to-one production positions."
+}

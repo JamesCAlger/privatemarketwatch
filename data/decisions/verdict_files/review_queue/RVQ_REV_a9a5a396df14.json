@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a9a5a396df14",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 4521855404.0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The html_carry flag is aggregate-shaped and requires raw-source triangulation, but the evidence CLI returned status no_accession_resolved for overview, tables, and totals. No raw schedule total, companyfacts anchor, or source table coordinates were available to adjudicate the carry rate."
+}

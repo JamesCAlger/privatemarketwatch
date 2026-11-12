@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0937795ed442",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_schedule_cost_cells",
+  "observed_value": -89000.0,
+  "anchor_value": -89000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "ACP Falcon Buyer Inc | First Lien Revolver | Cost (89) | Fair Value (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "ASP Integrity Acquisition Co LLC | First Lien Term Loan | Cost (51) | Fair Value (294)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review. The raw March 31, 2026 schedule presents the flagged costs as negative amounts in parentheses, including (89) thousand for ACP Falcon Buyer Inc and (51) thousand for ASP Integrity Acquisition Co LLC. The extracted values of -89000 and -51000 therefore match the source exactly. Negative cost is an unusual but source-reported value, and C107 is only a monitoring check; the flag does not establish a data error. No aggregate anchor is applicable."
+}

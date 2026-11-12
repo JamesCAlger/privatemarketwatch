@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_8efb62a52b89",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.7,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 0,
+      "quoted_text": "Header contains Principal, Shares, Units column."
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "Swyft Filings Holdings, LLC preferred equity row shows 192,443 in Principal, Shares, Units."
+    },
+    {
+      "table_index": 14,
+      "row_index": 52,
+      "quoted_text": "Consolidated Machine & Tool Holdings, LLC warrants/other equity row shows 176 in Principal, Shares, Units."
+    },
+    {
+      "table_index": 15,
+      "row_index": 42,
+      "quoted_text": "Arrow Home Health, LLC (dba Acara Home Health) - Class A Units preferred equity row shows 571,080 in Principal, Shares, Units."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C04 reports 0.0% of 48 equity rows have shares, but the SOI has populated Principal, Shares, Units values for representative preferred equity and warrant rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate field-coverage flag. The raw June 30, 2024 SOI header includes a Principal, Shares, Units column, and equity sections such as preferred equity securities and warrants/other equity securities contain numeric values in that column. Because the extracted population reports 0.0% of 48 equity rows with shares despite source-populated values, the flag is a real extraction gap rather than a false alarm."
+}

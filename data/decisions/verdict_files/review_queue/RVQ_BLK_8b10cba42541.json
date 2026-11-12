@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_8b10cba42541",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rate_cells",
+  "observed_value": 0.0,
+  "anchor_value": 15.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 6,
+      "quoted_text": "Infinite Commerce Holdings LLC (Razor) | 2nd Lien 2B Term Loan | Fixed | 0.00 % | 15.00 % PIK | 15.00 % | 12/20/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "Infinite Commerce Holdings LLC (Razor) | 2nd Lien 3B Term Loan | Fixed | 0.00 % | 15.00 % PIK | 15.00 % | 12/20/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 28,
+      "quoted_text": "Pluralsight, Inc. | First Lien Term Loan | SOFR(M) | 1.00 % | 3.00 % Cash + 1.50 % PIK | 8.17 % | 8/22/2029",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Razor 2nd Lien 2B stores a 0.00% spread although the current schedule discloses a 15.00% PIK spread component.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Razor 2nd Lien 3B stores a 0.00% spread although the current schedule discloses a 15.00% PIK spread component.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Pluralsight stores a 0.00% spread although the current schedule discloses 3.00% cash plus 1.50% PIK in the spread cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "This is a Class 2 within-row defect. The flagged identifiers report agentA_value_pct and Spread as 0.00% for all three instruments, but the raw March 31, 2026 schedule rows show 15.00% PIK for each cited Razor loan and 3.00% Cash + 1.50% PIK for Pluralsight. The source therefore decides that the zero spread extraction is wrong; the filing total of $201,772,770 was checked only as period context and is not the rate anchor."
+}

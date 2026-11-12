@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_96618a96452a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 26587210000,
+  "anchor_value": 25007853000,
+  "confidence": 0.98,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 20,
+      "quoted_text": "Total Investment Portfolio | $ | 25,063,146 | $ | 25,007,853 | 201.09 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation proves an aggregate extraction error. The extracted fair-value sum is $26,587,210,000, but the filing's Total Investment Portfolio fair value is $25,007,853,000, a $1,579,357,000 excess matching the flagged 6.315% residual. The filing also reports $25,711,266,000 for Total Investment Portfolio, Cash and Cash Equivalents at table 37 row 26, so the extract exceeds even that broader total by $875,944,000. Raw-source structure does not safely localize one culprit row; remediation should inspect row disposition for included subtotal or non-position rows."
+}

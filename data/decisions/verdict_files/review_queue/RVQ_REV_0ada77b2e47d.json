@@ -1,0 +1,106 @@
+{
+  "review_id": "RVQ_REV_0ada77b2e47d",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Six rows are treated as PRIVATE_CREDIT while carrying no interest_rate or basis_spread.",
+  "anchor_value": "The source rows are non-credit instruments or cash equivalents with N/A/blank rate fields, not interest-bearing private credit loans.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 10,
+      "quoted_text": "SP-CREH 19 Highline LLC | Common Equities | Multi-Family | N/A | N/A",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 14,
+      "quoted_text": "TH Liquidating Trust | Trust Interest | Other | N/A | N/A",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 15,
+      "quoted_text": "TH Liquidating Trust | Trust Interest | Other | N/A | N/A",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 20,
+      "quoted_text": "1035 Mecklenburg Highway, Mooresville, North Carolina | Real Estate Properties | Industrial Real Estate | N/A | N/A",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 25,
+      "quoted_text": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class | Money Market Fund",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 28,
+      "quoted_text": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class | Money Market Fund",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Controlled common equity row was treated as PRIVATE_CREDIT even though the source shows Common Equities with N/A rate fields.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Trust Interest row was treated as PRIVATE_CREDIT even though the source shows Trust Interest with N/A rate fields.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Second Trust Interest row was treated as PRIVATE_CREDIT even though the source shows Trust Interest with N/A rate fields.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Real estate property row was treated as PRIVATE_CREDIT even though the source shows Real Estate Properties with N/A rate fields.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 20
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Cash equivalent row was treated as PRIVATE_CREDIT even though the source shows a Money Market Fund with no rate columns.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Restricted cash equivalent row was treated as PRIVATE_CREDIT even though the source shows a Money Market Fund with no rate columns.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "X02 fired because six rows have no interest_rate or basis_spread while classified as PRIVATE_CREDIT. The raw SOI source localizes those six missing-rate cases to table 19 non-credit instruments: common equity, trust interest, real estate property, and money market fund rows. Their rate fields are N/A or absent in source because they are not private-credit loan rows, so the data error is the classification/asset-class assignment rather than a missing rate extraction from loan terms."
+}

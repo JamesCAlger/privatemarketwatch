@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_8bceb6af7cee",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2317918,
+  "anchor_value": 2317918,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Quantum Leap Buyer LLC | (4)(5)(6) | Revolving Line of Credit | SOFR | 4.50 % | 9/05/2025 | 9/6/2032 | - | ( 37 | ) | ( 37 | )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "quoted_text": "GarageCo Intermediate II LLC | (4)(5)(6) | Revolving Line of Credit | SOFR | 4.25 % | 8/01/2025 | 8/2/2032 | - | ( 71 | ) | ( 71 | )"
+    },
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,317,918 | $ | 2,339,502 | 204.79 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "Parenthesized amortized-cost values for revolver and delayed-draw positions are present in the raw SOI and were correctly extracted as negative cost amounts.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "This is an aggregate Class 3 fmt_cost weak flag, but raw source shows the flagged cost format is valid filing content rather than an extraction defect. Several investment rows print principal as '-' and amortized cost/fair value in parentheses, e.g. Quantum Leap Buyer LLC Revolving Line of Credit with amortized cost (37) and fair value (37), and GarageCo Intermediate II LLC Revolving Line of Credit with amortized cost (71) and fair value (71). The source schedule total for non-controlled/non-affiliated investments before cash is amortized cost 2,317,918 and fair value 2,339,502, matching the filing's balance-sheet disclosure, so the format warning is a check-scope false alarm rather than a data error."
+}

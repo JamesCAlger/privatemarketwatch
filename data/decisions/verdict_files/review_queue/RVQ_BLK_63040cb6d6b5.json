@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_63040cb6d6b5",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1209788377,
+  "anchor_value": 1209788377,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (3) | 148.1 | % | 1,231,779,281 | 1,209,788,377",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Total Debt Investments | 143.2 | % | 1,213,577,868 | 1,169,913,117",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 15,
+      "quoted_text": "Total Equity Investments | 4.9 | % | 18,201,413 | 39,875,260",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 7,
+      "quoted_text": "industry subtotal row with no issuer or investment: 4.7 | % | 38,339,839 | 37,974,596",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Raw SOI source shows the output fair value anchor is correct: table 28 row 16 reports Total Debt & Equity Investments fair value of 1,209,788,377, matching the extracted fund_quarter_fv_m anchor of 1,209,788,377. The 2025 schedule is split across continuation tables and includes headers, industry labels, and subtotal rows such as table 24 row 7 that are not positions. Counting actual 2025 debt positions across tables 24-27 gives 59 and equity positions in table 28 gives 4, matching output=63. The flag's source=231 is therefore a broader row-surface count, not evidence of missing extracted positions."
+}

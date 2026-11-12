@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_BLK_97049852873e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 14121000,
+  "anchor_value": 14121000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 13,
+      "quoted_text": "Total investment income | $ | 49,048"
+    },
+    {
+      "table_index": 31,
+      "row_index": 28,
+      "quoted_text": "Net Operating Expenses | 20,360"
+    },
+    {
+      "table_index": 31,
+      "row_index": 30,
+      "quoted_text": "Income taxes, including unincorporated business tax expense | 174"
+    },
+    {
+      "table_index": 31,
+      "row_index": 46,
+      "quoted_text": "Total net realized and change in unrealized gain (loss) | (14,393)"
+    },
+    {
+      "table_index": 31,
+      "row_index": 47,
+      "quoted_text": "Total Net Increase (Decrease) in Net Assets Resulting from Operations | $ | 14,121"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "Income identity should use net operating expenses after expense support and waivers plus tax expense; the filing reconciles 49,048 - 20,360 - 174 - 14,393 = 14,121.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 31,
+        "row_index": 47
+      }
+    }
+  ],
+  "rationale": "Raw source table 31 shows total investment income of 49,048 thousand, net operating expenses of 20,360 thousand after expense support and waivers, income tax expense of 174 thousand, total net realized and unrealized loss of 14,393 thousand, and total net increase in net assets from operations of 14,121 thousand. The identity reconciles as 49,048 - 20,360 - 174 - 14,393 = 14,121, so the flag is caused by applying the check to the wrong expense scope rather than a source data error."
+}

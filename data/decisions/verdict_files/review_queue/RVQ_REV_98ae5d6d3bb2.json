@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_98ae5d6d3bb2",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd missing on 7 rows flagged as non-USD debt",
+  "anchor_value": "All investments are denominated in United States Dollars.",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 0,
+      "quoted_text": "All investments are denominated in United States Dollars.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 assumes these seven debt positions have non-USD source principal and therefore require a separate USD conversion. The filing's Schedule of Investments footnote explicitly states that all investments are denominated in United States Dollars. Thus missing principal_amount_usd is not an FX defect for these rows; the check fired from an incorrect non-USD currency classification."
+}

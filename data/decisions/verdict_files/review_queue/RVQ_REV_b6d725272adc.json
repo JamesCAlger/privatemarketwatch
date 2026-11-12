@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_b6d725272adc",
+  "verdict": "ambiguous",
+  "mechanism": "source_unavailable_due_to_environment_authentication_failure",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 1.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "ambiguity_basis": "source_unavailable",
+  "rationale": "The permitted contract/source reads and evidence CLI could not execute because the environment rejected process creation with CreateProcessWithLogonW error 1326. No usable raw-source evidence was returned, so C103 cannot be adjudicated or localized without guessing. This is an infrastructure coverage outcome and requires escalation."
+}

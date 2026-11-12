@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_190abb1ed893",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -17000.0,
+  "anchor_value": -17000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 10,
+      "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 475 , 0.50 % Floor | 7/24/2032 | - | ( 17 ) | ( 19 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 11,
+      "quoted_text": "First Lien Secured Debt - Revolver | S+ 475 , 0.50 % Floor | 7/24/2032 | - | ( 35 ) | ( 37 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 20,
+      "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 575 , 0.75 % Floor | 2/13/2032 | - | ( 40 ) | ( 28 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 6,
+      "quoted_text": "First Lien Secured Debt - Revolver | S+ 500 , 2.00 % Floor | 12/29/2032 | - | ( 39 ) | ( 39 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 13,
+      "quoted_text": "First Lien Secured Debt - Revolver | S + 625 , 1.00 % Floor | 2/28/2029 | - | ( 31 ) | ( 55 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost rows for review. The raw SOI schedule itself presents these positions with par/shares '-' and cost values in parentheses in the Cost column, matching the extracted negative costs such as -17, -35, -40, -39, and -31 thousand. Because the flagged values are source-stated rather than extraction defects, the data-error flag is a false alarm; the issue is rule scope/monitoring of legitimate contra or unfunded/revolver rows, not a holding data error."
+}

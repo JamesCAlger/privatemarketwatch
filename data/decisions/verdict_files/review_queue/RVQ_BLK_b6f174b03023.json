@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_b6f174b03023",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 196,
+  "anchor_value": 595.760696,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 32,
+      "quoted_text": "Total liabilities | 595,760,696 | 642,627,074",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw March 31, 2026 balance sheet reports total liabilities of $595,760,696 at table 6 row 32, consistent with the filing's liability structure, including debt of $571,590,163 at row 22. E07 reports source approximately $596 million versus output approximately $196 million, so the output materially understates the source total; the source anchor is not bad. Values are expressed in millions to match the E07 message."
+}

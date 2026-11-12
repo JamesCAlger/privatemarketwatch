@@ -1,0 +1,36 @@
+{
+  "review_id": "RVQ_REV_cdb87df9325f",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_schedule_text",
+  "observed_value": "11.57, 11.17, 5.00, 12.13, 14.37",
+  "anchor_value": "matching values printed in the schedule text",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "Ibis US Blocker Co. | First-lien loan | SOFR + 8.50% | 12.13% PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 18,
+      "quoted_text": "Second-lien loan | SOFR + 10.70% | 14.37% PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 27,
+      "quoted_text": "Roll Up DIP term loan | SOFR + 7.90% | 11.57% PIK",
+      "ties_to_residual": false
+    },
+    {
+      "quoted_text": "BCTO Ignition Purchaser, Inc. Investment First-lien holdco loan; Reference Rate and Spread SOFR + 7.50%; Interest Rate 11.17% PIK",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The filing schedule prints the flagged text-derived rates and spread in the relevant rate columns, including explicit PIK labels for 11.57, 12.13, 14.37, and 11.17 and a printed 5.00 spread. The provenance warning arises because these values are schedule text rather than independently tagged instance facts; the raw source supports the published values, so the warning is not a data error."
+}

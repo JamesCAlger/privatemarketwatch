@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_097359337058",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 645193114,
+  "anchor_value": 1198298004,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 26,
+      "quoted_text": "Total Debt & Equity Investments (7) | 148.3 | % | 809,253,307 | 645,193,114",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 33,
+      "quoted_text": "Total Investments ( 275.0 %) | $ | 1,362,358,197 | $ | 1,198,298,004",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 6,
+      "quoted_text": "Total Assets | $ | 553,105 | $ | - | $ | 645,193 | $ | 1,198,298",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted GAV uses the debt and equity subtotal of 645,193,114 instead of total investments of 1,198,298,004.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 27,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Cash equivalents of 9,351,973 and short-term investments of 543,752,917 are present in the schedule but excluded from the observed GAV subtotal.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 27,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the observed fund_quarter_fv_m of 645.193114 million ties exactly to the source row for Total Debt & Equity Investments, not to the filing's full investments-at-fair-value total. The same schedule reports Total Investments at 1,198.298004 million after adding cash equivalents and short-term investments, and the fair-value hierarchy corroborates Level 3 debt/equity of 645.193 million plus Level 1 cash/short-term assets of 553.105 million for a total of 1,198.298 million. Therefore the F20 GAV reconciliation warning is a real under-extraction of the investments-at-fair-value anchor."
+}

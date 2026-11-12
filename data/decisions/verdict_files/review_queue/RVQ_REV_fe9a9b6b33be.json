@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_fe9a9b6b33be",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 164.48,
+  "anchor_value": 164.48,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Total United States of America 1st Lien/Secured Loans | 801,020,176 | 783,000,934 | 144.49"
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "Total 1st Lien/Secured Loans | 838,700,367 | 821,137,654 | 151.53"
+    },
+    {
+      "table_index": 14,
+      "row_index": 30,
+      "quoted_text": "Total Non-Controlled/Non-Affiliated Investments | 856,085,858 | 838,935,887 | 154.82 %"
+    },
+    {
+      "table_index": 15,
+      "row_index": 36,
+      "quoted_text": "Total Investments, March 31, 2025 | $ 922,634,556 | $ 891,256,739 | 164.48 %"
+    },
+    {
+      "table_index": 6,
+      "row_index": 41,
+      "quoted_text": "Total net assets | 542,222,586 | 544,912,994"
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The apparent violations are percent-of-net-assets values above 100%, but the raw filing itself prints those values in the % of Net Assets column, including 144.49, 151.53, 154.82%, and Total Investments at 164.48%. For a leveraged BDC schedule, investment fair value can exceed net assets, so magnitude above 100% is not by itself a data error. The extracted values match the source schedule rather than contradicting it."
+}

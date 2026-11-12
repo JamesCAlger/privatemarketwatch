@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_c84171ad8ea1",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_schedule_reference_rate_spread",
+  "observed_value": "SOFR and EURIBOR reference labels flagged as uncorroborated",
+  "anchor_value": "Schedule rows explicitly disclose SOFR or EURIBOR plus a numeric margin",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Puris LLC Term Loan (4)(5) | SOFR + 5.750 | % | 9.451 | % | 06/30/2031 | 5,805 | 5,745 | 5,610 | 3.29 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 22,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan (4)(7)(9) | EURIBOR + 5.750 | % | 7.769 | % | 08/14/2029 | 2,384 | 2,551 | 2,694 | 1.58 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 0,
+      "quoted_text": "For each of these loans, we have provided the applicable margin over the reference rate based on each respective credit agreement.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 schedule directly corroborates both reference-rate types represented by the flag. Table 11 row 5 discloses SOFR + 5.750% for Puris, and row 22 discloses EURIBOR + 5.750% for SubCalidora. Footnote (2) at table 15 row 0 confirms that the schedule provides the applicable margin over the reference rate. Thus the structured spreads exist in source and the uncorroborated-reference check, not the extracted reference labels, is wrong."
+}

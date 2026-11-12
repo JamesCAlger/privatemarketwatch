@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_2518610cd0b7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 20.191551724137938,
+  "anchor_value": 1.054150569250275,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 14,
+      "quoted_text": "$ | 1.31 | $ | 108,069,686 | $ | 56,555,740"
+    },
+    {
+      "table_index": 36,
+      "row_index": 24,
+      "quoted_text": "Net Investment Income (Loss) After Taxes | 102,518,074"
+    },
+    {
+      "table_index": 110,
+      "row_index": 5,
+      "quoted_text": "Net investment income (loss) B | 1.24"
+    },
+    {
+      "table_index": 110,
+      "row_index": 8,
+      "quoted_text": "Distributions | ( 1.28 )"
+    }
+  ],
+  "rationale": "F16 flagged distribution rate exceeding the income-yield heuristic with observed metric 20.191551724137938, but the raw filing source shows 2025 gross distributions of 108,069,686 against net investment income after taxes of 102,518,074, a ratio of about 1.054. The financial highlights likewise show per-unit distributions of 1.28 from income plus 0.03 return of capital, or 1.31 total, against per-unit net investment income of 1.24. Those source figures do not show distributions exceeding income yield by 1.5x; the fire appears to be a heuristic/rule-scope false alarm rather than a fund financial extraction defect."
+}

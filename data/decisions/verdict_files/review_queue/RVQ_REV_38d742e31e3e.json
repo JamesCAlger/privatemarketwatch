@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_38d742e31e3e",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on FX01 rows",
+  "anchor_value": "source schedule shows non-USD par amounts requiring USD conversion",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 20,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(10) | CA + | 5.00 % | 7.75 % | 8/10/2022 | 8/10/2029 | CAD | 259,555 | 199,847 | 190,604 | 0.43",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 21,
+      "quoted_text": "123Dentist, Inc. | (4)(5)(6)(7)(10) | CA + | 5.00 % | 7.75 % | 8/9/2024 | 8/10/2029 | CAD | 21,400 | 11,557 | 15,715 | 0.04",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 6,
+      "quoted_text": "Caramel Bidco, Limited | (4)(6)(8) | S + | 6.00 % | 10.22 % | 2/11/2022 | 2/24/2029 | GBP | 60,000 | $ | 78,981 | $ | 69,182 | 0.16 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 10,
+      "quoted_text": "ENV Bidco, AB | (4)(6)(7)(8) | E + | 5.00 % | 6.98 % | 12/12/2024 | 7/19/2029 | EUR | 114,257 | 114,045 | 134,186 | 0.30",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "FX01 rows have non-USD par amounts in source, but principal_amount_usd is blank instead of holding an explicit USD conversion.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 26,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 2 row-validation issue. The source schedule columns identify Par Amount/Units separately from Cost and Fair Value. Representative flagged debt rows show par in CAD, GBP, and EUR, while the review artifact reports principal_amount_usd blank for non-USD debt rows. Because the platform rule requires an explicit USD principal for non-USD source par before par analytics, the missing converted principal is a real unit/FX normalization defect rather than a false alarm."
+}

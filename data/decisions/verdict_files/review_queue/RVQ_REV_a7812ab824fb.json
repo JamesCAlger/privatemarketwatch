@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_a7812ab824fb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 544.170799,
+  "anchor_value": 224.956333,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (2) | 105.5 | % | 226,246,287 | 224,956,333",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 6,
+      "quoted_text": "Non-controlled/non-affiliated investments (amortized cost of $226,246 and $209,512, respectively) | $ | 224,956 | $ | 208,515",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The March 31, 2026 SOI gives debt and equity investments at fair value of $224.956333 million, and the balance sheet independently reports investments at fair value of $224.956 million. The extracted position sum is $544.170799 million, an overstatement of $319.214466 million and 2.419 times the filing anchor. Cash equivalents are separately presented and therefore do not explain the gap. A comparative December 31, 2025 schedule is present, but its $208.515038 million subtotal does not exactly tie to the residual, so the aggregate extraction defect is proven while the specific row-disposition cause is not localized."
+}

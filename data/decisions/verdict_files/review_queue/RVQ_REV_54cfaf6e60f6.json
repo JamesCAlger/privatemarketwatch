@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_54cfaf6e60f6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 60007000,
+  "anchor_value": 58469000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 58,469 | 2.6 | 18,727 | 0.9",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 26,
+      "quoted_text": "Sweep Midco, LLC | (5) (11) | Second Lien Debt | 03/12/2034 | 580 | 290 | 390 | 0.03",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 27,
+      "quoted_text": "Sweep Midco, LLC | (5) (11) | Second Lien Debt | 03/12/2036 | 1,686 | --- | --- | ---",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 46,
+      "row_index": 25,
+      "quoted_text": "Applitools, Inc. | (5) (14) (15) (16) | Common Equity | 07/18/2025 | 2,182,564 | 1,248 | 1,060 | 0.09",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Sweep Midco rows were counted as non-accrual even though including their 290 cost makes the flagged cost exceed the filing non-accrual cost anchor.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 34,
+        "row_index": 26
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Applitools common equity row was counted as non-accrual; its 1,248 cost plus Sweep Midco's 290 explains the 1,538 excess over the filing anchor.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 46,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The filing reports non-accrual amortized cost of 58,469 at table 16 row 4. The five source rows with the apparent non-accrual footnote in the flagged set tie that anchor: Continental Battery 6,415, 48Forty 25,821 and 3,038, and DCA 20,008 and 3,187 sum to 58,469. The artifact's eight-row observed set also includes Sweep Midco rows with cost 290 and 0 plus Applitools common equity cost 1,248, giving observed flagged cost 60,007, which exceeds the source anchor by 1,538. This grounds a real extraction over-inclusion error in the nonaccrual flag."
+}

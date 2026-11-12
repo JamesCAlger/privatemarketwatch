@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_c6c4a6d17bd6",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1061901106,
+  "anchor_value": 645193114,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 26,
+      "quoted_text": "Total Debt & Equity Investments (7) | 148.3% | 809,253,307 | 645,193,114",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 19,
+      "quoted_text": "Total Controlled Affiliated investments | Fair Value at December 31, 2025 | 308,845,992",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | Fair Value at December 31, 2025 | 107,862,000",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Affiliated-investment rollforward current fair value totals of 308,845,992 and 107,862,000 were counted in addition to the schedule total, producing the 416,707,992 overage.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 28,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Non-controlled affiliated-investment rollforward fair value of 107,862,000 is duplicate disclosure, not an additional holding beyond the schedule of investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 29,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing schedule total for debt and equity investments is 645,193,114, while the extracted holdings total is 1,061,901,106. The 416,707,992 overage exactly equals the affiliated-investment rollforward current fair value totals: 308,845,992 controlled plus 107,862,000 non-controlled. Those rollforward tables repeat investment fair values and should not be added to the holdings schedule. Therefore the E01 failure is a real extraction double-count error."
+}

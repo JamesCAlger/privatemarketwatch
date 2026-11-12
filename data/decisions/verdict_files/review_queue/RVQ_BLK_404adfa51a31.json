@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_404adfa51a31",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 176,
+  "anchor_value": 175.7407490716354,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 77,
+      "row_index": 11,
+      "quoted_text": "Fair Value 5,156,571; Percentage of Total Net Assets 176%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 41,
+      "quoted_text": "Total net assets | 2,934,192 | 2,841,371",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The filing reports percentage of net assets as whole percentages, so a tight exact-value identity incorrectly flags legitimate rounding.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 77,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The filing's schedule reports fair value of 5,156,571 (thousand) and 176% of net assets, while the balance sheet reports net assets of 2,934,192 (thousand). The exact ratio is 175.740749%, which rounds to the disclosed whole-percent value of 176%. Table 77 likewise presents category percentages as whole numbers. The 54.78% violation rate is therefore consistent with the identity check applying tighter precision than the raw source provides, not with erroneous extracted percentages."
+}

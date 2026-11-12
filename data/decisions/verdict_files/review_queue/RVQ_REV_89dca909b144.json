@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_89dca909b144",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 195.7,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 35,
+      "quoted_text": "Investments and Cash Equivalents Total | 516,345 | 518,156 | 195.7 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 reported pct_sum=0.0 even though the SOI total row carries 195.7 percent of NAV for investments and cash equivalents.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The bundle's oracle artifact reports A07 pct_sum=0.0 for this CIK-quarter, but the raw SOI has an explicit % of NAV column and its Investments and Cash Equivalents Total row shows 195.7%. This source anchor decides the issue: the zero extracted percentage sum is an extraction gap, not a genuine source total of zero."
+}

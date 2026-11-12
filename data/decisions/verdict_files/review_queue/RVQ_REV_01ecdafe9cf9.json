@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_01ecdafe9cf9",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.1,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 is a fund_financials/holdings coverage mismatch (fund=True; holdings=False), but the raw source could not be read through the allowed evidence CLI. The overview, tables, totals, and targeted roam calls all returned status no_accession_resolved for CIK 0002041175 and report_date 2025-12-31, so source evidence is unavailable and the item cannot be adjudicated as real_error or false_alarm."
+}

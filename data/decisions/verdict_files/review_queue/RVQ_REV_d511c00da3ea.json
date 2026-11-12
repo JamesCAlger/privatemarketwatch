@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_d511c00da3ea",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 25 ) | - | -"
+    },
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 38 ) | - | -"
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "AP Adhesives Holdings, LLC^(5) | One stop | N/A(6) | 04/2032 | - | ( 82 ) | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X02 is firing on source N/A interest-rate rows with no principal or fair value, not on rows where a rate exists but was missed.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The raw filing's schedule columns are Investment Type, Spread Above Index, Interest Rate, Maturity Date, Principal, Amortized Cost, Percentage of Net Assets, and Fair Value. The flagged examples are private-credit rows where the source itself prints N/A(6) in the Interest Rate column, leaves the spread cells blank, and shows dash principal and fair value with only small negative amortized-cost adjustments. Adjacent same-issuer rows carry normal spread/rate terms, e.g. ABC Legal Holdings row 9 has SF + 4.50% and 8.34%, so the missing-rate warning is a rule-scope false alarm for intentional N/A adjustment rows rather than a stored data error."
+}

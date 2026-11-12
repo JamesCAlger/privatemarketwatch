@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_a889ab1f9ae5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include category and instrument terms, e.g. 'Debt Investments Human Resource Support Services Madcap Software, Inc. First-lien loan ($32,256 par, due 12/2026) Initial Acquisition Date 12/15/2023 Reference Rate and Spread SOFR + 6.10% Interest Rate 10.35%'",
+  "anchor_value": "The raw SOI has a separate Company column with clean issuer names and a separate Investment column with instrument terms.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Madcap Software, Inc. (3)(5) | First-lien loan ($ 32,256 par, due 12/2026 ) | 12/15/2023 | SOFR + 6.10 % | 10.35 % | 31,687 | 31,934 | 2.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Dye & Durham, Ltd. (4)(10) | Common Shares ( 126,968 shares) | 12/3/2021 | 3,909 | 1,492 (CAD 2,015 ) | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 16,
+      "quoted_text": "Passport Labs, Inc. (11) | Warrants ( 17,534 warrants) | 4/28/2021 | 192 | 0 | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C206 is a real issuer_name parse leak: extracted issuer_name cells combine section labels, clean issuer, investment terms, dates, spread, and rate even though the SOI presents issuer and terms in separate columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 2,
+        "quoted_text": "Madcap Software, Inc. (3)(5) | First-lien loan ($ 32,256 par, due 12/2026 ) | 12/15/2023 | SOFR + 6.10 % | 10.35 % | 31,687 | 31,934 | 2.0 %"
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell adjudication. The flagged column is issuer_name, but the observed values in the bundle include raw schedule path and investment terms. The raw Schedule of Investments rows cited above show the Company/issuer cell is clean, while investment description, acquisition date, reference spread, and interest rate are separate cells. Therefore the flag identifies a real extraction/column-mapping defect rather than a valid issuer name or bad check."
+}

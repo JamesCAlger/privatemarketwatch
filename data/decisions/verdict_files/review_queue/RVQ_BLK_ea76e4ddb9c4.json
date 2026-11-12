@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_ea76e4ddb9c4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6391.054,
+  "anchor_value": 6391.054,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 13,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | $ | 6,389,065 | $ | 6,391,054 | 194.94 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 7,
+      "quoted_text": "Total investments | $ | 6,389,065 | $ | 6,391,054 | 100.00 | % | $ | 4,534,957 | $ | 4,529,064 | 100.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 reports source=697 vs output=202, but the raw current-period investment schedule total is 6,391,054 thousand and the extracted fund_quarter_fv_m is 6,391.054 million. The source also separately reports cash and a broader portfolio-plus-cash total, so the failed count/coverage anchor is broader than the investment extraction population rather than evidence of missing current-period fair value."
+}

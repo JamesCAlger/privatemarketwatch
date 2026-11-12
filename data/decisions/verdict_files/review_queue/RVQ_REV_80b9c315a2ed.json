@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_80b9c315a2ed",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_schedule_cells",
+  "observed_value": null,
+  "anchor_value": "-",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 9,
+      "quoted_text": "Penn Quarter Partners, LLC | Delayed Draw Term Loan | reference rate and spread - | interest rate - | par amount - | cost (29,398) | fair value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 14,
+      "quoted_text": "Aeron Buyer, LLC | Delayed Draw Term Loan | reference rate and spread - | interest rate - | par amount - | cost (64,254) | fair value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 3,
+      "quoted_text": "Harmony Hit US Holdings Inc | Delayed Draw Term Loan | reference rate and spread - | interest rate - | par amount - | cost (24,313) | fair value (3,546)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 4,
+      "quoted_text": "Harmony Hit US Holdings Inc | Revolving Credit Facility | reference rate and spread - | interest rate - | par amount - | cost (40,869) | fair value (27,825)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X02 batches 48 PRIVATE_CREDIT rows with no extracted interest_rate or basis_spread. Raw schedule rows show that this is an intentional source presentation for unfunded delayed-draw and revolving commitments: both rate columns and par are printed as dashes, while negative cost or fair-value balances remain. The extracted null therefore agrees with the raw source; requiring a rate for these unfunded commitment rows is an overbroad rule scope, not a data defect."
+}

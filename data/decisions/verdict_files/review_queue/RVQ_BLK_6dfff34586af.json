@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_6dfff34586af",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2219333000,
+  "anchor_value": 1811390000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 39,
+      "quoted_text": "Investments Total | $ | 1,811,390 | $ | 1,815,082 | 180.5 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 52,
+      "row_index": 17,
+      "quoted_text": "Investments Total | $ | 405,952 | $ | 406,514 | 4241.60 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "ATS (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.75 % | 9.42 | % | 7/12/2029 | $ | 9,600 | 9,523 | 9,600",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 50,
+      "row_index": 5,
+      "quoted_text": "ATS (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.75 % | 9.42 | % | 7/12/2029 | $ | 7,182 | 7,135 | 7,183",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extractor included the secondary members' equity investment schedule in addition to the primary consolidated schedule; its $405.952 million cost explains nearly all of the $407.943 million excess.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 52,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted cost of $2,219.333 million versus the filing's primary Investments Total cost of $1,811.390 million, an excess of $407.943 million (22.521%). The filing separately presents a $405.952 million cost schedule whose positions overlap the primary schedule, as demonstrated by the ATS loan appearing in both table 12 row 5 and table 50 row 5. This grounds a secondary-schedule dimension double count. The $1.991 million difference between that secondary total and the full residual remains a minor unlocalized residual and does not alter the aggregate real-error conclusion."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_9367633d1381",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 450.0,
+  "anchor_value": 450.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "MRO Holdings, Inc. | First Lien Secured Debt - Bank Debt Term Loan | S + 450 , 0.50 % Floor | 10/4/2032 | $ | 47,841 | $ | 48,037 | $ | 47,482 | (5)(8)(13)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The source row states the interest term as S + 450 with a 0.50% floor. For a basis_spread field, the observed value 450.0 is the source-stated spread in basis points, so the row value is correct and the validation range check is out of scope for whole-number basis-point spreads."
+}

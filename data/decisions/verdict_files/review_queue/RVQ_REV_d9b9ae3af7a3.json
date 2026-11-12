@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d9b9ae3af7a3",
+  "verdict": "false_alarm",
+  "mechanism": "position_key_collision",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 26,
+      "quoted_text": "ASG III, LLC | SOFR + 6.50 % | 10.17 % | 10/31/2029 | par 4,463 | amortized cost 4,373 | fair value 4,448",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 27,
+      "quoted_text": "ASG III, LLC | SOFR + 6.25 % | 9.92 % | 10/31/2029 | par 1,593 | amortized cost 1,548 | fair value 1,558",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "ASG III, LLC | SOFR + 7.00 % | 10.67 % | 10/31/2029 | par 332 | amortized cost 323 | fair value 325",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 investment schedule explicitly reports three ASG III, LLC first-lien positions. Although issuer and maturity match, the rows have different contractual spreads, stated interest rates, par amounts, amortized costs, and fair values. They are distinct tranches, so B02's count of three duplicate position keys is caused by an under-specified key rather than duplicated extracted data."
+}

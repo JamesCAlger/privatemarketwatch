@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_f95875e522f3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -17915.0,
+  "anchor_value": -17915.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Accela Inc/US | 1st Lien Revolver | S+4.75%, 0.75% Floor (0.50% on unfunded) | Interest Rate 0.50 | Par Amount 2,242,023 | Cost / Amortized Cost (17,915) | Fair Value (17,786)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Allium Buyer LLC | 1st Lien Revolver | S+5.00%, 1.00% Floor (0.50% on unfunded) | Interest Rate 0.50 | Par Amount 573,673 | Cost / Amortized Cost (10,042) | Fair Value (3,878)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "Alpine Acquisition Corp II | 1st Lien Delayed Draw Term Loan | S+4.75%, 1.00% Floor (0.50% on unfunded) | Interest Rate 0.50 | Par Amount 53,094 | Cost / Amortized Cost (508) | Fair Value (1,263)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 19,
+      "quoted_text": "Alpine Acquisition Corp II | 1st Lien Revolver | S+4.75%, 1.00% Floor (0.50% on unfunded) | Interest Rate 0.50 | Par Amount 212,377 | Cost / Amortized Cost (10,171) | Fair Value (5,159)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 11,
+      "quoted_text": "Coupa Holdings LLC | 1st Lien Delayed Draw Term Loan | S+5.25%, 0.75% Floor (1.00% on unfunded) | Interest Rate 1.00 | Par Amount 924,210 | Cost / Amortized Cost (9,302) | Fair Value (31,146)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "Guava Buyer LLC (dba AVI-SPL) | 1st Lien Revolver | S+5.50%, 1.00% Floor (0.50% on unfunded) | Interest Rate 0.50 | Par Amount 2,074,483 | Cost / Amortized Cost (36,218) | Fair Value (38,378)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost values for review, but the raw SOI prints the sampled flagged costs as parenthetical cost/amortized-cost amounts on unfunded revolver or delayed-draw rows. The stored negative signs therefore preserve the source presentation rather than indicating a data error; the check is overbroad for these unfunded commitment rows."
+}

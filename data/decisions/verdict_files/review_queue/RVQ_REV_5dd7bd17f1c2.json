@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_5dd7bd17f1c2",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X02 flag concerns two PRIVATE_CREDIT rows with missing interest_rate/basis_spread, but the required evidence CLI returned missing_cached_html for the filing accession 0001145549-21-068938 instead of usable raw source. Per the adjudication contract, unreadable raw source must be adjudicated as ambiguous with source_unavailable rather than guessed from extracted artifacts."
+}

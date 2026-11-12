@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_008fde126017",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1200205656,
+  "anchor_value": 1200205656,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Accela Inc/US 1st Lien Revolver source row reports Cost / Amortized Cost as ( 17,915 ) and Fair Value as ( 17,786 ).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 5,
+      "quoted_text": "Vensure Employer Services Inc 1st Lien Delayed Draw Term Loan source row reports Cost / Amortized Cost as dash and Fair Value as ( 4,332 ).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 source row reports Cost / Amortized Cost of $ 1,200,205,656 and Fair Value of $ 1,153,413,327.",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The fmt_cost weak flag is aggregate-level, with 28 of 204 rows flagged and no single row location. Raw SOI rows show the unusual cost formats are present in the filing itself, including parenthesized negative amortized costs for unfunded/revolver positions and dash cost cells. The schedule total for cost, $1,200,205,656, matches the extracted anchor, so the evidence supports an overbroad format check rather than a stored cost data error."
+}

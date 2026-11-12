@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_e756b2935ee1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 285000,
+  "anchor_value": 285000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) (15) | 5/16/2034 | 280 | 20 | 285 | 0.1"
+    }
+  ],
+  "rationale": "Class 2 row check. The source schedule row for Metropolis Technologies, Inc. Other Equity reports par/units 280, amortized cost 20, and fair value 285, in thousands. The extracted values of cost 20000 and fair_value 285000 match the raw source; X07 fired because the source itself shows fair value greater than 10x cost, not because either extracted field is wrong."
+}

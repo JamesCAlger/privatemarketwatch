@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_3d9e56dbca59",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 3,
+      "quoted_text": "All State Ag Parts, LLC ... Cost $ 4,989 ... Fair Value $ 5,004",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 3,
+      "quoted_text": "Veronica Holdings, LLC (Vapotherm) ... Cost $ 10,862 ... Fair Value $ 11,175",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 is a single-cell currency normalization issue. The raw schedule of investments presents affected Cost and Fair Value amounts with dollar signs in the 2025 Cost/Fair Value columns, but the extracted cost_currency value is the XBRL-style token U_USD rather than the expected USD currency code."
+}

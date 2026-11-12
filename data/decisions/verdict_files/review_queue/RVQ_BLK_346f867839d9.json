@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_346f867839d9",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": 12.0,
+  "anchor_value": 12.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 11,
+      "quoted_text": "Wine.com, LLC | Beverages | 15.93 % | S + 12.00 % PIK | 04/01/28 | $ | 8,709 | $ | 8,877 | $ | 7,572 | (6) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Wine.com, LLC | Beverages | 16.15 % | S + 12.00 % PIK | 04/03/27 | $ | 8,364 | $ | 8,513 | $ | 8,824 | (6) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Both flagged Wine.com rows disclose a floating reference-rate coupon of S + 12.00% PIK in the raw schedule. The extracted basis_spread of 12.0 is therefore correct. X04 fired from an incorrect fixed-coupon premise, not from a bad spread value."
+}

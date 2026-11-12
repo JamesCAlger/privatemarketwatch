@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_BLK_731c0e4e1882",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 8.25, 7.5, and 7.0 on rows flagged as fixed coupon",
+  "anchor_value": "raw schedule rows show those values in Reference Rate and Spread on floating-rate instruments",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 32,
+      "quoted_text": "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.33 % | E + 8.25 % PIK | 04/15/25 | 04/11/33 | EUR | 3,375 | $ | 3,840 | $ | 3,887 | (7) (8) (9)"
+    },
+    {
+      "table_index": 50,
+      "row_index": 33,
+      "quoted_text": "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.26 % | E + 8.25 % PIK | 06/25/25 | 06/24/33 | EUR | 2,025 | 2,301 | 2,332 | (7) (8) (9)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 49,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.23 % | S + 7.50 % PIK | 04/08/25 | 04/14/33 | 15,385 | $ | 15,182 | $ | 15,154 | (7) (8) (9)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 50,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 9.60 % | E + 7.50 % PIK | 04/08/25 | 04/14/33 | EUR | 10,393 | 11,674 | 12,061 | (7) (8) (9)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 51,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.82 % | S + 7.50 % PIK | 04/08/25 | 04/14/33 | 6,620 | 17 | ( 82 | ) | (7) (8) (9) (10)"
+    },
+    {
+      "table_index": 58,
+      "row_index": 33,
+      "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | S + 7.00 % PIK | 03/18/27 | 30,694 | 27,212 | 18,800 | (7) (8) (13) (14)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X04 treated rows carrying Reference Rate and Spread values as fixed-coupon rows, but the source prints the flagged spreads as floating reference-plus-spread terms.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 50,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review: the disputed field is basis_spread. The raw SOI schedule has separate Interest Rate and Reference Rate and Spread columns; the flagged values 8.25, 7.5, and 7.0 appear in the Reference Rate and Spread column as E/S plus spread, often with PIK notation. That means retaining basis_spread is source-supported, and the X04 fixed-coupon premise is the part that misfired."
+}

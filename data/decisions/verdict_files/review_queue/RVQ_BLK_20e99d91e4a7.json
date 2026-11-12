@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_20e99d91e4a7",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 26587.210,
+  "anchor_value": 25007.853,
+  "confidence": 0.97,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $25,063,146 at March 31, 2026) | 25,007,853",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation establishes a real aggregate extraction error. The extracted position sum is $26,587.210 million, while the filing's March 31, 2026 schedule/balance-sheet total investments at fair value is $25,007.853 million (table 8 row 7), an overstatement of $1,579.357 million. The filing's own NAV identity is internally exact: total assets $26,289.900 million (table 8 row 18) less total liabilities $13,854.926 million (row 32) equals total net assets $12,434.974 million (row 38). The SOI contains industry total rows alongside positions, making subtotal leakage the supported aggregate mechanism, but no single subtotal shown by targeted residual searches ties exactly to the full residual; therefore the defect is not row-localized and is escalated for structured disposition review."
+}

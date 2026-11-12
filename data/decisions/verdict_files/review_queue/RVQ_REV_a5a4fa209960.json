@@ -1,0 +1,48 @@
+{
+  "review_id": "RVQ_REV_a5a4fa209960",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3000,
+  "anchor_value": -3000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 18,
+      "quoted_text": "Everest Clinical Research Corporation (fka 1272775 B.C. LTD.) | Professional Services | S + 5.50 % | 11/06/26 | 1,260 | ( 3 | ) | ( 6 | ) | (6) (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 39,
+      "quoted_text": "Everest Clinical Research Corporation (fka 1272775 B.C. LTD.) | 1,260 | 1,260",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row shows cost as parenthesized negative (3) and fair value as parenthesized negative (6), but the extracted holding has cost +3000 and fair_value -6000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 18,
+        "quoted_text": "Everest Clinical Research Corporation (fka 1272775 B.C. LTD.) | Professional Services | S + 5.50 % | 11/06/26 | 1,260 | ( 3 | ) | ( 6 | ) | (6) (7) (8) (9)"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The same issuer appears in the filing's Unfunded Commitment Balances table for June 30, 2025, so the negative mark is source-supported commitment presentation rather than an unexplained negative fair value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 63,
+        "row_index": 39,
+        "quoted_text": "Everest Clinical Research Corporation (fka 1272775 B.C. LTD.) | 1,260 | 1,260"
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level adjudication. The C103 fire is not caused by a wrong negative fair_value: the SOI row itself reports fair value in parentheses, and it also reports cost in parentheses. The extracted row cited in the bundle kept fair_value as -6000 but stored cost as +3000, removing the sign consistency that would suppress C103. The issuer is also present in the filing's Unfunded Commitment Balances table. This localizes the defect to extraction/normalization of the row context, especially the cost sign and commitment marker, not to the source fair_value."
+}

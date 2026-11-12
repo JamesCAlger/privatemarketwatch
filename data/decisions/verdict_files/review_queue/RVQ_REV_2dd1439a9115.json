@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2dd1439a9115",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -1.0,
+  "anchor_value": 11499903.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 6,
+      "quoted_text": "Overton Chicago Gear, LLC Term Loan - 6.00% | Fair Value at December 31, 2025: 11,499,904 | Gross Addition: 295 | Net Change in Unrealized Appreciation/(Depreciation): (296) | Fair Value at March 31, 2026: 11,499,903",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The roll-forward reports March 31, 2026 fair value of 11,499,903. The flagged -1 equals the net movement from opening fair value 11,499,904 to closing fair value 11,499,903 and is not a reported negative fair value. The pipeline therefore extracted or derived the period change into the fair_value field."
+}

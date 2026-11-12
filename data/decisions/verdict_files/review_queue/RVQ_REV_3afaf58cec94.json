@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_3afaf58cec94",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "The Hiller Companies, LLC | First Lien Revolver | S + 5.00 % | 6/20/2030 | - | (3) | - | 23",
+    "anchor_value":  "Current-period source row present in 2025 SOI table 31 row 46",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  31,
+                                  "row_index":  46,
+                                  "quoted_text":  "The Hiller Companies, LLC | First Lien Revolver | S + 5.00 % | 6/20/2030 | - | (3) | - | 23",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "PP03 flagged the Hiller revolver as a comparative-period row, but the raw filing includes the same Hiller Companies, LLC First Lien Revolver with S + 5.00% and maturity 6/20/2030 in the current-period SOI table. The source therefore supports retaining the row for 2025-12-31; the warning is a rule-scope false alarm, not a data defect."
+}

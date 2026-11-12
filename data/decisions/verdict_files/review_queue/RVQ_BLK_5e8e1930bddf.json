@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_BLK_5e8e1930bddf",
+  "verdict": "false_alarm",
+  "mechanism": "identifier_maturity_parse_error",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2028-10-02",
+  "anchor_value": "2028-10-02",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 43,
+      "quoted_text": "Wealth Enhancement Group (WEG) (8)(17)(18) | First Lien Senior Secured Loan - Delayed Draw | SOFR | 4.50 % | 8.16 % | 10/2/2028 | $ | 4,693 | 4,692 | 4,693"
+    }
+  ],
+  "rationale": "Class 2 within-row maturity mismatch. The raw schedule header places maturity date in the same column used by table 59 row 43, and that matching WEG delayed draw loan reports maturity 10/2/2028. The structured value 2028-10-02 therefore matches the raw source; the flag is caused by the identifier-side parsed value 2028-10-04, which is not supported by the cited source row."
+}

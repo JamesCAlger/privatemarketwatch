@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_d8bb2a31b94a",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 16.0,
+  "anchor_value": 16.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 16,
+      "quoted_text": "Ruby Tuesday Operations LLC (4) | 02/01/23 | Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) | 0.8 | % | 1,486,709 | 02/24/25 | 1,486,709 | 2,940,116"
+    }
+  ],
+  "rationale": "C115 flagged basis_spread=16.0 as outside the expected range, but the raw SOI row for the Ruby Tuesday Operations LLC incremental term loan states SOFR + 16.00%. The bundle context says spreads are stored as whole-number percentages, so 16.0 is the source-correct basis spread and the validation range/check is too narrow for this position."
+}

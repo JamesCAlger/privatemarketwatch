@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_e064bce78246",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 877.069,
+  "anchor_value": 877.06,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 875,546 | 174.3 | % | $ | 877,060",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 9,
+      "quoted_text": "Accurate Finance Sub, LLC | fair value 550 | percentage of net assets 0.1",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 34,
+      "quoted_text": "Total net assets | 503,474 | 465,069",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted position total of $877.069m agrees with the filing schedule total of $877.060m within $0.009m, while the filing reports net assets of $503.474m. The source schedule prints percentage of net assets to only one decimal place: for example, $0.550m / $503.474m is about 0.109%, disclosed as 0.1%. The schedule total similarly gives 174.3% for $877.060m. Thus a tight exact identity will predictably flag correctly disclosed rounded percentages; the 29.39% violation rate does not establish bad extracted values."
+}

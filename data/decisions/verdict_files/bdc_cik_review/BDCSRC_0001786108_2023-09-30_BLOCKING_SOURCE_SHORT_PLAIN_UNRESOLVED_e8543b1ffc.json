@@ -1,0 +1,48 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV effect is claimed as the reason for the patch. The change prevents a filing total row from being treated as a source-only production-position blocker.",
+  "html_citations": [
+    {
+      "cell_indices": [
+        0,
+        12,
+        13,
+        16,
+        17
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "The source-row coordinate resolves the sparse XBRL label Portfolio Company Investment in Securities to the filing line Total Investment in Securities, with only total percentage, cost, and fair-value cells rather than issuer/tranche fields.",
+      "row_classification": "SUBTOTAL_ROW",
+      "row_index": 67,
+      "table_index": 35
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify Trinity's Portfolio Company Investment in Securities source-only label as a total/header row in source-only blocker classification, with regression coverage for the exact label.",
+  "primary_justification": "The bundled HTML coordinate for the only blocker row is a filing total line, Total Investment in Securities, not an issuer-level or tranche-level position. The bounded patch teaches source reconciliation to treat the recurring Trinity label Portfolio Company Investment in Securities as a non-position total/header residual instead of a blocker.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "Residual risk is limited to Trinity-style total labels. The test coverage includes this exact label as a non-position row and retains false-positive coverage for issuer-bearing names that should remain blocking.",
+  "review_id": "BDCSRC_0001786108_2023-09-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_e8543b1ffc",
+  "reviewer_notes": "Manual review found the row is not insufficient evidence. The evidence is enough to diagnose a total/header row, and the bounded code patch already implemented for related Trinity packets covers this exact wording.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect is to move this source-only row out of the blocking pool as an aggregate/header residual while preserving real position rows.",
+  "tests_validation_plan": "Already covered by targeted source reconciliation tests in tests/test_validate_holdings.py; validate this verdict with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

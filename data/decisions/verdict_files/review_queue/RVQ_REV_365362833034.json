@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_365362833034",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0.7386363636363636,
+  "anchor_value": 0.8,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Term Loan | S + 4.50 % | 11/29/2030 | fair value 7,873",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | fair value 5,017",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 21,
+      "quoted_text": "Seko Global Logistics Network, LLC | First Lien Term Loan, Last-out | S + 7.00 % (includes 5.00 % PIK) | 5/27/2030 | fair value 1,714",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt schedule rows disclose reference-rate spreads, but matching extracted private-credit rows in the review bundle have blank interest_rate values, driving C01 coverage below the 0.8 threshold.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C01 is an aggregate rate-coverage failure: the oracle artifact reports 260 of 352 debt rows with rates (0.7386363636363636), below the 0.8 threshold, leaving 92 missing-rate debt rows. Raw source table 32 has a Reference Rate and Spread column and shows concrete debt-rate disclosures for rows that the bundle's extracted holdings sample leaves with blank interest_rate, including GB Eagle Buyer, Titan BW Borrower, and Seko Global Logistics. The source therefore supports a real extraction gap rather than a false alarm."
+}

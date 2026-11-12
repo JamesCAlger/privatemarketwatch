@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_f9144db2dc1f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 127382778,
+  "anchor_value": 127382778,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Archer Systems, LLC | Houston, TX",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | First Lien | 3M SOFR+ 6.50% | Cost 9,537,896 | Fair Value 9,537,896",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "Total Non-controlled, non-affiliated investments | $ | 128,200,252 | $ | 127,382,778 | 166.41%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 denominator includes issuer header and total rows that are not investment-position leaves; the source position leaves carry fair value and tie to the schedule total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 9,
+        "row_index": 5,
+        "quoted_text": "Archer Systems, LLC issuer header has no position fair value, while its following investment rows do."
+      }
+    }
+  ],
+  "rationale": "The source SOI tables contain 62 real investment-position rows with fair values and 44 non-position structural rows such as issuer headers and totals. The filing total fair value is 127,382,778 in both the SOI total and investment total tables, and the flag reports residual_fv 0.0. Therefore the 62/106 fair-value coverage failure is caused by B01 counting structural rows in scope, not by missing source fair values."
+}

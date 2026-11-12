@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_a715083c7b0f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "6 PP01 candidate rows",
+  "anchor_value": "raw SOI shows 6 issuer-level instrument rows, not subtotal rows",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 22,
+      "quoted_text": "CB Buyer Inc | First Lien Senior Secured Term Loan | Software | SOFR + 5.250 % | 9.546 % | 7/1/2024 | 7/1/2031 | 22,582 | 22,391 | 22,525 | 4.74 | %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 23,
+      "quoted_text": "CB Buyer Inc (3)(7)(10) | First Lien Senior Secured Delayed Draw Term Loan | Software | SOFR + 5.250 % | 9.546 % | 7/1/2024 | 7/1/2031 | 685 | 656 | 673 | 0.14 | %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 24,
+      "quoted_text": "CB Buyer Inc (3)(7)(10) | First Lien Senior Secured Revolving Loan | Software | SOFR + 5.250 % | 7/1/2024 | 7/1/2031 | -- | (22) | (6) | (0.00)%"
+    },
+    {
+      "table_index": 12,
+      "row_index": 26,
+      "quoted_text": "Guardian Restoration Partners Buyer | First Lien Senior Secured Term Loan | Diversified Consumer Services | SOFR + 4.750 % | 9.046 % | 11/1/2024 | 11/3/2031 | 4,755 | 4,701 | 4,696 | 0.99 | %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 27,
+      "quoted_text": "Guardian Restoration Partners Buyer (3)(8) | First Lien Senior Secured Delayed Draw Term Loan | Diversified Consumer Services | SOFR + 4.750 % | 9.049 % | 11/1/2024 | 11/3/2031 | 4,827 | 4,755 | 4,728 | 1.00 | %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "Guardian Restoration Partners Buyer (3)(7)(10) | First Lien Senior Secured Revolving Loan | Diversified Consumer Services | SOFR + 4.750 % | 9.048 % | 11/1/2024 | 11/3/2031 | 175 | 159 | 160 | 0.03 | %"
+    },
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "Total Debt Investments | $ | 979,301 | $ | 980,322 | 206.39 | %"
+    }
+  ],
+  "rationale": "The PP01 flag treated the six CB Buyer and Guardian Restoration rows as subtotal/aggregate candidates, but the raw SOI lists each as a discrete portfolio-company instrument with investment type, industry, reference spread, dates, par/cost/fair value, and percent of net assets. The actual subtotal is separately labeled Total Debt Investments at table 14 row 10, so the subtotal-candidate diagnostic is overbroad for these issuer rows."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e65d5fc4af91",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10,
+  "anchor_value": 7,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "Wine.com, Inc. | S + 15.00% PIK | maturity 04/03/27 | footnotes (6) (8) (11) (12)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 22,
+      "quoted_text": "Wine.com, Inc. | S + 15.00% PIK | maturity 04/03/27 | footnotes (6) (8) (11) (12)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 23,
+      "quoted_text": "Wine.com, Inc. | S + 15.00% PIK | maturity 04/03/27 | footnotes (6) (8) (11)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Three prior-schedule Wine.com positions with 04/03/27 maturity were assigned to the 2026-03-31 report alongside the seven current-schedule non-accrual positions.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 12,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The current schedule in table 9 contains seven rows marked with footnote (11): Streamland (row 3), two Ej2 rows (4-5), Chase (14), and three Wine.com rows (17-19). The flagged artifact contains those seven plus three Wine.com records matching the comparative schedule in table 12 rows 21-23, identifiable by their different 04/03/27 maturity versus 04/01/28 in the current schedule. Thus the observed count of 10 overstates the current-period schedule count of 7 by three comparative-period rows."
+}

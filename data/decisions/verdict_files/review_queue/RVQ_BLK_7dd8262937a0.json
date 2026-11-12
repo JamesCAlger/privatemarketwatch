@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_7dd8262937a0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 473721796.0,
+  "anchor_value": 474204801.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "RT Holdings Parent, LLC (2)(4)(8) | Equity Units | 0.1 % | 105,624 | 133,086 | 374,004",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "RT Holdings Parent, LLC (2)(4)(8) | Equity Units | 0.0 % | 53,104 | 66,914 | 109,001",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing schedule total of all investments is 970,134,031, but that total includes cash equivalents of 4,184,508 and short-term investments of 491,744,722. Using the narrower source subtotal for debt and equity investments, table 5 row 33 reports fair value of 474,204,801. The bundle's observed extracted position sum is 473,721,796, which is lower by 483,005. Source rows 14 and 15 in table 5 are RT Holdings Parent, LLC equity-unit positions with fair values 374,004 and 109,001; their sum is exactly 483,005 and they are absent from the holdings slice. This grounds a localized extraction gap, although the larger residual is amplified by comparing against an all-investments anchor that also includes cash equivalents and short-term investments."
+}

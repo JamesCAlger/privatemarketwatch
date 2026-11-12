@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_24e2a7943924",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 43,
+      "quoted_text": "Canadian Hospital Specialties Ltd. | (4)(5)(6)(7)(11) | C + | 4.50 % | 9.52 % | 4/14/2028 | CAD | 14,943 | 11,859 | 13,958 | 0.06"
+    },
+    {
+      "table_index": 19,
+      "row_index": 44,
+      "quoted_text": "Canadian Hospital Specialties Ltd. | (4)(5)(6)(7)(10) | C + | 4.86 % | 9.95 % | 4/15/2027 | CAD | 4,343 | 3,323 | 3,018 | 0.01"
+    },
+    {
+      "table_index": 19,
+      "row_index": 45,
+      "quoted_text": "Caramel Bidco Limited | (4)(5)(6)(8) | S + | 6.00 % | 10.18 % | 2/24/2029 | GBP | 60,000 | 78,244 | 70,093 | 0.30"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD par is present in the source schedule, but principal_amount_usd is blank for FX01 rows, so explicit USD principal conversion is missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 43
+      }
+    }
+  ],
+  "rationale": "FX01 is a row-level missing-derived-field flag. The bundle shows principal_amount_usd is blank for non-USD debt rows. Raw source table 19 includes debt positions with Par Amount stated in CAD and GBP, including Canadian Hospital Specialties Ltd. and Caramel Bidco Limited. Because the source par is explicitly non-USD, the blank USD principal field is a real extraction/normalization gap rather than a false alarm."
+}

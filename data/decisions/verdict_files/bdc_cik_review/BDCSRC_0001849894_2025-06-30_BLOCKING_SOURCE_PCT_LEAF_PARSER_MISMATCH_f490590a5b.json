@@ -1,0 +1,69 @@
+{
+  "changed_files": [],
+  "cik": "0001849894",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed rows are real position-level source rows, but current production holdings already include the sampled MSD leaf positions for the same CIK/date/accession and fair values.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 20,
+      "cell_indices": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        9,
+        12,
+        16,
+        20,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The ALF Finance row is a current-period position row with issuer, reference-rate spread, interest-rate floor, interest rate, PIK flag, maturity, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 19,
+      "cell_indices": [
+        0,
+        3,
+        5,
+        7,
+        9,
+        12,
+        16,
+        20,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Accession Risk Management delayed draw term loan row is a current-period position row with issuer, instrument label, rate terms, maturity, cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review found that this blocker packet contains real MSD position rows, not aggregate/header rows. However, current production holdings already contain the sampled same-accession MSD rows for CIK 0001849894 and report date 2025-06-30, including ALF Finance delayed draw at 37,331,000, ALF Finance at 27,287,000, Accession Risk Management delayed draw at 48,967,000, and Foundation Risk Partners delayed draw rows. The bundle also includes current-accession unified holdings examples for the same issuer/rate/maturity shape. Because current code already emits these rows under the existing CIK-scoped MSD parser, an additional patch would be duplicative and could broaden parser behavior without new mechanism evidence.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-06-30",
+  "requires_human_merge": false,
+  "residual_risk": "The generated worklist still reports this packet as blocking until a clean rebuild confirms current-code behavior across all 61 rows. This verdict does not suppress or hide the blocker; it documents that the bounded mechanism already exists and that the remaining evidence points to stale reconciliation/worklist state rather than a new production defect.",
+  "review_id": "BDCSRC_0001849894_2025-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_f490590a5b",
+  "reviewer_notes": "The blocker packet reports 61 source-only rows and affected source fair value of 1,708,257,000. The sampled identifiers share the same MSD Investments Investments hierarchy shape covered by the existing CIK-scoped parser. Current production output inspection found exact same CIK/date/accession rows and matching fair values for the displayed ALF Finance, Accession Risk Management, and Foundation Risk Partners samples.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No immediate source reconciliation effect from this verdict alone. The expected clearing mechanism is a clean rebuild/reconciliation under current production code, not a verdict-only suppression or generated-output edit.",
+  "tests_validation_plan": "Validate verdict schema and evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No new code tests are added because no production code patch is proposed; existing MSD parser tests cover the same CIK-specific identifier pattern.",
+  "verdict": "NO_PATCH_NEEDED"
+}

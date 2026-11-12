@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_9f2dcf2d8bb3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw filing schedule was successfully read through the evidence CLI. The flag is aggregate only (one fmt_principal_amount violation among 613 units) and supplies no row, issuer, extracted principal value, or anchor residual. Targeted source rows show the Par/Shares/Units column and normally formatted values, including Accel International Holdings, LLC at table 10 row 4 (187,003) and Kaman Corp at table 10 row 8 (38,798), but neither the bundle nor targeted source evidence identifies which of the 613 positions triggered the rule. The source therefore cannot decide whether the unidentified flagged cell is erroneous or a valid shares/units presentation without prohibited haystack scanning or guessing."
+}

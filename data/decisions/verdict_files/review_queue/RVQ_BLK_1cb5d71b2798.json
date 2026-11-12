@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_1cb5d71b2798",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 230281379,
+  "anchor_value": 230281379,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments (108.0%) | $231,571,333 amortized cost | $230,281,379 fair value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Total Members' Capital | 213,530 (thousands) at March 31, 2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | 2.7% of Net Assets | Fair Value $5,754,396",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the source is internally consistent. The schedule total fair value is $230,281,379 and the balance-sheet net-assets proxy (Total Members' Capital) is $213,530,000, so investments equal 107.845% of net assets and correctly round to the filing's 108.0%. The same one-decimal convention is visible at the position level: Fenix fair value $5,754,396 divided by $213,530,000 is 2.695%, printed as 2.7%. The 25.49% identity failure rate therefore reflects a check/anchor precision mismatch against filer-rounded percentages, not erroneous extracted source values. No row-level source-artifact violations were supplied, so no culprit is localized."
+}

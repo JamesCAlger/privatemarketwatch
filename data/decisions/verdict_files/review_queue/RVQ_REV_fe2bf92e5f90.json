@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_fe2bf92e5f90",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 184.466,
+  "anchor_value": 254.797,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 254,797 | $ | 359,383",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 135.8 % | $ | 199,200 | $ | 184,466",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 16,
+      "quoted_text": "Total Investments & Cash Equivalents - 172.5 % | $ | 248,998 | $ | 234,264",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Canonical GAV used only Total Investments of 184.466m even though the filing reports Total assets of 254.797m and separately discloses cash equivalents within investments and cash equivalents.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 23,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fund fair value of 184.466m ties to the schedule's Total Investments row, but the filing/companyfacts total-assets anchor is 254.797m. The source also shows Total Investments & Cash Equivalents of 234.264m, confirming the extraction omitted source-disclosed asset value rather than the check relying on an unreadable anchor."
+}

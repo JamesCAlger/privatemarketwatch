@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_1baa2d7963c5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 878604000,
+  "anchor_value": 475610000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 24,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 475,586 | $ | 475,610",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 27,
+      "quoted_text": "Total | $ | 475,595 | $ | 15 | $ | 475,610",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 26,
+      "quoted_text": "Goldman Sachs Financial Square Government Fund Institutional Shares | N/A | N/A | 20,976 | 20,976 | 20,976",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The money market fund cash-equivalent row has fair value 20.976 million and appears after the filing's Total Investments before Cash Equivalents anchor, so it should not be conserved against the 475.610 million investments anchor.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 18,
+        "row_index": 26
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted fair-value sum is 878.604 million while both the filing schedule total and industry summary total are 475.610 million; the remaining unexplained overshoot is not supported by a raw-source Co-investment row.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 18,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. Raw-source anchors agree: the detailed schedule states Total Investments before Cash Equivalents fair value of 475.610 million, the industry summary total also states 475.610 million, and the bundle's companyfacts anchor is 475.610 million. The extracted position sum is 878.604 million, an overshoot of 402.994 million. Source table 18 row 26 separately shows a 20.976 million money market fund after the investment-total anchor, and a raw-source roam for Co-investment found no matching source row for the bundle's 382.018 million extracted row. Therefore the conservation failure reflects extracted values outside the anchored investment schedule rather than a bad anchor."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_af5584025aa1",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": -23000.0,
+  "anchor_value": -23000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Quantum Leap Buyer, LLC | Delayed Draw Term Loan | Principal - | Amortized Cost (23) | Fair Value (25)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Quantum Leap Buyer, LLC | Revolving Line of Credit | Principal - | Amortized Cost (35) | Fair Value (38)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The raw March 31, 2026 investment schedule explicitly prints negative Amortized Cost and Fair Value amounts in parentheses for unfunded delayed-draw and revolving facilities. The extracted observed cost of -23000 agrees with the filing's (23) thousand at table 11 row 5, and the adjacent flagged -35000 agrees with (35) thousand at row 6. C107's sign-only warning is therefore the faulty check for these source-faithful values, not a data error."
+}

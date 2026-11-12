@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_REV_e1be6868755d",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 16,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 2,
+      "quoted_text": "Debt Investments",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Business Services",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 23,
+      "quoted_text": "Lynx BidCo (3)(4) | First-lien loan ($ 1,441 par, due 7/2031 ) | 7/5/2024 | SOFR + 7.11 % | 11.40 % (incl. 5.61 % PIK) | 1,406 | 1,406 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 27,
+      "quoted_text": "Equity and Other Investments",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 30,
+      "quoted_text": "Business Services",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "Artisan Topco LP (11) | Class A Preferred Units ( 2,117,264 units) | 11/7/2023 | 2,117 | 1,863 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Debt position identifiers include standalone schedule hierarchy labels such as Debt Investments and Business Services before the issuer name.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 8,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Equity position identifiers include standalone schedule hierarchy labels such as Equity and Other Investments and Business Services before the issuer name.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 12,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "PP01 flagged identifiers that prepend schedule hierarchy text to position identifiers. In the raw schedule, Debt Investments, Equity and Other Investments, and Business Services are standalone header rows, while the source position rows begin with issuers such as Lynx BidCo and Artisan Topco LP. The derived bdc_investment_identifier therefore leaks classification/header text into the position identifier."
+}

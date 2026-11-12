@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_0d9ac0e5468b",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "earlier comparative period",
+  "anchor_value": "2026-03-31",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 13,
+      "quoted_text": "SPF Borrower, LLC | (a) | (2)(3)(11)(15) | Healthcare & Pharmaceuticals | SOFR | 6.25 % | 9.92 % | 2/1/2024 | 2/1/2028 | 10,392 | 10,392 | 10,392 | 0.59",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "An SPF Borrower position from the earlier comparative schedule was retained in the 2026-03-31 holdings population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 48,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The raw filing contains the SPF Borrower position in both the current schedule (table 21) and an earlier comparative schedule (table 48), with differing disclosed rates. The flagged retained fact is explicitly identified as earlier than the 2026-03-31 report date; table 48 row 13 grounds the comparative source row. A comparative-period position must not remain in the current-quarter holdings population."
+}

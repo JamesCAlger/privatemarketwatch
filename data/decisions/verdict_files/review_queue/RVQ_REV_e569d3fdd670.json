@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_e569d3fdd670",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope_denominator",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 993614639,
+  "anchor_value": 993614639,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | Amortized Cost 29,078,052 | Fair Value 29,249,244"
+    },
+    {
+      "table_index": 7,
+      "row_index": 35,
+      "quoted_text": "Total Investments ( 182.9 %) | $ | 991,136,356 | $ | 993,614,639"
+    }
+  ],
+  "rationale": "B01 reports 80/160 leaves have fair_value, but the raw current-period SOI has explicit Amortized Cost and Fair Value columns, representative investment rows have populated fair value cells, and the current schedule total fair value ties to 993,614,639. The 50% metric reflects the rule denominator treating non-fair-value/value-sibling leaves as expected fair_value coverage, not source evidence that half of current holdings lack fair value."
+}

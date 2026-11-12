@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_89c991fe5ade",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "CAD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 1,
+      "quoted_text": "Investments-non-controlled/non-affiliated (1) (2) | Footnotes | Investment | Reference Rate and Spread | Interest Rate (3) | Maturity Date | Par Amount/ Shares (4) | Cost (5) | Fair Value | Percentage of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 31,
+      "quoted_text": "Hercules Borrower, LLC | (6) (11) (19) | First Lien Debt | S + | 5.25 % | 9.68 % | 12/15/2026 | C$ | 3,167 | 3,025 | 2,963 | 0.09",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 4,
+      "quoted_text": "(4) | Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Euro (\"EUR\"), Great British Pound (\"GBP\"), or Canadian dollar (\"CAD\").",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The CAD marker belongs to Par Amount/Shares, not Cost; cost should remain USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 single-cell unit check. The flagged value is cost_currency=CAD. The raw schedule header separates Par Amount/Shares (4), Cost (5), and Fair Value, and footnote 4 limits CAD/EUR/GBP notation to par amount or shares. The cited row shows C$ immediately before the par amount, followed by separate cost and fair value values. Therefore CAD was propagated from the par amount column into the cost currency field, making the flag a real data error."
+}

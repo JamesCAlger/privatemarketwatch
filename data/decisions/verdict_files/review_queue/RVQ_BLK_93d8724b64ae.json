@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_93d8724b64ae",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 11.0,
+  "anchor_value": 11.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "GB Eagle Buyer, Inc. | (6) (7) (11) | First Lien Debt | S + | 4.50 % | 8.35 % | 11/29/2030 | 28,568 | $ 28,289 | $ 28,289 | 0.84 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 23,
+      "quoted_text": "Continental Battery Company | (6) (7) (8) (10) (13) (14) | First Lien Debt | S + | 7.00 % PIK | 11.29 % | 07/20/2028 | 12,945 | 11,731 | 5,480 | 0.16",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 16,
+      "quoted_text": "KWOR Acquisition, Inc. | (6) (19) | Other Debt | S + | 8.00 % PIK | 12.20 % | 02/28/2030 | 4,897 | 4,897 | 4,897 | 0.14",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 1,
+      "quoted_text": "(1) | Variable rate loans to the portfolio companies bear interest at a rate that is determined by reference to either CORRA (\"C\") or EURIBOR (\"E\") or SOFR (\"S\") or SONIA (\"SA\")or an alternate base rate (commonly based on the Federal Funds Rate (\"F\") or the U.S. Prime Rate (\"P\")), which generally resets periodically.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X04 flags basis_spread on rows treated as fixed coupon. The raw schedule has separate columns for Reference Rate & Spread and Interest Rate, and representative flagged rows show S + 4.50 %, S + 7.00 % PIK, and S + 8.00 % PIK in the reference-spread column with separate interest-rate cells. The footnote explains that S/P/C/E/SA reference-rate loans are variable-rate loans. Therefore the flagged spread values are source-correct and the rule/classification premise is wrong, not the extracted basis_spread."
+}

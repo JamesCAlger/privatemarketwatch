@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_BLK_91e4468e416a",
+    "verdict":  "false_alarm",
+    "mechanism":  "source_corroborates_structured_reference_terms",
+    "localized":  true,
+    "anchor_used":  "",
+    "observed_value":  "SOFR reference flagged as uncorroborated for three rows",
+    "anchor_value":  "SOI rows disclose SOFR plus spread and floor for the flagged instruments",
+    "confidence":  0.94,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  25,
+                                  "row_index":  6,
+                                  "quoted_text":  "HydroSource Logistics, LLC | 04/05/24 | Revolver - 12.46 % (SOFR + 8.50 %, 2.00 % Floor) | 0.3 | % | 2,657,450 | 04/04/29 | 2,657,450 | 2,657,450",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  25,
+                                  "row_index":  23,
+                                  "quoted_text":  "ADAN-B LLC (24 Hour Fitness) | 4/30/2025 \u0026 12/31/25 | Term Loan - 9.42 % (SOFR + 5.75 %, 1.50 % Floor) | 6.8 | % | 56,431,197 | 12/31/30 | 55,329,195 | 56,007,963",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The flag says the SOFR reference was uncorroborated/no structured spread, but the raw schedule rows for the flagged instruments disclose the full structured terms. HydroSource row 25:6 states SOFR + 8.50% with a 2.00% floor, and ADAN-B row 25:23 states SOFR + 5.75% with a 1.50% floor for the combined 04/30/2025 and 12/31/25 acquisition-date term loan. Therefore the data value is corroborated by source and the flag is a checker false alarm."
+}

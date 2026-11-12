@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_35593b162fe9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_footnote",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 9,
+      "quoted_text": "Avalign Technologies, Inc. (5)(13) | Unitranche First Lien Revolver | 12/2028 | 629 | 604 | 0.1 | 395",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 10,
+      "quoted_text": "Avalign Technologies, Inc. (13) | Unitranche First Lien Term Loan | 12/2028 | 7,444 | 7,222 | 1.1 | 5,557",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Avalign revolver and term loan carry source footnote marker (13), but the structured holdings do not preserve the non-accrual classification.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level review. The March 31, 2026 schedule independently marks both identified Avalign instruments with footnote (13), and both rows have blank interest term and interest rate cells. These exact source rows support the two-position non-accrual flag. Because the structured holdings represented in the bundle lack a non-accrual field, the grounded defect is failure to preserve the source classification, not a spurious rule firing. No aggregate anchor was needed."
+}

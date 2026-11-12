@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_REV_47e56b962d15",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.8723404255319149,
+  "anchor_value": 0.95,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 1,
+      "quoted_text": "Description | Fund Pays | Fund Receives | Counterparty | Corresponding Debt | Maturity Date | Payment Frequency | Notional Amount | Fair Value | Upfront Payments/Receipts | Unrealized Appreciation/(Depreciation)"
+    },
+    {
+      "table_index": 16,
+      "row_index": 2,
+      "quoted_text": "Interest rate swap | BNP Paribas | Denali Credit Agreement | 09/2029 | Notional Amount 39,666 | Fair Value 3,880"
+    },
+    {
+      "table_index": 16,
+      "row_index": 19,
+      "quoted_text": "Total | Notional Amount 630,594 | Fair Value 5,323 | Upfront Payments/Receipts 0 | Unrealized Appreciation/(Depreciation) 5,323",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period derivative schedule contains interest rate swap leaf rows with explicit fair values, but the B01 artifact reports 18 leaves without fair_value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "B01 is a CIK-quarter fair-value completeness check. The filing has a standard Fair Value column in the current investment and derivative schedules, and the March 31, 2026 investment total at fair value ties across the balance sheet and schedule at 3,466,654. The 18-row completeness gap localizes to the current derivative schedule shape: table 16 has a Fair Value header, individual interest rate swap rows with fair values such as 3,880, and a total fair value of 5,323. Because raw source provides fair values for these rows, the missing fair_value fields in the extracted leaves are a real extraction gap rather than a source omission or rule false alarm."
+}

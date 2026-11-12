@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_da5577bd5f52",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 2,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt | 13.59 % | 4/30/2024 | 1,657 | 1,594 | 828 | (4)(8)(15)(25)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "SK Neptune Husky Group Sarl | First Lien Secured Debt | 10.45 % | 1/3/2029 | 9,588 | 9,546 | 2,712 | (8)(15)(25)"
+    }
+  ],
+  "rationale": "The raw schedule localizes the two flagged Heubach positions and shows both carry footnote (25), but targeted evidence CLI searches for nonaccrual/accrual/default wording and the local grid output did not expose the definition of footnote (25). The marker alone does not decide whether these positions are truly nonaccrual or whether the rule is a false alarm."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_b67d748896c3",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "source",
+  "observed_value": "",
+  "anchor_value": "DEBT",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Artisan Bidco, Inc. (3) | First-lien loan ($ 38,340 par, due 11/2029 ) | 11/7/2023 | SOFR + 7.00 % | 10.65 | % | $ | 37,835 | $ | 37,666 | 2.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged row has a blank exposure_type, but the raw Schedule of Investments explicitly identifies the instrument as a first-lien loan within the filing's debt-investment schedule. The source therefore supports exposure_type DEBT and decisively grounds the missing controlled classification as a real pipeline error."
+}

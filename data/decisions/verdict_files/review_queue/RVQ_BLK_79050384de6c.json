@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_79050384de6c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_accession",
+  "observed_value": "",
+  "anchor_value": "0001803498-26-000014",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "evidence_cli overview: accession=0001803498-26-000014; entity_name=Blackstone Private Credit Fund; form_type=10-K; report_date=2025-12-31"
+    },
+    {
+      "table_index": 2,
+      "row_index": 1,
+      "quoted_text": "ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rows 317432 through 317442 have blank accession_number even though the source filing metadata provides accession 0001803498-26-000014.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "evidence_cli overview: accession=0001803498-26-000014; entity_name=Blackstone Private Credit Fund; form_type=10-K; report_date=2025-12-31"
+      }
+    }
+  ],
+  "rationale": "C006 is a row-level traceability check for accession_number. The validation artifact reports eleven filing-derived BDC rows with observed accession_number blank, but the raw source metadata for the same Blackstone Private Credit Fund 2025-12-31 10-K exposes accession 0001803498-26-000014. Because the source accession is available and the extracted rows failed to carry it, this is a real extraction/traceability data error rather than a false alarm."
+}

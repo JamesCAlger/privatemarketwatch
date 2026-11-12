@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4fa84e896bf0",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.632490031014623,
+  "anchor_value": 1.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 88,
+      "row_index": 11,
+      "quoted_text": "Total dividends declared | ( 1.28 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 88,
+      "row_index": 25,
+      "quoted_text": "Ratio of net investment income to average net assets (annualized) (2) | 12.68 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Total dividends / distributions | $ | 0.64 | $ | 0.62 | $ | 1.28 | $ | 1.22",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "F16 fired with metric 9.632490031014623 even though source shows six-month distributions of 1.28 per share and an annualized net investment income ratio of 12.68%, so the distribution-rate comparison is mis-scaled or mis-periodized.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 88,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The raw filing financial highlights show total dividends declared of 1.28 per share for the six months ended June 30, 2024 and a ratio of net investment income to average net assets of 12.68% annualized. The operations table independently shows total dividends/distributions of 0.64 for the quarter and 1.28 for the six-month period. These source anchors do not support a distribution-rate-to-income-yield excess of 9.63249; the flag reflects a rate scaling or periodization defect in the extracted/check data, not an unsupported source value."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_10da54e38f46",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 51,
+  "anchor_value": 51,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments (108.0%) | $ | 231,571,333 | $ | 230,281,379",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 18,
+      "quoted_text": "First American Government Obligation Fund, Yield 3.58%, Class X (FGXXX) | 2.5% | 5,325,046 | 5,325,046 | 5,325,046",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "Net unrealized depreciation on unfunded commitments (-0.0%) | (93,693)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 20,
+      "quoted_text": "Total Investments (102.9%) | $ | 213,938,298 | $ | 212,941,349",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw-source row structure shows 49 dated debt/equity positions across current-period tables 5-8, plus the cash-equivalent position at table 8 row 18 and the unfunded-commitment valuation line at table 8 row 21, matching output=51. Tables 10-13 are a distinct comparative schedule with a different total (table 13 row 20), so source=206 is not a valid current-period position-count anchor. The filing total of 230,281,379 at table 8 row 20 confirms the current schedule boundary. The E07 firing is therefore an anchor-count false alarm, not missing output positions."
+}

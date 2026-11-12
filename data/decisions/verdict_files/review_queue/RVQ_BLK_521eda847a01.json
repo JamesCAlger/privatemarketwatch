@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_521eda847a01",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 277.4,
+  "anchor_value": 277.4,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 32,
+      "quoted_text": "Total Investments (277.4%) | Fair Value $1,239,482,127",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 35,
+      "quoted_text": "Net Assets (100.0%) | $446,855,336",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 22,
+      "quoted_text": "Centric Brands L.P. Class A LP Interests | 5.3% | Fair Value 23,777,334",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The filing reports percent of net assets to one decimal, so exact row identities differ from fair value divided by net assets solely because of disclosed rounding.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 7,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "The raw schedule is internally consistent. Total fair value of $1,239,482,127 divided by net assets of $446,855,336 is 277.38%, which rounds to the filed 277.4%. A representative position has fair value $23,777,334, equal to 5.321% of net assets and correctly printed as 5.3%. The 100% violation rate across 47 units therefore reflects a check that does not accommodate the filing's one-decimal percentage precision, rather than erroneous extracted values."
+}

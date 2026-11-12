@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_26e4239cdd07",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 225.82371080684155,
+  "anchor_value": 200.47,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 31,
+      "quoted_text": "Total Investment Portfolio | 48,426,243 | 47,684,868 | 200.47",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 35,
+      "quoted_text": "Total Portfolio Investments, Cash and Cash Equivalents | $ | 49,815,275 | $ | 49,073,900 | 206.30 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 134,
+      "row_index": 1,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments June 30, 2023 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extracted CIK-quarter pct_of_net_assets sum exceeds the June 30 consolidated investment schedule total, and the filing contains separate JV schedules with their own net-asset denominators that should not be summed into the parent CIK aggregate.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 134,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "PCT01 is an aggregate check. The raw filing's June 30, 2023 consolidated schedule reports Total Investment Portfolio at 200.47% of net assets, and even the broader Total Portfolio Investments, Cash and Cash Equivalents line is only 206.30%. The flagged extract sum is 225.82371080684155%, materially above both filing anchors. The filing also contains separate BCRED Emerald JV LP schedules with their own % of Net Assets denominator, so the most likely mechanism is a scope/lookthrough classification leak rather than a valid parent-level percentage sum."
+}

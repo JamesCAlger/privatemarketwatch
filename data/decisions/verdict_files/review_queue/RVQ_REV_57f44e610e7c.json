@@ -1,0 +1,32 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_57f44e610e7c",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  24515.628,
+    "anchor_value":  24515.628,
+    "rationale":  "B01 failed because only 1334 of 1451 extracted leaves carried fair_value, but the source anchors decide against a missing fair-value defect: the current SOI total investments before cash equivalents is 24,515.628 million and the industry fair-value summary total is also 24,515.628 million, matching the bundle fund_quarter_fv_m. The source also contains issuer-level unfunded commitment tables whose headers have commitment and funded/unfunded columns rather than a fair-value column, so rows from that structure should not count as investment leaves missing fair value.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  24,
+                                  "table_index":  85,
+                                  "quoted_text":  "Total Investments before Cash Equivalents | $ | 24,414,425 | $ | 24,515,628 | (2)(6)(31)"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  32,
+                                  "table_index":  100,
+                                  "quoted_text":  "Total | $ | 24,441,482 | $ | 5,235 | $ | 45,525 | $ | 7,393 | $ | 15,993 | $ | 24,515,628 | 166.0 %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  1,
+                                  "table_index":  89,
+                                  "quoted_text":  "Name of Issuer | Total revolving and delayed draw loan commitments | Less: funded commitments | Total unfunded commitments | Less: commitments substantially at discretion of the Company | Less: unavailable commitments due to borrowing base or other covenant restrictions | Total net adjusted unfunded revolving and delayed draw commitments"
+                              }
+                          ],
+    "confidence":  0.84
+}

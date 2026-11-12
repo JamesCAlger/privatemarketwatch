@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_d6646b0748f7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1417789,
+  "anchor_value": 1417789,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 8,
+      "quoted_text": "Alert SRC Newco LLC | First Lien Senior Secured Term Loan | Commercial Services & Supplies | SOFR + 5.000 % | 8.853 % | 12/11/2024 | 12/11/2030 | 22,240 | 21,960 | 22,018 | 3.62 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 9,
+      "quoted_text": "Alert SRC Newco LLC (12) | First Lien Senior Secured Delayed Draw Term Loan | Commercial Services & Supplies | SOFR + 5.000 % | 8.773 % | 12/11/2024 | 12/11/2030 | 7,233 | 7,134 | 7,160 | 1.18 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 10,
+      "quoted_text": "Alert SRC Newco LLC (3)(8)(11) | First Lien Senior Secured Delayed Draw Term Loan | Commercial Services & Supplies | SOFR + 5.000 % | 8.843 % | 9/19/2025 | 12/11/2030 | 343 | 292 | 239 | 0.04 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 11,
+      "quoted_text": "Alert SRC Newco LLC (3)(7)(11) | First Lien Senior Secured Revolving Loan | Commercial Services & Supplies | SOFR + 5.000 % | 12/11/2024 | 12/11/2030 | - | ( 28 ) | ( 22 ) | ( 0.00 )%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "B02 duplicate key collapses distinct Alert SRC Newco LLC source positions: term loan, two delayed draw term loan rows with different rates/acquisition dates/values, and a revolver.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 33,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate/structure check. Filing totals triangulate cleanly: the schedule total fair value is 1,417,789 thousand and matches the bundle internal fund_quarter_fv_m of 1,417.789 million, so B02 is not explained by a bad aggregate anchor. The raw SOI localizes the example duplicate key to distinct Alert SRC Newco LLC positions in table 33 rows 8-11, with different investment types, interest rates, acquisition dates, par, cost, and fair values. A duplicate position key that collapses these distinct rows is therefore a real extraction/key-normalization error, not a source duplicate and not a false alarm."
+}

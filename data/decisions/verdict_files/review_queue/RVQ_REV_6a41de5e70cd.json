@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_6a41de5e70cd",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 179475000,
+  "anchor_value": 179475000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investments (9) - 135.8 % | $ | 196,338 | $ | 179,475",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 250,849 | $ | 254,797",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Cash equivalents (cost: $ 59,838 and $ 49,798, respectively) | 59,838 | 49,798",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "F20 compares the investment-only extract to total assets even though the filing separately reports cash equivalents and other non-investment assets.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 6,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows no extraction deficit: the observed holdings fair value of $179.475m equals the filing schedule's Total Investments of $179.475m (table 11 row 15), corroborated independently by the fair-value hierarchy total. The $250.849m companyfacts total-assets value is a broader balance-sheet measure that includes $59.838m of cash equivalents, $8.734m cash, and other receivables/assets (table 6), so it is not a valid completeness anchor for the investment-only holdings extract. The F20 failure is therefore a false alarm caused by an anchor scope mismatch."
+}

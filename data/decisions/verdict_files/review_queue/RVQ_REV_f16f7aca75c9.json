@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_f16f7aca75c9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 20.0,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 16,
+      "quoted_text": "FS NU Investors, LP | (a) | (6) | Consumer Services | 20.00 % ( 100 % PIK) | 8/9/2024 | 2 | 169 | 204 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source prints 20.00% (100% PIK) under the All-In Rate column for an equity investment, not as a Spread or basis_spread value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 58,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "C115 flagged basis_spread=20.0. The raw SOI source row for FS NU Investors, LP is in a Common and Preferred Equity Investments table whose header has All-In Rate, and the cited row shows 20.00 % (100 % PIK) in that All-In Rate position. That supports a 20% PIK/all-in rate, but not a basis spread, so the stored basis_spread is a localized extraction/column mapping error."
+}

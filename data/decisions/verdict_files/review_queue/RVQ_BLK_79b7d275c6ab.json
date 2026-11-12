@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_79b7d275c6ab",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 624.289,
+  "anchor_value": 624.289,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 665,684 | $ | 624,289 | 113.3 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 683,274 | $ | 648,055 | 115.7 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 4,
+      "quoted_text": "190 Octane Financing, LLC - Term Loan (12) | SOFR + 5.50% (1.00% floor) + 2.25% PIK | 11.52% | fair value 7,375",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07's source population pooled the separate comparative investment schedule with the March 31, 2026 schedule, inflating source rows relative to current-period output.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 28,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Raw source shows two distinct full investment schedules. The March 31, 2026 schedule ends at table 18 row 7 with fair value 624,289 thousand, exactly matching the output quarter anchor of 624.289 million. A separate comparative schedule ends at table 28 row 5 with fair value 648,055 thousand; table 21 also repeats the same 190 Octane instrument with a different 11.52% rate and 7,375 fair value versus 11.47% and 7,275 in the current schedule. Therefore the 321-versus-123 E07 count mismatch is caused by comparative-period rows entering the source-side count, while the output is correctly scoped to the current schedule."
+}

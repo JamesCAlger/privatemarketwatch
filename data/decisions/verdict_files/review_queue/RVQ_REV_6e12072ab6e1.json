@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_6e12072ab6e1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "source SOI rows state PIK-only interest rates",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 8,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | Super Senior Secured Term Loan | 15.0 % PIK | 04/24 | 12/26 | 98 | 96 | 268 | - | % | (3)(7)(30)(31)"
+    },
+    {
+      "table_index": 59,
+      "row_index": 26,
+      "quoted_text": "GPNZ II GmbH | First Lien Senior Secured Term Loan | 10.0 % PIK | 06/22 | 06/29 | 509 | 476 | 239 | - | % | (3)(7)(31)(32)"
+    },
+    {
+      "table_index": 60,
+      "row_index": 3,
+      "quoted_text": "Lambir Bidco Limited | Second Lien Senior Secured Term Loan | 12.0 % PIK | 12/21 | 06/29 | 1,089 | 1,026 | 1,003 | - | % | (3)(7)(32)"
+    },
+    {
+      "table_index": 62,
+      "row_index": 17,
+      "quoted_text": "EZ SMBO Bidco | First Lien Senior Secured Term Loan | 8.0 % PIK | 04/25 | 04/32 | 400 | 368 | 396 | - | % | (3)(7)(32)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PIK-only debt coupons are present in the SOI but were not populated into interest_rate when no cash leg is printed.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 59,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "X02 flags private credit rows with blank interest_rate and blank basis_spread. The raw SOI has private credit debt rows whose Interest cells state usable PIK-only rates, such as 15.0% PIK, 10.0% PIK, 12.0% PIK, and 8.0% PIK. Those stated coupons should populate the rate field for income-return computation; leaving interest_rate blank is an extraction gap, not a false alarm."
+}

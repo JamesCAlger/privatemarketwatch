@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_120c5a276616",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 180487,
+  "anchor_value": 180487,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 9,
+      "quoted_text": "Acronis International | SOFR + 6.85 % ( 1.00 % PIK) | 12.28 | % | 4/1/2027 | 20,002 | 19,678 | 19,652 | 17.1"
+    },
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | 180,078 | 180,487 | 156.9"
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 180,078 | 100.0 | % | $ | 180,487 | 100.0 | %"
+    }
+  ],
+  "rationale": "The source schedule confirms the extracted investment fair value anchor and the largest position values. Acronis International is disclosed at fair value 19,652 and 17.1% of net assets, and the schedule total investment fair value is 180,487. The concentration warning is therefore not caused by an extraction, subtotal, duplicate, unit, or anchor defect in the raw source; it reflects a source-disclosed concentration/check-scope condition."
+}

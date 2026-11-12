@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_9d3532d83e1a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 254.1,
+  "anchor_value": 254.1,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Total investments | cost/amortized cost 1,350,788 | fair value 1,355,641 | Percentage of Net Assets 254.1 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PCT01 flagged the extracted pct_of_net_assets sum of 254.1 as outside the expected range, but the raw Schedule of Investments itself reports Total investments at fair value 1,355,641 and 254.1% of net assets. The stored aggregate matches the filing total; the issue is the rule expectation that total investments must be near 100% for this levered BDC-style schedule."
+}

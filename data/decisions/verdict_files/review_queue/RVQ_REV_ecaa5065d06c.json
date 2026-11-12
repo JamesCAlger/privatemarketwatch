@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ecaa5065d06c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": -20000.0,
+  "anchor_value": -20000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 6,
+      "quoted_text": "Acentra Holdings, LLC | First Lien Revolving Loan | (10) | SOFR + 5.50 %, 0.50 % Floor | 9.17 % | 12/17/2029 | - | ( 20 | ) | ( 5 | ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 7,
+      "quoted_text": "Accordion Partners LLC | First Lien Revolving Loan | (10) | SOFR + 5.00 %, 0.75 % Floor | 8.70 % | 11/17/2031 | - | ( 25 | ) | ( 22 | ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 15,
+      "quoted_text": "ARMStrong Receivable Management | First Lien Delayed Draw Term Loan | (10) | SOFR + 4.75 %, 1.00 % Floor | 8.52 % | 10/06/2026 | - | ( 1 | ) | ( 1 | ) | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 fired because extracted cost values are negative. The source schedule header places Cost before Fair Value, and representative flagged rows show those Cost cells printed in parentheses: Acentra revolving loan cost (20), Accordion revolving loan cost (25), and ARMStrong delayed-draw term loan cost (1), all in thousands. The extracted negative costs therefore match the raw filing rather than indicating an extraction or normalization error."
+}

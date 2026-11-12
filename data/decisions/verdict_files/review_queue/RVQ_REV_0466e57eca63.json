@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_0466e57eca63",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -6466.0,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 22,
+      "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | ... | Par/Shares - | Amortized Cost - | Fair Value ( 6,466 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 33,
+      "quoted_text": "CP Iris Holdco I, Inc. | Delayed Draw Term Loan (First Lien) | ... | Par/Shares - | Amortized Cost - | Fair Value ( 1,236 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Milestone Technologies delayed draw row has no amortized cost in source, but the extracted holdings sample carries cost -6466, apparently copied from the fair-value cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CP Iris delayed draw row has no amortized cost in source, but the extracted holdings sample carries cost -1236, apparently copied from the fair-value cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "Some parenthesized amortized-cost cells are genuine source values for delayed draw or revolver positions, so a blanket negative-cost rule would also create false positives.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 48,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The fmt_cost aggregate flag is grounded by source rows where amortized cost is not a negative number at all: the Milestone Technologies delayed draw and CP Iris delayed draw rows show dashes in the Amortized Cost column while their Fair Value cells are parenthesized negatives. The bundle's extracted holdings sample carries those fair-value negatives as cost values for the same instruments, so at least part of the flag is a real extraction/column-mapping defect. Other rows show valid source-printed negative amortized cost, so the mechanism is mixed, but the reviewed flag is not a pure false alarm."
+}

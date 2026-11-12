@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_df159b2be035",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2023-11-01",
+  "anchor_value": "2023-11-01",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 33,
+      "quoted_text": "Ligado Networks LLC | (12) | N/A | N/A | 15.5 % PIK | 11/1/2023 | 15,354 | 8,763 | 4,913 | 0.18"
+    }
+  ],
+  "rationale": "The current-period schedule of investments for September 30, 2025 explicitly lists Ligado Networks LLC with maturity date 11/1/2023 and a continuing fair value of 4,913. The stored past maturity is therefore not an extraction error; it is source-real. The maturity_not_past check is overbroad for a carried investment whose disclosed source maturity is already past."
+}

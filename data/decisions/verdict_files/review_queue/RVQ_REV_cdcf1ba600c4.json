@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_cdcf1ba600c4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 200.33097202059324,
+  "anchor_value": 200.3309720205932,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Total Portfolio Investments | $ | 1,473,450 | $ | 1,444,805 | 200.33 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 32,
+      "quoted_text": "Total members' capital | $ | 721,209 | $ | 582,083",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The PCT01 flag is caused by the aggregate pct_of_net_assets sum exceeding a generic expected range, but the raw filing confirms this value. The schedule prints Total Portfolio Investments fair value of 1,444,805 and 200.33% of net assets, and the balance sheet prints Total members' capital of 721,209. 1,444,805 / 721,209 * 100 = 200.3309720205932, matching the observed value, so the stored percentage is source-supported and the range check is the bad anchor."
+}

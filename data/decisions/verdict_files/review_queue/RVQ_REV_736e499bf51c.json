@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_736e499bf51c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_CAD/U_GBP in fair_value_currency",
+  "anchor_value": "Fair Value column should be USD-denominated; CAD/GBP appears only in Par Amount / Shares",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "Onyx-Fire Protection Services Inc. | (6)(13)(15)(17) | First Lien Term Loan | C + 4.50 % | 6.77 % | 7/31/2031 | CAD 18,453 | 13,287 | 13,445 | 0.67",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 12,
+      "quoted_text": "Onyx-Fire Protection Services Inc. | (6)(7)(13)(15)(17) | First Lien Revolver | C + 4.50 % | 6.77 % | 7/31/2031 | CAD 4,378 | 201 | 213 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 19,
+      "quoted_text": "Movati Athletic (Group) Inc. | (6)(8)(13)(16) | First Lien Term Loan | C + 4.50 % | 7.09 % | 5/29/2030 | CAD 28,442 | 20,488 | 20,413 | 1.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 14,
+      "quoted_text": "Mclarens Midco Inc. | (7)(13)(15)(17) | First Lien Revolver | SON + 4.75 % | 8.44 % | 12/19/2027 | GBP 499 | - | ( 3 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 26,
+      "quoted_text": "Riser Interco, LLC | (13)(15)(17) | First Lien Term Loan | SON + 4.75 % | 8.32 % | 10/31/2029 | GBP 1,969 | 2,610 | 2,641 | 0.13",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign-currency labels from Par Amount / Shares were propagated into fair_value_currency even though the Fair Value column is separate and USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 41,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "FX02 is a real localized extraction error. In the source SOI header, Par Amount / Shares is a separate column from Amortized Cost and Fair Value. The cited CAD and GBP rows place CAD/GBP only before the par amount, followed by separate fair value figures such as 13,445, 213, 20,413, (3), and 2,641. The stored fair_value_currency therefore inherited the local par currency rather than the USD fair value denomination expected for BDC valuation fields."
+}

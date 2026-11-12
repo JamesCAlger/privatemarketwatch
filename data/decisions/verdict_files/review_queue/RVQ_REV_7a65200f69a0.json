@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_7a65200f69a0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 227.49,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 45,
+      "quoted_text": "Total Investments | $ | 939,797.5 | $ | 942,373.2 | (10) | 227.49 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0 even though the source schedule total reports Total Investments at 227.49% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 45
+      }
+    }
+  ],
+  "rationale": "The raw SOI schedule includes a % of Net Assets column and its current-period Total Investments row reports 227.49%. The flagged artifact reports pct_sum=0.0%, so the pipeline failed to extract or map the schedule percentage values rather than the source being zero."
+}

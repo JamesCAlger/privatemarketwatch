@@ -1,0 +1,44 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies the exact Trinity label 'Portfolio Company Investment in Securities' as a documented total/header source row, not as a production position. This avoids worsening the CIK-quarter source reconciliation over-coverage.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 38,
+      "row_index": 49,
+      "cell_indices": [
+        0,
+        9,
+        13
+      ],
+      "reason": "The current-period source candidate is a total row, 'Total Investment in Securities (94.6%)*', with aggregate cost and fair value cells, not a borrower or instrument-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Use the existing bounded total-header classification for the exact normalized label 'portfolio company investment in securities'. The test suite includes Trinity Portfolio Company Investment in Securities coverage and false-positive coverage for issuer-bearing Affiliate Investments rows.",
+  "primary_justification": "Manual review supports a bounded patch-covered verdict. The only blocker row in this packet is source_row_id 671905 with raw identifier 'Portfolio Company Investment in Securities' and source fair value 1,424,815,000. HTML coordinate evidence maps it to a current-period total row, 'Total Investment in Securities (94.6%)*', carrying aggregate cost and fair value cells rather than issuer, instrument, rate, maturity, principal, or shares. This is a total/header source row. The existing patch classifies this exact Trinity label as documented source-only total/header while preserving issuer-bearing false positives as blocking.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict does not hand-clear the row. Residual risk remains until affected outputs are rebuilt from cached data and source reconciliation confirms the row is documented as a non-position total/header rather than a blocker.",
+  "review_id": "BDCSRC_0001786108_2024-06-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_d6acdac2b6",
+  "reviewer_notes": "The packet reports one source-only blocker with affected source fair value of 1,424,815,000. Manual review found total-row coordinate evidence, not position-level evidence. The current CIK-quarter has source reconciliation over-coverage, so admitting this aggregate row as a holding would be unsafe.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected effect after rebuild: the Trinity Portfolio Company Investment in Securities row is documented as a total/header source row and no longer remains a short-plain blocker.",
+  "tests_validation_plan": "Covered by tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

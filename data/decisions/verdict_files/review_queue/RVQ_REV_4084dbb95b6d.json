@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_4084dbb95b6d",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -0.1,
+  "anchor_value": -0.1,
+  "confidence": 0.85,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4)(12) | Media & Entertainment | SOFR + 4.50 % ( 1.00 % floor) | 8.92 % | 9/29/2026 | $ | - | $ | ( 6 | ) | $ | ( 288 | ) | - 0.1 | %"
+    }
+  ],
+  "rationale": "Class 1 single-cell format review. The raw SOI row shows Percentage of Net Assets as -0.1% for OneCare Media, LLC - Revolving Credit Line, with fair value (288) thousand. Against total net assets of 541,492 thousand, (288) / 541,492 * 100 rounds to -0.1%, so the source value is correct and the flag appears to be a format false alarm caused by the spaced negative rendering."
+}

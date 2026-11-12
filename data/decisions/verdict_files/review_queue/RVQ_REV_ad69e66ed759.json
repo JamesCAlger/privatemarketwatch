@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_ad69e66ed759",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "25.94; 26.39; 25.92",
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 32,
+      "quoted_text": "Apidos CLO XXIV | Structured Finance | 5/17/2019 | 25.94 | % | N/A | 10/20/2030 | $ | 250,000 | $ | 165,383 | $ | 158,710 | 1.09 | %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 34,
+      "quoted_text": "California CLO IX, Ltd. | Structured Finance | 12/13/2019 | 26.39 | % | N/A | 7/16/2032 | 500,000 | 262,135 | 247,940 | 1.71 | %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "Octagon Investment Partners 36, Ltd. | Structured Finance | 12/20/2019 | 25.92 | % | N/A | 4/15/2031 | 500,000 | 387,298 | 353,521 | 2.44 | %"
+    }
+  ],
+  "rationale": "Class 1 row-level rate check. The raw filing schedule reports the flagged values directly in the Coupon/Yield (b) column, followed by percent signs, for structured subordinated CLO notes. The extracted interest_rate values therefore match the source cells; the warning is a threshold false positive for this structured-credit security type, not a source data error."
+}

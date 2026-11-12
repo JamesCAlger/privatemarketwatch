@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ed03fbd0e87b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -0.01,
+  "anchor_value": -0.01,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 16,
+      "quoted_text": "A.P.A. Industries, LLC (6) | First lien senior secured revolving loan | fair value (33) | percentage of net assets (0.01)%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "ACES Intermediate, LLC (6) | First lien senior secured revolving loan | fair value (104) | percentage of net assets (0.02)%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "K-1 Packaging Group, LLC. (6) | First lien senior secured revolving loan | fair value (136) | percentage of net assets (0.02)%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C404 flagged negative pct_of_net_assets rows. Raw SOI rows show the signed negative fair values and signed negative percentages are printed in the filing for revolving/delayed-draw loan positions, so the extracted negative percentages are source-faithful. This is a monitoring/rule-scope false alarm rather than a data error."
+}

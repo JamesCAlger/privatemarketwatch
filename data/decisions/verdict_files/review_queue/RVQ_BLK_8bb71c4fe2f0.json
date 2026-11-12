@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_BLK_8bb71c4fe2f0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 879.591,
+  "anchor_value": 879.592,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 19,
+      "quoted_text": "Total Investments | $ | 870,675 | 188.9 | % | $ | 879,592"
+    },
+    {
+      "table_index": 51,
+      "row_index": 24,
+      "quoted_text": "Total cash and cash equivalents, including restricted cash | $ | 97,966 | 21.1 | % | $ | 97,966"
+    },
+    {
+      "table_index": 34,
+      "row_index": 2,
+      "quoted_text": "Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value"
+    }
+  ],
+  "rationale": "E07 compares source=610 to output=371, but the raw SOI is a multi-table schedule whose row structure includes headers, grouping rows, subtotals/totals, and cash-equivalent rows in addition to investment positions. The extracted fair-value anchor in the bundle is 879.591m, which ties within rounding to the filing's Total Investments fair value of 879.592m at table 51 row 19. The count mismatch therefore reflects an overbroad raw-row count check rather than missing investment fair value in the output."
+}

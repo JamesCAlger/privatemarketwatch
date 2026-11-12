@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_d54b6c9773f0",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -10000.0,
+  "anchor_value": -10000.0,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Amberfield Acquisition Co.^(5) | One stop | SF + | 5.00 | % | N/A(6) | 05/2030 | \u2014 | ( 10 ) | \u2014 | ( 10 )"
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "Amberfield Acquisition Co.^(5) | One stop | SF + | 5.00 | % | N/A(6) | 05/2030 | \u2014 | ( 1 ) | \u2014 | ( 1 )"
+    },
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "Any Hour, LLC^(5) | One stop | SF + | 5.00 | % | N/A(6) | 05/2030 | \u2014 | ( 66 ) | \u2014 | ( 67 )"
+    }
+  ],
+  "rationale": "C107 flags negative cost values. The raw SOI shows the negative amortized cost amounts in parentheses for flagged positions, including Amberfield Acquisition Co. rows with amortized cost (10) and (1), and Any Hour, LLC with amortized cost (66). Because the source itself discloses these negative amortized cost values and the extraction matches the source convention, this is not a data error."
+}

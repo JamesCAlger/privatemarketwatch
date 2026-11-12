@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_b8233dbcd975",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 60,
+  "anchor_value": 141,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 9,
+      "quoted_text": "SCIH Salt Holdings Inc. | 6.35 | % | SOFR (Q) | 2.75 | % | 01/2029 | $ | 7,481 | $ | 7,481 | $ | 7,457",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate coverage failure. The source schedule contains 141 investment positions, but the output contains only 60, an 81-position shortfall. The filing schedule is internally anchored by total investments of $3,466.654 million at table 12 row 20, matching the statements total at table 7 row 10. Table 9 row 9 is a representative valid position row with issuer, coupon, maturity, principal, cost, and fair value. The independently reconciled source schedule makes the 57.4% count deficit a real extraction coverage error, although the evidence does not isolate one parser branch responsible for all omissions."
+}

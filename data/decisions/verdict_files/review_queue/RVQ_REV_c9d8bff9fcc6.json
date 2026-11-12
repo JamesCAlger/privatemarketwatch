@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_c9d8bff9fcc6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "DDebt Investments Diversified Financial Services Wharf Street Rating Acquisition LLC (KBRA) Sr Secured Revolver Ref SOFR(Q) Floor 0.75% Spread 6.00% Total Coupon 11.46% Maturity 12/10/2027ebt Investments Diversified Financial Services Wharf Street Rating Acquisition LLC (KBRA) First Lien Term Loan Ref SOFR(Q) Floor 0.75% Spread 6.00% Total Coupon 11.52% Maturity 12/10/2027",
+  "anchor_value": "Wharf Street Rating Acquisition LLC (KBRA)",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 28,
+      "quoted_text": "Wharf Street Rating Acquisition LLC (KBRA) | Sr Secured Revolver | SOFR(M) | 0.75 | % | 6.00 | % | 11.46 | % | 12/10/2027 | $ | - | ( 3,501 | ) | ( 5,367 | ) | 0.00 | % | E/F"
+    },
+    {
+      "table_index": 18,
+      "row_index": 29,
+      "quoted_text": "Wharf Street Rating Acquisition LLC (KBRA) | First Lien Term Loan | SOFR(M) | 0.75 | % | 6.00 | % | 11.46 | % | 12/10/2027 | $ | 2,603,716 | 2,569,088 | 2,551,121 | 0.99 | % | F"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name was populated with category and instrument text spanning two source rows instead of the source issuer cell Wharf Street Rating Acquisition LLC (KBRA).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "The extracted issuer_name for the flagged holding is a concatenated string beginning with DDebt Investments and continuing through two Wharf Street instruments. The raw source schedule has separate rows whose issuer cell is only Wharf Street Rating Acquisition LLC (KBRA), with instrument details in separate columns. This grounds the fmt_issuer_name warning as a real extraction/field-boundary error."
+}

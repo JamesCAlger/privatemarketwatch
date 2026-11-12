@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_0ec990c823fa",
+  "verdict": "false_alarm",
+  "mechanism": "rate_range_false_positive",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 26.91,
+  "anchor_value": 26.91,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 31,
+      "quoted_text": "Apidos CLO XXIV | Structured Finance | 5/17/2019 | 26.91 | % | N/A | 10/20/2030 | $ | 250,000 | $ | 166,533 | $ | 163,123 | 1.11 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check: the flagged holding is Apidos CLO XXIV for June 30, 2023, and the filing schedule shows 26.91 % in the Coupon/Yield column for that row. The extracted interest_rate value of 26.91 matches the raw source; the rule warning is therefore an expected-range false positive rather than a data error."
+}

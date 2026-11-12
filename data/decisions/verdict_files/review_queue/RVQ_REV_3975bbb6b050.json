@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_3975bbb6b050",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Non-Controlled Affiliated Investments Superior Industries International, Inc. Common Stock",
+  "anchor_value": "Current SOI equity row is separate and has September 30, 2025 fair value of zero",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Superior Industries International, Inc. Common Stock | Fair Value at December 31, 2024 -- | Gross Addition 39,578 | Net Change in Unrealized Appreciation/(Depreciation) (39,578) | Fair Value at September 30, 2025 --"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged identifier comes from the non-controlled affiliated investments roll-forward/disposition row rather than a standalone current holdings row; the row ends with September 30, 2025 fair value of zero.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-level position-purity flag. Raw source localizes the flagged Common Stock text to table 10, the non-controlled affiliated investments roll-forward, whose columns include Fair Value at December 31, 2024, Gross Addition, Net Change in Unrealized Appreciation/(Depreciation), and Fair Value at September 30, 2025. That row is not a pure current-position row and ends at zero fair value. The current SOI equity schedule separately lists Superior Industries International, Inc. Common Stock at table 9 row 4 with fair value shown as zero, so the defect is the retained roll-forward/comparative-style row/identifier, not absence of any source mention of the security."
+}

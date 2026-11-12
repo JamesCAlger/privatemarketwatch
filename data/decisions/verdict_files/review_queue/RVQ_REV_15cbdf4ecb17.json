@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_15cbdf4ecb17",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 225.4457422877005,
+  "anchor_value": 225.4457422877005,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Total investments at fair value (cost basis of $ 497,591 ) | 500,086",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 23,
+      "quoted_text": "Total net assets | 221,821",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 26,
+      "quoted_text": "Total investments | $ | 507,914 | $ | 497,591 | $ | 30,070 | $ | 500,086 | 225.4 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PCT01 flagged the pct_of_net_assets quarter sum of 225.4457422877005 as outside the expected range, but the raw filing supports that value. The balance sheet reports total investments at fair value of 500,086 and total net assets of 221,821, which computes to 225.4457422877005%. The investment schedule independently reports Total investments fair value of 500,086 and 225.4% of net assets. The data matches the source; the flag is caused by a rule-scope assumption that pct_of_net_assets should be near 100% even when investments exceed net assets."
+}

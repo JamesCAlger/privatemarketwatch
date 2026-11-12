@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_878c67158458",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Four issuer_name values concatenate section, industry, investment terms, units, acquisition date, and in one case rate text.",
+  "anchor_value": "Newark FP Co-Invest, L.P.; AF Eagle Parent, L.P.; Elysium BidCo Limited; Ranger Parent I, Inc.",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 17,
+      "quoted_text": "Newark FP Co-Invest, L.P. (9) | Partnership (8,555,356 units) | 11/8/2023",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 21,
+      "quoted_text": "AF Eagle Parent, L.P. (9) | Partnership Units (337,024 units) | 11/27/2023",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 32,
+      "quoted_text": "Elysium BidCo Limited (4)(9) | Convertible Preference Shares (38,503,125 units) | 12/11/2024",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 35,
+      "quoted_text": "Ranger Parent I, Inc. (10) | Series A-1 Preferred Shares (24,436 shares) | 10/28/2025 | 14.50% | 14.50% PIK",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 source schedule presents each issuer in the Company column and separately presents the security description, units, acquisition date, and rates. The four flagged issuer_name values concatenate those distinct fields and also prepend section and industry labels. The correct clean issuer names are shown directly in the cited source rows, so C206 identifies real wrapper/column extraction leakage. No aggregate anchor is applicable to this Class 1 field validation."
+}

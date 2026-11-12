@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_BLK_a914647a691c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values populated on rows classified by the validator as fixed coupon",
+  "anchor_value": "raw SOI shows these rows have floating reference-rate spreads",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 177,
+      "row_index": 1,
+      "quoted_text": "Investments (1) Non-Controlled, Non-Affiliated Investments | Reference Rate Spread (4) | Interest Rate | Maturity Date | Par Amount/ Shares | Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 177,
+      "row_index": 5,
+      "quoted_text": "Puris LLC Term Loan (3)(7) | SOFR + 5.750 % | 9.436 % | 06/30/2031 | 5,820 | 5,756 | 5,491 | 3.17 %"
+    },
+    {
+      "table_index": 177,
+      "row_index": 9,
+      "quoted_text": "DRS Holdings III, Inc. (3)(7) | SOFR + 5.250 % | 8.966 % | 11/01/2028 | 4,497 | 4,505 | 4,515 | 2.60 %"
+    },
+    {
+      "table_index": 178,
+      "row_index": 13,
+      "quoted_text": "Arctic Wolf Networks, Inc. Term Loan (3)(7) | SOFR + 5.750 % | 10.058 % | 02/04/2030 | 4,000 | 3,934 | 3,896 | 2.25 %"
+    },
+    {
+      "table_index": 178,
+      "row_index": 19,
+      "quoted_text": "DataBricks, Inc. Term Loan | SOFR + 4.500 % | 8.272 % | 01/03/2031 | 1,450 | 1,445 | 1,476 | 0.85 %"
+    }
+  ],
+  "rationale": "X04 flags basis_spread as invalid because the rows were treated as fixed coupon, but the raw schedule has a dedicated Reference Rate Spread column and shows the cited debt instruments as floating-rate loans with SOFR/EURIBOR plus a spread alongside a separate interest-rate column. The stored spread values such as 5.750, 5.250, and 4.500 are source-supported, so the defect is the check's fixed-rate premise rather than the extracted data."
+}

@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_da61a4da24bb",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 210055669,
+  "anchor_value": 210055893,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 21,
+      "quoted_text": "Pluralsight, Inc. | First Lien Term Loan | SOFR(Q) | Floor 1.00% | 3.00% Cash + 1.50% PIK | Total Coupon 9.01% | Maturity 8/22/2029 | Principal 122,331 | Cost 120,429 | Fair Value 122,331 | Notes F"
+    },
+    {
+      "table_index": 27,
+      "row_index": 22,
+      "quoted_text": "Pluralsight, Inc. | First Lien Term Loan | SOFR(Q) | Floor 1.00% | 3.00% Cash + 1.50% PIK | Total Coupon 9.01% | Maturity 8/22/2029 | Principal 69,299 | Cost 69,299 | Fair Value 69,299 | Notes F"
+    },
+    {
+      "table_index": 23,
+      "row_index": 42,
+      "quoted_text": "Total Investments - 80.50 % of Net Assets | 222,558,514 | 210,055,893 | 81.66 | %"
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, but the raw SOI shows the Pluralsight example as two separate filing rows with the same issuer/instrument/terms and different principal, cost, and fair value amounts. The schedule total investment fair value is 210,055,893, which ties to the extracted fund fair value of about 210.055669 million within rounding/scale tolerance, so removing one same-key row as an extraction duplicate would break the source total. The defect is in the duplicate-key rule scope/key granularity, not in the source-grounded position data."
+}

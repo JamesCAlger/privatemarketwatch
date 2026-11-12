@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_BLK_c50647679277",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 879986000,
+  "anchor_value": 819100000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 29,
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 30,
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 31,
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 32,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted capital value appears to use Common Unitholders' capital of 879,986,000 instead of Total Members' Capital of 819,100,000, omitting accumulated overdistributed earnings of -60,886,000.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 35,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Accumulated overdistributed earnings of -60,886,000 is part of Members' Capital and must be included in equity for the balance sheet identity.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 35,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing schedule anchors the 2025 balance sheet at Total Assets 1,267,900, Total Liabilities 448,800, Total Members' Capital 819,100, and Total Liabilities and Members' Capital 1,267,900, all in thousands. The reported residual of -60,886,000 equals the source row for accumulated overdistributed earnings, and 1,267,900 - 448,800 - 879,986 = -60,886. This localizes the defect to using the subtotal Common Unitholders' capital instead of total members' capital, omitting accumulated overdistributed earnings."
+}

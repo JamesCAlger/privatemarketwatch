@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_8dfc153db722",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Three Plasma Buyer LLC (dba PathGroup) instruments in table 53 rows 26-28 carry footnote marker (28).",
+  "anchor_value": "No CLI-accessible source text defines footnote (28) or otherwise states these instruments are nonaccrual.",
+  "confidence": 0.42,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 53,
+      "row_index": 26,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28) | First lien senior secured loan | S+ | 5.75 % | 5/2029 | 17,386 | 16,354 | 13,474"
+    },
+    {
+      "table_index": 53,
+      "row_index": 27,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28) | First lien senior secured delayed draw term loan | S+ | 6.25 % | 5/2029 | 658 | 616 | 510"
+    },
+    {
+      "table_index": 53,
+      "row_index": 28,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28) | First lien senior secured revolving loan | S+ | 5.75 % | 5/2028 | 1,978 | 1,866 | 1,533"
+    }
+  ],
+  "rationale": "The evidence CLI source was readable and confirmed the exact three flagged PathGroup rows, each carrying footnote marker (28). However, targeted CLI searches for non-accrual/nonaccrual, non accruing, not accruing, placed on, principal or interest, collectibility, and (28) did not return a source line defining (28) as nonaccrual. The raw source available through the CLI therefore does not decide whether the footnote-based nonaccrual flag is a real data error or a false alarm."
+}

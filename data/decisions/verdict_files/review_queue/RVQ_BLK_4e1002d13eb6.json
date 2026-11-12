@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_4e1002d13eb6",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4,
+  "anchor_value": 0.3505,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 23,
+      "quoted_text": "Thompson Safety LLC | First Lien Delayed Draw Term Loan | SOFR + 5.00 % | 8.80 % | 6/25/2025 | 6/25/2032 | 1,868 | 1,778 | 1,868 | 0.4 % | *3b(6)(8)"
+    },
+    {
+      "table_index": 31,
+      "row_index": 39,
+      "quoted_text": "MRI Software LLC | First Lien Delayed Draw Term Loan | SOFR + 4.75 % | 8.42 % | 10/2/2025 | 2/10/2028 | 285 | 280 | 280 | 0.1 % | *3b(6)(8)"
+    },
+    {
+      "table_index": 30,
+      "row_index": 7,
+      "quoted_text": "Chartis Group, LLC, The | First Lien Delayed Draw Term Loan | SOFR + 4.25 % | 7.92 % | 10/21/2024 | 9/17/2031 | 698 | 685 | 698 | 0.1 % | *3b(6)(8)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rounding_tolerance",
+      "detail": "The pct_of_net_assets identity check is firing on one-decimal displayed percentages even though the source rows' fair values and printed percentages are consistent after rounding.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 29,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "Raw source shows the flagged rows disclose fair value and percentage of net assets rounded to one decimal place. Using the filing net assets anchor of 532,953 from Total Net Assets, Thompson Safety fair value 1,868 gives 0.3505% and prints as 0.4%; MRI Software fair value 280 gives 0.0525% and prints as 0.1%; Chartis fair value 698 gives 0.1310% and prints as 0.1%. The residuals are therefore artifacts of enforcing an exact algebraic identity against rounded display percentages, not evidence that the extracted row values are wrong."
+}

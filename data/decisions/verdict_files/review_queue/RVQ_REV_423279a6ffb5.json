@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_423279a6ffb5",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 14,
+  "anchor_value": 14,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 87,
+      "row_index": 21,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interest | (4) | 11.50 % | 8/3/2021 | 29,194,330 | 28,735 | 41,705 | 0.11"
+    },
+    {
+      "table_index": 89,
+      "row_index": 16,
+      "quoted_text": "Azalea Parent Corp - Series A-1 Preferred Shares | (4) | 12.75 % | 4/30/2024 | 91,500 | 89,213 | 100,193 | 0.26"
+    },
+    {
+      "table_index": 89,
+      "row_index": 7,
+      "quoted_text": "CD&R Artemis Holdco 2 Limited - Preferred Shares | (4)(6) | 10.00 % | 8/19/2021 | 33,000,000 | 43,662 | 53,847 | 0.14"
+    },
+    {
+      "table_index": 89,
+      "row_index": 19,
+      "quoted_text": "Healthcomp Holding Company, LLC - Preferred Interest | (4) | 6.00 % | 11/8/2023 | 18,035 | 1,804 | 1,659 | 0.00"
+    },
+    {
+      "table_index": 90,
+      "row_index": 6,
+      "quoted_text": "RSC Topco, Inc. - Preferred Shares | (4) | 13.25 % | 8/14/2023 | 100 | 97 | 119 | 0.00"
+    },
+    {
+      "table_index": 91,
+      "row_index": 10,
+      "quoted_text": "Knockout Intermediate Holdings I, Inc. - Perpetual Preferred Stock | (4) | SOFR + 10.75 % | 15.03 % | 6/23/2022 | 49,020 | 47,795 | 69,363 | 0.18"
+    },
+    {
+      "table_index": 91,
+      "row_index": 11,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 11/30/2021 | 45,090 | 43,963 | 58,392 | 0.15"
+    },
+    {
+      "table_index": 91,
+      "row_index": 14,
+      "quoted_text": "Mitratech Holdings, Inc. - Class A Preferred Shares | (4) | 13.50 % | 12/19/2023 | 1,872 | 1,830 | 2,101 | 0.01"
+    },
+    {
+      "table_index": 91,
+      "row_index": 24,
+      "quoted_text": "Ncp Helix Holdings, LLC - Preferred Shares | (4) | 8.00 % | 8/3/2021 | 1,221,823 | 1,222 | 1,612 | 0.00"
+    }
+  ],
+  "rationale": "X01 flags PRIVATE_EQUITY rows with interest_rate, but the raw SOI places these instruments in Equity sections and labels them preferred stock, preferred shares, senior preferred interest, or preferred interest with explicit interest-rate cells. The stored interest rates are source-present; the check is overbroad for income-producing preferred equity rather than showing a data error."
+}

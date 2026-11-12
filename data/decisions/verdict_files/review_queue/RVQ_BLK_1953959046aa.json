@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_1953959046aa",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "Cash and Cash Equivalents",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 99,
+      "row_index": 23,
+      "quoted_text": "Cash and Cash Equivalents",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 24,
+      "quoted_text": "BlackRock Select Treasury Based Liquidity Fund | 3.61 % | 28,155 | 28,155 | 0.06 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 30,
+      "quoted_text": "Total Cash and Cash Equivalents | 2,348,711 | 2,348,711 | 4.92",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Rows under the source section Cash and Cash Equivalents were extracted with blank exposure_type even though the source supplies the cash-equivalent classification.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 99,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "C303 flags blank exposure_type, a controlled classification field. The raw SOI table localizes the affected block to a Cash and Cash Equivalents section: table 99 row 23 is the section label, rows 24-29 are named cash/money-market instruments, and row 30 totals the same section. The stored observed value is blank, while the source disposition provides the classification, so the flag is a real data error rather than a false alarm."
+}

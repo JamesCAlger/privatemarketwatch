@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_2c7497fc454f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -3000,
+  "anchor_value": -3000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 30,
+      "quoted_text": "USALCO | (6) (10) (11) | First Lien Debt (Delayed Draw) | S + 3.50 % | 7.66 | % | 9/30/2031 | 131 | - | ( 3 ) | - | %"
+    },
+    {
+      "table_index": 20,
+      "row_index": 11,
+      "quoted_text": "Hyphen Solutions, LLC | (4) (6) (7) (10) | First Lien Debt (Delayed Draw) | S + 4.50 % | 8.66 | % | 8/6/2032 | 1,444 | - | ( 3 ) | - | %"
+    },
+    {
+      "table_index": 97,
+      "row_index": 10,
+      "quoted_text": "USALCO - Delayed Draw Loan | 131 | 131"
+    },
+    {
+      "table_index": 95,
+      "row_index": 50,
+      "quoted_text": "Hyphen Solutions, LLC - Delayed Draw Loan | 1,444 | -"
+    },
+    {
+      "table_index": 97,
+      "row_index": 19,
+      "quoted_text": "Total unfunded commitments | $ | 283,356 | $ | 274,125"
+    }
+  ],
+  "rationale": "C103 flagged a fair_value of -3000 as negative without a matching negative cost or unfunded-commitment marker. The raw schedule shows the -3 fair value on delayed-draw debt rows, and the filing separately lists delayed-draw loans in the unfunded commitments schedule. That means the negative mark is filer presentation for unfunded/delayed-draw exposure rather than a data error."
+}

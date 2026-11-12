@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_208f53ae9ca6",
+  "verdict": "false_alarm",
+  "mechanism": "source_zero_not_missing",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 201772770,
+  "anchor_value": 201772770,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 36,
+      "quoted_text": "Titan Home Improvement, LLC (Renuity) | First Lien Delayed Draw Term Loan | principal - | cost (1,956) | fair value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 43,
+      "quoted_text": "Total Investments - 89.33% of Net Assets | cost 215,078,392 | fair value 201,772,770",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The balance sheet total investments (table 6 row 5), schedule total investments (table 17 row 43), and valuation-note total (table 25 row 5) all report fair value of 201,772,770, equal to the extracted position sum. The schedule also explicitly prints em dashes in the Fair Value column for genuine position rows, including table 11 row 36, so treating every dash as a missing fair value makes the 95% leaf-coverage check inapplicable. No aggregate fair value is missing; the B01 failure is a false alarm caused by source zero/dash presentation being counted as incompleteness."
+}

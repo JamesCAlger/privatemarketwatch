@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_b9cac0a3c749",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency flags include U_USD and U_EUR",
+  "anchor_value": "source schedule reports amortized cost and fair value in dollars",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "Albion Fortress Intermediate Holdings LLC | First Lien - Term Loan | EURIBOR + 575 | Par/Shares EUR 23,474,732 | Amortized Cost 26,175 | Fair Value 26,591",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 55,
+      "quoted_text": "Total investments | $ | 1,735,720 | 1,694,770 | 166.2",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 7,
+      "quoted_text": "Total investments and cash equivalents | $ | 1,759,131 | $ | 1,718,181 | 168.5",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX03 is treating XBRL/unit or instrument currency as a defect even though source valuation columns and totals are dollar-denominated.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 55
+      }
+    }
+  ],
+  "rationale": "Raw source shows foreign-currency denomination for at least one loan principal/reference-rate row, but the filing's investment schedule reports amortized cost and fair value in dollar-denominated schedule columns and dollar total rows. The flag therefore appears to be caused by rule scope/unit-code handling, not by non-USD BDC valuation amounts. Source was readable via the evidence CLI."
+}

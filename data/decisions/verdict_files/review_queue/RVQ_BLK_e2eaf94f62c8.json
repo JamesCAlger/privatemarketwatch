@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_e2eaf94f62c8",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.04,
+  "anchor_value": 0.035011158185007914,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 40,
+      "quoted_text": "Total net assets | $ | 1,388,129 | $ | 826,140"
+    },
+    {
+      "table_index": 60,
+      "row_index": 11,
+      "quoted_text": "All4 Buyer, LLC | (6) (10) | First Lien Debt (Delayed Draw) | S + 4.25 % | 8.11 | % | 1/23/2032 | 2,108 | 497 | 486 | 0.04 | %"
+    },
+    {
+      "table_index": 65,
+      "row_index": 13,
+      "quoted_text": "AWP Group Holdings, Inc. | (6) | First Lien Debt (Delayed Draw) | S + 4.50 % | 8.22 | % | 12/23/2030 | 629 | 625 | 623 | 0.04 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The source % of Net Assets column ties to reported total net assets of 1,388,129 thousand, not to total investments fair value of 2,155,846 thousand used by the flag context.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 39,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "Source rows decide the question. The filing reports total net assets of 1,388,129 thousand. All4 Buyer delayed draw has fair value 486 thousand and prints 0.04% of net assets; 486 / 1,388,129 * 100 = 0.0350%, which rounds to 0.04%. AWP delayed draw has fair value 623 thousand and prints 0.04%; 623 / 1,388,129 * 100 = 0.0449%, also rounding to 0.04%. The flagged identity failures therefore reflect a bad/internal denominator anchor, not bad source percentages."
+}

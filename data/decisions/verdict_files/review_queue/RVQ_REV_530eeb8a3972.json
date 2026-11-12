@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_530eeb8a3972",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "AGY Holdings Corp. rows extracted from shortened affiliate rollforward text without SOFR spread/floor/PIK terms or maturity",
+  "anchor_value": "Main debt schedule rows include SOFR + 10.00 %, 1.50 % Floor, 6.00 % PIK and maturity 09/21/27 for both AGY Holdings Corp. loans",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 15
+    },
+    {
+      "table_index": 4,
+      "row_index": 16
+    },
+    {
+      "table_index": 7,
+      "row_index": 6
+    },
+    {
+      "table_index": 7,
+      "row_index": 7
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AGY Holdings Corp. Term Loan source schedule row has SOFR + 10.00 %, 1.50 % Floor, 6.00 % PIK and maturity 09/21/27, while the extracted holding uses shortened rollforward text.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AGY Holdings Corp. Delayed Draw Term Loan source schedule row has SOFR + 10.00 %, 1.50 % Floor, 6.00 % PIK and maturity 09/21/27, while the extracted holding uses shortened rollforward text.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The bundle sample shows two AGY Holdings Corp. credit holdings with only '15.57% inc PIK' and no maturity, matching the two reported fmt_basis_spread violations. Raw source table 4 rows 15 and 16 are the actual debt schedule rows and contain the missing basis spread, floor, PIK split, and maturity. Raw source table 7 rows 6 and 7 are affiliate rollforward rows with shortened investment names only, explaining the extracted defect. The source therefore supports a real extraction gap rather than a false rule fire."
+}

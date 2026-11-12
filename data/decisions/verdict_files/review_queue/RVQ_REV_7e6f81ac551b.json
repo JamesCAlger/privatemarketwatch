@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_7e6f81ac551b",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.85,
+  "anchor_value": 0.085,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 7,
+      "quoted_text": "Capital Goods | 54,223 | 8.5%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "The source reports Capital Goods as 8.5% of total portfolio, but the flagged metric is 0.85 instead of the normalized 0.085.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 18,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The concentration flag reports metric 0.85. In the raw source industry concentration table, Capital Goods is shown as $54.223 million and 8.5% of total portfolio, with the table total at $638.110 million and 100.0%. The source percentage therefore normalizes to 0.085, not 0.85, so the flagged concentration is a tenfold percentage scale defect."
+}

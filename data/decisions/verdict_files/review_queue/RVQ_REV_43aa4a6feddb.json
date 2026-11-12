@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_43aa4a6feddb",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1183746738,
+  "anchor_value": 1183746738,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 3,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | S+ 10.15 %, 1.00 % Floor | 14.15 | 10/26/2020 | 4/3/2026 | 6,305,880 | 5,813,679 | 2,355,618 | 0.40"
+    },
+    {
+      "table_index": 30,
+      "row_index": 4,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | S+ 12.15 %, 1.00 % Floor | 16.15 | 10/29/2024 | 4/3/2026 | 3,017,963 | 580,738 | 1,127,389 | 0.19"
+    },
+    {
+      "table_index": 30,
+      "row_index": 5,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | S+ 10.15 %, 1.00 % Floor | 14.45 | 4/4/2024 | 4/3/2026 | 1,002,763 | 898,936 | 374,591 | 0.06"
+    },
+    {
+      "table_index": 34,
+      "row_index": 23,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 1,222,055,231 | $ 1,183,746,738 | 199.35 %"
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, but the raw schedule shows the example collision is not duplicated source data. National Dentex has multiple separate delayed-draw term-loan tranches with different rates, original acquisition dates, par amounts, costs, and fair values. The filing's total investments at fair value is 1,183,746,738, matching the internal anchor from the bundle, so there is no evidence of duplicate fair-value double counting. The check appears to over-collapse distinct tranches into the same duplicate key."
+}

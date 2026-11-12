@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_182258267a2c",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4.25,
+  "anchor_value": 7.25,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 20,
+      "quoted_text": "Great Lakes Dental Partners, LLC (5) | Unitranche First Lien Revolver | S + 725 ( 300 PIK), 100 Floor | 11.10 % | 06/2027 | 343 | 342 | 0.1 | 341",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 31,
+      "row_index": 10,
+      "quoted_text": "Ontario Systems, LLC | Unitranche First Lien Term Loan | S + 650 ( 100 PIK), 100 Floor | 10.35 % | 09/2028 | 3,159 | 3,152 | 0.5 | 3,117",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 12,
+      "quoted_text": "Great Lakes Dental Partners, LLC (5) | Unitranche First Lien Revolver | S + 425 ( 100 Floor) (plus 300 PIK) | 11.07 % | 06/2027 | 342 | 341 | 0.0 | 337",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 69,
+      "row_index": 11,
+      "quoted_text": "Ontario Systems, LLC | Unitranche First Lien Term Loan | S + 550 ( 100 Floor) (plus 100 PIK) | 10.32 % | 03/2027 | 3,138 | 3,133 | 0.4 | 3,138",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Great Lakes current-period revolver is S + 725 with 300 PIK, but the extracted identifier carries comparative-period S + 425 terms.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 20, "row_index": 20}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Ontario Systems current-period term loan is S + 650 with 100 PIK, but the extracted identifier carries comparative-period S + 550 terms.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 31, "row_index": 10}
+    }
+  ],
+  "rationale": "The current-period raw schedule rows match the flagged coupons and maturities but state spreads of 725 bps for Great Lakes and 650 bps for Ontario Systems. The flagged identifiers instead use 425 and 550 bps, which appear in comparative-period tables 58 and 69. This is a source-grounded comparative-period leakage, not an XBRL reconciliation false alarm. The numeric observed/anchor pair records the first flagged row; the second discrepancy is separately grounded by its citations and finding."
+}

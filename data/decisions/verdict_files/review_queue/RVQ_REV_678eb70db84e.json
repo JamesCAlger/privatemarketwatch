@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_678eb70db84e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "ABC Technologies Inc. (TI Automotive) (Canada) | First Lien Term Loan | EURIBOR(M) | Principal EUR 17,232,443.00",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source principal is EUR 17,232,443.00, but principal_amount_usd is missing, so explicit FX normalization was not populated.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 12,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell defect. Raw source table 12 row 24 explicitly marks the debt principal with a euro currency symbol and reports 17,232,443.00, while FX01 identifies the corresponding USD-normalized principal field as blank. The non-USD source amount therefore requires an explicit FX conversion that the extracted row lacks. No independent conversion-rate anchor is disclosed in the cited row, so this verdict establishes the missing normalization but does not assert a reconstructed USD amount."
+}

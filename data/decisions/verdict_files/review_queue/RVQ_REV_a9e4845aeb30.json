@@ -1,0 +1,50 @@
+{
+    "review_id":  "RVQ_REV_a9e4845aeb30",
+    "verdict":  "real_error",
+    "mechanism":  "subtotal_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  389,
+    "anchor_value":  345,
+    "confidence":  0.84,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  6,
+                                  "quoted_text":  "Total Investments in Portfolio Companies | $ | 367,496 | $ | 359,400 | $ | (8,096) | 455 | 185 | (1)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  11,
+                                  "row_index":  6,
+                                  "quoted_text":  "Total Investments in Portfolio Companies | $ | 372,310 | $ | 359,897 | $ | (12,413) | 465 | 160 | (1)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  32,
+                                  "row_index":  14,
+                                  "quoted_text":  "Total Aerospace and Defense - 5.58 %* | 13,946 | 13,566 | 13,815",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  38,
+                                  "row_index":  5,
+                                  "quoted_text":  "Total Debt Investments - 122.03 %* | $ | 328,902 | $ | 328,881 | $ | 302,379",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "subtotal_leak",
+                         "detail":  "D06 denominator uses 389 issuers although the filing discloses only 185 companies for 2025 and 160 for 2024; subtotal rows in the Company column explain the inflated issuer universe.",
+                         "fix_class":  "subtotal_filter",
+                         "citation":  {
+                                          "table_index":  32,
+                                          "row_index":  14,
+                                          "quoted_text":  "Total Aerospace and Defense - 5.58 %* | 13,946 | 13,566 | 13,815"
+                                      }
+                     }
+                 ],
+    "rationale":  "The D06 metric reports 143/389 issuers persist. Raw source schedule anchors disclose 185 portfolio companies at December 31, 2025 and 160 at December 31, 2024, so a two-period issuer universe of actual companies cannot exceed 345. The schedule also places subtotal labels such as Total Aerospace and Defense and Total Debt Investments in the Company column. The observed denominator therefore reflects non-company subtotal rows leaking into issuer continuity, making the flag a real data error rather than source-disclosed turnover."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_3496c4e2ebc9",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": 12.0,
+  "anchor_value": 12.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) (22) (23) | N/A | 12.00 | % | N/A | 11,082 | $ | 355 | $ | 360 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The raw schedule header identifies the relevant column as Interest Rate (2) (14), and table 14 row 4 reports 12.00% for Metropolis Technologies, Inc. This exactly supports the published interest_rate of 12.0; the absence of an inline XBRL declared or instance value merely explains the text pathway and does not make the extracted value erroneous."
+}

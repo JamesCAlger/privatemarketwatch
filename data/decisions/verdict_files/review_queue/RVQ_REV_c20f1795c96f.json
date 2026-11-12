@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_c20f1795c96f",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "raw_source_period_comparison",
+  "observed_value": 12,
+  "anchor_value": 0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 102,
+      "row_index": 5,
+      "quoted_text": "AWP Group Holdings, Inc. | Revolver | 12/23/2030 | 25 | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 53,
+      "row_index": 3,
+      "quoted_text": "AWP Group Holdings, Inc. | Revolver | 12/23/2030 | 17 | -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Twelve earlier-period commitment facts were retained as positions for the 2026-03-31 report date despite current-period counterparts.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 102,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The filing presents separate March 31, 2026 and December 31, 2025 schedules. The AWP revolver appears in the current commitment block at table 53 row 3 with unfunded commitment 17 and again in the comparative block at table 102 row 5 with 25. Retaining the earlier-period fact as an additional 2026-03-31 holding is a comparative-period leak; the queue identifies 12 rows with this same source-period mismatch."
+}

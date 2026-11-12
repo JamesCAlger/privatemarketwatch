@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_a739cade7de4",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 3,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 96,
+      "row_index": 14,
+      "quoted_text": "CPIG Holdco Inc. (8) | First lien senior secured revolving loan | 10.24 % | SOFR (Q) | 4.75 % | 04/2028 | 0.5 | 0.5 | 0.5 | (5)(6)"
+    },
+    {
+      "table_index": 100,
+      "row_index": 32,
+      "quoted_text": "Hills Distribution, Inc., Hills Intermediate FT Holdings, LLC and GMP Hills, LP (8) | First lien senior secured revolving loan | 9.87 % | SOFR (Q) | 4.50 % | 11/2029 | 0.6 | 0.6 | 0.6 | (5)(6)"
+    },
+    {
+      "table_index": 93,
+      "row_index": 23,
+      "quoted_text": "Paragon 28, Inc. and Paragon Advanced Technologies, Inc. (8) | First lien senior secured revolving loan | 9.38 % | SOFR (M) | 4.00 % | 11/2028 | 0.5 | 0.5 | 0.5 | (3)(5)(6)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2024 report-date holdings include the CPIG revolving-loan row sourced from the comparative-period schedule rather than only the current-period 2024 position schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 96,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2024 report-date holdings include the Hills Distribution revolving-loan row sourced from the comparative-period schedule rather than only the current-period 2024 position schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 100,
+        "row_index": 32
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2024 report-date holdings include the Paragon 28 revolving-loan row sourced from the comparative-period schedule rather than only the current-period 2024 position schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 93,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "PP03 flagged three rows whose source period is earlier than the 2024-12-31 report date. Raw source lookup shows each flagged issuer/instrument appears in the comparative schedule block: CPIG in table 96 row 14, Hills Distribution in table 100 row 32, and Paragon 28 in table 93 row 23. Retaining those rows as 2024 report-date holdings is a comparative-period leak rather than a valid current-period-only position extract."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_1f356e01ca2a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "raw_schedule_cell",
+  "observed_value": 13.0,
+  "anchor_value": 13.75,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 23,
+      "quoted_text": "Employee Health Co. | (15) | Senior Unsecured Term Loan | N/A | 13.75 % PIK | 11/10/2031 | 338 | 334 | 319 | 0.01",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 93,
+      "row_index": 24,
+      "quoted_text": "Employee Health Co. | (15) | Senior Unsecured Term Loan | N/A | 13.00 % PIK | 11/10/2031 | 316 | 311 | 306 | 0.01",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The published Employee Health Co. interest_rate is 13.00, but the raw March 31, 2026 schedule at table 44 row 23 states 13.75% PIK. The published 13.00 exactly matches the comparative schedule at table 93 row 24, localizing a comparative-period leak rather than a harmless text-pathway provenance gap."
+}

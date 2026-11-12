@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_6746767abd66",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_coupon",
+  "observed_value": "",
+  "anchor_value": "14.00 % PIK",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 93,
+      "row_index": 36,
+      "quoted_text": "Senior subordinated loan | 14.00 % PIK | 04/2035 | 13,520.1 | 12,735.5 | 13,520.1 | (2)(6)(13)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 15484880 Canada Inc. and 15484910 Canada Inc. senior subordinated loan is stored with blank interest_rate even though the source coupon is 14.00% PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 93,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "X02 flags private credit rows with no interest_rate or basis_spread. The raw schedule block for 15484880 Canada Inc. and 15484910 Canada Inc. shows the continuation row for the senior subordinated loan with Coupon 14.00 % PIK and maturity 04/2035, matching the flagged holding with fair value 13,520.1 thousand, while the extracted issue value is blank. That is a source-grounded missing-rate extraction gap."
+}

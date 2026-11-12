@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_e40f32ced62b",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 8,
+      "quoted_text": "Healthcomp Holding Company, LLC - Preferred Interest | (4) | 6.00 % | 11/8/2023 | 18,035 | 1,804 | 1,804 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 22,
+      "quoted_text": "Odyssey Holding Company, LLC | (4)(11) | SOFR + | 5.75 % | 10.91 % | 1/7/2021 | 11/16/2026 | 4,211 | 4,211 | 4,211 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged two identifiers as comparative-period rows retained for report_date 2024-09-30. Raw source shows matching current-period schedule rows for both: Healthcomp preferred interest appears in the September 30, 2024 schedule block at table 59 row 8, and Odyssey Holding Company, LLC has current-period duplicate-name positions at table 25 rows 21-23, including the row consistent with suffix 2 at row 22. Prior-period rows also exist, but the source does not support treating these identifiers as comparative-only leaks."
+}

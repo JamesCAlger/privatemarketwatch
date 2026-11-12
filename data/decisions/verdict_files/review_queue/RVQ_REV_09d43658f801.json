@@ -1,0 +1,106 @@
+{
+  "review_id": "RVQ_REV_09d43658f801",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "USD-converted principal_amount_usd required for non-USD par",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 50,
+      "quoted_text": "Capripack Debtco PLC par amount is explicitly EUR 5,177; principal_amount_usd is missing in the flagged row.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 2,
+      "quoted_text": "Capripack Debtco PLC par amount is explicitly EUR 27,868; principal_amount_usd is missing in the flagged row.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Alchemy US Holdco 1 LLC par amount is explicitly EUR 3,031; principal_amount_usd is missing in the flagged row.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Travelex Issuerco 2 PLC par amount is explicitly GBP 1,756; principal_amount_usd is missing in the flagged row.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 18,
+      "quoted_text": "HB AcquisitionCo PTY LTD par amount is explicitly AUD 3,789; principal_amount_usd is missing in the flagged row.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 19,
+      "quoted_text": "HB AcquisitionCo PTY LTD par amount is explicitly AUD 421; principal_amount_usd is missing in the flagged row.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par on Capripack Debtco PLC requires explicit USD conversion for principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 50
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par on Capripack Debtco PLC requires explicit USD conversion for principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par on Alchemy US Holdco 1 LLC requires explicit USD conversion for principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par on Travelex Issuerco 2 PLC requires explicit USD conversion for principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par on HB AcquisitionCo PTY LTD requires explicit USD conversion for principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 18
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par on HB AcquisitionCo PTY LTD requires explicit USD conversion for principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "FX01 is valid: the source schedule shows six debt positions with non-USD par amounts, while the flagged artifact reports blank principal_amount_usd for those rows. The required USD principal conversion was not populated, so this is an extraction/normalization gap rather than a false alarm."
+}

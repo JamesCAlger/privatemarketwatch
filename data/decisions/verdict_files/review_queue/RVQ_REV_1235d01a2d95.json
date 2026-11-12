@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_1235d01a2d95",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source par is U.S. dollars unless explicitly Euro-marked",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 220,
+      "row_index": 0,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted Euro (\"EUR\")."
+    },
+    {
+      "table_index": 210,
+      "row_index": 11,
+      "quoted_text": "2X LLC Revolver, First Lien, 3M SOFR+ 5.00%, principal amount 284,855, amortized cost 284,855, fair value 283,431, with no Euro notation."
+    }
+  ],
+  "rationale": "FX01 asserts that non-USD debt principal is missing principal_amount_usd, but the raw SOI note defines par amounts as U.S. dollars unless explicitly marked Euro. A representative flagged debt row from the issue slice, 2X LLC Revolver, has no Euro notation in the schedule. The source therefore does not support the non-USD premise of this FX01 flag; the check is out of scope for these USD par rows."
+}

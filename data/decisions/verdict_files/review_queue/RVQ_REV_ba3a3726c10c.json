@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_ba3a3726c10c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "FX01 flags 111 non-USD debt rows with missing principal_amount_usd, but the evidence CLI did not return usable raw-source content: the scoped overview/tables invocation produced only parser warnings, and subsequent scoped invocations failed at the Windows process-launch layer. Under the fail-closed contract, the source currency and principal cells could not be adjudicated."
+}

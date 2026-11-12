@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_2fb6c01ae865",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1309653222,
+  "anchor_value": 1309653222,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (3) | 160.6 | % | 1,332,161,604 | 1,309,653,222",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 601 | $ | - | $ | 1,309,653 | $ | 1,310,254",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | 03/28/24 | Term Loan B - 10.43% (SOFR + 6.75%, 1.75% Floor) | fair value 28,396,579",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation makes the E07 count flag a false alarm. The extracted quarter fair value of 1,309,653,222 exactly equals the filing's March 31 debt-and-equity schedule total at table 9 row 16; the fair-value hierarchy independently reports Level 3 investments of 1,309,653 thousand at table 23 row 5 (with 601 thousand cash equivalents producing total investments of 1,310,254 thousand). Tables 5-9 are the current schedule, while tables 11-15 repeat comparative positions: for example, table 11 row 4 contains the same Fenix instrument with a different 10.43% rate and 28,396,579 fair value, versus the current table 5 row 4 at 10.70% and 27,912,547. Thus the oracle's 251 source count is a non-position row anchor contaminated by schedule structure and the comparative schedule, whereas the output is fully tied to the current-period filing total."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_b05d19fbf576",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 3997354000.0,
+  "anchor_value": 3900686000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "Total non-controlled/affiliated investments | 85,589 | 96,668 | 4.54 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 11,
+      "quoted_text": "Total investments | $ | 3,906,977 | $ | 3,900,686 | 183.15 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted fair value sum exceeds the filing and companyfacts total investments anchor by 96,668,000, exactly the affiliated investments subtotal.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 41,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the source grand total investments is 3,900,686 thousand and matches the companyfacts_fv anchor of 3,900,686,000. The observed extracted fair value sum is 3,997,354,000, which is higher by 96,668,000. Source table 41 row 10 is a subtotal, Total non-controlled/affiliated investments, with fair value 96,668 thousand, immediately before row 11 Total investments. The residual is therefore explained by a subtotal being included in the position sum in addition to its component investments."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_e73407d539e7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2244701289,
+  "anchor_value": 2244701289,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 17,
+      "quoted_text": "ABC Technologies Inc. (TI Automotive) (Canada) | First Lien Term Loan | EURIBOR(M) | 0.75 | % | 5.88 | % | 7.78 | % | 8/22/2031 | EUR | 17,275,741 | 19,439,337 | 19,604,164 | 0.80 | % | C/E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 18,
+      "quoted_text": "ABC Technologies Inc. (TI Automotive) (Canada) | First Lien Term Loan | SOFR(Q) | 0.75 | % | 5.75 | % | 9.47 | % | 8/22/2031 | $ | 29,249,834 | 28,219,047 | 28,228,108 | 1.14 | % | C/E",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The duplicate-key example collapses two distinct ABC Technologies first-lien term loans with different reference rates, currencies, coupons, principal, cost, and fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 32,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, with ABC Technologies as the example. The raw SOI shows two separate ABC Technologies rows: one EURIBOR/EUR loan with 7.78% total coupon and fair value 19,604,164, and one SOFR/USD loan with 9.47% total coupon and fair value 28,228,108. Because the source distinguishes the instruments on economically material terms, the duplicate key is over-broad rather than evidence of duplicated source data. The filing schedule total of 2,244,701,289 also matches the statement total for total investments, so there is no aggregate anchor evidence that these separate rows should be removed."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ba87df99913d",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5128518971848225,
+  "anchor_value": 1.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "Frontgrade Technologies Inc. - Incremental Term Loan | 9.13% (Incl 1.50% PIK) | 1/9/2030 | cost 9,490 | fair value 9,620",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 1,
+      "quoted_text": "December 31, 2025",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 17,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | cost 6,865,873 | fair value 6,824,822",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 398 residual leaves are comparative-period records scoped into the 2026-03-31 denominator; the filing presents their fair values in the separate December 31, 2025 schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 27,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the current-period filing total of 6,824,822 thousand equals the extracted fair-value total of 6,824.822 million, so current-period fair value is present and complete at the aggregate level. The source separately presents a December 31, 2025 comparative schedule whose position rows also contain fair values (for example table 27 row 5). The check's exact 419 populated versus 398 residual split therefore reflects comparative leaves admitted to the 2026-03-31 denominator without their period-specific fair values, producing an artificial 51.3% completeness rate."
+}

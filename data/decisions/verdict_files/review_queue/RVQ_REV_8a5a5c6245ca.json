@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_8a5a5c6245ca",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7,
+  "anchor_value": 5,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 34.80 | 7.5 | 89.06 | 13.4",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 11,
+      "row_index": 46,
+      "quoted_text": "Lithium Technologies, Inc. | Interactive Media & Services | S + 11.00 % PIK | 01/03/25 | 70,660 | 64,001 | 22,611 | (7) (8) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 36,
+      "quoted_text": "Chase Industries, Inc. (dba Senneca Holdings) | Building Products | 10.00 % PIK | 05/11/27 | 12,850 | 11,531 | 5,815 | (7) (8) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged seven-position set includes two comparative-period non-accrual rows; the June 30, 2025 non-accrual schedule total of $34.80 million ties to five current-period rows, not seven.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 39,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The current-period performance table reports non-accrual amortized cost of $34.80 million as of June 30, 2025. That amount ties to five current SOI rows in table 9: Streamland ($9.742 million), Chase ($11.531 million), and three Wine.com Inc. rows ($0, $4.042 million, and $9.489 million). The flagged set has seven rows because it also includes comparative-period Lithium Technologies and a prior Chase Industries row from the December 31, 2024 SOI schedule, where the comparative non-accrual amount is $89.06 million. Therefore the flag reflects a real data error: comparative-period rows leaked into the report-date non-accrual position set."
+}

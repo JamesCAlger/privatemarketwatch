@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_4061a570ff56",
+  "verdict": "real_error",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 284306580,
+  "anchor_value": 263724095,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 23,
+      "quoted_text": "Total Debt Investments | 48.1 | % | 246,859,409 | 112,090,217",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 29,
+      "quoted_text": "Total Equity Investments | 65.2 | % | 144,513,218 | 151,633,878",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 30,
+      "quoted_text": "Total Debt & Equity Investments (8) | 113.3 | % | 391,372,627 | 263,724,095",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The companyfacts fair-value anchor of 114,444,389 does not match the filing's total debt and equity investments of 263,724,095.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 23,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The HTML aggregate value of 284,306,580 does not match the filing's debt and equity investment total of 263,724,095, even though the row-level private positions sum to that source total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 23,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication: the filing schedule gives Total Debt Investments fair value of 112,090,217 and Total Equity Investments fair value of 151,633,878, tying to Total Debt & Equity Investments of 263,724,095. The bundle's position slice also sums to 263,724,095. The flagged HTML aggregate observed value is 284,306,580 and the companyfacts anchor is 114,444,389, so the aggregate check is grounded as a real defect driven by a bad anchor and mismatched extraction aggregate rather than by the source schedule."
+}

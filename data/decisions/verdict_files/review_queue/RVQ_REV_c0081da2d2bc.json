@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c0081da2d2bc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 186.8,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | $ | 2,513,533,478 | $ | 2,487,588,823 | 186.80 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "Continuation row for Mobotrex Ultimate Holdings, LLC reports fair value 2,334,275 and Percentage of Net Assets 0.18 %.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "A07 observed pct_sum=0.0%, but the raw investment schedule reports a Total Investment Portfolio percentage of 186.80%. The schedule also shows position percentages on continuation rows, including 0.18% at table 33 row 7, supporting a percentage extraction or row-association gap. The zero aggregate is therefore a real data error, not a valid source value."
+}

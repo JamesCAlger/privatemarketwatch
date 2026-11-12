@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_fbba1dfdd9aa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6.9494527098831025,
+  "anchor_value": 1.10,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 132,
+      "row_index": 5,
+      "quoted_text": "Net investment income (loss) (1) | 1.79",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 132,
+      "row_index": 8,
+      "quoted_text": "Dividends declared (2) | ( 1.96 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 132,
+      "row_index": 17,
+      "quoted_text": "Net investment income (loss) | 9.48 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "F16 metric is 6.949x, but source financial highlights show 2025 dividends declared of 1.96 per share versus net investment income of 1.79 per share and a 9.48% NII ratio, so the distribution is about 1.10x NII rather than over 1.5x.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 132,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate fund-financials review. The filing's financial highlights provide the relevant anchors: 2025 net investment income per share is 1.79, dividends declared are 1.96, and the NII ratio to average net assets is 9.48%. The distribution-to-NII per-share ratio is approximately 1.10, below the 1.5x F16 threshold, while the flagged observed metric is 6.9494527098831025. The raw source therefore grounds an extraction or derived-field error rather than a genuine excessive distribution."
+}

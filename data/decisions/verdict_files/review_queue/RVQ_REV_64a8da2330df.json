@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_64a8da2330df",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 984342,
+  "anchor_value": 984342,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "Total investments | $ | 978,154 | $ | 984,342 | 164.92 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 34,
+      "quoted_text": "Ironhorse Purchaser, LLC | First lien senior secured term loan | Fair Value 30,099 | Percentage of Net Assets 5.04%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 19,
+      "quoted_text": "Twin Brook Equity Holdings, LLC | Equity 7.03% membership interest | Fair Value 38,564 | Percentage of Net Assets 6.46%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flag is an aggregate position-concentration warning, but the raw SOI shows the high percentages are filer-reported percentages of net assets, not extraction errors. The schedule total ties to $984,342 of investments and 164.92% of net assets, and individual rows such as Ironhorse at 5.04% and Twin Brook Equity Holdings at 6.46% are printed in the source. The computed 21.99 metric is not a source value and does not identify a data defect against these raw-source anchors."
+}

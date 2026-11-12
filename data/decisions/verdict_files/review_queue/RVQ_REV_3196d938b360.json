@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_3196d938b360",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 28719739,
+  "anchor_value": 357421,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 10,
+      "quoted_text": "HydroSource Logistics, LLC (2)(4) | 04/05/24 | Warrant, expires 4/4/34 | 3.5 | % | 247 | 357,421 | 28,719,739",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level check. The X07 condition is mechanically true because fair value 28,719,739 exceeds 10x amortized cost 357,421, but the raw source schedule itself reports those values for the HydroSource Logistics, LLC warrant. The evidence supports an extreme warrant valuation, not a cost or fair-value extraction error."
+}

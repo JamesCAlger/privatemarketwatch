@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_38b7c05cfed7",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -30000.0,
+  "anchor_value": -30000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Aryeh Bidco Investment Ltd. (dba Dentalcorp) | Health Care Providers & Services | C + 5.00 % | 01/14/33 | CAD | 692 | ( 30 | ) | ( 30 | ) | (7) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 22,
+      "quoted_text": "Everest Clinical Research Corporation (fka 1272775 B.C. LTD.) | Professional Services | S + 4.50 % | 11/06/28 | 1,260 | ( 8 | ) | ( 13 | ) | (7) (8) (9) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost as a review condition, but the raw schedule prints the representative flagged costs in parentheses: Aryeh Bidco cost (30), matching stored -30000, and Everest cost (8), matching stored -8000. The corresponding fair values are also parenthesized, showing intentional negative schedule entries rather than a sign or extraction error. The grouped negative-cost flag is therefore a false alarm."
+}

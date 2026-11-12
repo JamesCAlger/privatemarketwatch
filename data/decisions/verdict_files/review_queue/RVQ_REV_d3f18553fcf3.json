@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_d3f18553fcf3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 12,
+      "quoted_text": "INH Group Holdings, LLC | Common Units | Healthcare | 1/31/2019 | 484,552 | 484,552 | \\u2014",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 16,
+      "quoted_text": "NEPCORE Parent Holdings LLC | Units | Digital Infrastructure & Services | 10/21/2021 | 98 | 97,884 | \\u2014",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 20,
+      "quoted_text": "Content Square SAS | Indemnity Series F Shares Warrants | Software & Tech Services | 11/30/2023 | 2,027 | 8,561 | \\u2014 | (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 10,
+      "quoted_text": "ORCP III TRITON CO-INVESTORS, L.P. | Units | Consumer Non-Cyclical | 341,592 | \\u2014 | \\u2014 | (11)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows for review, but the raw SOI source confirms representative flagged positions have Fair Value cells printed as a dash, which the extractor normalized to 0.0. Tables 23, 24, and 25 show the column layout with Fair Value headers and the cited rows place the dash in that Fair Value column. The data matches the source; the warning is over-broad for legitimate zero/dash fair values."
+}

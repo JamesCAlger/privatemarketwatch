@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d0bcda69a1c3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 8,
+      "quoted_text": "IRGSE Holding Corp. (6)(11) | Class C-1 Units ( 8,800,000 units) | 12/21/2018 | 100 | 43 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 22,
+      "quoted_text": "Piano Software, Inc. (11) | Series C-1 Preferred Shares ( 418,527 shares) | 12/22/2021 | 3,000 | 2,400 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged two rows as comparative-period facts retained for report_date 2025-12-31. The raw 2025 schedule of investments includes both flagged instruments in the current-period equity and other investments section: IRGSE Class C-1 Units at table 42 row 8 and Piano Series C-1 Preferred Shares at table 42 row 22. Comparable rows also appear in the prior-year schedule, but the current-period source rows show the flagged identifiers are valid for the 2025 report date, so the PP03 comparative-period check is over-scoped rather than identifying bad holding values."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_124607fcd8d8",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 23,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (unaudited) and December 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 116,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ | 21,360,914.4 | $ | 21,508,598.4 | (17) | 204.73 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 34,
+      "quoted_text": "ZocDoc, Inc. (11) | First lien senior secured loan | 9.12 % | SOFR (Q) | 5.25 % | 07/2030 | 30,146.4 | 29,898.2 | 30,146.4 | (2)(8)(13)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Twenty-three rows flagged by PP03 are December 31, 2025 comparative schedule positions retained under the March 31, 2026 report_date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 5,
+        "row_index": 5,
+        "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (unaudited) and December 31, 2025"
+      }
+    }
+  ],
+  "rationale": "PP03 is a real data error. The source filing explicitly contains schedules for both March 31, 2026 and December 31, 2025. The flagged rows are described in the review artifact as source-period-earlier-than-report-date records, and raw source confirms a comparative schedule block: table 116 totals to the December 31, 2025 fair value of 21,508,598.4, while representative flagged issuer ZocDoc appears in that comparative block at table 80 row 34. Current-period holdings for report_date 2026-03-31 should not retain those December 31, 2025 comparative-period rows."
+}

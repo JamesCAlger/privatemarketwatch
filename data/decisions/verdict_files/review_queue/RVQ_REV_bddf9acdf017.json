@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_bddf9acdf017",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Alorica Inc. | 12/21/22 | Term Loan - 11.57 % (SOFR + 6.88 %, 1.50 % Floor) | 21.1 | % | $ | 10,253,311 | 12/21/27 | $ | 10,108,019 | $ | 10,068,752",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Del Real, LLC | 03/28/23 | Revolver - 13.53 % (SOFR + 8.50 %, 2.00 % Floor) | 1.1 | % | 516,200 | 03/28/28 | 516,200 | 502,004",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Del Real, LLC (3) | 03/28/23 | Term Loan - 13.53 % inc PIK (SOFR + 8.50 %, 2.00 % Floor, 1.50 % PIK) | 17.4 | % | 8,517,298 | 03/28/28 | 8,224,845 | 8,283,073",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 11,
+      "quoted_text": "Florida Marine Transporters, LLC | 03/17/23 | Term Loan B - 13.36 % (SOFR + 8.50 %, 2.00 % Floor) | 23.0 | % | 11,259,570 | 03/17/28 | 10,945,735 | 10,943,176",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Hoffmaster Group, Inc. | 02/24/23 | Revolver - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | 0.3 | % | 167,522 | 02/24/28 | 167,522 | 165,344",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "Hoffmaster Group, Inc. | 02/24/23 | Term Loan - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | 13.7 | % | 6,631,072 | 02/24/28 | 6,559,910 | 6,544,868",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Six March 31, 2023 debt investment cost_currency values are stored as U_USD even though the schedule presents the amortized cost and fair value columns as dollar-denominated USD amounts.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX03 is a single-cell currency/unit normalization issue. The flagged rows have observed cost_currency U_USD, while the raw schedule of investments presents the relevant valuation columns with dollar signs and the cited position rows under Amortized Cost and Fair Value. The source supports USD-denominated costs, so retaining U_USD rather than normalized USD is a real extraction/normalization defect, not a source ambiguity."
+}

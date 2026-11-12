@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_2c853c4a1f55",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 25,
+  "anchor_value": 5,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 3,
+      "quoted_text": "190 Octane Financing LLC Equity (1) | 7/1/2025 | March 31, 2026 amortized cost 13,751 | fair value 11,998",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 4,
+      "quoted_text": "Kent Water Sports Holdings, LLC (1) | 10/1/2023 | March 31, 2026 amortized cost 12,713 | fair value zero",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 5,
+      "quoted_text": "OneCare Media, LLC (1) | 10/1/2024 | March 31, 2026 amortized cost 13,332 | fair value 3,893",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 6,
+      "quoted_text": "Select Rehabilitation, LLC (1) | 10/1/2024 | March 31, 2026 amortized cost 6,088 | fair value 3,091",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 7,
+      "quoted_text": "VardimanBlack Holdings, LLC (1) | 10/1/2023 | March 31, 2026 amortized cost 22,192 | fair value 13,352",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The filing's dedicated non-accrual schedule (table 63) independently confirms five portfolio companies with current-period non-accrual balances totaling amortized cost 68,076 and fair value 32,334. The flagged metric counts 25 instrument-level units associated with that issuer cohort, while the schedule anchor counts five company rows; those counts are different grains, not a contradiction. Vecta Holdings is comparative-only because its March 31, 2026 cost and fair value are both zero. Raw source therefore confirms that the current affected holdings require non-accrual classification, supporting a real extraction gap rather than a false alarm."
+}

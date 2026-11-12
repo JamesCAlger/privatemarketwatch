@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_b8e774695141",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "matched pipeline fair_value differs from source row",
+  "anchor_value": "source fair_value 33,224 (in thousands)",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 46,
+      "quoted_text": "QF Holdings, Inc. | (4) (8) (22) (23) | SOFR + 4.50 % | 8.19 | % | 12/15/2032 | 33,449 | 33,242 | 33,224 | 3.5",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row for QF Holdings, Inc. shows fair value 33,224 while SRC_BDC03 reports the matched pipeline row has a materially different fair_value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 46
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level source/output mismatch. The raw SOI row for QF Holdings, Inc. gives the ordered numeric fields as par amount 33,449, amortized cost 33,242, and fair value 33,224, matching the flagged issuer, reference spread, rate, and maturity. Because the flag states the matched pipeline row's fair_value differs from this source row, the defect is localized to fair_value extraction or value mapping."
+}
+

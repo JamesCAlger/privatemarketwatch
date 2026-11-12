@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_4de7d8aab685",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2023-11-01",
+  "anchor_value": "2024-03-31",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 25,
+      "quoted_text": "Ligado Networks LLC | (9)(13) | N/A | N/A | 15.50 % PIK | 11/1/2023 | 12,853 | 11,071 | 1,946 | 0.16"
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The raw SOI row reports Ligado Networks LLC with maturity 11/1/2023 and nonzero fair value as of the 2024-03-31 filing. The extracted maturity date is therefore source-correct; X10's own evidence says matured positions can still be reported but need monitoring, so this warning is not a data defect."
+}

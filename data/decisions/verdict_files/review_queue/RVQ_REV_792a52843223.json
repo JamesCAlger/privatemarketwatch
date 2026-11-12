@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_792a52843223",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.2043,
+  "anchor_value": 148.98,
+  "confidence": 0.85,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 53,
+      "row_index": 13,
+      "quoted_text": "Total investments | $ | 2,988,655 | $ | 3,120,386 | 148.98 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 34,
+      "quoted_text": "Total net assets | 2,094,585"
+    }
+  ],
+  "rationale": "A07 is an aggregate item. The oracle observed pct_sum is 1.2043, but the raw schedule states total investments of 3,120,386 and 148.98% of net assets, with the balance sheet net assets anchor at 2,094,585. The source therefore supports the schedule-total percentage, not the much lower observed aggregate percentage; no individual row culprit is localized from the source structure."
+}

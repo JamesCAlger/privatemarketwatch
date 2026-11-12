@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_628c8012a05d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include wrapper/category/instrument/date text such as Investments Non-Controlled/Non-Affiliated Other Equity Financial Services VCI Asset Holdings 1 LLC Class B Interests Maturity Date 11/19/2025",
+  "anchor_value": "source schedule has clean issuer in the Investments column with instrument/date fields in separate columns",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 6,
+      "quoted_text": "VCI Asset Holdings 1 LLC | (14) | Class B Interests | N/A | 11/19/2025 | 1,237 | $ 1,273 | $ 1,273",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 9,
+      "quoted_text": "Blue Cloud Pediatric Surgery Centers, LLC | Class A-1 Common Units | N/A | 8/12/2025 | 1,000,000 | 1,000 | 1,000",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 10,
+      "quoted_text": "SCP CDH Holdings, LLC | Class B Units | N/A | 12/31/2025 | 1,900 | 174 | 174",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 11,
+      "quoted_text": "SCP CDH Holdings, LLC | Common Units | N/A | 12/31/2025 | 20,000 | 1,826 | 1,826",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 14,
+      "quoted_text": "Saguaro Buyer, LLC | Class R Common Units | N/A | 7/03/2025 | 10,000 | 10,000 | 10,000",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 17,
+      "quoted_text": "TCI Buyer LLC | Common Units | N/A | 11/14/2024 | 75,000 | 7,500 | 8,399",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name concatenates schedule wrapper/category, investment type, and date terms instead of retaining only the issuer entity from the Investments column.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 52, "row_index": 6}
+    }
+  ],
+  "rationale": "C206 is a Class 1 row-validation issue on issuer_name. The raw schedule rows keep issuer names such as VCI Asset Holdings 1 LLC, Blue Cloud Pediatric Surgery Centers, LLC, SCP CDH Holdings, LLC, Saguaro Buyer, LLC, and TCI Buyer LLC in the Investments column, with investment type and dates in separate columns. The flagged extracted issuer_name values include wrapper/category text and terms such as Other Equity, Class/Common Units, and Maturity Date/Acquisition Date, so the flag is a real issuer-name extraction leak rather than a false alarm. No aggregate anchor was needed."
+}

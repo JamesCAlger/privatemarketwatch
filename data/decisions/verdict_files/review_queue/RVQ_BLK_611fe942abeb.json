@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_611fe942abeb",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 25337.42,
+  "anchor_value": 25337.42,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 81,
+      "row_index": 12,
+      "quoted_text": "Total Investment Portfolio | $ | 25,109,408 | $ | 25,337,420 | 203.71 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 108,
+      "row_index": 16,
+      "quoted_text": "Total Investment Portfolio | $ | 16,071,078 | $ | 16,131,256 | 184.70 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The filing's current-period schedule total is 25,337,420, which matches the bundle's output fund_quarter_fv_m of 25,337.420 with residual_fv 0.0. The source also contains a separate prior-period SOI anchor of 16,131,256 and other non-current/non-position schedule rows, so the E07 source=1483 versus output=825 row-count comparison is over-scoped rather than evidence of missing current fair value."
+}

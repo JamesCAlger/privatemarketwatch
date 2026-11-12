@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_4a424019bec9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 18.25, 18.75, 18.75",
+  "anchor_value": "source terms PRIME + 18.25%, SOFR + 18.75%, SOFR + 18.75%",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 13,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 2.2 | % | 12,886,962 | 04/30/28 | 12,886,962 | 9,497,820"
+    },
+    {
+      "table_index": 25,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 4.9 | % | 28,782,924 | 04/30/28 | 28,782,924 | 21,213,303"
+    },
+    {
+      "table_index": 25,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.00 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) | 0.8 | % | 3,088,490 | 04/30/28 | 3,088,490 | 3,442,740"
+    }
+  ],
+  "rationale": "C115 flagged three basis_spread cells as outside the expected percentage range, but the raw SOI rows show the exact source spreads as whole-number percentages: SOFR + 18.75% for the revolver and term loan, and PRIME + 18.25% for the protective advance term loan. The stored basis_spread values therefore match source; the warning is a rule-threshold/scope false alarm, not a data error."
+}

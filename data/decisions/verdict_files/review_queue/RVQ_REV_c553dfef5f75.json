@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_c553dfef5f75",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 13,
+      "quoted_text": "123Dentist, Inc. (4)(6)(7)(10) | C + | 5.75 % | 9.41 % | 8/10/2029 | C$ | 204,779 | 156,925 | 142,902 | 0.64",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 19,
+      "quoted_text": "Canadian Hospital Specialties Ltd. (4)(5)(6)(7)(11) | C + | 4.50 % | 8.67 % | 4/14/2028 | C$ | 45,389 | 35,446 | 35,896 | 0.16",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 is valid because the SOI contains Canadian-dollar debt par amounts such as C$ 204,779 while the flagged extracted rows have blank principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 13,
+        "quoted_text": "123Dentist, Inc. (4)(6)(7)(10) | C + | 5.75 % | 9.41 % | 8/10/2029 | C$ | 204,779 | 156,925 | 142,902 | 0.64"
+      }
+    }
+  ],
+  "rationale": "Class 1 row-field check. The bundle's FX01 rows state that non-USD debt principal is missing principal_amount_usd. Raw SOI rows show debt par explicitly denominated in Canadian dollars, including 123Dentist with C$ 204,779 and Canadian Hospital Specialties with C$ 45,389. Because the source par is non-USD and the flagged field is blank, the flag is a real extraction/normalization gap rather than a false alarm."
+}

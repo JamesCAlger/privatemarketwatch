@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_9615a8d0ec1f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 139,
+      "row_index": 27,
+      "quoted_text": "Victory Buyer, LLC | (9) | SOFR + | 3.75 % | 9.34 % | 11/19/2028 | 9,827 | 9,386 | 9,360 | 0.35"
+    },
+    {
+      "table_index": 143,
+      "row_index": 16,
+      "quoted_text": "Victory Buyer, LLC | (4)(9) | SOFR + | 7.00 % | 12.59 % | 11/1/2029 | 66,704 | 65,678 | 62,868 | 2.32"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two BCRED Emerald JV Victory Buyer, LLC rows are distinct instruments with different spread, interest rate, maturity, par, cost, and fair value, but the extracted duplicate key collapses them.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 143,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "B02 reports two duplicate position keys, with the bundle example normalized to Victory Buyer LLC Emerald JV LP. Raw source shows BCRED Emerald JV LP March 31, 2024 contains separate Victory Buyer, LLC positions: one at SOFR + 3.75%, 9.34%, maturing 11/19/2028 with fair value 9,360, and another at SOFR + 7.00%, 12.59%, maturing 11/1/2029 with fair value 62,868. These are not duplicate source rows; the pipeline key is missing disambiguating instrument terms, so the duplicate-key flag is a real data error."
+}

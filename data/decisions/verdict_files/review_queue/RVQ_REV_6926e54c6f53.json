@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_6926e54c6f53",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2024-04-30",
+  "anchor_value": "2024-12-31",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 6,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | S+ 1026 , 1.00 % Floor | 4/30/2024 | 1,657 | 1,457 | 828 | (4)(8)(15)(25)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The current 2024 schedule reports a held debt position with maturity date 4/30/2024, before the 2024-12-31 report date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 37,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The raw SOI source for the current schedule has the Maturity Date column at table 37 row 1 and the Heubach Holdings USA LLC first-lien term-loan row at table 37 row 6 shows maturity 4/30/2024 while still carrying par, cost, and fair value. Because 2024-04-30 is before the 2024-12-31 report date, the maturity_not_past flag is source-grounded and localized."
+}

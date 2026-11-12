@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_0ca46a2f7fe3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 102,
+      "row_index": 30,
+      "quoted_text": "Total | 100.00 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 85,
+      "row_index": 24,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 24,414,425 | $ | 24,515,628 | (2)(6)(31)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source industry allocation for December 31, 2025 totals 100.00%, but the flagged artifact reports pct_sum=0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 102,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "A07 is a Class 3 aggregate flag because no row is supplied and the message is quarter-level pct_sum=0.0%. Raw source shows a populated December 31, 2025 industry percentage schedule: table 101 has nonzero industry percentages and table 102 row 30 totals 100.00%. The filing fair value anchor also ties to table 85 row 24 at 24,515,628 before cash equivalents, matching the bundle's fund_quarter_fv_m. Therefore the zero percentage sum is an extraction/classification gap, not a source-total defect."
+}

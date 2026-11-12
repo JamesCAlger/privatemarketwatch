@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_e2147fd9deeb",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 reports a fund_financials/private_markets_holdings coverage mismatch for CIK 0001646614 at 2021-12-31, but the permitted raw-source evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query. Because the raw filing source was not usable through the required evidence window, the mismatch cannot be confirmed or cleared."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_64d9d1d0f59c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 1280.91,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F30 flags NAV per share 1280.91 outside the expected range, but the approved evidence CLI returned missing_cached_html for overview, tables, totals, and a targeted roam query, so the raw source could not be checked."
+}

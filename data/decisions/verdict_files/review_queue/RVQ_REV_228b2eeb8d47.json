@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_228b2eeb8d47",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 5.38,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | 5,017 | 4,970 | 5,017 | 9"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Titan BW Borrower L.P. first lien term loan source states S + 5.38% including 2.88% PIK, but the extracted holding has blank interest_rate instead of an all-in rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "A07 uses the PIK all-in convention: interest_rate should carry the all-in stated coupon when a PIK leg is present. The raw SOI row for Titan BW Borrower L.P. states S + 5.38% and explicitly includes 2.88% PIK, while the bundle's extracted holding for the same issuer/instrument has blank interest_rate. This is a grounded extraction gap, not a false alarm."
+}

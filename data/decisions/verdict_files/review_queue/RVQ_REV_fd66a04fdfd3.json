@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_fd66a04fdfd3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 21805961,
+  "anchor_value": 25568779,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 81,
+      "row_index": 5,
+      "quoted_text": "Total Distributions Paid | $ | 21,805,961 | $ | 29,743,979 | $ | 32,068,284",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 24,
+      "quoted_text": "Net Investment Income (Loss) after Excise Tax | 25,568,779 | 30,956,592 | 32,044,723",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 83,
+      "row_index": 10,
+      "quoted_text": "Distributions from net investment income | ( 2.17 ) | ( 2.82 ) | ( 2.82 ) | ( 1.87 ) | ( 0.27 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 83,
+      "row_index": 17,
+      "quoted_text": "Ratio of net investment income (loss) after excise tax to average net assets (5) | 10.89 % | 12.06 % | 10.98 % | 8.03 % | 3.05 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source shows 2025 total distributions paid of 21,805,961, below net investment income after excise tax of 25,568,779. The financial highlights also show distributions from net investment income of 2.17 per share against net investment income per share of 2.49 and an NII ratio of 10.89%, so the F16 distribution-rate heuristic is not identifying a source data defect."
+}

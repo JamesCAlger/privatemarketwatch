@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_427b0050533e",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1309653222,
+  "anchor_value": 1309653222,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (3) | 160.6 | % | 1,332,161,604 | 1,309,653,222",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (3) | 148.1 | % | 1,231,779,281 | 1,209,788,377",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows that the extracted current-period fair value of 1,309,653,222 exactly equals the filing's March 31, 2026 debt-and-equity schedule total at table 9 row 16. The filing also contains a separate comparative investment schedule totaling 1,209,788,377 at table 15 row 16. The 123 of 251 coverage ratio therefore mixes current and comparative leaves in its denominator; it does not demonstrate missing fair values in the report-period holdings."
+}

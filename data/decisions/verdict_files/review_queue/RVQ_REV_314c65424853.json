@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_314c65424853",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "12.96 % PIK; SONIA (S); spread 7.50 %",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 23,
+      "quoted_text": "22 HoldCo Limited (15) | Sports and entertainment platform | Senior subordinated loan | 12.96 % PIK | SONIA (S) | 7.50 % | 08/2023 | 08/2033 | 42.5 | 42.5 | 42.5 | (2)(6)(11)"
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows with no stored interest_rate or basis_spread. The bundled artifact shows the 22 HoldCo Limited senior subordinated loan has a blank stored interest_rate, but the raw SOI row shows coupon/reference/spread terms: 12.96 % PIK, SONIA (S), and 7.50 %. That means the missing stored rate is an extraction gap, not a correct blank."
+}

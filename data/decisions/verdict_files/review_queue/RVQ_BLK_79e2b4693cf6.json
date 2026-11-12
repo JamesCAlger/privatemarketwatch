@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_79e2b4693cf6",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1013243399,
+  "anchor_value": 657323982,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Controlled Affiliated investments ... 246,700,365",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments ... 109,219,052",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Affiliate rollforward ending fair values totaling 355,919,417 were ingested in addition to the 657,323,982 debt-and-equity schedule, exactly explaining the extracted excess.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The filing's current-period debt-and-equity schedule total is 657,323,982 at table 7 row 25. The extracted position sum is 1,013,243,399, an excess of 355,919,417. That excess exactly equals the separate affiliate rollforward ending fair values: 246,700,365 at table 8 row 17 plus 109,219,052 at table 9 row 14. These rollforward disclosures are alternate-dimensional reconciliation data, not additional positions, so their inclusion causes a dimension double count. The full-investments total of 1,239,482,127 includes cash equivalents and short-term investments and is outside the private debt-and-equity position scope."
+}

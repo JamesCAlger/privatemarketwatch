@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8eb7ee66221e",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Applied Digital Corporation | Equipment Financing | April 24, 2024 | April 1, 2026 | Fixed interest rate 19.0 %; EOT 0.0 % | fair value 264",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 20,
+      "quoted_text": "K2View Inc. | Secured Loan | May 30, 2025 | June 1, 2030 | Variable interest rate Prime + 4.0 % or Floor rate 11.5 %; EOT 2.5 % | fair value 15,248",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 review. The flag identifies 33 interest_rate fields as not checked solely because merged contexts were excluded, but reports affected_fv_m of 0. Raw filing schedule cells are readable and explicitly disclose the rates; representative table 13 rows 5 and 20 agree with the corresponding extracted rates of 19.0 and 11.5. The schedule total was reviewed as the aggregate anchor, but no value residual is alleged by this flag. The evidence therefore shows a provenance-verification coverage limitation rather than erroneous published data. Residual risk is that only representative affected rows were source-cited, although the flag is uniform in reason and reports no affected value."
+}

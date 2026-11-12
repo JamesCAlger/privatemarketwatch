@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_5acec09360bf",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 14,
+  "anchor_value": 14,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 17,
+      "quoted_text": "Allied OMS Intermediate Company, LLC - Delayed Draw Term Loan; Amortized Cost (15); Fair Value (10)"
+    },
+    {
+      "table_index": 42,
+      "row_index": 18,
+      "quoted_text": "Allied OMS Intermediate Company, LLC - Revolving Credit Line; Amortized Cost (10); Fair Value (3)"
+    },
+    {
+      "table_index": 42,
+      "row_index": 20,
+      "quoted_text": "Aspire General Holding Company LLC - Delayed Draw Term Loan; Amortized Cost (27); Fair Value (29)"
+    },
+    {
+      "table_index": 42,
+      "row_index": 21,
+      "quoted_text": "Aspire General Holding Company LLC - Revolving Credit Line; Amortized Cost (7); Fair Value (8)"
+    },
+    {
+      "table_index": 43,
+      "row_index": 10,
+      "quoted_text": "Billhighway, LLC - Revolving Credit Line; Amortized Cost (3)"
+    },
+    {
+      "table_index": 43,
+      "row_index": 26,
+      "quoted_text": "Engineered Films Acquisition Inc. - Revolving Credit Line; Amortized Cost (16); Fair Value (18)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 17,
+      "quoted_text": "OAO Acquisitions, Inc. - Revolving Credit Line; Amortized Cost (7); Fair Value (3)"
+    },
+    {
+      "table_index": 46,
+      "row_index": 8,
+      "quoted_text": "PDDS Holdco, Inc. - Revolving Credit Line; Amortized Cost (11); Fair Value (12)"
+    },
+    {
+      "table_index": 47,
+      "row_index": 20,
+      "quoted_text": "West Creek Financial SPV- Debt Facility VI, LLC - Delayed Draw Term Loan B; Amortized Cost (28); Fair Value (28)"
+    }
+  ],
+  "rationale": "C107 fired because extracted cost values are negative, but the raw SOI prints those amortized-cost cells in parentheses for the same positions. The extractor's negative values therefore match the source; the warning is an over-broad monitor for source-disclosed negative cost balances, not a data error."
+}

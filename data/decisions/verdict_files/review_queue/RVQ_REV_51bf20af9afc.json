@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_51bf20af9afc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.48044692737430167,
+  "anchor_value": 0.95,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "LSF12 Phoenix Holdco, LLC | Term Loan | 3M SOFR + 4.50% | Interest Rate 8.20% | Par/Shares 3,000,000 | Amortized Cost 2,940,000 | Fair Value 2,973,750 | 1.8%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 414,055,669 | $ | 352,232,987 | 211.7%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "B01 reports only 172 of 358 leaves with fair_value, but the March 31, 2026 SOI has fair-value columns on investment rows and totals to 352,232,987.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw SOI includes a Fair Value column for current-period investment rows; for example table 8 row 5 reports LSF12 Phoenix Holdco with fair value 2,973,750. The same schedule rolls to Total Investments fair value 352,232,987 at table 11 row 28, also repeated in the totals view. Because the source provides fair values while the oracle artifact reports only 48.0% coverage, the flag is a real extraction coverage error rather than a source absence."
+}

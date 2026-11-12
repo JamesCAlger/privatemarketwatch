@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_cc07ad783a1d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted evidence CLI did not return usable raw source for the filing: overview, tables, and totals all reported missing_cached_html for accession 0001752724-24-200066. Under the adjudication contract, missing source must be treated as ambiguous with source_unavailable rather than guessed from derived artifacts."
+}

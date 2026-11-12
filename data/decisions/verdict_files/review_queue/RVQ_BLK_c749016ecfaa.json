@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_c749016ecfaa",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1898691121,
+  "anchor_value": 1898691121,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 42,
+      "quoted_text": "Total Investments - (265.02%) | 1,934,491,247 | 1,898,691,121",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 42,
+      "quoted_text": "Total Investments - (254.85%) | 1,876,212,627 | 1,861,296,462",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 filing schedule total fair value is $1,898,691,121, exactly equal to the extracted quarter fair value of $1,898,691,121. The filing also contains a distinct December 31, 2025 comparative investment schedule totaling $1,861,296,462. E07's source count of 1,237 versus 587 therefore reflects comparative-period rows leaking into the source-side row-count anchor, not missing current-period output data."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_37384e5a008d",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Preferred Equity \u2014 5.5%",
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 2,
+      "quoted_text": "Preferred Equity -- 5.5%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted identifier is a Preferred Equity section heading, not an investment position; the actual position begins on the next row with Veronica Holdings, LLC (Vapotherm).",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 23,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "PP01 is a real position-purity error. In the 2024 schedule, table 23 row 2 contains only the category header 'Preferred Equity -- 5.5%' with no issuer, cost, or fair value, while row 3 contains the actual preferred equity position details. The pipeline stored the header as bdc_investment_identifier, so a non-position subtotal/category label leaked into holdings."
+}

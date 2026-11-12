@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_fe386dfececc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 189.87,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 15,824,569.3 | $ | 15,994,025.4 | (13) | 189.87 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the SOI Total Investments row reports 189.87% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw schedule total row for June 30, 2025 gives Total Investments fair value of 15,994,025.4 and % of Net Assets of 189.87%, while the flagged oracle metric reports pct_sum=0.0%. The source therefore decides the question: the extracted/checked percentage sum is missing rather than the filing total being zero."
+}

@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_562dcd17ae4f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) (2) | Interest Rate | Base Rate Floor | Maturity Date | Principal Amount | Amortized Cost (3) | Fair Value"
+    },
+    {
+      "table_index": 251,
+      "row_index": 4,
+      "quoted_text": "Carestream Health, Inc. (First Lien Term Loan) (5) | SOFR + 750 | 3.67 | % | 9/30/2027 | $ | 1,579,575 | $ | 1,459,426 | $ | 811,507"
+    },
+    {
+      "table_index": 251,
+      "row_index": 5,
+      "quoted_text": "CCS Medical, Inc (First Lien Term Loan) (5) (6) (7) | Fixed + 1600 | 0.00 | % | 4/7/2026 | 3,000,000 | 2,992,732 | 3,000,000"
+    },
+    {
+      "table_index": 251,
+      "row_index": 10,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan E) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 1,166,439 | 1,166,439 | 1,158,740"
+    },
+    {
+      "table_index": 251,
+      "row_index": 11,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan F) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 276,146 | 276,146 | 274,324"
+    },
+    {
+      "table_index": 251,
+      "row_index": 12,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan G) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 49,335 | 49,335 | 49,010"
+    },
+    {
+      "table_index": 251,
+      "row_index": 13,
+      "quoted_text": "MidWave Wireless, Inc. (First Lien Term Loan H) (6) (7) | 12 % PIK | 12.00 | % | 12/31/2028 | 46,030 | 46,030 | 45,726"
+    },
+    {
+      "table_index": 251,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13 | % | 5/1/2029 | 110,967 | 108,484 | 106,963"
+    },
+    {
+      "table_index": 251,
+      "row_index": 22,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88 | % | 5/1/2030 | 171,258 | 163,600 | 148,143"
+    }
+  ],
+  "rationale": "FX01 flagged eight missing principal_amount_usd values on the premise that the debt principal was non-USD. The current Schedule of Investments table labels the relevant column as Principal Amount and renders dollar signs on the row/column structure for the debt investments; the affected debt rows are ordinary dollar principal amounts in that table, and targeted source search for MidWave principal currency returned no foreign-currency evidence. The source therefore supports the checked rows being USD-source principal rather than non-USD par requiring FX conversion, so the FX01 fire is a rule-scope/source-currency false alarm."
+}

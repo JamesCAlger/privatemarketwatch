@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_f2293ef00034",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4.712,
+  "anchor_value": 4.712,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 9,
+      "quoted_text": "Rapyd Financial Network, Ltd. | 9/13/2030 | 120,812 | 4,383 | 4,712 | 0.5",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source check confirms the flagged holding in the March 31, 2026 investment schedule at table 14 row 9, with fair value 4.712 million. Although an identical comparative-period row also appears at table 19 row 9, the current-period source row independently supports retention. The PP03 warning therefore reflects reliance on an earlier XBRL context for a position that is also explicitly disclosed in the current schedule, not a position-purity data error."
+}

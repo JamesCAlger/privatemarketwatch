@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c05be013b2cd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Signia Aerospace LLC delayed draw cost 78 fair value 1290; Wellness Pet LLC second out term loan cost 6876 fair value 202570",
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "Signia Aerospace LLC | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.50 | % | 3.00 | % | 7.30 | % | 11/21/2031 | $ | -- | 78 | 1,290 | -- | E"
+    },
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Wellness Pet LLC (Woof) | First Lien Second Out Term Loan | SOFR(Q) | -- | 3.75 | % | 8.26 | % | 12/31/2029 | $ | 360,124 | 6,876 | 202,570 | 0.01 | %"
+    }
+  ],
+  "rationale": "X07 flagged fair_value greater than 10x cost for two non-equity rows. The raw SOI rows show the same low cost and high fair value values carried by the extraction: Signia cost 78 and fair value 1290, and Wellness Pet cost 6876 and fair value 202570. Because the flagged values match the source, the data is source-true and the warning is a rule-scope false alarm rather than a data error."
+}

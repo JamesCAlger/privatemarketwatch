@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_329bc2a55365",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": "",
+  "anchor_value": "populated Reference Rate and Spread",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "AA&D Midco, Inc. (fka GB Eagle Buyer, Inc.) | First Lien Term Loan | S + 4.75 % | 11/29/2030 | 31,368 | 31,073 | 31,054 | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | 17,504 | 17,345 | 17,504 | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 25,
+      "quoted_text": "SEKO Global Logistics Network, LLC | First Lien Term Loan, Last-out | S + 7.00 % (includes 5.00 % PIK) | 5/27/2030 | 4,020 | 3,843 | 4,020 | 9",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Private-credit rows have blank interest_rate even though the source schedule contains populated Reference Rate and Spread cells.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell defect. The extracted holdings show blank interest_rate values, but the filing schedule explicitly reports rate/spread terms for matching positions. Representative current-period source rows show S + 4.75% for AA&D Midco, S + 5.38% including 2.88% PIK for Titan BW, and S + 7.00% including 5.00% PIK for SEKO. The X02 flags therefore identify a real systematic extraction gap in the rate column."
+}

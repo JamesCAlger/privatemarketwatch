@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_BLK_e970a178ec58",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 317842000.0,
+  "anchor_value": 308031000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 306,628 | 163.9 | % | $ | 308,031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 27,
+      "quoted_text": "Dreyfus Government Cash Management Institutional Fund | Cash Equivalents | 917 | 917 | 0.5 | 917",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 28,
+      "quoted_text": "Goldman Sachs FS Government Fund | Cash Equivalents | 6,061 | 6,061 | 3.2 | 6,061",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 12,
+      "quoted_text": "blank subtotal row after Primrose Bidco Limited: cost 2,424, fair value 2,475",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 15,
+      "quoted_text": "blank subtotal row after Fortis 333, Inc: cost 133, fair value 132",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 18,
+      "quoted_text": "blank subtotal row after Sophos Holdings: cost 225, fair value 226",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Cash equivalents of 6,978 are included in the extracted position sum even though the conservation anchor is Total Investments of 308,031, not Investments and Cash Equivalents Total of 315,009.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Three blank subtotal rows with fair values 2,475, 132, and 226 were extracted as positions, duplicating the adjacent single issuer rows and explaining the remaining 2,833 overcount after cash equivalents.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 16,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing anchors Total Investments fair value at 308,031, while the extracted fair value sum is 317,842, an overshoot of 9,811. Source rows show cash equivalents of 917 and 6,061, totaling 6,978, are below the Total Investments line and belong only in Investments and Cash Equivalents Total. The remaining 2,833 equals blank subtotal rows in table 16 for Primrose Bidco Limited (2,475), Fortis 333, Inc (132), and Sophos Holdings (226), which duplicate the adjacent actual positions. The source therefore grounds a real extraction/conservation error."
+}

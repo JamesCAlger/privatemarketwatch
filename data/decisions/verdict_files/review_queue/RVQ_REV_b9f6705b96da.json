@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_b9f6705b96da",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4,
+  "anchor_value": 4,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "ASP Unifrax Holdings, Inc. (12) | Second-lien note ($ 2,031 par, due 9/2029 ) (11) | 8/31/2023 | 7.10% | 7.10% (incl. 1.25% PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 35,
+      "quoted_text": "Bed Bath and Beyond Inc. (3)(11)(13) | ABL FILO term loan ($ 10,746 par, due 8/2027)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 36,
+      "quoted_text": "Roll Up DIP term loan ($ 45,919 par) | 4/24/2023 | SOFR + 7.90% | 11.57% PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 37,
+      "quoted_text": "Super-Priority DIP term loan ($ 6,500 par) | 4/24/2023 | SOFR + 7.90% | 11.57%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 raw investment schedule marks the Unifrax second-lien note with footnote (11) and marks the Bed Bath issuer block with footnote (11); that block contains the ABL FILO, Roll Up DIP, and Super-Priority DIP instruments. These are exactly the four positions in the flag artifact, so the observed extraction count of 4 agrees with the source schedule count of 4. The data is correct and the advisory nonaccrual flag is a false alarm rather than a position-level defect."
+}

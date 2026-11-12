@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_78074c91f79d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.72,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "FX01 flags rows where non-USD debt principal is missing principal_amount_usd. The raw filing source was readable through the evidence CLI, including SOI tables 13-15. Those tables expose Portfolio Company, Spread Above Index, Interest Rate, Principal/Shares/Units, Amortized Cost, and Fair Value columns, but the rendered source rows and targeted searches for foreign currency/currency disclosures do not show a non-USD principal currency or a USD conversion basis. Because the raw source available to this worker does not decide whether the flagged principal values are non-USD and require principal_amount_usd, the item remains ambiguous rather than a grounded real_error or false_alarm."
+}

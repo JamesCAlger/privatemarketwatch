@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_REV_698ab70cc897",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "5 PP03 rows retained as report_date 2024-03-31 facts from the comparative December 31, 2023 schedule of investments block",
+  "anchor_value": "March 31, 2024 holdings should exclude rows sourced only from the December 31, 2023 comparative schedule block",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 9,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2023 | 41"
+    },
+    {
+      "table_index": 44,
+      "row_index": 4,
+      "quoted_text": "MRO Holdings, Inc. | First Lien Secured Debt | S+ 576 , 0.50 % Floor | 12/18/2028 | $ | 4,836 | $ | 4,836 | $ | 4,848 | (4)(8)(15)"
+    },
+    {
+      "table_index": 44,
+      "row_index": 24,
+      "quoted_text": "Pinnacle Purchaser, LLC | First Lien Secured Debt | S+ 575 , 1.00 % Floor | 12/28/2029 | $ | 4,531 | $ | 4,441 | $ | 4,441 | (4)(9)(15)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 24,
+      "quoted_text": "Nutpods Holdings, Inc. | Common Equity - Stock | N/A | N/A | 125 Shares | 125 | 125 | (4)(9)"
+    },
+    {
+      "table_index": 57,
+      "row_index": 38,
+      "quoted_text": "Accelerate360 Holdings, LLC | First Lien Secured Debt | S+ 626 , 1.00 % Floor | 2/11/2027 | $ | 68,404 | $ | 68,404 | $ | 68,404 | (4)(9)(15)"
+    },
+    {
+      "table_index": 58,
+      "row_index": 17,
+      "quoted_text": "Material Holdings, LLC | First Lien Secured Debt | S+ 610 , 0.75 % Floor | 8/19/2027 | 7,368 | 7,368 | 7,276 | (4)(15)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "MRO Holdings, Inc. row is sourced from the December 31, 2023 comparative SOI block, not the March 31, 2024 current-period block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 44,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Pinnacle Purchaser, LLC row is sourced from the December 31, 2023 comparative SOI block, not the March 31, 2024 current-period block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 44,
+        "row_index": 24
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Nutpods Holdings, Inc. row is sourced from the December 31, 2023 comparative SOI block, not the March 31, 2024 current-period block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 51,
+        "row_index": 24
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Accelerate360 Holdings, LLC row is sourced from the December 31, 2023 comparative SOI block, not the March 31, 2024 current-period block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 57,
+        "row_index": 38
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Material Holdings, LLC row is sourced from the December 31, 2023 comparative SOI block, not the March 31, 2024 current-period block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 58,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The filing table of contents distinguishes the current Consolidated Schedule of Investments as of March 31, 2024 from the comparative Consolidated Schedule of Investments as of December 31, 2023. The five flagged positions are localized in the later comparative SOI block and were retained under the 2024-03-31 report date, so the PP03 position-purity flag is a real comparative-period leak."
+}

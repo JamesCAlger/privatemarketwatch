@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_c25d80fc19d8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 4,
+      "quoted_text": "Firebird Co-Invest L.P. | LP Interest | 1/29/2025 | N/A | 4,790 | 5,315 | 1.0 % | *(8)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 57,
+      "quoted_text": "Firebird Co-Invest L.P. | Equity | 250",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C04 treats the LP Interest equity row as defective for blank shares, but the source schedule itself discloses no share amount for that position.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 32,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C04 failed because 0.0% of one equity row had shares. The raw schedule localizes the only equity investment to Firebird Co-Invest L.P., investment type LP Interest, with the Par ($) / Shares column blank and cost/fair value of 4,790/5,315. A separate commitments table row for the same issuer shows an Equity unfunded commitment of 250, which is not a share count. The extracted absence of shares is therefore consistent with the source; the rule is over-scoped for LP interests without disclosed share quantities."
+}

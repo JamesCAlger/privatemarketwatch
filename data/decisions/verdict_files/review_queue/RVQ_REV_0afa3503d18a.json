@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_0afa3503d18a",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.9327868852459016,
+  "anchor_value": 0.95,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 76,
+      "row_index": 2,
+      "quoted_text": "Company | Investment Type | Commitment Expiration Date (1) | Unfunded Commitment | Commitment Expiration Date (1) | Unfunded Commitment",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 76,
+      "row_index": 4,
+      "quoted_text": "Accurate Finance Sub, LLC (3) | Delayed Draw Term Loan | 9/2/2027 | 300 | n/a | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 78,
+      "row_index": 2,
+      "quoted_text": "KLICK INC. (3) | Delayed Draw Term Loan | 11/5/2027 | 3,516 | n/a | -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Rows from the unfunded commitment schedule are being counted as leaf holdings requiring fair_value even though the source columns are commitment expiration date and unfunded commitment, not fair value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 76,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "B01 failed because only 569 of 610 leaves have fair_value (93.3% versus the 95% threshold). The filing's own investment total is readable and matches the extracted quarter total within rounding: the SOI reports Total Investments fair value of $879,592 thousand while the bundle has fund_quarter_fv_m 879.591. The localized source rows causing the missing-fair-value coverage are not fair-value rows; table 76 is an unfunded commitment schedule headed by Commitment Expiration Date and Unfunded Commitment, with examples such as Accurate Finance Sub, LLC and KLICK INC. carrying commitment amounts or dashes rather than fair values. Counting those rows as valuation-bearing holding leaves is therefore a real classification/scope extraction error."
+}

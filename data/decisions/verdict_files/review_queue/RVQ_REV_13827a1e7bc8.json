@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_13827a1e7bc8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Portfolio Company Debt Securities- United States Artificial Intelligence & Automation Ambient Photonics, Inc. Type of Investment Secured Loan Investment Date July 28,2022 Maturity Date July 01,2025 Interest Rate Variable interest rate Prime + 6.0% or Floor rate 9.5%; EOT 4.0%",
+  "anchor_value": "Ambient Photonics, Inc.",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Ambient Photonics, Inc. | Secured Loan | July 28, 2022 | July 1, 2025 | Variable interest rate Prime + 6.0% or Floor rate 9.5%; EOT 4.0% | 2,006 | 2,145 | 2,160"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name includes schedule title, geography, sector, investment type, dates, and interest-rate text even though the raw issuer cell is only Ambient Photonics, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw source separates the issuer from adjacent fields: table 13 row 5 has Portfolio Company = Ambient Photonics, Inc., while Type of Investment, Investment Date, Maturity Date, Interest Rate, Principal Amount, Cost, and Fair Value are separate cells. The observed extracted issuer_name concatenates those neighboring fields and higher-level schedule/category text into the issuer field, so the fmt_issuer_name flag identifies a real data error."
+}

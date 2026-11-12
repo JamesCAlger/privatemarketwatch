@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_7fbc4ec60f52",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2333427000,
+  "anchor_value": 2333427000,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 21,
+      "quoted_text": "ASC Communications, LLC revolver row reports principal dash, cost ( 8 ), fair value ( 6 ) in the investment schedule.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 29,
+      "quoted_text": "ATL II MRO Holdings Inc. revolver row reports principal dash, cost ( 55 ), fair value dash in the investment schedule.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 48,
+      "quoted_text": "Total Investments, September 30, 2023 ( 182.7 %)* | $ | 2,090,638 | $ | 2,333,427 | $ | 2,305,959",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate fmt_cost warning. Raw source shows the filing itself uses parenthesized negative cost amounts for revolver rows in the investment schedule, and the September 30, 2023 schedule total reports cost of 2,333,427 thousand and fair value of 2,305,959 thousand. The cited negative-cost examples match the extracted signed costs in the bundle slice, so the weak fmt_cost warning is overbroad for valid parenthetical cost formatting rather than a data error."
+}

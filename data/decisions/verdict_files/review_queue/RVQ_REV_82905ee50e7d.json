@@ -1,0 +1,49 @@
+{
+    "review_id":  "RVQ_REV_82905ee50e7d",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  67.4,
+    "anchor_value":  67.4,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  27,
+                                  "row_index":  1,
+                                  "quoted_text":  "Portfolio Company, Location and Industry(1) | Type of Investment | Reference (5) | Spread (5) | Interest Rate (5) | Acquisition Date | Maturity/Expiration Date | Principal Amount, Par Value or Shares | Cost | Fair Value | Percent of Net Assets",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  27,
+                                  "row_index":  4,
+                                  "quoted_text":  "Diamondback Acquisition, Inc. / Software | First lien (3)(4) - Undrawn | Reference -- | Spread -- | Interest Rate -- | 09/2021 | 09/2023 | $ 4,237 | Cost $ -- | Fair Value $ (348) | (0.04)%",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  27,
+                                  "row_index":  15,
+                                  "quoted_text":  "Total Unfunded Debt Investments | $ | 117,204 | $ | (503) | $ | (2,091) | (0.26) | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  6,
+                                  "quoted_text":  "Wealth Enhancement Group, LLC / Financial Services | First lien (3) | SOFR(Q) | 6.25% | 11.63% | 12/2020 | 10/2027 | $18,397 | Cost $18,305 | Fair Value $18,397",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "rule_scope",
+                         "detail":  "The fill-rate flag appears to count unfunded/undrawn debt commitment rows whose source Interest Rate cells are dashes, while funded debt rows in the same schedule carry explicit rates.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  27,
+                                          "row_index":  4
+                                      }
+                     }
+                 ],
+    "rationale":  "Raw SOI tables separate funded debt investments from unfunded debt investments. The header includes Reference, Spread, and Interest Rate columns; a representative funded row has SOFR, spread 6.25%, and interest rate 11.63%, while a representative unfunded/undrawn row in table 27 has dashes in Reference, Spread, and Interest Rate and rolls into Total Unfunded Debt Investments. Therefore the missing interest_rate values are source-blank unfunded commitments, not a data extraction error."
+}

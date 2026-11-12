@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_54da27eb9c51",
+  "verdict": "false_alarm",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 772888903,
+  "anchor_value": 772888903,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Sunland Asphalt & Construction, LLC | 06/16/23 | Term Loan B - 13.19 % inc PIK (SOFR + 7.88 %, 1.75 % Floor, 0.50 % PIK) | 4.9 % | $ 19,030,432 | 06/16/28 | $ 18,328,052 | $ 18,531,835",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "blank issuer/investment continuation row repeats 4.9 % | 18,328,052 | 18,531,835 after the Sunland position, showing a structural subtotal/continuation row rather than a separate investment leaf missing fair value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 14,
+      "quoted_text": "Total Investments ( 203.1 %) | $ | 770,456,020 | $ | 772,888,903",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 157,586 | $ | - | $ | 615,303 | $ | 772,889",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 fired because the artifact says only 44 of 88 leaves have fair_value, but the raw SOI structure shows populated fair-value cells on investment rows and separate structural continuation/subtotal rows. The current-period schedule total fair value is 772,888,903 and ties to the fair-value hierarchy total of 772,889 thousand, so the source does not support a real missing-fair-value defect. The 50% coverage is therefore a denominator/scope false alarm from subtotal or continuation rows being treated as leaves."
+}

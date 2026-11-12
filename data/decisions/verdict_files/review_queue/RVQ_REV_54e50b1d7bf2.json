@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_54e50b1d7bf2",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The bundle identifies X02 row-level missing-rate warnings for private credit holdings, but the evidence CLI returned missing_cached_html for the filing accession, so raw source could not be checked. Under the adjudication contract this must remain ambiguous with source_unavailable rather than guessing."
+}

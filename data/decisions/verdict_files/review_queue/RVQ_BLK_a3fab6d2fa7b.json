@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_a3fab6d2fa7b",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 413375000,
+  "anchor_value": 334855000,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 42,
+      "quoted_text": "Total Non-Controlled Affiliate Company Investments | $ | 94,367 | $ | 78,520 | 47.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 51,
+      "row_index": 44,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 373,465 | $ | 334,855 | 201.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 373,465 and $ 495,797, respectively) | 334,855 | 457,048",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted position sum includes the 78.520m Total Non-Controlled Affiliate Company Investments subtotal in addition to the 334.855m TOTAL INVESTMENTS schedule anchor.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 51,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the raw filing schedule total and balance sheet total investments anchor are both 334.855m for 2025, while the extracted reconciliation sum is 413.375m. The 78.520m over-coverage residual exactly matches the source subtotal row Total Non-Controlled Affiliate Company Investments, so the flag is a real subtotal leak rather than a bad anchor."
+}

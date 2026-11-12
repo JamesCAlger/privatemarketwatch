@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_04ce54c329b6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.0,
+  "anchor_value": -0.01,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 22,
+      "quoted_text": "Eskola LLC Delayed Draw Term B Loan | (3)(4)(5)(6)(7)(8) | 3M SOFR + 1.00 % / 1.50 % | 1.00 % | 12/19/2029 | - | ( 24 ) | ( 213 ) | - 0.01 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 31,
+      "row_index": 21,
+      "quoted_text": "CUB Financing Intermediate, LLC Delayed Draw Term Loan | (3)(4)(5)(6)(7)(8) | 3M SOFR + 1.00 % / 0.00 % | 1.00 % | 6/28/2030 | - | ( 196 ) | ( 196 ) | - 0.01 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted pct_of_net_assets field is populated from the Cash Interest column, e.g. 1.00%, while the source Percentage column for the same rows is -0.01%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The source SOI detail rows separate Reference Rate Spread/Floor, Cash Interest, maturity, cost, fair value, and Percentage. For Eskola Delayed Draw Term B and CUB Financing Intermediate Delayed Draw Term Loan, the source cash-interest cell is 1.00% but the percentage-of-net-assets cell is -0.01%; the flagged row identifiers carry 1.00% in the percentage identity context, producing the residuals. Totals corroborate that the schedule percentage column is based on net assets: total investments are $3,008,628 thousand and 161.57% of total net assets of $1,864,467 thousand, so this is not a 100%-of-investments percentage. The defect is localized to a column remap/extraction gap from Cash Interest into pct_of_net_assets."
+}

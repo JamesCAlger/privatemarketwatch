@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_84725feba6a7",
+  "verdict": "false_alarm",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Sunland Asphalt & Construction, LLC | Term Loan B - 13.19 % inc PIK (SOFR + 7.88 %, 1.75 % Floor, 0.50 % PIK) | $ | 18,328,052 | $ | 18,531,835"
+    },
+    {
+      "table_index": 7,
+      "row_index": 14,
+      "quoted_text": "Total Investments ( 203.1 %) | $ | 770,456,020 | $ | 772,888,903"
+    }
+  ],
+  "rationale": "FX03 flags cost_currency value U_USD as not USD, but the raw schedule of investments displays the amortized cost and fair value columns in dollars for the flagged position rows and for the schedule total. U_USD is therefore a USD unit-code representation, not a non-USD source value."
+}

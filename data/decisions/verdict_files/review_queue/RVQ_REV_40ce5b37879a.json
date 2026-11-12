@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_40ce5b37879a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Sunland Asphalt & Construction, LLC | 06/16/23 | Term Loan B - 13.19 % inc PIK (SOFR + 7.88 %, 1.75 % Floor, 0.50 % PIK) | 4.9 | % | $ | 19,030,432 | 06/16/28 | $ | 18,328,052 | $ | 18,531,835",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Lenox Holdings, Inc. | 07/08/22 | Term Loan - 13.67 % (SOFR + 8.50 %, 1.00 % Floor) | 9.7 | % | $ | 38,126,052 | 07/08/27 | $ | 37,513,028 | $ | 36,982,270",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 4,
+      "quoted_text": "Sigmatron International, Inc. | 07/18/22 | Term Loan - 12.71 % (SOFR + 7.50 %, 1.00 % Floor) | 3.1 | % | $ | 12,129,240 | 07/18/27 | $ | 11,935,738 | $ | 11,692,588",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd on the premise that the source par was non-USD, but the raw SOI presents the Par Amount, Amortized Cost, and Fair Value columns in dollars. The dollar signs appear on the first data row of each continued debt schedule page and subsequent flagged debt rows remain under the same dollar-denominated Par Amount column; a targeted source query found no foreign-currency or non-USD language. The check-side non-USD premise is therefore not supported by the raw source."
+}

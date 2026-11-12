@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_3afc0ef22a75",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -30767.0,
+  "anchor_value": -30767.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 9,
+      "quoted_text": "Penn Quarter Partners, LLC (f)(i)(l) | Delayed Draw Term Loan | - | - | 8/25/2031 | - | ( 30,767 | ) | ( 32,469 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 10,
+      "quoted_text": "Penn Quarter Partners, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 8/25/2031 | - | ( 30,645 | ) | ( 32,469 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 27,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(l)(m) | Delayed Draw Term Loan | - | - | 11/27/2030 | - | ( 83,377 | ) | ( 135,076 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 2,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(l)(m) | Revolving Credit Facility | - | - | 11/27/2030 | - | $ | ( 27,718 | ) | $ | ( 45,025 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but targeted raw-source checks show the filing itself presents the sampled flagged costs as parenthetical negatives in the Cost column, with matching negative Fair Value values for unfunded delayed draw and revolving credit facility rows. The extracted negative costs therefore reflect the source presentation rather than a data error; the warning is a rule-scope review alert."
+}

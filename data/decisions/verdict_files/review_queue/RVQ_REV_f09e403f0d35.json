@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_REV_f09e403f0d35",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "six PRIVATE_CREDIT rows have blank interest_rate and no extracted basis_spread",
+  "anchor_value": "raw SOI rows have blank Interest Rate cells but populated Reference Rate and Spread cells",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 27,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | S + 5.00 % | 12/05/31 | 3,106 | ( 46 | ) | ( 47 | ) | (7) (10)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 28,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | S + 5.00 % | 12/05/31 | 252 | ( 4 | ) | ( 4 | ) | (7) (10)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 23,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus) | Software | S + 4.50 % | 08/29/31 | 896 | ( 7 | ) | ( 9 | ) | (7) (8) (10)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 14,
+      "quoted_text": "Abacus Data Holdings, Inc. (dba Clutch Intermediate Holdings) | Software | S + 6.00 % | 03/10/27 | 1,220 | ( 7 | ) | ( 107 | ) | (7) (8) (10)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 17,
+      "quoted_text": "Accommodations Plus Technologies LLC | Software | S + 5.25 % | 05/28/32 | 439 | ( 4 | ) | ( 4 | ) | (7) (10)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 34,
+      "quoted_text": "Artifact Bidco, Inc. (dba Avetta) | Software | S + 4.15 % | 07/28/31 | 2,586 | ( 10 | ) | ( 13 | ) | (7) (8) (10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "KUIU adjustment rows omit Interest Rate but disclose Reference Rate and Spread S + 5.00%, so basis_spread should be available instead of both rate fields being blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Prometheus adjustment row omits Interest Rate but discloses Reference Rate and Spread S + 4.50%, so basis_spread should be available instead of both rate fields being blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Abacus adjustment row omits Interest Rate but discloses Reference Rate and Spread S + 6.00%, so basis_spread should be available instead of both rate fields being blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Accommodations Plus Technologies adjustment row omits Interest Rate but discloses Reference Rate and Spread S + 5.25%, so basis_spread should be available instead of both rate fields being blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Artifact Bidco adjustment row omits Interest Rate but discloses Reference Rate and Spread S + 4.15%, so basis_spread should be available instead of both rate fields being blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "X02 is a row-level missing-rate-data flag. The raw SOI confirms the flagged rows do not state an all-in Interest Rate, but they do state Reference Rate and Spread values such as S + 5.00%, S + 4.50%, S + 6.00%, S + 5.25%, and S + 4.15%. Because the extracted rows have neither interest_rate nor basis_spread populated, the check is identifying a real extraction gap rather than a false alarm."
+}

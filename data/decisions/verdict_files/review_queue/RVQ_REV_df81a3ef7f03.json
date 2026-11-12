@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_df81a3ef7f03",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 4.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Raw source could not be read: evidence CLI overview, tables, and totals all returned missing_cached_html for accession 0001752724-24-200066. The B02 duplicate-key flag cannot be adjudicated from raw source under the contract."
+}

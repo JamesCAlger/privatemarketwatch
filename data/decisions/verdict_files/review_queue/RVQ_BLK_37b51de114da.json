@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_37b51de114da",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 501538142000,
+  "anchor_value": 12434974000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Class I Common Shares outstanding: 197,713,842",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Class I Net asset value per share: $24.79",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 38,
+      "quoted_text": "Total net assets: 12,434,974 (amounts in thousands)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing discloses NAV per share of $24.79 for each of Classes I, D, F, and S (table 9, rows 6, 10, 14, and 18). Their disclosed shares (table 9, rows 5, 9, 13, and 17) sum to 501,538,142, and their class net assets (rows 4, 8, 12, and 16) sum to the schedule total of $12,434,974 thousand. The oracle's observed product of $501,538,142,000 implies an effective NAV of $1,000 per share, contradicting the source's $24.79. This is a localized extraction/field-selection defect, not a valid source inconsistency."
+}

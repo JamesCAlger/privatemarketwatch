@@ -1,0 +1,65 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001653384",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No immediate GAV effect from the verdict file itself. The proposed patch documents the 1025010000.000000 source row as a total investment line excluding Treasury Bills, not as a position.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 7,
+      "row_index": 11,
+      "cell_indices": [
+        0,
+        4,
+        9,
+        14,
+        20,
+        25,
+        30
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The row is explicitly labeled 'Total Investments, Excluding U.S. Treasury Bills' and reports aggregate cost, fair value, and percent columns for current and comparative periods, not issuer-level holding detail."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 18,
+      "row_index": 68,
+      "cell_indices": [
+        0,
+        7,
+        8,
+        10,
+        11
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The schedule total line repeats 'Total Investments, excluding U.S. Treasury Bills' with aggregate cost and fair-value amounts, confirming this is a total row rather than a production position."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Added exact total-header recognition for the normalized label 'total investments excluding u s treasury bills' and focused regression coverage with an issuer-bearing false-positive label that remains blocking.",
+  "primary_justification": "The blocker row is not a missing position. The source identifier begins with 'Total Investments' and the HTML evidence shows aggregate cost/fair-value totals excluding U.S. Treasury Bills. Adding it as a holding would duplicate the portfolio total and violate the position-level data contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "Low. The patch is exact to the normalized total phrase and includes a false-positive test so issuer-bearing Treasury Bill labels are not cleared by the new rule.",
+  "review_id": "BDCSRC_0001653384_2023-12-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_9587d98f74",
+  "reviewer_notes": "Manually reviewed this Runway bundle. The direct HTML coordinate and the XBRL source row agree on a portfolio total excluding U.S. Treasury Bills. Other Treasury Bill mentions in the bundle are financial statement rows and are not used as production-position evidence.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "After affected outputs are rebuilt, this row should classify as documented_source_total_header instead of blocking_source_unclassifiable_after_review.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict schema with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

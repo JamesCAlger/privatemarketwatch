@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_BLK_745ea71336d3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "internal_oracle_count",
+  "observed_value": 1283,
+  "anchor_value": 258,
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(10) | CA + | 5.00 % | 7.28 % | 8/10/2022 | 8/10/2029 | CAD | 257,763 | 198,878 | 185,294 | 0.41",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 28,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(10) | CA + | 5.00 % | 7.27 % | 8/10/2022 | 8/10/2029 | CAD | 258,226 | 199,099 | 188,136 | 0.40",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 count discrepancy. The oracle reports source count 258 versus output count 1283, but the raw filing does not disclose a grand total of investment-position rows. Targeted source checks confirm that the filing contains both current and comparative schedules, including the same 123Dentist instrument at table 27 row 23 and table 97 row 28. Those coordinates establish comparative-period structure but do not prove whether the output improperly included comparative rows or whether the internal 258 anchor is incomplete. The contract forbids scanning and manually counting the schedule haystack, so neither side of the discrepancy can be validated from the available source views."
+}

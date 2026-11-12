@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_9d9f9861dc47",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 1,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 308,
+      "row_index": 6,
+      "quoted_text": "Accel International Holdings Inc (Term Loan) | 1M S + 4.50 % | 8.22 % | 4/26/2032 | $ 12,568 | $ 12,506 | $ 12,568 | 2.38 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 311,
+      "row_index": 2,
+      "quoted_text": "Centaur Holdings III LLC (Term Loan) | 3M S + 4.75 % | 8.42 % | 9/5/2031 | $ 34,066 | $ 33,737 | $ 33,726 | 6.39 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing contains issuer-level investment schedule rows with cost and fair value, but the validation row reports fund_financials present and holdings absent.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 308,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "F28 expects fund_financials and holdings to be jointly present or jointly absent. The bundle reports value fund=True;holdings=False, while raw source includes private-market holding rows in investment schedule tables 308 and 311 with issuer names, rates, maturities, cost, and fair value. This grounds the mismatch as a holdings extraction gap rather than a valid absence of holdings."
+}

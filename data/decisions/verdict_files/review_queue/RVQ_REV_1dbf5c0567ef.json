@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_1dbf5c0567ef",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_STANDARD_USD_EOBZTAHQ7EWNAY-F6HM7GA",
+  "anchor_value": "USD",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 1,
+      "quoted_text": "Portfolio Investments ... Amortized Cost ... Market Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "Evans Network | ... | Par/Shares | $ | 3,584,708 | $ | 3,618,367",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 18,
+      "quoted_text": "A Place For Mom | Senior Secured Term Loan | ... | 2,201,313 | 2,201,351 | 2,157,287",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because the extracted XBRL unit label is UNIT_STANDARD_USD_EOBZTAHQ7EWNAY-F6HM7GA rather than literal USD. The raw source schedule labels the relevant value column as Amortized Cost and shows dollar markers for the cost and market-value columns in the same table section; representative flagged holdings such as A Place For Mom sit under that dollar-denominated cost column. The source therefore supports USD-denominated cost, so the flag is a rule-scope false alarm against a noncanonical USD unit label rather than a data error in the holding."
+}

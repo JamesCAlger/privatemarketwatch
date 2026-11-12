@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_86ecad94a942",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1588604000,
+  "anchor_value": 1625489000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "Dreyfus Treasury Obligations Cash Management Money Market Fund | 36,885 | 36,885",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The $36.885 million short-term money-market investment is omitted from the extracted position sum and exactly explains the conservation residual.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 14,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The extracted fair-value sum of $1,588.604 million equals the filing's Total Portfolio Investments at table 14 row 8, but the filing's Total Investments at Fair Value is $1,625.489 million at table 14 row 12. The $36.885 million difference is exactly the separately listed Dreyfus short-term money-market investment at table 14 row 11, establishing a missing-position extraction gap rather than a bad anchor."
+}

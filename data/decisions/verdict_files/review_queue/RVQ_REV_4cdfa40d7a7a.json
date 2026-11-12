@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_4cdfa40d7a7a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 25145.811,
+  "anchor_value": 25149.083,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 20,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 25,426,426 | $ | 25,149,083 | (2)(6)(34)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 9,
+      "quoted_text": "Non-controlled/non-affiliated investments (cost - $ 25,426,426 and $ 24,414,425 at March 31, 2026 and December 31, 2025, respectively) | $ | 25,149,083 | $ | 24,515,628",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows a real aggregate fair-value omission. The March 31, 2026 filing schedule and balance-sheet investment line both report fair value of 25,149.083 million, while the extracted position total is 25,145.811 million, a 3.272 million shortfall. B01 reports 96 leaves without fair value, consistent with an extraction gap. The source schedule is distributed across many continuation tables and does not safely localize the affected rows without haystack scanning, so localized is false."
+}

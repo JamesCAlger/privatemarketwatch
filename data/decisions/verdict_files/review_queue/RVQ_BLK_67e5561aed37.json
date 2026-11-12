@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_67e5561aed37",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "issuer name printed in Country/Security/Industry/Company column",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 31,
+      "quoted_text": "Klick Inc. (4)(5)(6) | Unitranche First Lien Delayed Draw Term Loan | 11/2032 | - | ( 8 ) | ( 0.0 ) | ( 31 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 33,
+      "quoted_text": "Klick Inc. (6) | Unitranche First Lien Term Loan | S + 500, 75 Floor | 8.67% | 11/2032 | 32,967 | 32,852 | 6.5 | 32,674",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 24,
+      "quoted_text": "Fugue Finance BV (6)(7)(11) | Senior Secured First Lien Term Loan | S + 225 | 5.92% | 01/2032 | 1,478 | 1,473 | 0.3 | 1,462",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C201 flags missing issuer_name values. The raw March 31, 2026 schedule explicitly identifies the issuers in the first column for representative flagged extracted positions: Klick Inc. at table 23 rows 31-33 and Fugue Finance BV at table 24 row 24. The matching extracted holdings retain instrument terms, maturity, cost, and fair value but have blank issuer_name, so the required names were present in source and lost during extraction. This is a real extraction gap, not a source omission or a bad validation rule."
+}

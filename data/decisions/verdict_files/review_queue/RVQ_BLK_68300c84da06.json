@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_68300c84da06",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": 6018000.0,
+  "anchor_value": 6018000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 11,
+      "quoted_text": "Pluralsight, LLC | First Lien Term Loan | SOFR+ 7.50% | 8/22/2029 | Principal 6,018 | Cost 5,563 | Fair Value 301 | (5)(8)(11)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review of the full source row shows that none of the three compared fields is erroneous. The filing reports principal of $6.018 million, cost of $5.563 million, and fair value of $0.301 million for the Pluralsight, LLC First Lien Term Loan. The extracted principal_amount of $6,018,000 therefore agrees with the source, while the very low fair value is a disclosed severe impairment rather than a scale or FX error. X06's greater-than-10x heuristic is the faulty check for this distressed position."
+}

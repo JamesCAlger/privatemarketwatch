@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_1b79d23c2eb2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 12,
+      "quoted_text": "Bulab Holdings, Inc. | First Lien Term Loan | EUR 1,348 | amortized cost 1,585 | fair value 1,542",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule explicitly reports the Bulab foreign loan par as EUR 1,348 while its amortized cost and fair value are reported in the filing's USD schedule columns. A missing principal_amount_usd therefore leaves the foreign-currency principal unnormalized for USD par analytics. The same source structure appears for CAD and GBP instruments. This grounds a real extraction/normalization gap, but the aggregate flag does not localize all 857 reported issue rows and may overcount USD rows that use ditto-style blank currency cells."
+}

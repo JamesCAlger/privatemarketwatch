@@ -1,0 +1,47 @@
+{
+  "review_id": "RVQ_REV_859f13a0beea",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2124410,
+  "anchor_value": 2124410,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 23,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | S + 5.50 % | 05/08/28 | 2,881 | ( 18 | ) | ( 14 | ) | (6) (7) (8) (9)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 27,
+      "quoted_text": "BSI3 Menu Buyer, Inc (dba Kydia) | Financial Services | S + 6.00 % | 01/25/28 | 1,924 | ( 18 | ) | ( 77 | ) | (6) (7) (9)"
+    },
+    {
+      "table_index": 42,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 190.0 % | $ | 2,124,410 | $ | 2,087,081",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (cost of $ 2,124,410 and $ 2,555,996 ) | $ | 2,087,081 | $ | 2,476,760",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "Parenthesized cost cells such as (18) and (77) are present in the SOI source and are valid negative cost/fair-value rows, not extraction defects.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 37,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The fmt_cost flag appears to be driven by rows where the SOI prints cost and fair value as parenthesized negative amounts split across cells. Raw source confirms those values in the cost/fair-value columns, for example Admiral Buyer cost (18) and fair value (14), and BSI3 Menu Buyer cost (18) and fair value (77). The investment schedule total cost of 2,124,410 matches the balance-sheet cost anchor for total investments, so the flagged cost formatting is source-supported rather than a data error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0e34ab6da8e5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -152000.0,
+  "anchor_value": -152000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 12,
+      "quoted_text": "Pacific Group Bidco Pty Ltd (dba Magentus) | Software | B + 2.00 % | 07/30/31 | AUD | 42,983 | ( 152 | ) | ( 574 | ) | (7) (8) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 38,
+      "quoted_text": "Jupiter Refuel Canada Buyer Inc. (dba 4Refuel) | Oil, Gas & Consumable Fuels | C + 5.25 % | 06/30/31 | CAD | 11,547 | ( 59 | ) | ( 105 | ) | (7) (8) (9) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw SOI source itself presents these cost amounts in parentheses. The extracted Magentus cost of -152000 matches table 49 row 12 cost shown as (152) in thousands, with fair value also shown as (574); 4Refuel shows the same source convention at row 38. This supports that the negative costs are source-stated schedule values rather than extraction defects."
+}

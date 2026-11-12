@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_b461490d7399",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_par_currency",
+  "observed_value": null,
+  "anchor_value": "EUR 49,921",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 28, "row_index": 4, "quoted_text": "Inspired Pet Nutrition EUR | Par Amount EUR 49,921 | Cost 48,773 | Fair Value 49,207", "ties_to_residual": false},
+    {"table_index": 28, "row_index": 7, "quoted_text": "Inspired Pet Nutrition GBP | Par Amount GBP 104,431 | Cost 102,319 | Fair Value 102,970", "ties_to_residual": false}
+  ],
+  "findings": [
+    {"mechanism": "extraction_gap", "detail": "Foreign-currency debt par is present in the schedule, but principal_amount_usd is missing for the flagged positions.", "fix_class": "unit_rescale", "citation": {"table_index": 28, "row_index": 4}}
+  ],
+  "rationale": "Class 3 aggregate flag. The filing schedule explicitly labels debt par in non-USD currencies, including EUR 49,921 at table 28 row 4 and GBP 104,431 at table 28 row 7, while the 174 flagged holdings have blank principal_amount_usd. The source therefore confirms that an explicit currency conversion/normalization step is required and missing. Filing investment totals are not a valid anchor for principal conversion, so localization rests on the row-disposition structure and representative source rows rather than a total residual."
+}

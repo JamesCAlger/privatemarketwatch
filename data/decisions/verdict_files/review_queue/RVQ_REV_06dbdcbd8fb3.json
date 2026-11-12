@@ -1,0 +1,46 @@
+{
+    "review_id":  "RVQ_REV_06dbdcbd8fb3",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "interest_rate and basis_spread missing in extracted rows",
+    "anchor_value":  "source rows disclose Reference Rate SOFR and Spread 4.50%",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  45,
+                                  "row_index":  5,
+                                  "quoted_text":  "Quantum Leap Buyer LLC | Delayed Draw Term Loan | [blank Interest Rate] | SOFR | 4.50 % | 9/05/2025 | 9/6/2032",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  45,
+                                  "row_index":  6,
+                                  "quoted_text":  "Quantum Leap Buyer LLC | Revolving Line of Credit | [blank Interest Rate] | SOFR | 4.50 % | 9/05/2025 | 9/6/2032",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Delayed Draw Term Loan extraction omitted the source SOFR reference rate and 4.50% spread, leaving no interest_rate or basis_spread.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  45,
+                                          "row_index":  5
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Revolving Line of Credit extraction omitted the source SOFR reference rate and 4.50% spread, leaving no interest_rate or basis_spread.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  45,
+                                          "row_index":  6
+                                      }
+                     }
+                 ],
+    "rationale":  "X02 is a within-row missing-rate warning. The raw SOI shows the two flagged Quantum Leap Buyer LLC private-credit rows have blank Interest Rate cells but do disclose Reference Rate SOFR and Spread 4.50%. Because the extracted rows retained neither interest_rate nor basis_spread even though the spread terms are present in source, the warning reflects a real extraction gap localized to table 45 rows 5 and 6."
+}

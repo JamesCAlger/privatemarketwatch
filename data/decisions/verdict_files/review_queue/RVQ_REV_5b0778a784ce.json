@@ -1,0 +1,106 @@
+{
+  "review_id": "RVQ_REV_5b0778a784ce",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 11,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Condensed Consolidated Schedules of Investments as of June 30, 2025 and December 31, 2024 (Unaudited) | 10",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 1,
+      "quoted_text": "Fair Value as of December 31, 2024 | Gross Additions | Gross Reductions | Net Change in Unrealized Appreciation (Depreciation) | Net Realized Gain (Loss) | Fair Value as of June 30, 2025 | Income",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 117,
+      "row_index": 11,
+      "quoted_text": "Daylight Beta Parent, LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 10.00 % | 10.00 % PIK | 9/11/2023 | 9/12/2033 | 54,791 | 49,530 | 12,744 | 0.03",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 130,
+      "row_index": 17,
+      "quoted_text": "Caerus Midco 2 S.a r.l. - Additional Vehicle Units | (4)(6) | 10/28/2022 | 988,290 | 988 | 109 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 132,
+      "row_index": 7,
+      "quoted_text": "Connatix Parent, LLC - Class L Common Units | (4) | 7/14/2021 | 126,136 | 1,388 | 628 | 0.00",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 flagged rows are comparative-period investment facts retained under the June 30, 2025 report date; the source filing presents schedules as of both June 30, 2025 and December 31, 2024.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 7, "row_index": 8}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Benefytt-related flagged facts include comparative schedule values that reconcile from December 31, 2024 to June 30, 2025 rather than representing a new current-period row.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 77, "row_index": 7}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Caerus Midco 2 vehicle-unit rows appear in the comparative schedule block and should not be retained as current-period holdings rows.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 130, "row_index": 17}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Connatix Parent Class L common-unit row appears in the comparative schedule block and should not be retained as a current-period holdings row.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 132, "row_index": 7}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Falcon Top Parent Class A common-unit row appears in both schedule blocks; the flagged row is the comparative-period instance.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 131, "row_index": 13}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Jupiter Ultimate Holdings common-unit rows appear in both schedule blocks; the flagged Class A row is the comparative-period instance.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 128, "row_index": 12}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "NSI Parent Class A common-unit row appears in both schedule blocks; the flagged row is the comparative-period instance.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 129, "row_index": 12}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Pibb Member rows appear in both schedule blocks and in the fair-value rollforward from December 31, 2024 to June 30, 2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 143, "row_index": 9}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Pye-Barker Fire & Safety rows appear in both schedule blocks with differing period-specific rates and values; the flagged row is a comparative-period instance.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 85, "row_index": 8}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "US Oral Surgery Management rows appear in both schedule blocks with differing period-specific rates and values; the flagged row is a comparative-period instance.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 94, "row_index": 10}
+    }
+  ],
+  "rationale": "PP03 is a row-validation position-purity flag. The raw filing explicitly contains condensed consolidated schedules of investments as of both June 30, 2025 and December 31, 2024, and the source rows for the flagged identifiers are present in duplicated current/comparative schedule blocks. Rows from the December 31, 2024 comparative schedule should not be retained as June 30, 2025 holdings facts, so the flag is a real comparative-period data error."
+}

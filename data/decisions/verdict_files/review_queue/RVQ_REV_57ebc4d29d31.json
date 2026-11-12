@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_57ebc4d29d31",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.7718446601941747,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 19,
+      "quoted_text": "Dynamic Connections, Ltd (f)(j)(m)(p) | Delayed Draw Term Loan | - | - | 11/27/2030 | - | (99,799) | (101,307)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 46,
+      "row_index": 20,
+      "quoted_text": "Dynamic Connections, Ltd (f)(j)(m)(p) | Revolving Credit Facility | - | - | 11/27/2030 | - | (33,252) | (33,769)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts debt commitment rows whose source schedule explicitly has dashes for both reference rate/spread and interest rate, so the missing rates are source-faithful rather than extraction defects.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 46,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "The flag is an aggregate debt-rate coverage failure: 77.18446601941747% of 206 debt rows have rates versus an 80% threshold. Raw schedule rows show debt instruments such as Dynamic Connections delayed draw and revolving credit facilities with explicit '-' in both the Reference Rate and Spread and Interest Rate columns, zero par, and small negative cost/fair value. Those blanks match the filed source, so C01 is over-scoping legitimate no-rate debt commitment rows rather than exposing a pipeline data error."
+}

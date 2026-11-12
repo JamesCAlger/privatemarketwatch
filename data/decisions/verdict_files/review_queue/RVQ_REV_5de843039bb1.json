@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_5de843039bb1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 62,
+      "quoted_text": "K2 Propco Class S Units has 897 in the Par Amount/Shares column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 63,
+      "quoted_text": "K2 Pure Solutions Class S Units has 113 in the Par Amount/Shares column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 67,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. has 25,000 in the Par Amount/Shares column.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "All three common-stock source rows disclose share counts in the Par Amount/Shares column, but the extracted equity-share completeness metric is 0 of 3.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "C04 fails because the extracted data reports 0.0% of 3 equity rows with shares. The raw June 30, 2025 schedule shows the three common-stock rows with share counts in the Par Amount/Shares column: 897, 113, and 25,000. The check is therefore identifying a real extraction/column mapping gap, not a source omission."
+}

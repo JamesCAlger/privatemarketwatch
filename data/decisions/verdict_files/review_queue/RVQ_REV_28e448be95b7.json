@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_28e448be95b7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "financial_highlights_threshold",
+  "observed_value": 9.46388665997994,
+  "anchor_value": 15.36,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 279,
+      "row_index": 12,
+      "quoted_text": "Total distributions to stockholders | ( 1.92 )"
+    },
+    {
+      "table_index": 279,
+      "row_index": 21,
+      "quoted_text": "Ratio of net investment income to average net assets(5)(7) | 10.24 | %"
+    }
+  ],
+  "rationale": "F16 fired on distribution rate exceeding 1.5 times income yield, but the raw financial highlights show 2025 total distributions of 1.92 per share and net investment income yield of 10.24%. The flagged distribution-rate value, 9.46388665997994%, is below the 1.5x income-yield threshold of 15.36%, so the source supports the stored financial data and the check fire is a false alarm."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_414b108425e2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": null,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "STG Distribution LLC (h)(m)(q)(r) | Term Loan | SOFR + 8.25% (7.25% PIK) | - | 10/3/2029 | 7,070,904 | 6,710,921 | 7,070,904",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "STG Distribution LLC (h)(m)(q)(r) | Term Loan | SOFR + 7.50% (6.50% PIK) | - | 10/3/2029 | 38,409,862 | 38,409,862 | 422,509",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 investment schedule localizes exactly two STG Distribution term loans with the (r) footnote marker and a dash for current interest rate. The adjacent STG facilities lack (r) and show an 8.00% interest rate, corroborating that the marker is position-specific rather than an issuer-wide artifact. The source therefore supports two genuine non-accrual positions requiring footnote-aware extraction."
+}

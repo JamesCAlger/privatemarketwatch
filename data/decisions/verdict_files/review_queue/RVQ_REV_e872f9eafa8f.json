@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_e872f9eafa8f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | Last Out Term Loan - 15.54 % inc PIK (SOFR + 10.25 %, 1.50 % Floor, 2.75 % PIK) | Fair Value | $ | 20,010,689"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency value U_USD as not USD, but the raw Schedule of Investments presents fair values in dollars; the cited row's Fair Value cell is explicitly dollar-denominated. U_USD is consistent with a USD XBRL unit identifier, so the row is USD-denominated and the check is over-strict rather than a source data defect."
+}

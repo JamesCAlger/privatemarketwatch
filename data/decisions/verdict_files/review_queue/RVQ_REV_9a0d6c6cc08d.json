@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9a0d6c6cc08d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "$ par amount shown in source schedule",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 5,
+      "quoted_text": "Central Parent, Inc. ... Par Amount/ Units (1) $ 9,875 ... Amortized Cost $ 9,892 ... Fair Value $ 8,397",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 3,
+      "quoted_text": "Mews Systems B.V. ... Par Amount/ Units (1) $ 18,428 ... Amortized Cost $ 17,380 ... Fair Value $ 18,418",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 flags missing principal_amount_usd on rows asserted to have non-USD source par. The raw SOI schedule instead presents the Par Amount/ Units column as dollar-denominated: table 48 row 5 explicitly shows $ 9,875 for Central Parent, Inc., and table 49 row 3 explicitly shows $ 18,428 for Mews Systems B.V. Searches for EUR, currency, foreign, and denominated did not find source text indicating non-USD par for the schedule. The flag appears to arise from repeated blank currency-symbol cells in the table layout rather than an actual non-USD principal requiring FX conversion."
+}

@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_9f5c2c58bbb4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 3,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 23,
+      "quoted_text": "Mavenir Systems, Inc. Initial Term Loan (2)(3) | SOFR + 10.000 % | 14.324 % | 09/02/2025 | 633 | 630 | 621 | 0.30 | %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 24,
+      "quoted_text": "Mavenir Systems, Inc. Initial Term Loan (2)(3) | SOFR + 10.000 % | 14.318 % | 09/02/2025 | 469 | 466 | 460 | 0.22 | %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 25,
+      "quoted_text": "Mavenir Systems, Inc. Initial Term Loan (2)(3) | SOFR + 10.000 % | 14.310 % | 09/02/2025 | 234 | 232 | 229 | 0.11 | %"
+    }
+  ],
+  "rationale": "B02 fired on duplicate position keys for the Mavenir first-lien technology position, but the raw June 30, 2025 schedule shows three separate Mavenir Initial Term Loan rows rather than duplicated source rows. The rows share issuer, instrument name, reference spread, and maturity, but they differ in stated interest rate and par/cost/fair value, so the duplicate-key check is too coarse for this filing's lot-level disclosure."
+}

@@ -1,0 +1,43 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "anchor_bad",
+                         "fix_class":  "anchor_fix",
+                         "detail":  "The pct-of-net-assets identity check appears to use the wrong internal denominator; source rows tie to Net Assets of 435,763,591 after normal percent rounding.",
+                         "citation":  {
+                                          "row_index":  36,
+                                          "table_index":  27
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_BLK_a50ee64098cf",
+    "mechanism":  "anchor_bad",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  435763591,
+    "anchor_value":  1061901106,
+    "rationale":  "Raw source shows the SOI denominator explicitly as Net Assets (100.0%) of 435,763,591. The same schedule reports Total Investments of 1,198,298,004 as 275.0%, which independently implies the same net-assets scale after filing rounding. Flagged rows such as Tabhi Purchaser Term Loan B show 13.0% and fair value 56,634,539, which equals about 13.0% of 435,763,591. The large residuals therefore arise from the checker/internal anchor, not from erroneous source values.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  36,
+                                  "table_index":  27,
+                                  "quoted_text":  "Net Assets ( 100.0 %) | $ | 435,763,591"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  33,
+                                  "table_index":  27,
+                                  "quoted_text":  "Total Investments ( 275.0 %) | $ | 1,362,358,197 | $ | 1,198,298,004"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  12,
+                                  "table_index":  26,
+                                  "quoted_text":  "Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Term Loan B - 9.67% inc PIK | 13.0% | Fair Value 56,634,539"
+                              }
+                          ],
+    "confidence":  0.93
+}

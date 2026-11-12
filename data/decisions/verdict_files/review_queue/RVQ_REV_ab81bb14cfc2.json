@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_ab81bb14cfc2",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2022-10-31 acquisition date on current-period row",
+  "anchor_value": "2023-06-30 schedule of investments",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 12,
+      "quoted_text": "Frisbee Holdings, LP (Fetch) | (4) (9) | 10/31/2022 | 18,287 | 233 | 233 | 0.03"
+    },
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Total Portfolio Investments | $ | 1,473,450 | $ | 1,444,805 | 200.33 | %"
+    },
+    {
+      "table_index": 43,
+      "row_index": 6,
+      "quoted_text": "Total | $ | 1,473,450 | $ | 1,444,805 | 100.0 | % | $ | 1,264,933 | $ | 1,234,145 | 100.0 | %"
+    }
+  ],
+  "rationale": "PP03 flagged Frisbee Holdings, LP (Fetch) as a comparative-period row, but the raw source shows the row in the current June 30, 2023 schedule of investments. In table 20 the 10/31/2022 value is explicitly under the Acquisition Date column, with current-period cost and fair value of 233, and the table's Total Portfolio Investments fair value of 1,444,805 ties to the June 30, 2023 total in table 43. The same issuer also appears in the December 31, 2022 comparative schedule, but that does not make the current table 20 row a comparative leak."
+}

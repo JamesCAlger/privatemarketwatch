@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_e6151d01ee58",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "",
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Raw source was unavailable through the evidence CLI: overview, tables, and totals all returned missing_cached_html for accession 0001752724-22-052357, so the F26 fund-vs-holdings leverage divergence cannot be adjudicated from source."
+}

@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001849894",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "Insufficient bounded evidence to safely change production parsing for this CIK-quarter-mechanism packet without manual source-table adjudication and a tested rule. Needed evidence: coordinate-level source table classification for the blocker rows, proof that the rows are either true position rows or non-position aggregate/header rows, and a false-positive analysis showing any proposed parser/config rule would not suppress legitimate position-level holdings.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 31 current blocker row(s) in mechanism blocking_source_pct_leaf_parser_mismatch, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2024-06-30",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 560055000.000000.",
+  "review_id": "BDCSRC_0001849894_2024-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_ab27577e69",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Fix parser/staging for terminal-percentage source rows with issuer, instrument, rate, maturity, or other leaf evidence.. Sample identifiers: Investments Investments - non-controlled/non-affiliated Equity and Other Investments Banking, Finance, Insurance & Real Estate Accession Risk Management - Preferred Stock Interest Rate 13.25% PIK | Investments Investments - non-controlled/non-affiliated Equity and Other Investments Retail Xponential Fitness LLC - Series A Preferred Stock Interest Rate 7.5% PIK Maturity Date 7/27/2031 | Investments Investments - non-controlled/non-affiliated First Lien Debt Banking, Finance, Insurance & Real Estate Accession Risk Management - Delayed Draw Term Loan Reference Rate and Spread S + 6.00% Interest Rate Floor 0.75% Interest Rate 11.34% Maturity Date 11/1/2029 | Investments Investments - non-controlled/non-affiliated First Lien Debt Banking, Finance, Insurance & Real Estate Foundation Risk Partners - Delayed Draw Term Loan Incremental Reference Rate and Spread S + 5.25% Interest Rate Floor 0.75% Interest Rate 10.57% Maturity Date 10/29/2030 | Investments Investments - non-controlled/non-affili",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

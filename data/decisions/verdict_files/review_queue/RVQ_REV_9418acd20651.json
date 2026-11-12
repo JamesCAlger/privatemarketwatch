@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_9418acd20651",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1013243399,
+  "anchor_value": 657323982,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 25,
+      "quoted_text": "Total Debt & Equity Investments (7) | 147.3 | % | 828,061,833 | 657,323,982",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Controlled Affiliated investments | 254,893,382 | 1,705,253 | (2,324) | 0 | (9,895,946) | 246,700,365 | 4,365,599",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | 106,857,004 | 4,366,776 | (1,354,454) | 0 | (650,274) | 109,219,052 | 2,796,825",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC | Super Senior Revolver | Fair Value 45,818,273",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 2,
+      "quoted_text": "Navistar Defense, LLC Super Senior Revolver | Fair Value at March 31, 2026 45,818,273",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Affiliate rollforward positions were extracted in addition to the Schedule of Investments; their 355,919,417 fair value exactly equals the over-coverage residual.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The filing's Schedule of Investments reports debt and equity fair value of 657,323,982, while the extracted position sum is 1,013,243,399. The 355,919,417 excess equals exactly 246,700,365 of controlled-affiliate fair value plus 109,219,052 of non-controlled-affiliate fair value from the separate affiliate rollforward tables. Navistar's 45,818,273 revolver appears in both the Schedule of Investments (table 4 row 4) and the rollforward (table 8 row 2), proving supplemental-table duplication rather than a bad filing anchor."
+}

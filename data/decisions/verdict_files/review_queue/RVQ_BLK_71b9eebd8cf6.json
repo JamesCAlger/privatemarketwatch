@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_71b9eebd8cf6",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 311346761000,
+  "anchor_value": 82199346000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 99,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | 82,916,241 | 82,199,346 | 172.60",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 8,
+      "quoted_text": "Total investments at fair value (cost of $ 82,916,241 and $ 68,985,671 , respectively) | 82,199,346 | 68,419,777",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "HTML aggregate uses an extracted fair-value sum of 311,346,761,000 even though the filing's 2025 schedule and balance sheet anchor fair value at 82,199,346,000.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 99,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The filing contains separate prior-period and subsidiary portfolio-total schedules, so aggregate extraction must scope to the primary 2025 investment portfolio instead of summing repeated SOI-like tables.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 170,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check: the filing's own primary schedule total shows fair value of 82,199,346 (in thousands), and the balance sheet independently reports total investments at fair value of 82,199,346 for 2025. The bundle's HTML extraction aggregate is 311,346,761,000, far above both the source schedule total and companyfacts FV of 82,199,346,000. Raw source also shows repeated portfolio-total schedules, including prior-period table 170 with 68,419,777, so the flag is a real aggregate extraction defect caused by double-counting/non-primary schedule leakage rather than a bad source anchor."
+}

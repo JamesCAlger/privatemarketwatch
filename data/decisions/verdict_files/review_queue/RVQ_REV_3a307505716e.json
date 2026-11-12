@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3a307505716e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "12.96 % PIK",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 2,
+      "quoted_text": "22 HoldCo Limited (10) | Senior subordinated loan | 12.96 % PIK | SONIA (S) | 7.50 % | 08/2033 | 15,462.9 | 14,974.1 | 14,840.7 | (3)(5)(6)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "row_key 472823 has blank stored interest_rate, but the SOI coupon cell for 22 HoldCo Limited is 12.96% PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 2,
+        "quoted_text": "22 HoldCo Limited (10) | Senior subordinated loan | 12.96 % PIK | SONIA (S) | 7.50 % | 08/2033 | 15,462.9 | 14,974.1 | 14,840.7 | (3)(5)(6)"
+      }
+    }
+  ],
+  "rationale": "X02 flagged private-credit rows with blank interest_rate/basis_spread. For row_key 472823, the bundle shows the stored interest_rate is blank, while the raw SOI row for the same issuer and instrument states Coupon 12.96% PIK with SONIA reference and 7.50% spread. The missing stored rate is therefore a source-grounded extraction gap, not a false alarm."
+}

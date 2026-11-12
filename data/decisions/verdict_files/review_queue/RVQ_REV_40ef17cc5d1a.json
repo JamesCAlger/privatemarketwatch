@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_40ef17cc5d1a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 31,
+      "quoted_text": "Infrabuild Australia Pty Ltd | 1st Lien Term Loan | Industrial Products & Services | S+ 14.00 %, 3.50 % Floor | 18.30 | 5/26/2023 | 5/26/2026 | 6,438,514 | 6,280,041 | 6,438,573 | 1.19"
+    },
+    {
+      "table_index": 15,
+      "row_index": 36,
+      "quoted_text": "Total Investments, March 31, 2025 | $ 922,634,556 | $ 891,256,739 | 164.48 %"
+    }
+  ],
+  "rationale": "FX03 flags cost_currency=U_USD as not USD, but the raw SOI shows the flagged cost/fair-value fields in dollar-denominated investment columns. The cited Infrabuild row has cost 6,280,041 and fair value 6,438,573, and the same schedule rolls to a dollar-labeled Total Investments line. This supports U_USD as a USD unit token rather than a non-USD currency defect; the rule should not fire on this source."
+}

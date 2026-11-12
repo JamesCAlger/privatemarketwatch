@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_b997eb74aa62",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 200.33,
+  "anchor_value": 200.33,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 32,
+      "quoted_text": "Total members' capital | $ | 721,209 | $ | 582,083",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Total Portfolio Investments | $ | 1,473,450 | $ | 1,444,805 | 200.33 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Mantech International CP | Fair Value 17,373 | Percentage of Net Assets 2.41 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule presents Percentage of Net Assets in percentage points and the values tie to members' capital/net assets of 721,209. For example, 17,373 / 721,209 = 2.41%, and the schedule total 1,444,805 / 721,209 = 200.33%. The high or greater-than-one percentage-point values are therefore correct source values for a levered BDC schedule, not data defects."
+}

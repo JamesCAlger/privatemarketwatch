@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_f32f9b43f9f6",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 25.0,
+  "anchor_value": 25.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Twin Star International, Inc. | 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "Twin Star International, Inc. | 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 6,
+      "quoted_text": "Twin Star International, Inc. | 14th Amendment Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Twin Star International, Inc. | 15th Amendment Delayed Draw Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Twin Star International, Inc. | 15th Amendment Discretionary Delayed Draw Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 9,
+      "quoted_text": "Twin Star International, Inc. | 16th Amendment Delayed Draw Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 10,
+      "quoted_text": "Twin Star International, Inc. | 17th Amendment Delayed Draw Term Loan - 25.00 % inc PIK (25.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "C117 treats seven source-stated 25.00% fixed all-PIK coupons as data outliers even though each extracted rate matches the schedule.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw schedule table 5 rows 4-10 explicitly disclose seven distinct Twin Star instruments at 25.00% inc PIK, with 25.00% fixed coupon and all PIK. The observed pik_rate of 25.0 therefore matches the source for every flagged row. C117's generic greater-than-20% outlier threshold is the faulty check for these distressed all-PIK instruments, so the grouped flag is a false alarm rather than a data defect."
+}

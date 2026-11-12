@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_bc317064ec08",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_STANDARD_USD_KSDGCPCYDEAEQHFDLHZODW",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "2X LLC Term Loan fair value is presented as $ 1,759,014 in the Fair Value column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted in Euros.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule presents fair value amounts in U.S. dollars, but fair_value_currency was stored as a noncanonical UNIT_STANDARD_USD_* token instead of USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 column-level currency validation issue. The raw schedule-of-investments row for 2X LLC shows the fair value amount with a dollar sign, and the schedule footnote states amounts are denominated in U.S. dollars unless otherwise noted. The stored fair_value_currency value is therefore not faithful to the source currency; it should normalize to USD rather than the custom UNIT_STANDARD_USD_KSDGCPCYDEAEQHFDLHZODW token."
+}

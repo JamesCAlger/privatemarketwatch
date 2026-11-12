@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_08a5e831ad79",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2.7569,
+  "anchor_value": 2.7347,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 14,
+      "quoted_text": "Total investment income | 31,542,755 | 27,237,926",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "Total | $ | 1,200,205,656 | $ | 1,153,413,327 | 100.00 | % | $ | 1,222,055,231 | $ | 1,183,746,738 | 100.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The source-supported quarterly investment-income yield is about 2.73%, so the F27 failure is attributable to the weak holdings-WAC comparison rather than the fund-financials value.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 7,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation supports the extracted income yield: the filing reports three-month total investment income of $31,542,755 (table 7 row 14) and total investments at fair value of $1,153,413,327 (table 38 row 9), implying 2.7347%, close to the flagged 2.7569%. The raw schedule also presents loan interest rates as annual percentages, while the tested income yield is a three-month measure. The source therefore supports the financial data and does not support treating the weak WAC heuristic failure as a data defect. Residual risk is that the bundle does not expose the check's exact computed WAC scalar, so the precise anchor-construction defect is not localized."
+}

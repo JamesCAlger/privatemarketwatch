@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d643a80c2f46",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "source_row_normalized",
+  "observed_value": 750.0,
+  "anchor_value": 7.5,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 8,
+      "quoted_text": "Carestream Health, Inc. (First Lien Term Loan) (7) | PRIME + 750 | 5.34 | % | 9/30/2027 | 655,663 | 586,706 | 587,366",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "The source prints the Carestream spread as PRIME + 750, a basis-point spread that should be stored as 7.5 under the platform whole-number percentage convention, not 750.0.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 17,
+        "row_index": 8,
+        "quoted_text": "Carestream Health, Inc. (First Lien Term Loan) (7) | PRIME + 750 | 5.34 | % | 9/30/2027 | 655,663 | 586,706 | 587,366"
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged value is basis_spread=750.0 for the Carestream Health row. Raw source table 17 row 8 shows the loan terms as PRIME + 750. Under the platform convention stated in the C115 evidence, spreads are stored as whole-number percentages, so the 750 basis-point token should normalize to 7.5. The stored value remains in basis points and is therefore a real rate-scale data error."
+}

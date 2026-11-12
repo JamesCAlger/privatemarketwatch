@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_b688ecf32e86",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_schedule",
+  "observed_value": -1000,
+  "anchor_value": -1000,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 21,
+      "quoted_text": "Zelis Cost Management Buyer, Inc. | First Lien Revolver | Par Amount / Shares 100 | Amortized Cost (1) | Fair Value dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 16,
+      "quoted_text": "Unlimited Technology Holdings, LLC | First Lien Revolver | Par Amount / Shares 747 | Amortized Cost (2) | Fair Value dash",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell review. The raw investment schedule labels the field Amortized Cost and explicitly prints negative parenthetical amounts for revolver positions. Table 65 row 21 shows amortized cost (1), corresponding to the extracted -1000 value, and row 16 independently shows the same pattern with amortized cost (2). The extraction preserves the filing's sign and thousand-dollar scale. Negative amortized cost can arise on unfunded revolvers from net deferred fees, so C107's sign-only warning does not establish a data defect. No aggregate anchor is required for this row-level sign check."
+}

@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_255d60d51bbc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.11875,
+  "anchor_value": 0.5,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "48Forty Solutions LLC - 1st Lien Term Loan - fair value 4,520,082 at March 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 5,
+      "quoted_text": "48Forty Solutions LLC - 1st Lien Term Loan - fair value 4,689,958 at December 31, 2024",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Accela Inc/US - 1st Lien Term Loan - fair value 10,507,653 at March 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 8,
+      "quoted_text": "Accela Inc/US - 1st Lien Term Loan - fair value 10,504,801 at December 31, 2024",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 36,
+      "quoted_text": "Total Investments, March 31, 2025 | $ 922,634,556 | $ 891,256,739 | 164.48 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 33,
+      "quoted_text": "Total Investments, December 31, 2024 | $ 919,774,172 | $ 891,045,657 | 163.51 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedules show repeated issuers across March 31, 2025 and December 31, 2024 despite the extracted D06 continuity metric reporting only 19 of 160 issuers persisted.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag. The raw filing does not support the 11.875% continuity metric: paired schedule rows show the same issuers and instruments persisting across March 31, 2025 and December 31, 2024, including 48Forty Solutions LLC and Accela Inc/US, and the schedule totals are nearly unchanged at $891,256,739 and $891,045,657 fair value. The low persistence metric is therefore a real extraction/issuer-normalization error rather than a source-level portfolio turnover event."
+}

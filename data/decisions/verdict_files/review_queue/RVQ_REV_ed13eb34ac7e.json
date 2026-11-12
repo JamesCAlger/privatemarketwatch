@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_ed13eb34ac7e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.6874251497005988,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 quarter-level C01 rate-completeness flag. The raw-source evidence CLI was attempted twice but returned no usable source because process creation failed with CreateProcessWithLogonW error 1326. The bundle reports 68.7% rate coverage (261 residual rows), but without raw-source access it is not possible to determine whether the missing rates are extraction defects or legitimate non-rate-bearing row components. Contract requires fail-closed ambiguity and escalation."
+}

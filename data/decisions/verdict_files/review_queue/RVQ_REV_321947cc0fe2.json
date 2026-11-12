@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_321947cc0fe2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": -35000,
+  "anchor_value": -35000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "G&A Partners Holding Company II, LLC revolver row shows Cost (29) (35) and Fair Value (35), i.e. negative 35 thousand, matching extracted cost -35000."
+    },
+    {
+      "table_index": 11,
+      "row_index": 33,
+      "quoted_text": "R.F. Fager Company, LLC revolver row shows Cost (29) (19) and Fair Value (19), i.e. negative 19 thousand, matching extracted cost -19000."
+    }
+  ],
+  "rationale": "C107 flagged negative cost values. The raw SOI shows these negative costs directly as parenthesized amounts on revolver rows, and the extracted values match the source scale. This is not a data extraction error; it is a monitoring-rule false alarm for source-filed negative cost rows."
+}

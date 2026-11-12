@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_b7b4364898c0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated schedule cost column",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC (1 )(2)(3)(4)(5 ) | Preferred Equity | - | - | - | - | 1,125 | 1,125,000 | 1,125,000 | - 94.6 | %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC , Class A (1)(2)(3)(4)(5) | Equity Interest | - | - | - | - | 90 | 90,000 | 90,000 | - 7.6 | %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC , Class B (1)(2)(3)(4)(5 ) | Equity Interest | - | - | - | - | 75 | - | - | 0.0 | %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "FIRE: Finance Total | $ | 1,215,000 | $ | 1,215,000 | - 102.2 | %"
+    }
+  ],
+  "rationale": "FX03 flagged the extracted cost_currency value U_USD as not USD for the three Legacy Corporate Lending HoldCo rows. The raw schedule places those rows under Cost and Market Value columns, and the immediately following FIRE: Finance total shows both columns with dollar signs and totals of $1,215,000. The row values sum to that USD total (1,125,000 + 90,000 + 0), so the source supports USD-denominated cost rather than a non-USD currency defect. The flag is therefore a rule-scope false alarm on the unit label."
+}

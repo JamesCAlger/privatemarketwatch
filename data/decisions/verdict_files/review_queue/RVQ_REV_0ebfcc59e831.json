@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_0ebfcc59e831",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 13,
+  "anchor_value": 13,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 41,
+      "quoted_text": "Hercules Borrower LLC | First Lien Delayed Draw Term Loan | S + 4.75 % | 12/15/2028 | - | ( 32 ) | ( 73 ) | 23"
+    },
+    {
+      "table_index": 31,
+      "row_index": 42,
+      "quoted_text": "Hercules Borrower LLC | First Lien Delayed Draw Term Loan | S + 4.75 % | 12/15/2028 | - | ( 32 ) | ( 73 ) | 23"
+    },
+    {
+      "table_index": 33,
+      "row_index": 5,
+      "quoted_text": "Dwyer Instruments, LLC | First Lien Term Loan | S + 4.75 % | 7/20/2029 | 2,009 | 1,990 | 2,009 | 9"
+    },
+    {
+      "table_index": 33,
+      "row_index": 6,
+      "quoted_text": "Dwyer Instruments, LLC | First Lien Term Loan | S + 4.75 % | 7/20/2029 | 6,318 | 6,239 | 6,318 | 9"
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "Dwyer Instruments, LLC | First Lien Term Loan | S + 4.75 % | 7/20/2029 | 3,155 | 3,130 | 3,155 | 9"
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys at the CIK-quarter level, but the raw schedule itself discloses separate rows with duplicate or duplicate-looking descriptors. The Hiller example resolves to multiple source rows with same issuer/type/maturity but differing spreads or amounts, and table 31 rows 41-42 are two separate source rows with the same Hercules descriptor and values. Additional Dwyer rows in table 33 show repeated same issuer/type/rate/maturity with distinct principal, cost, and fair value amounts. The extraction is therefore preserving source-disclosed rows; the duplicate-key rule is over-scoped for filings that split positions into multiple source rows without a more granular tranche identifier."
+}

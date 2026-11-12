@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ea35e398cf18",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "current schedule rows disclose non-USD principal amounts requiring explicit USD principal conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 13, "row_index": 11},
+    {"table_index": 13, "row_index": 13},
+    {"table_index": 13, "row_index": 28},
+    {"table_index": 13, "row_index": 31},
+    {"table_index": 13, "row_index": 32},
+    {"table_index": 15, "row_index": 18},
+    {"table_index": 16, "row_index": 30},
+    {"table_index": 18, "row_index": 18}
+  ],
+  "findings": [
+    {"mechanism": "extraction_gap", "detail": "Bain Capital Euro CLO 2021-2 has EUR principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 13, "row_index": 11}},
+    {"mechanism": "extraction_gap", "detail": "Bamboo US Bidco LLC has EUR principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 13, "row_index": 13}},
+    {"mechanism": "extraction_gap", "detail": "Carlyle Euro CLO 2021-2 has EUR principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 13, "row_index": 28}},
+    {"mechanism": "extraction_gap", "detail": "CD&R Firefly Bidco Limited has GBP principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 13, "row_index": 31}},
+    {"mechanism": "extraction_gap", "detail": "CD&R Firefly Bidco Limited has a SONIA-linked GBP loan row in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 13, "row_index": 32}},
+    {"mechanism": "extraction_gap", "detail": "GoldenTree Loan Management EUR CLO 2 DAC has EUR principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 15, "row_index": 18}},
+    {"mechanism": "extraction_gap", "detail": "Madison Park Euro Funding XIV has EUR principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 16, "row_index": 30}},
+    {"mechanism": "extraction_gap", "detail": "Quantum Bidco Limited has GBP principal in the source schedule but principal_amount_usd is blank in the flagged extract.", "fix_class": "column_remap", "citation": {"table_index": 18, "row_index": 18}}
+  ],
+  "rationale": "FX01 is a row-level check on principal_amount_usd. The bundle shows eight flagged rows where principal_amount_usd is blank. The raw March 31, 2024 schedule contains corresponding non-USD debt principal rows, including EUR principal rows and GBP/SONIA principal rows, so a USD principal conversion is required for par analytics but was not extracted/populated. This is therefore a real extraction/normalization gap, not a false alarm."
+}

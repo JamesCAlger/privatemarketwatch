@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_da8a3d20531a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "Variable interest rate SOFR 3 Month Term + 7.3%; EOT 0.0%",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 11,
+      "quoted_text": "Augmented Reality Concepts, Inc. | Secured Loan | June 17, 2024 | June 18, 2029 | Variable interest rate SOFR 3 Month Term + 7.3 %; EOT 0.0% | $ | 14,145 | $ | 13,933 | $ | 14,204 | (8)(14)(19)(22)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source interest-rate cell contains variable-rate terms, SOFR 3 Month Term + 7.3%, but the extracted row has blank interest_rate and no basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level check. The reviewed holding is Augmented Reality Concepts, Inc., secured loan, investment date June 17, 2024, maturity June 18, 2029, with cost 13,933 and fair value 14,204 in the source schedule. The cited source row shows the Interest Rate column as Variable interest rate SOFR 3 Month Term + 7.3%; EOT 0.0%, so a blank extracted interest_rate/basis_spread is a real extraction gap rather than a false alarm."
+}

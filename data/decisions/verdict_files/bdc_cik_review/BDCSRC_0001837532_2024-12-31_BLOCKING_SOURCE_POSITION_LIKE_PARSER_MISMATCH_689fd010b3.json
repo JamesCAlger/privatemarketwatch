@@ -1,0 +1,62 @@
+{
+  "changed_files": [],
+  "cik": "0001837532",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed source-only rows are borrower-level rollups or shortened issuer facts, while production holdings already preserve the filer's position-level loan rows for the same borrowers.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 38,
+      "row_index": 5,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        8,
+        14,
+        19,
+        24,
+        27
+      ],
+      "reason": "IQN Holding Corp. is shown with first lien secured debt, term loan, spread, floor, maturity, cost, and fair value cells; this supports retaining separate loan rows rather than adding the shorter Beeline borrower label as another production position."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 38,
+      "row_index": 24,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        8,
+        14,
+        19,
+        24,
+        27
+      ],
+      "reason": "Heritage Environmental Services, Inc. is shown with first lien secured debt, term loan, spread, floor, maturity, cost, and fair value cells; this supports retaining separate loan rows rather than adding the shorter borrower label as another production position."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review found that the source-only rows are not missing position-level holdings to add. They are shortened borrower/category identifiers such as Commercial Services & Supplies Beeline IQN Holding Corp. and Commercial Services & Supplies Heritage Environmental Services Heritage Environmental Services, Inc. The bundled coordinate evidence and current same-accession holding rows show the actual production positions at a finer grain, including separate loan rows with instrument, spread/floor, maturity, cost, and fair value. Adding the source-only borrower labels would duplicate position exposure and violate the position-level holdings contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-12-31",
+  "requires_human_merge": false,
+  "residual_risk": "This verdict clears the reviewed rows for accounting purposes only; it does not implement a general many-to-one source reconciliation rule. A future deterministic rule would need to prove exact borrower-rollup-to-tranche sums across all candidate rows and guard against true single-position rows that happen to have short source identifiers.",
+  "review_id": "BDCSRC_0001837532_2024-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_689fd010b3",
+  "reviewer_notes": "No production patch is proposed because production output is already more granular than the blocking source-only identifiers. For example, the Beeline source-only FV of 66.130M corresponds to separate Beeline revolver and term loan rows in current holdings rather than one position row.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "No production row should be added for the reviewed source-only borrower labels. They are intentionally non-blocking borrower-level rollups/short labels when supported by same-accession position-level rows.",
+  "tests_validation_plan": "Validate verdict schema and bundled evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code tests are added because no production code patch is proposed.",
+  "verdict": "NO_PATCH_NEEDED"
+}

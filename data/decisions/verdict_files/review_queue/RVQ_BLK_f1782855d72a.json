@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_BLK_f1782855d72a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 184466000,
+  "anchor_value": 184466000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) -- 135.8 % | $ | 199,200 | $ | 184,466"
+    },
+    {
+      "table_index": 18,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 254,797 | $ | 359,383"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "A04 compared holdings fair value of 184.466 million to total assets of 254.797 million instead of the filing's Total Investments fair-value anchor.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 18,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Raw source shows the extracted holdings fair value ties to the schedule total: table 23 row 13 reports Total Investments fair value of 184.466 million. The failed comparison value, 254.797 million, is table 18 row 11 Total assets, which includes investments plus cash, cash equivalents, receivables, and other assets. The check used the wrong comparison anchor, so the A04 flag is not a data error in holdings fair value."
+}

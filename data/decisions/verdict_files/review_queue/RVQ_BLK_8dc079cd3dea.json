@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_8dc079cd3dea",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 6.76,
+  "anchor_value": 4.50,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 9,
+      "quoted_text": "Shackleton Bidco Inc. (Payworks) (Canada) | First Lien Revolver | CORRA (Q) | 0.75 | % | 4.50 | % | 6.76 | % | 11/5/2032 | CAD$ - | ( 37,370 | ) | ( 37,370 | ) | - | C/D/E"
+    },
+    {
+      "table_index": 44,
+      "row_index": 10,
+      "quoted_text": "Shackleton Bidco Inc. (Payworks) (Canada) | First Lien Delayed Draw Term Loan | CORRA (Q) | 0.75 | % | 4.50 | % | 6.76 | % | 11/5/2032 | CAD$ - | ( 149,481 | ) | ( 149,481 | ) | - 0.01 | % | C/D/E"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Payworks First Lien Revolver source spread is 4.50%, but the flagged identifier used 6.76%, which is the source total coupon.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Payworks First Lien Delayed Draw Term Loan source spread is 4.50%, but the flagged identifier used 6.76%, which is the source total coupon.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The flagged Payworks rows identify CORRA(Q) Floor 4.50%, Spread 6.76%, Total Coupon 7.26%, but the raw SOI rows show CORRA(Q) Floor 0.75%, Spread 4.50%, Total Coupon 6.76%. The source therefore confirms a real extraction/column-mapping defect in the stored spread representation; no aggregate anchor is needed."
+}

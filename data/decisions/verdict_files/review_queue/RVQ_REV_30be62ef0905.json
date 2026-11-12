@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_30be62ef0905",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/holdings coverage mismatch, but the allowed raw-source evidence CLI views (overview, tables, totals, and targeted roam) all returned status no_accession_resolved for CIK 0001655050 and report date 2021-12-31. Because the raw filing source was not usable, the contract requires a source_unavailable ambiguous verdict rather than guessing whether holdings should exist."
+}

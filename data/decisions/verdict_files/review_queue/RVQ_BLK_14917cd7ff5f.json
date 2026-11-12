@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_14917cd7ff5f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values flagged on six rows: 7.0, 5.75, 5.0, 5.0, 5.0, 6.25",
+  "anchor_value": "raw schedule reference-rate-and-spread cells show floating-rate S + spread terms, not fixed coupons",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 20,
+      "quoted_text": "Continental Battery Company | (5) (10) (12) (13) | First Lien Debt | S + | 7.00 % PIK | 11.29 % | 07/20/2028 | 6,473 | 6,415 | 2,740 | 0.24"
+    },
+    {
+      "table_index": 32,
+      "row_index": 24,
+      "quoted_text": "Randy's Holdings, Inc. | (5) (6) (9) | First Lien Debt | S + | 5.00 % | 8.71 % | 11/01/2029 | 12,644 | 12,409 | 12,518 | 1.11"
+    },
+    {
+      "table_index": 32,
+      "row_index": 25,
+      "quoted_text": "Randy's Holdings, Inc. | (5) (6) (17) | First Lien Debt | S + | 5.00 % | 8.71 % | 11/01/2029 | 3,338 | 3,249 | 3,284 | 0.29"
+    },
+    {
+      "table_index": 32,
+      "row_index": 26,
+      "quoted_text": "Randy's Holdings, Inc. | (5) (6) (17) | First Lien Debt | S + | 5.00 % | 8.71 % | 11/01/2029 | par not shown | cost (27) | fair value (17)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 30,
+      "quoted_text": "KWOR Acquisition, Inc. | (5) (6) (18) | Second Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.07 % | 02/28/2030 | 8,991 | 8,991 | 8,991 | 0.80"
+    },
+    {
+      "table_index": 68,
+      "row_index": 34,
+      "quoted_text": "Granicus, Inc. | (5) (7) | First Lien Debt | S + | 5.75 % (incl. 2.25 % PIK) | 10.34 % | 01/17/2031 | 12,853 | 12,742 | 12,853 | 1.23"
+    }
+  ],
+  "rationale": "Class 2 adjudication. X04 says fixed coupon rows should not have basis_spread, but the raw SOI rows cited above place the flagged values in the Reference Rate and Spread column next to S +, while a separate Interest Rate column gives the current all-in rate. That means the stored basis_spread is source-supported and the row is floating-rate; the flag is caused by fixed-coupon classification or rule scope, not by a bad basis_spread value."
+}

@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_abb5b675e039",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "maturity_date populated with acquisition dates before report_date: 2024-11-14, 2024-09-06, 2024-12-04, 2024-09-27, 2024-12-10",
+  "anchor_value": "source maturity_date is N/A for the cited equity rows; the 2024 dates are acquisition dates",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 27,
+      "quoted_text": "TCI Buyer LLC - Common Units (75,000 units) | N/A | 11/14/2024 | 7,500 | 9,120",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 28,
+      "quoted_text": "Eclipse Topco, Inc. - Preferred Shares (6,061 shares) | 12.50 % PIK | N/A | 09/06/2024 | 6,181 | 6,183",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 31,
+      "quoted_text": "SVP MVP Holdings, L.P. - Preferred Units (30,400 units) | 12.50 % PIK | N/A | 12/04/2024 | 30,388 | 30,385",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 34,
+      "quoted_text": "AH Parent, Inc. - Series A Preferred Shares (25,000 shares) | 10.50 % PIK | N/A | 09/27/2024 | 25,332 | 25,344",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 35,
+      "quoted_text": "HIG Intermediate, Inc. - Series A Preferred Shares (15,000 shares) | 10.50 % PIK | N/A | 12/10/2024 | 14,775 | 14,775",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity rows with source maturity date N/A were normalized with acquisition dates in maturity_date, causing X10 to fire.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "X10 flags maturity_date before the 2025-06-30 report date. The source schedule header places Acquisition Date at column 12 and Maturity Date at column 14; the cited equity rows have N/A in the maturity-date position and the 2024 dates in the acquisition-date position. The stored maturity_date values therefore came from the wrong source column, so the flagged dataset rows are real extraction errors rather than legitimately matured positions."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_48fdf8efa2f8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1898691121,
+  "anchor_value": 1898691121,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 27,
+      "quoted_text": "American Physician Partners, LLC | Term Loan | Fair Value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "AAH Topco, LLC | Revolver | Funded Par Amount - | Fair Value -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Source dash markers in leaf-row Fair Value cells were retained as null instead of normalized to numeric zero.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the schedule total of 1898691121 equals the extracted investment total, consistent with the 104 missing-value rows contributing zero fair value. Raw SOI leaf rows explicitly show '-' in the Fair Value column, including table 10 rows 11 and 27. These are filing zero markers, not absent source disclosure, so leaving fair_value null is a systematic extraction/normalization error even though it creates no monetary residual."
+}

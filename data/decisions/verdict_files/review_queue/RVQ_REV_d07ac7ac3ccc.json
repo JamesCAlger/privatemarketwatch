@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_d07ac7ac3ccc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 28,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 18,
+      "quoted_text": "Eclipse Topco, Inc. | Preferred Stock | Principal / Shares 28 | Cost 274 | Fair Value 274",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The sole preferred equity row, Eclipse Topco, Inc. Preferred Stock, discloses 28 in the Principal / Shares column but the extracted equity row count has zero rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "C04 flagged 0.0% of 1 equity rows having shares. The raw schedule localizes the only equity investment to table 14 row 18, where Eclipse Topco, Inc. Preferred Stock has 28 in the Principal / Shares column; table 14 row 19 also totals equity investments at 28. The source therefore supports shares/principal of 28, while the extracted observation is 0, so this is an extraction gap rather than a valid zero-share equity row."
+}

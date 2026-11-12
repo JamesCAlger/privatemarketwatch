@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_BLK_f79c3d86307b",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1566716000,
+  "anchor_value": 1488856000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 38, "row_index": 2, "quoted_text": "Albion Fortress Intermediate Holdings LLC | First Lien - Term Loan | EUR | cost 22,966 | FMV 23,122", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 3, "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Term Loan | CAD | cost 31,263 | FMV 31,543", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 4, "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Revolving Credit Facility | CAD | cost 704 | FMV 743", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 5, "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Delayed Draw Term Loan | CAD | cost (48) | FMV (37)", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 6, "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Term Loan | GBP | cost 15,968 | FMV 15,940", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 7, "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Delayed Draw Term Loan | GBP | cost (54) | FMV (123)", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 8, "quoted_text": "Urban Gym Group B.V. | First Lien - Term Loan | EUR | cost 6,286 | FMV 6,286", "ties_to_residual": true},
+    {"table_index": 38, "row_index": 9, "quoted_text": "Urban Gym Group B.V. | First Lien - Delayed Draw Term Loan | EUR | cost 407 | FMV 386", "ties_to_residual": true}
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Supplemental currency-detail rows in table 38 were counted as additional holdings; their FMV values sum to 77.860 million, exactly the overshoot over the 1,488.856 million investment anchor.",
+      "fix_class": "dedup",
+      "citation": {"table_index": 38, "row_index": 2}
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing and companyfacts investment anchor at 1,488,856 thousand (table 12 row 4 and table 37 row 4), while the extracted position sum is 1,566,716 thousand. The 77,860 thousand residual equals the sum of table 38 FMV rows 2-9: 23,122 + 31,543 + 743 - 37 + 15,940 - 123 + 6,286 + 386. Table 38 is a supplemental Issuer/Investment Type/Currency/Cost/FMV presentation, and the same issuers appear in the main schedule, so counting these rows as independent positions creates a duplicate/dimension double count."
+}

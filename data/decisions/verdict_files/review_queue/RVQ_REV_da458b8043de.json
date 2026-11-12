@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_da458b8043de",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 65,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 20,
+      "quoted_text": "Greencross (Vermont Aus Pty Ltd) (11) | Unitranche First Lien Term Loan | B + 575 | 10.23 % | 03/2028 | AUD 29,250 | 21,463 | 2.7 | 20,219"
+    },
+    {
+      "table_index": 35,
+      "row_index": 21,
+      "quoted_text": "Greencross (Vermont Aus Pty Ltd) (11) | Unitranche First Lien Term Loan | B + 575 ( 75 Floor) | 10.23 % | 03/2028 | AUD 5,310 | 3,656 | 0.5 | 3,671"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The duplicate key collapses two distinct Greencross source positions with the same issuer and investment type but different interest terms and principal amounts.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "B02 flagged 65 duplicate position keys, with Greencross as the example. The raw SOI shows two separate September 30, 2024 rows for Greencross (Vermont Aus Pty Ltd) Unitranche First Lien Term Loan: one has interest term B + 575 and AUD 29,250 principal, while the next has B + 575 (75 Floor) and AUD 5,310 principal. Because the source rows are distinct positions that the extracted key collapses into one duplicate key, the flag reflects a real extraction/keying defect rather than a false duplicate-source alarm."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b9e4796ca20a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 9,
+      "quoted_text": "Total | $ | 35,918,948 | 100.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 90,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted/oracle percentage sum is 0.0%, but the raw filing investment-rating schedule totals the same fair value to 100.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triage shows the fair-value total is not the problem: the raw filing total investments at fair value is 35,918,948 thousand, matching the extracted fund-quarter fair value of 35,918.948 million. The A07 failure reports pct_sum=0.0%, but raw table 29 row 9 totals fair value of 35,918,948 to 100.0%, and the SOI total row also carries a nonzero percentage of net assets. The source therefore grounds a percentage extraction gap rather than a false alarm or bad anchor."
+}

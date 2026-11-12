@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d27e0cb93f69",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 157504755,
+  "anchor_value": 157504755,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 201,
+      "row_index": 24,
+      "quoted_text": "Total Non-controlled, non-affiliated investments | $ | 158,022,677 | $ | 157,504,755 | 196.24 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 199,
+      "row_index": 13,
+      "quoted_text": "Axis Portable Air, LLC issuer/group header row has no cost or fair value cells.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 199,
+      "row_index": 14,
+      "quoted_text": "Term Loan | First Lien | 3M SOFR+ 5.75 % | 1.00 % | 10.48 % | 3/22/2022 | 3/22/2028 | Capital Equipment | $ | 1,509,146 | $ | 1,482,068 | $ | 1,501,600 | 1.87 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw SOI tables 199-201 carry the portfolio schedule with a fair value column and a schedule total of 157,504,755. The apparent 70/140 fair-value completeness failure is explained by the schedule layout: issuer/group header rows, such as table 199 row 13, are structural labels with blank value cells, while the actual investment rows immediately below them carry fair values, such as table 199 row 14. The source therefore does not show missing fair values on half of the positions; it shows a rule-scope/counting issue that treats non-position header rows as leaves."
+}

@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_3b60d5a375a7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source rows show explicit interest rates for debt rows; one flagged row is source-classified as Equity",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "AP Highlands Holdings, L.P. | Unsecured Note | N/A | 9.75 % | 10/16/2028 | 5,207 | 5,172 | 5,207 | 0.4 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 11,
+      "quoted_text": "AP Highlands Co-Invest, L.P. | Unsecured Note | N/A | 9.75 % | 10/16/2028 | 3,184 | 3,162 | 3,183 | 0.2 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 3,
+      "quoted_text": "Accordion Partners Holdings LLC | Unsecured Note | N/A | 12.75 % PIK | 11/15/2034 | 17,413 | 17,142 | 17,152 | 1.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 17,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Equity | N/A | 5/8/2024 | 375 | 3,750 | 712 | 0.1 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AP Highlands Holdings and AP Highlands Co-Invest are unsecured notes whose source interest rate is 9.75%, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 41,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Accordion Partners Holdings LLC is an unsecured note whose source interest rate is 12.75% PIK, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 43,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "ACC Ultimate Holdings, L.P. is source-classified as Equity, so the PRIVATE_CREDIT missing-rate warning is caused by classification rather than a missing debt coupon.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 48,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The X02 issue is real. For debt rows, the filing schedule contains explicit interest-rate cells that the extracted holdings left blank, including AP Highlands at 9.75% and Accordion Partners Holdings at 12.75% PIK. The source also shows ACC Ultimate Holdings as Equity, while the flagged artifact treats its blank-rate row as PRIVATE_CREDIT. These source rows ground both the missing-rate extraction gap and the classification defect."
+}

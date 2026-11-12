@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_a40d534c382a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 36753538,
+  "anchor_value": 36753538,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 79,
+      "quoted_text": "Total Investments - 101.9% | $ | 34,241,464 | $ | 36,753,538",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 55,
+      "row_index": 26,
+      "quoted_text": "Total Investments | $ | 1,469,773 | $ | 209,378 | $ | 34,709,264 | $ | 36,753,538",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The conservation check used -1,195,791 as the schedule anchor even though the filing twice reports total investments of 36,753,538, exactly matching the extracted position sum.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 79
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The 21 extracted positions sum to 36,753,538. The raw schedule of investments reports Total Investments of 36,753,538 at table 17 row 79, and the ASC 820 hierarchy independently repeats Total Investments of 36,753,538 at table 55 row 26. Thus the extraction conserves to the filing total exactly. The flagged negative anchor of -1,195,791 is not the filing's investment total and is a mis-selected anchor. Residual risk is limited to the unavailable semantic identity of that negative fact; it cannot overturn the two matching filing anchors.",
+  "ambiguity_basis": null
+}

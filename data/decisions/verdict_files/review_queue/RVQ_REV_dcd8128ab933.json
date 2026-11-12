@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_dcd8128ab933",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6398176291793313,
+  "anchor_value": 0.8,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 107,
+      "row_index": 8,
+      "quoted_text": "Access CIG, LLC(7)(22) | First lien senior secured loan | S+ | 5.00 % | 08/2028 | 79,000 | $ | 77,472 | $ | 79,695 | 0.5 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 115,
+      "row_index": 28,
+      "quoted_text": "Acrisure, LLC(6)(22) | First lien senior secured loan | S+ | 3.00 % | 11/2030 | 92,186 | 92,186 | 92,158 | 0.6 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 116,
+      "row_index": 40,
+      "quoted_text": "Activate Holdings (US) Corp. (dba Absolute Software)(7)(18)(23) | First lien senior secured loan | S+ | 5.25 % | 07/2030 | 5,711 | $ | 5,689 | $ | 5,711 | -- | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule contains explicit interest terms for debt rows whose extracted holding records have blank interest_rate, including Access CIG at S+ 5.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 107,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "C01 failed because only 64.0% of 658 debt rows have extracted rates, below the 0.8 completeness threshold. Raw schedule tables have an Interest column and representative residual rows from the bundle with blank extracted interest_rate have explicit source rates: Access CIG has S+ 5.00%, Acrisure has S+ 3.00%, and Activate Holdings has S+ 5.25%. This grounds a real extraction gap rather than a false alarm or source-unavailable ambiguity. Filing totals were checked only to confirm the schedule context, not as the proof of the rate defect."
+}

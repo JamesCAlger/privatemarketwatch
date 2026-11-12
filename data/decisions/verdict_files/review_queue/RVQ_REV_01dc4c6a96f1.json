@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_01dc4c6a96f1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated amortized cost/fair value source columns",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Company (1)(6) | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2)(8) | Fair Value (9) | Percentage of Net Assets"
+    },
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "Acceo Solutions, Inc. (3)(4)(5) | First-lien loan (CAD 57,353 par, due 10/2025 ) | 7/6/2018 | C + 4.75 % | 9.78 % | 43,273 | 42,696 (CAD 57,783 ) | 3.1 %"
+    }
+  ],
+  "rationale": "FX03 fired because cost_currency was stored as U_USD, but the raw SOI presents the flagged valuation fields in the amortized cost and fair value columns of a dollar-denominated BDC investment schedule. A representative foreign-par row keeps CAD only in the instrument par and parenthetical local fair value while the extracted amortized cost is the schedule valuation amount, so U_USD denotes the USD XBRL unit rather than a non-USD cost currency."
+}

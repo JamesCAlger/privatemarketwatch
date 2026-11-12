@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_eaeaebbd381f",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_footnote",
+  "observed_value": "SOFR",
+  "anchor_value": "S (defined as SOFR)",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 80,
+      "row_index": 1,
+      "quoted_text": "Variable rate loans use SOFR (\"S\"); the filing indicates the reference rate used and the spread for each loan.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 22,
+      "quoted_text": "Continental Acquisition Holdings, Inc. | First Lien Debt | S + | 7.00 % PIK | 10.85 % | 07/20/2028",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw filing notation key explicitly defines S as SOFR, and a flagged schedule row prints S plus a 7.00% spread. The reference and spread are corroborated by the filing itself; the flag results from failing to resolve the filing-defined abbreviation S to SOFR."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_b38d710c0afa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "8.40 %",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 27,
+      "quoted_text": "Experigreen Intermediate Holdings, Inc. | First Lien Revolver | S + 4.75 % | 8.40 % | 12/10/2032 | par 3,169 | amortized cost (16) | fair value (16)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row states S + 4.75 % and interest rate 8.40 %, but the extracted PRIVATE_CREDIT row has blank interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows missing interest_rate or basis_spread. The bundle's Experigreen revolver holding is missing the rate, while the raw SOI row has Reference Rate and Spread S + 4.75 % and Interest Rate 8.40 %. The flag is therefore a real extraction gap, not a false alarm."
+}

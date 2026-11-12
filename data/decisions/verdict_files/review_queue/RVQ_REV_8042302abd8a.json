@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8042302abd8a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 934.425,
+  "anchor_value": 934.425,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 30,
+      "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 100 Cash plus 9.50 % PIK, 1.00 % Floor | 11/27/29 | par -- | cost -- | fair value --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 31,
+      "quoted_text": "Common Equity - Equity Unit | N/A | N/A | 876 Shares | cost 2,736 | fair value --",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted investment fair-value total of USD 934.425 million equals the filing's Total Investments before Cash Equivalents of USD 934.425 million, consistent with the flag's zero fair-value residual. However, raw SOI investment leaves explicitly print em dashes in the Fair Value column, including table 10 rows 30 and 31. Those source dashes denote zero amounts and should be normalized to numeric zero; leaving fair_value missing on 44 leaves is therefore a real extraction/normalization completeness defect even though it does not change the aggregate total."
+}

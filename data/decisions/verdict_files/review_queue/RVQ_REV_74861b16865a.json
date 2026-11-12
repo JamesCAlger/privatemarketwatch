@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_74861b16865a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_row",
+  "observed_value": -3000.0,
+  "anchor_value": 3000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 26,
+      "quoted_text": "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule reports TecoStar Holdings, Inc. fair value as positive 3 thousand, but the extracted fair_value is -3000.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "C103 flagged a negative fair_value without matching negative cost or unfunded-commitment marker. The current-period source row for TecoStar Holdings, Inc. shows cost 500 thousand and fair value 3 thousand with no parentheses or negative marker, so the stored -3000.0 fair_value is a sign extraction error; the correct source-signed value is +3000.0."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_b76443108720",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -39000,
+  "anchor_value": -29000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 19,
+      "quoted_text": "Xponential Fitness LLC | (6) | (9) | (20) | First Lien - Revolving Credit Facility | SOFR + 675 | 10.4 | 12/9/2030 | -- | ( 29 | ) | ( 39 | ) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Xponential Fitness revolving credit facility cost was stored as -39000, but the source row shows Amortized Cost (29) and Fair Value (39); the cost should be -29000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 19,
+        "quoted_text": "Xponential Fitness LLC | (6) | (9) | (20) | First Lien - Revolving Credit Facility | SOFR + 675 | 10.4 | 12/9/2030 | -- | ( 29 | ) | ( 39 | ) | -"
+      }
+    }
+  ],
+  "rationale": "C107 flags negative cost. The raw Schedule rows show negative amortized costs are often explicitly printed for unfunded delayed-draw or revolving facilities, so the negative sign alone is not an error. However, the flagged value -39000 is wrong for the Xponential Fitness revolving credit facility: the source row's Amortized Cost column is (29) while the Fair Value column is (39), indicating fair value was stored in cost for that row. This grounds the item as a real data error with a localized column-remap extraction defect."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_116a7c801086",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 8,
+      "quoted_text": "Central Moloney, LLC ( 6,029 Class B common units) | \u2014 | \u2014 | \u2014 | 10/20/2023 | \u2014 | \u2014 | 996 | 18,165 | 0.7 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 23,
+      "quoted_text": "Mooring Primary, LLC ( 2,576 common units) | \u2014 | \u2014 | \u2014 | 4/1/2025 | \u2014 | \u2014 | 3 | 2,574 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 7,
+      "quoted_text": "New Engen, Inc. ( 5,067 Class B common units) | \u2014 | \u2014 | \u2014 | 12/27/2021 | \u2014 | \u2014 | 5 | 67 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 22,
+      "quoted_text": "Witkoff/Monroe 700 JV LLC ( 2,992 preferred units) | (12)(17) | \u2014 | \u2014 | \u2014 | 7/2/2021 | \u2014 | \u2014 | 3 | 6,312 | 0.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X07 flagged four rows where fair value exceeds 10x amortized cost. The raw investment schedule supports the extracted low costs and high fair values for all four localized rows: Central Moloney 996/18,165, Mooring Primary 3/2,574, New Engen 5/67, and Witkoff/Monroe 3/6,312. The source therefore supports an extreme-appreciation review case, not a data error."
+}

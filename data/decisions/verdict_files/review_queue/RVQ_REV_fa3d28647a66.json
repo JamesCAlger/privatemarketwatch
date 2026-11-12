@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_fa3d28647a66",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 410.050595,
+  "anchor_value": 249.694433,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4 | % | 258,299,078 | 249,694,433",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 14,
+      "quoted_text": "Total Assets | $ | 573,517 | $ | 680,830",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows an aggregate extraction error. The extracted holdings fair value is 410.050595m, but the filing's March 31, 2026 debt-and-equity schedule total is 249.694433m, a 160.356162m overstatement. The filing also reports total investments of 572.771377m versus 680.173130m and total assets of 573.517m versus 680.830m, both declining about 15.8%; therefore the flagged 71.25 percentage-point growth divergence is not present in raw source. The excess cannot be localized to specific rows from the available disposition evidence, but the cross-period tables make a comparative-period leak the most likely mechanism."
+}

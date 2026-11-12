@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_da6e049a9fb5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Debt Investments Financial Services Passport Labs, Inc. Investment Convertible Promissory Note A ($1,086 par, due 8/2026) Initial Acquisition Date 3/2/2023 Reference Rate and Spread 8.00% Interest Rate 8.00%",
+  "anchor_value": "Passport Labs, Inc.",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 9,
+      "quoted_text": "Passport Labs, Inc. | Convertible Promissory Note A ($ 1,086 par, due 8/2026 ) | 3/2/2023 | 8.00 | % | 8.00 | % | 1,086 | 2,348 | 0.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule separates the Company cell, Passport Labs, Inc., from the investment description, dates, rates, cost, and fair value at table 9 row 9. The stored issuer_name concatenates those separate fields and category labels into the issuer, confirming a wrapper or column extraction leak under C206."
+}

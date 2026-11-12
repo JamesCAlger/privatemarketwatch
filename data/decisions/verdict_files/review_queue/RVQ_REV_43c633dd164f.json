@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_43c633dd164f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 32,
+      "quoted_text": "Cube Industrials Buyer, Inc. and Cube A&D Buyer Inc. (8) | First lien senior secured revolving loan | 10/2029 | - | - | - | (5)(6)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 4,
+      "quoted_text": "Bamboo US BidCo LLC (10) | First lien senior secured revolving loan | 10/2029 | - | - | - | (5)(6)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 7,
+      "quoted_text": "Mr. Greens Intermediate, LLC, Florida Veg Investments LLC, MRG Texas, LLC and Restaurant Produce and Services Blocker, LLC (8) | First lien senior secured revolving loan | 05/2029 | - | - | - | (5)(6)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 11,
+      "quoted_text": "Worldwide Produce Acquisition, LLC and REP WWP Coinvest IV, L.P. (8)(9) | First lien senior secured revolving loan | 01/2029 | - | - | - | (5)(6)(8)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged four zero fair_value cells. The raw SOI source shows the corresponding unfunded revolving-loan rows have dash values in the Principal, Amortized Cost, and Fair Value columns, so storing fair_value as 0.0 is consistent with the source rather than a data error."
+}

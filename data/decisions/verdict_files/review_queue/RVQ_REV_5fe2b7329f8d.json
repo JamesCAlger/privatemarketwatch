@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_5fe2b7329f8d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 12.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 20,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance debt investment | N/A | 12.00 % | 7/2030 | 60,057 | 60,057 | 60,057",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 12,
+      "quoted_text": "ABB/Con-cise Optical Group LLC | First lien senior secured loan | S+ | 7.50 % | 2/2028 | 33,306 | 33,112 | 33,057",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 grouped row-validation flag. The raw investment schedule explicitly reports rates for representative flagged private-credit positions, including 12.00% for AAM Series 1.1 Rail and S+7.50% for ABB/Con-cise Optical, while the corresponding extracted holdings rows have blank interest_rate. This grounds a real rate extraction gap. The group is overbroad because some flagged rows are equity or N/A-rate instruments, but that does not negate the demonstrated defects within the flagged set."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_df8f4191a98f",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 29597.0,
+  "anchor_value": 29484.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 190,
+      "row_index": 5,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 208,
+      "row_index": 18,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 138,
+      "row_index": 32,
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Prior-year schedule positions were retained under the 2025 report_date, inflating extracted fair value above the 2025 schedule total.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 190,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "PP03 flags 66 rows whose source period is earlier than the 2025 report_date. Raw source shows separate 2025 and 2024 investment schedules: the 2025 Total Investments row is 29,484.8, while the extracted fund_quarter_fv_m in the bundle is 29,597.0. Representative flagged issuer evidence appears in the prior-year schedule, including ADF Capital at table 190 row 5 and ASP-r-pac at table 208 row 18. The extracted total exceeding the current 2025 schedule total, combined with prior-year row coordinates, grounds a real comparative-period leak rather than a false alarm."
+}

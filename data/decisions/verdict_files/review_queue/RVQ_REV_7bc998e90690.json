@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_7bc998e90690",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0.78125,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Commitment Expiration Date | Unfunded Commitment | Fair Value (3)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 32,
+      "row_index": 2,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | 7/2/2026 | $ | 3,252 | $ | ( 16 | )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 14,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | S + 5.25 % | 7/2/2031 | 239 | 213 | 222 | 6,9",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 is counting unfunded commitment rows from table 32 in the debt-rate denominator even though that source table has no reference-rate or spread column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 32,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The C01 flag is an aggregate rate-coverage failure: 100 of 128 debt rows have interest_rate, leaving 28 residual rows. The residual examples in the bundle are unfunded delayed-draw/revolver commitments with negative or zero fair value. In raw source, those rows are in table 32, whose header is Portfolio Company / Investment Type / Commitment Expiration Date / Unfunded Commitment / Fair Value and includes no Reference Rate and Spread column. Adjacent SOI debt rows, such as AB Centers in table 28, do disclose S + 5.25 %, confirming that rates are present where the filing provides a rate column. Therefore the blank interest_rate on the commitment rows is source-faithful, and the C01 failure is caused by including commitment rows in the rate-coverage denominator."
+}

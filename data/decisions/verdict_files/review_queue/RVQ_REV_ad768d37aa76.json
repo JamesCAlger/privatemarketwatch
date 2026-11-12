@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_ad768d37aa76",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 9,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 177,
+      "row_index": 21,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan; EURIBOR + 5.750%; 7.750%; 08/14/2029; cost 2,545; fair value 2,816"
+    },
+    {
+      "table_index": 177,
+      "row_index": 37,
+      "quoted_text": "Strategic Gaming Term Loan; SOFR + 7.000%; 10.905%; 10/15/2030; cost 4,855; fair value 4,942"
+    },
+    {
+      "table_index": 177,
+      "row_index": 54,
+      "quoted_text": "Guardian Capital Term Loan; SOFR + 4.017%; 9.517%; 08/14/2032; cost 4,359; fair value 4,366"
+    },
+    {
+      "table_index": 178,
+      "row_index": 15,
+      "quoted_text": "Caldera Medical Term Loan; SOFR + 7.000%; 10.927%; 01/30/2030; cost 4,883; fair value 4,805"
+    },
+    {
+      "table_index": 178,
+      "row_index": 21,
+      "quoted_text": "DwyerOmega Revolving Credit Loan; SOFR + 4.750%; 8.439%; 07/20/2029; cost 217; fair value 228"
+    },
+    {
+      "table_index": 178,
+      "row_index": 22,
+      "quoted_text": "DwyerOmega Revolving Delayed Draw Term Loan; SOFR + 4.750%; 8.527%; 08/28/2029; cost 504; fair value 504"
+    },
+    {
+      "table_index": 178,
+      "row_index": 23,
+      "quoted_text": "DwyerOmega Term Loan; SOFR + 4.750%; 8.752%; 08/28/2029; cost 3,819; fair value 3,850"
+    },
+    {
+      "table_index": 178,
+      "row_index": 40,
+      "quoted_text": "K2 Pure Solutions Nocal Holding 2L Term Loan; N/A; 17.000% with 7.000% PIK; 01/30/2029; cost 5,417; fair value 5,773"
+    },
+    {
+      "table_index": 178,
+      "row_index": 53,
+      "quoted_text": "GCOM; N/A; 17.000% PIK; 02/16/2029; cost 16,662; fair value 16,724"
+    }
+  ],
+  "rationale": "PP01 flagged nine bdc_investment_identifier values as position-purity subtotal candidates because the extracted identifiers include hierarchy labels such as Debt Investments, lien type, and industry. The raw SOI tables show each flagged item is an actual investment line with instrument name plus rate, maturity, par, cost, and fair value, while adjacent subtotal rows are separately labeled Total <industry> or Total <class>. The check overmatched valid hierarchical identifiers rather than identifying subtotal rows."
+}

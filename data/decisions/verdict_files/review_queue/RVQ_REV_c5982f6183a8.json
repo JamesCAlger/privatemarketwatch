@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c5982f6183a8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": 0.0,
+  "anchor_value": 9.4,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 30,
+      "quoted_text": "Maple Raptor Acquisition Inc. (dba Rentsync) | Secured Loan | April 28, 2025 | April 28, 2030 | Variable interest rate CORRA 3 Month Term + 9.4%; EOT 0.0%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 31,
+      "quoted_text": "Secured Loan | December 23, 2025 | April 28, 2030 | Variable interest rate CORRA 3 Month Term + 9.4%; EOT 0.0%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The raw investment schedule explicitly gives a 9.4% spread over three-month CORRA for both Maple Raptor secured-loan lots, but the flagged extracted basis_spread is 0.0. The source therefore decides the issue: the spread was omitted during extraction."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_77842bbc8d79",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Monitorus Holding, LLC Revolver row has EUR principal 625,757; extracted principal_amount_usd is blank for the FX01 issue.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan row has EUR principal 3,585,699; extracted principal_amount_usd is blank for the FX01 issue.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted Euro.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row/local-field review. The source filing states debt par is USD unless otherwise noted Euro, and the March 31, 2023 SOI has Monitorus Holding, LLC debt rows where the principal currency marker is Euro with principal amounts 625,757 and 3,585,699. The reviewed FX01 artifact reports non-USD debt principal rows with blank principal_amount_usd, so the missing USD-converted principal is a real extraction/normalization gap rather than a false alarm. No aggregate anchor was needed."
+}

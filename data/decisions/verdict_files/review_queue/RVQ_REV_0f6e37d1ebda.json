@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_0f6e37d1ebda",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "PP03 flagged Pace Industries, Inc. Common Stock as a comparative-period row retained for report_date 2025-12-31.",
+  "anchor_value": "Current-period SOI equity table contains the same Pace Industries, Inc. Common Stock row for 2025-12-31 with 971,418 shares, amortized cost 2,110,522, fair value zero, and 0.0% of net assets.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 27,
+      "quoted_text": "Pace Industries, Inc. (2)(4)(7) | Common Stock | 0.0% | 971,418 shares | amortized cost $2,110,522 | fair value --"
+    }
+  ],
+  "rationale": "The flagged row is not a real comparative-period contamination. Although the same Pace Industries common stock row also appears in the comparative equity schedule at table 28 row 27, the raw 2025 schedule of equity investments contains the matching current-period row at table 23 row 27, so the retained holding is source-supported for the report date."
+}

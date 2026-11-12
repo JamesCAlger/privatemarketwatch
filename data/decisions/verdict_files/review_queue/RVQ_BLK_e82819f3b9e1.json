@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_e82819f3b9e1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 118,
+      "row_index": 27,
+      "quoted_text": "Align Precision Group, LLC and Align Precision Topco, L.P. (4)(13) | Manufacturer of precision machined components for defense and high-tech industrial platforms | First lien senior secured loan | 10.71 % PIK | SOFR (Q) | 6.75 % | 07/2025 | 07/2030 | 14.3 | 14.3 | 14.3 | (2)(9)"
+    },
+    {
+      "table_index": 131,
+      "row_index": 5,
+      "quoted_text": "Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P. (4) | Designer, marketer and distributor of licensed and owned apparel | First lien senior secured loan | 9.39 % | SOFR (Q) | 5.50 % | 02/2024 | 08/2029 | 28.4 | 26.6 | 28.4 | (2)(9)"
+    },
+    {
+      "table_index": 105,
+      "row_index": 19,
+      "quoted_text": "Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC (5)(13) | Provider of outsourced office solutions with a focus on printer and copier equipment and other parts and supplies | First lien senior secured revolving loan | 8.60 % | SOFR (S) | 5.00 % | 12/2025 | 01/2029 | 1.0 | 1.0 | 1.0 | (2)(9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Current-period source schedule row for Align Precision Group, LLC and Align Precision Topco, L.P. is present with fair value 14.3 million but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 118,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Current-period source schedule row for Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P. is present with fair value 28.4 million but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 131,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Current-period source schedule row for Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC is present with fair value 1.0 million but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 105,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "SRC_BDC01 flags eligible current-period BDC source rows missing from private_markets_holdings. The raw filing source is readable and targeted issuer searches locate all three flagged issuers in the current-period investment schedule before the current-period Total Investments line of 29,484.8 million. Because the source rows exist with investment type, rate terms, dates, cost, and fair value, the absence of corresponding pipeline output rows is a real extraction coverage error rather than a false alarm."
+}

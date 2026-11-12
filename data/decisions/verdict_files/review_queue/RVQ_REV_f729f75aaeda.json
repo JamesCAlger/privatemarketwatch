@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_f729f75aaeda",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 634626,
+  "anchor_value": 634626,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Total Investments | $ | 656,916 | $ | 634,626 | 117.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 22,
+      "quoted_text": "Cash and Cash Equivalents",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 20,
+      "quoted_text": "Equity Investments (6)(15)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 11,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company - Investment (3)(7) | Industry | Spread Above Index | Interest Rate (5)(10) | Maturity Date | Principal / Shares (14) | Amortized Cost | Fair Value | Percentage of Net Assets (2)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "B01 denominator includes structural SOI rows such as repeated headers and section labels that do not represent investment leaves requiring fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 11,
+        "row_index": 1
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Current schedule total is explicitly disclosed at fair value, supporting that the source provides the fair-value anchor despite structural rows without fair-value cells.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 16,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "B01 failed because 243 of 300 extracted leaf-like rows have fair_value, but raw SOI review shows the missing-fair-value population is driven by structural table rows rather than undecided holdings. Representative residual rows are repeated headers and section labels such as the table 11 header, Equity Investments, and Cash and Cash Equivalents. Actual schedule totals disclose current investments at fair value of 634,626, and sampled investment rows across the current SOI carry fair value cells, including zero/dash fair values where applicable. The completeness check is therefore over-scoped to structural rows, not identifying a source data error."
+}

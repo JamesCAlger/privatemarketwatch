@@ -1,0 +1,73 @@
+{
+  "review_id": "RVQ_REV_8837399dc276",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 19,
+      "quoted_text": "Sunland Asphalt & Construction, LLC | Delayed Draw Term Loan - 10.77% | par 7,912,750 | fair value 7,980,800",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 20,
+      "quoted_text": "Sunland Asphalt & Construction, LLC | Term Loan B - 10.77% | par 19,070,701 | fair value 19,234,709",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.70% | fair value 27,912,547",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "Fenix Intermediate, LLC | Delayed Draw Term Loan B-1 - 10.70% | fair value 1,673,916",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "Power Acquisition LLC | Term Loan B - 10.67% | acquisition 01/22/25 | fair value 33,856,766",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 16,
+      "quoted_text": "Power Acquisition LLC | Incremental Term Loan B - 10.67% | acquisition 07/11/25 | fair value 2,607,259",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 15,
+      "quoted_text": "RPM Purchaser, Inc. | Delayed Draw Term Loan B - 10.03% | fair value 8,334,090",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 16,
+      "quoted_text": "RPM Purchaser, Inc. | Term Loan B - 10.03% | fair value 27,272,379",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The duplicate key collapses distinct facility labels and therefore misclassifies four legitimate position pairs as duplicates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 5,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The raw March 31, 2026 schedule shows the apparent same-key records as distinct instruments, not duplicate extraction. Each pair is differentiated by facility label (Term Loan, Delayed Draw, or Incremental), and the rows carry different par and fair values. Sunland, Fenix, Power Acquisition, and RPM provide four source-confirmed examples matching the metric of four. The check's position key is under-granular because it collapses facility subtype; the extracted rows themselves should remain separate."
+}

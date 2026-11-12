@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_286db8a2abb2",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "source_row_current_period",
+  "observed_value": "2025-06-09",
+  "anchor_value": "2025-12-09",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 92,
+      "row_index": 21,
+      "quoted_text": "Pluto Holdco Limited | First Lien Secured Debt - Term Loan | 7.32 % PIK | 6/9/2025 | EUR | 12,976 | $ | 14,018 | $ | 13,408 | (3)(4)(8)(9)(19)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 20,
+      "quoted_text": "Pluto Holdco Limited | First Lien Secured Debt - Term Loan | 5.81 % PIK | 12/9/2025 | EUR | 13,612 | 14,744 | 15,941 | (3)(4)(8)(9)(10)(20)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted past maturity appears to come from the prior-period Pluto Holdco row dated 6/9/2025, while the current-period row for the same issuer matures 12/9/2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 92,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "For report date 2025-09-30, a 2025-06-09 maturity is past and should not be present as a current holding. Raw source localizes that date to table 92 row 21, a second SOI block using December 31, 2024-style headers/footnotes, while the current September 30, 2025 block has the matching Pluto Holdco position at table 11 row 20 with maturity 12/9/2025. The flag is therefore grounded as a comparative-period extraction leak, not a source-valid current maturity."
+}

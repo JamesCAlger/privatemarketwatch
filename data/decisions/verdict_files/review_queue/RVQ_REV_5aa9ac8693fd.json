@@ -1,0 +1,65 @@
+{
+  "review_id": "RVQ_REV_5aa9ac8693fd",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_footnote_count",
+  "observed_value": 10,
+  "anchor_value": 10,
+  "confidence": 0.72,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 79,
+      "row_index": 19,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28)(29) | First lien senior secured loan | S+ | 5.75 % | 5/2029 | 112,522 | 105,818 | 87,205"
+    },
+    {
+      "table_index": 79,
+      "row_index": 20,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28)(29) | First lien senior secured delayed draw term loan | S+ | 6.25 % | 5/2029 | 4,260 | 3,989 | 3,301"
+    },
+    {
+      "table_index": 79,
+      "row_index": 21,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28)(29) | First lien senior secured revolving loan | S+ | 5.75 % | 5/2028 | 12,799 | 12,076 | 9,920"
+    },
+    {
+      "table_index": 81,
+      "row_index": 9,
+      "quoted_text": "Walker Edison Furniture Company LLC(3)(4)(6)(22)(28)(29) | First lien senior secured loan | N/A | 10.00 % | 2/2026 | 1,336 | 1,305 | 1,346"
+    },
+    {
+      "table_index": 81,
+      "row_index": 10,
+      "quoted_text": "Walker Edison Furniture Company LLC(3)(4)(9)(22)(28)(29) | First lien senior secured delayed draw term loan | S+ | 6.75 % | 3/2027 | 4,717 | 3,072 | 46"
+    },
+    {
+      "table_index": 81,
+      "row_index": 11,
+      "quoted_text": "Walker Edison Furniture Company LLC(3)(4)(9)(22)(28)(29) | First lien senior secured revolving loan | S+ | 6.25 % | 3/2027 | 1,333 | 1,297 | -"
+    },
+    {
+      "table_index": 86,
+      "row_index": 21,
+      "quoted_text": "Ideal Image Development, LLC(3)(4)(9)(22)(28)(29) | First lien senior secured loan | S+ | 6.50 % | 2/2029 | 3,552 | 3,256 | -"
+    },
+    {
+      "table_index": 86,
+      "row_index": 22,
+      "quoted_text": "Ideal Image Development, LLC(3)(4)(9)(22)(28)(29) | First lien senior secured revolving loan | S+ | 6.00 % | 2/2029 | 715 | 678 | 420"
+    },
+    {
+      "table_index": 86,
+      "row_index": 33,
+      "quoted_text": "EOS Finco S.A.R.L(3)(9)(28)(29)(31) | First lien senior secured loan | S+ | 6.00 % | 10/2029 | 88,071 | 68,077 | 21,771"
+    },
+    {
+      "table_index": 89,
+      "row_index": 24,
+      "quoted_text": "Pluralsight, LLC(3)(4)(9)(24)(28)(29) | First lien senior secured loan | S+ | 7.50 % | 8/2029 | 1,386 | $ | 1,345 | $ | 1,133"
+    }
+  ],
+  "rationale": "The raw schedule search for footnote marker (28) localizes exactly ten current-period SOI rows matching the ten queued nonaccrual positions, but the evidence CLI did not expose the footnote legend defining (28), and targeted searches for non-accrual/accrual wording returned no decisive source text. Because the marker's meaning cannot be independently confirmed from the readable raw source, the nonaccrual flag is source-checked ambiguous rather than a grounded real_error or false_alarm."
+}

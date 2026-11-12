@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_9b96b569d9a2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": 6.4,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 14,
+      "quoted_text": "Acogroup | First Lien Senior Secured Term Loan | EURIBOR + 4.00 %, 6.4 % PIK | 05/21 | 10/26 | 1,543 | 1,580 | 455 | - | % | (3)(6)(7)(8) (11)(26)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 batched single-cell review. The extracted Acogroup Term Loan 2 row has blank interest_rate, but the matching March 31, 2026 schedule row explicitly reports EURIBOR + 4.00% and 6.4% PIK in the Interest column. The source therefore supplies rate data and proves an extraction gap. The citation uses an ASCII hyphen for the source dash."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_cdc868857fdd",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 8632.315,
+  "anchor_value": 8632.315,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC: fair value 300,658; percentage of net assets 7.2%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 26,
+      "quoted_text": "Total Net Assets 4,185,646",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 43,
+      "quoted_text": "Total Investments: fair value 8,632,315; percentage of net assets 206.2%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fair-value total of 8,632.315 million equals the filing schedule total and the balance-sheet investment total. The filing discloses percentage of net assets to one decimal. For example, 300.658 / 4,185.646 * 100 = 7.183%, which rounds to the source value 7.2%. The aggregate source value likewise reconciles at disclosed precision. The 25% violation rate therefore reflects an identity check that is too strict for source rounding, not erroneous extracted values."
+}

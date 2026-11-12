@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_6e2ab4178c15",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1597.977,
+  "anchor_value": 1597.977,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "Blank-name sector subtotal with amortized cost 61,137 and fair value 58,772, following three named automobile investment rows.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 14,
+      "quoted_text": "Blank-name sector subtotal with amortized cost 87,213 and fair value 86,656, following four named Data & Analytics investment rows.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 34,
+      "quoted_text": "Total Investments | 1,614,726 | 1,597,977 | 166.3",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fair value of 1,597.977 million agrees exactly with the filing's Total Investments fair value of 1,597.977 million. The raw schedule contains numeric sector subtotal rows without issuer names, including table 12 rows 8 and 14, in addition to named investment rows. E07's source count of 121 versus output count of 65 therefore compares subtotal-bearing source rows with position-only output rows. The data output is supported by the value anchor; the failing source-row count anchor is mis-scoped."
+}

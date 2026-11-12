@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_9a60f777bf64",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 39,
+      "quoted_text": "100.0 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The raw filing's Industry Classification schedule for March 31, 2026 lists portfolio percentages and reports a 100.0% total at table 36 row 39, but A07 observed pct_sum=0.0%. The schedule total is the controlling internal anchor, so the zero extracted sum is a grounded percentage extraction gap."
+}

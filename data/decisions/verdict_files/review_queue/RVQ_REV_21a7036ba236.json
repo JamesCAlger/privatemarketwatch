@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_21a7036ba236",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 43,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 29,194,330 | 28,735 | 35,549 | 0.15"
+    },
+    {
+      "table_index": 35,
+      "row_index": 31,
+      "quoted_text": "Guidehouse Holding Corp. - Preferred Equity | (4) | 11.50 % | 54,010 | 52,935 | 61,571 | 0.26"
+    },
+    {
+      "table_index": 35,
+      "row_index": 40,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 45,090 | 43,963 | 49,261 | 0.21"
+    },
+    {
+      "table_index": 142,
+      "row_index": 43,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 974,662 | 1,133 | 1,189 | 0.04"
+    },
+    {
+      "table_index": 142,
+      "row_index": 51,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 5,773 | 5,700 | 6,307 | 0.24"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X01 flags rate-bearing preferred equity although the source schedule explicitly presents these preferred equity instruments with stated rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 35,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review. The five flagged PRIVATE_EQUITY rows are preferred equity or senior preferred interests, and the raw schedule explicitly places 11.50% or 10.50% in the Interest Rate column for those instruments. The extracted interest_rate values therefore match source; the warning is caused by X01 treating all PRIVATE_EQUITY interest_rate values as suspect instead of allowing rate-bearing preferred equity."
+}

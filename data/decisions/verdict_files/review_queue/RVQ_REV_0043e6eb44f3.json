@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_0043e6eb44f3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 21,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 5,
+      "quoted_text": "American Trailer Rental Group, LLC (i)(l)(q) | Delayed Draw Term Loan | SOFR + 5.50 % | 9.32 % | 6/1/2027 | 14,588,284 | 14,585,576 | 13,742,163"
+    },
+    {
+      "table_index": 42,
+      "row_index": 6,
+      "quoted_text": "American Trailer Rental Group, LLC (i)(l) | Delayed Draw Term Loan | SOFR + 5.75 % | 9.57 % | 6/1/2027 | 19,024,292 | 18,804,353 | 17,977,956"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The duplicate-key example is two distinct delayed draw term loan rows with different reference spreads, interest rates, par amounts, costs, and fair values.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 42,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, with American Trailer Rental Group delayed draw term loan as the example. Raw SOI rows 42:5 and 42:6 show two separate delayed draw term loans for the same issuer and maturity, but differentiated by SOFR + 5.50% versus SOFR + 5.75%, 9.32% versus 9.57% interest, and different par/cost/fair value amounts. The source therefore supports distinct positions; the duplicate arises from a key/check scope that ignores differentiating loan terms, not from duplicated source data."
+}

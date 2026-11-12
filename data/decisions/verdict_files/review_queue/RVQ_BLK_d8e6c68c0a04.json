@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_d8e6c68c0a04",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": 3.5,
+  "anchor_value": 3.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Aretec Group, Inc. (fka RCS Capital Corporation) | First Lien - Term Loan | SOFR + 300 | 6.7 | 8/9/2030",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The flagged identifier stores the Aretec reference spread as SOFR+350 (3.5%), but the March 31, 2026 raw Schedule of Investments shows SOFR + 300 (3.0%) on the Aretec row. The immediately preceding Apex row shows SOFR + 350, supporting a neighboring-row extraction leak. The source therefore decisively grounds a localized spread extraction error."
+}

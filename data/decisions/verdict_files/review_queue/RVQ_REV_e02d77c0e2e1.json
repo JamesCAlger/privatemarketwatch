@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e02d77c0e2e1",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 410.050595,
+  "anchor_value": 249.694433,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4 | % | 258,299,078 | 249,694,433",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 4,
+      "row_index": 12,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) | Revolver - 6.00% inc PIK | Fair Value 17,092,378",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) Revolver - 6.00% | Fair Value at March 31, 2026 17,092,378",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Investment rollforward rows repeat instruments already captured from the current schedule, inflating extracted holdings above the debt-and-equity total.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 6,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted holdings of 410.050595 million versus the filing's current debt-and-equity fair value total of 249.694433 million, producing the flagged 1.6422 over-coverage ratio. The source localizes the mechanism structurally: for example, the Overton revolver at fair value 17,092,378 appears both in the current investment schedule (table 4 row 12) and the controlled-investment rollforward (table 6 row 5). Rollforward rows were therefore admitted as additional positions, causing dimension double counting; the filing schedule anchor is internally corroborated by debt fair value 86,897,322 plus equity fair value 162,797,111 equaling 249,694,433."
+}

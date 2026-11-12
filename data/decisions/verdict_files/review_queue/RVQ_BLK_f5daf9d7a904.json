@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_f5daf9d7a904",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": null,
+  "anchor_value": 4102000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 22,
+      "quoted_text": "AWRG Borrower LLC | First Lien Secured Debt - Term Loan | 8.77 % | 06/18/30 | $ | 5,515 | $ | 5,515 | $ | 4,102 | (5)(24)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period AWRG Borrower LLC term loan with fair value $4.102 million is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 21,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule of investments contains an eligible AWRG Borrower LLC first-lien term loan at table 21 row 22, with maturity 06/18/30, cost $5.515 million, and fair value $4.102 million. The flagged artifact reports no corresponding pipeline output row, so the omission is a source-grounded extraction gap."
+}

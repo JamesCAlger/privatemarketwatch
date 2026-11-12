@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_9e005e044290",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted evidence CLI did not expose usable raw source for CIK 0001825248 report_date 2022-09-30; overview, tables, totals, roam, and grid all returned status no_accession_resolved. Under the contract, source-unreadable items must be adjudicated ambiguous with escalation rather than guessed."
+}

@@ -1,0 +1,46 @@
+{
+    "review_id":  "RVQ_BLK_6b5dd84fdda7",
+    "verdict":  "real_error",
+    "mechanism":  "subtotal_leak",
+    "localized":  false,
+    "anchor_used":  "companyfacts_fv",
+    "observed_value":  3500324000,
+    "anchor_value":  3167838000,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  69,
+                                  "row_index":  15,
+                                  "quoted_text":  "Total Investment before Cash Equivalents | $ | 3,356,770 | $ | 3,167,838",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  81,
+                                  "row_index":  17,
+                                  "quoted_text":  "Total | $ | 3,002,864 | $ | 62 | $ | 3,072 | $ | 18,350 | $ | 27,104 | $ | 116,060 | $ | 326 | $ | 3,167,838 | 242.31 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "subtotal_leak",
+                         "detail":  "Extracted fair value sum is 3,500,324,000 while both the filing schedule total and companyfacts anchor are 3,167,838,000, indicating non-position summary or duplicate rows were included.",
+                         "fix_class":  "subtotal_filter",
+                         "citation":  {
+                                          "table_index":  69,
+                                          "row_index":  15
+                                      }
+                     },
+                     {
+                         "mechanism":  "subtotal_leak",
+                         "detail":  "Adjacent affiliated and controlled investment roll-forward summaries disclose issuer fair values already represented in the schedule, so they are likely duplicate summary-table scope rather than additional holdings.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  70,
+                                          "row_index":  1
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate adjudication. The source schedule total before cash equivalents is 3,167,838 thousand at table 69 row 15, and the schedule classification total at table 81 row 17 also totals 3,167,838 thousand. This agrees with the companyfacts_fv anchor of 3,167,838,000, but the extracted position sum is 3,500,324,000, an overshoot of 332,486,000. Because the independent anchors agree and the extraction sum does not, the conservation flag is a real extraction/scope error. The nearby roll-forward/summary tables are duplicate summary context, but the exact leaking extracted rows are not fully localized from the raw-source window."
+}

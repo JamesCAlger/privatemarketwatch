@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9bfd21a2678d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": -12000,
+  "anchor_value": -12000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.50 % | 8.35 % | 11/29/2030 | \u2014 | ( 12 | ) | ( 12 | ) | \u2014",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "GB Eagle Buyer, Inc. | (5) (7) (17) | First Lien Debt | S + | 4.50 % | 8.35 % | 11/29/2030 | \u2014 | ( 15 | ) | ( 15 | ) | \u2014",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw schedule of investments itself reports parenthesized amounts in the Cost column for representative flagged rows. The extracted values -12000 and -15000 match the filing's (12) and (15) amounts in thousands, so the data is source-faithful and the warning is a scope/monitoring false alarm rather than a data error."
+}

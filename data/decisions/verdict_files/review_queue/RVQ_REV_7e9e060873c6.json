@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_7e9e060873c6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -40000.0,
+  "anchor_value": 21113000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 32,
+      "quoted_text": "Mindbody, Inc. | Revolver | 0.50 | 2,684 | ( 40 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 5,
+      "quoted_text": "Mindbody, Inc. | (c) | (2)(3)(15) | Leisure Products & Services | SOFR | 6.00 % | 9.70 % | 3/30/2026 | 3/30/2033 | 21,475 | 21,113 | 21,113 | 1.18",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source value (40) thousand is negative fair value for an unfunded revolver, but the pipeline stored it as cost; the funded investment row reports amortized cost of 21,113 thousand.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "Class 1 source-cell check. Table 35 is headed Type, Unused Fee, Par/Principal Amount, and Fair Value; its Mindbody row places (40) in Fair Value, not Cost. Table 19 separately shows the Mindbody investment with amortized cost 21,113 thousand and fair value 21,113 thousand. Therefore the flagged cost of -40,000 is a real extraction/column-remapping error, although the negative fair value itself is legitimate in its source context."
+}

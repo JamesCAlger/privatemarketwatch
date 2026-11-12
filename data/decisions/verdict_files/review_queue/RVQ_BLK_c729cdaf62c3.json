@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_c729cdaf62c3",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6824.822,
+  "anchor_value": 6824.822,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 17,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | $ | 6,865,873 | $ | 6,824,822 | 208.46 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The E07 source count of 817 is not a valid position-count anchor; the 217-row output reconciles exactly to the filing fair-value total of 6,824.822 million.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 21,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag. The filing's current-period Schedule of Investments ends at table 21 row 17 with total fair value 6,824,822 in thousands, or 6,824.822 million, exactly equal to the extracted fund-quarter fair value. The source document also contains headings, subtotals, cash rows, derivatives, commitments, and a comparative investment schedule, so the oracle's raw count of 817 is not a valid count of current-period investment positions. Because the extracted value fully reconciles to the filing total, E07's count mismatch is a false alarm caused by a bad source-count anchor rather than missing holdings."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_d2cfa8e4e6e8",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 412,
+  "anchor_value": 840,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (unaudited) and December 31, 2025 | 9",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 42,
+      "row_index": 1,
+      "quoted_text": "As of March 31, 2026",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 43,
+      "row_index": 1,
+      "quoted_text": "As of December 31, 2025",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "E07 compares 412 output rows with a purported 840-row source count, but the raw filing states that its schedules cover both March 31, 2026 and December 31, 2025 and exposes separate current- and comparative-period schedule sections. The near-doubling is therefore caused by the oracle source comparator counting comparative-period schedule rows against a report-date-scoped output. The output count is not shown to be incomplete; the check's source anchor is period-contaminated."
+}

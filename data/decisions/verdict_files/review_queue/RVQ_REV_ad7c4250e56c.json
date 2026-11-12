@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ad7c4250e56c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 877.069,
+  "anchor_value": 877.06,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 7,
+      "quoted_text": "Accurate Finance Sub, LLC (4)(5) | Senior Secured First Lien Delayed Draw Term Loan | 09/2032 | $ | - | $ | ( 1 ) | - % | $ | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "Accurate Finance Sub, LLC (4)(5) | Senior Secured First Lien Revolver | 09/2032 | - | ( 1 ) | - | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 875,546 | 174.3 | % | $ | 877,060",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Explicit dash fair values representing zero were normalized as missing, causing 47 false-null fair_value leaves.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The filing's Fair Value column explicitly reports a dash (zero) for investment leaves such as table 9 rows 7 and 8, while B01 reports 47 leaves without fair_value and zero residual fair value. The filing total is $877.060 million versus the extracted $877.069 million, confirming that the B01 failure is not a material omitted-value residual; it is an extraction/normalization defect in which explicit source zeros are stored as null."
+}

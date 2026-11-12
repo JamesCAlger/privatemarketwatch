@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_890bf9820c34",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4.0033472454090155,
+  "anchor_value": 1.22,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 12,
+      "quoted_text": "Total distributions (3) | ( 0.30 | ) | ( 0.98 | ) | ( 2.60 | ) | ( 2.20 | ) | ( 14.06 | )"
+    },
+    {
+      "table_index": 56,
+      "row_index": 25,
+      "quoted_text": "Ratio of net investment income to average net assets | 2.42 | % | 4.87 | % | 9.60 | % | 7.67 | % | 7.02 | %"
+    },
+    {
+      "table_index": 56,
+      "row_index": 13,
+      "quoted_text": "Net Asset Value Per Unit (accrual base), End of Year | $ | 23.96 | $ | 25.22 | $ | 31.38 | $ | 32.84 | $ | 39.65"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "F16 observed distribution_rate is 4.0033%, but the 2025 source shows total distributions of 0.30 per unit and ending NAV of 23.96, implying about 1.25%, below 1.5x the disclosed 2.42% net investment income ratio.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 56,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "The F16 fail says distribution_rate exceeds income_yield_pct * 1.5 with observed value 4.0033472454090155. The raw financial highlights show 2025 total distributions of 0.30 per unit, ending NAV of 23.96, and ratio of net investment income to average net assets of 2.42%. A source-derived distribution rate is about 0.30 / 23.96 = 1.25%, which is below the 3.63% heuristic threshold, so the fund-level distribution rate used by the check is miscomputed or mis-scaled rather than source-supported."
+}

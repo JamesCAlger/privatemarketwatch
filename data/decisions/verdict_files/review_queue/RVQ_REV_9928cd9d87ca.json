@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_9928cd9d87ca",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "USD-converted principal required for explicitly non-USD debt par rows",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 1,
+      "quoted_text": "Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Australian Dollars (\"AUD\"), or Euros (\"EUR\").",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 17,
+      "quoted_text": "Sonar Acquisitionco, Inc. (dba SimPRO) | Construction & Engineering | 8.60 % | B + 5.00 % | 10/24/30 | AUD | 5,600 | 3,687 | 3,718 | (5) (6) (7) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 36,
+      "quoted_text": "Hamilton Thorne, Inc. | Health Care Equipment & Supplies | 7.32 % | E + 5.25 % | 11/28/31 | EUR | 11,492 | 12,323 | 13,235 | (5) (6) (7)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AUD-denominated debt par is present in the source schedule, but the flagged artifact has missing principal_amount_usd for non-USD par analytics.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 40,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "EUR-denominated debt par is present in the source schedule, but the flagged artifact has missing principal_amount_usd for non-USD par analytics.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 41,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "FX01 is a real extraction/normalization error. The source footnote says par is USD unless otherwise noted as AUD or EUR; current-period schedule rows explicitly show AUD par for Sonar Acquisitionco and EUR par for Hamilton Thorne. The flagged row-validation artifact reports blank principal_amount_usd for non-USD debt principal rows, so the missing USD conversion is a real data defect rather than a false alarm."
+}

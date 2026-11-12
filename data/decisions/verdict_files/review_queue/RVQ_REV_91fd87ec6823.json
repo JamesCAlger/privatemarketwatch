@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_91fd87ec6823",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Three extracted issuer_name values contain the full debt-investment path including investment type, industry, spread, interest rate, and maturity.",
+  "anchor_value": "Raw SOI rows identify the portfolio company in the first cell, e.g. OneCare Media, LLC - Revolving Credit Line and The Smilist Management, Inc. - Revolving Credit Line / Term Loan, with industry, spread, rate, and maturity in separate columns.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4) | Media | SOFR + 6.50 % ( 1.00 % floor) | 11.64 | % | 9/29/2026 | - | ( 27 | ) | ( 51 | ) | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 35,
+      "quoted_text": "The Smilist Management, Inc. - Revolving Credit Line (4) | Health Care Providers & Services | SOFR + 6.50 % ( 1.00 % floor) | 11.64 | % | 12/23/2025 | - | ( 5 | ) | ( 21 | ) | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 36,
+      "quoted_text": "The Smilist Management, Inc. - Term Loan | Health Care Providers & Services | SOFR + 6.50 % ( 1.00 % floor) | 11.64 | % | 12/23/2025 | 4,896 | 4,847 | 4,710 | 0.9 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "OneCare Media revolving credit line issuer_name should be localized to the clean issuer, not the full debt-investment path with terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Smilist Management revolving credit line issuer_name should be localized to the clean issuer, not the full debt-investment path with terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Smilist Management term loan issuer_name should be localized to the clean issuer, not the full debt-investment path with terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "C206 is confirmed. The flagged stored issuer_name values are not clean issuers; they concatenate debt investment category, issuer, instrument, industry, spread, interest rate, and maturity. In the raw June 30, 2023 SOI, those terms are separate columns and the portfolio company cell only contains the issuer plus instrument, proving a wrapper/extraction localization failure for the three flagged cells."
+}

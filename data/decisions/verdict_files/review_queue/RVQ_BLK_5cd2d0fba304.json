@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_5cd2d0fba304",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 43,
+  "anchor_value": 43,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Atlantic Squared Supply LLC - First lien senior secured term loan - SOFR + 6.00% - 11/17/2030 - fair value 63,445",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "Comparative Atlantic Squared Supply LLC term-loan row - fair value 63,524",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 7,
+      "quoted_text": "Total Debt Investments - fair value 1,519,948",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 compares 89 source rows with 43 output rows, but the raw filing contains two four-table investment schedules: tables 11-14 for March 31, 2026 and tables 15-18 for December 31, 2025. The same Atlantic Squared instrument appears at table 11 row 8 with current fair value 63,445 and at table 15 row 8 with comparative fair value 63,524, proving that the source count pooled periods. The 43 output positions are the current-period schedule, and their reported fair value of 1,519,948 ties to the filing's Total Debt Investments at table 14 row 7. The flag is therefore a comparative-period leak in the E07 source-count anchor, not a holdings data error."
+}

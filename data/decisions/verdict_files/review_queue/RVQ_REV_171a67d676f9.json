@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_171a67d676f9",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 20.0,
+  "anchor_value": 9.10,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 50,
+      "quoted_text": "Apidos CLO, Series 2015-23A (3)(4)(9) | Structured Credit ($ 4,000 par, due 4/2033 ) | 9/3/2025 | SOFR + 5.20 % | 9.10 | % | 4,016 | 4,002 | 0.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The flagged row is sourced from an Other Investments structured credit position, not a non-preferred private equity holding.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 42,
+        "row_index": 50
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row states interest rate 9.10%, while the reviewed extracted value is 20.0, apparently from the SOFR + 5.20% spread cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 50
+      }
+    }
+  ],
+  "rationale": "X01 flagged a PRIVATE_EQUITY non-preferred row carrying interest_rate=20.0. Raw source table 42 row 50 places the holding under Other Investments and describes it as Structured Credit with reference rate SOFR + 5.20% and stated interest rate 9.10%. The source therefore shows both that the row is not private equity and that the extracted 20.0 is not the stated interest rate."
+}

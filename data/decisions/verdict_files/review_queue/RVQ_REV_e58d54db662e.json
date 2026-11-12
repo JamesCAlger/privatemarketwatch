@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_e58d54db662e",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9267.0,
+  "anchor_value": 9267000.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 4,
+      "quoted_text": "Cold Spring Brewing Company | Term Loan | SOFR | + | 4.75 % | (M) | 8.49 % | 12/23/2024 | 12/10/2030 | $ 9,348 | $ 9,267 | $ 9,348 | (1)(6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "Cold Spring Brewing Company source amortized cost is $9,267 thousand, so stored cost 9267.0 is under-scaled and should be 9267000.0.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 43,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level X07. The raw SOI row for Cold Spring Brewing Company reports amortized cost $9,267 and fair value $9,348 in the schedule, whose total investment line is in thousands. The stored cost value 9267.0 is therefore under-scaled relative to the source amount of 9267000.0, which can make a correctly scaled fair value appear to exceed 10x cost."
+}

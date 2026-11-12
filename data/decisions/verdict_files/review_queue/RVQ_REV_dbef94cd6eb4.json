@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_dbef94cd6eb4",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -134000.0,
+  "anchor_value": -134000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 35,
+      "quoted_text": "Artemis Bidco Limited (4)(5)(6)(7) | SN + | 6.00 % | 11.23 | % | 9/8/2028 | GBP | 2,437 | 310 | ( 134 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 31,
+      "quoted_text": "Artemis Bidco Limited | 1st Lien Senior Secured Delayed Draw Loan | 2,738 | ( 420 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 3,
+      "quoted_text": "Calabrio, Inc. (4)(6)(10) | 4/16/2027 | 2,687 | - | ( 6 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 27,
+      "quoted_text": "Calabrio, Inc. | 1st Lien Senior Secured Revolving Loan | 2,687 | ( 6 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-validation check. The two negative fair-value observations are source-presented values, not extraction errors. Calabrio's (6) schedule row ties exactly to the unfunded-commitment table: par/unfunded commitment 2,687 and fair value (6). Artemis has the flagged schedule row with fair value (134) and also appears in the unfunded-commitment table as a delayed draw loan, so the negative mark is explained by the filer's commitment presentation rather than an unexplained negative fair value. The rule fire is therefore a missed source-context/classification lookthrough, not a real data defect. No aggregate anchor was needed."
+}

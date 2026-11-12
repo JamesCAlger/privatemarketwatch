@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_fd07ae89d93f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": -165000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 70, "row_index": 14, "ties_to_residual": true},
+    {"table_index": 72, "row_index": 2, "ties_to_residual": true},
+    {"table_index": 74, "row_index": 8, "ties_to_residual": true},
+    {"table_index": 74, "row_index": 14, "ties_to_residual": true},
+    {"table_index": 75, "row_index": 6, "ties_to_residual": true}
+  ],
+  "findings": [
+    {"mechanism": "extraction_gap", "detail": "Foreside Financial Group, LLC delayed draw unfunded commitment has source fair value -25000 and no output row.", "fix_class": "missing_position_add", "citation": {"table_index": 70, "row_index": 14}},
+    {"mechanism": "extraction_gap", "detail": "Kwol Acquisition, Inc. delayed draw unfunded commitment has source fair value -46000 and no output row.", "fix_class": "missing_position_add", "citation": {"table_index": 72, "row_index": 2}},
+    {"mechanism": "extraction_gap", "detail": "Rimkus Consulting Group, Inc. delayed draw unfunded commitment has source fair value -51000 and no output row.", "fix_class": "missing_position_add", "citation": {"table_index": 74, "row_index": 8}},
+    {"mechanism": "extraction_gap", "detail": "Ruppert Landscape, LLC delayed draw unfunded commitment has source fair value -19000 and no output row.", "fix_class": "missing_position_add", "citation": {"table_index": 74, "row_index": 14}},
+    {"mechanism": "extraction_gap", "detail": "Sugar Ppc Buyer LLC delayed draw unfunded commitment has source fair value -24000 and no output row.", "fix_class": "missing_position_add", "citation": {"table_index": 75, "row_index": 6}}
+  ],
+  "rationale": "Class 2 source-coverage adjudication. The raw filing has a current-period unfunded commitments schedule with columns for Commitment Type, Commitment Expiration Date, Unfunded Commitment, and Fair Value. The five flagged delayed draw term loan commitment rows each carry explicit negative fair value amounts in source: -25, -46, -51, -19, and -24 thousand, totaling -165000 dollars. The review artifact states these eligible current-period BDC source rows have no pipeline output rows, so the source fair value exposure was omitted rather than the rule firing on a non-source row."
+}

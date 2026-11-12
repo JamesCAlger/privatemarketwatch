@@ -1,0 +1,26 @@
+{
+  "review_id": "BDCSRC_0001976336_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_9fc0856cb5",
+  "cik": "0001976336",
+  "report_date": "2025-12-31",
+  "verdict": "ESCALATE",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a blocking source-only row-identity residual: five current-period InvestmentOwnedAtFairValue source rows for delayed draw term loan commitment facts have source fair value totaling -165000 and no pipeline output row, while the source-row HTML coordinate candidate evidence is empty. The local bundle therefore supports the source-side residual but not a coordinate-backed parser/table mechanism.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "xbrl_rows_same_accession"
+  ],
+  "html_citations": [],
+  "changed_files": [],
+  "patch_summary": "No patch proposed. The review is escalated because the bundle lacks coordinate-level HTML evidence for the five commitment rows, so a bounded parser or staging change cannot be justified from local evidence alone.",
+  "source_reconciliation_effect": "No expected source-reconciliation change from this verdict. A future fix would need to decide whether the five negative fair-value delayed draw commitment source facts should be represented in unified output or excluded by an audited rule.",
+  "gav_effect": "Context only; GAV already passes and is not used as the primary justification.",
+  "tests_validation_plan": "If a human-approved patch is later attempted, run pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py and python -m pipeline.main --unified --validate.",
+  "requires_human_merge": false,
+  "missing_evidence": "Coordinate-level HTML evidence for the Foreside Financial Group, Kwol Acquisition, Rimkus Consulting Group, Ruppert Landscape, and Sugar Ppc Buyer delayed draw term loan commitment rows, or an audited rule/policy establishing how negative fair-value unfunded commitment facts should be staged in unified holdings.",
+  "residual_risk": "The rows are source-current XBRL facts with position-like issuer and commitment text, but without HTML coordinates they cannot be safely classified as production SOI position rows, table-not-parsed rows, or non-position commitment disclosures.",
+  "reviewer_notes": "html_source_row_coordinate_candidates is present but empty. Coordinate-class HTML evidence IDs are omitted from evidence_refs to comply with the XBRL_ONLY_NO_HTML_COORDINATE validator rule."
+}

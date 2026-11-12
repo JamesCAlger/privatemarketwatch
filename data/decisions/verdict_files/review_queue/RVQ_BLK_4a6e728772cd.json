@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_4a6e728772cd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 711556000,
+  "anchor_value": 446855000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 33,
+      "quoted_text": "Common Unitholders' capital | 711,556",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 35,
+      "quoted_text": "Total Members' Capital | 446,855",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Net assets selected the 711,556 common unitholders' capital component instead of total members' capital of 446,855; the 264,701 difference equals accumulated overdistributed earnings.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 balance sheet reports total assets of 1,249,314 and total liabilities of 802,459 (thousands), implying and explicitly reporting total members' capital of 446,855. The observed net-assets value of 711,556 is only the common unitholders' capital component. Subtracting accumulated overdistributed earnings of 264,701 yields the reported total of 446,855, and the same 264,701 exactly matches the F10 residual. Thus the filing reconciles and the pipeline selected a component rather than the total net-assets field."
+}

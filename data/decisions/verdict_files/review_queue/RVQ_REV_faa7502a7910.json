@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_faa7502a7910",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD ($)",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 233,
+      "row_index": 1,
+      "quoted_text": "Investments | Footnotes | Reference Rate Spread / Floor | Cash Interest Rate / PIK Rate | Maturity Date | Outstanding Principal | Amortized Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 233,
+      "row_index": 5,
+      "quoted_text": "Finn Partners, Inc. Initial Term Loan | 3M SOFR + 6.65 % / 1.00 % | 12.00 % | 7/1/2026 | $ | 1,688,670 | $ | 1,666,105 | $ | 1,665,772 | 0.50 | %"
+    },
+    {
+      "table_index": 243,
+      "row_index": 23,
+      "quoted_text": "Total Investments | $ | 566,083,084 | $ | 565,360,825 | 169.58 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX02 treated normalized token UNIT_USD as non-USD even though the source fair-value schedule is dollar-denominated.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 243,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The reviewed rows are flagged only because fair_value_currency is UNIT_USD. Raw source schedule table 233 labels the relevant column as Fair Value and shows dollar-sign fair values, and table 243 ties the schedule total to $565,360,825. UNIT_USD is therefore a normalized USD unit token, not evidence of a non-USD fair-value currency. The FX02 check is over-scoped/misclassifying the USD token."
+}

@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_bac22d315965",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": "identifier dates: DNAnexus term loan 2029-12-18; Cherry Bekaert three instruments 2030-06-28",
+  "anchor_value": "current-quarter SOI dates: DNAnexus term loan 2029-12-20; Cherry Bekaert three instruments 2030-06-30",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 49,
+      "quoted_text": "DNAnexus, Inc | First Lien Term Loan | SOFR(M) | 3.00 % | 5.25 % | 8.93 % | 12/20/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "Cherry Bekaert Advisory, LLC | First Lien Delayed Draw Term Loan | SOFR(M) | 0.75 % | 4.50 % | 8.17 % | 6/30/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 28,
+      "quoted_text": "Cherry Bekaert Advisory, LLC | First Lien Term Loan | SOFR(M) | 0.75 % | 4.50 % | 8.17 % | 6/30/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 30,
+      "quoted_text": "Cherry Bekaert Advisory, LLC | Sr Secured Revolver | SOFR(M) | 0.75 % | 4.50 % | 8.17 % | 6/30/2030",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The DNAnexus First Lien Term Loan identifier uses 12/18/2029 from the adjacent delayed-draw instrument, but its own source row states 12/20/2029.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 49
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Three Cherry Bekaert identifiers use prior-period 6/28/2030; the current-quarter delayed-draw, term-loan, and revolver source rows each state 6/30/2030.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 14,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 2 source-row comparison shows the structured XBRL maturities are correct and the identifier-derived dates are defective. DNAnexus has two distinct instruments: the delayed draw is 12/18/2029 (table 13 row 48), while the flagged First Lien Term Loan is 12/20/2029 (table 13 row 49). Cherry Bekaert current-quarter rows are 6/30/2030 (table 14 rows 26-30), whereas 6/28/2030 appears in the comparative schedule (table 21 rows 30-34), proving comparative-period leakage into all three flagged identifiers."
+}

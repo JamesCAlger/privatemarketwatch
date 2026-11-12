@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_59dcf1f9e762",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -42000,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 97,
+      "row_index": 26,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured revolving loan | 8/2031 | \u2014 | 4,245 | ( 42 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 23,
+      "quoted_text": "Accommodations Plus Technologies LLC | First lien senior secured revolving loan | 5/2032 | \u2014 | 1,250 | ( 11 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Unfunded commitment rows with dash funded commitment and negative fair value were extracted with the negative fair value copied into cost.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 97,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "C107 flags negative cost values. In the raw commitment table, the relevant columns are Portfolio Company, Commitment Type, Commitment Expiration Date, Funded Commitment, Commitment, and Fair Value. For affected revolving commitment rows such as AI Titan Parent and Accommodations Plus Technologies, Funded Commitment is a dash while Fair Value is negative, e.g. (42) and (11) in thousands. The extracted holdings carried those negative fair values as cost values, so the cost field is wrong even though the negative fair value itself is source-supported."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b866e60ff19b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated fair value columns shown with dollar signs",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC (3) | Term Loan B - 11.81 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 6,000,357 | $ | 6,037,866",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 24,
+      "quoted_text": "Total Investments ( 133.5 %) | $ | 166,236,768 | $ | 166,549,638",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX02 is treating the XBRL unit identifier U_USD as non-USD even though the schedule fair value column is dollar-denominated.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 6,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "The flagged field is fair_value_currency with observed value U_USD. The raw schedule of investments labels the fair value amounts with dollar signs on both individual holdings and the total investments row, so the holdings are USD-denominated. The issue is therefore the FX02 check's handling of the unit identifier U_USD, not a non-USD fair value in the extracted data."
+}

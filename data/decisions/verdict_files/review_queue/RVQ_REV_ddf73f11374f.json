@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ddf73f11374f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.7938144329896907,
+  "anchor_value": 0.8,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "Omni Intermediate Holdings, LLC (f)(g) | Delayed Draw Term Loan | - | - | 12/30/2026 | - | ( 6,469 | ) | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 19,
+      "quoted_text": "ACP Falcon Buyer, Inc. (f)(g) | Revolving Credit Facility | - | - | 8/1/2029 | - | ( 189,770 | ) | ( 162,500 | )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 21,
+      "quoted_text": "Atlas AU Bidco Pty Ltd / Atlas US Finco, Inc. (f)(g) | Revolving Credit Facility | - | - | 12/9/2028 | - | ( 88,284 | ) | ( 44,068 | )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts debt-like undrawn or negative facility rows in its rate denominator even though the source schedule explicitly shows '-' for reference rate and interest rate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The flag is an aggregate rate-coverage failure: 77 of 97 debt rows have rates, just below the 0.8 threshold. Raw source inspection shows representative residual rows are not extraction misses: the filing itself prints '-' in the reference-rate and interest-rate columns for delayed draw or revolving facility rows with no par and negative/zero fair value. Adjacent funded loans in the same table do show SOFR spread and interest rate, so the extraction is preserving the source distinction. The check is overbroad for these source-blank facility rows."
+}

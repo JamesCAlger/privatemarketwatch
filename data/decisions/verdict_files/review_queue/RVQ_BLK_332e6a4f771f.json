@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_332e6a4f771f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2153.682,
+  "anchor_value": 2153.908,
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 anchor triangulation found the extracted position sum of 2153.682 million materially agrees with the filing schedule total of 2153.908 million (table 24 row 22) and the balance-sheet total investments of 2153.908 million (table 4 row 7). The filing also reports members' capital of 1157.117 million (table 4 row 29), which supports the schedule's 186.14 percent of net assets. However, the flagged 10.28 percent violation rate has no matching row-level identity violations in the bundle, so the raw source does not identify any fired cell or permit deciding whether the row-level check or extracted data is wrong."
+}

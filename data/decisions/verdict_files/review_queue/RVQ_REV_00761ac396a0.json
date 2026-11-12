@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_00761ac396a0",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PRIVATE_EQUITY with interest_rate values 9.25 and 7.25",
+  "anchor_value": "Growth Capital Loan; Prime + 6.50% interest rate; 9.75% floor; EOT payments 9.25% and 7.25%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 36,
+      "quoted_text": "Habyt GmbH (f/k/a Common Living Inc.) (1)(7) | Growth Capital Loan (Prime + 6.50 % interest rate, 9.75 % floor, 9.25 % EOT payment) | 4/30/2021 | 2,500 | 2,668 | 690 | 9/30/2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Habyt GmbH (f/k/a Common Living Inc.) (1)(7) | Growth Capital Loan (Prime + 6.50 % interest rate, 9.75 % floor, 7.25 % EOT payment) | 3/18/2022 | 4,742 | 4,967 | 1,310 | 9/30/2025",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Both flagged positions are Growth Capital Loans and should not be classified as PRIVATE_EQUITY.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 36
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The stored 9.25 and 7.25 values match EOT payments, not the separately disclosed Prime + 6.50% interest term with a 9.75% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "Class 2 source adjudication identifies both wrong fields. The two exact flagged values occur on adjacent Habyt GmbH source rows as 9.25% and 7.25% EOT payments. Both rows are explicitly Growth Capital Loans and separately disclose Prime + 6.50% interest with a 9.75% floor. Therefore PRIVATE_EQUITY is a classification defect, and the interest_rate values were mapped from EOT payment terms."
+}

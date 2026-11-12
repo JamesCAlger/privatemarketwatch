@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_08c4614f7c46",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 544170799,
+  "anchor_value": 224956333,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (2) | 105.5 | % | 226,246,287 | 224,956,333",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 5,325 | $ | - | $ | 224,956 | $ | 230,281",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The extracted position fair-value sum of 544,170,799 is 319,214,466 above the filing's March 31, 2026 debt-and-equity schedule total of 224,956,333. The fair-value hierarchy independently corroborates 224,956 thousand as Level 3 investments (and 230,281 thousand only after adding 5,325 thousand of cash equivalents). Thus the 224,956,000 comparison anchor is valid and the holdings extraction is overstated. The source structure exposes both current and comparative schedules and several subtotal rows, but the available evidence does not uniquely tie the excess to a particular row set, so the defect is not further localized."
+}

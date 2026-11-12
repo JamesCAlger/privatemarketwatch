@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_675008b2462a",
+  "verdict": "false_alarm",
+  "mechanism": "rate_threshold_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 25.75,
+  "anchor_value": 25.75,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) | 0.6 | % | 2,775,487 | 04/30/28 | 2,775,487 | 2,858,752",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell review. The flagged extracted interest_rate is 25.75, and the raw filing table 5 row 14 states 'Protective Advance Term Loan - 25.75 % inc PIK' for WDE TorcSill Holdings LLC. The row-level warning is therefore caused by the validation range being too narrow for this documented PIK loan rate, not by an extraction or source data error."
+}

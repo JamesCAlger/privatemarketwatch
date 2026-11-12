@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_a81fe67f83cb",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8,
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 60,
+      "quoted_text": "Mitnick TA Aggregator, LP (11)(12)(13) | Membership Interest ( 0.43 % ownership) | 5/2/2022 | 5,243 | 5,245 | 0.4 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 61,
+      "quoted_text": "ReliaQuest, LLC (11)(13) | Class A-1 Units ( 567,683 units) | 11/23/2021 | 1,120 | 1,512 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 63,
+      "quoted_text": "Sprinklr, Inc. (10)(11) | Common Shares ( 484,700 shares) | 6/24/2021 | 4,180 | 6,282 | 0.5 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Merative L.P. (11)(12)(13) | 989,691 Class A-1 Units | 6/30/2022 | 9,897 | 9,897 | 0.7 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Footnote-derived nonaccrual flags attached to equity and other investment rows with no debt coupon or interest-rate fields.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 9,
+        "row_index": 60,
+        "quoted_text": "Mitnick TA Aggregator, LP (11)(12)(13) | Membership Interest ( 0.43 % ownership) | 5/2/2022 | 5,243 | 5,245 | 0.4 %"
+      }
+    }
+  ],
+  "rationale": "The bundle's eight nonaccrual artifact rows are sourced from footnotes, but the raw schedule rows checked are equity/other investments such as membership interests, class units, and common shares. These cited rows have blank reference-rate and interest-rate columns and are not debt accrual-status disclosures. The rule fire therefore reflects footnote/classification lookthrough leakage into nonaccrual detection rather than true nonaccrual debt positions. Literal non-accrual text was not found by targeted roam searches, so the decision is grounded in the schedule row structure and cited rows."
+}

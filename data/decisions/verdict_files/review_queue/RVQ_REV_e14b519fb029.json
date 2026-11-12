@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_e14b519fb029",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 48.95,
+  "anchor_value": 100.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 21,
+      "quoted_text": "Total investments | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate check. A07 reports pct_sum=48.95 for 2026-03-31, but the filing's March 31, 2026 Industry Type schedule explicitly reports Total investments at 100.00%. The 51.05 percentage-point shortfall proves incomplete extraction or aggregation. No row-level detail or structural residual in the flag identifies which positions or categories were omitted, so the error is not further localized."
+}

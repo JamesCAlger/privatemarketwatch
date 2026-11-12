@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e83565be0e1b",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 201772770,
+  "anchor_value": 201772770,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 28,
+      "quoted_text": "Pluralsight, Inc. | First Lien Term Loan | SOFR(M) | 1.00% | 3.00% Cash + 1.50% PIK | 8.17% | 8/22/2029 | principal 123,953 | cost 122,575 | fair value 123,953",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Pluralsight, Inc. | First Lien Term Loan | SOFR(M) | 1.00% | 3.00% Cash + 1.50% PIK | 8.17% | 8/22/2029 | principal 70,218 | cost 70,218 | fair value 70,218",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 30,
+      "quoted_text": "Pluralsight, Inc. | First Lien Term Loan | SOFR(M) | 1.00% | 7.50% PIK | 11.17% | 8/22/2029 | principal 221,061 | cost 210,388 | fair value 35,268",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 43,
+      "quoted_text": "Total Investments - 89.33% of Net Assets | cost 215,078,392 | fair value 201,772,770 | 89.53%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 uses a position key that is too coarse for separately disclosed lots. The raw schedule contains three distinct Pluralsight rows at table 13 rows 28-30. Rows 28 and 29 share issuer, instrument, reference rate, coupon, and maturity, but their principal, cost, and fair value amounts differ; row 30 additionally has different PIK and total-coupon terms. These are filer-presented positions rather than duplicated extraction rows. The filing total investments fair value of 201,772,770 also matches the bundle's fund-quarter fair value, so the disclosed rows are included consistently. The duplicate-key check should distinguish lots or narrow its scope, not delete these rows."
+}

@@ -1,0 +1,85 @@
+{
+  "review_id": "RVQ_REV_4d814b92c5f5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values concatenate portfolio company with type of investment and acquisition date",
+  "anchor_value": "source table separates Portfolio Company, Type of Investment, and Acquisition Date into distinct columns",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "Imagine Acquisitionco, Inc. | Preferred Equity | N/A | 11/16/2021 | 2,000 | 2,000 | 3,159 | 0.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 8,
+      "quoted_text": "Galway Partners Holdings LLC | Preferred Equity | 14.00 % | 4/28/2023 | 13,036 | 12,816 | 13,111 | 1.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 9,
+      "quoted_text": "RSC Topco, Inc. | Preferred Equity | 13.25 % | 8/14/2023 | 6,203 | 6,079 | 6,168 | 0.5 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Eclipse Buyer, Inc. | Preferred Equity | 12.50 % | 9/6/2024 | 3,490 | 3,422 | 3,447 | 0.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 14,
+      "quoted_text": "GT Polaris Holdings, Inc | Preferred Equity | 12.50 % | 6/6/2022 | 11,657 | 11,527 | 11,373 | 0.9 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "Resolute Investment Managers, Inc. | Equity | N/A | 12/29/2023 | 58 | 1,249 | 1,353 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 25,
+      "quoted_text": "New Giving Acquisition, Inc. | Equity | N/A | 8/19/2022 | 2 | - | 1,025 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 29,
+      "quoted_text": "THL Fund IX Investors (Plymouth), L.P. | Equity | (12) | N/A | 9/1/2023 | 3,732 | 3,732 | 4,191 | 0.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 33,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Equity | N/A | 5/8/2024 | 375 | 3,750 | 3,750 | 0.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 37,
+      "quoted_text": "Spirit RR Holdings, Inc. | Equity | N/A | 9/19/2022 | 3,586 | 3,635 | 5,672 | 0.5 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name was built from multiple source columns; the clean source portfolio company is separate from type of investment and acquisition date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse leak. The flagged stored values append Type of Investment and Acquisition Date text to issuer_name, but the raw SOI table has separate columns for Portfolio Company, Type of Investment, Interest Rate, Acquisition Date, cost, and fair value. For example, table 17 row 33 has Portfolio Company 'ACC Ultimate Holdings, L.P.', Type 'Equity', and Acquisition Date '5/8/2024' in separate columns, while the flagged value is 'ACC Ultimate Holdings, L.P., Equity, Acquisition Date 5/8/2024'. The same source-column separation is visible for all ten flagged rows."
+}

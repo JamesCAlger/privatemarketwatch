@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_c9bc02bc56a0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -8000,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 22,
+      "quoted_text": "Acumatica Holdings, Inc. / Software / First Lien(8)(9) - Undrawn shows principal 3,148 with cost dash and fair value dash, not a negative cost.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 30,
+      "quoted_text": "Anaplan, Inc. / Software / First Lien(8)(9) - Undrawn shows principal 2,460 with cost dash and fair value dash, not a negative cost.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Undrawn rows with source dashes in cost/fair value were extracted with negative cost values, e.g. Acumatica stored -8000 though the source cost is a dash.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The same unsupported negative-cost pattern appears on Anaplan, stored as -48000 while the source undrawn row has dash cost and dash fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "C107 flagged negative costs. Raw source inspection shows some true parenthetical negative costs on unfunded debt rows, but at least two sampled flagged issue rows are extraction defects: the Acumatica and Anaplan undrawn source rows show dashes in the cost and fair value positions while the holding extract stored negative costs. This grounds the aggregate C107 flag as a real data error with an extraction/column mapping mechanism."
+}

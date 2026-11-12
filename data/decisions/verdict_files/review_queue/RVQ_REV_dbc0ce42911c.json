@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_dbc0ce42911c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -164000,
+  "anchor_value": -164000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "Accupac, LLC | Personal Products | Delayed Draw Term Loan | N/A | 0.00 % | 01/16/26 | - | - | ( 15 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 36,
+      "quoted_text": "Boulder Scientific Company, LLC | Chemicals | Delayed Draw Term Loan | N/A | 0.00 % | 12/28/25 | - | ( 1 | ) | ( 26 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 43,
+      "quoted_text": "BRG Acquisition Co., LLC | Health Care Technology | Revolver | N/A | 0.00 % | 07/26/28 | - | ( 10 | ) | ( 11 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 37,
+      "quoted_text": "KL Bronco Acquisition, Inc. | Personal Products | Delayed Draw Term Loan | N/A | 0.00 % | 06/30/28 | - | ( 15 | ) | ( 80 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 49,
+      "quoted_text": "Krayden Holdings, Inc. | Trading Companies & Distributors | Delayed Draw Term Loan | N/A | 0.00 % | 03/01/29 | - | ( 11 | ) | ( 6 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 50,
+      "quoted_text": "Krayden Holdings, Inc. | Trading Companies & Distributors | Delayed Draw Term Loan | N/A | 0.00 % | 03/01/29 | - | ( 11 | ) | ( 6 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 51,
+      "quoted_text": "Krayden Holdings, Inc. | Trading Companies & Distributors | Revolver | N/A | 0.00 % | 03/01/29 | - | ( 11 | ) | ( 6 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 33,
+      "quoted_text": "OIS Management Services, LLC | Health Care Providers & Services | Revolver | N/A | 0.00 % | 11/16/28 | - | ( 16 | ) | ( 13 | ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 16,
+      "quoted_text": "Techmer BB Bidco, LLC | Chemicals | Delayed Draw Term Loan | N/A | 0.00 % | 09/01/28 | - | - | ( 1 | ) | (2)(6)(9)"
+    }
+  ],
+  "rationale": "Class 1 source check: each flagged negative fair_value is a literal parenthesized fair-value amount in the June 30, 2023 investment schedule. The stored negatives match the raw source presentation, so the C103 negative-value review is not a data error."
+}

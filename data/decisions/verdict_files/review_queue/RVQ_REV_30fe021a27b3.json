@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_30fe021a27b3",
+  "verdict": "real_error",
+  "mechanism": "duplicate_position_key_collision",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1665.503,
+  "anchor_value": 1665.503,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 30,
+      "quoted_text": "Truck-Lite Co., LLC | (8)(14) | First Lien Term Loan | S + 4.75 % | 8.42 % | 2/13/2032 | 194 | 193 | 193 | 0.03",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 31,
+      "quoted_text": "Truck-Lite Co., LLC | (8)(12)(14) | First Lien Term Loan | S + 4.75 % | 8.42 % | 2/13/2032 | 1,707 | 1,707 | 1,703 | 0.23",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "duplicate_position_key_collision",
+      "detail": "Rows 30 and 31 are separate source positions with the same issuer, asset type, rate, and maturity but different footnotes and amounts, so a position key that collapses them is not unique.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 37,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "B02 reports 49 duplicate position keys, with Truck-Lite Co., LLC as the example. Raw SOI table 37 shows adjacent Truck-Lite First Lien Term Loan rows that share issuer, instrument type, spread, interest rate, and maturity, but carry different footnotes and different par/amortized cost/fair value amounts. The filing total anchor ties at 1,665.503 million, so this is not an aggregate fair-value residual; the defect is that the extracted position key is too coarse and collides across distinct source rows."
+}

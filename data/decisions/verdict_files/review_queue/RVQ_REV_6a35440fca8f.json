@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_6a35440fca8f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 181356000,
+  "anchor_value": 181356000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 52,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. (3)(7) | N/A | N/A | 09/08/2028 | 47,166 | - | - | 0.00 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 80,
+      "quoted_text": "Total Investments | $ | 185,605 | $ | 181,356 | 92.27 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | - | $ | 102,949 | $ | 78,407 | $ | 181,356",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 flagged fair-value completeness at 63/67 leaves, but raw source does not show a missing nonzero fair value. The localized residual is explained by zero-value/structural rows, including the West Marine warrant row whose cost and fair value are printed as dashes and whose percentage of net assets is 0.00%. The June 30, 2024 SOI total investments fair value is 181,356 thousand, and the fair-value hierarchy total assets line independently repeats 181,356 thousand. Since the schedule total ties and the flagged residual fair value is zero, the completeness threshold is over-scoped for zero/structural rows rather than identifying a data error."
+}

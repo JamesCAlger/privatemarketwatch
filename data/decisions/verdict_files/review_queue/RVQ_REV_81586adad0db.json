@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_81586adad0db",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 60,
+      "row_index": 18,
+      "quoted_text": "Descartes Holdings, Inc - Class A Common Stock | (4) | 10/9/2023 | 937,585 | 4,060 | 47 | 0.00"
+    },
+    {
+      "table_index": 219,
+      "row_index": 7,
+      "quoted_text": "Descartes Holdings, Inc - Class A Common Stock | (4) | 10/9/2023 | 168,057 | $ | 728 | $ | 8 | 0.00 | %"
+    }
+  ],
+  "rationale": "X08 flagged two rows because fair value is below 5% of cost. Raw source confirms the stored low fair values for the flagged Descartes Holdings common stock positions: cost 4,060 with fair value 47, and cost 728 with fair value 8, in the filing's schedule. The values are source-supported distressed/equity marks, not a data extraction error."
+}

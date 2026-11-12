@@ -1,0 +1,46 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded patch classifies this Trinity source-only row as a documented total/header row rather than adding it to production holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 51,
+      "row_index": 72,
+      "cell_indices": [
+        0,
+        12,
+        13,
+        16,
+        17
+      ],
+      "reason": "The current-period source coordinate is a subtotal row, 'Total Investment in Securities (97.3%)*', with aggregate cost and fair value cells and no issuer, instrument, rate, maturity, principal, or shares."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Use the bounded source reconciliation total/header patch already added for the normalized label 'portfolio company investment in securities'. The regression test covers this Trinity total-header wording.",
+  "primary_justification": "The blocker is not a missing production holding. The bundled source row is Trinity's 2023-12-31 portfolio-level total with raw identifier 'Portfolio Company Investment in Securities' and source fair value 1,275,180,000. HTML coordinates map that source fact to 'Total Investment in Securities (97.3%)* $ 1,319,316 $ 1,275,180', an aggregate row without position-level fields. Adding it to unified holdings would duplicate portfolio exposure and violate the position-level data contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded classification mechanism; production outputs still need to be rebuilt and source reconciliation rerun before claiming the current blocker pool no longer contains this row.",
+  "review_id": "BDCSRC_0001786108_2023-12-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_eae6e918ad",
+  "reviewer_notes": "Manual review found coordinate-level evidence that the row is an aggregate investment-in-securities total, not a position. It should remain out of position-level unified holdings and be documented as a source-only total/header row.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this Trinity portfolio company investment in securities row is classified as documented_source_total_header instead of blocking_source_short_plain_unresolved.",
+  "tests_validation_plan": "Focused test coverage exists in tests/test_validate_holdings.py for this Trinity total-header label. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

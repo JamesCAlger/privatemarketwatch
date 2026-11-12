@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_77238f6ae293",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 B01 completeness flag. The scoped raw-source overview, tables, and totals commands returned only an XMLParsedAsHTMLWarning and no usable evidence, so filing, companyfacts, and extracted-position anchors could not be compared and no culprit could be localized. Per the fail-closed contract, this is source_unavailable rather than a data judgment."
+}

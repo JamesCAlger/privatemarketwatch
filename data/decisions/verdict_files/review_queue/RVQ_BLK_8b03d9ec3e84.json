@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_8b03d9ec3e84",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1013243399,
+  "anchor_value": 657323982,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Controlled Affiliated investments ... Fair Value at March 31, 2026: $246,700,365",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments ... Fair Value at March 31, 2026: $109,219,052",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 25,
+      "quoted_text": "Total Debt & Equity Investments (7) ... Fair Value: $657,323,982",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Controlled and non-controlled affiliated investment roll-up totals were included with position detail, adding $355,919,417 above the schedule total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The filing schedule reports total debt and equity investment fair value of $657,323,982. The extracted position sum is $1,013,243,399, an excess of $355,919,417. The raw source roll-up totals are $246,700,365 for controlled affiliated investments and $109,219,052 for non-controlled affiliated investments; together they equal the residual exactly. These aggregate rows duplicate underlying position coverage and establish a subtotal-leak extraction error."
+}

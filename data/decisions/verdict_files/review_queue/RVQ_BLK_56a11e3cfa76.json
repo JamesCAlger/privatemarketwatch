@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_BLK_56a11e3cfa76",
+    "verdict":  "false_alarm",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  750,
+    "anchor_value":  750,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  251,
+                                  "row_index":  4,
+                                  "quoted_text":  "Carestream Health, Inc. (First Lien Term Loan) (5) | SOFR + 750 | 3.67% | 9/30/2027 | principal 1,579,575 | amortized cost 1,459,426 | fair value 811,507",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The X04 issue says a fixed coupon row has basis_spread=750, but the raw schedule row for the matching 2025 Carestream position shows a floating-rate term, SOFR + 750, with a 3.67% base-rate floor. The stored 750 basis spread is therefore source-supported; the validation fire comes from treating this floating-rate row as fixed."
+}

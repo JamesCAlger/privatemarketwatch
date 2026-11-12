@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_bf100cd42ad6",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "internal",
+  "observed_value": 25.0,
+  "anchor_value": 25.0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate nonaccrual-position count flag. The bundle reports 25 footnote-derived positions, but repeated attempts to invoke the scoped evidence CLI failed before process creation with Windows CreateProcessWithLogonW error 1326. No usable raw-source output was returned, so the position count and footnote scope could not be independently adjudicated. Contract requires fail-closed source_unavailable ambiguity and escalation."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_07dc8088d7e4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10,
+  "anchor_value": 10,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 14,
+      "quoted_text": "(14) Investment was on non-accrual status as of March 31, 2026.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Abracon Group Holdings, LLC | (6) (8) (9) (11) (14) | First Lien Debt",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 29,
+      "quoted_text": "KWOR Intermediate I, Inc. | (6) (14) (17) (19) | Preferred Equity | 8.00 % PIK",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 count check. The filing schedule contains exactly ten distinct investment rows marked with footnote (14): KWOR preferred equity; Continental debt; two Abracon debt tranches; Teasdale debt; two DCA debt tranches; two Vardiman debt tranches; and Vardiman preferred equity. Table 28 row 14 defines footnote (14) as on non-accrual status at March 31, 2026. Thus the observed extracted count of 10 equals the raw-source schedule count of 10; the data are correct and a rule that treats their presence as a defect is out of scope."
+}

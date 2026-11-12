@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_8bb8865018dd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "internal",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 36,
+      "quoted_text": "Rally Network, Inc. Revolver: outstanding principal 42, cost 42, fair value 4 (in thousands).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 18,
+      "quoted_text": "Manufactured Networks, Inc. Revolver: outstanding principal 2,630, cost 2,668, fair value 132 (in thousands).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 27,
+      "quoted_text": "Ephemeral Solutions, Inc. Growth Capital Loan: outstanding principal 11, cost 11, fair value 1 (in thousands).",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X06 treats deeply impaired debt as a likely scale error even when the disclosed outstanding principal is correctly extracted.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "The complete source rows confirm that all three stored principal amounts are the filing's disclosed outstanding principal amounts, in the same thousands scale as cost and fair value. Their low fair values are economically plausible impairment marks on PIK/distressed loans, not evidence of a scale, FX, or column-mapping defect. The X06 heuristic therefore fired on valid data."
+}

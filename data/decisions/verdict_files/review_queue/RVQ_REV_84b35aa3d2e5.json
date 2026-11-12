@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_84b35aa3d2e5",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 37,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 9,
+      "quoted_text": "Arcserve Cayman Opco LP (fka Arcstor Midco, LLC) (Delayed Draw) | (19)(20)(21) | SF | 8.11 | % | 12.67 % PIK | 1/2/2024 | 1/2/2027 | 1,471 | 392 | 882 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 20,
+      "quoted_text": "Avison Young (USA) Inc. | (12)(21)(37) | SF | 8.26 | % | 6.15 % Cash/ 6.50 % PIK | 4/26/2019 | 3/12/2029 | 1,892 | 1,790 | 1,495 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw source was readable and the investment schedule localizes candidate positions carrying footnote marker (21), including rows cited above. However, targeted CLI searches for non-accrual/nonaccrual/accrual status/not accruing/placed on and for common footnote-definition wording returned no source text defining marker (21) as non-accrual. Without the raw footnote definition, the source does not decide whether the nonaccrual_flag is a real data error or a false alarm."
+}

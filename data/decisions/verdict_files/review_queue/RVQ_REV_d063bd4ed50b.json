@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d063bd4ed50b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 19,
+      "quoted_text": "Twin Brook Equity Holdings, LLC (35) (36) (37) | Equity - 17.41 % membership interest | $ | 87,326 | $ | 103,655 | 4.35 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 20,
+      "quoted_text": "Twin Brook Segregated Equity Holdings, LLC (35) (36) (37) | Equity - 2.11 % membership interest | 19 | 15 | 0.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C04 fired because 0 of 2 equity rows have shares, but the source rows are membership-interest equity holdings. The SOI row text discloses 17.41% and 2.11% membership interests in the Investment description, with cost and fair value columns populated and no Shares column or share-count field for these rows. The missing share count is therefore source-consistent; the check is too broad for membership-interest equity."
+}

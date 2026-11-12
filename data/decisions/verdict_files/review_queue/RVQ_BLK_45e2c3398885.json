@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_45e2c3398885",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19087624,
+  "anchor_value": 19087624,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 26,
+      "quoted_text": "State Street Institutional Treasury Plus Money Market Fund - 3.66 % (g)(n) | Investor Class Units | 19,087,624 | 19,087,624 | 19,087,624"
+    },
+    {
+      "table_index": 57,
+      "row_index": 2,
+      "quoted_text": "Total Money Market Mutual Funds | $ | 19,087,624 | $ | 19,087,624 | 2.44 %"
+    }
+  ],
+  "rationale": "SRC_BDC02 flagged the BDC row as having no matching current-period source fact, but the raw source contains the exact State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units row with 19,087,624, matching the pipeline cost and fair value. The adjacent schedule total for Money Market Mutual Funds also ties to 19,087,624, so the source supports the extracted row and the rule fire is not a data error."
+}

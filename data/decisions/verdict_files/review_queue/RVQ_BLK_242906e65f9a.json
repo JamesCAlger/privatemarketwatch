@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_242906e65f9a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "asset_class missing",
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw filing was successfully read through the evidence CLI, but the flagged row_key 544957 is an internal identifier not present in the filing. A targeted roam search returned zero hits across 4,157 source rows, and the bundle provides no issuer, instrument, amount, or source coordinate for that row. Therefore the source cannot identify the affected position or determine its correct asset_class without guessing."
+}

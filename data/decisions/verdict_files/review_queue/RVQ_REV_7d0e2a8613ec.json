@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_7d0e2a8613ec",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4137055837563452,
+  "anchor_value": 0.5,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Applied Digital Corporation | Equipment Financing | March 13, 2024 | October 1, 2025 | Fixed interest rate 19.0%; EOT 0.0% | principal 3,001 | cost 3,001 | fair value 3,063",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 10,
+      "quoted_text": "Applied Digital Corporation | Equipment Financing | March 13, 2024 | October 1, 2025 | Fixed interest rate 19.0%; EOT 0.0% | principal 4,190 | cost 4,191 | fair value 4,270",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer extraction is contaminated by schedule context and loan terms; the source issuer is the first-column company name, while the extracted row stores a long concatenated descriptor as issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "D06 is a class 3 continuity flag: the oracle reports only 41.4% issuer persistence (163/394), below the 50% threshold. The filing itself has March 31, 2025 and December 31, 2024 SOI tables with matching issuers, including Applied Digital Corporation in both periods. Raw source table 13 row 5 shows the current-period issuer as the first-column company name, and table 43 row 10 shows the same issuer in the comparative schedule. The bundle's extracted holdings sample instead stores issuer_name as a concatenated descriptor including schedule section, geography, industry, issuer, investment type, dates, rate, and EOT terms. That issuer-name extraction gap can mechanically depress issuer continuity despite source-visible persistence, so the flag represents a real data error rather than genuine portfolio turnover."
+}

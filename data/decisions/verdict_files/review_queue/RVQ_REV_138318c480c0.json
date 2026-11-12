@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_138318c480c0",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 C206 flag localizes three issuer_name cells, but the raw-source evidence CLI returned no usable source content for overview, tables, or targeted issuer queries (only an XMLParsedAsHTMLWarning). The flagged values therefore cannot be confirmed against source; fail closed and retry source evidence access."
+}

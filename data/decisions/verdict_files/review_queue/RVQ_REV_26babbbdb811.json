@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_26babbbdb811",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source rows have no stated index, spread, or interest rate",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 17
+    },
+    {
+      "table_index": 56,
+      "row_index": 27
+    },
+    {
+      "table_index": 57,
+      "row_index": 9
+    },
+    {
+      "table_index": 58,
+      "row_index": 5
+    },
+    {
+      "table_index": 59,
+      "row_index": 19
+    }
+  ],
+  "rationale": "X02 flagged PRIVATE_CREDIT rows with missing interest_rate or basis_spread. In the raw schedule, representative flagged revolver and delayed-draw rows have blank/dash cells under Index, Spread, and Interest Rate, while adjacent funded loans in the same tables carry explicit SOFR/spread/rate values. Examples include Heads Up Technologies revolver, Chilton delayed draw, Hellers delayed draw, AGS revolver, and Allworth revolver. The extracted blank rate fields therefore match the source rows; the warning is an overbroad rule-scope issue for commitment-style private credit rows whose source rate fields are not stated."
+}

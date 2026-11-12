@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_fa5c3f16b461",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 17.5,
+  "anchor_value": 6.75,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | 03/28/24 | Term Loan B - 11.05 % (SOFR + 6.75 %, 1.75 % Floor) | 2.9 | % | $ | 6,110,047 | 03/28/29 | $ | 5,971,577 | $ | 5,847,315"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "basis_spread is stored as 17.5, but the source terms show SOFR + 6.75% with a separate 1.75% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The flagged value 17.5 is not the basis spread in the source. The cited SOI row states the instrument coupon as 11.05% with terms '(SOFR + 6.75 %, 1.75 % Floor)', so the source spread is 6.75 and the separate floor is 1.75. Storing 17.5 in basis_spread is therefore a localized extraction/normalization error."
+}

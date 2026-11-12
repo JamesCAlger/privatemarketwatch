@@ -1,0 +1,35 @@
+{
+    "review_id":  "RVQ_REV_86baf22959ab",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  "source schedule has non-USD par amounts requiring USD principal conversion",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  16,
+                                  "row_index":  25,
+                                  "quoted_text":  "WeTransfer BV term loan: Par Amount EUR 8,232,915; cost 9,506,867; fair value 8,531,803"
+                              },
+                              {
+                                  "table_index":  16,
+                                  "row_index":  29,
+                                  "quoted_text":  "Inspired Entertainment Financing PLC term loan: Par Amount GBP 8,812,074; cost 11,784,501; fair value 11,560,428"
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Non-USD debt par amounts are present in the source schedule, but principal_amount_usd is blank in the extracted holdings rows.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  16,
+                                          "row_index":  25
+                                      }
+                     }
+                 ],
+    "rationale":  "FX01 is a real data error: the source schedule contains debt rows with explicit non-USD par amounts, including EUR and GBP par, while the reviewed artifact reports principal_amount_usd as blank for non-USD debt principal rows. The raw source therefore supports that an explicit USD principal conversion is missing rather than the rule being a false alarm."
+}

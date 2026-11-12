@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a8422ed29628",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | Last Out Term Loan - 15.90 % inc PIK (SOFR + 10.25 %, 1.50 % Floor, 2.75 % PIK) | $ | 17,933,678 | $ | 17,149,647",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 8,
+      "quoted_text": "Navistar Defense, LLC (2) (5) | Revolver - 16.01 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) | $ | 3,769,118 | $ | 3,798,939",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flags cost_currency='U_USD' as not USD, but the raw investment schedule shows the flagged valuation fields under Amortized Cost and Fair Value with dollar markers. The source therefore supports USD-denominated valuation fields; the defect is the rule treating the filer/XBRL unit label U_USD as non-USD."
+}

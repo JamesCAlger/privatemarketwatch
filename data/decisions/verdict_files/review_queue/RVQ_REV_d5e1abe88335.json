@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_d5e1abe88335",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.76 % (SOFR + 6.75 %, 1.75 % Floor) | $ | 29,562,653 | $ | 28,937,806 | $ | 28,468,835",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 22,
+      "quoted_text": "Total Debt Investments | 150.1 | % | 1,316,967,619 | 1,271,845,293",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 2,
+      "quoted_text": "United States | 100 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 asserts non-USD debt principal is missing principal_amount_usd, but the raw SOI uses dollar-denominated monetary columns. The schedule header is Par Amount, Amortized Cost, and Fair Value; the first current-period debt row prints dollar signs in those columns, and later rows omit repeated currency symbols under the same columns. Roam found no EUR, GBP, CAD, foreign, or currency text, and the geographic allocation shows United States 100%. The source therefore does not show non-USD par requiring FX conversion; the flag appears caused by failure to inherit the USD column currency across rows."
+}

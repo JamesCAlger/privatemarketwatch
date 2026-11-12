@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_7329199e8b37",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 653,
+  "anchor_value": 653,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 16,
+      "quoted_text": "Blackstone Private Credit Fund Consolidated Schedule of Investments December 31, 2022: 2U, Inc. (6)(10) | L + | 5.75 % | 10.16 % | 12/30/2024 | 7,960 | 7,880 | 7,666 | 0.03"
+    },
+    {
+      "table_index": 190,
+      "row_index": 37,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments December 31, 2022: 2U, Inc. (10) | L + | 5.75 % | 10.16 % | 12/30/2024 | 67,442 | 65,101 | 64,956 | 2.35"
+    }
+  ],
+  "rationale": "B02 flags duplicate position keys, with 2U, Inc. as the example. Raw source shows the matching rows are distinct schedule positions, not a duplicated extraction: one is in the Blackstone Private Credit Fund schedule and one is in the BCRED Emerald JV LP schedule, and their par, cost, fair value, and percent of net assets differ. The check is therefore over-scoped for legitimate same-issuer/same-term positions across source schedule entities."
+}

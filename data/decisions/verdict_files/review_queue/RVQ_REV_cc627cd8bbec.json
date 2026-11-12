@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_cc627cd8bbec",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.7512953367875648,
+  "anchor_value": 0.7512953367875648,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 9,
+      "quoted_text": "Jeppesen Holdings, LLC^(5) | One stop | N/A(6) | 11/2032 | - | (21) | - | (42)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | (25) | - | -"
+    },
+    {
+      "table_index": 30,
+      "row_index": 49,
+      "quoted_text": "Total debt investments | 9,879,854 | 9,770,025 | 220.0 | 9,839,925"
+    }
+  ],
+  "rationale": "C01 failed because only 75.1% of extracted debt rows carry an interest_rate, but raw SOI evidence shows a large cohort of debt-schedule rows where the filer itself reports Interest Rate (2) as N/A(6), typically with no principal and immaterial or zero fair value. The source therefore supports null interest_rate values for those debt rows; the coverage check is over-scoped unless it excludes filer-N/A/unfunded-style rows from the denominator."
+}

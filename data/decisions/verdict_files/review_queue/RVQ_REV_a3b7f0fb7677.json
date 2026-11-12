@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_a3b7f0fb7677",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 33,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 5,
+      "quoted_text": "US BANK MMDA GCTS | 3.48 % | 17,856,130 | 17,856,130 | 17,856,130 | (9)(14)(15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 81,
+      "row_index": 4,
+      "quoted_text": "Non-accrual | 21,125,453 | 1.19 | % | 1,991,208 | 0.11 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The cash-equivalent row US BANK MMDA GCTS is included in the nonaccrual artifact even though its source tickmarks are (9)(14)(15), not the non-accrual tickmark seen on debt rows.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 26,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The artifact population includes prior-period schedule variants such as December 2024 cash-equivalent rows, so the 2025 report-date nonaccrual population is not limited to current-period source rows.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 41,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "Raw source confirms a true non-accrual aggregate at September 30, 2025 (table 81 row 4: amortized cost 21,125,453 and fair value 1,991,208), and representative debt rows carrying tickmark (16) support that some positions are non-accrual. However, the artifact also tags US BANK MMDA GCTS as non-accrual even though its source row is a cash equivalent with tickmarks (9)(14)(15), not (16). That is a source-grounded over-classification of non-accrual status rather than a mere warning about genuine non-accrual loans."
+}

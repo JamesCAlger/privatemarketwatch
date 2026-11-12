@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_51fc380c94d0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Hudson Technologies Company | 03/02/22 | Last Out Term Loan - 12.31 % (SOFR + 7.50 %, 1.00 % Floor) | 1.9 | % | $ | 6,059,560 | 03/02/27 | $ | 5,964,585 | $ | 6,059,560",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 21,
+      "quoted_text": "Total Debt Investments (2) | 124.4 | % | 405,255,392 | 403,510,457",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 29,
+      "quoted_text": "Total Investments ( 211.5 %) | $ | 687,902,445 | $ | 686,157,510",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "B01 reports only 37 of 74 extracted leaves have fair_value, but the current-period SOI has a Fair Value column populated on investment rows and totals.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 5,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The raw SOI tables expose a Fair Value column for the investment schedule and populate it on current-period investment rows, for example Hudson Technologies Company at table 5 row 4 with fair value 6,059,560. The schedule anchors also provide current-period debt fair value of 403,510,457 and total investments fair value of 686,157,510 at table 6 rows 21 and 29. Because the source carries fair values while the B01 artifact reports only 37/74 leaves with fair_value, the failure is a real extraction/completeness gap rather than a source omission."
+}

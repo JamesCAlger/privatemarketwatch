@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_5aabcd73c86b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -102.2,
+  "anchor_value": -102.2,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC Preferred Equity ... Market Value 1,125,000 ... % of NAV - 94.6%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC, Class A Equity Interest ... Market Value 90,000 ... % of NAV - 7.6%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 27,
+      "quoted_text": "Total Net Assets | $ | ( 1,188,729 | ) | $ | ( 1,088,939 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 9,
+      "quoted_text": "Investments Total | $ | 1,215,000 | $ | 1,215,000 | - 102.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The weak rule appears to flag two negative percentage-of-net-assets cells. Raw source shows those negative percentages are the filer presentation: Preferred Equity is -94.6% of NAV and Class A Equity Interest is -7.6% of NAV, while Class B is 0.0%. The balance sheet reports Total Net Assets of negative 1,188,729, and the schedule total fair value of 1,215,000 is presented as -102.2% of NAV. The negative signs are therefore caused by a negative NAV denominator, not by bad extracted percent values."
+}

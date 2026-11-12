@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d78d981f3198",
+  "verdict": "false_alarm",
+  "mechanism": "unit_label_normalization",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated schedule, shown with dollar signs",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Sunland Asphalt & Construction, LLC (3) | 06/16/23 | Term Loan B - 13.19 % inc PIK (SOFR + 7.88 %, 1.75 % Floor, 0.50 % PIK) | $ | 5,007,634 | $ | 4,822,811 | $ | 4,876,434",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 25,
+      "quoted_text": "Total Investments ( 216.4 %) | $ | 146,973,822 | $ | 147,476,202",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency value U_USD as non-USD. The raw SOI schedule is denominated in dollars: the Amortized Cost and Fair Value columns carry dollar markers on the cited investment row, and the schedule total is also shown with dollar signs. The source therefore supports USD-denominated costs; the flag appears to be an exact-label/unit-normalization false positive rather than a real foreign-currency data defect."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_58ddbd8d99ad",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 17,
+  "anchor_value": 16,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 35,
+      "quoted_text": "Navigator Acquiror, Inc. | (4)(7)(9) | SOFR + | 5.50 % | 9.32 % (incl. 4.00 % PIK) | 7/16/2021 | 7/16/2030 | 539,588 | 538,218 | 458,413 | 0.96",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 7,
+      "quoted_text": "Atlas CC Acquisition Corp. | (10)(17) | SOFR + | 4.25 % | 8.37 % | 7/25/2025 | 5/25/2029 | $ | 41,085 | $ | 29,763 | $ | 21,285 | 0.04",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The nonaccrual artifact counts 17 positions, but Navigator Acquiror is included even though its current-period schedule row carries footnotes (4)(7)(9), not the nonaccrual footnote marker (17).",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 54,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "The source artifact lists 17 nonaccrual positions. Targeted source review shows current-period nonaccrual-marked rows carrying footnote (17), for example Atlas CC Acquisition Corp. at table 41 row 7. The artifact's Navigator Acquiror entry does not carry that marker in the raw schedule; its current-period row has only footnotes (4)(7)(9). Therefore the nonaccrual list/count is overstated by one and the error is localized to Navigator Acquiror."
+}

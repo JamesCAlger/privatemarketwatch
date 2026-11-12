@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_8cfca92d117d",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 21,
+      "quoted_text": "Klick Inc. (4)(5)(11) | Unitranche First Lien Delayed Draw Term Loan | 11/2032 | - | $ | (5) | 0.0% | $ | (19)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 22,
+      "quoted_text": "Klick Inc. (4)(5)(11) | Unitranche First Lien Revolver | 11/2032 | - | (10) | 0.0 | (19)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 13,
+      "quoted_text": "Pipe Bidco GMBH (4)(5)(11) | Unitranche First Lien Delayed Draw Term Loan | 01/2033 | EUR | - | (38) | 0.0 | (38)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X02 incorrectly requires a rate on unfunded delayed-draw and revolver commitment rows whose source rate cells are blank.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The filing schedule itself leaves Interest Term and Interest Rate blank for the flagged unfunded commitment rows. Klick delayed-draw and revolver rows have negative cost and fair value, and Pipe Bidco's delayed-draw row likewise has a dash principal and negative cost/fair value; adjacent funded term-loan rows disclose rates (8.67% for Klick and 6.60% for Pipe Bidco). The stored blank is therefore faithful to source, while X02 is overbroad because it applies the funded-loan rate requirement to commitment/fee rows classified as PRIVATE_CREDIT."
+}

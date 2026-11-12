@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_43492b8f7ede",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 103.1,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 103.1 % | $ | 349,365 | $ | 329,255",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 reported pct_sum=0.0%, but the SOI discloses Total Investments at 103.1% with fair value 329,255.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 20,
+        "quoted_text": "Total Investments - 103.1 % | $ | 349,365 | $ | 329,255"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation found the filing schedule total fair value of 329,255 ties to the bundle's 329.255 million fund-quarter FV and statement totals, while the raw SOI explicitly carries Total Investments - 103.1%. The flagged observed pct_sum of 0.0% is therefore not supported by the raw source; it reflects a missed extraction of the schedule percentage."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_50503d63bd9d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "internal",
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 repeated-cell review. The two flagged basis_spread records publish 0.0, but their row_id and src_context_id values are not mapped in the bundle or evidence output to an issuer or raw-source table coordinate. Raw source was checked and contains multiple floating-rate schedule rows with explicit nonzero spreads, including RevauAdvanced Underwriting at table 25 rows 9-10 and Syntax Systems at table 25 rows 11-12, but none can be safely identified as either flagged provenance record. The source therefore does not decide whether the two published zeros are defects or valid values for other positions."
+}

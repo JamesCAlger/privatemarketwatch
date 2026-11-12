@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_46fed89aa96b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1620593897.0,
+  "anchor_value": 1639681521.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 2,
+      "quoted_text": "Total Money Market Mutual Funds | $ | 19,087,624 | $ | 19,087,624 | 2.44 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 89,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 19,087,624 | $ | - | $ | 1,620,593,897 | $ | 1,639,681,521",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted fair value sum matches the Level 3 total of 1,620,593,897 but omits the Level 1 money market mutual funds fair value of 19,087,624 included in total investments.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 57,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing total investments fair value is 1,639,681,521, matching the companyfacts anchor, while the extracted holdings sum is 1,620,593,897. Source table 89 decomposes total investments into Level 1 mutual funds of 19,087,624 plus Level 3 investments of 1,620,593,897, and table 57 separately discloses Total Money Market Mutual Funds fair value of 19,087,624. The residual equals the omitted money market mutual funds line, so the conservation undershoot is a real extraction gap rather than a bad anchor."
+}

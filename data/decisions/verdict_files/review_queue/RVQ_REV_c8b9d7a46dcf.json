@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_c8b9d7a46dcf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Reference Rate and Spread populated in source SOI rows",
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 14,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | S + 5.25 % | 7/2/2031 | cost 213 | fair value 222",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 15,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Revolver | S + 5.25 % | 7/2/2031 | cost (5) | fair value (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 18,
+      "quoted_text": "Harvey Tool Company, LLC | First Lien Delayed Draw Term Loan | S + 5.25 % | 10/26/2027 | cost (27) | fair value (16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 21,
+      "quoted_text": "Netwrix Corporation | First Lien Delayed Draw Term Loan | S + 4.75 % | 6/11/2029 | cost 26 | fair value 23",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Private credit SOI rows carry Reference Rate and Spread values, but the extracted holdings rows have blank interest_rate, triggering X02.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 28,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 1 row/field check: X02 flags PRIVATE_CREDIT rows with blank interest_rate and no basis_spread. The source SOI has an explicit Reference Rate and Spread column, and representative flagged instruments show populated rate/spread cells, for example AB Centers DDTL and revolver at S + 5.25 %, Harvey Tool DDTL at S + 5.25 %, and Netwrix DDTL at S + 4.75 %. The stored observed value is blank, so the flag is a real extraction gap rather than a false alarm. No aggregate anchor is needed for this row-level rate field defect."
+}

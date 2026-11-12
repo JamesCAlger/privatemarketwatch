@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0a165e473d91",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8.7,
+  "anchor_value": 8.7,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 40,
+      "quoted_text": "UFT Buyer LLC (dba United Flow Technologies) | Trading Companies & Distributors | 8.70 % | S + 5.00 % (Incl. 2.75 % PIK) | 12/06/32 | 10,476 | 10,375 | 10,345 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 39,
+      "quoted_text": "UFT Buyer LLC (dba United Flow Technologies) | Trading Companies & Distributors | 8.27 % | S + 4.50 % | 12/06/32 | 10,383 | 10,280 | 10,279 | (7)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The extracted holding has cost 10,375 and fair value 10,345, which uniquely tie it to current-period table 20 row 40; that source row prints interest rate 8.70%, exactly matching the stored 8.7. The conflicting 8.27% text is from table 38 row 39, a different comparative-period position with cost 10,280 and fair value 10,279. Therefore the data value is correct and the fmt_basis_spread flag is a false alarm caused by comparative-period leakage in the identifier/check context. No aggregate anchor is relevant to this formatting rule."
+}

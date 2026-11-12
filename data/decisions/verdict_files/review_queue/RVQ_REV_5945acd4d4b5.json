@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_5945acd4d4b5",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_row",
+  "observed_value": "2024-04-30",
+  "anchor_value": "2024-06-30",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 18,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 15.61 % | 4/30/2024 | 1,657 | 1,476 | 389 | (4)(8)(15)(24)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Current June 30, 2024 schedule carries Heubach Holdings USA LLC with maturity 2024-04-30 and nonzero fair value of 389.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "The rule is row-localized from the current June 30, 2024 schedule: Heubach Holdings USA LLC is listed with maturity 4/30/2024, which is before the report date, while still carrying fair value 389. The source therefore confirms the maturity_not_past violation rather than showing a bad check or unavailable evidence."
+}

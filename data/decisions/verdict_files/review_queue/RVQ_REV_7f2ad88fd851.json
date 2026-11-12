@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_7f2ad88fd851",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_source_cell",
+  "observed_value": 5.75,
+  "anchor_value": 5.75,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 27,
+      "quoted_text": "Mark Andy, Inc. | 06/16/23 | Term Loan - 12.60 % inc PIK (SOFR + 8.75 %, 1.50 % Floor, 5.75 % PIK)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source confirmation: the March 31, 2026 schedule explicitly reports 5.75% PIK for the Mark Andy, Inc. term loan, exactly matching the published pik_rate of 5.75. The missing declared and instance values reflect a valid text-only extraction pathway, not a data error."
+}

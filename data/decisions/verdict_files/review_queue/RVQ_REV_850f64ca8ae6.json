@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_850f64ca8ae6",
+    "verdict":  "false_alarm",
+    "mechanism":  "unit_alias_false_positive",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD-denominated schedule columns",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  19,
+                                  "row_index":  25,
+                                  "quoted_text":  "Citation Glow Co-Invest LP ( 7,000 shares) | N/A | 7/28/2025 | 7,050 | 7,050",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  28,
+                                  "quoted_text":  "Blue Cloud Pediatric Surgery Centers, LLC - Class A-1 Common Units ( 1,000,000 units) | N/A | 8/12/2025 | 1,000 | 1,000",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  36,
+                                  "quoted_text":  "Total Common Equity | $ | 34,037 | $ | 35,698 | 3.12 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX03 flags cost_currency value U_USD as not USD, but the raw SOI presents the cited investment rows in the Amortized Cost and Fair Value schedule, and the same common-equity section shows dollar markers on the valuation columns. U_USD is therefore a USD unit token/alias rather than evidence of non-USD valuation currency; the check is over-strict, not the extracted holding currency."
+}

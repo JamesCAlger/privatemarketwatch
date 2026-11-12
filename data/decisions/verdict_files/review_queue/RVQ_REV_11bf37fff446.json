@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_11bf37fff446",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Professional Services AVSC Holding Corp. Investment TypeFirst Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.50% Maturity Date 4/12/2032",
+  "anchor_value": "AVSC Holding Corp.",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 42,
+      "quoted_text": "AVSC Holding Corp. | First Lien Term Loan | S + 5.00 % | 12/5/2031 | 6,978 | 6,847 | 6,943 | 7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 43,
+      "quoted_text": "AVSC Holding Corp. | First Lien Revolver | S + 5.00 % | 12/5/2029 | - | ( 3 | ) | ( 1 | ) | 17",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name retained section/path and instrument-term text instead of the clean source portfolio company name AVSC Holding Corp.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "The C206 cell flag is confirmed. In the raw SOI, table 14 rows 42-43 put AVSC Holding Corp. in the Portfolio Company column and keep investment type, spread, and maturity in separate columns. The stored issuer_name instead concatenates the ownership/category path, industry label, issuer, investment type, reference rate, and maturity into one issuer field, so the clean issuer extraction failed."
+}

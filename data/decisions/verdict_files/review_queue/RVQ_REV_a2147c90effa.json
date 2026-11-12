@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_a2147c90effa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "A8",
+  "anchor_value": "A8 - A (Feeder) L.P.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 15,
+      "quoted_text": "A8 - A (Feeder) L.P. (11) | Limited partnership interest | 03/2025 | 0.03 % | 1,000.3 | 1,128.8 | (5)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name was truncated to A8 even though the source company cell is A8 - A (Feeder) L.P.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 15,
+        "quoted_text": "A8 - A (Feeder) L.P. (11)"
+      }
+    }
+  ],
+  "rationale": "The extracted holdings sample stores issuer_name as A8 for the position identified as A8 - A (Feeder) L.P., Limited partnership interest. The raw SOI row shows the company cell is A8 - A (Feeder) L.P. (11), so the extracted issuer name is truncated and the fmt_issuer_name flag is a real source-grounded data error."
+}

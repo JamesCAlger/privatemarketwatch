@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_01899e04cce8",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3161223,
+  "anchor_value": 4277724,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 98,
+      "row_index": 15,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 112,
+      "row_index": 8,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 rows were retained from the prior-year investment schedule; table 112 totals 3,161,223 fair value while the 2025 schedule total is 4,277,724.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 98,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The raw source contains separate current and comparative investment schedules. The current schedule totals 4,277,724 fair value at table 85 row 22, while the comparative schedule totals 3,161,223 at table 112 row 8. A flagged issuer row such as Brightview, LLC delayed draw term loan appears in the comparative section at table 98 row 15 with prior-period economics distinct from the current Brightview row at table 69 row 4. Retaining that earlier-period source row in holdings for report_date 2025-12-31 is a real PP03 comparative-period leak."
+}

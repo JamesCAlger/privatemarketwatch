@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_176508fbcd02",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": 26.62,
+  "anchor_value": 26.62,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 42,
+      "quoted_text": "BBG, Inc. Initial Term Loan | (1)(2)(3)(4)(5)(7)(12) | 1M SOFR + 21.18 % / 1.00 % | 26.62 6.75 | % / % | 1/8/2026 | $ | 6,050,808 | $ | 5,755,886 | $ | 5,444,991 | 1.27 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The row-level issue flags interest_rate 26.619999999999997 as outside the expected range, but the raw filing source row for BBG, Inc. Initial Term Loan shows 26.62 in the Cash Interest Rate / PIK Rate cell, followed by 6.75 PIK and percent units. The extracted cash interest rate is therefore source-correct; the warning is a high-but-real source value rather than a data extraction error."
+}

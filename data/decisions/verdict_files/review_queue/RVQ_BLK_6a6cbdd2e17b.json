@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_6a6cbdd2e17b",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 420568000.0,
+  "anchor_value": 420568000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 12,
+      "quoted_text": "Total Investments (10) - 156.8% | $ | 425,763 | $ | 420,568",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 50 | $ | - | $ | 420,518 | $ | 420,568",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 5,
+      "quoted_text": "Companies 5% to 25% owned (cost: $ 21,187 and $ 0, respectively) | $ | 13,958 | $ | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The companyfacts_fv anchor used 13.958 million from the Companies 5% to 25% owned balance-sheet line instead of total investments of 420.568 million.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 16,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fair value sum of 420.568 million matches the filing schedule total and the fair-value hierarchy total. The disputed companyfacts anchor of 13.958 million is visible in the balance sheet as only the Companies 5% to 25% owned subline, not total investments. The conservation failure is therefore a false alarm caused by a bad anchor, not a source-backed holdings error."
+}

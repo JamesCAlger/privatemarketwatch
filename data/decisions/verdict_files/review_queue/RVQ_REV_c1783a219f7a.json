@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_c1783a219f7a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 22, "row_index": 42, "quoted_text": "The ONE Group Hospitality, Inc. - Preferred Stock | 1,000 | 877 | 1,075", "ties_to_residual": false},
+    {"table_index": 23, "row_index": 37, "quoted_text": "The ONE Group Hospitality, Inc. - A-2 Warrants | 11,911 | 61 | 21", "ties_to_residual": false},
+    {"table_index": 23, "row_index": 38, "quoted_text": "The ONE Group Hospitality, Inc. - B-2 Warrants | 6,667 | 12 | zero fair value", "ties_to_residual": false}
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The duplicate-position key collapses three distinct securities of the same issuer: Preferred Stock, A-2 Warrants, and B-2 Warrants.",
+      "fix_class": "rule_scope",
+      "citation": {"table_index": 23, "row_index": 37}
+    }
+  ],
+  "rationale": "B02 is a false alarm for the cited key group. The raw March 31, 2026 schedule separately reports Preferred Stock at table 22 row 42, A-2 Warrants at table 23 row 37, and B-2 Warrants at table 23 row 38. Their distinct instrument labels and distinct units, cost, and fair value prove they are separate positions, while an issuer-level identity key incorrectly collides them. No aggregate value defect is indicated."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_64def15824a6",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 24,
+  "anchor_value": 24,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "Esdec Solar Group B.V. | First Lien Secured Debt - Term Loan | 7.00 % | 08/30/2028 | EUR 62,693 | Cost 66,457 | Fair Value 32,971 | (3)(4)(8)(9)(22)(33)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 13,
+      "quoted_text": "First Lien Secured Debt - Term Loan | 8.94 % | 08/30/2028 | 708 | Cost 296 | Fair Value 305 | (8)(9)(16)(33)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 23,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 13.75 % | 01/03/2029 | $485 | Cost $485 | Fair Value $243 | (4)(8)(16)(33)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw investment schedule deliberately marks the flagged instruments with footnote (33): both Esdec debt rows and the independently located Heubach row carry that marker, while an adjacent ordinary Esdec-area row (table 12 row 9) carries only footnote (16). The bundle's 24-position metric is therefore supported by the filing's position-level footnote classification rather than evidence of a bad extracted value. The advisory nonaccrual flag is a false alarm for data quality; nonaccrual status itself is legitimate source data."
+}

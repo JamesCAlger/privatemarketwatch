@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_4638de65b2cb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "25 FX01 issue rows have principal_amount_usd blank",
+  "anchor_value": "raw SOI rows disclose non-USD debt principal amounts requiring explicit USD conversion",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 2,
+      "quoted_text": "Orthrus Limited (United Kingdom) | EURIBOR | 3.50 %, 2.75 % PIK | 8.28 % | 12/4/2031 | EUR 1,855 | $ 1,943 | $ 2,159",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 4,
+      "quoted_text": "Orthrus Limited (United Kingdom) | SONIA | 3.50 %, 2.75 % PIK | 10.22 % | 12/4/2031 | GBP 2,077 | 2,647 | 2,766",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 5,
+      "quoted_text": "Sigma Irish Acquico Limited (Ireland) | EURIBOR | 5.25 % | 7.27 % | 3/19/2032 | EUR 4,511 | 4,882 | 5,235",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 15,
+      "quoted_text": "Summit Bidco, Inc. (Canada) | CORRA | 4.75 % | 7.21 % | 10/1/2032 | C$ 5,563 | 3,929 | 3,993",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 20,
+      "quoted_text": "Total Power Limited (Canada) | CORRA | 4.50 % | 6.76 % | 7/22/2030 | C$ 9,070 | 6,457 | 6,543",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt principal appears in the raw SOI, while the extracted principal_amount_usd field is blank for the FX01 issue rows.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 53,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The rule flags 25 debt rows where principal_amount_usd is blank. Raw SOI rows show foreign-denominated par/principal amounts, including EUR/GBP/C$ positions, so a USD principal field requires explicit FX conversion rather than remaining blank. The source therefore supports a real extraction/normalization gap, not a false alarm."
+}

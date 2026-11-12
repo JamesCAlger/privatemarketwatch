@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_54a76e4cc044",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 5.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 9,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Term Loan | 8.66 % ( S + 5.00 %; 0.75 % Floor) | 5/10/2032 | 9,611,493 | 9,524,787 | 9,371,206 | (8)(15)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 10,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Delayed Draw Term Loan | 8.66 % ( S + 5.00 %; 0.75 % Floor) | 5/10/2032 | 632,323 | 611,084 | 547,785 | (6)(8)(15)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 11,
+      "quoted_text": "Syntax Systems Ltd. | Digital Infrastructure & Services | Term Loan | 8.76 % ( S + 5.00 %; 0.75 % Floor) | 10/27/2028 | 8,464,244 | 8,430,536 | 8,252,638 | (8)(15)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 12,
+      "quoted_text": "Syntax Systems Ltd. | Digital Infrastructure & Services | Term Loan | 8.77 % ( S + 5.00 %; 0.75 % Floor) | 10/30/2028 | 1,179,378 | 1,176,039 | 1,149,894 | (8)(15)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw March 31, 2026 schedule explicitly states S + 5.00% for each of the four flagged floating-rate loans, but the extracted basis_spread is 0.0. The source therefore establishes that each stored spread omitted the disclosed 5.00 percentage-point basis spread."
+}

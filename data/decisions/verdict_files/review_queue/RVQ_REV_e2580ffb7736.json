@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_e2580ffb7736",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Portfolio Company Debt Securities- Canada Construction Technology Nexii, Inc. Type of Investment Secured Loan Investment Date July 24,2024 Maturity Date July 1,2027 Interest Rate Fixed interest rate 10.0%; EOT 0.0%",
+  "anchor_value": "Nexii, Inc.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 5,
+      "quoted_text": "Nexii, Inc. | Secured Loan | July 24, 2024 | July 1, 2027 | Fixed interest rate 10.0 %; EOT 0.0 % | $ | 365 | $ | 365 | $ | 375 | (10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted issuer_name absorbed section labels and adjacent investment/date/rate fields; the source issuer cell is only Nexii, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 1 issuer-name formatting defect. The stored issuer_name includes geography/category labels and separate Type of Investment, Investment Date, Maturity Date, and Interest Rate fields. In the raw schedule, table 44 row 5 has the Portfolio Company cell as Nexii, Inc. and those other values in separate columns, so the flag is a real extraction boundary error."
+}

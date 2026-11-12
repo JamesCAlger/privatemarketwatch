@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_BLK_ebd2a209d07f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 9,
+  "anchor_value": 9,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 20,
+      "quoted_text": "Chase Intermediate, LLC | (4) (5) (6) | S + | 4.75 % | 8.59 % | 10/30/2028 | 21,189 | 1,368 | 1,347 | 0.09",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 21,
+      "quoted_text": "Community Brands ParentCo, LLC | (4) (5) (6) | S + | 5.25 % | 8.92 % | 7/1/2031 | 2,797 | 164 | 161 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 22,
+      "quoted_text": "Community Brands ParentCo, LLC | (4) (5) (6) | S + | 5.25 % | 8.97 % | 7/1/2031 | 1,579 | 88 | 93 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 18,
+      "quoted_text": "FR Vision Holdings, Inc. | (4) (5) (6) | S + | 5.00 % | 8.87 % | 1/20/2031 | 3,544 | 193 | 176 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 24,
+      "quoted_text": "GC Waves Holdings, Inc. | (4) (5) (6) | S + | 4.50 % | 8.22 % | 10/4/2030 | 7,499 | 381 | 363 | 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 11,
+      "quoted_text": "Ministry Brands Purchaser, LLC | (4) (5) (6) | P + | 4.50 % | 11.25 % | 12/30/2027 | 155 | 11 | 11 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 30,
+      "quoted_text": "PetVet Care Centers, LLC | (4) (5) (6) | S + | 6.00 % | 9.84 % | 11/15/2029 | 3,258 | 307 | 98 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level check. X06 fired because principal_amount_usd is more than 10x fair_value, but the SOI source rows themselves show the same par/principal amounts and low fair values in the Par Amount/Units, Cost, and Fair Value columns. The flagged condition is therefore not a scale or FX extraction error for the localized rows; it is a rule-scope false alarm on valid low-fair-value debt/commitment rows. Seven of nine flagged row values were directly localized in source; the remaining two were not independently localized within the targeted evidence budget, so confidence is below high."
+}

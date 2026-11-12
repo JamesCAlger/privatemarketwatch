@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_1dfa05df4fc6",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 7.0,
+  "anchor_value": 7.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 22,
+      "quoted_text": "Continental Acquisition Holdings, Inc. | First Lien Debt | S + | 7.00 % PIK | 10.85 % | 07/20/2028 | 12,945 | 11,731 | 5,613 | 0.17",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 portfolio-level provenance flag. Raw schedule table 8 row 22 explicitly presents the rate data as table text: S + 7.00% PIK and 10.85%. The flagged provenance row for this position publishes basis_spread 7.0, and the holding publishes interest_rate 10.85, both matching the raw schedule. declared_raw and instance_raw being absent is therefore expected for these text-derived fields, not evidence that the published data are wrong. No fair-value amount is at risk, so numerical total anchors do not adjudicate this rule; the raw schedule text is the controlling anchor."
+}

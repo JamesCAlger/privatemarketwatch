@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_a88dcde31d67",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -3000,
+  "anchor_value": -3000,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "AP Adhesives Holdings, LLC(5) | One stop | SF + | 4.75 % | N/A(6) | 04/2032 | \u2014 | ( 3 ) | \u2014 | ( 3 )"
+    }
+  ],
+  "rationale": "C103 fired because the normalized fair_value is negative. The raw schedule row for AP Adhesives Holdings, LLC shows the Fair Value column itself as '( 3 )' thousand, matching the stored -3000 value. This is source-present negative fair value, not a row extraction or normalization error."
+}

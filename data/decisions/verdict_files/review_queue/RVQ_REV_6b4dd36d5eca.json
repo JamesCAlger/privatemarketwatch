@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_6b4dd36d5eca",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "11.5; 10.5",
+  "anchor_value": "source rows show the same rates in the Interest Rate column",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 62,
+      "row_index": 23,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 29,194,330 | 28,735 | 37,228 | 0.13"
+    },
+    {
+      "table_index": 63,
+      "row_index": 26,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 45,090 | 43,963 | 53,094 | 0.19"
+    },
+    {
+      "table_index": 180,
+      "row_index": 6,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 974,662 | $ | 1,133 | $ | 1,245 | 0.05 | %"
+    },
+    {
+      "table_index": 180,
+      "row_index": 13,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 5,773 | 5,700 | 6,798 | 0.25"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X01 flags PRIVATE_EQUITY rows with interest_rate, but these source rows are preferred equity instruments with stated rates printed in the Interest Rate column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 62,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "This is a Class 2 within-row adjudication. The flagged values are not extraction errors: the source schedule prints 11.50% for Cambium Holdings, LLC - Senior Preferred Interests and 10.50% for Lobos Parent, Inc. - Series A Preferred Shares, including the corresponding Emerald JV schedule rows. Because preferred equity can carry a stated rate and the raw source supports the stored interest_rate values, the row-validation rule is overbroad for these instruments."
+}

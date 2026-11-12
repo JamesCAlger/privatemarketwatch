@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_c2f461891c66",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 380,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 28,
+      "quoted_text": "HydroSource Logistics, LLC | 04/05/24 | Warrant, expires 4/4/34 | 0.2% | Par Amount/Shares 380 | amortized cost dash | fair value 1,115,411"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The equity warrant row has 380 shares in the source Par Amount/Shares column, but the C04 artifact reports 0 of 1 equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 7,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "C04 failed because the extracted equity-share completeness metric is 0.0% for one equity row. The raw SOI table 7 has a Par Amount/Shares column, and row 28 is the sole equity position, HydroSource Logistics, LLC Warrant, expires 4/4/34, with 380 in that column and fair value 1,115,411. The source therefore provides shares; the extracted row missed or failed to map them."
+}

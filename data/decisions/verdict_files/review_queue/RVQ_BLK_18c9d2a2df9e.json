@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_18c9d2a2df9e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "eight identifier-versus-structured maturity disagreements",
+  "anchor_value": "position-specific maturity dates in the filed investment schedule",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 84, "row_index": 7},
+    {"table_index": 31, "row_index": 9},
+    {"table_index": 31, "row_index": 10},
+    {"table_index": 36, "row_index": 28},
+    {"table_index": 13, "row_index": 27},
+    {"table_index": 35, "row_index": 25},
+    {"table_index": 55, "row_index": 20},
+    {"table_index": 47, "row_index": 27}
+  ],
+  "findings": [
+    {"mechanism": "genuine_value_defect", "detail": "Hudson River Trading LLC is 03/18/2030 in the schedule, so structured maturity 2031-09-30 is wrong.", "fix_class": "column_remap", "citation": {"table_index": 84, "row_index": 7}},
+    {"mechanism": "extraction_gap", "detail": "Both Corpuls facilities mature 06/28/2030; identifier year 2023 is wrong while structured maturity is correct.", "fix_class": "column_remap", "citation": {"table_index": 31, "row_index": 9}},
+    {"mechanism": "extraction_gap", "detail": "Delivery Hero Finco LLC matures 06/16/2032; identifier date 12/12/2029 belongs to a different Delivery Hero row.", "fix_class": "column_remap", "citation": {"table_index": 36, "row_index": 28}},
+    {"mechanism": "genuine_value_defect", "detail": "Rochester Midland is a term loan maturing 08/01/2029; structured maturity 2032-08-01 and the delayed-draw identifier classification are wrong.", "fix_class": "column_remap", "citation": {"table_index": 13, "row_index": 27}},
+    {"mechanism": "genuine_value_defect", "detail": "MRO Parent is a term loan maturing 06/09/2032; structured maturity 2031-09-02 and the revolver identifier classification are wrong.", "fix_class": "column_remap", "citation": {"table_index": 35, "row_index": 25}},
+    {"mechanism": "genuine_value_defect", "detail": "Kaseya matures 03/22/2032; identifier 03/22/2030 and structured 03/20/2030 are both wrong.", "fix_class": "column_remap", "citation": {"table_index": 55, "row_index": 20}},
+    {"mechanism": "genuine_value_defect", "detail": "Amika OpCo LLC matures 07/01/2029, so structured maturity 2028-07-01 is wrong.", "fix_class": "column_remap", "citation": {"table_index": 47, "row_index": 27}}
+  ],
+  "rationale": "The raw filed schedule resolves all eight flags. Hudson River, Rochester Midland, and Amika show the identifier date is right and the structured date is wrong. Both Corpuls rows and Delivery Hero show the structured date is right and the identifier is wrong. MRO Parent has the identifier date right but its investment type and structured date wrong. Kaseya has neither candidate right: the schedule says 03/22/2032. These are grounded row-level extraction or row-association defects, not a bad maturity comparison rule."
+}

@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_81820116fa5d",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 164.92,
+  "anchor_value": 164.92,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "Total investments | $ | 978,154 | $ | 984,342 | 164.92 | %"
+    },
+    {
+      "table_index": 8,
+      "row_index": 31,
+      "quoted_text": "Total net assets | 596,869 | 528,895"
+    },
+    {
+      "table_index": 12,
+      "row_index": 17,
+      "quoted_text": "A.P.A. Industries, LLC | First lien senior secured term loan | Fair Value 9,849 | Percentage of Net Assets 1.65 | %"
+    }
+  ],
+  "rationale": "False alarm. The raw SOI column is explicitly 'Percentage of Net Assets' and reports values as percentage points with a separate percent sign, including position rows such as 1.65% and a schedule total of 164.92%. The total reconciles to the balance-sheet net assets anchor: 984,342 / 596,869 * 100 = 164.91%, matching the filed 164.92% after rounding. Values greater than 1 are therefore legitimate percent-point values for a leveraged BDC schedule, not a source data error."
+}

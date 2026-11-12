@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_25c8252401c5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 3,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 6,
+      "quoted_text": "HIG Intermediate, Inc. | Preferred Equity- Cumulative Preferred | N/A | N/A | 34,000 | 33 | 34",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 6,
+      "quoted_text": "VCI Intermediate Topco 1 LLC | Common Equity - Membership Interest | N/A | N/A | 1,788,576 | 1,789 | 1,806",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 7,
+      "quoted_text": "VCI Intermediate TopCo 2 LLC | Common Equity - Membership Interest | N/A | N/A | 2,549,659 | 2,549 | 2,576",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "C04 reports that 0 of 3 equity rows have shares, but the current-period investment schedule labels the column Par/Shares and populates it for each of the three equity rows: 34,000 preferred shares and 1,788,576 and 2,549,659 common membership interests. The source-supported count is 3 of 3, so the missing extracted shares are a real extraction gap."
+}

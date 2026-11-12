@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_597dbdf65151",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_AUD/U_GBP/U_EUR/U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Prestige Bidco: AUD appears in Par, while Cost $46,361 and Fair Value $49,457 are dollar amounts.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 15,
+      "quoted_text": "Pacific Group Bidco: GBP appears in Par, while Cost 21,292 and Fair Value 21,186 remain in the dollar valuation columns.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Ranch Bidco: EUR appears in Par, while Cost $29,881 and Fair Value $29,318 are dollar amounts.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 26,
+      "quoted_text": "Rocket Bidco: CAD appears in Par, while Cost $46,125 and Fair Value $46,139 are dollar amounts.",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign Par currency units were mapped into fair_value_currency across the 24 flagged rows; fair value is USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The schedule separates Par from Cost and Fair Value. AUD, GBP, EUR, and CAD appear beside Par amounts, while the Cost and Fair Value columns are introduced with dollar signs and country totals are also explicitly dollar-denominated (for example, table 8 row 17). Therefore the extracted non-USD fair_value_currency values are systematic column/unit misassignments; the correct fair-value currency is USD."
+}

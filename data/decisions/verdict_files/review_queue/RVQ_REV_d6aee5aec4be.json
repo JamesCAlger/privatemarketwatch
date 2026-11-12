@@ -1,0 +1,62 @@
+{
+  "review_id": "RVQ_REV_d6aee5aec4be",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3462766.6,
+  "anchor_value": 3462766.6,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 3,435,383.7 | $ | 3,462,766.6 | (7)(12) | 147.07 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 34,
+      "quoted_text": "ADMA Biologics Inc. (10) | First lien senior secured revolving loan | 9.08 % | SOFR (Q) | 3.75 % | 12/2027 | 1.0 | 1.0 | 1.0 | (3)(5)(6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 5,
+      "quoted_text": "Series D preferred units | 10/2023 | 267,369 | 4,400.0 | 4,400.0 | (6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 28,
+      "quoted_text": "CPIG Holdco Inc. (10) | First lien senior secured revolving loan | 10.18 % | SOFR (Q) | 4.75 % | 04/2028 | 0.5 | 0.5 | 0.5 | (5)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 11,
+      "quoted_text": "Helios Service Partners, LLC and Astra Service Partners, LLC (10) | First lien senior secured revolving loan | 11.56 % | SOFR (Q) | 6.00 % | 03/2027 | 0.6 | 0.6 | 0.6 | (5)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 27,
+      "quoted_text": "OakBridge Insurance Agency LLC and Maple Acquisition Holdings, LP (10) | First lien senior secured loan | 11.07 % | SOFR (M) | 5.75 % | 11/2029 | 9,196.4 | 9,024.7 | 9,012.5 | (5)(6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 34,
+      "quoted_text": "Paragon 28, Inc. and Paragon Advanced Technologies, Inc. (10) | First lien senior secured revolving loan | 9.33 % | SOFR (Q) | 4.00 % | 11/2028 | 0.5 | 0.5 | 0.5 | (3)(5)(6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 17,
+      "quoted_text": "WCI-BXC Purchaser, LLC and WCI-BXC Investment Holdings, L.P. (10) | First lien senior secured loan | 11.54 % | SOFR (Q) | 6.25 % | 11/2030 | 4,447.7 | 4,342.5 | 4,336.5 | (5)(6)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged rows as comparative-period facts, but the raw SOI contains current-period rows for the flagged identifiers in the current schedule block that totals to the March 31, 2024 Total Investments fair value of 3,462,766.6. Examples include ADMA at 9.08%, matching the holdings sample, while the separate comparative block contains a different prior-period ADMA row at 9.13%. The source therefore supports the current report-date rows and the flag reflects rule scope around repeated comparative rows rather than a holdings data error."
+}

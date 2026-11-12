@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_ba9bcd335000",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 14665000,
+  "anchor_value": 14665000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 21,
+      "quoted_text": "Structured Credit Partners JV, LLC (4)(6)(11) | Partnership Interest (25.00% ownership) | 12/23/2025 | 14,665 | 14,665 | 1.0%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw schedule contains a genuine Structured Credit Partners JV, LLC partnership-interest row at table 14 row 21, with amortized cost and fair value both 14,665 thousand, matching the published 14,665,000. The source therefore validates the position and its values, but the provenance ledger has no source context for any tracked field on this row. The flag is a real provenance extraction/linkage gap, not a value error or a false alarm."
+}

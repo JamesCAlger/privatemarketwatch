@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_19b9bb6989df",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "Total Investments ( 168.5 %) | $ | 1,040,122,806 | $ | 1,029,942,922",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 161.1 %) | $ | 1,372,545,223 | $ | 1,364,884,229",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The September 30, 2025 review population appears to include the separate December 31, 2024 SOI block, producing 236 leaves while only the 118 current-period leaves should be in scope.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 15,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "B01 failed because only 118 of 236 extracted leaves have fair value. Raw source shows a current September 30 schedule total of fair value 1,364,884,229 and a separate comparative December 31 schedule total of fair value 1,029,942,922. The exact 50% completeness pattern is therefore not an absence of source fair values; it is a current-period population defect caused by comparative-period SOI rows leaking into the September 30 holding leaves."
+}

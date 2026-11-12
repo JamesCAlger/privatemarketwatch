@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_783456e58cfa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2122227524,
+  "anchor_value": 2314667480,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "Total Investments | $ | 2,314,667,480 | $ | 2,292,614,325 | 100.0 | % | $ | 1,363,206,046 | $ | 1,369,240,440 | 100.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 2,
+      "quoted_text": "Fidelity Floating Rate Central Fund (g)(l)(m)(o) | 1,863,034 | $ | 179,607,284 | $ | 178,106,038",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 64,
+      "row_index": 22,
+      "quoted_text": "State Street Institutional Treasury Plus Money Market Fund - 3.66 % (g)(n)(s) | Investor Class Units | 13,143,788 | 13,143,788 | 13,143,788",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted cost sum is 192,439,956 below the filing's total investment cost; the source total includes material mutual fund categories, including Fidelity Floating Rate Central Fund at cost 179,607,284 and State Street money market fund at cost 13,143,788.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 14,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor check: the filing's own schedule reports total investments at cost of 2,314,667,480 at December 31, 2025, and the SOI ending portfolio repeats the same total. The reviewed extraction sums cost to 2,122,227,524, an undershoot of 192,439,956. Source category and position rows show the total includes material mutual fund investments, so the conservation failure is a real extraction coverage gap rather than a bad filing anchor."
+}

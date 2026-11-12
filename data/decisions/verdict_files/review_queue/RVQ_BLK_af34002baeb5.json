@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_af34002baeb5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 29530.8,
+  "anchor_value": 29499.3,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 29,
+      "quoted_text": "Total Investments | $ | 29,647.5 | $ | 29,499.3 | (17) | 209.73 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 153,
+      "row_index": 32,
+      "quoted_text": "Total Investments | $ | 29,249.9 | $ | 29,484.8 | (17) | 205.93 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "False alarm from a bad source-count anchor. The extracted current-quarter position sum is $29,530.8 million, which closely agrees with the filing's current-period fair-value total of $29,499.3 million (difference $31.5 million, about 0.11%). The filing separately presents a comparative-period investment schedule totaling $29,484.8 million, demonstrating that raw schedule rows and facts span more than the current-period position population. Therefore 4,858 raw source items is not a valid one-to-one expected position count, and the 1,421 output count does not establish missing data."
+}

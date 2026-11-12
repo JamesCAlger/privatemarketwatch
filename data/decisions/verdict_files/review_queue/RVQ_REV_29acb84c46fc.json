@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_29acb84c46fc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_interest_rate",
+  "observed_value": "",
+  "anchor_value": "S + 510 , 1.00 % Floor",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Jonathan Acquisition Company | First Lien Secured Debt - Term Loan | S + 510 , 1.00 % Floor | 12/22/2026 | $ | 7,835 | $ | 7,790 | $ | 7,739 | (17)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 18,
+      "quoted_text": "SEKO Global Logistics Network, LLC | First Lien Secured Debt - Term Loan | S + 700 PIK, 1.00 % Floor | 5/27/2030 | 1,911 | 1,911 | 1,911 | (17)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Raw schedule interest-rate cells carry basis-spread terms, but matching extracted holdings in the bundle have blank interest_rate and carry the terms in the identifier text.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The raw source schedule has an Interest Rate column populated with basis-spread terms such as 'S + 510 , 1.00 % Floor' for Jonathan Acquisition Company and 'S + 700 PIK, 1.00 % Floor' for SEKO. The bundle's matching extracted holdings show blank interest_rate values while the same spread terms are embedded in bdc_investment_identifier, so the fmt_basis_spread flag reflects a real extraction/field-mapping error rather than a source formatting false alarm."
+}

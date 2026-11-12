@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_052f4104448d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "1st Lien/Secured Loans United States of America 48Forty Solutions LLC Instrument 1st Lien Term Loan Industry Transportation & Logistics Rate S+6.10%, 1.00% Floor Interest Rate 110.65% Original Acquisition Date 4/8/2022 Maturity Date 11/30/2029",
+  "anchor_value": "48Forty Solutions LLC",
+  "confidence": 0.89,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "Portfolio Company 48Forty Solutions LLC; Instrument 1st Lien Term Loan; Industry Transportation & Logistics; Rate S+ 6.10 %, 1.00 % Floor; Interest Rate 10.65 %; Original Acquisition Date 4/8/2022; Maturity Date 11/30/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 30,
+      "quoted_text": "Portfolio Company 1035 Mecklenburg Highway, Mooresville, North Carolina; Instrument Real Estate Properties; Industry Telecommunications; Rate N/A; Interest Rate N/A; Original Acquisition Date 8/22/2023",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name extraction over-merged schedule section and row descriptor text; the source portfolio-company cell for the cited loan is only 48Forty Solutions LLC.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 27, "row_index": 5}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name extraction over-merged country context into a real-estate property row; the source portfolio-company cell is only the Mecklenburg Highway property address.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 32, "row_index": 30}
+    }
+  ],
+  "rationale": "Class 2/row-structure localization: raw SOI tables keep Portfolio Company as a separate column from instrument, industry, rate, interest rate, acquisition date, maturity date, and country/category section rows. The extracted issuer_name shown in the bundle for 48Forty includes the section path and row descriptors instead of only the Portfolio Company cell, and the real-estate row similarly shows country/context leakage. Source therefore grounds the issuer-name format flag as a real extraction defect, not a false alarm. No aggregate anchor was needed for this formatting rule."
+}

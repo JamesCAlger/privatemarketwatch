@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_623cae22342f",
+  "verdict": "false_alarm",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 183056,
+  "anchor_value": 183056,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "SRC_BDC01 treated the schedule aggregate 'Total Investments' row as an eligible position row even though source shows it is a total, not an individual holding.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 179,
+        "row_index": 41,
+        "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60 | %"
+      }
+    }
+  ],
+  "rationale": "The flagged missing source row is 'Total Investments'. Raw source table 179 row 41 is the schedule grand total with cost 186,110 and fair value 183,056, immediately after other total rows such as Total Short-Term Investments and Total Non-Controlled, Non-Affiliated Investments. Because this aggregate row should not produce an individual private_markets_holdings output row, the SRC_BDC01 missing-row flag is a false alarm."
+}

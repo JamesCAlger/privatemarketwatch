@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_98db41a8566c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 50,
+  "anchor_value": null,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 25,
+      "quoted_text": "Membership units | 9/2016 | 3,000,000 | 3.0 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 22,
+      "quoted_text": "ADG, LLC and RC IV GEDC Investor LLC (15) | Dental services provider | First lien senior secured revolving loan | 7.81 % ( 0.50 % PIK) | LIBOR (Q) | 5.25 % | 9/2016 | 10/2022 | 9.0 | 9.0 | 8.7 | (2)(11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 16,
+      "quoted_text": "ACAS Equity Holdings Corporation (5) | Investment company | Common stock | 1/2017 | 589 | 0.4 | 0.4 | (6)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged rows as comparative-period facts, but the raw source shows representative flagged instruments in the September 30, 2022 investment schedule itself. The older dates in these rows are acquisition dates, not source/reporting periods, and the same filing separately contains a December 31, 2021 comparative schedule. Presence of these positions in current holdings is therefore not a data error; the check is over-scoping current rows as comparative-period rows."
+}

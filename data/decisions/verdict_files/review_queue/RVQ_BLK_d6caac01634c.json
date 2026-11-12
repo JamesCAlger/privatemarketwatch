@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_d6caac01634c",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5355842000,
+  "anchor_value": 2398524000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 75,
+      "row_index": 17,
+      "quoted_text": "Total Investments, December 31, 2025 ( 206.6 %)* | $ | 2,424,280 | $ | 2,398,524",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 10,
+      "quoted_text": "$ | 2,424,280 | 100 | % | $ | 2,398,524 | 100 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 15,
+      "quoted_text": "Subtotal Equity Investments ( 4.8 %)* | 58,925 | 55,281",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 16,
+      "quoted_text": "Subtotal Control Investments ( 7.1 %)* | 86,128 | 82,977",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extraction aggregate is 5,355,842 thousand while the source schedule total fair value is 2,398,524 thousand, indicating intermediate subtotal or rollup rows were included in the HTML aggregate.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 75,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate flag. The raw source gives Total Investments fair value of 2,398,524 thousand at table 75 row 17, corroborated by the portfolio composition total at table 17 row 10 and the balance sheet line Total investments at fair value of 2,398,524 thousand found by roam. The bundle's HTML extraction aggregate is 5,355,842 thousand (5,355,842,000 after the 1000 multiplier), which does not match the source/companyfacts anchor of 2,398,524,000. The SOI includes subtotal rows such as Subtotal Equity Investments and Subtotal Control Investments immediately above the grand total, so the most likely source-grounded mechanism is subtotal leakage into the aggregate."
+}

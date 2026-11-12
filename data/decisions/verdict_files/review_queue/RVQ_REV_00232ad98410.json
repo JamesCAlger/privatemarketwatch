@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_00232ad98410",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 8.183965827338127,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 flags distribution_rate exceeding income_yield_pct * 1.5 for CIK 0001396440 as of 2014-12-31, but the allowed evidence CLI did not expose usable raw source: overview, tables, totals, and targeted roam all returned status no_accession_resolved. Under the contract this cannot be adjudicated from source and must be treated as source_unavailable rather than guessed."
+}

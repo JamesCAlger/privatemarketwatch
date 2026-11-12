@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_7e5cb94e189b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "B01 is a CIK-quarter coverage failure reporting 0/65 leaf rows with fair_value, but the raw-source evidence CLI did not resolve an accession for CIK 0002008748 and report date 2025-06-30. The overview, tables, and totals views all returned status no_accession_resolved, so the filing source could not be checked and the flag cannot be adjudicated on source evidence."
+}

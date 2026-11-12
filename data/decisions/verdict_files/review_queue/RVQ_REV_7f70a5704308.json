@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_7f70a5704308",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 18,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 11,
+      "quoted_text": "Arise Holdings, Inc. | First Lien Debt | 8.24% (PIK) | fair value 3,795",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 23,
+      "quoted_text": "Arise Holdings, Inc. | First Lien Debt | 8.16% | fair value 3,416",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Eighteen earlier-period position facts were retained under the 2026-03-31 report date; the Arise row demonstrates the comparative fact differs from the current schedule row.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 61,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The raw filing has separate current and comparative investment schedules. Arise Holdings is shown in the current schedule at table 34 row 23 with an 8.16% rate and fair value 3,416, while table 61 row 11 shows the earlier-period version at 8.24% (PIK) and fair value 3,795. The flagged records explicitly carry earlier source periods but were retained under report_date 2026-03-31, so PP03 correctly identifies a comparative-period contamination defect. No aggregate anchor is needed for this row-localized purity check."
+}

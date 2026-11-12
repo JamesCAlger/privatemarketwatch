@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_ec7ed7670046",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_footnote_marker_17",
+  "observed_value": 17,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 16,
+      "quoted_text": "ACI Group Holdings, Inc. | (8)(14)( 17 ) | First Lien Term Loan | S + 6.00 % | 9.77 % (Incl. 3.25 % PIK) | 8/2/2028 | 207 | 206 | 143 | 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 29,
+      "quoted_text": "DCA Investment Holding LLC | (8)(14)( 17 ) | First Lien Term Loan | S + 8.41 % | 12.08 % | 4/3/2028 | 197 | 194 | 172 | 0.02",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. Raw schedule rows confirm that the extracted candidates carry footnote marker (17), including ACI Group Holdings and DCA Investment Holding. However, the evidence CLI exposes no footnote legend defining marker 17, and targeted raw-source searches for non-accrual, nonaccrual, and accrual returned no hits. The source therefore does not decide whether all 17 extracted positions are truly nonaccrual or whether the flag reflects a footnote interpretation error. No filing total, companyfacts fact, or independently defined position-count anchor is available for this nonaccrual count, so the skeptic-default outcome is source-checked ambiguous."
+}

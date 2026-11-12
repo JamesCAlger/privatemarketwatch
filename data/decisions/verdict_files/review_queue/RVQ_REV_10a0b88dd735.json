@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_10a0b88dd735",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 192,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 127,
+      "row_index": 11,
+      "quoted_text": "Class A2 shares | 04/2025 | 19,825,189 | 13.8 | 13.8 | (2)(6)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 28,
+      "quoted_text": "Class A2 shares | 04/2025 | 19,825,189 | 13.8 | 13.8 | (2)(6)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The December 31, 2025 schedule instance was retained in the March 31, 2026 holdings population even though the filing provides a separate current-period instance.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 127,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The filing index identifies separate Consolidated Schedules of Investments as of March 31, 2026 and December 31, 2025 (table 6, row 9). The Class A2 shares position appears in the current schedule at table 47, row 28 and again in the comparative schedule at table 127, row 11 with the same 19,825,189 shares and 13.8 fair value. PP03 reports 192 earlier-period rows retained for the 2026-03-31 report date. Current-quarter position purity requires zero comparative-period rows, so this is a grounded comparative-period extraction leak rather than a false alarm."
+}

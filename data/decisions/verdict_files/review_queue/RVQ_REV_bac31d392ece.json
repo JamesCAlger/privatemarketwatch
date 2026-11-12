@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_bac31d392ece",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 200.0155431057265,
+  "anchor_value": 200.02,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 39,
+      "quoted_text": "Total Investments | $ | 335,175,538 | $ | 340,357,403 | 200.02 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 41,
+      "quoted_text": "NET ASSETS | $ | 170,165,477 | 100.00 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 32,
+      "quoted_text": "Net Assets | $ | 170,165,477 | $ | 162,387,880",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PCT01 flagged the CIK-quarter pct_of_net_assets sum at about 200.02%, but the raw schedule itself prints Total Investments fair value of 340,357,403 as 200.02% of Net Assets, and the balance sheet shows Net Assets of 170,165,477. The schedule also prints liabilities in excess of other assets as (100.02)% and Net Assets as 100.00%, so the aggregate above 100% is an expected leveraged BDC presentation rather than an extracted data error."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_9659237fa993",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3313.441,
+  "anchor_value": 3313.441,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 3,324,332 | $ | 3,313,441 | 214.8 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 27,
+      "quoted_text": "Total Net Assets | 1,542,673 | 1,607,721",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 3,324,332 and $ 3,323,282, respectively) | 3,313,441 | 3,347,317",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The identity check does not accommodate the filing's one-decimal percentage rounding; 3,313,441 / 1,542,673 x 100 = 214.78%, which the schedule correctly reports as 214.8%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag as a check defect. The balance sheet investment fair value (table 6 row 7), schedule total fair value (table 14 row 24), and extracted total of 3,313.441 million agree exactly. The filing reports percentages to one decimal: total fair value divided by net assets is 214.78%, correctly displayed as 214.8%. Representative schedule rows likewise use one-decimal percentages, so a 33.33% tight-tier violation rate is expected rounding behavior rather than erroneous extracted values."
+}

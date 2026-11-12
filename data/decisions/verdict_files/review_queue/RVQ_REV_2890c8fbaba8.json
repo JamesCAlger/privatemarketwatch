@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_2890c8fbaba8",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "report_date",
+  "observed_value": "2023-02-01",
+  "anchor_value": "2023-06-30",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "Odlum Data Lender, LLC | Telecommunications | L+ 6.35 %, | 10.72 | 6/23/2021 | 2/1/2023 | 15,581,221 | 15,581,221 | 13,758,218 | 2.59"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The June 30, 2023 schedule carries Odlum Data Lender, LLC with maturity date 2/1/2023, before the report date, while fair value remains 13,758,218.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "This is a current-period schedule row, not a comparative-period row: table 11 header places column 12 as Maturity Date, and row 18 shows Odlum Data Lender, LLC with maturity 2/1/2023 and fair value 13,758,218. Because 2023-02-01 is before the 2023-06-30 report date, the maturity_not_past flag is a real data error."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_fd9d24b8748e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1364884229,
+  "anchor_value": 1364884229,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.76 % (SOFR + 6.75 %, 1.75 % Floor) | $ | 28,468,835",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 161.1 %) | $ | 1,372,545,223 | $ | 1,364,884,229",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX02 flagged U_USD as non-USD, but the raw schedule presents fair value amounts in dollars, including the total fair value of $1,364,884,229.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 9,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The flagged field is fair_value_currency with value U_USD. Raw SOI evidence shows the fair value column is dollar-denominated: representative position rows use dollar-marked fair value columns and the schedule total explicitly reports Total Investments fair value as $1,364,884,229. The source therefore does not support a real non-USD fair-value currency defect; the issue is the FX02 check treating U_USD as not USD."
+}

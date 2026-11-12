@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0c1e0ff08775",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -48000.0,
+  "anchor_value": -48000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 10,
+      "quoted_text": "PPW Aero Buyer, Inc. | First Lien Delayed Draw Term Loan | S + 5.00 % | 9/30/2031 | - | (48) | - | 23",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 20,
+      "quoted_text": "Zenith AcquisitionCo, LLC | First Lien Revolver | S + 4.50 % | 1/13/2033 | - | (2) | (2) | 23",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell confirmation. The filing itself presents negative costs in accounting parentheses, including PPW Aero Buyer delayed-draw term loan cost (48) thousand at table 11 row 10, exactly matching the extracted -48000, and Zenith AcquisitionCo revolver cost (2) thousand at table 11 row 20, matching -2000. C107 explicitly notes that negative cost can be legitimate; these source-faithful values therefore make the blanket negative-cost flag a false alarm rather than a data error. Residual risk is limited to uninspected members of the 144-row batch."
+}

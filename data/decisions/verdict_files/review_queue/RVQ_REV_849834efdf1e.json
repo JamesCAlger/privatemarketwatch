@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_849834efdf1e",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "source_schedule_period",
+  "observed_value": "2025-12-31",
+  "anchor_value": "2026-03-31",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 19,
+      "quoted_text": "December 31, 2025 schedule: Craftable Intermediate II Inc. | Revolver | 1,889,539 | 0.50% | June 30, 2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 19,
+      "quoted_text": "March 31, 2026 schedule: Craftable Intermediate II Inc. | Revolver | 1,889,539 | 0.50% | June 30, 2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 72,
+      "quoted_text": "March 31, 2026 schedule: Teckrez, LLC | Revolver | 335,155 | 1.00% | November 30, 2028",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Eleven December 31, 2025 context facts were retained in the March 31, 2026 holdings population despite the filing presenting a separate current-period schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 50,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "PP03 is a real position-purity error. The filing labels the table 50 schedule as December 31, 2025 and separately presents table 23 for March 31, 2026. The flagged records explicitly carry an earlier source period but were retained in the 2026-03-31 holdings population. The separate schedules are not interchangeable: for example, the current-period Teckrez revolver is 335,155, while raw-source search shows 167,577 in the earlier schedule. The defect is therefore failure to filter comparative-period contexts."
+}

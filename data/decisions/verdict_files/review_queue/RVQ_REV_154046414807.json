@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_154046414807",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "Telestream 2 LLC | 1st Lien Revolver | Cost / Amortized Cost (15,503) | Fair Value -- | % of Net Assets 0.00"
+    },
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Alpine Acquisition Corp II | Common Equities | Cost / Amortized Cost 122,423 | Fair Value -- | % of Net Assets --"
+    },
+    {
+      "table_index": 17,
+      "row_index": 15,
+      "quoted_text": "Circle Graphics Parent, LP | Preferred Equities | Cost / Amortized Cost -- | Fair Value -- | % of Net Assets --"
+    },
+    {
+      "table_index": 19,
+      "row_index": 10,
+      "quoted_text": "SP-CREH 19 Highline LLC | Common Equities | Cost / Amortized Cost 14,608,750 | Fair Value -- | % of Net Assets --"
+    },
+    {
+      "table_index": 19,
+      "row_index": 15,
+      "quoted_text": "TH Liquidating Trust | Trust Interest | Cost / Amortized Cost -- | Fair Value -- | % of Net Assets --"
+    }
+  ],
+  "rationale": "C104 flags stored fair_value values of 0.0. The raw March 31, 2026 schedule rows checked through the evidence CLI show dash entries in the Fair Value column for the localized positions, which the extraction normalized to zero. The source therefore supports zero/no fair value; the warning is a conservative row-validation alert rather than a data error."
+}

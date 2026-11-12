@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_f496d3e9e647",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate and blank basis_spread in extracted row",
+  "anchor_value": "source has n/a for Index, Spread, and Interest Rate",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 25,
+      "quoted_text": "Varicent Intermediate Holdings Corporation (Delayed Draw) | n/a | n/a | n/a | 8/23/2024 | 8/22/2031 | 6,085"
+    },
+    {
+      "table_index": 60,
+      "row_index": 4,
+      "quoted_text": "Adept AG Holdings, LLC | n/a | n/a | n/a | 12/30/2024 | 8/11/2027 | 83"
+    },
+    {
+      "table_index": 61,
+      "row_index": 3,
+      "quoted_text": "Vice Acquisition Holdco, LLC | n/a | n/a | n/a | 5/2/2019 | n/a | 477"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X02 is flagging private-credit rows where the filing itself gives n/a for Index, Spread, and Interest Rate, so there is no disclosed rate missing from extraction.",
+      "fix_class": "rule_scope",
+      "citation": {"table_index": 51, "row_index": 25}
+    }
+  ],
+  "rationale": "Class 1 multi-row single-field review. The flag says private-credit rows have no interest_rate or basis_spread. Raw SOI rows show that at least the localized flagged pattern is source-disclosed as n/a for Index, Spread, and Interest Rate rather than a missed numeric rate. Nearby rows in the same SOI tables contain populated rates, so the raw source window is readable and distinguishes populated rates from n/a rows. The stored blank rate is therefore faithful to source for this pattern, and the X02 warning is overbroad rather than a real data error. No aggregate anchor was needed."
+}

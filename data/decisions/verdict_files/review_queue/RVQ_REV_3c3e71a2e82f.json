@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_3c3e71a2e82f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -9000.0,
+  "anchor_value": -9000.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Delayed Draw Term Loan | S + 4.50% | 11/29/2030 | principal/shares -- | Cost (9) | Fair Value (19) | footnote 23"
+    },
+    {
+      "table_index": 32,
+      "row_index": 7,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Revolver | S + 4.50% | 11/29/2030 | principal/shares -- | Cost (1) | Fair Value (1) | footnote 23"
+    },
+    {
+      "table_index": 32,
+      "row_index": 9,
+      "quoted_text": "PPW Aero Buyer, Inc. | First Lien Delayed Draw Term Loan | S + 5.00% | 9/30/2031 | principal/shares -- | Cost (16) | Fair Value (27) | footnote 23"
+    },
+    {
+      "table_index": 39,
+      "row_index": 10,
+      "quoted_text": "Vessco Midco Holdings, LLC | First Lien Delayed Draw Term Loan | S + 4.50% | 7/24/2031 | principal/shares -- | Cost (2) | Fair Value (4) | footnote 23"
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw investment schedule itself reports those costs as parenthesized amounts in the Cost column for the same issuers and investment types. The extracted values preserve the source sign rather than introducing a data error; the warning is therefore a rule-scope false alarm for source-reported negative costs."
+}

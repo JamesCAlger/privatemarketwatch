@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_1dec823afc0a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 13,
+  "anchor_value": 12.7,
+  "confidence": 0.62,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 99,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual | 25.6 | 1.7 | % | 12.7 | 0.9 | % | 30.6 | 2.0 | % | 28.4 | 1.9 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 18,
+      "quoted_text": "Envocore Holding, LLC (7)(8)(9) | Senior Secured Second Lien Term Loan | 12/2026 | 9,146 | 7,053 | 0.2 | 1,194",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Action Signature Acquisition, Inc. (9) | Unitranche First Lien Term Loan | 06/2026 | 3,191 | 3,180 | 0.3 | 2,102",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw source contains an aggregate Non-Accrual row for September 30, 2024, which supports that non-accrual investments exist. The flagged positions appear to be selected from SOI rows carrying footnote marker (9), but the evidence CLI did not expose source text defining footnote (9) as non-accrual, and the 13-position count cannot be reconciled directly to the 12.7 million fair-value non-accrual schedule total. Because the available raw source does not decide the exact row-level flag, this is source-checked ambiguous rather than a confirmed error or false alarm."
+}

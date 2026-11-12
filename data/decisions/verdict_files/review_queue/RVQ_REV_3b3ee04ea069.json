@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_3b3ee04ea069",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8.33,
+  "anchor_value": 8.33,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 13,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 1.9 | % | 13,154,336 | 04/30/28 | 13,154,336 | 8,800,251"
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 4.3 | % | 29,380,330 | 04/30/28 | 29,380,330 | 19,655,441"
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) | 0.7 | % | 3,158,925 | 04/30/28 | 3,158,925 | 3,253,693"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The three localized WDE TorcSill rows have unusually high but explicitly disclosed all-PIK benchmark-spread terms in the source, not malformed basis-spread data.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 5,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The aggregate fmt_basis_spread flag reports 3 violations across 36 units. Raw source localizes the apparent outliers to the three WDE TorcSill debt rows in table 5: two SOFR + 18.75% all-PIK instruments with a 4.60% floor and one PRIME + 18.25% all-PIK instrument. The high stated coupons and basis spreads are printed directly in the filing and tie to ordinary position rows, with the WDE subtotal immediately below them. The source therefore supports the extracted terms and indicates the weak rule is over-scoping high all-PIK/floor/prime spread formats rather than identifying a data error."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_805434c4321d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "B01 reports 0 of 67 leaf rows have fair_value, but the evidence CLI returned no_accession_resolved for overview, tables, totals, and targeted roam, so raw source tables and anchors were not available to adjudicate the flag. Per contract, unreadable raw source requires an ambiguous source_unavailable verdict rather than guessing."
+}

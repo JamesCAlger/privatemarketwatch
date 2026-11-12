@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_7c3378fa4ec7",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 2.0,
+  "anchor_value": 1.0,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "B07 flags 0001851322/2025-12-31/10-K for 2 accession(s), but the scoped raw-source evidence CLI exposes only accession 0001193125-26-096532, identified in overview as a 10-K/A for North Haven Private Income Fund LLC. The cover-page table confirms an annual report row, but the raw source available through the allowed CLI does not expose the other accession or decide whether the two-accession count is a data defect versus a valid original-plus-amendment filing state."
+}

@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_REV_b12370ff6eb9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency extracted as GBP/EUR",
+  "anchor_value": "amortized cost column is USD-denominated; foreign currency marker belongs to Par / Units",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 16,
+      "quoted_text": "Armstrong Bidco Limited first lien senior secured GBP term loan shows foreign marker in Par / Units, followed by amortized cost 32,009 and fair value 33,618.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 17,
+      "quoted_text": "Armstrong Bidco Limited first lien senior secured GBP delayed draw term loan shows foreign marker in Par / Units, followed by amortized cost 16,697 and fair value 17,540.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 76,
+      "row_index": 11,
+      "quoted_text": "Bamboo US BidCo LLC first lien senior secured EUR term loan shows foreign marker in Par / Units, followed by amortized cost 12,593 and fair value 13,128.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 7,
+      "quoted_text": "Sensor Technology Topco, Inc. first lien senior secured EUR term loan shows foreign marker in Par / Units, followed by amortized cost 4,583 and fair value 4,677.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 78,
+      "row_index": 22,
+      "quoted_text": "Sitecore Holding III A/S first lien senior secured EUR term loan shows foreign marker in Par / Units, followed by amortized cost 27,517 and fair value 28,843.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser assigned the Par / Units foreign currency marker to cost_currency for the Armstrong GBP term loan; amortized cost is in the USD-denominated cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 70,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser assigned the Par / Units foreign currency marker to cost_currency for the Armstrong GBP delayed draw term loan; amortized cost is in the USD-denominated cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 70,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser assigned the Par / Units foreign currency marker to cost_currency for the Bamboo EUR term loan; amortized cost is in the USD-denominated cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 76,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser assigned the Par / Units foreign currency marker to cost_currency for the Sensor Technology EUR term loan; amortized cost is in the USD-denominated cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 77,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser assigned the Par / Units foreign currency marker to cost_currency for the Sitecore EUR term loan; amortized cost is in the USD-denominated cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 78,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "FX03 is a real extraction error. The source schedule uses foreign currency markers for Par / Units on GBP/EUR loans, but the flagged field is cost_currency. The cited rows show the foreign marker before par amount, then separate amortized cost and fair value values in the schedule's investment value columns. Therefore the stored cost_currency values GBP/EUR are column bleed from Par / Units, not the currency of cost."
+}

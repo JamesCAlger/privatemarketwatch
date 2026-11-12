@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_b6b725760c46",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values U_GBP, U_CAD, U_EUR, U_EUR on four flagged holdings rows",
+  "anchor_value": "USD-denominated SOI cost column",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 4,
+      "quoted_text": "Accel International Holdings, LLC | First Lien Secured Debt - Term Loan | S + 450 , 0.50 % Floor | 4/26/2032 | $ | 187,003 | $ | 186,155 | $ | 187,470 | (4)(15)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX03 flagged four holdings whose extracted cost_currency is non-USD even though the SOI investment cost column is dollar-denominated; the cited flagged Accel row shows cost 186,155 preceded by a dollar sign.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The bundle artifact reports four FX03 rows with cost_currency values U_GBP, U_CAD, U_EUR, and U_EUR, but the raw schedule of investments uses USD-denominated Cost and Fair Value columns. The cited Accel International Holdings row, present in the holdings slice for the flagged period and CIK, shows the par, cost, and fair value amounts under explicit dollar signs, with cost 186,155 in the Cost column. A non-USD cost unit for that BDC valuation field is therefore a real extraction/unit error rather than a valid source currency."
+}

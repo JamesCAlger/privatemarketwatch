@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_0cea4d411261",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "flagged interest_rate values: 10.45, 8.96, 8.0 on PRIVATE_EQUITY rows with row_keys 33719, 33734, 34359",
+  "anchor_value": null,
+  "confidence": 0.58,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Raw source was readable. It contains private-equity-like preferred share/unit rows with these rates, including table 23 row 18: Series A preferred shares | 10.45 %, table 69 row 22: Ferrellgas senior preferred units | 8.96 %, and multiple unit/preferred rows with 8.00 % PIK. However, the row-level artifact exposes only row_key, column, and value, not the flagged issuer/instrument, and the same rates also appear on loan rows. Therefore the exact flagged cells cannot be tied to specific source rows from the allowed evidence, so the source does not decide whether X01 is a false alarm or a classification/extraction defect."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d42a34df79cf",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_schedule_footnote",
+  "observed_value": 1,
+  "anchor_value": 1,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 24,
+      "quoted_text": "Arise Holdings, Inc. | (6) (14) | First Lien Debt | S + 4.50% | 8.16% | 12/9/2027 | par 2,415 | amortized cost 153 | fair value shown as dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 12,
+      "quoted_text": "Arise Holdings, Inc. | (6) (14) | First Lien Debt | S + 4.50% | 8.24% (PIK) | 12/9/2027 | par 2,415 | cost 153 | fair value shown as dash",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 confirmation. The exact second Arise Holdings first-lien debt tranche is explicitly marked with footnote (14) in the March 31, 2026 source schedule at table 34 row 24. The corresponding comparative schedule row at table 61 row 12 carries the same (14) marker and shows the tranche as PIK with no fair value. This independently corroborates the pipeline's footnote-based non-accrual identification, so the advisory flag does not identify a data error."
+}

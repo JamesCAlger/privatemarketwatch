@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_0ce04f85c459",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4000,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 28,
+      "quoted_text": "Core Scientific, Inc. / Common Stock (51,846 shares) source row shows cost 168 and fair value 4, not cost 4 and fair value greater than 40.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 34,
+      "quoted_text": "Narda Acquisitionco., Inc. / Revolver source row shows principal 106, cost 91, and fair value 4, not cost 4 and fair value greater than 40.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Core Scientific common stock source cost is 168 thousand and fair value is 4 thousand, but the extracted row used 4 thousand as cost, producing a spurious greater-than-10x appreciation condition.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 46,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Narda Acquisitionco revolver source cost is 91 thousand and fair value is 4 thousand, but the extracted row used 4 thousand as cost, producing a spurious greater-than-10x appreciation condition.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 53,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "X07 is a within-row cost/fair-value validation. The raw comparative schedule rows localize both flagged 4,000 values to the fair value column, while the source cost cells are 168 and 91 thousand respectively. The extracted holdings therefore have a column-position/remap extraction defect rather than a valid extreme appreciation relationship."
+}

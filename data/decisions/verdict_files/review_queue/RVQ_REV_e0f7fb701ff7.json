@@ -1,0 +1,19 @@
+{
+    "review_id":  "RVQ_REV_e0f7fb701ff7",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "2023-11-01",
+    "anchor_value":  "11/1/2023",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  17,
+                                  "row_index":  22,
+                                  "quoted_text":  "Ligado Networks LLC | (8)(9)(13) | N/A | N/A | 15.50 % | 11/1/2023 | 12,853 | 11,071 | 1,832 | 0.11"
+                              }
+                          ],
+    "rationale":  "Class 2 row check. The raw June 30, 2024 SOI row for Ligado Networks LLC shows the same maturity date, 11/1/2023, while the position remains reported with cost and fair value. The extracted maturity_date 2023-11-01 is source-correct; X10 is an overbroad monitoring rule for matured-but-still-reported positions, not a source-backed data error."
+}

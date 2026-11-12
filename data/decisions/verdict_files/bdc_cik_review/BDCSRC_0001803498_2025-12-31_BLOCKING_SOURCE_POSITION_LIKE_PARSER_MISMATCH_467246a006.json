@@ -1,0 +1,63 @@
+{
+  "review_id": "BDCSRC_0001803498_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_467246a006",
+  "cik": "0001803498",
+  "report_date": "2025-12-31",
+  "verdict": "NO_PATCH_NEEDED",
+  "confidence": "HIGH",
+  "primary_justification": "Source-reconciliation evidence supports duplicate dimension-path handling rather than a missing parser/staging position patch. The blocker group contains 682 source-only rows with affected source fair value of 7058317000 and no matched output rows, but the raw current-period source rows classify the sampled issuer-plus-affiliation/JV identifiers as collapsed_duplicate_dimension_path. HTML coordinate candidates repeatedly map those different issuer-plus-JV source identifiers to the same fund-level JV LP rows, so adding the XBRL look-through dimension rows as unified production positions would double count the fund-level JV investment exposure.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "gav_reconciliation",
+    "position_purity"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 99,
+      "row_index": 14,
+      "cell_indices": [
+        0,
+        6,
+        27,
+        45,
+        51,
+        57
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The candidate row is the selected current-period fund-level BCRED Emerald JV LP LP-interest position, and multiple distinct source-only identifiers with Emerald JV LP as the second dimension map to this same row rather than to separate issuer-level HTML rows."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 111,
+      "row_index": 25,
+      "cell_indices": [
+        0,
+        6,
+        12,
+        18,
+        24,
+        30,
+        36,
+        42
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The non-selected current-period coordinate candidate is also a BCRED Emerald JV LP row, reused across sampled issuer-plus-JV source-only identifiers; it does not establish separate production rows for the issuer-level dimension paths."
+    }
+  ],
+  "changed_files": [],
+  "patch_summary": "",
+  "source_reconciliation_effect": "No source reconciliation outputs are changed by this verdict. The reviewed blocker should not be cleared by adding parser output rows for the sampled issuer-plus-JV source rows because local evidence indicates they are duplicate dimension paths already represented by fund-level positions.",
+  "gav_effect": "Context only; no GAV effect is claimed. The GAV row passes at 1.0052 and this verdict does not alter holdings, source rows, or validation outputs.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code patch is proposed for this packet.",
+  "requires_human_merge": false,
+  "missing_evidence": "",
+  "residual_risk": "The residual classifier still labels these rows as blocking_source_position_like_parser_mismatch even though the raw source row status indicates collapsed_duplicate_dimension_path. Remaining risk is limited to whether a future reconciliation reviewer should reclassify this blocker family deterministically instead of leaving it as a reviewed no-patch packet.",
+  "reviewer_notes": "Sample source-only identifiers include ABG Intermediate Holdings 2, LLC | Verdelite JV LP; ACI Group Holdings, Inc. | Emerald JV LP; ADCS Clinics Intermediate Holdings, LLC 2 | Emerald JV LP; and AG Group Holdings, Inc. | Emerald JV LP. The coordinate candidates for these rows point to JV LP rows, while raw current-period source rows show collapsed_duplicate_dimension_path, supporting no parser patch."
+}

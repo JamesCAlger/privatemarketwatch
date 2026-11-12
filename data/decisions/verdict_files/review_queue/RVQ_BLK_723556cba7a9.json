@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_723556cba7a9",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "missing_or_unknown_asset_class",
+  "anchor_value": "PRIVATE_EQUITY",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 12,
+      "quoted_text": "Equity",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 24,
+      "quoted_text": "VP Security Buyer, Inc. | Limited Partnership Units | 111,111 | 111 | 111 | (3)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 17,
+      "quoted_text": "KLC Fund 1-C1 LP | Limited Partnership Units | 605,769 | 608 | 618 | (3)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Rows under the source Equity section with unit-style investment types were emitted with missing or unknown asset_class instead of PRIVATE_EQUITY.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 55,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "C304 flags missing or unknown asset_class. The raw schedule has a clear Equity section and representative affected rows such as VP Security Buyer, Inc. and KLC Fund 1-C1 LP with Limited Partnership Units, so the source supports a controlled private-equity classification. The defect is in extraction/classification, not in source availability or an aggregate anchor."
+}

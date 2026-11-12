@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_4af6b30bdf60",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -343000.0,
+  "anchor_value": -343000.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Discovery SL Management, LLC - Revolving Credit Line (4) | Health Care Equipment & Services | SOFR + 5.50 % ( 1.00 % floor) | 9.81 % | 3/18/2030 | - | ( 4 ) | ( 2 ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "Hasa Acquisition, LLC - Delayed Draw Term Loan (4)(11) | Capital Goods | SOFR + 4.50 % ( 1.00 % floor) | 8.81 % | 1/10/2029 | - | ( 31 ) | ( 13 ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Military Retail Solutions, LLC - Delayed Draw Term Loan (4)(11) | Consumer Staples Distribution & Retail | SOFR + 5.25 % ( 1.00 % floor) | 9.57 % | 6/28/2029 | - | ( 16 ) | ( 7 ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4)(12) | Media & Entertainment | SOFR + 4.50 % ( 1.00 % floor) | 8.92 % | 9/29/2026 | $ | - | $ | ( 6 ) | $ | ( 288 ) | - 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "PJW Ultimate Holdings, LLC - Revolving Credit Line (4) | Consumer Services | SOFR + 5.50 % ( 1.00 % floor) | 9.82 % | 11/17/2029 | - | ( 14 ) | ( 21 ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 22,
+      "quoted_text": "Rushmore Intermediate II, LLC - Revolving Credit Line (4) | Health Care Equipment & Services | SOFR + 7.00 % ( 1.00 % floor) | 11.45 % | 11/1/2027 | - | ( 12 ) | ( 12 ) | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 row-validation review of six negative fair_value cells. The raw schedule of investments itself reports each fair value as a parenthesized amount: (2), (13), (7), (288), (21), and (12) thousand. The extracted negative fair values therefore match the source; C103 is an advisory review flag for legitimate negative fair values, not a data error in these rows."
+}

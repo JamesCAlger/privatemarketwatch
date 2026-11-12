@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_8af7ce9d7159",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -24000,
+  "anchor_value": -24000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "Avetta, LLC^(5) | One stop | SF + | 5.75 | % | N/A(6) | 10/2029 | \u2014 | ( 24 ) | \u2014 | \u2014"
+    },
+    {
+      "table_index": 15,
+      "row_index": 12,
+      "quoted_text": "Azurite Intermediate Holdings, Inc.^(5) | One stop | SF + | 9.00 | % | N/A(6) | 03/2031 | \u2014 | ( 131 ) | \u2014 | ( 132 )"
+    },
+    {
+      "table_index": 10,
+      "row_index": 18,
+      "quoted_text": "Encore Holdings, LLC^(5) | One stop | SF + | 5.00 | % | N/A(6) | 11/2028 | \u2014 | ( 136 ) | \u2014 | ( 273 )"
+    }
+  ],
+  "rationale": "C107 flagged negative extracted cost values. The raw Schedule of Investments explicitly reports parenthesized amortized cost values for the cited rows, including (24), (131), and (136) in thousands under the Amortized Cost column. Because the stored negative costs match source presentation, the data is not erroneous; the row-validation warning is an overbroad monitor for legitimate negative cost rows."
+}

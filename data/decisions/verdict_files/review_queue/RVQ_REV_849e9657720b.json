@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_REV_849e9657720b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Denali Intermediate Holdings, Inc. | Revolving Credit Loan | fair value ( 21,633 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 19,
+      "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | fair value ( 20,517 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Milestone Technologies, Inc. | Revolving Loan | fair value ( 15,388 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 22,
+      "quoted_text": "Montana Buyer Inc. | Revolving Loan | fair value ( 4,216 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 26,
+      "quoted_text": "The Ultimus Group Midco, LLC | Initial Delayed Draw Term Loan | fair value ( 28,872 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 27,
+      "quoted_text": "The Ultimus Group Midco, LLC | Revolving Credit Loan | fair value ( 10,827 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 23,
+      "quoted_text": "OneZero Financial Systems, LLC | Revolving Loan | fair value ( 3,918 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 32,
+      "quoted_text": "Amplity Parent, Inc. | Revolving Credit Facility | fair value ( 326,935 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 35,
+      "quoted_text": "Blue River PetCare, L.L.C. | 2026 Additional DDTL | fair value ( 9,525 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 37,
+      "quoted_text": "Celerion Buyer, Inc. | Revolving Loan | fair value ( 17,263 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 14,
+      "quoted_text": "Flexera Software LLC | Revolving Loan | fair value ( 5,606 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 2,
+      "quoted_text": "IMB Midco LLC | Revolving Loan | fair value ( 74,594 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged twelve negative fair_value values, but the raw schedule of investments prints each corresponding fair value in parentheses in the Fair Value column. The extracted negative signs therefore match the source rows; the flag reflects an advisory rule_scope review of legitimate source-negative values, not a data error."
+}

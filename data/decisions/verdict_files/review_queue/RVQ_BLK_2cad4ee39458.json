@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_2cad4ee39458",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 572,
+  "anchor_value": 280,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 14,
+      "quoted_text": "Total Investments - 168.8 % | $ | 932,840 | $ | 926,975",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 11,
+      "quoted_text": "Total Investments - 189.0 % | $ | 904,200 | $ | 901,521",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 is a Class 3 count comparison. Raw source contains separate full schedules for March 31, 2026 (tables 8-15, ending with the current-period total at table 15 row 14) and December 31, 2025 (tables 32-39, ending with the comparative total at table 39 row 11). The source-side count of 572 combines current and comparative schedule rows; the output count of 280 is consistent with retaining only the requested current report date. The failed check is therefore caused by comparative-period leakage in its source anchor, not missing current-period output positions."
+}

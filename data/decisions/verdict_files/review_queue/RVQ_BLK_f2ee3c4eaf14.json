@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_f2ee3c4eaf14",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6860295000.0,
+  "anchor_value": 6610610000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 31,
+      "quoted_text": "Total Portfolio Investments | $ | 249,905 | $ | 249,685 | 254.62 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 69,
+      "row_index": 3,
+      "quoted_text": "Investments, at fair value (cost of $ 249,905 ) | $ | 249,685",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The filing's own total investments at fair value is 6,610,610 thousand (table 6 row 7, also table 28 row 46 and table 66 row 8), matching the companyfacts anchor of 6,610,610,000. The extracted position sum is 6,860,295,000, which exceeds the anchor by 249,685,000. That residual exactly matches a separate source schedule total: table 74 row 31 reports Total Portfolio Investments fair value of 249,685 thousand, and table 69 row 3 reports investments at fair value of 249,685 thousand. The evidence indicates the extraction included this look-through/separate schedule in addition to the filing-level portfolio total."
+}

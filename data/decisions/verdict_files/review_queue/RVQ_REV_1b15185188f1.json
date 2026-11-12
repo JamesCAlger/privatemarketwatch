@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_1b15185188f1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values concatenate category/country, portfolio company, instrument, industry, rate, interest rate, acquisition date, and maturity date",
+  "anchor_value": "raw SOI rows keep Portfolio Company separate from Instrument, Industry, Rate, Interest Rate, Original Acquisition Date, and Maturity Date columns",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 31,
+      "quoted_text": "Ardonagh Group Finco Pty Ltd | 1st Lien Term Loan | Insurance & Insurance Services | S+ 2.75 % | 6.92 | 5/5/2025 | 2/18/2031 | 2,972,581 | 2,938,077 | 2,963,608 | 0.50",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 34,
+      "quoted_text": "1261229 BC LTD | 1st Lien Term Loan | Healthcare Equipment & Supplies | S+ 6.25 % | 9.97 | 8/28/2025 | 10/8/2030 | 22,500,118 | 22,388,390 | 21,927,828 | 3.69",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 3,
+      "quoted_text": "Accelya Lux Finco Sarl | 1st Lien Term Loan | Software & Services | S+ 5.25 % | 8.92 % | 9/29/2025 | 9/29/2032 | 7,519,989 | 7,373,432 | 7,458,889 | 1.26 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer_name extraction swallowed adjacent row dimensions and terms instead of retaining only the Portfolio Company cell.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 31, "row_index": 31}
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse leak. The flagged stored examples include text such as '1st Lien/Secured Loans Australia Ardonagh Group Finco Pty Ltd Instrument 1st Lien Term Loan Industry Insurance & Insurance Services Rate S+2.75% Interest Rate 6.92% Original Acquisition Date 5/5/2025 Maturity Date 2/18/2031'. The raw SOI source has separate columns: Portfolio Company is only 'Ardonagh Group Finco Pty Ltd', while instrument, industry, rate, interest rate, acquisition date, maturity date, par amount, cost, fair value, and net assets are separate cells. The same pattern appears for 1261229 BC LTD and Accelya Lux Finco Sarl, so the flag is grounded as an extraction/wrapper parse defect rather than a false alarm."
+}

@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_9aa097bce9f3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "interest_rate blank and basis_spread absent in extracted holdings rows 495641 and 495711",
+  "anchor_value": "source rows show Spread Above Index SF + 5.00% and Interest Rate N/A(6)",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Amberfield Acquisition Co.^(5) | One stop | SF + | 5.00 | % | N/A(6) | 05/2030 | - | ( 10 ) | - | ( 10 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "Amberfield Acquisition Co.^(5) | One stop | SF + | 5.00 | % | N/A(6) | 05/2030 | - | ( 1 ) | - | ( 1 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Amberfield Acquisition Co. one-stop row with amortized cost and fair value of (10) has source spread SF + 5.00% but the extracted holdings issue has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Amberfield Acquisition Co. one-stop row with amortized cost and fair value of (1) has source spread SF + 5.00% but the extracted holdings issue has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "X02 flags two PRIVATE_CREDIT Amberfield Acquisition Co. one-stop rows because the extracted holdings rows have neither interest_rate nor basis_spread. The raw SOI rows are localized at table 13 rows 11 and 12. In both rows, the Interest Rate column is N/A(6), but the Spread Above Index column states SF + 5.00%. Because the rule allows either interest_rate or basis_spread, the source provides rate information that was not carried into the extracted row, so the warning is a real extraction gap rather than a false alarm. No aggregate anchor is needed for this Class 2 row-level issue."
+}

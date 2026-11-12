@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_73bd03acf98e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4,
+  "anchor_value": 0.4,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (5) | Investment Type | Reference Rate and Spread (1) | Maturity Date | Principal / Shares | Cost (2) | Fair Value (3) | % of Net Assets | Footnotes"
+    },
+    {
+      "table_index": 38,
+      "row_index": 26,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | dash in Principal / Shares | cost 434 | fair value 528"
+    },
+    {
+      "table_index": 38,
+      "row_index": 27,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | dash in Principal / Shares | cost dash | fair value 5"
+    },
+    {
+      "table_index": 38,
+      "row_index": 22,
+      "quoted_text": "Red Griffin TopCo, LLC | Common Stock | Principal / Shares 1,746 | cost 8,435 | fair value 1,598"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C04 treats L.P. interests as equity rows requiring shares even though the source schedule prints a dash in the Principal / Shares column for those L.P. interest rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "The C04 metric is low because not every equity-class row has a numeric Principal / Shares value. Raw source table 38 confirms the column is Principal / Shares and shows numeric shares for preferred/common stock rows, but the Firebird L.P. Interest rows show a dash in that same column. This means the missing share values are source-absent for L.P. interests rather than extraction defects in the holdings data, so the C04 flag is a rule-scope false alarm for this filing."
+}

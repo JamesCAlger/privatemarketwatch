@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_fef22fd8edba",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "weak_metric=0.2; n_violate=1; no row coordinate or extracted offending field supplied in bundle",
+  "anchor_value": "",
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Raw source was readable. The schedule tables have Index, Spread, and Interest Rate columns, and targeted source checks found plausible fixed-rate rows such as table 35 row 10 and row 11 showing SFR Holdco, LLC with Index n/a, Spread n/a, and Interest Rate 8.00%. However, the blinded bundle exposes only an aggregate fmt_basis_spread weak result with one violation and no row coordinate, issuer, observed extracted field, or rule-specific adjudication standard. The raw source therefore does not decide whether the single aggregate flag is a real extraction defect or a false alarm without guessing."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_6046e713aa60",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X02 flag reports an internal row_key with missing interest_rate/basis_spread, but the bundle does not expose the flagged row's issuer, investment text, fair value, or maturity. Raw SOI tables 4-6 and comparative SOI tables 10-13 were checked: actual debt instrument rows disclose coupon/rate terms in the Investment cell, while subtotal/equity/cash rows may lack interest_rate but are not enough to identify row_key 237372. Because the raw source does not decide which field/row is wrong, the issue cannot be grounded as real_error or false_alarm."
+}

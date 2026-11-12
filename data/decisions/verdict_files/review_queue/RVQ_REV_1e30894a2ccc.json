@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_1e30894a2ccc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values concatenate portfolio company, investment type, and acquisition date",
+  "anchor_value": "source separates Portfolio Company from Type of Investment and Acquisition Date",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company 1 2 3 4 | Type of Investment | Footnotes | Interest Rate 5 | Acquisition Date | Par Amount / Units | Cost 7 | Fair Value | Percentage of Net Assets 8"
+    },
+    {
+      "table_index": 47,
+      "row_index": 18,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Preferred Equity | N/A | 12/9/2025 | 44 | 272 | 544 | 0.0 %"
+    },
+    {
+      "table_index": 47,
+      "row_index": 5,
+      "quoted_text": "MC CIF Wealth Management (UK) Ltd. | Preferred Equity | (13) | 12.00 % PIK | 8/12/2025 | 2,616 | 2,591 | 2,593 | 0.2 %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field is composed from multiple source columns; the correct issuer for the cited ACC row is ACC Ultimate Holdings, L.P., with Preferred Equity and 12/9/2025 in separate source columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 47,
+        "row_index": 18
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field is composed from multiple source columns; the correct issuer for the cited MC CIF row is MC CIF Wealth Management (UK) Ltd., with Preferred Equity and 8/12/2025 in separate source columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 47,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C206 is a real data error. The flagged stored issuer names include investment terms and acquisition dates, but the raw schedule presents these as separate columns under Portfolio Company, Type of Investment, and Acquisition Date. The cited source rows show clean portfolio-company names in the issuer column, so the extracted issuer_name values are contaminated by adjacent columns."
+}

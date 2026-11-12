@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_BLK_ee016f68276a",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3001.0,
+  "anchor_value": 3439.42,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 49,
+      "quoted_text": "Alltech, Inc. | First Lien - Term Loan | SOFR + 436 | (9) | (7) | 8.1 | 8/13/2030 | $ | 2,984,962 | $ | 3,000 | $ | 3,001 | 0.4"
+    },
+    {
+      "table_index": 30,
+      "row_index": 35,
+      "quoted_text": "Total Net Assets | 859,855 | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The Alltech row prints fair value 3,001 and 0.4% of net assets, but schedule net assets of 859,855 imply 3,439.42 for a 0.4% row or about 0.3% for fair value 3,001.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 35,
+        "row_index": 49
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation used the filing's own schedule totals: total investments are 1,488,856 and total net assets are 859,855, with total investments reported as 173.1% of net assets. The localized Alltech source row is aligned to the Schedule of Investments columns and prints fair value 3,001 with % of net assets 0.4. Using the filing net-assets anchor, 0.4% corresponds to 3,439.42, while fair value 3,001 is about 0.349% and rounds to 0.3 at one decimal. The raw source therefore confirms a real pct_of_net_assets identity defect rather than an extraction false alarm."
+}

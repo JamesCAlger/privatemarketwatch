@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_1007ea7232f2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -8000.0,
+  "anchor_value": -8000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 21,
+      "quoted_text": "ASC Communications, LLC Revolver | SOFR + 4.75 %, 10.2 % Cash | 07/22 | 07/27 | principal -- | cost ( 8 ) | fair value ( 6 ) | -- % | (7) (8) (15) (28) (29)"
+    },
+    {
+      "table_index": 16,
+      "row_index": 29,
+      "quoted_text": "ATL II MRO Holdings Inc. Revolver | SOFR + 5.50 %, 10.9 % Cash | 11/22 | 11/28 | principal -- | cost ( 55 ) | fair value -- | -- % | (7) (8) (16) (28) (29)"
+    }
+  ],
+  "rationale": "C107 flagged negative cost rows. The raw schedule itself reports the checked revolver cost cells in parentheses, matching the extracted signs for representative flagged rows: ASC Communications has cost (8) and fair value (6), and ATL II MRO has cost (55) with zero fair value. The negative costs are therefore source-faithful monitoring cases, not extraction or normalization data errors."
+}

@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_REV_338c3dd51d98",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 35918.948,
+  "anchor_value": 35918.948,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | $ | (64,210) | $ | 26,383,665 | $ | 26,378,894 | $ | (4,771)"
+    },
+    {
+      "table_index": 86,
+      "row_index": 41,
+      "quoted_text": "Lightbeam Bidco, Inc. (dba Lazer Spot) | First lien senior secured loan | S+ | 4.75 % | 5/2030 | fair value 148,687"
+    },
+    {
+      "table_index": 121,
+      "row_index": 4,
+      "quoted_text": "Lightbeam Bidco, Inc. (dba Lazer Spot) | First lien senior secured loan | S+ | 5.00 % | 05/2030 | fair value 139,256"
+    },
+    {
+      "table_index": 86,
+      "row_index": 43,
+      "quoted_text": "Motus Group, LLC | First lien senior secured loan | S+ | 3.75 % | 12/2028 | fair value 31,932"
+    },
+    {
+      "table_index": 121,
+      "row_index": 5,
+      "quoted_text": "Motus Group, LLC | First lien senior secured loan | S+ | 4.00 % | 12/2028 | fair value 7,498"
+    },
+    {
+      "table_index": 89,
+      "row_index": 24,
+      "quoted_text": "Pluralsight, LLC | First lien senior secured loan | S+ | PIK 7.50 % | 8/2029 | fair value 1,133"
+    },
+    {
+      "table_index": 123,
+      "row_index": 16,
+      "quoted_text": "Pluralsight, LLC | First lien senior secured loan | S+ | 7.50 % PIK | 08/2029 | fair value 1,229"
+    },
+    {
+      "table_index": 89,
+      "row_index": 36,
+      "quoted_text": "Paradigmatic Holdco LLC (dba Pluralsight) | Common stock | fair value zero"
+    },
+    {
+      "table_index": 123,
+      "row_index": 24,
+      "quoted_text": "Paradigmatic Holdco LLC (dba Pluralsight) | Common stock | fair value 1,053"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "D06 reports only 7 of 788 issuers persist, but raw 2025 and 2024 schedule rows contain repeated issuer names across the comparative schedules.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 86,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "The aggregate fair-value anchor is intact: the filing shows Total Investments fair value of 35,918,948 thousand, matching the extracted fund-quarter fair value of 35,918.948 million. The D06 low-continuity premise is contradicted by raw comparative schedule rows: for example, Lightbeam Bidco, Motus Group, Pluralsight, and Paradigmatic Holdco recur across the 2025 and 2024 schedule sections. This supports a check/rule-scope false alarm rather than a source data defect."
+}

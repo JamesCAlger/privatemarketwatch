@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_f9eebab68a60",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "A Place for Mom",
+  "anchor_value": "A Place For Mom, Inc.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 12,
+      "quoted_text": "A Place For Mom, Inc. | (4) (6) | First Lien Debt | S + 4.50 % | 8.94 | % | 2/10/2026 | 16,334 | 16,334 | 16,334 | 1.49 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Issuer-name capitalization does not match the raw source: extracted 'A Place for Mom' should preserve source capitalization 'A Place For Mom' after legal-suffix normalization.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 12,
+        "quoted_text": "A Place For Mom, Inc. | (4) (6) | First Lien Debt | S + 4.50 % | 8.94 | % | 2/10/2026 | 16,334 | 16,334 | 16,334 | 1.49 | %"
+      }
+    }
+  ],
+  "rationale": "The bundle's holdings slice shows the observed issuer_name as 'A Place for Mom'. The raw filing row for the matching position prints 'A Place For Mom, Inc.'; stripping the legal suffix leaves 'A Place For Mom', so the lowercase 'for' in the extracted issuer_name is a source-disagreeing issuer-name formatting defect."
+}

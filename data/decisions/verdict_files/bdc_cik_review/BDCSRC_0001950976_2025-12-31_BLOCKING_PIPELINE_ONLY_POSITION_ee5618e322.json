@@ -1,0 +1,48 @@
+{
+  "review_id": "BDCSRC_0001950976_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_ee5618e322",
+  "cik": "0001950976",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "HIGH",
+  "primary_justification": "Source-reconciliation evidence identifies one blocking extra_in_pipeline row for Short-Term Investments | Dreyfus Treasury Obligations Cash Management Money Market Fund with output fair value 65057000 and blank source row/source fair value, while coordinate evidence shows the exact current-period SOI row is present in table 37 row 11. This supports a source parsing/table coverage gap for the selected short-term investments table rather than a synthetic output holding.",
+  "reconciliation_diagnosis": "HTML_PRESENT_TABLE_NOT_PARSED",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "position_purity"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 37,
+      "row_index": 11,
+      "cell_indices": [
+        0,
+        8,
+        19,
+        23,
+        27,
+        28
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Exact Dreyfus Treasury Obligations Cash Management Money Market Fund row appears in the selected current-period SOI table with cost and fair value of 65,057, matching the pipeline-only blocker identity and amount."
+    }
+  ],
+  "changed_files": [
+    "pipeline/bdc_xbrl_html_bridge.py",
+    "pipeline/source_reconciliation.py",
+    "tests/test_bdc_xbrl_html_bridge.py",
+    "tests/test_source_reconciliation_cache.py"
+  ],
+  "patch_summary": "Extend the BDC HTML/XBRL bridge or source reconciliation source-row extraction to preserve selected SOI short-term investment position rows such as money market funds when they carry current-period cost/fair-value columns, and add a false-positive test ensuring footnote-only money-market mentions remain excluded.",
+  "source_reconciliation_effect": "Expected to convert this Dreyfus money market fund row from extra_in_pipeline to matched/current-period source-backed for CIK 0001950976 report date 2025-12-31 without clearing unrelated aggregate, subtotal, or footnote-only residuals.",
+  "gav_effect": "Context only; expected no independent pass/fail claim because the GAV gate already passes and the proposed change is justified by source-reconciliation evidence.",
+  "tests_validation_plan": "pytest tests/test_bdc_xbrl_html_bridge.py tests/test_source_reconciliation_cache.py tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "The numeric source of truth remains the parsed raw source rows, and the bundle shows no raw current-period source row for this identifier; implementation must confirm the selected table 37 values are admitted through the audited source path rather than using footnote text or unchecked HTML as numeric truth.",
+  "reviewer_notes": "Two other coordinate candidates are footnote rows in tables 26 and 32 and should be treated as false positives. The actionable coordinate is table 37 row 11, selected_by_template_or_detector=true, with row text 'Dreyfus Treasury Obligations Cash Management Money Market Fund 3.65 % 65,057 65,057 10.70 %'."
+}

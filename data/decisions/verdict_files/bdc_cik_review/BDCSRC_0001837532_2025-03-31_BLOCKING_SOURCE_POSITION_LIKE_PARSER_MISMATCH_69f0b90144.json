@@ -1,0 +1,95 @@
+{
+  "changed_files": [],
+  "cik": "0001837532",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed source-only rows are borrower/category rollups or shortened borrower facts, while production holdings already preserve Apollo's position-level loan rows for the same borrowers.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 105,
+      "row_index": 5,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        8,
+        14,
+        19,
+        24,
+        27
+      ],
+      "reason": "Associations Inc. is shown with first lien secured debt, term loan, spread/floor, maturity, cost, fair value, and other position cells; this supports keeping the granular tranche row rather than adding the shorter Associa borrower/category label."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 14,
+      "row_index": 7,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        9,
+        12,
+        15,
+        16
+      ],
+      "reason": "Bingo Group Buyer, Inc. is shown with first lien secured debt, term loan, spread/floor, maturity, cost, and fair value cells; this supports retaining the detailed loan row rather than adding the shorter Best Trash borrower/category label."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 14,
+      "row_index": 20,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        9,
+        12,
+        15,
+        16
+      ],
+      "reason": "AVSC Holding Corp. is shown with first lien secured debt, term loan, spread/floor, maturity, cost, and fair value cells; this supports retaining the detailed loan row rather than adding the shorter Encore borrower/category label."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 15,
+      "row_index": 3,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        9,
+        12,
+        15,
+        16
+      ],
+      "reason": "Heritage Environmental Services, Inc. is shown with first lien secured debt, term loan, spread/floor, maturity, cost, and fair value cells; this supports retaining detailed loan rows rather than adding the shorter borrower/category rollup label."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review covered the 26 source-only blocker rows in this packet. The rows are Apollo borrower/category labels such as Commercial Services & Supplies Associa Associations Inc., Commercial Services & Supplies Best Trash Bingo Group Buyer, Inc., Commercial Services & Supplies Encore AVSC Holding Corp., Commercial Services & Supplies Heritage Environmental Services Heritage Environmental Services, Inc., and Commercial Services & Supplies Smith System Smith Topco, Inc. The bundled coordinates and same-CIK/date holdings show production already contains the more granular position-level rows with investment type, loan tranche, spread/floor, maturity, cost, and fair value. Adding the shorter source-only labels as separate holdings would duplicate exposure and violate the position-level data contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2025-03-31",
+  "requires_human_merge": false,
+  "residual_risk": "This verdict does not implement a general many-to-one source reconciliation rule. A future deterministic clearing rule would need to prove borrower-rollup-to-tranche sums across all rows and guard against true single-position rows that happen to have short source identifiers.",
+  "review_id": "BDCSRC_0001837532_2025-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_69f0b90144",
+  "reviewer_notes": "Reviewed 26 source-only blocker rows with affected source fair value 1,738,442,000. Current holdings searches found granular rows for the sampled borrowers, including Associations Inc. term/revolver/delayed-draw rows, Bingo Group Buyer term/revolver/delayed-draw rows, AVSC Holding Corp. revolver and term loan rows, Heritage Environmental Services delayed-draw and term loan rows, and Smith Topco revolver and term loan rows. The worklist also reports GAV PASS for the CIK/date, so the issue is source-row identity granularity rather than a need to add aggregate borrower rows.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "No production row should be added for these reviewed source-only borrower/category labels. They are intentionally non-blocking borrower-level rollups/short labels when supported by same-accession position-level rows.",
+  "tests_validation_plan": "Validate verdict schema and bundled evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code tests are added because no production code patch is proposed.",
+  "verdict": "NO_PATCH_NEEDED"
+}

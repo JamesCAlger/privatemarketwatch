@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_e5a834d77591",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 60.7,
+  "anchor_value": 60.7,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "Funded debt row shows First lien with SOFR reference, 6.25% spread, and 11.64% interest rate.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 4,
+      "quoted_text": "Unfunded debt row shows First lien - Undrawn with dash reference, dash spread, and dash interest rate.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 22,
+      "quoted_text": "Unfunded Australia row shows First lien - Undrawn with dash reference, dash spread, and dash interest rate.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The weak dl_rate_fill flag reports a 60.7 fill metric with missing rates across direct-lending units, but the raw SOI separates funded debt from unfunded debt. Funded first-lien rows disclose reference, spread, and interest-rate values, while the unfunded/undrawn rows disclose dashes in those same rate columns. The stored blank interest_rate values on undrawn/unfunded rows therefore match the source; the rule is over-scoping unfunded commitments rather than identifying an extraction defect."
+}

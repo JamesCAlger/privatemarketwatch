@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_14bee589b806",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "fair_value_currency values include U_EUR and U_GBP across 16 flagged rows",
+  "anchor_value": "USD, as shown by the schedule of investments Fair Value column presented with dollar signs",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Industry/Company | Investment Type | Interest Rate (13) | Maturity Date | Par/Shares (3) | Cost (34) | Fair Value (1)(35)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Accel International Holdings, LLC | First Lien Secured Debt - Term Loan | S + 450, 0.50% Floor | 4/24/2032 | $ | 187,003 | $ | 186,087 | $ | 186,068 | (4)(16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "First Lien Secured Debt - Revolver | S + 450, 0.50% Floor | 4/24/2032 | par -- | cost (157) | fair value (161) | (4)(5)(12)(32)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 13,
+      "quoted_text": "First Lien Secured Debt - Revolver | S + 450, 0.50% Floor | 5/5/2032 | par -- | cost (832) | fair value (850) | (4)(5)(9)(12)(32)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 21,
+      "quoted_text": "Total Aerospace & Defense | $ | 518,161 | $ | 518,426",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "The fair value currency is stored as non-USD (U_EUR/U_GBP) even though the source schedule presents the Fair Value column in dollars.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 10,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 row-level currency-unit check on fair_value_currency. The raw schedule of investments identifies the Fair Value column and displays dollar signs for the same cost/fair-value column group; rows such as Accel International and MRO Holdings continuation revolver rows inherit that USD fair-value column, and the Aerospace & Defense subtotal is also dollar-denominated. The stored fair_value_currency values U_EUR/U_GBP are therefore inconsistent with the raw source presentation, so the flag is a real currency-unit extraction/tagging error rather than a false alarm. No aggregate anchor was needed."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_c4a9408c5dbb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "cost_currency values U_CAD/U_GBP/U_EUR on 11 FX03 rows",
+  "anchor_value": "Cost column should remain USD-denominated; foreign currency labels belong to Par, not Cost",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Investment (1)(4) | Industry | Interest Rate (2) | Reference Rate and Spread (2) | Maturity | Par (3) | Cost | Fair Value | Footnotes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "1272775 B.C. LTD. (dba Everest Clinical Research) | Professional Services | 11.45 % | CDN P + 4.75 % | 11/06/26 | CAD | 454 | 339 | 331 | (5) (6) (7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 33,
+      "quoted_text": "Bigchange Group Limited | Software | 10.05 % | SN + 6.00 % | 12/23/26 | GBP | 11,990 | 15,834 | 14,458 | (5) (6) (7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 34,
+      "quoted_text": "Bigchange Group Limited | Software | 9.93 % | SN + 6.00 % | 12/23/26 | GBP | 1,740 | 1,477 | 1,446 | (5) (6) (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign currency labels such as CAD and GBP appear under Par, while Cost and Fair Value are separate valuation columns; the extraction propagated the Par currency into cost_currency.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. The source schedule header separates Par (3), Cost, and Fair Value. Representative flagged rows show foreign currency labels in the Par column, for example CAD par 454 with cost 339 and fair value 331, and GBP par 11,990 with cost 15,834 and fair value 14,458. The observed non-USD cost_currency values therefore reflect a column/unit mapping defect: the Par currency was carried into the Cost currency field even though the valuation columns are the BDC cost/fair-value columns expected to be USD-denominated."
+}

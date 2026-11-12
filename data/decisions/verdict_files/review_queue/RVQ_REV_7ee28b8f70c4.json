@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_7ee28b8f70c4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "1261229 B.C. LTD., First lien senior secured loan",
+  "anchor_value": "1261229 B.C. LTD.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 30,
+      "quoted_text": "1261229 B.C. LTD. | First lien senior secured loan | 10.55 % | SOFR (S) | 6.25 % | 09/2030 | 45,000.0 | 43,875.0 | 43,200.0 | (5)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name extraction includes the investment term; the source company cell is 1261229 B.C. LTD. and the investment cell is First lien senior secured loan.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 33,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "The raw SOI table has separate Company and Investment columns. For the cited row, the Company value is only 1261229 B.C. LTD., while First lien senior secured loan is the separate investment descriptor. The bundle sample shows issuer_name as 1261229 B.C. LTD., First lien senior secured loan, so the stored issuer name has merged the investment descriptor into the issuer field."
+}

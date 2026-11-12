@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_1d258b6b97b9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 0.0029940119760479044,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 22,
+      "quoted_text": "123Dentist Inc. | (4) (5) (8) (9) | C + | 5.00 % | 7.27 % | 8/10/2029 | CAD | 5,953 | 4,337 | 4,343 | 0.27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 78,
+      "row_index": 32,
+      "quoted_text": "123Dentist Inc. | (4) (5) (9) | C + | 5.00 % | 10.50 % | 8/10/2029 | CAD | 27 | 19 | 19 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 11,
+      "quoted_text": "AI Titan Parent Inc. | (4) (5) (6) | S + | 4.50 % | 8.32 % | 8/29/2031 | 5,726 | 1,283 | 1,274 | 0.08",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 5,
+      "quoted_text": "AI Titan Parent Inc. | (4) (5) (6) | S + | 4.75 % | 9.11 % | 8/29/2031 | 5,726 | - | ( 29 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 5,
+      "quoted_text": "Evergreen IX Borrower 2023 LLC | (4) (5) | S + | 4.75 % | 8.42 % | 9/30/2030 | $ | 5,727 | $ | 5,704 | $ | 5,728 | 0.36 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 76,
+      "row_index": 5,
+      "quoted_text": "Evergreen IX Borrower 2023 LLC | (4) (5) | S + | 4.75 % | 9.08 % | 5/14/2031 | $ | 5,786 | $ | 5,758 | $ | 5,786 | 0.48 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Raw source repeats multiple issuer names across the current and comparative investment schedules, so the 1/334 issuer-persistence metric indicates issuer identity extraction or normalization failed.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 59,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag. The raw filing source shows named issuers recurring across the 2025 schedule and the comparative 2024 schedule: 123Dentist appears at table 59 row 22 and table 78 row 32, AI Titan appears at table 57 row 11 and table 77 row 5, and Evergreen IX appears at table 56 row 5 and table 76 row 5. The bundle's extracted sample uses suffixed issuer identifiers such as '123Dentist Inc. 1/2/3' even though the source issuer cell is unsuffixed, which explains a near-zero issuer persistence metric. The filing source therefore supports the flag as a real data error in issuer identity extraction/normalization rather than a genuine lack of continuity."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_7b2bd6076092",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 55541,
+  "anchor_value": 55541,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Interest income | 51,581",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "Payment-in-kind interest income | 3,583",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 6,
+      "quoted_text": "Dividend income | 243",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Fee income | 134",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Total investment income | 55,541",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw filing table 5 shows that current-quarter investment income components reconcile exactly: 51,581 interest income + 3,583 PIK interest income + 243 dividend income + 134 fee income = 55,541 total investment income. The six-month column independently reconciles: 104,585 + 7,351 + 635 + 359 = 112,930. Because the filing identity holds in both current-period columns and the bundle supplies no row-level algebraic violation, the aggregate flag is a false alarm caused by the internal check or anchor, not a source-data error."
+}

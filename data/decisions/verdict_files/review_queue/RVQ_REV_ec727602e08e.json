@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ec727602e08e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 215.1999999999997,
+  "anchor_value": 215.2,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 32,
+      "quoted_text": "Total Investments | $ | 2,899,835 | $ | 2,918,584 | 215.2 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 27,
+      "quoted_text": "Total Net Assets | 1,356,005",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value | 2,918,584",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PCT01 flagged the quarter because extracted pct_of_net_assets sums to about 215.2, but the raw Schedule of Investments itself reports Total Investments at 215.2% of net assets. The balance sheet anchors support the percentage: total investments at fair value are 2,918,584 and total net assets are 1,356,005, giving approximately 215.2%. The extracted value is source-consistent; the flag reflects an over-narrow expected-range check for a leveraged BDC portfolio rather than a data defect."
+}

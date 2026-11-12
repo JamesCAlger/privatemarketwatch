@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d069f7df6fed",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 122,
+      "row_index": 5,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. (5) | Restaurant owner and operator | First lien senior secured loan | 12/2016 | 08/2022 | 12.6 | - | - | (2)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 27,
+      "quoted_text": "Membership units | 09/2016 | 3,000,000 | - | - | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows. Raw SOI source for sampled flagged rows shows dashes in the Fair Value column, not omitted nonzero amounts: ADF has dashes for amortized cost and fair value, and the ADG membership-units row has a dash in Fair Value. Normalizing those source dashes to 0.0 is source-faithful, so the zero-value warning is not a data error for the source-verified rows. Schedule totals also show the filing total investments line, with no aggregate evidence that these dash-valued rows should carry nonzero fair value."
+}

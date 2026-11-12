@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_f9ac6d53d57f",
+  "verdict": "false_alarm",
+  "mechanism": "currency_symbol_carry_forward_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "47 FX01 rows with missing principal_amount_usd after non-USD classification",
+  "anchor_value": "Raw SOI par columns are dollar-denominated; no EUR, GBP, CAD, or euro-symbol rows found",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B | Par Amount | $ | 29,862,781 | Amortized Cost | $ | 29,050,755 | Fair Value | $ | 29,086,349",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Del Real, LLC | Term Loan - 12.45% inc PIK | Par Amount continuation cell blank but same dollar-denominated Par Amount column | 33,688,944",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 4,
+      "quoted_text": "HOP Energy, LLC | Term Loan B | Par Amount/Shares | $ | 5,405,914 | Amortized Cost | $ | 5,345,831 | Fair Value | $ | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "CG Buyer, LLC | Term Loan | Par Amount | $ | 19,857,139 | Amortized Cost | $ | 19,364,026 | Fair Value | $ | 19,261,424",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 requires a non-USD source par before demanding principal_amount_usd conversion. The raw SOI tables use dollar-denominated Par Amount columns: each SOI segment starts with explicit dollar symbols in the par, cost, and fair value columns, while later rows omit the repeated symbol as a continuation formatting convention. Targeted searches for EUR, GBP, CAD, euro-symbol, foreign, and currency returned no non-USD source evidence. The flag is therefore a false alarm from treating blank continuation currency cells as non-USD rather than inherited USD."
+}

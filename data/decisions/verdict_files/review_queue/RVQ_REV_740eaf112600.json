@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_740eaf112600",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_rate_column",
+  "observed_value": 73.5,
+  "anchor_value": "explicit N/A for non-rate-bearing rows",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "Jeppesen Holdings, LLC^(5) | One stop | N/A(6) | 11/2032 | - | (20) | - | (114)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "PPW Aero Buyer, Inc.^(5) | One stop | N/A(6) | 09/2031 | - | (26) | - | (27)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The fill-rate denominator includes separate rows whose source interest-rate cell is explicitly N/A(6), while adjacent funded tranches have stated rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 11,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "This is a fund-level completeness flag, but the raw schedule distinguishes funded rate-bearing tranches from separate rows explicitly marked N/A(6). For example, table 11 row 8 reports Jeppesen at 8.42%, while row 9 is a separate Jeppesen One stop row with N/A(6), zero principal, negative cost, and negative fair value; rows 14-15 show the same structure for PPW Aero. These source-explicit N/A cells should not be treated as missing rate extraction, so the 73.5% unscoped fill metric is a false alarm caused by rule scope. Residual risk is that the aggregate bundle does not enumerate all 249 violations, but the repeated source structure directly establishes that valid N/A rows contaminate the denominator."
+}

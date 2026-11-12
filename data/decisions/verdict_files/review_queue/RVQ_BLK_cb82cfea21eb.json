@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_cb82cfea21eb",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 400.131924,
+  "anchor_value": 400.131924,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 5,
+      "quoted_text": "Fair value (a) | $ | 400.1",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 218,
+      "row_index": 58,
+      "quoted_text": "Total Investments | $ | 396,791,982 | $ | 400,131,924 | 200.44 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 238,
+      "row_index": 13,
+      "quoted_text": "Total | $ | 5,583,228 | $ | 5,804,955 | 3.57 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E07 source count appears to count non-position schedule structure, including issuer subtotals and prior-period schedule rows, while the current extracted fair value ties to the filing total.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 218,
+        "row_index": 58
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's current-period summary reports fair value of $400.1 million, and the current investment schedule grand total reports fair value of $400,131,924. The bundle's extracted fund-quarter fair value is 400.131924 million, so the current extraction ties to the raw filing total. The schedule grid also shows issuer header rows, issuer subtotal rows, grand-total/liability rows, and separate prior-period schedule pages such as table 238; those rows are not current-period positions. Therefore the E07 count comparator source=1150 is an inflated/bad count anchor, not evidence that the 329 extracted current positions are missing value."
+}

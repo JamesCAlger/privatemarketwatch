@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_0c04954d31b1",
+  "verdict": "false_alarm",
+  "mechanism": "source_matcher_duplicate_suffix",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Pipeline identities with ordinal suffixes such as 'Amplify Buyer, Inc. Term Loan ... Maturity Date | 9/17/2032 One' were flagged as having no matching current-period source fact.",
+  "anchor_value": "The current-period schedule contains the same investment rows as duplicate source rows distinguished by footnote sets and economics, without the internal ordinal suffix.",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 8,
+      "quoted_text": "Amplify Buyer, Inc. Term Loan | (3)(4)(5)(7)(13) | 3M SOFR + 4.75 % / 0.75 % | 8.42 % | 9/17/2032 | 9,000 | 8,957 | 8,944 | 0.48 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 19,
+      "quoted_text": "Kite Midco II LTD Term Loan B1 | (3)(4)(5)(7)(12)(32) | 6M SOFR + 4.50 % / 0.00 % | 8.23 % | 11/19/2031 | 5,290 | 5,222 | 5,203 | 0.28 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "source_matcher_duplicate_suffix",
+      "detail": "The flagged 'One' rows are source-backed duplicate schedule rows; the source distinguishes them with footnotes and economics, while the pipeline uses an ordinal suffix for identity uniqueness.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "SRC_BDC02 claims the flagged BDC rows have no matching current-period source fact. Raw schedule table 27 shows matching current-period rows for representative flagged ordinal-suffixed identities: Amplify Buyer, Inc. Term Loan appears twice in source rows 7 and 8 with the same maturity, rate, cost, and fair value, and Kite Midco II LTD Term Loan B1 appears in source rows 18 and 19. The pipeline's 'One' suffix is not literal source text; it is an internal duplicate disambiguator for a row that is present in the schedule. The check is therefore over-strict for duplicate source rows rather than exposing a data error."
+}

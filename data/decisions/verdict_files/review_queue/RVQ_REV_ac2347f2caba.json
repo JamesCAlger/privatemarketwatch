@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_ac2347f2caba",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "interest_rate_coverage_threshold",
+  "observed_value": 0.6120689655172413,
+  "anchor_value": 0.8,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Capstone Acquisition Holdings, Inc. | First Lien Term Loan | S + 4.50 % | 11/12/2029 | $ 11,641 | $ 11,452 | $ 11,554",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 16,
+      "quoted_text": "Firebird Acquisition Corp, Inc. | First Lien Term Loan | S + 5.00 % (includes 2.75 % PIK) | 2/2/2032 | 11,502 | 11,446 | 11,445",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt rows with printed Reference Rate and Spread terms were extracted with blank interest_rate, driving C01 coverage to 61.2% versus the 80% threshold.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A PIK-inclusive First Lien Term Loan row has a printed rate term but the extracted interest_rate field is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "C01 is an aggregate interest-rate coverage check. The queue artifact reports 90 of 232 debt rows without rates, with observed coverage 0.6120689655172413 below the 0.8 threshold. Raw SOI table 11 has a Reference Rate and Spread column and shows debt rows with explicit coupon terms, including Capstone at S + 4.50 % and Firebird at S + 5.00 % including 2.75 % PIK. The bundle's extracted holdings sample shows the corresponding private-credit rows with blank interest_rate, so the flag reflects a real extraction gap rather than a false alarm."
+}

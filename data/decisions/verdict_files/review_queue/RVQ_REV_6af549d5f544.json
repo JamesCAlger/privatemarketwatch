@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_6af549d5f544",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 33,
+      "quoted_text": "PlantSwitch, Inc. (Series A-2) (6) (7) | 1,128,553 | 2,192,329 | 2,653,228",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 42,
+      "quoted_text": "IQHQ, Inc. (13) | 87,350 | 1,310,250 | 365,123",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 0,
+      "quoted_text": "The interest rate on these investments is subject to a base rate of 3-Month SOFR, which at December 31, 2025 was 4.27%.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw filing has separate current and comparative investment schedules. PlantSwitch and IQHQ occur in table 17 for March 31, 2026 and again at table 32 rows 33 and 42; the footnotes associated with table 32 identify that schedule as December 31, 2025. Retaining the two table 32 facts as current-quarter positions is therefore a comparative-period leak. The expected number of earlier-period rows in the March 31, 2026 holdings slice is zero, versus two observed flagged rows."
+}

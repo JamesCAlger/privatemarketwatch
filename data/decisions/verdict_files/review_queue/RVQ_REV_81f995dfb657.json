@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_81f995dfb657",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "CAD 45,575",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Jupiter Refuel Canada Buyer Inc. (dba 4Refuel) | Oil, Gas & Consumable Fuels | 7.56 % | C + 5.25 % | 06/30/31 | CAD | 45,575 | 33,021 | 32,271 | (7) (8) (9)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 broad row set. The raw schedule explicitly labels the position par as CAD 45,575, while the extracted principal_amount_usd is blank. The same source row separately reports dollar-denominated cost and fair value, so the foreign-currency par is real and an explicit USD-principal conversion/output is missing. FX01 is therefore correctly identifying an extraction/normalization gap. No filing-total anchor is needed for this field-presence rule."
+}

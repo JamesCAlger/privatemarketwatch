@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_a81b6d75a6b3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_EB_HRZXYB0UP6UQE2QKGTG",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan ... Principal Amount/Shares $ 2,486,670 ... Amortized Cost $ 2,434,685 ... Fair Value $ 2,474,237",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars ($) unless otherwise noted in Euros.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 53,
+      "quoted_text": "Total Investments | $ | 252,191,163 | $ | 254,154,676 | 178.19 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX03 treats the custom XBRL unit label as non-USD even though the schedule presents the cost and fair value columns in dollars.",
+      "fix_class": "rule_scope",
+      "citation": {"table_index": 9, "row_index": 6}
+    }
+  ],
+  "rationale": "The raw source does not show non-USD valuation amounts. The investment schedule displays dollar signs for principal, amortized cost, fair value, and totals, and the currency footnote states that par amount is denominated in U.S. dollars unless otherwise noted. The flagged value is a custom unit token containing USD, so the FX03 warning is a validator/normalization false alarm rather than a data error in cost_currency."
+}

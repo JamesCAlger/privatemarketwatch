@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_590fa8ad5840",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Senior secured debt | $ | 458,672 | 98.81 | % | 142.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "Preferred equity | 5,525 | 1.19 | % | 1.71 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 464,197 | 100.00 | % | 143.71 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the filing's fair-value composition schedule totals 100.00% of total investments for June 30, 2024.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw schedule has explicit percentage anchors for June 30, 2024: senior secured debt is 98.81% of total investments, preferred equity is 1.19%, and the schedule total is 100.00%. The flagged artifact reports pct_sum=0.0%, so the extracted aggregate percentage is missing despite a readable source schedule."
+}

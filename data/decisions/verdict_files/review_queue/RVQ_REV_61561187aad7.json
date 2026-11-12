@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_61561187aad7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -3000.0,
+  "anchor_value": -3000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Software | First Lien(3)(4) - Undrawn | 07/2025 | 07/2030 | Principal 512 | Cost (3) | Fair Value (4)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review. The filing's investment schedule explicitly presents negative costs for unfunded debt investments. At table 29 row 6, the Cost column is parenthesized (3), matching a flagged -3000 value after the filing's thousands-to-units scaling; the adjacent fair value is separately parenthesized (4). Negative cost is therefore source-faithful and legitimate for this unfunded-position convention. C107's blanket negative-cost warning is overbroad, not a data error. No aggregate anchor is applicable."
+}

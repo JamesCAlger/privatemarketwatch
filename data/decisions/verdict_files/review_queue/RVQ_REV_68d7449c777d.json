@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_68d7449c777d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank principal_amount_usd on flagged non-USD debt rows",
+  "anchor_value": "source schedule shows Euro-denominated principal for debt investments",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 21,
+      "quoted_text": "Revolver row shows Euro-denominated principal 1,251,514 with cost 1,360,599 and fair value 1,353,796.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 22,
+      "quoted_text": "Delayed Draw Term Loan row shows Euro-denominated principal 3,585,699 with cost 3,619,086 and fair value 3,600,991.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted Euro.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The schedule explicitly marks Monitorus debt par as Euro, but the flagged extracted debt rows have blank principal_amount_usd despite requiring FX-normalized principal.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "FX01 asks whether non-USD debt principal is missing principal_amount_usd. The raw schedule note says par is USD unless otherwise noted, and the Monitorus Revolver and Delayed Draw Term Loan rows are explicitly Euro-denominated. The flagged artifact rows show principal_amount_usd is blank for this rule, so the source supports a real normalization/extraction gap rather than a false alarm. No aggregate anchor was needed because this is localized to source currency/par rows."
+}

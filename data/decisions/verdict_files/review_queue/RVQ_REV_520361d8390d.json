@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_520361d8390d",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  "AUD 240,767 source par",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  49,
+                                  "row_index":  9,
+                                  "quoted_text":  "DBG Consolidated Holdings Pty Ltd (dba Arrotex Pharmaceuticals) | Pharmaceuticals | 9.04 % | B + 5.25 % | 10/29/32 | AUD | Par 240,767 | Cost 157,008 | Fair Value 159,069",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX01 flags blank principal_amount_usd on non-USD debt. The raw SOI row at table 49 row 9 is a debt investment with AUD-denominated par of 240,767, while the review bundle shows the corresponding principal_amount_usd value is blank. The source therefore supports a missing FX-normalized principal field rather than a false alarm."
+}

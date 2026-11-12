@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_7e1310466c62",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 15668.751,
+  "anchor_value": 15674.51,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 68,
+      "row_index": 33,
+      "quoted_text": "Total Investments - 181.4 % | $ | 15,704,123 | $ | 15,674,510",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 14,
+      "quoted_text": "Total 1st Lien/Senior Secured Debt | 353,061 | 360,743",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 81,
+      "row_index": 36,
+      "quoted_text": "Total Investments - 148.3 % | $ | 7,285,922 | $ | 7,273,815",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E07's source count is not a clean current-position count; the raw schedule includes headers, category rows, subtotal rows, and separate comparative-year schedule tables.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 49,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. The filing's current schedule total for investments is 15,674.510 million, while the bundle reports extracted fund-quarter fair value of 15,668.751 million, a tight fair-value anchor rather than evidence of hundreds of missing positions. Raw schedule structure shows non-position subtotal/category rows mixed into the current SOI, and table 81 is the comparative-year schedule with its own total of 7,273.815 million. Therefore the E07 source=1286 vs output=739 count comparison is using a bad source-row anchor, not proving a real data error in the extracted current holdings."
+}

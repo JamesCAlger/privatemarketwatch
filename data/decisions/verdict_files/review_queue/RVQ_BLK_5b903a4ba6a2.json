@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_5b903a4ba6a2",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_schedule_row",
+  "observed_value": "SOFR",
+  "anchor_value": "SOFR(M) with 2.75% Cash + 2.75% PIK spread",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "Skydio, Inc | First Lien Term Loan | SOFR(M) | 2.50 | % | 2.75 % Cash + 2.75 % PIK | 9.17 | % | 12/4/2029",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw filing schedule directly corroborates the flagged SOFR reference. Table 12 labels separate Ref(B) and Spread columns, and row 12 reports SOFR(M) together with a structured 2.75% cash plus 2.75% PIK spread. The underlying extracted reference is supported by source; the uncorroborated-reference check is the defective component. Aggregate fair-value anchors are not relevant to this Class 2 identifier-field adjudication."
+}

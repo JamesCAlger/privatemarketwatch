@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0aa385fc07d4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 38.36,
+  "anchor_value": 7.76,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 10,
+      "quoted_text": "Distributions to common shareholders | ( 1.20 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 17,
+      "quoted_text": "Net investment income (4) | 7.76 % | 9.3 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw-source financial highlights explicitly report a $1.20 per-share distribution for the three months ended March 31, 2026 and a 7.76% net-investment-income ratio. The distribution is therefore source-supported, and its unusually large size relative to recurring income explains the F16 heuristic breach. F16 is only a weak distribution-versus-income heuristic; it does not establish that either source-backed field is erroneous. The check is the false alarm, driven by a legitimate exceptional distribution rather than an extraction defect."
+}

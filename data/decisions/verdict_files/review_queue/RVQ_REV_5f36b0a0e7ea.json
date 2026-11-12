@@ -1,0 +1,46 @@
+{
+    "review_id":  "RVQ_REV_5f36b0a0e7ea",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "GBP",
+    "anchor_value":  "USD",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  8,
+                                  "row_index":  12,
+                                  "quoted_text":  "Armstrong Bidco Limited first lien senior secured loan row: pound-denominated Par / Units, with Amortized Cost 31,940 and Fair Value 32,607 in valuation columns",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  8,
+                                  "row_index":  13,
+                                  "quoted_text":  "Armstrong Bidco Limited first lien senior secured delayed draw term loan row: pound-denominated Par / Units, with Amortized Cost 12,927 and Fair Value 13,203 in valuation columns",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Cost currency was assigned GBP from the Par / Units column for Armstrong Bidco Limited first lien senior secured loan; the cost value belongs to the USD valuation column.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  8,
+                                          "row_index":  12
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Cost currency was assigned GBP from the Par / Units column for Armstrong Bidco Limited delayed draw term loan; the cost value belongs to the USD valuation column.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  8,
+                                          "row_index":  13
+                                      }
+                     }
+                 ],
+    "rationale":  "FX03 is confirmed. The raw SOI rows show the pound currency marker in the Par / Units column, while Amortized Cost and Fair Value are separate valuation columns that roll into dollar-denominated investment totals. The extracted cost_currency of GBP for both flagged Armstrong Bidco rows is therefore a currency-assignment extraction error, not a valid non-USD cost valuation."
+}

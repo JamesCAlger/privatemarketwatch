@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_871bb280c629",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "issuer_name required; raw row has no company or investment terms and is a subtotal/rollup line, not a position",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 6,
+      "quoted_text": "Company cell blank; Type of Investment blank; Outstanding Principal 2,549; Cost 2,596; Fair Value 271",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "A blank-company subtotal/rollup line was included as a holding, producing a position with missing issuer_name.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "C201 requires issuer_name for position identity. In the raw SOI grid, table 33 row 6 has an empty Company cell and empty Type of Investment cell, with only subtotal-like numeric principal/cost/fair-value amounts following the preceding Rally Network rows. Treating that row as a holding yields a blank issuer_name, so the flag is a real extraction/subtotal-leak error rather than a false alarm."
+}

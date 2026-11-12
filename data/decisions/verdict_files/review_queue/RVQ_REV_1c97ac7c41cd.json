@@ -1,0 +1,65 @@
+{
+  "review_id": "RVQ_REV_1c97ac7c41cd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 20,
+      "quoted_text": "Rising Pharma Holdings, Inc. | 02/08/22 | Delayed Draw Term Loan - 12.61 % (SOFR + 7.00 %, 1.00 % Floor) | 0.2 | % | 809,471 | 12/13/26 | 795,148 | 791,663"
+    },
+    {
+      "table_index": 23,
+      "row_index": 21,
+      "quoted_text": "Rising Pharma Holdings, Inc. | 02/08/22 | Term Loan - 12.65 % (SOFR + 7.00 %, 1.00 % Floor) | 2.7 | % | 12,838,027 | 12/13/26 | 12,578,206 | 12,555,590"
+    },
+    {
+      "table_index": 22,
+      "row_index": 20,
+      "quoted_text": "Harvey Gulf Holdings, LLC | 08/10/22 | Term Loan A - 10.14 % (SOFR + 4.50 %, 1.00 % Floor) | 4.7 | % | 21,324,957 | 08/10/27 | 21,055,796 | 21,538,206"
+    },
+    {
+      "table_index": 22,
+      "row_index": 21,
+      "quoted_text": "Harvey Gulf Holdings, LLC | 08/10/22 | Term Loan B - 12.64 % (SOFR + 7.00 %, 1.00 % Floor) | 4.6 | % | 20,549,504 | 08/10/27 | 20,078,648 | 21,124,890"
+    },
+    {
+      "table_index": 22,
+      "row_index": 33,
+      "quoted_text": "Five Star Buyer, Inc. | 05/11/23 | Term Loan - 12.46 % (SOFR + 7.00 %, 1.50 % Floor) | 4.4 | % | 20,925,460 | 02/23/28 | 20,207,374 | 20,151,218"
+    },
+    {
+      "table_index": 22,
+      "row_index": 34,
+      "quoted_text": "Five Star Buyer, Inc. | 05/11/23 | Delayed Draw Term Loan - 12.46 % (SOFR + 7.00 %, 1.50 % Floor) | 0.1 | % | 710,698 | 02/23/28 | 710,698 | 684,403"
+    },
+    {
+      "table_index": 23,
+      "row_index": 27,
+      "quoted_text": "D&D Buyer, LLC | 10/04/23 | Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) | 0.2 | % | 1,153,606 | 10/04/28 | 1,153,606 | 1,130,534"
+    },
+    {
+      "table_index": 23,
+      "row_index": 28,
+      "quoted_text": "D&D Buyer, LLC | 10/04/23 | Term Loan - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) | 6.9 | % | 32,300,978 | 10/04/28 | 31,280,506 | 31,654,959"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The B02 duplicate key collapses distinct same-issuer instruments; the cited rows differ by investment type or tranche and by par/cost/fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 23,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The source schedule supports same-issuer multi-instrument rows rather than duplicate positions. The named example, Rising Pharma Holdings, has separate delayed-draw term loan and term loan rows with different investment labels, par amounts, amortized costs, and fair values. The other same-issuer pairs checked show the same legitimate structure: Harvey Term Loan A/B, Five Star term loan/delayed draw, and D&D revolver/term loan. The flag's count of 4 duplicate position keys is therefore caused by an over-broad issuer-level duplicate key, not a data defect."
+}

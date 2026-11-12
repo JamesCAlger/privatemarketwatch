@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_7004897aa8ba",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -24067.0,
+  "anchor_value": -24067.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 23,
+      "quoted_text": "Amercare Royal LLC | Services | Delayed Draw Term Loan | - ( S + 5.00 %; 1.00 % Floor) | 9/10/2030 | - | - | ( 24,067 | ) | (6)(7)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 40,
+      "quoted_text": "AppViewX, Inc. | Software & Tech Services | Revolver | - ( S + 5.25 %; 0.75 % Floor) | 12/24/2031 | - | ( 16,474 | ) | ( 18,466 | ) | (6)(7)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 34,
+      "quoted_text": "DeLorean Purchaser, Inc. | Software & Tech Services | Revolver | - ( S + 4.75 %; 0.75 % Floor) | 12/16/2031 | - | ( 32,079 | ) | ( 24,098 | ) | (6)(7)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "Negative fair_value values are source-reported parenthesized fair values on unfunded revolver or delayed draw rows, not extraction sign errors.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "C103 flags negative fair_value rows. The raw schedule itself reports negative fair values in parentheses for rows such as Amercare Royal LLC delayed draw term loan (24,067), AppViewX revolver (18,466), and DeLorean Purchaser revolver (24,098), generally with unfunded/commitment footnotes (6)(7). Because the extracted negative values match the source presentation, this is not a data error; the row-validation rule is intentionally broad and fired on legitimate source-reported negatives."
+}

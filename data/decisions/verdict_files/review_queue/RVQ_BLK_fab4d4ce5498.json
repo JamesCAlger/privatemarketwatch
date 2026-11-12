@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_fab4d4ce5498",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_row_maturity",
+  "observed_value": "Generated identifiers embed incorrect maturity dates, including Orion 5/19/2032, Higginbotham DDTL 6/11/2031, Cherry Bekaert 6/30/2030, Applied Systems 9/19/2026, and Madison IAQ 11/5/2032.",
+  "anchor_value": "Raw SOI rows show Orion 10/10/2032, Higginbotham DDTLs 9/30/2026 and 12/10/2027, Cherry Bekaert 6/28/2030 for the 8.22% rows, Applied Systems 2/24/2031 for the 6.17% row, and Madison IAQ 11/8/2032 for the 6.64% row.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 37,
+      "quoted_text": "Orion Us Finco Inc. | First Lien Term Loan | SOFR(Q) | \\u2014 | 3.50 | % | 7.43 | % | 10/10/2032 | $ | 442,000 | 439,852 | 444,590 | 0.02 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 28,
+      "quoted_text": "Higginbotham Insurance Agency, Inc. | First Lien Delayed Draw Term Loan | SOFR(M) | 1.00 | % | 4.50 | % | 8.22 | % | 9/30/2026 | $ | \\u2014 | ( 59,373 | ) | \\u2014 | \\u2014 | D/E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 29,
+      "quoted_text": "Higginbotham Insurance Agency, Inc. | First Lien Delayed Draw Term Loan | SOFR(M) | 1.00 | % | 4.50 | % | 8.82 | % | 12/10/2027 | $ | \\u2014 | \\u2014 | \\u2014 | \\u2014 | E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 20,
+      "quoted_text": "Cherry Bekaert Advisory, LLC | First Lien Term Loan | SOFR(M) | 0.75 | % | 4.50 | % | 8.22 | % | 6/28/2030 | $ | 2,114,842 | 2,091,101 | 2,094,529 | 0.08 | % | E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 22,
+      "quoted_text": "Applied Systems, Inc. | First Lien Term Loan | SOFR(Q) | 0.50 | % | 2.50 | % | 6.17 | % | 2/24/2031 | $ | 489,434 | 489,433 | 492,774 | 0.02 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 20,
+      "quoted_text": "Madison IAQ LLC | First Lien Term Loan | SOFR(Q) | \\u2014 | 2.75 | % | 6.64 | % | 11/8/2032 | $ | 5,450,022 | 5,439,238 | 5,491,197 | 0.22 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Identifier maturity text was populated from a non-matching date while the row-level SOI maturity is available and matches the structured value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "This is Class 2 within-row localization. The raw SOI schedule rows decide the issue: for matched issuer/instrument/coupon rows, the Maturity column contains the structured residual date rather than the maturity embedded in the generated identifier text. Examples include Orion at 10/10/2032 rather than identifier 5/19/2032, Higginbotham delayed draw rows at 9/30/2026 and 12/10/2027 rather than identifier 6/11/2031, Cherry Bekaert 8.22% rows at 6/28/2030 rather than identifier 6/30/2030, Applied Systems 6.17% row at 2/24/2031 rather than identifier 9/19/2026, and Madison IAQ 6.64% row at 11/8/2032 rather than identifier 11/5/2032. The check is therefore catching a real generated identifier maturity defect, not a false alarm."
+}

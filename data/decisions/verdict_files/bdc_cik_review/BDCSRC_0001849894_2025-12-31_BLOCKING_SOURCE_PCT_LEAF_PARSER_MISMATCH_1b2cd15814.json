@@ -1,0 +1,55 @@
+{
+  "changed_files": [],
+  "cik": "0001849894",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this review verdict does not add, remove, or revalue holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 37,
+      "row_index": 11,
+      "cell_indices": [0, 1, 9, 14, 18, 22, 26],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period S.A.F.E. Management equity row has issuer, instrument, maturity, cost, fair value, and net-assets percentage; these are position-level fields."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 30,
+      "row_index": 22,
+      "cell_indices": [0, 1, 3, 5, 7, 9, 12, 16, 20, 24],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period ALF Finance row has issuer, loan terms, maturity, cost, fair value, and net-assets percentage; it supports the blocker as a real position-row parser residual."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 30,
+      "row_index": 24,
+      "cell_indices": [0, 1, 3, 5, 7, 9, 12, 16, 20, 24],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period ALF Finance Incremental Term Loan row has issuer, instrument, rate, maturity, cost, fair value, and net-assets percentage; it is a separate position row."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review found that sampled blocker rows are real MSD position rows, but current production code already contains a CIK-scoped MSD hierarchy parser for this exact Investments Investments identifier shape and targeted regression tests pass. A second patch would be duplicative and would risk broadening row filters without new mechanism evidence.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-12-31",
+  "requires_human_merge": false,
+  "residual_risk": "The generated source reconciliation artifact still reports this packet as blocking until a clean rebuild confirms current-code behavior. This verdict does not hide the blocker; it documents that no additional bounded code change is supported beyond the existing CIK-scoped MSD parser coverage.",
+  "review_id": "BDCSRC_0001849894_2025-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_1b2cd15814",
+  "reviewer_notes": "Bundle issue_count is 83 and affected source fair value is 2,985,764,000. Source-only rows include S.A.F.E. Management, 7Ridge Investments, ALF Finance, Foundation Risk Partners, and Fullsteam identifiers with issuer/instrument/rate/maturity evidence. Current tests test_msd_hierarchy_leaf_rows_without_legal_suffix_are_kept and test_msd_hierarchy_parser_is_cik_scoped_false_positive_guard cover this CIK-specific identifier pattern and passed in targeted pytest.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No immediate source reconciliation effect from this verdict alone. The expected clearing mechanism is a clean rebuild under current production code, not an additional verdict-only suppression or generated-output edit.",
+  "tests_validation_plan": "Targeted parser tests run: pytest tests/test_unified_holdings.py::TestPrepareBdc::test_msd_hierarchy_leaf_rows_without_legal_suffix_are_kept tests/test_unified_holdings.py::TestPrepareBdc::test_msd_hierarchy_parser_is_cik_scoped_false_positive_guard. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "NO_PATCH_NEEDED"
+}

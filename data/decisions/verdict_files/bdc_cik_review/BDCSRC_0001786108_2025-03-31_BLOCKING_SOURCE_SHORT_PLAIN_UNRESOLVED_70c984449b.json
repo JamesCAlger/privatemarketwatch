@@ -1,0 +1,48 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so Trinity's footnoted affiliation hierarchy header and investment-in-securities total are documented as non-position source rows rather than missing holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 41,
+      "row_index": 20,
+      "cell_indices": [
+        0,
+        12,
+        13,
+        16,
+        17
+      ],
+      "reason": "The current-period row text is Total Investment in Securities with cost, fair value, and percent-of-net-assets totals; it is a subtotal/total row corresponding to source_row_id 678362, not a position-level borrower or instrument row."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify footnoted affiliation headers such as Affiliate Investments1 as documented source affiliation headers, and classify the exact normalized label Portfolio Company Investment in Securities as a documented source total/header row.",
+  "primary_justification": "Manual review covered both blocker rows. Affiliate Investments1 appears in XBRL as investmentidentifieraxis=Affiliate Investments1, has no issuer or instrument text, and represents an affiliation hierarchy header; current production holdings separately include issuer rows under that branch such as EPT 16, LLC, GoFor Delivers, Inc., Nexii, Inc., Senior Credit Corp 2022 LLC, and Trinity Capital Adviser, LLC. Portfolio Company Investment in Securities maps to the filing row Total Investment in Securities, and the bundled HTML coordinate evidence classifies it as a current-period subtotal row with fair value 1,792,689,000. Adding either row to unified holdings would duplicate exposure rather than restore a missing position.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The affiliation-header patch allows only optional trailing digits on already-recognized affiliation investment headers and remains guarded by entity/position/rate signal checks. The test suite includes a Trinity false-positive guard confirming Affiliate Investments EPT 16, LLC remains a blocking position-like residual if it appears source-only. Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code.",
+  "review_id": "BDCSRC_0001786108_2025-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_70c984449b",
+  "reviewer_notes": "Source-only blocker rows reviewed: source_row_id 677988 Affiliate Investments1 FV 39,164,000; source_row_id 678362 Portfolio Company Investment in Securities FV 1,792,689,000. The packet's affected source-only blocker fair value is 1,831,853,000. The HTML coordinate candidate for Portfolio Company Investment in Securities is table_index 41, row_index 20, and the row text is Total Investment in Securities, confirming subtotal treatment.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_short_plain_unresolved to documented_source_affiliation_header/documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

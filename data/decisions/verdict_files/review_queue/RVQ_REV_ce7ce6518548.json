@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ce7ce6518548",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -3000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 34,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | 6/30/2027 | 160 | \u2014 | ( 3 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "For the American Academy revolver row, amortized cost is disclosed as a dash while fair value is (3); the extracted holding stored cost as -3000.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 34,
+        "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | 6/30/2027 | 160 | \u2014 | ( 3 )"
+      }
+    }
+  ],
+  "rationale": "Class 2/aggregate weak fmt_cost review: the raw SOI cost column is in thousands and several parenthesized negative cost rows are source-disclosed, but the American Academy Holdings revolver row has amortized cost shown as a dash and fair value shown as (3). The bundle's extracted holdings include this row with observed cost -3000.0, so the cost value is not supported by the source cost cell and appears copied from the fair value column."
+}

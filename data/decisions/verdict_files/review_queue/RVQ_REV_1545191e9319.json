@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1545191e9319",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2025-03-19",
+  "anchor_value": "2025-03-31",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 143,
+      "row_index": 2,
+      "quoted_text": "Morgan Stanley and Co. International PLC | $ | 467,803 | EUR | 443,140 | 3/19/2025 | $ | 7,452 | Unrealized appreciation (depreciation) on foreign currency forward contracts",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 136,
+      "row_index": 14,
+      "quoted_text": "Foreign currency forward transactions | $ | - | $ | 34,954 | $ | - | $ | 34,954 | $ | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 135,
+      "row_index": 13,
+      "quoted_text": "Foreign currency forward transactions | $ | - | $ | 9,005 | $ | - | $ | 9,005 | $ | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "A 3/19/2025 foreign-currency-forward settlement row from the prior-period derivative schedule was treated as current for report_date 2025-03-31; current foreign-currency-forward rows settle 6/18/2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 143,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "The maturity_not_past flag is real. The source row with settlement date 3/19/2025 is before the 2025-03-31 report date, but it belongs to the comparative derivative schedule: its table total of 34,954 ties to the prior-period foreign currency forward transactions total in table 136. The current-period foreign currency forward total is 9,005 in table 135, and the current forward-contract detail rows have 6/18/2025 settlements, not 3/19/2025. The defect is therefore a comparative-period row leaking into the current report-date population."
+}

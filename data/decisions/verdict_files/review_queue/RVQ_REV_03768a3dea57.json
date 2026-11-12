@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_03768a3dea57",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Raw source could not be checked: the evidence CLI returned missing_cached_html for accession 0001193125-25-328001 at the expected cached HTML path. The bundle identifies a row-level X02 missing-rate warning for Apollo Offshore Credit Strategies Fund Ltd, but the contract requires raw-source grounding before deciding real_error or false_alarm."
+}

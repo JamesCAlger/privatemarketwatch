@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_2b5ab0f83dc7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 210328,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 30,
+      "quoted_text": "HydroSource Logistics, LLC (2)(4) | 04/05/24 | Warrant, expires 4/4/34 | 0.0 | % | 380 | - | 210,328"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The HydroSource Logistics warrant source row reports fair value 210,328, but the extracted fair_value is 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 7,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "C104 flagged a zero fair_value in the extracted holding. The source SOI row for HydroSource Logistics, LLC warrant shows 0.0% of net assets, par/shares 380, amortized cost as a dash, and fair value 210,328. The zero appears to come from the percent-of-net-assets field or the dash/cell alignment rather than the fair_value column, so the extracted fair_value of 0.0 is a real localized extraction error."
+}

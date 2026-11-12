@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_27cf666928c5",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "stored identifiers include carried-forward section/industry headers such as Debt Investments Business Services before the actual issuer and investment",
+  "anchor_value": "raw SOI rows keep Debt Investments and industry labels on separate header rows; position rows begin with the issuer/instrument",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 18,
+      "quoted_text": "Lynx BidCo (3)(4) | First-lien loan ($ 39,406 par, due 7/2031 ) | 7/5/2024 | SOFR + 7.11 % | 12.42 % (incl. 5.61 % PIK) | 38,345 | 38,278 | 1.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 31,
+      "quoted_text": "Artisan Topco LP (8)(10) | Class A Preferred Units ( 7,882,736 units) | 11/7/2023 | 7,883 | 6,602 | 0.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 3,
+      "quoted_text": "GreenShoot BidCo B.V. (3)(4) | First-lien loan (EUR 5,107 par, due 5/2030 ) | 5/28/2024 | E + 5.75 % | 9.27 | % | 5,409 | 5,623 (EUR 5,038 ) | 0.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The bdc_investment_identifier field is polluted by carried-forward section and industry headers such as Debt Investments and Business Services that are separate source rows, not part of the position name.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 8,
+        "row_index": 18
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "At least one flagged identifier appears to concatenate neighboring text fragments, as GreenShoot is stored with both 9.27% and a second 9.56% fragment not present in the cited source row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The PP01 flag is grounded: the raw schedule shows ordinary position rows for Lynx BidCo, Artisan Topco LP, and GreenShoot BidCo B.V.; the section labels Debt Investments and industry labels such as Business Services are separate header rows in the grid, while the stored flagged bdc_investment_identifier values prepend those labels to the position text. The error is not that the cited rows are subtotals; it is that the extracted identifier carries classification/header text into the position identifier."
+}

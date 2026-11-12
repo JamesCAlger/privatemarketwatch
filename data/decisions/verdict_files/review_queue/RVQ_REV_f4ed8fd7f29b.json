@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_f4ed8fd7f29b",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 9,
+      "quoted_text": "Continental Battery Company (9) | Unitranche First Lien Term Loan | 07/2028 | 8,428 | 7,469 | 0.6 | 3,884"
+    },
+    {
+      "table_index": 27,
+      "row_index": 10,
+      "quoted_text": "Continental Battery Company (9) | Unitranche First Lien Delayed Draw Term Loan | 07/2028 | 3,108 | 2,765 | 0.2 | 1,432"
+    },
+    {
+      "table_index": 27,
+      "row_index": 18,
+      "quoted_text": "Envocore Holding, LLC (7)(8)(9) | Senior Secured Second Lien Term Loan | 12/2028 | 10,368 | 7,053 | 0.5 | 3,666"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Current-period debt rows in the source schedule have blank Interest Term and Interest Rate cells, leaving no rate or basis-spread value for private-credit income calculations.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "X02 flags private-credit rows missing both interest_rate and basis_spread. The raw investment schedule header identifies the relevant columns as Interest Term and Interest Rate, and the cited current-period debt rows omit both columns while still reporting debt instruments, maturity, principal/par, cost, percentage of net assets, and fair value. This confirms a real missing-rate data condition rather than an aggregate-anchor issue or an equity/classification false alarm."
+}

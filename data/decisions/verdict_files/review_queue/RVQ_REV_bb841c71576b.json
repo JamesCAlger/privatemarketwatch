@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_bb841c71576b",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -11000,
+  "anchor_value": -11000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 7,
+      "quoted_text": "Ancora Bidco PTY LTD (4)(5)(6) | Unitranche First Lien Delayed Draw Term Loan | 11/2030 | AUD 0 | ( 11 ) | 0.0 | 7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 35,
+      "quoted_text": "KLICK INC. (4)(5)(6) | Unitranche First Lien Delayed Draw Term Loan | 11/2032 | - | ( 9 ) | ( 0.0 ) | ( 18 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 36,
+      "quoted_text": "KLICK INC. (4)(5)(6) | Unitranche First Lien Revolver | 11/2032 | - | ( 17 ) | ( 0.0 ) | ( 18 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw December 31, 2025 schedule itself reports those costs in parentheses. Representative flagged extracted values of -11000, -9000, and -17000 match source rows showing costs of (11), (9), and (17) in thousands, so the data is source-faithful and the warning is a rule-scope monitor rather than a data error."
+}
+

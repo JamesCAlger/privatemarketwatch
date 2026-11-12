@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_23d0f0922ea9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 7.33 % | C + 4.75 % | 11/01/30 | CAD | 7,811 | 5,553 | 5,559 | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 7.32 % | C + 4.75 % | 11/01/30 | CAD | 1,940 | 793 | 776 | (7) (8) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 8.42 % | S + 4.75 % | 11/01/30 | CAD | 776 | 19 | 16 | (7) (8) (9) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CAD belongs to the Par field; the three flagged cost units were attributed from the wrong schedule column and should be USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 1 review of the three FX03 cells against the raw schedule. Table 8 identifies CAD immediately after maturity in the Par field, while the following values are the separately headed Cost and Fair Value fields. Thus U_CAD is valid for par denomination but not for cost_currency; assigning it to cost is a localized unit/column extraction error. The same structure is visible on the cited rows."
+}

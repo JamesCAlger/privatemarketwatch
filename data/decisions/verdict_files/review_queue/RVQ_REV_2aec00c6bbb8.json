@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_2aec00c6bbb8",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.3741935483870968,
+  "anchor_value": 0.3741935483870968,
+  "confidence": 0.45,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 4,
+      "quoted_text": "New investments purchased | 221,082 | 88,372 | 351,039 | 113,782"
+    },
+    {
+      "table_index": 57,
+      "row_index": 8,
+      "quoted_text": "Investments repaid | (12,479 | ) | (2,286 | ) | (38,932 | ) | (2,803 | )"
+    }
+  ],
+  "rationale": "D06 is a CIK-quarter issuer-continuity aggregate flag with no localized row. The raw filing source was readable and shows material investment activity during the period, including $351.039 million of new investments purchased and $38.932 million of investments repaid for the six months ended June 30, 2025, which could explain reduced issuer continuity. However, the checked source does not directly expose the cross-period issuer-list comparison needed to prove that 58 of 155 persisted issuers is either a true extraction defect or a valid low-continuity business outcome. With no decisive source anchor for the continuity metric, the result is source-checked ambiguous."
+}

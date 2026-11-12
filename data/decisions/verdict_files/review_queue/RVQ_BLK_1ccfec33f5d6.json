@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_1ccfec33f5d6",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 3384669000,
+  "anchor_value": 3384669000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (cost of $ 3,555,486 and $ 3,673,582 ) | $ | 3,384,669 | $ | 3,475,258"
+    },
+    {
+      "table_index": 23,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 218.7 % | $ | 3,555,486 | $ | 3,384,669"
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The filing's balance-sheet investment total and the SOI total both show March 31, 2025 fair value of 3,384,669 thousand, matching the companyfacts_fv anchor of 3,384,669,000. The current conservation row in the review bundle reports value_sum 3,379,044,000 versus that anchor with residual_pct -0.166 and status reconciles, so the blocker flag metric is not supported by the source-anchor triangulation for this item."
+}

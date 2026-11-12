@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_BLK_23826edf918e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "filing_accession",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-115988",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "evidence_cli tables output identifies the raw filing accession as 0001193125-26-115988; the flagged C006 artifact row has accession_number value \"\" for row_key 548357."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing-derived BDC/HTML row is missing accession_number even though the raw source bundle resolves to accession 0001193125-26-115988.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "raw source accession 0001193125-26-115988; flagged row_key 548357 accession_number value \"\""
+      }
+    }
+  ],
+  "rationale": "C006 requires source traceability via accession_number. The evidence CLI successfully read the raw source and reported accession 0001193125-26-115988 for this filing, while the flagged artifact row has an empty accession_number. The source therefore decides the issue: the row is missing a required traceability value that is available from the filing metadata."
+}

@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_e398aaa79210",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -1998.0,
+  "anchor_value": 0.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 37,
+      "quoted_text": "Anaplan, Inc. | One stop | SF + | 4.50 % | N/A(6) | 06/2028 | - | - | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted Anaplan, Inc. One stop 2 cost is -1998.0, but the source amortized cost cell is a dash, indicating no cost amount for that row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate fmt_cost warning was checked against the raw SOI. Source totals show the investment schedule is in thousands and internally tied, but the localized Anaplan, Inc. One stop row at table 18 row 37 has dashes for principal, amortized cost, percentage of net assets, and fair value. The reviewed extracted holdings slice carries cost -1998.0 for this same Anaplan One stop 2 position, so the nonzero extracted cost is not supported by the source cell."
+}

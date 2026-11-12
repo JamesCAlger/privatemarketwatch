@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_62c38e39e999",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  100,
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  41,
+                                  "row_index":  7,
+                                  "quoted_text":  "Total | $ | 7,433,861 | 100.00 | % | 159.40 | % | $ | 6,899,031 | 100.00 | % | 151.90 | %",
+                                  "ties_to_residual":  true
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "A07 internal pct_sum is 0.0%, but the source fair value allocation total for December 31, 2025 is 100.00% on total investments of 7,433,861.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  41,
+                                          "row_index":  7
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate check. The raw source schedule shows the December 31, 2025 fair value allocation total is 100.00% and total investments are 7,433,861, matching the bundle fund_quarter_fv_m anchor. The oracle flag reports pct_sum=0.0%, so the source contradicts the observed internal metric; this is a real extraction gap, not a source ambiguity."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_3d415c208e8c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4.0,
+  "anchor_value": 19.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 49,
+      "quoted_text": "Panzura, LLC(19) | One stop | N/A | 4.00 % | cash/ | 15.00 % | PIK | 08/2027 | 56 | 52 | - | 50",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 33,
+      "quoted_text": "Island Bidco AB(7)(8)(11)(19) | One stop | E + | 7.25 % | (b)(d) | 3.65 % | cash/ | 7.25 % | PIK | 07/2028 | 664 | 644 | 0.1 | 664",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The rule-specific contract requires interest_rate to be the all-in PIK-inclusive coupon. Raw SOI rows show separate cash and PIK legs: Panzura is 4.00% cash plus 15.00% PIK, while Island Bidco row 33 is 3.65% cash plus 7.25% PIK. The flagged residuals match cases where the stored interest_rate kept only the cash leg rather than cash plus PIK, so the stored rate is not all-in."
+}

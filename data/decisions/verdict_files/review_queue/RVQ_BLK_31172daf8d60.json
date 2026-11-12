@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_31172daf8d60",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 538,
+  "anchor_value": 1132,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 22,
+      "quoted_text": "Total Portfolio Investments | $ | 2,210,744 | $ | 2,153,908 | 186.14 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 21,
+      "quoted_text": "Total Portfolio Investments | $ | 2,233,984 | $ | 2,185,948 | 194.57 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 1,
+      "quoted_text": "March 31, 2026 | December 31, 2025",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count combines the March 31, 2026 and December 31, 2025 portfolio schedules instead of comparing only the report-date schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 59,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "E07 compares 1,132 source rows with 538 output rows, but the raw filing presents separate full portfolio schedules for March 31, 2026 and December 31, 2025. Their distinct portfolio totals are shown at table 24 row 22 and table 49 row 21, and table 59 row 1 explicitly identifies the two periods. The oracle source-row anchor is therefore contaminated by comparative-period rows; the report-date output count is not shown to be deficient."
+}

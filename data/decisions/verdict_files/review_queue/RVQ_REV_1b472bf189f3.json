@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_1b472bf189f3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate GAV reconciliation flag could not be adjudicated because the allowed evidence CLI returned missing_cached_html for the filing accession before overview, tables, or totals could expose raw source anchors."
+}

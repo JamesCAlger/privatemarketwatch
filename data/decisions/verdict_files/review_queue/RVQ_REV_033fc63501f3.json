@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_033fc63501f3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 31,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | CA + | 5.50 % | 10.27 % | 8/10/2029 | CAD | 253,273 | 193,395 | 185,069 | 0.54",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "BPPH2 Limited | (4)(6)(8) | S + | 6.87 % | 12.07 % | 3/2/2028 | GBP | 40,700 | 55,466 | 51,449 | 0.15",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "ENV Bidco AB | (4)(6)(7)(8) | E + | 5.75 % | 9.47 % | 7/19/2029 | EUR | 114,140 | 113,265 | 121,888 | 0.36",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged rows are debt positions whose source par is denominated in non-USD currencies while principal_amount_usd is blank in the extracted rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "FX01 flags missing principal_amount_usd for non-USD debt principal. The raw schedule shows debt rows with explicit non-USD currency markers such as CAD, GBP, and EUR immediately before par amount; the bundle's issue rows show principal_amount_usd is blank for these rows. This is a real extraction/normalization gap rather than a false alarm."
+}

@@ -1,0 +1,121 @@
+{
+  "review_id": "RVQ_BLK_2d5caa82bb01",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 10,
+      "quoted_text": "Albion Fortress Intermediate Holdings LLC | First Lien - Term Loan | EURIBOR + 575 | 7.8 | 7/31/2031 | cost 26,209 | fair value 27,173",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 30,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Revolving Credit Facility | CORRA + 525 | 7.5 | 6/30/2031 | cost 517 | fair value 542",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 29,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Term Loan | CORRA + 525 | 7.5 | 6/30/2031 | cost 22,958 | fair value 22,981",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 47,
+      "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Delayed Draw Term Loan | SONIA + 500 | 9.0 | 9/12/2032 | cost (73) | fair value (166)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 46,
+      "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Term Loan | SONIA + 500 | 9.0 | 9/12/2032 | cost 21,561 | fair value 21,487",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 53,
+      "quoted_text": "Urban Gym Group B.V. | First Lien - Delayed Draw Term Loan | EURIBOR + 675 | 8.8 | 10/28/2031 | cost 474 | fair value 454",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 52,
+      "quoted_text": "Urban Gym Group B.V. | First Lien - Term Loan | EURIBOR + 675 | 8.8 | 10/28/2031 | cost 7,325 | fair value 7,387",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Albion Fortress Intermediate Holdings LLC First Lien - Term Loan is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 34,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Jupiter Refuel Canada Buyer, Inc. First Lien - Revolving Credit Facility is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 36,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Jupiter Refuel Canada Buyer, Inc. First Lien - Term Loan is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 36,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ruby Bidco Holdings Limited First Lien - Delayed Draw Term Loan is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 34,
+        "row_index": 47
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ruby Bidco Holdings Limited First Lien - Term Loan is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 34,
+        "row_index": 46
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Urban Gym Group B.V. First Lien - Delayed Draw Term Loan is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 34,
+        "row_index": 53
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Urban Gym Group B.V. First Lien - Term Loan is an eligible current-period SOI debt row but is missing from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 34,
+        "row_index": 52
+      }
+    }
+  ],
+  "rationale": "SRC_BDC01 flags seven current-period BDC source rows with no pipeline output row. The raw filing source was readable, the Schedule of Investments total is 1,488,856, and targeted source queries locate each flagged debt position in the current-period SOI with fair value. Because these eligible source rows are localized in the filing but are reported by the validation artifact as absent from pipeline output, the blocker reflects a real extraction coverage gap rather than a false alarm."
+}

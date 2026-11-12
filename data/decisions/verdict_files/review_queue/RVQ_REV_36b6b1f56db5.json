@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_36b6b1f56db5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 1413006,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 16,
+      "quoted_text": "Total Investments (8) | $ | 1,423,993 | $ | 1,413,006 | 210.26 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The March 31, 2026 filing reports an investment schedule totaling $1,413,006 thousand at fair value, but the holdings dataset is absent.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 34,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "F28 reports fund_financials present but holdings absent. Raw source contains detailed investment tables and a March 31, 2026 Schedule of Investments total fair value of 1,413,006 (thousands), also matching the balance-sheet total investments at fair value. Therefore absence of holdings is a real extraction coverage gap. observed_value 0 represents no holdings output; anchor_value is the filing schedule total."
+}

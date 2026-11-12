@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_b20c8e109edd",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 398113300,
+  "anchor_value": 334975067,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 11,
+      "quoted_text": "Azumo, Inc. | Senior Secured | 12.8 % | 957,356 | 913,213 | 453,370 | *"
+    },
+    {
+      "table_index": 17,
+      "row_index": 12,
+      "quoted_text": "Badiani Limited ** ^ | Senior Secured | 13.6 % | 1,719,107 | 1,638,961 | 1,202,391 | *"
+    },
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Grand Total | 206.2 % | $ | 473,041,048 | $ | 430,925,365 | $ | 398,113,300"
+    },
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "Grand Total | 176.6 % | $ | 407,613,644 | $ | 370,055,950 | $ | 334,975,067"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 rows are retained under report_date 2026-03-31 from the comparative December 31, 2025 investment schedule whose loan fair value total is 398,113,300, not the current March 31, 2026 schedule total of 334,975,067.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 20,
+        "row_index": 19,
+        "quoted_text": "Grand Total | 206.2 % | $ | 473,041,048 | $ | 430,925,365 | $ | 398,113,300"
+      }
+    }
+  ],
+  "rationale": "The filing contains a current March 31, 2026 investment schedule totaling fair value 334,975,067 and a comparative December 31, 2025 schedule totaling 398,113,300. The flagged PP03 rows are described by the row-validation artifact as source-period-earlier-than-report-date facts retained for report_date 2026-03-31; raw source confirms examples of those retained rows in the comparative schedule and the comparative schedule total differs from the current schedule anchor. This is a real current-period holdings contamination by comparative-period rows."
+}

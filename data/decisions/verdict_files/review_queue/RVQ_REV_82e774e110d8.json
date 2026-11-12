@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_82e774e110d8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -3000.0,
+  "anchor_value": -3000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Trystar, LLC | Electrical Equipment | S + 4.25 % | 08/06/31 | $ | 652 | $ | ( 3 | ) | $ | ( 7 | ) | (5) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 32,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | S + 5.00 % | 12/05/31 | 105 | ( 1 | ) | ( 2 | ) | (5) (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell flag. The March 31, 2026 schedule explicitly reports parenthesized negative Cost amounts for unfunded-commitment rows, including Trystar cost (3) thousand and AAG KP Borrower cost (1) thousand. The extracted negative costs match the raw source convention, so C107 is monitoring legitimate disclosed values rather than identifying a data defect. No aggregate anchor is needed."
+}

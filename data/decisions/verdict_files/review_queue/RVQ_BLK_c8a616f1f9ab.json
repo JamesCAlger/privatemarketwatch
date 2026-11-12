@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_c8a616f1f9ab",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": "rate_type=fixed with basis_spread values 6.0, 4.5, and 4.75",
+  "anchor_value": "SOFR + 6.00%, SOFR + 4.50%, and SOFR + 4.75%",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "Tighitco Inc | Revolving Credit Facility | SOFR + 6.00 % | 9.68 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 21,
+      "quoted_text": "Tgnl Purchaser LLC | Term Loan | SOFR + 4.50 % | 8.17 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Keel Platform LLC | Term Loan | SOFR + 4.75 % | 8.45 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The three flagged rows are floating-rate instruments because the source explicitly states SOFR plus a spread; the fixed-rate classification is wrong while basis_spread is valid.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 13,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "Class 2 adjudication of the full source rows shows explicit SOFR reference rates paired with the flagged 6.00%, 4.50%, and 4.75% spreads and separate all-in interest rates. Therefore these are floating-rate positions. X04 identifies a real internal inconsistency, localized to the fixed-rate classification rather than basis_spread. No aggregate anchor is applicable."
+}

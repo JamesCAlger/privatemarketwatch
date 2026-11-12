@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_94e57f6a05ef",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 84.0,
+  "anchor_value": 84.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 26,
+      "quoted_text": "PrimeFlight Acquisition, LLC | First Lien Secured Debt - Term Loan | S + 525 , 0.00 % Floor | 5/1/2029 | $ | 9,950 | $ | 9,851 | $ | 9,950 | (4)(16)"
+    },
+    {
+      "table_index": 35,
+      "row_index": 27,
+      "quoted_text": "First Lien Secured Debt - Term Loan | S + 475 , 1.00 % Floor | 5/1/2029 | 4,988 | 4,938 | 4,938 | (4)(16)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The cited PrimeFlight duplicate-key example is two valid same-issuer term-loan positions distinguished by rate, floor, par, cost, and fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 35,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, with PrimeFlight as the example. Raw SOI source shows PrimeFlight has two adjacent term-loan line items under the same issuer and maturity, but they are distinct positions: row 26 is S+525 with a 0.00% floor, par 9,950, cost 9,851, fair value 9,950; row 27 is S+475 with a 1.00% floor, par 4,988, cost 4,938, fair value 4,938. The Air Freight & Logistics subtotal includes both rows, so collapsing them as duplicate keys is an over-coarse rule/keying issue rather than a data error."
+}

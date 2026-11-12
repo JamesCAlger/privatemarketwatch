@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_9a4b33cfb917",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 row-level flag: the bundle identifies only internal row_key 425373 and the missing interest_rate field, but supplies no issuer_name, investment identifier, accession context, or raw-source coordinate for that row. The raw filing source was successfully read through the evidence CLI, yet the internal row_key is not present in the filing and cannot be mapped to one specific schedule row from the supplied evidence. The source therefore cannot determine whether the missing rate is an extraction defect, a non-interest-bearing instrument, or a classification defect without guessing. Escalation is requested for a row identity crosswalk or source coordinate."
+}

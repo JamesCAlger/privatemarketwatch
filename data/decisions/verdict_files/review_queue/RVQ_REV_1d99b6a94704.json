@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_1d99b6a94704",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 62,
+  "anchor_value": 62,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured delayed draw term loan | 9/2026 | 1,240 | 4,270 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 alleges that 62 rows are comparative-period positions because their tagged source period is earlier than the 2026-03-31 report date. Raw filing source instead places the cited AI Titan row in table 23 under the current Unfunded commitment schedule, whose columns are Portfolio Company, Commitment Type, Commitment Expiration Date, Funded Commitment, Commitment, and Fair Value. The same schedule contains the other flagged commitment-shaped identifiers. These are current-quarter commitment disclosures, not rows leaked from the December 31, 2025 comparative investment schedule (which begins at table 30). The flag is therefore driven by an unreliable period/context anchor rather than a source data defect."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_2401dc5e7f0b",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 887000,
+  "anchor_value": 887000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 38,
+      "quoted_text": "ONE Group, LLC (4)(6)(7)(23) | SF + | 6.00 % | 9.67 | % | 10/31/2028 | 887 | 51 | 38",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review of the full source row confirms par amount 887, amortized cost 51, and fair value 38, with the schedule presented in thousands. Thus the extracted principal_amount_usd of 887000 and fair value of 38000 both match the filing. The more-than-10x ratio reflects the filer's reported economics, so X06's ratio heuristic is overbroad for this distressed/deeply impaired position rather than identifying a data error."
+}

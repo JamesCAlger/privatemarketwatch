@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_REV_9c02fbde13b8",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "dates treated as source periods",
+  "anchor_value": "Initial Acquisition Date",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 16,
+      "quoted_text": "Content Square SAS | Indemnity Series F Shares Warrants | Software & Tech Services | 11/30/2023 | 2,027 | 8,561 | - | (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 27,
+      "quoted_text": "CL Services Acquisition, LLC | Common Units | Services | 3/31/2025 | 405,787 | 628,970 | 969,291 | (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 36,
+      "quoted_text": "NEPCORE Parent Holdings LLC | Units | Digital Infrastructure & Services | 10/21/2021 | 98 | 97,884 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 52,
+      "quoted_text": "Swyft Parent Holdings LP | Common Units | Services | 2/7/2022 | 4,485 | 53,048 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Falcon Co-Investment Partners, L.P. | Units | Investment Companies | 849,577 | 849,577 | 850,426 | (8)(11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "GHP-EIP Aggregator, LLC | Common Units | Investment Companies | 50,957 | 174,608 | - | (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 32,
+      "quoted_text": "Palms Co-Investment Partners D, L.P. | Units | Investment Companies | 261,450 | 261,450 | 295,438 | (8)(11)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "False alarm. Tables 26 and 27 are the March 31, 2026 investment schedule, and their header labels the date column Initial Acquisition Date (10). Four flagged identifiers merely carry historical acquisition dates, not comparative reporting periods. The other three flagged positions have no date in that column and also appear in the same current-period schedule. Thus all seven are valid current-period positions and PP03 has mis-scoped descriptive or context dates as comparative-period evidence. No aggregate anchor was needed."
+}

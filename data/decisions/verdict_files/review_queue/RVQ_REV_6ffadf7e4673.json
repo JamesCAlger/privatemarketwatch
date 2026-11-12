@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_6ffadf7e4673",
+  "verdict": "false_alarm",
+  "mechanism": "rate_range_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 25.76,
+  "anchor_value": 25.76,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 68,
+      "quoted_text": "JMP Credit Advisors CLO IV Ltd. | Financials | 25.76 % | - | - | 07/17/2029 | 7,891 | 749 | 749 | (13)(15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 69,
+      "quoted_text": "JMP Credit Advisors CLO V Ltd. | Financials | 28.22 % | - | - | 07/17/2030 | 7,320 | 1,691 | 1,691 | (13)(15)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The raw filing investment schedule shows the two flagged CLO rows with interest rates of 25.76% and 28.22% in the Interest Rate column. The extracted values match the raw source, so the row-validation warning is an overbroad expected-range check for CLO instruments rather than a data error."
+}

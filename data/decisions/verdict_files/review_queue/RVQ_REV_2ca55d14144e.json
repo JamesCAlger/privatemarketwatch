@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_2ca55d14144e",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 901.521,
+  "anchor_value": 901.521,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 11,
+      "quoted_text": "Total Investments - 189.0 % | $ | 904,200 | $ | 901,521"
+    },
+    {
+      "table_index": 45,
+      "row_index": 8,
+      "quoted_text": "Skyway Towers Intermediate LLC | Wireless Telecommunication Services | 8.74 % | S + 5.03 % | 12/22/28 | 6,095 | $ | 6,061 | $ | 6,065 | (5) (6) (7)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 9,
+      "quoted_text": "Skyway Towers Intermediate LLC | Wireless Telecommunication Services | 8.74 % | S + 5.03 % | 12/22/28 | 4,993 | $ | 390 | $ | 401 | (5) (7) (8)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 10,
+      "quoted_text": "Tarpon Towers II LLC | Wireless Telecommunication Services | 8.30 % | S + 4.58 % | 02/01/29 | 3,143 | $ | 3,121 | $ | 3,127 | (5) (6) (7)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 11,
+      "quoted_text": "Tarpon Towers II LLC | Wireless Telecommunication Services | 8.30 % | S + 4.58 % | 02/01/29 | 1,858 | $ | 908 | $ | 910 | (5) (7) (8)"
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys at the CIK-quarter level, but the raw filing shows the sampled duplicate-key cases are separate SOI rows with the same issuer/rate/reference/maturity and different par, cost, fair value, and footnotes. The aggregate fair-value anchor also matches the filing's total investments fair value of 901.521 million, so the duplicate-key fire is not evidence of duplicated or erroneous holding values."
+}

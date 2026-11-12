@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_BLK_c7b8923a470b",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  71644,
+    "anchor_value":  71644,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  72,
+                                  "row_index":  23,
+                                  "quoted_text":  "BlackRock Liquidity T-Fund - Institutional Shares | (14) | -- | -- | -- | 71,644 | 71,644 | 3.55",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "False alarm: the current-period schedule of investments contains the flagged Short-Term Investments row. Table 72 row 23 lists BlackRock Liquidity T-Fund - Institutional Shares with amortized cost 71,644 and fair value 71,644, and table 72 row 25 ties to the bundle quarter total fair value of 4,246,035, so this is a current-period source row rather than an unmatched pipeline fact."
+}

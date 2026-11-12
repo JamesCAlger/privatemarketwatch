@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_9319d3b213f3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 493104572000.0,
+  "anchor_value": 12436831000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 173,
+      "row_index": 13,
+      "quoted_text": "Net asset value, end of period | $ | 25.22 | $ | 25.22 | $ | 25.22 | $ | 25.22",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 173,
+      "row_index": 14,
+      "quoted_text": "Shares outstanding, end of period | 192,514,877 | 45,135,208 | 223,188,196 | 32,266,291",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 38,
+      "quoted_text": "Total net assets | 12,436,831 | 8,733,932",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The NAV/share identity should use source NAV/share 25.22; the failed delta implies a stored NAV/share near 1000.00 against 493,104,572 shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 173,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class financial highlights report NAV/share of 25.22 for all classes and shares outstanding of 192,514,877, 45,135,208, 223,188,196, and 32,266,291, totaling 493,104,572 shares. 25.22 times total shares is approximately 12,436,097,306 dollars, which reconciles to total net assets of 12,436,831 thousand dollars within rounding. The validation failure value 480,667,741,000 equals 493,104,572,000 minus 12,436,831,000, implying the stored identity used a NAV/share around 1000 rather than the source NAV/share 25.22."
+}

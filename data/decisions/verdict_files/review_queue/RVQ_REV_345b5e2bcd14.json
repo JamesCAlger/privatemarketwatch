@@ -1,0 +1,61 @@
+{
+    "review_id":  "RVQ_REV_345b5e2bcd14",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  8602,
+    "anchor_value":  8602,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  20,
+                                  "row_index":  4,
+                                  "quoted_text":  "Non-accrual | 8,602 | 0.2 | % | 6,458 | 0.2 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  68,
+                                  "row_index":  12,
+                                  "quoted_text":  "ASC Ortho Management Company, LLC (8) | First lien senior secured delayed draw term loan | S + | 6.50 % + 2.50 % PIK | 12.93 | % | 7/28/2023 | 12/31/2026 | 329 | 323 | 64 | 0.00 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  69,
+                                  "row_index":  7,
+                                  "quoted_text":  "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured delayed draw term loan | 17.00 % | 17.00 | % | 2/26/2025 | 12/31/2026 | C$ | 35 | 17 | 16 | 0.00 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  61,
+                                  "row_index":  15,
+                                  "quoted_text":  "Innovative FlexPak, LLC (8) | First lien senior secured delayed draw term loan | 20.00 % PIK | 20.00 | % | 7/31/2025 | 1/23/2027 | 459 | 257 | 28 | 0.00 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  67,
+                                  "row_index":  10,
+                                  "quoted_text":  "Spectrum Solutions, LLC (8) | First lien senior secured delayed draw term loan | 18.00 % | 18.00 | % | 4/10/2025 | 3/5/2026 | 134 | 128 | 134 | 0.01 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  81,
+                                  "row_index":  14,
+                                  "quoted_text":  "Cosmetic Solutions LLC (8) | First lien senior secured term loan | 4.00 % PIK | 4.00 | % | 7/18/2025 | 10/17/2028 | $ | 1,512 | $ | 1,483 | $ | 663 | 0.03 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The filing has 23 schedule rows marked with non-accrual footnote (8), and their amortized costs sum to the disclosed non-accrual amount of 8,602 thousand.",
+                         "fix_class":  "classification_fix",
+                         "citation":  {
+                                          "table_index":  20,
+                                          "row_index":  4
+                                      }
+                     }
+                 ],
+    "rationale":  "Raw source confirms a real non-accrual condition: table 20 reports Non-accrual amortized cost of 8,602 thousand, and the localized 2025 SOI rows for ASC Ortho, Canadian Orthodontic, Cosmetic Solutions, Innovative FlexPak, and Spectrum Solutions carry footnote (8). The 23 flagged rows listed in the bundle sum to 8,602 thousand by amortized cost, matching the filing aggregate, so the warning is not a false alarm."
+}

@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_9ba7bf1e998e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Equity Consumer Services Wash & Wax Holdings LLC Class A Common Share Initial Acquisition Date 4/30/2025; Equity Wholesale IMB Holdco LLC Series Z Units Initial Acquisition Date 5/20/2024",
+  "anchor_value": "Wash & Wax Holdings LLC; IMB Holdco LLC",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 13,
+      "quoted_text": "Wash & Wax Holdings LLC | Class A Common Share | 4/30/2025 | N/A | 1,440 | 3,309,551 | 810,605 | 0.5 | % | (15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 24,
+      "quoted_text": "IMB Holdco LLC | Series Z Units | 5/20/2024 | N/A | 164 | 163,748 | 956 | 0.0 | % | (6) (15)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name for Wash & Wax Holdings LLC leaked the equity class and initial acquisition date even though the source has issuer, investment type, and date in separate columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 13
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name for IMB Holdco LLC leaked the industry, Series Z Units security type, and initial acquisition date even though the source has issuer, investment type, and date in separate columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name extraction defect. The flagged stored values concatenate wrapper/category text plus security type and Initial Acquisition Date into issuer_name. In the raw SOI grid, table 11 row 1 labels separate columns for Portfolio Company, Investment Type, and Initial Acquisition Date; row 13 has Portfolio Company 'Wash & Wax Holdings LLC', Investment Type 'Class A Common Share', and Initial Acquisition Date '4/30/2025'; row 24 has Portfolio Company 'IMB Holdco LLC', Investment Type 'Series Z Units', and Initial Acquisition Date '5/20/2024'. The issuer_name field should contain only the clean portfolio company name."
+}

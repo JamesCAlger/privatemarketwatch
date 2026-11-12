@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_69d0c9c3f59e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 254.85,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 2,
+      "quoted_text": "Investments at Fair Value - 254.85 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 68,
+      "row_index": 42,
+      "quoted_text": "Total Investments - ( 254.85 %) | 1,876,212,627 | 1,861,296,462",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the SOI source explicitly reports total investments at 254.85% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 68,
+        "row_index": 42,
+        "quoted_text": "Total Investments - ( 254.85 %) | 1,876,212,627 | 1,861,296,462"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing anchors tie on fair value: the SOI total investments row reports fair value 1,861,296,462, matching the balance sheet total investments at fair value. The A07 flag reports pct_sum=0.0%, but the raw SOI source contains percentage anchors for the same investment schedule: Investments at Fair Value is 254.85% and Total Investments is 254.85%. Therefore the failure is a real data extraction gap in the percentage field, not a source ambiguity or bad fair-value anchor."
+}

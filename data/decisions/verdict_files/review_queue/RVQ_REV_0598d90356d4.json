@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_0598d90356d4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_row",
+  "observed_value": null,
+  "anchor_value": 4.75,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 77,
+      "row_index": 4,
+      "quoted_text": "GB Eagle Buyer, Inc. | (3) (5) | First Lien Debt | S + | 4.75 % | 11/29/2030 | 8,547 | $ | 8,466 | $ | 8,462 | 7.42 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | (3) (5) | First Lien Debt | S + | 4.75 % | 11/29/2030 | 1,998 | 1,978 | 1,978 | 1.73",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source discloses a 4.75% SOFR spread, but the flagged credit rows store neither interest_rate nor basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 77,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The X02 flag is a real data error. The raw current-period investment schedule identifies the matching GB Eagle Buyer first-lien debt and explicitly discloses S + 4.75%, while the flagged extracted rows have blank interest_rate and basis_spread. The source does not print an all-in coupon for these rows, but the disclosed basis spread is sufficient to populate basis_spread and prevent the missing-rate condition."
+}

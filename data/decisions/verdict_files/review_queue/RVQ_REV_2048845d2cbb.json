@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_2048845d2cbb",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -492000.0,
+  "anchor_value": -492000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 4,
+      "quoted_text": "Software | First Lien(3)(4) - Undrawn | Reference: -- | Spread: -- | Interest Rate: -- | Cost: $(9) | Fair Value: $(167)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 10,
+      "quoted_text": "Total Unfunded Debt Investments | $153,674 | $(586) | $(492) | (0.06)%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "C01 counted 120 debt rows without interest_rate, but the raw schedule localizes that residual to unfunded debt investments. The filing itself shows unfunded/undrawn rows with Reference, Spread, and Interest Rate as dashes, and the check's residual fair value of -492000 ties to the source total for Total Unfunded Debt Investments rather than to a missing extraction from funded debt rows. The data therefore reflects the source; the check should exclude unfunded debt commitments from rate coverage."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_ab2479e32a50",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 flags distribution_rate greater than income_yield_pct * 1.5 for CIK 0001580345 at 2023-09-30, but the evidence CLI did not return usable raw source. overview, tables, totals, targeted roam queries, and grid all returned status no_accession_resolved, so the source could not decide whether the heuristic failure is a real data error or a false alarm."
+}

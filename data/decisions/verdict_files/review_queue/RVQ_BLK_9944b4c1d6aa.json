@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_9944b4c1d6aa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_soi_row",
+  "observed_value": 10.25,
+  "anchor_value": 8.20,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "eShipping, LLC | First Lien Debt | S + | 4.50 % | 8.20 % | 12/23/2032",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "quoted_text": "eShipping, LLC | First Lien Debt | P + | 3.50 % | 10.25 % | 12/23/2032",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted identifier joined S + 4.50% to 10.25%, but the source pairs S + 4.50% with 8.20%; 10.25% belongs to the separate P + 3.50% row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 2 source-row adjudication. Table 14 row 11 states eShipping First Lien Debt at S + 4.50% with an 8.20% interest rate. Row 13 separately states P + 3.50% with a 10.25% interest rate. The flagged identifier incorrectly combines the spread from row 11 with the coupon from row 13, so the 3.0712 percentage-point reconciliation residual is caused by cross-row extraction misalignment."
+}

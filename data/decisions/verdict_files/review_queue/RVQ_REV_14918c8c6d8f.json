@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_14918c8c6d8f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 21.18,
+  "anchor_value": 21.18,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 42,
+      "quoted_text": "BBG, Inc. Initial Term Loan | (1)(2)(3)(4)(5)(7)(12) | 1M SOFR + 21.18 % / 1.00 % | 26.62 6.75 | % / % | 1/8/2026 | $ | 6,050,808 | $ | 5,755,886 | $ | 5,444,991 | 1.27 | %"
+    }
+  ],
+  "rationale": "Class 1 single-cell check: the flagged basis_spread value 21.18 is present in the raw SOI Reference Rate Spread/Floor cell for BBG, Inc. Initial Term Loan as '1M SOFR + 21.18 % / 1.00 %'. The extraction matches the source; the warning is caused by the validation range being too narrow for this disclosed spread."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_10989f258804",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 65,
+  "anchor_value": 65,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 17,
+      "quoted_text": "Greencross (Vermont Aus Pty Ltd) (11) | Unitranche First Lien Term Loan | B + 450 | 8.70 % | 03/2028 | AUD 28,800 | $ | 21,265 | 3.0 | % | $ | 19,870",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 18,
+      "quoted_text": "Greencross (Vermont Aus Pty Ltd) (11) | Unitranche First Lien Term Loan | B + 450 , 75 Floor | 8.70 % | 03/2028 | AUD 4,802 | 3,306 | 0.5 | 3,314",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 schedule prints the flagged Greencross key as two distinct positions, not a duplicated row: principal is AUD 28,800 versus AUD 4,802, and the second instrument has a 75 floor while the first does not. Their cost and fair value also differ. B02 therefore collapses legitimate separately disclosed positions because its normalized key omits distinguishing instrument terms; the check is wrong rather than the extracted data. The internal schedule, rather than an aggregate fair-value anchor, is decisive for this duplicate-key adjudication."
+}

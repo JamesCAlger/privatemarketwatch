@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_cbdcf522fcf1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 27,
+  "anchor_value": 28.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual | 61.8 | 4.1% of cost | 28.8 | 2.0% of fair value as of December 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 9,
+      "quoted_text": "Continental Battery Company (9) | Unitranche First Lien Term Loan | 07/2028 | 8,428 | 7,469 | 0.6 | 3,884",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 11,
+      "quoted_text": "TriStrux, LLC (9) | Senior Secured First Lien Term Loan | 12/2027 | 2,798 | 2,674 | 0.1 | 930",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 7,
+      "quoted_text": "A&A Global Imports, LLC (9) | Senior Secured First Lien Term Loan | 06/2026 | 1,645 | 992 | 0.0 | fair value --",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2025 filing reports non-accrual investments and the reviewed rows are representative current schedule rows carrying the non-accrual footnote notation, but the reviewed surface is false.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw source confirms non-accrual exposure for the quarter: table 9 row 4 reports Non-Accrual investments of $61.8 million cost and $28.8 million fair value as of December 31, 2025. Representative schedule rows in the reviewed set carry the same non-accrual footnote notation, including Continental Battery Company, TriStrux, LLC, and A&A Global Imports, LLC. Because the reviewed item has 27 nonaccrual positions with surface=false, the flag reflects a real extraction/surfacing gap rather than a false alarm. The exact footnote legend text was not exposed by the CLI searches, so confidence is below maximum, but the filing-level non-accrual anchor decides the question."
+}

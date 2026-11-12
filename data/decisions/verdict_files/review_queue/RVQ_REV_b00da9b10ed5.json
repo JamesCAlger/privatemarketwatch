@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_b00da9b10ed5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": "$ 10,883",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "AIM Acquisition, LLC | Term Loan | Principal $ 10,883",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 claims that non-USD source principal lacks principal_amount_usd, but the raw investment schedule's Principal column shows an explicit dollar-denominated amount at table 10 row 5 ($ 10,883). The source therefore contradicts the check's non-USD premise; no FX conversion is required for this cited row, so the flag is a false alarm caused by a bad currency anchor or rule scope."
+}

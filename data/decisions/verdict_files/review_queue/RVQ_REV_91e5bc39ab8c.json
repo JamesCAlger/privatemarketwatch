@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_91e5bc39ab8c",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  "Source schedule Par/Shares present for flagged debt rows, e.g. API Technologies Term B-2 par 1,125,639 and Term B-1 par 99,191.",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  36,
+                                  "row_index":  32,
+                                  "quoted_text":  "API Technologies | Senior Secured Term B-2 Loan (First Lien) | S+ | 1.00 %, 6.00 % PIK | 10.65 % | 1/15/2020 | 5/9/2027 | 1,125,639 | 1,123,491 | 1,089,055",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  36,
+                                  "quoted_text":  "API Technologies | Senior Secured Term B-1 Loan (First Lien) | S+ | 1.00 %, 6.00 % PIK | 10.65 % | 11/3/2023 | 3/25/2027 | 99,191 | 98,576 | 97,207",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "principal_amount_usd is blank in the validation artifact even though the source schedule provides Par/Shares for the matching debt positions.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  36,
+                                          "row_index":  32
+                                      }
+                     }
+                 ],
+    "rationale":  "FX01 is confirmed: the row-validation artifact flags blank principal_amount_usd for private_markets_holdings debt rows, and raw source rows for matching API Technologies positions show populated Par/Shares values alongside the same cost and fair value amounts. The missing normalized principal field is therefore an extraction/normalization gap, not a false alarm."
+}

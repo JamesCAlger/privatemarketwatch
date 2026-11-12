@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_BLK_7e4da4357982",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 422,
+  "anchor_value": 422,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 9,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 202 5 | 76"
+    },
+    {
+      "table_index": 20,
+      "row_index": 10,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 202 4 | 100"
+    },
+    {
+      "table_index": 47,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 1,525,141 | $ | 1,512,098 | 154.32 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 38,
+      "quoted_text": "Total Investments | $ | 1,451,005 | $ | 1,445,655 | 146.96 | %"
+    },
+    {
+      "table_index": 25,
+      "row_index": 28,
+      "quoted_text": "AAH Topco, LLC"
+    },
+    {
+      "table_index": 25,
+      "row_index": 29,
+      "quoted_text": "Consumer Services | First Lien(3) | SOFR(M) | 5.25 % | 9.07 % | 12/2021 | 12/2027 | 11,511 | 11,472 | 11,511"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07 source count includes the separate December 31, 2024 schedule even though the reviewed report_date is December 31, 2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 20,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The raw filing explicitly has two consolidated schedules of investments: one as of December 31, 2025 and a separate comparative schedule as of December 31, 2024. The current schedule total is table 47 row 9 with fair value 1,512,098, while the comparative schedule total is table 69 row 38 with fair value 1,445,655. The source table structure also uses issuer rows plus investment-detail rows, as shown by AAH Topco at table 25 rows 28-29, so raw schedule rows are not a one-to-one position count. The E07 message source=775 vs output=422 is therefore consistent with the oracle source side counting comparative-period/current raw schedule lines, not evidence that 353 current 2025 holdings are missing from output."
+}

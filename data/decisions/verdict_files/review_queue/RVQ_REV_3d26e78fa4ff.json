@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_3d26e78fa4ff",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5247524752475248,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 40,
+      "quoted_text": "Total Investments ( 155.3 %) | $ | 1,045,828,622 | $ | 1,009,786,284",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 40,
+      "quoted_text": "Total Investments ( 153.8 %) | $ | 1,134,245,918 | $ | 1,140,779,575",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The filing contains separate June 30, 2023 and December 31, 2022 SOI schedules; the B01 population for report_date 2023-06-30 includes 202 leaves but only 106 current-period fair values.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 13,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "B01 reports 106 of 202 leaves with fair_value (52.5%) for the 2023-06-30 quarter. Raw source is readable and shows the June 30, 2023 SOI total fair value in table 6 row 40, while a separate December 31, 2022 comparative SOI total appears in table 13 row 40. The flagged missing-current-fair-value population is therefore a real current-period extraction/scoping error, not an unavailable source value."
+}

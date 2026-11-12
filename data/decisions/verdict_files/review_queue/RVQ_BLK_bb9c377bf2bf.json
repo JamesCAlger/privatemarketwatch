@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_bb9c377bf2bf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1352732000,
+  "anchor_value": 1417789000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 11,
+      "quoted_text": "Dreyfus Treasury Obligations Cash Management Money Market Fund | 3.65 % | 65,057 | 65,057 | 10.70 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 44,
+      "row_index": 7,
+      "quoted_text": "Short-term Investments (1) | Level 1 65,057 | Total 65,057",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted position sum omitted the short-term Dreyfus money market investment with fair value 65,057 thousand, which exactly bridges portfolio investments of 1,352,732 thousand to total investments at fair value of 1,417,789 thousand.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 37,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fair value sum is 1,352,732,000, matching the filing's Total Portfolio Investments subtotal of 1,352,732 thousand, but the filing's Total Investments at fair value and companyfacts anchor are 1,417,789 thousand. The residual is 65,057 thousand, exactly the cited short-term Dreyfus money market investment shown in the schedule and independently in the fair value hierarchy as Level 1 Short-term Investments."
+}

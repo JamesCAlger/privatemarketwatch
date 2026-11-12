@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_509250925fe5",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 208.2892999424124,
+  "anchor_value": 185.14,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 13,
+      "quoted_text": "Total Investment Portfolio | 48,875,505 | 48,413,196 | 185.14",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 138,
+      "row_index": 1,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments September 30, 2023 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extracted pct_of_net_assets sum of 208.2893 does not tie to the parent schedule total of 185.14, while the filing contains separate BCRED Emerald JV LP investment schedules with their own percent-of-net-assets basis.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 138,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "PCT01 is an aggregate issue. The filed parent Blackstone Private Credit Fund schedule reports Total Investment Portfolio at 185.14% of net assets for September 30, 2023. The flagged extracted aggregate is 208.2893%, so it does not tie to the source schedule total. The source also presents separate BCRED Emerald JV LP consolidated schedules, indicating a likely look-through/scope classification leak rather than a source-supported parent aggregate."
+}

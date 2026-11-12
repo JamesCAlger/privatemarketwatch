@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_a8c46f3da9db",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Debt Specialized Consumer Services USW Holdings, LLC Convertible Promissory Note Reference Rate and Spread + 18.00% (18.00% PIK) Interest Rate 18.00% Maturity Date 5/3/2029",
+  "anchor_value": "USW Holdings, LLC",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 6,
+      "quoted_text": "USW Holdings, LLC (m)(q) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 5/3/2029 | 53,475 | 53,475 | 53,475",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field leaked sector, instrument type, reference/spread, interest-rate, and maturity text; the source issuer cell is only USW Holdings, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The raw SOI row keeps issuer, type, reference rate/spread, interest rate, maturity, par amount, cost, and fair value in separate columns. The stored issuer_name concatenates the sector label and multiple non-issuer columns into the issuer field, so the C206 parse-leak flag is a real localized extraction error."
+}

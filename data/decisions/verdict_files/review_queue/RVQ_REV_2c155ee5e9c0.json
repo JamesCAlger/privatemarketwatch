@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_2c155ee5e9c0",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -4000.0,
+  "anchor_value": -4000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Everest Clinical Research Corporation (fka 1272775 B.C. LTD.) | Professional Services | S + 4.50 % | 11/06/28 | 1,160 | ( 4 | ) | ( 12 | ) | (6) (7) (8) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "Rodeo Buyer Company (dba Absorb Software) | Professional Services | S + 6.25 % | 05/25/27 | 3,065 | ( 12 | ) | ( 31 | ) | (6) (8) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 22,
+      "quoted_text": "Abacus Data Holdings, Inc. (dba Clutch Intermediate Holdings) | Software | S + 6.00 % | 03/10/27 | 1,100 | ( 4 | ) | ( 99 | ) | (6) (7) (8) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 13,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | S + 5.00 % | 12/06/29 | 2,881 | ( 13 | ) | ( 14 | ) | (6) (7) (8) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell review. The filing schedule itself prints the flagged costs in parentheses: for example, Everest cost (4) and fair value (12), Rodeo cost (12) and fair value (31), Abacus cost (4) and fair value (99), and Admiral cost (13) and fair value (14), all in USD thousands. The extracted negative dollar values therefore preserve the source signs. C107 is advisory because negative cost can be legitimate; on these source-confirmed cells its sign-only warning is a false alarm rather than a data error. No aggregate anchor was used."
+}

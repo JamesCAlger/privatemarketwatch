@@ -1,0 +1,16 @@
+{
+    "escalate":  false,
+    "ambiguity_basis":  "source_checked",
+    "verdict":  "ambiguous",
+    "review_id":  "RVQ_BLK_00ed88b9f6b3",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  14600000,
+    "anchor_value":  null,
+    "rationale":  "Raw source was readable via the evidence CLI, and the SOI grid shows principal, amortized cost, and fair value are reported in millions. However, the bundle only identifies internal row_key 32275 and stored principal_amount_usd 14600000; it does not provide issuer, instrument, fair_value, or a raw table coordinate. Targeted raw-source searches for 14600000, 14600, 14.6, 14,600,000, and shares-style 14 600 000 did not localize a matching SOI row. Without a source row tying the flagged stored value to principal, shares/units, or fair value, the source does not decide whether X06 is a real extraction/scale error or a false alarm.",
+    "culprit_citations":  [
+
+                          ],
+    "confidence":  0.35
+}

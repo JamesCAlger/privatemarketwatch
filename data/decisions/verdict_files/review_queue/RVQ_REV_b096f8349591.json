@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_b096f8349591",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.783625730994152,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "Cytracom, LLC (f)(i)(l) | Delayed Draw Term Loan | - | - | 6/28/2027 | - | ( 16,882 ) | ( 18,337 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "Cytracom, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 6/28/2027 | - | ( 18,705 ) | ( 20,374 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 14,
+      "quoted_text": "Neptune Platform Buyer, LLC (f)(j)(l) | Delayed Draw Term Loan | - | - | 1/20/2031 | - | ( 27,409 ) | ( 40,082 )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts debt rows whose source interest-rate cells are intentionally dashed for undrawn or unfunded delayed-draw and revolving-credit positions, not extraction-missing coupons.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The C01 failure is a coverage threshold failure: 134 of 171 debt rows have rates, below 0.8. Raw source rows show the residual class includes delayed-draw or revolving-credit positions where the filer prints '-' for both reference/spread and Interest Rate and also '-' par, with small negative cost/fair-value balances. Comparable funded rows in the same schedule carry SOFR spreads and interest-rate cells. The stored blanks therefore match the source for these residual rows; the check is over-scoped to rows that do not disclose a coupon in the schedule."
+}

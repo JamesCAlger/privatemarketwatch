@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_793b1e81c47e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1291512,
+  "anchor_value": 1291512,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 12,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.75 % | N/A(6) | 08/2031 | - | ( 3 ) | - | ( 3 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 13,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.75 % | N/A(6) | 08/2031 | - | ( 3 ) | 0.1 | ( 3 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 67,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,291,512 | 201.6 | 1,311,001",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The source schedule legitimately presents small negative amortized cost and fair value amounts in parentheses; the extracted negative costs match those source cells.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 61,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "The flag is aggregate-level, so I checked schedule anchors first: the filing's SOI total investments line reports amortized cost 1,291,512 and fair value 1,311,001 in thousands. Representative normalized negative-cost rows are not extraction errors: AI Titan Parent rows in the raw SOI show principal as a dash and amortized cost/fair value as parenthesized amounts, e.g. ( 3 ), which correctly normalizes to -3000. The raw source therefore supports the extracted values, and the rule appears to be flagging legitimate parenthetical cost formatting rather than a data defect."
+}

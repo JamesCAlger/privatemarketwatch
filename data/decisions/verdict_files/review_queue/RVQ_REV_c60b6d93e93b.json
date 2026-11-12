@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_c60b6d93e93b",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.638095238095238,
+  "anchor_value": 0.8,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "Funded debt row has Reference SOFR(Q), Spread 4.25%, and Interest Rate 7.91%."
+    },
+    {
+      "table_index": 26,
+      "row_index": 4,
+      "quoted_text": "Undrawn row has First Lien - Undrawn with dash values in Reference, Spread, and Interest Rate."
+    },
+    {
+      "table_index": 33,
+      "row_index": 26,
+      "quoted_text": "Unfunded debt row has First Lien - Undrawn with dash values in Reference, Spread, and Interest Rate."
+    },
+    {
+      "table_index": 34,
+      "row_index": 21,
+      "quoted_text": "Total Unfunded Debt Investments section total confirms the missing-rate rows belong to the unfunded debt schedule."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C01 is counting unfunded/undrawn debt commitment rows whose source interest-rate cells are dashes, while funded debt rows carry rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 26,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C01 failed because only 63.8% of debt rows have an extracted rate, but the raw filing distinguishes funded debt rows, which show reference, spread, and interest-rate values, from unfunded/undrawn debt rows, which intentionally show dashes in those columns. The low coverage is therefore caused by the check scope counting unfunded/undrawn commitment rows as debt rows requiring rates, not by a raw-source extraction defect."
+}

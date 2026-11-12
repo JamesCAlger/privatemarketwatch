@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_f2aaa3d45cec",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Equity Investments- United States Investment Funds & Vehicles TCW Direct Lending Strategic Ventures Common membership Interests Net Assets 0.0%; Equity Investments- United States Investment Funds & Vehicles TCW Direct Lending Strategic Ventures Preferred membership Interests Net Assets 16.2%",
+  "anchor_value": "Source table 5 rows 23-24 list TCW Direct Lending Strategic Ventures LLC as two equity positions, Common membership Interests and Preferred membership Interests, under the Investment Funds & Vehicles industry section.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 23,
+      "quoted_text": "TCW Direct Lending Strategic Ventures LLC (2)(4)(6) | Common membership Interests | 0.0 | % | 800 | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 24,
+      "quoted_text": "TCW Direct Lending Strategic Ventures LLC (2)(4)(6) | Preferred membership Interests | 16.2 | % | 57,400 | 57,400,000 | 42,798,018",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged the identifier text as a subtotal candidate, apparently because it contains the industry phrase Investment Funds & Vehicles and net-asset percentages. The raw SOI shows these are normal position rows with issuer, investment type, share count, cost, and fair value, followed later by the actual Total Equity Investments row at table 5 row 29. The flagged stored rows therefore reflect source positions, while the check overmatched legitimate position text."
+}

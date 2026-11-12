@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_0a965c0fa818",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": "2024-10-31",
+  "anchor_value": "2029-10-31",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 19,
+      "quoted_text": "Price Fx Inc. (3)(4) | First-lien loan (EUR 910 par, due 10/2029 ) | 12/19/2024 | E + 6.25 % | 9.12 | % | 921 | 919 (EUR 887 ) | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted maturity date is 2024-10-31, but the matching source row states the Price Fx Inc. loan is due 10/2029.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "The flagged holding slice contains Price Fx Inc. with cost 921 and fair value 919, matching source table 35 row 19. That source row states the investment is a First-lien loan (EUR 910 par, due 10/2029), while the extracted maturity_date is 2024-10-31, which is before the 2024-12-31 report date. The source therefore confirms a real extraction error in the maturity date, not a false alarm."
+}

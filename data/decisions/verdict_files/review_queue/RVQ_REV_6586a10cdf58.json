@@ -1,0 +1,93 @@
+{
+  "review_id": "RVQ_REV_6586a10cdf58",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 30,
+      "quoted_text": "Kangaroo Bidco AS (3)(4) | First-lien loan ($ 157,500 par, due 11/2030 ) | 11/2/2023 | SOFR + 7.50 % | 12.90 % | 152,736 | 154,349 | 6.5%"
+    },
+    {
+      "table_index": 8,
+      "row_index": 32,
+      "quoted_text": "Alaska Bidco Oy (3)(4) | First-lien loan (EUR 727 par, due 5/2030 ) | 5/30/2023 | E + 6.25 % | 10.15 % | 756 | 785 (EUR 727) | 0.0%"
+    },
+    {
+      "table_index": 8,
+      "row_index": 43,
+      "quoted_text": "Edge Bidco B.V (3)(4)(5) | First-lien loan (EUR 5,811 par, due 2/2029 ) | 2/24/2023 | E + 7.00 % | 10.93 % (incl. 3.25 % PIK) | 6,042 | 6,313 (EUR 5,845) | 0.3%"
+    },
+    {
+      "table_index": 9,
+      "row_index": 31,
+      "quoted_text": "Mach Natural Resources LP (3)(4) | First-lien loan ($ 135,000 par, due 12/2026 ) | 12/28/2023 | SOFR + 6.65 % | 11.95 % | 132,505 | 132,975 | 5.6%"
+    },
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Artisan Topco LP (8)(10) | Class A Preferred Units ( 7,882,736 units) | 11/7/2023 | 7,883 | 7,883 | 0.3%"
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Newark FP Co-Invest, L.P. (8)(10) | Partnership ( 8,555,356 units) | 11/8/2023 | 8,572 | 8,572 | 0.4%"
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Warrior TopCo LP (8)(10) | Class A Units ( 9,576,271 units) | 7/7/2023 | 9,576 | 9,576 | 0.4%"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Debt Investments' and 'Education' to the Kangaroo Bidco AS position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 8, "row_index": 30}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Debt Investments' and 'Financial Services' to the Alaska Bidco Oy position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 8, "row_index": 32}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Debt Investments' and 'Healthcare' to the Edge Bidco B.V position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 8, "row_index": 43}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Debt Investments' and 'Oil, Gas and Consumable Fuels' to the Mach Natural Resources LP position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 9, "row_index": 31}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Equity and Other Investments' and 'Business Services' to the Artisan Topco LP position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 10, "row_index": 2}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Equity and Other Investments' and 'Business Services' to the Newark FP Co-Invest, L.P. position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 10, "row_index": 4}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The stored identifier prepends the section and industry headings 'Equity and Other Investments' and 'Business Services' to the Warrior TopCo LP position; the source position row contains only company and instrument fields.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 10, "row_index": 5}
+    }
+  ],
+  "rationale": "The PP01 rows are real position rows, not subtotals, but the flagged column is still defective: the stored bdc_investment_identifier includes portfolio section and industry headings such as 'Debt Investments Education' or 'Equity and Other Investments Business Services'. In the raw SOI grids, those headings are separate rows, while each cited position row starts with the issuer name and instrument. The position identifier should be built from the position row, not from carried-forward section headers."
+}

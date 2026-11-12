@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_6994e3843f14",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_issuer_column",
+  "observed_value": "Debt Investments Professional Services Lighthouse Parent Holdings, Inc (Aperture) Instrument [instrument terms] Ref SOFR(Q) Floor 0.75% Spread 4.75% Total Coupon 8.42% Maturity Date 12/20/2031",
+  "anchor_value": "Lighthouse Parent Holdings, Inc (Aperture)",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 21,
+      "quoted_text": "Lighthouse Parent Holdings, Inc (Aperture) | First Lien Delayed Draw Term Loan | SOFR(Q) | 0.75% | 4.75% | 8.42% | 12/20/2031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 22,
+      "quoted_text": "Lighthouse Parent Holdings, Inc (Aperture) | Sr Secured Revolver | SOFR(Q) | 0.75% | 4.75% | 8.42% | 12/20/2031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 23,
+      "quoted_text": "Lighthouse Parent Holdings, Inc (Aperture) | First Lien Term Loan | SOFR(Q) | 0.75% | 4.75% | 8.42% | 12/20/2031",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing schedule separates the clean issuer name in column 0 from the instrument, reference rate, floor, spread, total coupon, and maturity columns for all three flagged positions. The stored issuer_name concatenates the Debt Investments and Professional Services wrappers plus those instrument terms, so each flagged issuer_name is a real wrapper/row extraction leak rather than a valid issuer value."
+}

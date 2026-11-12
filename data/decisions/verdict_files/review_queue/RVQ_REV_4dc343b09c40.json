@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_4dc343b09c40",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "non-equity classification used by X07 row_validation",
+  "anchor_value": "source Type of Investment is Equity",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 26,
+      "quoted_text": "Trinity Capital Adviser, LLC | Equity | June 28, 2024 | - | Preferred | $ | 1 | $ | 4,851 | (10)(17)(21)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The flagged holding has cost $1 and fair value $4,851 in the source, but its Type of Investment is Equity, so the non-equity X07 premise is caused by classification, not by a bad cost value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 56,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "X07 flagged a non-equity row because fair value exceeds 10x cost, with the bundle showing cost 1000.0. The raw SOI row for Trinity Capital Adviser, LLC reports Type of Investment as Equity and reports cost $1 and fair value $4,851, so the numeric values match source while the row is being treated as non-equity for validation."
+}

@@ -1,0 +1,60 @@
+{
+  "review_id": "RVQ_REV_051f9ff07001",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "non-USD source principal requires populated principal_amount_usd",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 0,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 7,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 8,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 9,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 10,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 11,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 12,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Current-period SOI debt rows 7-12 carry EUR principal amounts, but the extracted principal_amount_usd field is blank for the FX01 issue rows.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 16,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The filing note states debt par is in U.S. dollars unless otherwise noted in Euros, and the current-period SOI shows multiple debt instruments with EUR principal amounts in table 16 rows 7-12. The FX01 artifact reports principal_amount_usd as blank for non-USD debt principal rows, so the extraction is missing the required USD-normalized principal for these Euro-denominated debt positions."
+}

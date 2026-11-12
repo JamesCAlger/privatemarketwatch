@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_c8f90907e9d2",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 16502.831,
+  "anchor_value": 16508.590,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "Apple AU Finco Pty Ltd (dba Aspen Pharmacare) | Pharmaceuticals | B + 4.75 % | 03/19/33 | AUD | 159,424 | - | - | (7) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "Apple AU Finco Pty Ltd (dba Aspen Pharmacare) | Pharmaceuticals | B + 4.75 % | 03/19/33 | AUD | 118 | - | - | (7) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (cost of $ 16,677,760 and $ 15,704,123) | $ | 16,508,590 | $ | 15,674,510",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 counts 1,673 leaves and flags 170 without fair value, but the raw schedule explicitly contains valid instrument rows with par amounts and dashes in both cost and fair value (for example table 8 rows 6 through 9). Such unfunded or otherwise zero-valued schedule leaves legitimately have no printed fair value, so including them in a 95% non-null denominator makes this flag a false alarm. The filing reports total investments at fair value of $16,508.590 million versus extracted $16,502.831 million, a $5.759 million difference, but B01 reports residual_fv 0 and supplies no localization tying that separate small mismatch to the 170 dash-valued leaves."
+}

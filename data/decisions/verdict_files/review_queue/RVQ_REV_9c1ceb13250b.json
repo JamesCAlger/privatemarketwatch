@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_9c1ceb13250b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -3000.0,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "Pushpay USA Inc. (4)(5)(6) | Unitranche First Lien Revolver | 05/2029 | - | ( 12 | ) | - | ( 3 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 6,
+      "quoted_text": "Pushpay USA Inc. (3) | Revolver | 5/10/2030 | 429",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source Pushpay revolver row presents cost as (12) and fair value as (3) in thousands, but the extracted row has cost +12000 with fair value -3000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 24
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The flagged source position is a revolver and Pushpay also appears in the unfunded commitments table, so the extracted row lost the unfunded/revolver context.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "C103 fired because the extracted row has fair_value -3000 with positive cost 12000 and no unfunded-commitment marker. Raw source table 10 row 24 shows the same Pushpay revolver with both cost and fair value in parentheses, i.e. cost -12000 and fair value -3000 in source scale, and table 19 row 6 identifies Pushpay as a revolver unfunded commitment. The negative fair value is source-present, but the extracted row's cost sign and revolver/unfunded context are wrong, so this is a real extraction/normalization error rather than a false alarm."
+}

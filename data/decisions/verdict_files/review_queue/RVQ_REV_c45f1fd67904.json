@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_c45f1fd67904",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The evidence CLI returned no usable raw-source overview, table listing, source coordinates, or quoted source after repeated scoped attempts; it emitted only an XML parser warning. The 370 X02 missing-rate flags therefore cannot be adjudicated from raw source and must be retried as a coverage or infrastructure failure."
+}

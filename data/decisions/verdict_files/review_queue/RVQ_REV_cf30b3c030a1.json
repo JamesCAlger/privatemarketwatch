@@ -1,0 +1,65 @@
+{
+  "review_id": "RVQ_REV_cf30b3c030a1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_footnote_rows",
+  "observed_value": 0,
+  "anchor_value": 7,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 9,
+      "quoted_text": "CFCo LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/13/2038 | 86,098 | 12,571 | 0 | 0.00"
+    },
+    {
+      "table_index": 35,
+      "row_index": 10,
+      "quoted_text": "Daylight Beta Parent LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17) | 10.00 % | 10.00 % PIK | 9/12/2033 | 49,530 | 49,530 | 13,551 | 0.04"
+    },
+    {
+      "table_index": 27,
+      "row_index": 20,
+      "quoted_text": "Digital Media Solutions, LLC | (6)(10)(17) | SOFR + | 11.00 % | 16.57 % PIK | 5/25/2026 | 33,699 | 33,382 | 4,044 | 0.01"
+    },
+    {
+      "table_index": 32,
+      "row_index": 7,
+      "quoted_text": "Magenta Buyer LLC | (5)(6)(10)(17) | SOFR + | 5.00 % | 10.59 % | 7/27/2028 | 65,063 | 64,649 | 36,476 | 0.11"
+    },
+    {
+      "table_index": 35,
+      "row_index": 5,
+      "quoted_text": "Pigments Services, Inc. | (4)(6)(11)(16)(17) | SOFR + | 8.35 % | 13.69 % PIK | 4/14/2029 | $ | 18,433 | $ | 15,229 | $ | 8,259 | 0.02 | %"
+    },
+    {
+      "table_index": 22,
+      "row_index": 17,
+      "quoted_text": "WHCG Purchaser III, Inc. | (4)(5)(10)(17) | SOFR + | 5.75 % | 11.34 % | 6/22/2028 | 102,373 | 101,266 | 66,542 | 0.20"
+    },
+    {
+      "table_index": 22,
+      "row_index": 18,
+      "quoted_text": "WHCG Purchaser III, Inc. | (4)(5)(7)(10)(17) | SOFR + | 5.75 % | 11.34 % | 6/22/2026 | 12,455 | 12,356 | 8,085 | 0.02"
+    },
+    {
+      "table_index": 194,
+      "row_index": 33,
+      "quoted_text": "Percentage of assets on non-accrual, at amortized cost (5) | 0.4 | % | 0.1 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Seven June 30, 2024 investment schedule rows carry the nonaccrual footnote marker, but the normalized holdings surface does not preserve a nonaccrual status field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Raw source shows seven June 30, 2024 SOI rows with footnote marker (17) on the same instruments identified by the flag: CFCo, Daylight Beta Parent, Digital Media Solutions, Magenta Buyer, Pigments Services, and two WHCG Purchaser III rows. The filing also discloses assets on non-accrual at amortized cost for June 30, 2024. This supports a real extraction gap rather than a false alarm."
+}

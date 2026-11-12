@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_dde9fd9f0fec",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 263.724095,
+  "anchor_value": 263.724095,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 30,
+      "quoted_text": "Total Debt & Equity Investments (8) | 113.3 | % | 391,372,627 | 263,724,095"
+    },
+    {
+      "table_index": 37,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 416,449 | $ | \u2014 | $ | 226,534 | $ | 37,189 | $ | 680,172"
+    }
+  ],
+  "rationale": "Class 3 anchor check: the flagged observed fund-quarter FV is 263.724095 million, which matches the raw SOI row for Total Debt & Equity Investments at 263,724,095. The detailed source separately presents cash equivalents and short-term investments outside that debt-and-equity anchor, and the valuation hierarchy separately presents the investment-fund NAV bucket; those rollup/classification boundaries explain the A01 rollup failures without showing a source-backed amount error in the flagged value."
+}

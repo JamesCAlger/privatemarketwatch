@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_390e847a03e9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 110,
+      "row_index": 3,
+      "quoted_text": "US Oral Surgery Management Holdco, LLC | Revolver | 11/20/2028 | $ | 15,496 | $ | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 109,
+      "row_index": 10,
+      "quoted_text": "SpecialtyCare, Inc. | Delayed Draw Term Loan | 8/26/2027 | 1,794 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 110,
+      "row_index": 29,
+      "quoted_text": "Zenith AcquisitionCo, LLC | Term Loan | 1/13/2033 | 90,012 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C104 flags zero fair_value rows, but the source commitment schedule prints dash fair values for unfunded commitments, which supports zero rather than a missing or erroneous fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 110,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "C104 is a review warning that zero fair_value may affect aggregation, but the raw filing has commitment-schedule rows with Fair Value shown as a dash. The cited rows are revolver, delayed-draw, and term-loan commitment rows with unfunded commitment amounts and dash fair values, so a stored fair_value of 0.0 is a faithful zero/dash transcription rather than a data error. The warning is therefore out of scope for these source-backed zero fair values."
+}

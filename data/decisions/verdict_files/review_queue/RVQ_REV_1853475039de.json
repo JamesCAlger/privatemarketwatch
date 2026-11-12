@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_1853475039de",
+  "verdict": "false_alarm",
+  "mechanism": "dimension_double_count",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 166549638,
+  "anchor_value": 166549638,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 24,
+      "quoted_text": "Total Investments ( 133.5 %) | $ | 166,236,768 | $ | 166,549,638",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC (3) | 03/28/24 | Term Loan B - 11.81 % (SOFR + 6.50 %, 1.75 % Floor) | 4.8 | % | $ | 6,187,389 | 03/28/29 | $ | 6,000,357 | $ | 6,037,866",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 16,
+      "quoted_text": "Total Debt Investments (2) | 106.0 | % | 131,925,029 | 132,237,899",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 fired because only 43 of 86 counted leaves carried fair_value, but the raw schedule shows value-bearing investment rows and subtotals with fair values, including a representative detailed Fenix row with fair value 6,037,866 and total debt investments fair value 132,237,899. The current-period schedule total investments line is 166,549,638, and the bundle's B01 source artifact reports residual_fv 0.0, so the aggregate fair-value anchor is not missing. The failure is therefore caused by the check's denominator/counting scope over non-position or duplicated leaf candidates, not a source-backed missing fair-value defect."
+}

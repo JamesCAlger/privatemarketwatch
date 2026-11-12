@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_4f8d2cd8601b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Stored maturity_date values include 2025-06-30, 2025-07-28, 2025-08-12, 2025-07-03, 2024-11-14, 2024-09-06, 2024-12-04, 2024-09-27, and 2024-12-10.",
+  "anchor_value": "Raw SOI places those dates in the Acquisition Date column; Maturity Date is blank for the equity/preferred rows and 1/21/2031 for the Blue Cloud debt rows.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares"
+    },
+    {
+      "table_index": 19,
+      "row_index": 22,
+      "quoted_text": "AP Edison Co-Invest (UB), L.P. (8,487 units) | N/A | 6/30/2025 | 8,487 | 8,487"
+    },
+    {
+      "table_index": 19,
+      "row_index": 25,
+      "quoted_text": "Citation Glow Co-Invest LP (7,000 shares) | N/A | 7/28/2025 | 7,050 | 7,050"
+    },
+    {
+      "table_index": 19,
+      "row_index": 28,
+      "quoted_text": "Blue Cloud Pediatric Surgery Centers, LLC - Class A-1 Common Units (1,000,000 units) | N/A | 8/12/2025 | 1,000 | 1,000"
+    },
+    {
+      "table_index": 15,
+      "row_index": 20,
+      "quoted_text": "Blue Cloud Pediatric Surgery Centers, LLC | Delayed Draw Term Loan | 9.23 % | SOFR | 5.00 % | 8/12/2025 | 1/21/2031 | 7,803 | 7,639 | 7,675"
+    },
+    {
+      "table_index": 26,
+      "row_index": 28,
+      "quoted_text": "Eclipse Topco, Inc. - Preferred Shares (6,061 shares) | 12.50 % PIK | N/A | 09/06/2024 | 6,181 | 6,183"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "For equity and preferred equity rows, the extractor stored the Acquisition Date cell as maturity_date even though the source Maturity Date column is blank.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 19, "row_index": 22}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "For Blue Cloud debt rows, the extractor stored acquisition date 8/12/2025 as maturity_date while the source maturity is 1/21/2031.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 15, "row_index": 20}
+    }
+  ],
+  "rationale": "X10 fired because stored maturity_date values are before the 2025-09-30 report date. The raw SOI header shows Acquisition Date immediately before Maturity Date, and the cited rows show the flagged dates under Acquisition Date, not Maturity Date. Equity/preferred rows have no maturity date, while the Blue Cloud debt rows show maturity 1/21/2031. The row data therefore contains a real maturity_date column-remap extraction error, not a valid matured-position warning."
+}

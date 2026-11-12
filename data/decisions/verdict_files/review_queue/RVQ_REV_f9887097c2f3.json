@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_f9887097c2f3",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "extract_total_fv",
+    "observed_value":  0.15432098765432098,
+    "anchor_value":  0.5,
+    "confidence":  0.55,
+    "escalate":  false,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Class 3 continuity flag: the bundle reports 25/162 issuers persist versus a 0.5 threshold, and the evidence CLI returned usable current-filing source. The filing contains September 30, 2025 schedule rows and a December 31, 2024 comparative schedule, with some repeated issuers visible (for example Hootsuite Inc. in table 15 rows 20-21 and table 26 rows 6-7; Vensure/Voyant/Wrangler in table 15 rows 2-7 and table 25 rows 24-30), plus table 53 roll-forward rows with both-period balances. However, the raw source available through the bundle does not provide the exact continuity comparator or a deterministic aggregate issuer-count proof for the D06 metric, so the source checks do not decide whether the low persistence is a real extraction/normalization defect or genuine turnover."
+}

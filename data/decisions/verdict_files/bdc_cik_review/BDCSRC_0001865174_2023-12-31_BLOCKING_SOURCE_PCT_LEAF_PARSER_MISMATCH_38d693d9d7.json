@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001865174",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "Insufficient bounded evidence to safely change production parsing for this CIK-quarter-mechanism packet without manual source-table adjudication and a tested rule. Needed evidence: coordinate-level source table classification for the blocker rows, proof that the rows are either true position rows or non-position aggregate/header rows, and a false-positive analysis showing any proposed parser/config rule would not suppress legitimate position-level holdings.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 9 current blocker row(s) in mechanism blocking_source_pct_leaf_parser_mismatch, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2023-12-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 55911000.000000.",
+  "review_id": "BDCSRC_0001865174_2023-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_38d693d9d7",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Fix parser/staging for terminal-percentage source rows with issuer, instrument, rate, maturity, or other leaf evidence.. Sample identifiers: Investment Debt Investments - 180.11% Canada - 11.23% 1st Lien/Senior Secured Debt - 11.23% Trader Corporation Industry Automobiles Interest Rate 12.19% Reference Rate and Spread C + 6.75% Maturity 12/21/29 | Investment Debt Investments - 180.11% United Kingdom - 9.20% 1st Lien/Senior Secured Debt - 9.20% Clearcourse Partnership Acquireco Finance Limited Industry IT Services Interest Rate 12.69% Reference Rate and Spread SN+8.50% (Incl. 8.50% PIK) Maturity 07/25/28 | Investment Debt Investments - 180.11% United Kingdom - 9.20% 1st Lien/Senior Secured Debt - 9.20% Clearcourse Partnership Acquireco Finance Limited Industry IT Services Interest Rate 13.69% Reference Rate and Spread SN+8.50% (Incl. 8.50% PIK) Maturity 07/25/28 | Investment Debt Investments - 180.11% United States 159.68% 1st Lien/Senior Secured Debt - 146.55% CST Buyer Company (dba Intoxalock) Industry Diversified Consumer Services Interest Rate 11.86% Reference Rate and Spread S + 6.50% Maturity 11/01/28 | Investment Debt",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

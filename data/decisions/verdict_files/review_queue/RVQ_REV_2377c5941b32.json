@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_2377c5941b32",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 9,
+      "quoted_text": "HH Masterwork Intermediate, Inc. senior unsecured notes show amortized cost 2,033,098 and Fair Value '-' with 0.0% of net assets.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 52,
+      "quoted_text": "Consolidated Machine & Tool Holdings, LLC warrants and other equity securities show amortized cost 142,485 and Fair Value '-' with 0.0% of net assets.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 64,
+      "quoted_text": "Caregility Corporation warrants and other equity securities show amortized cost 443,392 and Fair Value '-' with 0.0% of net assets.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 49,
+      "quoted_text": "USBid Parent, LLC - Class A preferred equity securities show amortized cost 2,812,500 and Fair Value '-' with 0.0% of net assets.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags extracted fair_value values of 0.0. The raw June 30, 2024 schedule of investments contains source rows whose Fair Value cells are '-' and whose % of Net Assets is 0.0, including debt, preferred equity, and warrant/equity rows. The extraction's zero fair values are therefore faithful normalizations of disclosed zero/dash fair values, not data errors."
+}

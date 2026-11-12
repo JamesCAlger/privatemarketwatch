@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_9d6a657c8d35",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.9455337690631809,
+  "anchor_value": 0.95,
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 22,
+      "quoted_text": "Total Investment before Cash Equivalents | $ | 920,039 | $ | 906,526"
+    },
+    {
+      "table_index": 25,
+      "row_index": 24,
+      "quoted_text": "Total Investments after Cash Equivalents | $ | 922,086 | $ | 908,573 | (2)(7)"
+    },
+    {
+      "table_index": 54,
+      "row_index": 10,
+      "quoted_text": "Total Investments after Cash Equivalents | $ | 922,086 | $ | 908,573 | $ | 2,047 | $ | 7,109 | $ | 899,417"
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value coverage flag: the check artifact reports 434 of 459 leaves with fair_value, below the 0.95 threshold. Raw source was readable and confirms the September 30, 2025 schedule and fair-value hierarchy carry fair-value totals, including 906,526 before cash equivalents and 908,573 after cash equivalents. However, the evidence CLI does not expose the 25 extracted residual rows, so source review cannot decide whether those rows are true investment leaves missing fair value or non-position/header/subtotal row-disposition artifacts. Because the raw source does not conclusively localize the defect, this is source-checked ambiguous."
+}

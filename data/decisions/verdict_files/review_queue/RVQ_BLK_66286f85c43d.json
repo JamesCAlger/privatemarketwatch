@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_BLK_66286f85c43d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_rows",
+  "observed_value": "agentA identifier fields",
+  "anchor_value": "March 31, 2026 source schedule fields",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 22,
+      "quoted_text": "ProAmpac PG Borrower LLC | First Lien Term Loan | S + 4.00 % | 7.77 % | 3/7/2033",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "ProAmpac PG Borrower LLC | First Lien Revolver | S + 3.75 % | 7.41 % | 3/6/2031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 37,
+      "quoted_text": "Aspen Medical Products, LLC | First Lien Term Loan | S + 5.00 % | 8.67 % | 6/10/2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 41,
+      "quoted_text": "TerSera Therapeutics LLC | First Lien Term Loan | S + 5.00 % | 8.67 % | 4/4/2030",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 18,
+      "quoted_text": "BlueCat Networks (USA) Inc. | First Lien Delayed Draw Term Loan | S + 5.50 % | 9.17 % | 8/8/2028",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "ProAmpac revolver identifier incorrectly combines the term-loan spread and coupon with the revolver type and maturity; the revolver is S + 3.75% at 7.41%.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 19, "row_index": 23}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Aspen is stored as S + 4.75%, the comparative-period value, while the March 31, 2026 row is S + 5.00%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 27, "row_index": 37}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "TerSera's S + 5.00% and 8.67% belong to the term loan, but the flagged identifier labels the instrument as a revolver.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 36, "row_index": 41}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "BlueCat is stored as S + 5.75%, the comparative-period value, while the March 31, 2026 delayed-draw row is S + 5.50%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 39, "row_index": 18}
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule rows directly contradict multiple Agent A identifiers. ProAmpac splices fields from two current-period instruments, Aspen and BlueCat carry comparative-period spreads, and TerSera assigns term-loan rate fields to a revolver. These row-construction defects explain the spread-versus-XBRL warnings; the raw source does not support treating the check as wrong. Safety's cited S + 4.75% value is source-supported, but that does not negate the independently grounded defects in this five-unit flag."
+}

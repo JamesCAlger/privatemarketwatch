@@ -1,0 +1,61 @@
+{
+    "review_id":  "RVQ_REV_48332110496c",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "extract_total_fv",
+    "observed_value":  0.67509481668773708,
+    "anchor_value":  0.8,
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  19,
+                                  "quoted_text":  "Any Hour, LLC(25) | One stop | N/A | 13.00 % | PIK | 05/2031 | 3,047 | 3,009 | 0.2 | 2,620",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  15,
+                                  "row_index":  39,
+                                  "quoted_text":  "PPV Intermediate Holdings, LLC(25) | One stop | N/A | 14.75 % | PIK | 08/2030 | 9,679 | 9,543 | 0.8 | 9,679",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  22,
+                                  "row_index":  21,
+                                  "quoted_text":  "Denali Bidco Limited(8)(9)(10)(25) | Subordinated debt | N/A | 11.20 % | PIK | 09/2032 | 6,937 | 6,890 | 0.6 | 6,937",
+                                  "ties_to_residual":  true
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "All-PIK debt rows with N/A spread still disclose numeric PIK rates in the Interest Rate column and should not be stored with blank interest_rate.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  12,
+                                          "row_index":  19
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The same N/A-spread plus numeric PIK-rate pattern recurs on positive fair-value PPV Intermediate rows contributing to the missing-rate residual.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  15,
+                                          "row_index":  39
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Subordinated debt rows for Denali Bidco disclose PIK rates despite N/A spread, confirming the issue is extraction of the rate cell rather than legitimate no-rate debt.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  22,
+                                          "row_index":  21
+                                      }
+                     }
+                 ],
+    "rationale":  "C01 is an aggregate interest-rate coverage failure: only 67.5% of 791 debt rows have rates, below the 0.8 threshold, with a 31.002 million FV residual. Raw SOI rows show a localized pattern where spread is N/A but the Interest Rate column contains numeric PIK rates on positive fair-value debt rows, e.g. Any Hour 13.00% PIK, PPV Intermediate 14.75% PIK, and Denali Bidco 11.20% PIK. These are not source-blank N/A(6) rows; the stored missing interest_rate is an extraction gap."
+}

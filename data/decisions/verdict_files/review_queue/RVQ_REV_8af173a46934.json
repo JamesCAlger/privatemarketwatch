@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_8af173a46934",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2024-12-31",
+  "anchor_value": "12/31/2024",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 25,
+      "quoted_text": "Zips Car Wash, LLC | Delayed Draw Term Loan | ... | 7/13/2022 | 12/31/2024 | 8,658,304 | 8,619,548 | 7,172,539 | 2.9 | % | (5) (13) (20)"
+    }
+  ],
+  "rationale": "Class 1 source check: the flagged value is the maturity date field, and the March 31, 2025 SOI source row reports Zips Car Wash, LLC Delayed Draw Term Loan with maturity date 12/31/2024. The stored normalized value 2024-12-31 matches the raw source. Because X10 is an advisory monitoring rule for positions that can still be reported after maturity, this flag is not a data extraction error."
+}

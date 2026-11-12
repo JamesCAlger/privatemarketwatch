@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_902ea4a4b247",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 68,
+      "row_index": 9,
+      "quoted_text": "Total | $ | 861,647 | $ | 869,924 | 100.0 | % | $ | 440,201 | $ | 441,879 | 100.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 70,
+      "row_index": 29,
+      "quoted_text": "Total | $ | 869,924 | 100.0 | % | $ | 441,879 | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing discloses current Percentage of Portfolio totals of 100.0%, but the extracted A07 pct_sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 68,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "A07 is an aggregate CIK-quarter flag with pct_sum=0.0% and no detail rows. Raw source tables for June 30, 2025 show Percentage of Portfolio columns and totals of 100.0% by investment type and by industry, with the same fair value total of 869,924 tying to the schedule. The pipeline's observed 0.0% is therefore a source-grounded extraction gap, not a false alarm."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_bd78172551d3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 234.08487346665672,
+  "anchor_value": 214.36,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | 48,711,985 | 47,905,799 | 214.36",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate PCT01 check. The raw March 31, 2023 consolidated schedule gives Total Investment Portfolio at 214.36% of net assets, while the queued extracted pct_of_net_assets sum is 234.08487346665672%. Because the observed aggregate does not tie to the filing schedule-total anchor, the flag is a real aggregate extraction/scope error. The source also shows total portfolio investments plus cash and cash equivalents at 219.86%, which still does not support the observed 234.08487346665672%."
+}

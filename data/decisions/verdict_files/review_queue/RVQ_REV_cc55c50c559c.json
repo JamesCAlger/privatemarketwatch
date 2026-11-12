@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_cc55c50c559c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source fair value schedule ($)",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "LSF12 Phoenix Holdco, LLC | Term Loan | 3M SOFR + 4.50 % | 8.20 % | 3/5/2026 | 3/25/2033 | $ | 3,000,000 | $ | 2,940,000 | $ | 2,973,750 | 1.8 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 414,055,669 | $ | 352,232,987 | $ | 438,839,857 | $ | 395,375,030",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD. Raw SOI evidence shows the flagged Fair Value column and the filing investment totals are dollar-denominated with $ markers, so U_USD is a USD unit-label convention rather than a non-USD currency. The check is over-strict for this unit label, not a data error in the holding."
+}

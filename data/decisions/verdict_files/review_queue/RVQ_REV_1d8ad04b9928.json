@@ -1,0 +1,72 @@
+{
+  "review_id": "RVQ_REV_1d8ad04b9928",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_terms",
+  "observed_value": 0.0,
+  "anchor_value": 4.75,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 9,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Term Loan | 8.46 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 9,635,703 | 9,546,142 | 9,539,346 | (8)(15)"
+    },
+    {
+      "table_index": 66,
+      "row_index": 10,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Delayed Draw Term Loan | 8.46 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 84,155 | 64,561 | 63,012 | (6)(8)(15)"
+    },
+    {
+      "table_index": 66,
+      "row_index": 11,
+      "quoted_text": "Syntax Systems Ltd. | Digital Infrastructure & Services | Term Loan | 8.81 % ( S + 5.00 %; 0.75 % Floor) | 10/27/2028 | 8,489,024 | 8,452,147 | 8,340,466 | (8)(15)"
+    },
+    {
+      "table_index": 66,
+      "row_index": 18,
+      "quoted_text": "SumUp Holdings Luxembourg | Software & Tech Services | Delayed Draw Term Loan | 9.82 % (S + 6.00 %; 1.50 % Floor) | 5/23/2031 | 10,088,201 | 10,025,193 | 10,088,201 | (8)(15)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "RevauAdvanced Underwriting Inc. term loan source discloses S + 4.75% but stored basis_spread is 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "RevauAdvanced Underwriting Inc. delayed draw term loan source discloses S + 4.75% but stored basis_spread is 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Syntax Systems Ltd. term loan source discloses S + 5.00% but stored basis_spread is 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "SumUp Holdings Luxembourg delayed draw term loan source discloses S + 6.00% but stored basis_spread is 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "X05 flags floating-rate rows with missing or zero basis_spread. The raw schedule rows cited above disclose explicit nonzero spreads in the Interest term, while the flagged artifact rows report basis_spread as 0.0. This is a localized extraction gap in the spread field, not a false alarm."
+}

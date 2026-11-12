@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_2417933dc0c8",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 6,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 3,
+      "quoted_text": "77 Commercial | 9.00 | % | 12/9/2025 | 1/6/2031 | 27,500 | 27,500 | - | 27,500 | 3.7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 9,
+      "quoted_text": "COLT 2025-INV2 B2 | 7.10 | % | 11/21/2025 | 2/25/2070 | 226 | 225 | - | 224 | 0.0",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 34,
+      "quoted_text": "Eagle & West | SOFR | 5.45 | % | 9.20 | % | 6/11/2025 | 6/9/2030 | 40,000 | 40,000 | - | 40,000 | 5.4",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 issue rows are sourced from the December 31, 2025 comparative investment schedule while the reviewed holdings surface is report_date 2026-03-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 21,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row period purity issue. The bundle identifies six PP03 rows whose source period is earlier than the 2026-03-31 report_date. Raw source confirms the same issuers appear in both the March 31, 2026 investment schedule and the December 31, 2025 comparative schedule; for example, 77 Commercial appears in table 15 row 6 for the current schedule and table 21 row 3 for the comparative schedule, and COLT 2025-INV2 B2 appears in table 17 row 12 and table 23 row 9. Retaining the comparative-period rows under the current report-date holdings surface is a real comparative-period leakage defect. No aggregate anchor was needed because the source row coordinates localize the defect."
+}

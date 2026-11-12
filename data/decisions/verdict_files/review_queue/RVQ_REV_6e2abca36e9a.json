@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_6e2abca36e9a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank principal_amount_usd on FX01 flagged rows",
+  "anchor_value": "non-USD par requires explicit USD principal conversion",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 25,
+      "quoted_text": "ENV Bidco AB | (4)(6)(7)(8) | E + | 5.25 % | 7.97 % | 12/12/2024 | 7/19/2029 | EUR | 114,257 | 113,857 | 117,999 | 0.30",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 17,
+      "quoted_text": "Dellner Couplers Group AB | (5)(6)(8) | E + | 5.50 % | 8.22 % | 6/20/2024 | 6/18/2029 | EUR | 23,500 | 24,933 | 24,107 | 0.06",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 20,
+      "quoted_text": "Monterey Financing, S.? r.l. | (4)(6)(8) | E + | 6.00 % | 8.72 % | 9/28/2022 | 9/28/2029 | EUR | 110,819 | 106,566 | 114,792 | 0.30",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rows with EUR par are debt positions and require explicit USD principal conversion, but FX01 reports principal_amount_usd as blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 39,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "FX01 is a row-validation issue: non-USD debt principal is missing principal_amount_usd. The raw SOI contains debt rows with an explicit EUR currency marker immediately before par amount, while the bundle's validation rows show principal_amount_usd is blank for this rule. Because non-USD par cannot be used for USD par analytics without conversion, the missing converted principal is a real extraction/normalization error rather than a false alarm. No aggregate anchor was needed."
+}

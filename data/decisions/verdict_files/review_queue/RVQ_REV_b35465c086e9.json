@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_b35465c086e9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 1,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 15,
+      "quoted_text": "AAH Topco, LLC appears in the current-period investment schedule; rows 16-18 carry first lien positions with fair values 22,885, 5,489, and subtotal 28,374.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 32,
+      "quoted_text": "AAH Topco, LLC appears again in the comparative/prior-period investment schedule; row 33 carries a first lien undrawn position.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "D06 reports 0 persisted issuers, but the raw filing shows at least AAH Topco, LLC present in both current and comparative/prior schedule blocks.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 63,
+        "row_index": 32,
+        "quoted_text": "AAH Topco, LLC"
+      }
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag reporting 0/228 issuers persisted. Raw source contradicts that metric: AAH Topco, LLC is present in the current-period schedule at table 28 row 15 and also in the comparative/prior-period schedule at table 63 row 32. The filing also anchors total investments at fair value to 2,006,885, matching the bundle's current-quarter fair value, so the issue is not a missing current schedule but a continuity extraction/comparison gap."
+}

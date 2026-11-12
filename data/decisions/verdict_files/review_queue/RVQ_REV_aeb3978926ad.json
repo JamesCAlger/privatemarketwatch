@@ -1,0 +1,43 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "rule_scope",
+                         "fix_class":  "rule_scope",
+                         "detail":  "F16 fired because the source legitimately reports a 0.36 per-share distribution funded by return of capital while net investment income yield is negative, not because the extracted fund-financial values are wrong.",
+                         "citation":  {
+                                          "row_index":  13,
+                                          "table_index":  319
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_aeb3978926ad",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  8.2304555808656,
+    "anchor_value":  -0.84,
+    "rationale":  "Source financial highlights for 2025 show NAV ending at 4.39, total distributions to common shareholders of 0.36 per share, 0.00 from net investment income, the full 0.36 from return of capital, and net investment income after waivers of (0.56)%. The raw source therefore supports a distribution rate around 8.23% exceeding the income-yield heuristic, but as a legitimate return-of-capital distribution rather than a data extraction defect. The F16 flag is an overbroad heuristic for this filing.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  15,
+                                  "table_index":  319,
+                                  "quoted_text":  "Total distributions declared to common shareholders | ( 0.36 )"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  31,
+                                  "table_index":  319,
+                                  "quoted_text":  "Net investment income (loss) after fees waived or reimbursed (5) | ( 0.56 )%"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  13,
+                                  "table_index":  319,
+                                  "quoted_text":  "From return of capital | ( 0.36 )"
+                              }
+                          ],
+    "confidence":  0.87
+}

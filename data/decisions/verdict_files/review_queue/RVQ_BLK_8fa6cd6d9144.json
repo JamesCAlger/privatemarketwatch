@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_8fa6cd6d9144",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "INDIRECT",
+  "anchor_value": "DIRECT",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 3,
+      "quoted_text": "Debt investments",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 6,
+      "quoted_text": "Saturn Sound Bidco Limited | First Lien Term Loan | SOFR + 5.25 % | 8.92 % | 12/2/2024 | 12/3/2031 | 57,365 | 56,541 | 56,648 | 10.7 % | *3a(6)(7)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The row block is classified INDIRECT even though the source schedule presents issuer-level debt instruments such as first-lien term loans, which require DIRECT exposure classification.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "C303 is a repeated Class 1 classification failure across a bounded 71-row block. Raw source table 17 labels the section Debt investments and identifies the cited position as an issuer-level First Lien Term Loan with its own par, cost, and fair value. That is direct instrument exposure, so stored exposure_type INDIRECT is wrong; this is not an anchor or rule-scope false alarm. The filing separately labels actual Investment Funds elsewhere, reinforcing that fund interests and these issuer loans are distinct source categories."
+}

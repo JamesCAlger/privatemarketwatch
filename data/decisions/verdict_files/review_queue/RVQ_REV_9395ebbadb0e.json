@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_9395ebbadb0e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 37,
+      "quoted_text": "Sweep Midco LLC row shows cost and fair value printed as dash in the current-period SOI; dash plausibly normalizes to 0.0, but row_key 275629 is not source-localized in the bundle."
+    },
+    {
+      "table_index": 42,
+      "row_index": 5,
+      "quoted_text": "Thrasio, LLC common stock row shows cost and fair value printed as dash in the current-period SOI; this is another possible zero-normalized source row."
+    }
+  ],
+  "rationale": "C104 is a Class 1 single-cell warning for fair_value = 0.0. The raw source was readable and contains SOI rows where the fair value cell is printed as dash, which may legitimately normalize to zero. However, the blinded artifact provides only row_key 275629 and value 0.0, with no issuer or terms, and the row key is not present in the raw source search. Because multiple raw source rows could explain the zero value, the exact flagged cell cannot be confirmed or rejected from the permitted evidence."
+}

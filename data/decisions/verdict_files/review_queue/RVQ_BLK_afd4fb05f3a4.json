@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_BLK_afd4fb05f3a4",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  1417789,
+    "anchor_value":  1417789,
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  37,
+                                  "row_index":  11,
+                                  "quoted_text":  "Dreyfus Treasury Obligations Cash Management Money Market Fund | 3.65 % | 65,057 | 65,057 | 10.70 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "SRC_BDC02 asserted that the pipeline BDC row had no matching current-period source fact, but the raw SOI contains the exact Dreyfus Treasury Obligations Cash Management Money Market Fund row at table 37 row 11, under Short-Term Investments, with amortized cost 65,057 and fair value 65,057. Table 37 row 12 then includes the short-term investment in Total Investments at fair value of 1,417,789, matching the bundle\u0027s fund_quarter_fv_m of 1417.789. The source row exists, so the no-source-match flag is a false alarm."
+}

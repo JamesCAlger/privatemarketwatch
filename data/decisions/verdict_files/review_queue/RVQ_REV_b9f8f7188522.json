@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_b9f8f7188522",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 233,
+      "row_index": 1,
+      "quoted_text": "Investments | Footnotes | Reference Rate Spread / Floor | Cash Interest Rate / PIK Rate | Maturity Date | Outstanding Principal | Amortized Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 233,
+      "row_index": 5,
+      "quoted_text": "Finn Partners, Inc. Initial Term Loan ... Outstanding Principal $ 1,688,670 ... Amortized Cost $ 1,666,105 ... Fair Value $ 1,665,772"
+    },
+    {
+      "table_index": 233,
+      "row_index": 6,
+      "quoted_text": "Finn Partners, Inc. Second Amendment Term Loan ... 3,273,754 ... 3,229,775 ... 3,229,296 in the same dollar-denominated principal/cost/fair-value columns"
+    },
+    {
+      "table_index": 243,
+      "row_index": 15,
+      "quoted_text": "CIFC Stone Warehouse Ltd. - Subordinated Lender ... Outstanding Principal $ - ... Amortized Cost $ 29,250,000 ... Fair Value $ 29,250,000"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 appears to treat rows with omitted repeated dollar symbols as non-USD even though the SOI columns are dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 233,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Raw source does not support the premise that these debt principal amounts are non-USD. The SOI header places Outstanding Principal, Amortized Cost, and Fair Value in money columns; representative rows show dollar symbols at the start of each run, while following rows omit the repeated symbol but remain in the same columns. A warehouse row from the flagged slice also shows dollar-denominated cost and fair value. Because the source shows USD presentation rather than non-USD principal requiring FX conversion, the FX01 firing is a false alarm caused by currency-symbol carry-forward/extraction, not a data error in principal_amount_usd."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_89b580d99e88",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on FX01 validation rows",
+  "anchor_value": "source SOI has EUR-denominated debt principal requiring explicit USD converted principal",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted in Euros.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 23,
+      "quoted_text": "Monitorus Holding, LLC Revolver, First Lien, principal currency EUR, principal 1,332,835, cost 1,449,009, fair value 1,434,519.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan, First Lien, principal currency EUR, principal 2,362,219, cost 2,378,591, fair value 2,354,805.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 25,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan (PBDC SPV), First Lien, principal currency EUR, principal 1,438,546, cost 1,448,516, fair value 1,434,031.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "EUR-denominated debt principal rows are present in the source, but the FX01 validation rows show principal_amount_usd is missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "FX01 is a row-level FX completeness check. The bundle's source_artifact_rows show OPEN FX01 issues where non-USD debt principal is missing principal_amount_usd. Raw source confirms that the SOI uses USD par unless noted in Euros, and table 15 rows 23-25 are debt rows with EUR principal amounts. Because those rows need an explicit USD converted principal field for par analytics and the observed field is blank, the flag is a real extraction/normalization gap."
+}

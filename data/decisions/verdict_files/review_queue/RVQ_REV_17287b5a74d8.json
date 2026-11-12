@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_17287b5a74d8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -8000.0,
+  "anchor_value": -8000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 25,
+      "quoted_text": "Arnott, LLC^(5) | One stop | SF + | 4.75 | % | N/A(6) | 11/2030 | -- | ( 8 ) | -- | ( 8 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "Empyrean Solutions, LLC^(5) | One stop | SF + | 4.75 | % | N/A(6) | 11/2031 | -- | ( 7 ) | -- | ( 7 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 41,
+      "quoted_text": "Creek Parent, Inc.^(5) | One stop | SF + | 5.25 | % | N/A(6) | 12/2029 | -- | ( 200 ) | -- | ( 201 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 54,
+      "row_index": 13,
+      "quoted_text": "Total liabilities, at fair value: | $ | -- | $ | ( 17,856 ) | $ | -- | $ | ( 17,856 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value rows. Raw schedule rows show parenthesized fair values in the fair value position, e.g. Arnott (8), Empyrean (7), and Creek Parent (201), matching the extracted negative values in thousands. The filing also reports total liabilities at fair value as a negative amount, so negative fair values are source-native for this filing rather than extraction errors."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_a463e98021b7",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "02/28/2025",
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 28,
+      "quoted_text": "KWOR Intermediate I, Inc. | Common Equity | Acquisition Date 02/28/2025 | Cost 1,069 | Fair Value zero",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 treated 02/28/2025 as a comparative source period, but raw source table 26 explicitly identifies this column as Acquisition Date. Row 28 is a position in the filing's investment schedule, so an acquisition date earlier than the 2026-03-31 report date is expected and does not make the holding comparative-period data. The flag is a rule-scope/classification false alarm."
+}

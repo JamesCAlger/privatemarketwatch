@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_a03828c48e4d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_coupon",
+  "observed_value": "blank extracted interest_rate and blank basis_spread for flagged private credit rows",
+  "anchor_value": "source schedule coupon cells include explicit PIK rates such as 14.00 % PIK and 12.16 % PIK",
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 2,
+      "quoted_text": "Senior subordinated loan | 14.00 % PIK | 04/2035 | 12,704.9 | 11,820.3 | 12,387.3 | (2)(5)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 31,
+      "quoted_text": "22 HoldCo Limited | Senior subordinated loan | 12.16 % PIK | SONIA (S) | 7.50 % | 08/2033 | 25,193.1 | 22,927.9 | 25,193.1 | (2)(5)(7)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The review bundle shows flagged private credit rows with blank interest_rate, but matching source senior subordinated loan rows disclose PIK coupon rates.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "22 HoldCo Limited is flagged with no extracted rate while the source coupon cell is 12.16 % PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Class 1 row-validation issue: the bundle reports X02 rows where private credit positions have blank interest_rate and basis_spread, including senior subordinated loans. Raw SOI source rows have populated Coupon cells for matching instruments, including 14.00 % PIK on the continuation senior subordinated loan row following the 15484880 Canada issuer block and 12.16 % PIK for 22 HoldCo Limited. The missing extracted rates are therefore source-contradicted extraction gaps, not a valid source blank or aggregate-anchor issue."
+}

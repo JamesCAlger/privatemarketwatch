@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_b23f940caee7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_GYIAAUPKRUCQGOAUDCFQTQ",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | ... | $ | 1,750,389 | $ | 1,776,963 | 1.25 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 22,
+      "quoted_text": "Total Investments | $ | 255,095,531 | $ | 256,654,766 | 180.45 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted in Euros.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "fair_value_currency retained a synthetic XBRL unit label even though the source schedule fair-value amounts are dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error: affected extracted rows carry fair_value_currency=UNIT_STANDARD_USD_GYIAAUPKRUCQGOAUDCFQTQ, but the raw investment schedule prints the fair-value column with dollar markers and the schedule total is also shown as dollars. The source therefore supports USD, so the non-USD synthetic unit label should have been normalized to USD rather than stored as the currency."
+}

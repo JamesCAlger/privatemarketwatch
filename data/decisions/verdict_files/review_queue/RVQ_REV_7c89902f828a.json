@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_7c89902f828a",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Company (1)(9) | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2) (7) | Fair Value (6) | Percentage of Net Assets"
+    },
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Hornetsecurity Holding GmbH (3)(4) | First-lien loan (EUR 3,150 par, due 11/2029 ) | 11/14/2022 | E + 6.50 % | 9.15 % | $ 3,143 | $ 3,312 (EUR 3,049 ) | 0.4 %"
+    },
+    {
+      "table_index": 8,
+      "row_index": 69,
+      "quoted_text": "Total Investments | $ | 1,248,920 | $ | 1,262,452 | 155.4 | %"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency value U_USD as not USD, but the raw SOI schedule labels the valuation columns as Amortized Cost and Fair Value and shows dollar signs for those monetary columns. A representative flagged row, Hornetsecurity Holding GmbH, has amortized cost '$ 3,143' and fair value '$ 3,312 (EUR 3,049 )'; the schedule total also uses '$'. The source therefore supports USD-denominated valuation fields, so the warning is caused by treating the extractor token U_USD as non-USD rather than by a source data error."
+}

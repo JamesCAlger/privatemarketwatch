@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_f97755b8787b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1646959,
+  "anchor_value": 1646959,
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 9,
+      "quoted_text": "Total Investment Portfolio | $ | 1,632,151 | $ | 1,646,959 | 169.34 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 31,
+      "quoted_text": "Capripack Debtco PLC (4)(5)(10) | E + | 5.75 % (incl. 2.50 % PIK) | 8.07 | % | 1/3/2030 | EUR | 5,276 | 5,614 | 6,194",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 28,
+      "quoted_text": "Flatiron Energy Holdco LLC (4)(13) | SF + | 7.50 % PIK | 11.80 | % | 10/1/2029 | 5,244 | 5,142 | 5,132",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "No rule-specific fmt_basis_spread standard exists in the contract. The flag is CIK-level with n_violate=2 and no row/cell location. Source evidence was readable: the investment fair-value anchor ties to the schedule total at 1,646,959, and targeted SOI rows show unusual spread formats such as E + 5.75% (incl. 2.50% PIK) and SF + 7.50% PIK, but those source rows are internally parseable and do not prove a source data error. Without the two internally flagged rows or an independent source contradiction, raw source does not decide whether the weak check found a real extraction defect or over-fired on valid formatting."
+}

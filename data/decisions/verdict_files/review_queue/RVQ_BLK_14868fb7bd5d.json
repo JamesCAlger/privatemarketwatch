@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_14868fb7bd5d",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_source_row",
+  "observed_value": "fixed coupon classification with basis_spread 450",
+  "anchor_value": "floating SOFR plus 450 bps",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "MRO Holdings, Inc. | First Lien Secured Debt - Bank Debt Term Loan | S + 450 , 0.50 % Floor | 10/4/2032 | $ | 47,841 | $ | 48,037 | $ | 47,482 | (5)(8)(13)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The source identifies the coupon as SOFR plus 450 bps, so the row must not be treated as fixed-rate; basis_spread 450 is correct.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 2 adjudication. The March 31, 2026 schedule row matching the flagged holding by issuer, maturity, cost, and fair value states S + 450 with a 0.50% floor. This is a floating-rate SOFR instrument. Therefore the stored basis_spread of 450 is source-correct, but the row's fixed-coupon classification that triggered X04 is a real data defect. No aggregate anchor is needed."
+}

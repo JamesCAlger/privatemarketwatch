@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_c3efe57ab80f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 218,
+  "anchor_value": 218,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 12,
+      "quoted_text": "Carnegie Dartlet, LLC Revolving Loan | 3M SOFR + 0.50 % / 1.00 % | 0.50 % | 2/7/2030 | outstanding principal -- | Cost* ( 1 ) | Fair Value --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 17,
+      "quoted_text": "Gator Plastic Intermediate Holdings, LLC Revolving Loan | 3M SOFR + 0.50 % / 1.50 % | 0.50 % | 10/14/2027 | outstanding principal -- | Cost* ( 11 ) | Fair Value --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 20,
+      "quoted_text": "Kite Midco II LTD Term Loan B2 | 3M SOFR + 1.00 % / 0.00 % | 1.00 % | 11/19/2031 | outstanding principal -- | Cost* ( 8 ) | Fair Value ( 1 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 22,
+      "quoted_text": "Minds Buyer, LLC Revolving Credit | 3M SOFR + 0.50 % / 1.00 % | 0.50 % | 5/3/2029 | outstanding principal -- | Cost* ( 3 ) | Fair Value --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 10,
+      "quoted_text": "Total unfunded commitments | $ | 641,519 | $ | 319,844",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 is an aggregate review warning for negative cost rows. The raw Schedule of Investments itself prints negative costs in parentheses in the Cost* column for revolving/undrawn-style positions with no outstanding principal, and the filing separately discloses total unfunded commitments. The extracted negative costs therefore match source presentation rather than showing a data error; the flag is overbroad for source-present negative-cost positions."
+}

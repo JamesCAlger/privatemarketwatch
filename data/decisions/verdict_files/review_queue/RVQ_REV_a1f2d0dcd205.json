@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_a1f2d0dcd205",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2025-09-28",
+  "anchor_value": "09/28/25",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Revolver - 12.08 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 0.4 | % | 4,408,256 | 09/28/25 | 4,134,235 | 1,992,532"
+    },
+    {
+      "table_index": 12,
+      "row_index": 22,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Term Loan - 12.08 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 3.3 | % | 37,996,697 | 09/28/25 | 35,633,236 | 17,174,507"
+    }
+  ],
+  "rationale": "Class 1 check of the flagged maturity_date cells. The raw schedule's Maturity Date column shows 09/28/25 for both Encompass Digital Media rows, matching the stored value 2025-09-28. Because the extracted value is source-faithful and the filing still reports the positions at 2025-09-30, the X10 warning is monitoring/rule-scope rather than a demonstrated data error."
+}

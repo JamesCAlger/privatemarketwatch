@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_c7aecdeb06b7",
+  "verdict": "real_error",
+  "mechanism": "cash_equivalent_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 449527000.0,
+  "anchor_value": 402819000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 20,
+      "quoted_text": "Total Investments in Portfolio Companies - 136.87 %* (4) | $ | 411,754 | $ | 402,819",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "Total Cash Equivalents - 15.87 %* | $ | 46,708 | $ | 46,708",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing's portfolio-company schedule total is 402,819 thousand, matching the companyfacts fair-value anchor. The extracted observed value is 449,527,000, exactly 46,708,000 above the anchor; the separate cash-equivalents table reports Total Cash Equivalents of 46,708 thousand. The overshoot is therefore explained by cash equivalents being included with portfolio-company investments."
+}

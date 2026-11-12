@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_54a6da2e7bdf",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1016389000,
+  "anchor_value": 982953000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 20,
+      "quoted_text": "Total Investments | $ 988,148 | $ 982,953 | 206.53 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 23,
+      "quoted_text": "BlackRock Liquidity FedFund - Institutional | 33,436 | $ 33,436 | $ 33,436 | 7.02 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 25,
+      "quoted_text": "Total Investments and Cash Equivalents | $ 1,021,584 | $ 1,016,389 | 213.55 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 8,
+      "quoted_text": "Total cash equivalents and investments at fair value | $ 191,069 | $ 342,886 | $ 482,434 | $ 1,016,389",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source separates Total Investments fair value of 982,953 thousand from Total Investments and Cash Equivalents fair value of 1,016,389 thousand. The observed position sum equals the broader cash-equivalents-inclusive total, while the companyfacts_fv anchor equals Total Investments. The difference is 33,436 thousand, matching the BlackRock Liquidity FedFund cash equivalents row, so the conservation overshoot is a real subtotal leak caused by including cash equivalents against an investments-only anchor."
+}

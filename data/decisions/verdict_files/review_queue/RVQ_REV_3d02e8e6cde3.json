@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_3d02e8e6cde3",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  203.71,
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  81,
+                                  "row_index":  12,
+                                  "quoted_text":  "Total Investment Portfolio | $ | 25,109,408 | $ | 25,337,420 | 203.71 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  8,
+                                  "row_index":  10,
+                                  "quoted_text":  "Total | $ | 25,109,408 | $ | 25,337,420 | 100.00 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "A07 reports pct_sum=0.0%, but the raw filing contains percentage anchors for the same 2025 schedule: total investments equal $25,337,420 and 100.00% of total investments, while the detailed schedule total reports $25,337,420 and 203.71% of net assets. The zero percentage aggregate is therefore a source-grounded extraction gap rather than a source value."
+}

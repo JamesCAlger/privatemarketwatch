@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_791e1d449dd7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "515349 source par amount",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 20,
+      "quoted_text": "Dynamic Connections, Ltd (i)(l)(m)(p) | Term Loan | CORRA + 5.75 % | 8.30 % | 11/27/2030 | 515,349 | 362,777 | 368,710"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 row has blank principal_amount_usd even though the source schedule provides a debt par amount in Par Amount/Units.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 39,
+        "row_index": 20,
+        "quoted_text": "Dynamic Connections, Ltd (i)(l)(m)(p) | Term Loan | CORRA + 5.75 % | 8.30 % | 11/27/2030 | 515,349 | 362,777 | 368,710"
+      }
+    }
+  ],
+  "rationale": "The FX01 artifact reports principal_amount_usd as blank for rows requiring explicit FX-aware principal handling. Raw source table 39 row 20 is a debt position and shows a concrete Par Amount/Units value of 515,349 alongside cost and fair value. The flagged blank value is therefore a source-grounded extraction/normalization gap, not a source absence or a check-only false alarm."
+}

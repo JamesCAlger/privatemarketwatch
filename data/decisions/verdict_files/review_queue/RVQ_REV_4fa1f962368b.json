@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_4fa1f962368b",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -10000,
+  "anchor_value": -10000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 11,
+      "quoted_text": "DS Admiral Bidco, LLC (4)(6)(11) | 3/16/2026 | 966 | ( 6 ) | ( 10 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 55,
+      "quoted_text": "DS Admiral Bidco, LLC | 1st Lien Senior Secured Revolving Loan | 966 | ( 10 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged fair_value of -10000 is the filing's (10) fair value in thousands for DS Admiral Bidco. The schedule row also shows matching negative amortized cost (6), and the unfunded commitment table identifies the same issuer as a 1st Lien Senior Secured Revolving Loan with unfunded commitment 966 and fair value (10). The negative fair value is therefore source-supported and within the unfunded commitment presentation that C103 is meant to exempt."
+}

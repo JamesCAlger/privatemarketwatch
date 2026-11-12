@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_e3f4a427c3bd",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1029,
+  "anchor_value": 1919,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 5,
+      "quoted_text": "Total investments | $ | 10,050,232 | 218.2 | % | $ | 9,928,221",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 57,
+      "row_index": 41,
+      "quoted_text": "Total investments | $ | 8,479,341 | 210.7 | % | $ | 8,555,251",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count combines the current investment schedule with the separate comparative-period schedule, while output is correctly scoped to 2026-03-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 57,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "Raw filing evidence contains two distinct investment schedules: the current schedule closes at table 35 with fair value 9,928,221, matching the extracted quarter fair value of approximately 9,843.424 million after the platform's position scope, while a separate comparative schedule closes at table 57 with fair value 8,555,251. E07's source count of 1,919 versus 1,029 output is therefore inflated by comparative-period rows rather than demonstrating missing current-period positions. The flag is a false alarm caused by a comparative leak in the oracle anchor."
+}

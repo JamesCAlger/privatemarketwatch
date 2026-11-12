@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_049efbc4c992",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5.0,
+  "anchor_value": 0.02,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 82,
+      "row_index": 10,
+      "quoted_text": "DemandTec, LLC | First lien senior secured revolving loan | S + | 5.00 % | 8.71 | % | 8/27/2025 | 8/27/2031 | 1,505 | 355 | 358 | 0.02 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 25,
+      "quoted_text": "Answer Acquisition, LLC | First lien senior secured term loan | S + | 6.00 % | 9.82 | % | 1/16/2024 | 6/30/2028 | 843 | 835 | 835 | 0.04 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted percent-of-net-assets value appears to be taken from the Reference Rate and Spread column instead of the final Percentage of Net Assets column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 82,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "This is a Class 2 within-row defect. The filing row has separate columns for Reference Rate and Spread and Percentage of Net Assets; for DemandTec revolving loan the source shows a 5.00% spread but a 0.02% net-assets percentage. Using the filing net assets anchor of 2,384,890, fair value 358 implies approximately 0.02%, so the source net-assets percentage is internally consistent while the flagged identity residual is explained by extracting the earlier spread-like percent as pct_of_net_assets. The same structure appears on another flagged Answer Acquisition term-loan row, where 6.00% is the spread and 0.04% is the actual percent of net assets."
+}

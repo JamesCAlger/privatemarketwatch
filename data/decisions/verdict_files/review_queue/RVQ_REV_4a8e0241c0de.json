@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_4a8e0241c0de",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Portfolio Company Debt Securities- United States Artificial Intelligence & Automation Ambient Photonics, Inc. Type of Investment Secured Loan Investment Date December 20, 2022 Maturity Date June 1, 2025 Interest Rate Variable interest rate Prime + 6.0% or Floor rate 9.5%; EOT 4.0%",
+  "anchor_value": "Ambient Photonics, Inc.",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 7,
+      "quoted_text": "Portfolio Company column is blank on a continuation row for Ambient Photonics, Inc.; separate cells show Type of Investment Secured Loan, Investment Date December 20, 2022, Maturity Date June 1, 2025, Interest Rate Variable interest rate Prime + 6.0 % or Floor rate 9.5 %; EOT 4.0 %, Cost 324, Fair Value 305.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name extraction concatenated schedule headers/category and investment terms into issuer_name instead of carrying forward the portfolio company name Ambient Photonics, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The source schedule has a Portfolio Company column separate from Type of Investment, Investment Date, Maturity Date, and Interest Rate. In table 15, Ambient Photonics, Inc. appears as the portfolio company on row 5 and rows 6-7 are continuation rows for the same issuer, while row 7 separately contains Secured Loan, December 20, 2022, June 1, 2025, and the interest-rate terms. The stored issuer_name concatenates the section/category and all of those terms, so the fmt_issuer_name flag is a real extraction defect."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_c4957d2284bd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include sector/category/type/rate/maturity text",
+  "anchor_value": "source rows show clean issuer cells with terms in separate columns",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 60,
+      "row_index": 18,
+      "quoted_text": "Benefit Street Partners Clo Vi-B Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 4.75 % | 9.08 % | 4/20/2038 | 100,000 | 100,000 | 98,425"
+    },
+    {
+      "table_index": 60,
+      "row_index": 21,
+      "quoted_text": "Cifc Fdg 2025-Iii Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 7.25 % | 11.58 % | 7/21/2038 | 250,000 | 250,000 | 256,598"
+    },
+    {
+      "table_index": 60,
+      "row_index": 22,
+      "quoted_text": "Flatiron Rr Clo 30 Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 5.25 % | 9.53 % | 4/15/2038 | 200,000 | 200,000 | 201,407"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer extraction leaked asset class, industry, type, reference spread, interest rate, and maturity into issuer_name for three CLO rows; the source rows keep those fields separate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 60,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse error. The flagged stored values concatenate the table's category wrappers and term columns, but the raw source rows show clean issuer cells such as Benefit Street Partners Clo Vi-B Ltd, Cifc Fdg 2025-Iii Ltd, and Flatiron Rr Clo 30 Ltd, with type, spread, rate, maturity, cost, and fair value in separate cells. This localizes the defect to extraction/wrapper parsing rather than a false rule fire."
+}

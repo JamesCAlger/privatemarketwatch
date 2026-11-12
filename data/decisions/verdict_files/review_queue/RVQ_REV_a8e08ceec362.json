@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_a8e08ceec362",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 202,
+      "row_index": 30,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments March 31, 2025; American Airlines, Inc. | (8) | SOFR + | 2.25 % | 6.54 % | 1/19/2022 | 4/20/2028 | 2,480 | 2,480 | 2,454 | 0.11",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 202,
+      "row_index": 31,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments March 31, 2025; American Airlines, Inc | (8) | SOFR + | 2.25 % | 6.57 % | 12/12/2024 | 2/15/2028 | 15,000 | 15,066 | 14,788 | 0.64",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two distinct American Airlines positions in the BCRED Emerald JV schedule are collapsed to one duplicate position key even though maturity, acquisition date, par, cost, fair value, and interest rate differ.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 202,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "B02 flags two duplicate position keys, with the bundle example 'american airlines inc emerald jv lp'. Raw source table 202 is the BCRED Emerald JV LP March 31, 2025 schedule and contains two separate American Airlines rows. They are not duplicate source rows: row 30 has interest 6.54%, acquisition 1/19/2022, maturity 4/20/2028, par 2,480, fair value 2,454; row 31 has interest 6.57%, acquisition 12/12/2024, maturity 2/15/2028, par 15,000, fair value 14,788. The duplicate key therefore reflects an extraction/identity construction gap that omitted tranche-disambiguating fields."
+}

@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_8c9f7c643c27",
+  "verdict": "false_alarm",
+  "mechanism": "unit_label_normalization",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U002",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "48forty Intermediate Holdings, Inc. | (16) | S+ 6.10 % | 11.44 % | 10/11/2022 | 12/1/2026 | 14,736,842 | 14,273,291 | 13,669,895 | 6.7"
+    },
+    {
+      "table_index": 15,
+      "row_index": 75,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 337,496,226 | $ | 325,772,154 | 160.0 | %"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency as U002, but the raw schedule of investments presents the affected rows under Amortized Cost and Fair Value columns that are dollar-denominated. The first flagged sample row has amortized cost 14,273,291 and fair value 13,669,895 in those columns, and the same schedule total explicitly shows dollar signs for total amortized cost and fair value. Source supports USD-denominated valuation amounts; the non-USD U002 token is a unit-label normalization/check false alarm rather than a source data error."
+}

@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_049b1d5323ff",
+    "verdict":  "false_alarm",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  5114000,
+    "anchor_value":  5114000,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  22,
+                                  "row_index":  5,
+                                  "quoted_text":  "Atlas Ontario LP (Canada) | ^ | (6)(7) | Business Services | 4/7/2021 | 5,114 | 5,114 | 5,114 | 0.47",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  37,
+                                  "row_index":  5,
+                                  "quoted_text":  "Atlas Ontario LP (Canada) | ^ | (7)(8) | Business Services | 4/7/2021 | 5,114 | 5,114 | 5,114 | 0.44",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "PP03 flagged a retained comparative-period row for Atlas Ontario LP, but the raw filing also contains a current-period Atlas Ontario LP row in the September 30, 2023 equity schedule with the same shares, cost, and fair value. The comparative row explains the warning, while the current-period row grounds the stored report-date values, so the row is not a data error."
+}

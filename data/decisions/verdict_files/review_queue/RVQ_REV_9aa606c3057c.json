@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_9aa606c3057c",
+    "verdict":  "real_error",
+    "mechanism":  "unit_scale",
+    "localized":  true,
+    "anchor_used":  "schedule_currency_note",
+    "observed_value":  "EUR",
+    "anchor_value":  "USD",
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  20,
+                                  "row_index":  1,
+                                  "quoted_text":  "(1) | Unless otherwise indicated, issuers of debt and equity investments held by the Company (where such term \"Company\" shall include the Company\u0027s consolidated subsidiaries for purposes of this Consolidated Schedule of Investments) are denominated in dollars.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  20,
+                                  "row_index":  2,
+                                  "quoted_text":  "(2) | Variable rate loans to the portfolio companies bear interest at a rate that is determined by reference to either EURIBOR (\"E\"), LIBOR (\"L\" or \"LIBOR\") or SOFR (\"S\") or an alternate base rate.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "unit_scale",
+                         "detail":  "The stored cost_currency is EUR, but the schedule states portfolio debt and equity investments are dollar-denominated unless otherwise indicated; EUR appears only as EURIBOR reference-rate notation, not cost currency.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  20,
+                                          "row_index":  1
+                                      }
+                     }
+                 ],
+    "rationale":  "FX03 is a Class 1 currency/unit check. The flagged observed value is cost_currency=EUR. The raw schedule footnote for March 31, 2023 states that debt and equity investments are denominated in dollars unless otherwise indicated, and the source search found no investment-row EUR denomination; the EUR text in the investment footnotes is EURIBOR reference-rate notation. Therefore the EUR cost currency is a real data error, likely caused by unit/currency extraction from rate or XBRL tagging rather than a legitimate non-USD investment."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_11cd91d7b7de",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 4.9512206572769974,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 flagged distribution_rate greater than income_yield_pct * 1.5, but the evidence CLI returned no_accession_resolved for overview, tables, totals, and targeted roam queries, so raw source was unavailable through the permitted evidence window."
+}

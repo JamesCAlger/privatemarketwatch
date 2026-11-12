@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_c690e2983880",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "principal_amount_usd is blank in the FX01 issue rows",
+  "anchor_value": "SOI contains non-USD debt par requiring USD conversion, e.g. SubCalidora 2 S.a r.l. Term Loan: EURIBOR + 5.750%, par 2,384, Spain domiciled",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan (2)(3)(11) | EURIBOR + 5.750 % | 9.340% | 08/14/2029 | Par Amount/Shares 2,384 | Cost 2,522 | Fair Value 2,601"
+    },
+    {
+      "table_index": 24,
+      "row_index": 0,
+      "quoted_text": "(11) Investment is Spain domiciled."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "At least one flagged debt position has a non-USD/EURIBOR source par amount but the extracted principal_amount_usd is blank, so par analytics lack the required USD conversion field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The issue artifact reports FX01 rows where principal_amount_usd is blank. Raw SOI row 11:18 shows SubCalidora 2 S.a r.l. Term Loan with EURIBOR + 5.750%, par amount 2,384, cost 2,522 and fair value 2,601; footnote 11 at table 24:0 identifies the investment as Spain domiciled. That source row supports the rule premise that at least this debt par is non-USD/FX-sensitive and requires an explicit USD principal conversion before USD par analytics. The stored observed value is blank, so the flag is a real extraction/normalization gap. Residual risk: the queued aggregate may include some rows that appear USD-denominated, but the reviewed item is grounded by a concrete non-USD culprit row."
+}

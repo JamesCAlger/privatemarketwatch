@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_3c79654f0eee",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 181.4,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 22,
+      "quoted_text": "Investments Total | $ | 1,664,992 | $ | 1,681,258 | 181.4 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The A07 artifact observed pct_sum=0.0%, but the 2025 SOI source reports Investments Total at 181.4% of NAV.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 65,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation against the schedule total shows a nonzero percentage anchor in the raw SOI: table 65 row 22 reports Investments Total with fair value $1,681,258 and 181.4% of NAV. The flagged artifact's observed pct_sum is 0.0%, so the source supports an extraction/column mapping gap rather than a valid zero percentage."
+}

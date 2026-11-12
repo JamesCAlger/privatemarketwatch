@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_6df9b3c2bb6d",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": 10.27,
+  "anchor_value": 10.27,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 14,
+      "quoted_text": "First-lien revolving loan ($ 892 par, due 7/2027 ) | 7/22/2021 | SOFR + 6.60 % | 10.27 | % | 882 | 880 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source table 8 row 14 separates Reference Rate and Spread (SOFR + 6.60%) from Interest Rate (10.27%). The stored interest_rate of 10.27 matches the source coupon; the flag incorrectly compares or substitutes the 6.60% spread as the interest-rate basis."
+}

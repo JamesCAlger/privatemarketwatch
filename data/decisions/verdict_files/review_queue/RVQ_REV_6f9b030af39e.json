@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_6f9b030af39e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_interest_rate_cell",
+  "observed_value": "",
+  "anchor_value": "S+ 225 , 0.00 % Floor",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 4,
+      "quoted_text": "Dynasty Acquisition Co., Inc. | First Lien Secured Debt - Term Loan | S+ 225 , 0.00 % Floor | 10/31/2031 | $ | 5,000 | $ | 4,994 | $ | 5,029 | (8)(14)"
+    },
+    {
+      "table_index": 36,
+      "row_index": 3,
+      "quoted_text": "R.F. Fager Company, LLC | First Lien Secured Debt - Term Loan | S+ 525 , 1.00 % Floor | 3/4/2030 | 3,102 | 3,039 | 3,047 | (4)(9)(14)(15)(16)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Basis-spread interest-rate cells are present in the SOI but the extracted holdings slice carries blank interest_rate values for matching positions.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The raw SOI has an Interest Rate column containing basis-spread/floor terms, including Dynasty Acquisition Co., Inc. with 'S+ 225 , 0.00 % Floor' and R.F. Fager Company, LLC with 'S+ 525 , 1.00 % Floor'. The bundled extracted holdings for this CIK/quarter show matching basis-spread terms embedded in the investment identifier while interest_rate is blank, so the flag reflects a real extraction gap rather than a source ambiguity."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_992749acc17f",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 82,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 3,
+      "row_index": 7,
+      "quoted_text": "Consolidated Schedules of Investments as of December 31, 2025 (unaudited) and September 30, 2025 | 8"
+    },
+    {
+      "table_index": 32,
+      "row_index": 45,
+      "quoted_text": "AP Adhesives Holdings, LLC(5) | One stop | N/A(6) | 04/2032 | -- | ( 3 ) | -- | --"
+    },
+    {
+      "table_index": 32,
+      "row_index": 47,
+      "quoted_text": "AP Adhesives Holdings, LLC^ | One stop | SF + | 4.75 % | (i) | 8.80 % | 04/2032 | 1,667 | 1,659 | 0.2 | 1,667"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 rows are comparative-period investment schedule rows retained in the 2025-12-31 holdings extract; AP Adhesives appears in the later comparative schedule block with values distinct from the December block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 32,
+        "row_index": 47
+      }
+    }
+  ],
+  "rationale": "The raw filing explicitly contains consolidated schedules of investments for both December 31, 2025 and September 30, 2025. A flagged issuer, AP Adhesives Holdings, appears in the current December block at table 10 rows 48-50 and again in the later comparative block at table 32 rows 45-47; the comparative row carries different period values such as interest rate 8.80% and amortized cost/fair value 1,659/1,667, while the December row carries 8.66% and 1,655/1,662. Retaining those earlier-period schedule rows in the report-date holdings extract is a real comparative-period leakage defect, not a false alarm."
+}

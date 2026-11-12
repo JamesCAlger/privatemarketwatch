@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_5c7c618123ac",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "FX01 flags missing principal_amount_usd for rows described by the validation artifact as non-USD debt principal. The raw source schedule rows checked via the evidence CLI show Par Amount/ Units and USD-denominated amortized cost/fair value columns, but the source rows available through the CLI do not disclose an explicit source currency or FX conversion anchor. For example, table 14 row 3 shows Mews Systems B.V. with par 17,840, amortized cost $16,737, and fair value $17,614; table 14 row 33 shows BusBud Inc. with par 26,552, amortized cost 25,343, and fair value 25,193; table 15 row 13 shows BusBud Inc. with par/units 178,935 and fair value 1,359. Roam queries for 'EUR GBP non-USD currency par principal', 'Currency', 'foreign currency', 'Canadian dollars', 'denominated', and 'Euro' returned no deciding currency disclosure. Because the raw source is readable but does not decide whether these flagged par amounts require a USD principal conversion, the item is ambiguous rather than a grounded real error or false alarm."
+}

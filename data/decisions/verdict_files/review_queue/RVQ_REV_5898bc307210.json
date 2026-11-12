@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_5898bc307210",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -125000,
+  "anchor_value": -125000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 20,
+      "quoted_text": "MRI Software, LLC | SOFR + 5.50 % | N/A | 2/10/2027 | amortized cost ( 68 ) | fair value ( 125 ) | ( 0.2 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value for MRI Software, LLC. The raw schedule of investments is in thousands and shows the MRI Software row with fair value '( 125 )', matching the extracted value of -125000. Because the challenged value is present in source, the negative fair value is not an extraction or data error."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_55d4386cf8a2",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.3178,
+  "anchor_value": 0.9918,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 39,
+      "quoted_text": "Total Investments ( 101.9 %) | $ | 206,915,482 | $ | 203,061,624",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Total Assets | $ | 204,949 | $ | 160,646",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 5,430 | $ | - | $ | 197,632 | $ | 203,062",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor check. The filing's June 30, 2025 investment schedule reports total investments of 203,061,624, and the fair-value hierarchy independently totals investments at 203,062 thousand. The balance sheet reports total assets of 204,949 thousand. Source ratio is therefore about 203.062m / 204.949m = 0.9918, inside the 0.8-1.2 GAV_BDC02 band; the queued 1.3178 ratio is not supported by the raw filing and points to a bad companyfacts/full-fund-assets anchor rather than a holdings data error."
+}

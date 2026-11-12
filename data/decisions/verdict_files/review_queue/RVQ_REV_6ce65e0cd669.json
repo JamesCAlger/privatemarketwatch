@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_6ce65e0cd669",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 40,
+      "quoted_text": "Astra Acquisition Corp. (3)(14) | Second-lien loan ($ 40,302 par, due 10/2029 ) | 10/22/2021 | P + 9.88 % | 17.38 | % | 39,703 | 1,511 | 0.1 | %"
+    },
+    {
+      "table_index": 13,
+      "row_index": 4,
+      "quoted_text": "IRGSE Holding Corp. (6)(11) | Class A Units ( 33,790,171 units) | 12/21/2018 | 21,842 | 84 | 0.0 | %"
+    }
+  ],
+  "rationale": "X08 flagged two rows because fair value is below 5% of cost, but the raw schedule confirms the extracted values: Astra Acquisition cost 39,703 and fair value 1,511, and IRGSE Holding Class A Units cost 21,842 and fair value 84. The low ratios are disclosed in the filing, so this is not a demonstrated extraction, scale, or column data error."
+}

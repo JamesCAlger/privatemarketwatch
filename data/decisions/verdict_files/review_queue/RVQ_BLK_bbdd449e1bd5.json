@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_bbdd449e1bd5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 231.8,
+  "anchor_value": 231.81,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ | 1,618,654 | 231.8 | % | $ | 1,562,470",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 35,
+      "quoted_text": "Total net assets | 674,028 | 706,038",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 11,
+      "quoted_text": "Claritas, LLC | fair value 2,389 | percentage of net assets 0.4",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "The identity check does not allow for the filing's one-decimal percentage rounding; 2,389 / 674,028 x 100 = 0.3544%, correctly disclosed as 0.4%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 29,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Raw source anchors agree. The filing reports net assets of $674.028 million and total investment fair value of $1,562.470 million; their ratio is 231.81%, which correctly rounds to the disclosed 231.8%. A representative position likewise reports $2.389 million fair value and 0.4% of net assets, correctly rounding 0.3544% to one decimal. The aggregate 42.14% failure rate therefore reflects an overly tight exact-identity check against rounded source percentages, not erroneous source or extracted values. The extracted position sum of $1,561.237 million is $1.233 million below the schedule total, but that small coverage gap cannot explain the widespread per-row percentage identity flags."
+}

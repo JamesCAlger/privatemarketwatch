@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_10657b0af2ea",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1000.0,
+  "anchor_value": 24.79,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Net asset value per share | $ | 24.79 | $ | 25.22",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The March 31, 2026 source disclosure at table 9 row 6 reports net asset value per share of $24.79, while the extracted fund-financial value is 1000.0. The same current-period $24.79 value is repeated for each share class at rows 6, 10, 14, and 18, so 1000.0 is a localized extraction defect rather than a valid boundary case."
+}

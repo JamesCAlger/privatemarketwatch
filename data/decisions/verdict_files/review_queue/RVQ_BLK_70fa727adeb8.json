@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_70fa727adeb8",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag identifies issuer_name as blank at internal row_key 192283, but the bundle provides no other fields for that row and no source coordinate. The raw filing was successfully read through the evidence CLI; its schedule tables contain Portfolio Company columns, but targeted searches for row key 192283 and issuer missing returned no source match. The evidence therefore cannot distinguish a genuinely omitted issuer from a continuation, header, or subtotal row without an unbounded schedule scan. A source coordinate or identifying row fields are required."
+}

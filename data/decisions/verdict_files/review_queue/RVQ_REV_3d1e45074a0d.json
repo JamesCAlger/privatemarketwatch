@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_3d1e45074a0d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2024-03-31",
+  "anchor_value": "2024-03-31",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 38,
+      "quoted_text": "Chicken Soup For The Soul, LLC | (16)(19)(24) | S+ 8.60 % | 13.94 % | 10/29/2021 | 3/31/2024 | 6,380,856 | 6,380,856 | 1,730,488 | 0.8",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The X10 flag fired because the extracted maturity_date 2024-03-31 precedes the 2024-06-30 report date, but the raw June 30, 2024 schedule itself reports Chicken Soup For The Soul, LLC with maturity 3/31/2024 and nonzero fair value. The stored maturity date matches source, so this is a monitoring/rule-scope warning rather than a data error."
+}

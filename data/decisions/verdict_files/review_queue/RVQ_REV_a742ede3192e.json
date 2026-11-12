@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_a742ede3192e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 21,
+      "quoted_text": "Live Comfortably Inc. (fka Hollander Intermediate LLC) | Common Stock | 0.0% | fair value zero"
+    },
+    {
+      "table_index": 26,
+      "row_index": 23,
+      "quoted_text": "TCW ND Parent Holdings LLC | Class A Units | 0.0% | fair value zero"
+    },
+    {
+      "table_index": 27,
+      "row_index": 18,
+      "quoted_text": "Tabhi Holdings, LLC (fka Mondee Holdings LLC) | Class B Common Units | 0.0% | fair value zero"
+    },
+    {
+      "table_index": 26,
+      "row_index": 33,
+      "quoted_text": "Outform Holdings LLC (fka Rapid Displays, Inc.) | Class A Common Units | 0.0% | fair value zero"
+    },
+    {
+      "table_index": 27,
+      "row_index": 14,
+      "quoted_text": "Encompass Digital Media, Inc. | Class A Units | 0.0% | fair value zero"
+    }
+  ],
+  "rationale": "PP03 flagged five rows as comparative-period facts retained for report_date 2025-12-31. Raw source shows those same instruments as current-period positions in the December 31, 2025 schedule of investments: Live Comfortably common stock, TCW ND Parent Class A Units, Tabhi Class B Common Units, Outform Class A Common Units, and Encompass Class A Units. Their appearance in affiliate roll-forward tables does not by itself prove a retained prior-period row when the current SOI also carries the positions. The check is over-scoped for these zero-value current holdings rather than identifying a data error."
+}

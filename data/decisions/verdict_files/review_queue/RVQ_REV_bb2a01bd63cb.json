@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_bb2a01bd63cb",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/holdings coverage mismatch (fund=True;holdings=False), but the evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query. Raw source was therefore not available through the permitted evidence interface, so the mismatch cannot be adjudicated from source."
+}

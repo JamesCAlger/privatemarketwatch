@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_a56d3b92dcd8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "EUR 17,275,741 principal in source; USD-converted principal required",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 17,
+      "quoted_text": "ABC Technologies Inc. (TI Automotive) (Canada) | First Lien Term Loan | EURIBOR(M) | 0.75% | 5.88% | 7.78% | 8/22/2031 | EUR | 17,275,741 | 19,439,337 | 19,604,164 | 0.80% | C/E"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD source principal is present as EUR 17,275,741, but principal_amount_usd is blank for the extracted debt row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "FX01 is a real data error. The source schedule row for ABC Technologies Inc. (TI Automotive) (Canada) shows a debt principal denominated in EUR, so par analytics require an explicit USD-converted principal. The flagged extracted row has principal_amount_usd blank, which is an extraction/normalization gap rather than a false alarm."
+}

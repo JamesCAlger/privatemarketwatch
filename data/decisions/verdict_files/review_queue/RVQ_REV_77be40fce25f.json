@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_77be40fce25f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Rows 24 and 25 are TCW Direct Lending Strategic Ventures Common and Preferred membership Interests position rows under the Investment Funds & Vehicles industry heading.",
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 24,
+      "quoted_text": "TCW Direct Lending Strategic Ventures (2)(4)(7) | Common membership Interests | 0.0 | % | 800 | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 25,
+      "quoted_text": "TCW Direct Lending Strategic Ventures (4)(7) | Preferred membership Interests | 20.9 | % | 84,880 | 84,880,000 | 81,579,355",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 26,
+      "quoted_text": "Blank issuer/investment subtotal row for the same TCW Direct Lending Strategic Ventures position group: 20.9% | 84,880,000 | 81,579,355",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged the extracted identifiers because they contain the industry phrase Investment Funds & Vehicles and look aggregate-like after concatenation. Raw source shows the flagged rows are specific security-level holdings: common membership interests and preferred membership interests for TCW Direct Lending Strategic Ventures, with shares, amortized cost, and fair value populated. The adjacent subtotal-style rollup is row 26, not the two flagged extracted rows, so the rule fire is a false alarm on these rows."
+}

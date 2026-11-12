@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_37747402223d",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 25228000,
+  "anchor_value": 20852440,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 14,
+      "quoted_text": "Insight Hideaway Aggregator, L.P. (8) | Partnership Interest ( 2,170,139 units) | 3/19/2024 | 21,701 | 25,228 | 0.5 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 24,
+      "quoted_text": "Total Net Assets | 4,170,488 | 4,036,470",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor check used the filing's own schedule/financial-statement anchors. Total Net Assets are 4,170,488 thousand, while the cited SOI row reports fair value of 25,228 thousand and 0.5% of net assets. The printed percentage implies 20,852.44 thousand of fair value, not 25,228 thousand, producing the queued residual of 4,375.56 thousand. The total investment and net-assets anchors are readable and internally consistent, so this is a real percentage-of-net-assets identity defect localized to the cited row."
+}

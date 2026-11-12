@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d04d87f777c1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "Allied OMS Intermediate Company, LLC - Preferred Units | Principal / Shares: 13,570",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "Vistria ESS Holdings, LLC - Equity Units | Principal / Shares: 326",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity share and unit counts disclosed in the Principal / Shares column were not populated for the extracted equity rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C04 reports that 0.0% of 12 equity rows have shares, but the raw March 31, 2026 investment schedule labels the column Principal / Shares and supplies counts throughout the equity section. Table 17 row 4 discloses 13,570 Preferred Units and table 18 row 4 discloses 326 Equity Units. The schedule therefore anchors expected share coverage at 100% versus the observed 0%, proving a systematic equity share-column extraction gap."
+}

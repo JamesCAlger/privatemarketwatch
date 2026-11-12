@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_e6d03487bb0f",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 821.004121,
+  "anchor_value": 825.525,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 7,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 858,951 | $ 825,525 | 220.04 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 57,
+      "row_index": 52,
+      "quoted_text": "Total Investments, March 31, 2026 | $ | 4,391,653 | $ | 4,232,727",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E07's 1,738-row source anchor includes a separate embedded SDLP investment schedule and repeated schedule presentations, while the registrant schedule total agrees closely with extracted fair value.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 57,
+        "row_index": 52
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate false alarm. The registrant's schedule reports fair value of $825.525 million at table 28 row 7, independently echoed by the balance-sheet total and the allocation table. Extracted positions total $821.004121 million, a difference of only $4.520879 million (0.55%), well inside E07's 10% threshold. The filing also contains a distinct SDLP schedule totaling $4,232.727 million at table 57 row 52 and repeated schedule presentations. Therefore the oracle's source=1,738 versus output=454 row-count comparison uses a contaminated source anchor; it does not establish missing extracted positions."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_9852ce42d284",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 62841989,
+  "anchor_value": 48480496,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "TOTAL INVESTMENTS - 92.9 % | $ | 57,062,399 | $ | 48,480,496",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (cost of $ 57,062,399 and $ 68,120,235, respectively) | 48,480,496 | 70,818,041",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "Extracted/indexable holdings fair value is 62,841,989, but both the investment schedule and statement anchor show total investments at fair value of 48,480,496 for 2025.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 11,
+        "row_index": 18,
+        "quoted_text": "TOTAL INVESTMENTS - 92.9 % | $ | 57,062,399 | $ | 48,480,496"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate reconciliation: the raw filing's schedule total at table 11 row 18 and statement total at table 5 row 7 both anchor 2025 total investments at fair value to 48,480,496. The reviewed extracted/indexable holdings sum is 62,841,989, creating overcoverage of 14,361,493. Source was readable and decides the aggregate error, but the row-disposition evidence does not safely localize the entire residual to one specific source row."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_efdf3c8a7818",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 507776675,
+  "anchor_value": 581376022,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 38,
+      "quoted_text": "Total Investments (262.7%) | $ | 581,376,022 | $ | 572,771,377",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The extracted 44-position cost sum is 507,776,675, while the March 31, 2026 filing schedule reports total-investments amortized cost of 581,376,022 at table 5 row 38, a shortfall of 73,599,347. The source schedule structure shows debt and equity cost of 258,299,078, cash equivalents of 1,906,618, and short-term investments of 321,170,326, which sum exactly to the filing total. Thus the extracted cost population is incomplete or structurally mis-disposed. The raw-source window does not safely identify a single omitted position, so the defect is grounded at aggregate level and localized is false."
+}

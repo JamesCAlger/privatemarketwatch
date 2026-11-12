@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_c8402a4ce90f",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.6464,
+  "anchor_value": 11.1,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 13,
+      "quoted_text": "For the Three Months Ended March 31, 2026: Total investment income $51,941",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 22,
+      "quoted_text": "Total Portfolio Investments: fair value $2,153,908",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 82,
+      "row_index": 12,
+      "quoted_text": "Weighted average yield on total portfolio, at fair value: 9.1%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The source states that $51.941 million of total investment income covers the three months ended March 31, 2026, and reports total portfolio fair value of $2,153.908 million. Annualizing the source income gives 51.941 * 4 / 2153.908 = 9.6464%, consistent with the filing's independently reported 9.1% weighted average portfolio yield. The F27 ceiling is 11.1% using the filing yield plus 200 bps, so the source-grounded income yield passes. The 2.114 failing metric is therefore a bad check/anchor computation rather than a defect in the underlying fund financials."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_507d93e23cfa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 133.39,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Total Investments | $ | 334,821.7 | $ | 334,085.0 | (10) | 133.39 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 pct_sum is stored as 0.0%, but the Schedule of Investments total line reports Total Investments at 133.39% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate flag. The oracle observed pct_sum=0.0%, while the raw Schedule of Investments has a current-period Total Investments line with fair value $334,085.0 and % of Net Assets 133.39%. Because the source provides a nonzero schedule total for the same CIK and report date, the zero extracted percent sum is a real extraction gap, not a false alarm."
+}

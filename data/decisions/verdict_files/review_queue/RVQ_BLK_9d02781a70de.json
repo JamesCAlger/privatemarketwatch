@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_9d02781a70de",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1249314,
+  "anchor_value": 1249314,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 14,
+      "quoted_text": "Total Assets | $ | 1,249,314 | $ | 1,205,245",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 23,
+      "quoted_text": "Total Liabilities | 802,459 | 769,481",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 35,
+      "quoted_text": "Total Members' Capital | 446,855 | 435,764",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 36,
+      "quoted_text": "Total Liabilities and Members' Capital | $ | 1,249,314 | $ | 1,205,245",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw March 31, 2026 balance sheet is internally balanced: total liabilities of 802,459 plus total members' capital of 446,855 equals 1,249,314, matching both total assets and the printed total liabilities and members' capital. The 100 percent identity violation therefore reflects a bad check or anchor rather than a filing data error. The position fair-value sum is not an appropriate anchor for the full balance-sheet identity because the statement also includes cash, short-term investments, receivables, and other assets."
+}

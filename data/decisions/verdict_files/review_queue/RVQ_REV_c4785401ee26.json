@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_c4785401ee26",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan (2)(3)(11) | EURIBOR + 5.750 % | 9.340 | % | 08/14/2029 | 2,384 | 2,522 | 2,601 | 1.31 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "K2 Pure Solutions Nocal Holding Term Loan (3)(6)(9) | N/A | 17.000 | % | 01/30/2029 | 5,241 | 4,854 | 5,145 | 2.60 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 20,
+      "quoted_text": "Total Entertainment | 3,481 | 3,489 | 1.76 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 23,
+      "quoted_text": "Total Chemicals | 4,854 | 5,145 | 2.60 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged two identifiers as possible subtotal/aggregate leakage, but the raw SOI shows both are genuine investment rows with instrument name, rate, maturity, par, cost, fair value, and percentage columns populated. The subtotal rows are separate adjacent rows. K2's source row equals Total Chemicals because it is the only Chemicals position in the Second Lien Senior Secured section, not because the extracted row is itself a subtotal. SubCalidora is one of two Entertainment positions and is separately followed by Total Entertainment."
+}

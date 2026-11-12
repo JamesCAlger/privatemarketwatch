@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a461f164d476",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2000,
+  "anchor_value": 2000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 36,
+      "quoted_text": "Habyt GmbH (f/k/a Common Living Inc.) - Growth Capital Loan; acquired 4/30/2021; principal 2,500; cost 2,668; fair value 690; 9.25% EOT payment",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Habyt GmbH (f/k/a Common Living Inc.) - Growth Capital Loan; acquired 3/18/2022; principal 4,742; cost 4,967; fair value 1,310; 7.25% EOT payment",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 38,
+      "quoted_text": "Total Real Estate Services - principal 7,242; cost 7,635; fair value 2,000",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The source presents two separate Habyt Growth Capital Loans, not a duplicated position. Rows 36 and 37 differ in acquisition date, principal, cost, fair value, and EOT payment terms. Their fair values of 690 and 1,310 (in thousands) sum exactly to the source schedule subtotal of 2,000 at row 38. B02 fires because its normalized position key omits distinguishing loan attributes; the extracted rows faithfully represent two source positions."
+}

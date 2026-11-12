@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_708d00b8a2e3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "issuer_name stored as 'Investments, Investments - non-controlled / non-affiliate, First Lien Debt, Aerospace & Defense, Cadence - Southwick, Inc, Term Loan, SOFR+6.75%, Interest Rate 12.22%, Maturity Date 5/3/2029'",
+  "anchor_value": "source row issuer cell is 'Cadence - Southwick, Inc. (i)(l)' with loan type, spread, interest rate, and maturity in separate source columns",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Cadence - Southwick, Inc. (i)(l) | Term Loan | SOFR | + | 6.75 % | 12.22 % | 5/3/2029 | 7,208,519 | 7,003,727 | 7,136,437",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 14,
+      "quoted_text": "ACP Falcon Buyer, Inc. (f)(i)(l) | Revolving Credit Facility | - | - | 8/1/2029 | - | ( 29,203 ) | ( 25,000 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name extraction leaked schedule hierarchy and instrument terms into issuer_name; the source keeps issuer, type, reference rate, interest rate, and maturity in separate columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C206 is a real defect. The raw SOI table has distinct columns for Investments, Type, Reference Rate and Spread, Interest Rate, and Maturity Date. For example, table 10 row 5 has issuer 'Cadence - Southwick, Inc. (i)(l)' in the Investments column, with 'Term Loan', 'SOFR + 6.75 %', '12.22 %', and '5/3/2029' in separate cells. The flagged holding instead stores the hierarchy and those separate terms inside issuer_name, so issuer_name is not the clean entity."
+}

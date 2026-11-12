@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_1ca58ad6ad6e",
+  "verdict": "false_alarm",
+  "mechanism": "source_disclosed_negative_fair_value",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -30000.0,
+  "anchor_value": -30000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 20,
+      "quoted_text": "Albers Aerospace Holdings LLC (4)(6)(7) | 6/22/2031 | 1,983 | ( 30 ) | ( 30 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 39,
+      "quoted_text": "Azurity Pharmaceuticals Inc (4)(6)(10) | 3/14/2030 | 4,037 | ( 68 ) | ( 171 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 42,
+      "quoted_text": "GAPCO AIV Interholdco (CP), L.P. (4)(5)(6)(10) | 3/31/2033 | 12,500 | ( 500 ) | ( 365 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flags negative fair_value rows for review. The raw SOI schedule prints parenthesized negative fair values for the flagged population, including Albers Aerospace Holdings LLC at (30), Azurity Pharmaceuticals Inc at (171), and GAPCO AIV Interholdco (CP), L.P. at (365), matching stored negative fair values in thousands. Because the source itself discloses the negative fair values, the negative sign is not a data extraction error."
+}

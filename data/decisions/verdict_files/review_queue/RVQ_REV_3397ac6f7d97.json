@@ -1,0 +1,51 @@
+{
+  "review_id": "RVQ_REV_3397ac6f7d97",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "0 of 6 equity rows with shares per oracle metric",
+  "anchor_value": "5 of 6 current equity rows have Shares/Units values in source table 11",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Assertio Holdings, Inc. Common Stock; Shares/Units 4,230; Cost $17; Fair Value $5"
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Centrexion Therapeutics, Inc. Warrants; Shares/Units 56,483; Cost 27; Fair Value 7"
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Meditrina, Inc. Warrants; Shares/Units 15,858; Cost 12; Fair Value 10"
+    },
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Senseonics Holdings, Inc Common Stock; Shares/Units 79,501; Cost 23; Fair Value 32"
+    },
+    {
+      "table_index": 11,
+      "row_index": 10,
+      "quoted_text": "Vapotherm, Inc.; Shares/Units 36,979; Cost 117; Fair Value 25"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current equity schedule exposes Shares/Units values for five of six equity rows, but the extracted holdings coverage metric reports zero equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5,
+        "quoted_text": "Table 11 header Shares/ Units with row 5 value 4,230 demonstrates the populated source column."
+      }
+    }
+  ],
+  "rationale": "C04 fired because the extracted data reports 0.0% of six equity rows have shares. The raw June 30, 2024 equity schedule in table 11 has a Shares/ Units header and populated quantities on five current equity rows: rows 5, 6, 7, 8, and 10. Row 9 is a dash, so the source supports 5 of 6 with shares/units, above the 70% threshold. The flag reflects a real extraction gap in the shares/units field, not a missing source disclosure."
+}

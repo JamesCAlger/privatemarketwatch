@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d451ab26691c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on FX01 source_artifact_rows",
+  "anchor_value": "Raw SOI debt rows disclose non-USD Principal/Shares requiring explicit USD principal conversion",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 11,
+      "quoted_text": "Hellers First Lien Senior Secured Loan - Delayed Draw | BKBM | 3.63 % ( 1.88 %PIK) | 8.07 % | 9/27/2030 | NZ$ | 1,097 | Cost 663 | Market Value 625",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 10,
+      "quoted_text": "Hellers Subordinated Debt | 15.00 % PIK | 15.00 % | 3/27/2031 | NZ$ | 93 | Cost 57 | Market Value 52",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 is a Class 1 row-field validation: the flagged field is principal_amount_usd for debt rows whose source principal is not USD. The raw SOI shows debt principal in NZ$ for Hellers while the reviewed artifact rows show principal_amount_usd blank. That is not a source ambiguity or a bad check; it is a missing normalized USD principal value needed before par analytics."
+}

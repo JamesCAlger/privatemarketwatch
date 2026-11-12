@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_bb3c722740eb",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/private_markets_holdings coverage mismatch for CIK 0001822523 at 2021-09-30, with fund_financials present and holdings absent. The evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query, so raw source was not available to determine whether holdings should exist or whether the check is a false alarm."
+}

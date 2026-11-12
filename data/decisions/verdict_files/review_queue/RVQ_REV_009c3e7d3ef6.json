@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_009c3e7d3ef6",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F24 is an aggregate quarter-over-quarter position-count flag, but the evidence CLI returned missing_cached_html for the filing accession 0001145549-24-077154 on overview, tables, and totals. Raw source could not be read, so the contract requires source_unavailable ambiguity rather than guessing whether the count change is a real data error or false alarm."
+}

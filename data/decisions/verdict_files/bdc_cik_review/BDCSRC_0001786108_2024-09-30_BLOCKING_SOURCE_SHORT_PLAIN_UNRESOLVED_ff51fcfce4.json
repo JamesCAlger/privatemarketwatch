@@ -1,0 +1,48 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV effect until source reconciliation artifacts are rebuilt. The patch classifies this source-only row as a non-position total/header rather than adding or removing holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 39,
+      "row_index": 53,
+      "cell_indices": [
+        0,
+        12,
+        13,
+        16,
+        17
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The source coordinate is the current-period Total Investment in Securities line with aggregate percent, aggregate cost, and aggregate fair value; it is not an issuer or position-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "The existing Trinity row-classification patch recognizes Portfolio Company Investment in Securities as a total/header source row. The test coverage added for Trinity verifies this exact label while preserving an entity-bearing Affiliate Investments EPT 16, LLC false positive as blocking.",
+  "primary_justification": "Manual review found that Portfolio Company Investment in Securities maps to the filing's Total Investment in Securities subtotal row for the 2024-09-30 period. The coordinate shows aggregate percent, cost, and fair value with no borrower, instrument, rate, maturity, or share/unit evidence. This is the same bounded Trinity total-header mechanism already patched and tested for adjacent Trinity packets.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "The patch should only clear this blocker after source reconciliation is rebuilt through the approved pipeline. Residual risk is limited to this exact total/header wording; entity-bearing similarly prefixed rows remain covered by false-positive tests.",
+  "review_id": "BDCSRC_0001786108_2024-09-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_ff51fcfce4",
+  "reviewer_notes": "The packet contains one source-only blocker row and affected source fair value of 1,686,862,000. The cited HTML coordinate confirms a subtotal row, and the patched classifier already includes the exact normalized label portfolio company investment in securities.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected to reclassify this row as a documented non-blocking total/header row after source reconciliation outputs are rebuilt.",
+  "tests_validation_plan": "Previously ran the targeted source reconciliation tests covering the Trinity total/header patch and false-positive behavior: pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate all BDC verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

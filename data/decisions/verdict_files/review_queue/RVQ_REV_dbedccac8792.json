@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_dbedccac8792",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 750,
+  "anchor_value": 7.5,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 18,
+      "quoted_text": "Envocore Holding, LLC (7)(8) | Senior Secured First Lien Term Loan | 750 | 7.50 % | 12/2025 | 6,788 | 6,748 | 0.9 | 6,789",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 20,
+      "quoted_text": "Envocore Holding, LLC (5)(7)(8) | Senior Secured First Lien Revolver | 750 | 7.50 % | 12/2025 | 972 | 969 | 0.1 | 972",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "The source row has Interest Term 750 and Interest Rate 7.50%, so a stored rate of 750 would be a basis-point value not divided by 100.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 9,
+        "row_index": 18
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "The source row has Interest Term 750 and Interest Rate 7.50%, so a stored rate of 750 would be a basis-point value not divided by 100.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 9,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 2/aggregate-style rate-format flag. The raw SOI separates the basis-style term from the true rate: cited rows show Interest Term 750 and Interest Rate 7.50%. The queue artifact reports seven fmt_basis_spread violations for this CIK/quarter, which is consistent with basis-point terms being carried as rates. Source therefore supports a rate_scale extraction error rather than a false alarm."
+}

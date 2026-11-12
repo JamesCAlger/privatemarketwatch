@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_3d041314369a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 168,
+      "row_index": 7,
+      "quoted_text": "Allied Universal Holdco, LLC | (9) | SOFR + | 3.75 % | 9.17 % | 5/12/2028 | 2,566 | 2,456 | 2,483 | 1.75",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 168,
+      "row_index": 8,
+      "quoted_text": "Allied Universal Holdco, LLC | (9) | SOFR + | 4.75 % | 10.07 % | 5/12/2028 | 2,000 | 1,943 | 1,975 | 1.39",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Verdelite JV schedule has two distinct Allied Universal Holdco positions with the same issuer and maturity but different spread, interest rate, par, cost, and fair value, so the duplicate key is a real tranche-level key collision.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 168,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "B02 is grounded by the raw BCRED Verdelite JV LP September 30, 2023 schedule. Rows 7 and 8 are not duplicate source rows: they are separate Allied Universal Holdco, LLC loan tranches with different spread and interest-rate terms (3.75%/9.17% versus 4.75%/10.07%) and different par, cost, and fair value. A position key that collapses these rows creates duplicate position keys in the extract, so the flag is a real data/keying error rather than a false alarm."
+}

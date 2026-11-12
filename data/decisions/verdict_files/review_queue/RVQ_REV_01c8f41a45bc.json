@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_01c8f41a45bc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 132842.848,
+  "anchor_value": 208185.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Total Investments | $ | 211,709 | $ | 208,185 | 105.09 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 11,
+      "quoted_text": "Total investments | $ | 211,709 | $ | 208,185 | $ | 220,859 | $ | 215,975",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 13,
+      "quoted_text": "Total Short-Term Investments | 25,160 | 25,164 | 12.70 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 41,
+      "quoted_text": "Total Senior Unsecured | 48,776 | 48,163 | 24.31 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period source schedule totals 208,185 thousand of investments, but the flagged extraction ratio is only 0.6381, implying about 132,842.848 thousand captured and omitted schedule sections such as senior unsecured and short-term investments.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 13,
+        "row_index": 17,
+        "quoted_text": "Total Investments | $ | 211,709 | $ | 208,185 | 105.09 | %"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate reconciliation. Raw source anchors agree: the SOI total investments row reports fair value of 208,185 thousand at September 30, 2024, and the investments footnote repeats 208,185 thousand. The rule artifact reports a GAV reconciliation ratio of 0.6381, which implies extracted fair value of about 132,842.848 thousand, materially below the filing anchor. The schedule rows show valid current-period investment sections beyond the captured amount, including senior unsecured at 48,163 thousand and short-term investments at 25,164 thousand, so the flag is a grounded extraction gap rather than a bad source anchor."
+}

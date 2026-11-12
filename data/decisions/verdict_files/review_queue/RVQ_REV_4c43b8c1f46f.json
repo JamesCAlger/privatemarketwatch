@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_REV_4c43b8c1f46f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values U_EUR and U_AUD",
+  "anchor_value": "source places EUR/AUD in Par/Shares currency, not Cost currency; Cost is USD-denominated in the SOI column",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Investment (1) | Industry (2) | Interest Rate (3) | Reference Rate and Spread (3) | Maturity | Par/ Shares (4) | Cost | Fair Value | Footnotes"
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Hamilton Thorne, Inc. | Health Care Equipment & Supplies | 7.60 % | E + 5.50 % | 11/28/31 | EUR | 11,492 | 12,307 | 13,232 | (5) (6) (7)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 36,
+      "quoted_text": "Sonar Acquisitionco, Inc. (dba SimPRO) | Construction & Engineering | 8.41 % | B + 4.75 % | 10/24/30 | AUD | 5,600 | 3,684 | 3,649 | (5) (6) (7) (9)"
+    },
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Australian Dollars (\"AUD\"), or Euros (\"EUR\")."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "EUR was read from the Par/Shares currency marker for Hamilton Thorne and propagated into cost_currency, although the EUR marker applies to par amount under footnote 4.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AUD was read from the Par/Shares currency marker for Sonar Acquisitionco and propagated into cost_currency, although the AUD marker applies to par amount under footnote 4.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level currency localization. The flagged rows store cost_currency as U_EUR or U_AUD, but the raw SOI table separates Par/Shares from Cost and Fair Value. The EUR and AUD tokens appear in the Par/Shares currency position, and footnote 4 says those non-USD indicators denominate par amount. They are not cost-currency indicators. The Cost column values are separate SOI columns, so propagating the par currency into cost_currency is a real extraction/column-mapping defect."
+}

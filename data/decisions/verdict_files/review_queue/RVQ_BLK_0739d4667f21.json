@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_0739d4667f21",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 685,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 286,
+      "row_index": 7,
+      "quoted_text": "ACI Group Holdings, Inc. | (4)(10) | SOFR + | 6.00 % | 10.46 % (incl. 3.25 % PIK) | 7/7/2023 | 8/2/2028 | $ | 128,528 | $ | 127,691 | $ | 123,387 | 5.20 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 309,
+      "row_index": 30,
+      "quoted_text": "ABG Intermediate Holdings 2, LLC | (8) | SOFR + | 2.25 % | 5.97 % | 12/13/2024 | 12/21/2028 | 386 | 386 | 387 | 0.30",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 14,
+      "quoted_text": "BCRED Emerald JV LP - LP Interest | (6)(16) | 1/19/2022 | 1,815,000 | 1,678,745 | 3.53",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 15,
+      "quoted_text": "BCRED Verdelite JV LP - LP Interest | (6)(16) | 10/21/2022 | 117,706 | 113,068 | 0.25",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Current-period JV look-through source rows are present in the filing but are not emitted as pipeline holdings rows.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 286,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "SRC_BDC01 is a missing-source-row flag. The raw filing contains current-period JV schedule rows for the flagged issuers, including ACI Group Holdings, Inc. in the Emerald JV schedule with fair value 123,387 and ABG Intermediate Holdings 2, LLC in a Verdelite JV schedule with fair value 387. The same filing separately reports BCRED Emerald JV LP and BCRED Verdelite JV LP interests, so the omitted rows are localized to JV look-through source schedules rather than an unreadable or absent source. The pipeline output slice includes the top-level issuer positions but not these JV-qualified source rows, making the blocker a real extraction/classification look-through error."
+}

@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_a5e4a5f95b1c",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  29,
+                                  "row_index":  15,
+                                  "quoted_text":  "KWOR Acquisition, Inc. | (6) (10) (19) (20) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.56 % | 2/28/2030 | 75 | 1 | 75 | -",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  29,
+                                  "row_index":  16,
+                                  "quoted_text":  "KWOR Acquisition, Inc. | (6) (10) (19) (20) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.56 % | 2/28/2030 | 111 | 2 | 111 | -",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Class 2 row-level review. The raw SOI shows the two flagged KWOR Acquisition first lien debt rows with cost 1 and fair value 75, and cost 2 and fair value 111, in thousands. After scaling, those match the stored costs 1000 and 2000 and explain the high fair-value-to-cost ratios. The source therefore corroborates the extracted row values; this is an extreme-appreciation review condition, not a source-grounded pipeline data error."
+}

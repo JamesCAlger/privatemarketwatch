@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c425787d1a94",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6,
+  "anchor_value": 6,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 123,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 6 | 17,082 | 0.7 | 7 | 27,340 | 1.0",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 9,
+      "quoted_text": "DCA Investment Holding LLC | (a)(b) | (2)(3)(8) | Healthcare & Pharmaceuticals | SOFR | 6.41 % | 10.09 % | 3/11/2021 | 4/3/2028 | 11,816 | 11,745 | 10,321 | 0.58",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing's current-period non-accrual summary reports exactly 6 positions, matching the flagged observed count of 6. The schedule also marks a named flagged position, DCA Investment Holding LLC, with footnote (8). The source therefore supports the extracted non-accrual flag rather than a data defect; the advisory check is the false alarm. The same summary row separately reports 7 for the comparative period, so the current-period count is not a comparative leak."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_8b445d2bdfed",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 47.26,
+  "anchor_value": 150.28,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 1,385,574 | $ | 1,385,068 | 150.28 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Total net assets | $ | 921,634 | $ | 865,054",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 47.26%, but the raw June 30, 2024 investment schedule total is 150.28% of net assets.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 29,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The flag reports pct_sum=47.26%, while raw source anchors total investments at fair value of 1,385,068 against total net assets of 921,634, which the filing itself reports as 150.28%. The source percentage anchor therefore disagrees with the observed extracted percentage sum, indicating an extraction gap rather than a false alarm."
+}

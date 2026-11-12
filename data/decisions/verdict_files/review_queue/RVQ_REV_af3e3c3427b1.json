@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_af3e3c3427b1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 263724095,
+  "anchor_value": 263724095,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 23,
+      "quoted_text": "Total Debt Investments | 48.1 | % | 246,859,409 | 112,090,217",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 29,
+      "quoted_text": "Total Equity Investments | 65.2 | % | 144,513,218 | 151,633,878",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 30,
+      "quoted_text": "Total Debt & Equity Investments (8) | 113.3 | % | 391,372,627 | 263,724,095",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 is a CIK-quarter aggregate completeness flag: 123/147 leaves have fair_value, with 24 residual rows and residual_fv 0.0. The raw 2025 SOI source shows the scoped private debt and equity schedule carries fair values and reconciles exactly to the internal private debt/equity anchor: debt FV 112,090,217 plus equity FV 151,633,878 equals Total Debt & Equity Investments FV 263,724,095, matching the observed fund_quarter_fv_m of 263.724095 million. The failure is therefore a rule-scope/counting false alarm rather than a source-supported missing fair-value defect."
+}

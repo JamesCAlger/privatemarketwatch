@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_b85c95cadabd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.1722488038277512,
+  "anchor_value": 0.8909090909090909,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 2,
+      "quoted_text": "Accela Inc/US | 1st Lien Revolver | March 31, 2026 2,242,023 | December 31, 2025 908,238",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 62,
+      "quoted_text": "Total | March 31, 2026 66,287,604 | December 31, 2025 66,905,919",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Software & Services | S+ 4.75 %, 0.75 % Floor | 8.42 | 9/1/2023 | 9/3/2030 | 11,379,348 | 11,238,827 | 11,322,792 | 1.82",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 7,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Software & Services | S+ 4.75 %, 0.75 % Floor | 8.47 | 9/1/2023 | 9/3/2030 | 10,516,647 | 10,372,616 | 10,422,269 | 1.76",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The D06 continuity metric reports only 36 of 209 issuers persisting, but the raw filing's continuity schedule shows 49 of 55 current commitment rows with both March 2026 and December 2025 values, and matched SOI rows such as Accela persist across both schedules.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 55,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "D06 is a CIK-quarter aggregate continuity flag. The source is readable and contradicts the low extracted continuity metric: table 55 directly lists portfolio companies by investment type with March 31, 2026 and December 31, 2025 columns, including many rows populated in both periods, and its total is populated for both periods. Counting that table gives 49 recurring rows among 55 current rows, about 0.891 continuity, not the observed 0.172. The SOI pages also show the same Accela Inc/US term loan in both the March 2026 schedule and the December 2025 comparative schedule. This grounds the failure as an extraction or issuer-continuity normalization gap rather than a true low-continuity source condition."
+}

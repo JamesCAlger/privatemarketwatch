@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_96d42783adaf",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "source_schedule_and_unfunded_commitment_table",
+  "observed_value": -38000,
+  "anchor_value": -38000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 45,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(16) | 6/30/2027 | 160 | - | ( 6 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 3,
+      "quoted_text": "American Academy Holdings, LLC | 1st Lien Senior Secured Revolving Loan | 160 | ( 6 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "Grain Connect Limited (4)(5)(6)(15)(28) | SN + | 8.50 % (incl 6.00 % PIK) | 12.23 | % | 8/3/2030 | GBP | 1,074 | 9 | ( 32 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 33,
+      "quoted_text": "Grain Connect Limited | 1st Lien Senior Secured Delayed Draw Loan | 1,412 | ( 40 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Both flagged negative fair values are valid filer presentation of unfunded commitments. American Academy's schedule row reports fair value (6) and the dedicated commitment table identifies a $160 thousand unfunded revolving-loan commitment with fair value (6). Grain Connect's schedule row reports fair value (32), carries footnote (6), and the dedicated commitment table identifies its delayed-draw unfunded commitments with negative fair values. The extracted values therefore agree with raw source; C103 failed to recognize the commitment disposition encoded outside the extracted row."
+}

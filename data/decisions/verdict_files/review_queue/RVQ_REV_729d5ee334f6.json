@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_729d5ee334f6",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": 0.5,
+  "anchor_value": 11.32,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 23,
+      "quoted_text": "Twin Star International, Inc. | Protective Advance Term Loan - 11.32 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) | 0.5 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The published pik_rate of 0.5 is not a PIK term. In source table 11 row 23, 0.5 is located under the explicitly headed % of Net Assets column, while the investment cell states 11.32% inc PIK and all PIK. The text pathway therefore leaked a comparative schedule percentage from the wrong column into pik_rate. The raw-source rate anchor for that cited row is 11.32, not 0.5."
+}

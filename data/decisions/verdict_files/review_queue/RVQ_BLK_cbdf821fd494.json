@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_BLK_cbdf821fd494",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 784,
+  "anchor_value": 2862,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 46,
+      "quoted_text": "Total Portfolio Investments | $ 6,699,473 | $ 6,610,610 | 195.59 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Total Portfolio Investments, Cash and Cash Equivalents and Short Term Investments | $ 6,937,741 | $ 6,848,878 | 202.64 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The raw filing source was readable and shows a current portfolio fair value total of 6,610.610 million and a portfolio-plus-cash/short-term total of 6,848.878 million, while the flag is a row-count comparison of source=2862 versus output=784 with no detail rows or residual fair value. The source tables contain current investments, cash, derivatives, unfunded commitments, prior-year comparatives, subtotals, and section rows, but the evidence CLI does not expose a row-disposition bridge showing which of the 2,862 source units should survive normalization. Because the raw source does not decide whether the row-count anchor is comparable to the normalized output count, the item is genuinely ambiguous rather than grounded as either a real data error or a false alarm."
+}

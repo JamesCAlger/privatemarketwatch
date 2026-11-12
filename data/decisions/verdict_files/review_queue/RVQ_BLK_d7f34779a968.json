@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_d7f34779a968",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 158.88,
+  "anchor_value": 158.64,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 5,
+      "quoted_text": "Total Investments | fair value 3,313,853 | percentage of net assets 158.88%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 10,
+      "quoted_text": "Liabilities Less Other Assets | (1,316,616) | (63.27)%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 12,
+      "quoted_text": "Net Assets | 2,088,932 | 100.00%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Total Investments is disclosed as 158.88%, but 3,313,853 divided by net assets of 2,088,932 rounds to 158.64%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 50,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Liabilities Less Other Assets is disclosed as (63.27)%, but (1,316,616) divided by net assets of 2,088,932 rounds to (63.03)%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 50,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation used the filing schedule itself. Table 50 reports net assets of 2,088,932 and total investments fair value of 3,313,853, so the percentage identity yields 158.64%, not the disclosed 158.88%. It also reports liabilities less other assets of (1,316,616), which yields (63.03)%, not (63.27)%. The two 0.24 percentage-point errors offset, and with cash equivalents of 4.39% the printed percentages still sum to 100.00%; that internal offset does not satisfy the per-row percentage-of-net-assets identity."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_fff74b1bd658",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 17.0,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "quoted_text": "Preferred equity securities"
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "Swyft Filings Holdings, LLC | Preferred equity securities section | Interest Rate: 8.00 % PIK"
+    },
+    {
+      "table_index": 14,
+      "row_index": 35,
+      "quoted_text": "Channel Factory Holdings, LLC | Preferred equity securities section | Interest Rate: 5.00 % Cash + 5.00 % PIK"
+    },
+    {
+      "table_index": 15,
+      "row_index": 30,
+      "quoted_text": "Preferred equity securities"
+    },
+    {
+      "table_index": 15,
+      "row_index": 35,
+      "quoted_text": "Caregility Corporation - Series A Units | Preferred equity securities section | Interest Rate: 8.00 % PIK"
+    },
+    {
+      "table_index": 15,
+      "row_index": 50,
+      "quoted_text": "USBid Parent, LLC - Class C | Preferred equity securities section | Interest Rate: 10.00 % PIK"
+    }
+  ],
+  "rationale": "X01 fired because private-equity-classified rows have nonzero interest_rate values. Raw SOI rows show the filer places these positions in the Preferred equity securities section and itself reports nonzero PIK or cash-plus-PIK rates in the Interest Rate column. The stored rates are therefore source-supported attributes of preferred equity securities, not evidence that the rows are misclassified as debt or that the rate values were extracted from the wrong field."
+}

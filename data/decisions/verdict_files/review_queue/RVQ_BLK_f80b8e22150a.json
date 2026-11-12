@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_f80b8e22150a",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 438466761,
+  "anchor_value": 249694433,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 29,
+      "quoted_text": "Total Controlled Affiliated Investments | Fair Value at March 31, 2026 | 222,075,628",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4% | 258,299,078 | 249,694,433",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The controlled-affiliate rollforward repeats schedule positions and contributes 222,075,628 from a secondary table to the position extract.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 6,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows a real over-coverage defect. The filing's primary debt-and-equity schedule totals 249,694,433 at table 5 row 31. The reconciled extract is 438,466,761. That extract is exactly 249,694,433 less the separately filtered 33,303,300 NAV position plus the 222,075,628 controlled-affiliate rollforward total at table 6 row 29. Table 6 is a fair-value rollforward of investments already present in the primary schedule, so its rows were extracted a second time. The resulting difference of 188,772,328 is fully explained by this duplicated secondary-table block net of the NAV exclusion."
+}

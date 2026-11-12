@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_99f7b8be5b28",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 22,
+      "quoted_text": "Slickdeals Holdings, LLC (4)(5)(6) | Unitranche First Lien Revolver | 06/2023 | - | ( 2 ) | ( 0.0 ) | ( 1 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 79,
+      "row_index": 20,
+      "quoted_text": "Loadmaster Derrick & Equipment, Inc. (5) | Revolver | 12/31/2022 | 225 | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Slickdeals revolver with 06/2023 maturity appears in the December 31, 2022 SOI, while the June 30, 2023 SOI shows the current Slickdeals revolver maturity as 06/2024.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 50,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Loadmaster current unfunded revolver commitment is disclosed as of June 30, 2023 with a commitment expiration date of 12/31/2022 and unfunded commitment of 225.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 79,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Raw source supports the maturity_not_past flag. The Slickdeals 06/2023 row is localized to the December 31, 2022 comparative SOI; the current June 30, 2023 SOI instead shows Slickdeals revolver maturity as 06/2024, so any June-2023 report-date violation from that row is a comparative-period leak. Separately, the current commitments table reports Loadmaster Derrick & Equipment, Inc. with a 12/31/2022 revolver commitment expiration and a 225 unfunded commitment as of June 30, 2023, which is genuinely past the report date."
+}

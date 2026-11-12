@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_0dc197fb791a",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments L.P Interests Commercial Services & Supplies Firebird Co-Invest L.P Investment Type L.P Interest",
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 15,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | - | 434 | 537",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged the identifier as a subtotal candidate because the extracted identifier includes schedule section labels, but the raw source row is an actual position row: table 19 row 15 lists Firebird Co-Invest L.P. with investment type L.P. Interest, cost 434, and fair value 537. The true subtotal appears separately at table 19 row 17 and is not the flagged holding value, so the check overmatched a valid position."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_fdd01089f54e",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8108654,
+  "anchor_value": 8108654,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 40,
+      "quoted_text": "Total Investments | $ | 7,892,866 | $ | 8,108,654 | 194.4 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 46,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "B01 denominator appears to include both the 2025 current investment schedule and the separate prior-year schedule; current fair value ties to 8,108,654 while the prior schedule separately totals 7,244,282.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 44,
+        "row_index": 46,
+        "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate B01 flag. The filing's current schedule total for December 31, 2025 ties to the extracted fund-quarter fair value of 8,108.654 million, so the failure is not a missing fair-value anchor. The raw source also contains a separate prior-period investment schedule totaling 7,244.282 million. The exact 222/444 fair-value coverage pattern is consistent with the report-date row universe admitting the comparative schedule alongside the current schedule, rather than a legitimate source omission."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_1de634ec5872",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 21,
+      "quoted_text": "Legalshield (11) | Common Stock | 372 | 372 | 0.1 | 629",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 20,
+      "quoted_text": "VetStrategy (11) | Preferred Stock | 2,126,875 | 968 | 0.3 | 2,050",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 5,
+      "quoted_text": "AX VI INV2 Holding AB (Voff) (6)(11) | Common Stock | 1,140,447 | 1,086 | 0.2 | 1,434",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 17,
+      "quoted_text": "Continental Battery Company | Common Stock | 12,345 | $ | - | 0.0 | % | $ | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 19,
+      "quoted_text": "VetStrategy (11) | Common Stock | 37,612 | $ | 30 | - | % | $ | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review of the five full source rows shows that each identifier is a genuine position, not a category or subtotal: every cited row names an issuer, states Common Stock or Preferred Stock as the investment type, and carries shares and/or position values. The geography, Equity Investments, industry, and Investment Type tokens in the extracted identifiers are hierarchy labels surrounding valid positions. Thus the category_keyword_no_position heuristic is the defective check and the flag is a false alarm."
+}

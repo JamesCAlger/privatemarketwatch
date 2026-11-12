@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_87303ba4774e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1544900.0,
+  "anchor_value": 356603000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Denali Equity Holdings LLC (1)(5) | Class A Units | 09/2024 | 3,749 | 340,994 | 356,603 | (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 12,
+      "quoted_text": "Amount of investments funded: Other Equity | 347,854",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged row combines Denali with a 347,854 amount from a non-holding commitments/funded-amount note instead of the current Denali SOI row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 52,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The valid current Denali holding is Class A Units with cost 340,994 and fair value 356,603 in the SOI, so the separate low-fair-value Denali row should not stand as a current position.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 9,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level adjudication. The extracted flagged row reports Denali Equity Holdings LLC with cost 347,854,000 and fair value 1,544,900, triggering X08. Raw source does not show that as a Denali holding. The current SOI row for Denali is Class A Units with cost 340,994 and fair value 356,603 (thousands), while 347,854 appears in a commitments/funded-amount note for Other Equity, not as the current position fair-value row. The flag is therefore a real data error in the extracted holding row, not a genuine distressed position."
+}

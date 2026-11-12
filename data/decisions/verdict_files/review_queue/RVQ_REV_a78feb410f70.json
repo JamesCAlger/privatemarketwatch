@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_a78feb410f70",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2.6505,
+  "anchor_value": 2.6502,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 42,
+      "quoted_text": "Total Investments - (265.02%) | cost 1,934,491,247 | fair value 1,898,691,121",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 37,
+      "quoted_text": "Total net assets | 716,426,408",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The generic 2.5 maximum is not valid for this leveraged BDC because the filing itself reports investments equal to 265.02% of net assets.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "Raw source confirms rather than contradicts the extracted ratio. The balance sheet reports total investments at fair value of 1,898,691,121 and total net assets of 716,426,408, yielding 2.6505 after rounding; the investment schedule independently prints Total Investments at 265.02%. Total liabilities of 1,273,772,776 explain why investments materially exceed net assets. Therefore the data are correct and F21's generic upper bound is inapplicable to this leveraged fund."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_eb30e3b146ec",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1687339000,
+  "anchor_value": 1730366000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 21,
+      "quoted_text": "BlackRock Liquidity T-Fund - Institutional Shares | amortized cost 43,021 | fair value 43,021",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 23,
+      "quoted_text": "Total Investments at fair value | amortized cost 1,750,309 | fair value 1,730,366",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 43.021 million BlackRock short-term investment is absent from the extracted position sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 41,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The extracted position sum is 1,687.339 million, which matches the filing's 1,687.345 million non-controlled/non-affiliated subtotal within 0.006 million of row rounding. The schedule then separately reports a 43.021 million BlackRock short-term investment and a 1,730.366 million grand total. Thus the 43.027 million anchor gap is explained by omission of the 43.021 million position plus rounding, rather than by a bad conservation check."
+}

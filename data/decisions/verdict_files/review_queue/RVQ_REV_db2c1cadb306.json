@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_db2c1cadb306",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 42401556,
+  "anchor_value": 1662543940,
+  "confidence": 0.86,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Total Investment Income | 42,401,556 | 44,923,848",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 19,
+      "quoted_text": "Total Investment Portfolio | $ | 1,703,615,168 | $ | 1,662,543,940 | 208.55 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate heuristic. Raw source confirms three-month 2026 interest income of 41,110,024, dividend income of 219,602, other income of 1,071,930, total investment income of 42,401,556, and ending portfolio fair value of 1,662,543,940. The filing does not disclose a portfolio WAC that can independently anchor the derived holdings WAC. F27 compares annualized realized income, which includes dividend and other income and is earned over the period, with a point-in-time WAC derived only from holdings having parsed rates. The source therefore does not decide whether the 2.9335 percentage-point excess reflects a data defect or normal basis and timing differences."
+}

@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_95939d914b9e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4,
+  "anchor_value": 4,
+  "confidence": 0.87,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 17,
+      "quoted_text": "HOP Energy, LLC (2)(5) - Term Loan B",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 18,
+      "quoted_text": "HOP Energy, LLC (2)(5) - Delayed Draw Term Loan B",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 19,
+      "quoted_text": "HOP Energy, LLC (2)(5) - Term Loan",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 20,
+      "quoted_text": "HOP Energy, LLC (2)(5) - Term Loan C",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule contains exactly four HOP Energy positions, and every row carries footnote marker (5). However, the raw source exposed through the evidence CLI does not provide the text defining footnote (5), and targeted searches for non-accrual terminology returned no hits. The source therefore localizes the four flagged positions but does not decide whether marker (5) means non-accrual; inferring that meaning would violate the skeptic default. Human review of the footnote text is required."
+}

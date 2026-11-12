@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_6d88a9e61adf",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.96,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag identifies only holdings row_key 459964 and a blank basis_spread, but provides no issuer or instrument identity. Raw filing source was successfully checked through the evidence CLI. Searching the locator returned no source match, while the filing contains many SOFR positions with explicit spreads, so the flagged extracted row cannot be mapped to one source coordinate without guessing. The source therefore does not decide whether this specific blank is an extraction defect or an allowed omission; human or pipeline-level row-key resolution is required."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_ac5a1dfd9800",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 313,
+  "anchor_value": 600,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 12,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 2,883,469 | $ | 2,882,954"
+    },
+    {
+      "table_index": 58,
+      "row_index": 37,
+      "quoted_text": "Total Non-Controlled/Non-Affiliated Investments | $ | 2,502,807 | $ | 2,504,242"
+    },
+    {
+      "table_index": 74,
+      "row_index": 8,
+      "quoted_text": "Total Investments | December 31, 2025 fair value 2,882,954 | December 31, 2024 fair value 2,504,242"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source-count anchor appears to include a separate comparative 2024 investment schedule, while the reviewed output is for report_date 2025-12-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 74,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "E07 fired at CIK-quarter scope with source=600 versus output=313, but raw source shows two distinct schedule populations: the current 2025 schedule totals fair value 2,882,954 at table 49 row 12, while the later schedule block ties to the separate December 31, 2024 fair value 2,504,242 shown at table 58 row 37 and reconciled side-by-side at table 74 row 8. Because the source-count anchor is contaminated by comparative-period schedule rows, the row-count mismatch does not prove a current-period extraction defect."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_3f04258dd35d",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10.702367303609343,
+  "anchor_value": 13.635,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 16,
+      "quoted_text": "Net investment income (loss) | 9.09 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "From distributable earnings | ( 1.00 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 10,
+      "quoted_text": "From return of capital | ( 0.22 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 6,
+      "quoted_text": "Total distributions | $ | 20,557 | 100.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 expected distribution_rate <= income_yield_pct * 1.5. The raw financial highlights disclose 2025 net investment income ratio of 9.09%, making the source-based 150% threshold 13.635%. The flagged distribution-rate value, 10.702367303609343%, is below that threshold. Source distribution rows also show the distribution components and total distributions, so the filing supports the distribution disclosure; the failure appears to come from a bad income-yield anchor/check input rather than a fund-financials data error."
+}

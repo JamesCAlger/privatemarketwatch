@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_2ff53ac5ec11",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "2026-09-06; 2029-04-04",
+  "anchor_value": "2028-03-06; 2030-04-04",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 15,
+      "quoted_text": "Process Equipment, Inc. | First Lien Term Loan | S + 5.25% | 9.19% | 3/6/2028",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 71,
+      "row_index": 17,
+      "quoted_text": "Process Equipment, Inc. | First Lien Term Loan | S + 5.25% | 9.08% | 9/6/2026",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 32,
+      "row_index": 32,
+      "quoted_text": "TerSera Therapeutics LLC | First Lien Term Loan | S + 5.25% | 8.92% | 4/4/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 72,
+      "row_index": 31,
+      "quoted_text": "Tersera Therapeutics, LLC | First Lien Term Loan | S + 5.25% | 8.92% | 4/4/2029",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Process Equipment maturity 9/6/2026 was taken from the comparative schedule instead of current-period 3/6/2028.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 31, "row_index": 15}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "TerSera maturity 4/4/2029 was taken from the comparative schedule instead of current-period 4/4/2030.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 32, "row_index": 32}
+    }
+  ],
+  "rationale": "Class 2 row comparison decides both flags. The current March 31, 2026 schedule lists Process Equipment at 3/6/2028 (table 31 row 15) and TerSera at 4/4/2030 (table 32 row 32). The flagged dates exactly match the comparative schedule rows: 9/6/2026 at table 71 row 17 and 4/4/2029 at table 72 row 31. This is a comparative-period extraction leak, not a bad structured XBRL date."
+}

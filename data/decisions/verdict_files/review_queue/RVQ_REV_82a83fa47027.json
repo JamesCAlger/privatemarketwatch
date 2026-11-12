@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_82a83fa47027",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -327000,
+  "anchor_value": -327000,
+  "confidence": 0.76,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 22,
+      "quoted_text": "TITAN BW BORROWER L.P. | First Lien Secured Debt - Revolver | S + 475, 0.50% Floor | 7/24/2032 | par dash | cost (327) | fair value (336)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "Total Aerospace & Defense | $ | 553,242 | $ | 553,445",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw SOI uses normal accounting table presentation for Cost: dollars are split into separate currency columns, repeated dollar signs are omitted on continuation rows, amounts are in thousands, and negative cost values are shown in parentheses. The extracted sample for the cited revolver stores cost as -327000, which matches the source cost (327) in thousands rather than evidencing a value error. The related industry total row also shows the same split-column cost/fair-value structure. The fmt_cost weak aggregate therefore appears to be a format-rule scope issue, not a source data defect."
+}

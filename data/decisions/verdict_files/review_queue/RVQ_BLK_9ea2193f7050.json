@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_9ea2193f7050",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1435037224,
+  "anchor_value": 1468228000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 46,
+      "quoted_text": "QF Holdings, Inc. | (4) (8) (22) (23) | SOFR + 4.50 % | 8.19 | % | 12/15/2032 | 33,449 | 33,242 | 33,224 | 3.5",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 28,
+      "quoted_text": "Total Investments | 1,460,156 | 1,468,228 | 155.3",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "QF Holdings fair value is 33,224 thousand in the SOI, but the conservation residual indicates it was effectively counted as 33,224 dollars rather than 33,224,000 dollars.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 48,
+        "row_index": 46,
+        "quoted_text": "QF Holdings, Inc. | (4) (8) (22) (23) | SOFR + 4.50 % | 8.19 | % | 12/15/2032 | 33,449 | 33,242 | 33,224 | 3.5"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation confirms the filing total investments fair value is 1,468,228 thousand: the SOI total row states 1,468,228 and other filing total lines agree. The extracted conservation sum is 1,435,037,224, short by 33,190,776. The localized QF Holdings row reports fair value 33,224 thousand; counting that row as 33,224 dollars instead of 33,224,000 dollars explains the residual exactly as 33,224,000 - 33,224 = 33,190,776."
+}

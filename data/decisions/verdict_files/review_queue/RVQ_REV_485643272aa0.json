@@ -1,0 +1,26 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_485643272aa0",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "",
+    "observed_value":  "UNIT_STANDARD_USD_-Q8F-ZP5NEQ4GVMXVXZTWA",
+    "anchor_value":  "USD-denominated fair value shown with $ in source schedule",
+    "rationale":  "FX02 flagged fair_value_currency as a non-USD unit label, but the raw investment schedule displays the flagged fair-value cells in dollar columns. The cited American Refrigeration row shows Fair Value with a $ unit, and the schedule note states par amounts are denominated in U.S. dollars unless otherwise noted. The issue is therefore a rule/parser false alarm on a nonstandard XBRL unit identifier containing USD, not a source data error.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  6,
+                                  "table_index":  9,
+                                  "quoted_text":  "American Refrigeration, LLC Term Loan ... Fair Value (1) | $ | 3,642,939"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  0,
+                                  "table_index":  14,
+                                  "quoted_text":  "Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted Euro."
+                              }
+                          ],
+    "confidence":  0.92
+}

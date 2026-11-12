@@ -1,0 +1,51 @@
+{
+  "review_id": "RVQ_REV_4964dcde25f0",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 32,
+      "quoted_text": "CPIG Holdco Inc. (10) | First lien senior secured revolving loan | 9.44 % | SOFR (Q) | 4.75 % | 04/2028 | 0.5 | 0.5 | 0.5 | (2)(7)(9)(12)"
+    },
+    {
+      "table_index": 91,
+      "row_index": 37,
+      "quoted_text": "Excelitas Technologies Corp. (10) | First lien senior secured loan | 9.61 % | SOFR (M) | 5.25 % | 08/2029 | 32,500.0 | 32,500.0 | 32,500.0 | (2)(7)(12)"
+    },
+    {
+      "table_index": 71,
+      "row_index": 10,
+      "quoted_text": "HPCC Parent, Inc. and Patriot Container Corp. (10) | First lien senior secured loan | 13.00 % ( 7.00 % PIK) | 09/2030 | 69,423.2 | 67,652.4 | 67,514.0 | (2)(12)"
+    },
+    {
+      "table_index": 88,
+      "row_index": 13,
+      "quoted_text": "Hills Distribution, Inc., Hills Intermediate FT Holdings, LLC and GMP Hills, LP (10) | First lien senior secured revolving loan | 8.90 % | SOFR (M) | 4.50 % | 11/2029 | 0.6 | 0.6 | 0.6 | (2)(7)(12)"
+    },
+    {
+      "table_index": 76,
+      "row_index": 21,
+      "quoted_text": "Priority Waste Holdings LLC, Priority Waste Holdings Indiana LLC and Priority Waste Super Holdings, LLC (10) | First lien senior secured revolving loan | 10.09 % | SOFR (Q) | 5.50 % | 08/2029 | 1.9 | 1.8 | 1.9 | (2)(7)(12)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Six extracted holdings rows are sourced from the prior-period SOI block even though the dataset/report date is 2025-09-30.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 93,
+        "row_index": 17,
+        "quoted_text": "Total Investments | $ | 11,482,053.0 | $ | 11,549,149.4 | (14) | 195.73 | %"
+      }
+    }
+  ],
+  "rationale": "PP03 is a position-purity comparative-period flag. The filing contains a current 2025 SOI block totaling $19,558,594.6 at table 51 row 6 and a separate comparative 2024 SOI block totaling $11,549,149.4 at table 93 row 17. The flagged issuers have source rows in the comparative block (for example CPIG at table 70 row 32, Excelitas at table 91 row 37, HPCC at table 71 row 10, Hills at table 88 row 13, and Priority Waste at table 76 row 21) while the bundle reports those comparative-period rows retained under report_date 2025-09-30. That is a localized comparative-period leak, not a false alarm."
+}

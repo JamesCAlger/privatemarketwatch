@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_98f854195402",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "2024-03-08",
+  "anchor_value": "2024-06-30",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 14,
+      "quoted_text": "Equinox Holdings, Inc. | (9) | S + 3.00 % | 1.00 % | 8.61 % | 3/8/2024 | 35,976 | 34,994 | 35,111 | 3.74",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Equinox Holdings, Inc. is carried under the 2024-06-30 review period with a source maturity of 3/8/2024, a date before the report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 23,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "The maturity_not_past flag is real. The raw source row for Equinox Holdings, Inc. shows a maturity date of 3/8/2024, which is before the 2024-06-30 report date. The row is localized to table 23 row 14; the issue is best characterized as a comparative-period leak rather than a source maturity typo."
+}

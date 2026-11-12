@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e555b8759e01",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Crash Champions Intermediate, LLC | Initial Term Loan | Fair Value 6,274,216",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 22,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | amortized cost 531,846,449 | fair value 523,092,809",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | amortized cost 510,803,850 | fair value 504,942,593",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source SOI rows and schedule totals carry fair value, but the check reports only 108 of 216 leaves with fair_value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate completeness issue. The raw SOI has explicit Fair Value columns on investment rows and schedule totals tying current-period investments to fair value 523,092,809; the comparative schedule also has fair value totals. A 50.0% fair_value completeness result therefore reflects an extraction/completeness gap rather than missing source disclosure."
+}

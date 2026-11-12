@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_652c3f40e8dd",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "2028-08-25; 2031-07-28",
+  "anchor_value": "2028-08-25; 2030-07-26",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 29,
+      "quoted_text": "Heights Buyer, LLC | (8)(13) | First Lien Term Loan | S + 5.75 % | 9.50 % | 8/25/2028 | 5,294 | 5,294 | 5,294 | 0.72"
+    },
+    {
+      "table_index": 59,
+      "row_index": 14,
+      "quoted_text": "Artifact Bidco, Inc. | (7)(12)(15) | First Lien Revolver | S + 4.15 % | 7.80 % | 7/26/2030 | 587 | ( 3 | ) | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Heights Buyer First Lien Term Loan source maturity is 8/25/2028, so the structured value 2031-09-05 is wrong.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 46,
+        "row_index": 29,
+        "quoted_text": "Heights Buyer, LLC | (8)(13) | First Lien Term Loan | S + 5.75 % | 9.50 % | 8/25/2028 | 5,294 | 5,294 | 5,294 | 0.72"
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Artifact Bidco First Lien Revolver source maturity is 7/26/2030, so the identifier maturity 7/28/2031 is borrowed from a different instrument.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 59,
+        "row_index": 14,
+        "quoted_text": "Artifact Bidco, Inc. | (7)(12)(15) | First Lien Revolver | S + 4.15 % | 7.80 % | 7/26/2030 | 587 | ( 3 | ) | - | -"
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw schedule confirms that Heights Buyer First Lien Term Loan matures 8/25/2028, not the structured value 2031-09-05. For Artifact Bidco, the raw revolver row matures 7/26/2030; the 7/28/2031 date belongs to the separate term loan row, so the identifier maturity is wrong. The rule fire reflects real maturity data defects rather than a false alarm."
+}

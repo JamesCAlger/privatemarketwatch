@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_d81b8b3ccba9",
+    "verdict":  "false_alarm",
+    "mechanism":  "unit_label_normalization",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD-denominated source schedule using dollar-sign cost and fair-value columns",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  27,
+                                  "row_index":  1,
+                                  "quoted_text":  "Portfolio Company (13) | Investment Type | Reference Rate and Spread (1) | Maturity Date | Principal / Shares | Cost (2) | Fair Value (3) | % of Net Assets | Footnotes",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  27,
+                                  "row_index":  5,
+                                  "quoted_text":  "Capstone Acquisition Holdings, Inc. | First Lien Term Loan | S + 4.50 % | 11/12/2029 | $ 11,670 | $ 11,473 | $ 11,583 | 6",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  31,
+                                  "row_index":  11,
+                                  "quoted_text":  "Total non-controlled-non-affiliated Portfolio Company investments | $ 773,069 | $ 778,371 | 218.4 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX03 flagged cost_currency value U_USD as not USD, but the raw BDC schedule presents the cost and fair-value columns with dollar signs, including individual investment rows and the schedule total. U_USD is therefore consistent with a USD XBRL unit identifier/label rather than evidence of a non-USD valuation field; the check is over-strict on unit label form."
+}

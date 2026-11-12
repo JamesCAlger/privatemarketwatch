@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_f3a1d59ac35e",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2674591000.0,
+  "anchor_value": 2625095000.0,
+  "confidence": 0.88,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 9,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw SOI total and balance-sheet total both state investments at fair value of 2,625,095 thousand for December 31, 2025, matching the companyfacts anchor. The reviewed extracted holdings sum is 2,674,591 thousand, an overshoot of 49,496 thousand. Targeted total/residual searches did not identify a single row tying exactly to the residual, so the defect is grounded at the aggregate level but not localized to a row-level mechanism."
+}

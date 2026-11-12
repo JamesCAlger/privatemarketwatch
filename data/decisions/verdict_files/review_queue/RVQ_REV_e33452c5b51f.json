@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_e33452c5b51f",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5114000,
+  "anchor_value": 5114000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 5,
+      "quoted_text": "Atlas Ontario LP (Canada) | ^ | (6)(7) | Business Services | 4/7/2021 | 5,114 | 5,114 | 5,114 | 0.46",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 4,
+      "quoted_text": "Investments, at fair value | $ | 1,572,751 | $ | 186,479 | $ | 61,088 | $ | 1,820,318",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The PP03 warning says the Atlas Ontario LP row is a comparative-period row, but raw source shows the same issuer in the current December 31, 2023 investment schedule sequence with cost 5,114 and fair value 5,114, matching the stored 5,114,000 values. The 2023 schedule total is 1,820,318, while the later comparative sequence carries 2022 totals; the existence of a separate comparative Atlas row does not make the current-period Atlas row erroneous."
+}

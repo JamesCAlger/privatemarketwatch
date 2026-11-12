@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_d86a4069ddc1",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1854165000.0,
+  "anchor_value": 1788119000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 44,
+      "quoted_text": "Goldman Sachs Financial Square Government Fund - Institutional Shares | 65,977,319 shares | cost 65,977 | fair value 65,977",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 45,
+      "quoted_text": "Total Investments in Affiliated Money Market Fund | 65,977 | 65,977",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 54,
+      "row_index": 6,
+      "quoted_text": "Total investments | $ | 1,782,641 | $ | 1,788,119",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extraction sum includes an affiliated money market fund with fair value 65.977 million even though the filing's Total investments anchor is 1,788.119 million and excludes that fund.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 50,
+        "row_index": 44
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted fair-value sum is 1,854.165 million versus the companyfacts/source Total investments anchor of 1,788.119 million. The raw schedule separately presents Total Investments at 1,788.119 million and then presents Investments in Affiliated Money Market Fund of 65.977 million, followed by a broader Total Investments and Investments in Affiliated Money Market Fund of 1,854.096 million. The residual is therefore a real extraction/classification error: the private-markets conservation sum is using the broader total that includes the affiliated money market fund rather than the Total investments anchor."
+}

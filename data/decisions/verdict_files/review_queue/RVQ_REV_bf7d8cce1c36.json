@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_bf7d8cce1c36",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_interest_rate_cell",
+  "observed_value": 2.75,
+  "anchor_value": 675,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Vantage Specialty Chemicals Holdings, Inc. | First Lien Secured Debt - Bank Debt Term Loan | S + 675 Cash plus 2.75 % PIK, 1.00 % Floor | 8/29/2029 | $ | 15,946 | $ | 15,387 | $ | 14,511 | (5)(8)(13)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 single-cell outlier. The extracted interest_rate is 2.75, but the cited filing row identifies 2.75% as the PIK leg and states the cash basis spread as S + 675. The parser selected the PIK component as interest_rate, so the formatting/basis-spread flag is a real localized extraction error."
+}

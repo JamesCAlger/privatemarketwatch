@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_3b0344cf521e",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  290000,
+    "anchor_value":  0,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  22,
+                                  "row_index":  11,
+                                  "quoted_text":  "ECP Parent, LLC | ^ | (7) | Healthcare \u0026 Pharmaceuticals | 3/29/2018 | 268 | [dash] | 290 | 0.03",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "ECP Parent source Cost is a dash while Fair Value is 290; extracted cost is 290000, indicating the fair value was used as cost.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  22,
+                                          "row_index":  11
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 2 row localization from the holdings sample and source row. The extracted holding for ECP Parent, LLC carries cost 290000.0 and fair_value 290000.0. In the raw SOI row, the Cost cell is a dash and the Fair Value cell is 290 (filing in thousands). The flag is therefore a real cost extraction/column mapping error, not a formatting false alarm."
+}

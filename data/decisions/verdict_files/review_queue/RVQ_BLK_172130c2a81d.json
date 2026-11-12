@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_BLK_172130c2a81d",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  null,
+    "confidence":  0.35,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "C301 flags row_key 392953 because index_classification is blank, but the bundle and evidence CLI do not expose the issuer or source-table coordinate for that row_key. I checked the raw filing evidence: the schedule tables contain investment-type rows that can support classification for localized loan positions (for example table 48 row 5 is a first-lien term loan), but the flagged blank cannot be tied to a specific raw source row. Raw source was readable but does not decide this specific row-level question without the row_key-to-source mapping."
+}

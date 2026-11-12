@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_3de950f3ae94",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 13,
+      "quoted_text": "RQM+ Corp. (2) | Life Sciences Tools & Services | S+ 725 PIK | 1.00 | % | 11.21 | % | 8/2021 | 8/2029 | 17,067 | 16,958 | 13,653",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "TAUC Management, LLC (2) | Health Care Providers & Services | S+ 700 PIK | 1.00 | % | 10.82 | % | 2/2021 | 2/2027 | 8,406 | 8,386 | 7,229",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 3,
+      "quoted_text": "TI TopCo Holdings, LLC | Ground Transportation | 10.00 % PIK | 1/2026 | 11 | $ | 4,186 | $ | 3,469",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Veronica Holdings, LLC (Vapotherm) (8) | Health Care Equipment & Supplies | 9.00 % PIK | 9/2024 | 4,573,737 | 11,155 | 11,426",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 raw schedule directly supports every flagged text-derived value. Table 10 rows 13 and 15 disclose S+725 PIK and S+700 PIK, supporting published basis_spread values 725 and 700. Table 11 rows 3 and 4 disclose 10.00% PIK and 9.00% PIK, supporting both the published interest_rate and pik_rate values for those all-PIK preferred-equity positions. The absence of declared_raw and instance_raw facts is expected for this text pathway and does not make the published data erroneous; the provenance warning lacks the appropriate raw-schedule anchor."
+}

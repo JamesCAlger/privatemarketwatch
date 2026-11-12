@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_2e1b70f9f0aa",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 9,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Term Loan | 8.46% | 5/10/2032 | Funded Par Amount 9,635,703 | Cost 9,546,142 | Fair Value 9,539,346"
+    },
+    {
+      "table_index": 66,
+      "row_index": 18,
+      "quoted_text": "SumUp Holdings Luxembourg | Software & Tech Services | Delayed Draw Term Loan | 9.82% | 5/23/2031 | Funded Par Amount 10,088,201 | Cost 10,025,193 | Fair Value 10,088,201"
+    },
+    {
+      "table_index": 66,
+      "row_index": 25,
+      "quoted_text": "Labvantage Systems Limited | Software & Tech Services | Term Loan | 9.10% | 12/23/2030 | Funded Par Amount 19,621,002 | Cost 19,310,544 | Fair Value 19,473,844"
+    }
+  ],
+  "rationale": "FX01 flags missing principal_amount_usd for rows treated as non-USD debt. The raw schedule localizes the affected positions in Canada, Luxembourg, and United Kingdom debt sections and shows funded par amounts, but the source table available through the evidence CLI does not state the par currency, an FX rate, or an explicit USD conversion convention. Country classification alone does not decide whether principal_amount_usd is truly missing because of unconverted non-USD source par, so the source was checked but does not resolve the flag."
+}

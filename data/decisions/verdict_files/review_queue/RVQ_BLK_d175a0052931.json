@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_d175a0052931",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 143,
+  "anchor_value": 143,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 2,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 1,507,910 | $ | 1,495,157",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 2,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 1,489,706 | $ | 1,493,627",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count of 283 combines the 143 current-period positions with 140 comparative-period positions; the output count of 143 is the current schedule only.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 39,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Raw source contains two complete investment schedules: the March 31, 2026 schedule in tables 10-22 and the December 31, 2025 comparative schedule in tables 28-39. The 283 source count equals 143 current positions plus 140 comparative positions. The extracted output has 143 positions and its fair value of 1,495.157 million exactly matches the current-period filing total at table 22 row 2. The distinct comparative total at table 39 row 2 confirms that the second schedule is not part of the report-date population. E07 therefore counted both periods on the source side; the output is complete for the requested report date."
+}

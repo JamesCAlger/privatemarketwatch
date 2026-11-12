@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_REV_247c1f187009",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  54.8,
+    "anchor_value":  null,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  49,
+                                  "row_index":  15,
+                                  "quoted_text":  "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 28,787 | 28,525 | 28,478",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  49,
+                                  "row_index":  12,
+                                  "quoted_text":  "Accommodations Plus Technologies LLC(3)(4)(9) | First lien senior secured loan | S+ | 5.25 % | 5/2032 | 20,748 | 20,554 | 20,437",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  8,
+                                  "quoted_text":  "Access CIG, LLC(3)(8) | First lien senior secured loan | S+ | 4.00 % | 8/2030 | 14,676 | 14,676 | 14,126",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The schedule presents Ref. Rate and Cash rate columns for direct-lending debt rows, but matching extracted holdings have blank interest_rate values.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  49,
+                                          "row_index":  15
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate fill-rate warning. The extracted holdings sample has blank interest_rate for direct-lending debt positions such as AI Titan, Accommodations Plus Technologies, and Access CIG. Raw SOI rows for matching investments include Ref. Rate and Cash interest data, for example S+ cash 4.50%, S+ cash 5.25%, and S+ cash 4.00%. Because source rates are present but the extracted field is blank, the flag is a real extraction gap."
+}

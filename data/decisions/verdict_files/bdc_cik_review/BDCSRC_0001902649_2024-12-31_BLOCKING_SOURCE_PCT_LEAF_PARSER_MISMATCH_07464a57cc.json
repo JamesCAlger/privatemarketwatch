@@ -1,0 +1,124 @@
+{
+  "changed_files": [
+    "pipeline/bdc_identifier.py",
+    "pipeline/source_reconciliation.py",
+    "tests/test_unified_holdings.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001902649",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_row_classification_candidates",
+    "html_source_row_coordinate_candidates",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV rule change. The production changes separate non-position aggregate labels from true BlackRock Private Credit Fund loan positions; after rebuilding unified and validation outputs, GAV/source reconciliation should be checked for this CIK-quarter because the packet includes both aggregate labels and missing position rows.",
+  "html_citations": [
+    {
+      "cell_indices": [
+        0,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_row_classification_candidates",
+      "reason": "The Debt Investments - 159.7% of Net Assets source row corresponds to a total debt investments line with cost, fair value, and pct-of-net-assets totals, not a production position.",
+      "row_classification": "SUBTOTAL_ROW",
+      "row_index": 35,
+      "table_index": 38
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "Discovery Purchaser Corporation is a current-period position row with issuer, first lien term loan instrument, SOFR reference, floor, spread, coupon, maturity, principal, cost, fair value, and pct-of-net-assets cells.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 39,
+      "table_index": 29
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "Olympus Water US Holding Corporation (Solenis) is a current-period position row with borrower, instrument, rate, maturity, principal, cost, fair value, and pct-of-net-assets fields.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 42,
+      "table_index": 29
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "Brand safway (Brand Industrial Services) is a current-period position row with first lien term loan instrument, SOFR terms, maturity, principal, cost, fair value, and pct-of-net-assets fields.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 15,
+      "table_index": 30
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "This packet has two bounded defects. First, true leaf positions using an Instrument hierarchy marker were filtered as aggregate rows; pipeline/bdc_identifier.py now treats Instrument like Investment Type only when loan/equity terms and rate or maturity evidence are also present. Second, source-only aggregate labels ending in '% of Net Assets' were classified as leaf parser mismatches; pipeline/source_reconciliation.py now treats those terminal percentage labels as terminal pct rows and documents exact Investments/Cash and Investments totals as non-position rows unless leaf-position evidence is present.",
+  "primary_justification": "Manual bundle review shows the packet is mixed. The high-FV labels Cash and Investments - 166.1% of Net Assets, Debt Investments - 159.7% of Net Assets, and Investments - 159.8% of Net Assets have no issuer, instrument, rate, maturity, principal, or share evidence and are aggregate portfolio labels. Other rows in the same packet, such as Discovery Purchaser Corporation, Olympus Water, and Brand safway, have coordinate-level source-table evidence as real current-period loan positions. A bounded patch can therefore distinguish aggregate labels from real Instrument leaf rows without converting aggregate/header/subtotal rows into production positions.",
+  "reconciliation_diagnosis": "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+  "report_date": "2024-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The source reconciliation impact must be confirmed by a clean rebuild, because this verdict covers a mixed packet and the current output artifacts predate the two production patches. The false-positive tests constrain both sides: bare Instrument labels remain aggregate, singular Investment geography rollups remain category rollups, and leaf rows with issuer/instrument/rate/maturity evidence remain blocking until parsed.",
+  "review_id": "BDCSRC_0001902649_2024-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_07464a57cc",
+  "reviewer_notes": "Manual review replaced the old auto-drafted insufficient-evidence verdict. The bundle evidence was assessed row-by-row at the packet level: three aggregate pct-of-net-assets labels are non-position rows, while the remaining sampled Instrument rows are true loan positions. Targeted tests run after patching: pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows; pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals tests/test_unified_holdings.py::TestPctPrefixCategorySubtotals.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected to remove the aggregate pct-of-net-assets labels from the blocking leaf-parser queue as documented non-position rows and allow true Instrument leaf positions to flow into unified holdings after rebuilding current outputs. This should lower the 17-row BlackRock Private Credit Fund 2024-12-31 blocker without hiding aggregate rows or weakening source validation.",
+  "tests_validation_plan": "Run the targeted tests listed in reviewer_notes and validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. Because production source reconciliation and unified holdings logic changed, run python -m pipeline.main --unified --validate before treating blocker counts as final if the command completes in the local environment.",
+  "verdict": "PATCH_PROPOSED"
+}

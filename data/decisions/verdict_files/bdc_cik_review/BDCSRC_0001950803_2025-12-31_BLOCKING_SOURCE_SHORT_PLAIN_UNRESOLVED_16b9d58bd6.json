@@ -1,0 +1,42 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001950803",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so exact Net Assets labels are documented as total/header rows rather than blocking short plain residuals.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 23,
+      "row_index": 28,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The source row is a Net assets subtotal line, not a borrower, security, or production position."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify exact Net Assets source-only labels as documented source total/header rows.",
+  "primary_justification": "Manual review found one blocker row: source_row_id 1075583, raw identifier Net Assets, source fair value 1,864,467,000. The bundled coordinate evidence classifies the visible Net assets row as a subtotal. This is a fund-level net-assets line rather than a position-level holding, so adding it to unified holdings would corrupt exposure. The exact-label total/header patch added while reviewing the prior Kennedy Lewis packet covers this Stepstone row as well.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2025-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch is limited to exact normalized Net Assets and related exact total/header labels and remains guarded by existing entity/position signal checks. Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code.",
+  "review_id": "BDCSRC_0001950803_2025-12-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_16b9d58bd6",
+  "reviewer_notes": "The packet has one source-only blocker row and affected source fair value of 1,864,467,000. It is a balance-sheet/net-assets line, not a position. No additional code change beyond the exact-label total/header patch was needed for this row.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_short_plain_unresolved to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "The exact-label patch was covered by pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives and related source-only classification tests. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

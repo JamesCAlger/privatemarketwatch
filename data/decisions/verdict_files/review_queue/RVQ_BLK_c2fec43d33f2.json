@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_c2fec43d33f2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2418.074,
+  "anchor_value": 2418.075,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 20,
+      "quoted_text": "Total Investment in Securities ( 221.0 %)* | $ | 2,396,883 | $ | 2,418,075",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 9,
+      "quoted_text": "Total investments (cost of $ 2,396,883 and $ 1,760,226 , respectively) | 2,418,075 | 1,725,570",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor check: the filing schedule total investment fair value is 2,418.075 million and the extracted fund-quarter fair value in the bundle is 2,418.074 million, a one-thousand-dollar rounding difference. The E07 message compares source=3844 vs output=438, but the raw source total and the balance-sheet investment total both tie to the extracted fair value, so the count-style source/output mismatch is a rule-scope false alarm rather than a grounded data error."
+}

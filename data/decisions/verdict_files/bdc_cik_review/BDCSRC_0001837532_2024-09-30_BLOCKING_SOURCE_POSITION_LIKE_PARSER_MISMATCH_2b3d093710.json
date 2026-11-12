@@ -1,0 +1,96 @@
+{
+  "changed_files": [],
+  "cik": "0001837532",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed rows are short borrower/category labels for borrowers that already appear in production as more granular position-level loan rows for the same CIK, report date, and accession.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 60,
+      "row_index": 14,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        9,
+        12,
+        15,
+        17
+      ],
+      "reason": "IQN Holding Corp. is shown with first lien secured debt, spread/floor, maturity, cost, and fair value cells; the source-only Beeline row is a shorter borrower/category label, while production already carries the granular tranche rows."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 49,
+      "row_index": 4,
+      "cell_indices": [
+        0,
+        2,
+        5,
+        8,
+        11,
+        14,
+        17
+      ],
+      "reason": "Heritage Environmental Services, Inc. appears as a borrower-level table row, and production output has separate delayed-draw and term-loan rows for the same borrower and quarter; adding this short label would duplicate exposure."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 81,
+      "row_index": 19,
+      "cell_indices": [
+        0,
+        2,
+        5,
+        8,
+        11,
+        14,
+        17
+      ],
+      "reason": "Mobile Communications America, Inc. appears as a short borrower row, while production output already includes its delayed-draw, revolver, and term-loan position rows for the same accession."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 23,
+      "row_index": 16,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15,
+        17
+      ],
+      "reason": "Channelside AcquisitionCo, Inc. is shown with first lien secured debt, term loan, spread/floor, maturity, cost, and fair value cells; production already preserves the granular Boasso position rows."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review covered the 22 source-only blocker rows in this packet. The sampled rows are Apollo borrower/category labels such as Commercial Services & Supplies Beeline IQN Holding Corp., Commercial Services & Supplies Heritage Environmental Services Heritage Environmental Services, Inc., Communications Equipment MCA Mobile Communications America, Inc., Ground Transportation Boasso Channelside AcquisitionCo, Inc., and Health Care Providers & Services Advarra Advarra Holdings, Inc. The bundled HTML coordinates and same-accession production holdings show the output already contains more granular position-level rows with investment type, tranche, spread/floor, maturity, cost, and fair value for these borrowers. Adding the shorter source-only labels as separate holdings would duplicate exposure and violate the position-level data contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-09-30",
+  "requires_human_merge": false,
+  "residual_risk": "This verdict is a manual packet-level review, not a general many-to-one clearing rule. A deterministic production rule would need to prove borrower-rollup-to-tranche sums across all rows and distinguish borrower rollups from true single-position rows with short labels.",
+  "review_id": "BDCSRC_0001837532_2024-09-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_2b3d093710",
+  "reviewer_notes": "Current holdings searches found same-CIK/date/accession granular rows for Beeline/IQN Holding Corp. revolver and term loan, Heritage Environmental Services delayed-draw and term-loan rows, MCA Mobile Communications America delayed-draw, revolver, and term-loan rows, Boasso/Channelside delayed-draw, revolver, and term-loan rows, and Advarra delayed-draw and term-loan rows. The worklist reports GAV PASS for the CIK/date, so the issue is source-row identity granularity rather than a missing exposure.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "No production row should be added for these reviewed source-only borrower/category labels. They are intentionally non-blocking borrower-level rollups/short labels when supported by same-accession position-level rows.",
+  "tests_validation_plan": "Validate verdict schema and bundled evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code tests are added because no production code patch is proposed.",
+  "verdict": "NO_PATCH_NEEDED"
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_cc14fdbfd3f6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 93,
+  "anchor_value": 186,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 10.76 % (SOFR + 6.75 %, 1.75 % Floor) | Amortized Cost 5,965,761 | Fair Value 5,869,079",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments (102.5 %) | $ | 221,201,220 | $ | 221,817,660",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw SOI rows carry populated fair value cells, but B01 reports only 93 of 186 extracted leaves with fair_value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate completeness flag. Raw source is readable and shows the SOI has populated fair value cells on leaf rows, for example table 5 row 4 with fair value 5,869,079, and the current schedule totals to fair value 221,817,660 at table 8 row 20. The source therefore does not explain the 93/186 fair_value population rate as blank filing data; the flag reflects a real extraction completeness defect."
+}

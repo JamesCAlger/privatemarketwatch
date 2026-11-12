@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_283b37b42e63",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 6.10,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "48forty Intermediate Holdings, Inc. | (16) | S+ 6.10 % | 11.44 % | 10/11/2022 | 12/1/2026 | 14,736,842 | 14,273,291 | 13,669,895 | 6.7"
+    }
+  ],
+  "rationale": "Class 2 within-row review. The flagged holding stored basis_spread as 0.0, but the raw SOI row for the matching 48forty term loan shows the Spread Above Index cell as S+ 6.10 % and Interest Rate as 11.44 %. The source therefore supports a 6.10 SOFR spread, so the missing/zero basis_spread is a real extraction defect."
+}

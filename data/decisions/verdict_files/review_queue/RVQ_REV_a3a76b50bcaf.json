@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_a3a76b50bcaf",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10,
+  "anchor_value": 10,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "KWOR Acquisition, Inc. | Unsecured Debt | S + | 8.00 % PIK | 11.67 % | 02/28/2030",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 5,
+      "quoted_text": "Knockout Intermediate Holdings I, Inc. | Preferred Equity | 10.75 % PIK | 06/25/2022",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flag identifies ten fields whose declared and instance facts are absent but whose published rates came from filing text. Targeted raw-source review confirms that this text pathway is substantive schedule disclosure, not fabricated or mismapped data: table 22 row 4 prints KWOR's 8.00% PIK spread, matching the published basis_spread, and table 24 row 5 prints Knockout's 10.75% PIK rate, matching the published basis_spread. Other targeted rate searches likewise returned the stated schedule values. The provenance-only check is therefore the faulty alarm; no data correction is supported. The schedule rows, rather than an aggregate numeric total, are the applicable internal anchor."
+}

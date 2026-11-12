@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_BLK_3d7167541d99",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8570374000.0,
+  "anchor_value": 2605347000.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 6,
+      "quoted_text": "Total Investments - 250.4 % of Net Assets (11), (12) | $ | 2,683,700 | $ | 2,605,347",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments (amortized cost-- $ 2,683,700 and $ 2,819,393, respectively) | 2,605,347 | 2,773,328",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 64,
+      "quoted_text": "Total Investments - 258.1 % of Net Assets (11), (13) | $ | 2,819,393 | $ | 2,773,328",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 2,
+      "quoted_text": "Total investments | $ | 1,195,016 | $ | 1,084,649",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The report-date filing and SOI anchors show investments fair value of 2,605,347 thousand, but the HTML aggregate under review is 8,570,374 thousand.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 20,
+        "row_index": 6,
+        "quoted_text": "Total Investments - 250.4 % of Net Assets (11), (12) | $ | 2,683,700 | $ | 2,605,347"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The September 30, 2025 comparative schedule carries a separate fair value total of 2,773,328 thousand and must not be aggregated into the December 31, 2025 total.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 27,
+        "row_index": 64,
+        "quoted_text": "Total Investments - 258.1 % of Net Assets (11), (13) | $ | 2,819,393 | $ | 2,773,328"
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "A PSSL look-through table has its own total investments of 1,195,016 thousand and 1,084,649 thousand, separate from the registrant report-date investment total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 30,
+        "row_index": 2,
+        "quoted_text": "Total investments | $ | 1,195,016 | $ | 1,084,649"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. The filing's balance sheet, SOI total, and companyfacts-aligned schedule total all anchor December 31, 2025 investments at 2,605,347 thousand, or 2,605,347,000. The reviewed HTML aggregate is 8,570,374 thousand, or 8,570,374,000, so the extraction aggregate materially exceeds the raw-source anchor. Nearby source totals show separate comparative-period and PSSL look-through totals that can inflate a broad HTML sweep; the check is therefore flagging a real extraction scope/double-count error rather than a bad source anchor."
+}

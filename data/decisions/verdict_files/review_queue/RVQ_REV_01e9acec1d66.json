@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_01e9acec1d66",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "EUR 8,508 principal requiring USD conversion",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "ACESO Holding 4 S.A.R.L. | First Lien Term Loan | EUR 8,508 principal | cost 9,822 | fair value 9,702",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Repeated Class 1 missing-cell flag. Raw source table 12 row 8 explicitly shows a non-USD debt principal of EUR 8,508, while principal_amount_usd is blank in the flagged output. The source therefore requires an explicit FX-normalized USD principal; omission is an extraction/normalization gap, not a false alarm. The citation is a representative grounded member of the 43-row FX01 cohort."
+}

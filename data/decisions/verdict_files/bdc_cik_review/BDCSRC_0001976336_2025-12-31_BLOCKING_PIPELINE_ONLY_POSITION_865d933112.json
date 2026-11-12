@@ -1,0 +1,48 @@
+{
+  "review_id": "BDCSRC_0001976336_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_865d933112",
+  "cik": "0001976336",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a bounded calibration patch: the only blocking extra pipeline row is Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares with output fair value 56001000 and no matching current-period raw/XBRL source fact, while the output wrapper already classifies it as family cash and disposition non_private_market rather than a private production position.",
+  "reconciliation_diagnosis": "ZERO_OR_UNFUNDED_NON_INDEX_ROW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 65,
+      "row_index": 21,
+      "cell_indices": [
+        0,
+        2,
+        16,
+        17,
+        20,
+        21,
+        25,
+        27
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Coordinate evidence shows the BlackRock Liquidity T-Fund row is visible in the current-period SOI table; HTML is used only for identity and classification support, not as numeric source of truth."
+    }
+  ],
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "patch_summary": "Propose adding an output-only cash or money-market calibration for rows whose wrapper disposition is non_private_market and wrapper family is cash, so retained analytics cash buckets do not become blocking private-position residuals; add a regression for this BlackRock T-Fund shape and a false-positive guard for real loan rows containing cash/PIK coupon language.",
+  "source_reconciliation_effect": "Expected to clear the single blocking extra_in_pipeline row for this CIK/date while preserving blockers for output rows that are private-market production positions or lack a non_private_market cash wrapper classification.",
+  "gav_effect": "Context only; GAV already passes and no independent pass/fail claim is made from the proposed patch.",
+  "tests_validation_plan": "pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py tests/test_validate_holdings.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "The diagnosis enum has no exact cash-equivalent/non_private_market bucket value, so ZERO_OR_UNFUNDED_NON_INDEX_ROW is the closest available non-production-position diagnosis. Human merge should verify the calibration does not hide genuine pipeline-only private investments that merely contain cash-related coupon text.",
+  "reviewer_notes": "The bundle has no source-only blockers for this group. raw_source_rows_current_period and xbrl_rows_same_accession contain no BlackRock Liquidity T-Fund source row, while source_reconciliation_detail_samples identifies the output row as non_private_market/cash with rule ANTARES_PRIVATE_CREDIT_CASH_NON_PRIVATE_MARKET_V1. The HTML coordinate candidate at table 65 row 21 corroborates current-period row identity only."
+}

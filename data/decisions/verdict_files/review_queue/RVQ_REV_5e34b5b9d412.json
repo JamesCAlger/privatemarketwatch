@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_5e34b5b9d412",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -9000.0,
+  "anchor_value": -9000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 14,
+      "quoted_text": "AI Titan Parent, Inc.^(5) | One stop | SF + | 4.75 | % | N/A(6) | 08/2031 | dash | ( 9 ) | dash | dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc.^(5) | One stop | SF + | 4.75 | % | N/A(6) | 08/2031 | dash | ( 11 ) | dash | dash",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the source schedule itself prints negative amortized cost for the cited AI Titan Parent rows. Table 17 row 1 labels the relevant column as Amortized Cost; rows 14 and 15 show principal as dash, amortized cost as ( 9 ) and ( 11 ), and fair value as dash. The extracted stored costs of -9000 and -11000 therefore match the raw source in thousands; the negative sign is not a data error."
+}

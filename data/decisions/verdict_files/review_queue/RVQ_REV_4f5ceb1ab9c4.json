@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_4f5ceb1ab9c4",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_VUORH33YOEEJJWMWYX6SZA",
+  "anchor_value": "USD-denominated amortized cost column in source schedule",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "Monitorus Holding delayed draw term loan shows EUR only in the Principal Amount/Shares column, while Amortized Cost is 3,619,086 and Fair Value is 3,460,339 under the dollar-denominated cost/value columns."
+    },
+    {
+      "table_index": 14,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted Euro."
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "Total Non-controlled, non-affiliated investments | $ | 128,200,252 | $ | 127,382,778 | 166.41 %"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency as non-USD, but the source schedule presents amortized cost and fair value as dollar-denominated columns. The only explicit Euro marker in the relevant SOI appears in the principal amount/share column for Monitorus, and the footnote says par amount is USD unless otherwise noted Euro. That supports a foreign principal denomination, not a non-USD cost valuation field."
+}

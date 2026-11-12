@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_c080ca57af83",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4277564,
+  "anchor_value": 4277564,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 4,197,705 | $ | 4,277,564 | 179.7 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 44,
+      "quoted_text": "Total Debt Investments | 4,106,795 | 4,183,171 | 175.7 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Company | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost | Fair Value | Percentage of Net Assets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 is a Class 3 quarter-scope fair-value coverage flag. The raw March 31, 2024 schedule of investments has an explicit Fair Value column and reports total investments at fair value of 4,277,564. The B01 source artifact reports residual_fv of 0.0 despite counting 134 residual rows, so the low 128/262 coverage metric is driven by row-scope/counting of structural or non-value rows rather than a source-backed missing fair-value amount. The source anchor therefore supports the extracted fair-value total and does not ground a real data error."
+}

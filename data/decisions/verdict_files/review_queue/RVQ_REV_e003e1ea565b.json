@@ -1,0 +1,100 @@
+{
+  "review_id": "RVQ_REV_e003e1ea565b",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values stored as 1075.0, 1225.0, 650.0, and 775.0",
+  "anchor_value": "source interest terms use basis-point spreads equivalent to 10.75%, 12.25%, 6.50%, and 7.75%",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Mario Purchaser, LLC (10) | Unitranche First Lien - Last Out Term Loan | S + 1075 PIK | 16.19 % | 04/2032 | 3,926 | 3,836 | 0.5 | 4,043"
+    },
+    {
+      "table_index": 22,
+      "row_index": 14,
+      "quoted_text": "Integro Parent, Inc. (11) | Senior Secured First Lien Term Loan | S + 1225 PIK ( 100 Floor) | 17.60 % | 651 | 657 | 0.1 | 651"
+    },
+    {
+      "table_index": 22,
+      "row_index": 15,
+      "quoted_text": "Integro Parent, Inc. (11) | Senior Secured Second Lien Term Loan | S + 1225 PIK ( 100 Floor) | 17.56 % | 4,910 | 4,101 | 0.6 | 4,531"
+    },
+    {
+      "table_index": 24,
+      "row_index": 10,
+      "quoted_text": "BioAgilytix | Senior Secured First Lien Term Loan | S + 650 PIK ( 75 Floor) | 11.93 % | 12/2028 | 13,790 | 13,594 | 1.5 | 11,436"
+    },
+    {
+      "table_index": 24,
+      "row_index": 11,
+      "quoted_text": "BioAgilytix | Senior Secured First Lien Delayed Draw Term Loan | S + 650 PIK ( 75 Floor) | 11.95 % | 12/2028 | 739 | 729 | 0.1 | 613"
+    },
+    {
+      "table_index": 24,
+      "row_index": 20,
+      "quoted_text": "MeriCal, LLC | Unitranche First Lien Term Loan | S + 775 PIK ( 100 floor) | 13.34 % | 11/2024 | 7,964 | 7,964 | 0.6 | 4,646"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 1075.0 should be normalized from the source basis-point term S + 1075 PIK to 10.75 percent points.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 13,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 1225.0 should be normalized from the source basis-point term S + 1225 PIK to 12.25 percent points for the first Integro loan.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 22,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 1225.0 should be normalized from the source basis-point term S + 1225 PIK to 12.25 percent points for the second Integro loan.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 22,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 650.0 should be normalized from the source basis-point term S + 650 PIK to 6.50 percent points for the BioAgilytix term loan.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 24,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 650.0 should be normalized from the source basis-point term S + 650 PIK to 6.50 percent points for the BioAgilytix delayed draw term loan.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 24,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 775.0 should be normalized from the source basis-point term S + 775 PIK to 7.75 percent points.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 24,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "C115 flagged six basis_spread values as outside the expected percentage range. The cited raw SOI rows show the values appear in Interest Term as basis-point spreads (S + 1075, S + 1225, S + 650, S + 775), not whole percent-point basis_spread values. The extraction retained the basis-point numbers directly, so the stored values are scaled 100x too high."
+}

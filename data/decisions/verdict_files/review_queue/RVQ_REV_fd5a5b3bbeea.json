@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_fd5a5b3bbeea",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "fair_value_currency values U_CAD/U_EUR on four FX02 issue rows",
+  "anchor_value": "source schedule shows C$ or EUR symbols in the par amount/shares position, not the fair value column",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 17,
+      "quoted_text": "Surewerx Purchaser III, Inc. | (5) (7) (14) | First Lien Debt | C + | 5.25 % | 7.70 % | 12/28/2029 | C$ 317 | 229 | 228 | 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 12,
+      "quoted_text": "Excelitas Technologies Corp. | (5) (7) (10) | First Lien Debt | E + | 5.25 % | 7.16 % | 08/13/2029 | EUR 6,504 | 6,648 | 7,604 | 0.69",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 10,
+      "quoted_text": "Optimizely North America, Inc. | (5) (7) (9) (14) | First Lien Debt | E + | 5.25 % | 7.15 % | 10/30/2031 | EUR 559 | 602 | 647 | 0.06",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign par amount currency was attributed to fair_value_currency; the fair value amount is in the separate fair value column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign par amount currency was attributed to fair_value_currency; the fair value amount is in the separate fair value column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign par amount currency was attributed to fair_value_currency; the fair value amount is in the separate fair value column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 row/cell flag on fair_value_currency. The raw SOI rows place C$ or EUR immediately before the par amount/shares value, while cost and fair value appear as later numeric columns. Therefore the non-USD unit is not a fair value currency; it is a par amount currency that was carried into fair_value_currency, making the flag a real localized extraction error."
+}

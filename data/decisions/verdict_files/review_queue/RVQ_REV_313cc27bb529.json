@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_313cc27bb529",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Company (1)(9) | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2) (7) | Fair Value (6) | Percentage of Net Assets"
+    },
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Bestpass, Inc. (3)(5) | First-lien loan ($ 59,800 par, due 5/2029 ) | 5/26/2023 | SOFR + 5.75 % | 11.08 % | $ 57,695 | $ 59,501 | 2.5 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 4,197,705 | $ | 4,277,564 | 179.7 | %"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as non-USD, but the raw schedule presents the fair value column as dollar-denominated: the header identifies Fair Value, row 4 shows Bestpass fair value with a dollar sign, and the schedule total is also in dollars. The stored U_USD value is therefore a USD unit representation/alias, not a source-indicated non-USD fair value."
+}

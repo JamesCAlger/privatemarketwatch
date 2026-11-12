@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_5c89a25d404a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2025-12-31 comparative schedule rows",
+  "anchor_value": "2026-03-31 report-date holdings",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 5,
+      "quoted_text": "AlphaCoin LLC (6) | First lien senior secured delayed draw term loan | S + 5.00% | 8.84% | 5/6/2025 | 7/29/2030 | principal 2,610 | amortized cost (17) | fair value (12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Thirty positions sourced from the earlier comparative Schedule of Investments were retained in the 2026-03-31 holdings population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 46,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw filing contains two full Schedule of Investments blocks with the same position columns. Table 15 is the current-period block and table 46 begins the parallel comparative block; for the same AlphaCoin instrument, table 15 row 5 reports 8.67% with cost/fair value (16)/(11), while table 46 row 5 reports 8.84% with cost/fair value (17)/(12). The PP03 rows are explicitly identified as facts whose source period is earlier than the 2026-03-31 report date, so retaining them in that report-date holdings population is a comparative-period extraction leak. The cited comparative row grounds the table-cohort mechanism; no valuation anchor is needed for this position-purity rule."
+}

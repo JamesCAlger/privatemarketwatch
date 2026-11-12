@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_0207d9deeffb",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 143769,
+  "anchor_value": 143769,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 13,
+      "quoted_text": "Total Investment Income | 217,498",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 24,
+      "quoted_text": "Net Expenses | 73,724",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 27,
+      "quoted_text": "Net Investment Income | 143,769",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The income identity must use net expenses after the 16,926 management-fee waiver and subtract 5 of income taxes; the filing then ties exactly.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 7,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Raw statement-of-operations rows show total investment income of 217,498, gross total expenses of 90,650, a 16,926 management-fee waiver, net expenses of 73,724, and income taxes of 5. The authoritative filing identity is 217,498 - 73,724 - 5 = 143,769, exactly the reported net investment income. A check using gross expenses would omit the waiver and create a spurious failure, so the flag is a rule-scope false alarm rather than a source-data error."
+}

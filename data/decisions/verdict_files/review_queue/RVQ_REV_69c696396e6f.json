@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_69c696396e6f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -67000,
+  "anchor_value": -67000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 13,
+      "quoted_text": "AMI Buyer Inc (3)(7)(11) | First Lien Senior Secured Revolving Loan | Semiconductors & Semiconductor Equipment | SOFR + 5.000 % | 10/17/2024 | 10/17/2031 | - | ( 67 | ) | ( 26 | ) | ( 0.00 | )%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Adelaide Borrower LLC (3)(8)(11) | First Lien Senior Secured Delayed Draw Term Loan | Multi-Utilities | SOFR + 6.250 % | 5/8/2024 | 5/8/2030 | - | ( 42 | ) | - | ( 0.00 | )%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 30,
+      "quoted_text": "Baxter Planning Systems LLC (3)(8)(11) | First Lien Senior Secured Delayed Draw Term Loan | Air Freight & Logistics | SOFR + 5.750 % | 5/20/2024 | 5/20/2031 | - | ( 9 | ) | ( 180 | ) | ( 0.02 | )%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review of representative flagged cost cells against the raw schedule shows that the filing itself presents negative amortized cost in parentheses. The extracted -67000 for AMI Buyer matches source (67) in $000s; Adelaide (42) and Baxter (9), with a separate Baxter revolving row at (18), confirm the same recurring presentation for unfunded delayed-draw and revolving positions. Negative cost is therefore legitimate here, and C107 is overbroad for this source-defined position type."
+}

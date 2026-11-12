@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_fa98540e56bc",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_schedule_cell",
+  "observed_value": -18275.0,
+  "anchor_value": -18275.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 7,
+      "quoted_text": "Hootsuite Inc. | 1st Lien Revolver | S+ 5.50 %, 0.75 % Floor (0.50% on unfunded) | cost (18,275) | fair value (10,666)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Source Energy Services Ltd | 1st Lien Delayed Draw Term Loan | S+ 5.25 %, 4.25 % Floor (3.00 % on unfunded) | cost (14,618) | fair value (9,411)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Smarsh Inc | 1st Lien Delayed Draw Term Loan | S+ 4.75 %, 0.75 % Floor (1.00 % on unfunded) | cost (13,466) | fair value (1,692)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "TETRA Technologies Inc | 1st Lien Delayed Draw Term Loan | S+ 5.85 %, 1.00 % Floor (1.50% on unfunded) | cost (59,674) | fair value (97,699)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 24,
+      "quoted_text": "Vensure Employer Services Inc | 1st Lien Delayed Draw Term Loan | S+ 5.00 %, 0.50 % Floor (0.50 % on unfunded) | cost (7,503) | fair value (826)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 28,
+      "quoted_text": "Wrangler Topco, LLC | 1st Lien Revolver | S+ 6.00 %, 1.00 % Floor (0.50 % on unfunded) | cost (28,303) | fair value (13,583)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost values, but the raw Schedule of Investments itself prints these positions with parenthesized negative Cost / Amortized Cost amounts and corresponding negative Fair Value amounts, primarily unfunded revolver or delayed-draw loan rows. The extracted negative costs therefore match the source cells rather than indicating an extraction or data error."
+}

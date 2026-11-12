@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_a05cf7c2cece",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_current_period_row",
+  "observed_value": 8.42,
+  "anchor_value": 8.42,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "CRS TH Holdings, Corp. | Senior Secured First Lien Term Loan | S + 475, 75 Floor | 8.42% | 12/2032 | 1,375 | 1,365 | 0.3 | 1,365",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged identifier is not confined to the earlier comparative schedule. The raw March 31, 2026 Consolidated Schedule of Investments (table 12 header at row 1) contains the exact CRS TH Holdings senior secured first lien term loan at table 12 row 21, including S + 475 with a 75 floor, 8.42% interest, and 12/2032 maturity. The same position also appears in the December 31, 2025 comparative schedule at table 32 row 5, so a period-selection check likely matched the comparative duplicate despite valid current-period source support."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_463acc34dbb3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values CAD/EUR/GBP on 13 flagged rows",
+  "anchor_value": "SOI layout shows CAD/EUR/GBP in Par Amount / Units column, while Cost (3) and Fair Value are separate valuation columns denominated in dollars",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "123Dentist Inc. | (4) (5) (6) (8) (9) | C + | 5.00 % | 7.75 % | 8/9/2029 | CAD | 5,981 | 2,533 | 2,664 | 0.19",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 2,
+      "quoted_text": "Speed Midco 3 S.a r.l. | (4) (5) (7) (9) | E + | 4.95 % | 7.33 % | 5/16/2029 | EUR | 15,595 | 16,566 | 18,261 | 1.31",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "Speed Midco 3 S.a r.l. | (4) (5) (7) (9) | SN + | 4.95 % | 9.41 % | 5/16/2029 | GBP | 2,498 | 3,145 | 3,415 | 0.25",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign currency tokens such as CAD, EUR, and GBP were assigned to cost_currency even though the source places them under Par Amount / Units, not Cost (3).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "FX03 is a real row-level data error. The flagged non-USD values are present in the raw schedule, but grid evidence shows they occupy the Par Amount / Units column. The adjacent Cost (3) and Fair Value columns are separate valuation columns, with schedule totals displayed with dollar signs, so storing CAD/EUR/GBP as cost_currency is a localized extraction/column mapping defect rather than a valid non-USD cost."
+}

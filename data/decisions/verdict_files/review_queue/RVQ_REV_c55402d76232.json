@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_c55402d76232",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": "2026-02-01",
+  "anchor_value": "2027-02-01",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC Super Senior Revolver - 14.27% inc PIK; Maturity Date 02/01/27",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 4,
+      "row_index": 5,
+      "quoted_text": "Navistar Defense, LLC Term Loan - 12.27% inc PIK; Maturity Date 02/01/27",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Super Senior Revolver maturity is stored as 2026-02-01 but the current filing schedule states 2027-02-01.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Term Loan maturity is stored as 2026-02-01 but the current filing schedule states 2027-02-01.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review. The two maturity_not_past violations are the Navistar Super Senior Revolver and Term Loan. Their extracted rows store 2026-02-01, before the 2026-03-31 report date, but the current Schedule of Investments at table 4 rows 4 and 5 states 02/01/27 for both. The maturity field is therefore wrong; the rule firing is valid. A separate unfunded-commitments disclosure at table 30 row 6 also says February 2027 for the revolver."
+}

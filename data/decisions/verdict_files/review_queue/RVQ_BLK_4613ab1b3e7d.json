@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_BLK_4613ab1b3e7d",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 184466000,
+  "anchor_value": 184466000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 135.8 % | $ | 199,200 | $ | 184,466"
+    },
+    {
+      "table_index": 30,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 24 | $ | - | $ | 184,442 | $ | 184,466"
+    },
+    {
+      "table_index": 18,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 254,797 | $ | 359,383"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E01 compared holdings fair value of 184.466 million to balance-sheet total assets of 254.797 million instead of the filing's Total Investments fair-value total of 184.466 million.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 18,
+        "row_index": 11,
+        "quoted_text": "Total assets | $ | 254,797 | $ | 359,383"
+      }
+    }
+  ],
+  "rationale": "Raw source shows the current-period Schedule of Investments total fair value is 184.466 million, matching the extracted holdings_fv of 184.466 million. A fair-value hierarchy table independently repeats Total Investments at 184.466 million. The 254.797 million comparison value is the balance-sheet Total assets line, not an investments fair-value anchor, so the E01 failure is a false alarm caused by a bad anchor."
+}

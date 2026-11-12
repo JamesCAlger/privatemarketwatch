@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_60c04034576d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR",
+  "anchor_value": "SOFR plus stated spread",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 2,
+      "quoted_text": "Luminii LLC | Term Loan | SOFR + 6.00 % | 9.70 % | 3/21/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 2,
+      "quoted_text": "Knight AcquireCo, LLC | Term Loan | SOFR + 4.50 % | 8.16 % | 11/7/2032",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 2,
+      "quoted_text": "Woven Health Collective, LLC | Revolving Credit Facility | SOFR + 4.75 % | 8.42 % | 10/23/2028",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 9,
+      "quoted_text": "Plains All American Pipeline LP | Floating Rate Note | SOFR + 4.11 % | 8.02 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "All four flagged source rows state SOFR plus a numeric spread, but the structured flagged value retains only SOFR.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Plains is 8.02% in the current-period row, while the flagged 8.70% comes from the comparative table.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 29,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 2 source-row review localizes the primary defect to structured reference/spread extraction: Luminii, Knight AcquireCo, Woven Health Collective, and Plains each disclose a combined SOFR + numeric spread cell, whereas the flagged structured value is only SOFR. The Plains full row also exposes a comparative-period leak: current table 29 row 9 reports 8.02%, while 8.70% appears at comparative table 51 row 27 and was carried into the flagged identifier."
+}

@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_5e3cac114c11",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.491609081934847,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Non-controlled, non-affiliated investments, at fair value (amortized cost of $ 335,175,538 and $ 297,791,269 , respectively) | $ | 340,357,403 | $ | 300,732,065",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 39,
+      "quoted_text": "Total Investments | $ | 335,175,538 | $ | 340,357,403 | 200.02 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Term Loan | First Lien | 3M SOFR+ 5.00 % | 2.00 % | 9.30 % | 6/5/2023 | 6/5/2028 | Services: Business | $ | 1,772,363 | $ | 1,742,931 | $ | 1,763,501 | 1.04 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period investment schedule and balance sheet carry fair-value amounts, but the extracted artifact reports fair_value on only 498 of 1013 leaves.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The source also contains unfunded commitment rows with commitment amounts rather than fair values, which should not be counted as fair-value investment leaves.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 22,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value coverage failure. The raw filing is source-available and shows the June 30, 2025 investment fair value anchor of 340,357,403 both on the balance sheet and in the SOI total, and detail investment rows carry Fair Value cells. The artifact metric of 498/1013 leaves with fair_value is therefore a real extraction/row-disposition error, not a source absence or a false alarm. Unfunded commitment rows lack fair value by structure and are a likely classification contributor if they were counted as leaves."
+}

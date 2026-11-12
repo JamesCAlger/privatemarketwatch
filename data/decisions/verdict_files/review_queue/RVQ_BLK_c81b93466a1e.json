@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_c81b93466a1e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4.94,
+  "anchor_value": 16.93,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Industry | Type of Investment (1)(2)(3) | Index | Spread | Cash Interest Rate (4)(5) | PIK | Maturity Date | Shares | Principal (6) | Cost | Fair Value | Notes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Alto Pharmacy Holdings, Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 11.50 % | 4.94 % | 11.99 % | 10/14/2027 | 14,541 | 13,797 | 13,342 | (5)(8)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 2 within-row rate defect. The source schedule separates Cash Interest Rate and PIK. For Alto Pharmacy Holdings, Inc., First Lien Term Loan, the source row shows cash interest of 4.94% and PIK of 11.99%; the stored interest_rate is 4.94%, matching only the cash leg. Under the pik_le_interest_rate all-in convention, interest_rate must include PIK, so the source all-in rate is 16.93% and the stored value is not all-in."
+}

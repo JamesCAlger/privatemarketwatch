@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_efbe4e9c0eac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "S + 450, 0.50% Floor",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 4,
+      "quoted_text": "Accel International Holdings, LLC | First Lien Secured Debt - Term Loan | S + 450 , 0.50 % Floor | 4/26/2032 | $ | 187,003 | $ | 186,155 | $ | 187,470 | (4)(15)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row states floating-rate terms S + 450 with a 0.50% floor, but the extracted private-credit row has blank interest_rate and no basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 2 row validation: the flagged extracted row for Accel International Holdings, LLC has no interest_rate or basis_spread, while the matching raw schedule row has an explicit Interest Rate cell: S + 450, 0.50% Floor. The source therefore decides the issue as a real extraction gap."
+}

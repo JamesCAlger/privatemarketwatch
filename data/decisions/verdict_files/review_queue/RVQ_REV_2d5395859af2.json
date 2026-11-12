@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_2d5395859af2",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.051502145922746781,
+    "anchor_value":  0.5,
+    "confidence":  0.62,
+    "escalate":  false,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "D06 is an aggregate continuity flag (48/932 issuers persisted; metric 0.051502 vs threshold 0.5). Raw source was available. The filing contains distinct 2025 and 2024 investment schedules whose totals tie to reported investment fair value (2025 TOTAL INVESTMENTS fair value 5,819,755 in table 70 row 35 and 2024 TOTAL INVESTMENTS fair value 4,008,973 in table 99 row 8), and representative source rows show portfolio purchases from zero/opening fair value in the 2025 roll-forward (table 117 rows 3-7). However, the allowed targeted evidence does not establish whether the very low issuer continuity is caused by a pipeline normalization/matching defect versus legitimate portfolio turnover, so the source does not decide real_error vs false_alarm."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_8da6df60bc06",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 5,
+      "quoted_text": "Consolidated Schedule of Investments as of March 31, 2026 (unaudited) and December 31, 2025 | 2",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 108.0 %) | $ | 231,571,333 | $ | 230,281,379",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 102.9 %) | $ | 213,938,298 | $ | 212,941,349",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The checked population appears to include both March 31, 2026 and December 31, 2025 schedule leaves, doubling the denominator from the 103 current-period leaves to 206.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 4,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate completeness flag: 103/206 leaves have fair_value. The raw source identifies one consolidated schedule covering March 31, 2026 and December 31, 2025, and the schedule totals show separate current-period and comparative-period investment totals. The source current-period schedule has fair-value totals, so the 50% metric is best explained by comparative-period leaves entering the report-date population rather than by legitimate missing fair values in the source."
+}

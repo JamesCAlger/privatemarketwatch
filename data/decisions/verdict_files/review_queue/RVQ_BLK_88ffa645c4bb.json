@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_88ffa645c4bb",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1588.604,
+  "anchor_value": 1588.604,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Portfolio Investments | $ | 1,598,063 | $ | 1,588,604 | 194.77 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 4,
+      "quoted_text": "Adelaide Borrower LLC | First Lien Senior Secured Term Loan | SOFR + 6.750% (Incl. 3.375% PIK) | 10.422%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E07's source row-count anchor includes repeated/comparative schedule structure rather than only current-period position rows, while the extracted current portfolio fair value ties exactly to the filing total.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 14,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate false alarm. The filing's current-period Total Portfolio Investments fair value is $1,588.604 million at table 14 row 8, exactly equal to the bundle's extracted fund-quarter fair value of $1,588.604 million. The raw filing also contains a repeated comparative investment schedule beginning at table 15 (for example, Adelaide has different comparative-period terms at table 15 row 4), so the oracle's source=518 count is not a valid current-position anchor. The output=137 count therefore does not establish omitted positions; the independent value anchor instead confirms complete current portfolio coverage."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_840d987c61d3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 891256739,
+  "anchor_value": 891256739,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 18,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | Healthcare Providers & Services | S+ 8.15 %, 1.00 % Floor | 12.45 | 10/26/2020 | 4/3/2026 | 5,811,828 | 5,699,243 | 4,328,359 | 0.80",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 19,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | Healthcare Providers & Services | S+ 8.15 %, 1.00 % Floor | 12.45 | 4/4/2024 | 4/3/2026 | 924,199 | 889,643 | 688,297 | 0.13",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, with the example key matching National Dentex. The raw schedule shows separate National Dentex delayed-draw term loan rows with the same issuer, instrument, rate, and maturity but different original acquisition dates, par amounts, costs, and fair values. The schedule total fair value of 891,256,739 ties to the balance-sheet total investments at fair value, so the evidence supports legitimate tranche-level source rows and an over-coarse duplicate-key rule rather than duplicated data."
+}

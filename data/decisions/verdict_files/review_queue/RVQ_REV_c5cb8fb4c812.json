@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c5cb8fb4c812",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 29
+    },
+    {
+      "table_index": 15,
+      "row_index": 3
+    },
+    {
+      "table_index": 23,
+      "row_index": 29
+    }
+  ],
+  "rationale": "C104 flagged zero fair_value rows. The raw SOI includes revolver rows whose fair value column is a dash, including table 16 row 29 for ATL II MRO Holdings Inc. with principal dash, cost (55), fair value dash, and net-assets percentage dash. Other revolver rows show the same source pattern. Normalizing the source dash to 0.0 is correct for fair_value; the rule warning is overbroad for legitimate zero/dash fair-value revolver rows."
+}

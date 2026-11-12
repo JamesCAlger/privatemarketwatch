@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1962c2f355b5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 54,
+      "quoted_text": "Industry classification percentage table totals to 100.0% for March 31, 2024, not 0.0%.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 27,
+      "quoted_text": "Total | $ | 8,446,937 | $ | 26,900 | $ | 202 | $ | 127 | $ | 490 | $ | 8,474,656 | 158.9 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 10,
+      "quoted_text": "Non-controlled/non-affiliated investments (cost - $ 8,420,468 and $ 6,683,052 at March 31, 2024 and December 31, 2023, respectively) | $ | 8,474,656 | $ | 6,719,588",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the raw March 31, 2024 industry classification percentage table contains percentage rows and totals to 100.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 54
+      }
+    }
+  ],
+  "rationale": "The raw source decides the aggregate flag. The filing has a March 31, 2024 industry-classification percentage table whose total is 100.0%, while the queue artifact reports pct_sum=0.0%. Independent schedule anchors agree that total investments are about 8,474,656 thousand: the schedule total row shows 8,474,656 and 158.9% of net assets, and the balance sheet shows investments at fair value of 8,474,656. This supports an extraction gap in the percentage capture rather than a source total problem."
+}

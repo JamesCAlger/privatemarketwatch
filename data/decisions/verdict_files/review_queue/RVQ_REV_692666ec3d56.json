@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_692666ec3d56",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 78.4,
+  "anchor_value": 100.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 23,
+      "quoted_text": "Total First Lien Debt | 1,040,682,128 | 1,042,255,961 | 154.38 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 29,
+      "quoted_text": "Total Second Lien Debt | 6,728,616 | 6,480,590 | 0.96 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Two extracted blank-rate rows named only Debt match source debt subtotal rows, not individual investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 22,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted second Debt row matches the source Total Second Lien Debt subtotal and should not be included as a position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 22,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "The raw schedule shows normal debt investment rows with populated Type, Reference Rate and Spread, Interest Rate, maturity, cost, and fair value. The bundle's blank-rate rows named only Debt with fair values 1,042,255,961 and 6,480,590 match source rows explicitly labeled Total First Lien Debt and Total Second Lien Debt. Those are schedule subtotals, not rate-bearing investment positions, so their inclusion creates a real data defect affecting the direct-lending rate-fill check."
+}

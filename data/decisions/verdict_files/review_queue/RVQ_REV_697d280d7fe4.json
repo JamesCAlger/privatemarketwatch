@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_697d280d7fe4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 22.967441752096924,
+  "anchor_value": 9.25,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 13,
+      "quoted_text": "Total distributions recorded | ( 4.10 ) for 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 66,
+      "row_index": 25,
+      "quoted_text": "Ratio of net investment income to average Members' Capital | 9.25 % for 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 12,
+      "quoted_text": "Return of capital | $ | ( 29,015 ) for 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 13,
+      "quoted_text": "Distributable earnings | ( 32,099 ) for 2025",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 compares total distribution rate against income yield, but the raw source shows the 2025 total distributions are real and include both return of capital and distributable earnings. The financial highlights report total distributions recorded of $4.10 per unit and a net investment income ratio of 9.25%, so exceeding an income-yield heuristic is source-consistent rather than evidence of a fund_financials extraction error."
+}

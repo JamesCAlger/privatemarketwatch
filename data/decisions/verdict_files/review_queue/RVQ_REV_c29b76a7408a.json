@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_c29b76a7408a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.729086576648134,
+  "anchor_value": 10.68,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 124,
+      "row_index": 16,
+      "quoted_text": "Net investment income to average net assets | 10.68 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 124,
+      "row_index": 8,
+      "quoted_text": "Distributions declared (4) | ( 2.52 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 14,
+      "quoted_text": "Total | $ | 2.2637 | $ | 0.2566 | $ | 2.5203 | $ | 67,845",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "F16 fired even though source shows distribution rate around 9.73% is below the disclosed net investment income yield of 10.68%, so the income-yield/check anchor is wrong.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 124,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "F16 compares distribution_rate to income_yield_pct * 1.5. The reviewed metric is a 9.729% distribution rate, while the filing's financial highlights disclose net investment income to average net assets of 10.68% for 2025; the distribution per-share rows show 2.52/2.5203 distributions. Since 9.729% is below 10.68% and well below 1.5x that income yield, the raw source does not support the flag."
+}

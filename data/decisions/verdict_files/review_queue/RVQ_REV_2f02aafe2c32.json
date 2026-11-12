@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_2f02aafe2c32",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 26,
+  "anchor_value": null,
+  "confidence": 0.62,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 14,
+      "quoted_text": "Molekule, Inc. | Equipment Financing (18) | June 19, 2020 | January 1, 2024 | Fixed interest rate 8.8 %; EOT 10.0 % | $ | 312 | $ | 595 | $ | 267"
+    },
+    {
+      "table_index": 25,
+      "row_index": 41,
+      "quoted_text": "Total: Debt Securities ( 92.4 %) (19) * | $ | 1,080,901 | $ | 1,092,715 | $ | 1,063,841"
+    }
+  ],
+  "rationale": "The raw source was checked through the evidence CLI. The flagged positions appear tied to schedule footnote markers such as (18), and the debt total carries marker (19), but CLI searches for non-accrual, nonaccrual, accrual, past due, collectibility, and income recognition returned no source text defining those markers as non-accrual. The visible schedule rows show ordinary debt instruments with rates, maturities, cost, and fair value, but do not independently decide whether the footnote marks non-accrual status. Because the decisive footnote prose is not exposed in usable source output, the flag cannot be confirmed as a real error or cleared as a false alarm from raw source."
+}

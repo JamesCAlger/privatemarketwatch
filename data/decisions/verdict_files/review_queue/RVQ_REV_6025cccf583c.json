@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_6025cccf583c",
+  "verdict": "false_alarm",
+  "mechanism": "rate_range_false_positive",
+  "localized": true,
+  "anchor_used": "source_interest_rate_cells",
+  "observed_value": "29.44; 25.61",
+  "anchor_value": "29.44; 25.61",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 14,
+      "quoted_text": "Enservco / Heat Waves 14133 County Rd 9 1/2 Longmont, CO 80504 | Specialty Finance | Term Loan | 6 | 29.44 % | 03/24/2022 | 06/24/2026 | 1,674 | 1,695 | 1,872",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 11,
+      "quoted_text": "ITP Live Production Group 101 Greenwich Street, Floor 26 New York, NY 10006 | Specialty Finance | Term Loan | 2, 6 | 25.61 % | 12/22/2021 | 05/22/2026 | 1,364 | 1,379 | 1,451",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell review of the flagged interest_rate values. The raw schedule of investments source shows Enservco / Heat Waves with Interest Rate 29.44 % at table 23 row 14 and ITP Live Production Group with Interest Rate 25.61 % at table 24 row 11. The extracted whole-number percentage values match those source cells, so the C113 out-of-range warning is a threshold/range false positive rather than a data error."
+}

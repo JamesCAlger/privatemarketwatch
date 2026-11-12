@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_0f98a6cc8bb8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "59 FX01 issue rows asserting non-USD source par with missing principal_amount_usd",
+  "anchor_value": "Source schedule debt rows are USD-denominated; no non-USD currency marker found",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.43 % (SOFR + 6.75 %, 1.75 % Floor) | $ | 29,487,621 | $ | 28,909,368 | $ | 28,396,579"
+    },
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "HydroSource Logistics, LLC | 3rd Amendment Term Loan - 12.43 % (SOFR + 8.50 %, 2.00 % Floor) | $ | 40,240,512 | $ | 38,923,804 | $ | 40,240,512"
+    },
+    {
+      "table_index": 26,
+      "row_index": 4,
+      "quoted_text": "Corcentric, Inc. | Term Loan - 10.93 % (SOFR + 7.00 %, 2.00 % Floor) | $ | 38,249,808 | $ | 38,056,203 | $ | 38,196,259"
+    },
+    {
+      "table_index": 27,
+      "row_index": 4,
+      "quoted_text": "CF Newco, Inc. | Term Loan - 9.74 % (SOFR + 6.00 %, 1.50 % Floor) | $ | 22,153,339 | $ | 21,965,431 | $ | 22,264,106"
+    }
+  ],
+  "rationale": "FX01 says non-USD debt principal is missing principal_amount_usd, but the raw investment schedule pages for the 2025 debt holdings show dollar-denominated par, amortized cost, and fair value columns on the first row of each current debt schedule page, with subsequent blank currency cells following the same table convention. Targeted source search for EUR/CAD/GBP, foreign currency, Canadian, Euro, and Sterling returned no hits. The source therefore does not support the premise that these are non-USD principal rows requiring FX conversion; the flag is a rule/source-currency inference false alarm."
+}

@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_3cdd604e1e64",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 17,
+      "quoted_text": "Corza Medical Srl (4)(5)(7) | 14.00 % PIK | 14.00 | % | 2/13/2030 | 19,369 | 19,164 | 19,950"
+    },
+    {
+      "table_index": 72,
+      "row_index": 46,
+      "quoted_text": "Corza Medical S.A R.L. (4)(5)(7) | 14.00 % PIK | 2/13/2030 | $ | 16,879 | $ | 16,624 | $ | 17,385"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "B02 duplicate keys are explained by same issuers appearing in separate 2025 and 2024 SOI blocks; the 2024 Corza row should not create a duplicate 2025 position key.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 72,
+        "row_index": 46
+      }
+    }
+  ],
+  "rationale": "The bundle reports 5 duplicate position keys for the 2025-12-31 CIK-quarter, with Corza Medical Srl as an example. Raw source shows a 2025 Corza row with fair value 19,950 in the current SOI block and a separate Corza row with fair value 17,385 in the later comparative/prior-period SOI block; filing totals also separate 2025 total investments of 2,177,821 from 2024 total investments of 984,954. The duplicate is therefore a real extraction/classification defect caused by comparative-period leakage rather than two distinct 2025 positions."
+}

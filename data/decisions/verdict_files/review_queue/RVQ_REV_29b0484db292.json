@@ -1,0 +1,74 @@
+{
+  "review_id": "RVQ_REV_29b0484db292",
+  "verdict": "false_alarm",
+  "mechanism": "source_dash_zero_normalization",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 10
+    },
+    {
+      "table_index": 13,
+      "row_index": 17
+    },
+    {
+      "table_index": 13,
+      "row_index": 19
+    },
+    {
+      "table_index": 13,
+      "row_index": 20
+    },
+    {
+      "table_index": 14,
+      "row_index": 21
+    },
+    {
+      "table_index": 15,
+      "row_index": 4
+    },
+    {
+      "table_index": 15,
+      "row_index": 5
+    },
+    {
+      "table_index": 16,
+      "row_index": 7
+    },
+    {
+      "table_index": 16,
+      "row_index": 13
+    },
+    {
+      "table_index": 16,
+      "row_index": 14
+    },
+    {
+      "table_index": 17,
+      "row_index": 11
+    },
+    {
+      "table_index": 18,
+      "row_index": 33
+    },
+    {
+      "table_index": 18,
+      "row_index": 34
+    },
+    {
+      "table_index": 19,
+      "row_index": 7
+    },
+    {
+      "table_index": 19,
+      "row_index": 8
+    }
+  ],
+  "rationale": "C104 flagged 15 holdings with fair_value normalized to 0.0. The raw March 31, 2024 schedule of investments shows the same 15 rows with the fair-value cell printed as a dash in the Fair Value column, including ACP Falcon Buyer Inc. First Lien Revolver at table 12 row 10 and the remaining cited rows. Because the source itself carries no fair value for these positions and the extraction's zero is the platform normalization of that source dash, the zero-FV warning is not a real data error."
+}

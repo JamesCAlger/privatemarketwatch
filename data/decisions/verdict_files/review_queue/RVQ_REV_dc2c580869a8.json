@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_dc2c580869a8",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.9363484087102177,
+  "anchor_value": 0.95,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 1,
+      "quoted_text": "Investment | Type | Acquisition Date | Acquisition Cost ($)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 2,
+      "quoted_text": "Acp Flexibles I LP | Equity Interest | 10/22/2025 | 191,571",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 59,
+      "row_index": 2,
+      "quoted_text": "Mse Acquisitions Inc | Series A Preferred Stock | 8/14/2024 | 288,462",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 57,
+      "row_index": 4,
+      "quoted_text": "Total Investment Portfolio | $ | 1,677,854,551 | $ | 1,639,681,521 | 209.61 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Acquisition-cost-only investment tables are being treated as fair-value holdings leaves even though their source header has no Fair Value column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 58,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "B01 is a quarter-level fair-value completeness flag: 559 of 597 leaves have fair_value, below the 0.95 threshold. Raw source totals show the actual Schedule of Investments total fair value is present and internally anchored at $1,639,681,521, matching the fund-quarter fair value in the bundle. The no-FV rows are localized to separate acquisition-cost-only investment tables whose header is Investment/Type/Acquisition Date/Acquisition Cost ($), not a fair-value schedule. Counting those rows as fair-value holdings leaves is therefore a real scope/classification defect, not a source omission."
+}

@@ -1,0 +1,18 @@
+{
+  "review_id": "RVQ_BLK_0d348ec86d61",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source",
+  "observed_value": "",
+  "anchor_value": "Antares Strategic Credit Fund",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "entity_name: Antares Strategic Credit Fund",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged private_markets_holdings row key 544957 has a blank entity_name, while the raw filing overview identifies the entity as Antares Strategic Credit Fund. The required display and diagnostic field was therefore not populated from available source evidence."
+}

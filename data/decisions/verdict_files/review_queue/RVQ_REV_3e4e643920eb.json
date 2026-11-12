@@ -1,0 +1,97 @@
+{
+  "review_id": "RVQ_REV_3e4e643920eb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.16091954022988506,
+  "anchor_value": 0.5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 6,
+      "quoted_text": "2023 row: 48Forty Solutions LLC, 1st Lien Term Loan, fair value 6,202,715; same issuer appears in 2022 at table 37 row 5.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 5,
+      "quoted_text": "2022 row: 48Forty Solutions LLC, 1st Lien Term Loan, fair value 6,332,299.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 11,
+      "quoted_text": "2023 row: Accurate Background LLC, 1st Lien Term Loan, fair value 18,490,207; same issuer appears in 2022 at table 37 rows 9-10.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 9,
+      "quoted_text": "2022 row: Accurate Background LLC, 1st Lien Term Loan, fair value 15,601,516.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 13,
+      "quoted_text": "2023 row: Allentown LLC, 1st Lien Term Loan, fair value 9,696,643; same issuer appears in 2022 at table 37 rows 13-15.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 13,
+      "quoted_text": "2022 row: Allentown LLC, 1st Lien Term Loan, fair value 9,628,399.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 25,
+      "quoted_text": "2023 row: Speedstar Holding LLC, 1st Lien Term Loan, fair value 20,497,133; same issuer appears in 2022 at table 39 row 7.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 7,
+      "quoted_text": "2022 row: Speedstar Holding LLC, 1st Lien Term Loan, fair value 20,897,952.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 6,
+      "quoted_text": "2023 row: Dye & Durham Corp, 1st Lien Term Loan, fair value 3,506,126; same issuer appears in 2022 at table 39 rows 19-21.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 19,
+      "quoted_text": "2022 row: Dye & Durham Corp, 1st Lien Term Loan, fair value 3,642,835.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 15,
+      "quoted_text": "2023 row: SP-CREH 19 Highline LLC, 1st Lien Term Loan, fair value 14,004,900; same issuer appears in 2022 at table 41 rows 5-6 and 10.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 5,
+      "quoted_text": "2022 row: SP-CREH 19 Highline LLC, 1st Lien Term Loan, fair value 20,909,700.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "D06 reports only 14 of 87 issuers persisted, but the raw 2023 and 2022 SOI pages contain many directly matching issuer names across periods, so the continuity extraction or issuer-normalization layer is undercounting persistence.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 28,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag. The filing's raw SOI schedule is readable: 2023 investment tables 28-32 total investments at fair value of 876,197,259, and comparative 2022 tables 37-41 total investments at fair value of 815,424,661. The raw rows show numerous issuer continuations between the periods, including 48Forty Solutions, Accurate Background, Allentown, Speedstar, Dye & Durham, and SP-CREH 19 Highline in the cited row pairs. That source pattern is inconsistent with the flagged 16.1% continuity result, so the low continuity metric is a real extraction/normalization error rather than a true portfolio turnover signal."
+}

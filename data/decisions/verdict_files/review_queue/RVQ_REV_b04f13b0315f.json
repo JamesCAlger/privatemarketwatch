@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_b04f13b0315f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 50.0,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 10,
+      "quoted_text": "InFarm Technologies Limited (1)(3)(7) | Growth Capital Loan ( 50.00 % EOT payment) (2) | 6/20/2024 | 22 | 22 | - | 9/20/2024",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged value is interest_rate=50.0, but the raw source row labels 50.00% as an EOT payment, not an interest rate. Adjacent InFarm rows separately state 6.00% interest rate, confirming the schedule distinguishes interest rates from EOT payments. The extraction placed an EOT payment percentage into the interest_rate field."
+}

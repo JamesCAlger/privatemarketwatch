@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_b6053ced92fd",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 7,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 31,
+      "quoted_text": "Priority Holdings, LLC and Priority Technology Holdings, Inc. | Provider of merchant acquiring and payment processing solutions | Senior preferred stock | 17.33 % ( 7.00 % PIK) | SOFR (Q) | 12.00 % | 04/2021 | 25,739 | 31.3 | 31.8 | (2)(6)(11)"
+    },
+    {
+      "table_index": 22,
+      "row_index": 25,
+      "quoted_text": "Evolent Health LLC and Evolent Health, Inc. | Medical technology company focused on value based care services and payment solutions | Series A preferred shares | 11.48 % | SOFR (Q) | 6.00 % | 01/2023 | 01/2029 | 3,834 | 3.8 | 4.1 | (2)(6)(11)"
+    },
+    {
+      "table_index": 46,
+      "row_index": 10,
+      "quoted_text": "Ferrellgas, L.P. and Ferrellgas Partners, L.P. | Distributor of propane and related accessories | Senior preferred units | 8.96 % | 03/2021 | 64,155 | 64.2 | 64.8"
+    },
+    {
+      "table_index": 23,
+      "row_index": 27,
+      "quoted_text": "Napa Management Services Corporation and ASP NAPA Holdings, LLC | Anesthesia management services provider | Preferred units | 15.00 % PIK | 06/2020 | 1,842 | 0.2 | 0.2 | (2)"
+    },
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Limited partnership interest | 8.00 % PIK | 10/2023 | 9,249,000 | 9.5 | 14.2 | (2)(6)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 22,
+      "quoted_text": "OUTFRONT Media Inc. | Provider of out-of-home advertising | Series A convertible perpetual preferred stock | 7.00 % | 04/2020 | 25,000 | 25.0 | 27.0 | (2)(6)"
+    }
+  ],
+  "rationale": "X01 flagged PRIVATE_EQUITY rows with nonblank interest_rate values. Raw SOI rows show the relevant rates are printed coupon or PIK terms on preferred equity, convertible preferred stock, preferred units, or partnership-interest instruments, so both the equity classification and the rate-bearing term are source-backed. The check is overbroad for rate-bearing preferred equity rather than exposing a data error."
+}

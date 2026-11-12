@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_db859eba135a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -195000,
+  "anchor_value": -195000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "Hyland Software, Inc. | Software | S + 6.00 % | 09/19/29 | 4,525 | ( 67 ) | ( 68 ) | (6) (8)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Superior Environmental Solutions | Commercial Services & Supplies | S + 6.50 % | 08/01/29 | 1,567 | ( 19 ) | ( 20 ) | (6) (8)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 2,
+      "quoted_text": "VASA Fitness Buyer, Inc. | Consumer Retail | S + 7.50 % (Incl. 0.38 % PIK) | 08/14/28 | 435 | ( 15 ) | ( 15 ) | (6) (8)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 3,
+      "quoted_text": "VASA Fitness Buyer, Inc. | Consumer Retail | S + 7.50 % (Incl. 0.38 % PIK) | 08/14/28 | 2,612 | ( 44 ) | ( 46 ) | (6) (8)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 23,
+      "quoted_text": "AWP Group Holdings, Inc. | Commercial Services & Supplies | S + 8.75 % | 12/23/30 | 4,545 | ( 45 ) | ( 46 ) | (8)"
+    },
+    {
+      "table_index": 27,
+      "row_index": 1,
+      "quoted_text": "Unfunded Commitment Balances (1)"
+    },
+    {
+      "table_index": 27,
+      "row_index": 15,
+      "quoted_text": "Hyland Software, Inc. | 4,525"
+    },
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Superior Environmental Solutions | 2,298"
+    },
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "VASA Fitness Buyer, Inc. | 3,047"
+    },
+    {
+      "table_index": 27,
+      "row_index": 32,
+      "quoted_text": "AWP Group Holdings, Inc. | 4,546"
+    }
+  ],
+  "rationale": "C103 warned on five negative fair_value rows, but each cited SOI row presents both cost and fair value in parentheses and carries footnote (8). The same issuers appear in the filing's Unfunded Commitment Balances table, so these are sign-consistent unfunded-commitment marks rather than unexplained negative fair values. The check is over-broad for this filer presentation."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_6ba6ef604439",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "principal_amount_usd missing on 32 rows classified as non-USD",
+  "anchor_value": "source schedule presents the positions under United States with Par denominated in $",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "VRC Companies, LLC (dba Vital Records Control) | Par | $ | 14,793",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 3,
+      "quoted_text": "United States - 87.8 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 investment schedule places the debt positions in the United States section and explicitly prints a dollar sign in the Par column. Subsequent rows inherit that displayed currency convention. FX01 incorrectly treats these USD par amounts as non-USD and demands a separate principal_amount_usd conversion, so the flag is a false alarm caused by currency classification/check scope rather than a source-data omission."
+}

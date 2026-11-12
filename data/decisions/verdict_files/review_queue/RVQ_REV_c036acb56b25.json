@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_c036acb56b25",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5.0,
+  "anchor_value": 13.75,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 23,
+      "quoted_text": "Alloy Technologies, Inc. | Growth Capital Loan (Prime + 5.25 % interest rate, 13.75 % floor, 5.00 % EOT payment) | 8/8/2024 | 913 | 949 | 949 | 8/31/2027",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 10,
+      "quoted_text": "Ao1 Holdings Inc. | Growth Capital Loan (Prime + 1.00 % interest rate, 7.75 % floor, 3.00 % EOT payment) | 12/13/2024 | 1,114 | 1,128 | 1,114 | 12/1/2027",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The holdings rate field captures non-coupon components or spreads, including Alloy's 5.00% EOT payment instead of its 13.75% coupon floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "F27 is a real cross-dataset error, not an unusually high income yield. The raw debt schedule shows that extracted holdings rates used to compute WAC are not all-in current coupons. Alloy is stored at 5.0 even though the source separately states Prime + 5.25%, a 13.75% floor, and a 5.00% EOT payment; Ao1 is stored at 3.0 even though the source separately states Prime + 1.00%, a 7.75% floor, and a 3.00% EOT payment. The exact matches to the EOT payment demonstrate a column-remap/extraction defect that understates holdings WAC and causes the 6.5341 F27 comparison failure."
+}

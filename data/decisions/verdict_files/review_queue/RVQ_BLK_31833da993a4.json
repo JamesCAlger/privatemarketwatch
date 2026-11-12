@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_31833da993a4",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.97,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag for private_markets_holdings row_key 544957 and missing index_classification. The raw filing was successfully read through the evidence CLI, but the bundle supplies no issuer, instrument identifier, source context, or source coordinate for row_key 544957. A targeted raw-source roam query for 544957 returned zero hits across 4,157 rows. Therefore the flagged derived classification cell cannot be mapped to a raw-source instrument row, so the source does not decide whether the blank classification is erroneous."
+}

@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_e3aef59736ed",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "asset_class=PRIVATE_EQUITY; index_classification=PREFERRED_EQUITY; interest_rate=14.499999999999998",
+  "anchor_value": "Source row: Solifi Preferred Equity with Spread 14.50 % PIK and Interest Rate 14.50 %",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 15,
+      "quoted_text": "Solifi (10)(15)(17) | Preferred Equity | - | 14.50 % PIK | 14.50 % | - | 15 | 14,700 | 14,700"
+    }
+  ],
+  "rationale": "Class 2 within-row check. The raw SOI row identifies Solifi as Preferred Equity, not a loan, and the same row explicitly reports both a 14.50 % PIK spread and a 14.50 % interest rate. The extracted PRIVATE_EQUITY/PREFERRED_EQUITY classification and 14.5 interest_rate therefore match the source; the X01 flag is a rule-scope false alarm for rate-bearing preferred equity."
+}

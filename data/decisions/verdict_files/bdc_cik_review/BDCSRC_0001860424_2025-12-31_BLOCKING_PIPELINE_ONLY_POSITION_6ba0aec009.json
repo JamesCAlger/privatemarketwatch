@@ -1,0 +1,33 @@
+﻿{
+    "review_id":  "BDCSRC_0001860424_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_6ba0aec009",
+    "cik":  "0001860424",
+    "report_date":  "2025-12-31",
+    "verdict":  "PATCH_PROPOSED",
+    "confidence":  "MEDIUM",
+    "primary_justification":  "Source-reconciliation evidence supports a bounded wrapper classification fix: the blocker is the S4T Holdings Corp. equity units output row, while raw current-period source rows include the exact same identifier and fair value 542123.0 but classify it as excluded_aggregate_candidate. The identifier has issuer text, Equity Units, initial acquisition date, cost/fair value/shares in output detail, and no source-only blocker rows, indicating a real current-period position is being excluded from the source-reconciliation indexable set by an over-broad aggregate classification rather than missing source data.",
+    "reconciliation_diagnosis":  "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+    "evidence_refs":  [
+                          "worklist_row",
+                          "source_residual_rows",
+                          "source_reconciliation_detail_samples",
+                          "raw_source_rows_current_period",
+                          "position_purity",
+                          "cik_validation_packet"
+                      ],
+    "html_citations":  [
+
+                       ],
+    "changed_files":  [
+                          "data/overrides/bdc_xbrl_wrappers/0001860424.json",
+                          "tests/test_bdc_xbrl_wrapper.py",
+                          "tests/test_validate_holdings.py"
+                      ],
+    "patch_summary":  "Add Equity Units as an Onex equity leaf signal and regression coverage proving the S4T Holdings Corp. equity-units identifier classifies as an equity_position_leaf and reconciles against the raw current-period source row, while retaining aggregate treatment for true equity totals/headers.",
+    "source_reconciliation_effect":  "Expected to clear the one blocking_pipeline_only_position row for CIK 0001860424 report_date 2025-12-31 by moving the exact raw S4T equity-units source fact out of excluded_aggregate_candidate into the indexable source/leaf match path, without clearing unrelated aggregate/header residuals.",
+    "gav_effect":  "Context only; GAV already passes and should not be used as the primary pass/fail claim. Expected no independent GAV-based justification.",
+    "tests_validation_plan":  "pytest tests/test_bdc_xbrl_wrapper.py tests/test_validate_holdings.py -k \"onex or aggregate_candidate or source_reconciliation\"; pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+    "requires_human_merge":  true,
+    "missing_evidence":  "No HTML coordinate candidate for the exact S4T equity-units row was bundled; the proposed mechanism relies on bundled raw XBRL/source-reconciliation rows as numeric source of truth.",
+    "residual_risk":  "The diagnosis depends on the raw XBRL identifier and source-reconciliation detail rather than coordinate-level HTML. Adding Equity Units must be constrained to Onex equity leaf classification and tested against true equity total/header rows to avoid reintroducing aggregate leaks.",
+    "reviewer_notes":  "The output detail shows output_wrapper_disposition=aggregate and rule ONEX_FALCON_DIRECT_LENDING_EQUITY_AGGREGATE_V1 for a row with issuer S4T Holdings Corp., instrument Equity Units, cost 200000.0, fair value 542123.0, and shares 200.0. The raw current-period source rows contain the same identifier/fair value but mark it excluded_aggregate_candidate, which explains the pipeline-only residual."
+}

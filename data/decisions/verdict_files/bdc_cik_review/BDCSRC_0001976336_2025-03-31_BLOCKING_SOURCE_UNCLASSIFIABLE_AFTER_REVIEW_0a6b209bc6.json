@@ -1,0 +1,32 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001976336",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies exact Antares category, unfunded-commitment, and total-investment labels as documented source header/total rows, not production positions.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Add narrow source reconciliation recognition for Antares Private Credit Fund category/header labels: the exact unfunded commitments bucket without the word Total, and the industry category headers 'Electronic Equipment, Instruments and Component' and 'IT Services' when embedded in non-controlled/non-affiliated secured debt hierarchy labels. Existing total-investment recognition covers the fourth row.",
+  "primary_justification": "Manual review supports a bounded patch. The four blocker rows are source_row_id 1104600 ('Investments - non-controlled/non-affiliated Secured Debt Electronic Equipment, Instruments and Component'), source_row_id 1104569 ('Investments - non-controlled/non-affiliated Secured Debt IT Services'), source_row_id 1103523 ('Investments--non-controlled/non-affiliated Unfunded Commitments'), and source_row_id 1102785 ('Total Investments - non-controlled/non-affiliated'). These are hierarchy/category, unfunded commitment, or total investment labels with no issuer, rate, maturity, shares, principal, or position-level terms. The same accession contains named Antares rows such as Wildcat Topco and DT1 Midco with issuer and asset-type detail, confirming these blocker labels are not production position granularity.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded header/total mechanism. Production outputs still need to be rebuilt and source reconciliation rerun before claiming these current blocker rows are cleared from generated artifacts.",
+  "review_id": "BDCSRC_0001976336_2025-03-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_0a6b209bc6",
+  "reviewer_notes": "Reviewed manually as row 60. The prior insufficient-evidence placeholder was not accurate: the XBRL identifiers are category, unfunded-commitment, and total-investment labels and support a small tested source_reconciliation patch.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: the exact Antares category/header, unfunded-commitment, and total-investment labels are documented as source headers/totals instead of remaining source-only blockers.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

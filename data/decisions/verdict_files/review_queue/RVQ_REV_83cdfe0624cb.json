@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_83cdfe0624cb",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -0.02,
+  "anchor_value": -0.02,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 7,
+      "quoted_text": "Hootsuite Inc. | 1st Lien Revolver | ... | Cost (18,275) | Fair Value (10,666) | % of Net Assets (0.00)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Source Energy Services Ltd | 1st Lien Delayed Draw Term Loan | ... | Cost (14,618) | Fair Value (9,411) | % of Net Assets (0.00)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "Accela Inc/US | 1st Lien Revolver | ... | Cost (14,059) | Fair Value (7,583) | % of Net Assets (0.00)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 14,
+      "quoted_text": "Allium Buyer LLC | 1st Lien Revolver | ... | Cost (12,499) | Fair Value (4,885) | % of Net Assets (0.00)"
+    }
+  ],
+  "rationale": "C404 flagged negative pct_of_net_assets values. The raw schedule shows all four flagged positions are unfunded revolver or delayed-draw rows with parenthesized negative cost and fair value and parenthesized near-zero percent of net assets. The negative pct values are therefore source-consistent monitoring cases, not extraction or normalization errors."
+}

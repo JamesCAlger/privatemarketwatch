@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_8306fcd86b47",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3516321000.0,
+  "anchor_value": 3180965000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 8,
+      "quoted_text": "Total Investment before Cash Equivalents | $ | 3,338,149 | $ | 3,180,965 | (7)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. Raw source table 50 row 8 reports total investment before cash equivalents at fair value of 3,180.965 million for September 30, 2025, matching the companyfacts anchor of 3,180,965,000. The extracted position sum in the review bundle is 3,516,321,000, an overshoot of 335,356,000. The source therefore decides the flag as a real aggregate data error, but the available row-disposition evidence does not localize a single specific leaked row or subtotal."
+}

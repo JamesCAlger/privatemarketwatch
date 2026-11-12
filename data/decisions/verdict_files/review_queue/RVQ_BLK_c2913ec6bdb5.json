@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_c2913ec6bdb5",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 831,
+  "anchor_value": 831,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "March 31, 2026 | December 31, 2025",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 37,
+      "row_index": 20,
+      "quoted_text": "Total Investment Portfolio | $ | 25,063,146 | $ | 25,007,853 | 201.09 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 68,
+      "row_index": 17,
+      "quoted_text": "Total Investment Portfolio | $ | 25,109,408 | $ | 25,337,420 | 203.71 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source contains separate complete investment schedules for March 31, 2026 and December 31, 2025. The current schedule ends at table 37 with fair value 25,007,853, matching the filing balance-sheet current-period total, while the comparative schedule ends at table 68 with fair value 25,337,420, matching the comparative total. The flagged source count of 1,655 is exactly 831 current rows plus 824 comparative rows; output 831 correctly retains only the report-date schedule. E07 therefore compared a two-period source count with a one-period output count."
+}

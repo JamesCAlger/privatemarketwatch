@@ -1,0 +1,91 @@
+{
+    "review_id":  "RVQ_REV_0a43ca695826",
+    "verdict":  "real_error",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  5,
+    "anchor_value":  null,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  73,
+                                  "row_index":  30,
+                                  "quoted_text":  "December 31, 2022 schedule row: CD\u0026R Ulysses Equity Holdings, L.P. - Common Shares | (4)(6) | 6,000,000 | 6,090 | 5,040 | 0.02",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  74,
+                                  "row_index":  6,
+                                  "quoted_text":  "December 31, 2022 schedule row: Caerus Midco 2 S.A. R.L - Additional Vehicle Units | (4)(6) | 988,290 | 988 | 109 | 0.00",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  74,
+                                  "row_index":  33,
+                                  "quoted_text":  "December 31, 2022 schedule row: Ncp Helix Holdings, LLC. - Preferred Shares | (4) | 1,485,282 | 1,116 | 1,417 | 0.01",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  10,
+                                  "quoted_text":  "December 31, 2022 schedule row: Oxea Corporation | (6)(8) | L + | 3.25 % | 7.00 % | 10/14/2024 | 6 | 6 | 6 | 0.00",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  74,
+                                  "row_index":  26,
+                                  "quoted_text":  "December 31, 2022 schedule row: Zoro Common Equity | (4) | 1,195,880 | 11,959 | 11,959 | 0.05",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "CD\u0026R Ulysses Equity Holdings, L.P. - Common Shares was retained from the December 31, 2022 schedule under report_date 2023-09-30.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  73,
+                                          "row_index":  30
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Caerus Midco 2 S.A. R.L - Additional Vehicle Units was retained from the December 31, 2022 schedule under report_date 2023-09-30.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  74,
+                                          "row_index":  6
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Ncp Helix Holdings, LLC. - Preferred Shares was retained from the December 31, 2022 schedule under report_date 2023-09-30.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  74,
+                                          "row_index":  33
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Oxea Corporation was retained from the December 31, 2022 schedule under report_date 2023-09-30.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  51,
+                                          "row_index":  10
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Zoro Common Equity was retained from the December 31, 2022 schedule under report_date 2023-09-30.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  74,
+                                          "row_index":  26
+                                      }
+                     }
+                 ],
+    "rationale":  "PP03 flags five holdings rows whose source period is earlier than report_date. The raw filing has separate September 30, 2023 and December 31, 2022 schedules; the cited culprit rows are in the December 31, 2022 schedule while the dataset report_date is 2023-09-30. Current-period rows may also exist for some same issuers, but these cited rows are prior-period schedule facts and should not be retained as current-period positions."
+}

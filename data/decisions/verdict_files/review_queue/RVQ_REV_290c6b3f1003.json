@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_290c6b3f1003",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 27239000,
+  "anchor_value": 1327850,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "CloudBees, Inc. | Software | 11.47 % | S + 7.00 % (Incl. 2.50 % PIK) | 11/24/26 | 27,239 | 26,557 | 27,239 | (6) (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged fair_value below 5% of cost for the localized CloudBees row, but the raw schedule row shows cost 26,557 and fair value 27,239 (amounts in thousands). The source fair value is about 102.6% of cost and far above the 5% threshold of 1,327.85 thousand, so the row does not exhibit the distressed-value condition."
+}

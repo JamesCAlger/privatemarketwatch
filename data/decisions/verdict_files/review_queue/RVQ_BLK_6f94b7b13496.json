@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_6f94b7b13496",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2029-12-11",
+  "anchor_value": "2029-11-12",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Jonathan Acquisition Company | First Lien Debt | S + 4.50% | 8.20% | 11/12/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 26,
+      "quoted_text": "Randy's Holdings, Inc. | First Lien Debt | S + 5.00% | 8.67% | 11/01/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 29,
+      "quoted_text": "Sonny's Enterprises, LLC | First Lien Debt | S + 5.50% | 9.31% | 08/05/2028",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 2 localization. The filing schedule is the decisive raw-source anchor. It prints Jonathan Acquisition Company maturity as 11/12/2029, matching the structured value 2029-11-12, while Agent A parsed 2029-12-11. Randy (11/01/2029) and Sonny's (08/05/2028) independently show the same systematic month/day reversal. Therefore the flag identifies a real identifier date-parsing error, not an XBRL maturity defect."
+}

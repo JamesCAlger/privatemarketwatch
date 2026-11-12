@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_REV_fc2c691b6488",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5391,
+  "anchor_value": 5391,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "MBS Services Holdings, LLC (4)(10)(17)(23) | SF + | 9.50 % PIK | 4/15/2026 | 119 | 111 | 87",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 30,
+      "quoted_text": "MBS Services Holdings, LLC (4)(10)(17)(23) | SF + | 9.50 % PIK | 4/15/2026 | 4,232 | 3,950 | 3,088",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 31,
+      "quoted_text": "MBS Services Holdings, LLC (4)(10)(17)(23) | SF + | 9.50 % PIK | 4/15/2026 | 1,109 | 1,036 | 810",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 32,
+      "quoted_text": "MBS Services Holdings, LLC (4)(10)(17)(23) | SF + | 9.50 % PIK | 4/15/2026 | 1,641 | 1,533 | 1,198",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 33,
+      "quoted_text": "MBS Services Holdings, LLC (4)(12)(17)(33) | P + | 10.00 % | 4/15/2026 | 176 | 164 | 128",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 34,
+      "quoted_text": "MBS Services Holdings, LLC (4)(12)(17)(33) | P + | 10.00 % | 4/15/2026 | 109 | 105 | 80",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 93,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 5,391 | 0.28 | 5,570 | 0.29",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source confirms all six flagged MBS Services positions. Their fair values are 87, 3,088, 810, 1,198, 128, and 80 (USD thousands), which sum exactly to the filing's March 31, 2026 non-accrual schedule total of 5,391. The extracted six-position flag is therefore correct; treating the mere presence of disclosed non-accrual positions as a data-error flag is a rule-scope/anchor false alarm."
+}

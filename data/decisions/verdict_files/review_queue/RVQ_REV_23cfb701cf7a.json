@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_23cfb701cf7a",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1183746738,
+  "anchor_value": 1183746738,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 23,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 1,222,055,231 | $ 1,183,746,738 | 199.35 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 33,
+      "quoted_text": "Total Investments, December 31, 2024 | $ 919,774,172 | $ 891,045,657 | 163.51 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "B01 coverage denominator appears to include comparative December 31, 2024 schedule rows even though the review unit is report_date 2025-12-31 and the 2025 fair-value anchor ties.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 44,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "The raw filing's current-period Schedule of Investments total for December 31, 2025 is fair value $1,183,746,738, matching the bundle's internal fund_quarter_fv_m of 1183.746738 million. The source also contains a separate December 31, 2024 schedule total, indicating comparative-year schedule rows are present. Because the current-period fair-value anchor ties and the low B01 coverage metric is explained by comparative schedule population leakage rather than missing current fair values, the flag is a false alarm."
+}

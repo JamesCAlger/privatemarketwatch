@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_c32b7003006c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 67,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Class/Series | Industry | Initial Acquisition Date (10) | Shares | Cost | Fair Value | Tickmarks"
+    },
+    {
+      "table_index": 67,
+      "row_index": 50,
+      "quoted_text": "SBS Super Holdings, LLC | Class B Non-Voting Units | Healthcare | 5/12/2023 | 100 | 10 | - | (5)"
+    },
+    {
+      "table_index": 67,
+      "row_index": 53,
+      "quoted_text": "Swyft Parent Holdings LP | Common Units | Services | 2/7/2022 | 4,485 | 53,048 | -"
+    },
+    {
+      "table_index": 68,
+      "row_index": 1,
+      "quoted_text": "Class/Series | Industry | Initial Acquisition Date (10) | Shares | Cost | Fair Value | Tickmarks"
+    },
+    {
+      "table_index": 68,
+      "row_index": 16,
+      "quoted_text": "Content Square SAS | Indemnity Series F Shares Warrants | Software & Tech Services | 11/30/2023 | 2,027 | 8,561 | - | (8)"
+    },
+    {
+      "table_index": 68,
+      "row_index": 32,
+      "quoted_text": "Palms Co-Investment Partners D, L.P. | Units | 261,450 | 261,450 | 295,438 | (11)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "PP03 treated Initial Acquisition Date values as comparative source-period dates, but the cited rows are current SOI positions.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 67,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The four PP03 rows are not stale comparative-period facts. The source schedule headers label the date field as Initial Acquisition Date, and the flagged securities are present as current holdings in the 2025 filing's SOI tables with those acquisition dates. The rule's premise is therefore an overfire rather than a data defect."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_e54c0355c8ab",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": -1000.0,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw filing was checked through the evidence CLI. The bundle identifies only row_key 168180 and fair_value -1000, without an issuer or source coordinate. The filing contains multiple distinct schedule rows whose fair value is shown as (1) thousand, including sign-consistent negative-cost rows such as Splash Car Wash, Inc. at table 11 row 39 (cost (1), fair value (1)) and rows with different cost presentation such as Trystar, LLC at table 12 row 16 (cost dash, fair value (1)). Therefore the flagged extracted cell cannot be uniquely matched to a raw-source row, and C103 cannot be decided without guessing."
+}

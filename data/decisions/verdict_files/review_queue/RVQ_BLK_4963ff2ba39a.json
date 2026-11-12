@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_4963ff2ba39a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": [280777.0, 1044774.0],
+  "anchor_value": [280777.0, 1044774.0],
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 12,
+      "quoted_text": "Associations, Inc. | APS CW SPV LLC | Par Amount/Units 280,777 | Cost 16,712 | Fair Value 18,555",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 20,
+      "quoted_text": "NCWS Intermediate, Inc. | CHS BDC 2 LLC | Par Amount/Units 1,044,774 | Cost 77,758 | Fair Value 59,442",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw Schedule of Investments confirms both extracted principal amounts exactly. Each position is deeply impaired, so principal legitimately exceeds fair value by more than 10x; the X06 scale/FX heuristic is out of scope for these source-supported distressed rows."
+}

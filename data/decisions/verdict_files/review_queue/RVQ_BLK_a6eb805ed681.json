@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_a6eb805ed681",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 6.90,
+  "anchor_value": 6.75,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 22,
+      "quoted_text": "FSK Pallet Holding Corp. (Kamps) | First Lien Term Loan | SOFR(Q) | 1.25 % | 6.75 % | 10.83 % | 12/23/2026 | $ | 1,409,366 | 1,397,739 | 1,400,199 | 0.54 | % | F",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted identifier stores spread 6.90%, but the matching source schedule row shows spread 6.75% for the same issuer, instrument, floor, coupon, and maturity.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The flagged identifier names FSK Pallet Holding Corp. (Kamps), First Lien Term Loan, SOFR(Q), floor 1.25%, spread 6.90%, total coupon 10.83%, maturity 12/23/2026. Raw source table 20 row 22 matches the issuer, instrument, ref, floor, total coupon, and maturity, but its Spread column is 6.75%, not 6.90%. The source therefore grounds a localized extraction defect rather than a false alarm."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_84f2e51e6110",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2024-07-25",
+  "anchor_value": "2031-07-25",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 25,
+      "quoted_text": "ONBE, Inc. | Initial Term Loan | 1M SOFR + 5.50% | Interest Rate 10.35% | Initial Acquisition Date 7/25/2024 | Maturity Date 7/25/2031",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted maturity_date is 2024-07-25, but the source row shows 7/25/2024 as initial acquisition date and 7/25/2031 as maturity date.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "X10 flags the stored maturity_date 2024-07-25 as before the 2024-09-30 report date. The raw SOI row for ONBE, Inc. separates initial acquisition date 7/25/2024 from maturity date 7/25/2031, so the stored maturity_date copied the wrong date cell."
+}

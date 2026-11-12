@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_6eb28b07ce40",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "fair_value_currency populated as CAD/EUR/GBP on 11 rows",
+  "anchor_value": "USD fair-value column",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 1,
+      "quoted_text": "Header separates Par Amount /Units from Cost (3) and Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 32,
+      "quoted_text": "123Dentist Inc. | (4) (5) (6) (8) (9) | C + | 5.00 % | 7.72 % | 8/9/2029 | CAD | 5,990 | 1,730 | 1,753 | 0.14",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 39,
+      "quoted_text": "Aurelia Netherlands Midco 2 B.V. | (4) (5) (9) | E + | 5.50 % | 8.29 % | 5/29/2031 | EUR | 24,615 | 25,821 | 26,456 | 2.11",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 21,
+      "quoted_text": "Speed Midco 3 S.a r.l. | (4) (5) (7) (9) | SN + | 4.95 % | 9.41 % | 5/16/2029 | GBP | 2,498 | 3,145 | 3,217 | 0.26",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The non-USD token belongs to the Par Amount /Units column; the following Cost and Fair Value amounts are valuation columns and should remain USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "FX02 is a true data defect. The March 2025 investment schedule header has separate Par Amount /Units, Cost, and Fair Value columns. In the cited rows, CAD, EUR, and GBP appear in the par/unit column immediately before the cost and fair value amounts, not as the fair-value currency. The pipeline therefore carried the par/unit currency into fair_value_currency for the flagged fair value facts."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_958b30fccb4c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 36,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.50 % | N/A(6) | 08/2031 | - | ( 2 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 37,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.50 % | N/A(6) | 08/2031 | - | ( 3 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 37,
+      "quoted_text": "Anaplan, Inc. | One stop | SF + | 4.50 % | N/A(6) | 06/2028 | - | - | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows for review. Raw SOI rows corresponding to bundle-listed zero-FV examples print dash fair values, including AI Titan Parent one-stop rows with negative amortized cost and fair value dash, and an Anaplan one-stop row with dash fair value. The extracted observed fair_value of 0.0 is therefore faithful to the source; the warning is a legitimate zero-FV review condition rather than a source data error."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_a3a7c44960d5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Sun Acquirer Corp.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 21,
+      "quoted_text": "Sun Acquirer Corp. | Common Stock | 6,148 | 615 | 0.1 | 892",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 50,
+      "row_index": 22,
+      "quoted_text": "Sun Acquirer Corp. | Common Stock | 428 | 43 | 0.0 | 62",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holdings rows have blank issuer_name even though the source schedule company column contains Sun Acquirer Corp. for the matching common stock positions.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 50,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "C201 flags missing issuer_name. The bundle's extracted holdings sample shows blank issuer_name for Sun Acquirer Corp. common stock rows with cost/fair value 615/892 and 43/62, while the raw source table 50 rows 21 and 22 explicitly list Sun Acquirer Corp. in the company/issuer column for those same common stock positions. The source therefore proves a real extraction gap, not a false alarm. No aggregate anchor was needed."
+}

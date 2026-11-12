@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e1dbe3835df7",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6183574879227053,
+  "anchor_value": 0.8,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "Business Services | First Lien(4)(5) - Undrawn | - | - | - | 12/2023 | 12/2025 | $ | 888 | $ | - | $ | ( 7 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 29,
+      "quoted_text": "Total Unfunded Debt Investments | $ | 202,984 | $ | ( 298 ) | $ | ( 196 ) | ( 0.05 ) | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 3,
+      "quoted_text": "Floating rates | 96.07 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C01 counts unfunded/undrawn debt commitment rows as rate-required debt rows even though the source prints dashes in the Reference, Spread, and Interest Rate columns for those rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 22,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C01 reports only 79 of 207 debt rows with interest_rate, but the raw schedule shows many denominator rows are explicitly unfunded/undrawn commitments. In table 22, row 4 is a First Lien - Undrawn row and the Reference, Spread, and Interest Rate cells are all dashes, so there is no rate to extract for that row. Table 22 row 29 separately totals these as Unfunded Debt Investments, showing this is a distinct section rather than funded loan rows with missing rates. Funded debt rows do carry explicit rates, while the filing's rate-type summary accounts for investments by fair value. The observed low row-count coverage is therefore a rule-scope artifact from counting undrawn commitment rows, not a grounded data defect in the extracted interest_rate field."
+}

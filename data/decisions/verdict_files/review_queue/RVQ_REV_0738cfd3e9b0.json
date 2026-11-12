@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_0738cfd3e9b0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values CAD/EUR/GBP",
+  "anchor_value": "source places CAD/EUR/GBP in Par Amount/Units, while Cost (3) and Fair Value are USD schedule valuation columns",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "123Dentist Inc. (4) (5) (6) | C + | 5.50 % | 10.47 % | 8/10/2029 | CAD | 73 | 3 | 3 | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "Aurelia Netherlands Midco 2 B.V. (4) (5) (9) | E + | 5.75 % | 9.56 % | 5/1/2031 | EUR | 24,615 | 25,778 | 25,986 | 2.59",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 12,
+      "quoted_text": "Speed Midco 3 S.a r.l. (4) (5) (9) | SN + | 4.95 % | 10.15 % | 6/5/2031 | GBP | 2,498 | 3,139 | 3,142 | 0.31",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign currency labels are par amount/unit currencies, not cost currencies; cost_currency should remain USD for the valuation columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. In the source SOI header, Par Amount/Units precedes Cost (3) and Fair Value; representative flagged rows show CAD, EUR, or GBP in the Par Amount/Units position, followed by separate cost and fair value amounts. The schedule totals for the same cost/fair value columns are dollar-denominated, so assigning the foreign par currency to cost_currency is an extraction/localization defect rather than a valid non-USD cost valuation."
+}

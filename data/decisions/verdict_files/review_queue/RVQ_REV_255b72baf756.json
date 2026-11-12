@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_255b72baf756",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": "fund_financials and holdings both present or both absent",
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The F28 flag is a fund_financials/holdings coverage mismatch, but the permitted raw-source evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query, so the raw source was not usable to decide whether holdings are truly absent or the extraction/check is wrong."
+}

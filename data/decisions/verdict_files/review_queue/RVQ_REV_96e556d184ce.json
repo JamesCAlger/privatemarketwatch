@@ -1,0 +1,120 @@
+{
+  "review_id": "RVQ_REV_96e556d184ce",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8,
+  "anchor_value": 0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 1,
+      "quoted_text": "Blackstone Private Credit Fund Condensed Consolidated Schedule of Investments December 31, 2022 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 30,
+      "quoted_text": "CD&R Ulysses Equity Holdings, L.P. - Common Shares | (4)(6) | 6,000,000 | 6,090 | 5,040 | 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 1,
+      "quoted_text": "Blackstone Private Credit Fund Condensed Consolidated Schedule of Investments December 31, 2022 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 26,
+      "quoted_text": "Zoro Common Equity | (4) | 1,195,880 | 11,959 | 11,959 | 0.05",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "CD&R Ulysses Equity Holdings, L.P. - Common Shares is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 69,
+        "row_index": 30,
+        "quoted_text": "CD&R Ulysses Equity Holdings, L.P. - Common Shares | (4)(6) | 6,000,000 | 6,090 | 5,040 | 0.02"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Caerus Midco 2 S.A. R.L - Additional Vehicle Units is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 6,
+        "quoted_text": "Caerus Midco 2 S.A. R.L - Additional Vehicle Units | (4)(6) | 988,290 | 988 | 109 | 0.00"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "GCX Corporation Group Holdings, L.P. - Class A-2 Units is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 69,
+        "row_index": 26,
+        "quoted_text": "GCX Corporation Group Holdings, L.P. - Class A-2 Units | (4) | 4,853 | 4,853 | 2,912 | 0.01"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Mimecast Limited is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 25,
+        "quoted_text": "Mimecast Limited | (4) | 73,213,759 | 73,214 | 71,705 | 0.32"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Ncp Helix Holdings, LLC. - Preferred Shares is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 33,
+        "quoted_text": "Ncp Helix Holdings, LLC. - Preferred Shares | (4) | 1,485,282 | 1,116 | 1,417 | 0.01"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Oxea Corporation is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 47,
+        "row_index": 10,
+        "quoted_text": "Oxea Corporation | (6)(8) | L + | 3.25 % | 7.00 % | 10/14/2024 | 6 | 6 | 6 | 0.00"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Tricor Horizon, LP is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 16,
+        "quoted_text": "Tricor Horizon, LP | (4)(6) | 14,151,361 | 14,151 | 14,151 | 0.06"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Zoro Common Equity is a December 31, 2022 schedule row retained in the June 30, 2023 holdings surface.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 26,
+        "quoted_text": "Zoro Common Equity | (4) | 1,195,880 | 11,959 | 11,959 | 0.05"
+      }
+    }
+  ],
+  "rationale": "PP03 flags eight rows whose source period is earlier than the 2023-06-30 report date. The raw source shows investment schedule tables explicitly headed December 31, 2022, including table 69 row 1, table 70 row 1, and table 47 row 1. The flagged issuers appear in those December schedule tables while the bundle's holdings surface is for report_date 2023-06-30, so retaining those rows is a real comparative-period leak rather than a false alarm."
+}

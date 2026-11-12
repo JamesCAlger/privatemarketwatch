@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_b32918a1cc0f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4.5,
+  "anchor_value": 4.75,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 29,
+      "quoted_text": "Engage2Excel, Inc. | Professional Services | 10.37 % | S + 6.50 % | 07/01/29 | 910 | 899 | 887 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 19,
+      "quoted_text": "Vamos Bidco, Inc. (dba VIP) | Software | 8.42 % | S + 4.75 % | 01/30/32 | 16,135 | 15,990 | 15,974 | (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Engage2Excel source row reports Reference Rate and Spread S + 6.50%, but the extracted identifier row used S + 5.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Vamos Bidco source row reports Reference Rate and Spread S + 4.75%, but the extracted identifier row used S + 4.50%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row spread reconciliation. The flagged source_artifact_rows show extracted identifier spreads of S + 5.00% for Engage2Excel and S + 4.50% for Vamos Bidco. Raw SOI rows show the same issuers, interest rates, and maturities, but the Reference Rate and Spread column is S + 6.50% for Engage2Excel and S + 4.75% for Vamos Bidco. The source therefore grounds an extraction defect, not a false alarm."
+}

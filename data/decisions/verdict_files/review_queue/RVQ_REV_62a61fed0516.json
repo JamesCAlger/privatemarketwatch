@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_62a61fed0516",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.32954545454545453,
+  "anchor_value": 0.32954545454545453,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 303,162 par, due 2/2032) | 2/13/2024 | SOFR + 4.75% | 8.42% | 300,603 | 300,658 | 7.2%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 303,927 par, due 2/2032) | 2/13/2024 | SOFR + 4.75% | 8.48% | 301,240 | 304,775 | 7.3%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name extraction appends or absorbs investment text, suppressing matches between persistent current and prior schedule issuers.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 3 continuity flag. The filing schedule total is internally consistent at $8,632.315 million current versus $8,108.654 million prior, and paired raw schedule rows show the same issuer and instrument persisting across periods. Truck-Lite is present at table 8 row 4 and table 14 row 5; the paired schedules likewise show many other unchanged issuers. The extracted holding instead names this issuer 'Truck-Lite Co., LLC Investment', demonstrating that investment-column text leaked into issuer_name. Therefore the reported 29/88 continuity is a pipeline issuer-name extraction/normalization error rather than genuine turnover. The schedule total is contextual; grounding rests on the paired row citations."
+}

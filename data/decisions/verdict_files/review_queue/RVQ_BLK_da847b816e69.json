@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_BLK_da847b816e69",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 4717000,
+  "anchor_value": 46000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 81,
+      "row_index": 10,
+      "quoted_text": "Walker Edison Furniture Company LLC - First lien senior secured delayed draw term loan - Par / Units 4,717 - Amortized Cost 3,072 - Fair Value 46"
+    }
+  ],
+  "rationale": "Class 2 within-row review. The source schedule itself shows the flagged row has par/units of 4,717 and fair value of 46, with amounts presented in the schedule columns. The extracted principal_amount_usd of 4,717,000 and fair value of 46,000 therefore match the raw source; the extreme principal-to-fair-value ratio reflects a deeply impaired position, not a scale or FX extraction error. X06 is too broad for this source-confirmed distressed loan row."
+}

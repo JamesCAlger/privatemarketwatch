@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_d0584516f7a0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PRIVATE_EQUITY rows have source-stated preferred-equity interest/PIK rates: 12.00% PIK, 13.50% PIK, 12.50% PIK, 12.50% PIK, 10.00%, and 10.50%",
+  "anchor_value": "SOI table 19 lists the instruments under Equity / Preferred Equity with those interest-rate cells",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 6,
+      "quoted_text": "MC CIF Wealth Management (UK) Ltd. - Series Z1 Preferred Shares (10,000 shares) | Preferred Equity | 12.00 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 7,
+      "quoted_text": "MC CIF Wealth Management (UK) Ltd. - Series Z2 Preferred Shares (10,000 shares) | Preferred Equity | 13.50 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 10,
+      "quoted_text": "Eclipse Topco, Inc. - Preferred Shares (6,693 shares) | Preferred Equity | 12.50 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 13,
+      "quoted_text": "SVP MVP Holdings, L.P. - Preferred Units (40,223 units) | Preferred Equity | 12.50 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 16,
+      "quoted_text": "AH Parent, Inc. - Series A Preferred Shares (25,700 shares) | Preferred Equity | 10.00 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 17,
+      "quoted_text": "HIG Intermediate, Inc. - Series A Preferred Shares (15,000 shares) | Preferred Equity | 10.50 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X01 flags PRIVATE_EQUITY rows carrying interest_rate. The raw SOI source shows the warned values are explicitly disclosed in the Interest Rate column for instruments under Equity / Preferred Equity, not debt rows misclassified as equity. The extracted asset class and interest_rate are source-consistent; the rule is overbroad for preferred equity with stated coupon/PIK rates."
+}

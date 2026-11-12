@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_5f022e467e7d",
+  "verdict": "real_error",
+  "mechanism": "footnote_scope_error",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 35581135,
+  "anchor_value": 23400000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 49.2 | 4.0 | % | 23.4 | 2.0 | % | 51.7 | 5.6 | % | 45.8 | 5.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 17,
+      "quoted_text": "Amerijet Holdings Inc(7)(14) | 1st Lien Term Loan | Transportation & Logistics | 11.50 % | 11.50 | 12/19/2023 | 6/30/2027 | 6,907,617 | 6,895,666 | 12,202,306 | 2.05",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 7,
+      "quoted_text": "Coupa Holdings LLC(6)(7)(29)(30) | 1st Lien Revolver | Software & Services | S+ 5.25 %, 0.75 % Floor (0.50 % on unfunded) | 0.50 | 2/27/2023 | 2/27/2029 | 707,659 | (9,306) | (1,474) | (0.00)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 18,
+      "quoted_text": "FR Vision Holdings, Inc. (CHA Consulting)(6)(7) | 1st Lien Delayed Draw Term Loan | Professional Services | S+ 5.00 %, 0.75 % Floor (1.00 % on unfunded) | 8.87 | 9/26/2025 | 1/20/2031 | 557,241 | 27,648 | 24,998 | (0.00)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "footnote_scope_error",
+      "detail": "The flagged 15-row set sums to $35.6 million fair value, but the filing's non-accrual fair value total is $23.4 million; Amerijet row 27:17 is an over-included footnote row.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "footnote_scope_error",
+      "detail": "Coupa row 28:7 is over-included in the non-accrual set even though the source non-accrual aggregate is already explained by the rows carrying the non-accrual marker.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 28,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "footnote_scope_error",
+      "detail": "FR Vision row 28:18 is over-included in the non-accrual set even though the source non-accrual aggregate is already explained by the rows carrying the non-accrual marker.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 28,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 3 row-set/footnote adjudication. The filing has a non-accrual schedule total of $49.2 million amortized cost and $23.4 million fair value at December 31, 2025. The 15 rows in the flagged artifact sum to about $56.1 million cost and $35.6 million fair value, which does not tie to that source anchor. The rows bearing the non-accrual marker tie to the rounded source anchor; the three cited rows account for the over-inclusion and carry different footnote markers. This is therefore a real source-grounded data error in non-accrual footnote scoping, not a false alarm."
+}

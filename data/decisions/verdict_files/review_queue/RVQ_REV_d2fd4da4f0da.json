@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d2fd4da4f0da",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Aerospace & Defense BTX Precision First Lien Senior Secured Loan SOFR Spread 4.75% Interest Rate 8.42% Maturity Date 7/25/2030",
+  "anchor_value": "BTX Precision",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 13,
+      "quoted_text": "BTX Precision (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 4.75 % | 8.42 | % | 7/25/2030 | $ | 2,010 | 1,996 | 2,010",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The source header assigns Portfolio Company to a distinct column, and the cited source row contains BTX Precision in that column while loan type, SOFR, spread, interest rate, and maturity are separate neighboring fields. The stored issuer_name concatenates the industry wrapper and those neighboring fields, so C206 identifies a real issuer-name extraction/column-boundary defect. This is a representative grounded instance of the repeated flag pattern; no aggregate anchor is relevant."
+}

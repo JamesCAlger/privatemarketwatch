@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_8b51b5b2dd13",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6,
+  "anchor_value": 5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 18,
+      "quoted_text": "AMEX Holding III Corp Delayed Draw Term Loan | (4)(5)(7)(11)(29) | FIXED + 0.00 % / 1.00 % | 9.96 % / 5.50 % | 3/31/2028 | $ | 153 | $ | 152 | $ | 151 | 0.01 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 19,
+      "quoted_text": "AMEX Holding III Corp Term Loan | (4)(5)(7)(11)(29) | FIXED + 0.00 % / 1.00 % | 9.99 % / 5.50 % | 3/31/2028 | 3,437 | 3,422 | 3,402 | 0.18 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 37,
+      "quoted_text": "Signature Brands, LLC Term Loan A | (4)(5)(7)(10)(29) | 3M SOFR + 6.50 % / 1.75 % | 10.58 % | 5/4/2028 | 289 | 287 | 213 | 0.01 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 38,
+      "quoted_text": "Signature Brands, LLC Term Loan B | (4)(5)(7)(10)(29) | 1M SOFR + 9.50 % / 1.75 % | 14.09 % | 5/4/2028 | 4,906 | 4,843 | 3,586 | 0.19 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 39,
+      "quoted_text": "Signature Investor LLC Term Loan B | (4)(5)(6)(7)(8)(29) | 3M SOFR + 0.00 % / 1.75 % | 0.00 % | 5/4/2028 | nil | nil | (92) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 21,
+      "quoted_text": "Amex Holding III Corp Equity 16th December 2025 | (5)(11)(25) | N/A | N/A | N/A | 4,892 | $ | 1,989 | $ | 499 | 0.03 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The nonaccrual artifact counted six positions, but the raw schedule shows only five rows with footnote (29); the included Amex preferred equity row carries (25), not (29).",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 65,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The source schedule localizes five footnote-(29) debt rows: AMEX debt at table 28 rows 18-19 and Signature debt at table 57 rows 37-39. The sixth bundled nonaccrual row, Amex Holding III Corp Equity 16th December 2025, is preferred equity at table 65 row 21 and carries footnotes (5)(11)(25), not (29). Thus the observed flagged count of 6 disagrees with the raw schedule-supported count of 5, consistent with issuer/classification lookthrough onto a related equity position."
+}

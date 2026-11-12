@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_221af15ac586",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 18,
+      "quoted_text": "Envocore Holding, LLC (7)(8)(9) | Senior Secured Second Lien Term Loan | [blank Interest Term] | [blank Interest Rate] | 12/2026 | 9,146 | 7,053 | 0.2 | 1,194",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 26,
+      "quoted_text": "Seko Global Logistics Network, LLC (9)(11) | Senior Secured First Lien Term Loan | [blank Interest Term] | [blank Interest Rate] | 07/2027 | 4,973 | 4,883 | 0.5 | 3,432",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Private-credit term-loan rows are present with both Interest Term and Interest Rate blank in the source schedule, leaving no interest_rate or basis_spread for income return computation.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 9,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows with no interest_rate or basis_spread. The September 30, 2024 SOI has debt investment rows, including Senior Secured Term Loans, where both the Interest Term and Interest Rate cells are blank. Because these are credit instruments and the missing rate data is confirmed at the row level in raw source, the flag represents a real missing-rate data defect rather than an equity/cash scope false alarm."
+}

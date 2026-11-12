@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_0164b383062c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PP03 flagged three bdc_investment_identifier rows as comparative-period rows for report_date 2024-09-30",
+  "anchor_value": "Raw filing has matching current-period September 30, 2024 SOI rows for all three identifiers",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 36,
+      "quoted_text": "CPIG Holdco Inc. (10) | First lien senior secured revolving loan | 10.18 % | SOFR (Q) | 4.75 % | 04/2028 | 0.5 | 0.5 | 0.5 | (2)(7)(9)(12)"
+    },
+    {
+      "table_index": 26,
+      "row_index": 11,
+      "quoted_text": "Hills Distribution, Inc., Hills Intermediate FT Holdings, LLC and GMP Hills, LP (10) | First lien senior secured revolving loan | 9.61 % | SOFR (M) | 4.50 % | 11/2029 | 0.6 | 0.6 | 0.6 | (2)(7)(12)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 36,
+      "quoted_text": "Paragon 28, Inc. and Paragon Advanced Technologies, Inc. (10) | First lien senior secured revolving loan | 9.30 % | SOFR (Q) | 4.00 % | 11/2028 | 0.5 | 0.5 | 0.5 | (2)(5)(7)(12)"
+    }
+  ],
+  "rationale": "PP03 flagged the rows as comparative-period facts, but the raw filing shows each identifier in the current September 30, 2024 schedule of investments block. The same issuers also appear in the December 31 comparative block, so the check appears to have treated duplicate comparative/current identifiers as comparative leakage rather than recognizing valid current-period rows."
+}

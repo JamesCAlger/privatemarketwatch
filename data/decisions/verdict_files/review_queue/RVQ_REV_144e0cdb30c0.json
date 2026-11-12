@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_144e0cdb30c0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate in extracted direct-lending rows",
+  "anchor_value": "raw SOI Reference Rate and Spread values present",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "AA&D Midco, Inc. (fka GB Eagle Buyer, Inc.) | First Lien Term Loan | S + 4.75 % | 11/29/2030 | $ | 7,932 | $ | 7,857 | $ | 7,853 | 9"
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | 5,041 | 4,995 | 5,041 | 9"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw SOI carries Reference Rate and Spread terms for direct-lending debt rows, but the extracted holdings slice has blank interest_rate for the matching instruments.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "This is a schedule-wide Class 3 fill failure. The raw filing's SOI tables contain a Reference Rate and Spread column, and representative debt rows show values such as S + 4.75 % for AA&D Midco and S + 5.38 % (includes 2.88 % PIK) for Titan BW Borrower. The review bundle's holdings slice for the same direct-lending positions has blank interest_rate, so the weak dl_rate_fill warning reflects a real extraction gap rather than a false alarm."
+}

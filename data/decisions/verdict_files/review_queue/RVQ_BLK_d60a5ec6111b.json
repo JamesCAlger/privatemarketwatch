@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_d60a5ec6111b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1237484289.0,
+  "anchor_value": 1410219978.0,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 32,
+      "quoted_text": "Total Investments (277.4%) | $ | 1,410,219,978 | $ | 1,239,482,127",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows a real aggregate cost defect. The March 31, 2026 schedule reports total amortized cost of 1,410,219,978 at table 7 row 32, while the conservation artifact reports only 1,237,484,289 across 85 extracted cost rows, a shortfall of 172,735,689. The same source row separately reports fair value of 1,239,482,127, confirming that 1,410,219,978 is the cost anchor. The schedule structure does not tie the residual to a single position or subtotal, so the defect is not localized and escalation is appropriate."
+}

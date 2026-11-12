@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_a02b42ff29c8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_GBP/U_AUD/U_EUR in fair_value_currency",
+  "anchor_value": "USD fair value column per SOI schedule",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 47,
+      "quoted_text": "Hamsard 3778 Limited term loan shows principal in GBP, but cost and fair value amounts appear in the schedule's Cost/Fair Value columns, with the United Kingdom subtotal showing dollar signs for cost and fair value.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 10,
+      "quoted_text": "Ancora Bidco PTY LTD term loan shows principal as AUD 5,191, while cost 3,345 and fair value 3,151 are in the schedule's Cost/Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 35,
+      "quoted_text": "Van Der Steen term loan shows principal in EUR, while cost 3,448 and fair value 3,407 are in the schedule's Cost/Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 21,
+      "quoted_text": "Total Investments row shows dollar signs for cost and fair value totals: cost 280,031 and fair value 282,161.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted fair_value_currency copied non-USD principal/par units into fair value currency; the SOI fair value column is USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The raw SOI separates Principal Amount, Par Value or Shares from Cost and Fair Value. Rows flagged with U_GBP, U_AUD, and U_EUR show those foreign-currency tokens in the principal/par area, while the fair value amounts sit under the Fair Value column and the schedule totals display dollar signs for fair value. Therefore fair_value_currency should be USD, not the principal currency."
+}

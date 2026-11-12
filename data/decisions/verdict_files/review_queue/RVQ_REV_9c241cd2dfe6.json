@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_9c241cd2dfe6",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 14,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 1,
+      "quoted_text": "Blackstone Private Credit Fund Consolidated Schedule of Investments December 31, 2022 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 6,
+      "quoted_text": "Caerus Midco 2 S.\\u00c0. R.L - Additional Vehicle Units | (4)(6) | 988,290 | $ | 988 | $ | 109 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 25,
+      "quoted_text": "Mimecast Limited | (4) | 73,213,759 | 73,214 | 71,705 | 0.32",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 flagged 14 holdings rows whose source period is earlier than the March 31, 2023 report date; raw source localizes example rows to the December 31, 2022 investment schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 1,
+        "quoted_text": "Blackstone Private Credit Fund Consolidated Schedule of Investments December 31, 2022 (in thousands) (Unaudited)"
+      }
+    }
+  ],
+  "rationale": "The reviewed report_date is 2023-03-31, but the flagged PP03 rows are comparative-period facts. Raw source table 70 is explicitly the December 31, 2022 schedule, and it contains flagged examples such as Caerus Midco 2 Additional Vehicle Units and Mimecast Limited. Retaining those December 31, 2022 positions as March 31, 2023 holdings is a real comparative-period leakage defect, not a check false alarm. No aggregate monetary anchor was needed because the row-disposition source period mismatch is directly localized in the source schedule."
+}

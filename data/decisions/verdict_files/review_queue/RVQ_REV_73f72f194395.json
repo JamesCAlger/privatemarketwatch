@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_73f72f194395",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -71000,
+  "anchor_value": -71000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 2,
+      "quoted_text": "123Dentist Inc. | 2025 CAD Fixed Delayed Draw Term Loan | 08/08/2029 | $ | 5,379 | $ | ( 1,532 )"
+    },
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "Ascend Buyer LLC | 2025 4th Amendment Revolver | 09/29/2028 | 358 | ( 2 )"
+    },
+    {
+      "table_index": 23,
+      "row_index": 39,
+      "quoted_text": "Eagan Sub, Inc. | Delayed Draw Term Loan | 09/08/2032 | 7,947 | ( 20 )"
+    },
+    {
+      "table_index": 24,
+      "row_index": 10,
+      "quoted_text": "FR Vision Holdings, Inc. | Delayed Draw Term Loan | 01/20/2031 | 3,544 | ( 18 )"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The source commitment schedule header identifies the relevant section as Unfunded commitments with Total Commitment Fair Value, so negative fair values are filer-presented commitment marks rather than extracted position errors.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 23,
+        "row_index": 1,
+        "quoted_text": "Investments- non-controlled/non-affiliated | Commitment Type | Commitment Expiration Date | Unfunded | Total Commitment Fair Value"
+      }
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value rows, but the raw filing shows the negative amounts in the unfunded commitment schedule under the Total Commitment Fair Value column. Those source rows are sign-consistent commitment marks, not unexplained negative holding fair values; the check is over-scoped for this filer presentation."
+}

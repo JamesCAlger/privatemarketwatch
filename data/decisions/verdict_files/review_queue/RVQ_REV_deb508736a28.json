@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_deb508736a28",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on non-USD debt rows",
+  "anchor_value": "source schedule contains explicit non-USD par amounts requiring FX-normalized USD principal",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 37,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | C + | 5.50 % | 10.88 % | 8/10/2029 | CAD | 207,196 | 157,502 | 143,807 | 0.55",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "ENV Bidco AB | (4)(6)(7)(8) | E + | 5.75 % | 9.72 % | 7/19/2029 | EUR | 114,140 | 113,464 | 118,073 | 0.45",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 15,
+      "quoted_text": "Quantum Bidco, Ltd. | (6)(8) | S + | 5.75 % | 11.22 % | 1/29/2028 | GBP | 18,500 | 24,714 | 20,662 | 0.08",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 rows are true non-USD debt positions: the source schedule gives CAD, EUR, and GBP par amounts while the extracted principal_amount_usd field is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 37,
+        "quoted_text": "123Dentist, Inc. | CAD | 207,196 par amount"
+      }
+    }
+  ],
+  "rationale": "The queue artifact reports FX01 on 56 rows where principal_amount_usd is empty. Raw SOI rows confirm the underlying debt positions carry explicit non-USD par currencies in the Par Amount/Units column, including CAD 207,196 for 123Dentist, EUR 114,140 for ENV Bidco AB, and GBP 18,500 for Quantum Bidco. Because FX01 requires an explicit USD principal conversion for non-USD source par before par analytics, the blank principal_amount_usd is a real extraction/normalization gap rather than a false alarm. No aggregate anchor was needed for this row-level rule."
+}

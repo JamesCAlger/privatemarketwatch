@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_912095ac2a8d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 34000,
+  "anchor_value": 434000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 37,
+      "quoted_text": "Ineos Quattro (6)(7) | Senior Secured First Lien Term Loan | S + 425 | 9.69 % | 04/2029 | ... | 443 | ... | 4 34 | ... | 0.3 | ... | 443",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 38,
+      "quoted_text": "continuation/duplicate source line shows principal 443, cost 434, fair value 443",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Ineos Quattro cost was extracted as 34000, but the source schedule row supports cost 434000 with fair value 443000, so the >10x cost flag is caused by a bad cost extraction.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "Raw source table 14 is the June 30, 2024 Schedule of Investments in thousands. In the United Kingdom / Debt Investments / Commercial and Professional Services section, the Ineos Quattro row shows principal 443, cost 434, and fair value 443 (thousand). The extracted holding instead carries cost 34000 and fair_value 443000, creating the X07 ratio. The source therefore grounds a localized extraction error in the cost field."
+}

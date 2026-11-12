@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_eec4a4a4c19c",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.51,
+  "anchor_value": 0.53,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 9,
+      "quoted_text": "Distributions | $ | ( 0.51 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 4,
+      "quoted_text": "Net investment income (loss) | 0.53",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing's financial highlights report quarterly distributions of $0.51 per share and quarterly net investment income of $0.53 per share for the same three-month period. Because net investment income covers the distribution, the F16 derived-rate failure is a false alarm caused by an unsuitable or period-mismatched heuristic anchor, not a source data error."
+}

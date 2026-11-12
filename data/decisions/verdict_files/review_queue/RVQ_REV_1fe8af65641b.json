@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_1fe8af65641b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated fair value schedule",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares"
+    },
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Quantum Leap Buyer LLC | (4)(5)(6) | Delayed Draw Term Loan | SOFR | 4.50 % | 9/05/2025 | 9/6/2032 | $ | - | $ | ( 62 ) | $ | ( 62 )"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD, but the raw source schedule is a USD-denominated BDC investment schedule: the valuation column is Fair Value (3), and representative flagged rows carry dollar markers for principal, amortized cost, and fair value. U_USD is therefore consistent with USD rather than evidence of a non-USD fair value unit."
+}

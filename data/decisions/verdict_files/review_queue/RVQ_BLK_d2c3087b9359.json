@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_d2c3087b9359",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 37448.222,
+  "anchor_value": 35918.948,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 103,
+      "row_index": 4,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(c) | 75,112 | 13,778 | ( 86 ) | 4,660 | - | 93,464 | - | 6,328 | -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Roll-forward or affiliate detail rows such as AAM Series 1.1 ending fair value of 93.464 million are being included as holdings even though the SOI already has the component debt and equity positions totaling the same fair value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 103,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The extracted holdings fair value is 37,448.222 million, above the filing SOI total investments fair value anchor of 35,918.948 million.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 90,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag: the filing's current schedule of investments total investments fair value is 35,918,948 thousand, while the extracted fund-quarter fair value in the queue item is 37,448.222 million. Source rows localize a representative mechanism: the AAM Series 1.1 debt row at 58.702 million and equity row at 34.762 million sum to 93.464 million, and a separate roll-forward/affiliate row reports the same 93.464 million ending fair value; the bundle holdings slice shows that roll-forward-style '(c)' row was included as an additional OTHER holding. This is a real extraction/classification error, not a false alarm from an unreadable source."
+}

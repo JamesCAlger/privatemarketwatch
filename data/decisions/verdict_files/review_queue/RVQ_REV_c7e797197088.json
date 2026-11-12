@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c7e797197088",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": "principal_amount_usd is blank on FX01 issue rows",
+  "anchor_value": "raw schedule presents the par amount column as dollar-denominated; example Fenix Intermediate LLC Term Loan B shows Par Amount $ 6,079,110",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 10.43 % ( SOFR + 6.75 %, 1.75 % Floor) | $ | 6,079,110 | 03/28/29 | $ | 5,959,899 | $ | 5,854,183"
+    }
+  ],
+  "rationale": "FX01 is premised on non-USD source par requiring explicit FX conversion. The raw source schedule's par amount/cost/fair-value columns are dollar-denominated, and a representative flagged debt row has a dollar-sign par amount. Because the source does not show a non-USD principal requiring conversion, the FX01 flag is a rule-scope false alarm rather than a confirmed data error."
+}

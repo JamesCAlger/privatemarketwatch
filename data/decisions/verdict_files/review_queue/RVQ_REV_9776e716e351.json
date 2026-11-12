@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_9776e716e351",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F11 is a Class 2 within-row identity review requiring raw-source comparison of NAV per share, shares outstanding, and net assets. The bundle-scoped evidence CLI returned only an XMLParsedAsHTMLWarning and no usable source rows for overview, tables, totals, or targeted searches for all three fields. The defective field and any reliable anchor therefore cannot be determined without guessing."
+}

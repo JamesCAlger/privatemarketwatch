@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_a992ab550001",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.15254237288135594,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 28,787 | 28,525 | 28,478",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 14,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group)(7) | First lien senior secured loan | S+ | 4.75 % | 08/2031 | 27,547 | 27,281 | 27,272 | 0.9 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 16,
+      "quoted_text": "AlphaSense, Inc.(3)(4)(9) | First lien senior secured loan | S+ | 6.25 % | 6/2029 | 20,052 | 19,902 | 20,002",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 15,
+      "quoted_text": "AlphaSense, Inc.(8) | First lien senior secured loan | S+ | 6.25 % | 06/2029 | 20,052 | 19,867 | 19,851 | 0.7 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source keeps issuer/company and investment terms in separate columns, but the reviewed holdings sample contains issuer_name values with the investment term appended for comma-shaped rows, suppressing cross-period issuer continuity.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag, so I checked anchors first: the filing total investments at fair value is 6,207,136 thousand and the extracted fund-quarter value is about 6,207.165 million, so the issue is not a gross fair-value anchor mismatch. The raw SOI source then shows multiple same issuers present in both the 2025 and 2024 schedules, with issuer/company in a distinct first column and investment terms in a separate Investment column. The bundle's reviewed holdings sample shows the corresponding extracted issuer_name sometimes includes the investment term, which explains the artificially low 63/413 persistence metric. The flag is therefore a real extraction/normalization data error, localized to issuer-name parsing across the changed schedule layout."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_03e7a899610f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9346,
+  "anchor_value": 9346,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 64,
+      "row_index": 37,
+      "quoted_text": "Abracon Group Holding, LLC. (8)(12)(15)(17)(19)(27) | First Lien Senior Secured Loan | SOFR | 2.05 % ( 4.60 % PIK) | 10.54 | % | 7/6/2028 | $ | 15,577 | 13,926 | 9,346",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 4,
+      "quoted_text": "Non-accrual | 13,926 | 0.8 | 9,346 | 0.6",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Abracon position is the filing's non-accrual investment, but the extracted holding is only surfaced through the nonaccrual flag rather than a normalized non-accrual classification.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 64,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "The raw source confirms the flagged Abracon holding is non-accrual: the SOI row reports cost 13,926 and fair value 9,346, and the filing's December 31, 2025 non-accrual summary line reports the same cost and fair value. This grounds the nonaccrual_flag as a real extraction/classification gap rather than a false alarm."
+}

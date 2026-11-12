@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_695c147e351c",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 208515038,
+  "anchor_value": 208515038,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (2) | 100.8 | % | 209,511,987 | 208,515,038",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 19,
+      "quoted_text": "Total Debt & Equity Investments | 100.6 | % | 150,651,684 | 150,182,511",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The 2025 source schedule total for debt and equity investments is 208,515,038, matching the bundle's current-quarter internal FV anchor of 208.515038 million. The larger oracle source count is not a current-period defect: the raw source also contains a separate comparative schedule with prior-period totals, including table 27 row 19 at 150,182,511, so the check is counting out-of-scope comparative-period schedule material rather than showing missing current 2025 holdings."
+}

@@ -1,0 +1,43 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "subtotal_leak",
+                         "fix_class":  "rule_scope",
+                         "detail":  "E07 source count appears to include blank-company subtotal or continuation rows, while the raw schedule has 63 distinct investment rows matching the output count.",
+                         "citation":  {
+                                          "row_index":  28,
+                                          "table_index":  50
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_BLK_9a45d2a84628",
+    "mechanism":  "subtotal_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  63,
+    "anchor_value":  63,
+    "rationale":  "False alarm. Raw Schedule of Investments tables 50-53 contain 63 distinct issuer/investment rows: table 50 has 27, table 51 has 28, table 52 has 6, and table 53 has 2. This matches output=63. The higher source=73 count is not a missing-position proof; the source grid shows blank-company subtotal/continuation monetary rows such as table 50 row 28, table 51 row 32, and table 52 row 5 that should not be counted as separate investments.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  28,
+                                  "table_index":  50,
+                                  "quoted_text":  "Blank-company subtotal/continuation row: 119,599 | 119,996 | 5.73 | %, following individual Electric utilities investment rows"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  32,
+                                  "table_index":  51,
+                                  "quoted_text":  "Blank-company subtotal/continuation row: 137,227 | 137,505 | 6.56 | %, following individual Oil, gas and consumable fuels investment rows"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  5,
+                                  "table_index":  52,
+                                  "quoted_text":  "Blank-company continuation row: 35,345 | 35,304 | 1.69 | %, repeating monetary fields for Retained Vantage Data Centers Intermediate Holdco, L.P."
+                              }
+                          ],
+    "confidence":  0.92
+}

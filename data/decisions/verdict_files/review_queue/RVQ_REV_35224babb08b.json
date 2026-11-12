@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_REV_35224babb08b",
+    "verdict":  "false_alarm",
+    "mechanism":  "unit_parser_false_positive",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "UNIT_STANDARD_USD_DASORC5G6KMGZ3CKZQSWFA",
+    "anchor_value":  "USD",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  199,
+                                  "row_index":  6,
+                                  "quoted_text":  "Term Loan | First Lien | 6M SOFR+ 6.50 % | 1.00 % | 11.31 % | 5/17/2022 | 5/17/2028 | Automotive | $ | 8,845,526 | $ | 8,682,015 | $ | 8,801,298 | 10.97 %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  204,
+                                  "row_index":  0,
+                                  "quoted_text":  "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars ($) unless otherwise noted Euro.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  201,
+                                  "row_index":  24,
+                                  "quoted_text":  "Total Non-controlled, non-affiliated investments | $ | 158,022,677 | $ | 157,504,755 | 196.24 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "unknown",
+                         "detail":  "FX02 flagged a custom-looking fair_value_currency unit even though the raw schedule presents fair values in U.S. dollars.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  204,
+                                          "row_index":  0
+                                      }
+                     }
+                 ],
+    "rationale":  "The raw investment schedule presents fair value amounts in dollar columns for the flagged holdings and the portfolio total. Footnote 3 states par amounts are denominated in U.S. Dollars unless otherwise noted; the schedule uses $ for fair value as well, with no non-USD notation on the cited rows. The extracted unit label contains USD but was treated as non-USD, so the FX02 fire is a rule/unit-parser false alarm rather than a source data error."
+}

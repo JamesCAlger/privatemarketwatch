@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_00234e87925f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 37591400,
+  "anchor_value": 37591400,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 17,
+      "quoted_text": "Total Senior Secured Loans | 5,339,307",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 251,
+      "row_index": 24,
+      "quoted_text": "Total Corporate Bonds | 255,106",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 251,
+      "row_index": 50,
+      "quoted_text": "Total Common Stocks | 12,122,756",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 251,
+      "row_index": 59,
+      "quoted_text": "Total LLC Interests | 8,614,188",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 17,
+      "quoted_text": "Total Preferred Stocks | 11,260,043",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 102.3% | $ | 35,850,999 | $ | 37,591,400",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The source schedule uses industry/type headers, blank spacer rows, subtotals, cash equivalents, other assets/liabilities, and net assets rows in addition to the 23 actual investment line items; those non-position rows explain the source-count side of E07.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 252,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "False alarm. The raw 2025 schedule localizes to 23 actual investment rows: 17 line items in table 251 and 6 preferred-stock line items in table 252. Those line items roll through the cited category totals to Total Investments of $37,591,400, matching the output fund_quarter_fv_m anchor of 37.591400. The E07 source=52 count is therefore counting non-position schedule structure rather than missing output positions."
+}

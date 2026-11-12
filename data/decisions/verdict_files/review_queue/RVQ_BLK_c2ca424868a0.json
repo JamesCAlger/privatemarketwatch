@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_c2ca424868a0",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "missing or unknown index_classification on C301 issue rows",
+  "anchor_value": "source schedule rows disclose equity or investment-fund instruments with issuer and type sufficient for classification",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 24,
+      "quoted_text": "VP Security Buyer, Inc. | Limited Partnership Units | 111,111 | 111 | 111 | (3)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 17,
+      "quoted_text": "KLC Fund 1-C1 LP | Limited Partnership Units | 605,769 | 608 | 618 | (3)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 26,
+      "quoted_text": "Senior Direct Lending Program, LLC | Limited Partnership Units | SOFR | + | 8.00 % | (Q) | Current Yield: 11.75 % | 12/31/36 | 183,603 | 177,962 | 165,702 | (2)(4)(5)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The pipeline left issue rows missing or unknown even though the source schedule places Limited Partnership Units inside equity or investment-fund/vehicle sections with issuer-level descriptors.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 55,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "C301 targets missing or unknown index_classification. The raw schedule rows are not blank or indeterminate: VP Security Buyer, Inc. and KLC Fund 1-C1 LP are Limited Partnership Units in the equity section, and Senior Direct Lending Program, LLC is a Limited Partnership Units position under Controlled Investments / Investment Funds and Vehicles with a stated current yield. Leaving these rows missing or unknown is therefore a real classification extraction/lookthrough error, not a false alarm."
+}

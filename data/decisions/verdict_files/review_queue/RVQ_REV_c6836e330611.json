@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_c6836e330611",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2002-02-24",
+  "anchor_value": "2028-02-24",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 26,
+      "quoted_text": "Hoffmaster Group, Inc. | 03/15/24 | Incremental Term Loan - 10.10 % ( SOFR + 6.25 %, 2.00 % Floor) | 0.4 | % | 772,602 | 02/24/2 8 | 764,195 | 766,885",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The maturity date for Hoffmaster Group, Inc. Incremental Term Loan was parsed as 2002-02-24, but the source maturity cell is 02/24/28 with a spacing artifact.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 26,
+        "quoted_text": "02/24/2 8"
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged row stores maturity_date as 2002-02-24, which is before the 2025-12-31 report date. The raw schedule row for the same issuer, acquisition date, instrument, cost, and fair value shows the maturity cell as 02/24/2 8, a spaced rendering of 02/24/28. The source therefore supports a 2028-02-24 maturity, making the extracted 2002 date a localized parsing error."
+}

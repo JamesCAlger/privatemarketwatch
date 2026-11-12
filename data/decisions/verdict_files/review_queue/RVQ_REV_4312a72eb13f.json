@@ -1,0 +1,85 @@
+{
+  "review_id": "RVQ_REV_4312a72eb13f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency flagged as non-USD units U_AUD, U_CAD, U_EUR, and U_GBP",
+  "anchor_value": "schedule cost and fair value columns roll to dollar-denominated totals",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 37,
+      "quoted_text": "Ancora Bidco PTY LTD term loan shows principal amount AUD 3,235 but cost 3,348 and fair value 3,215 under the schedule Cost/Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 39,
+      "quoted_text": "Total Debt Investments Australia shows $ 3,335 cost and $ 3,211 fair value.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Rockpoint Gas Storage Partners shows cost 459 and fair value 462; the Canada section total is dollar-denominated.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 16,
+      "quoted_text": "Total Debt Investments Canada shows $ 459 cost and $ 462 fair value.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 25,
+      "quoted_text": "Avidity Acquisition B.V. term loan shows principal amount EUR 133 but cost 127 and fair value 131 under the schedule Cost/Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 32,
+      "quoted_text": "Total Debt Investments Netherlands shows $ 6,549 cost and $ 6,775 fair value.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 7,
+      "quoted_text": "Hamsard 3778 Limited term loan shows principal amount GBP 3,683 but cost 3,614 and fair value 3,591 under the schedule Cost/Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Total Debt Investments United Kingdom shows $ 6,821 cost and $ 6,840 fair value.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 40,
+      "quoted_text": "Solvias AG LP term loan shows principal amount CHF 10,457 but cost 10,034 and fair value 10,196 under the schedule Cost/Fair Value columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 43,
+      "quoted_text": "Total Debt Investments Switzerland shows $ 10,000 cost and $ 10,160 fair value.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign currency symbols in the principal amount column were propagated to cost_currency even though Cost and Fair Value are dollar-denominated schedule valuation columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 row-validation issue on cost_currency. The raw schedule is headed '(in thousands)' with Cost and Fair Value columns; for foreign-country positions, local currency markers such as AUD, EUR, GBP, and CHF appear in the principal amount/par value column, while the Cost and Fair Value columns aggregate to rows explicitly marked with dollar signs. Therefore non-USD cost_currency values on the flagged BDC valuation rows are source-inconsistent extraction/unit-assignment errors, not valid foreign-currency cost units."
+}

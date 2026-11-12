@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_340950152eba",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "raw_schedule_period",
+  "observed_value": 52,
+  "anchor_value": 0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 8,
+      "quoted_text": "API Holdings III Corp. | SF | 7.00% | 4.67% Cash/6.00% PIK | principal 166 | amortized cost 166 | fair value 170",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Fifty-two earlier-period schedule facts were retained as March 31, 2026 holdings; the cited API Holdings comparative row differs from the current-period extracted position.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 44,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "PP03 identifies 52 rows whose source period predates the 2026-03-31 report date. Raw source table 44 row 8 shows the earlier comparative API Holdings III Corp. position at fair value 170, whereas the current-period holdings evidence carries API Holdings III Corp. at fair value 0. The period-specific value disagreement confirms that the earlier schedule row is not a valid current-period position and should have been filtered."
+}

@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_5e70e2c33b9a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7,
+  "anchor_value": 3,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 30.20 | 1.4 | 94.13 | 3.7",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 43,
+      "row_index": 26,
+      "quoted_text": "Thrasio, LLC | Broadline Retail | S + 7.00 % | 12/18/26 | $ | 35,972 | $ | 35,555 | $ | 21,224 | (5) (7) (8) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 2,
+      "quoted_text": "MedeAnalytics, Inc. | Health Care Technology | 3.00 % PIK | 10/23/28 | $ | 9,333 | $ | 6,075 | $ | 6,277 | (5) (7) (8) (10) (11)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 11,
+      "quoted_text": "Zodiac Intermediate, LLC (dba Zipari) | Health Care Technology | S + 8.00 % | 12/21/26 | 46,540 | 45,659 | 28,296 | (5) (7) (8) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 12,
+      "quoted_text": "Zodiac Intermediate, LLC (dba Zipari) | Health Care Technology | S + 8.00 % | 12/22/25 | 7,000 | 6,843 | 4,256 | (7) (8) (10)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flag counts seven non-accrual positions, but only three belong to December 31, 2024; the other four tie to the December 31, 2023 comparative non-accrual amortized cost.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 17,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Table 17 row 6 reports current-period non-accrual amortized cost of 30.20 and comparative-period non-accrual amortized cost of 94.13. The 2024 non-accrual rows are Thrasio table 36 row 20 (cost 11,402), MedeAnalytics table 39 row 26 (cost 6,057), and Pluralsight table 40 row 27 (cost 12,743), summing to 30.202 million and implying three current-period positions. The remaining four flagged rows are comparative-period rows: Thrasio table 43 row 26 plus MedeAnalytics and Zodiac rows in table 47, whose costs sum to 94.132 million. The observed metric of seven positions therefore leaks prior-period rows into the 2024 flag."
+}

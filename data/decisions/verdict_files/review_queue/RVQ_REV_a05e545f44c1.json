@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a05e545f44c1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/holdings coverage mismatch for CIK 0002028686 at 2024-09-30 (fund=True;holdings=False), but the allowed evidence CLI returned no_accession_resolved for overview, tables, totals, and targeted roam. Because no raw source table, text, or anchor was available to adjudicate whether holdings should exist, the contract requires an ambiguous source_unavailable verdict."
+}

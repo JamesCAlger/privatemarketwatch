@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_6d7c7704ecee",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -142000,
+  "anchor_value": -142000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "ACP Falcon Buyer Inc | Systems Software | First Lien Revolver | SOFR+ | 6.50 % | 8/1/2029 | blank principal | ( 142 ) cost | blank fair value | (5)(8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "AmSpec Parent LLC | Diversified Support Services | First Lien Term Loan | SOFR+ | 5.75 % | 12/5/2030 | blank principal | ( 127 ) cost | ( 116 ) fair value | (5)(8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 25,
+      "quoted_text": "AmSpec Parent LLC | Diversified Support Services | First Lien Revolver | SOFR+ | 5.75 % | 12/5/2029 | blank principal | ( 225 ) cost | ( 212 ) fair value | (5)(8)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values. The raw schedule of investments prints parenthesized values in the Cost column for sampled flagged rows, including ACP Falcon Buyer Inc at (142) and AmSpec Parent LLC at (127) and (225), with table 12 row 1 confirming the column order includes Cost followed by Fair Value. The extraction therefore matches the source; the row-validation warning is an over-broad monitor rather than a real data error."
+}

@@ -1,0 +1,42 @@
+{
+  "review_id": "RVQ_REV_ea75fea138ea",
+  "verdict": "false_alarm",
+  "mechanism": "source_confirmed_distressed_position",
+  "localized": true,
+  "anchor_used": "source_rows",
+  "observed_value": {
+    "row_key_436557": {
+      "cost": 500436,
+      "fair_value": 6640
+    },
+    "row_key_436558": {
+      "cost": 31584,
+      "fair_value": 699
+    }
+  },
+  "anchor_value": {
+    "row_key_436557": {
+      "cost": 500436,
+      "fair_value": 6640
+    },
+    "row_key_436558": {
+      "cost": 31584,
+      "fair_value": 699
+    }
+  },
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 46,
+      "quoted_text": "Eskola Holdings, LLC Class A Units | Equity | 12/19/2024 | 176 | 500,436 | 6,640 | 0.00 %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 47,
+      "quoted_text": "Eskola Holdings, LLC Class C Units | Equity | 6/4/2025 | 16 | 31,584 | 699 | 0.00 %"
+    }
+  ],
+  "rationale": "X08 flagged two holdings because fair value is below 5% of cost. The raw March 31, 2026 schedule reports Eskola Holdings Class A Units with amortized cost 500,436 and fair value 6,640, and Class C Units with amortized cost 31,584 and fair value 699. The stored values match the source rows, so the flag reflects genuinely distressed/source-reported equity marks rather than a data extraction error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_862124d71d7e",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "25.4; 25.3",
+  "anchor_value": "25.4; 25.3",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 4,
+      "quoted_text": "Dryden 30 Senior Loan Fund | Subordinated Securities, effective interest 25.4 % | CLO Fund Securities | 11/1/28 | 6.8 % | 10/10/13 | cost 424 | fair value 409",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 6,
+      "quoted_text": "JMP Credit Advisors CLO V LTD | Subordinated Securities, effective interest 25.3 % | CLO Fund Securities | 7/17/30 | 57.2 % | 10/22/21 | cost 3,049 | fair value 3,049",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 row-validation check on interest_rate. The raw filing table 39 shows the two flagged CLO Fund Securities rows have effective interest rates of 25.4% and 25.3%, matching the extracted observed values. The flagged cells are therefore source-correct; the advisory expected-range check is too broad for CLO subordinated securities effective-interest values."
+}

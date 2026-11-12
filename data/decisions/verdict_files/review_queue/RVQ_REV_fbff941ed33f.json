@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_fbff941ed33f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": "fund_financials and holdings both present or both absent",
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The bundle reports an F28 coverage mismatch in derived artifacts, but the raw-source evidence CLI returned status no_accession_resolved for overview, tables, totals, and a targeted roam query. Under the contract, unreadable raw source must be adjudicated as ambiguous with source_unavailable and escalated."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_ea8fd46a3663",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "none",
+  "observed_value": 4,
+  "anchor_value": 4,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The bundle identifies four PP03 comparative-period candidates, but the required raw-source evidence CLI returned no usable source because the sandbox could not launch the process (CreateProcessWithLogonW error 1326). The source-period status therefore cannot be adjudicated without guessing."
+}

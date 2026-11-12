@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_c9303fb5e511",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row_maturity",
+  "observed_value": "identifier maturities: FL Hawk 2030-02-22; Hydraulic Technologies 2031-06-03; OEC Holdco 2031-04-22",
+  "anchor_value": "source/XBRL maturities: FL Hawk 2029-02-22; Hydraulic Technologies 2030-06-03; OEC Holdco 2035-12-30",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 23,
+      "quoted_text": "FL Hawk Intermediate Holdings, Inc. | (7)(13)(15)(16) | First Lien Revolver | S + 4.50 % | 8.15 % | 2/22/2029 | 2,233 | ( 3 | ) | -- | --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 42,
+      "row_index": 18,
+      "quoted_text": "Hydraulic Technologies USA LLC | (7)(13)(15)(16) | First Lien Revolver | S + 5.50 % | 9.15 % | 6/3/2030 | 2,384 | 1,049 | 1,037 | 0.05",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 69,
+      "row_index": 3,
+      "quoted_text": "OEC Holdco, LLC | (13)(15) | Subordinated Unsecured Term Loan | N/A | 11.00 % PIK | 12/30/2035 | $ | 10,000 | $ | 9,800 | $ | 9,800 | 0.48 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FL Hawk Intermediate Holdings, Inc. First Lien Revolver identifier carries 2030-02-22, but the source row maturity is 2/22/2029.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Hydraulic Technologies USA LLC First Lien Revolver identifier carries 2031-06-03, but the source row maturity is 6/3/2030.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 18
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "OEC Holdco, LLC Subordinated Unsecured Term Loan identifier carries 2031-04-22, but the source row maturity is 12/30/2035.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 69,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 2 review: the instrument rows are identified and the full source rows decide which field is wrong. For all three flagged rows, the raw schedule maturity cell matches the structured XBRL residual date, while the pipeline's flattened identifier text contains a different maturity date apparently taken from a neighboring or different instrument. The defect is therefore in identifier construction/parsing, not in the XBRL maturity value."
+}

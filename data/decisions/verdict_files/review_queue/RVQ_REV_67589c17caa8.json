@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_67589c17caa8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 217,
+  "anchor_value": 217,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 299,765 par, due 2/2031 ) | 2/13/2024 | SOFR + 5.75 % | 10.06 % | $ 297,033 | $ 298,988 | 7.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Total Investments | $ | 7,172,247 | $ | 7,356,032 | 178.9 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 30,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 counts amortized-cost and fair-value numeric leaves together, producing 217 fair-value leaves out of 434 total leaves even though the investment schedule has a fair value column and fair-value total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 8,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate completeness check. Raw source rows show the SOI has both Amortized Cost and Fair Value columns on investment rows; table 8 row 4, for example, has amortized cost 297,033 and fair value 298,988. Source totals confirm current-period investments at fair value of 7,356,032 and comparative-period investments at fair value of 7,244,282. The 217/434 metric therefore reflects a mixed leaf denominator containing both cost leaves and fair-value leaves, not missing fair values in the source."
+}

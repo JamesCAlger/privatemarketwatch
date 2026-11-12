@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_6b19b89fc2d6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "6.56 % PIK; LIBOR (M); 3.44 % spread",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 24,
+      "quoted_text": "Second lien senior secured loan | 6.56 % PIK | LIBOR (M) | 3.44 % | 9/2016 | 3/2024 | 125.6 | 103.6 | 106.8 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "ADG second lien senior secured loan was stored with no interest_rate or basis_spread even though the source shows 6.56 % PIK, LIBOR (M), and 3.44 % spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 2 row validation. The flagged extracted row for ADG, LLC and RC IV GEDC Investor LLC, Second lien senior secured loan has blank interest_rate and basis_spread, but the matching raw SOI row is identifiable by issuer context, instrument, maturity 3/2024, amortized cost 103.6, and fair value 106.8. That source row contains coupon 6.56 % PIK, reference LIBOR (M), and spread 3.44 %, so the missing extracted rate fields are a real extraction gap."
+}

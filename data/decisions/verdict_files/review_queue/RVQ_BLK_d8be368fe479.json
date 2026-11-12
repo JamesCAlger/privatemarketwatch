@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_d8be368fe479",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 6603548000.0,
+  "anchor_value": 3261721000.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 18,
+      "quoted_text": "Total Investments - 229.2 % | $ | 3,395,166 | $ | 3,261,721",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 71,
+      "row_index": 24,
+      "quoted_text": "Total Investments - 221.0 % | $ | 3,673,582 | $ | 3,475,258",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extraction aggregate exceeds the current-period companyfacts and filing total while the source contains a separate prior-year investments schedule total that should not be included for 2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 71,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate flag. The filing's current-period investment total is 3,261,721 thousand at table 54 row 18, matching the companyfacts FV anchor of 3,261,721,000. The HTML extracted FV sum is 6,603,548,000, more than double the anchor. Raw source also has a distinct prior-year investment schedule total of 3,475,258 thousand at table 71 row 24. The aggregate mismatch is therefore a real extraction error consistent with comparative-period leakage into the 2025 HTML aggregate, not a bad companyfacts anchor."
+}

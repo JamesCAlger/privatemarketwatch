@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_f9afd73811a8",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -36000.0,
+  "anchor_value": -36000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 6,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Delayed Draw Term Loan | S + 4.50 % | 11/29/2030 | - | ( 36 ) | ( 73 ) | 23",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 7,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Revolver | S + 4.50 % | 11/29/2030 | - | ( 4 ) | ( 4 ) | 23",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 9,
+      "quoted_text": "PPW Aero Buyer, Inc. | First Lien Delayed Draw Term Loan | S + 5.00 % | 9/30/2031 | - | ( 50 ) | ( 86 ) | 23",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost values for review. The raw Schedule of Investments table has a Cost (2) column, and the cited rows print those exact costs in parentheses: (36), (4), and (50), matching extracted costs of -36000, -4000, and -50000 after the filing's thousands scale. The flagged values are source-backed negatives rather than data errors."
+}

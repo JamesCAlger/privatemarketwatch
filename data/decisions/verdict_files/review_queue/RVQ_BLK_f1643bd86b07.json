@@ -1,0 +1,26 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_BLK_f1643bd86b07",
+    "mechanism":  "anchor_bad",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  100,
+    "anchor_value":  100,
+    "rationale":  "Class 3 aggregate check. The source contains a 2025 industry allocation summary whose header is % of Investments at Fair Value and whose Total row is 100.0%, matching the platform output basis. The higher 254.1% figure appears in the SOI as Percentage of Net Assets, a different leveraged-BDC denominator. The flag therefore compares output=100 against the wrong source anchor rather than proving a data extraction error.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  24,
+                                  "table_index":  14,
+                                  "quoted_text":  "Total | $ | 1,350,788 | $ | 1,355,641 | 100.0 | %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  6,
+                                  "table_index":  32,
+                                  "quoted_text":  "Total investments | 1,350,788 | 1,355,641 | 254.1 %"
+                              }
+                          ],
+    "confidence":  0.86
+}

@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_b649c0253d10",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Investments (a) | Type | Reference Rate and Spread (b) | Interest Rate (b) | Maturity Date | Par Amount/Units (c) | Cost (d) | Fair Value (e) | Percentage of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 25,
+      "quoted_text": "Dynamic Connections, Ltd (i)(l)(m)(p) | Term Loan | CORRA + 5.50 % | 8.49 % | 11/27/2030 | 514,047 | 362,060 | 367,678",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 is a repeated Class 1 flag over 229 missing principal_amount_usd cells. Raw-source review confirmed that the schedule supplies a Par Amount/Units column and position-level par values, but it does not label that column's currency; searches for currency, non-USD, EUR, GBP, CAD, Canadian, Euro, foreign currency, and denominated returned no currency disclosure. A CORRA-linked example alone does not prove the denomination of its par amount, and the bundle does not localize the 229 flags to source currency evidence. Therefore the raw source does not decide whether a required USD conversion is missing or whether the non-USD premise is erroneous. Human or structured-XBRL currency-unit evidence is required."
+}

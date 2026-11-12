@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_d5993d4f0bc8",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 34,
+  "anchor_value": 34,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 27,
+      "quoted_text": "Total 1st Lien/Senior Secured Debt | 167,788 | 165,081",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 22,
+      "quoted_text": "Total Debt Investments | $ | 290,949 | $ | 283,261",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 89.7 % | $ | 310,164 | $ | 289,479",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The current-period schedule spans tables 8-10. Counting only disclosed position rows with nonzero fair value gives 22 rows in table 8 (rows 5-26), 10 rows in table 9 (rows 3-14 excluding the three zero-fair-value Wine.com rows 17-19), and 2 rows in table 10 (rows 5 and 11), totaling 34 and matching output. The filing total of fair value is 289,479, confirmed at table 10 row 20 and the balance-sheet total. The oracle source count of 115 cannot represent current nonzero portfolio positions; the filing also contains parallel comparative schedule tables 11-13, so the inflated source count is a comparative/structural-row contaminated anchor rather than missing output positions."
+}

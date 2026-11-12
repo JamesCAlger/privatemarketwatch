@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_cfc70d9f1ee2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate for direct-lending debt rows; weak fill metric 75.8 with 36 violations",
+  "anchor_value": "source schedule Reference Rate and Spread cells are populated for cited rows",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 14,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | S + 5.25 % | 7/2/2031 | 98 | 87 | 91",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 15,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Revolver | S + 5.25 % | 7/2/2031 | - | (2) | (1)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 23,
+      "quoted_text": "AVSC Holding Corp. | First Lien Revolver | S + 5.00 % | 12/5/2029 | - | (3) | (3)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 21,
+      "quoted_text": "Netwrix Corporation | First Lien Delayed Draw Term Loan | S + 4.75 % | 6/11/2029 | 7 | 7 | 6",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor left interest_rate blank for direct-lending DDTL/revolver rows even though the source Reference Rate and Spread column contains stated rates such as S + 5.25% and S + 5.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate fill-rate flag. The bundle shows blank interest_rate values for sampled direct-lending debt rows including AB Centers Acquisition Corporation DDTL/Revolver, AVSC Holding Corp. Revolver, and Netwrix Corporation DDTL. The raw schedule has a Reference Rate and Spread column and the cited matching rows contain populated rates. The check is therefore identifying a real extraction gap, not a missing disclosure or false alarm."
+}

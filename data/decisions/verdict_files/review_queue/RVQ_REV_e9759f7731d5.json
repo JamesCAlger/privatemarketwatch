@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_e9759f7731d5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2686,
+  "anchor_value": 2862,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 4,
+      "quoted_text": "AWP Group Holdings, Inc. | Revolver | 12/23/2030 | 2,435 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 35,
+      "quoted_text": "Total Unfunded Commitments | $ 858,781 | $( 5,775 )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Unfunded commitment leaf rows carry an explicit Fair Value column, including dash/zero values, but the extract leaves enough fair_value values missing to fail B01.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is a Class 3 quarter-level completeness flag: 2686 of 2862 leaves have fair_value, below the 0.95 rule threshold. The raw filing schedule has an explicit Fair Value column for unfunded commitments, and representative leaf rows disclose values in that column, including dash values that mean zero rather than missing. The same commitment schedule totals to a disclosed fair value of $(5,775). Therefore the missing extracted fair_value leaves are not source omissions; they are an extraction/normalization gap around the commitment Fair Value column."
+}

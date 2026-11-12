@@ -1,0 +1,54 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies the exact Fidelity non-controlled/non-affiliate investments label as a documented total/header source row, not as a production position.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 19,
+      "row_index": 2,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The selected current-period SOI row is a one-cell section header, 'Investments -- non-controlled/ non-affiliate', introducing a group of investments rather than a leaf holding."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 17,
+      "row_index": 36,
+      "cell_indices": [
+        0,
+        17,
+        21,
+        24
+      ],
+      "reason": "The current-period source candidate with the blocker fair value is a subtotal row, 'Total Investments -- non-controlled/ non-affiliate', carrying aggregate cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Use the existing narrow normalized total/header match for the Fidelity wording 'Investments Investments - non-controlled / non-affiliate'. The rule is exact to this duplicated Investments plus non-controlled/non-affiliate section label and does not classify issuer-bearing rows as totals.",
+  "primary_justification": "Manual review supports a bounded patch-covered verdict. The only blocker row in this packet is source_row_id 938973 with raw identifier 'Investments Investments - non-controlled / non-affiliate' and source fair value 1,438,312,194. The HTML coordinate candidates show the selected current-period SOI row as a one-cell section header at table 19 row 2 and the matching fair-value row as a subtotal at table 17 row 36. Neither coordinate has issuer, instrument, rate, maturity, principal, shares, or other leaf-position evidence. A broad non-affiliate filter would be unsafe, but the exact normalized section/total-header match is bounded and covered by false-positive tests for issuer-bearing Fidelity rows.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict does not hand-clear the row. Residual risk remains until affected outputs are rebuilt from cached data and source reconciliation confirms the row is documented as a non-position total/header rather than a blocker.",
+  "review_id": "BDCSRC_0001899996_2024-06-30_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_f5ad9e073e",
+  "reviewer_notes": "The packet reports one source-only blocker with affected source fair value of 1,438,312,194. Manual review found aggregate/header and subtotal coordinate evidence, not position-level evidence. The patch is constrained to this exact normalized label and leaves Fidelity issuer/instrument rows blocking unless independently classified.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected effect after rebuild: the Fidelity non-controlled/non-affiliate section aggregate row is documented as a total/header source row and no longer remains an unclassifiable blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

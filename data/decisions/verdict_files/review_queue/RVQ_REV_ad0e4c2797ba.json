@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_ad0e4c2797ba",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The authorized evidence CLI did not return usable raw-source evidence: repeated invocations through the required interpreter failed at process creation with Windows error 1326. The bundle identifies 222 FX01 rows but pipeline-derived flag data cannot adjudicate whether the missing USD principal values are source-supported conversion gaps. Per the fail-closed contract, no data judgment is made and infrastructure retry is required."
+}

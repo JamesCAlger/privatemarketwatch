@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_7be3404cb3f7",
+  "verdict": "ambiguous",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [],
+  "ambiguity_basis": "source_checked",
+  "rationale": "The raw filing was checked through the evidence CLI. The filing exposes schedule tables with a generic Principal/Shares (2) column and dollar-denominated cost and market value, but targeted source searches returned no EUR, GBP, CAD, or foreign-currency principal markers. The source therefore does not establish whether the 330 flagged principals are non-USD amounts requiring conversion or amounts already expressed in USD. The aggregate FX01 flag cannot be confirmed or rejected without guessing."
+}

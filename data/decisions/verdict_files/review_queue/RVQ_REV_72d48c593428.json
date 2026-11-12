@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_72d48c593428",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_CAD, U_JPY, U_GBP, U_EUR",
+  "anchor_value": "USD presentation indicated by dollar signs",
+  "confidence": 0.84,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "AA&D Midco, Inc. ... Cost $ 7,857 ... Fair Value $ 7,853",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review of five flagged fair_value_currency cells. Raw filing table 11 presents the schedule's principal, cost, and fair value columns with dollar signs, and targeted searches found no CAD, JPY, GBP, EUR, or corresponding currency names. However, the evidence CLI does not expose the inline-XBRL unitRef attributes and does not map flagged row keys 509890, 509892, 509977, 509984, and 510038 to source table coordinates. The visible source therefore suggests USD presentation but cannot decide whether each flagged foreign unit is a tagging error, a legitimate source unit with converted presentation, or a row-mapping defect. A cell-level grounded verdict is not possible from the available raw-source view."
+}

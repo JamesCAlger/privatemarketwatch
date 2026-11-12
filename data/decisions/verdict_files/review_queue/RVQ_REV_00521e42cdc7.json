@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_00521e42cdc7",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_footnote_10",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 13,
+      "quoted_text": "TM Restaurant Group LLC | Hotels, Restaurants & Leisure | S + 7.25 % | 07/26/28 | 10,446 | 9,997 | 8,827 | (5) (6) (8) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 14,
+      "quoted_text": "TM Restaurant Group LLC | Hotels, Restaurants & Leisure | S + 7.25 % | 07/26/28 | 1,286 | (14) | (199) | (5) (7) (8) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 1,
+      "quoted_text": "(10) | The investment is on non-accrual status. See Note 2 Significant Accounting Policies.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 investment schedule contains two distinct TM Restaurant Group LLC positions at table 11 rows 13 and 14. Each row carries footnote (10), and table 25 row 1 defines footnote (10) as the investment being on non-accrual status. The raw source therefore independently confirms the extracted count of two non-accrual positions; the advisory flag is a false alarm rather than a data defect."
+}

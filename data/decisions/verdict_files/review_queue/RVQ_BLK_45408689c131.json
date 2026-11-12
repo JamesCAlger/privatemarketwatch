@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_45408689c131",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 16,
+  "anchor_value": 16,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 27,
+      "quoted_text": "AirPro Diagnostics, LLC | First lien senior secured delayed draw term loan | S + | 5.25 % | 9.47 | % | 2/21/2025 | 2/21/2030 | 3,163 | 6 | 11 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 8,
+      "quoted_text": "Capstone Mechanical LLC (6) | First lien senior secured delayed draw term loan | S + | 5.00 % | 8.67 | % | 11/20/2025 | 11/20/2030 | 6,161 | ( 76 ) | ( 76 ) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 2,
+      "quoted_text": "Redwood Buyer, LLC (6) | First lien senior secured delayed draw term loan | S + | 4.75 % | 8.42 | % | 1/3/2025 | 1/3/2030 | 7,615 | ( 122 ) | ( 112 ) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 12,
+      "quoted_text": "ACES Intermediate, Inc (6) | First lien senior secured revolving loan | S + | 5.00 % | 8.83 | % | 7/28/2023 | 7/27/2027 | 7,114 | ( 63 ) | ( 36 ) | 0.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X06 fired because principal_amount_usd exceeds 10x fair_value, but the raw schedule itself reports principal/par amounts far above fair value for delayed draw term loan and revolving loan rows. The extracted values follow the source columns and scale: for example AirPro reports principal/par 3,163, amortized cost 6, and fair value 11; ACES reports principal/par 7,114, amortized cost (63), and fair value (36). The defect is the validation rule's scope for source-correct DDT/revolver economics, not a data extraction or unit-scale error."
+}

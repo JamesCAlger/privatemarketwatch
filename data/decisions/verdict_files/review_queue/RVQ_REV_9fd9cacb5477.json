@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9fd9cacb5477",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 79,
+      "row_index": 27,
+      "quoted_text": "Heights Buyer, LLC | Revolver | 8/25/2028 | 543 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 24,
+      "quoted_text": "Kele Holdco, Inc. | Revolver | 2/20/2028 | 290 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged two identifiers as comparative-period commitment rows, but the raw filing source contains matching current schedule commitment rows for both flagged identifiers. Heights Buyer appears in table 79 row 27 as a Revolver expiring 8/25/2028; Kele Holdco appears in table 80 row 24 as a Revolver expiring 2/20/2028. The source therefore supports retaining these identifiers for the report period, so the PP03 warning is a false alarm rather than a data defect. No aggregate anchor was needed."
+}

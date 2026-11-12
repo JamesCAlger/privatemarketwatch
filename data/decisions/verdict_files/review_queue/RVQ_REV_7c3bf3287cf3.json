@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_7c3bf3287cf3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_cell",
+  "observed_value": -8000,
+  "anchor_value": -8000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 31,
+      "quoted_text": "Klick Inc. delayed draw term loan: Cost (8), Fair Value (31), both printed as parenthesized negatives.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 32,
+      "quoted_text": "Klick Inc. revolver: Cost (17), Fair Value (31), both printed as parenthesized negatives.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 9,
+      "quoted_text": "Pipe Bidco GmbH delayed draw term loan: Cost (75), Fair Value (77), both printed as parenthesized negatives.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 batched single-cell review. The raw investment schedule explicitly reports negative cost for representative flagged delayed-draw and revolver rows, and the extracted values match those source cells after the filing's thousands-to-units scaling. Corresponding fair values are also negative, supporting that these are filer-reported position values rather than sign extraction errors. C107 merely treats any negative cost as suspicious, so the flag is a false alarm caused by overbroad rule scope. No aggregate anchor is applicable."
+}

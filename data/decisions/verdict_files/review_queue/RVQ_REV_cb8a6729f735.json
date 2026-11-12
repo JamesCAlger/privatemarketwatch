@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_cb8a6729f735",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 12,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(8) | Revolver - 6.00 % inc PIK (6.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 13,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(8) | Term Loan A - 6.00 % inc PIK (6.00 %, Fixed Coupon, all PIK)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule contains exactly the two flagged Overton positions and both carry footnote marker (8), but the evidence CLI does not expose the text defining footnote (8). Targeted raw-source searches for non-accrual/nonaccrual and related accrual language returned no decisive disclosure. The visible rows therefore establish localization but do not establish that either position was on non-accrual status, so the flag cannot be confirmed or rejected from the available raw source."
+}

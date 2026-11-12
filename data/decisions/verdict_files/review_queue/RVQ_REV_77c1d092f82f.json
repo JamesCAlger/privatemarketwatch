@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_77c1d092f82f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": 4,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 9,
+      "quoted_text": "Evolent Health LLC and Evolent Health, Inc. | Medical technology company focused on value based care services and payment solutions | Series A preferred shares | 10.74 % | SOFR (Q) | 6.00 % | 01/2023 | 01/2029 | 3,834 | 3.8 | 4.4 | (2)(6)(11)"
+    },
+    {
+      "table_index": 47,
+      "row_index": 11,
+      "quoted_text": "Ferrellgas, L.P. and Ferrellgas Partners, L.P. | Distributor of propane and related accessories | Senior preferred units | 8.96 % | 03/2021 | 64,155 | 64.2 | 64.8"
+    },
+    {
+      "table_index": 25,
+      "row_index": 21,
+      "quoted_text": "SM Wellness Holdings, Inc. and SM Holdco, LLC (15) | Breast cancer screening provider | Series D units | 8.00 % PIK | 03/2023 | 1,127 | 1.2 | 1.7 | (2)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 23,
+      "quoted_text": "Priority Holdings, LLC and Priority Technology Holdings, Inc. | Provider of merchant acquiring and payment processing solutions | Senior preferred stock | 16.59 % ( 7.00 % PIK) | SOFR (Q) | 12.00 % | 04/2021 | 25,739 | 31.8 | 32.3 | (2)(6)(11)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Coupon-bearing preferred equity instruments carry source-disclosed rates, so X01 is overbroad when it treats all private-equity rows with interest_rate as defects.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 23,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "The raw SOI shows coupon or PIK rates printed directly on preferred shares, preferred units, and preferred stock. These are equity-form instruments with source-disclosed rates, so the stored interest_rate values are source-correct and the rule's blanket PRIVATE_EQUITY-with-rate warning is the defect. The 8.00 percent row is less uniquely identifiable from rate alone, but the source contains multiple private-equity unit rows with 8.00 percent PIK, supporting the same rule-scope conclusion."
+}

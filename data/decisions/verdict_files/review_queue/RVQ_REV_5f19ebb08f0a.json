@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_5f19ebb08f0a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 821004121,
+  "anchor_value": 825525000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 858,951 | 100.0 | % | $ | 825,525 | 100.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "AIM Acquisition, LLC | Term Loan | SOFR + 4.75% | Fair Value $10,883",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted quarter fair value of $821,004,121 versus the filing schedule total of $825,525,000, a $4,520,879 shortfall. The raw March 31 schedule has a Fair Value column populated on investment rows (for example table 10 row 5), so the 51.2% fair-value coverage flag reflects a real extraction/row-disposition gap rather than absent filer disclosure. The evidence bundle does not identify the complete set of 848 deficient leaves, so the defect is not row-localized."
+}

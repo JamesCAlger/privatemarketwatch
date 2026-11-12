@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_da16724158e9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 25,
+      "quoted_text": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class | Money Market Fund | 11,056,883 | 11,056,883 | 11,056,883 | 1.86",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holdings row has blank issuer_name, but the source row has portfolio company/name JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "C201 is a Class 1 required-field check on issuer_name. The raw 2025 SOI cash-equivalents row has a nonblank first-column name, JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class, while the flagged extracted value is blank. This grounds the flag as a real extraction gap, not a source blank or an aggregate anchor issue."
+}

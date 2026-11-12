@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_9c6e2dd137ac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 78.5,
+  "anchor_value": 100.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 22,
+      "quoted_text": "AMR GP Limited (4)(5)(7) | 10.50 % (incl 5.25 % PIK) | 10.50 % | 7/10/2034 | 1,043 | 1,015 | 1,034"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AMR GP Limited has a raw schedule interest rate of 10.50%, including 5.25% PIK, but the extracted holding has blank interest_rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate rate-fill flag. The raw filing schedule is readable and carries Interest Rate columns; totals tie to the filing's total investment portfolio, so this is not source_unavailable. A sampled flagged missing-rate position, AMR GP Limited, has blank interest_rate in the extracted holdings slice but the raw source row shows 10.50% in the interest-rate column. That proves at least one rate-fill violation is a real extraction gap rather than a false alarm."
+}

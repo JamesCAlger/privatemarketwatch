@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_933d70e38c3e",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 36507217,
+  "anchor_value": 36507217,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 18,
+      "quoted_text": "Total Debt Investments (2) | 76.6 | % | 36,522,231 | 36,507,217",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 22,
+      "quoted_text": "Total Cash Equivalents | 30.5 | % | 14,548,634 | 14,548,634 | 14,548,634",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 25,
+      "quoted_text": "Total Short-term Investments | 144.9 | % | 70,000,000 | 69,076,000 | 69,076,000",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 is firing on 6 of 12 rows with fair value, but the raw current-period SOI shows the six private-credit debt positions carry fair values and sum to the filing's Total Debt Investments fair value of 36,507,217. The remaining denominator rows are subtotal/rollup rows and liquid cash-equivalent or short-term investment rows, not missing-fair-value private-credit leaf positions. The check scope/row classification is therefore the issue, not the extracted private-credit fair values."
+}

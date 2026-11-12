@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_REV_8832b52f5f08",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  17,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  7,
+                                  "quoted_text":  "ERA Industries, LLC ... | Equity Interest | - | - | - | - | 1 | 1,201 | 1,201",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  23,
+                                  "quoted_text":  "Sikich ... | Preferred Equity | - | 13.00 % PIK | 13.00 % | - | 31 | 3,098 | 3,150",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  24,
+                                  "quoted_text":  "Sikich ... | Warrants | - | - | - | - | 5 | - | 596",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The filing schedule has a Principal/ Share column with populated values for equity-like rows, but the extracted equity rows have zero share coverage.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  12,
+                                          "row_index":  7
+                                      }
+                     }
+                 ],
+    "rationale":  "C04 reports 0.0% of 17 equity rows have shares. Raw SOI tables use a Principal/ Share (2) column, and equity-like rows show populated values in that column, e.g. Equity Interest row value 1, Preferred Equity row value 31, and Warrants row value 5. The source therefore supports share/principal extraction; the zero coverage in extracted equity rows is a real extraction gap, not a source absence."
+}

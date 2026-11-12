@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_90356f799017",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 203856000,
+  "anchor_value": 203856000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 66,
+      "quoted_text": "K2 Propco Class S Units (4)(11)(12) | N/A | N/A | N/A | 113 | 36 | 118 | 0.07 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 67,
+      "quoted_text": "K2 Pure Solutions Class S Units (4)(11)(12) | N/A | N/A | N/A | 897 | 285 | 941 | 0.55 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 65,
+      "quoted_text": "Total Investments | $ | 210,328 | $ | 203,856 | 119.73 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule distinguishes the flagged labels without uncertainty. Table 12 rows 66 and 67 are genuine Common Stock investment positions: each has a separate security name plus shares, cost, fair value, and percentage of net assets, so the word 'Class' does not denote a category or subtotal. Table 13 row 65 is explicitly Total Investments and repeats the schedule total of cost $210.328 million and fair value $203.856 million, so it is correctly not a position. The candidate rule therefore identifies no data error among its three flagged labels; its lexical classification check is overbroad."
+}

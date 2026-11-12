@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_cc0901115379",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 14,
+      "quoted_text": "Clearcourse Partnership Acquireco Finance Limited | IT Services | 13.70 % | SN + 8.75 % (Incl. 9.85 % PIK) | 07/25/28 | GBP | 6,415 | $ | 7,680 | $ | 7,790",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 5,
+      "quoted_text": "1272775 B.C. LTD. (dba Everest Clinical Research) | Professional Services | 9.98 % | S + 5.50 % | 11/06/26 | $ | 8,022 | $ | 7,978 | $ | 7,982",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD, but the raw SOI shows cost and fair value columns denominated with dollar signs. Table 36 row 14 is especially diagnostic because the par column is GBP while cost and fair value are still shown with $ symbols; this supports U_USD as the correct USD XBRL unit for fair_value_currency rather than a non-USD value."
+}

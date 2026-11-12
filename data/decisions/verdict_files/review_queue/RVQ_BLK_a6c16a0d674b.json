@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_a6c16a0d674b",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 913524000.0,
+  "anchor_value": 906526000.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 45,
+      "quoted_text": "Total Non-Controlled / Affiliated Investments | $ | 5,522 | $ | - | $ | 1,476 | $ | 6,998 | 1.7%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted position sum exceeds the companyfacts and filing total by 6.998m, exactly matching the Total Non-Controlled / Affiliated Investments subtotal.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 32,
+        "row_index": 45,
+        "quoted_text": "Total Non-Controlled / Affiliated Investments | $ | 5,522 | $ | - | $ | 1,476 | $ | 6,998 | 1.7%"
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate conservation failure. The filing's September 30, 2025 total investment before cash equivalents is 906.526m (table 25 row 22), and the summary table total is also 906.526m (table 32 row 47), matching the companyfacts_fv anchor. The extracted holdings sum is 913.524m, an overshoot of 6.998m. Source table 32 row 45 identifies a Total Non-Controlled / Affiliated Investments subtotal of 6.998m, which is already included in the 906.526m table total and therefore explains the overshoot as a subtotal leak rather than a bad anchor."
+}

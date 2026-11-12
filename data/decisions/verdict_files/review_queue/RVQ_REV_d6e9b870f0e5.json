@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_d6e9b870f0e5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 14.0,
+  "anchor_value": 14.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Great Dane Intermediate Holding I LLC (11) | Preferred Equity | Software | 14.00 % PIK | 7/21/2025 | 21,268 | 20,718 | 20,045 | 2.46 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged published pik_rate is 14.0. The raw schedule at table 14 row 5 identifies Great Dane Intermediate Holding I LLC and prints 14.00 % PIK in the Interest Rate column, exactly supporting the published value. The missing declared and instance values reflect the text-only pathway, not a data defect, so the provenance warning is a false alarm."
+}

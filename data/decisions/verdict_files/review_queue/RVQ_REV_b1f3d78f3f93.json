@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_b1f3d78f3f93",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 405398306,
+  "anchor_value": 405398306,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 47,
+      "quoted_text": "Total Investments | $ | 402,245,114 | $ | 405,398,306 | 206.36 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "B01 uses all 1,328 XBRL leaves as its denominator even though fair value is a distinct fact population; the 655 extracted fair-value facts reconcile to the complete schedule total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 18,
+        "row_index": 47
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The raw schedule reports Total Investments fair value of $405,398,306 at table 18 row 47, exactly equal to the extracted fund-quarter fair value of $405.398306 million, with zero reported residual. Nearby investment rows 40-44 also each display a fair-value amount. The 49.3% metric instead divides 655 fair-value facts by 1,328 heterogeneous XBRL leaves, so the denominator does not represent positions that should each carry fair value. The source therefore supports complete fair-value extraction and shows B01 is a false alarm caused by rule scope/anchor design."
+}

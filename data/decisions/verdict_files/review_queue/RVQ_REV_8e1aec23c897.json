@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_8e1aec23c897",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.3821138211382114,
+  "anchor_value": 0.5,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 2,
+      "quoted_text": "Raw schedule hierarchy row is separate: Debt Investments - 226.3 %; extracted issuer names in the bundle include hierarchy prefixes such as United States - 205.6% 1st Lien/Senior Secured Debt - 195.3% Acquia, Inc.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 18,
+      "quoted_text": "Raw investment row is Acquia, Inc. | Software | 9.59 % | S + 5.50 % | 10/30/26 | 42,164 | 41,960 | 41,743 | (7) (8), not a hierarchy-prefixed issuer name.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer identity is contaminated with schedule hierarchy labels and percentages, which can break cross-period issuer continuity even when the raw issuer persists.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 18,
+        "quoted_text": "Acquia, Inc. appears as the raw investment name, while the bundle's extracted issuer sample prefixes it with United States and lien-category hierarchy text."
+      }
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag (47/123 issuers persist, metric 0.382 below threshold 0.5). The filing totals are readable and tie at the schedule level: Total Investments at fair value is 3,261,721 for 2025 and 3,475,258 for 2024. The defect localizes through the row-disposition structure: raw schedule hierarchy rows such as Debt Investments and country/lien-category rows are separate from investment rows, but the reviewed extract sample stores those hierarchy labels inside issuer_name. A named source example confirms Acquia, Inc. is the raw issuer row, while the bundle's extracted issuer format prefixes Acquia, Inc. with United States and lien-category text. That source-backed issuer contamination makes the low continuity flag a real extraction data error rather than a false alarm."
+}

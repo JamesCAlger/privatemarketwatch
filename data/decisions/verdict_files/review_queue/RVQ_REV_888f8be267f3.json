@@ -1,0 +1,38 @@
+{
+    "review_id":  "RVQ_REV_888f8be267f3",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  22,
+                                  "row_index":  1,
+                                  "quoted_text":  "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  22,
+                                  "row_index":  4,
+                                  "quoted_text":  "SSI Parent, LLC (fka School Specialty, Inc.) | Term Loan - 11.84 % ( SOFR + 8.00 %, 1.25 % Floor) | Par Amount 7,152,936 | Amortized Cost $7,152,936 | Fair Value $7,152,936",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  22,
+                                  "row_index":  7,
+                                  "quoted_text":  "Ruby Tuesday Operations LLC | Term Loan - 15.98 % inc PIK (SOFR + 12.00 %, 1.25 % Floor, all PIK) | Par Amount 10,266,562 | Fair Value 10,266,562",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  22,
+                                  "row_index":  21,
+                                  "quoted_text":  "Noramco, LLC | Term Loan - 12.51 % inc PIK ( SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK) | Par Amount 27,642,846 | Fair Value 27,145,275",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX01 fired because principal_amount_usd is blank for ten debt rows, asserting non-USD source par requires FX conversion. The raw 2025 Schedule of Investments labels the column only as Par Amount and the flagged debt rows show ordinary numeric par amounts without EUR, GBP, CAD, or other non-USD currency markers; targeted source searches for foreign currency and common non-USD currency labels returned no hits. The source therefore does not support the non-USD premise of the check."
+}

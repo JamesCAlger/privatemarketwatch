@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a08bbf99ad8b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10.713346379647747,
+  "anchor_value": 14.625,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 97,
+      "row_index": 25,
+      "quoted_text": "Ratio of net investment income to average net assets (6) | 9.75 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 10,
+      "quoted_text": "Distributions from net investment income | ( 1.28 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 13,
+      "quoted_text": "Total | $ | 1.28",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source supports the income-yield and distribution anchors rather than a source-data defect: financial highlights report net investment income to average net assets of 9.75% for the six months ended June 30, 2025, and distributions from net investment income of $1.28 per share. The distribution rate is about 10% annualized and remains below 1.5 times the reported income-yield anchor (14.625%), so the F16 fire is a false alarm from the heuristic/check path rather than a filing extraction error."
+}

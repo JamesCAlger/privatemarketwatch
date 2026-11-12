@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_9bd22b0ddf61",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1166044000,
+  "anchor_value": 640076000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 2,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 638,563 | $ | 640,076",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 638,563 | $ | 640,076 | $ | - | $ | 56,301 | $ | 583,775",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extracted holdings include a Co-investment row with fair value 525,968,000, matching the over-coverage residual above the filing's 640,076,000 investments-at-fair-value total.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 32,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag: the filing's own schedule total for investments before cash equivalents is 640,076 thousand, corroborated by the fair value hierarchy Total Investments row. The extracted holdings sum is 1,166,044 thousand, leaving a 525,968 thousand residual. The bundle's holdings slice localizes that residual to an extracted Co-investment row that is not part of the raw investment schedule total, so the GAV over-coverage is a real data error."
+}

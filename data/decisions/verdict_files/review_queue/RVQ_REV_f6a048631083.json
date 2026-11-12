@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_f6a048631083",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw-source evidence CLI returned no usable overview, table list, or roam evidence (only an XMLParsedAsHTMLWarning), and the targeted grid attempt failed at process creation. Under the contract's fail-closed rule, the apparent issuer-name wrapper leak cannot be adjudicated from bundle-derived evidence alone."
+}

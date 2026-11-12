@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_fd6d4e725974",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "UNIT_STANDARD_USD_EB_HRZXYB0UP6UQE2QKGTG",
+    "anchor_value":  "USD-denominated source amounts",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  16,
+                                  "row_index":  0,
+                                  "quoted_text":  "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted in Euros.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  9,
+                                  "row_index":  6,
+                                  "quoted_text":  "Term Loan ... $ 2,434,685 ... $ 2,474,237",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  9,
+                                  "row_index":  9,
+                                  "quoted_text":  "Total | $ | 3,578,544 | $ | 3,689,041 | 2.58 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX02 flagged the stored fair_value_currency as a non-USD unit identifier, but the raw schedule presents amortized cost and fair value in dollar columns and the schedule footnote states amounts are denominated in U.S. Dollars unless otherwise noted. The cited representative rows show fair value amounts under \"$\" columns, so the source does not support a non-USD valuation defect; the check is over-firing on a noncanonical/custom unit label that still denotes USD."
+}

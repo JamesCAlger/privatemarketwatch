@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_0f77212c2dee",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2029-04-11",
+  "anchor_value": "2032-03-24",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 14,
+      "quoted_text": "Arax Midco, LLC | First Lien Term Loan | S + 5.25 % | 3/24/2032 | 5,323 | 5,296 | 5,296 | 9",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 32,
+      "quoted_text": "Redwood Services, LP | First Lien Term Loan | S + 4.25 % | 6/16/2032 | 3,069 | 3,041 | 3,069 | 9",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Arax current-period source maturity is 3/24/2032, but the identifier carries the prior-period 4/11/2029 maturity while retaining the current-period S + 5.25% spread.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 13,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Redwood source maturity is 6/16/2032, so the conflicting structured value 1/10/2033 is assigned from a different instrument or context.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "The raw current-period schedule resolves representative flagged rows. Arax proves a comparative-period field merge: its current row states S + 5.25% and 3/24/2032, whereas the flagged identifier combines that current spread with 4/11/2029, a date appearing only on the comparative schedule. Redwood proves that the opposite stored side can also be wrong: its source row states 6/16/2032, not the structured 1/10/2033 value. Thus the rule is detecting real row/context assignment defects rather than issuing a false alarm."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_14064f7a0219",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2845.623249,
+  "anchor_value": 2845.622,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value | 2,845,622 | 2,783,476",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,833,404 | $ | 2,845,622 | 189.87 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "E07 compares 686 source units with 172 output positions, but those are not like-for-like row populations. Raw source independently reports March 31, 2026 investments at fair value of 2,845.622 million both on the balance sheet and at the terminal investment-schedule total. The extracted holdings total is 2,845.623249 million, only 0.001249 million (about 0.000044 percent) above the filing total. This tight agreement rules out the alleged 74.9 percent coverage loss and grounds the flag as a bad count anchor rather than a data error."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2534dbccec48",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 17,
+      "quoted_text": "Daintree Bidco Pty Limited | (6) | (20) | First Lien - Term Loan | (16) | 11/25/2032 | 9,000,000 | 8,865 | 8,933 | 1.0",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 X02 check on interest_rate: the raw SOI row is a private-credit debt investment (First Lien - Term Loan) but has no value in either the Reference Rate and Spread column or the Interest Rate (%) column. The source therefore confirms the row lacks both interest_rate and basis_spread, so the X02 missing-rate flag is a real localized data quality defect rather than a false alarm."
+}

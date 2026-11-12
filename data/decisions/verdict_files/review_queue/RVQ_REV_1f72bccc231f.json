@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_1f72bccc231f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "CAD/EUR/GBP stored as fair_value_currency",
+  "anchor_value": "foreign currency codes belong to Par Amount/Units; Fair Value is a separate column",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 1,
+      "quoted_text": "Par Amount/ Units | Cost (3) | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "123Dentist Inc. | 8/10/2029 | CAD | 5,938 | 4,326 | 4,255",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor mapped the foreign-currency par denomination into fair_value_currency for the 16 flagged rows; fair value is a separate schedule column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 1 batch. The schedule header places the currency-bearing cell under Par Amount/Units and separates Cost and Fair Value. The representative 123Dentist row prints CAD immediately before par amount 5,938, followed by cost 4,326 and fair value 4,255. Thus CAD is the instrument/par denomination, not the fair-value unit; storing it as fair_value_currency is a grounded column-remapping extraction error. The same FX02 batch shape covers CAD, EUR, and GBP values."
+}

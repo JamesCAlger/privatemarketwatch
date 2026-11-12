@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_895d80c43749",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.81,
+  "anchor_value": 0.068,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value | 1,694,770 | 1,488,856"
+    },
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "Blue Raven Solutions, LLC, Triman Industries, Inc. and Crestwood Technology Group, LLC | (9) | First Lien - Term Loan | SOFR + 600 | 9.7 | 1/16/2032 | $ | 70,875,000 | 69,607 | 69,631 | 6.8"
+    },
+    {
+      "table_index": 30,
+      "row_index": 2,
+      "quoted_text": "First lien debt investments | $ | 1,659,180 | 97.9 | % | $ | 1,702,008 | 98.0 | %"
+    },
+    {
+      "table_index": 34,
+      "row_index": 2,
+      "quoted_text": "United States | $ | 1,563,816 | 92.3 | %"
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's schedule total investments at fair value is 1,694,770 ($000), and the SOI/source rows show ordinary individual position percentages such as Blue Raven at 6.8% of net assets. The high percentages in raw source are disclosed portfolio summary dimensions, including first lien debt investments at 97.9% of fair value and United States geographic risk at 92.3%, not individual position rows. The 0.81 weak metric therefore reflects a concentration rule/scope issue rather than a source data defect in a position value."
+}

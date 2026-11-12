@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_f087bc59747b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Source schedule contains non-USD Par amounts such as CAD 7,831 and GBP 16,616 that require explicit USD principal conversion.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 6,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 7.33 % | C + 4.75 % | 11/01/30 | CAD | 7,831 | cost 5,563 | fair value 5,691",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 38,
+      "quoted_text": "Clearcourse Partnership Acquireco Finance Limited | IT Services | 11.47 % | SN + 7.50 % (Incl. 0.50 % PIK) | 07/25/28 | GBP | 16,616 | cost 20,095 | fair value 21,726",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt Par rows are present in the source schedule, but principal_amount_usd is blank in the flagged extract rows.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 39,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX01 is a within-row missing-conversion check: the source schedule explicitly marks debt Par amounts in non-USD currencies, including CAD and GBP rows, while the review artifact reports blank principal_amount_usd for non-USD debt principal rows. Because those rows require an explicit USD principal conversion before par analytics, the blank field is a grounded extraction gap rather than a false alarm."
+}

@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_146640a2c538",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "issuer_name stored as concatenated dimension and terms text, e.g. '1st Lien/Secured Loans Canada 1261229 BC LTD Instrument 1st Lien Term Loan Industry Healthcare Equipment & Supplies Rate S+6.25% Interest Rate 9.92% Original Acquisition Date 8/28/2025 Maturity Date 10/8/2030'",
+  "anchor_value": "Raw source separates Portfolio Company '1261229 BC LTD' from Instrument, Industry, Rate, Interest Rate, Original Acquisition Date, Maturity Date, Par Amount, Cost, and Fair Value columns.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 13,
+      "quoted_text": "1261229 BC LTD | 1st Lien Term Loan | Healthcare Equipment & Supplies | S+ 6.25 % | 9.92 | 8/28/2025 | 10/8/2030 | 22,443,585 | 22,342,368 | 21,624,933 | 3.48"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name includes wrapper path and separate row terms; the source issuer cell is only 1261229 BC LTD while instrument, industry, rates, dates, cost, and fair value are separate columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse leak. The raw SOI row has a clean Portfolio Company cell and separate columns for instrument, industry, rate, interest rate, dates, par, cost, fair value, and net-asset percentage, but the extracted issuer_name concatenates country/category wrappers plus those separate terms into the issuer field."
+}

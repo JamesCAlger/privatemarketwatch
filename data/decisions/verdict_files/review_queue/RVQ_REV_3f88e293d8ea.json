@@ -1,0 +1,32 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_3f88e293d8ea",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  204.76804244572025,
+    "anchor_value":  205,
+    "rationale":  "A07 fired on pct_sum=204.768% with two outliers \u003e25%, but the raw schedule labels that percentage basis as Fair Value as % of Net Assets. The same classification schedules separately show % of Total Investments at Fair Value totaling 100%. The flagged value is source-backed and reflects leverage/net-assets denominator, so the check is applying the wrong percentage scope rather than exposing a bad extracted value.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  2,
+                                  "table_index":  50,
+                                  "quoted_text":  "Geography | Number of Positions | Cost Basis | Fair Value | % of Total Investments at Fair Value | Fair Value as % of Net Assets"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  17,
+                                  "table_index":  50,
+                                  "quoted_text":  "Total investments | 112 | $ | 1,516,173 | $ | 1,528,317 | 100 | % | 205 | %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  18,
+                                  "table_index":  49,
+                                  "quoted_text":  "Total investments | $ | 112 | $ | 1,516,173 | $ | 1,528,317 | 100 | % | 205 | %"
+                              }
+                          ],
+    "confidence":  0.92
+}

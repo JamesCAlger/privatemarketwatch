@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_cd10aaf38743",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 20.0,
+  "anchor_value": null,
+  "confidence": 0.76,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "Retail & Animal Intermediate, LLC (3) | 07/29/22 | Delayed Draw Priming Term Loan - 20.00 % inc PIK ( 20.00 %, Fixed Coupon, all PIK) | 0.0 | % | 2,816,305 | 11/14/25 | 2,816,305 | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source states a 20.00% fixed coupon, not a floating-rate basis spread; any extracted basis_spread of 20.00 is coupon text mapped into the spread field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row terms issue. The source row for Retail & Animal Intermediate describes the instrument as '20.00 %, Fixed Coupon, all PIK' rather than as a reference rate plus spread. A basis-spread formatting flag on this row is therefore a real extraction defect: the fixed coupon text has been interpreted as a basis spread."
+}

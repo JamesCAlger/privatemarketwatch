@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_c2ec1bc84bf0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "filing_schedule_rows",
+  "observed_value": "identifier maturity dates differ across 13 flagged rows",
+  "anchor_value": "maturity cells in the filing schedule",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 16,
+      "quoted_text": "GovDelivery Holdings, LLC (dba Granicus, Inc.) | Software | 9.17 % | S + 5.50 % (Incl. 2.00 % PIK) | 01/17/31 | 11,948 | 11,862 | 11,888 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 40,
+      "quoted_text": "SI Swan UK Bidco Limited (dba Sapiens International) | Software | 8.42 % | S + 4.75 % | 12/17/32 | 15,104 | 15,031 | 14,991 | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 33,
+      "quoted_text": "Southeast Mechanical, LLC | Diversified Consumer Services | 9.78 % | S + 6.00 % | 07/06/27 | 17,089 | 4,056 | 4,022 | (7) (8) (10) (11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "Project Accelerate Parent, LLC (dba ABC Fitness) | Financial Services | 8.92 % | S + 5.25 % | 02/24/31 | 12,895 | 12,797 | 12,799 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 20,
+      "quoted_text": "Acquia, Inc. | Software | 8.80 % | S + 5.00 % | 10/30/26 | 42,164 | 42,020 | 41,110 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Splash Car Wash, Inc. | Diversified Consumer Services | S + 5.00 % | 03/17/31 | 123 | ( 1 | ) | ( 1 | ) | (7) (8) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Identifier maturity parsing corrupts or mis-associates dates; the filing maturity cells support the structured dates for the flagged positions.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "This is a Class 2 within-row conflict. Targeted raw-source checks show filing maturities of 01/17/31 for Granicus, 12/17/32 for the current Sapiens row, 07/06/27 for Southeast Mechanical, 02/24/31 for Project Accelerate, and 10/30/26 for Acquia, matching the structured/XBRL side rather than the identifier-side values. Splash has multiple instruments, and the cited 03/17/31 source row grounds the structured date for the flagged same-issuer position. The identifier-side values therefore reflect extraction/parsing and row-association defects, not bad filing anchors."
+}

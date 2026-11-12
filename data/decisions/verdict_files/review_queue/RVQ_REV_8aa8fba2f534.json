@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_8aa8fba2f534",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 397985000,
+  "anchor_value": 397985000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 41,
+      "quoted_text": "Total Bank Debt/Senior Secured Loans | $ | 381,816 | $ | 383,948"
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "Total Investments (11) - 144.0% | $ | 403,199 | $ | 397,985"
+    },
+    {
+      "table_index": 10,
+      "row_index": 3,
+      "quoted_text": "AMF Levered II, LLC (2) | Diversified Financial Services | S+ 705 | 1.00% | 12.49% | 12/24/2021 | 8/21/2028 | $12,660 | $12,486 | $12,660"
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value completeness flag, but the raw SOI tables show a valid two-measure layout with both Cost and Fair Value columns. Actual investment rows carry fair value cells, and the current schedule reconciles: bank debt fair value 383,948 plus common equity fair value 14,037 equals total investments fair value 397,985. The flagged low leaf coverage is therefore a rule-scope artifact from counting non-fair-value measure leaves such as cost/other structural cells, not a source data omission."
+}

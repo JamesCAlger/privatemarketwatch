@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_7c481f13364d",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 403,
+  "anchor_value": 403,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 20,
+      "quoted_text": "Total Investments | $ | 5,388,045 | $ | 5,217,369 | 184.0 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 44,
+      "row_index": 16,
+      "quoted_text": "Total Investments | $ | 6,206,603 | $ | 6,207,136 | 173.4 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows two distinct complete investment schedules in the filing: the March 31, 2026 schedule closes at table 21 with fair value 5,217,369, matching the extracted quarter fair value, while the December 31, 2025 comparative schedule closes at table 44 with fair value 6,207,136. The E07 source count of 822 is exactly 403 current-period output rows plus 419 comparative-period rows. Thus the 403 output count is correctly scoped to the report date and the oracle source count improperly includes the comparative schedule."
+}

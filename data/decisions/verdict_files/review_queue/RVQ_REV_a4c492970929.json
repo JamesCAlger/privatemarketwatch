@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_a4c492970929",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "",
+  "anchor_value": "non-USD par amount 2,384 requires explicit USD principal conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 177,
+      "row_index": 21,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan (2)(3)(11) | EURIBOR + 5.750 % | 7.750 | % | 08/14/2029 | 2,384 | 2,545 | 2,816 | 1.62 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 190,
+      "row_index": 0,
+      "quoted_text": "(11) | Investment is Spain domiciled.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 is valid: a non-USD/EURIBOR debt row has source par amount 2,384, but principal_amount_usd is blank in the flagged extract rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 177,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The raw schedule shows a debt investment for SubCalidora 2 S.a r.l. with EURIBOR + 5.750% and par amount 2,384, and the row footnote identifies the investment as Spain domiciled. The FX01 artifact flags missing principal_amount_usd for non-USD source par; because this source row supplies non-USD debt principal terms but the observed USD principal field is blank, the flag reflects an extraction/normalization gap rather than a false alarm."
+}

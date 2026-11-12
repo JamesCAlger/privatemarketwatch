@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_cfe8b061ea07",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 30.6,
+  "anchor_value": 30.6,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 24,
+      "quoted_text": "NewStar Clarendon 2014-1A Class D | (v)(w) | Financial Services | 30.6 % | 1/25/27 | $ | 8.3 | 1.6 | 2.7",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell rate check. The flagged extracted value is 30.6, and the raw filing schedule shows NewStar Clarendon 2014-1A Class D with Rate (b) equal to 30.6 %. The value is source-supported; C113 is firing on a valid high-rate/outlier cell rather than a data extraction error."
+}

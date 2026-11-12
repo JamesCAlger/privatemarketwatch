@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_9bf6449f2189",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 595736689.0,
+  "anchor_value": 327832330.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 30,
+      "quoted_text": "Total Debt & Equity Investments (8) | 128.1 | % | 432,887,516 | 327,832,330",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 2,
+      "quoted_text": "ASC Acquisition Holdings LLC Term Loan - 9.50 % | $ | 686,276 | $ | - | $ | - | $ | ( 27,362,675 | ) | $ | 26,676,399 | $ | - | $ | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Animal Supply Company, LLC First Out Term Loan | 2,703,724 | 6,022 | 30,767 | ( 2,715,155 | ) | ( 25,358 | ) | - | 35,805",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 30,
+      "quoted_text": "Total Debt & Equity Investments (8) | 129.7 | % | 463,548,533 | 331,582,372",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The June 30, 2025 current debt and equity schedule reconciles to 327,832,330, but extracted fair value is 595,736,689, indicating non-current schedule/disposition rows were included.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 5,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "ASC Acquisition appears only in a rollforward/disposition table with zero June 30 ending fair value, not as a current June holding.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 6,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation failure. The current filing schedule total for debt and equity investments is 327,832,330, matching the companyfacts anchor, while the extracted position sum is 595,736,689. Raw source rows show additional non-current/disposition and comparative schedule rows, including ASC Acquisition in a rollforward row with no June 30 fair value and Animal Supply rows outside the current June debt/equity schedule. The check is therefore catching a real extraction leak rather than a bad anchor."
+}

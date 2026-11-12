@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_c7fcabfd72ce",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -3000.0,
+  "anchor_value": -3000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 12,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.75 % | N/A(6) | 08/2031 | - | ( 3 ) | - | ( 3 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 13,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.75 % | N/A(6) | 08/2031 | - | ( 3 ) | 0.1 | ( 3 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 29,
+      "quoted_text": "Amberfield Acquisition Co.(5) | One stop | SF + | 5.00 % | N/A(6) | 05/2030 | - | ( 35 ) | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost values, but the raw schedule of investments itself reports parenthesized amounts in the Amortized Cost column for the flagged rows. For example, AI Titan Parent rows 12 and 13 show amortized cost (3), matching extracted cost -3000.0, and Amberfield Acquisition Co. row 29 shows amortized cost (35), matching extracted cost -35000.0. The data extraction preserved the source sign and scale; the warning is an overbroad negative-cost monitor rather than a source data error."
+}

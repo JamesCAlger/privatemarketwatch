@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_19fdc39e48a6",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 33.7510929758088,
+  "anchor_value": 23.870591664237833,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 13,
+      "quoted_text": "Total distributions recorded | ( 16.38 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 15,
+      "quoted_text": "NAV, end of period | $ | 68.62",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Stored distribution_rate is 33.7511%, but source financial highlights imply 16.38 distributions per unit divided by 68.62 ending NAV, or 23.8706%.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 69,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "F33 checks whether distribution_rate is within 0% to 30%. The raw filing's financial highlights show 2025 total distributions recorded of 16.38 per unit and ending NAV of 68.62, implying a source-derived distribution rate of 23.8706%, below the threshold. The flagged stored value of 33.7511% is therefore not supported by the source and appears overstated."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_cccc0987e623",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 9,
+  "anchor_value": 9,
+  "confidence": 0.58,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw filing schedules were checked through the evidence CLI. The nine flagged mappings cannot be independently confirmed as nonaccrual because the decisive numbered-footnote prose is not exposed: targeted searches for accrual/non-accrual returned no footnote statement, while schedule rows show only markers such as (19) and (20). The schedules also contain current and comparative DCA rows with different rates (12.08% versus 12.06%), so the mapped count is not a reliable independent anchor. The source is available, but the accessible raw source does not decide whether the flag represents a data error or a valid condition."
+}

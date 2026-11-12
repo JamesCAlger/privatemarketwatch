@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_2489f3388f36",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Extracted reference-rate/spread strings include malformed values: Artisan Bidco shown as 'SOFR 7.00%' and Elements Finco shown as 'S+ 5.25%'.",
+  "anchor_value": "Raw source rows show 'SOFR + 7.00 %' for Artisan Bidco and 'S + 5.25 %' for Elements Finco.",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 6,
+      "quoted_text": "Artisan Bidco, Inc. (3) | First-lien loan ($ 114,848 par, due 11/2029 ) | 11/7/2023 | SOFR + 7.00 % | 11.39 % | 112,663 | 114,848 | 2.8 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 13,
+      "quoted_text": "Elements Finco Limited (3)(4) continuation row | First-lien loan (GBP 115,946 par, due 4/2031 ) | 4/29/2024 | S + 5.25 % | 9.95 % (incl. 2.25 % PIK) | 144,105 | 145,210 (GBP 115,946 ) | 3.6 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Artisan Bidco's reference-rate/spread lost the plus sign in extraction; source is SOFR + 7.00 %, not SOFR 7.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Elements Finco's GBP row collapsed spacing in the reference-rate/spread; source is S + 5.25 %, not S+ 5.25%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level formatting defect. The bundle's holdings sample exposes two malformed extracted reference-rate/spread values, matching the weak rule's n_violate=2. The raw SOI schedule at table 35 rows 6 and 13 shows the corresponding source cells have standard basis-plus-spread formatting, so the flag is a real extraction/normalization error rather than a source ambiguity or rule false alarm."
+}

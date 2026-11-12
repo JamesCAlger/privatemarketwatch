@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_8f8968d3aa3e",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7.5,
+  "anchor_value": 7.5,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 13,
+      "quoted_text": "Cinelease, LLC | 08/07/25 | ABL Term Loan - 11.17 % (SOFR + 7.50 %, 2.50 % Floor)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw schedule explicitly states an all-in coupon of 11.17% and a separate contractual spread of SOFR + 7.50%. Agent A extracted 7.5%, exactly matching the source spread. The 4.9912 percentage-point comparison residual therefore reflects an invalid comparison of the spread with an all-in XBRL rate, rather than a data error in the Agent A value."
+}

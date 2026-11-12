@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_REV_cb2bc60e78d4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8,
+  "anchor_value": 8,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC (2)(5)(8) | Super Senior Revolver"
+    },
+    {
+      "table_index": 4,
+      "row_index": 5,
+      "quoted_text": "Navistar Defense, LLC (2)(5)(8) | Term Loan"
+    },
+    {
+      "table_index": 4,
+      "row_index": 17,
+      "quoted_text": "Twin Star International, Inc. (5)(8) | Term Loan"
+    },
+    {
+      "table_index": 5,
+      "row_index": 25,
+      "quoted_text": "The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) (2)(5)(8) | First Out Term Loan"
+    },
+    {
+      "table_index": 5,
+      "row_index": 26,
+      "quoted_text": "The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) (2)(5)(8) | Last Out Term Loan"
+    },
+    {
+      "table_index": 5,
+      "row_index": 27,
+      "quoted_text": "The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) (2)(5)(8) | 1st Amendment First Out Term Loan"
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | Revolver"
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | Term Loan"
+    }
+  ],
+  "rationale": "The March 31, 2026 filing schedule contains exactly eight debt positions carrying footnote marker (8): two Navistar Defense rows, one Twin Star row, three Legacy Companies rows, and two Encompass Digital Media rows. This exactly matches the extracted nonaccrual position count of 8, so the data are source-supported and the warning is a false alarm."
+}

@@ -1,0 +1,60 @@
+{
+  "review_id": "RVQ_REV_7488a938e485",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3589,
+  "anchor_value": 3589,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 52,
+      "quoted_text": "Center for Autism and Related Disorders, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 10.00 % | (Q) | 15.34 % (ALL PIK) | 10/11/23 | 580 | 562 | 435 | (6)(9)(10)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 53,
+      "quoted_text": "Center for Autism and Related Disorders, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 10.00 % | (Q) | 15.33 % (ALL PIK) | 10/11/23 | 280 | 271 | 209 | (6)(9)(10)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 54,
+      "quoted_text": "Center for Autism and Related Disorders, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 10.00 % | (Q) | 15.53 % (ALL PIK) | 10/11/23 | 436 | 423 | 327 | (6)(9)(10)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 55,
+      "quoted_text": "Center for Autism and Related Disorders, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 10.00 % | (Q) | 15.51 % (ALL PIK) | 10/11/23 | 436 | 423 | 327 | (6)(9)(10)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 56,
+      "quoted_text": "Center for Autism and Related Disorders, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 10.00 % | (Q) | 15.50 % (ALL PIK) | 10/11/23 | 420 | 408 | 315 | (6)(9)(10)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 59,
+      "quoted_text": "Center for Autism and Related Disorders, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 10.00 % | (Q) | 15.50 % (ALL PIK) | 10/11/23 | 1,573 | 1,502 | 1,180 | (6)(9)(10)"
+    },
+    {
+      "table_index": 56,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual | 3,589 | 0.5 | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Six Center for Autism delayed draw term loan rows carry the non-accrual footnote and their amortized costs sum to the filing's Non-Accrual amount of 3,589.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 56,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The source SOI lists six Center for Autism and Related Disorders delayed draw term loan rows maturing 10/11/23 with footnote (10). Their amortized costs are 562, 271, 423, 423, 408, and 1,502, which sum to 3,589. The filing's investment-status table separately reports Non-Accrual amortized cost of 3,589 as of June 30, 2023, so the nonaccrual flag is source-confirmed and localized to these six positions."
+}

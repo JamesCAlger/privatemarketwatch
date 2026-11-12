@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_fb441ada0fcf",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated schedule columns shown with dollar markers",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.83 % (SOFR + 6.50 %, 1.75 % Floor) | $ 29,787,749 | $ 29,023,229 | $ 28,774,966"
+    },
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "Harvey Gulf Holdings, LLC | Term Loan B - 10.61 % (SOFR + 6.25 %, 2.00 % Floor) | $ 41,115,842 | $ 40,815,030 | $ 41,033,611"
+    },
+    {
+      "table_index": 26,
+      "row_index": 4,
+      "quoted_text": "Corcentric, Inc. | Term Loan - 11.66 % (SOFR + 7.00 %, 2.00 % Floor) | $ 39,276,649 | $ 38,930,659 | $ 39,669,415"
+    },
+    {
+      "table_index": 27,
+      "row_index": 24,
+      "quoted_text": "Total Investments ( 168.5 %) | $ | 1,040,122,806 | $ | 1,029,942,922"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency as non-USD because the stored unit value is U_USD. The raw schedule-of-investments source shows the affected amortized-cost and fair-value columns are dollar-denominated, with dollar markers on the relevant schedule pages and total row. U_USD is therefore a USD unit label rather than evidence of foreign currency; the flagged value is source-consistent and the rule/string normalization is overbroad."
+}

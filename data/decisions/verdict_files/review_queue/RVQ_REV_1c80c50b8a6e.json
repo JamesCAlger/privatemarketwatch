@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_1c80c50b8a6e",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_positive",
+  "localized": true,
+  "anchor_used": "source_cell_currency",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "190 Octane Financing, LLC - Delayed Draw Term Loan | Amortized Cost | $ | 4,819 | Fair Value | $ | 4,525"
+    }
+  ],
+  "rationale": "FX03 says the BDC cost unit is not USD because the extracted cost_currency value is U_USD. The raw schedule row shows the Amortized Cost and Fair Value columns are dollar-denominated; U_USD is therefore a USD unit token/normalization variant, not a non-USD source currency. The check is firing on the unit token rather than on a real foreign-currency cost value."
+}

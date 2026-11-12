@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_66eeb8c7f2ab",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 428.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | (3)(4)(5)(7) | 3M SOFR + 5.00 % / 1.00 % | 8.67 % | 5/3/2029 | 3,838 | 3,823 | 3,826 | 0.21 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 24,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | (3)(4)(5)(7)(14) | 3M SOFR + 5.00 % / 1.00 % | 8.67 % | 5/3/2029 | 3,366 | 3,346 | 3,356 | 0.18 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | (3)(4)(5)(7)(15) | 3M SOFR + 5.00 % / 1.00 % | 8.67 % | 5/3/2029 | 4,057 | 4,024 | 4,044 | 0.22 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The position key collapses separate same-name source rows that differ by footnotes and principal/cost/fair value, producing duplicate position keys instead of preserving row-level identity.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "B02 is an aggregate duplicate-position-key flag with no single row supplied, so I checked schedule structure rather than scanning for one culprit. The source schedule itself contains separate rows for the same Minds Buyer instrument with identical issuer, instrument, rate, and maturity but distinct footnote sets and distinct principal/cost/fair-value amounts. Those are legitimate separate source rows, so a normalized position key that collapses them is a real extraction/keying defect. The schedule total anchor was available and confirms this is within the investment schedule context, but the verdict is grounded primarily by the cited source rows."
+}

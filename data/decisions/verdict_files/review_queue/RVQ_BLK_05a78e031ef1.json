@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_05a78e031ef1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 407509401,
+  "anchor_value": 407509401,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 59,
+      "quoted_text": "Total Portfolio Investments | (bd) | $ | 420,392,905 | $ | 407,509,401"
+    },
+    {
+      "table_index": 51,
+      "row_index": 7,
+      "quoted_text": "Total | $ | - | $ | 77,841,792 | $ | 329,667,609 | $ | 407,509,401"
+    }
+  ],
+  "rationale": "E07 reports a broad source/output count mismatch (source=1802 vs output=442), but raw source anchors for the target period reconcile to the extracted fund-quarter fair value. The source schedule total for December 31, 2025 is 407,509,401, matching the bundle's 407.509401 million, and the fair-value hierarchy total independently ties to the same amount. The source also contains broader tabular material, including a separate comparative portfolio schedule ending at 410,031,275 and unfunded-commitment tables, so the count comparison is over-scoped rather than evidence of missing or incorrect current-period holdings."
+}

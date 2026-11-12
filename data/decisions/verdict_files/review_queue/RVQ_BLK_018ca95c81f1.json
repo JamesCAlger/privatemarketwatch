@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_018ca95c81f1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 2777000.0,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "X06 flags principal_amount value 2777000.0 for internal row_key 487522, but the bundle does not provide the issuer or full extracted row for that row_key. Raw source was readable through the evidence CLI: targeted searches for row_key 487522 and for the flagged numeric value returned no source match, while the visible AAH Topco source row in table 28 rows 15-17 shows principal/fair-value/cost values around 22,885 / 22,769 / 22,885 and cannot be safely assumed to be the flagged row. Without a source row tying the internal row_key to a raw SOI coordinate, the defect cannot be grounded."
+}

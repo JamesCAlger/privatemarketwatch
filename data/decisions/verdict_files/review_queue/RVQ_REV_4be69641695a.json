@@ -1,0 +1,32 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "A07 observed pct_sum is 0.0, but the source industry classification schedule for June 30, 2024 has percentages totaling 100.0 percent.",
+                         "citation":  {
+                                          "row_index":  23,
+                                          "table_index":  13,
+                                          "quoted_text":  "Total Investments | 100.0 | %"
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_4be69641695a",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  100,
+    "rationale":  "Class 3 aggregate check. The bundle flag reports pct_sum=0.0 for A07, while the raw filing table 13 is the June 30, 2024 industry classification schedule and its source total row states Total Investments | 100.0 | %. This supports a schedule_total anchor disagreement and indicates the extraction missed or failed to aggregate the percentage column.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  23,
+                                  "table_index":  13,
+                                  "quoted_text":  "Total Investments | 100.0 | %"
+                              }
+                          ],
+    "confidence":  0.97
+}

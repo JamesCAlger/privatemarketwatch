@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_494c390c3d2b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 4083621000,
+  "anchor_value": 4083621000,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw SOI was readable and its schedule anchors are internally consistent: total investments and money market funds are shown as 4,083,621 amortized cost and 4,096,222 fair value in table 23 row 15, while table 21 row 12 shows total debt investments of 4,056,601 amortized cost and 4,037,865 fair value. Representative sampled holdings tie to source rows after the expected thousands-to-dollars scaling, including AHP Health Partners in table 13 row 42 with amortized cost 7,144 and fair value 7,194, and AI Titan Parent in table 17 rows 13-15 with amortized costs 9,214, (9), and (11). However, the bundle exposes only the aggregate fmt_cost weak warning (136 of 572) and not the violating row coordinates or extracted position-sum anchor, so the raw source checked here does not decide whether the aggregate weak check reflects a real data error or an overbroad rule."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_38a3764d97e9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_header",
+  "observed_value": "3 maturity_not_past violations",
+  "anchor_value": "Source table 21 header is Initial Acquisition Date (17), not Maturity",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 13,
+      "quoted_text": "Kawa Solar Holdings Limited | Construction & Engineering | 08/17/16 | 1,399,556 | $ | - | $ | - | (7) (8) (11) (12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 16,
+      "quoted_text": "Kawa Solar Holdings Limited | Construction & Engineering | 8.00 % PIK | 10/25/16 | 92,279 | $ | 778 | $ | - | (7) (8) (11) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 21,
+      "quoted_text": "Conergy Asia & ME Pte. LTD. | Construction & Engineering | 01/11/21 | 3,126,780 | $ | 5,300 | $ | - | (7) (8) (11) (12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity security acquisition dates in table 21 appear to have been treated as maturity dates, producing past-date maturity violations.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The report date is 2024-09-30. The source schedule rows cited have dates before that date, but table 21 labels the date column as Initial Acquisition Date (17), while the debt schedules use a separate Maturity column. Treating these equity acquisition dates as maturity dates is therefore a real extraction/column-mapping error, not a valid past maturity in the source."
+}

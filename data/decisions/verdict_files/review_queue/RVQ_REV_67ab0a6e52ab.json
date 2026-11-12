@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_67ab0a6e52ab",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PRIVATE_EQUITY with interest_rate 8.4",
+  "anchor_value": "First Lien Debt row with SOFR + 3.00%, interest rate 8.40%, maturity 9/20/2030",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 171,
+      "row_index": 4,
+      "quoted_text": "First Lien Debt (continued)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 171,
+      "row_index": 35,
+      "quoted_text": "GTCR Investors LP - A-1 Units | (9) | SOFR + | 3.00 % | 8.40 % | 9/20/2030 | 3,335 | 3,319 | 3,336 | 2.35",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "GTCR Investors LP - A-1 Units is stored as private equity, but the raw schedule places it under First Lien Debt with SOFR spread, stated interest rate, maturity, and par amount.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 171,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "The preferred-equity rows with stated rates are source-supported equity rows, so X01 should not treat every private-equity interest_rate as a data defect.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 39,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review. Most flagged rates are legitimate source-stated rates on preferred equity under Equity headings, for example Guidehouse Preferred Equity at 11.50% and Lobos Preferred Shares at 10.50%. However, at least one flagged row is a real classification error: GTCR Investors LP - A-1 Units is under the filing's First Lien Debt section and carries SOFR + 3.00%, 8.40% interest, maturity 9/20/2030, and par amount, so storing it as PRIVATE_EQUITY caused a real X01 issue."
+}

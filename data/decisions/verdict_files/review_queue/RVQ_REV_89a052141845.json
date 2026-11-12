@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_89a052141845",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1493.591,
+  "anchor_value": 1493.627,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 30,
+      "quoted_text": "Grand Total | $ | 1,491,804 | $ | 34 | $ | 1,789 | $ | 1,493,627",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 38,
+      "quoted_text": "Preferred Equity - Cumulative Preferred | N/A | 12/10/2124 | 34,000 | $ | 34 | $ | 34",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted fund-quarter fair value is 0.036 million below the SOI grand total before cash equivalents; the SOI includes a 0.034 million preferred-equity position in the same residual neighborhood.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 25,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "B01 failed because only 132 of 139 leaf rows carried fair_value. The raw SOI is readable and gives a schedule fair-value grand total before cash equivalents of 1,493.627 million, while the flagged extract reports fund_quarter_fv_m of 1,493.591 million. That 0.036 million shortfall means the check is not merely a threshold artifact. The SOI structure also shows a 0.034 million preferred-equity row and preferred-equity contribution to the grand total, indicating a small investment fair-value extraction gap rather than source ambiguity."
+}

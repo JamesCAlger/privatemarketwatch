@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_eb611b218db5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 15,
+      "quoted_text": "North Haven Goldfinch Topco, LLC | ... | Cost 2,315 | Fair Value -- | 0.00%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 9,
+      "quoted_text": "Applied Technical Services, LLC | Revolver | Par/Principal Amount 22 | Fair Value --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 31,
+      "quoted_text": "Denali Midco 2, LLC | Delayed Draw | Par/Principal Amount 876 | Fair Value --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 32,
+      "quoted_text": "Diligent Corporation | Revolver | Par/Principal Amount 22 | Fair Value --",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged zero fair_value rows. The raw source schedule uses dash entries in the Fair Value column for zero-value positions/commitments; these normalize to 0.0 and are not evidence of extraction or value error. The rule is correctly surfacing review-only zero values, but the source supports the stored zero values."
+}

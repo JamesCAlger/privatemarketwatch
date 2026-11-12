@@ -1,0 +1,52 @@
+{
+    "review_id":  "RVQ_REV_b5ec0b510a4d",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  112159901,
+    "anchor_value":  163929983,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  6,
+                                  "row_index":  16,
+                                  "quoted_text":  "First American Government Obligation Fund, Yield 5.26 % | 10.6 % | 12,430,504 | 12,430,504 | 12,430,504",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  6,
+                                  "row_index":  19,
+                                  "quoted_text":  "U.S. Treasury Bill, Yield 5.47 % | 33.5 % | 40,000,000 | 39,339,578 | 39,339,578",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  6,
+                                  "row_index":  21,
+                                  "quoted_text":  "Total Investments ( 139.7 %) | $ | 163,170,628 | $ | 163,929,983",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Cash equivalent position with fair value 12,430,504 is present in the BDC schedule but absent from the extracted GAV sum.",
+                         "fix_class":  "missing_position_add",
+                         "citation":  {
+                                          "table_index":  6,
+                                          "row_index":  16
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Short-term Treasury Bill position with fair value 39,339,578 is present in the BDC schedule but absent from the extracted GAV sum.",
+                         "fix_class":  "missing_position_add",
+                         "citation":  {
+                                          "table_index":  6,
+                                          "row_index":  19
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate reconciliation: the extracted BDC debt fair value is 112,159,901, which matches only Total Debt Investments, while the raw schedule total investments are 163,929,983. The residual is localized to source rows for cash equivalents (12,430,504) and short-term investments (39,339,578), which bridge the extracted debt total to the schedule total. The balance sheet separately supports total assets of 164,940 thousand, so the 0.68 ratio reflects missing scheduled investment rows rather than a bad companyfacts anchor."
+}

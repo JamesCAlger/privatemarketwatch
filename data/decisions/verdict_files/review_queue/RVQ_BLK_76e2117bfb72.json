@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_76e2117bfb72",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 948669000,
+  "anchor_value": 948669000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 5,
+      "quoted_text": "Interest from investments | $ | 833,132",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "Paid-in-kind interest income | 70,670",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 7,
+      "quoted_text": "Dividend income | 6,307",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 8,
+      "quoted_text": "Other income | 38,560",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 9,
+      "quoted_text": "Total Investment Income | 948,669",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate income identity checked against the raw statement of operations. The 2025 source rows reconcile in thousands: 833,132 interest from investments + 70,670 paid-in-kind interest income + 6,307 dividend income + 38,560 other income = 948,669 total investment income. The rounded MD&A income table repeats the same structure (833.1 + 70.7 + 6.3 + 38.6 = 948.7). The flagged residual is therefore not a source data error."
+}

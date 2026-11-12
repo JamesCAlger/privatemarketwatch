@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_476a8fdf5237",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1687.339,
+  "anchor_value": 1687.345,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 18,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | 1,707,288 | 1,687,345 | 212.08",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 81,
+      "row_index": 18,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | 1,610,881 | 1,609,502 | 219.56",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw current-period schedule total is 1,687.345 million and the extracted position sum is 1,687.339 million, a difference of only 0.006 million (about 0.00036%). This independently reconciles the output to the filing and contradicts the E07 count-based 64.7% omission signal. The raw filing also contains a distinct prior-period schedule total at table 81, consistent with the oracle source count leaking comparative and repeated schedule rows. The flag is therefore a check false alarm, not a holdings data error."
+}

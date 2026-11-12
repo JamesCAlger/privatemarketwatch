@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_b4ad4bf71811",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1534.345,
+  "anchor_value": 1534.345,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 161.4 % | $ | 1,596,478 | $ | 1,534,345",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) | $ | 1,534,345 | $ | 2,087,081",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 190.0 % | $ | 2,124,410 | $ | 2,087,081",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07 source row count appears to include adjacent comparative-period schedule rows even though the 2025 output fair value ties the 2025 schedule total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 46,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "The Class 3 anchors decide the flag. The filing's 2025 schedule total investments fair value is 1,534,345 thousand, and the balance sheet repeats the same 2025 investment fair value; this equals the bundle output aggregate of 1,534.345 million. The flagged E07 count mismatch, source=446 versus output=171, therefore does not indicate missing current-period fair value. The source also contains a separate comparative schedule total of 2,087,081 thousand for 2024, supporting a comparative-period count/scope leak in the check rather than a data defect."
+}

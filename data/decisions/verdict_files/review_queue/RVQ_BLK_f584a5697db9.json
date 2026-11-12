@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_f584a5697db9",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 7323481000.0,
+  "anchor_value": 7244282000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 31,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 5,
+      "quoted_text": "Non-controlled, non-affiliated investments (amortized cost of $ 7,079,994 and $ 3,037,826 , respectively) | $ | 7,244,282 | $ | 3,099,151",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The filing's Schedule of Investments total and balance-sheet investment line both show fair value of 7,244,282 thousand, matching the companyfacts anchor of 7,244,282,000. The flagged extracted position sum is 7,323,481,000, an overshoot of 79,199,000. Targeted residual search did not identify an exact source row tying to 79,199 thousand, so the defect is real at the aggregate anchor level but not localized to a specific row."
+}

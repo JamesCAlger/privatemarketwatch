@@ -1,0 +1,98 @@
+{
+  "review_id": "RVQ_BLK_1ce09e264cce",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_soi_row",
+  "observed_value": "generated identifiers contain maturity dates that differ from the raw SOI maturity cells for 19 flagged twin rows",
+  "anchor_value": "raw SOI rows show the structured maturity dates such as IQN 05/02/2028, Atlas 12/10/2029 and 12/09/2028, FLS 12/17/2027, HSI 06/28/2030, LegitScript 06/24/2028, LogRhythm 07/02/2029, Nasuni 09/10/2030, Netwrix 06/11/2029, Riskonnect 12/07/2028, Saturn 11/10/2028",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 19,
+      "quoted_text": "IQN Holding Corp. | (5) (7) (17) | First Lien Debt | S + | 5.75 % (incl. 3.13 % PIK) | 9.42 % | 05/02/2028 | 417 | 415 | 417 | 0.04"
+    },
+    {
+      "table_index": 33,
+      "row_index": 29,
+      "quoted_text": "Atlas US Finco, Inc. | (5) (6) (9) (14) | First Lien Debt | S + | 4.75 % | 8.61 % | 12/10/2029 | 2,972 | 2,959 | 2,972 | 0.26"
+    },
+    {
+      "table_index": 33,
+      "row_index": 30,
+      "quoted_text": "Atlas US Finco, Inc. | (5) (6) (14) (17) | First Lien Debt | S + | 4.75 % | 8.61 % | 12/09/2028 | - | ( 10 | ) | - | -"
+    },
+    {
+      "table_index": 34,
+      "row_index": 3,
+      "quoted_text": "FLS Holding, Inc. | (5) (6) (14) (17) | First Lien Debt | S + | 5.25 % | 9.07 % | 12/17/2027 | 1,898 | 1,886 | 1,614 | 0.14"
+    },
+    {
+      "table_index": 34,
+      "row_index": 7,
+      "quoted_text": "HSI Halo Acquisition, Inc. | (5) (7) (17) | First Lien Debt | S + | 5.00 % | 8.84 % | 06/28/2030 | - | ( 13 | ) | ( 7 | ) | -"
+    },
+    {
+      "table_index": 44,
+      "row_index": 18,
+      "quoted_text": "LegitScript, LLC | (5) (7) (17) | First Lien Debt | S + | 5.75 % | 9.47 % | 06/24/2028 | 1,078 | 1,053 | 1,078 | 0.10"
+    },
+    {
+      "table_index": 44,
+      "row_index": 19,
+      "quoted_text": "LogRhythm, Inc. | (5) (6) (11) | First Lien Debt | S + | 7.50 % | 11.34 % | 07/02/2029 | 2,727 | 2,665 | 2,618 | 0.23"
+    },
+    {
+      "table_index": 44,
+      "row_index": 23,
+      "quoted_text": "Nasuni Corporation | (5) (7) (9) | First Lien Debt | S + | 5.00 % | 8.67 % | 09/10/2030 | 8,276 | 8,173 | 8,276 | 0.74"
+    },
+    {
+      "table_index": 44,
+      "row_index": 25,
+      "quoted_text": "Netwrix Corporation And Concept Searching, Inc. | (5) (7) (9) | First Lien Debt | S + | 4.50 % | 8.32 % | 06/11/2029 | 5,010 | 4,983 | 4,984 | 0.44"
+    },
+    {
+      "table_index": 44,
+      "row_index": 40,
+      "quoted_text": "Riskonnect Parent, LLC | (5) (7) (9) | First Lien Debt | S + | 4.75 % | 8.62 % | 12/07/2028 | 6,172 | 6,095 | 6,172 | 0.55"
+    },
+    {
+      "table_index": 45,
+      "row_index": 5,
+      "quoted_text": "Saturn Borrower, Inc. | (5) (6) (9) | First Lien Debt | S + | 6.00 % | 9.67 % | 11/10/2028 | 3,249 | 3,211 | 3,223 | 0.29"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Identifier maturity text for IQN Holding Corp. Two says 05/02/2029, but the raw SOI twin row maturity is 05/02/2028.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Identifier maturity text for Atlas US Finco, Inc. One says 12/09/2029, but the raw SOI twin row maturity is 12/10/2029.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 33,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Identifier maturity text for Saturn Borrower, Inc. says 11/10/2018, but the raw SOI rows show 11/10/2028.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw SOI rows include explicit maturity date cells and repeatedly match the structured XBRL residual dates, while the generated identifier strings in the flag carry different maturity dates. Examples include IQN row 42:19 with 05/02/2028 versus identifier 05/02/2029, Atlas row 33:29 with 12/10/2029 versus identifier 12/09/2029, and Saturn row 45:5 with 11/10/2028 versus identifier 11/10/2018. The defect is therefore a real identifier/extraction mismatch, not a false alarm in the maturity-vs-XBRL check."
+}

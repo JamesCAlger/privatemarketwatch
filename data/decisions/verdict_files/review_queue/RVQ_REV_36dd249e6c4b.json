@@ -1,0 +1,19 @@
+{
+    "review_id":  "RVQ_REV_36dd249e6c4b",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  6208316,
+    "anchor_value":  6208316,
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  8,
+                                  "row_index":  10,
+                                  "quoted_text":  "HydroSource Logistics, LLC (4)(5) | 04/05/24 | Warrant, expires 4/4/34 | 2.9 | % | 45 | 56,923 | 6,208,316"
+                              }
+                          ],
+    "rationale":  "Class 2 row check: the raw schedule row for HydroSource Logistics, LLC warrant shows shares 45, amortized cost 56,923, and fair value 6,208,316. The extracted values match the source, so the fair-value-over-10x-cost condition is an economic warrant outcome rather than a data error."
+}

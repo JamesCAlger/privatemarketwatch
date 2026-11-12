@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_28dbe462b66e",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Two PRIVATE_EQUITY non-preferred rows carry interest_rate values 9.25 and 7.25",
+  "anchor_value": "Raw SOI shows both rows are Growth Capital Loan debt rows; 9.25 and 7.25 are EOT payment percentages, not the stated interest rate",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 35,
+      "quoted_text": "Habyt GmbH (f/k/a Common Living Inc.) (1)(7) | Growth Capital Loan (Prime + 6.50 % interest rate, 9.75 % floor, 9.25 % EOT payment) | 4/30/2021 | 2,500 | 2,668 | 690 | 9/30/2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 36,
+      "quoted_text": "Habyt GmbH (f/k/a Common Living Inc.) (1)(7) | Growth Capital Loan (Prime + 6.50 % interest rate, 9.75 % floor, 7.25 % EOT payment) | 3/18/2022 | 4,742 | 4,967 | 1,310 | 9/30/2025",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The row with normalized interest_rate 9.25 is a Growth Capital Loan debt position, not private equity.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 37,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The stored interest_rate 9.25 is the EOT payment term; the source states Prime + 6.50% interest rate with a 9.75% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 37,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The row with normalized interest_rate 7.25 is a Growth Capital Loan debt position, not private equity.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 37,
+        "row_index": 36
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The stored interest_rate 7.25 is the EOT payment term; the source states Prime + 6.50% interest rate with a 9.75% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 37,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review: the flagged values are not valid interest rates on private equity rows. The raw schedule classifies both localized Habyt GmbH rows as Growth Capital Loan investments, and the exact 9.25 and 7.25 values appear inside the type-of-investment terms as EOT payment percentages rather than the stated interest-rate leg. Therefore the flag reflects real data defects: debt rows were treated as PRIVATE_EQUITY and EOT payment terms were stored as interest_rate."
+}

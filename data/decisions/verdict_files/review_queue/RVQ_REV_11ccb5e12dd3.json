@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_11ccb5e12dd3",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 13,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 20,336 | 20,336 | 18,506",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 14,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 9,995 | 9,994 | 9,095",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 15,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 8,455 | 8,455 | 7,694",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 16,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 5,486 | 5,486 | 4,992",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 17,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 3,246 | 3,246 | 2,954",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The weak flag reports five maturity_not_past violations for the 2025-12-31 filing. Raw source table 36, rows 13-17 contains exactly five current-year One GI LLC debt rows with maturity 12/22/25, before the report date, and positive fair values. The extracted past maturity dates therefore match the filing rather than showing an extraction or normalization error; the rule is over-asserting a data defect for source-reported holdings."
+}

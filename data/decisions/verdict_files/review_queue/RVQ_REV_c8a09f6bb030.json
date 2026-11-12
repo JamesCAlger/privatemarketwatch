@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_c8a09f6bb030",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The html_carry flag is aggregate-level, but the evidence CLI returned no_accession_resolved for overview, tables, and totals, so raw source was not available to adjudicate the carry-rate warning."
+}

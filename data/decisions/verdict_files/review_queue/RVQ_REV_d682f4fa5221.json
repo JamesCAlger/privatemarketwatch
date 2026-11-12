@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_d682f4fa5221",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "0.0 fair_value on three flagged artifact rows",
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 16,
+      "quoted_text": "North Haven Goldfinch Topco, LLC | ^ | (7) | Containers, Packaging & Glass | 6/18/2018 | 2,315 | 2,315 | - | 0.00",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags three artifact rows where fair_value is 0.0. The raw filing confirms at least one such zero is source-faithful: North Haven Goldfinch Topco, LLC has a dash in the Fair Value column and 0.00 percent of net assets. However, the bundle identifies the other two flagged rows only by row_key (228914 and 228915), and targeted raw-source searches for those row keys return no source coordinates. Because the full three-row flag cannot be tied back to exact source rows, the source checked does not decide the item."
+}

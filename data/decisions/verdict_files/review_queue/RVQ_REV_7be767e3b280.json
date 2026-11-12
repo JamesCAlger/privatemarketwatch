@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_7be767e3b280",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_CAD/U_EUR in cost_currency for 7 rows",
+  "anchor_value": "USD-denominated Cost/Fair Value schedule totals",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 13,
+      "quoted_text": "Jupiter Refuel Canada Buyer Inc. (dba 4Refuel) | Oil, Gas & Consumable Fuels | 7.93 % | C + 5.25 % | 06/30/31 | CAD | 45,804 | 33,132 | 33,132",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 15,
+      "quoted_text": "Jupiter Refuel Canada Buyer Inc. (dba 4Refuel) | Oil, Gas & Consumable Fuels | 7.93 % | C + 5.25 % | 06/30/31 | CAD | 6,638 | 739 | 739",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 24,
+      "quoted_text": "Total Canada | $ | 104,186 | $ | 104,572",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Clearcourse Partnership Acquireco Finance Limited | IT Services | 13.21 % | SN + 8.75 % (Incl. 9.85 % PIK) | 07/25/28 | GBP | 12,947 | 11,838 | 12,545",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 30,
+      "quoted_text": "Total United Kingdom | $ | 31,261 | $ | 34,036",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "The non-USD currency marker belongs to par/notional currency on foreign-country debt rows, while Cost and Fair Value are reported in USD and roll to dollar-denominated country totals.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 13
+      }
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "The UK Clearcourse row carries GBP in the par currency slot, but its Cost and Fair Value roll to the USD-denominated Total United Kingdom line.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. The raw schedule uses CAD/GBP as the par currency for foreign debt rows, not as the valuation currency. The Cost and Fair Value columns for those rows aggregate to country totals explicitly marked with dollar signs, including Total Canada and Total United Kingdom. Therefore storing U_CAD or U_EUR in cost_currency misattributes the par/notional currency to the USD-denominated cost field."
+}

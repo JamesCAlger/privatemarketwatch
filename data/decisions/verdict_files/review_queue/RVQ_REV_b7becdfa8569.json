@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_b7becdfa8569",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": [17.0, 18.0],
+  "anchor_value": [17.0, 18.0],
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 7,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured delayed draw term loan | 17.00 % | 17.00 | % | 2/26/2025 | 12/31/2026 | C$ | 35 | 17 | 16 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 67,
+      "row_index": 10,
+      "quoted_text": "Spectrum Solutions, LLC (8) | First lien senior secured delayed draw term loan | 18.00 % | 18.00 | % | 4/10/2025 | 3/5/2026 | 134 | 128 | 134 | 0.01 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C115 flagged basis_spread values 17.0 and 18.0 as outside an expected percentage range, but the raw SOI prints those spreads as whole-number percentages in the Reference Rate and Spread column. The stored values match source format rather than showing a scale or extraction error, so the flag is a rule-scope false alarm."
+}

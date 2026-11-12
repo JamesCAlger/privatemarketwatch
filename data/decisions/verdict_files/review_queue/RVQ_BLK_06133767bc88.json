@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_06133767bc88",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1861.296462,
+  "anchor_value": 1861.296462,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 2,
+      "quoted_text": "Investments at Fair Value - 254.85 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 42,
+      "quoted_text": "Total Investments - (254.85 %) | 1,876,212,627 | 1,861,296,462",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 2,
+      "quoted_text": "Investments at Fair Value - 268.57 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 84,
+      "row_index": 20,
+      "quoted_text": "Total Investments | 1,636,597,753 | 1,630,349,305",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (amortized cost of $1,876,212,627 and $1,636,597,753) | 1,861,296,462 | 1,630,349,305",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 reports source=1183 versus output=566, but the current-period extraction is anchored: the bundle's fund-quarter FV is 1,861.296462 million and the 2025 source schedule total is 1,861,296,462. The balance sheet reports the same 2025 total investments at fair value. The source schedule then continues into a separate 2024 investments section with its own total of 1,630,349,305, so the inflated source count is consistent with a comparative-period row-count leak rather than a missing 2025 holdings extraction."
+}

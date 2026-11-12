@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_21f04acdf440",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 0.4074074074074074,
+  "anchor_value": 0.5,
+  "confidence": 0.38,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 12,
+      "quoted_text": "Total Investments (10) - 156.8% | $ | 425,763 | $ | 420,568"
+    },
+    {
+      "table_index": 25,
+      "row_index": 23,
+      "quoted_text": "Total Investments (9) - 271.5% | $ | 529,070 | $ | 532,895"
+    }
+  ],
+  "rationale": "D06 is an issuer-continuity flag: 40.7% continuity, 22/54 issuers persist, below a 0.5 threshold. The raw filing source was readable and shows the December 31, 2023 and December 31, 2022 investment schedules, including total investments of 420,568 and 532,895 respectively, but the source window does not expose the previous reporting-period issuer set used by the continuity metric. A search for September 30, 2023 issuer/investment continuity evidence returned no matches. Because the available source confirms schedule context but does not decide whether the 22/54 persistence result is a true extraction problem or legitimate portfolio turnover, the flag remains ambiguous."
+}

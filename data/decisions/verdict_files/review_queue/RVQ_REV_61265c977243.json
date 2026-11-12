@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_61265c977243",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 29,
+      "quoted_text": "Amberfield Acquisition Co.(5) | One stop | SF + | 5.00 % | N/A(6) | 05/2030 | - | ( 35 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 8,
+      "quoted_text": "Anaplan, Inc.(5) | One stop | SF + | 5.25 % | N/A(6) | 06/2028 | - | ( 2 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 13,
+      "quoted_text": "Arrow Buyer, Inc.(5) | One stop | SF + | 5.75 % | N/A(6) | 07/2030 | - | ( 13 ) | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows. Targeted source checks for flagged issuers show the Schedule of Investments itself reports dash fair-value cells for those rows, with no nonzero fair value to extract. The zero stored fair_value therefore matches the raw source for these reviewed rows; the warning is a scope/legitimacy review case rather than a data error."
+}

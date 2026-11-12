@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_e30053f94639",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_EUR",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 4,
+      "quoted_text": "Bank of America, N.A. | U.S. Dollar 1,712 | Euro 1,692 | 10/04/24 | $ | ( 158 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The row's fair value currency was stored as U_EUR even though the source fair value cell is dollar-denominated; Euro belongs to the Currency Sold field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 28,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 single-cell fair_value_currency issue. The raw source row for the foreign currency forward contract shows Currency Sold as Euro 1,692, but the Unrealized Appreciation (Depreciation) amount is introduced by '$' and equals (158). Therefore the stored fair_value_currency of U_EUR is a real localized extraction/column-mapping error; the fair value is USD-denominated in source."
+}

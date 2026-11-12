@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_765adc2c5cef",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480975000,
+  "anchor_value": 1249444000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "A separate 231,531,000 portfolio schedule was included in addition to the main 1,249,444,000 investment schedule, exactly explaining the excess.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 33,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The extracted fair-value sum is 1,480,975,000, while the filing's main investment schedule totals 1,249,444,000 at table 20 row 23. The 231,531,000 difference exactly equals the separately presented total portfolio investments at table 33 row 62 and the investments-at-fair-value balance at table 30 row 4. The extractor therefore combined two reporting scopes rather than conserving to the filing's main schedule total."
+}

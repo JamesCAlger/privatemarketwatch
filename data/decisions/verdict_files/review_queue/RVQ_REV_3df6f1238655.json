@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3df6f1238655",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_schedule",
+  "observed_value": -11601.0,
+  "anchor_value": -11601.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 17,
+      "quoted_text": "Admiral Buyer, Inc. | Software & Tech Services | Revolver | - % ( S + 5.00 %; 0.75 % Floor) | 12/6/2029 | - | ( 11,601 ) | ( 7,008 ) | (6)(7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "Datacor, Inc. | Software & Tech Services | Delayed Draw Term Loan | - % ( S + 6.00 %; 1.00 % Floor) | 3/11/2030 | - | ( 10,380 ) | ( 21,057 ) | (6)(7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 34,
+      "quoted_text": "EET Buyer, Inc. | Software & Tech Services | Revolver | - % ( S + 5.00 %; 0.75 % Floor) | 11/8/2027 | - | ( 6,877 ) | ( 18,141 ) | (6)(7)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags any negative cost, but the raw investment schedule explicitly prints parenthesized negative cost and fair value for unfunded revolver and delayed-draw positions. Representative rows have dash funded par and tickmarks (6)(7), and the extracted sign and amount match the source (for example, observed -11601 equals source -11601). Negative cost is therefore legitimate source data in this filing structure; the check is overbroad rather than the data being erroneous."
+}

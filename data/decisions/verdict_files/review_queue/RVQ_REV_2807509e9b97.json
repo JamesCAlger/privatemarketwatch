@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_2807509e9b97",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "4 debt investment rows with source maturity 2024-07-15 before report date 2024-09-30",
+  "anchor_value": "report_date 2024-09-30",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 12,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 17,990 | 17,990 | 16,191",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 13,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 4,533 | 4,533 | 4,080",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 14,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 1,753 | 1,753 | 1,578",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 299 | 299 | 269",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Four current debt positions for CFS Management disclose a maturity date of 2024-07-15, which is before the 2024-09-30 report date.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "The current-period debt schedule header labels the relevant column as Maturity, and rows 12-15 in table 10 list CFS Management debt investments with maturity 07/15/24. That date is before the 2024-09-30 report date, matching the weak-engine count of 4 violations."
+}

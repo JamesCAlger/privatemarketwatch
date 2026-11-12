@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_ee39a7625caa",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Current-period source row present: Sigma Defense Systems LLC Revolving Loan, 3M SOFR + 0.50% / 1.00%, 0.50%, maturity 12/18/2027, cost (1), fair value dash.",
+  "anchor_value": "PP03 flagged identifier alleging a comparative-period row for the same Sigma Defense Systems LLC Revolving Loan.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 5,
+      "quoted_text": "Sigma Defense Systems LLC Revolving Loan | (3)(4)(5)(6)(7)(8) | 3M SOFR + 0.50 % / 1.00 % | 0.50 % | 12/18/2027 | - | ( 1 ) | - | 0.00 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 67,
+      "row_index": 30,
+      "quoted_text": "Sigma Defense Systems LLC Revolving Loan | (1)(2)(3)(4)(5)(6)(7)(8) | 3M SOFR + 0.50 % / 1.00 % | 0.50 % | 12/18/2027 | - | ( 1 ) | - | 0.00 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged identifier is not evidence of a retained comparative-only position because the raw 2025 schedule contains a current-period Sigma Defense Systems LLC Revolving Loan row with the same issuer, terms, rate, maturity, cost, fair value, and net-asset percentage. The matching comparative row exists too, but raw source supports the 2025 row directly, so the PP03 comparative-period warning is a false alarm rather than a data error."
+}

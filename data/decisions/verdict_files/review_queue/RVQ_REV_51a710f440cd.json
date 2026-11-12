@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_51a710f440cd",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 500.0,
+  "anchor_value": 5.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 29,
+      "quoted_text": "LABL Inc (7) | Senior Secured First Lien Term Loan | S + 500 ( 50 Floor) | 9.95 % | 10/2028 | 992 | 979 | 0.6 | 972"
+    },
+    {
+      "table_index": 12,
+      "row_index": 2,
+      "quoted_text": "Accession Risk Management | Senior Secured First Lien Term Loan | S + 475 ( 100 Floor) | 9.81 % | 10/2029 | 558 | 560 | 0.3 | 557"
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "J&J Ventures Gaming (7) | Senior Secured First Lien Term Loan | S + 400 ( 75 Floor) | 8.96 % | 04/2028 | 1,006 | 997 | 0.6 | 1,005"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Source term S + 500 is a 500 bp spread, which should normalize to basis_spread 5.00 under the whole-number percentage convention, not 500.0.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 9,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Source term S + 475 is a 475 bp spread, which should normalize to basis_spread 4.75 under the whole-number percentage convention, not 475.0.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 12,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Source term S + 400 is a 400 bp spread, which should normalize to basis_spread 4.00 under the whole-number percentage convention, not 400.0.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C115 flags basis_spread values 500.0, 475.0, and 400.0 as outside the expected whole-number percentage range. The raw schedule prints these as basis-point spread terms (S + 500, S + 475, S + 400). Under the platform convention that stored spreads are whole-number percentages, those terms should be normalized to 5.00, 4.75, and 4.00, so the stored values are off by a factor of 100."
+}

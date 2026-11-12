@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_d5e0f713c22b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated fair value source columns",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Investment Type | Reference Rate and Spread (2) | Floor | Interest Rate (2) | Initial Acquisition Date | Maturity Date | Par/Shares | Amortized Cost (3) | Fair Value (4) | % of Net Assets | Footnotes"
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Crash Champions Intermediate, LLC | Initial Term Loan | 1M SOFR + 7.00 % | 0.75 | % | 12.32 | % | 8/8/2022 | 8/1/2029 | 6,308,915 | $ | 6,196,732 | $ | 6,274,216 | 2.3 | % | (5)"
+    }
+  ],
+  "rationale": "FX02 fired because fair_value_currency is stored as U_USD, but the raw SOI source presents the flagged fair value field in the dollar-denominated Fair Value (4) column. Table 8 row 5 shows the same position's fair value with a dollar marker in the fair value column, and the schedule totals likewise use dollar-denominated investment amounts. The source supports USD valuation; the issue is the rule treating the U_USD unit label as non-USD rather than a data error in the holding."
+}

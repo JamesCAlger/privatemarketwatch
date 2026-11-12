@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_0d4abc7e38d6",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4552238805970149,
+  "anchor_value": 0.5,
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "D06 is an aggregate issuer-continuity flag (122 of 268 issuers, 45.5%, against a 50% threshold). Raw source was checked. The filing contains March 31, 2026 and December 31, 2025 investment schedules, and Caliber appears in both at table 12 row 27 and table 26 row 25, confirming at least one genuine persistent issuer. However, that targeted evidence does not independently establish the aggregate issuer denominator or show whether enough of the unmatched names reflect true portfolio turnover versus extraction/name-normalization defects. No row-level culprit or decisive independent continuity anchor is available without a prohibited haystack scan, so the flag is genuinely ambiguous."
+}

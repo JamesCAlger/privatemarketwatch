@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_938dfa1ef9c4",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7806000,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 34,
+      "quoted_text": "bswift, LLC (8)(10) | Class A-1 Units ( 7,606,491 units) | 11/7/2022 | 7,606 | 7,606 | 1.4 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 37,
+      "quoted_text": "SMA Technologies Holdings, LLC (8)(10) | Class A Units ( 200 units) | 11/21/2022 | 200 | 200 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 42,
+      "quoted_text": "Total Investments | $ | 809,029 | $ | 808,801 | 147.8 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The bswift Class A-1 Units row is from the December 31, 2022 comparative schedule and should not be retained as a June 30, 2023 report-date position from that source period.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 10,
+        "row_index": 34
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The SMA Technologies Class A Units row is from the December 31, 2022 comparative schedule and should not be retained as a June 30, 2023 report-date position from that source period.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 10,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "PP03 flagged two rows as comparative-period facts retained for report_date 2023-06-30. Raw source confirms the same instruments in the December 31, 2022 schedule section at table 10 rows 34 and 37; table 10's Total Investments fair value is 808,801, matching the December 31 comparative total rather than the June 30 schedule total of 1,758,911. Retaining those table 10 rows as June 30 positions is therefore a real comparative-period leakage defect. The expected contribution from the comparative-period source rows to the June 30 extract is zero, while the observed retained fair value is 7,806 thousand."
+}

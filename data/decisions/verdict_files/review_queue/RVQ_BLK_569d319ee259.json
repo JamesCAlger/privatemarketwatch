@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_569d319ee259",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_source_cell",
+  "observed_value": 5.0,
+  "anchor_value": 3.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "Deerfield Dakota Holding, LLC | Initial Term Loan | 3M SOFR + 3.00 % | 0.75 | % | 9.42 % ( 2.75 % PIK)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged Agent A spread is 5.0%, but the March 31, 2026 filing schedule at table 14 row 29 states 3M SOFR + 3.00% for Deerfield Dakota Holding, LLC Initial Term Loan. The extracted spread is therefore 2.0 percentage points too high. Nearby rows use the same Reference Rate and Spread column structure, so the source cell is clear and directly localizes the defect."
+}

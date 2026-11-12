@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_3013177136a4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_row",
+  "observed_value": -29000,
+  "anchor_value": -29000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 41,
+      "quoted_text": "Albers Aerospace Holdings LLC (4)(6)(7) | 6/22/2031 | 1,983 | ( 29 ) | ( 37 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 2,
+      "quoted_text": "Albers Aerospace Holdings LLC | 2nd Lien Senior Secured Delayed Draw Loan | $ | 1,983 | $ | ( 37 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "C107 treats a source-reported negative amortized cost on an unfunded delayed-draw position as suspect even though the filing prints the value as (29).",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 20,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell flag. The filing directly prints negative amortized cost (29) and negative fair value (37) for the Albers Aerospace delayed-draw position, while the unfunded-commitments schedule independently identifies the same $1.983 million commitment and (37) fair value. The extracted -29000 cost therefore matches raw source; negative values are legitimate for these unfunded commitment positions, so C107 is overbroad rather than the data being erroneous."
+}

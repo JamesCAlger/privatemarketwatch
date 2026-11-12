@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_a2de00aab99c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -14000,
+  "anchor_value": -14000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 13,
+      "quoted_text": "Sun Acquirer Corp. (4)(5) | Unitranche First Lien Revolver | 09/2027 | par -- | Cost ( 14 ) | Fair Value ( 18 )"
+    },
+    {
+      "table_index": 27,
+      "row_index": 20,
+      "quoted_text": "GB Eagle Buyer, Inc. (4)(5) | Unitranche First Lien Delayed Draw Term Loan | 12/2030 | par -- | Cost ( 14 ) | Fair Value ( 30 )"
+    },
+    {
+      "table_index": 27,
+      "row_index": 21,
+      "quoted_text": "GB Eagle Buyer, Inc. (4)(5) | Unitranche First Lien Revolver | 12/2030 | par -- | Cost ( 12 ) | Fair Value ( 12 )"
+    }
+  ],
+  "rationale": "C107 flags negative cost values for review, but the raw schedule of investments itself prints negative cost amounts in the Cost column using parentheses. The extracted negative values therefore match source presentation for the cited rows; the flag is an advisory rule-scope false alarm, not a data error."
+}

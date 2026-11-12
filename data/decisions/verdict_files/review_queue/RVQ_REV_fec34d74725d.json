@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_fec34d74725d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 30,
+      "quoted_text": "Total | 100.00 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 20,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 22,294,362 | $ | 22,491,891",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source industry-classification percentage schedule totals 100.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 74,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate flag with no row coordinates. The raw filing has an industry-classification percentage schedule for September 30, 2025 split across tables 73 and 74; the terminal source row is table 74 row 30, 'Total | 100.00 %'. The oracle artifact reports A07 pct_sum=0.0%, so the extracted/checked value disagrees with the schedule total rather than reflecting the source."
+}

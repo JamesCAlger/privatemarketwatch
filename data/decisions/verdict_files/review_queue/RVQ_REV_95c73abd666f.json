@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_95c73abd666f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "Businessolver.com, Inc. / Software | First Lien(2)(3) | SOFR(Q) | 5.50 % | 10.93 % | 12/2021 | 12/2027 | 14,525 | 14,486 | 14,525",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 5,
+      "quoted_text": "Businessolver.com, Inc. / First Lien(3)(4) - Drawn | SOFR(Q) | 5.50 % | 10.93 % | 12/2021 | 12/2027 | 535 | 535 | 535",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two distinct Businessolver.com First Lien source rows collapse to the same duplicate position key when the drawn-status row label is not preserved.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "B02 is an aggregate duplicate-key flag, but the raw June 30, 2024 schedule localizes the example duplicate to Businessolver.com, Inc.: row 4 is a regular First Lien position and row 5 is a separate First Lien - Drawn position, each with its own par, cost, and fair value. Collapsing both to one position key is therefore a real extraction/key-normalization error, not a source duplicate or a check-only false alarm."
+}

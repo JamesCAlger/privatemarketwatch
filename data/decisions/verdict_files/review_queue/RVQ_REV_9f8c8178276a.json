@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_9f8c8178276a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2783476,
+  "anchor_value": 2783476,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 20,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,767,878 | $ | 2,783,476 | 199.06 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 4,
+      "quoted_text": "Aerospace & Defense",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 8,
+      "quoted_text": "subtotal row for Quantum Leap Buyer LLC: principal 12,500, amortized cost 12,284, fair value 12,274, 0.88%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 fired because only 230 of 513 schedule leaves had fair_value, but the raw schedule structure shows many leaves are non-position headings or subtotal rows rather than missing position fair values. The source total for Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents is 2,783,476, which equals the extracted fund_quarter_fv_m anchor of 2,783.476 million with zero residual. The fair-value data itself is therefore anchored to the filing total; the failure is the check denominator including structural schedule rows."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_eb92e749f131",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 402991550.0,
+  "anchor_value": 314170238.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 159,
+      "row_index": 2,
+      "quoted_text": "Less unfunded loan commitments ( 61.8 %) | ( 105,643,990 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 159,
+      "row_index": 3,
+      "quoted_text": "Net investments (Cost $ 314,145,189 ) 184.0 % | $ | 314,170,238",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The SOI reports gross total investments before subtracting unfunded loan commitments; conservation should reconcile to net investments of 314,170,238, not the gross position sum.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 159,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation confirms a real overshoot: the extracted fair value sum is 402,991,550 while both the companyfacts/financial statement anchor and the SOI net investments line are 314,170,238. The raw SOI explains the structure: gross total investments of 419,814,228 are reduced by unfunded loan commitments of 105,643,990 to net investments of 314,170,238. The flag is therefore a real conservation defect caused by treating gross commitment exposure as fair value without the source's unfunded-commitment reduction."
+}

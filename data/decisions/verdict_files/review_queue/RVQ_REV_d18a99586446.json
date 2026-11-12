@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_d18a99586446",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "CAD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 4,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Euro (\"EUR\"), Great British Pound (\"GBP\"), or Canadian dollar (\"CAD\")."
+    },
+    {
+      "table_index": 9,
+      "row_index": 1,
+      "quoted_text": "Investment | Reference Rate and Spread | Interest Rate (3) | Maturity Date | Par Amount/ Shares (4) | Cost (5) | Fair Value | Percentage of Net Assets"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The CAD denomination disclosed in source applies to par amount under footnote (4), while fair value is a separate dollar-denominated SOI column; fair_value_currency should not be CAD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 currency/unit check on fair_value_currency. The raw SOI structure separates Par Amount/Shares (4) from Cost and Fair Value, and footnote (4) explicitly describes denomination only for par amount/shares. The flagged CAD value therefore appears to be propagated from the par amount denomination into the fair value currency field, while the fair value column remains presented in dollars."
+}

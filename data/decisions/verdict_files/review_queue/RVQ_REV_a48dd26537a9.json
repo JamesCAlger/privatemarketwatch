@@ -1,0 +1,88 @@
+{
+  "review_id": "RVQ_REV_a48dd26537a9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include industry, investment type, interest-rate, floor, and maturity text",
+  "anchor_value": "source schedule keeps issuer/company separate from investment type, interest rate, and maturity columns",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 41,
+      "quoted_text": "Arrowhead Holdco Company | First Lien Secured Debt | S+ 450 , 0.75 % Floor | 8/31/2028 | $ | 9,900 | $ | 9,900 | $ | 9,652 | (4)(17)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 18,
+      "quoted_text": "Ultimate Baked Goods Midco LLC | First Lien Secured Debt | S+ 650 , 1.00 % Floor | 8/13/2027 | $ | 8,279 | $ | 8,052 | $ | 8,011 | (4)(9)(16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 28,
+      "quoted_text": "PODS, LLC | First Lien Secured Debt | S+ 300 , 0.75 % Floor | 3/31/2028 | $ | 10,569 | $ | 10,579 | $ | 10,290 | (17)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "[continuation under PODS/PODS, LLC] | First Lien Secured Debt | S+ 400 , 0.75 % Floor | 3/31/2028 | 5,237 | 5,081 | 5,158 | (17)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 9,
+      "quoted_text": "DCA Investment Holding LLC | First Lien Secured Debt | S+ 641 , 0.75 % Floor | 4/3/2028 | 2,472 | 2,472 | 2,472 | (4)(17)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "PPL Acquisition LLC | First Lien Secured Debt | S+ 625 , 0.75 % Floor | 7/1/2028 | 8,780 | 8,571 | 8,604 | (4)(9)(17)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Arrowhead issuer_name should be Arrowhead Holdco Company; extracted value leaked industry, debt type, rate, floor, and maturity text into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 10, "row_index": 41}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ultimate Baked Goods issuer_name should be Ultimate Baked Goods Midco LLC; extracted value leaked industry and terms into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 14, "row_index": 18}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PODS S+300 issuer_name should be PODS, LLC; extracted value leaked industry and terms into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 14, "row_index": 28}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PODS S+400 row is a continuation under PODS/PODS, LLC; extracted value leaked industry and terms into issuer_name instead of carrying forward the issuer.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 14, "row_index": 29}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "DCA issuer_name should be DCA Investment Holding LLC; extracted value leaked industry, alternate label, rate, floor, and maturity text into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 15, "row_index": 9}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PPL issuer_name should be PPL Acquisition LLC; extracted value leaked industry, label, investment type, rate, floor, and maturity text into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 15, "row_index": 24}
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse leak. For each flagged holding, the raw SOI row has a clean issuer/company cell and separate columns for investment type, interest rate/floor, and maturity date; the extracted issuer_name instead concatenated industry/path and those term columns into the issuer field. The cited source rows ground the specific affected records. No aggregate anchor is needed for this row-level/cell-level defect."
+}

@@ -1,0 +1,55 @@
+{
+    "review_id":  "RVQ_REV_4a0e350c5c62",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.4,
+    "anchor_value":  1,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  19,
+                                  "row_index":  22,
+                                  "quoted_text":  "AP Edison Co-Invest (UB), L.P. ( 8,487 units)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  25,
+                                  "quoted_text":  "Citation Glow Co-Invest LP ( 7,000 shares)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  28,
+                                  "quoted_text":  "Blue Cloud Pediatric Surgery Centers, LLC - Class A-1 Common Units ( 1,000,000 units)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  31,
+                                  "quoted_text":  "Saguaro Buyer, LLC - Class R Common Units ( 10,000 units)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  34,
+                                  "quoted_text":  "TCI Buyer LLC - Common Units ( 75,000 units)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The 2025 schedule of investments prints parenthetical share/unit quantities on common equity rows, but the extracted equity-share coverage metric is only 0.4.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  19,
+                                          "row_index":  22
+                                      }
+                     }
+                 ],
+    "rationale":  "C04 reports 40.0% of 10 equity rows have shares. Raw source table 19 shows equity investment-name cells carry parenthetical share/unit quantities, including AP Edison 8,487 units, Citation Glow 7,000 shares, Blue Cloud 1,000,000 units, Saguaro 10,000 units, and TCI Buyer 75,000 units. The source supports full equity share/unit coverage for these localized rows, so the failure is an extraction gap in capturing those quantities, not a false alarm or ambiguous filing."
+}

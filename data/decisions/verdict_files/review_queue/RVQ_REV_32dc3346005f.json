@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_32dc3346005f",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "",
+    "observed_value":  0,
+    "anchor_value":  0,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Raw source could not be adjudicated because the evidence CLI returned missing_cached_html for the required filing accession 0001104659-22-092916. No source tables or totals were available to confirm or refute the A07 aggregate/outlier flag."
+}

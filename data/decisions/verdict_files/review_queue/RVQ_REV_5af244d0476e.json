@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_5af244d0476e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "raw_source_rate_applicability",
+  "observed_value": 0.7482305358948432,
+  "anchor_value": 0.8140814081408141,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "Jeppesen Holdings, LLC^(5) | One stop | N/A(6) | 11/2032 | - | (20) | - | (114)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "AP Adhesives Holdings, LLC^(5) | One stop | N/A(6) | 04/2032 | - | (79) | - | (165)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 7,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | (24) | - | (111)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts debt-schedule rows whose source rate is explicitly N/A(6); at least 80 such rows are present, enough to lift applicable-row coverage above 80% when excluded.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 11,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "C01 reports 740 rated rows out of 989 debt rows (74.823%). Raw-source schedule searches returned at least 80 rows explicitly showing N/A(6) in the interest-rate field, generally with no principal and small negative cost or fair value, so these are not missing disclosed coupons. Excluding only those 80 demonstrably inapplicable rows gives 740/(989-80)=81.408%, above the 80% threshold. The flag is therefore caused by the check denominator including source-designated N/A rows, not by a data extraction error. Additional unrated rows may exist, but they cannot change that the evidenced scope correction alone clears the check."
+}

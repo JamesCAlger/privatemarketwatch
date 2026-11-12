@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_dbb5ecf6bb99",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 19,
+      "quoted_text": "Twin Brook Equity Holdings, LLC (11) (12) (13) | Equity 7.03 % membership interest | $ | 34,165 | $ | 38,564 | 6.46 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C04 flagged that 0.0% of 1 equity rows have shares. The raw schedule's only equity-like row is an LLC membership interest disclosed as 'Equity 7.03 % membership interest'; its Principal/Par Amount cells are blank while cost and fair value are present. The extraction's missing shares value therefore matches the source, and the check is overbroad for membership-interest equity positions that do not disclose shares."
+}

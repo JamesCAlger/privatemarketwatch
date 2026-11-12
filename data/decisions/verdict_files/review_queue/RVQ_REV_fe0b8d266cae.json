@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_fe0b8d266cae",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "A8",
+  "anchor_value": "A8 - A (Feeder) L.P.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 73,
+      "row_index": 31,
+      "quoted_text": "A8 - A (Feeder) L.P. (12) | Limited partnership interests | 03/2025 | 0.44 % | 1,000.3 | 718.3 | (6)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name was truncated to A8; the source company is A8 - A (Feeder) L.P. and the investment is Limited partnership interests.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 73,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "The raw Schedule of Investments row separates Company from Investment. For table 73 row 31, the company cell is A8 - A (Feeder) L.P. (12) and the investment cell is Limited partnership interests, while the extracted holding in the bundle has issuer_name A8 for the same position. The issuer_name is therefore truncated and does not match the raw source company name."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_97ec1a470e5e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_source_soi",
+  "observed_value": [17.0, 18.0],
+  "anchor_value": [17.0, 18.0],
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 32,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured delayed draw term loan | 17.00 % | 17.00 % | 4/5/2024 | 12/31/2026 | C$ | 36 | 17 | 17 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 7,
+      "quoted_text": "Spectrum Solutions, LLC (8) | First lien senior secured delayed draw term loan | 18.00 % | 18.00 % | 4/10/2025 | 4/30/2026 | 140 | 127 | 140 | 0.01 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 8,
+      "quoted_text": "Spectrum Solutions, LLC (8) | First lien senior secured delayed draw term loan | 18.00 % PIK | 18.00 % | 5/3/2024 | 4/30/2026 | 281 | 258 | 280 | 0.01 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source confirmation shows that the flagged basis_spread values are faithfully extracted from the filing. Table 26 row 32 prints 17.00% as both the reference-rate/spread entry and interest rate for Canadian Orthodontic Partners. Table 25 rows 7-8 print 18.00% for Spectrum Solutions, including an explicitly labeled 18.00% PIK instrument. The values are unusually high but source-correct; C115's expected-range threshold is too narrow for these fixed/distressed or PIK instruments."
+}

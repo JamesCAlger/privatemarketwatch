@@ -1,0 +1,37 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "A07 aggregate pct_sum is 0.0 even though the source fair value percentage schedules total 100.00 percent for December 31, 2023.",
+                         "citation":  {
+                                          "row_index":  7,
+                                          "table_index":  31
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_50c08724a7aa",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  100,
+    "rationale":  "The raw filing source is readable and contradicts the flagged aggregate. The review artifact reports A07 pct_sum=0.0%, but the December 31, 2023 fair value summary totals to 100.00% of total investments and 142.52% of net assets, with an industry fair value schedule also totaling 100.00%. This indicates the pipeline missed or failed to map the source percentage totals rather than a true zero-percent portfolio.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  7,
+                                  "table_index":  31,
+                                  "quoted_text":  "Fair Value total for December 31, 2023 reports Total | $ | 2,857,808 | 100.00 | % | 142.52 | %"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  57,
+                                  "table_index":  68,
+                                  "quoted_text":  "Industry fair value schedule reports Total | 100.00 | % for December 31, 2023"
+                              }
+                          ],
+    "confidence":  0.92
+}

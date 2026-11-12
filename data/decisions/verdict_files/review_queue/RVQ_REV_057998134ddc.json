@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_057998134ddc",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC, Class B Equity Interest shows Cost '-' and Market Value '-' in the source schedule.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "FIRE: Finance Total shows Cost $1,215,000 and Market Value $1,215,000, consistent with Preferred $1,125,000 plus Class A $90,000 plus Class B $0.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged a zero fair_value for the Legacy Corporate Lending HoldCo, LLC Class B Equity Interest. The raw schedule of investments prints the Class B Market Value as '-' on table 10 row 6, so the stored fair_value of 0.0 matches the source. The schedule total on row 7 reconciles when Class B is treated as zero, confirming this is a legitimate zero-value position rather than a data error."
+}

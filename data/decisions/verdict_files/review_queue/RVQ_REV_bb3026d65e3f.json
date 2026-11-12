@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_REV_bb3026d65e3f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include raw section, industry, investment, acquisition date, reference rate, and interest-rate text instead of only the issuer/company name",
+  "anchor_value": "raw SOI rows separate Company from Investment, Initial Acquisition Date, Reference Rate and Spread, and Interest Rate columns",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 24,
+      "quoted_text": "Passport Labs, Inc. | First-lien loan ($ 24,995 , par, due 7/2025 ) (3) | 4/28/2021 | SOFR + 8.40 % | 12.71 | % | 24,928 | 25,057 | 1.6 | %"
+    },
+    {
+      "table_index": 9,
+      "row_index": 25,
+      "quoted_text": "Convertible Promissory Note A ($ 1,086 par, due 8/2026 ) | 3/2/2023 | 8.00 | % | 8.00 | % | 1,086 | 1,205 | 0.1 | %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 32,
+      "quoted_text": "Dye & Durham, Ltd. (4)(10) | Common Shares ( 126,968 shares) | 12/3/2021 | 3,909 | 955 (CAD 1,375 ) | 0.1 | %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "American Achievement, Corp. (3)(14) | First-lien loan ($ 26,816 par, due 9/2026 ) | 9/30/2015 | SOFR + 7.35 % | 11.67 % (incl. 11.17 % PIK) | 25,996 | 19,777 | 1.2 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name is populated from concatenated SOI wrapper/row text instead of the clean Company cell; Passport Labs continuation investment terms were included in issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "equity rows show the same contamination: clean company Dye & Durham, Ltd. is separate from Common Shares and acquisition-date fields that leaked into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse-leak error. The raw source SOI has separate Company and Investment/terms columns, while the flagged extracted issuer_name values concatenate section labels, company, instrument, acquisition date, reference spread, and interest-rate text. The cited Passport Labs, Dye & Durham, and American Achievement source rows demonstrate that the correct issuer/company field is only the company cell, not the full concatenated row text."
+}

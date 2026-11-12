@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_709dd80fe060",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5419847328244275,
+  "anchor_value": 0.8,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 20,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(3)(4)(6)(24)(31) | Specialty finance debt investment | N/A | 12.00 % | 7/2030 | 60,057 | -- | $ | 60,057 | $ | 60,057",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule prints a 12.00% interest component for AAM Series 1.1 Rail debt, but the extracted holding in the bundle has blank interest_rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "C01 is a CIK-quarter rate coverage flag: the extracted data reports only 360 of 786 debt rows with a rate, observed coverage 0.5419847328244275 versus the 0.8 threshold. Raw source is readable and shows rate-bearing debt rows whose interest components were not captured; for example table 36 row 20 has the AAM Series 1.1 Rail specialty finance debt investment with Interest subcolumns Ref. Rate/Cash/PIK and a 12.00% component, while the bundle's extracted holding for that same debt investment has blank interest_rate. That grounds the low coverage as a real extraction gap rather than a false alarm."
+}

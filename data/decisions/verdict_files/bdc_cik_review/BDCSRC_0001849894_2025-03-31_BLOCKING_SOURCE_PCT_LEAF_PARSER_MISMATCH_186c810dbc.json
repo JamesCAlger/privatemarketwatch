@@ -1,0 +1,70 @@
+{
+  "changed_files": [],
+  "cik": "0001849894",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed rows are real position-level source rows, but current production holdings already include the sampled MSD leaf positions for the same CIK/date/accession and fair values.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 20,
+      "cell_indices": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        9,
+        12,
+        16,
+        20,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The ALF Finance row is a current-period leaf debt position with issuer, reference-rate spread, interest-rate floor, current rate, PIK flag, maturity, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 19,
+      "cell_indices": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        9,
+        12,
+        16,
+        20,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Accession Risk Management delayed draw term loan row is a current-period leaf debt position with issuer, instrument label, rate terms, maturity, cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review found that this blocker packet contains real MSD position rows, not aggregate/header rows. The HTML coordinate candidates identify the sampled ALF Finance and Accession Risk Management rows as current-period position rows with issuer, instrument/rate/maturity, cost, fair value, and percent-of-net-assets evidence. Current production holdings examples for the same CIK, report date, and accession already include the sampled ALF Finance delayed draw row at fair value 19,651,000, ALF Finance row at 26,582,000, Accession Risk Management delayed draw row at 49,153,000, Foundation Risk Partners delayed draw incremental row at 7,796,000, and Foundation Risk Partners delayed draw row at 44,481,000. Because the current pipeline already emits the sampled leaf rows under the existing MSD parser behavior, a new production patch would be duplicative and risk broadening parsing without a new mechanism.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-03-31",
+  "requires_human_merge": false,
+  "residual_risk": "The generated worklist still reports this packet as blocking until a clean rebuild confirms current-code behavior across all 59 rows. This verdict does not suppress or hide the blocker; it documents that the bounded mechanism already exists for the sampled rows and that the remaining evidence points to stale reconciliation/worklist state rather than a new production defect.",
+  "review_id": "BDCSRC_0001849894_2025-03-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_186c810dbc",
+  "reviewer_notes": "The blocker packet reports 59 source-only rows and affected source fair value of 1,616,810,000. I reviewed the bundle evidence manually: source residual rows classify these as terminal-percentage/rate-bearing leaf candidates; HTML coordinate candidates show sampled rows in source tables with position-level cells; xbrl_rows_same_accession and holdings_examples show the same accession and current production holdings already carry the sampled CIK/date/accession positions and matching fair values. The GAV packet is WARN overall, but gav_flag and bdc_source_reconciliation_flag are ok, and this verdict makes no generated-output edit.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No immediate source reconciliation effect from this verdict alone. The expected clearing mechanism is a clean rebuild/reconciliation under current production code, not a verdict-only suppression or generated-output edit.",
+  "tests_validation_plan": "Validate verdict schema and evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No new code tests are added because no production code patch is proposed; existing MSD parser behavior already emits the sampled rows.",
+  "verdict": "NO_PATCH_NEEDED"
+}

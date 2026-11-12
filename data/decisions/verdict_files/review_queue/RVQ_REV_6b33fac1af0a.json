@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_6b33fac1af0a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 27,
+      "quoted_text": "Experigreen Intermediate Holdings, Inc. | (7)(13)(15)(17) | First Lien Revolver | S + 4.75 % | 8.40 % | 12/10/2032 | 3,169 | ( 16 ) | ( 16 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 78,
+      "row_index": 41,
+      "quoted_text": "Experigreen Intermediate Holdings, Inc. | Revolver | 12/10/2032 | 3,169 | ( 16 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted Experigreen direct-lending revolver has a blank interest_rate from the commitment schedule, while the matching SOI investment row states 8.40%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The commitment-schedule Experigreen revolver row is being surfaced as a rate-bearing direct-lending holding even though that schedule does not contain an Interest Rate column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 78,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "This aggregate rate-fill flag is grounded by a representative direct-lending blank from the bundle: Experigreen Intermediate Holdings, Inc. appears as a Revolver commitment with no interest_rate in the extracted holdings, but the raw SOI investment table lists the matching Experigreen First Lien Revolver with Reference Rate and Spread S + 4.75 % and Interest Rate 8.40 %. The blank is therefore not source ambiguity; the rate exists in source and was not carried into the extracted row, or the commitment-only row should be scoped out of the rate-fill population."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_12521a1d6d2a",
+  "verdict": "false_alarm",
+  "mechanism": "genuine_appreciation_outlier",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 27000,
+  "anchor_value": 27000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 26,
+      "quoted_text": "Park Place Technologies, LLC | Common Stock | 442,203 | 27 | 0.1 | 439",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X07 fired because fair value is more than 10x cost. The raw SOI row for Park Place Technologies, LLC common stock explicitly reports cost of 27 and fair value of 439, in thousands, so the extracted cost of 27000 and high fair-value-to-cost ratio are faithful to source rather than a data error."
+}

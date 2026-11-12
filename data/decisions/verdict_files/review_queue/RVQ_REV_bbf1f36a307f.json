@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_bbf1f36a307f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "raw_filing_schedule_cells",
+  "observed_value": "basis_spread=7.0; pik_rate=7.5; basis_spread=7.0",
+  "anchor_value": "pik_rate=7.5 uniquely confirmed; basis_spread rows not uniquely identifiable",
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 23,
+      "quoted_text": "Select Rehabilitation, LLC - Term Loan B (12) | Health Care Equipment & Services | Fixed 7.50 % PIK | 7.50 % | 12/29/2028",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw filing evidence uniquely confirms the published 7.5 pik_rate at table 15 row 23. However, the bundle identifies the two published 7.0 basis_spread cells only by pipeline row_id and src_context_id, while the evidence CLI exposes filing table coordinates without a mapping to those identifiers. The filing contains numerous 7.00% spread rows in both current and comparative schedules, so neither flagged basis_spread cell can be uniquely matched and adjudicated. The source was usable but does not decide the full three-cell flag."
+}

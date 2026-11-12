@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_c278fac339c4",
+  "verdict": "real_error",
+  "mechanism": "footnote_nonaccrual",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3675949,
+  "anchor_value": 3675949,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 40,
+      "quoted_text": "Amplity Parent, Inc. | Restatement Date Term Loan (First Lien) | 3M SOFR + 6.00 % | 1.00 | % | 12.32 % ( 2.50 % PIK) | 2/4/2022 | 1/31/2027 | 20,913,088 | 20,727,312 | 3,804,091 | 2.0 | % | (5) (17)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 41,
+      "quoted_text": "Amplity Parent, Inc. | Revolving Credit Facility | 3M SOFR + 6.00 % | 1.00 | % | 12.32 % ( 2.50 % PIK) | 2/4/2022 | 1/31/2027 | 1,479,188 | 1,461,370 | ( 342,747 | ) | - 0.2 | % | (8) (13) (17)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 10,
+      "quoted_text": "IMB Midco LLC | Term Loan B | 8.00% | -- | 8.00 % PIK | 5/20/2024 | 4/27/2028 | 6,131,575 | 4,974,599 | 214,605 | 0.1 | % | (17)"
+    },
+    {
+      "table_index": 19,
+      "row_index": 4,
+      "quoted_text": "Non-accrual | 3,675,949 | 0.9 | % | 16,356,203 | 3.2 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "footnote_nonaccrual",
+      "detail": "The three footnote-(17) positions tie exactly to the filing's current non-accrual fair value total of 3,675,949.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw source confirms the nonaccrual flag: Amplity Parent term loan fair value 3,804,091, Amplity Parent revolver fair value -342,747, and IMB Midco Term Loan B fair value 214,605 are all marked with footnote (17); their sum is 3,675,949, matching the filing's Non-accrual schedule total at table 19 row 4."
+}

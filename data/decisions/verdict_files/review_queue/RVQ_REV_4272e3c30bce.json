@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_4272e3c30bce",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "no_comparison",
+  "anchor_value": 5156571,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 31,
+      "quoted_text": "Total Investments, March 31, 2026 ( 175.7 %)* | $ | 5,231,456 | $ | 5,156,571",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 9,
+      "quoted_text": "Total investments at fair value | 5,156,571 | 4,876,989",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "GAV comparison denominator was recorded as missing even though the March 31, 2026 investment schedule and balance sheet both disclose total investments at fair value of 5,156,571 thousand.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 40,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation found a raw schedule total for Total Investments, March 31, 2026 of fair value 5,156,571 thousand, and the balance sheet independently reports Total investments at fair value of 5,156,571 thousand. The flagged artifact says comparison_source=None and value=no_comparison, so the source-visible denominator was not extracted or supplied to the GAV_BDC02 check."
+}

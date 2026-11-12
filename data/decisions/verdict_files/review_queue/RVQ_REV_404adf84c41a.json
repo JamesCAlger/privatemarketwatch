@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_REV_404adf84c41a",
+  "verdict": "false_alarm",
+  "mechanism": "unit_attribution_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "fair_value_currency flagged as U_AUD/U_CAD/U_EUR/U_GBP on 15 rows",
+  "anchor_value": "source schedule fair value and cost columns are dollar-denominated; foreign currency markers appear in principal/par/share column or are not present",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 2,
+      "quoted_text": "Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value"
+    },
+    {
+      "table_index": 16,
+      "row_index": 37,
+      "quoted_text": "Ancora Bidco PTY LTD (6) | Unitranche First Lien Term Loan | B + 500 ( 50 Floor) | 9.15 % | 11/2030 | AUD 3,235 | 3,348 | 1.7 | 3,215"
+    },
+    {
+      "table_index": 16,
+      "row_index": 39,
+      "quoted_text": "Total Debt Investments Australia | $ | 3,335 | 1.7 | % | $ | 3,211"
+    },
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Rockpoint Gas Storage Partners (6)(7) | Senior Secured First Lien Term Loan | S + 300 | 7.32 % | 09/2031 | 463 | 459 | 0.2 | 462"
+    },
+    {
+      "table_index": 17,
+      "row_index": 16,
+      "quoted_text": "Total Debt Investments Canada | $ | 459 | 0.2 | % | $ | 462"
+    },
+    {
+      "table_index": 16,
+      "row_index": 7,
+      "quoted_text": "Hamsard 3778 Limited (6) | Unitranche First Lien Term Loan | S + 550 | 9.96 % | 10/2031 | GBP 3,683 | 3,614 | 1.9 | 3,591"
+    },
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Total Debt Investments United Kingdom | $ | 6,821 | $ | 3.6 | % | $ | 6,840"
+    },
+    {
+      "table_index": 16,
+      "row_index": 25,
+      "quoted_text": "Avidity Acquisition B.V. (6) | Unitranche First Lien - Last Out Term Loan | E + 525 | 7.68 % | 03/2032 | EUR 133 | 127 | 0.1 | 131"
+    },
+    {
+      "table_index": 16,
+      "row_index": 32,
+      "quoted_text": "Total Debt Investments Netherlands | $ | 6,549 | 3.6 | % | $ | 6,775"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_attribution_false_positive",
+      "detail": "The parser/validator attributed the principal/par currency marker or country currency to fair_value_currency even though the source fair value column is dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "FX02 is not a real data error for these rows. In the source SOI header, foreign symbols such as AUD, EUR, and GBP sit under Principal Amount, Par Value or Shares, while Cost and Fair Value are separate columns; the country subtotals for Australia, Canada, United Kingdom, and Netherlands explicitly show dollar signs for cost and fair value. Canada has no CAD marker on the row at all and its subtotal fair value is also dollar-denominated. The non-USD fair_value_currency values therefore reflect unit attribution by extraction/validation, not source fair values reported in foreign currency."
+}

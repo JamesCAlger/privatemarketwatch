@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_61d1a8418fe7",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1239482127,
+  "anchor_value": 1239482127,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 3,
+      "quoted_text": "Aerospace & Defense",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 17,
+      "quoted_text": "Twin Star International, Inc. | Term Loan - 11.35% inc PIK | Fair Value: -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 32,
+      "quoted_text": "Total Investments (277.4%) | $1,410,219,978 | $1,239,482,127",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "B01's denominator includes non-position schedule labels with structurally blank fair-value cells; a dash on a genuine position is a disclosed zero, not missing data.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 4,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "The raw SOI separates industry labels from investment rows. Table 4 row 3 is only the industry label 'Aerospace & Defense' and has no fair-value cell, so counting it as a leaf with missing fair value pollutes the B01 denominator. In contrast, genuine investment rows disclose fair value, including table 4 row 17 where an em dash denotes zero; the extracted holdings sample correctly represents that position at 0.0. The filing's schedule total is explicitly $1,239,482,127 at table 7 row 32. Thus the 72.3% cell-coverage flag does not establish missing position fair values and is a rule-scope false alarm."
+}

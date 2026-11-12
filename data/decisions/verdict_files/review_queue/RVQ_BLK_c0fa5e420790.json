@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_c0fa5e420790",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6127925000.0,
+  "anchor_value": 5819755000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 33,
+      "quoted_text": "Total Non-Controlled/Affiliate Company Investments | $ | 343,639 | $ | 308,170 | 10.9 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 70,
+      "row_index": 35,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted fair-value sum exceeds the schedule/companyfacts total by 308,170 thousand, matching the subtotal row Total Non-Controlled/Affiliate Company Investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the source schedule total and companyfacts anchor are 5,819,755 thousand, while the extracted holdings fair-value sum is 6,127,925 thousand. The 308,170 thousand overshoot exactly matches the fair value on the subtotal row Total Non-Controlled/Affiliate Company Investments, which is already included in TOTAL INVESTMENTS and should not be counted as a position."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_6e7c83a97cac",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X02 warning: the bundle reports two PRIVATE_CREDIT rows with blank interest_rate and basis_spread, but localizes them only by internal row_key values 526161 and 526162. Raw source was checked through the evidence CLI. The SOI tables expose the rate columns, and the plausible unsecured debt rows around table 63 have stated rates such as 14.25% PIK, 12.75% PIK, and 11.00% PIK, but the allowed evidence does not map row_key 526161 or 526162 to a specific issuer/source row. Because the flagged rows cannot be tied to a raw-source coordinate, source evidence does not decide whether the warning is a real missing-rate extraction error, a duplicate/continuation-row artifact, or a false alarm."
+}

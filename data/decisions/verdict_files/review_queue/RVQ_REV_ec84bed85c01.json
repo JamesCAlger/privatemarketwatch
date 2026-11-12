@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_ec84bed85c01",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 15, "row_index": 11},
+    {"table_index": 15, "row_index": 17},
+    {"table_index": 13, "row_index": 22},
+    {"table_index": 14, "row_index": 3},
+    {"table_index": 14, "row_index": 18}
+  ],
+  "rationale": "PP01 flagged five bdc_investment_identifier values as subtotal candidates, but the raw SOI shows each is an individual investment row with issuer, terms or maturity, and cost/fair value cells. The category text in the normalized identifiers comes from surrounding schedule headings, not from subtotal rows: HPC GPFS Arsenal Co-Invest (Cayman) LP is table 15 row 11; Mews Systems B.V. equity is table 15 row 17; Rapyd Netherlands B.V. first-lien debt is table 13 row 22; Mews Systems B.V. first-lien debt is table 14 row 3; Acronis International first-lien debt is table 14 row 18. The check is overbroad for legitimate hierarchical position labels."
+}
+

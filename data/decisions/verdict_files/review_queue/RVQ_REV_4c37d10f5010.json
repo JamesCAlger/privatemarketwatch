@@ -1,0 +1,19 @@
+{
+    "review_id":  "RVQ_REV_4c37d10f5010",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -0.1,
+    "anchor_value":  "dash",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  14,
+                                  "row_index":  23,
+                                  "quoted_text":  "AD Bidco, Inc. continuation row: First Lien Senior Secured Term Loan | SOFR + 6.25 %, 11.6 % Cash | 03/24 | 09/26 | principal dash | cost (28) | fair value (26) | % of Net Assets dash | notes (6) (7) (12) (28)"
+                              }
+                          ],
+    "rationale":  "Class 1 single-cell adjudication. The flagged artifact has pct_of_net_assets = -0.1 for the AD Bidco continuation/second term-loan component, but the raw schedule row shows the % of Net Assets cell as a dash, while only cost and fair value are negative parentheses. The negative percentage is therefore an extraction/normalization defect, not a legitimate sourced negative percent."
+}

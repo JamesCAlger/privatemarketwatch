@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_284da8db1530",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_soi_row",
+  "observed_value": 0,
+  "anchor_value": -17000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Painters Supply & Equipment Company (4)(5) | Unitranche First Lien Revolver | 08/2027 | cost (2) | fair value (17)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period Painters Supply revolver with fair value -17000 is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 10,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "The raw March 31, 2026 schedule at table 10 row 8 contains a distinct Painters Supply & Equipment Company Unitranche First Lien Revolver maturing 08/2027. Parentheses show signed cost of -2000 and fair value of -17000, so this is not a blank or zero-value heading. The flagged absence from pipeline output is therefore a real missing-position extraction error."
+}

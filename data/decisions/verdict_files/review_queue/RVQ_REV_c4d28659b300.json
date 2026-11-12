@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_c4d28659b300",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Source SOI interest-rate cells populated, including all-PIK rates such as 14.55 % PIK, 12.44 % PIK, and 13.25 % PIK",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 15,
+      "quoted_text": "Thrasio, LLC | (21) | SF | 10.26 | % | 14.55 % PIK | 6/18/2024 | 6/18/2029 | 574 | 574 | 502 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 25,
+      "quoted_text": "Arcserve Cayman Opco LP (Delayed Draw) | (19)(20)(21) | SF | 8.11 | % | 12.44 % PIK | 1/2/2024 | 1/2/2027 | 1,471 | 391 | 882 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 26,
+      "quoted_text": "Witkoff/Monroe 700 JV LLC | (12) | n/a | n/a | 13.25 % PIK | 3/18/2025 | 10/1/2026 | 1,646 | 1,647 | 1,646 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "All-PIK private-credit SOI rows carry explicit interest-rate cells, but the extracted holdings rows surfaced by X02 have blank interest_rate and basis_spread.",
+      "fix_class": "all_pik_normalization",
+      "citation": {
+        "table_index": 17,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows where the stored interest_rate and basis_spread are blank. The raw SOI schedule has explicit Index, Spread, and Interest Rate columns, and all-PIK credit rows contain populated Interest Rate cells such as 14.55 % PIK, 12.44 % PIK, and 13.25 % PIK. A blank extracted rate for these credit positions is therefore an extraction gap rather than a source limitation or aggregate anchor issue."
+}

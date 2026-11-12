@@ -1,0 +1,78 @@
+{
+    "review_id":  "RVQ_REV_8d9f95b2bd7c",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  16,
+    "anchor_value":  16,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "row_index":  15,
+                                  "table_index":  11
+                              },
+                              {
+                                  "row_index":  9,
+                                  "table_index":  12
+                              },
+                              {
+                                  "row_index":  36,
+                                  "table_index":  12
+                              },
+                              {
+                                  "row_index":  37,
+                                  "table_index":  12
+                              },
+                              {
+                                  "row_index":  10,
+                                  "table_index":  14
+                              },
+                              {
+                                  "row_index":  11,
+                                  "table_index":  14
+                              },
+                              {
+                                  "row_index":  21,
+                                  "table_index":  15
+                              },
+                              {
+                                  "row_index":  31,
+                                  "table_index":  15
+                              },
+                              {
+                                  "row_index":  22,
+                                  "table_index":  35
+                              },
+                              {
+                                  "row_index":  10,
+                                  "table_index":  36
+                              },
+                              {
+                                  "row_index":  23,
+                                  "table_index":  36
+                              },
+                              {
+                                  "row_index":  24,
+                                  "table_index":  37
+                              },
+                              {
+                                  "row_index":  24,
+                                  "table_index":  39
+                              },
+                              {
+                                  "row_index":  21,
+                                  "table_index":  40
+                              },
+                              {
+                                  "row_index":  27,
+                                  "table_index":  40
+                              },
+                              {
+                                  "row_index":  35,
+                                  "table_index":  43
+                              }
+                          ],
+    "rationale":  "C104 flagged 16 stored fair_value values of 0.0. Raw SOI evidence search for dash-valued schedule rows localized exactly 16 investment rows where the Fair Value column is disclosed as a dash/zero-value cell, including unfunded revolvers, warrants/units, and one private asset-backed investment. The extractor value of zero is therefore source-consistent; the warning is a rule-scope false alarm rather than a data error."
+}

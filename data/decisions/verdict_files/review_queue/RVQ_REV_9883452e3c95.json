@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_9883452e3c95",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "source SOI rows disclose PIK interest/coupon terms",
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 38,
+      "quoted_text": "Quick Commerce Ltd. (1)(3) | Growth Capital Loan ( 6.00 % PIK interest rate, 3.75 % EOT payment) (2) | 5/4/2022 | 859 | 763 | 614 | 12/31/2028"
+    },
+    {
+      "table_index": 32,
+      "row_index": 39,
+      "quoted_text": "Quick Commerce Ltd. (1)(3) | Growth Capital Loan ( 6.00 % PIK interest rate, 3.75 % EOT payment) (2) | 10/19/2023 | 143 | 127 | 102 | 12/31/2028"
+    },
+    {
+      "table_index": 33,
+      "row_index": 40,
+      "quoted_text": "Join Digital, Inc. (7) | Growth Capital Loan (Prime + 12.50 % PIK interest rate, 20.00 % floor) (2) | 10/31/2025 | 72 | 72 | 54 | 12/31/2025"
+    },
+    {
+      "table_index": 33,
+      "row_index": 41,
+      "quoted_text": "Join Digital, Inc. (7) | Growth Capital Loan (Prime + 12.50 % PIK interest rate, 20.00 % floor) (2) | 11/24/2025 | 278 | 278 | 207 | 12/31/2025"
+    },
+    {
+      "table_index": 33,
+      "row_index": 42,
+      "quoted_text": "Join Digital, Inc. (7) | Growth Capital Loan (Prime + 12.50 % PIK interest rate, 20.00 % floor) (2) | 12/12/2025 | 105 | 105 | 78 | 12/31/2025"
+    },
+    {
+      "table_index": 35,
+      "row_index": 11,
+      "quoted_text": "Nakdcom One World AB (1)(3)(7) | Growth Capital Loan ( 12.00 % PIK interest rate) (2) | 12/31/2025 | 12 | 12 | 12 | 12/31/2028"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rows with stated PIK interest terms are present in the SOI while the reviewed X02 rows report blank interest_rate and basis_spread.",
+      "fix_class": "all_pik_normalization",
+      "citation": {
+        "table_index": 32,
+        "row_index": 38
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Prime plus PIK terms should not leave both rate fields blank; the source includes a basis and PIK leg.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 33,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row issue. The flag reports PRIVATE_CREDIT rows with blank interest_rate and basis_spread. Raw SOI rows for private-credit growth capital loans disclose coupon terms, including PIK interest rates such as 6.00%, Prime + 12.50% PIK, and 12.00% PIK. Under the platform all-in convention, PIK-inclusive stated coupon information should populate the rate data rather than leaving interest_rate/basis_spread blank. This is therefore a source-grounded extraction/all-in normalization gap, not a false alarm."
+}

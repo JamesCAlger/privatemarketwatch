@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_29f82650702f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 10,
+      "quoted_text": "Albion Fortress Intermediate Holdings LLC | First Lien - Term Loan | EURIBOR + 575 | 7.8 | 7/31/2031 | EUR | 23,533,714 | $ | 26,209 | $ | 27,173 | 3.2",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 52,
+      "quoted_text": "Urban Gym Group B.V. | First Lien - Term Loan | EURIBOR + 675 | 8.8 | 10/28/2031 | EUR | 6,410,257 | $ | 7,325 | $ | 7,387 | 0.9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 53,
+      "quoted_text": "Urban Gym Group B.V. | First Lien - Delayed Draw Term Loan | EURIBOR + 675 | 8.8 | 10/28/2031 | 427,350 | 474 | 454 | 0.1",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt positions show EUR-denominated source par, but the normalized principal_amount_usd field is blank for FX01 rows.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 34,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "FX01 asks whether non-USD debt principal is missing a USD-normalized principal amount. The source SOI has debt rows with EUR par in Par/Shares, including Albion Fortress Intermediate Holdings LLC with EUR 23,533,714 and Urban Gym Group B.V. with EUR 6,410,257, while the bundle's row-level issues show principal_amount_usd is blank. Because source confirms non-USD par that requires explicit FX conversion before USD par analytics, the flag is a real extraction/normalization gap rather than a false alarm."
+}

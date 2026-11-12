@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_88079f9edacb",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4493774,
+  "anchor_value": 4493774,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited) and December 31, 2025",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 24,
+      "quoted_text": "Total Investments at fair value | 4,537,269 | 4,493,774 | 208.26%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 97,
+      "row_index": 25,
+      "quoted_text": "Total Investments at fair value | 4,241,699 | 4,246,035 | 210.45%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source explicitly contains schedules for both March 31, 2026 and December 31, 2025. The current schedule closes at table 48 with fair value 4,493,774, and the comparative schedule separately closes at table 97 with fair value 4,246,035. E07 reports source row count 2,778 versus current-period output count 1,392, almost exactly two periods of positions. The check has leaked the comparative schedule into its source count; the current-period output is not shown to be incomplete."
+}

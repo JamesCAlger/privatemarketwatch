@@ -1,0 +1,100 @@
+{
+  "review_id": "RVQ_REV_c39a5fddcfde",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1153413327,
+  "anchor_value": 1153413327,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 11,
+      "quoted_text": "Total United States of America 1st Lien/Secured Loans | 981,617,153 | 953,252,026 | 153.57",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 19,
+      "quoted_text": "Total Canada 1st Lien/Secured Loans | 72,004,712 | 70,752,092 | 11.40",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 32,
+      "quoted_text": "Total 1st Lien/Secured Loans | 1,092,311,336 | 1,060,859,550 | 170.90",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "Total Non-Controlled/Non-Affiliated Investments | 1,136,588,958 | 1,101,328,239 | 177.42 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 30,
+      "quoted_text": "Total Non-Controlled/Affiliated Investments | 23,872,169 | 34,518,711 | 5.57 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 1,200,205,656 | $ 1,153,413,327 | 185.82 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 30,
+      "quoted_text": "Total Cash Equivalents and Restricted Cash Equivalents, March 31, 2026 | $ 32,370,481 | $ 32,370,481 | 5.21 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period country subtotal is present in the position set with 153.57 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 16, "row_index": 11}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period country subtotal is present in the position set with 11.40 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 16, "row_index": 19}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period instrument subtotal is present in the position set with 170.90 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 16, "row_index": 32}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period affiliation subtotal is present in the position set with 177.42 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 18, "row_index": 6}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period affiliation subtotal is present in the position set with 5.57 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 18, "row_index": 30}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period grand total investments row is present in the position set with 185.82 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 19, "row_index": 23}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Current-period cash equivalents aggregate row is present in the position set with 5.21 percent of net assets.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 19, "row_index": 30}
+    }
+  ],
+  "rationale": "Class 3 aggregate concentration warning. The filing anchor is internally consistent: the schedule total fair value of 1,153,413,327 appears in both the investments total and the balance sheet total investments line, so the issue is not a bad total anchor. The seven concentration outliers are source rows labelled Total or aggregate rows, including country, instrument, affiliation, grand-total investment, and cash-equivalent totals; these are not portfolio-company positions and should be filtered from position-level concentration checks."
+}

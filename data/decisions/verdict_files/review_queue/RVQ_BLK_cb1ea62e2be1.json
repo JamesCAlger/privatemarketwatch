@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_cb1ea62e2be1",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 548845350,
+  "anchor_value": 172658862,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ 190,450,759 | $ 172,658,862 | 281.54 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 22,
+      "quoted_text": "Total Investments | $ 200,505,907 | $ 191,616,958 | 246.92 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 43,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ 204,469,040 | $ 184,569,530 | 246.06 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted fair value sum includes the December 31, 2024 total investment fair value of 191,616,958.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 38,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted fair value sum includes the June 30, 2024 total investment fair value of 184,569,530.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 43,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor check: source totals show the December 31, 2025 fair value anchor is 172,658,862, matching companyfacts. The observed HTML extraction sum is 548,845,350, which equals 172,658,862 plus the comparative-period total investment fair values 191,616,958 and 184,569,530. The flag is therefore a real comparative-period leakage error in the HTML aggregate extraction."
+}

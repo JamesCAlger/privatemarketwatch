@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_9c0ce489d3b3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3153597319,
+  "anchor_value": 3313853000,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 3,320,878 | $ | 3,313,853 | 158.88 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 100,
+      "row_index": 8,
+      "quoted_text": "Total assets | $ | - | $ | - | $ | 3,259,501 | $ | 54,352 | $ | 3,313,853",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor triangulation. The extracted position fair-value sum is 3153597319, while the filing's current-period schedule total is 3313853000. The fair-value hierarchy independently repeats 3313853000 (3259501000 plus 54352000). The 160255681 shortfall equals 4.836 percent of the filing total and reproduces the flag. This proves a real extraction gap. Companyfacts was not supplied as a usable anchor, and the available row-disposition evidence does not identify the individual omitted positions, so the defect is not row-localized and is escalated for remediation." 
+}

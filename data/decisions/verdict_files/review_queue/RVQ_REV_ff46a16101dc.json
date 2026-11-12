@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_ff46a16101dc",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 35918.948,
+  "anchor_value": 35918.948,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 14,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance equity investment | N/A | N/A | 26,517 | $ | 26,557 | $ | 34,762",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 102,
+      "row_index": 40,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance equity investment | N/A | $ | 26,517 | $ | 38,809 | $ | dash",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "A portfolio-company commitment row for AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC was admitted as a holdings position alongside the actual SOI investment row, creating a duplicate position key with zero fair value.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 102,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate duplicate-key flag localized through the cited example. The schedule total anchor is internally consistent at 35,918.948 million, so the issue is not a total-FV anchor mismatch. Raw source shows the actual controlled/affiliated equity investment in table 90 row 14 with fair value 34,762 thousand, and a separate controlled/affiliated equity commitments row in table 102 row 40 for the same issuer and investment with fair value shown as dash. The bundle holdings slice contains both the real holding and a zero-FV duplicate for that same position key, so the flag is a real commitment-row leak/double-counting defect."
+}

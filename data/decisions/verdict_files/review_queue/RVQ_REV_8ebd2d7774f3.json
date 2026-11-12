@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_REV_8ebd2d7774f3",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 34,
+      "quoted_text": "Advantage Software Company (The), LLC | Advertising, Printing & Publishing | Class A1 Partnership Units ( 3,012.9 units) | N/A | 12/21 | N/A | 97 | 235 | - | % | (6) (27)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 33,
+      "quoted_text": "Aptus 1829. GmbH | Chemicals, Plastics, and Rubber | First Lien Senior Secured Term Loan | EURIBOR + 6.25 %, 8.4 % Cash, 1.5 % PIK | 09/21 | 09/27 | 1,512 | 1,627 | 1,338 | 0.2 | % | (3) (6) (7) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 47,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | Healthcare | First Lien Senior Secured Term Loan | 3.5 % Cash, CORRA + 3.5 % PIK, 9.0 % PIK | 06/21 | 03/26 | 1,599 | 1,781 | 433 | 0.1 | % | (3) (6) (7) (21) (26)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 16,
+      "quoted_text": "Mercell Holding AS | Technology | First Lien Senior Secured Term Loan | NIBOR + 5.50 %, 10.2 % Cash | 08/22 | 08/29 | 1,475 | 1,572 | 1,459 | 0.2 | % | (3) (6) (7) (24) (28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 37,
+      "quoted_text": "Ocelot Holdco LLC | Construction Machinery | Super Senior Takeback Loan | 10.0 % Cash | 10/23 | 10/27 | 96 | 96 | 96 | - | % | (6) (7)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Advantage Software Class B1 and Class B2 Partnership Units are retained in holdings, but the raw current-period SOI row for this issuer is Class A1 Partnership Units.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 14,
+        "row_index": 34
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Aptus 1829 Common Stock is retained in holdings, but the raw current-period SOI row for this issuer is a First Lien Senior Secured Term Loan.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 15,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Canadian Orthodontic Partners Class A Equity and Class X Equity are retained in holdings, but the raw current-period SOI row for this issuer is a First Lien Senior Secured Term Loan.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 17,
+        "row_index": 47
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Mercell Holding Class A Units are retained in holdings, but the raw current-period SOI row for this issuer is a First Lien Senior Secured Term Loan.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 25,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Ocelot Holdco Takeback Term Loan is retained in holdings, but the raw current-period SOI row returned for this issuer is the Super Senior Takeback Loan.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 26,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "PP03 is a within-row position purity flag. The bundle identifies eight rows whose source period is earlier than the 2024-06-30 report date. Targeted raw-source checks for the flagged issuers show current-period SOI rows with different investment types, and the flagged position labels are not present as current-period source rows. The correct remediation class is filtering comparative-period retained facts rather than accepting them as 2024-06-30 holdings."
+}

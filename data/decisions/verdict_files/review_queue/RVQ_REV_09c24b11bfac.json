@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_09c24b11bfac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 4.75,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Amplify Buyer, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75 % / 0.75 % | Cash Interest Rate / PIK Rate | 8.42 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 9,
+      "quoted_text": "Assembled Intelligence LLC Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25 % / 1.00 % | Cash Interest Rate / PIK Rate | 8.92 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | Reference Rate Spread / Floor | 3M SOFR + 5.00 % / 1.00 % | Cash Interest Rate / PIK Rate | 8.67 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Floating-rate source rows disclose nonzero reference-rate spreads, but the reviewed holdings rows store basis_spread as 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "X05 flags 18 floating coupon rows with missing or zero basis_spread. Raw SOI table 27 identifies the relevant source column as Reference Rate Spread / Floor and shows nonzero spread terms such as 3M SOFR + 4.75% / 0.75%, 3M SOFR + 5.25% / 1.00%, and 3M SOFR + 5.00% / 1.00% for affected instruments. Because the stored observed value is 0.0 while the source explicitly carries nonzero basis spreads, the flag is a real localized extraction gap rather than a false alarm."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_e49aafb23ff5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "SF | 7.60% spread | 3.75% PIK rate cell",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 13,
+      "quoted_text": "Arcstor Midco, LLC (~) (~~) | SF | 7.60 | % | 3.75 | % PIK | 3/16/2021 | 3/16/2027 | 12,191 | 12,025 | 10,750 | 1.3 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holding for Arcstor Midco has blank interest_rate even though the source row carries SF index, 7.60% spread, and a 3.75% PIK rate cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 13,
+        "quoted_text": "Arcstor Midco, LLC (~) (~~) | SF | 7.60 | % | 3.75 | % PIK | 3/16/2021 | 3/16/2027 | 12,191 | 12,025 | 10,750 | 1.3 | %"
+      }
+    }
+  ],
+  "rationale": "Class 2/within-schedule localization: the bundle's holdings slice shows Arcstor Midco, LLC, Senior Secured Loans, Due 3/16/2027 with observed interest_rate blank, while the raw investment schedule row has a populated basis/spread/rate sequence: SF index, 7.60% spread, and 3.75% PIK in the rate cell. The source therefore decides the issue as an extraction gap rather than a false alarm. Schedule fair-value totals were checked only as context and tie to the filing total, so no aggregate anchor disagreement is asserted."
+}

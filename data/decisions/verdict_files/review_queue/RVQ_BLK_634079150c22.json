@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_634079150c22",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 877.069,
+  "anchor_value": 877.060,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 875,546 | 174.3 | % | $ | 877,060",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 33,
+      "quoted_text": "Commercial and Professional Services",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 4,
+      "quoted_text": "108,930 | 107,774 | 21.1 | 106,728",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the E07 count discrepancy as a false alarm. The extracted position fair value of $877.069 million agrees with the filing's March 31, 2026 Total Investments fair value of $877.060 million to $0.009 million, consistent with rounding, so the output is not missing roughly 54% of investment value. The raw schedule contains many non-position HTML rows that inflate a naive source-row count, including an industry heading at table 9 row 33 and an unlabeled subtotal/continuation row at table 12 row 4. Thus source=774 is not a valid position-count anchor against output=357; the check's internal anchor is wrong rather than the extracted data. Residual risk is limited to immaterial individual-row omissions or offsets that aggregate reconciliation cannot exclude."
+}

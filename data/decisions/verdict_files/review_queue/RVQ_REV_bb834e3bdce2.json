@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_bb834e3bdce2",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Investment Debt Investments - 135.07% Switzerland - 0.53% 1st Lien/Last-Out Unitranche - 0.53% Esperanto BidCo AG (dba BSI Software) Industry Software Interest Rate 6.21% Reference Rate and Spread SARON + 5.00% Maturity 09/10/31",
+  "anchor_value": "Esperanto BidCo AG (dba BSI Software) | Software | 6.21 % | SARON + 5.00 % | 09/10/31 | CHF | 9,074 | 10,530 | 10,534 | (6) (9)",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 2,
+      "quoted_text": "Debt Investments - 135.07 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Switzerland - 0.53 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 18,
+      "quoted_text": "1st Lien/Last-Out Unitranche (13) - 0.53 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Esperanto BidCo AG (dba BSI Software) | Software | 6.21 % | SARON + 5.00 % | 09/10/31 | CHF | 9,074 | 10,530 | 10,534 | (6) (9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The position identifier includes parent schedule headers for investment class, country, and lien class before the issuer/instrument row.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 8,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "PP01 is a real position-purity defect. The raw SOI separates parent headers from the issuer rows: table 8 row 2 is the debt-investments header, row 17 is the Switzerland header, row 18 is the lien-class header, and row 20 is the actual Esperanto BidCo AG position. The extracted bdc_investment_identifier concatenates those parent headers into the position identifier instead of preserving the issuer/instrument row as the identifier."
+}

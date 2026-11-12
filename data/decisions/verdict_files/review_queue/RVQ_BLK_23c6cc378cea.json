@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_23c6cc378cea",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "C304 flags an internal holdings row_key 392953 for blank asset_class. The raw filing source was readable and its SOI tables include classification structure, including a Debt Investments section in table 48 and individual loan rows beneath it. However, the blinded bundle and source evidence do not identify which issuer/source row corresponds to internal row_key 392953, and searching the raw source for the key returns no hit. Without a source-row mapping, the exact flagged cell cannot be confirmed as a real missing classification or dismissed as a non-position/header/subtotal artifact."
+}

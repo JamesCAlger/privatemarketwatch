@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_dfc5242fa0d8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_GBP/U_CAD in fair_value_currency",
+  "anchor_value": "USD fair-value column in the SOI",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 46,
+      "quoted_text": "Ruby Bidco Holdings Limited | (6) | (18) | First Lien - Term Loan | SONIA + 500 | (15) | 9.0 | 9/12/2032 | GBP par shown separately | $ | 21,561 | $ | 21,487 | 2.5",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 29,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | (6) | (18) | First Lien - Term Loan | CORRA + 525 | (13) | 7.5 | 6/30/2031 | C$ par shown separately | $ | 22,958 | $ | 22,981 | 2.7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 30,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | (6) | (18) | First Lien - Revolving Credit Facility | CORRA + 525 | (13) | 7.5 | 6/30/2031 | 767,868 | 517 | 542 | 0.1; table 38 row 4 identifies this investment currency as CAD",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ruby Bidco Holdings Limited term-loan fair value is presented in the SOI under USD dollar columns, but fair_value_currency was stored as U_GBP from the investment currency/par context.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 46
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Jupiter Refuel Canada Buyer, Inc. term-loan fair value is presented in the SOI under USD dollar columns, but fair_value_currency was stored as U_CAD from the investment currency/par context.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Jupiter Refuel Canada Buyer, Inc. revolving-credit fair value is presented in the SOI as the fair-value amount while table 38 only identifies CAD as investment currency, so fair_value_currency should not be U_CAD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The source separates investment/par currency from fair-value presentation: the SOI rows show the fair-value columns as USD dollar columns, while GBP/CAD appears as investment currency or par context. The stored fair_value_currency values U_GBP and U_CAD therefore reflect the wrong source field, not the valuation column's unit."
+}

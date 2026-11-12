@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_713f6f4cb94c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "PRIME with no structured spread; Orchard identifier states Prime + 0.0% and floor 0.0%",
+  "anchor_value": "Orchard: Prime + 4.5% or floor 11.5%; CMR Surgical: Prime + 4.0% or floor 11.0%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 27,
+      "quoted_text": "Orchard Technologies, Inc. | Secured Loan | January 27, 2026 | January 31, 2030 | Variable interest rate Prime + 4.5 % or Floor rate 11.5 %; EOT 8.0 % | 14,240 | 15,382 | 11,711 | (8)(24)"
+    },
+    {
+      "table_index": 26,
+      "row_index": 15,
+      "quoted_text": "CMR Surgical Limited | Secured Loan | March 24, 2025 | April 1, 2030 | Variable interest rate Prime + 4.0 % or Floor rate 11.0 %; EOT 4.0 % | $ | 29,375 | $ | 29,351 | $ | 30,188 | (8)(10)(14)(19)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Orchard's source spread is 4.5% with an 11.5% floor, but the flagged identifier substitutes 0.0% for both terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CMR Surgical's source and identifier disclose Prime + 4.0%, so the structured spread is missing despite being readable.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 26,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The raw investment schedule explicitly supplies a numeric PRIME spread for each flagged position. Orchard is a direct value extraction defect because the flagged identifier replaces 4.5% and the 11.5% floor with zeros. CMR's identifier preserves Prime + 4.0%, yet the flag mechanism says no structured spread, proving a structuring gap rather than absent source disclosure."
+}

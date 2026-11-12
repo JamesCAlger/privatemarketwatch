@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_8325a39d51d0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5164835164835165,
+  "anchor_value": 1.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 28,787 | - | 28,535 | 27,817",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 13,
+      "quoted_text": "Acrisure, LLC | Unsecured notes | N/A | 8.50 % | 6/2029 | 3,000 | - | 3,000 | 2,966",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 17,
+      "quoted_text": "Anaplan, Inc. | First lien senior secured loan | S+ | 4.50 % | 6/2029 | 100,788 | - | 100,788 | 98,520",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Funded debt rows with blank stored interest_rate have explicit Cash rates in the source schedule.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Unfunded revolving and delayed-draw commitment rows have no source rate and should not inflate the rate-completeness denominator.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 25,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate completeness failure. The extracted coverage is 188 of 364 debt rows (0.5165), while the filing schedule explicitly supplies rates for representative funded rows whose stored interest_rate is blank: AI Titan 4.50%, Acrisure 8.50%, and Anaplan 4.50%. This grounds a real extraction gap. Source commitment rows also show that some denominator members are unfunded commitments without disclosed rates, creating a secondary rule-scope issue; it does not negate the proven missing rates on funded positions. The schedule_total anchor value of 1.0 expresses expected coverage for in-scope funded debt rows with a disclosed source rate, not a claim that every commitment row must carry a rate."
+}

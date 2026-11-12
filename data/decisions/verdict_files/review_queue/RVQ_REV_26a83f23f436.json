@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_26a83f23f436",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7244282,
+  "anchor_value": 7356032,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 3,
+      "quoted_text": "Clarience Technologies, LLC (8)(10) | Class A Units ( 2,666 units) | 2/12/2024 | 6,557 | 6,557 | 0.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 30,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 39,
+      "quoted_text": "Total Investments | $ | 7,172,247 | $ | 7,356,032 | 178.9 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The Clarience Class A Units row from the comparative SOI segment with total fair value 7,244,282 was retained for report_date 2025-03-31 instead of using only the current SOI segment tied to 7,356,032.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 16,
+        "row_index": 3,
+        "quoted_text": "Clarience Technologies, LLC (8)(10) | Class A Units ( 2,666 units) | 2/12/2024 | 6,557 | 6,557 | 0.2 | %"
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The flagged row matches table 16 row 3, and table 16 row 30 totals 7,079,994 cost and 7,244,282 fair value, which is the comparative-period schedule total. The current-period SOI total is table 11 row 39 at 7,172,247 cost and 7,356,032 fair value. Retaining the table 16 comparative row under report_date 2025-03-31 is therefore a real comparative-period leak, not a false alarm."
+}

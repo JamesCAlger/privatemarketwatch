@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_5749d94ffde6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 108,
+  "anchor_value": 108,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 16,
+      "quoted_text": "Transdigm Inc. | First Lien Secured Debt - Term Loan | S + 250 , 0.00 % Floor | 8/19/2032 | 25,000 | 24,938 | 25,001 | (8)(16)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 17,
+      "quoted_text": "First Lien Secured Debt - Term Loan | S + 250 , 0.00 % Floor | 1/19/2032 | 2,805 | 2,799 | 2,807 | (8)(16)"
+    }
+  ],
+  "rationale": "B02 flags duplicate position keys, with the bundle example pointing to Aerospace & Defense / Transdigm / Transdigm Inc. / First Lien Secured Debt - Term Loan. The raw September 30, 2025 SOI shows two adjacent Transdigm term-loan rows, but they are separate stated positions: one matures 8/19/2032 with par 25,000, cost 24,938, fair value 25,001, and the other matures 1/19/2032 with par 2,805, cost 2,799, fair value 2,807. The duplicate signal is therefore produced by a key/check that is too coarse for legitimate same-issuer same-security-type positions, not by duplicated source data."
+}

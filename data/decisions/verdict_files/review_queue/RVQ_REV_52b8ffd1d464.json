@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_52b8ffd1d464",
+  "verdict": "false_alarm",
+  "mechanism": "currency_unit_alias",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares"
+    },
+    {
+      "table_index": 39,
+      "row_index": 5,
+      "quoted_text": "Neutron Holdings, Inc. | Term Loan | 10.00 % | N/A | 01/22/2024 | 9/30/2026 | $ | 30,000 | $ | 29,784 | $ | 30,090"
+    },
+    {
+      "table_index": 40,
+      "row_index": 2,
+      "quoted_text": "Eclipse Buyer, Inc. | Delayed Draw Term Loan | SOFR | 4.75 % | 09/06/2024 | 9/6/2031 | $ | - | $ | ( 18 ) | $ | 27"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency values of U_USD as non-USD, but the raw schedule of investments presents the fair value column in dollar-denominated form. Representative flagged holdings show dollar signs in the principal, amortized cost, and fair value columns, including Neutron Holdings, Inc. with fair value $30,090 and Eclipse Buyer, Inc. with fair value $27. The source therefore supports USD-denominated fair values; U_USD is a source/unit-label alias issue in the check, not a real non-USD data error."
+}

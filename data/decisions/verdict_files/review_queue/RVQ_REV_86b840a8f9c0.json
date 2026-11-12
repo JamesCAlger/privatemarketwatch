@@ -1,0 +1,24 @@
+{
+    "review_id":  "RVQ_REV_86b840a8f9c0",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  0,
+    "anchor_value":  0,
+    "confidence":  0.82,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  16,
+                                  "row_index":  31,
+                                  "quoted_text":  "ASC Communications, LLC revolver row has principal amount dash, cost (6), fair value dash, and percent of net assets dash."
+                              },
+                              {
+                                  "table_index":  91,
+                                  "row_index":  15,
+                                  "quoted_text":  "ASC Communications, LLC Revolver appears in the unfunded commitments table with 647 at June 30, 2024."
+                              }
+                          ],
+    "rationale":  "C104 flags zero fair_value rows for review. For the visible flagged ASC Communications revolver, the raw SOI shows the fair value cell as a dash, not a positive investment fair value omitted by extraction, and the related revolver is separately disclosed in the unfunded commitments table. Normalizing that source dash to 0.0 is consistent with the filing, so the zero fair_value warning is not a real data error for this item."
+}

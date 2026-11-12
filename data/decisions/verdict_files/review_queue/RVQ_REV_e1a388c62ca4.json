@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_e1a388c62ca4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Central Parent, Inc. | SOFR + 3.25 % | 7.25% | 7/6/2029 | 9,900 | $ | 9,918 | $ | 8,589 | 1.5%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw SOI shows amortized cost and fair value as dollar-denominated amounts, but the extracted cost_currency is the XBRL unit id U_USD rather than normalized USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 currency-unit check on cost_currency. The source SOI uses dollar-denominated amortized cost and fair value columns, including table 13 row 5 where the cost and fair value values are preceded by dollar signs. The extracted observed value U_USD is therefore not a source currency but an unnormalized XBRL unit identifier; the expected stored currency is USD."
+}

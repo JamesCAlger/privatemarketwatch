@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_42317cebcdcb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": null,
+  "anchor_value": "9.13% and 10.88%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 20,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13 | % | 5/1/2029 | 110,967 | 109,915 | 100,875",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88 | % | 5/1/2030 | 171,258 | 167,710 | 108,503",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2029 iHeartCommunications bond has a source interest rate of 9.13%, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 20
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2030 iHeartCommunications bond has a source interest rate of 10.88%, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the two flagged private-credit rows. The March 31, 2026 schedule explicitly reports 9.13% and 10.88% in the Interest Rate column for the matching iHeartCommunications bonds, while both extracted rows have blank interest_rate and basis_spread. The X02 flags therefore identify real source-to-extract omissions."
+}

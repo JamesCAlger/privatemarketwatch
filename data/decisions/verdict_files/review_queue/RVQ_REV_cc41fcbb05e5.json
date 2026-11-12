@@ -1,0 +1,110 @@
+{
+  "review_id": "RVQ_REV_cc41fcbb05e5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 13,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company - Investment (3)(7) | Industry | Spread Above Index | Interest Rate (5)(10) | Maturity Date | Principal / Shares (14) | Amortized Cost | Fair Value | Percentage of Net Assets (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 4,
+      "quoted_text": "Allied OMS Intermediate Company, LLC - Preferred Units | Health Care Equipment & Services | NA | NA | NA | 12,041 | $ | 634 | $ | 722 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 5,
+      "quoted_text": "Atlas US Holdings, LP - Class X Preferred Units | Financial Services | 15.00 % PIK | 15.00 % | NA | 285,441 | 342 | 226 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 7,
+      "quoted_text": "EEP-EPS Fund I-A, LP - Series A-1 Preferred Units | Media & Entertainment | NA | NA | NA | 887,237 | 887 | 177 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 14,
+      "quoted_text": "Cardiology Partners Co., L.P. - Class O2 Units | Health Care Equipment & Services | NA | NA | NA | 142,509 | 142 | 113 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 16,
+      "quoted_text": "Firebirds Intermediate Holdings I, LLC - Class A Units | Consumer Services | NA | NA | NA | 590,012 | 590 | 537 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 17,
+      "quoted_text": "Firebirds Intermediate Holdings I, LLC - Class B Units | Consumer Services | NA | NA | NA | 590,012 | - | 24 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 18,
+      "quoted_text": "Kemper Sports Management Holdings, LLC Equity (11) | Consumer Services | NA | NA | NA | 420,992 | 421 | 1,225 | 0.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 19,
+      "quoted_text": "Oak Dental Partners Holding Company, LLC - Class C Units (11) | Health Care Equipment & Services | NA | NA | NA | 53 | 344 | 462 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 20,
+      "quoted_text": "Oak Dental Partners Holding Company, LLC - Class D Units (11) | Health Care Equipment & Services | 2.25 % PIK | 2.25 % PIK | NA | 19 | 19 | 27 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 21,
+      "quoted_text": "Rushmore Lender Co-Invest Blocker, LLC - Common Stock | Health Care Equipment & Services | NA | NA | NA | 676,823 | 719 | 393 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 24,
+      "quoted_text": "Senior Support Holdings, LP - Class A-1 (11) | Health Care Equipment & Services | NA | NA | NA | 449 | 449 | 531 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 25,
+      "quoted_text": "Senior Support Holdings, LP - Class B (11) | Health Care Equipment & Services | NA | NA | NA | 449 | - | 202 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 2,
+      "quoted_text": "Vistria ESS Holdings, LLC - Equity Units | Commercial & Professional Services | NA | NA | NA | 326 | $ | 157 | $ | 792 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source SOI has numeric Principal / Shares values for the 13 FV-positive equity rows, but the extracted C04 metric reports 0 of 13 equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 1,
+        "quoted_text": "Principal / Shares (14) column header on the 2025 SOI tables"
+      }
+    }
+  ],
+  "rationale": "C04 is a quarter-level equity share-population check. The 2025 SOI tables identify a Principal / Shares column, and each of the 13 FV-positive equity positions in the Preferred/Common Membership Interest sections has a numeric value in that column. The extracted observed metric is 0 of 13 equity rows with shares, so the stored data omitted source-disclosed share/unit counts. This is a localized extraction gap, not a false alarm."
+}

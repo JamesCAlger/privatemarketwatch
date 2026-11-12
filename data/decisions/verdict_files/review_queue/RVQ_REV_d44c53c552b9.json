@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_d44c53c552b9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 16.0,
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 21,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) (4) | 08/22/24 | Term Loan A - 6.00 % inc PIK ( 6.00 %, Fixed Coupon, all PIK) | 16.0 | % | 40,929,861 | 01/31/28 | 40,915,831 | 40,929,861",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "basis_spread was populated with the row's 16.0% net-assets value even though the instrument terms state a 6.00% fixed coupon with all PIK and no spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "C115 is a Class 1 row-level single-cell issue for basis_spread. The raw schedule row shows the loan terms as a fixed 6.00% all-PIK coupon, while 16.0 appears under the % of Net Assets column. Therefore the stored basis_spread value of 16.0 is not supported by the source terms and is a localized extraction/column mapping error."
+}

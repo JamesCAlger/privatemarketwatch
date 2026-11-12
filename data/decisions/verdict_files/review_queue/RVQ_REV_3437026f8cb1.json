@@ -1,0 +1,89 @@
+{
+    "review_id":  "RVQ_REV_3437026f8cb1",
+    "verdict":  "false_alarm",
+    "mechanism":  "source_confirmed_negative_fair_value",
+    "localized":  true,
+    "anchor_used":  "source_fair_value_cells",
+    "observed_value":  15,
+    "anchor_value":  15,
+    "confidence":  0.96,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  48,
+                                  "row_index":  13,
+                                  "quoted_text":  "SPLAT Super HoldCo, LLC Delayed Draw Term Loan fair value (5,878)"
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  20,
+                                  "quoted_text":  "Denali Intermediate Holdings, Inc. Revolving Credit Loan fair value (5,345)"
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  22,
+                                  "quoted_text":  "Milestone Technologies, Inc. Delayed Draw Term Loan fair value (6,466)"
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  23,
+                                  "quoted_text":  "Milestone Technologies, Inc. Revolving Loan fair value (4,849)"
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  29,
+                                  "quoted_text":  "The Ultimus Group Midco, LLC Initial Delayed Draw Term Loan fair value (9,528)"
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  30,
+                                  "quoted_text":  "The Ultimus Group Midco, LLC Revolving Credit Loan fair value (3,573)"
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  33,
+                                  "quoted_text":  "CP Iris Holdco I, Inc. Delayed Draw Term Loan fair value (1,236)"
+                              },
+                              {
+                                  "table_index":  49,
+                                  "row_index":  29,
+                                  "quoted_text":  "Deerfield Dakota Holding, LLC Initial Revolving Credit fair value (7,500)"
+                              },
+                              {
+                                  "table_index":  49,
+                                  "row_index":  41,
+                                  "quoted_text":  "Amplity Parent, Inc. Revolving Credit Facility fair value (342,747)"
+                              },
+                              {
+                                  "table_index":  50,
+                                  "row_index":  2,
+                                  "quoted_text":  "Celerion Buyer, Inc. Revolving Loan fair value (5,754)"
+                              },
+                              {
+                                  "table_index":  50,
+                                  "row_index":  7,
+                                  "quoted_text":  "Specialty Pharma III Inc. Revolving Loan fair value (5,714)"
+                              },
+                              {
+                                  "table_index":  50,
+                                  "row_index":  19,
+                                  "quoted_text":  "Flexera Software LLC Revolving Loan fair value (1,617)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  2,
+                                  "quoted_text":  "Offen, Inc Initial Revolving Loan fair value (6,778)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  4,
+                                  "quoted_text":  "VTC Buyer Corp. Advance Revolver fair value (21,897)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  11,
+                                  "quoted_text":  "IMB Midco LLC Revolving Loan fair value (226,384)"
+                              }
+                          ],
+    "rationale":  "C103 flagged negative fair_value values, but the raw SOI fair value column prints all 15 flagged amounts as parenthesized negatives. The extractor preserved the source values; the warning reflects legitimate negative fair values rather than a data error."
+}

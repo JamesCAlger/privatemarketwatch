@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_b177b3e05c6c",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Foreign Currency Forward Contracts",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 113,
+      "row_index": 1,
+      "quoted_text": "Foreign Currency Forward Contracts",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 113,
+      "row_index": 3,
+      "quoted_text": "Deutsche Bank AG | USD 588,180 | CAD 806,500 | 03/25/2026 | unrealized depreciation (1,961)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 113,
+      "row_index": 13,
+      "quoted_text": "Goldman Sachs Bank USA | USD 180,488 | SEK 1,668,034 | 03/17/2026 | unrealized depreciation (999)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The 11 flagged rows are derivative positions under the source heading Foreign Currency Forward Contracts, but asset_class is blank in the extracted holdings rows.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 113,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "C304 flags 11 private_markets_holdings rows where asset_class is blank. The raw source has a readable derivative schedule headed Foreign Currency Forward Contracts with 11 contract rows from table 113 rows 3-13. A blank controlled asset_class is therefore not source-supported; the rows should be classified from the derivative schedule context or scoped out by a derivative-specific rule, rather than left empty."
+}

@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_f367651886ee",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "12.82% inc PIK; SOFR + 8.38%, 1.00% floor, 0.38% PIK",
+  "anchor_value": "source row prints the same coupon/spread/PIK terms",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 25,
+      "quoted_text": "Noramco, LLC | 07/01/16 | Term Loan - 12.82 % inc PIK (SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK) | 10.6% | 27,635,533 | 05/01/26 | 27,635,533 | 27,138,093"
+    }
+  ],
+  "rationale": "Class 3 anchor check found the June 2025 schedule totals internally tie: debt plus equity plus cash equivalents plus short-term investments equals total investments of 723,292,813, and the fair-value hierarchy total is 723,293 in thousands. The one likely fmt_basis_spread outlier is Noramco: the raw source itself prints the all-in coupon together with SOFR spread, floor, and 0.38% PIK, matching the extracted terms rather than showing a wrong value. The weak spread residual is therefore a rule limitation around PIK-inclusive floating-rate formatting, not a source-backed data error."
+}

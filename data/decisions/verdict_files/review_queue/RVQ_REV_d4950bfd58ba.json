@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d4950bfd58ba",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 9.135478131949588,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 flagged distribution_rate > income_yield_pct * 1.5 for CIK 0001496099 at 2021-12-31, with validation value 9.135478131949588. The evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query for distribution rate, income yield, net investment income, and distributions, so raw source was not available to verify the extracted values or the heuristic anchor. Per the contract, unreadable raw source requires ambiguous/source_unavailable with escalation."
+}

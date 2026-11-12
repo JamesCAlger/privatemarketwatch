@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b95ee83c32e1",
+  "verdict": "real_error",
+  "mechanism": "footnote",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8855,
+  "anchor_value": 8855,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 16,
+      "quoted_text": "Dermatology Associates | ^ | (2)(3)(8)(9) | Healthcare & Pharmaceuticals | SOFR | 11.35 % ( 100 % PIK) | 16.89 % | 2/15/2018 | 11/6/2023 | 12,259 | 6,106 | 8,855 | 0.82",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 79,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 8,855 | 0.5 | % | 7,176 | 0.3 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "footnote",
+      "detail": "The September 30, 2023 non-accrual fair-value total of 8,855 ties to the Dermatology Associates source row.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Raw source confirms a non-accrual exposure: the filing's non-accrual disclosure reports fair value of 8,855 at September 30, 2023, and that amount ties directly to the Dermatology Associates schedule row. The bundle's count also includes two American Physician Partners rows with zero fair value, so the exact position count has residual uncertainty, but the flag is not a false alarm because source confirms an actual non-accrual position."
+}

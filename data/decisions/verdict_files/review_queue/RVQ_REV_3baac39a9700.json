@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_3baac39a9700",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1927237,
+  "anchor_value": 3519936,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "Delta Leasing SPV II LLC | Specialized Finance | Common Stock | 2 | 2 | 2 | (8)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 14,
+      "quoted_text": "Establishment Labs Holdings Inc. | Health Care Technology | First Lien Term Loan | 3.00 % | 6.00 % | 4/21/2027 | 11,048 | 10,937 | 10,662 | (8)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 15,
+      "quoted_text": "Establishment Labs Holdings Inc. | Health Care Technology | First Lien Term Loan | 3.00 % | 6.00 % | 4/21/2027 | 1,769 | 1,745 | 1,707 | (8)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 18,
+      "quoted_text": "North Star Acquisitionco, LLC | Education Services | First Lien Term Loan | SOFR+ | 6.00 % | 5/3/2029 | - | ( 33 ) | ( 31 ) | (5)(8)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Four PP03 rows are sourced from the comparative September 30, 2023 investment schedule rather than the March 31, 2024 schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 29,
+        "row_index": 16,
+        "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 126.0 % of net assets) | $ | 1,922,218 | $ | 1,927,237"
+      }
+    }
+  ],
+  "rationale": "Class 2 PP03 row validation: the flagged rows localize to the later SOI table block whose total non-control/non-affiliate investments fair value is 1,927,237 at 126.0% of net assets, while the March 31, 2024 current SOI block totals 3,519,936 at 142.5% of net assets. The cited rows are therefore comparative-period facts retained under the 2024-03-31 report_date."
+}

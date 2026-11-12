@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_95c3d19d5533",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source fair value cells",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | 08/20/19 | Last Out Term Loan - 15.54 % inc PIK (SOFR + 10.25 %, 1.50 % Floor, 2.75 % PIK) | 2.6 | % | $ | 17,912,484 | 08/20/24 | $ | 17,833,011 | $ | 17,106,423",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Grand Circle Corporation | 02/26/21 | Term Loan - 17.51 % (SOFR + 12.00 %, 1.25 % Floor) | 6.0 | % | $ | 39,048,218 | 02/26/26 | $ | 38,634,995 | $ | 38,852,977",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 fired because fair_value_currency is stored as U_USD, but the raw SOI fair value column is presented in dollars and the cited rows show dollar-marked fair value cells. The source supports USD-denominated fair values; the issue is that the rule treats the U_USD unit identifier as non-USD rather than recognizing it as USD."
+}

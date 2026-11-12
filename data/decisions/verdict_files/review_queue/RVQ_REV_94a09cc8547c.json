@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_94a09cc8547c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 60,
+      "row_index": 10,
+      "quoted_text": "601 Lafayette Mezz LLC (Delayed Draw) row reports amortized cost and fair value as dashes, with 0.0 percent net assets."
+    },
+    {
+      "table_index": 52,
+      "row_index": 4,
+      "quoted_text": "95 Percent Buyer, LLC (Revolver) row reports amortized cost and fair value as dashes, with 0.0 percent net assets."
+    },
+    {
+      "table_index": 61,
+      "row_index": 36,
+      "quoted_text": "Adept AG Holdings, LLC Class A preferred units row reports amortized cost 650 and fair value as dash, with 0.0 percent net assets."
+    }
+  ],
+  "rationale": "C104 flagged zero fair_value rows. Targeted raw-source checks of representative flagged holdings show the source schedule itself reports fair value as dash/zero for those positions, so the stored fair_value of 0.0 is source-consistent rather than a data error. The filing investment totals also tie at 4,008,973, so there is no aggregate anchor disagreement requiring a zero-FV correction."
+}

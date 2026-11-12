@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_363bc4ade05d",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6981004000,
+  "anchor_value": 2949092000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 28,
+      "quoted_text": "Total Portfolio Investments ( 205.3 % of net assets) | $ | 3,208,969 | $ | 2,949,092",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 8,
+      "quoted_text": "Total Portfolio Investments ( 194.3 % of net assets) | $ | 3,075,122 | $ | 2,847,782",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 55,
+      "row_index": 25,
+      "quoted_text": "Total Portfolio Investments | $ | 394,812 | $ | 404,402 | $ | 381,077",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 25,
+      "quoted_text": "Total Portfolio Investments | $ | 394,091 | $ | 403,332 | $ | 384,364",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extractor counted the September 30, 2025 portfolio schedule total even though the reviewed anchor is the December 31, 2025 fair value total.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 32,
+        "row_index": 8
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extractor also picked up JV/affiliate lookthrough portfolio tables that are separate disclosure schedules rather than issuer-level holdings for the fund aggregate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 55,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate flag. The filing schedule total for December 31, 2025 is 2,949,092 thousand and matches the companyfacts anchor in the bundle, while the HTML extraction artifact reports 6,981,004 thousand. The raw source shows additional prior-period and JV/lookthrough Total Portfolio Investments rows, including 2,847,782 thousand for September 30, 2025 and JV totals such as 381,077/384,364 thousand, so the aggregate failure is a real extraction scope error rather than a bad source anchor."
+}

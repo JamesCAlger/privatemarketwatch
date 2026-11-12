@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_954aa869e77e",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  100,
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  13,
+                                  "row_index":  16,
+                                  "quoted_text":  "Total Investments | 100.0 | %",
+                                  "ties_to_residual":  true
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "A07 observed pct_sum is 0.0%, but the source industry-classification schedule totals 100.0% for September 30, 2025.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  13,
+                                          "row_index":  16,
+                                          "quoted_text":  "Total Investments | 100.0 | %"
+                                      }
+                     }
+                 ],
+    "rationale":  "The filing source includes a September 30, 2025 Industry Classification percentage table with individual percentage rows and a Total Investments row of 100.0%. The A07 artifact reports pct_sum=0.0%, so the platform failed to capture/map the percentage schedule rather than the source lacking or failing the percentage total."
+}

@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_REV_1065430066b6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 407509401,
+  "anchor_value": 407509401,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 1,
+      "quoted_text": "Portfolio Investments (a) (b) (c) (d) (e) (f) | Footnote Reference | Investment Type | Index (^) | Spread | Interest Rate | Acquisition Date | Maturity Date | Par/ Shares | Amortized Cost | Market Value"
+    },
+    {
+      "table_index": 29,
+      "row_index": 5,
+      "quoted_text": "Vortex Companies | (j) | Unitranche Initial Term Loan | S+ | 5.00 % | 8.65 % | 9/1/2023 | 9/4/2029 | $ | 5,002,162 | $ | 4,943,639 | $ | 5,002,149"
+    },
+    {
+      "table_index": 39,
+      "row_index": 59,
+      "quoted_text": "Total Portfolio Investments | (bd) | $ | 420,392,905 | $ | 407,509,401",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 counts low fair-value coverage across leaves in a multi-page SOI even though source position rows carry Market Value and the schedule total ties the extracted fund-quarter FV.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 39,
+        "row_index": 59
+      }
+    }
+  ],
+  "rationale": "The raw SOI uses a Market Value column for position fair value, illustrated by table 29 row 5. The filing's own Total Portfolio Investments fair value is 407,509,401 at table 39 row 59, which matches the bundle's extracted fund_quarter_fv_m of 407.509401 million. Because the source total and extracted total agree, the B01 782/1802 leaf coverage failure is a scope/counting false alarm rather than a real missing fair-value defect."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_88eb1a16e54b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Allowed evidence CLI calls for overview, totals, roam, and grid returned missing_cached_html for accession 0001193125-25-328001, and the tables call was not usable due to a sandbox read failure. The raw source could not be checked, so the X08 cost/fair-value warning cannot be adjudicated from source."
+}

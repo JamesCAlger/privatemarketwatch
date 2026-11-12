@@ -1,0 +1,28 @@
+{
+  "review_id": "RVQ_BLK_634dc2d53389",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "filing_accession",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-091756",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "evidence_cli overview: accession = 0001193125-26-091756; flagged source_artifact_rows row_key 508584 has accession_number value empty",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing-derived BDC row is missing accession_number even though the raw filing accession is 0001193125-26-091756.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "evidence_cli overview accession = 0001193125-26-091756; C006 issue row value for accession_number is empty"
+      }
+    }
+  ],
+  "rationale": "C006 requires source traceability for filing-derived BDC rows. The evidence CLI returned usable raw-source metadata for the filing and identified accession 0001193125-26-091756, while the flagged row's accession_number value is empty. That is a localized extraction/propagation defect, not an unclear source condition."
+}

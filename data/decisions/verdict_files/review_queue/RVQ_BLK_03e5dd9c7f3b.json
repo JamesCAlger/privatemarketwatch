@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_03e5dd9c7f3b",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 26786615000,
+  "anchor_value": 25337420000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 25,109,408 and $ 16,071,078 at December 31, 2025 and December 31, 2024, respectively) | 25,337,420 | 16,131,256",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 81,
+      "row_index": 12,
+      "quoted_text": "Total Investment Portfolio | $ | 25,109,408 | $ | 25,337,420 | 203.71 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 81,
+      "row_index": 18,
+      "quoted_text": "Total Investment Portfolio, Cash and Cash Equivalents | $ | 25,700,074 | $ | 25,928,086 | 208.46 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Extracted fair-value sum exceeds the filing and companyfacts investment anchor; the source separately reports cash-inclusive totals outside Total Investment Portfolio.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 81,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's own investment anchor ties to companyfacts at 25,337,420 thousand: the balance sheet reports total investments at fair value of 25,337,420 and the schedule reports Total Investment Portfolio fair value of 25,337,420. The reviewed extract sums fair_value to 26,786,615 thousand, an overshoot of 1,449,195 thousand. Source rows also show cash-inclusive totals are separate from the investment portfolio, so the conservation failure is a real over-inclusion/subtotal leakage defect rather than a bad anchor."
+}

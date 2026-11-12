@@ -1,0 +1,42 @@
+{
+  "review_id": "RVQ_REV_16ea877d2c65",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "bdc_investment_identifier=Investments Non-Controlled/Non-Affiliated Common Equity Personal Care Products Maturity Date 11/14/2024; issuer_name=Maturity Date 11/14/2024; maturity_date=2024-11-14",
+  "anchor_value": "TCI Buyer LLC - Common Units (75,000 units); acquisition_date=11/14/2024; no maturity date shown",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 44,
+      "quoted_text": "TCI Buyer LLC - Common Units ( 75,000 units) | N/A | 11/14/2024 | $ | 7,500 | $ | 7,500",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The common-equity position was extracted as hierarchy/date text instead of the source issuer and instrument TCI Buyer LLC - Common Units.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 41,
+        "row_index": 44,
+        "quoted_text": "TCI Buyer LLC - Common Units ( 75,000 units) | N/A | 11/14/2024 | $ | 7,500 | $ | 7,500"
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The stored maturity_date 2024-11-14 is actually the acquisition date for the common-units row; the source shows no maturity date for that equity position.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 41,
+        "row_index": 44,
+        "quoted_text": "TCI Buyer LLC - Common Units ( 75,000 units) | N/A | 11/14/2024 | $ | 7,500 | $ | 7,500"
+      }
+    }
+  ],
+  "rationale": "PP01 flagged four identifier-purity candidates. Source table 39 rows 17-18 and table 41 row 16 show the R.R. Donnelley and BDO debt rows are real position rows with matching issuer, instrument, rate, acquisition date, maturity date, cost, and fair value. However, the Personal Care Products common-equity artifact row is wrong: source table 41 row 44 identifies the position as TCI Buyer LLC - Common Units (75,000 units), with N/A spread and acquisition date 11/14/2024, while the stored identifier/issuer collapsed to hierarchy/date text and misclassified the acquisition date as maturity_date. The flag therefore corresponds to a real localized extraction defect, not a pure false alarm."
+}

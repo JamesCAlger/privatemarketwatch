@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_19eee96b3907",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 750.0,
+  "anchor_value": 7.5,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 4,
+      "quoted_text": "Carestream Health, Inc. (First Lien Term Loan) (5) | SOFR + 750 | 3.67% | 9/30/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "The source states SOFR + 750, which is 750 bps or 7.5 percentage points, but basis_spread was stored as 750.0 in a percentage-point field.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 251,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged holding is Carestream Health, Inc. (First Lien Term Loan), and the source SOI row shows an interest term of SOFR + 750. For a basis_spread field stored as whole-number percentage points, this should be 7.5, not 750.0; the flagged value is a basis-point value stored without conversion."
+}

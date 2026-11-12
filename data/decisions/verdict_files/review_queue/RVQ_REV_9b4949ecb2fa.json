@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_9b4949ecb2fa",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6,
+  "anchor_value": 6,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 29,
+      "quoted_text": "Nomad Health, Inc. secured loan dated June 12, 2024 is marked (18)(24).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 30,
+      "quoted_text": "Nomad Health, Inc. secured loan dated September 30, 2025 is marked (18)(24).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 5,
+      "quoted_text": "3DEO, Inc. equipment financing is marked (18).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 13,
+      "quoted_text": "Macrofab, Inc. secured loan is marked (8)(18).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 25,
+      "quoted_text": "NextCar Holding Company, Inc. secured loan is marked (18).",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 16,
+      "quoted_text": "Zuum Transportation, Inc. secured loan is marked (8)(18).",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 raw investment schedule contains exactly six debt positions carrying the common footnote (18): two distinct Nomad Health loans plus one position each for 3DEO, Macrofab, NextCar, and Zuum. This matches the flag's observed count of six and its six position identifiers. The flag therefore reflects the filing disclosure rather than a data defect; treating the mere presence of disclosed non-accrual positions as an error is a bad rule anchor/scope."
+}

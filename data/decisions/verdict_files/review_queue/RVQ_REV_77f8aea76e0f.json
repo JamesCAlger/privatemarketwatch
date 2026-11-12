@@ -1,0 +1,38 @@
+{
+    "review_id":  "RVQ_REV_77f8aea76e0f",
+    "verdict":  "real_error",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.50116009280742457,
+    "anchor_value":  0.95,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  11,
+                                  "row_index":  29,
+                                  "quoted_text":  "Total Investments | $ | 7,440,176 | $ | 7,724,072 | 179.8 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  30,
+                                  "quoted_text":  "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "The B01 leaf universe appears to include both the September 30, 2025 SOI and the December 31, 2024 comparative SOI; the raw source has separate current and comparative totals, while only 216 of 431 counted leaves carry fair_value.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  17,
+                                          "row_index":  30,
+                                          "quoted_text":  "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %"
+                                      }
+                     }
+                 ],
+    "rationale":  "B01 is a Class 3 aggregate completeness flag with no single row specified. The raw source shows a current-period SOI total at table 11 row 29 of fair value 7,724,072 and a separate comparative-period SOI total at table 17 row 30 of fair value 7,244,282. The failing universe, 216/431 leaves with fair_value, is approximately the current-period leaf count over current plus comparative leaves, so the source supports a comparative-period leakage/counting defect rather than missing disclosure. Source rows themselves carry fair-value columns."
+}

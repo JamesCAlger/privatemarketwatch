@@ -1,0 +1,108 @@
+{
+  "changed_files": [],
+  "cik": "0001925309",
+  "confidence": "MEDIUM",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No GAV effect from this verdict; it does not alter holdings, source rows, or validation outputs. The worklist reports affected source fair value of 1067512000.000000 for this unresolved packet.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 15,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        11,
+        12,
+        15,
+        19,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period Elements Finco Limited debt row matches the blocker identity with issuer, first-lien loan description, USD par amount, maturity, acquisition date, SOFR spread, interest rate, cost, fair value, and percent-of-net-assets fields."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 19,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        18,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period OutSystems Luxco SARL row matches issuer, EUR par amount, 12/2028 maturity, acquisition date, reference spread, interest rate, cost, fair value, local-currency fair value, and percent-of-net-assets details from the blocker row."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 26,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        18,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period Erling Lux Bidco SARL EUR first-lien loan row matches issuer, par amount, 9/2028 maturity, acquisition date, E plus 6.75 percent spread, interest rate, cost, fair value, local-currency fair value, and percent-of-net-assets detail."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 17,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        11,
+        12,
+        15,
+        19,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period Mach Natural Resources LP row matches issuer, USD par amount, 12/2026 maturity, acquisition date, SOFR reference spread, interest rate, cost, fair value, and percent-of-net-assets detail for a real schedule position."
+    }
+  ],
+  "missing_evidence": "A safe patch needs a deterministic row identity mechanism for this Sixth Street filing style that links source XBRL investment identifiers to the correct HTML rows using issuer, currency, par amount, maturity, acquisition date, reference rate/spread, interest rate, cost, fair value, and period. The bundle proves that some blocker rows are real current positions, but it also shows false coordinate matches from generic par/maturity snippets against unrelated issuers, so the evidence is insufficient to implement a bounded parser or staging patch without adding mis-linked rows.",
+  "patch_summary": "",
+  "primary_justification": "Escalate rather than patch: the cited coordinates show genuine current-period position rows missing from unified output, but the bundle's matching evidence is noisy and does not establish a bounded production rule. A broad parser change for terminal-percentage leaf rows would risk importing incorrect rows or linking source facts to the wrong HTML table coordinates for this CIK-quarter.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2024-06-30",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker remains unresolved and visible. Sixth Street Lending Partners 2024-06-30 has real source positions that appear absent from unified holdings, but the safe clearing mechanism requires row-level identity reconciliation before production rows can be added.",
+  "review_id": "BDCSRC_0001925309_2024-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_b14905bb71",
+  "reviewer_notes": "Manually reviewed this bundle on its merits. The HTML/source evidence supports real current position rows for Elements Finco Limited, OutSystems Luxco SARL, Erling Lux Bidco SARL, and Mach Natural Resources LP. However, the coordinate candidate evidence also includes false matches, including generic par/maturity hits against unrelated issuers, which means the bundle does not support a simple parser or classifier patch. This should be handled by a dedicated Sixth Street row-identity mechanism or reviewed source-table mapping, not by weakening blocker filters.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No source reconciliation rows are reclassified by this verdict. The packet is documented as an escalated real-position residual pending a bounded row-identity parser/staging mechanism.",
+  "tests_validation_plan": "Validated with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If converted to a patch later, add focused tests that cover correct Sixth Street multi-currency debt rows and false-positive rows that share only par/maturity snippets.",
+  "verdict": "ESCALATE"
+}

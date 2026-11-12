@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_261ac979d987",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source rows",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 2,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | 7/2/2026 | $ | 1,432 | $ | ( 22 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Term Loan | S + 5.25 % | 7/2/2031 | $ | 7,874 | $ | 7,759 | $ | 7,756 | 7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 20,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 259,337 | $ | 259,073 | 220.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because the stored unit label is U_USD, but the raw filing schedule presents the same BDC valuation fields as USD-denominated dollar amounts. The cited AB Centers commitment and investment rows, plus the schedule total, show dollar signs for cost/fair value amounts; the check is misclassifying the U_USD unit label rather than identifying a non-USD source value."
+}

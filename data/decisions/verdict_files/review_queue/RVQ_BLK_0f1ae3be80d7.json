@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_0f1ae3be80d7",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2372.110,
+  "anchor_value": 2382.163,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 53,
+      "row_index": 1,
+      "quoted_text": "As of December 31, 2025 | As of September 30, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 8,
+      "quoted_text": "Total | $ | 2,351,803 | $ | 2,349,527 | $ | 2,382,163 | $ | 2,179,985 | $ | 2,176,447 | $ | 2,209,174",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 33,
+      "quoted_text": "Total investments | 2,349,527 | 203.7 | 2,382,163",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 23,
+      "quoted_text": "Total investments | 2,176,447 | 206.7 | 2,209,174",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07 source-side basis appears to include the September 30, 2025 comparative SOI block even though the reviewed output quarter is December 31, 2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 53,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate coverage flag with no row location. Raw-source anchors show two distinct SOI periods: December 31, 2025 fair value total investments of 2,382,163 and September 30, 2025 fair value total investments of 2,209,174. The bundle output quarter FV is 2,372.110m, close to the December schedule total and inconsistent with a 47.1% current-period omission. The E07 source=1589 vs output=841 comparison is therefore best explained by the check's source side leaking comparative-period SOI rows, not by a real December 31 output data error."
+}

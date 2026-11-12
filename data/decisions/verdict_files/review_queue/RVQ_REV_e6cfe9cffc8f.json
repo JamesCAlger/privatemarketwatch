@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e6cfe9cffc8f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.2597402597402597,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 17,
+      "quoted_text": "Number of new portfolio companies | 159 | 104",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 18,
+      "quoted_text": "Number of exited portfolio companies | (43) | (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 19,
+      "quoted_text": "Portfolio companies, end of period | 275 | 159",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 20,
+      "quoted_text": "Count of investments | 477 | 252",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "D06 fired on low issuer continuity, but the raw filing explains the discontinuity as genuine portfolio growth and turnover: 2024 had 159 new portfolio companies, 43 exits, end-of-period portfolio companies increased to 275 from 159, and investment count increased to 477 from 252. The source therefore supports the low continuity as a business/source outcome rather than a demonstrated extraction or normalization defect."
+}

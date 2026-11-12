@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_2419ae5e229c",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19.21194630872483,
+  "anchor_value": 9.172259507829978,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 10,
+      "quoted_text": "Dividends to common shareholders: 2025 (0.82) per common share",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 11,
+      "quoted_text": "Per share NAV at end of period: 2025 $8.94",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 17,
+      "quoted_text": "Ratios to average net asset value: Net investment income 2025 8.52%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 6,
+      "quoted_text": "Total 2025 distributions: $0.82 per share, $23,540,971 total amount",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The extracted distribution_rate is 19.2119%, but source dividends of $0.82 per share over ending NAV of $8.94 support about 9.17%, which does not exceed 1.5 times the 8.52% NII yield.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 52,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "F16 is an aggregate fund-financials check. The filing source reports 2025 dividends to common shareholders of $0.82 per share, ending NAV of $8.94, and net investment income of 8.52% of average net asset value. Those source figures imply a distribution rate of about 9.17% using ending NAV, below the F16 threshold of 12.78% (8.52% * 1.5). The flagged observed value of 19.211946% is therefore not source-supported and localizes to the derived distribution_rate field."
+}

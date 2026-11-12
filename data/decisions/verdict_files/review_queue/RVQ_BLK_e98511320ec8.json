@@ -1,0 +1,142 @@
+{
+  "review_id": "RVQ_BLK_e98511320ec8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9,
+  "anchor_value": 0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 20,
+      "quoted_text": "Saturn Purchaser Corp. (8)(13)(17)(18) | First Lien Senior Secured Loan | SOFR | 4.85 % | 8.72 | % | 7/22/2030 | $ | 8,129 | 8,026 | 8,129"
+    },
+    {
+      "table_index": 57,
+      "row_index": 24,
+      "quoted_text": "Ergotron Acquisition LLC (8)(13)(17)(19) | First Lien Senior Secured Loan | SOFR | 5.25 % | 8.97 | % | 7/6/2028 | $ | 8,368 | 8,277 | 8,368"
+    },
+    {
+      "table_index": 59,
+      "row_index": 36,
+      "quoted_text": "PMA (8)(13)(17)(19) | First Lien Senior Secured Loan | SOFR | 4.75 % | 8.42 | % | 1/31/2031 | $ | 17,390 | 17,190 | 17,390"
+    },
+    {
+      "table_index": 60,
+      "row_index": 54,
+      "quoted_text": "RedMed Operations (Collage Rehabilitation) (8)(13)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.00 % | 8.72 | % | 2/28/2031 | $ | 15,444 | 15,378 | 15,444"
+    },
+    {
+      "table_index": 61,
+      "row_index": 25,
+      "quoted_text": "Govineer Solutions (fka Black Mountain) (8)(13)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.00 % | 8.67 | % | 10/7/2030 | $ | 15,733 | 15,639 | 15,733"
+    },
+    {
+      "table_index": 61,
+      "row_index": 41,
+      "quoted_text": "SensorTower (8)(13)(17)(22) | First Lien Senior Secured Loan | SOFR | 7.50 % | 11.20 | % | 3/15/2029 | $ | 3,881 | 3,843 | 3,881"
+    },
+    {
+      "table_index": 61,
+      "row_index": 50,
+      "quoted_text": "Awayday (8)(13)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.25 % | 8.92 | % | 5/6/2032 | $ | 22,851 | 22,653 | 22,851"
+    },
+    {
+      "table_index": 63,
+      "row_index": 36,
+      "quoted_text": "CorePower Yoga, LLC (8)(13)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.25 % | 8.92 | % | 4/30/2031 | $ | 35,897 | 35,738 | 35,897"
+    },
+    {
+      "table_index": 63,
+      "row_index": 42,
+      "quoted_text": "Owl Acquisition, LLC (8)(13)(17)(19) | First Lien Senior Secured Loan | SOFR | 4.75 % | 8.63 | % | 4/17/2032 | $ | 25,174 | 25,089 | 24,670"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Saturn Purchaser Corp. current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 56,
+        "row_index": 20
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Ergotron Acquisition LLC current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 57,
+        "row_index": 24
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PMA current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 59,
+        "row_index": 36
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "RedMed Operations (Collage Rehabilitation) current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 60,
+        "row_index": 54
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Govineer Solutions (fka Black Mountain) current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 61,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "SensorTower current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 61,
+        "row_index": 41
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Awayday current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 61,
+        "row_index": 50
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CorePower Yoga, LLC current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 63,
+        "row_index": 36
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Owl Acquisition, LLC current-period term-loan source row is absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 63,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "SRC_BDC01 reports nine eligible current-period BDC source rows with no corresponding pipeline output rows. Targeted evidence CLI queries found all nine rows in the raw 2025 schedule of investments with issuer, loan type, rate, maturity, cost, and fair value coordinates; therefore the flag is a real extraction/output coverage error, not a false alarm."
+}

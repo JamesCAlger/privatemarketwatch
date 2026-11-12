@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_6cf35734362d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 12.05,
+  "anchor_value": 12.05,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 5,
+      "quoted_text": "Heligear Acquisition Co. | 07/30/19 | Term Loan - 12.05 % ( SOFR + 7.50 %, 2.00 % Floor) | 8.6 | % | 44,088,010 | 09/30/25 | 44,088,010 | 44,088,010"
+    },
+    {
+      "table_index": 4,
+      "row_index": 23,
+      "quoted_text": "Twin Star International, Inc. | 06/12/23 | Incremental Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) | 0.2 | % | 1,079,539 | 06/18/26 | 1,079,539 | 1,079,539"
+    },
+    {
+      "table_index": 5,
+      "row_index": 18,
+      "quoted_text": "RL Investor Holdings LLC (fka Red Lobster Management, LLC) (4) | 09/16/24 | Term Loan - 11.80 % inc PIK ( SOFR + 7.50 %, 2.00 % Floor, all PIK) | 9.2 | % | 47,388,099 | 09/16/29 | 47,388,099 | 47,388,099"
+    }
+  ],
+  "rationale": "The weak metric is the 7.50 percent basis spread, but raw SOI rows show 7.50 percent appears inside the parenthetical benchmark-spread terms while the stated instrument coupon is separately printed before the parenthetical. Representative rows show all-in/stated rates of 12.05 percent, 11.95 percent, and 11.80 percent with SOFR + 7.50 percent terms. The source does not show a Term Loan - 7.50 percent coupon, so this flag is a rule-scope false alarm on valid rate-spread formatting rather than a data error."
+}

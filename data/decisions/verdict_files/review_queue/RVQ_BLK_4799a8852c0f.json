@@ -1,0 +1,13 @@
+{
+  "review_id": "RVQ_BLK_4799a8852c0f",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 5353574000,
+  "anchor_value": 5156571000,
+  "confidence": 0.96,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 anchor triangulation shows the extracted position fair-value sum of $5,353.574 million exceeds the filing's Total Investments, March 31, 2026 schedule total of $5,156.571 million (table 40, row 31) by $197.003 million, or 3.82%. Raw source therefore confirms a conservation error. Targeted subtotal/residual queries did not uniquely localize a culprit, so the mechanism remains unknown and localized is false."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_dac2c986dc78",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "C104 flagged four extracted fair_value cells equal to 0.0, identified in the bundle only by internal row_key values 187697, 187737, 187762, and 188023. The raw filing source was readable and contains many SOI rows with zero-like or dash values, but the evidence available through the allowed CLI does not map those row_keys to issuer/instrument/source coordinates. Because the specific four flagged cells cannot be matched to raw source rows without guessing, the source checked does not decide whether these are real data errors or legitimate zero fair values."
+}

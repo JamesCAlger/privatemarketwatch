@@ -1,0 +1,36 @@
+{
+  "review_id": "RVQ_BLK_4d13df3f7724",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 2345309000.0,
+  "anchor_value": 2064194000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "source_artifact_rows: value_sum=2345309000.0 vs companyfacts_fv anchor_value=2064194000.0; totals: Total investments at fair value | 2,064,194 and Total Investments | $ | 2,109,527 | $ | 2,064,194",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 78,
+      "row_index": 45,
+      "quoted_text": "Total Investments | $ | 271,700 | $ | 267,841 | $ | 267,327",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "An additional investment schedule with its own Total Investments fair value of 267.327 million appears to have been included in the extracted position sum even though the issuer-level filing total is 2.064194 billion.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 78,
+        "row_index": 45,
+        "quoted_text": "Total Investments | $ | 271,700 | $ | 267,841 | $ | 267,327"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The source totals agree with the companyfacts anchor: table 24 row 8 and table 47 row 19 both report total investments at fair value of 2,064,194 thousand, matching the companyfacts_fv anchor of 2,064,194,000. The extracted position sum is 2,345,309,000, an overshoot of 281,115,000, so the conservation flag is a real data error rather than a bad anchor. The extra schedule total at table 78 row 45 localizes a substantial out-of-scope lookthrough component, but it does not exactly equal the full residual, so localization remains partial."
+}

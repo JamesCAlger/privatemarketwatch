@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_5af6aa34c636",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -0.2,
+  "anchor_value": 0.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 13,
+      "quoted_text": "SPLAT Super HoldCo, LLC | Delayed Draw Term Loan | 1M SOFR + 5.00 % | - | - | 8/4/2025 | 7/2/2032 | - | ( 2,175 | ) | ( 5,878 | ) | 0.0 | % | (7) (8) (11) (12) (13)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged extracted value is pct_of_net_assets = -0.2 for the SPLAT Super HoldCo delayed draw term loan, but the raw schedule row shows the filed % of Net Assets cell as 0.0%. The negative amortized cost and fair value are source-faithful, but the percentage field is not."
+}

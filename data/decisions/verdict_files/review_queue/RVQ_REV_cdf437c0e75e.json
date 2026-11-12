@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_cdf437c0e75e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 29,
+      "quoted_text": "Pegasus Steel | Senior Secured First Lien Term Loan | S + 475 , 75 Floor | 8.75 % | 01/2031 | 1,537 | 1,521 | 0.3 | 1,529"
+    },
+    {
+      "table_index": 43,
+      "row_index": 30,
+      "quoted_text": "Pegasus Steel | Senior Secured First Lien Term Loan | S + 475 , 75 Floor | 8.42 % | 01/2031 | 884 | 884 | 0.2 | 879"
+    },
+    {
+      "table_index": 43,
+      "row_index": 31,
+      "quoted_text": "Pegasus Steel (4)(5) | Senior Secured First Lien Delayed Draw Term Loan | 01/2031 | - | ( 2 | ) | ( 0.0 | ) | ( 2 | )"
+    },
+    {
+      "table_index": 43,
+      "row_index": 32,
+      "quoted_text": "Pegasus Steel (4)(5) | Senior Secured First Lien Delayed Draw Term Loan | 01/2031 | - | - | ( 0.0 | ) | ( 1 | )"
+    },
+    {
+      "table_index": 43,
+      "row_index": 33,
+      "quoted_text": "Pegasus Steel (4)(5) | Senior Secured First Lien Delayed Draw Term Loan | 01/2031 | - | - | ( 0.0 | ) | ( 2 | )"
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys for Pegasus. The raw SOI shows multiple separate Pegasus Steel schedule rows, not a repeated extraction of one row: the two funded term loans have different interest rates and amounts, and the delayed-draw rows are separate source lines with different cost/fair-value economics. The duplicate key is therefore too coarse for legitimate separately reported positions."
+}

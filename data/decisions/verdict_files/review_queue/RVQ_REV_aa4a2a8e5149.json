@@ -1,0 +1,96 @@
+{
+  "review_id": "RVQ_REV_aa4a2a8e5149",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 11549149.4,
+  "anchor_value": 21508598.4,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 139,
+      "row_index": 36,
+      "quoted_text": "BSP 2022-28 | Collaterized loan obligation | 9.96 % | SOFR (Q) | 5.40 % | 10/2037 | 500.0 | 500.0 | 501.4 | (5)(12)"
+    },
+    {
+      "table_index": 126,
+      "row_index": 32,
+      "quoted_text": "CPIG Holdco Inc. (10) | First lien senior secured revolving loan | 9.44 % | SOFR (Q) | 4.75 % | 04/2028 | 0.5 | 0.5 | 0.5 | (2)(7)(9)(12)"
+    },
+    {
+      "table_index": 147,
+      "row_index": 37,
+      "quoted_text": "Excelitas Technologies Corp. (10) | First lien senior secured loan | 9.61 % | SOFR (M) | 5.25 % | 08/2029 | 32,500.0 | 32,500.0 | 32,500.0 | (2)(7)(12)"
+    },
+    {
+      "table_index": 132,
+      "row_index": 19,
+      "quoted_text": "Priority Waste Holdings LLC, Priority Waste Holdings Indiana LLC and Priority Waste Super Holdings, LLC (10) | First lien senior secured revolving loan | 10.09 % | SOFR (Q) | 5.50 % | 08/2029 | 1.9 | 1.8 | 1.9 | (2)(7)(12)"
+    },
+    {
+      "table_index": 132,
+      "row_index": 20,
+      "quoted_text": "First lien senior secured revolving loan | 12.00 % | Base Rate (Q) | 4.50 % | 08/2029 | 0.1 | 0.1 | 0.1 | (2)(7)(12)"
+    },
+    {
+      "table_index": 149,
+      "row_index": 18,
+      "quoted_text": "Total Investments | $ | 11,482,053.0 | $ | 11,549,149.4 | (14) | 195.73 | %"
+    },
+    {
+      "table_index": 105,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ | 21,360,914.4 | $ | 21,508,598.4 | (17) | 204.73 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "BSP 2022-28 was retained from the comparative-period SOI block under the 2025 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 139,
+        "row_index": 36
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "CPIG Holdco Inc. revolving loan was retained from the comparative-period SOI block under the 2025 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 126,
+        "row_index": 32
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Excelitas Technologies Corp. loan was retained from the comparative-period SOI block under the 2025 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 147,
+        "row_index": 37
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Priority Waste SOFR revolving-loan row was retained from the comparative-period SOI block under the 2025 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 132,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Priority Waste Base Rate revolving-loan continuation row was retained from the comparative-period SOI block under the 2025 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 132,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "PP03 flagged rows are real comparative-period leakage. The later SOI block contains the cited flagged rows and totals to fair value 11,549,149.4, matching the comparative 2024 total, while the current 2025 SOI block totals to 21,508,598.4 and contains current-period versions of the same positions with different coupons. Retaining the comparative rows under report_date 2025-12-31 is therefore a source-grounded data error."
+}

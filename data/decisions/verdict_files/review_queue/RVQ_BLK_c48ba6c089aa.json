@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_c48ba6c089aa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 12769251.0,
+  "anchor_value": 37591400.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 252,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 102.3% | $ | 35,850,999 | $ | 37,591,400",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 200,
+      "row_index": 10,
+      "quoted_text": "Total Invested Assets | $ | 35,850,999 | $ | 37,591,400 | 100%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "HTML extraction captured fair value of 12,769,251 while the filing schedule and portfolio composition total for December 31, 2025 are 37,591,400.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 252,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The bundle's html_extract observed fair value sum is 12,769,251, but raw source totals show Total Investments/Total Invested Assets of 37,591,400 for December 31, 2025, matching the companyfacts anchor in the bundle. The filing anchor is therefore sound and the HTML aggregate extraction is materially incomplete."
+}

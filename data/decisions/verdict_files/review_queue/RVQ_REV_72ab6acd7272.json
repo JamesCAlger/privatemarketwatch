@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_72ab6acd7272",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6.91,
+  "anchor_value": 9.4,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 87,
+      "row_index": 11,
+      "quoted_text": "Total debt portfolio (2) | 9.4%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 14,
+      "quoted_text": "Total Investment Income | $ | 22,498",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 46,
+      "quoted_text": "Total | $ | 931,486 | $ | - | $ | 2,939 | $ | 934,425 | 245.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source shows Q1 2026 total investment income of $22.498 million and a March 31, 2026 investment fair-value total of $934.425 million, implying an annualized income yield of about 9.63%. The filing independently discloses a 9.4% weighted average yield for the total debt portfolio. Thus 9.63% is below the source WAC plus 200 bps (11.4%). The flag metric of 2.72 implies a weak holdings-derived WAC near 6.91%, contradicted by the filing's disclosed 9.4% portfolio yield; the check anchor is bad, while the fund-financials value is supported."
+}

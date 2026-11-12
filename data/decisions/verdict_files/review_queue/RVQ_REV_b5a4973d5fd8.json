@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_b5a4973d5fd8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values contain raw investment path/terms: Debt Investments, First Lien Senior Secured, OneCare Media, LLC [instrument], Media, Spread Above Index SOFR + 6.50% (1.00% floor), Interest rate 11.85%, Maturity Date 9/29/2026",
+  "anchor_value": "raw source separates issuer/instrument from industry, spread, interest rate, and maturity; issuer base is OneCare Media, LLC",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 65,
+      "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4) | Media | SOFR + 6.50 % ( 1.00 % floor) | 11.85 | % | 9/29/2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 66,
+      "quoted_text": "OneCare Media, LLC - Term Loan A | Media | SOFR + 6.50 % ( 1.00 % floor) | 11.85 | % | 9/29/2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 67,
+      "quoted_text": "OneCare Media, LLC - Term Loan B | Media | SOFR + 6.50 % ( 1.00 % floor) | 11.85 | % | 9/29/2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 68,
+      "quoted_text": "OneCare Media, LLC - Term Loan C | Media | SOFR + 6.50 % ( 1.00 % floor) | 11.85 | % | 9/29/2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 69,
+      "quoted_text": "OneCare Media, LLC - Term Loan D | Media | SOFR + 6.50 % ( 1.00 % floor) | 11.85 | % | 9/29/2026",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The five OneCare Media issuer_name values leaked raw schedule context, including debt category, instrument, industry, spread, interest rate, and maturity; the clean issuer base is OneCare Media, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 41,
+        "row_index": 65
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse leak. The raw SOI table separates Portfolio Company from Industry, Spread Above Index, Interest Rate, and Maturity Date. For rows 65-69, the source portfolio-company cells are OneCare Media, LLC plus the instrument name, with Media, SOFR + 6.50% (1.00% floor), 11.85%, and 9/29/2026 in separate columns. The flagged stored values instead concatenate those separate terms into issuer_name, so the column contains raw dimension/term text rather than the clean issuer."
+}

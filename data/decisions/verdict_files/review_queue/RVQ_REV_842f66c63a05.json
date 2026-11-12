@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_842f66c63a05",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "EURIBOR + 10.5 % PIK, 14.4 % PIK",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 31,
+      "quoted_text": "Subordinated Term Loan | EURIBOR + 10.5 % PIK, 14.4 % PIK | 05/23 | 11/30 | 342 | 341 | 336 | - | % | (3) (7) (10) (28)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Adhefin International subordinated term loan has source-disclosed PIK interest but the extracted private-credit row has blank interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 31,
+        "quoted_text": "Subordinated Term Loan | EURIBOR + 10.5 % PIK, 14.4 % PIK"
+      }
+    }
+  ],
+  "rationale": "X02 flags private-credit rows with no interest_rate or basis_spread. The bundle's holdings sample includes Adhefin International, Industrial Other, Subordinated Term Loan with blank interest_rate, but the raw schedule row immediately under Adhefin International discloses an Interest value of EURIBOR + 10.5 % PIK, 14.4 % PIK. This grounds the warning as a real extraction gap rather than source absence or a false alarm."
+}

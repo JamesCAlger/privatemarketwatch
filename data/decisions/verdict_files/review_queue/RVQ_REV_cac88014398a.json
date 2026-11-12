@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_cac88014398a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 13,
+  "anchor_value": 13,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 0,
+      "quoted_text": "Portfolio Company | Type of Investment | Footnotes | Interest Rate | Acquisition Date | Par Amount / Units | Cost | Fair Value | Percentage of Net Assets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell defect. The raw March 31, 2026 schedule exposes Portfolio Company, Type of Investment, and Acquisition Date as separate columns, while all 13 flagged issuer_name values concatenate the portfolio-company name with investment-type and acquisition-date text (for example, ACC Ultimate Holdings, L.P., Equity, Acquisition Date 5/8/2024). The source structure therefore confirms a wrapper/column-boundary extraction gap rather than a legitimate issuer name. No aggregate valuation anchor is relevant to C206."
+}

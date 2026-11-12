@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_65ddb94b71d5",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 1,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 26,
+      "quoted_text": "CentralSquare Technologies, LLC",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 27,
+      "quoted_text": "Software | First Lien(2)(3)(6) | SOFR(M) | 5.75 % | 9.42 % | 04/2024 | 04/2030 | 15,621 | 15,490 | 15,621 | 1.63 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extract has a duplicate CentralSquare First Lien key, while the current-period source schedule contains one such position.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 16,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "B02 reports two rows under the same normalized CentralSquare Technologies LLC First Lien key. The raw current-period schedule shows one issuer heading at table 16 row 26 and one corresponding First Lien position at row 27, with a single set of rate, maturity, principal, cost, and fair-value fields. Thus the second extracted key instance is not a distinct source position and is a dimension/identity double count. The raw-source row count is one versus two observed extracted instances."
+}

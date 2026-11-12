@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_e8ba5135fea7",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 181.8,
+  "anchor_value": 181.8,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 32,
+      "quoted_text": "Total Net Assets | 19,760,273"
+    }
+  ],
+  "rationale": "F22 expects 50 <= sum(pct_of_net_assets) <= 400. The raw schedule reports Total Investments at fair value of 35,918,948 and 181.8% of net assets; the balance sheet reports Total Net Assets of 19,760,273, and 35,918,948 / 19,760,273 is approximately 181.8%. The source therefore satisfies the rule, so the review flag is not a source data error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_6c8a37557389",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 402522665,
+  "anchor_value": 402522665,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 38,
+      "quoted_text": "Total Portfolio Investments | (bi) | $ | 421,382,402 | $ | 402,522,665",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 55,
+      "row_index": 11,
+      "quoted_text": "Number of portfolio investments | 338 | 291",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The E07 source count of 1969 is not a valid position-count anchor. Raw source reports 338 portfolio investments for March 31, 2026 at table 55 row 11, while the output has 456 instrument-level rows, so those counts are different grains. More decisively, the filing's schedule total fair value is $402,522,665 at table 20 row 38, exactly matching the extracted fund-quarter fair value of $402,522,665. The aggregate value reconciliation shows the holdings schedule was captured; the flag is caused by an incorrectly scoped source-row count rather than missing output positions."
+}

@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_98466621f673",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 22,
+      "quoted_text": "Class A preferred units | 09/2024 | 20,000,000 | 16.2 | 0.1 | (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 28,
+      "quoted_text": "Class A common units | 06/2023 | 7,776,181 | 29.4 | 0.1 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged four rows where fair value is below 5% of cost. The permitted raw-source views confirm two printed distressed equity rows in table 21: one with amortized cost 16.2 and fair value 0.1, and ADG Class A common units with amortized cost 29.4 and fair value 0.1. Those two look source-faithful rather than extraction errors. However, targeted raw-source queries for the other flagged costs, 23.7 and 45.1, did not localize matching rows with fair value below 5% of cost; the returned rows either showed fair value approximately equal to cost or unrelated commitment/prior-period context. Because the bundle contains four issue rows and the permitted evidence does not decisively identify all four raw source rows, the item remains ambiguous rather than a false alarm or grounded real error."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_747d2adf2f55",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2783.476,
+  "anchor_value": 2783.476,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 7,
+      "quoted_text": "21,773 | 21,349 | 21,338 | 1.53 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 11,
+      "quoted_text": "20,694 | 20,395 | 20,797 | 1.49 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Rows following preferred-equity positions repeat only numeric totals/percentages and are continuation or rollup rows, not additional investments.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 51,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "B02 is a CIK-quarter duplicate-position-key flag. The filing's own total investment fair value is 2,783,476 thousand, matching the bundle's 2783.476 million internal anchor, so the aggregate anchor is not bad. In the preferred-equity SOI section, source position rows such as Ranger Parent I, Inc. at table 51 row 6 are immediately followed by numeric-only rows such as row 7, and the MC CIF rows 9-10 are followed by numeric-only row 11. Those numeric-only rows are subtotal/continuation presentation rows, not separate instruments. Treating them as positions would create duplicate or non-position keys, so the B02 flag is a real extraction/row-disposition defect."
+}

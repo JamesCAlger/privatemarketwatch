@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_6df6b4e837d8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 204.79,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,317,918 | $ | 2,339,502 | 204.79 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 reports pct_sum=0.0%, but the SOI schedule total carries 204.79% of net assets before cash and cash equivalents.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The oracle artifact reports pct_sum=0.0% for the CIK-quarter, but the raw SOI table has a populated % of net assets schedule total: Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents has fair value 2,339,502 and 204.79%. The source therefore does not support a zero percentage sum; the likely defect is that the percentage column/subtotal was missed during extraction or mapping."
+}

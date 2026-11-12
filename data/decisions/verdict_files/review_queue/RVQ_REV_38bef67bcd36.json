@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_38bef67bcd36",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include extracted sequence suffixes such as 'AB Centers Acquisition Corporation (Action Behavior Centers) 1' and 'ADPD Holdings LLC (NearU) 1/2/3'",
+  "anchor_value": "source Portfolio Company cells show 'AB Centers Acquisition Corporation (Action Behavior Centers)' and 'ADPD Holdings LLC (NearU)' without numeric suffixes",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 4,
+      "quoted_text": "AB Centers Acquisition Corporation (Action Behavior Centers) | (4) (6) (14) | First Lien Debt | S + 5.00 % | 9.32 | % | 7/2/2031 | $ | 13,818 | $ | 13,693 | $ | 14,095 | 1.55 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "AB Centers Acquisition Corporation (Action Behavior Centers) | (4) (11) | First Lien Debt (Delayed Draw) | S + 5.00 % | 9.32 | % | 7/2/2031 | 2,517 | 762 | 817 | 0.09 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 7,
+      "quoted_text": "ADPD Holdings LLC (NearU) | (4) (6) (7) | First Lien Debt | S + 6.00 % | 10.47 | % | 8/16/2028 | 5,678 | 5,633 | 5,425 | 0.60 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 8,
+      "quoted_text": "ADPD Holdings LLC (NearU) | (4) (6) (7) (11) | First Lien Debt (Delayed Draw) | S + 6.00 % | 10.70 | % | 8/16/2028 | 148 | -- | ( 7 ) | -- | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name normalization retained instrument sequence suffixes on repeated AB Centers rows even though the source issuer cell has no numeric suffix.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name normalization retained instrument sequence suffixes on repeated ADPD Holdings rows even though the source issuer cell has no numeric suffix.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "This is a real issuer-name formatting extraction error. The bundle's holdings slice shows stored issuer_name values with trailing sequence numbers for repeated instruments, while the raw filing's Portfolio Company rows list the issuer names without those numeric suffixes; the suffixes belong to the pipeline's disambiguated investment identifier, not the issuer name."
+}

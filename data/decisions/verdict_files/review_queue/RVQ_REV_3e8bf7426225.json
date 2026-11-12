@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_3e8bf7426225",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC (2)(5)(8) | 07/27/23 | Super Senior Revolver - 14.32 % inc PIK ( SOFR + 10.50 %, 1.50 % Floor, all PIK) | 10.5 | % | $ | 45,818,273 | 02/01/27 | $ | 45,808,482 | $ | 45,818,273"
+    },
+    {
+      "table_index": 26,
+      "row_index": 5,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Term Loan - 11.42 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 2.9 | % | 42,880,913 | 09/28/26 | 35,633,236 | 12,564,108"
+    }
+  ],
+  "rationale": "The evidence CLI exposed eight current-period schedule rows carrying footnote marker (8), matching the flagged observed count of 8: two Navistar rows, one Twin Star row, three Legacy rows, and two Encompass rows. However, targeted source queries for non-accrual and alternate wording did not expose the footnote legend defining marker (8). Because the raw source rows show the marker but not its meaning, the source checked does not decide whether these are nonaccrual positions or whether the flag is a data defect."
+}

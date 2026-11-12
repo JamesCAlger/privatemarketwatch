@@ -1,0 +1,82 @@
+{
+  "changed_files": [],
+  "cik": "0001849894",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "holdings_examples",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 30,
+      "row_index": 24,
+      "cell_indices": [
+        0,
+        3,
+        5,
+        7,
+        9,
+        12,
+        16,
+        20,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Foundation Risk Partners is a current-period MSD position row with borrower text, reference rate/spread, floor, stated rate, maturity, principal/cost/fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 31,
+      "row_index": 8,
+      "cell_indices": [
+        0,
+        3,
+        5,
+        7,
+        9,
+        12,
+        16,
+        20,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Texas Hydraulics is a current-period MSD position row with borrower text, reference rate/spread, floor, stated rate, maturity, principal/cost/fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 39,
+      "row_index": 26,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Foundation Risk Partners delayed-draw detail row is classified as a current-period position row, but it is a separate tranche/detail candidate with only borrower, delayed-draw label, maturity, amount, and fair-value-like cells; this illustrates why a safe fix needs tranche/row identity logic rather than a broad parser inclusion."
+    }
+  ],
+  "missing_evidence": "A bounded production patch is not supported by this bundle alone. Missing evidence needed for a safe MSD fix: a row-identity mechanism that maps each XBRL investment identifier to the correct HTML row or continuation/detail row; a tranche-level matching rule that distinguishes base term loans, delayed-draw loans, revolving-credit facilities, incremental rows, and negative adjustment-like fair values; and false-positive tests across adjacent MSD quarters proving the fix would not duplicate already matched rows or merge distinct tranches.",
+  "patch_summary": "",
+  "primary_justification": "Manual review shows this packet is a real source reconciliation blocker, not a header/subtotal row and not an insufficient-evidence placeholder. The source-only rows contain issuer, lien, industry, rate/spread, floor, interest rate, maturity, principal/cost/fair-value evidence, and the HTML coordinate candidates include current-period position rows such as Foundation Risk Partners and Texas Hydraulics. However, the coordinate evidence is mixed: some candidates are broad issuer-level rows, some are tranche/detail rows, some revolving-credit candidates match generic facility text in unrelated rows, and the same accession contains negative fair-value rows for certain facilities. Because the worklist reports 50 source-only blocker rows and 54 missing-from-pipeline rows while output rows also exist for the same accession, a safe patch requires a tested row-identity/tranche mechanism rather than a one-off inclusion rule.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2024-12-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker remains live production undercoverage until a bounded MSD parser/table-selection/row-identity fix is implemented and source reconciliation is rebuilt. Adding these rows without a row-identity mechanism could duplicate existing MSD output rows, misassign fair values between base and delayed-draw tranches, or include negative adjustment-like rows as standalone positions.",
+  "review_id": "BDCSRC_0001849894_2024-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_a277eb1a7c",
+  "reviewer_notes": "Reviewed manually as row 53. The correct outcome is escalation: evidence is strong that true current-period MSD positions are missing from unified/source matching, but the bundle does not establish a bounded production rule. This replaces the prior placeholder insufficient-evidence verdict because the merits of the row show real position undercoverage with unresolved row-identity risk.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation packet remains a live blocker requiring a targeted MSD row-identity/tranche parser fix.",
+  "tests_validation_plan": "Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. Before any code patch, add focused tests for MSD row identity, table selection, delayed-draw/detail rows, revolving-credit rows, negative fair-value adjustment handling, and duplicate prevention across adjacent MSD quarters.",
+  "verdict": "ESCALATE"
+}

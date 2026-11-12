@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_72312752abf9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Total portfolio company investments | $ | 359,400 | 100.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum=0.0%, but the 2025 source schedule reports total portfolio company investments at 100.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's own schedule total anchors the portfolio company investment percentage at 100.0% for December 31, 2025, while the flagged oracle metric is pct_sum=0.0%. The source also anchors fair value at $359,400 thousand, matching the bundle's 359.4 million quarter fair value, so the issue is not a bad total anchor; it is a missed percentage extraction/mapping."
+}

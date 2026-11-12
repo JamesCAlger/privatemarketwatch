@@ -1,0 +1,40 @@
+{
+    "review_id":  "RVQ_REV_0d8c3de13123",
+    "verdict":  "false_alarm",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  66.5,
+    "anchor_value":  100.0,
+    "confidence":  0.82,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  6,
+                                  "quoted_text":  "Funded row discloses SOFR(Q) + 6.25% and Interest Rate 11.26% for a First lien investment."
+                              },
+                              {
+                                  "table_index":  26,
+                                  "row_index":  4,
+                                  "quoted_text":  "Unfunded row for Notorious Topco shows First lien - Undrawn with reference, spread, and interest rate all shown as dashes."
+                              },
+                              {
+                                  "table_index":  31,
+                                  "row_index":  3,
+                                  "quoted_text":  "Interest Rate Type summary shows Floating rates at 99.91% of total investments at fair value."
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "classification_lookthrough",
+                         "detail":  "The rate-fill warning appears to count unfunded commitment rows even though the source schedule explicitly has no rate terms for those rows.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  26,
+                                          "row_index":  4
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate review. The raw schedule separates funded debt rows, which carry reference, spread, and interest-rate values, from unfunded debt rows, which are labeled Undrawn and show dashes/blanks in the reference, spread, and interest-rate columns. The filing also provides an interest-rate-type summary totaling 100% of investments, including 99.91% floating-rate exposure. The observed 66.5% fill warning is therefore not evidence of dropped source rates; it is caused by applying the rate-fill check to rows where the raw source does not disclose an interest rate because they are unfunded commitments."
+}

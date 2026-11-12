@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_63619f37e95c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -123000.0,
+  "anchor_value": -123000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "ACP Falcon Buyer Inc | Systems Software | First Lien Revolver | SOFR+ | 6.50 % | 8/1/2029 | - | ( 149 ) | ( 123 ) | (5)(8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "ADC Therapeutics SA | Biotechnology | First Lien Term Loan | SOFR+ | 7.50 % | 8/15/2029 | - | ( 60 ) | ( 60 ) | (5)(8)(9)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 27,
+      "quoted_text": "AmSpec Parent LLC | Diversified Support Services | First Lien Revolver | SOFR+ | 5.75 % | 12/5/2029 | - | ( 235 ) | ( 238 ) | (5)(8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 10,
+      "quoted_text": "Total liabilities at fair value | $ | - | $ | 2,817 | $ | - | $ | 2,817",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flags negative fair_value values for review, but the raw source prints these fair values in parentheses in the Fair Value column for the cited positions; the extracted negative signs match the filing. The same filing also reports total liabilities at fair value of $2.817 million, supporting that liability-side fair values exist in the source. This is therefore a rule-scope false alarm, not a data extraction error."
+}

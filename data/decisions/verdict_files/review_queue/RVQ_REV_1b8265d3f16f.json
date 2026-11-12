@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_1b8265d3f16f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "TCW ND Parent Holdings LLC. Class A Units: fair value shown as dash"
+    },
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "AGY Equity LLC Class A Preferred Units: fair value shown as dash"
+    },
+    {
+      "table_index": 8,
+      "row_index": 8,
+      "quoted_text": "AGY Equity LLC Class B Preferred Units: fair value shown as dash"
+    },
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "AGY Equity LLC Class C Common Units: fair value shown as dash"
+    },
+    {
+      "table_index": 8,
+      "row_index": 10,
+      "quoted_text": "AGY Equity LLC Class D Preferred Units: fair value shown as dash"
+    },
+    {
+      "table_index": 8,
+      "row_index": 24,
+      "quoted_text": "Centric Brands GP LLC Membership Interests: fair value shown as dash"
+    },
+    {
+      "table_index": 8,
+      "row_index": 25,
+      "quoted_text": "Centric Brands L.P. Class A LP Interests: fair value shown as dash"
+    }
+  ],
+  "rationale": "C104 flagged seven extracted fair_value values of 0.0. In the raw March 31, 2023 schedule of investments, table 8 shows those same seven equity positions with a dash in the Fair Value column, which is the filer-disclosed zero/no-value presentation. The extracted zero therefore matches the source; the issue is the rule scope treating legitimate source-disclosed zero fair values as review defects."
+}

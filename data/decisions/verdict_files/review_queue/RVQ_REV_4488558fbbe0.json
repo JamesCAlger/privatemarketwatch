@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_4488558fbbe0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 6,
+      "quoted_text": "Great Kitchens Food Company, Inc. | 05/31/24 | Term Loan - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) | 9.6 | % | 53,093,605 | 05/31/29 | 51,878,075 | 52,031,733",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Great Kitchens Food Company, Inc. | 05/31/24 | Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) | 0.1 | % | 698,600 | 05/31/29 | 698,600 | 684,628",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Great Kitchens 0.1% position is a Revolver in the source, but the extracted holding in the bundle labels it as another Term Loan, creating a duplicate position key with the separate 9.6% Term Loan.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 6,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "B02 flags duplicate position keys. The raw SOI has two adjacent Great Kitchens positions with the same issuer, acquisition date, coupon, and maturity, but they are different instruments: row 6 is a Term Loan with fair value 52,031,733 and row 7 is a Revolver with fair value 684,628. The bundle's holdings slice shows the 684,628 fair-value row as 'Term Loan' rather than 'Revolver', collapsing two real source positions into the same extracted key. The flag therefore identifies a real localized extraction defect, not a false duplicate in the filing."
+}

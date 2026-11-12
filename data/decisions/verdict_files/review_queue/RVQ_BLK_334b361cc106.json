@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_334b361cc106",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread populated while row was classified as fixed-rate",
+  "anchor_value": "floating-rate formula with explicit reference rate and spread",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 11,
+      "quoted_text": "Prophix Software Inc. (dba Pound Bidco) | Financial Services | 10.17 % | S + 6.00 % | 02/01/27 | 13,488 | 13,465 | 13,353 | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 28,
+      "quoted_text": "Buckeye Acquiror LLC (dba Superior Environmental Solutions) | Commercial Services & Supplies | 10.27 % | S + 6.50 % | 08/01/29 | 3,900 | 3,835 | 3,880 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 25,
+      "quoted_text": "Wine.com, LLC | Beverages | 15.93 % | S + 12.00 % PIK | 04/01/28 | 13,978 | 14,279 | 12,154 | (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged rows retain valid spread values but lose or fail to use the source reference-rate token, causing floating-rate instruments to be treated as fixed-rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "X04 is a real row-level data defect, but basis_spread is not the culprit. Raw schedule rows explicitly disclose floating formulas (for example S + 6.00%, S + 6.50%, and S + 12.00% PIK). Therefore the fixed-rate classification underlying the flag results from a missing or unused reference-rate extraction; the valid spread should be retained and the reference-rate field/classification restored."
+}

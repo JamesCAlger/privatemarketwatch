@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_8af310d56395",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 4876989,
+  "anchor_value": 4876989,
+  "confidence": 0.42,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "D06 is an aggregate continuity flag (4/705 issuers persist). The current SOI source is readable and sampled extracted holdings are present in the raw filing; the schedule total ties to the balance-sheet total investments at fair value of 4,876,989. However, the evidence window does not provide the adjacent prior-quarter source population used by the oracle continuity denominator, so the raw source does not decide whether the low internal continuity is a real extraction defect, a stale/comparison-period issue, or a legitimate portfolio/population change. Source examples also show repeated issuers across annual schedules (for example A.T. Holdings II LTD appears at table 58 row 34 and table 87 row 31), which prevents treating the 4/705 metric as source-proven without the exact comparison population."
+}

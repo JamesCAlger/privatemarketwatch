@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_df6e51695132",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 1,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 21,
+      "quoted_text": "OID-OL Intermediate I, LLC | Initial First Out Term Loan (First Lien) | 3M SOFR + 6.00 % | - | 9.84 | % | 6/11/2025 | 2/1/2029 | 7,000,000 | 7,192,725 | 7,204,155 | 3.7 | % | (5) (12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The B02 duplicate-key exemplar corresponds to a single SOI position for OID-OL Intermediate I, LLC Initial First Out Term Loan (First Lien), so duplicate extracted keys are not supported by source structure.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 50,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "B02 reports 2 duplicate position keys, including oid ol intermediate i llc initial first out term loan first. Raw source lookup for OL Intermediate / First Out Term Loan localizes that exemplar to one SOI row: OID-OL Intermediate I, LLC, Initial First Out Term Loan (First Lien), with its rate, dates, par, cost, and fair value on table 50 row 21. The surrounding grid shows adjacent distinct instruments, not a second same-key source row. Therefore the duplicate-key flag reflects a real extracted-data duplicate/double-counting defect rather than a legitimate source duplicate."
+}

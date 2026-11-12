@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_eacaccf9a96a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 879986000,
+  "anchor_value": 815597000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 30,
+      "quoted_text": "Common Unitholders' capital | 879,986",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 32,
+      "quoted_text": "Total Members' Capital | 815,597",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The March 31, 2026 balance sheet is stated in thousands and reconciles exactly: Total Assets 1,380,848 less Total Liabilities 565,251 equals Total Members' Capital 815,597. The flagged residual of -64,389 arises exactly if Common Unitholders' capital 879,986 is used as net assets while the separately presented Accumulated overdistributed earnings of (64,389) is omitted. The source therefore localizes the defect to selection of the pre-earnings capital row rather than the total members' capital row."
+}

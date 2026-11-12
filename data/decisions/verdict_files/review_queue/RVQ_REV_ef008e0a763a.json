@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_ef008e0a763a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5285714285714286,
+  "anchor_value": 0.95,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 32,
+      "quoted_text": "Total Investments ( 144.1 %) | $ | 1,093,709,783 | $ | 1,080,322,297",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 32,
+      "quoted_text": "Total Investments ( 153.8 %) | $ | 1,134,245,918 | $ | 1,140,779,575",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "B01 counted 210 leaves for the 2023-03-31 review even though the source has a distinct comparative December 31, 2022 schedule block alongside the March 31, 2023 schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 16,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "B01 reports only 111 of 210 leaves with fair_value for the March 31, 2023 review. The raw source has a complete March schedule whose total investments fair value is 1,080,322,297, tying to the fair-value hierarchy total of 1,080,322 in thousands. It also has a separate comparative schedule block with December totals of 1,140,779,575. The low coverage therefore reflects comparative-period schedule rows leaking into the March holdings population, not missing source fair-value disclosure."
+}

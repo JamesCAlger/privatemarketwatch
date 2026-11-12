@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_40e1792bfc8f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1582075,
+  "anchor_value": 1582075,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 18,
+      "quoted_text": "Envocore Holding, LLC (7)(8) | Senior Secured First Lien Term Loan | 750 | 7.50 % | 12/2025 | 6,806 | 6,766 | 0.9 | 6,806"
+    },
+    {
+      "table_index": 57,
+      "row_index": 19,
+      "quoted_text": "Envocore Holding, LLC (7)(8) | Senior Secured First Lien Term Loan | 750 | 7.50 % | 12/2025 | 6,875 | 6,816 | 1.1 | 6,875"
+    },
+    {
+      "table_index": 55,
+      "row_index": 4,
+      "quoted_text": "SOFR (\"S\") | - | 5.35 % | 5.33 % | 5.16 % | 4.77 %"
+    }
+  ],
+  "rationale": "The raw schedule supports the flagged basis-spread formatting pattern. Floating-rate rows use explicit reference-rate terms such as S + spread, with the filing defining SOFR separately, while fixed-rate rows use a bare numeric interest term such as 750 paired with a 7.50% interest rate. The source therefore shows the flagged bare numeric term is a valid fixed-rate presentation, not a data defect. Schedule total was checked only as an anchor sanity check and matched the filing total."
+}
+

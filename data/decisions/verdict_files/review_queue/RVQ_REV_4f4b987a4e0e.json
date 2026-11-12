@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4f4b987a4e0e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_rate",
+  "observed_value": "",
+  "anchor_value": "S+ 4.50%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured loan | S+ | 4.50% | 8/2031 | 28,787 | - | 28,535 | 27,817",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 12,
+      "quoted_text": "Accommodations Plus Technologies LLC | First lien senior secured loan | S+ | 5.25% | 5/2032 | 8,806 | - | 8,726 | 8,520",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 13,
+      "quoted_text": "Acrisure, LLC | Unsecured notes | N/A | 8.50% | 6/2029 | 3,000 | - | 3,000 | 2,966",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Populated source schedule rate terms were not mapped into interest_rate for multiple funded private-credit positions.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The extracted holdings slice has blank interest_rate for funded private-credit positions, but the raw March 31, 2026 schedule prints explicit rate terms for matching rows, including AI Titan at S+4.50%, Accommodations Plus at S+5.25%, and Acrisure at 8.50%. Thus X02 identifies a real rate extraction gap. The aggregate flag may also include unfunded commitment or revolving rows for which no rate is printed, but that heterogeneity does not negate the cited defects."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b8cc7fbea6c0",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 35,
+      "quoted_text": "Consumer Services | First Lien(3)(4) - Undrawn | - | - | - | 12/2021 | 12/2027 | 1,414 | (4) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 4,
+      "quoted_text": "Business Services | First Lien(3)(4) - Undrawn | - | - | - | 05/2021 | 05/2028 | 271 | (1) | - | -%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X02 treats undrawn commitment rows as rate-bearing private-credit positions even though the filing intentionally reports no reference, spread, or interest rate for them.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 25,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "This is a batched Class 1 single-cell flag. The raw March 31, 2026 investment schedule repeatedly labels the affected position type as Undrawn and prints dashes in Reference, Spread, and Interest Rate. The extracted null rate therefore agrees with the source; X02 is firing because its scope does not exclude non-rate-bearing undrawn commitments."
+}

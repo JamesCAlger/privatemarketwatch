@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_d0e7e4aad883",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 85,
+  "anchor_value": 362,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 414,055,669 | $ | 352,232,987 | 211.7 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 4,
+      "quoted_text": "Total Investments | $ | - | $ | 79,494,423 | $ | 272,738,564 | $ | 352,232,987",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted portfolio is complete in value: the SOI grand total at table 11 row 28 is $352,232,987, independently repeated by the Level 1/2/3 total at table 23 row 4, and it equals the bundle extract total of $352,232,987. The raw SOI is a multi-column schedule split across tables 8-11; table 8 row 5 demonstrates that one investment row contains multiple source cells/facts (issuer, instrument, rate, dates, par, cost, fair value, and percentage). Thus 362 is not a defensible position-count anchor, while the 85 extracted positions reconcile to the filing total. E07 is a false alarm caused by a source-fact/cell count being compared with output position rows."
+}

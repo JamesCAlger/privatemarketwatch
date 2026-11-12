@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_83c575a4685e",
+  "verdict": "false_alarm",
+  "mechanism": "unit_alias_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 280,937 par, due 2/2031 ) | 2/13/2024 | SOFR + 5.75 % | 10.27 % | $ 277,851 | $ 281,792 | 7.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 7,
+      "quoted_text": "First-lien loan (EUR 51,863 par, due 11/2029 ) | 11/7/2023 | E + 7.00 % | 10.05 % | 54,775 | 53,704 (EUR 51,863) | 1.3 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flags cost_currency value U_USD as not USD, but the raw schedule labels the valuation columns as dollar-denominated amortized cost and fair value. Table 35 row 4 explicitly shows dollar signs on amortized cost and fair value, and row 7 shows a foreign-currency par loan whose cost remains in the same schedule valuation column while the EUR amount is only a parenthetical instrument/FV detail. The flagged value is therefore a USD unit alias/normalization issue in the check, not a non-USD cost data error."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_4cf0af5857f3",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 660,
+  "anchor_value": 660,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 7,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited) and December 31, 2025",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 43,
+      "row_index": 7,
+      "quoted_text": "Total Investments and Cash Equivalents | $ | 2,517,236 | $ | 2,492,984 | 172.24 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 69,
+      "row_index": 7,
+      "quoted_text": "Total Investments and Cash Equivalents | $ | 2,211,171 | $ | 2,202,406 | 158.67 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count combines the March 31, 2026 schedule with the separate December 31, 2025 comparative schedule; the 660-row output is correctly scoped to the report date.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 7,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Raw source identifies two distinct Schedules of Investments, one for March 31, 2026 and one for December 31, 2025. Their distinct ending fair-value totals are $2,492.984 million at table 43 row 7 and $2,202.406 million at table 69 row 7. Thus the oracle source population of 1,199 leaks comparative-period positions into a report-date check, while the 660-row output is correctly scoped to March 31, 2026. The flag is a false alarm caused by a bad comparative-inclusive anchor, not a holdings-data omission."
+}

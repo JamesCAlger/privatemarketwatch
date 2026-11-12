@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_5d0b6832d10e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 7.0,
+  "anchor_value": 0.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 28,
+      "quoted_text": "Heartland Veterinary Partners, LLC | Second Lien Debt | 14.50 % (incl. 7.00 % PIK) | 14.50 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 30,
+      "quoted_text": "Heartland Veterinary Partners, LLC | Second Lien Debt | 14.50 % (incl. 7.00 % PIK) | 14.50 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two Heartland fixed-rate rows misplace the disclosed 7.00% PIK component into basis_spread; basis_spread should be empty because no reference rate is shown.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The other five fires are explicitly S-plus floating-rate rows, so X04's fixed-rate classification or scope is overinclusive for those rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the full source rows shows a mixed seven-row flag. Heartland rows 28 and 30 have no reference-rate token and disclose a fixed 14.50% coupon including 7.00% PIK, proving that stored basis_spread 7.0 is a PIK-to-spread column-remap error. In contrast, source rows such as Applitools table 13 row 15 expressly show S + 6.25% PIK and therefore are floating-rate positions whose spreads are valid; those residual fires reflect overinclusive fixed-rate classification. Because at least two flagged rows contain grounded data defects, the aggregate item is a real_error."
+}

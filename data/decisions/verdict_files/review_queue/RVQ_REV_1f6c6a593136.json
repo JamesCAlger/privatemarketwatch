@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_1f6c6a593136",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 214605,
+  "anchor_value": 214605,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 10,
+      "quoted_text": "IMB Midco LLC | Term Loan B | 8.00% | - | 8.00 % PIK | 5/20/2024 | 4/27/2028 | 6,131,575 | 4,974,599 | 214,605 | 0.1 | % | (17)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 fired because fair value is below 5% of cost, but the raw schedule itself discloses IMB Midco LLC Term Loan B with amortized cost 4,974,599 and fair value 214,605. The extracted values match the source row, so the warning reflects a genuinely distressed/marked-down position rather than a data error."
+}

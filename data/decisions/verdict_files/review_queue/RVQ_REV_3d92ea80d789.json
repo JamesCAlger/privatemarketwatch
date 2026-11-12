@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_3d92ea80d789",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_cell",
+  "observed_value": "A8",
+  "anchor_value": "A8 - A (Feeder) L.P.",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 6,
+      "quoted_text": "A8 - A (Feeder) L.P. (12) | Limited partnership interests | 03/2025 | 0.44 % | 1,000.3 | 716.1 | (6)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule identifies the company as A8 - A (Feeder) L.P. (footnote 12), but the extracted issuer_name is only A8. The source cell therefore proves that the issuer name was truncated during extraction."
+}

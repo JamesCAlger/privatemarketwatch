@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_58cf2bf3512f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 13,
+      "quoted_text": "RQM+ Corp. (2) | Life Sciences Tools & Services | S+ 725 PIK | 1.00 | % | 11.21 | % | 8/2021 | 8/2029 | 17,067 | 16,958 | 13,653"
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "TAUC Management, LLC (2) | Health Care Providers & Services | S+ 700 PIK | 1.00 | % | 10.82 | % | 2/2021 | 2/2027 | 8,406 | 8,386 | 7,229"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The two flagged spread cells contain the PIK marker in the filer schedule itself; the spread terms are source-faithful rather than parser-created bad basis values.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 13
+      }
+    },
+    {
+      "mechanism": "rule_scope",
+      "detail": "The second flagged spread cell likewise shows PIK in the source spread column, so the weak format rule is over-scoping valid disclosed terms.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The aggregate flag reports 2 violations among 15 bank-debt rows. Table 10 has exactly two March 31, 2026 spread cells with non-basis text: RQM+ Corp. 'S+ 725 PIK' and TAUC Management, LLC 'S+ 700 PIK'. Those strings are present in the raw filing's Spread above Index column, and the bundle's extracted identifiers preserve the same terms. The source therefore supports the stored terms and indicates the weak format check is too narrow for PIK-marked spread cells, not that the platform invented or corrupted the data."
+}

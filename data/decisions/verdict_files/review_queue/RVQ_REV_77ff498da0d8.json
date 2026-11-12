@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_77ff498da0d8",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.35,
+    "escalate":  false,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "The bundle flags row_key 135834 for missing interest_rate or basis_spread, but it does not provide the issuer or instrument needed to match that dataset row to a raw SOI row. The raw source was readable via evidence_cli; the SOI schedule tables reviewed show debt rows generally carrying rate/spread terms, and row_key 135834 does not appear in the raw source. Without a raw row coordinate for the flagged holding, the source does not decide whether the empty extracted rate is a real extraction error or a localization artifact."
+}

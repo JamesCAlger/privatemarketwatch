@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_b65e5696c2fc",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_cells",
+  "observed_value": -26000.0,
+  "anchor_value": -26000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 11,
+      "quoted_text": "ManTech International CP | First Lien Debt | 09/14/2028 | cost (26) | fair value zero",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 14,
+      "quoted_text": "Two Six Labs, LLC | First Lien Debt | 08/20/2027 | cost (6) | fair value (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 10,
+      "quoted_text": "Zenith Acquisitionco, LLC | First Lien Debt | 01/13/2033 | cost (5) | fair value (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 24,
+      "quoted_text": "OEConnection, LLC | First Lien Debt | 12/23/2032 | cost (2) | fair value (20)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost as a review condition, but raw schedule cells confirm the stored signs and amounts. Representative current-period rows print parenthetical costs of (26), (6), (5), and (2), matching stored values of -26000, -6000, -5000, and -2000 after the filing's thousands scale. The source therefore supports legitimate disclosed negative costs; the check is overbroad rather than the data being erroneous."
+}

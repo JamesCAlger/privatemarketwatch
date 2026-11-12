@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_e742c84bac02",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 591810,
+  "anchor_value": 591810,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 46,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 593,625 | $ | 591,810 | 226.7 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Non-controlled/non-affiliated investments (amortized cost of $593,625 and $546,560, at March 31, 2026 and December 31, 2025, respectively) | $ | 591,810 | $ | 545,727",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw filing provides a usable comparison denominator: the schedule total fair value is 591,810 and the balance sheet investment fair value for the same non-controlled/non-affiliated investments is also 591,810. The queue flag's no_comparison condition is therefore a check/anchor availability miss rather than a holdings data error."
+}

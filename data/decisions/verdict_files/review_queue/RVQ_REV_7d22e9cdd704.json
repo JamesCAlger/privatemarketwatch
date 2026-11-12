@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_7d22e9cdd704",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -29429,
+  "anchor_value": -29429,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Skydio, Inc | First Lien Delayed Draw Term Loan B | SOFR(M) | 2.50 | % | 5.00 % Cash | 8.73 | % | 12/4/2029 | $ | - | ( 29,429 | ) | ( 33,750 | ) | - | D/E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 142.2 % of Net Assets | 2,254,646,820 | 2,244,701,289 | 91.04 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 6,
+      "quoted_text": "Total investments (cost of $ 2,254,646,820 and $ 1,035,050,829 , respectively) | 2,244,701,289 | 1,040,393,586",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost rows. The raw SOI prints a representative flagged row with cost in parentheses, matching the extracted observed cost of -29429, and the schedule total ties to the balance-sheet total investments. This supports that the negative cost is source-present and included in the filing's own schedule rather than a data extraction error; the broad negative-cost warning is therefore a false alarm for this adjudication."
+}

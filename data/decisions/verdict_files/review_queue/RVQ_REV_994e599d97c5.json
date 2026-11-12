@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_994e599d97c5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -153000.0,
+  "anchor_value": -153000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "Ranch Bidco B.V. (dba Innovad) | Biotechnology | E + 4.75 % | 01/28/33 | EUR | 6,837 | ( 153 ) | ( 53 ) | (7) (9) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 38,
+      "quoted_text": "Aryeh Bidco Investment Ltd. (dba Dentalcorp) | Health Care Providers & Services | C + 5.00 % | 01/14/33 | CAD | 8,291 | ( 353 ) | ( 354 ) | (7) (9) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 sign checks. The raw investment schedule prints the flagged cost values in parentheses, including cost (153) thousand for Ranch Bidco and cost (353) thousand for Aryeh Bidco. The extracted values of -153000 and -353000 therefore preserve the source signs. C107 expressly monitors negative cost because it can be legitimate; these source-confirmed negatives are warnings, not data errors. Residual risk is limited to uninspected members of the 150-row warning set, but two independently localized flagged values show the same source-confirmed pattern."
+}

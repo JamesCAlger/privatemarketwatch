@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_3945a9f9bd14",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6127.925,
+  "anchor_value": 5819.755,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 33,
+      "quoted_text": "Total Non-Controlled/Affiliate Company Investments | $ | 343,639 | $ | 308,170 | 10.9 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 70,
+      "row_index": 35,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Extracted fair value exceeds the filing's total investments by 308.170 million, exactly matching the subtotal row for Total Non-Controlled/Affiliate Company Investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate triangulation: the bundle reports extracted fair value of 6127.925 million, while the raw source schedule total is 5819.755 million at table 70 row 35 and also ties the balance sheet. The 308.170 million excess equals table 70 row 33, a subtotal for Total Non-Controlled/Affiliate Company Investments, indicating the subtotal was included in extracted holdings in addition to underlying rows."
+}

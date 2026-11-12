@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ac76394ac7ba",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 9,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 19,
+      "quoted_text": "Clarience Technologies / Truck-Lite Co., LLC: First Lien Secured Debt - Delayed Draw, S + 500, 0.75% Floor, maturity 2/13/2032, cost 2,250, fair value 2,275",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 20,
+      "quoted_text": "Clarience Technologies / Truck-Lite Co., LLC: First Lien Secured Debt - Delayed Draw, S + 575, 0.75% Floor, maturity 2/13/2032, cost (40), fair value (28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 21,
+      "quoted_text": "Clarience Technologies / Truck-Lite Co., LLC: First Lien Secured Debt - Delayed Draw, S + 475, 0.75% Floor, maturity 2/13/2032, cost 464, fair value 456",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Clarience delayed-draw rows share issuer, investment type, and maturity but have distinct source interest-rate terms; the extracted holdings show blank interest_rate, collapsing separate instruments into duplicate position keys.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "B02 flags duplicate position keys for this CIK-quarter, with the example around Clarience Technologies Truck-Lite. The raw SOI rows distinguish the Clarience delayed-draw instruments by stated spreads S+500, S+575, and S+475 at the same 2/13/2032 maturity. In the bundle's extracted holdings, the corresponding interest_rate fields are empty, so legitimate distinct source positions are being collapsed into duplicate keys. This is an extraction/key-field defect, not a false alarm in the source."
+}

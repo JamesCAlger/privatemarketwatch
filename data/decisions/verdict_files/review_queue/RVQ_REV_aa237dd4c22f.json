@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_aa237dd4c22f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1495.157,
+  "anchor_value": 1495.157,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 23,
+      "quoted_text": "Spruce Bidco II Inc. | First Lien Secured Debt - Bank Debt Term Loan | S + 475, 0.75% Floor | 1/30/2032 | $ | 12,938 | $ | 12,768 | $ | 12,712",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 24,
+      "quoted_text": "First Lien Secured Debt - Bank Debt Term Loan | T + 500, 0.75% Floor | 1/30/2032 | JPY 250,465 | cost 1,593 | fair value 1,558",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 25,
+      "quoted_text": "First Lien Secured Debt - Bank Debt Term Loan | C + 475, 0.75% Floor | 1/30/2032 | CAD 2,342 | cost 1,590 | fair value 1,666",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 reports duplicate normalized position keys, but the raw March 31, 2026 schedule shows that the cited Spruce Bidco key represents distinct facilities. Adjacent rows 23-25 have the same issuer, broad investment type, and maturity but different reference rates and currencies (USD, JPY, and CAD), with different par, cost, and fair value. Row 26 is additionally a revolver. The filing schedule total fair value of 1495.157 million agrees with the extracted quarter total. The check is conflating legitimate multi-currency or multi-facility positions because its identity key is under-specified; the source does not show duplicated extraction rows."
+}

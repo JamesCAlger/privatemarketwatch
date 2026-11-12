@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_0d221a810fea",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1122702000,
+  "anchor_value": 1106721000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "Goldman Sachs Financial Square Government Fund Institutional Shares | N/A | N/A | 15,981 | 15,981 | 15,981",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 7,
+      "quoted_text": "Total Cash Equivalents | 15,981 | 15,981 | 15,981 | -- | --",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted fair-value sum uses Total Investments after Cash Equivalents of 1,122,702, while the companyfacts/schedule investment anchor is Total Investments before Cash Equivalents of 1,106,721; the 15,981 residual is the cash-equivalents money market fund.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 18,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the companyfacts_fv anchor of 1,106,721 ties to the filing's Total Investments before Cash Equivalents, while the observed extracted sum of 1,122,702 ties to Total Investments after Cash Equivalents. The difference is 15,981, exactly the Goldman Sachs money market fund / Total Cash Equivalents disclosed in the source, so cash equivalents were included in the holdings sum even though the fair-value conservation anchor excludes them."
+}

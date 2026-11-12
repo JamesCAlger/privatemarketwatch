@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_f4b0c6c0b904",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 56,
+      "quoted_text": "BRG Group Holdings, LLC | Health Care Technology | Class A Units | 500,000 | $ | 500 | $ | 500 | (3)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 57,
+      "quoted_text": "FS NU Investors, LP | Diversified Consumer Services | Class A Units | 500,000 | 500 | 500 | (3)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 59,
+      "quoted_text": "M&D Parent Holdings, LLC | Auto Components | Class B Units | 500,000 | 500 | 500 | (3)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 60,
+      "quoted_text": "MDI Aggregator LP | Chemicals | Common Units | 804,569 | 805 | 805 | (3)(8)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 61,
+      "quoted_text": "Oliver Investors, LP | Containers & Packaging | Class A Units | 5,050 | 550 | 543 | (3)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 62,
+      "quoted_text": "RFI Group Holdings, L.P. | Commercial Services & Supplies | Class A Units | 3,000 | 300 | 300 | (3)(9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C04 reports 0.0% of six equity rows have shares, but the source schedule's Par Amount / Shares column is populated for the six common equity rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 56
+      }
+    }
+  ],
+  "rationale": "The filing schedule includes an explicit Par Amount / Shares column and the equity section rows for BRG Group Holdings, FS NU Investors, M&D Parent Holdings, MDI Aggregator, Oliver Investors, and RFI Group Holdings each show a numeric share/unit amount. The derived check says 0.0% of six equity rows have shares, so the stored extraction is missing values that are present in raw source."
+}

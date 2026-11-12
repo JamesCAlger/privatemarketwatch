@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_BLK_6d864dbacef6",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 849354000,
+  "anchor_value": 849354000,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 11,
+      "quoted_text": "Horizon Freight Holdings, Inc. | Delayed Draw Term Loan | N/A | 8/22/2024 | 8/22/2030 | - | ( 9 ) | ( 39 ) | (2)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 24,
+      "quoted_text": "3G Intermediate, Inc. | Revolver | SOFR | + | 5.50 % | (Q) | 9.19 % | 9/30/2024 | 9/30/2030 | $ 133 | $ 128 | $ 128 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 30,
+      "quoted_text": "Source Holding Delaware, LLC | Revolver | PRIME | + | 3.75 % | (Q) | 10.50 % | 2/7/2025 | 2/7/2031 | 104 | 101 | 98 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 9,
+      "quoted_text": "ADPD Holdings LLC | Revolver | SOFR | + | 6.00 % | (S) | 10.01 % | 8/16/2022 | 8/16/2028 | 2 | 2 | 1 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 1,
+      "quoted_text": "Zavation Medical Products, LLC | Revolver | SOFR | + | 5.75 % | (Q) | 9.73 % | 7/22/2024 | 6/30/2028 | 53 | 52 | 52 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 1,
+      "quoted_text": "SGA Dental Partners Opco, LLC | Delayed Draw Term Loan | SOFR | + | 5.50 % | (Q) | 9.36 % | 7/17/2024 | 7/17/2029 | 136 | 134 | 136 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 12,
+      "quoted_text": "Accupac, LLC | Revolver | SOFR | + | 3.00 % ( 6.00 % PIK) | (Q) | 10.87 % | 12/31/2024 | 12/31/2029 | 217 | 210 | 172 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 13,
+      "quoted_text": "Accupac, LLC | Revolver | SOFR | + | 3.00 % ( 6.00 % PIK) | (Q) | 10.89 % | 12/31/2024 | 12/31/2029 | 217 | 210 | 172 | (2)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 28,
+      "quoted_text": "NS and Associates LLC | Term Loan | SOFR | + | 5.25 % | (Q) | 9.07 % | 9/9/2025 | 8/6/2030 | 3,507 | 3,457 | 3,455 | (1)(6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 54,
+      "row_index": 21,
+      "quoted_text": "Easy Ice, LLC | Revolver | SOFR | + | 5.25 % | (Q) | 9.24 % | 10/30/2024 | 10/30/2030 | $ 135 | $ 130 | $ 133 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 2,
+      "quoted_text": "Krayden Holdings, Inc. | Delayed Draw Term Loan | SOFR | + | 4.75 % | (Q) | 8.42 % | 3/1/2023 | 3/1/2029 | 384 | 377 | 383 | (6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "SRC_BDC02 asserted that the eleven flagged BDC holding rows had no matching current-period source fact. Targeted raw-source lookups found current-period schedule-of-investments rows for each flagged issuer/instrument, including fair value cells, and the filing schedule total ties to the bundle fund-quarter fair value of 849.354 million. The source supports the extracted rows; the source-match blocker is therefore the failing check, not a data error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_6c111fabc639",
+  "verdict": "false_alarm",
+  "mechanism": "source_confirmed_extreme_appreciation",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 67,
+      "row_index": 4,
+      "quoted_text": "Central Moloney, LLC ( 6,029 Class B common units) | --- | --- | --- | 10/20/2023 | --- | --- | 996 | 10,189 | 0.5 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 36,
+      "quoted_text": "Witkoff/Monroe 700 JV LLC ( 2,992 preferred units) | (12)(17) | --- | --- | --- | 7/2/2021 | --- | --- | 3 | 5,200 | 0.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X07 flagged two rows where fair value exceeds 10x cost. The raw SOI confirms both reported source rows: Central Moloney Class B common units show amortized cost 996 and fair value 10,189, and Witkoff/Monroe 700 JV preferred units show amortized cost 3 and fair value 5,200. The extracted cost values therefore match the filing; the warning reflects disclosed extreme appreciation, not a data error."
+}

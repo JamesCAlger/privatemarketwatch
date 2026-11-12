@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_a2b9bce6988c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 76,
+      "row_index": 44,
+      "quoted_text": "Total portfolio company investments | $ | 385,098 | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed a percentage sum of 0.0%, but the raw March 31, 2026 industry schedule reports Total portfolio company investments of $385.098 million and 100.0% at table 76 row 44. The source also supplies percentages on the industry rows, so the zero result reflects failure to extract or retain the percentage field rather than a source or anchor defect."
+}

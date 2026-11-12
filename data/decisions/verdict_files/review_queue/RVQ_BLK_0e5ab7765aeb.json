@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_BLK_0e5ab7765aeb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 647500000,
+  "anchor_value": 657565000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 16,
+      "quoted_text": "Total investment income | 657,565 | 552,328 | 302,770",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Other income | 9,953 | 12,673 | 8,564",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 13,
+      "quoted_text": "Other income | 35 | - | -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule includes 2025 Other income lines of 9,953 and 35 (thousand), which appear absent from the extracted income identity and explain most of the 10.065 million residual.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 7,
+        "row_index": 8,
+        "quoted_text": "Other income | 9,953 | 12,673 | 8,564"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The non-controlled/affiliated Other income line of 35 (thousand) is part of the 2025 investment income subtotal and should be included in the income identity components.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 7,
+        "row_index": 13,
+        "quoted_text": "Other income | 35 | - | -"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate income-identity flag. Raw source table 7 shows 2025 Total investment income of 657,565 thousand. The visible 2025 investment-income components foot to that total: 619,613 + 19,306 + 5,565 + 9,953 + 677 + 1,042 + 200 + 35 + 1,174 = 657,565. The flagged residual is 10,065,000, implying an extracted observed identity value of 647,500,000 versus the schedule-total anchor of 657,565,000. Because the filer schedule itself balances, the blocker reflects an extraction/classification gap in the platform data, not a source arithmetic problem. The two Other income rows explain 9,988,000 of the residual; the remaining 77,000 is not localized from the available row structure, so localization is conservative."
+}

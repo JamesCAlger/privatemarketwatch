@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_65b9bf91df64",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "SOFR flagged as lacking a structured spread",
+  "anchor_value": "S+ | 0.00% | 3.68%",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 9,
+      "quoted_text": "St. George Logistics | Senior Secured Interim Initial New Money Term Loan | S+ | 0.00 % | 3.68 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 47,
+      "quoted_text": "Alliance Environmental Group | Senior Secured Initial Term Loan | S+ | 0.00 % | 3.68 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review of the complete source rows shows an explicit structured index and spread for every flagged position: Index S+, Spread 0.00%, Interest Rate 3.68%. Neighboring rows in the same schedule corroborate 3.68% as the S+ base because their interest rates equal 3.68% plus the printed spread (for example, 4.75% gives 8.43%). A zero spread is a disclosed value, not a missing structured spread, so the reference-uncorroborated check is the error. No aggregate anchor is relevant."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_229109fddd19",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 16.5 and 16.0",
+  "anchor_value": "Raw schedule Reference Rate and Spread cells show 16.50% and 16.00%",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 40,
+      "quoted_text": "Volante Technologies, Inc. | First-lien loan ($ 2,712 par, due 9/2028 ) | 9/29/2023 | 16.50 | % | 16.50 % PIK | 2,688 | 2,678 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 1,
+      "quoted_text": "Second-lien loan ($ 10,331 par, due 6/2027 ) | 3/13/2024 | 16.00 | % | 16.00 % PIK | 10,024 | 9,995 | 0.4 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C115 flagged two high basis_spread values, but the raw SOI prints those same values in the Reference Rate and Spread column: Volante Technologies at 16.50% and the continuation-row second-lien loan at 16.00%. The extracted values match the raw source; the warning reflects a rule threshold/scope issue for high fixed/PIK rates rather than a data error."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_7060fe84be6a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1588.604,
+  "anchor_value": 1588.604,
+  "confidence": 0.93,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate review. The filing reports Total Portfolio Investments fair value of 1,588.604 million and 194.77% of net assets at table 14 row 8; Total Net Assets is 815.618 million at table 4 row 27, and 1,588.604 / 815.618 * 100 rounds to 194.77. The extracted fund-quarter fair value is also 1,588.604 million, so the schedule and extract anchors agree. However, the bundle contains no matching row-level identity violations or residuals, while the flag only states that 3.3% of 91 units failed. Raw source therefore cannot identify the fired cells or decide whether those individual values are erroneous versus a rounding-sensitive check."
+}

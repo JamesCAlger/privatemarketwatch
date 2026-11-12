@@ -1,0 +1,106 @@
+{
+  "changed_files": [],
+  "cik": "0001925309",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed rows appear to be real source positions missing from current unified output, but no bounded production patch is supported by the available evidence.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 35,
+      "row_index": 16,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        10,
+        15,
+        19,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Lynx BidCo row is a current-period position row with issuer, first-lien loan instrument, par and maturity, acquisition date, reference-rate spread, interest rate including PIK, cost, fair value, and net-assets percentage."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 35,
+      "row_index": 25,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        18,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Erling Lux Bidco SARL row is a current-period position row with issuer, first-lien loan instrument, EUR par and maturity, acquisition date, reference-rate spread, interest rate, cost, fair value, currency value, and net-assets percentage."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 35,
+      "row_index": 30,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        18,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Aurelia Netherlands MidCo 2 B.V. row is a current-period position row with issuer, first-lien loan instrument, EUR par and maturity, acquisition date, reference-rate spread, interest rate, cost, fair value, currency value, and net-assets percentage."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 35,
+      "row_index": 31,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        11,
+        12,
+        15,
+        19,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Babylon Finco Limited row is a current-period position row with issuer, first-lien loan instrument, par and maturity, acquisition date, reference-rate spread, interest rate, cost, fair value, and net-assets percentage."
+    }
+  ],
+  "missing_evidence": "A bounded parser/staging mechanism is still missing for Sixth Street Lending Partners' long XBRL dimension text. The bundle proves representative blocker rows are real positions, but it does not identify why the current unified path drops this CIK/date while avoiding false positives across other BDC hierarchy rows.",
+  "patch_summary": "",
+  "primary_justification": "Manual review found that the source-only rows are real current-period loan positions, not aggregate/header/subtotal/comparative rows. The source rows include issuer, first-lien loan terms, par, maturity, acquisition date, rate/spread, fair value, and percent-of-net-assets evidence. Current production output search did not find same-CIK/date Dye & Durham, Elements Finco, or Lynx BidCo rows. Because prior Sixth Street packets show the same unresolved parser/staging failure and the available evidence does not isolate a narrow safe production mechanism, adding a broad hierarchy parser rule would risk admitting non-position rows.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2024-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The blocker remains unresolved in production until a developer traces the Sixth Street extraction/staging path and adds a targeted fix with false-positive coverage. This verdict does not clear the source reconciliation by suppression; it escalates a real missing-position defect.",
+  "review_id": "BDCSRC_0001925309_2024-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_d431f0edc5",
+  "reviewer_notes": "The packet contains 28 source-only blocker rows and affected source fair value of 1,715,561,000. Sampled rows include Dye & Durham Corp., Elements Finco Limited, Lynx BidCo, Erling Lux Bidco SARL, Aurelia Netherlands MidCo 2 B.V., Babylon Finco Limited, Kangaroo Bidco AS, Alaska Bidco Oy, and other rate-bearing loan positions. The reviewed coordinates confirm real position rows, but the mechanism for the unified output omission is not bounded enough for a safe patch in this manual pass.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No direct clearing effect. The packet should remain escalated until a bounded Sixth Street parser/staging fix is implemented and source reconciliation is rebuilt.",
+  "tests_validation_plan": "Validate verdict schema and evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code tests are added because no production patch is proposed.",
+  "verdict": "ESCALATE"
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_cc5175ac3f94",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 12,
+  "anchor_value": 10,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 25,
+      "quoted_text": "Gateway US Holdings, Inc. | (5) (7) (14) | First Lien Debt | S + | 4.75 % | 8.45 % | 09/22/2028 | 1,464 | 1,459 | 1,457 | 0.13",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "Gateway US Holdings, Inc. | (5) (7) (14) (17) | First Lien Debt | S + | 4.75 % | 8.45 % | 09/22/2028 | - | (1) | (1) | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 85,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 60,816 | 2.8 | 58,469 | 2.6",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two Gateway rows without footnote (13) were included, inflating the non-accrual position count from 10 to 12 and amortized cost by a net 1,458.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 14,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule has 10 current-period rows carrying footnote (13), the non-accrual marker. The extracted artifact has 12 rows because it also includes Gateway rows at table 14 rows 25 and 26, whose markers are (14) and (14)(17), not (13). The 12 extracted rows sum to amortized cost 62,274, while removing the two Gateway rows' net 1,458 gives 60,816, exactly matching the filing's non-accrual amortized-cost total at table 85 row 4."
+}

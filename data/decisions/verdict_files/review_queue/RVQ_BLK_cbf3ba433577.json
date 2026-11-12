@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_cbf3ba433577",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 75705,
+  "anchor_value": 75705,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 5,
+      "quoted_text": "Distribution income | $ | 55,119",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 6,
+      "quoted_text": "Interest income | 20,240",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 7,
+      "quoted_text": "Other income | 346",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 8,
+      "quoted_text": "Total income | 75,705",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate income identity check. The filing's income statement provides the relevant schedule anchor: Distribution income 55,119 plus Interest income 20,240 plus Other income 346 equals Total income 75,705 for the year ended December 31, 2025. Because the raw source income identity ties exactly, the reported residual is not a source data error."
+}

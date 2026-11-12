@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_a82f4fdf879a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR",
+  "anchor_value": "S+",
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 50,
+      "quoted_text": "Polytek | (o) | Senior Secured Term Loan | S+ | 8.25 % PIK | 11.90 % | 12/23/2020 | 8/15/2026 | 471,236 | 471,236 | 164,933"
+    }
+  ],
+  "rationale": "Class 2 within-row reference issue. The localized raw source row for Polytek shows the Index column as S+ and the Spread column as 8.25 % PIK; targeted source searches returned no literal SOFR hit in the filing. Because the contract has no rule-specific convention for agentA_reference_uncorroborated and the raw source does not define S+ as SOFR, the source checked does not decisively establish whether Agent A's SOFR expansion is an error or an acceptable abbreviation normalization."
+}

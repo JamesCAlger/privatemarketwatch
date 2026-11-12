@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_aac543bedc1a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "U_EUR",
+  "anchor_value": "USD",
+  "confidence": 0.83,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 5
+    },
+    {
+      "table_index": 27,
+      "row_index": 24
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign currency marker from the par amount field was carried into fair_value_currency even though the source fair value column is the BDC valuation column expected in USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX02 is a single-cell fair_value_currency flag. The extracted value is U_EUR, but the raw schedule separates par amount currency from valuation fields: cited rows place EUR in the par amount slot, while cost/amortized cost and fair value are reported in the valuation columns that roll to USD schedule totals. The source therefore supports USD for fair_value_currency and shows the EUR unit was taken from the wrong field. Exact row_key-to-issuer mapping is not exposed in the bundle, so confidence is below perfect, but the source pattern directly grounds the defect."
+}

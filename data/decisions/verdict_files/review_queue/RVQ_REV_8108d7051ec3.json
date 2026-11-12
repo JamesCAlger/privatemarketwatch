@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_8108d7051ec3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd blank on flagged non-USD debt rows",
+  "anchor_value": "source schedule includes non-USD CORRA par amount requiring USD conversion",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 26,
+      "quoted_text": "Dynamic Connections, Ltd (i)(l)(m)(t) | Term Loan | CORRA + 5.75 % | 8.30 % | 11/27/2030 | 10,047,242 | 7,072,548 | 7,188,366",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A CORRA term-loan row has source par 10,047,242 while the flagged extraction leaves principal_amount_usd blank, so non-USD par was not explicitly converted for USD par analytics.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 46,
+        "row_index": 26,
+        "quoted_text": "Dynamic Connections, Ltd (i)(l)(m)(t) | Term Loan | CORRA + 5.75 % | 8.30 % | 11/27/2030 | 10,047,242 | 7,072,548 | 7,188,366"
+      }
+    }
+  ],
+  "rationale": "FX01 flags non-USD debt principal missing principal_amount_usd. The raw schedule contains a Dynamic Connections term loan with CORRA reference rate and source par amount 10,047,242, while the flagged artifact records principal_amount_usd as blank for non-USD debt rows. That is a real extraction/conversion gap, not a rule false positive."
+}

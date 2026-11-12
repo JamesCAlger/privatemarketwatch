@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_5e204021a5fa",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_row",
+  "observed_value": 70000,
+  "anchor_value": 70000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 10,
+      "quoted_text": "Atlas CC Acquisition Corp. | (5)(7)(10) | P + | 3.00 % | 10.25 % | 7/25/2025 | 5/25/2029 | 5,679 | 70 | 5,355 | 0.01"
+    }
+  ],
+  "rationale": "The X07 flag is on cost=70000 for a non-equity row whose fair value is more than 10x cost. The raw SOI row shows Atlas CC Acquisition Corp. with cost 70 and fair value 5,355 in the filing table's thousands presentation, so the extracted cost of 70,000 matches source. The flag reflects an extreme source-reported cost/fair-value relationship, not a data extraction error."
+}

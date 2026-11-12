@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_52bd62474b82",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": 1841121000,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 25,
+      "quoted_text": "Total investments | 1,841,121 | 175.5 | 1,847,666"
+    },
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "AHP Health Partners, Inc. ^(7)(18) | Senior secured | SF + | 3.50 | % | (g) | 8.94 | % | 08/2028 | 2,977 | 2,984 | 0.3 | 2,986"
+    }
+  ],
+  "rationale": "The raw SOI source is readable and shows the schedule's amortized-cost and fair-value columns in thousands; the total investments line reports amortized cost 1,841,121 and fair value 1,847,666, and a representative extracted holding, AHP Health Partners, matches the source amortized cost 2,984 in thousands. However, the review bundle exposes only the aggregate fmt_cost count (60 of 327) and a holdings sample, not the specific violating rows. Without the offending row coordinates or an extract-total observed value, the source evidence does not decide whether the flagged fmt_cost population is a real extraction defect or a weak-rule false alarm."
+}

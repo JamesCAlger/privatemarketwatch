@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_0a3b6e88ca18",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 3.4909090909090907,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Evidence CLI raw-source commands for overview, tables, and totals all returned missing_cached_html for accession 0001145549-24-077154, so the filing source could not be checked. Per contract, source-unavailable items must remain ambiguous and escalate."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3a0098953e1d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "principal_amount_usd missing on flagged rows",
+  "anchor_value": "raw SOI principal column is USD-denominated, not non-USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company - Investment (3)(7) | Industry | Spread Above Index | Interest Rate (5)(10) | Maturity Date | Principal / Shares (14) | Amortized Cost | Fair Value | Percentage of Net Assets (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 4,
+      "quoted_text": "190 Octane Financing, LLC - Term Loan (12) | Consumer Services | SOFR + 5.50 % ( 1.00 % floor) + 2.25 % PIK | 11.52 % | 5/10/2027 | $ | 8,535 | $ | 8,270 | $ | 7,375 | 1.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 4,
+      "quoted_text": "Batteries Plus Holding Corporation - Term Loan | Technology Hardware & Equipment | SOFR + 6.75 % ( 1.00 % floor) | 10.57 % | 6/27/2028 | $ | 16,129 | $ | 15,892 | $ | 16,129 | 2.9 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 requires review when a non-USD source principal lacks an explicit USD principal. The raw SOI schedule shows the principal/shares column is dollar-denominated; page-opening rows carry the dollar sign in the principal, amortized cost, and fair value columns, and continuation rows omit repeated symbols under the same header. Targeted source searches for EUR, GBP, CAD, and Euro returned no hits. The check appears to have treated blank repeated currency cells as non-USD rather than propagating the USD column context."
+}

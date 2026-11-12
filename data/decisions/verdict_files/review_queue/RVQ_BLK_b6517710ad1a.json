@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_b6517710ad1a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 179475000,
+  "anchor_value": 179475000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investments (9) - 135.8% | cost 196,338 | fair value 179,475",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 11,
+      "quoted_text": "Total assets | 250,849",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Cash equivalents | 59,838",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted position sum of 179,475,000 exactly equals the filing schedule's Total Investments fair value at table 11 row 15. The 250,849,000 comparison value is explicitly Total assets at table 6 row 11, a broader balance-sheet scope that includes 59,838,000 of cash equivalents, 8,734,000 of cash, and other non-position assets. The flag therefore results from using a full-fund-assets proxy as the denominator, not from a holdings data error."
+}

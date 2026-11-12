@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_4afc018cb344",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "cost_currency values GBP/EUR on flagged rows 367908-367910",
+  "anchor_value": "source schedule amortized cost/fair value columns are USD-denominated; visible foreign unit, where present, belongs to par amount/units",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 50,
+      "quoted_text": "123Dentist Inc (4)(5)(6)(10) | 8/10/2029 | C$ | 8,703 | ( 122 ) | ( 90 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 51,
+      "quoted_text": "123Dentist Inc (4)(5)(10) | C + | 5.50 % | 10.88 % | 8/10/2029 | C$ | 48,751 | 37,457 | 35,394",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 14,
+      "quoted_text": "2080 Media, Inc. (4)(6)(10) | SF + | 6.00 % | 11.47 % | 3/14/2029 | 29,433 | 12,206 | 12,976",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Flagged cost_currency values GBP/EUR are not supported by the source amortized cost cells; the 123Dentist rows show C$ only in the par amount/units column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 50
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "2080 Media amortized cost row has no foreign currency marker, so EUR cost_currency is unsupported by the source row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error because the raw schedule does not support non-USD cost currencies for the flagged holdings. The 123Dentist rows show C$ in the par amount/units position while amortized cost and fair value are separate valuation columns; the 2080 Media row shows numeric par, amortized cost, and fair value with no EUR marker. The stored GBP/EUR cost_currency values therefore reflect a localized extraction/column mapping defect, not a valid non-USD cost disclosure."
+}

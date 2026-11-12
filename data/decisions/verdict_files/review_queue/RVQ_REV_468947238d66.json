@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_468947238d66",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 97,
+  "anchor_value": 45,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Number of portfolio companies | 45 | 17",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 46,
+      "row_index": 17,
+      "quoted_text": "Total Investments -- non-controlled/ non-affiliate | $ | 1,371,453,021 | $ | 1,379,664,900 | 204.36 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 11,
+      "quoted_text": "Total Investments -- non-controlled/ non-affiliated | $ | 739,018,787 | $ | 737,741,430 | 159.49 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "D06 used 97 current issuers even though the filing reports 45 portfolio companies for 2023, indicating issuer extraction or normalization inflated the continuity denominator.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 11,
+        "quoted_text": "Number of portfolio companies | 45 | 17"
+      }
+    }
+  ],
+  "rationale": "The D06 flag reports 18/97 issuers persist, but the filing's own portfolio rollforward reports 45 portfolio companies at December 31, 2023 and 17 at December 31, 2022. The schedule totals corroborate the current and prior SOI sections, so the source does not support a 97-issuer current denominator. The continuity failure is therefore grounded as an extraction/issuer-normalization data error rather than a genuine source fact."
+}

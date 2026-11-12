@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_64f76f42e613",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 384,
+  "anchor_value": 384,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited) and December 31, 2025",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 9,
+      "quoted_text": "Total Portfolio Investments | $ | 3,038,758 | $ | 2,983,663 | 182.11 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 43,
+      "row_index": 33,
+      "quoted_text": "Total Portfolio Investments | $ | 2,905,803 | $ | 2,893,559 | 182.19 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw filing explicitly presents two separate schedules of investments, one for March 31, 2026 and one for December 31, 2025, and each has its own distinct Total Portfolio Investments row. The E07 source count of 761 therefore combines current and comparative schedule positions. The output count of 384 is scoped to the requested March 31, 2026 quarter, so the output is not shown to be missing positions; the oracle comparator leaked the comparative period."
+}

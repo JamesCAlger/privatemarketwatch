@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_cb479b51f5db",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -2000.0,
+  "anchor_value": -2000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 33,
+      "quoted_text": "Alpine Acquisition Corp. II | First Lien Debt | par amount dash | cost (2) | fair value (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 34,
+      "quoted_text": "Alpine Acquisition Corp. II | First Lien Debt | par amount dash | cost (45) | fair value (45)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 30,
+      "quoted_text": "Atlas US Finco, Inc. | First Lien Debt | par amount dash | cost (9) | fair value (9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell review confirms that the filing itself presents negative values in the Cost column using parentheses. The flagged Alpine values of -2000 and -45000 exactly match source costs of (2) and (45) in thousands, and analogous rows recur for commitments with dash par amounts. The extracted signs are therefore correct; C107 is an overbroad warning for legitimate negative commitment valuations rather than evidence of a data error."
+}

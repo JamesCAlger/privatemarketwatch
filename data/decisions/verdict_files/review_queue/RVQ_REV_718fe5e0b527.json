@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_718fe5e0b527",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.5566625155666252,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 73,
+      "row_index": 2,
+      "quoted_text": "Company(1)(25) | Investment | Ref. Rate | Cash | PIK | Maturity Date | Par / Units | Amortized Cost(2)(27) | Fair Value | % of Net Assets"
+    },
+    {
+      "table_index": 75,
+      "row_index": 38,
+      "quoted_text": "ABB/Con-cise Optical Group LLC(3)(4)(9) | First lien senior secured loan | S+ | 7.50 % | 2/2028 | 33,306 | 33,089 | 33,057"
+    },
+    {
+      "table_index": 89,
+      "row_index": 47,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(3)(4)(6)(24)(31) | Specialty finance debt investment | N/A | 12.00 % | 7/2030 | 58,702 | $ | 58,702 | $ | 58,702"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt schedule rows disclose interest fields such as Ref. Rate/Cash/PIK, but the extracted debt coverage metric shows only 356 of 803 debt rows with stored rates.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 73,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "C01 failed because only 55.7% of 803 extracted debt rows have a stored interest rate, below the 0.8 threshold. The raw schedule is not rate-less: debt tables expose Ref. Rate, Cash, and PIK columns, and representative debt rows disclose rates such as ABB/Con-cise Optical Group LLC with S+ and 7.50% cash and AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC with 12.00%. The blank interest_rate values shown in the bundle for multiple private credit debt rows are therefore an extraction/mapping gap rather than a false alarm."
+}

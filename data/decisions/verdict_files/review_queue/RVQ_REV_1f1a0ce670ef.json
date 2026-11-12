@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_1f1a0ce670ef",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 161.28,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Investments, June 30, 2023 | $ | 677,849 | $ | 659,021 | 161.28 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source schedule total reports investments at 161.28% of net assets for June 30, 2023.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "The raw source schedule includes the Percentage of Net Assets column and its June 30, 2023 total investments row reports fair value 659,021 and 161.28% of net assets. The reviewed artifact reports pct_sum=0.0%, so the aggregate percentage was not extracted/mapped even though it is present in the filing."
+}

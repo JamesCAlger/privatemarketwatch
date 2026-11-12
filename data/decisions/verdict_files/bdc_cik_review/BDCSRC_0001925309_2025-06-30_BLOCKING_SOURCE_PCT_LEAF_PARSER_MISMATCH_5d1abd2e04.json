@@ -1,0 +1,63 @@
+{
+  "changed_files": [],
+  "cik": "0001925309",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_row_classification_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_row_classification_candidates",
+      "table_index": 14,
+      "row_index": 12,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        10,
+        15,
+        19,
+        23,
+        24
+      ],
+      "reason": "Elements Finco Limited is a current-period position row with borrower, first-lien loan, par/due date, acquisition date, reference rate, coupon, PIK disclosure, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_row_classification_candidates",
+      "table_index": 14,
+      "row_index": 16,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        10,
+        15,
+        19,
+        23,
+        24
+      ],
+      "reason": "Lynx BidCo is a current-period position row with borrower, first-lien loan, par/due date, acquisition date, reference rate, coupon, PIK disclosure, cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "A bounded production patch requires the specific parser/staging failure mode for Sixth Street's 2025-06-30 filing, plus evidence that the same mechanism safely covers all 31 source-only rows without admitting continuation rows, comparative-period rows, or rollups. The bundle proves sampled rows are real current-period positions, but it does not prove whether the correct fix is table selection, row continuation stitching, XBRL identifier normalization, issuer matching, or another CIK-scoped extraction rule.",
+  "patch_summary": "",
+  "primary_justification": "Manual review found source-only XBRL rows with borrower names, first-lien loan terms, par amounts, due dates, acquisition dates, reference rates, spreads, interest rates, and PIK terms. The HTML row-classification evidence independently confirms sampled current-period positions for Elements Finco Limited and Lynx BidCo. These are not total/header rows. However, no bounded production patch is proposed because the evidence does not isolate the failing mechanism or prove a safe rule for all 31 rows.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-06-30",
+  "requires_human_merge": false,
+  "residual_risk": "The 31 reviewed rows remain unresolved real-position blockers until a CIK-scoped mechanism is identified and tested. Leaving them as blockers is safer than adding a broad parser rule from a partial diagnosis.",
+  "review_id": "BDCSRC_0001925309_2025-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_5d1abd2e04",
+  "reviewer_notes": "Escalation is warranted: there is enough evidence that sampled Sixth Street rows are true current-period positions, but not enough evidence for a bounded production patch. Current output search found no matching 2025-06-30 Elements Finco or Lynx BidCo holdings rows, consistent with undercoverage.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No source reconciliation change is made by this verdict. The packet remains blocking pending a tested parser/staging fix.",
+  "tests_validation_plan": "Validate schema and evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No production code tests are added because no bounded patch is proposed.",
+  "verdict": "ESCALATE"
+}

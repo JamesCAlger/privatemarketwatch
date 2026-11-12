@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_4c08f25b4e05",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_rate_spread_column",
+  "observed_value": "blank interest_rate and blank basis_spread on X02 private-credit rows",
+  "anchor_value": "raw SOI Reference Rate and Spread cells contain stated spread terms",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Term Loan | S + 4.50 % | 11/29/2030",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 21,
+      "quoted_text": "Seko Global Logistics Network, LLC | First Lien Term Loan, Last-out | S + 7.00 % (includes 5.00 % PIK) | 5/27/2030",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The schedule has a Reference Rate and Spread column with stated spread terms, but the extracted PRIVATE_CREDIT rows carry blank interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PIK-inclusive spread text is present in the source schedule and should not be dropped from rate extraction.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "X02 fired because PRIVATE_CREDIT holdings rows have no interest_rate or basis_spread. The raw SOI table has a Reference Rate and Spread column and cited rows show concrete terms such as S + 4.50 %, S + 5.38 % including 2.88 % PIK, and S + 7.00 % including 5.00 % PIK. Since the source contains rate/spread data that the extracted rows left blank, the flag is a real extraction error. No fair-value aggregate anchor is needed for this row-validation issue."
+}

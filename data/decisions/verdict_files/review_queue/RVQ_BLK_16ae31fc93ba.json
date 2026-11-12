@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_BLK_16ae31fc93ba",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 5544000,
+  "anchor_value": 5544000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 9,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | First Lien Senior Secured Term Loan | CORRA + 7.00 %, 10.3 % PIK | 06/21 | 12/26 | 5,544 | 4,893 | 426 | - | % | (3)(7)(8)(22) (28)(30)"
+    }
+  ],
+  "rationale": "Class 2 row-level X06 check. The raw SOI row discloses principal amount 5,544 and fair value 426, both in thousands, for Canadian Orthodontic Partners Corp. The stored principal_amount_usd of 5,544,000 matches the source principal amount; the greater-than-10x fair-value relationship is source-disclosed and reflects a low marked fair value on a PIK loan, not a data extraction or scale error."
+}

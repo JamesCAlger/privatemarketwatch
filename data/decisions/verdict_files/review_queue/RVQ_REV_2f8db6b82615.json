@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_2f8db6b82615",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.48623853211009177,
+  "anchor_value": 0.95,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 19,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | $ | 541,963,717 | 533,065,800 | 195.5 | % | (16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Type | Total Commitment | Funded Commitment | Expired Commitment | Unfunded Commitment",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 46,
+      "row_index": 25,
+      "quoted_text": "$ | 79,641,889 | $ | 34,277,976 | $ | 25,700,927 | $ | 19,662,986",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The fair-value completeness universe includes commitment schedule rows whose source columns are total/funded/expired/unfunded commitment, not fair value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 46,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw filing's current investment schedule provides a fair value column and ties to Total Non-controlled/Non-affiliated investments fair value of 533,065,800 in table 45 row 19. The residual population is localized to adjacent commitment schedules, exemplified by table 46, whose header is Total Commitment/Funded Commitment/Expired Commitment/Unfunded Commitment and has no fair value column. Treating those commitment rows as fair-value holdings leaves is a real extraction/classification defect, not a source omission."
+}

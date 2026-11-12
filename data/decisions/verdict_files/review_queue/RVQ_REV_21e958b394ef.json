@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_21e958b394ef",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.195,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 flags a fund-financials heuristic failure: distribution_rate exceeds income_yield_pct * 1.5, with reported check value 0.195. The allowed raw-source evidence CLI did not resolve an accession for this CIK/report date; overview, tables, totals, and targeted roam queries all returned status no_accession_resolved, so no source table or anchor could be inspected. Per the adjudication contract, this is ambiguous with source_unavailable rather than a source judgment."
+}

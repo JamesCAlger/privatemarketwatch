@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_e1757ad83eea",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "U_EUR",
+  "anchor_value": "USD",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "Erling Lux Bidco SARL (3)(4) | First-lien loan (EUR 7,726 par, due 9/2028 ) | 9/6/2022 | E + 6.75 % | 8.73 % | 6,907 | 7,326 (EUR 6,864) | 1.3 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The row reflects the December 31, 2022 comparative schedule and captured the parenthetical EUR fair value 6,864 instead of the dollar fair value 7,326.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 9,
+        "row_index": 8
+      }
+    },
+    {
+      "mechanism": "column_remap",
+      "detail": "For the cited row, fair_value_currency is U_EUR even though the source Fair Value column is dollar-denominated and the EUR amount is only parenthetical disclosure.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 single-cell currency-unit check. The raw schedule's Fair Value column is USD-denominated; table 9 row 8 shows a dollar fair value of 7,326 with a parenthetical EUR 6,864. The reviewed extracted row has fair_value_currency U_EUR and fair_value 6,864 for that instrument, so the stored fair-value currency/value follows the parenthetical foreign-currency disclosure rather than the USD fair-value column. This grounds a real extraction/comparative leak error. Some U_USD rows may only reflect unit-code normalization noise, but the cited U_EUR row is an independently grounded defect."
+}

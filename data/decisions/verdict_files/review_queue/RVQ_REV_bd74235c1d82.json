@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_bd74235c1d82",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.0661,
+  "anchor_value": 1.2019,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 42,
+      "quoted_text": "Total Investments | $ | 1,427,270 | $ | 1,503,533 | 103.75 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 238,347 | $ | 238,264 | 16.44 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 34,
+      "quoted_text": "Total net assets | 1,449,175 | 156,453",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's current schedule totals are 103.75% plus 16.44% of net assets, or 120.19% before separate cash equivalents, and table 22 also reports current total investments of 1,741,797 against current net assets of 1,449,175. The flagged observed pct_sum/metric is 1.0661, so it undercounts the filing's own current-period schedule anchor. The source supports an aggregate extraction/scope error, but the available rule artifact has no detail rows and the schedule structure does not isolate one position-level culprit."
+}

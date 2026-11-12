@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_25f6c2815768",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -669000,
+  "anchor_value": -669000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "Atlantic Squared Supply LLC delayed draw term loan: amortized cost (84), fair value (91), in thousands",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 13,
+      "quoted_text": "Advanced Technology Services Inc delayed draw term loan: amortized cost (112), fair value (132), in thousands",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "Hand Family Companies Holdings, LLC delayed draw term loan: amortized cost (237), fair value (279), in thousands",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "Hand Family Companies Holdings, LLC delayed draw term loan: amortized cost (87), fair value (102), in thousands",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 24,
+      "quoted_text": "JF Acquisition LLC delayed draw term loan: amortized cost (82), fair value (43), in thousands",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 25,
+      "quoted_text": "JF Acquisition LLC revolving loan: amortized cost (67), fair value (79), in thousands",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw schedule rows show all six flagged values exactly as parenthesized negative amortized costs: (84), (112), (237), (87), (82), and (67) thousand. Each is paired with a parenthesized negative fair value on a delayed-draw or revolving commitment row, so the extraction preserves the filing and the sign is source-intended. C107's generic negative-cost warning is therefore a false alarm for these legitimate commitment-related positions."
+}

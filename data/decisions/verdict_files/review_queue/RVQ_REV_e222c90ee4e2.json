@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_e222c90ee4e2",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_source_cell",
+  "observed_value": -65000,
+  "anchor_value": -65000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "MRI Software, LLC | SOFR + 5.50 % | N/A | 2/10/2027 | par amount/units -- | amortized cost (65) | fair value (99) | % of net assets (0.1)"
+    }
+  ],
+  "rationale": "C107 flagged cost as negative, but the raw schedule of investments prints MRI Software, LLC with amortized cost (65) in thousands and fair value (99) in thousands. The extracted cost of -65000 therefore matches the source cell; the warning is not a data error for this row."
+}

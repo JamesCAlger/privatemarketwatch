@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_60bbd9822fbc",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3739882000,
+  "anchor_value": 3327482000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 14,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 3,495,111 | $ | 3,327,482 | (7)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 16,
+      "quoted_text": "Total | $ | 3,096,992 | $ | 4,209 | $ | 3,383 | $ | 30,547 | $ | 23,895 | $ | 168,294 | $ | 162 | $ | 3,327,482 | 241.85 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The filing's detailed schedule total for June 30, 2025 fair value is 3,327,482 thousand before cash equivalents, and the investment-type classification total independently ties to 3,327,482 thousand. The extracted position sum in the bundle is 3,739,882,000, exceeding the source schedule total of 3,327,482,000 by 412,400,000. Targeted residual search did not isolate a single matching culprit row, so the defect is source-grounded at the aggregate level but not localized to one row."
+}

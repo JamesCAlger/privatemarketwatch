@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_52f56c1aeff9",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "strategy=PRIVATE_CREDIT; private_credit_share=0.42502835017786295",
+  "anchor_value": "schedule debt fair value 112090217; schedule equity fair value 151633878; debt_and_equity_total 263724095",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 23,
+      "quoted_text": "Total Debt Investments | 48.1% | amortized cost 246,859,409 | fair value 112,090,217",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 29,
+      "quoted_text": "Total Equity Investments | 65.2% | amortized cost 144,513,218 | fair value 151,633,878",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 30,
+      "quoted_text": "Total Debt & Equity Investments (8) | 113.3% | amortized cost 391,372,627 | fair value 263,724,095",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The vehicle-type strategy assignment PRIVATE_CREDIT conflicts with the filing schedule: equity fair value 151,633,878 exceeds debt fair value 112,090,217, so the debt/private-credit share is only about 42.5% of debt and equity investments.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 23,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Raw source was checked through the evidence CLI. The filing's own 2025 schedule totals report Total Debt Investments fair value of 112,090,217 and Total Equity Investments fair value of 151,633,878, with Total Debt & Equity Investments fair value of 263,724,095. Debt/private-credit exposure is therefore approximately 42.5% while equity is approximately 57.5%, so assigning the fund strategy as PRIVATE_CREDIT solely from BDC vehicle type is a real classification/lookthrough data error rather than a false alarm."
+}

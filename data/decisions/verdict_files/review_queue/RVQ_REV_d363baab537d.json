@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d363baab537d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/holdings coverage mismatch for CIK 0001490349 at 2022-12-31. The evidence CLI was reachable but all requested raw-source views returned status no_accession_resolved, so no filing tables, totals, or source rows were available to adjudicate whether holdings should exist."
+}

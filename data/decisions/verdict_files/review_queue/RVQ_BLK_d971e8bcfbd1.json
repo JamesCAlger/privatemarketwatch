@@ -1,0 +1,61 @@
+{
+    "review_id":  "RVQ_BLK_d971e8bcfbd1",
+    "verdict":  "real_error",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  "source_schedule_rows",
+    "observed_value":  "",
+    "anchor_value":  "raw SOI Type of Investment cells disclose classifiable exposure terms",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  56,
+                                  "row_index":  26,
+                                  "quoted_text":  "Senior Direct Lending Program, LLC | Limited Partnership Units | SOFR | + | 8.00 % | (Q) | Current Yield: 11.75 % | 12/31/36 | 183,603 | 177,962 | 165,702 | (2)(4)(5)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  47,
+                                  "row_index":  12,
+                                  "quoted_text":  "Energy Labs Holdings Corp. | Term Loan | SOFR | + | 5.00 % | (M) | 8.82 % | 6/2/2022 | 4/7/2028 | 7,526 | 7,475 | 7,432 | (1)(6)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  47,
+                                  "row_index":  13,
+                                  "quoted_text":  "Velocity Buyer, Inc. | Revolver | N/A | 1/24/2025 | 1/24/2031 | - | ( 23 ) | - | (2)(6)(9)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  55,
+                                  "row_index":  14,
+                                  "quoted_text":  "M\u0026D Parent Holdings, LLC | Class B Units | 5,144 | 518 | 516 | (3)(9)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  55,
+                                  "row_index":  24,
+                                  "quoted_text":  "VP Security Buyer, Inc. | Limited Partnership Units | 111,111 | 111 | 111 | (3)(9)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  56,
+                                  "row_index":  17,
+                                  "quoted_text":  "KLC Fund 1-C1 LP | Limited Partnership Units | 605,769 | 608 | 618 | (3)(9)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "classification_lookthrough",
+                         "detail":  "C303 rows have blank exposure_type even though the raw SOI Type of Investment cells disclose classifiable loan, revolver, unit, or limited partnership unit terms.",
+                         "fix_class":  "classification_fix",
+                         "citation":  {
+                                          "table_index":  56,
+                                          "row_index":  26
+                                      }
+                     }
+                 ],
+    "rationale":  "Rule C303 flags blank exposure_type on 11 row-validation records. Raw source rows are readable and include explicit Type of Investment values, including Limited Partnership Units, Term Loan, Revolver, and Class B Units. Because the controlled classification axis is blank despite source terms that should feed it, the flag is a real classification extraction/lookthrough error rather than a false alarm."
+}

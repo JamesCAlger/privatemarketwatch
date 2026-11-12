@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_187cef1919ae",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1093518278,
+  "anchor_value": 691956192,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 29,
+      "quoted_text": "Total Cash Equivalents | 1.5 | % | 7,095,586 | 7,095,586",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 32,
+      "quoted_text": "Total Short-term Investments | 81.5 | % | 394,466,500 | 394,466,500",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 26,
+      "quoted_text": "Total Debt & Equity Investments (7) | 143.3 | % | 844,551,095 | 691,956,192",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 33,
+      "quoted_text": "Total Investments (226.1%) | $ | 1,246,113,181 | $ | 1,093,518,278",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Cash equivalents of 7,095,586 are Level 1 cash-like assets and should not be counted in the private debt/equity holdings anchor.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 7,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Short-term investments of 394,466,500 are Level 1 U.S. Treasury bills and should not be counted in the private debt/equity holdings anchor.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 7,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the source schedule's Total Debt & Equity Investments fair value is 691,956,192, while Total Investments fair value is 1,093,518,278. The 401,562,086 residual equals Total Cash Equivalents of 7,095,586 plus Total Short-term Investments of 394,466,500. Table 24 independently classifies those two residual components as Level 1 cash equivalents and short-term investments, with Debt and Equity totaling 691,956 thousand. The GAV_BDC02 over-coverage is therefore a real classification lookthrough error caused by cash-like/short-term rows being included with private debt/equity holdings."
+}

@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_1618dc94d7b6",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -364000,
+    "anchor_value":  -364000,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  39,
+                                  "row_index":  8,
+                                  "quoted_text":  "Action Elevator Intermediate Holdings, LLC | Delayed Draw Term Loan | Amortized Cost | ( 364 ) | Fair Value | ( 364 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  39,
+                                  "row_index":  9,
+                                  "quoted_text":  "Action Elevator Intermediate Holdings, LLC | Revolving Line of Credit | Amortized Cost | ( 146 ) | Fair Value | ( 146 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  41,
+                                  "row_index":  17,
+                                  "quoted_text":  "Crete PA Holdco, LLC | Delayed Draw Term Loan | Amortized Cost | ( 326 ) | Fair Value | ( 326 )",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "C107 fired because cost is negative. The raw schedule of investments itself presents these amortized-cost cells as parenthesized negative amounts, and the extracted values preserve those source signs. The flag is therefore a monitoring/rule-scope false alarm, not a data error."
+}

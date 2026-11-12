@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2618ea4f3440",
+  "verdict": "false_alarm",
+  "mechanism": "unit_label_normalization",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 11,
+      "quoted_text": "Total Equity and Other Investments ... $ 55,847,461 ... $ 49,467,415",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flags cost_currency value U_USD as non-USD, but the raw schedule presents amortized cost/cost and fair value as dollar-denominated amounts. The representative schedule total row explicitly marks the cost and fair value columns with dollar signs, so U_USD is a USD unit label variant rather than a non-USD currency defect."
+}

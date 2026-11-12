@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_124f43c96889",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 33,
+      "quoted_text": "Aptus 1829. GmbH preferred stock: cost 122, fair value 3.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 27,
+      "quoted_text": "Front Line Power Construction LLC common stock: cost 116, fair value 1.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level review. X08 flagged two rows because fair value is below 5% of cost. The raw SOI confirms both low fair values exactly: Aptus 1829. GmbH preferred stock has cost 122 and fair value 3, and Front Line Power Construction LLC common stock has cost 116 and fair value 1. The extracted values match the source; the flag is a source-backed severe impairment review item, not a data error."
+}

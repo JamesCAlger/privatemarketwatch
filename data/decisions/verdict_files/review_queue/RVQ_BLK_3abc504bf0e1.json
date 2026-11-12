@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_3abc504bf0e1",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 212391432,
+  "anchor_value": 217267721,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 238,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 4,134 | $ | 105,317,160 | $ | 111,946,427 | $ | 217,267,721",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 221,
+      "row_index": 5,
+      "quoted_text": "Total investments at fair value | $ | 217,263,587 | $ | 284,185,845",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The over-coverage flag used an unsupported comparison value of 24577684, while the filing's investment fair value total is about 217.27 million and aligns closely with the extracted holdings sum of 212391432.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 238,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing schedule total is 217,267,721 in the fair value hierarchy, corroborated by the separate total investments at fair value note of 217,263,587. The extracted position sum of 212,391,432 is close to those source totals and does not support the flag's over-coverage comparison value of 24,577,684; the check appears to have used a bad anchor rather than finding a real source data error."
+}

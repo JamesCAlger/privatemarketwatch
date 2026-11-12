@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_c0bfa9de193b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -3000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "American Academy Holdings, LLC line has Amortized Cost shown as dash in the source table, while the bundle holdings slice stores cost -3000.0.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "American Academy Holdings, LLC second line source cost is zero/dash, but extraction stored cost -3000.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication: the row is visible in the raw schedule of investments. Table 12 row 31 shows American Academy Holdings, LLC with par amount 160, maturity 6/30/2027, Amortized Cost as a dash, and Fair Value as a dash. The blinded bundle's holdings slice for the matching issuer/date/accession stores cost -3000.0 and fair_value 0.0. The raw source therefore decides the flagged cost issue as a real extraction defect rather than a valid negative source cost."
+}

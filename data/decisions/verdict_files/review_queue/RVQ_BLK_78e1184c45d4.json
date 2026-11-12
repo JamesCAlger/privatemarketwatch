@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_78e1184c45d4",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2983.663,
+  "anchor_value": 2983.663,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 8,
+      "quoted_text": "Total Investments-non-controlled/non-affiliated | $ | 3,038,758 | $ | 2,983,663 | 182.11 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 40,
+      "quoted_text": "Total net assets | $ | 1,638,402 | $ | 1,588,246",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "Evergreen IX Borrower 2023 LLC | fair value $5,713 | 0.35% of net assets",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag as a false alarm. The extracted position sum is $2,983.663 million, exactly equal to the filing schedule total of $2,983.663 million. The filing reports net assets of $1,638.402 million, and 2,983.663 / 1,638.402 * 100 = 182.1093%, matching the source total of 182.11%. At row level the filing rounds percent of net assets to two decimals: for example, $5.713 million / $1,638.402 million * 100 = 0.3487%, printed as 0.35%. Thus the 10.07% violation rate is caused by a check tolerance that does not accommodate source rounding, not by an extracted value defect. No individual culprit row is localized because the bundle contains no matching violation rows."
+}

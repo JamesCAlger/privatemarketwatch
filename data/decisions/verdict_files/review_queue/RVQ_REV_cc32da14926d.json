@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_cc32da14926d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 18,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. (5) | Restaurant owner and operator | First lien senior secured loan | 12/2016 | 08/2022 | 11.8 | -- | -- | (2)(10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows. The raw SOI table header places Fair Value after Amortized Cost, and the cited ADF Capital row shows dashes in both Amortized Cost and Fair Value. The extracted fair_value of 0.0 is therefore faithful to a filer-disclosed dash/no-value cell, not a data error. The check is overbroad because zero fair value may be a legitimate disclosed value."
+}

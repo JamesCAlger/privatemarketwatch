@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_5e5f8d172f8c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_table_maturity_date",
+  "observed_value": "2026-02-01",
+  "anchor_value": "2027-02-01",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC (2)(5)(8) | 07/27/23 | Super Senior Revolver - 14.27 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) | Maturity Date 02/01/27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 5,
+      "quoted_text": "Navistar Defense, LLC (2)(5)(8) | 08/01/22 | Term Loan - 12.27 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) | Maturity Date 02/01/27",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The two flagged Navistar Defense maturity_date values are stored as 2026-02-01, but the source schedule shows 02/01/27 for both positions.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The second flagged Navistar Defense position has the same one-year maturity-date extraction error: stored 2026-02-01 versus source 02/01/27.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Rule X10 flagged maturity_date values before the 2026-03-31 report date. The raw SOI rows for the matching Navistar Defense Super Senior Revolver and Term Loan show Maturity Date 02/01/27, not 02/01/26. The stored 2026-02-01 values are therefore localized extraction errors."
+}

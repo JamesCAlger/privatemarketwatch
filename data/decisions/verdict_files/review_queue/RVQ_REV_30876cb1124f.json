@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_30876cb1124f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 146.34,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 8,
+      "quoted_text": "Total Investments | $ | 2,556,783.9 | $ | 2,577,558.1 | (7)(10) | 146.34 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period schedule total reports 146.34% of net assets, while the flagged extracted percent sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 55,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Raw source was readable and the filing's current-period schedule total explicitly reports Total Investments fair value of 2,577,558.1 and 146.34% of net assets at table 55 row 8. The queue metric is pct_sum=0.0%, so the zero percent is an extraction/column capture gap rather than a source-supported value."
+}

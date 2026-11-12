@@ -1,0 +1,31 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001849894",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded code change classifies the XBRL-only MSD source row 'Investments Investments Total Investments - non-controlled/non-affiliated' as a documented total/header source row, not as a production position.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Add a narrow normalized total-header match for the MSD wording 'Investments Investments Total Investments - non-controlled/non-affiliated' and cover it with a focused source reconciliation test. The rule is exact to the duplicated Investments/Total Investments label and does not classify issuer-bearing rows as totals.",
+  "primary_justification": "Manual review supports a bounded patch. The only blocker row in this packet is source_row_id 839288 with raw identifier 'Investments Investments Total Investments - non-controlled/non-affiliated', source fair value 1,572,769,000, and no issuer, instrument, rate, maturity, principal, shares, or other leaf-position fields. The bundle's html_source_row_coordinate_candidates evidence is empty for this row, so the diagnosis is not based on an HTML table coordinate. The XBRL identifier itself is an exact total/header label: it contains duplicated Investments hierarchy text followed by Total Investments and an affiliation scope, and source_reconciliation_detail_samples show adjacent source-only rows such as Total Cash and Cash Equivalents and Total Portfolio Investments, Cash and Cash Equivalents with the same total-row semantics. A broad suppression rule would be unsafe, but an exact normalized total-header match is bounded and covered by existing false-positive tests for issuer-bearing rows.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2023-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict does not hand-clear production data. Residual risk remains until source reconciliation is rebuilt from cached data and confirms this exact row is documented as a non-position total/header row rather than a blocker.",
+  "review_id": "BDCSRC_0001849894_2023-06-30_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_0c27291470",
+  "reviewer_notes": "The packet reports one blocker row with affected source fair value of 1,572,769,000. Manual review found no position-level evidence in the blocker identifier, and the bundle provides no HTML coordinate candidate for the row. The patch is therefore constrained to this exact normalized total-label shape and does not change classification of MSD issuer/instrument rows.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected effect after rebuild: the MSD duplicated Investments/Total Investments non-controlled/non-affiliated row is documented as source-only total/header evidence and no longer remains a blocking unclassifiable row.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

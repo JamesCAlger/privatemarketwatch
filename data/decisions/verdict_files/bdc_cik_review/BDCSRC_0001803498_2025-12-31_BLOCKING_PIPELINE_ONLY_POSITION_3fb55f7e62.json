@@ -1,0 +1,51 @@
+{
+  "review_id": "BDCSRC_0001803498_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_3fb55f7e62",
+  "cik": "0001803498",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a duplicate-dimension-path false blocker mechanism: the blocker group reports 11 extra pipeline rows with $220.42 million of output fair value and zero matched source fair value, while current-period raw source rows for sampled blocker identifiers are present but all carry match_status collapsed_duplicate_dimension_path.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "gav_reconciliation"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 84,
+      "row_index": 13,
+      "cell_indices": [
+        0,
+        6,
+        12,
+        15,
+        21,
+        27,
+        33,
+        39,
+        45,
+        51,
+        57
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Coordinate candidate shows Apidos CLO XXV - Class E1R3 as a current-period position row in a selected SOI table; numeric source support remains the raw/XBRL source row, not the HTML text."
+    }
+  ],
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_bdc_source_reconciliation.py"
+  ],
+  "patch_summary": "Propose a bounded source-reconciliation change so current-period raw source rows marked collapsed_duplicate_dimension_path remain eligible for identity matching against unified output rows when identifier, report date, accession, and fair value support the same production position; add a false-positive test ensuring true duplicate dimension collapses are still not counted twice.",
+  "source_reconciliation_effect": "Expected to reduce or clear this blocking_pipeline_only_position residual by matching the affected pipeline rows to their current-period raw source facts instead of treating them as zero-source extras, without suppressing unrelated missing_from_pipeline residuals.",
+  "gav_effect": "Context only; GAV already passes with gav_ratio 1.0052 and should not be used as an independent pass/fail claim.",
+  "tests_validation_plan": "pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py tests/test_bdc_source_reconciliation.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "The bundle provides only sampled extra-in-pipeline identifiers and one exact HTML coordinate citation; the full set of 11 output rows should be checked after patching to confirm each has a legitimate current-period source fact and that duplicate-dimension collapse semantics are not weakened globally.",
+  "reviewer_notes": "Do not patch generated CSVs or validation outputs. Generic HTML matches on terms such as Subordinated Notes were not relied on because they can point to different issuers; the mechanism is based on source reconciliation and raw current-period source rows."
+}

@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_39b28bb6976b",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -62000,
+  "anchor_value": -62000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Quantum Leap Buyer LLC | Delayed Draw Term Loan | Amortized Cost $ (62) | Fair Value $ (62)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Quantum Leap Buyer LLC | Revolving Line of Credit | Amortized Cost (37) | Fair Value (37)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 12,
+      "quoted_text": "GarageCo Intermediate II LLC | Delayed Draw Term Loan | Amortized Cost (118) | Fair Value (118)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 9,
+      "quoted_text": "Rocket Youth Brands Holdco LLC | Delayed Draw Term Loan | Amortized Cost (224) | Fair Value (235)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 15,
+      "quoted_text": "TCI Buyer LLC | Delayed Draw Term Loan | Amortized Cost (153) | Fair Value 178",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 14,
+      "quoted_text": "Riskonnect Parent, LLC | Delayed Draw Term Loan | Amortized Cost (267) | Fair Value -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw SOI tables themselves show those positions with parenthesized amounts in the Amortized Cost column. The extracted negative costs therefore match the source schedule; this is a monitoring-rule false alarm, not a data error. No aggregate anchor was needed because the issue localizes to the flagged cost cells."
+}

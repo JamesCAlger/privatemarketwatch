@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_66a9094d784e",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -33000,
+  "anchor_value": -33000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "Bamboo US Bidco LLC | Health Care Equipment | First Lien Term Loan | SOFR+ | 5.25 % | 9/30/2030 | Principal - | Cost - | Fair Value (33) | Notes (5)(8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 19,
+      "quoted_text": "Eyesouth Eye Care Holdco LLC | Health Care Services | First Lien Term Loan | SOFR+ | 5.50 % | 9.92 % | 10/5/2029 | Principal 49 | Cost 9 | Fair Value (19) | Notes (5)(8)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged two negative fair_value rows as unexplained, but the raw schedule itself reports the negative fair values: Bamboo US Bidco LLC at (33) and Eyesouth Eye Care Holdco LLC at (19). Both localized rows also carry the filing's note marker (9) in the Notes column, consistent with the rule's exception for filer-presented commitment/unfunded marks rather than a data error in fair_value."
+}

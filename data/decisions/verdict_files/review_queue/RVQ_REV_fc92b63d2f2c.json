@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_fc92b63d2f2c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -26000.0,
+  "anchor_value": -26000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 23,
+      "quoted_text": "First Lien Senior Secured Term Loan | SOFR + 6.25 %, 11.6 % Cash | 03/24 | 09/26 | -- | ( 28 ) | ( 26 ) | -- | % | (6) (7) (12) (28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "Revolver | SOFR + 6.25 %, 11.6 % Cash | 03/24 | 03/30 | -- | ( 10 ) | ( 10 ) | -- | % | (6) (7) (12) (28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 26,
+      "quoted_text": "Revolver | SOFR + 5.50 %, 10.8 % Cash | 11/22 | 11/28 | -- | ( 24 ) | ( 13 ) | -- | % | (6) (7) (12) (28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 24,
+      "quoted_text": "First Lien Senior Secured Term Loan | EURIBOR + 7.00 %, 10.9 % Cash | 12/22 | 12/29 | -- | ( 37 ) | ( 684 ) | ( 0.1 ) | % | (3) (6) (7) (9) (26) (28)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value rows for review, but raw SOI rows show those fair values are source-reported negatives in the Fair Value column, including AD Bidco term loan row (26), AD Bidco revolver (10), ATL II MRO revolver (13), and a larger negative fair value (684). The extracted negative signs match the filing rather than indicating an extraction or normalization error."
+}

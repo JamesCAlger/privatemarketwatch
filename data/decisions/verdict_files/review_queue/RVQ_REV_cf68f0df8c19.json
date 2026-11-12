@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_cf68f0df8c19",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 79,
+      "row_index": 29,
+      "quoted_text": "Total | 100.0 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed pct_sum=0.0%, but the raw filing's Industry Classification schedule for March 31, 2026 explicitly reports Total | 100.0 % at table 79, row 29. The schedule anchor disproves the extracted zero sum and shows that the allocation percentages were not captured, an extraction gap."
+}

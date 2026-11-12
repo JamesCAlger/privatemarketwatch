@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_e6b18d3ea374",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "non-USD par amount requiring USD principal conversion",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 7
+    },
+    {
+      "table_index": 32,
+      "row_index": 10
+    },
+    {
+      "table_index": 32,
+      "row_index": 11
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "WeTransfer BV has source par in EUR 8,338,465 while extracted principal_amount_usd is blank.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 32,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Inspired Entertainment Financing PLC has source par in GBP 9,151,000 while extracted principal_amount_usd is blank.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 32,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Neon Finance Limited has source par in GBP 3,991,078 while extracted principal_amount_usd is blank.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 32,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level FX01 review. The raw SOI header identifies Par Amount, Cost / Amortized Cost, and Fair Value columns. Table 32 rows 7, 10, and 11 show debt positions with par explicitly denominated in EUR or GBP while cost and fair value are USD-denominated schedule values; the flagged extracted field principal_amount_usd is blank. Non-USD source par therefore needs an explicit USD principal conversion before par analytics, so the warning is a real extraction gap rather than a false alarm."
+}

@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_9bc8e5a94f50",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  30,
+                                  "row_index":  33,
+                                  "quoted_text":  "Healthco Investment LTD EUR | UK(9)(10) | E + 5.75 % | 0.00 % | 7.85 % | 9/9/2032 | EUR 27,178 | 26,596 | 26,656 | 0.81",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  30,
+                                  "row_index":  34,
+                                  "quoted_text":  "Healthco Investment LTD GBP | UK(9)(10) | SO + 5.75 % | 0.00 % | 9.72 % | 9/9/2032 | GBP 6,738 | 6,624 | 6,609 | 0.20",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Non-USD debt par is present in the source schedule, but principal_amount_usd is blank in the extracted holding rows, so explicit FX-normalized principal is missing.",
+                         "fix_class":  "unit_rescale",
+                         "citation":  {
+                                          "table_index":  30,
+                                          "row_index":  33
+                                      }
+                     }
+                 ],
+    "rationale":  "FX01 flags non-USD debt principal values with missing principal_amount_usd. The source schedule header identifies Par Amount / Shares, Cost, and Fair Value columns, and representative source rows show par explicitly denominated in EUR and GBP while the derived issue rows for FX01 have blank principal_amount_usd. This is a real normalization/extraction gap rather than a false alarm."
+}

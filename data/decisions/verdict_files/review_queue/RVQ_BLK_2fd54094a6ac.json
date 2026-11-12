@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_2fd54094a6ac",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 493104572000,
+  "anchor_value": 12436497305.84,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 5,
+      "quoted_text": "Class I common shares outstanding: 192,514,877",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 54,
+      "row_index": 6,
+      "quoted_text": "Class I net asset value per share: 25.22",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 54,
+      "row_index": 18,
+      "quoted_text": "Class S net asset value per share: 25.22",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "The observed E04 nav*shares value equals the total class share count of 493,104,572 scaled by 1,000, while the source NAV per share is 25.22 and should be multiplied by shares.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 54,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. Filing schedule table 54 reports class net assets of 4,855,520, 1,138,385, 5,629,111, and 813,815 (in thousands), totaling 12,436,831,000, and reports class shares of 192,514,877, 45,135,208, 223,188,196, and 32,266,291 with NAV per share of 25.22. Those shares sum to 493,104,572; 493,104,572 * 25.22 = 12,436,497,305.84, which ties to total net assets within ordinary per-share rounding. The oracle observed 493,104,572,000, which is the share count scaled by 1,000 rather than NAV times shares, so the flag reflects a real unit/formula data defect rather than a correct source mismatch."
+}

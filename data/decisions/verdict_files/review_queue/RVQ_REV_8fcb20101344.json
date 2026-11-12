@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_8fcb20101344",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4,
+  "anchor_value": 4,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "AMEX Holding III Corp Term Loan | (4)(5)(7)(11)(29) | 3M SOFR + 0.00 % / 1.00 % | 0.00 % | 3/31/2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 29,
+      "quoted_text": "AMEX Holding III Corp Delayed Draw Term Loan | (4)(5)(7)(11)(29) | 3M SOFR + 0.00 % / 1.00 % | 0.00 % | 3/31/2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 7,
+      "quoted_text": "Signature Brands, LLC Term Loan B | (4)(5)(7)(29) | 1M SOFR + 9.50 % / 1.75 % | 14.09 % | 5/4/2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 38,
+      "quoted_text": "Kinetic Purchaser, LLC - Closing Date Term Loan | (4)(5)(7)(29) | 3M SOFR + 6.00 % / 1.00 % | 9.82 % | 11/10/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule supports all four footnote-derived nonaccrual flags: each flagged current-quarter position carries footnote (29). The source distinguishes nearby rows within the same issuer groups, such as Signature Brands Term Loan A, which lacks (29). Thus the observed count of four matches the schedule evidence and the advisory nonaccrual warning is a false alarm, not a holdings-data defect."
+}

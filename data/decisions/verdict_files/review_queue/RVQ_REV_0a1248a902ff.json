@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_0a1248a902ff",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Investments, Investments -- non-controlled/ non-affiliated, First Lien Debt, Aerospace \u0026 Defense, Cadence - Southwick, Inc., Term Loan, Reference Rate and Spread SOFR + 6.75%, Interest Rate 11.69%, Maturity Date 5/3/2029",
+    "anchor_value":  "Cadence - Southwick, Inc. (g)(j)",
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  5,
+                                  "quoted_text":  "Source row has issuer \"Cadence - Southwick, Inc. (g)(j)\" in the Investments column, with separate Type \"Term Loan\", Reference Rate and Spread \"SOFR + 6.75%\", Interest Rate \"11.69%\", and Maturity Date \"5/3/2029\" cells.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  10,
+                                  "row_index":  9,
+                                  "quoted_text":  "Source row has issuer \"Echo Global Logistics Inc (j)\" in the Investments column, with separate Type \"Term Loan\", Reference Rate and Spread \"SOFR + 4.75%\", Interest Rate \"9.95%\", and Maturity Date \"11/23/2028\" cells.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Issuer_name was populated with schedule headings and separate row attributes instead of the clean issuer name.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  10,
+                                          "row_index":  5
+                                      }
+                     }
+                 ],
+    "rationale":  "C206 is confirmed by raw source table 10. The filing presents issuer names as clean Investments-column cells, while Type, Reference Rate and Spread, Interest Rate, and Maturity Date are separate columns and investment/category labels are separate heading rows. The extracted issuer_name concatenates those headings and separate attributes into the issuer field, so the flag is a real data error."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_0db98e7ff88c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2155.846,
+  "anchor_value": 2155.846,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 15,
+      "quoted_text": "Total Investments | $ | 2,164,611 | $ | 2,155,846 | 155.32 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 13,
+      "quoted_text": "Total | $ | 1,991,358 | 92.36 | % | 243 | $ | 1,497,746 | 89.07 | % | 201",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 119,
+      "row_index": 12,
+      "quoted_text": "Aprio Advisory Group, LLC - Delayed Draw Loan | 12,414 | 2024 dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 120,
+      "row_index": 21,
+      "quoted_text": "Cool Acquisition Holdings, LP (Universal Air Conditioner, L.L.C.) | 2025 dash | 550",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "D06 flags low issuer continuity (83/398), but the raw filing supports real portfolio turnover rather than a data error. The schedule total fair value ties to the bundle amount at $2,155.846 million, table 18 reports different current/prior portfolio-company counts (243 vs 201), and side-by-side source rows show ordinary 2025-only and 2024-only portfolio-company entries. No localized extraction defect is supported by the source."
+}

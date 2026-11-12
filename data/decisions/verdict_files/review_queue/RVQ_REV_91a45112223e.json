@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_91a45112223e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 173.4,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 16,
+      "quoted_text": "Total Investments | $ | 6,206,603 | $ | 6,207,136 | 173.4 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source schedule total for % of Net Assets is 173.4%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 63,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate flag. The bundle reports A07 pct_sum=0.0%, while the raw SOI total row reports Total Investments fair value of $6,207,136 thousand and % of Net Assets of 173.4%. The schedule total directly contradicts the extracted aggregate percentage, so the zero percentage is a real extraction gap rather than a valid filing value."
+}

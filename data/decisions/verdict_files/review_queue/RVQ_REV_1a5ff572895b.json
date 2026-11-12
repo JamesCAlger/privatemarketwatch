@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_1a5ff572895b",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "2023-05-08",
+  "anchor_value": "2023-05-08",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 39,
+      "quoted_text": "Integro | (n) | Senior Secured 2022 Refinancing Term Loan (First Lien) | FIXED | ( 12.25 | % PIK) | 12.25 | % | 10/9/2015 | 5/8/2023 | 234,560 | 237,263 | 234,560"
+    }
+  ],
+  "rationale": "The September 30, 2023 schedule of investments lists the Integro loan with maturity date 5/8/2023 in the Maturity Date column. The raw source therefore supports the stored past maturity rather than showing an extraction or normalization error; the maturity_not_past check is flagging a filed position whose maturity is before the report date."
+}

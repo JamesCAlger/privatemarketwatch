@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_91ed69cf9f9e",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 7,
+      "quoted_text": "Total 1st Lien/Senior Secured Debt | 2,919,435 | 2,857,787",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 39,
+      "quoted_text": "Total United States | $ | 3,137,799 | $ | 3,049,333",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 40,
+      "quoted_text": "Total Debt Investments | $ | 3,306,672 | $ | 3,220,334",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "C201 missing issuer_name is real because subtotal/category rows from the investment schedule were emitted as holdings rows; these rows have no issuer by source structure.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 52,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The raw SOI table contains ordinary issuer rows with issuer names, but also subtotal/category rows whose first cell is a total label and whose issuer-related columns are blank. The C201 bundle reports holdings rows with empty issuer_name; the cited source rows show this is not a legitimate position with a missing displayed issuer, but a subtotal leak into the holdings extract."
+}

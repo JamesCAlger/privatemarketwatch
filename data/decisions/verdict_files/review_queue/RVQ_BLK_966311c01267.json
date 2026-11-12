@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_966311c01267",
+  "verdict": "real_error",
+  "mechanism": "identifier_maturity_ne_structured",
+  "localized": true,
+  "anchor_used": "raw_soi_maturity_date",
+  "observed_value": "identifier maturities 2033-12-12 and 2034-12-12",
+  "anchor_value": "raw SOI maturity 2032-12-12",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 13,
+      "quoted_text": "Peachtree Buyer, Inc. (3) | First Lien Senior Secured Delayed Draw Term Loan | Construction & Engineering | SOFR + 4.500 % | 12/11/2025 | 12/12/2032",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 14,
+      "quoted_text": "Peachtree Buyer, Inc. (3)(7) | First Lien Senior Secured Revolving Loan | Construction & Engineering | SOFR + 4.500 % | 8.172 % | 12/11/2025 | 12/12/2032",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "identifier_maturity_ne_structured",
+      "detail": "Delayed Draw Term Loan identifier carries 2033-12-12, but the raw SOI maturity date is 12/12/2032.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 13
+      }
+    },
+    {
+      "mechanism": "identifier_maturity_ne_structured",
+      "detail": "Revolving Loan identifier carries 2034-12-12, but the raw SOI maturity date is 12/12/2032.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The bundle's flagged generated identifiers disagree with the structured XBRL maturity value of 2032-12-12. Raw SOI rows for the same Peachtree Buyer delayed draw term loan and revolving loan both show maturity date 12/12/2032, so the structured maturity is source-grounded and the identifier maturities 2033-12-12 and 2034-12-12 are data errors."
+}

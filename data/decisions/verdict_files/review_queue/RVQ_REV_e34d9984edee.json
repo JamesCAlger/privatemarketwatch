@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e34d9984edee",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values contain concatenated schedule fields, e.g. Company, Inc. Type of Investment Secured Loan Investment Date June 22, 2022 Maturity Date June 30, 2025 Interest Rate Variable interest rate Prime + 5.8% or Floor rate 9.0%; EOT 2.0%",
+  "anchor_value": "source rows keep issuer in Portfolio Company column and investment terms in separate columns; continuation rows inherit the portfolio company rather than making terms part of issuer_name",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 7,
+      "quoted_text": "[blank Portfolio Company continuation under NextCar Holding Company, Inc.] | Secured Loan | February 23, 2022 | June 30, 2025 | Variable interest rate Prime + 5.8 % or Floor rate 9.0 %; EOT 2.0 % | 2,843 | 2,974 | 789",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "[blank Portfolio Company continuation under Applied Digital Corporation] | Equipment Financing | March 25, 2024 | March 1, 2026 | Fixed interest rate 19.0 %; EOT 0.0 % | 5,708 | 5,707 | 5,848",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "[blank Portfolio Company continuation under Applied Digital Corporation] | Equipment Financing | April 24, 2024 | April 1, 2026 | Fixed interest rate 19.0 %; EOT 0.0 % | 3,084 | 3,084 | 3,163",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name extraction is absorbing schedule descriptors and terms instead of retaining only the portfolio company name; continuation debt rows should inherit the preceding company name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 26,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The raw SOI columns show portfolio company names and investment terms as separate fields. For the cited continuation rows, the Portfolio Company cell is blank under an immediately preceding company total group, while type, date, maturity, rate, cost, and fair value occupy their own columns. The observed issuer_name values in the bundle instead concatenate those non-issuer fields and omit or pollute the actual issuer, so the fmt_issuer_name flag is a real extraction error."
+}

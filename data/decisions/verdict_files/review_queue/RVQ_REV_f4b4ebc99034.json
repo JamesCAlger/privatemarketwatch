@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_f4b4ebc99034",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Evidence CLI returned missing_cached_html for the cached filing (accession 0001752724-22-052357), so raw source tables/anchors were unavailable. Per the adjudication contract, missing or unreadable raw source is ambiguous with source_unavailable and escalation."
+}

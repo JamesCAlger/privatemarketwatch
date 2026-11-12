@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_09a1efedfa1e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 14,
+      "quoted_text": "AI Sirona (Luxembourg) Acquisition S.a.r.l. | Pharmaceuticals | First Lien Term Loan | E+ | 5.00 % | 8.84 % | 9/30/2028 | \\u20ac | 21,000 | 23,002 | 23,279 | (5)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 32,
+      "quoted_text": "Ardonagh Midco 3 PLC | Insurance Brokers | First Lien Term Loan | E+ | 6.75 % | 10.70 % | 7/14/2026 | \\u20ac | 9,600 | 9,650 | 10,711 | (5)(8)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "Bamboo US Bidco LLC | Health Care Equipment | First Lien Term Loan | E+ | 6.00 % | 9.95 % | 9/30/2030 | \\u20ac | 15,530 | 15,968 | 16,640 | (5)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 26,
+      "quoted_text": "Carlyle Euro CLO 2021-2 | Multi-Sector Holdings | CLO Notes | E+ | 3.30 % | 7.27 % | 10/15/2035 | \\u20ac | 1,400 | 1,376 | 1,428 | (5)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "GoldenTree Loan Management EUR CLO 2 DAC | Multi-Sector Holdings | CLO Notes | E+ | 2.85 % | 6.84 % | 1/20/2032 | \\u20ac | 1,000 | 880 | 1,033 | (5)(10)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 rows have blank principal_amount_usd even though the source SOI shows non-USD euro principal; USD par must be explicitly converted before par analytics.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 12,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "The raw SOI has debt rows whose Principal column is denominated with a euro symbol, including the cited current-period investment rows. The row-validation artifact for this review shows five FX01 rows where principal_amount_usd is blank and the rule evidence states that non-USD source par requires explicit FX conversion before par analytics. Because the source establishes non-USD principal and the extracted USD principal field is missing, the flag is a real extraction/normalization gap, not an aggregate anchor issue."
+}

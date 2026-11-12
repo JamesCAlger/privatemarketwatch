@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_933806dbfe99",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": 11.47,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 106,
+      "row_index": 25,
+      "quoted_text": "22 HoldCo Limited | Senior subordinated loan | 11.47 % PIK | SONIA (S) | 7.50 % | 08/2033 | 26,215.4 | 24,458.8 | 26,215.4 | (2)(6)(8)(13)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X02 reports a missing interest_rate for the 22 HoldCo Limited senior subordinated loan, but the raw investment schedule explicitly discloses an 11.47% PIK coupon at table 106 row 25. The stored blank therefore reflects an extraction gap, not a source omission or an inapplicable rate check. This citation grounds the batch flag; the remaining flagged rows were not individually adjudicated."
+}

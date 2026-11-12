@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_10b8b4d49343",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 75.0,
+  "anchor_value": 100.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 247,
+      "row_index": 37,
+      "quoted_text": "Vista Outdoor, Inc. 4.50 %, 03/15/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 247,
+      "row_index": 40,
+      "quoted_text": "iHeartCommunications, Inc. (7) 6.38 %, 05/01/2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 247,
+      "row_index": 41,
+      "quoted_text": "iHeartCommunications, Inc. (7) 8.38 %, 05/01/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Vista Outdoor corporate bond source text carries a 4.50% coupon but extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 247,
+        "row_index": 37,
+        "quoted_text": "Vista Outdoor, Inc. 4.50 %, 03/15/2029"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "iHeartCommunications 2026 corporate bond source text carries a 6.38% coupon but extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 247,
+        "row_index": 40,
+        "quoted_text": "iHeartCommunications, Inc. (7) 6.38 %, 05/01/2026"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "iHeartCommunications 2027 corporate bond source text carries an 8.38% coupon but extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 247,
+        "row_index": 41,
+        "quoted_text": "iHeartCommunications, Inc. (7) 8.38 %, 05/01/2027"
+      }
+    }
+  ],
+  "rationale": "Class 2/aggregate rate-fill review. The bundle shows a dl_rate_fill weak flag with metric 75.0 and four missing-rate units among sixteen, including corporate bond rows whose extracted interest_rate is blank. Raw source table 247 prints coupons in the instrument text for Vista Outdoor (4.50%), iHeartCommunications 2026 (6.38%), and iHeartCommunications 2027 (8.38%). Those source rates should have populated interest_rate, so the flag reflects a real extraction gap. The Grayson asset-backed row has no visible source rate, so it is not used as a culprit."
+}

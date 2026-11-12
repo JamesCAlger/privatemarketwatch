@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_f14fddfd1224",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 18,
+  "anchor_value": 0,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 25,
+      "quoted_text": "API Commercial Inc., API Military Inc., and API Space Intermediate, Inc. | Provider of military aircraft aftermarket parts and distribution, repair and logistics services | First lien senior secured loan | 05/2022 | 08/2025 | 6.6 | 2.1 | 2.6 | (2)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 28,
+      "quoted_text": "Continental Acquisition Holdings, Inc. | Distributor of aftermarket batteries to the electric utility vehicle, automotive, commercial, marine and industrial markets | First lien senior secured loan | 01/2021 | 01/2027 | 38.2 | 36.6 | 28.7 | (2)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate-style nonaccrual flag for 18 positions. Raw schedule rows for flagged issuers are present and carry footnote markers such as (9), but evidence_cli text searches for non-accrual/accrual and likely footnote wording returned no hits, and the grid output did not expose the footnote prose defining (9). The raw source therefore confirms marked rows but does not decide whether the markers mean nonaccrual status within the available evidence window."
+}

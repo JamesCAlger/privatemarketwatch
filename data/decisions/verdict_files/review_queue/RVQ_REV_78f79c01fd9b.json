@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_78f79c01fd9b",
+  "verdict": "false_alarm",
+  "mechanism": "unit_parser_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_EOBZTAHQ7EWNAY-F6HM7GA",
+  "anchor_value": "USD",
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 18,
+      "quoted_text": "A Place For Mom | Senior Secured Term Loan | L+ | 4.50 | % | 9.69 | % | 7/28/2017 | 2/10/2026 | 2,201,313 | 2,201,351 | 2,157,287"
+    },
+    {
+      "table_index": 24,
+      "row_index": 37,
+      "quoted_text": "Total Portfolio Investments (aj) | $ | 406,272,865 | $ | 398,843,940"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency because the stored unit label is a custom token, but the raw schedule presents the portfolio investment market value column in dollars. A flagged sample row, A Place For Mom, carries market value 2,157,287 in that schedule, and the schedule total explicitly prints dollar signs for both amortized cost and market value. The source therefore supports USD valuation, so the row-validation currency check is over-firing on a custom USD unit label rather than finding a non-USD fair value."
+}

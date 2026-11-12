@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_3f4ec86ecac7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 235.9,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 25,
+      "quoted_text": "Total Investments and Investments in Affiliated Money Market Fund - 235.9 % | $ | 3,405,587 | $ | 3,231,416",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed a quarter-wide percentage sum of 0.0%, but the raw schedule's current-period grand total is 235.9% (and the investments-only subtotal is 235.7% at table 23 row 19). The zero therefore reflects a missing percentage extraction rather than the filing, and the schedule-total disagreement grounds a real extraction error."
+}

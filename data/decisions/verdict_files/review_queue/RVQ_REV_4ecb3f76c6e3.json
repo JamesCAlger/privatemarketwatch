@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_4ecb3f76c6e3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_schedule_currency",
+  "observed_value": 24,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC (3) | 03/28/24 | Term Loan B - 11.81 % (SOFR + 6.50 %, 1.75 % Floor) | 4.8 | % | $ | 6,187,389 | 03/28/29 | $ | 6,000,357 | $ | 6,037,866"
+    },
+    {
+      "table_index": 6,
+      "row_index": 16,
+      "quoted_text": "Total Debt Investments (2) | 106.0 | % | 131,925,029 | 132,237,899"
+    }
+  ],
+  "rationale": "FX01 flags non-USD debt principal rows missing principal_amount_usd, but the raw schedule for the flagged debt positions is a dollar-denominated Par Amount / Amortized Cost / Fair Value table. The first debt row explicitly carries dollar signs in the par, cost, and fair value columns, and the debt total ties the same schedule without any foreign-currency marker. A targeted source query for foreign currency/par/dollars returned no foreign-currency hits. The non-USD premise is therefore not supported by raw source."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_f289bb2b7c8a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 66.0,
+  "anchor_value": 66.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 20,
+      "quoted_text": "Software | First Lien(3)(4) - Undrawn | dash | dash | dash | 02/2023 | 08/2024 | $ | 1,193 | $ | dash | $ | dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 21,
+      "quoted_text": "First Lien(3)(4) - Undrawn | dash | dash | dash | 02/2023 | 02/2029 | 914 | (9) | dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 10,
+      "quoted_text": "Total Unfunded Debt Investments | $ | 153,674 | $ | (586) | $ | (492) | (0.06) | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The fill-rate rule is counting unfunded or undrawn direct-lending commitments even though the source schedule explicitly prints dashes for reference, spread, and interest rate on those rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 22,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The flag is an aggregate dl_rate_fill warning, not a localized bad extraction. Raw source rows in the unfunded debt investment section show Undrawn first-lien commitments with dash placeholders in the reference, spread, and interest-rate columns, and the filing totals separately identify a material Total Unfunded Debt Investments section. The stored blank interest_rate values for these undrawn rows therefore match the source; the check is overbroad when it treats those source-blank unfunded commitments as rate-fill defects."
+}

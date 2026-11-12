@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_52d74377a478",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "extracted/source-artifact identifier: SOFR + 5.00%; Interest Rate 9.17%",
+  "anchor_value": "raw schedule row: SOFR + 4.75%; Interest Rate 8.48%",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 13,
+      "quoted_text": "Tex-Tech Industries Inc (f)(j)(q) | Delayed Draw Term Loan | SOFR + 4.75 % | 8.48 % | 1/13/2031 | 95,238 | 94,366 | 95,238",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Tex-Tech Delayed Draw Term Loan was represented with SOFR + 5.00% and 9.17%, but the raw schedule row shows SOFR + 4.75% and 8.48%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 39,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The flagged row is the Tex-Tech Industries Inc Delayed Draw Term Loan. The bundle's source-artifact/unified identifier carries SOFR + 5.00% and Interest Rate 9.17%, while the raw investment schedule row for the same issuer, instrument type, maturity, cost, and fair value shows Reference Rate and Spread SOFR + 4.75% and Interest Rate 8.48%. The source therefore confirms a localized extraction/identifier data error rather than a bad check."
+}

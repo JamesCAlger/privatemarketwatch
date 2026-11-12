@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_187871b7270e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Asset-Backed Securities Commercial & Residential Mortgage Finance Benefit Street Partners Clo Vi-B Ltd Type Collateralized Loan Obligation Reference Rate and Spread SOFR + 4.75% Interest Rate 9.08% Maturity Date 4/20/2038",
+  "anchor_value": "Benefit Street Partners Clo Vi-B Ltd",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 26,
+      "quoted_text": "Benefit Street Partners Clo Vi-B Ltd (g)(l)(m)(w) | Collateralized Loan Obligation | SOFR + 4.75 % | 8.42 % | 4/20/2038 | 100,000 | 100,000 | 96,027",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 7,
+      "quoted_text": "Behavioral Framework LLC (f)(i)(l) | Delayed Draw Term Loan | SOFR + 4.75 % | 8.47 % | 11/20/2031 | 3,082,846 | 3,049,882 | 3,049,538",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field absorbs section labels and the adjacent Type, Reference Rate, Interest Rate, and Maturity Date columns instead of retaining only the issuer.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 28,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "The filing schedule presents issuer, type, reference rate, interest rate, and maturity as separate columns. At table 28 row 26 the issuer cell is Benefit Street Partners Clo Vi-B Ltd, while the flagged issuer_name concatenates category text and all adjacent terms through the maturity date. Table 43 row 7 independently shows the same column structure for Behavioral Framework LLC. The C206 flag therefore identifies a real, localized issuer-name extraction defect rather than valid issuer text. No aggregate anchor is applicable."
+}

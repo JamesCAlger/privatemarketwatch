@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_5379ce1b4ef0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 58,
+  "anchor_value": 58,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 135.8 % | $ | 199,200 | $ | 184,466",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 1,
+      "quoted_text": "Description | Industry | Spread above Index (3) | Floor | Interest Rate (1) | Acquisition Date | Maturity Date | Par Amount | Cost | Fair Value",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 is an aggregate coverage flag reporting that 58 of 116 leaves have fair_value. The raw 2025 investment schedule has explicit Cost and Fair Value columns, and its Total Investments row reports cost 199,200 and fair value 184,466; the extracted 2025 holdings slice carries fair_value for the shown positions and ties structurally to the schedule total. The 50% metric is therefore consistent with counting cost leaves together with fair-value leaves in the denominator, not with missing fair values in the raw source."
+}

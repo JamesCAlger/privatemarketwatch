@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_1ab9b93d12c1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Four Impel Pharmaceuticals Inc. First Lien Term Loan rows carry note (12) and have blank Cash Interest Rate cells in the December 31, 2023 schedule.",
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 28,
+      "quoted_text": "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 10,187 | 9,687 | 5,389 | (5)(8)(12)"
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 305 | 285 | 242 | (5)(8)(12)"
+    },
+    {
+      "table_index": 15,
+      "row_index": 30,
+      "quoted_text": "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 812 | 787 | 643 | (5)(8)(12)"
+    },
+    {
+      "table_index": 15,
+      "row_index": 31,
+      "quoted_text": "Impel Pharmaceuticals Inc. | Health Care Technology | First Lien Term Loan | SOFR+ | 10.75 % | 3/17/2027 | 364 | 358 | 288 | (5)(8)(12)"
+    }
+  ],
+  "rationale": "The raw schedule localizes the flag to four Impel Pharmaceuticals Inc. first-lien term-loan rows. Each row has note (12) and no displayed Cash Interest Rate, while comparable SOFR loans in the same table show cash-interest values. However, targeted evidence-cli searches for non-accrual/accrual/status/footnote language did not expose the text defining note (12). Because the raw source available through the CLI does not decisively prove that note (12) means non-accrual, the flag is source-checked ambiguous rather than a grounded real_error or false_alarm."
+}

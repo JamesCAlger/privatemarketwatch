@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_057d8c5a8c25",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include schedule headings, geography/industry labels, and investment terms, e.g. 'Portfolio Company Debt Securities' or full concatenated debt-security descriptors",
+  "anchor_value": "raw source Portfolio Company cells contain issuer names only, e.g. Smartly, Inc.; Nexii Building Solutions, Inc. (10); Aledia, Inc. (10)",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 23,
+      "quoted_text": "Smartly, Inc. | Secured Loan | May 16, 2022 | December 1, 2026 | Variable interest rate Prime + 7.0 % or Floor rate 10.5 %; EOT 2.5 % | $ | 10,000 | $ | 9,956 | $ | 10,038"
+    },
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "Nexii Building Solutions, Inc. (10) | Secured Loan | August 27, 2021 | August 27, 2025 | Variable interest rate Prime + 7.0 % or Floor rate 10.3 %; EOT 2.5 % | $ | 10,000 | $ | 9,888 | $ | 10,009"
+    },
+    {
+      "table_index": 23,
+      "row_index": 25,
+      "quoted_text": "Aledia, Inc. (10) | Equipment Financing | March 31, 2022 | April 1, 2025 | Fixed interest rate 9.0 %; EOT 7.0 % | $ | 12,602 | $ | 13,246 | $ | 12,860"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer-name extractor carried forward schedule/category text and investment terms instead of limiting issuer_name to the Portfolio Company cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The bundle's holdings sample shows issuer_name populated with generic or concatenated strings such as 'Portfolio Company Debt Securities' and long descriptors containing geography, industry, investment date, maturity date, and interest-rate text. The raw SOI schedule separates those fields: the Portfolio Company cell for the matching positions is the issuer name alone, with type, dates, rate, principal, cost, and fair value in separate columns. This grounds the fmt_issuer_name flag as a real extraction/column-boundary error rather than a false alarm."
+}

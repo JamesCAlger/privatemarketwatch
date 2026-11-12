@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_6d89e6e86176",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 2,767,878 | $ | 2,783,476 | 100.00 | % | $ | 1,207,142 | $ | 1,216,443 | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source schedule total for December 31, 2025 shows 100.00% of total investments at fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 6,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The A07 source artifact reports pct_sum=0.0% for the CIK-quarter, while the raw filing's investment summary table for December 31, 2025 reports fair value of 2,783,476 and a total percentage of 100.00% of total investments at fair value. The source therefore supports a populated percentage total, so the zero observed value is an extraction gap rather than a true filing value."
+}

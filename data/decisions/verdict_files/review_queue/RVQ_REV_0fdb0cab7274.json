@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_0fdb0cab7274",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 76241000,
+  "anchor_value": 76241000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 5,
+      "quoted_text": "Interest income | $ | 71,669 | $ | 33,080",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Total Investment Income | 76,241 | 35,279",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 15,
+      "quoted_text": "Annualized ratio of net investment income (loss) to average net assets applicable to Common Shares (4) | 13.00 | % | 11.14 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw filing reports 2026 first-quarter interest income of $71.669 million and total investment income of $76.241 million, matching the extracted schedule total. It also reports a 13.00% annualized net-investment-income ratio. These independent filing disclosures support an income yield materially above a holdings WAC heuristic. F27 is therefore a false alarm caused by a weak, non-comparable WAC anchor rather than a fund-financials data error."
+}

@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_4cbc44853d40",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 12,
+  "anchor_value": 0,
+  "confidence": 0.58,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 34,
+      "quoted_text": "Percentage of assets on non-accrual, at amortized cost (6) | 0.5 | % | 0.1 | % | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 76,
+      "row_index": 11,
+      "quoted_text": "Daylight Beta Parent, LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 10.00 % | 10.00 % PIK | 9/11/2023 | 9/12/2033 | 54,791 | 49,530 | 12,744 | 0.03",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 76,
+      "row_index": 10,
+      "quoted_text": "CFCo, LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/11/2023 | 9/13/2038 | 86,098 | 12,571 | 0 | 0.00",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The source confirms non-accrual exposure exists for the 2024 filing at the portfolio level, and several flagged issuers appear in the schedule with footnote (16). However, the evidence CLI did not surface the footnote legend or other raw text establishing that footnote (16) means non-accrual. Without that raw legend, the exact 12 position-level nonaccrual classification cannot be independently confirmed or rejected."
+}

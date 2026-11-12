@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_3e82f7e7c7f3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted evidence CLI returned no usable raw-source payload for overview or targeted Panzura and Plasma Buyer non-accrual queries; it emitted only an XMLParsedAsHTMLWarning. The non-accrual classification therefore cannot be adjudicated from raw source in this environment without guessing."
+}

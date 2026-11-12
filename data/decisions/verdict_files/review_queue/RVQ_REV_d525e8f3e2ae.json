@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d525e8f3e2ae",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Debt Investments Financial Services Passport Labs, Inc. Investment Convertible Promissory Note A ($1,086 par, due 8/2026) Initial Acquisition Date 3/2/2023 Reference Rate and Spread 8.00% Interest Rate 8.00%",
+  "anchor_value": "Passport Labs, Inc.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 16,
+      "quoted_text": "Passport Labs, Inc. | Convertible Promissory Note A ($ 1,086 par, due 8/2026 ) | 3/2/2023 | 8.00 | % | 8.00 | % | 1,085 | 1,167 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 32,
+      "quoted_text": "American Achievement, Corp. (3)(14) | First-lien loan ($ 26,664 par, due 9/2026 ) | 9/30/2015 | SOFR + 7.35 % | 11.22 % (incl. 10.72 % PIK) | 25,848 | 19,665 | 1.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name is populated with concatenated schedule fields instead of only the source issuer cell; Passport Labs source issuer is only Passport Labs, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "C206 is a Class 2 within-row issuer_name contamination flag. The raw schedule row separates issuer, investment, acquisition date, reference rate, interest rate, cost, and fair value into distinct cells. The stored issuer_name for the flagged Passport Labs row concatenates the investment description, maturity, acquisition date, reference rate, and interest rate into issuer_name, while the source issuer cell is only Passport Labs, Inc.; American Achievement shows the same source column structure. This grounds a real extraction/column mapping error rather than a false alarm."
+}

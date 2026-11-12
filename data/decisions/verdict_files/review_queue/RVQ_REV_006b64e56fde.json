@@ -1,0 +1,79 @@
+{
+  "review_id": "RVQ_REV_006b64e56fde",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 210130,
+  "anchor_value": 209352.453,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 269,
+      "row_index": 35,
+      "quoted_text": "Percentage of assets on non-accrual, at amortized cost (6) | 0.3 | % | 0.5 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 16,
+      "quoted_text": "Maverick Acquisition, Inc. | (4)(11)(17) | SOFR + | 6.25 % | 10.55 % | 6/1/2021 | 6/1/2027 | 47,851 | 47,426 | 26,318 | 0.06",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 26,
+      "row_index": 31,
+      "quoted_text": "WHCG Purchaser III Inc | (4)(5)(10)(17) | 10.00 % | 10.00 % PIK | 8/2/2024 | 6/30/2030 | 37,229 | 14,654 | 14,892 | 0.04",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 8,
+      "quoted_text": "Magenta Security Holdings LLC | (5)(10)(17)(18) | SOFR + | 7.00 % | 11.55 % (incl. 5.50 % PIK) | 8/14/2024 | 7/27/2028 | 6,792 | 2,110 | 1,947 | 0.00",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 26,
+      "quoted_text": "Pigments Services, Inc. | (4)(6)(14)(16)(17) | SOFR + | 8.25 % | 12.67 % PIK | 4/14/2023 | 4/14/2029 | 23,880 | 15,191 | 0 | 0.00",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 27,
+      "quoted_text": "Pigments Services, Inc. | (4)(6)(14)(16)(17) | SOFR + | 8.25 % | 12.67 % PIK | 4/14/2023 | 4/14/2029 | 11,661 | 11,573 | 8,897 | 0.02",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 30,
+      "quoted_text": "CFCo, LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/11/2023 | 9/13/2038 | 86,098 | 12,571 | 0 | 0.00",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 31,
+      "quoted_text": "Daylight Beta Parent, LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 10.00 % | 10.00 % PIK | 9/11/2023 | 9/12/2033 | 56,160 | 49,530 | 13,063 | 0.03",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 37,
+      "quoted_text": "Material Holdings, LLC | (4)(5)(10)(16)(17) | SOFR + | 6.00 % | 10.43 % PIK | 6/14/2024 | 8/19/2027 | 59,023 | 57,075 | 10,435 | 0.02",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Eight schedule rows carrying the non-accrual footnote are supported by the filing's 0.3% non-accrual-at-cost aggregate.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 269,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "The raw filing reports 0.3% of assets on non-accrual at amortized cost. Applying that rounded percentage to total investment cost of 69,784,151 implies about 209,352, which ties to the 210,130 cost total of the eight cited schedule rows bearing footnote (17). The flagged nonaccrual set is therefore source-backed and localized; the defect is an extraction/classification gap in carrying the nonaccrual status through the data."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_d4f73fd1f29d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.7474167623421355,
+  "anchor_value": 0.8,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Asset Type | Reference Rate and Spread (2) | Interest Rate Floor | Interest Rate (3) | Maturity Date | Par Amount / Shares | Amortized Cost (4) | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 51,
+      "row_index": 3,
+      "quoted_text": "Alert Media, Inc. | First Lien Term Loan | S + 6.50 % | 1.00 % | 11.06 % (Incl. 10.06 % PIK) | 4/12/2027 | 129 | 129 | 129"
+    },
+    {
+      "table_index": 51,
+      "row_index": 16,
+      "quoted_text": "AVG Intermediate Holdings LLC | Subordinated Unsecured Term Loan | 13.75 % PIK | 0.00 % | 13.75 % PIK | 3/16/2028 | 753 | 753 | 697"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C01 reports only 74.74167623421355% of 871 debt rows with an extracted rate, but the SOI debt schedule has explicit rate columns and representative secured and unsecured debt rows carry populated interest-rate cells.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The check is an aggregate debt-rate coverage failure: 220 of 871 debt rows lack an extracted rate, below the 0.8 threshold. Raw source shows the SOI debt schedule is organized with Reference Rate and Spread, Interest Rate Floor, and Interest Rate columns across the debt pages, and sampled secured and unsecured debt rows in table 51 contain populated interest-rate cells. This supports an extraction gap in rate capture rather than a false alarm; the exact missing 220 rows are not individually localized from the available aggregate bundle."
+}

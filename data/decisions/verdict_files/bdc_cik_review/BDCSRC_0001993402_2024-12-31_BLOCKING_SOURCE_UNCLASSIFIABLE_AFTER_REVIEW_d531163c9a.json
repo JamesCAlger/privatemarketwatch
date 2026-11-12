@@ -1,0 +1,46 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001993402",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No production GAV change is made by this verdict. The reviewed source-only rows are total/header facts and should not be added to position-level holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 60,
+      "row_index": 34,
+      "cell_indices": [
+        0,
+        6,
+        7,
+        10,
+        11,
+        12
+      ],
+      "reason": "The source-table row is Total Unfunded Commitments with total commitment and fair-value cells, not an issuer/security position."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify exact Antares-style non-controlled/non-affiliated total rows and total unfunded commitment rows as documented source-only total/header rows instead of unresolved source-only blockers.",
+  "primary_justification": "The two reviewed rows are non-position source facts: Investments-non-controlled/non-affiliated Total Unfunded Commitments and Total Investments - non-controlled/non-affiliated. The bundled HTML coordinate evidence classifies the unfunded commitments row as a subtotal/total row, and the source-only XBRL identifier for Total Investments is an exact total label. Adding either row to production holdings would duplicate summarized exposure rather than create a position-level holding.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch is limited to total/header wording and does not clear Antares rows that contain borrower, asset type, rate, maturity, or other leaf-position evidence.",
+  "review_id": "BDCSRC_0001993402_2024-12-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_d531163c9a",
+  "reviewer_notes": "Manual review matched the same Antares total/header mechanism as the 2025-03-31 packet. The source-only fair value is dominated by a total investments label, while the unfunded commitment row has coordinate-level total-row evidence.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: these exact total/header rows are documented as non-blocking source-only total/header rows rather than current blockers.",
+  "tests_validation_plan": "Targeted source-only classifier tests in tests/test_validate_holdings.py cover Total Investments - non-controlled/non-affiliated and Investments-non-controlled/non-affiliated Total Unfunded Commitments. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_23dc226dfca4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "FX01 flagged 31 rows as non-USD debt principal missing principal_amount_usd.",
+  "anchor_value": "Raw SOI presents Par Amount in USD dollars and the portfolio geographic breakdown is 100% United States.",
+  "confidence": 0.89,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.11 % (SOFR + 7.50 %, 2.00 % Floor) | Par Amount | $ | 29,792,536",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 4,
+      "quoted_text": "Lenox Holdings, Inc. | Term Loan - 14.42 % (SOFR + 8.75 %, 1.00 % Floor) | Par Amount | $ | 37,397,529",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 2,
+      "quoted_text": "Geographic Breakdown of Portfolio | United States | 100 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 fires only when a non-USD source par requires explicit USD conversion. The raw schedule of investments uses a Par Amount column with dollar signs on the debt schedule, and the adjacent geographic breakdown reports the portfolio as 100% United States. The source therefore does not support the non-USD premise behind the FX01 rows; the missing principal_amount_usd field under this rule is a check-scope false alarm rather than a data error."
+}

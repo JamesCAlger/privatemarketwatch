@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_08d5a8034fa4",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 85,
+  "anchor_value": 60,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC Super Senior Revolver - 14.27% inc PIK; fair value 45,818,273",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 2,
+      "quoted_text": "Navistar Defense, LLC Super Senior Revolver - 14.27% inc PIK; Fair Value at March 31, 2026 45,818,273",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The output count of 85 exceeds the 60-position current SOI by 25 because investment rollforward rows duplicate instruments already present in the SOI.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 8,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 triangulation shows the current SOI in tables 4-7 contains 58 debt/equity positions plus one cash-equivalent and one short-term investment, for a schedule anchor of 60, while the output has 85. The adjacent controlled and non-controlled investment rollforwards are not additional positions: table 8 row 2 repeats the same Navistar instrument and 45,818,273 fair value shown in table 4 row 4. Thus the oracle's stated source count of 303 is a bad raw count, but the flagged output is still erroneous because it contains 25 excess duplicate rollforward-derived rows."
+}

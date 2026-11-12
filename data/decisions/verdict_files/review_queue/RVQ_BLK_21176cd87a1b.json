@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_BLK_21176cd87a1b",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_schedule_interest_cells",
+  "observed_value": "SOFR",
+  "anchor_value": "S",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 32,
+      "quoted_text": "Magaya Corporation | Term Loan | 9.44% (S + .00%; 0.75% Floor; 5.75% PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 33,
+      "quoted_text": "Magaya Corporation | Delayed Draw Term Loan | 9.44% (S + .00%; 0.75% Floor; 5.75% PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 34,
+      "quoted_text": "Magaya Corporation | Revolver | 1.5% (S + .00%; 0.75% Floor; 4.75% PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "Delaware Valley Management Holdings, Inc. | Revolver | (S + 0.00%; 1.00% Floor)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 12,
+      "quoted_text": "Delaware Valley Management Holdings, Inc. | Delayed Draw Term Loan | (S + 0.00%; 1.00% Floor)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 13,
+      "quoted_text": "Delaware Valley Management Holdings, Inc. | Delayed Draw Term Loan | (S + 0.00%; 1.00% Floor)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 13,
+      "quoted_text": "FirstDigital Communications, LLC | Term Loan | (S + 0.00%; 0.75% Floor)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review of all seven flagged rows. The March 31, 2026 raw schedule explicitly identifies each instrument's reference formulation as S + 0.00% (or .00%), corroborating the extracted SOFR reference. The rule appears to treat the absence of a positive structured spread as absence of reference-rate support, but zero spread and a stated floor do not negate the printed S reference."
+}

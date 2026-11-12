@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_d63136cad080",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": 6.0,
+  "anchor_value": 5.75,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 25,
+      "quoted_text": "Kryptona BidCo US, LLC (3) | First-lien loan ($ 20,762 par, due 12/2031 ) | 12/18/2024 | SOFR + 5.75 % | 9.44 % (incl. 3.13 % PIK)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule row explicitly reports a 5.75% SOFR spread, but Agent A stored 6.00%. The same row separately reports the 9.44% all-in interest rate including 3.13% PIK, so the mismatch localizes to spread extraction rather than the source disclosure."
+}

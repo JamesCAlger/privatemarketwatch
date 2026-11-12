@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_ff0dd72cd5a3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Debt Investments Household Durables First Lien Term Loan B Ref SOFR(Q) Floor 1.00% Spread 6.00% Total Coupon 11.37% Maturity 11/9/2029",
+  "anchor_value": "Bad Boy Mowers JV Acquisition, LLC | First Lien Term Loan | SOFR(Q) | 1.00 | % | 6.00 | % | 11.37 | % | 11/9/2029 | $ | 7,510,059 | 7,325,923 | 7,209,657 | 1.71 | % | E",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 16,
+      "quoted_text": "Household Durables"
+    },
+    {
+      "table_index": 22,
+      "row_index": 17,
+      "quoted_text": "Bad Boy Mowers JV Acquisition, LLC | First Lien Term Loan | SOFR(Q) | 1.00 | % | 6.00 | % | 11.37 | % | 11/9/2029 | $ | 7,510,059 | 7,325,923 | 7,209,657 | 1.71 | % | E"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted position identifier used the industry header Household Durables and omitted the source issuer Bad Boy Mowers JV Acquisition, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The raw source separates the industry header at table 22 row 16 from the actual investment at table 22 row 17. The flagged value does not appear in source and replaces the issuer with the industry header, while the source row identifies the position as Bad Boy Mowers JV Acquisition, LLC with the matching SOFR(Q), floor, spread, coupon, maturity, cost, and fair value terms."
+}

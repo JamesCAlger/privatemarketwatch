@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_0c64f7036d24",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 762,
+  "anchor_value": 1673,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 34,
+      "quoted_text": "Total Investments- 179.9 % | cost 16,677,760 | fair value 16,508,590",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 33,
+      "quoted_text": "Total Investments - 181.4 % | cost 15,704,123 | fair value 15,674,510",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 compares a 1,673-row source count with 762 output rows, but raw source contains two distinct SOI blocks. The current-period block runs through table 27 and totals fair value 16,508,590, matching the March 31, 2026 balance-sheet investment total. A second parallel block runs through table 48 and totals fair value 15,674,510, matching the December 31, 2025 comparative total. The source counter therefore mixes current and comparative schedules while output is quarter-scoped; the check anchor is wrong, not the current-quarter extraction."
+}

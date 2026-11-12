@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1c9b23eae874",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "CAD",
+  "anchor_value": "USD",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "123Dentist Inc. | ... | 8/10/2029 | CAD | 5,938 | 4,326 | 4,255 | 0.26",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 30,
+      "quoted_text": "123Dentist Inc. | ... | 8/9/2029 | CAD | 945 | 681 | 677 | 0.04",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 31,
+      "quoted_text": "123Dentist Inc. | ... | 8/10/2029 | CAD | 7,493 | 2,048 | 1,999 | 0.12",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The foreign-currency code belongs to Par Amount/Units but was propagated into cost_currency; cost and fair value are separate USD reporting columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 1 source check. The schedule header orders Maturity Date, Par Amount/Units, Cost, and Fair Value. In cited rows CAD appears before par amounts 5,938, 945, and 7,493, followed by distinct cost values 4,326, 681, and 2,048 and fair values 4,255, 677, and 1,999. Thus CAD describes the instrument/par denomination, not cost_currency. The FX03 rows are real extraction/column-mapping errors; cost_currency should follow the USD-denominated filing presentation."
+}

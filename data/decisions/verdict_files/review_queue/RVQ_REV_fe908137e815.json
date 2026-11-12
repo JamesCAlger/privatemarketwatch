@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_fe908137e815",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 656916000,
+  "anchor_value": 656916000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 5
+    },
+    {
+      "table_index": 15,
+      "row_index": 7
+    },
+    {
+      "table_index": 23,
+      "row_index": 4
+    },
+    {
+      "table_index": 23,
+      "row_index": 10
+    },
+    {
+      "table_index": 23,
+      "row_index": 13
+    },
+    {
+      "table_index": 23,
+      "row_index": 15
+    }
+  ],
+  "rationale": "The six fmt_cost fires correspond to raw SOI rows where amortized cost is printed in parentheses for undrawn or zero-principal revolver/DDTL positions. Current rows 15:5 and 15:7 show principal as dash, amortized cost as parenthetical 9 and 21, and fair value as dash; comparative rows 23:4, 23:10, 23:13, and 23:15 show the same source-native pattern. The filing's current Total Investments line ties amortized cost 656,916 and fair value 634,626 to the statement line, so the source supports the extracted cost presentation and the check is over-scoped."
+}

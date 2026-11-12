@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_8faac2c1740e",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -4000.0,
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 2,
+      "quoted_text": "Helios Service Partners, LLC | Revolver | 03/19/2027 | $ | 4,053 | $ | ( 1 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 3,
+      "quoted_text": "Tidi Legacy Products, Inc. | Revolver | 12/19/2029 | 2,132 | ( 4 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The flagged negative fair-value marks are shown in filing tables headed Unfunded Commitment and Fair Value, so they should carry unfunded-commitment classification rather than appear as unexplained negative holding fair values.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 61,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "A second flagged negative fair-value amount is likewise source-presented in the unfunded commitment schedule, with positive unfunded commitment and negative fair value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 64,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. C103 flags negative fair_value rows as unexplained when there is no matching negative cost or unfunded-commitment marker. The raw filing shows the relevant negative marks in tables whose header is Investments - non-controlled/non-affiliated | Commitment Type | Commitment Expiration Date | Unfunded Commitment | Fair Value. Those rows are valid filer presentation for unfunded commitments, but the extracted holding rows need the unfunded-commitment classification/marker; otherwise C103 correctly sees them as unexplained negative fair values. This is a real classification/lookthrough data error, not a fair-value amount error."
+}

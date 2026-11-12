@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_e21b673ad261",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 59, "row_index": 22, "quoted_text": "123Dentist Inc. | (4) (5) (8) (9) | C + | 5.00 % | 7.27 % | 8/10/2029 | CAD | 5,953 | 4,337 | 4,343 | 0.27"},
+    {"table_index": 59, "row_index": 23, "quoted_text": "123Dentist Inc. | (4) (5) (8) (9) | C + | 5.00 % | 7.27 % | 8/9/2029 | CAD | 947 | 682 | 691 | 0.04"},
+    {"table_index": 59, "row_index": 24, "quoted_text": "123Dentist Inc. | (4) (5) (6) (9) | C + | 4.75 % | 7.02 % | 8/10/2029 | CAD | 7,500 | 984 | 973 | 0.06"},
+    {"table_index": 60, "row_index": 28, "quoted_text": "Packaging Coordinators Midco, Inc. | (4) (5) | SN + | 4.75 % | 8.47 % | 7/9/2032 | GBP | 2,526 | 3,309 | 3,372 | 0.21"},
+    {"table_index": 60, "row_index": 39, "quoted_text": "Tyber Medical LLC | (4) (5) | E + | 5.00 % | 7.02 % | 6/12/2031 | EUR | 245 | 288 | 287 | 0.02"},
+    {"table_index": 61, "row_index": 6, "quoted_text": "Tyber Medical LLC | (4) (5) | E + | 5.00 % | 7.11 % | 6/14/2032 | EUR | 2,603 | 3,001 | 3,042 | 0.19"},
+    {"table_index": 62, "row_index": 2, "quoted_text": "Flexera Software, Inc. | (4) (5) | E + | 4.50 % | 6.43 % | 8/16/2032 | EUR | 6,467 | 7,565 | 7,557 | 0.48"},
+    {"table_index": 63, "row_index": 5, "quoted_text": "Aurelia Netherlands Midco 2 B.V. | (4) (5) (9) | E + | 4.75 % | 6.78 % | 5/29/2031 | EUR | 54,814 | 59,819 | 64,215 | 4.04"},
+    {"table_index": 63, "row_index": 26, "quoted_text": "New Look Vision Group, Inc. | (4) (5) (7) (9) | C + | 5.25 % | 7.51 % | 5/26/2028 | CAD | 8,162 | 5,887 | 5,955 | 0.37"},
+    {"table_index": 63, "row_index": 27, "quoted_text": "New Look Vision Group, Inc. | (4) (5) (6) (9) | C + | 5.25 % | 7.49 % | 5/26/2028 | CAD | 1,125 | 282 | 261 | 0.02"},
+    {"table_index": 63, "row_index": 28, "quoted_text": "New Look Vision Group, Inc. | (4) (5) (8) (9) | C + | 5.25 % | 7.51 % | 5/26/2028 | CAD | 544 | 396 | 397 | 0.03"},
+    {"table_index": 63, "row_index": 30, "quoted_text": "New Look Vision Group, Inc. | (4) (5) (7) (9) | C + | 5.25 % | 7.51 % | 5/26/2028 | CAD | 1,044 | 753 | 761 | 0.05"},
+    {"table_index": 67, "row_index": 10, "quoted_text": "Berlin Packaging LLC | (4) (5) | E + | 6.50 % | 8.52 % | 6/7/2032 | EUR | 14,057 | 15,352 | 16,468 | 1.04"},
+    {"table_index": 67, "row_index": 12, "quoted_text": "Berlin Packaging LLC | (4) (5) | E + | 6.50 % | 8.52 % | 6/7/2032 | EUR | 2,386 | 2,606 | 2,796 | 0.17"},
+    {"table_index": 68, "row_index": 2, "quoted_text": "Kymora Ltd. | (5) (9) | EUR | 16 | 9,321 | 10,643 | 0.67"}
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period source schedule contains 15 CAD/EUR/GBP investment rows with par amount/units, while the FX01 artifact reports missing principal_amount_usd for 15 rows.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 59, "row_index": 22}
+    }
+  ],
+  "rationale": "FX01 flags non-USD source par that lacks an explicit USD-converted principal. The raw SOI header identifies the relevant field as Par Amount /Units, and targeted source searches found 15 current-period CAD/EUR/GBP investment rows matching the 15 artifact issue rows. The cited rows show non-USD currency codes with populated par/units, while the artifact rows report blank principal_amount_usd, so the missing USD principal is a real extraction/normalization gap rather than a false alarm."
+}

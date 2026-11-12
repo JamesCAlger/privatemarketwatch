@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_1e9c92ec2420",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The bundle flags F33 because fund_financials distribution_rate is 0.0 where the check expects 0 < distribution_rate < 30%. The permitted evidence CLI did not return usable raw source for overview, tables, totals, or targeted distribution roam queries; each returned no_accession_resolved for CIK 0001425355 and report date 2018-06-30. Under the contract, unreadable raw source requires source_unavailable ambiguity rather than guessing whether the zero rate is correct."
+}

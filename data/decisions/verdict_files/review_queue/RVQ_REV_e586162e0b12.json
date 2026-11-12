@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_e586162e0b12",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Equity Wholesale IMB Holdco LLC Series Z Units Initial Acquisition Date 5/20/2024",
+  "anchor_value": "IMB Holdco LLC",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "IMB Holdco LLC | Series Z Units | 5/20/2024 | N/A | 164 | 163,748 | 32,780 | 0.0 | % | (6) (16)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name contains concatenated asset-class, industry, investment-type, and acquisition-date text; source Portfolio Company is IMB Holdco LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 28,
+        "quoted_text": "Portfolio Company is IMB Holdco LLC; Investment Type is Series Z Units; Initial Acquisition Date is 5/20/2024."
+      }
+    }
+  ],
+  "rationale": "The source schedule header maps column 0 to Portfolio Company, column 2 to Investment Type, and column 14 to Initial Acquisition Date. In table 12 row 28, the Portfolio Company cell is only IMB Holdco LLC, while Series Z Units and 5/20/2024 are separate cells and Wholesale is the preceding industry section header. The reviewed issuer_name concatenates these non-issuer fields, so the C206 parse-leak flag is a real data error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d22f0631a516",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "Meristem/Lunar delayed-draw position marked with an earlier source context",
+  "anchor_value": "The same position is present in the March 31, 2026 schedule",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 30,
+      "quoted_text": "Lunar Buyer, LLC First Lien Secured Debt - Delayed Draw; S + 550, 0.75% Floor; maturity 10/03/30; cost (1); fair value (3)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 4,
+      "quoted_text": "Comparative schedule contains the same delayed-draw position and values",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 treated an earlier XBRL source period as proof of a comparative-period leak. Raw filing source shows the flagged Meristem Crop Performance / Lunar Buyer delayed-draw holding in the current March 31, 2026 schedule at table 11 row 30, with the same terms and amounts also appearing in the December 31, 2025 comparative schedule at table 40 row 4. Because the position is visibly part of the report-date schedule, retaining it in the 2026-03-31 portfolio is correct; the period-context purity check is the faulty anchor."
+}

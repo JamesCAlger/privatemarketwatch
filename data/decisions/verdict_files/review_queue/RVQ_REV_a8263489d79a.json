@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_a8263489d79a",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 22,
+      "quoted_text": "Gener8, LLC (9) | Senior Secured First Lien Term Loan | 02/2026 | 6,162 | 6,005 | 0.3 | 1,779"
+    },
+    {
+      "table_index": 32,
+      "row_index": 23,
+      "quoted_text": "Gener8, LLC (5)(9) | Senior Secured First Lien Revolver | 02/2026 | 1,322 | 1,289 | 0.0 | 169"
+    },
+    {
+      "table_index": 32,
+      "row_index": 24,
+      "quoted_text": "Gener8, LLC (9) | Senior Secured First Lien Term Loan | 02/2026 | 265 | 259 | 0.0 | 77"
+    }
+  ],
+  "rationale": "The report date is 2026-03-31. The current schedule of investments contains exactly three Gener8 debt positions with nonzero cost/fair-value columns and maturity/dissolution date 02/2026, which is before the report date. This grounds the maturity_not_past flag as a real source-level value defect rather than a false alarm."
+}

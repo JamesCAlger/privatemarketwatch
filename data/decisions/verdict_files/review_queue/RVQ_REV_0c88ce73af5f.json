@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_0c88ce73af5f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source fair value column",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | Last Out Term Loan - 15.90 % inc PIK (SOFR + 10.25 %, 1.50 % Floor, 2.75 % PIK) | $ | 17,149,647",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 38,
+      "quoted_text": "Total Investments ( 160.5 %) | $ | 1,007,451,912 | $ | 946,318,463",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency values of U_USD as not USD. The raw schedule labels the relevant valuation column as Fair Value and displays dollar signs on the source position row and on the schedule total. U_USD is therefore an internal unit token representing USD rather than evidence of a non-USD fair value currency; the rule check is too narrow for this unit spelling."
+}

@@ -1,0 +1,43 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "Multiple flagged debt rows have source principal/par amounts but the extracted principal_amount_usd field is blank, leaving no explicit USD principal for par analytics.",
+                         "citation":  {
+                                          "row_index":  5,
+                                          "table_index":  26
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_e61ac2abb473",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  "source schedule shows principal/par amounts for flagged debt rows, e.g. 3,984 and 98,750 (in thousands)",
+    "rationale":  "FX01 flags non-USD debt principal rows whose principal_amount_usd is blank. The raw schedule has a Principal/Par Amount/Shares column and shows principal/par values for flagged debt rows, including Alterra Mountain Co at 3,984, CV Borrower at 98,750, and USG AS Holdings at 79,800, while the bundle extraction context shows principal_amount_usd is empty for the flagged rows. This is an extraction gap rather than a false alarm.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  5,
+                                  "table_index":  26,
+                                  "quoted_text":  "Alterra Mountain Co(7)(14) | First lien senior secured term loan | SOFR + 2.50 % | 8/17/2028 | 3,984 | 4,012 | 3,994 | 0.55 | %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  6,
+                                  "table_index":  26,
+                                  "quoted_text":  "CV Borrower, LLC(6)(7)(10)(14) | First lien senior secured term loan | SOFR + 5.50 % | 8/30/2030 | 98,750 | 97,101 | 97,801 | 13.35 | %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  5,
+                                  "table_index":  27,
+                                  "quoted_text":  "USG AS Holdings, LLC(6)(8)(14) | First lien senior secured term loan | SOFR + 5.25 % | 6/11/2030 | 79,800 | 78,724 | 78,774 | 10.75 | %"
+                              }
+                          ],
+    "confidence":  0.86
+}

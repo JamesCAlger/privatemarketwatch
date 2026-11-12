@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_6606615db298",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "Blank issuer/investment subtotal row: 4.9% net assets, amortized cost 18,328,052, fair value 18,531,835, with no loan terms.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 9,
+      "quoted_text": "Blank issuer/investment subtotal row: 3.5% net assets, amortized cost 12,931,378, fair value 13,265,286, with no loan terms.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 12,
+      "quoted_text": "Blank issuer/investment subtotal row: 4.3% net assets, amortized cost 16,151,915, fair value 16,260,486, with no loan terms.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "Blank issuer/investment subtotal row: 4.9% net assets, amortized cost 18,658,041, fair value 18,709,770, with no loan terms.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 19,
+      "quoted_text": "Blank issuer/investment subtotal row: 5.6% net assets, amortized cost 21,185,220, fair value 21,472,572, with no loan terms.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Five blank issuer/investment subtotal rows from the schedule were treated as PRIVATE_CREDIT positions, causing missing interest_rate and basis_spread warnings.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 5,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw SOI loan rows carry coupon/spread terms in the Investment column, but the five flagged missing-rate cases align to blank issuer/investment subtotal rows in table 5 that repeat industry cost and fair value totals. These are not loan positions with missing source rate data; they are leaked subtotal rows in the extracted private-credit holdings, so the flag is a real data error caused by subtotal leakage."
+}

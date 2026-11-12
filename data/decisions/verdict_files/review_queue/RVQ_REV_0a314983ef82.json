@@ -1,0 +1,62 @@
+{
+  "review_id": "RVQ_REV_0a314983ef82",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 86897322,
+  "anchor_value": 86897322,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "The first debt row displays $ before Par Amount 6,971,683, establishing the table's USD presentation convention.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 7,
+      "quoted_text": "Ruby Tuesday Term Loan Par Amount 10,603,403 appears in the same Par Amount column with the repeated currency symbol suppressed.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 8,
+      "quoted_text": "Ruby Tuesday Incremental Term Loan Par Amount 2,796,572 appears in the same Par Amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 9,
+      "quoted_text": "Ruby Tuesday 10th Amendment Term Loan B Par Amount 1,840,065 appears in the same Par Amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 12,
+      "quoted_text": "Overton Chicago Gear Revolver Par Amount 17,092,378 appears in the same Par Amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 13,
+      "quoted_text": "Overton Chicago Gear Term Loan A Par Amount 11,499,903 appears in the same Par Amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 16,
+      "quoted_text": "Xiphias Buyer Term Loan Par Amount 8,343,085 appears in the same Par Amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 21,
+      "quoted_text": "Total Debt Investments Fair Value is 86,897,322, matching the extracted debt position total and confirming one coherent schedule.",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source table 4 is the March 31, 2026 debt schedule. Row 4 prints the dollar sign for the Par Amount column, while subsequent debt rows suppress repeated currency symbols. The six flagged continuation rows (7, 8, 9, 12, 13, and 16) therefore disclose USD par amounts, not non-USD principal requiring FX conversion. FX01 fired because presentation-level currency-symbol suppression was misclassified as non-USD; principal_amount_usd need not be separately populated for these USD positions."
+}

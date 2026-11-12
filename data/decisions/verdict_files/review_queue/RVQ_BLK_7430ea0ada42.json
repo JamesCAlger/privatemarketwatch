@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_7430ea0ada42",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2221596000,
+  "anchor_value": 1815082000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 39,
+      "quoted_text": "Investments Total | $ | 1,811,390 | $ | 1,815,082 | 180.5 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted position sum exceeds the filing's Investments Total by $406,514,000 amid nested schedule subtotal rows.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 22,
+        "row_index": 39
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The filing balance sheet investment components are $1,735,938,000 non-controlled/non-affiliate, $28,222,000 non-controlled affiliate, and $50,922,000 controlled affiliate, summing to $1,815,082,000. Schedule table 22 row 39 independently prints Investments Total fair value of $1,815,082,000. The extracted holdings sum is $2,221,596,000, an excess of $406,514,000. The schedule contains nested industry and affiliate subtotal rows, including adjacent Investment Vehicles Total and Controlled Affiliate Investments Total rows with the same $50,922,000 fair value, supporting structural subtotal leakage rather than a valid position-level difference. Cash equivalents are separately reported after Investments Total and therefore do not explain the excess."
+}

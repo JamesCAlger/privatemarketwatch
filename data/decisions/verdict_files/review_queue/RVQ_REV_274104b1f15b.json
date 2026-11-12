@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_274104b1f15b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 13.226829268292686,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted evidence CLI did not return usable raw source for CIK 0001747172 report date 2023-09-30; overview, tables, totals, and targeted roam queries all returned status no_accession_resolved. Under the contract, this must be treated as source_unavailable rather than guessing whether F16 is a real distribution-rate data error or a false alarm."
+}

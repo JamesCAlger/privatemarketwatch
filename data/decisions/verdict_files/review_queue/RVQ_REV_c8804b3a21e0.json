@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_c8804b3a21e0",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate F20 review requires source-anchor triangulation, but the evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-24-055544. Raw source was therefore unavailable through the allowed evidence window, so the flag cannot be adjudicated on the merits."
+}

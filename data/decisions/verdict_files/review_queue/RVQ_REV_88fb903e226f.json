@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_88fb903e226f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 1,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 91,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual | 6,050 | 0.7 | - | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 28,
+      "quoted_text": "VG Target Holdings, LLC | Term Loan | SOFR | + | 5.00 % ( 3.00 % PIK) | (M) | 12.78 % | 6/2/2022 | 8/2/2027 | 6,489 | 6,050 | 2,206 | (2)(6)(9)(13)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 29,
+      "quoted_text": "VG Target Holdings, LLC | Term Loan | PRIME | + | ( 9.50 % PIK) | (Q) | 16.75 % | 7/18/2025 | 8/2/2027 | 251 | 251 | 917 | (6)(9)(13)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The non-accrual total of 6,050 ties to the VG Target SOFR row only, but the flag counted five footnote-sourced positions.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 91,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "VG Target PRIME carries similar footnotes but its 251 amortized cost is not included in the 6,050 non-accrual bucket.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 19,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "The filing reports Non-Accrual amortized cost of 6,050. That amount matches the VG Target Holdings SOFR term loan row's amortized cost of 6,050, while the reviewed flag reports five non-accrual positions from footnotes. A second VG Target row with the same broad footnote pattern has amortized cost 251 and is not included in the 6,050 non-accrual bucket, showing the footnote extraction is overinclusive."
+}

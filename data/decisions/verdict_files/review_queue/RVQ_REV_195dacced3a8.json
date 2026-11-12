@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_195dacced3a8",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10,
+  "anchor_value": 5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 46,
+      "quoted_text": "Lithium Technologies, Inc. | Interactive Media & Services | S + 11.00 % PIK | 01/03/25 | 70,660 | 64,001 | 22,611 | (7) (8) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 36,
+      "quoted_text": "Chase Industries, Inc. (dba Senneca Holdings) | Building Products | 10.00 % PIK | 05/11/27 | 12,850 | 11,531 | 5,815 | (7) (8) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 39,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | $ | 21,349 | $ | - | $ | - | (7) (8) (10) (12)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 40,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | 12,314 | 4,042 | - | (7) (8) (10) (12)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 41,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | 7,488 | 9,489 | - | (7) (8) (10)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2025 non-accrual flag counts five comparative-period rows from tables 39 and 40 in addition to the five current-period non-accrual rows in table 37.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 39,
+        "row_index": 46
+      }
+    }
+  ],
+  "rationale": "The filing's own aging/performance table separates December 31, 2025 from December 31, 2024 and shows current non-accrual amortized cost of 34.47 million, not the 2024 non-accrual column of 89.06 million. The five current table 37 rows marked with the current non-accrual footnote have costs 9,410, 11,531, 0, 4,042, and 9,488 thousand, summing to 34.471 million and tying to the 2025 schedule total. The reviewed artifact reports 10 non-accrual positions because it also includes five rows from comparative tables 39 and 40, which belong to the 2024 schedule. Thus the source supports non-accrual classification for current rows, but the reviewed count has a comparative-period leak."
+}

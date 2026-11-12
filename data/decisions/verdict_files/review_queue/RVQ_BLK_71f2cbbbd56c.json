@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_71f2cbbbd56c",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1380848,
+  "anchor_value": 1380848,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Total Assets | $ | 1,380,848 | $ | 1,267,900",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 23,
+      "quoted_text": "Total Liabilities | 565,251 | 448,800",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 32,
+      "quoted_text": "Total Members' Capital | 815,597 | 819,100",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 33,
+      "quoted_text": "Total Liabilities and Members' Capital | $ | 1,380,848 | $ | 1,267,900",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The March 31, 2026 balance sheet is internally exact in the raw filing: Total Assets are 1,380,848 (thousands), Total Liabilities are 565,251, and Total Members' Capital is 815,597. The components sum to 1,380,848, and the filing independently prints Total Liabilities and Members' Capital as 1,380,848. The balance_sheet_identity flag is therefore a false alarm caused by the check or its internal anchor, not a source-data error. The investment schedule also prints debt and equity fair value of 1,309,653 (thousands), consistent with the bundle's extracted 1,309,653,222 before filing-rounding, but that position total is only an asset component and is not the balance-sheet identity anchor."
+}

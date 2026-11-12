@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_2a4be65134bb",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_schedule_cell",
+  "observed_value": -364000.0,
+  "anchor_value": -364000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 8,
+      "quoted_text": "Action Elevator Intermediate Holdings, LLC | Delayed Draw Term Loan | Amortized Cost ( 364 ) | Fair Value ( 364 )"
+    },
+    {
+      "table_index": 39,
+      "row_index": 9,
+      "quoted_text": "Action Elevator Intermediate Holdings, LLC | Revolving Line of Credit | Amortized Cost ( 146 ) | Fair Value ( 146 )"
+    },
+    {
+      "table_index": 39,
+      "row_index": 12,
+      "quoted_text": "Cobalt Service Partners, LLC | Revolving Line of Credit | Amortized Cost ( 51 ) | Fair Value ( 51 )"
+    },
+    {
+      "table_index": 40,
+      "row_index": 13,
+      "quoted_text": "Blue Cloud Pediatric Surgery Centers, LLC | Revolving Line of Credit | Amortized Cost ( 52 ) | Fair Value ( 52 )"
+    },
+    {
+      "table_index": 41,
+      "row_index": 17,
+      "quoted_text": "Crete PA Holdco, LLC | Delayed Draw Term Loan | Amortized Cost ( 326 ) | Fair Value ( 326 )"
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value rows. The raw investment schedule itself reports parenthesized amounts in the Fair Value column for the flagged positions, including Action Elevator (364) and (146), Cobalt (51), Blue Cloud (52), and Crete PA Holdco (326), in thousands. These match the extracted negative fair_value signs, so the data is source-faithful and the advisory negative-value rule is overbroad for these schedule cells. No aggregate anchor was needed."
+}

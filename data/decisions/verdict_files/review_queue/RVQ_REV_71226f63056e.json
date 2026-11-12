@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_71226f63056e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "filing_reported_yield",
+  "observed_value": 9.7,
+  "anchor_value": 9.7,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F27 is an aggregate heuristic comparing reported income yield to holdings WAC plus 200bps. Raw source confirms the filing reports weighted average investment income yield of total investments of 9.7% for December 31, 2025 at table 82 row 6, and total investments fair value of $2,382,163 thousand at table 90 row 19 / totals. However, the raw-source evidence available through the scoped CLI does not provide an authoritative WAC anchor or a localized row-disposition path that decides whether the heuristic failure is caused by a bad holdings WAC, a valid difference between stated coupon WAC and investment-income yield, or another extraction issue. Therefore the source was checked but does not decide the flagged question."
+}

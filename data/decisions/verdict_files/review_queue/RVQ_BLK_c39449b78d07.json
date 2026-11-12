@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_c39449b78d07",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 591.539,
+  "anchor_value": 591.810,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 46,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | cost 593,625 | fair value 591,810",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Non-controlled/non-affiliated investments at fair value | March 31, 2026 | 591,810",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows that the filing schedule total and the balance-sheet investment value independently agree at 591.810 million, while extracted positions total 591.539 million, a difference of only 0.271 million (0.046%). The E07 message instead compares a raw-source count of 926 with 391 output positions and reports a 57.8% gap. Because the value anchors demonstrate essentially complete current-period coverage, the 926 source units are not comparable position units and the count-based internal anchor is bad. The small remaining value difference may reflect rounding or a minor omission, but it does not support the flagged 57.8% coverage failure."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_3b92890a325d",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 1000,
+  "anchor_value": 1000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 26,
+      "quoted_text": "Amergin Asset Management, LLC(23)(25) | Class A Units | N/A | N/A | 50,000,000 | $ | 1 | $ | 1,816",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The X07 non-equity scope is wrong for this row: the source places Amergin Asset Management, LLC under Equity Investments and describes the investment as Class A Units, while the source cost of 1 and fair value of 1,816 match the extracted cost 1000 and implied fair value 1816000 in dollars.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 26,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review. The raw SOI row is under the Equity Investments section and identifies the security as Class A Units with N/A interest and maturity. The disclosed cost is 1 and fair value is 1,816 in a dollars-in-thousands schedule, so the extracted cost/fair value relationship is source-supported; the real defect is that the row entered the non-equity X07 scope rather than being treated as equity."
+}

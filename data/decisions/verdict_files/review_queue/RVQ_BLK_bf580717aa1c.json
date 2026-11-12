@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_bf580717aa1c",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 185.82,
+  "anchor_value": 185.74718670584193,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 1,200,205,656 | $ 1,153,413,327 | 185.82 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 40,
+      "quoted_text": "Total net assets | 620,958,706 | 593,835,119",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "Total investments | $ | 812,979 | $ | 216,400,890 | $ | 936,199,458 | $ | 1,153,413,327",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The filing prints total investments of $1,153,413,327 as 185.82%, while balance-sheet net assets of $620,958,706 imply 185.7472%; the identity check assumes a denominator the filing's percentage column does not exactly use.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 19,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows no extracted fair-value error: the SOI total and the independent fair-value hierarchy both report $1,153,413,327. The filing itself reports that amount as 185.82% of net assets, whereas the balance-sheet total net assets of $620,958,706 produce 185.7472%. Thus the aggregate 5.49% firing arises from applying the balance-sheet denominator to filer-reported percentages that use a slightly different filing-level denominator, not from a localized bad holding value. Treat the rule fire as an anchor/rule-scope false alarm."
+}

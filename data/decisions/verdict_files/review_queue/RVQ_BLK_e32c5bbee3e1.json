@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_e32c5bbee3e1",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 150.17,
+  "anchor_value": 150.17,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 38,
+      "quoted_text": "Total net assets | $ | 1,765,624 | $ | 1,492,462"
+    },
+    {
+      "table_index": 61,
+      "row_index": 6,
+      "quoted_text": "Total investments | $ | 2,676,109 | $ | 2,651,286 | 150.17 | %"
+    },
+    {
+      "table_index": 58,
+      "row_index": 27,
+      "quoted_text": "Summit K2 Midco, Inc. | (a) | (6)(12) | Diversified Financial Services | 4/27/2023 | 61 | 30 | 89 | 0.01"
+    },
+    {
+      "table_index": 49,
+      "row_index": 19,
+      "quoted_text": "Essential Services Holding Corporation | (c) | (2)(3)(15) | Consumer Services | SOFR | 5.00 % | 8.88 % | 6/17/2024 | 6/17/2031 | 795 | 787 | 793 | 0.04"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rounding_tolerance",
+      "detail": "The source reports percent of net assets rounded to two decimals, so exact row-level fair-value divided by net-assets identity residuals are expected for small positions.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 58,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "The filing's own anchors reconcile: total investments at fair value of 2,651,286 over total net assets of 1,765,624 rounds to the disclosed 150.17% of net assets. The flagged row examples also match the source: Summit K2 Midco reports fair value 89 and 0.01% of net assets, while Essential Services reports fair value 793 and 0.04%; those percentages are rounded display values, not exact identities. The flag is therefore caused by an overly tight identity check against rounded source percentages, not by a data extraction error."
+}

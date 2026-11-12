@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_f3e1193cfe3d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 8.57,
+  "anchor_value": 8.57,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 13,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 2.2 | % | 12,886,962 | 04/30/28 | 12,886,962 | 9,497,820"
+    },
+    {
+      "table_index": 25,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 4.9 | % | 28,782,924 | 04/30/28 | 28,782,924 | 21,213,303"
+    },
+    {
+      "table_index": 25,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.00 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) | 0.8 | % | 3,088,490 | 04/30/28 | 3,088,490 | 3,442,740"
+    }
+  ],
+  "rationale": "The weak fmt_basis_spread flag reports three violations, and the raw SOI localizes those to WDE TorcSill rows where the coupon is intentionally higher than the disclosed basis spread because the terms include a base index and floor: 23.35% inc PIK is SOFR + 18.75% with a 4.60% floor, and 25.00% inc PIK is PRIME + 18.25% with a 4.60% floor. The source supports the extracted all-in coupon and the spread disclosure; the flag is therefore a rule-scope false alarm, not a source data defect."
+}

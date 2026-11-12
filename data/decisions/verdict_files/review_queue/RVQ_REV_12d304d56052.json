@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_12d304d56052",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 22,
+      "quoted_text": "Mooring Primary, LLC ( 2,574 preferred units) | - | - | - | 4/1/2025 | - | - | 2,574 | 3 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 15,
+      "quoted_text": "Skillsoft Corp. ( 1,308 Class A shares) | (6)(12)(29) | - | - | - | 6/11/2021 | - | - | 508 | 21 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged two rows where fair value is below 5% of cost. The raw SOI supports both extracted rows: Mooring Primary shows amortized cost 2,574 and fair value 3, and Skillsoft shows amortized cost 508 and fair value 21. Because the low fair values are source-supported distressed marks rather than extraction or normalization defects, the data-error flag is a false alarm."
+}

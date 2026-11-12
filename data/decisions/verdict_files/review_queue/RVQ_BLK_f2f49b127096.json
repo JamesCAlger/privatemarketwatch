@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_f2f49b127096",
+  "verdict": "false_alarm",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 203856000,
+  "anchor_value": 203856000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 65,
+      "quoted_text": "Total Investments | $ | 210,328 | $ | 203,856 | 119.73 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule identifies table 13 row 65 as Total Investments, with fair value 203,856 (thousands). It is a grand-total row, not an eligible investment position, and it repeats the same cost and fair value as Total Non-Controlled, Non-Affiliated Investments at row 63. Its absence from position-level pipeline output is therefore correct; SRC_BDC01 leaked a total row into its expected-position set."
+}

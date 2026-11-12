@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_2b027af29fa4",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 42,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The bundle flags 42 footnote-derived nonaccrual positions, but the raw source available through the evidence CLI did not decide the question. Direct source searches for non-accrual, nonaccrual, accrual, cash basis, and income-producing variants returned no hits. Targeted rows such as Adept AG Holdings show footnote markers including (21) and (22), PIK/cash terms, and fair value data, but the CLI output did not expose a source definition proving those markers mean nonaccrual. Under the skeptic standard, the source was checked but is not decisive."
+}

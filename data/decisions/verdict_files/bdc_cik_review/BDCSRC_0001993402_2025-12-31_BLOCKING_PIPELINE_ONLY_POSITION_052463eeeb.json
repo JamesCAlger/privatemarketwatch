@@ -1,0 +1,47 @@
+{
+  "review_id": "BDCSRC_0001993402_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_052463eeeb",
+  "cik": "0001993402",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a current-period source extraction coverage gap: the residual row is an extra_in_pipeline BlackRock Liquidity T-Fund position with no matching current-period source fact, and raw current-period source rows contain no BlackRock/Liquidity match. The bundled coordinate candidate shows the same investment as a current-period SOI position row, so the mechanism is HTML present in the selected SOI table set but absent from parsed raw source rows.",
+  "reconciliation_diagnosis": "HTML_PRESENT_TABLE_NOT_PARSED",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 72,
+      "row_index": 23,
+      "cell_indices": [
+        0,
+        2,
+        6,
+        8,
+        10,
+        17,
+        21,
+        25
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Current-period SOI row for BlackRock Liquidity T-Fund - Institutional Shares is classified as a production position row, while source reconciliation has no current-period raw source match for the pipeline row."
+    }
+  ],
+  "changed_files": [
+    "pipeline/bdc_source_extraction.py",
+    "tests/test_bdc_source_extraction.py"
+  ],
+  "patch_summary": "Bounded parser/test change proposed to include short-term investment cash-equivalent SOI rows such as BlackRock Liquidity T-Fund in current-period raw BDC source extraction, without editing generated reconciliation outputs.",
+  "source_reconciliation_effect": "Expected to reduce the row-identity extra_in_pipeline blocker for this CIK/date by creating a current-period source row for the visible SOI position. Because the bundled HTML row text shows 71,644 while the pipeline output fair value is 75,879, the patch may convert this blocker into a value mismatch rather than fully clearing all residuals.",
+  "gav_effect": "Context only; no independent GAV pass/fail claim. The existing GAV row is already PASS and should not be used as the primary justification.",
+  "tests_validation_plan": "Add a focused source-extraction fixture for the table 72 short-term investment row and a false-positive case excluding comparative-period table 109; then run: pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py tests/test_bdc_source_extraction.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "HTML can support identity, classification, and coordinates only. The bundle does not include a raw XBRL/source numeric fact for the BlackRock row, and the visible current-period row amount differs from the pipeline fair value, so human merge should verify numeric mapping after parser coverage is added.",
+  "reviewer_notes": "Do not rely on the 2024-12-31 coordinate candidate in table 109. The proposed mechanism is limited to current-period source extraction coverage for the table 72 position row."
+}

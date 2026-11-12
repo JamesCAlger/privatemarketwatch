@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_435bd94d54aa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 173214000,
+  "anchor_value": 183056000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 173,
+      "row_index": 4,
+      "quoted_text": "Non-controlled, non-affiliated investments, at fair value (cost of $ 186,110 and $ 229,254, respectively) | $ | 183,056 | $ | 225,617",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "A04 compares the extracted holdings fair value of 173,214,000 with the filing's current-period investment total. The raw filing reports 183,056 thousand as total investments in the SOI and repeats 183,056 thousand for non-controlled, non-affiliated investments on the balance sheet. The 9,842,000 shortfall is therefore an extraction gap, not a bad filing anchor; the allowed source view did not cleanly localize the residual to a single omitted row or subtotal."
+}

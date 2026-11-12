@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_f0394cb79dc1",
+    "verdict":  "false_alarm",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  17,
+    "anchor_value":  17,
+    "confidence":  0.91,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  14,
+                                  "row_index":  31,
+                                  "quoted_text":  "Giving Home Health Care | Equity | N/A | 8/19/2022 | 1,667 | 17 | 976,212 | 0.1%",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Raw source table 14 row 31 labels Giving Home Health Care as Type of Investment = Equity and shows Cost = 17 and Fair Value = 976,212; row 32 repeats the same industry subtotal. X07 is a non-equity extreme-appreciation check, so the numeric values are source-correct and the flag is caused by applying the check to an equity row."
+}

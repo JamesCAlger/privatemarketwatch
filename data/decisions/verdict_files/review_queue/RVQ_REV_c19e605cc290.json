@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_c19e605cc290",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate and blank basis_spread on extracted undrawn private credit rows",
+  "anchor_value": "source schedule prints dashes in Reference, Spread, and Interest Rate columns for those undrawn rows",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 22,
+      "quoted_text": "Acumatica Holdings, Inc. / Software / First Lien - Undrawn row has dash in Reference, Spread, and Interest Rate columns."
+    },
+    {
+      "table_index": 40,
+      "row_index": 24,
+      "quoted_text": "AAH Topco, LLC / Consumer Services / First Lien - Undrawn row has dash in Reference, Spread, and Interest Rate columns."
+    },
+    {
+      "table_index": 48,
+      "row_index": 9,
+      "quoted_text": "Adelaide Borrower, LLC / Business Services / First Lien - Undrawn row has dash in Reference, Spread, and Interest Rate columns."
+    }
+  ],
+  "rationale": "X02 flagged private credit rows because both interest_rate and basis_spread are blank in the extracted holdings. Raw source review shows the affected examples are unfunded/undrawn debt investment rows, and the filing itself prints dashes for Reference, Spread, and Interest Rate on those rows. Funded rows in the same schedule carry SOFR references, spreads, and stated interest rates, so the blank extracted fields on undrawn rows reflect the source presentation and should not be treated as missing income-return rate data."
+}

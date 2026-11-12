@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_d4c8917c125b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Debt Investments Software Aerospike, Inc. One First Lien Delayed Draw Term Loan (0.50% Exit Fee) Ref SOFR(M) Floor 1.00% Spread 7.50% Total Coupon 12.97% Maturity Date 12/29/2025",
+  "anchor_value": "Aerospike, Inc.",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 9,
+      "quoted_text": "Aerospike, Inc. | First Lien Delayed Draw Term Loan (0 .50 % Exit Fee) | SOFR(M) | 1.00 | % | 7.50 | % | 12.97 | % | 12/29/2025 | $ | 417,946 | 410,352 | 414,603 | 0.16 | % | F/I",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name leaked section, industry, instrument, rate, and maturity text; source Issuer cell is only Aerospike, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "C206 is a single-cell issuer_name parse-leak flag. The raw SOI table separates Issuer from Instrument and terms: table 22 row 9 has Issuer 'Aerospike, Inc.' and Instrument 'First Lien Delayed Draw Term Loan (0 .50 % Exit Fee)' with separate rate and maturity columns. The stored issuer_name concatenates 'Debt Investments Software', the issuer, an ordinal/instrument label, reference rate, floor, spread, total coupon, and maturity date, so the field is not the clean issuer."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4d6746e68d7a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C04 flags that 0.0% of 6 COMMON_EQUITY rows have shares, but the allowed evidence CLI returned missing_cached_html for overview, tables, totals, and targeted roam for accession 0001104659-22-092916. Because raw source was unavailable through the permitted interface, the contract requires an ambiguous source_unavailable verdict rather than a substantive guess."
+}

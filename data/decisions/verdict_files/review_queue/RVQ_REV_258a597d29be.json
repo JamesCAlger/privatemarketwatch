@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_258a597d29be",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_EUR",
+    "anchor_value":  "USD",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  50,
+                                  "row_index":  1,
+                                  "quoted_text":  "Investment | Industry | Interest Rate | Reference Rate and Spread | Initial Acquisition Date | Maturity | Par | Cost | Fair Value | Footnotes",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  50,
+                                  "row_index":  4,
+                                  "quoted_text":  "Financiere N (dba Nemera) | Health Care Equipment \u0026 Supplies | 7.02 % | E + 5.00 % | 03/14/25 | 05/07/32 | EUR | 11,428 | $ | 12,799 | $ | 13,296",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The parser stored the par currency EUR as fair_value_currency even though the source fair value is in the Fair Value dollar column.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  50,
+                                          "row_index":  4
+                                      }
+                     }
+                 ],
+    "rationale":  "FX02 is a real localized fair_value_currency error. In the raw SOI table, row 1 labels Par separately from Cost and Fair Value, and row 4 places EUR in the Par currency area while Cost and Fair Value are dollar-denominated cells. The observed stored fair_value_currency U_EUR therefore reflects the par currency being mapped into the fair value currency field; the correct fair value currency is USD."
+}

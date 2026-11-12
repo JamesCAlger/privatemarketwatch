@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_dfc7041c41a8",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 231.49999999999952,
+  "anchor_value": 231.8,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ | 1,618,654 | 231.8 | % | $ | 1,562,470",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 4,
+      "row_index": 35,
+      "quoted_text": "Total net assets | 674,028 | 706,038",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the flag is a false alarm. The March 31, 2026 schedule explicitly reports Total Investments of $1,618,654 at 231.8% of net assets, while the balance sheet reports total net assets of $674,028; 1,562,470 / 674,028 is approximately 231.8%. The extracted percentage sum of 231.5% closely matches the filing's own schedule total, with only a 0.3 percentage-point rounding or coverage difference. A percentage of investments to net assets above 100% is therefore source-supported for this leveraged BDC, so the expected-range premise of PCT01 is inapplicable rather than the extracted data being erroneous."
+}

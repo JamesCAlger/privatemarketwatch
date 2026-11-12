@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_bc990b0690ee",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  43,
+                                  "row_index":  5,
+                                  "quoted_text":  "Crash Champions Intermediate, LLC | Initial Term Loan | 1M SOFR + 7.00 % | 0.75 | % | 12.36 | % | 8/8/2022 | 8/1/2029 | 6,293,023 | $ | 6,183,816 | $ | 6,284,213 | 2.3 | % | (5)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  44,
+                                  "row_index":  30,
+                                  "quoted_text":  "Foundation Risk Partners, Corp. | Term Loan | 3M SOFR + 6.75 % | 0.75 | % | 12.20 | % | 3/8/2023 | 10/29/2028 | 19,843,466 | 19,305,744 | 19,829,575 | 7.3 | % | (5) (15)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX01 asserts non-USD source par with missing principal_amount_usd. Targeted raw-source checks found no EUR, GBP, foreign-currency, or similar marker, and representative flagged debt rows in the 2023 schedule present par/share amounts alongside dollar-denominated amortized cost and fair value columns. The raw source therefore does not support the rule predicate that these are non-USD par amounts requiring FX conversion."
+}

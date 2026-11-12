@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_2be03e27f593",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": [
+    "Equity Securities United States Common Stock Elah Holdings, Inc. Capital Markets Initial Acquisition Date 05/09/18",
+    "Equity Securities United States Preferred Stock Khoros, LLC (fka Lithium Technologies, Inc.) Interactive Media & Services Initial Acquisition Date 05/23/25"
+  ],
+  "anchor_value": [
+    "Elah Holdings, Inc.",
+    "Khoros, LLC (fka Lithium Technologies, Inc.)"
+  ],
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 5,
+      "quoted_text": "Elah Holdings, Inc. | Capital Markets | 05/09/18 | 69,386 | $ | 3,354 | $ | 3,354 | (6) (8) (13) (14)"
+    },
+    {
+      "table_index": 38,
+      "row_index": 11,
+      "quoted_text": "Khoros, LLC (fka Lithium Technologies, Inc.) | Interactive Media & Services | 05/23/25 | 133,523 | 5,739 | 5,728 | (6) (8) (13)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Elah issuer_name leaked schedule classification path and separate industry/acquisition-date fields instead of the source issuer cell, which is Elah Holdings, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Khoros issuer_name leaked schedule classification path and separate industry/acquisition-date fields instead of the source issuer cell, which is Khoros, LLC (fka Lithium Technologies, Inc.).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "C206 is a real localized issuer_name parse leak. The raw SOI table separates wrapper categories (Equity Securities, United States, Common Stock/Preferred Stock) from the investment rows, and it also separates Investment, Industry, and Initial Acquisition Date into distinct columns. The stored issuer_name values concatenate those wrapper/term fields into issuer_name, while the cited source rows show the clean issuer names are only Elah Holdings, Inc. and Khoros, LLC (fka Lithium Technologies, Inc.)."
+}

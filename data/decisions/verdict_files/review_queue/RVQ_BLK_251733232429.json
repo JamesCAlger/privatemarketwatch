@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_251733232429",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.03,
+  "anchor_value": 0.03403329949117928,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 178,
+      "row_index": 26,
+      "quoted_text": "MRI Software, LLC Revolving Credit Loan (3)(9) | SOFR + 4.750 % | 8.436 % | 02/10/2028 | 59 | 58 | 59 | 0.03 | %"
+    },
+    {
+      "table_index": 173,
+      "row_index": 38,
+      "quoted_text": "Total Net Assets | $ | 173,342 | $ | 200,993"
+    }
+  ],
+  "rationale": "Class 2 within-row check. The raw SOI row reports fair value of 59 thousand and percentage of net assets of 0.03%. The balance sheet reports total net assets of 173,342 thousand. 59 / 173,342 * 100 = 0.034033%, which rounds to the printed 0.03%; the approximate 6,997 dollar identity residual is explained by using the rounded display percentage as if it were exact, not by a bad source value."
+}

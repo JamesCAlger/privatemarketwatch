@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_5a58a0b44b86",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 233.14,
+  "anchor_value": 233.14,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 12,
+      "quoted_text": "Total Investments at fair value | $ | 1,418,136 | $ | 1,417,789 | 233.14 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 28,
+      "quoted_text": "Total Net Assets | $ | 608,129 | $ | 352,123",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 8,
+      "quoted_text": "Total Investments | $ | 1,418,136 | $ | 1,417,789 | $ | 665,676 | $ | 666,141",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PCT01 flagged the extracted pct_of_net_assets quarter sum of 233.14 as outside an expected range, but the raw filing itself reports Total Investments at fair value of 1,417,789 and 233.14% of net assets. The balance sheet reports Total Net Assets of 608,129, so total investments can exceed 100% of net assets for this leveraged BDC. The extracted value matches the source schedule rather than indicating a data error."
+}

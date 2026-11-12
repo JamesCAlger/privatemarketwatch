@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_f72292eb8e8e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2475.678,
+  "anchor_value": 2483.554,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Equipment Financing | May 28, 2024 | May 1, 2026 | Fixed interest rate 16.0%; EOT 0.0% | 215 | 215 | 218",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 9,
+      "quoted_text": "Total investments (cost of $2,468,380 and $2,396,883, respectively) | 2,483,554 | 2,418,075",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The completeness denominator treats structural blank and row-spanned HTML cells as investment leaves, although the investment row has fair value 218 in the Fair Value column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation rejects the 43.4% leaf-cell coverage metric as a measure of position fair-value completeness. The filing reports total investments of 2,483.554 million, while the extracted fund-quarter fair value is 2,475.678 million, or 99.68% of the schedule total. Raw table 13 uses a 23-cell HTML layout with intentionally blank continuation, spacer, currency, and row-spanned cells; row 6 still contains fair value 218 in the Fair Value column despite blank issuer and currency cells. Thus the flag is caused by an overbroad structural-leaf denominator, not evidence that 56.6% of investment positions lack fair value. The remaining 7.876 million difference is small but is not localized by this evidence and remains residual risk outside the B01 flag mechanism."
+}

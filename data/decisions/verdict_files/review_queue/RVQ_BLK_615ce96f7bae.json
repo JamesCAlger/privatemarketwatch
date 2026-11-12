@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_BLK_615ce96f7bae",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  7.25,
+    "anchor_value":  12.13,
+    "confidence":  0.94,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  22,
+                                  "row_index":  9,
+                                  "quoted_text":  "Header: Reference Rate Spread / Floor | Cash Interest Rate / PIK Rate; row: W.A. Kendall and Company, LLC Revolving Loan | 3M SOFR + 7.25 % / 1.00 % | 12.13 % | 4/22/2030",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Class 2 within-row rate extraction issue. The raw SOI row distinguishes Reference Rate Spread / Floor from Cash Interest Rate / PIK Rate. For the cited W.A. Kendall Revolving Loan, the source shows reference spread/floor of 3M SOFR + 7.25% / 1.00% and a stated cash interest/coupon rate of 12.13%. The bundle row shows the stored interest_rate pattern retained 7.25 rather than the all-in stated coupon, causing pik_le_interest_rate to fire. Under the rule-specific all-in convention, storing the reference spread instead of the stated all-in coupon is a real extraction error."
+}

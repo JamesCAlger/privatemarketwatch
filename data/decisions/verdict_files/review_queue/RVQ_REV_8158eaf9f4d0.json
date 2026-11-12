@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_8158eaf9f4d0",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "The bundle identifies a Class 2 row-level X02 issue for row_key 560630: a PRIVATE_CREDIT row has no interest_rate or basis_spread. The evidence CLI was queried for overview, tables, totals, targeted roam, and grid, but each returned status no_accession_resolved rather than usable raw source. Because the raw source row could not be read, the missing-rate question cannot be adjudicated."
+}

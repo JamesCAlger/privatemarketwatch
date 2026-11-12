@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_8fb9e93dbfa1",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 232002,
+  "anchor_value": 232002,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 11,
+      "quoted_text": "Total Assets | $ | 232,002 | $ | 215,438",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 19,
+      "quoted_text": "Total Liabilities | 18,472 | 8,419",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Total Members' Capital | 213,530 | 207,019",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 30,
+      "quoted_text": "Total Liabilities and Members' Capital | $ | 232,002 | $ | 215,438",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 balance sheet is internally exact: total assets of 232,002 equal total liabilities of 18,472 plus total members' capital of 213,530, and the filing prints total liabilities and members' capital as 232,002. The identity flag therefore reflects a bad internal anchor or check scope rather than erroneous source data. The bundle's extracted holdings total of 544.170799 million does not represent this balance-sheet total and should not override the filing identity."
+}

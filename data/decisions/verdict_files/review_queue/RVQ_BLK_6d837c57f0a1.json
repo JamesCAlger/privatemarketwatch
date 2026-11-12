@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_BLK_6d837c57f0a1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_accession_metadata",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-115260",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "evidence_cli overview: accession = 0001193125-26-115260; flag row_key 527031 has accession_number value = empty"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "BDC/HTML holdings row_key 527031 is missing accession_number even though the cached source filing has accession 0001193125-26-115260.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "evidence_cli overview: accession = 0001193125-26-115260"
+      }
+    }
+  ],
+  "rationale": "C006 checks source traceability. The raw source was available through the evidence CLI and identifies the filing accession as 0001193125-26-115260 for Antares Private Credit Fund, report_date 2025-12-31. The flagged row-level artifact records accession_number as empty for a filing-derived BDC row, so the extracted row is missing metadata that exists in the source context."
+}

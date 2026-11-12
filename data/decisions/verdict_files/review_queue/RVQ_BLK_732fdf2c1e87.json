@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_732fdf2c1e87",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1779.362,
+  "anchor_value": 1780.072,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 19,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 1,783,987 | $ | 1,780,072 | 218.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Term Loan | S + 4.50% | 11/29/2030 | fair value 31,132",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation rejects the E07 count comparison. The raw current-period schedule closes at fair value $1,780.072m (table 19 row 19), while extracted holdings total $1,779.362m, only $0.710m or 0.04% lower. A distinct later portfolio schedule begins at table 23 and contains comparative positions, demonstrating that raw schedule rows are multi-period and cannot support the oracle's unscoped source count of 933 against 369 current output positions. The filing-value anchor therefore supports the output and identifies the E07 source-count anchor as bad, not a holdings data error."
+}

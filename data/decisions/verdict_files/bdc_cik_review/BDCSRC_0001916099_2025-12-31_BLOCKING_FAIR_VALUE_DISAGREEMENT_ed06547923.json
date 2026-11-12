@@ -1,0 +1,26 @@
+{
+  "review_id": "BDCSRC_0001916099_2025-12-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_ed06547923",
+  "cik": "0001916099",
+  "report_date": "2025-12-31",
+  "verdict": "ESCALATE",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports an exact-identifier matched value mismatch for Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan: the source row reports fair_value -25957000.0 while the unified output reports 25957000.0, with matching wrapper keys and no source-only blocker rows. The bundled evidence does not establish a safe parser or normalization patch because the available HTML coordinate candidates do not unambiguously show the current-period fair-value cells for the exact matched row.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "holdings_examples"
+  ],
+  "html_citations": [],
+  "changed_files": [],
+  "patch_summary": "No patch proposed; the bundle supports a real source/output sign disagreement but not a bounded code change.",
+  "source_reconciliation_effect": "No immediate source-reconciliation effect. Human review should determine whether the XBRL sign, unified holdings sign normalization, or issuer-specific presentation requires correction.",
+  "gav_effect": "Context only; GAV already passes and is not used as the primary justification.",
+  "tests_validation_plan": "If a patch is later proposed, run: pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": false,
+  "missing_evidence": "Need unambiguous current-period HTML coordinates for the exact Action Elevator delayed draw term-loan row including fair-value cells, or code-level evidence showing why the unified output flips the source fair_value sign while related Action Elevator rows reconcile.",
+  "residual_risk": "The source XBRL and output agree on identifier, cost, principal amount, rates, maturity, and wrapper keys, so the remaining risk is isolated to fair-value sign handling. A broad sign-normalization patch could incorrectly change legitimate negative fair values for revolver or delayed-draw positions.",
+  "reviewer_notes": "HTML source-row coordinate candidates include exact Action Elevator short rows at table_index 53 row_index 6 and table_index 61 row_index 4, but those rows do not expose the matched fair-value amount. Other current-period candidates match only the generic term Holdings, LLC and point to different issuers, while a 2024 comparative-period candidate is not valid evidence for the 2025-12-31 position value."
+}

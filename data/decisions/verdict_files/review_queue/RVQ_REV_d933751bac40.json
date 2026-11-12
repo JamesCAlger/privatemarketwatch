@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d933751bac40",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -653000,
+  "anchor_value": -653000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 2,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | 7/2/2026 | Unfunded Commitment $3,252 | Fair Value $(16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "Any Hour LLC | First Lien Delayed Draw Term Loan | 5/23/2026 | Unfunded Commitment 4,313 | Fair Value (65)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 69,
+      "quoted_text": "Total Unfunded Portfolio Company Commitments | $ | 152,628 | $ | (653)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value values, but the raw source places these rows in the Unfunded Portfolio Company Commitments schedule, whose Fair Value column is explicitly parenthesized for negative values. The extracted examples match the source sign and scale, and the schedule total fair value is $(653) thousand, matching an observed/anchor value of -653000. The data is source-faithful; the check is too broad for unfunded commitment fair values."
+}

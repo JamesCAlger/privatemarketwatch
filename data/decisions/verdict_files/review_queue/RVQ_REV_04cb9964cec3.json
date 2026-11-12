@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_04cb9964cec3",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 9.0,
+  "anchor_value": 9.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 3,
+      "quoted_text": "Preferred Equity section row: Veronica Holdings, LLC (Vapotherm) (9) | Health Care Equipment & Supplies | Interest Rate 9.00 % PIK | Acquisition Date 9/2024 | Cost $10,862 | Fair Value $11,175"
+    }
+  ],
+  "rationale": "The X01 flag says a PRIVATE_EQUITY row has interest_rate=9.0, but the raw schedule classifies the instrument within Preferred Equity and explicitly reports an Interest Rate cell of 9.00 % PIK for Veronica Holdings, LLC (Vapotherm). The stored rate matches the source; the check is overbroad because preferred equity can carry a stated PIK coupon even while the platform umbrella asset_class is PRIVATE_EQUITY."
+}

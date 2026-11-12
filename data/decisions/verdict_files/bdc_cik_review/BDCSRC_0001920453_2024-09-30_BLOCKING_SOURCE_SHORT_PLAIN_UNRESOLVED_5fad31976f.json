@@ -1,0 +1,32 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001920453",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV effect is claimed as the basis for the patch. The change only prevents a portfolio-level XBRL total label from remaining in the source-only blocker pool.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Classify the exact Fidelity source-only label Investment Portfolio as a non-position total/header residual in source-only blocker classification.",
+  "primary_justification": "The only blocker row is the XBRL investmentidentifieraxis value Investment Portfolio, with portfolio-level cost, fair value, and percent-of-net-assets facts and no issuer, tranche, rate, maturity, or share evidence. The bounded patch treats this exact label as a total/header residual and covers it with regression tests.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2024-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "Residual risk is limited to exact portfolio-total labels. No issuer-bearing or instrument-bearing rows are reclassified by this verdict.",
+  "review_id": "BDCSRC_0001920453_2024-09-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_5fad31976f",
+  "reviewer_notes": "Manual review found this is not insufficient evidence. HTML source-row coordinates are absent for this blocker, so the verdict relies on the bundled XBRL source row and exact-label patch/test coverage.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect is to move this source-only row out of the blocking pool as an aggregate/header residual while preserving real position rows.",
+  "tests_validation_plan": "Covered by targeted source reconciliation tests in tests/test_validate_holdings.py; validate this verdict with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

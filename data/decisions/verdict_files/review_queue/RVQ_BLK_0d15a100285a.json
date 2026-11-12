@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_0d15a100285a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1288,
+  "anchor_value": 250,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 2,
+      "quoted_text": "Investments (1)(19) | Footnotes | Reference Rate and Spread (2) | Interest Rate (2)(15) | Acquisition Date | Maturity Date | Par Amount/Units (1) | Cost (3) | Fair Value | % of Net Assets"
+    },
+    {
+      "table_index": 99,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | 82,916,241 | 82,199,346 | 172.60"
+    }
+  ],
+  "rationale": "Class 3 aggregate count flag. Raw source review shows the 2025 schedule of investments is a long multi-table sequence with investment-row headers starting at table 41 and a current-year roll-up at table 99 for Total Investment Portfolio, fair value 82,199,346. The filing structure is consistent with a large extracted position set, not a 250-row source schedule. The E07 comparison anchor of 250 is therefore inconsistent with the raw schedule structure, while the output count of 1288 is not contradicted by the raw source. Treat the flag as an anchor/count false alarm rather than a holdings data error."
+}

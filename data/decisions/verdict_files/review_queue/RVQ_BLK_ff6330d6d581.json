@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_ff6330d6d581",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 2101364499.0,
+  "anchor_value": 2292614325.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 93,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 191,249,826 | $ | 80,534,379 | $ | 2,020,830,120 | $ | 2,292,614,325",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 93,
+      "row_index": 9,
+      "quoted_text": "Money Market Mutual Funds | 13,143,788 | 0 | 0 | 13,143,788",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 93,
+      "row_index": 10,
+      "quoted_text": "Fixed Income Mutual Funds | 178,106,038 | 0 | 0 | 178,106,038",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The 191,249,826 residual equals Level 1 money market and fixed income mutual funds included in total investments but outside the private-markets holdings universe.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 93,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing total and companyfacts anchor agree at 2,292,614,325, while the extracted private-markets holdings sum is 2,101,364,499. The 191,249,826 difference is fully localized in raw source to Level 1 investments: 13,143,788 Money Market Mutual Funds plus 178,106,038 Fixed Income Mutual Funds. Those non-private Level 1 funds are included in the companyfacts total-investments anchor, so the conservation check is using an over-broad anchor for the private-markets holdings data rather than proving a holdings extraction defect."
+}

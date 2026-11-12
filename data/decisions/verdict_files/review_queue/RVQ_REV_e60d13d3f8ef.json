@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e60d13d3f8ef",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -17786.0,
+  "anchor_value": -17786.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Accela Inc/US | 1st Lien Revolver | Software & Services | S+4.75%, 0.75% Floor (0.50% on unfunded) | 0.50 | 9/1/2023 | 9/2/2030 | 2,242,023 | (17,915) | (17,786) | (0.00)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Allium Buyer LLC | 1st Lien Revolver | Business Services | S+5.00%, 1.00% Floor (0.50% on unfunded) | 0.50 | 5/2/2023 | 5/2/2029 | 573,673 | (10,042) | (3,878) | (0.00)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "Alpine Acquisition Corp II | 1st Lien Delayed Draw Term Loan | Transportation & Logistics | S+4.75%, 1.00% Floor (0.50% on unfunded) | 0.50 | 1/14/2026 | 1/14/2031 | 53,094 | (508) | (1,263) | (0.00)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 19,
+      "quoted_text": "Alpine Acquisition Corp II | 1st Lien Revolver | Transportation & Logistics | S+4.75%, 1.00% Floor (0.50% on unfunded) | 0.50 | 1/14/2026 | 1/14/2031 | 212,377 | (10,171) | (5,159) | (0.00)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flags negative fair_value values for review. The raw Schedule of Investments rows show the same fair values in parentheses for unfunded revolver or delayed-draw instruments, including Accela (17,786), Allium (3,878), and Alpine (1,263 and 5,159). Because the stored negative fair values match the source disclosure and are plausible for unfunded commitment marks, this flag is a false alarm rather than a data error."
+}

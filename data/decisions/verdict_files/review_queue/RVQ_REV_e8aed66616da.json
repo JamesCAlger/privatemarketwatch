@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_e8aed66616da",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.19160802541736824,
+  "anchor_value": 0.8083919745826318,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 9,
+      "quoted_text": "Total debt investments | $ | 597,964 | $ | 597,891 | 28.54 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 25,
+      "quoted_text": "Total equity investments | $ | 2,152,344 | $ | 2,269,950 | 108.37 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 13,
+      "quoted_text": "Total investments | $ | 2,988,655 | $ | 3,120,386 | 148.98 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The filing schedule shows debt investments of 597.891 million against total investments of 3120.386 million, so the PRIVATE_CREDIT share is only 19.16% and the vehicle-type BDC strategy assignment is inconsistent with source composition.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 52,
+        "row_index": 9,
+        "quoted_text": "Total debt investments | $ | 597,964 | $ | 597,891 | 28.54 | %"
+      }
+    }
+  ],
+  "rationale": "The raw investment schedule localizes the mismatch: debt/private-credit investments total 597.891 million while total investments are 3120.386 million, matching the flagged 19.16% private-credit share. Equity investments dominate the portfolio at 2269.950 million plus controlled/affiliated equity of 252.545 million. A targeted raw-source search for 'business development company' returned zero hits, so the VEHICLE_TYPE_BDC-derived PRIVATE_CREDIT strategy is not source-supported for this filing. The flag is therefore a real classification/lookthrough error rather than a false alarm."
+}

@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_eb970bb027d7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "12.96 % PIK",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 16,
+      "quoted_text": "22 HoldCo Limited (8) | Senior subordinated loan | 12.96 % PIK | SONIA (S) | 7.50 % | 08/2033 | 14,698.0 | 14,049.2 | 14,097.2 | (3)(5)(6)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Source Coupon cell states 12.96% PIK for the senior subordinated loan, but extracted interest_rate is blank.",
+      "fix_class": "all_pik_normalization",
+      "citation": {
+        "table_index": 50,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "X02 flags the PRIVATE_CREDIT row because interest_rate and basis_spread are missing. The raw SOI row for 22 HoldCo Limited shows a stated coupon of 12.96% PIK on the senior subordinated loan, so the blank extracted interest_rate is an extraction gap rather than an absence of source rate data."
+}

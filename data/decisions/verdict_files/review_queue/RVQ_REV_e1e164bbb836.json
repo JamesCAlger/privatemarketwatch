@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_e1e164bbb836",
+    "verdict":  "real_error",
+    "mechanism":  "source_format_defect",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "0.4",
+    "anchor_value":  "0.4%",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  35,
+                                  "row_index":  7,
+                                  "quoted_text":  "Integrity Marketing Acquisition, LLC | (4) (6) (9) | SOFR + 6.00 % | 11.39 | % | 8/27/2026 | 349 | 337 | 306 | 0.4",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "source_format_defect",
+                         "detail":  "The source row prints 0.4 in the % of Net Assets column without the trailing percent sign used by the column context.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  35,
+                                          "row_index":  7
+                                      }
+                     }
+                 ],
+    "rationale":  "Table 35 is the schedule of investments and its header includes % of Net Assets. The Integrity Marketing Acquisition row has value 0.4 in that column but no trailing % cell, unlike other schedule rows such as Athenahealth and the total row. The flag is therefore a real localized formatting defect in the raw source, not a false alarm."
+}

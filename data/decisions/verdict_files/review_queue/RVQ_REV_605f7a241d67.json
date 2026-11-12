@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_605f7a241d67",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 11.782991755005886,
+  "anchor_value": 19.56,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 87,
+      "row_index": 23,
+      "quoted_text": "Ratio of net investment income to average net assets | 13.04 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 87,
+      "row_index": 13,
+      "quoted_text": "Dividends declared (2) | ( 2.05 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 81,
+      "row_index": 12,
+      "quoted_text": "Total Dividends Declared | $ | 2.05",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 compares distribution_rate to income_yield_pct * 1.5. The source financial highlights show 2025 net investment income yield of 13.04%, giving a threshold of 19.56%, while the flagged distribution rate is 11.782991755005886%. Source dividend rows also support the distribution input at $2.05 per share. Therefore the source values satisfy the rule and the flag is a false alarm caused by a bad internal anchor/check input rather than a source data error."
+}

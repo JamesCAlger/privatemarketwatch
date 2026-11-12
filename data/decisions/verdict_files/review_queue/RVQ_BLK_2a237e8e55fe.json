@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_2a237e8e55fe",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "ff_investments_at_cost",
+  "observed_value": 1279714700.0,
+  "anchor_value": 809253307.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 26,
+      "quoted_text": "Total Debt & Equity Investments (7) | 148.3 | % | 809,253,307 | 645,193,114",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 14,
+      "quoted_text": "The Legacy Companies LLC Last Out Term Loan - 9.44 % inc PIK | -- | 36,553,925 | -- | -- | -- | 36,553,925 | 991,641",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Affiliated-investment activity rows are being admitted as holdings/cost rows even though the table columns are roll-forward fair value activity, duplicating SOI positions.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 28,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "rule_scope",
+      "detail": "The filing's Debt & Equity Investments cost anchor is 809,253,307, while the extracted cost population sums to 1,279,714,700.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the item. The raw schedule reports Total Debt & Equity Investments at amortized cost of 809,253,307, while the reviewed extracted cost sum is 1,279,714,700. The filing separately presents cash equivalents and short-term investments outside that debt/equity anchor, and table 28 is an affiliated-investment roll-forward with fair-value activity columns rather than an amortized-cost holdings schedule. The same Legacy Companies investment appears in the SOI and in the roll-forward, so the overshoot is a real extraction population/double-count error rather than a bad source anchor."
+}

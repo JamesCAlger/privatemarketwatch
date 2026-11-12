@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_BLK_d7e3a1b527a3",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 89619925000.0,
+  "anchor_value": 82199346000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 99,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | 82,916,241 | 82,199,346 | 172.60",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 14,
+      "quoted_text": "BCRED Emerald JV LP - LP Interest | (6)(16) | 1/19/2022 | 1,815,000 | 1,678,745 | 3.53",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 15,
+      "quoted_text": "BCRED Verdelite JV LP - LP Interest | (6)(16) | 10/21/2022 | 117,706 | 113,068 | 0.25",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 2,
+      "quoted_text": "Total investments, at fair value | $ | 6,496,980",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 2,
+      "quoted_text": "Total investments, at fair value | $ | 714,200",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Separate JV investment schedules disclose 6,496,980 and 714,200 thousand of JV portfolio investments while the parent schedule already carries the JV LP interests at 1,678,745 and 113,068 thousand inside total investments.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 21,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "The conservation anchor is the filing/companyfacts total investments at fair value of 82,199,346,000, shown in the source as Total Investment Portfolio fair value of 82,199,346 thousand. The extracted fair value sum is 89,619,925,000, an overshoot of 7,420,579,000. Source rows show the parent portfolio already includes BCRED Emerald JV LP and BCRED Verdelite JV LP interests at fair values of 1,678,745 and 113,068 thousand, while separate JV schedules also disclose underlying total investments at fair value of 6,496,980 and 714,200 thousand. This supports a real aggregate extraction/classification error from lookthrough JV schedule inclusion rather than a bad anchor; the exact residual is not fully localized to one row."
+}

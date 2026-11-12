@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_0fa8eaa8ae50",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 9,
+      "quoted_text": "Total Assets | $ | 34,241,464 | $ | 36,753,538 | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed pct_sum=0.0% with zero detail rows, but the raw March 31, 2026 portfolio-composition schedule contains category percentages of 12.4%, 0.6%, 31.9%, 23.9%, and 31.2%, and its Total Assets row explicitly anchors the portfolio at 100.0%. The zero extracted percentage sum is therefore a source-grounded extraction gap, not a valid filing value or a bad anchor."
+}

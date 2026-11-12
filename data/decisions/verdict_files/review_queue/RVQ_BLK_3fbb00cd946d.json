@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_3fbb00cd946d",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 799,
+  "anchor_value": 799,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 37,
+      "quoted_text": "Total Portfolio Investments | $ | 6,472,428 | $ | 6,342,711 | 196.38 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 59,
+      "row_index": 46,
+      "quoted_text": "Total Portfolio Investments | $ | 6,699,473 | $ | 6,610,610 | 195.59 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source contains two complete portfolio schedules: the March 31, 2026 report-date schedule terminates at table 26 with fair value 6,342,711, and a distinct comparative December 31, 2025 schedule terminates at table 59 with fair value 6,610,610. The E07 source count of 1,657 conflates rows from both schedules, while the 799 output count is scoped to the report date. The flagged mismatch is therefore an oracle comparative-period leak, not a holdings data error."
+}

@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_c612be8b3881",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_rate_column",
+  "observed_value": 0.6748466257668712,
+  "anchor_value": 0.8,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Capstone Acquisition Holdings, Inc. | First Lien Term Loan | S + 4.50 % | 11/12/2029 | cost 11,494 | fair value 11,612"
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Capstone Acquisition Holdings, Inc. | First Lien Delayed Draw Term Loan | S + 4.50 % | 11/12/2029 | cost (7) | fair value (14)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Seko Global Logistics Network, LLC | First Lien Term Loan | S + 8.00 % | 12/30/2026 | cost 1,321 | fair value 1,004"
+    },
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Seko Global Logistics Network, LLC | First Lien Delayed Draw Term Loan | S + 8.00 % | 12/30/2026 | cost 14,275 | fair value 10,858"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Several debt positions with blank extracted interest_rate have explicit source Reference Rate and Spread values such as S + 4.50% and S + 8.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The C01 aggregate flag reports only 67.48466257668712% of 163 debt rows with an extracted rate, below the 0.8 threshold. Raw schedule table 11 has a dedicated Reference Rate and Spread column and shows rates for positions that the review bundle's holdings slice reports with blank interest_rate, including Capstone Acquisition Holdings and Seko Global Logistics rows. This supports an extraction gap in the stored rate field, not a false alarm in the check."
+}

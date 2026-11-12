@@ -1,0 +1,50 @@
+{
+    "review_id":  "RVQ_REV_a850de75e805",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "fair_value_currency extracted as U_AUD/U_EUR/U_CHF/U_GBP",
+    "anchor_value":  "fair value column rolls into USD-denominated schedule totals",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  21,
+                                  "row_index":  6,
+                                  "quoted_text":  "Ancora Bidco PTY LTD term loan shows AUD principal amount but fair value 3,409 in the Fair Value column; Total Debt Investments Australia is marked $ 3,410."
+                              },
+                              {
+                                  "table_index":  21,
+                                  "row_index":  28,
+                                  "quoted_text":  "Olyos term loan shows foreign principal amount but fair value 2,521 in the Fair Value column; Total Debt Investments France is marked $ 2,456."
+                              },
+                              {
+                                  "table_index":  20,
+                                  "row_index":  13,
+                                  "quoted_text":  "Avidity Acquisition B.V. term loan shows foreign principal amount but fair value 142 in the Fair Value column; Total Debt Investments Netherlands is marked $ 8,575."
+                              },
+                              {
+                                  "table_index":  19,
+                                  "row_index":  30,
+                                  "quoted_text":  "Solvias AG LP term loan shows CHF 11,591 principal amount but fair value 11,789 in the Fair Value column; Total Debt Investments Switzerland is marked $ 11,789."
+                              },
+                              {
+                                  "table_index":  20,
+                                  "row_index":  25,
+                                  "quoted_text":  "Hamsard 3778 Limited term loan shows foreign principal amount but fair value 3,909 in the Fair Value column; Total Debt Investments United Kingdom is marked $ 7,142."
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Fair value currency was populated from the principal/par currency on foreign holdings, but cost and fair value belong to the USD-denominated schedule columns.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  21,
+                                          "row_index":  6
+                                      }
+                     }
+                 ],
+    "rationale":  "FX02 is a real extraction error. In the raw schedule, foreign currency labels such as AUD, EUR, CHF, and GBP appear in the Principal Amount, Par Value or Shares column, while the Cost and Fair Value columns roll to totals explicitly marked with dollar signs. The flagged fair_value_currency values therefore reflect unit bleed from the principal/par column, not the reported fair value currency."
+}

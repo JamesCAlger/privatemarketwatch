@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_2658ee82d758",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "PRIME+ 7.50 %",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 216,
+      "row_index": 18,
+      "quoted_text": "Service Minds Company, LLC | Term Loan | First Lien | PRIME+ 7.50 % | Floor 1.00 % | Cash 0.00 % | PIK 0.00 % | 2/7/2022 | 2/7/2028",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The private-credit term loan source row has a stated PRIME+ 7.50 % coupon term, but the extracted row was flagged with blank interest_rate and basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 216,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "X02 flags a PRIVATE_CREDIT row with no interest_rate or basis_spread. In the raw SOI, the matching Service Minds Company, LLC debt row is a First Lien Term Loan and the coupon cell states PRIME+ 7.50 %, with the rate columns otherwise showing Floor 1.00 %, Cash 0.00 %, and PIK 0.00 %. Because source provides a rate term but the extracted row is blank, the flag is a real extraction gap."
+}

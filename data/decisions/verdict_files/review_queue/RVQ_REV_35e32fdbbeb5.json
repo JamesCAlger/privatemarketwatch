@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_35e32fdbbeb5",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "basis_spread values 18.25, 18.75, and 18.75",
+  "anchor_value": "raw SOI rows state PRIME + 18.25% and SOFR + 18.75%",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK)"
+    },
+    {
+      "table_index": 5,
+      "row_index": 13,
+      "quoted_text": "WDE TorcSill Holdings LLC Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK)"
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK)"
+    }
+  ],
+  "rationale": "C115 flagged basis_spread values of 18.25, 18.75, and 18.75 as outside the expected range. The raw schedule of investments states those exact spreads as whole-number percentages for the three WDE TorcSill Holdings LLC debt rows, so the stored values match source and the warning reflects an over-narrow range check rather than a data defect."
+}

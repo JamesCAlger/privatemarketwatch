@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001988280",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "The terminal-percentage source rows remain ambiguous after deterministic review. Needed evidence is coordinate-level source table classification and a bounded rule distinguishing leaf position rows from percentage subtotal/category rows for this filer without weakening existing blocker semantics.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 2 current blocker row(s) in mechanism blocking_source_pct_ambiguous_after_review, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2025-03-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 256585715.000000.",
+  "review_id": "BDCSRC_0001988280_2025-03-31_BLOCKING_SOURCE_PCT_AMBIGUOUS_AFTER_REVIEW_6e7704110d",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Escalate terminal-percentage source rows that lack safe rollup evidence and do not have enough leaf evidence to parse.. Sample identifiers: Senior loans 195.1% | Materials 3.5% | Senior loans 198.5%",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

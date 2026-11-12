@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_66893049b942",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 211,
+      "row_index": 1,
+      "quoted_text": "BCRED Verdelite JV LP Consolidated Schedule of Investments December 31, 2023 (in thousands)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 211,
+      "row_index": 9,
+      "quoted_text": "BroadStreet Partners, Inc. | (8) | SOFR + | 3.75 % | 9.11 % | 1/27/2029 | 3,304 | 3,267 | 3,318 | 2.25",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 211,
+      "row_index": 10,
+      "quoted_text": "BroadStreet Partners, Inc. | (8) | SOFR + | 3.00 % | 8.47 % | 1/27/2027 | 3,302 | 3,228 | 3,311 | 2.24",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 reports duplicate position keys, with BroadStreet Partners Inc. Verdelite JV LP as the example. The raw Verdelite JV schedule has two BroadStreet Partners rows, but they are distinct tranches: one is SOFR + 3.75%, 9.11%, maturing 1/27/2029 with fair value 3,318, and the other is SOFR + 3.00%, 8.47%, maturing 1/27/2027 with fair value 3,311. The duplicate-key check is collapsing legitimate separate source positions rather than finding duplicated extraction rows."
+}

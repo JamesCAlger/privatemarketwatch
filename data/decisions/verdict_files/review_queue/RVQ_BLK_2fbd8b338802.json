@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_2fbd8b338802",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 168000,
+  "anchor_value": 112370.7,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 42,
+      "quoted_text": "Riskonnect Parent, LLC | (5) (7) (17) | First Lien Debt | S + | 4.75 % | 8.62 % | 12/07/2028 | 168 | 157 | 168 | 0.01"
+    },
+    {
+      "table_index": 28,
+      "row_index": 32,
+      "quoted_text": "Total members' capital | $ | 1,123,707 | $ | 1,041,965"
+    }
+  ],
+  "rationale": "The raw schedule row reports fair value of 168 thousand and percentage of net assets of 0.01%, while the filing total members' capital is 1,123,707 thousand. Exact multiplication of the printed rounded percent gives about 112.371 thousand, creating the flagged residual, but the printed percentage is rounded to two decimals and the source row itself carries the fair value and rounded percent consistently for presentation. Other sampled flagged rows show the same small-row rounding pattern, so the identity flag is a tolerance/rule-scope false alarm rather than a source data error."
+}

@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_ede0090f1892",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "PRIVATE_EQUITY row has interest_rate 4.44",
+  "anchor_value": "Bonds section row: Huntington Bancshares Inc, 4.44%, maturity 8/4/2028, par 620",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 193,
+      "row_index": 37,
+      "quoted_text": "Huntington Bancshares Inc (8) | 4.44 | % | 4.44 % | 8/4/2028 | 620 | 598 | 592 | 0.02"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The 4.44% flagged holding is sourced from a Bonds subsection row with maturity date and par amount, so PRIVATE_EQUITY classification is wrong.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 193,
+        "row_index": 37
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "Several other flagged rates are printed directly on preferred equity rows, so those rows may require a rule-scope exception rather than rate removal.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 66,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The source decides at least one flagged row: Huntington Bancshares Inc appears in table 193 under the Bonds subsection, with 4.44% reference/interest rate, maturity 8/4/2028, and par amount 620. A pipeline row classified as PRIVATE_EQUITY for that source row is therefore a real classification error, not merely an equity row carrying a disclosed preferred-equity rate. Other flagged examples such as Guidehouse preferred equity and Lobos preferred shares show source-supported preferred-equity rates, so remediation should avoid blanket deletion of rates from preferred equity."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_7ccc9428b2c2",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Revolver - 12.08 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 0.4 | % | 4,408,256 | 09/28/25 | 4,134,235 | 1,992,532",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 22,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Term Loan - 12.08 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 3.3 | % | 37,996,697 | 09/28/25 | 35,633,236 | 17,174,507",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Revolver - 11.91 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 0.3 | % | 3,907,541 | 09/28/26 | 3,267,678 | 1,441,883",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Encompass Digital Media, Inc. (4)(5)(8) | 10/01/18 | Term Loan - 11.91 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) | 3.4 | % | 41,618,479 | 09/28/26 | 35,633,236 | 15,357,219",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Two Encompass maturity violations match comparative-period rows dated 09/28/25; the current-period SOI rows mature 09/28/26.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 12,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The rule reports 2 maturity_not_past violations for report date 2025-09-30. The current SOI debt rows for Encompass Digital Media in table 6 show maturities of 09/28/26, which are not past the report date. The same two Encompass instruments in comparative table 12 show 09/28/25, which is before the report date and matches the violation count. This grounds the flag as a real extraction error caused by comparative-period maturity values leaking into current-period holdings, not a false alarm in the rule."
+}

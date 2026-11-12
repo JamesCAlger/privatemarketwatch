@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_97b68ee2e188",
+  "verdict": "ambiguous",
+  "mechanism": "source_evidence_unavailable",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 1.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "ambiguity_basis": "source_unavailable",
+  "rationale": "The raw-source evidence could not be retrieved in this worker environment. PowerShell process creation failed with CreateProcessWithLogonW error 1326, and subsequent attempts to invoke the mandated evidence CLI through the available command runner returned access or invocation failures. No usable raw source was returned, so X02 cannot be adjudicated or localized without guessing."
+}

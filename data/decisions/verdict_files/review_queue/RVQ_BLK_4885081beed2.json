@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_4885081beed2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 38194770000.0,
+  "anchor_value": 35983158000.0,
+  "confidence": 0.9,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The raw schedule total for December 31, 2025 is amortized cost of 35,983,158 thousand, matching the bundle's companyfacts cost anchor of 35,983,158,000. The extracted position-cost sum is 38,194,770,000, an overstatement of 2,211,612,000. Targeted review of the nearby total and commitment structure did not localize a single leaking row or subtotal, but the agreed filing and companyfacts anchors make the aggregate extraction overshoot a real data error."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_5df345104a26",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": "explicit EUR 556 par requiring USD normalization",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 36,
+      "quoted_text": "Optimizely North America, Inc. | First Lien Debt | E + 5.25% | 7.16% | 10/30/2031 | EUR 556 | cost 599 | fair value 622",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw March 31, 2026 investment schedule explicitly marks Optimizely's par amount as EUR 556, while cost and fair value are reported separately. The flagged principal_amount_usd is blank, so the non-USD debt principal lacks the required explicit USD-normalized value. This is a source-grounded extraction/normalization gap. The bundle aggregates many FX01 rows, but this citation independently proves that the aggregate flag contains a real defect."
+}

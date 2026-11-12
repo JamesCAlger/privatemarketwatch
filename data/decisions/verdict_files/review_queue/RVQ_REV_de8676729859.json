@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_de8676729859",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "cost_currency populated as CAD/EUR/GBP",
+  "anchor_value": "source foreign currency token belongs to Par Amount/Units; Cost and Fair Value are separate valuation columns",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 1,
+      "quoted_text": "Investments- non-controlled/ non-affiliated (1) | Footnotes | Reference Rate and Spread | Interest Rate (2) | Maturity Date | Par Amount/ Units | Cost (3) | Fair Value | % of Net Assets"
+    },
+    {
+      "table_index": 50,
+      "row_index": 33,
+      "quoted_text": "123Dentist Inc. | (4) (5) (9) | C + | 5.00 % | 10.50 % | 8/10/2029 | CAD | 27 | 19 | 19 | -"
+    },
+    {
+      "table_index": 55,
+      "row_index": 16,
+      "quoted_text": "Speed Midco 3 S.a r.l. | (4) (5) (7) (9) | SN + | 4.95 % | 9.90 % | 6/5/2031 | GBP | 2,498 | 3,140 | 3,121 | 0.26"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser carried the Par Amount/Units currency token into cost_currency for non-USD principal rows; cost and fair value are separate valuation columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 50,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency values CAD, EUR, and GBP. The SOI header separates Par Amount/Units from Cost and Fair Value, and representative flagged rows place the foreign currency code immediately before the par amount/units value, not as the Cost column currency. Therefore the stored cost_currency is a real extraction/mapping defect rather than a valid non-USD valuation or a bad rule."
+}

@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_BLK_a01215a8b00b",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1551076000,
+  "anchor_value": 334855000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 44,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 373,465 | $ | 334,855 | 201.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 22,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 495,797 | $ | 457,048 | 238.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 43,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 97,951",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted HTML fair value sum is 1551076000 while the current-year SOI total is 334855000, indicating the extractor counted multiple SOI-like sections rather than one current-year schedule.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 51,
+        "row_index": 44,
+        "quoted_text": "TOTAL INVESTMENTS | $ | 373,465 | $ | 334,855 | 201.1 | %"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "A separate comparative schedule total of 457048000 appears in the filing and should not be included in the 2025 aggregate.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 64,
+        "row_index": 22,
+        "quoted_text": "TOTAL INVESTMENTS | $ | 495,797 | $ | 457,048 | 238.3 | %"
+      }
+    },
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "A separate Part I SOI-like investment total of 97951000 is also present and should not be summed with the main current-year SOI total.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 31,
+        "row_index": 43,
+        "quoted_text": "TOTAL INVESTMENTS | $ | 97,951"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The filing's current-year schedule total for total investments at fair value is 334855000 (table 51 row 44), matching the companyfacts anchor of 334855000 in the bundle, while the html_extract aggregate is 1551076000. Raw source also contains additional SOI-like totals, including a 2024 comparative total of 457048000 and a separate Part I total of 97951000, supporting a duplicate/comparative inclusion mechanism rather than a bad companyfacts anchor."
+}

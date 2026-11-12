@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_cd21a72454ff",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_portfolio_company",
+  "observed_value": "AB Centers Acquisition Corporation (Action Behavior Centers) 1; AB Centers Acquisition Corporation (Action Behavior Centers) 2; AB Centers Acquisition Corporation (Action Behavior Centers) 3",
+  "anchor_value": "AB Centers Acquisition Corporation (Action Behavior Centers)",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "AB Centers Acquisition Corporation (Action Behavior Centers) | (4) (6) (15) | First Lien Debt | S + 5.25 % | 9.47 | % | 7/2/2031 | $ | 13,749 | $ | 13,631 | $ | 13,640 | 1.08 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 5,
+      "quoted_text": "AB Centers Acquisition Corporation (Action Behavior Centers) | (4) (6) (10) | First Lien Debt (Delayed Draw) | S + 5.25 % | 9.47 | % | 7/2/2031 | 2,512 | 897 | 882 | 0.07 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 6,
+      "quoted_text": "AB Centers Acquisition Corporation (Action Behavior Centers) | (4) (15) | First Lien Debt | S + 5.25 % | 9.41 | % | 7/2/2031 | 3,371 | 3,357 | 3,344 | 0.27 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted issuer names append instrument sequence suffixes 1, 2, and 3 even though the source portfolio company name has no such suffix.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 4,
+        "quoted_text": "AB Centers Acquisition Corporation (Action Behavior Centers)"
+      }
+    }
+  ],
+  "rationale": "The source schedule lists the portfolio company as AB Centers Acquisition Corporation (Action Behavior Centers) on each of the three investment rows. The bundle's extracted holdings rows instead show issuer_name values ending in 1, 2, and 3, which are not part of the source issuer name and appear to be sequence labels leaking from the investment identifier."
+}

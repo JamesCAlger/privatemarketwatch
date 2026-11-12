@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d9c8a19a88e9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -536000.0,
+  "anchor_value": -536000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 4,
+      "quoted_text": "PetVet Care Centers, LLC / First Lien - Undrawn row shows Reference, Spread, and Interest Rate as dashes, with fair value (96).",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 23,
+      "quoted_text": "Total Unfunded Debt Investments | cost (606) | fair value (536).",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 denominator is counting unfunded debt commitment rows whose source Interest Rate column is explicitly blank/dash; the residual fair value ties to Total Unfunded Debt Investments of (536).",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 48,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The raw source schedule has funded debt rows with populated Reference, Spread, and Interest Rate columns, while unfunded debt rows such as PetVet Care Centers, LLC - Undrawn show dashes in those rate columns. The C01 residual_fv is -536000, matching the source Total Unfunded Debt Investments fair value of (536) in thousands. The low rate coverage is therefore caused by including source-unrated unfunded commitments in the denominator, not by a missing extraction from funded debt rows."
+}

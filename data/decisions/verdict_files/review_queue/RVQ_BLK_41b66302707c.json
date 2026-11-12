@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_41b66302707c",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2221596000,
+  "anchor_value": 1815082000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 3,
+      "quoted_text": "Total investments | $ | 406,514 | $ | 141,011",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 57,
+      "row_index": 13,
+      "quoted_text": "Total Investments | $ | - | $ | 66,665 | $ | 1,741,235 | $ | 7,182 | $ | 1,815,082",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The SLP II summary total of $406.514 million leaked into holdings, exactly explaining the excess over the filing total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 49,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "The filing's fair-value table reports Total Investments of $1.815082 billion at table 57 row 13. Extracted holdings total $2.221596 billion, an excess of $406.514 million. That residual exactly equals the separate SLP II summary line Total investments at table 49 row 3, so the aggregate is overstated by a leaked summary subtotal rather than an incorrect filing anchor."
+}

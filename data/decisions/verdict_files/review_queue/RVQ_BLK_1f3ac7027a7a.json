@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_1f3ac7027a7a",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 7.5,
+  "anchor_value": 7.5,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 8,
+      "quoted_text": "User Zoom Technologies, Inc (i)(l) | Term Loan | SOFR + 7.50 % | 11.63 % | 4/5/2029 | 10,000,000 | 9,768,773 | 9,930,000",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The 7.50 basis spread is source-supported as SOFR + 7.50%, so the row should not be treated as a fixed-rate instrument.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 48,
+        "row_index": 8,
+        "quoted_text": "User Zoom Technologies, Inc (i)(l) | Term Loan | SOFR + 7.50 % | 11.63 % | 4/5/2029 | 10,000,000 | 9,768,773 | 9,930,000"
+      }
+    }
+  ],
+  "rationale": "X04 is a within-row rate classification conflict. The raw source row presents the instrument as a Term Loan with Reference Rate and Spread of SOFR + 7.50% and an interest rate of 11.63%, so the stored basis_spread value 7.5 is not the wrong field. The data error is the row being treated as fixed-rate for validation despite floating-rate source terms. Other 7.50% hits in the schedule also appear as SOFR + 7.50%, which lowers row-specific certainty but supports the same localization."
+}

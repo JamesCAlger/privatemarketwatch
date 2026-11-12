@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_3acb9e50c192",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7.357966286025013,
+  "anchor_value": 8.8,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 111,
+      "row_index": 1,
+      "quoted_text": "Three Months Ended March 31,",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 111,
+      "row_index": 17,
+      "quoted_text": "Net investment income (loss) | 2.20 | % | 2.33 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 111,
+      "row_index": 8,
+      "quoted_text": "Dividends declared (2) | ( 0.49 ) | ( 0.49 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "F16 compares an annualized distribution rate with a three-month net investment income ratio; annualizing 2.20% gives 8.80%, above the observed 7.358% distribution rate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 111,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The financial-highlights table labels the period as the three months ended March 31, 2026 and reports net investment income of 2.20% for that quarter. The F16 observed distribution rate of 7.357966% is annualized, so comparing it directly with 2.20% mixes period bases. On the comparable annual basis, the source income ratio is 8.80% (2.20% x 4), and 7.357966% is below both 8.80% and the rule's 13.20% threshold. The underlying values are source-supported; the heuristic fire is a false alarm caused by an invalid period-basis anchor comparison."
+}

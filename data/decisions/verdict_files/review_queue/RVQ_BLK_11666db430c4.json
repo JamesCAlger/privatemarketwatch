@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_11666db430c4",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 64,
+  "anchor_value": 64,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 12,
+      "quoted_text": "Total investments | $ | 186,110 | $ | 183,056 | $ | 229,254 | $ | 225,617"
+    },
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60%"
+    },
+    {
+      "table_index": 197,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 229,254 | $ | 225,617 | 112.25%"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source-side count appears to include the comparative 2024 SOI block; the reviewed 2025 SOI pages account for the 64 output positions.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 197,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "E07 is an aggregate count flag with no row location, so this is Class 3. The filing summary distinguishes December 31, 2025 total investments of fair value 183,056 from December 31, 2024 fair value 225,617. The current-period SOI continuation totals at table 179 row 41 tie to 183,056, while table 197 row 28 ties to 225,617 and is therefore the comparative-period schedule. The output count of 64 matches the current-period position set; the larger source count of 111 is explained by including comparative-period rows, so the data output is not shown wrong."
+}

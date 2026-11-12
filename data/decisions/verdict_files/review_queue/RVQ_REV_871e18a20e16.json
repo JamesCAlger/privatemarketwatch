@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_871e18a20e16",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.34,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag covering two cost cells (row keys 333397 and 333492). The cached raw 10-Q source was read successfully, but the bundle supplies neither issuer nor source coordinates for those row keys. Targeted raw-source searches for the reported dollar costs (1,000 and 11,667,000), including filing-scale representations, did not identify either flagged position. The source therefore cannot decide whether the extreme fair-value-to-cost ratios are genuine appreciation or extraction errors without an unsupported schedule-wide scan. Escalate for row-key-to-source localization."
+}

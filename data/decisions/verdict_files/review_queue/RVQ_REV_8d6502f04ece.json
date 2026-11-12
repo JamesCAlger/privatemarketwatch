@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_8d6502f04ece",
+    "verdict":  "false_alarm",
+    "mechanism":  "unit_label_alias",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  772888903,
+    "anchor_value":  772888903,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  5,
+                                  "row_index":  4,
+                                  "quoted_text":  "Sunland Asphalt \u0026 Construction, LLC | Term Loan B - 13.19 % inc PIK ... | Fair Value | $ | 18,531,835",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  7,
+                                  "row_index":  14,
+                                  "quoted_text":  "Total Investments ( 203.1 %) | $ | 770,456,020 | $ | 772,888,903",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX02 flags fair_value_currency value U_USD as not USD. The raw SOI presents the investment Fair Value amounts in dollar columns, including a flagged debt row with Fair Value $18,531,835 and the schedule total Fair Value $772,888,903. This supports U_USD as a USD unit-label/normalization alias rather than a non-USD source currency, so the row-validation fire is a false alarm."
+}

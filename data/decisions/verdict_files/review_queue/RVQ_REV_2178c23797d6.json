@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_2178c23797d6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 19.0,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 43,
+      "quoted_text": "Homeward, Inc. | Growth Capital Loan ( 19.00 % interest rate, 9.75 % EOT payment) | 12/30/2021 | 3,053 | 3,358 | 3,319 | 6/30/2026"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 19.00 value is a fixed stated interest rate for Homeward, Inc., not a basis spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 43
+      }
+    }
+  ],
+  "rationale": "C115 flagged basis_spread=19.0. The raw SOI row for Homeward, Inc. states 'Growth Capital Loan ( 19.00 % interest rate, 9.75 % EOT payment)' and contains no Prime/SOFR/reference-rate spread language. The pipeline therefore placed a fixed coupon into basis_spread rather than leaving basis_spread empty and treating 19.00 as the stated interest rate."
+}

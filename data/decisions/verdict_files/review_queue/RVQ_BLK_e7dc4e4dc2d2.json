@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_e7dc4e4dc2d2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 8508000,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Total investment income | 57,389 | 38,072",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 22,
+      "quoted_text": "Total expenses | 35,821 | 25,113",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 23,
+      "quoted_text": "Base management fee waived (Note 4) | ( 5,157 ) | ( 3,168 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 24,
+      "quoted_text": "Incentive fee waived (Note 4) | ( 3,351 ) | ( 2,055 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 26,
+      "quoted_text": "Net expenses | 27,313 | 19,890",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 27,
+      "quoted_text": "Net investment income | 30,076 | 18,182",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The income identity should use net expenses after fee waivers: 57,389 - 27,313 = 30,076, while using gross expenses creates the 8,508 residual.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 5,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Raw source table 5 is internally consistent when fee waivers are applied. For the 2025 column, total expenses of 35,821 less base management fee waived of 5,157 and incentive fee waived of 3,351 equals net expenses of 27,313. Total investment income of 57,389 minus net expenses of 27,313 equals net investment income of 30,076. The flagged residual of 8,508 equals the two waiver rows, so the flag is a false alarm from applying the identity to gross expenses rather than net expenses."
+}

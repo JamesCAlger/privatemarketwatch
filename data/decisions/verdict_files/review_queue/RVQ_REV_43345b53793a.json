@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_43345b53793a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.625,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C01 is an aggregate rate-coverage flag: the bundle reports 15 of 24 debt rows with interest rates and 9 residual rows. The raw source could not be adjudicated because the evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001752724-22-052357, so the source is unavailable rather than merely unclear."
+}

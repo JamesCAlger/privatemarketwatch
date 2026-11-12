@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_7d106753b2b8",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_source_cells",
+  "observed_value": [-1000.0, -2000.0, -29000.0, -11000.0, -11000.0],
+  "anchor_value": [-1000.0, -2000.0, -29000.0, -11000.0, -11000.0],
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "VRC Companies, LLC: Cost (1) thousand",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 11,
+      "quoted_text": "CDM Fitness Holdings, LLC: Cost (2) thousand",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "HAI Hospitality, Inc.: Cost (29) thousand",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "HAI Hospitality, Inc.: Cost (11) thousand",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 26,
+      "quoted_text": "SugarCRM Inc.: Cost (11) thousand",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell confirmation. The March 31, 2026 investment schedule prints each flagged Cost as a parenthesized negative: VRC (1), CDM Fitness (2), HAI Hospitality (29) and (11), and SugarCRM (11), all in thousands. These exactly match the extracted values -1000, -2000, -29000, -11000, and -11000. The data are source-faithful; C107's generic negative-cost monitoring condition is the source of the flag."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_b5cf9178539a",
+  "verdict": "false_alarm",
+  "mechanism": "currency_unit_alias",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Investments (1)(16)(22) | Footnotes | Reference Rate and Spread | Interest Rate (2) (14) | Maturity Date | Par Amount/ Units (1) | Amortized Cost (3) | Fair Value | % of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "Central Parent, Inc. | SOFR + 3.25 % | 7.55 % | 7/6/2029 | 9,925 | $ | 9,944 | $ | 8,313 | 1.7 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 19,
+      "quoted_text": "Total Investments, Cash and Cash Equivalents and Restricted Cash and Cash Equivalents | $ | 767,638 | $ | 770,571 | 154.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency='U_USD' as not USD, but the raw schedule presents Amortized Cost and Fair Value as dollar columns. Representative position rows and the schedule total carry dollar markers for the same cost/fair-value columns, so U_USD is a USD unit alias/identifier rather than evidence of a non-USD BDC valuation."
+}

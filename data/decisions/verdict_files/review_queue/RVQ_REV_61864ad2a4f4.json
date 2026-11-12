@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_61864ad2a4f4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 38,
+      "quoted_text": "Pluralsight, Inc. | Professional Services | S + 7.50 % PIK | 08/22/29 | 17,548 | 15,642 | 4,957 | (7) (8) (11) (12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 34,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 11/03/23 | 04/01/28 | $ | 43,634 | $ | - | $ | - | (7) (8) (12) (16)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "This is a provenance-coverage warning, not a demonstrated data defect. The ledger reports 21 text_pathway fields with no declared or instance comparator and zero affected fair value. Raw schedule text directly supports sampled flagged publications: table 17 row 38 discloses 7.50% PIK, matching the flagged published pik_rate of 7.5, and table 21 row 34 discloses S + 15.00% PIK, supporting the flagged 15.0 text-derived rate. The filing schedule total of $3,228.940 million was used only as the Class 3 portfolio anchor; the flag itself reports no fair value at risk, so the total does not identify a row-level monetary defect. The check fired because these fields require text extraction and lack a structured XBRL comparison, which is an unsuitable anchor for declaring the published values erroneous."
+}

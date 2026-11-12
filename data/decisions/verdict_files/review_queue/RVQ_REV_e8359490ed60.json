@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_e8359490ed60",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 10,
+      "quoted_text": "ASP MCS Acquisition Corp. (6)(12) | Common Stock | 13,293 | 1,183 | 0.0 | 47"
+    },
+    {
+      "table_index": 51,
+      "row_index": 20,
+      "quoted_text": "Seko Global Logistics Network, LLC | Common Stock | 625 | 2,372 | 0.0 | 55"
+    },
+    {
+      "table_index": 51,
+      "row_index": 21,
+      "quoted_text": "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3"
+    }
+  ],
+  "rationale": "Class 2 row check. The December 31, 2025 schedule of investments source rows show the same cost and fair value amounts as the extracted holdings for all three X08 rows, in thousands: ASP MCS 1,183 cost and 47 fair value, Seko 2,372 cost and 55 fair value, and TecoStar 500 cost and 3 fair value. The low fair-value-to-cost ratios are source-supported distressed valuations, not extraction or normalization errors."
+}

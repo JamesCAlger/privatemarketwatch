@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0666cb553f41",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -212000,
+  "anchor_value": -212000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "AmSpec Parent LLC | First Lien Term Loan | cost (127) | fair value (116)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 25,
+      "quoted_text": "AmSpec Parent LLC | First Lien Revolver | cost (225) | fair value (212)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flags negative fair_value cells for review, but the raw schedule of investments itself reports negative fair values for flagged AmSpec Parent LLC positions. The extracted observed value of -212000 corresponds to the source fair value shown as (212) in thousands, so the flagged negative value is source-faithful rather than a data error."
+}

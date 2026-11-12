@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_72b22dec4aec",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 358516000.0,
+  "anchor_value": 355200000.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 7,
+      "quoted_text": "Blank preferred-stock subtotal row repeats fair value 291",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 11,
+      "quoted_text": "Blank common-stock subtotal row repeats fair value 3,250",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 15,
+      "quoted_text": "Blank L.P. interest subtotal row repeats fair value 152",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 39,
+      "quoted_text": "Total Unfunded Portfolio Company Commitments | $ | 74,135 | $ | ( 377 )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Equity subtotal rows repeat 291, 3,250, and 152 of fair value; those 3,693 thousand are subtotals, not additional positions.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 16,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Unfunded Portfolio Company Commitments have total fair value of (377) thousand and should not be included in funded investment fair-value conservation.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 18,
+        "row_index": 39
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing schedule total is 355,200 thousand: table 16 row 17 reports total non-controlled-non-affiliated Portfolio Company investments of 355,200, and summary tables also report total fair value of 355,200. The extracted position sum is 358,516 thousand, a 3,316 thousand overshoot against the companyfacts_fv anchor. The row-disposition structure localizes the net residual: table 16 contains blank subtotal rows for preferred stock, common stock, and L.P. interest that repeat 291 + 3,250 + 152 = 3,693 thousand of fair value, while the commitment table total shows (377) thousand of unfunded commitments. Including both explains 3,693 - 377 = 3,316 thousand, matching the overshoot."
+}

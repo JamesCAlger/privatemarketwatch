@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_ce39738ae498",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -15000.0,
+  "anchor_value": -15000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 10,
+      "quoted_text": "PPW Aero Buyer, Inc. | First Lien Delayed Draw Term Loan | S + 5.00% | 9/30/2031 | - | (15) | - | 23",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 27,
+      "quoted_text": "Zeppelin Holdco II, LP | First Lien Delayed Draw Term Loan | S + 4.75% | 8/2/2032 | - | (3) | (4) | 23",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The raw investment schedule explicitly presents negative costs in parentheses. PPW Aero Buyer delayed draw shows cost (15) thousand, matching extracted cost -15000, and Zeppelin Holdco delayed draw shows cost (3) thousand, matching extracted cost -3000. Negative cost is therefore a filer-reported value for these commitment-related instruments; C107's negative-cost warning does not establish a data defect."
+}

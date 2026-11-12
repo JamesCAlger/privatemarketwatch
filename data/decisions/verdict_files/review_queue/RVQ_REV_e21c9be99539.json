@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_e21c9be99539",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "12.75; 11.50; 11.50; 6.00; 10.50; 10.50",
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 14,
+      "quoted_text": "Azalea Parent Corp - Series A-1 Preferred Shares | (4) | 12.75 % | 91,500 | 89,213 | 91,509 | 0.27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 22,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 29,194,330 | 28,735 | 39,754 | 0.12",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 79,
+      "row_index": 22,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 29,194,330 | 28,735 | 37,228 | 0.13",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 17,
+      "quoted_text": "Healthcomp Holding Company, LLC - Preferred Interests | (4) | 6.00 % | 18,035 | 1,804 | 1,804 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 9,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 45,090 | 43,963 | 55,458 | 0.16",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 25,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 45,090 | 43,963 | 53,094 | 0.19",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X01 flagged PRIVATE_EQUITY rows because interest_rate was populated. The raw SOI shows the flagged rates belong to preferred shares or preferred interests, not misplaced debt instruments: Azalea Series A-1 Preferred Shares at 12.75%, Cambium Senior Preferred Interests at 11.50%, Healthcomp Preferred Interests at 6.00%, and Lobos Series A Preferred Shares at 10.50%. These rows support equity classification while also carrying a stated preferred return in the filing's rate column, so the row-level check is overbroad for preferred equity rather than exposing a data error."
+}

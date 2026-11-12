@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_48a2d88e62a8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5714285714285714,
+  "anchor_value": 1.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 27,
+      "quoted_text": "Shares",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 30,
+      "quoted_text": "PlantSwitch, Inc. (Series A-2) | Shares 1,128,553",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 33,
+      "quoted_text": "American Banknote Corp. | Shares 750,000",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 36,
+      "quoted_text": "IQHQ, Inc. | Shares 87,350",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 37,
+      "quoted_text": "Nexpoint Real Estate Finance, Inc. | Shares 65,670",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 42,
+      "quoted_text": "NexPoint Residential Trust, Inc. | Shares 23,409",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 45,
+      "quoted_text": "MidWave Wireless, Inc. | Shares 14,035",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "All six common-stock positions have source share counts, but they are absent from the extracted rows, reducing coverage from 14 of 14 to 8 of 14.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "The filing schedule labels cell 15 as Shares at table 17 row 27. Each of the six common-stock positions at rows 30, 33, 36, 37, 42, and 45 contains a numeric share count in that column; the two LLC-interest and six preferred-stock positions likewise contain share counts. The raw-source coverage is therefore 14 of 14 (100%), while C04 observed only 8 of 14 (57.1%). The missing six align exactly with the common-stock block, proving a localized shares-column extraction gap."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_9c7a87569f1c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 20.0,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 review. The raw filing source was readable through the evidence CLI, but the review artifact identifies only row_key 131974 and does not provide the issuer or a source coordinate for that row. Targeted source searches for the reported 20 percent value did not locate a matching row. The filing contains equity instruments that legitimately carry PIK rates, so the rule fire alone cannot decide whether this is a classification mismatch or an interest-rate extraction defect. No source row can be safely cited or matched; human localization is required."
+}

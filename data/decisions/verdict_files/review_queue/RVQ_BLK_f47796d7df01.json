@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_f47796d7df01",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 73,
+  "anchor_value": 135,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Under the Chemicals heading, the source position is Puris LLC Term Loan (4)(5), while the extracted holding stores issuer_name as Chemicals.",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer field is populated from the industry heading, collapsing distinct portfolio companies and reducing source issuer coverage from 135 to 73.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The filing schedule distinguishes the industry heading Chemicals at table 11 row 4 from the actual investment issuer Puris LLC at row 5. The corresponding extracted holding instead has issuer_name Chemicals even though its investment identifier contains Puris LLC Term Loan. The same pattern is visible for other sampled rows, explaining the aggregate collapse from 135 source units to 73 output units. This is a grounded issuer-column extraction defect, not a bad source anchor."
+}

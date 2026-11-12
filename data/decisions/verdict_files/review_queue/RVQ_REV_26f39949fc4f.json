@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_26f39949fc4f",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 73.3,
+  "anchor_value": 100.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "Secured Debt",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 4,
+      "quoted_text": "Aerospace and Defense",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "12,804 | 12,224 | 0.83",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Schedule heading and subtotal rows are non-instrument rows with blank rate fields, while adjacent debt instrument rows carry populated interest rates; leaked heading/subtotal rows depress dl_rate_fill.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 13,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "The source schedule has explicit Interest Rate columns. Instrument rows such as table 13 rows 5-7 contain asset type, reference spread, interest rate, maturity, par, cost, and fair value. By contrast, table 13 rows 3-4 are section/industry headings and row 8 is a subtotal line with only aggregate cost/fair-value values and no issuer, asset type, spread, maturity, or interest rate. The bundle's holdings slice includes analogous heading-like direct-lending records with blank interest_rate, so the rate-fill warning reflects real row-disposition leakage rather than legitimate debt instruments without disclosed rates."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_5372a3639535",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Lifescan Global Corporation row carries footnotes (6)(9), but allowed CLI source did not expose a definition of footnote (9) or direct non-accrual wording.",
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 3,
+      "quoted_text": "Lifescan Global Corporation (6)(9) | Healthcare Equipment and Supplies | 10.92 % ( S +CSA + 6.50 %) | 12/31/2026 | 3,626,311 | 3,622,701 | 2,400,618 | 0.5 | %"
+    }
+  ],
+  "rationale": "The flagged position is localized to table 12 row 3 and the source row shows Lifescan Global Corporation with footnote (9). Searches for non-accrual, non accrual, accrual, past due, impaired, and payment default returned no decisive raw-source text, and the schedule/totals views did not expose a footnote definition tying (9) to non-accrual status. Because the raw source was checked but does not decide whether the nonaccrual_flag is a true data error or a false alarm, the adjudication remains ambiguous."
+}

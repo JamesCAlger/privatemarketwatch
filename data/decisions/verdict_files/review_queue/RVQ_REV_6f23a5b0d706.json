@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_6f23a5b0d706",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2021-12-31 comparative schedule row retained for report_date 2022-12-31",
+  "anchor_value": "2022-12-31 current-period holdings only",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 114,
+      "row_index": 1,
+      "quoted_text": "Blackstone Private Credit Fund Consolidated Schedule of Investments December 31, 2021 (in thousands)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 115,
+      "row_index": 10,
+      "quoted_text": "NC Ocala Co-Invest Beta, L.P. - LP Interest (4) | 25,687,196 | 25,687 | 25,687 | 0.20",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged NC Ocala row is sourced from the December 31, 2021 comparative schedule but was retained under the 2022-12-31 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 115,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "PP03 is a within-row/source-period purity issue. The raw filing has a current December 31, 2022 NC Ocala row in table 66 row 12, but the flagged row is grounded in the separate December 31, 2021 schedule: table 114 row 1 labels the block as December 31, 2021 and table 115 row 10 contains the same NC Ocala position. Retaining that comparative-period row as a 2022 holding is a real comparative leak, not a false alarm."
+}

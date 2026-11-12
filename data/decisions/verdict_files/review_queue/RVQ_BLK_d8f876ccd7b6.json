@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_d8f876ccd7b6",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 215377000,
+  "anchor_value": 207019000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 29,
+      "quoted_text": "Total Members' Capital | 207,019"
+    },
+    {
+      "table_index": 29,
+      "row_index": 27,
+      "quoted_text": "Common Unitholders' capital | 215,377"
+    },
+    {
+      "table_index": 22,
+      "row_index": 16,
+      "quoted_text": "D&D Buyer, LLC | 10/04/23 | Revolver - 10.27 % ( SOFR + 6.50 %, 2.00 % Floor) | 0.3 | % | 528,672 | 10/04/28 | 528,672 | 528,672"
+    },
+    {
+      "table_index": 21,
+      "row_index": 6,
+      "quoted_text": "Signature Brands, LLC | 02/29/24 | Delayed Draw Term Loan A - 10.58 % inc PIK ( SOFR + 6.50 %, 1.75 % Floor, all PIK) | 0.3 | % | 538,353 | 05/04/28 | 533,001 | 538,353"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The pct-of-net-assets residuals are produced by using Common Unitholders' capital of 215,377,000 rather than the filing's net asset anchor, while representative source rows reconcile to their disclosed one-decimal percentages under rounding.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 29,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "The raw filing shows Total Members' Capital of 207,019 thousand and a separate Common Unitholders' capital subtotal of 215,377 thousand. The flagged residual for D&D Buyer equals 528,672 - (0.3% * 215,377,000), showing the checker used the subtotal rather than the net-asset anchor. Against 207,019,000, the cited D&D Buyer and Signature Brands fair values are about 0.255% and 0.260% of net assets, which both round to the disclosed 0.3%. The source rows therefore support the disclosed values; the flag is caused by the check anchor/rounding basis, not a position data error."
+}

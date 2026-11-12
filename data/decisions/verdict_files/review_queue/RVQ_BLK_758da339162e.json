@@ -1,0 +1,48 @@
+{
+  "review_id": "RVQ_BLK_758da339162e",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1040552500,
+  "anchor_value": 930595000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 6,
+      "quoted_text": "Total Cash Equivalents | $ | 109,175 | $ | 109,175 | 13.39 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Denali Equity Holdings LLC (1)(5) | Class A units | 09/2024 | 3,749 | 340,995 | 354,076 | (2)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted holdings sum includes cash equivalents of 109,175,000 even though the filing's Total Investments fair value is 930,595,000 and cash equivalents are reported in a separate table.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 12,
+        "row_index": 6,
+        "quoted_text": "Total Cash Equivalents | $ | 109,175 | $ | 109,175 | 13.39 | %"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted Denali Equity Holdings LLC parent row with fair value 782,500 has no matching source investment amount; the source Denali row fair value is 354,076,000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 4,
+        "quoted_text": "Denali Equity Holdings LLC (1)(5) | Class A units | 09/2024 | 3,749 | 340,995 | 354,076 | (2)"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The raw source Total Investments row reports fair value 930,595,000, and the totals view also shows the same 930,595,000 filing/companyfacts anchor. The extracted position sum is 1,040,552,500, an overshoot of 109,957,500. Source structure localizes 109,175,000 of the overshoot to cash equivalents reported separately from investments, and the remaining 782,500 corresponds to an extracted Denali parent row that is not supported by the source Denali fair value row. Therefore the conservation flag is a real extraction error, not a bad anchor."
+}

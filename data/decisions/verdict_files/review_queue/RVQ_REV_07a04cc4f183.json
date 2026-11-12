@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_07a04cc4f183",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 11,
+      "quoted_text": "CDM Fitness Holdings, LLC | Consumer Staples Distribution & Retail | S + 6.25 % | 06/17/26 | 1,083 | ( 2 | ) | ( 5 | ) | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "HAI Hospitality, Inc. | Hotels, Restaurants & Leisure | S + 5.50 % | 12/06/28 | 4,362 | ( 29 | ) | ( 44 | ) | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "HAI Hospitality, Inc. | Hotels, Restaurants & Leisure | S + 5.50 % | 12/06/28 | 1,636 | ( 11 | ) | ( 16 | ) | (7) (8) (9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The CDM adjustment row omits interest_rate and failed to capture the disclosed 6.25% basis spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The two HAI adjustment rows omit interest_rate and failed to capture the disclosed 5.50% basis spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 1 source confirmation shows blank interest-rate cells on the flagged adjustment positions, but each row contains an explicit reference-rate spread in the adjacent source column. The structured rows retained neither interest_rate nor basis_spread, so the available 6.25% and 5.50% spreads were not extracted. This is a grounded extraction error, not a false alarm."
+}

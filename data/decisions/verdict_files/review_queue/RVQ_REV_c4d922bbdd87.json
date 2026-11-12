@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_c4d922bbdd87",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 67,
+      "row_index": 37,
+      "quoted_text": "FleetPride, Inc. | (4) (5) | [no Reference Rate and Spread] | [no Interest Rate] | Par 2 | Cost 321 | Fair Value 321; under Preferred Equity",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 2,
+      "quoted_text": "Kymora Ltd. | (5) (9) | [no Reference Rate and Spread] | [no Interest Rate] | EUR | Par 16 | Cost 9,321 | Fair Value 10,643; under Preferred Equity",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 18,
+      "quoted_text": "Oakswift Holdings Ltd. | (5) (9) | [no Reference Rate and Spread] | [no Interest Rate] | Par 4,854 | Cost 4,854 | Fair Value 4,854; under Common Stocks",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 19,
+      "quoted_text": "Oakswift Holdings Ltd. | (5) (9) | [no Reference Rate and Spread] | [no Interest Rate] | Par 2,582 | Cost/Fair Value dash; under Common Stocks",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 23,
+      "quoted_text": "CSAT Solutions Holding LLC | (5) (8) | [no Reference Rate and Spread] | [no Interest Rate] | Par 337 | Cost 238 | Fair Value 370; under Common Stocks",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 28,
+      "quoted_text": "Iconic Purchaser Corporation | (5) (7) | [no Reference Rate and Spread] | [no Interest Rate] | Par 2 | Cost 555 | Fair Value 554; under Common Stocks",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 31,
+      "quoted_text": "Cheval Blanc Holdings Company | (5) (9) | [no Reference Rate and Spread] | [no Interest Rate] | Par 1,671 | Cost 1,671 | Fair Value 1,916; under Common Stocks",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Seven X02 no-rate rows are sourced from Preferred Equity/Common Stocks rows with no debt coupon terms, so the extraction should not classify them as private credit requiring interest_rate or basis_spread.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 68,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level adjudication. The source schedule has explicit Reference Rate and Spread and Interest Rate columns, and the seven no-rate rows matching the X02 count are not ordinary debt coupon rows: FleetPride row 37 is within the Preferred Equity section, while Kymora, Oakswift, CSAT, Iconic, and Cheval Blanc are in Preferred Equity or Common Stocks with blank rate/spread cells. The flag is therefore grounded as a real dataset error caused by classification/lookthrough: equity positions were treated as PRIVATE_CREDIT rows that require a rate."
+}

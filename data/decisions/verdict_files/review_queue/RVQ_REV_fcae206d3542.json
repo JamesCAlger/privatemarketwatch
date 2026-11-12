@@ -1,0 +1,25 @@
+{
+    "review_id":  "RVQ_REV_fcae206d3542",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  13,
+    "anchor_value":  null,
+    "confidence":  0.45,
+    "escalate":  true,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  24,
+                                  "row_index":  4,
+                                  "quoted_text":  "Center for Autism and Related Disorders, LLC (15) | Autism treatment and services provider specializing in applied behavior analysis therapy | First lien senior secured revolving loan | 11/2018 | 11/2023 | 6.8 | -- | -- | (2)(10)(14)"
+                              },
+                              {
+                                  "table_index":  46,
+                                  "row_index":  27,
+                                  "quoted_text":  "API Commercial Inc., API Military Inc., and API Space Intermediate, Inc. | Provider of military aircraft aftermarket parts and distribution, repair and logistics services | First lien senior secured loan | 05/2022 | 08/2025 | 6.9 | 2.7 | 4.0 | (2)(10)"
+                              }
+                          ],
+    "rationale":  "The allowed source CLI located the SOI rows that the flag appears to use, and those rows carry footnote marker (10). However, literal searches for non-accrual/nonaccrual/non accrual and targeted searches for cash-basis, no longer accruing, past due, non-income-producing, and related wording did not return a footnote definition or other raw-source text proving that marker (10) denotes non-accrual status. Because the source window does not decide whether the footnote-derived nonaccrual flag is correct, this is ambiguous rather than a confirmed error or false alarm."
+}

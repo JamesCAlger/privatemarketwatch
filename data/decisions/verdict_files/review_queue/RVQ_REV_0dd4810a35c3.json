@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_0dd4810a35c3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": -101000.0,
+  "anchor_value": -101000.0,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 27,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2028 | 13,795 | ( 101 ) | -"
+    },
+    {
+      "table_index": 66,
+      "row_index": 47,
+      "quoted_text": "AB Centers Acquisition Corporation (4)(6)(9) | 7/2/2031 | 24,356 | ( 250 ) | ( 133 )"
+    },
+    {
+      "table_index": 62,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC (4)(6)(9) | 8/13/2032 | 24,138 | ( 235 ) | 241"
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but representative raw SOI rows show the same negative amortized cost amounts in parentheses. The extracted negative costs therefore match source presentation rather than showing a data error; the warning reflects rule scope for legitimate negative amortized-cost positions."
+}

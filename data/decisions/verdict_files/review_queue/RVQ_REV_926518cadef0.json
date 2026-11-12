@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_926518cadef0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 18.25, 18.75, and 18.75",
+  "anchor_value": "source rows state PRIME + 18.25% and SOFR + 18.75%",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 1.8 | % | 12,391,743 | 04/30/28 | 12,391,743 | 8,711,395"
+    },
+    {
+      "table_index": 5,
+      "row_index": 16,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) | 4.0 | % | 27,538,497 | 04/30/28 | 27,538,497 | 19,359,563"
+    },
+    {
+      "table_index": 5,
+      "row_index": 17,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) | 0.6 | % | 2,960,091 | 04/30/28 | 2,960,091 | 3,048,894"
+    }
+  ],
+  "rationale": "C115 flagged three basis_spread values as outside the expected percentage range, but the raw schedule states the same whole-number percentage spreads for the corresponding WDE TorcSill instruments: SOFR + 18.75% for the revolver and term loan, and PRIME + 18.25% for the protective advance term loan. The stored values match the source; the validation range is too narrow for these disclosed distressed/all-PIK spread terms."
+}

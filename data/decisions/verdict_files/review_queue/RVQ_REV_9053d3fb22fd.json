@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_9053d3fb22fd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank in FX01 source artifact rows, including row_key 323058",
+  "anchor_value": "raw source table 27 row 23 shows 123Dentist, Inc. par amount CAD 257,763 requiring USD principal normalization",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(10) | CA + | 5.00 % | 7.28 % | 8/10/2022 | 8/10/2029 | CAD | 257,763 | 198,878 | 185,294 | 0.41",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 24,
+      "quoted_text": "123Dentist, Inc. | (4)(5)(6)(10) | CA + | 5.00 % | 7.28 % | 8/9/2024 | 8/10/2029 | CAD | 34,595 | 25,074 | 24,869 | 0.06",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 is valid because non-USD source par is present while principal_amount_usd is blank, so USD principal normalization is missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 23,
+        "quoted_text": "123Dentist, Inc. row shows CAD 257,763 in Par Amount/Units."
+      }
+    }
+  ],
+  "rationale": "The row-validation artifact reports blank principal_amount_usd for FX01 row_key 323058. The raw investment schedule header includes Par Amount/Units, Cost, and Fair Value, and table 27 row 23 shows the matching 123Dentist debt position with CAD 257,763 par. Because the platform requires explicit USD principal conversion for non-USD debt par, the blank USD principal field is a real extraction/normalization defect, not a false alarm."
+}

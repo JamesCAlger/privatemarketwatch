@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_3ccf012b7a81",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.85,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 15,
+      "quoted_text": "Americo Chemical Products, LLC | Revolver | SOFR + 5.50 %, 10.8 % Cash | 04/23 | 04/29 | principal amount dash | cost (10) | fair value dash | % of net assets dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 35,
+      "quoted_text": "Aptus 1829. GmbH | Common Stock (32 shares) | N/A | 09/21 | N/A | cost 8 | fair value dash | % of net assets dash",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged zero fair_value rows. Raw source schedule rows show dash fair-value cells for representative flagged-style positions, which normalize to zero; the filing also reports a June 30, 2024 total investments fair value of 1,324,527 in the schedule totals, so the zero cells are disclosed schedule values rather than extraction defects. The warning is therefore not a real data error."
+}

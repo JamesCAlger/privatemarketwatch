@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_BLK_c48761127b70",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "mixed identifier/structured maturity mismatches across 9 flagged units",
+  "anchor_value": "issuer-, spread-, and tranche-matched maturity in the filed investment schedule",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 9,
+      "quoted_text": "Apple Bidco Holdings, Inc. (dba Raptor Technologies) | Software | 8.20 % | S + 4.50 % | 01/22/33 | 64,525 | 64,209 | 63,719 | (7) (8)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 37,
+      "quoted_text": "AQ Sunshine, Inc. (dba Relation Insurance) | Insurance | S + 4.50 % | 07/24/33 | 52,130 | - | - | (7) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 23,
+      "quoted_text": "Atwell, LLC | Professional Services | S + 4.75 % | 04/25/33 | 47,344 | - | - | (7) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 40,
+      "quoted_text": "Edition Holdings, Inc. (dba Enverus) | Software | S + 4.50 % | 12/18/32 | 50,000 | - | - | (7) (10)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Apple Bidco and Atwell identifier maturities truncate 2033 to 2023 even though the schedule prints 01/22/33 and 04/25/33.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AQ Sunshine S + 4.50% rows mature 07/24/33, so the identifier value 07/24/31 was borrowed from a different tranche while the structured date is correct.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 37
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Enverus S + 4.50% row with par 50,000 matures 12/18/32, so its identifier is correct and the structured 12/20/32 date was borrowed from adjacent tranches.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the complete matched source rows resolves which side is wrong. Apple Bidco and Atwell source rows show 2033, disproving identifier dates parsed as 2023. AQ Sunshine has multiple maturities, but the flagged S + 4.50% rows specifically show 07/24/33, disproving the identifier's 07/24/31. Enverus also has multiple tranches: the flagged 50,000-par S + 4.50% row shows 12/18/32, so there the identifier is correct and the structured 12/20/32 value is wrong. The flag therefore identifies real row-level extraction/association defects, with defect direction varying by row."
+}

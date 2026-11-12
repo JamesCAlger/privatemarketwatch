@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_3a196729a34e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.0,
+  "anchor_value": 0.7,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 23,
+      "quoted_text": "TCW ND Parent Holdings LLC. (2)(5)(6) | Class A Units | 0.0 % | Shares 4,399 | Amortized Cost 43,990 | Fair Value -"
+    },
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "Total Equity Investments | 23.1 % | Shares 221,944,772 | Amortized Cost 146,615,217 | Fair Value 100,629,224"
+    }
+  ],
+  "rationale": "C04 is a check-level equity-shares flag for this CIK/quarter. The current source artifact reports C04 as pass with metric_value 1.0 and message '100.0% of 16 equity rows have shares', above the 0.7 threshold. Raw source table 26 starts the EQUITY section and shows populated Shares values for equity rows, and table 27 continues the EQUITY section and totals Shares to 221,944,772. The source therefore supports the extracted equity-share coverage rather than the queue fail."
+}

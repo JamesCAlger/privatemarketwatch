@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_9493d9b2d09a",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "current_period_schedule_rows",
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 10,
+      "quoted_text": "NSI Holdings, Inc. | First Lien Debt | P + 3.75% | 10.50% | 11/17/2031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "BP Purchaser, LLC Rights | Common Equity | 03/12/2024",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 30,
+      "quoted_text": "Vardiman Black Holdings, LLC | Preferred Equity | 6.00% PIK | 03/29/2024",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 42,
+      "quoted_text": "Verdantas, LLC | Common Equity | 05/03/2024 | 3,984 | 4 | 6 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fullsteam Operations, LLC | Common Equity | 11/27/2023 | 11,270 | 380 | 941 | 0.08",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 filing schedule contains every one of the five flagged positions in current-period tables 13, 23, and 24. Matching versions also occur in the December 31, 2025 comparative tables, but that repetition does not make the current positions comparative-only. PP03's earlier-context signal is therefore a bad period anchor for these rows, not a holdings data defect."
+}

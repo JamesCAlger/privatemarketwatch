@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_f804658807cd",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 465069,
+  "anchor_value": 879592,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 34,
+      "quoted_text": "Total net assets | 465,069 | 180,725"
+    },
+    {
+      "table_index": 36,
+      "row_index": 10,
+      "quoted_text": "Dispatch Acquisition Holdings, LLC (5) | Unitranche First Lien Revolver | S + 475 , 75 Floor | 8.42 % | 11/2032 | 1,673 | 1,627 | 0.3 | 1,627"
+    },
+    {
+      "table_index": 51,
+      "row_index": 19,
+      "quoted_text": "Total Investments | $ | 870,675 | 188.9 | % | $ | 879,592"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The rule context used total investments of 879,592 as the denominator, but the source column is Percentage of Net Assets and ties to net assets of 465,069.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 29,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "The flagged pct_of_net_assets_identity rows are not source data errors. The filing labels the SOI column as Percentage of Net Assets and reports total net assets of 465,069; the Dispatch row fair value of 1,627 divided by 465,069 is about 0.35%, which rounds to the printed 0.3%. The schedule also reports Total Investments of 879,592 at 188.9% of net assets, showing total investments is not the denominator for per-row percentage of net assets. The flag therefore comes from applying the wrong anchor/check denominator, not from an incorrect extracted position value."
+}

@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_84533b46a8cd",
+    "verdict":  "false_alarm",
+    "mechanism":  "source_confirmed_extreme_appreciation",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  46,
+                                  "row_index":  17,
+                                  "quoted_text":  "ZBS Mechanical Group Co-Invest Fund 2, LLC | Provider of residential HVAC and plumbing services | Membership interest | 10/2021 | 2,771,000 | 1.4 | 13.5",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  53,
+                                  "row_index":  22,
+                                  "quoted_text":  "Class A units | 08/2019 | 4,549,000 | 0.5 | 8.6 | (2)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  38,
+                                  "row_index":  15,
+                                  "quoted_text":  "Class A common units | 02/2019 | 245 | 0.2 | 2.6",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "X07 flagged three rows because fair value exceeded 10x cost. The filing schedule itself shows the same amortized cost and fair value pairs for the flagged positions, so the extracted values match raw source and the rule is only surfacing genuine extreme appreciation rather than a data defect."
+}

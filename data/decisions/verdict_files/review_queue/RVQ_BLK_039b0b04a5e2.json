@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_039b0b04a5e2",
+  "verdict": "false_alarm",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2209.267,
+  "anchor_value": 2205.572,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Carbon Topco, Inc.; amortized cost 4,479; fair value 4,549",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 26,
+      "quoted_text": "Total Investment Portfolio; amortized cost 2,182,115; fair value 2,205,572",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 compares 644 source units with 324 output positions, but the raw March 31, 2026 schedule shows that a single investment row supplies two monetary facts, amortized cost and fair value. Thus 644 is approximately two facts per position, not 644 distinct positions. The schedule fair-value total is $2,205.572 million and the extracted portfolio total is $2,209.267 million, a close aggregate tie that is incompatible with half the positions being omitted. The flag is therefore caused by check-side dimension double counting."
+}

@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_17e9f0ce99a5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Textiles, Apparel & Luxury Goods, Company BPCP NSA Intermedco, Inc., Type of Revolver, Acquisition Date 5/17/2024, Maturity 5/17/2030",
+  "anchor_value": "BPCP NSA Intermedco, Inc.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 18,
+      "quoted_text": "BPCP NSA Intermedco, Inc. | Revolver | N/A | 5/17/2024 | 5/17/2030 | $ | - | $ | ( 12 | ) | $ | - | (2)(6)(9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field leaked relationship, asset class, industry, instrument type, acquisition date, and maturity text instead of retaining the source issuer cell BPCP NSA Intermedco, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 26,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level adjudication. The source schedule has the issuer in column 0 as BPCP NSA Intermedco, Inc. and separate row fields for Revolver, acquisition date 5/17/2024, and maturity 5/17/2030, with the industry header Textiles, Apparel & Luxury Goods on the prior source row. The extracted issuer_name concatenated those structural labels and terms, so the C206 parse-leak flag is a real data error."
+}

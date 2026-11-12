@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_f8e6c78fbbf0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "blank interest_rate for affected extracted direct-lending rows",
+  "anchor_value": "source schedule discloses interest terms, e.g. 12.00% for AAM specialty finance debt investments",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 45,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance debt investment | N/A | 12.00 % | 7/2030 | 55,871 | $ | 55,871 | $ | 55,871"
+    },
+    {
+      "table_index": 29,
+      "row_index": 46,
+      "quoted_text": "AAM Series 2.1 Aviation Feeder, LLC | Specialty finance debt investment | N/A | 12.00 % | 11/2030 | 76,451 | 76,451 | 76,451"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw schedule discloses a 12.00% interest term for AAM specialty finance debt rows, but the extracted holdings slice stores blank interest_rate for those same debt investments.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 45
+      }
+    }
+  ],
+  "rationale": "The dl_rate_fill flag is a portfolio-level missing-rate warning. The bundle's extracted holdings slice shows blank interest_rate for AAM Series 1.1 and AAM Series 2.1 specialty finance debt investments, while the raw schedule rows cite an Interest value of 12.00% for those same debt investments. This is not a source omission; it is an extraction gap in carrying the schedule's Interest column into interest_rate."
+}

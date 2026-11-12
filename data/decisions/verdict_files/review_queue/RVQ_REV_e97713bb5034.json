@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_e97713bb5034",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "extracted identifier: First-lien loan (89,755 par, due 6/2032); extracted cost 88039000.0 and fair_value 88428000.0",
+  "anchor_value": "source row: First-lien loan ($ 89,775 par, due 6/2032 ); amortized cost 88,039; fair value 88,428",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 31,
+      "quoted_text": "FGI Acquisition Corp. (3)(4) | First-lien loan ($ 89,775 par, due 6/2032 ) | 6/4/2025 | SOFR + 5.50 % | 9.66 | % | 88,039 | 88,428 | 2.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The FGI Acquisition identifier dropped the dollar marker and misread the par amount as 89,755 instead of the source value of $89,775; cost and fair value match the source row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 31,
+        "quoted_text": "First-lien loan ($ 89,775 par, due 6/2032 ) | amortized cost 88,039 | fair value 88,428"
+      }
+    }
+  ],
+  "rationale": "The raw SOI row for FGI Acquisition shows the investment text as First-lien loan ($ 89,775 par, due 6/2032 ) with amortized cost 88,039 and fair value 88,428. The bundle's extracted holding for the same issuer and row has cost 88,039,000 and fair value 88,428,000, which agree after the filing's thousands scale, but its investment identifier says 89,755 par and omits the dollar marker. The flag is therefore a real localized extraction/format error, not an aggregate cost or fair-value total problem."
+}

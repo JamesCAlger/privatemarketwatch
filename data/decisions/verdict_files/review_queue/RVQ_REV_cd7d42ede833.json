@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_cd7d42ede833",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2024-07-15",
+  "anchor_value": "07/15/24",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 12,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 17,990 | 17,990 | 16,191 | (6) (7) (8) (13)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 13,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 4,533 | 4,533 | 4,080 | (6) (7) (8) (13)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 14,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 1,753 | 1,753 | 1,578 | (6) (7) (8) (13)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "CFS Management, LLC (dba Center for Sight Management) | Health Care Providers & Services | 13.87 % | S + 9.00 % (Incl. 2.75 % PIK) | 07/15/24 | 299 | 299 | 269 | (6) (7) (8) (13)"
+    }
+  ],
+  "rationale": "X10 flags four maturity_date values before the 2024-09-30 report date. Raw source confirms each flagged CFS Management row prints maturity 07/15/24, matching the stored observed value 2024-07-15. The source therefore supports the extracted data; this is an advisory matured-position condition rather than a data error."
+}

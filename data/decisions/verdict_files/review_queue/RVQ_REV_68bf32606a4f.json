@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_68bf32606a4f",
+  "verdict": "false_alarm",
+  "mechanism": "overbroad_duplicate_key",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4246.035,
+  "anchor_value": 4246.035,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 10,
+      "quoted_text": "Applied Technical Services, LLC | (8)(13)(17) | First Lien Term Loan | S + 5.25 % | 8.90 % | 4/8/2031 | 22,261 | 22,161 | 22,261 | 1.10"
+    },
+    {
+      "table_index": 61,
+      "row_index": 11,
+      "quoted_text": "Applied Technical Services, LLC | (7)(13)(15)(17) | First Lien Delayed Draw Term Loan | S + 5.25 % | 8.90 % | 4/8/2031 | 2,256 | 775 | 788 | 0.04"
+    },
+    {
+      "table_index": 61,
+      "row_index": 12,
+      "quoted_text": "Applied Technical Services, LLC | (7)(13)(15)(17) | First Lien Revolver | S + 5.25 % | 8.90 % | 4/8/2031 | 2,259 | 170 | 181 | 0.01"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "overbroad_duplicate_key",
+      "detail": "B02's duplicate key collapses distinct Applied Technical Services facilities disclosed as separate SOI rows with different asset types and fair values.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 61,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The flag reports duplicate position keys, with Applied Technical Services as the example. Raw SOI source shows the repeated issuer is not a duplicated position: rows 10-12 are separate First Lien Term Loan, First Lien Delayed Draw Term Loan, and First Lien Revolver facilities with different par, cost, and fair value amounts. The schedule total anchor also agrees with the extracted fund-quarter FV (4,246.035 million), so the evidence supports an overbroad duplicate-key check rather than a source data error."
+}

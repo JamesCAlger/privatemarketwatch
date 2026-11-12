@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_6ab388d83f76",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 17.0,
+  "anchor_value": 17.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 24,
+      "quoted_text": "MPI Engineered Technologies, LLC | Automobile Components | S + 17.00 % PIK | 01/15/20 | 11/17/25 | $ | 23,049 | $ | 20,011 | $ | 6,915 | (8) (12) (14)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source check: table 21 row 1 labels the field Reference Rate and Spread, and table 21 row 24 reports MPI Engineered Technologies, LLC as S + 17.00% PIK. The stored basis_spread of 17.0 therefore matches the raw schedule and its whole-number percentage convention exactly. C115 is a false alarm caused by an overly narrow expected-range anchor for a high PIK spread."
+}

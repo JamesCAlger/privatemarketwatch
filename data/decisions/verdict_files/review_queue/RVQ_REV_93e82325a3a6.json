@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_93e82325a3a6",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PP03 flagged the Senior Credit Corp 2022 LLC secured loan as a comparative-period row for report_date 2025-12-31.",
+  "anchor_value": "The raw 2025 schedule includes Senior Credit Corp 2022 LLC as a debt investment with January 30, 2023 investment date, December 5, 2028 maturity, fixed interest rate 8.5%; EOT 0.0%, principal/cost/fair value all $12,885.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 39,
+      "quoted_text": "Senior Credit Corp 2022 LLC | Secured Loan | January 30, 2023 | December 5, 2028 | Fixed interest rate 8.5 %; EOT 0.0 % | $ | 12,885 | $ | 12,885 | $ | 12,885 | (10)(23)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 11,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2025 | 99",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source shows the flagged debt row in the Consolidated Schedule of Investments as of December 31, 2025, not only in a comparative-period schedule. The PP03 comparative-period warning is therefore a rule-scope false alarm for this row."
+}

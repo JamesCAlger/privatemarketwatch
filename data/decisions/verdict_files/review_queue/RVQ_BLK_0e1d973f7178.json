@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_0e1d973f7178",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 1,
+      "quoted_text": "Investment (1)(2) | Industry (3) | Interest Rate (4) | Reference Rate and Spread (4) | Maturity | Par (6) | Cost | Fair Value | Footnotes"
+    },
+    {
+      "table_index": 51,
+      "row_index": 26,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | 8.76 % | S + 5.00 % | 12/05/31 | 24,347 | 23,954 | 23,950 | (7)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 18,
+      "quoted_text": "Acquia, Inc. | Software | 9.59 % | S + 5.50 % | 10/30/26 | 42,164 | 41,960 | 41,743 | (7) (8)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 21,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus) | Software | 8.22 % | S + 4.50 % | 08/29/31 | 7,167 | 7,106 | 7,095 | (7) (8)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X04 treated populated Interest Rate as fixed-rate evidence, but the SOI has a separate Reference Rate and Spread column showing these are floating-rate S-spread rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 49,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "False alarm. The raw schedule labels separate Interest Rate and Reference Rate and Spread columns, and the flagged examples carry SOI spreads such as S + 5.00%, S + 5.50%, and S + 4.50% alongside current interest rates. The stored basis_spread values therefore reflect the source's floating-rate spread, not an erroneous spread on a fixed coupon row."
+}

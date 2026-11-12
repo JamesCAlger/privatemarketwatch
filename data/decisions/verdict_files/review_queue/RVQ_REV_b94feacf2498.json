@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_b94feacf2498",
+  "verdict": "false_alarm",
+  "mechanism": "dimension_double_count",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2845.623249,
+  "anchor_value": 2845.622,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,833,404 | $ | 2,845,622 | 189.87 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the B01 leaf-count flag is not a real fair-value coverage failure. The extracted position fair-value sum is 2,845.623249 million and the filing schedule total is 2,845.622 million, a difference of only 0.001249 million (0.000044%). Raw schedule rows display fair value for actual investments, including table 11 rows 5-7, while structural, heading, and continuation rows are also present in the schedule. The 322/686 leaf ratio therefore uses an inflated non-position leaf denominator rather than measuring missing fair value on positions. Residual risk is limited to the separate 1.249-thousand aggregate excess, which is immaterial to this coverage adjudication and may relate to the Constellation row structure at table 19 row 22."
+}

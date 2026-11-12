@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_6ab8e7a39509",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": "AUD 72,042 par",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Prestige Bidco Pty Ltd (dba Pickles Auctions) | Par: AUD 72,042 | Cost: $46,361 | Fair Value: $49,457",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 batch flag grounded to a localized schedule row. The raw filing separately identifies par as AUD 72,042 and cost/fair value as dollar amounts. The extracted principal_amount_usd is blank, so the platform lacks the explicit USD conversion required for non-USD par analytics. The source currency label rules out a country-inference false alarm; cost and fair value are not substitutes for converted principal."
+}

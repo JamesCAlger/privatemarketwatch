@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_b7959ef1c805",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "source Par/Shares present, e.g. 2,201,313 for A Place For Mom and 2,969,565 for Excelitas Euro Term Loan",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 18,
+      "quoted_text": "A Place For Mom | Senior Secured Term Loan | L+ | 4.50 | % | 9.69 | % | 7/28/2017 | 2/10/2026 | 2,201,313 | 2,201,351 | 2,157,287",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 28,
+      "quoted_text": "Excelitas | Unitranche Closing Date Euro Term Loan | L+ | 5.75 | % | 10.94 | % | 6/15/2022 | 8/12/2029 | 2,969,565 | 3,013,358 | 2,947,293",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt rows have source Par/Shares amounts, but the flagged artifact has blank principal_amount_usd for those rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 18
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Excelitas row is explicitly a Euro Term Loan with Par/Shares 2,969,565, so USD principal requires an explicit conversion rather than remaining blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "FX01 flagged blank principal_amount_usd values. The raw schedule contains Par/Shares for debt positions, including A Place For Mom with Par/Shares 2,201,313 and Excelitas explicitly described as a Euro Term Loan with Par/Shares 2,969,565. Because source principal exists and the normalized USD principal field is blank, this is a real extraction/normalization gap rather than a false alarm."
+}

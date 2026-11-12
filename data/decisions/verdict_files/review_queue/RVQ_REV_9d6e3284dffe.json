@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_9d6e3284dffe",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.62,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 24,
+      "quoted_text": "Gateway US Holdings, Inc. | 1.00 % | Delayed Draw Term Loan | 8/4/2023 | 45 | Fair Value: -"
+    },
+    {
+      "table_index": 24,
+      "row_index": 9,
+      "quoted_text": "MRI Software, LLC | 0.50 % | Revolver | 2/10/2026 | 52 | Fair Value: -"
+    },
+    {
+      "table_index": 25,
+      "row_index": 23,
+      "quoted_text": "Zarya Intermediate, LLC | 0.50 % | Revolver | 7/1/2027 | 2,406 | Fair Value: -"
+    }
+  ],
+  "rationale": "C104 flagged an extracted fair_value of 0.0, but the bundle provides only internal row_key 420595 and no issuer/source coordinate. The raw filing is readable and contains multiple June 30, 2023 unfunded commitment rows whose Fair Value cell is a dash, which could legitimately be normalized to zero. Because the source has multiple plausible zero fair-value candidates and the bundle does not identify which one maps to the flagged row, the raw source does not decide whether this specific flag is a false alarm or a data error."
+}

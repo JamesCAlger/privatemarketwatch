@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_714fa18dd067",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 24193948.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X07 flag concerns FR Tom Miller, LLC with derived cost 901750.0 and fair_value 24193948.0, but the permitted raw-source evidence CLI returned missing_cached_html for overview, tables, totals, and a targeted roam query for accession 0001752724-25-113744. Because raw source was unavailable, the contract requires failing closed rather than adjudicating from derived artifacts."
+}

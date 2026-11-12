@@ -1,0 +1,38 @@
+{
+    "review_id":  "RVQ_REV_8acc5bcf1fb6",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "schedule_total",
+    "observed_value":  329255000,
+    "anchor_value":  329255000,
+    "confidence":  0.74,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  32,
+                                  "row_index":  6,
+                                  "quoted_text":  "Total investments, at fair value (amortized cost of $ 349,365 and $ 663,661 ) | $ | 329,255 | $ | 582,495",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  32,
+                                  "row_index":  14,
+                                  "quoted_text":  "Debt | $ | 148,432 | $ | 293,132",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  6,
+                                  "row_index":  5,
+                                  "quoted_text":  "Weighted average leverage (net debt/EBITDA) (3) | 5.0x",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  7,
+                                  "row_index":  3,
+                                  "quoted_text":  "Weighted average net debt to EBITDA is weighted based on the fair value of our debt investments, excluding investments where net debt to EBITDA may not be the appropriate measure of credit risk",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "F26 flagged divergence between fund and holdings leverage proxies. Raw source confirms the fund balance-sheet figures and total investments anchor, and separately defines portfolio-company weighted average leverage as net debt/EBITDA weighted by debt-investment fair value with explicit exclusions. Those are intentionally different leverage constructs, not a localized extracted value defect."
+}

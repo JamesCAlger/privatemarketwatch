@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_e71ce61a0eac",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "C301 flags a missing index_classification for internal row_key 548357, but the bundle does not provide issuer/source coordinates for that row. The raw source was readable via evidence_cli; a targeted roam query for 548357 returned zero hits, and broad SOI table discovery only confirmed that many investment rows exist without localizing the flagged row. Because the specific source row cannot be matched, raw source does not decide whether the missing classification is a true extraction/classification defect or a false alarm."
+}

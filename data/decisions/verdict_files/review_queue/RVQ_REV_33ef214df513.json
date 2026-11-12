@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_33ef214df513",
+  "verdict": "ambiguous",
+  "mechanism": "source_evidence_unavailable",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 1.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "ambiguity_basis": "source_unavailable",
+  "rationale": "The worker could not launch the permitted local shell or evidence CLI because the execution environment repeatedly failed with Windows CreateProcessWithLogonW error 1326. Raw source was therefore unavailable, so the flagged fund strategy cannot be adjudicated without guessing."
+}

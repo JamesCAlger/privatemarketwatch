@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_cceb8e7a929c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8.38,
+  "anchor_value": 8.38,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 28,
+      "quoted_text": "Noramco, LLC | 07/01/16 | Term Loan - 13.42 % inc PIK (SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK) | 10.9 | % | 44,146,213 | 01/31/25 | 44,119,786 | 42,865,973"
+    }
+  ],
+  "rationale": "The weak fmt_basis_spread flag appears to target the lone unusual basis spread among the ten debt instruments. Raw source shows Noramco's term exactly as SOFR + 8.38% with a separate 0.38% PIK component, and the bundled extracted identifier preserves those terms. The irregular spread format is disclosed in the filing, so the check is too broad for this filer-authored value rather than evidence of a data extraction error."
+}

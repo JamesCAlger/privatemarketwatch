@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_5fceb90555aa",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 250849000,
+  "anchor_value": 179475000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 250,849 | $ | 254,797",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investments (9) - 135.8 % | $ | 196,338 | $ | 179,475",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The A04 comparison value of 250,849,000 is the filing's total-assets line, not an investments fair-value anchor. The balance sheet reports investments at fair value of 152,230,000 plus 27,245,000, totaling 179,475,000, and the schedule of investments independently reports Total Investments fair value of 179,475,000. The extracted holdings total therefore agrees with the raw-source schedule, and the flag is caused by use of the wrong internal anchor."
+}

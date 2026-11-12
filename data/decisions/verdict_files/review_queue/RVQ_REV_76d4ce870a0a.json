@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_76d4ce870a0a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5988023952095808,
+  "anchor_value": 0.8,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 55,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group), First lien senior secured loan, Interest S+ 4.75 %, maturity 08/2031, fair value 27,272",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C01 rate coverage is below threshold because debt rows with source interest terms, including AI Titan Parent, Inc. First lien senior secured loan at S+ 4.75%, were extracted with blank interest_rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 69,
+        "row_index": 55
+      }
+    }
+  ],
+  "rationale": "The raw schedule of investments has an Interest column and table 69 row 55 shows AI Titan Parent, Inc. First lien senior secured loan with Interest S+ 4.75%. The bundle's extracted holding for the same issuer/instrument has interest_rate blank. The C01 observed coverage is 0.5988023952095808 versus the 0.8 threshold, so the flag reflects a real extraction gap rather than a source omission. The schedule total anchor was checked via totals, which returned Total Investments of 5,203,798 for the 2024 schedule."
+}

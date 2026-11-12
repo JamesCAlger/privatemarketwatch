@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_4416abcd4506",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 20,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) (20) | 5/16/2034 | - | 20 | 20 | 0.0",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C04 flagged that 0 of 1 equity rows had shares, but the raw schedule does not disclose shares or units for the matching Other Equity position. Table 17 header identifies column 18 as Par Amount/Units, and row 20 for Metropolis Technologies, Inc. shows '-' in that column with amortized cost 20 and fair value 20. The extracted missing share count therefore matches the source; the check is over-scoped for this Other Equity row."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_32adc19aeef1",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_AUD/U_GBP/U_EUR assigned to cost_currency",
+  "anchor_value": "USD cost and fair-value columns",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Prestige Bidco: Par AUD 72,042; Cost $46,361; Fair Value $49,457",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Australia: Cost $360,388; Fair Value $378,554",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 misattributes the instrument denomination shown in the Par column to cost_currency. The raw schedule header separates Par, Cost, and Fair Value; row 5 places AUD under Par but explicitly shows dollar signs for Cost and Fair Value, and row 17 confirms the Australia cost and fair-value subtotal in dollars. Thus the extracted non-USD cost_currency flag is a rule/column-scope false alarm; the reported valuation amounts are USD-denominated."
+}

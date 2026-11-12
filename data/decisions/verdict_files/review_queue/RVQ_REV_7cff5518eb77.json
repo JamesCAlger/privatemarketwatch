@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_7cff5518eb77",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | maturity 6/30/2027 | par 160 | amortized cost - | fair value -"
+    },
+    {
+      "table_index": 13,
+      "row_index": 35,
+      "quoted_text": "MBS Services Holdings, LLC (4)(6)(10) | maturity 2/26/2026 | par 110 | amortized cost (1) | fair value -"
+    },
+    {
+      "table_index": 13,
+      "row_index": 38,
+      "quoted_text": "Mood Media Borrower, LLC (4)(6)(10) | maturity 12/31/2025 | par 1,761 | amortized cost (4) | fair value -"
+    },
+    {
+      "table_index": 13,
+      "row_index": 42,
+      "quoted_text": "Showtime Acquisition, L.L.C. (4)(6)(12) | maturity 8/7/2028 | par 262 | amortized cost (4) | fair value -"
+    },
+    {
+      "table_index": 14,
+      "row_index": 6,
+      "quoted_text": "Patriot Acquisition Topco S.A R.L. (4)(5)(6)(10) | maturity 1/29/2028 | par 78 | amortized cost (1) | fair value -"
+    },
+    {
+      "table_index": 15,
+      "row_index": 23,
+      "quoted_text": "The ONE Group Hospitality, Inc. - Warrants (4) | units 7 | amortized cost - | fair value -"
+    },
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "The ONE Group Hospitality, Inc. - Warrants (4) | units 12 | amortized cost - | fair value -"
+    }
+  ],
+  "rationale": "C104 flags seven extracted fair_value values of 0. The raw SOI rows corresponding to the zero-valued positions print a dash in the Fair Value column, not a positive or missing source amount. The extraction normalized those dash fair values to 0, so the row-validation warning is a rule-scope false alarm for source-supported zero/dash fair values rather than a data error."
+}

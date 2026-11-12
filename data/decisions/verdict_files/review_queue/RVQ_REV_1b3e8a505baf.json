@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1b3e8a505baf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 204.73,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 105,
+      "row_index": 21,
+      "quoted_text": "Total Investments | $ | 21,360,914.4 | $ | 21,508,598.4 | (17) | 204.73 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 59,
+      "row_index": 11,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 21,360,914 and $ 11,482,053 , respectively) | 21,508,598 | 11,549,149",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 37,
+      "quoted_text": "Total net assets | 10,506,044 | 5,900,696",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source SOI total reports investments equal to 204.73% of net assets, but the check observed pct_sum=0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 105,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The 2025 SOI Total Investments row reports fair value of 21,508,598.4 and 204.73% of net assets. The balance sheet independently reports total investments at fair value of 21,508,598 and total net assets of 10,506,044, which supports the same percentage relationship. Because the oracle artifact observed pct_sum=0.0% while raw source provides a populated total percentage, the flag reflects a real extraction gap in the percentage aggregate rather than an ambiguous source or bad filing anchor."
+}

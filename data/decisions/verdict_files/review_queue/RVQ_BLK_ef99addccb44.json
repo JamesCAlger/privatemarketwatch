@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_ef99addccb44",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 528135000.0,
+  "anchor_value": 1324753000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 83,
+      "row_index": 53,
+      "quoted_text": "Total Investments | $ | 1,299,294 | $ | 1,324,753 | 179 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "HTML aggregate captured fair value of 528.135 million while the filing schedule total and companyfacts anchor both show 1,324.753 million.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 83,
+        "row_index": 53
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check: the extracted HTML fair-value sum is 528,135,000, but the filing schedule's Total Investments row shows fair value of 1,324,753 (in thousands), equal to 1,324,753,000. The balance sheet total investments at fair value also shows 1,324,753, and the bundle's companyfacts fair-value anchor is 1,324,753,000. Because the independent source anchors agree with each other and disagree with the extracted aggregate, this is a real HTML extraction aggregation gap rather than a bad anchor."
+}

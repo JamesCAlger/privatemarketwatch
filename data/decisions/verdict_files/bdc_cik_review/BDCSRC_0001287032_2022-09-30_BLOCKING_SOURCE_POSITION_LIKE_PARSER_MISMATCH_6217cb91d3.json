@@ -1,0 +1,75 @@
+{
+  "changed_files": [],
+  "cik": "0001287032",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [
+    {
+      "cell_indices": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        33
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "NMMB, Inc. appears in the source filing as an issuer-level row with separate first-lien term-loan position detail, including date, coupon, spread, floor, maturity, cost, fair value, and percent cells. The XBRL blocker row is a borrower-name rollup, not a standalone production position.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 16,
+      "table_index": 13
+    },
+    {
+      "cell_indices": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        32,
+        33
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "PGX Holdings, Inc. appears as an issuer-level first-lien term-loan position with instrument, rate, maturity, cost, fair value, and percent cells, while the source-only blocker fair value is a borrower aggregate across multiple PGX-related position rows.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 8,
+      "table_index": 14
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "No production patch is needed because the seven Prospect source-only rows are borrower-name XBRL rollups, not position-level holdings. The filing evidence shows the underlying investments as separate issuer/instrument rows; adding the borrower rollups would double count exposure and violate the repository's position-level data contract.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "report_date": "2022-09-30",
+  "requires_human_merge": false,
+  "residual_risk": "The reviewed rows remain intentionally non-blocking for production holdings. Residual risk is that source reconciliation still labels borrower-name XBRL rollups as parser mismatches until a separate deterministic reviewer class is added for Prospect borrower aggregate rows.",
+  "review_id": "BDCSRC_0001287032_2022-09-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_6217cb91d3",
+  "reviewer_notes": "Manual review found this is not insufficient evidence and not a missing-position patch candidate. The blocker rows are issuer/borrower aggregate XBRL identifiers such as InterDent, MITY, NMMB, PGX, R-V Industries, USES, and another borrower label; the HTML evidence shows granular position rows underneath.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No source reconciliation output is changed by this verdict. The verdict documents why these borrower aggregate rows should not be added to unified position-level holdings.",
+  "tests_validation_plan": "Validate schema and evidence-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code patch is proposed for this packet.",
+  "verdict": "NO_PATCH_NEEDED"
+}

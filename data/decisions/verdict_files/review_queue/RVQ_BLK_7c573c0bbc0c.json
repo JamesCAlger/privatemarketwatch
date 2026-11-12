@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_7c573c0bbc0c",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 8632.315,
+  "anchor_value": 8632.315,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 43,
+      "quoted_text": "Total Investments | $ | 8,595,040 | $ | 8,632,315 | 206.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 8,595,040 and $ 7,892,866, respectively) | 8,632,315 | 8,108,654",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 8,
+      "quoted_text": "Total investments at fair value | $ | - | $ | 196,925 | $ | 8,435,390 | $ | 8,632,315",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 compares source=482 with output=122, but raw source shows the current investment schedule spread across tables 8 through 11 and interleaved with headers, sector labels, subtotals, and total rows; 482 is therefore not a defensible position-count anchor. More decisively, the output fair-value total of 8,632.315 million exactly matches the schedule total of 8,632,315 thousand, the balance-sheet investment total, and the fair-value hierarchy total. The count flag is an oracle anchor/counting defect rather than evidence of missing output positions. Residual risk is limited to a theoretically offsetting omission and duplication, for which the reviewed source provides no indication."
+}

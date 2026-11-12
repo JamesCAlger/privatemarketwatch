@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_082f62b11f91",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -39000,
+  "anchor_value": -39000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 73,
+      "row_index": 10,
+      "quoted_text": "Artemis Bidco Limited (4)(5)(6)(7) | SN + | 6.00 % | 11.25 % | 9/8/2028 | GBP | 2,437 | 308 | ( 39 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 79,
+      "row_index": 4,
+      "quoted_text": "Artemis Bidco Limited | 1st Lien Senior Secured Delayed Draw Loan | 2,765 | ( 338 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged fair_value of -39000 corresponds to the filer source value (39) in thousands for Artemis Bidco Limited, while the same issuer is separately disclosed in the unfunded commitments schedule as a 1st Lien Senior Secured Delayed Draw Loan with negative fair value. The extracted negative value is source-supported and the C103 fire is due to the validation check not carrying/looking through the unfunded commitment context, not a bad fair_value."
+}

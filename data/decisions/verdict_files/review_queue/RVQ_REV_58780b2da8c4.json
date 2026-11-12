@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_58780b2da8c4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 15.50119225037258,
+  "anchor_value": 15.5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 125,
+      "row_index": 13,
+      "quoted_text": "Distributions (4) | ( 2.04 )"
+    },
+    {
+      "table_index": 125,
+      "row_index": 27,
+      "quoted_text": "Ratio of net investment income to average net assets | 15.5 | %"
+    }
+  ],
+  "rationale": "F16 is an aggregate fund-financials heuristic comparing distribution_rate to income_yield_pct * 1.5. The source financial highlights show 2025 distributions of $2.04 per share and a 15.5% ratio of net investment income to average net assets. The flagged observed value 15.50119225037258 is consistent with the source rate and is not greater than 1.5 times the source income-yield anchor, so the source supports the data rather than a defect."
+}

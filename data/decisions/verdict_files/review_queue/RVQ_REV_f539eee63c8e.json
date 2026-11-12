@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_f539eee63c8e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 220.04,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 7,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 858,951 | $ 825,525 | 220.04 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed a 0.0% aggregate, but the raw March 31, 2026 investment schedule includes a Percentage of Net Assets column and reports Total Investments at 220.04%. The zero therefore reflects failure to extract the disclosed percentages, not the filing value. The defect is systematic at the percentage-field level rather than localized to one position row."
+}

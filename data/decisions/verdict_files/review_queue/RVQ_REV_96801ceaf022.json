@@ -1,0 +1,66 @@
+{
+  "review_id": "RVQ_REV_96801ceaf022",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "25 issuer_name rows contain concatenated schedule category/instrument/date/rate text, e.g. Debt Investments Communications IntelePeer Holdings, Inc. Convertible note ... Initial Acquisition Date ... Reference Rate and Spread ... Interest Rate ...",
+  "anchor_value": "issuer_name should be only the source Company cell, e.g. IntelePeer Holdings, Inc.; Passport Labs, Inc.; American Achievement, Corp.; Dye & Durham, Ltd.; Rapid Data GmbH Unternehmensberatung",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 35,
+      "quoted_text": "IntelePeer Holdings, Inc. | First-lien loan ($ 33,925 par, due 12/2024 ) (3) | 12/2/2019 | SOFR + 8.40 % | 13.79 % | 33,899 | 33,586 | 2.3 %"
+    },
+    {
+      "table_index": 8,
+      "row_index": 55,
+      "quoted_text": "Passport Labs, Inc. | First-lien loan ($ 24,349 par, due 4/2026 ) (3) | 4/28/2021 | SOFR + 8.40 % | 13.79 % | 24,174 | 24,294 | 1.6 %"
+    },
+    {
+      "table_index": 9,
+      "row_index": 1,
+      "quoted_text": "Convertible Promissory Note A ($ 694 par, due 9/2024 ) | 3/2/2023 | 8.00 % | 8.00 % | 694 | 943 | 0.1 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "American Achievement, Corp. (3)(14) | First-lien loan ($ 27,089 par, due 9/2026 ) | 9/30/2015 | SOFR + 6.35 % | 11.68 % (incl. 11.19 % PIK) | 26,260 | 20,452 | 1.4 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 34,
+      "quoted_text": "Dye & Durham, Ltd. (4)(10) | Common Shares ( 126,968 shares) | 12/3/2021 | 3,909 | 1,248 (CAD 1,688 ) | 0.1 %"
+    },
+    {
+      "table_index": 10,
+      "row_index": 20,
+      "quoted_text": "Rapid Data GmbH Unternehmensberatung (3)(4) | First-lien loan (EUR 4,495 par, due 7/2029 ) | 7/11/2023 | E + 6.50 % | 10.15 % | 4,666 | 4,625 (EUR 4,368 ) | 0.3 %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer-name extraction leaked schedule category and investment terms into issuer_name instead of retaining only the Company cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 35,
+        "quoted_text": "IntelePeer Holdings, Inc. | First-lien loan ($ 33,925 par, due 12/2024 ) (3) | 12/2/2019 | SOFR + 8.40 % | 13.79 % | 33,899 | 33,586 | 2.3 %"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Continuation/instrument-only rows such as the Passport Labs convertible note were parsed into issuer_name even though the source row has no company cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 1,
+        "quoted_text": "Convertible Promissory Note A ($ 694 par, due 9/2024 ) | 3/2/2023 | 8.00 % | 8.00 % | 694 | 943 | 0.1 %"
+      }
+    }
+  ],
+  "rationale": "C206 is confirmed by raw source. The investment schedule has a Company column followed by separate Investment, Initial Acquisition Date, Reference Rate and Spread, Interest Rate, Amortized Cost, Fair Value, and Percentage of Net Assets columns. The cited rows show clean issuer/company cells such as IntelePeer Holdings, Inc., Passport Labs, Inc., American Achievement, Corp., Dye & Durham, Ltd., and Rapid Data GmbH Unternehmensberatung, with instrument/date/rate text in separate cells. The flagged stored issuer_name values concatenate schedule section labels and those separate investment terms, so the data field is wrong rather than the rule firing being a false alarm."
+}

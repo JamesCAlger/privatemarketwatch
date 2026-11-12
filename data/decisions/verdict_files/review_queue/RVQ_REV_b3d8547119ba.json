@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_b3d8547119ba",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0.1956521739130435,
+  "anchor_value": 0.0,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "888 Holdings PLC (4)(8) | Hotels, Restaurants and Leisure | 9.63 % ( S +CSA + 5.25 %) | 7/8/2028 | 5,912,115 | 5,802,351 | 5,687,926 | 1.0%"
+    },
+    {
+      "table_index": 19,
+      "row_index": 4,
+      "quoted_text": "888 Holdings PLC (4)(8) | Hotels, Restaurants and Leisure | 9.50 % ( S + 5.25 %) | 7/8/2028 | 7,299,910 | 7,148,457 | 7,064,961 | 1.2%"
+    },
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Boxer Parent Company Inc. (6)(8) | Software | 7.33 % ( S + 3.00 %) | 7/30/2031 | 9,925,125 | 9,886,745 | 9,874,854 | 2.0%"
+    },
+    {
+      "table_index": 20,
+      "row_index": 3,
+      "quoted_text": "Boxer Parent Company Inc. (8) | Software | 8.34 % ( S + 3.75 %) | 7/30/2031 | 9,950,000 | 9,906,984 | 10,044,426 | 1.9%"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The D06 continuity metric reports only 45 of 230 issuers persisting, but the raw current and comparative schedules show repeated issuers across periods on matched schedule pages.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 9,
+        "row_index": 4,
+        "quoted_text": "888 Holdings PLC appears in both the June 30, 2025 schedule and the December 31, 2024 comparative schedule."
+      }
+    }
+  ],
+  "rationale": "D06 is a CIK-quarter continuity flag with no single row localization. The evidence CLI returned usable raw source. The filing's investment schedules contain current-period tables 9-18 and comparative December 31, 2024 tables 19-28. Matched pages show persistent issuer names, including 888 Holdings PLC in table 9 row 4 and table 19 row 4, and Boxer Parent Company Inc. in table 10 row 2 and table 20 row 3. That source pattern is inconsistent with the reported 19.6% continuity metric as a true portfolio turnover condition, so the flag identifies a real extraction or continuity matching defect rather than a source-supported low-continuity event."
+}

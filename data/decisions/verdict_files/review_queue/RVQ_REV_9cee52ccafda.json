@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_9cee52ccafda",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 200.72,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 19,
+      "quoted_text": "Total Portfolio Investments, Cash and Cash Equivalents | $ | 1,210,589 | $ | 1,219,890 | 200.72 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 42,
+      "row_index": 13,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 1,207,142 | $ | 1,216,443 | 200.15 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted A07 percentage sum is 0.0%, but the SOI schedule reports total portfolio investments at 200.72% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "A07 is a CIK-quarter aggregate flag with pct_sum=0.0%. Raw source table 42 contains the % of Net Assets column and shows total investments before cash and cash equivalents at 200.15% and total portfolio investments including cash at 200.72%. The zero aggregate therefore reflects a missed extraction or mapping of the source percentage column, not an absence of source percentages."
+}

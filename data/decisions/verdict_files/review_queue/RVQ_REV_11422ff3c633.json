@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_11422ff3c633",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 65.4,
+  "anchor_value": 100.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 5,
+      "quoted_text": "Interest Rate Type schedule totals 100.00% of investments at fair value for December 31, 2025."
+    },
+    {
+      "table_index": 38,
+      "row_index": 29,
+      "quoted_text": "Business Services | First Lien(4) - Undrawn | \\u2014 | \\u2014 | \\u2014 | 12/2025 | 12/2028 | $ | 1,847 | $ | \\u2014 | $ | 3"
+    },
+    {
+      "table_index": 46,
+      "row_index": 20,
+      "quoted_text": "First Lien(3)(4) - Undrawn row has Reference, Spread, and Interest Rate all shown as \\u2014 in the source."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The dl_rate_fill warning is driven by counting undrawn/unfunded commitments whose source Reference, Spread, and Interest Rate cells are intentionally blank/dash, not by missing extractable stated rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "The flag reports only 65.4% row-count fill (144 missing of 416), but the raw SOI has an explicit Interest Rate column and the 2025 Interest Rate Type schedule sums to 100.00% of investments at fair value. Representative missing-rate rows are undrawn commitments where the filer prints dashes for Reference, Spread, and Interest Rate. These source-intended blanks should not be treated as extractable direct-lending rate failures, so the check is over-scoped rather than exposing a data error."
+}

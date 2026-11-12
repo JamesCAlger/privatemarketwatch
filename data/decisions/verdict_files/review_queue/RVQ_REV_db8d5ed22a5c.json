@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_db8d5ed22a5c",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2354502240,
+  "anchor_value": 2354502240,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 22,
+      "quoted_text": "Streamland Media Holdings LLC | Common Stock | $ | 12,363 | 645,215 | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source check shows the flagged identifier in the current-period schedule, not only in a comparative period. Table 26 row 22 reports Streamland Media Holdings LLC as Common Stock, and table 26 totals current-period investments at $2,354,502,240, matching the report-period extract total. The December 31, 2025 comparative schedule instead labels the Streamland instrument Common Units at table 40 row 13. Therefore PP03's earlier-source-period attribution is wrong and the retained Common Stock row is valid for March 31, 2026."
+}

@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_45ea3f9bdf71",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "",
+    "observed_value":  1000,
+    "anchor_value":  1000,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  27,
+                                  "row_index":  6,
+                                  "quoted_text":  "Amergin Asset Management, LLC - Specialty finance equity investment - Amortized Cost $1 - Fair Value $2,576, under Equity Investments",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The raw schedule shows the matching source position under Equity Investments, with investment type Specialty finance equity investment. The cost and fair value values are correctly extracted from the source ($1 thousand cost and $2,576 thousand fair value), but X07 is scoped as fair_value exceeds 10x cost for non-equity. Because the source row is equity, the non-equity X07 fire is a rule-scope false alarm rather than a data value error."
+}

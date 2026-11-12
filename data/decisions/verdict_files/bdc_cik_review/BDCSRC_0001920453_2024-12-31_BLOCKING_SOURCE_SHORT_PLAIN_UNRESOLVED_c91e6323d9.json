@@ -1,0 +1,31 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001920453",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies the exact label 'Investment Portfolio' as a documented total/header source row, not as a production position.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Use the existing bounded total-header classification for the exact normalized label 'investment portfolio'. The test suite includes Investment Portfolio / Total Investment Portfolio coverage plus false-positive protection for issuer-bearing rows.",
+  "primary_justification": "Manual review supports a bounded patch-covered verdict. The only blocker row in this packet is source_row_id 1032428 with raw identifier 'Investment Portfolio' and source fair value 1,369,240,440. The identifier is a fund-level portfolio total, not a position: it has no issuer, borrower, instrument, rate, maturity, principal, shares, or other leaf-position evidence. The bundle does not provide an HTML source-row coordinate candidate for this exact row, so the diagnosis is XBRL-only rather than HTML-based. Same-CIK/date evidence separately contains detailed position rows, confirming this short plain row is not the production holding granularity.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2024-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded classification mechanism; production outputs still need to be rebuilt and source reconciliation rerun before claiming the current blocker pool no longer contains this row.",
+  "review_id": "BDCSRC_0001920453_2024-12-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_c91e6323d9",
+  "reviewer_notes": "Source-only blocker row reviewed manually: source_row_id 1032428, Investment Portfolio, FV 1,369,240,440. The row is too sparse to be a position and matches the existing exact total/header vocabulary.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: the Fidelity Private Credit Fund Investment Portfolio source-only row is documented as a total/header source row and no longer remains a short-plain blocker.",
+  "tests_validation_plan": "Focused test coverage exists in tests/test_validate_holdings.py for investment portfolio total-header classification and false-positive issuer-bearing rows. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

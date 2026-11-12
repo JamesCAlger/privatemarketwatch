@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_a63485a69fac",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 63.0,
+  "anchor_value": 63.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 6,
+      "quoted_text": "Business Services | First Lien(8)(9) - Undrawn | - | - | - | 05/2024 | 07/2028 | $ | 1,425 | $ | - | $ | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 14,
+      "quoted_text": "Software | First Lien(8)(9) - Undrawn | - | - | - | 02/2024 | 02/2031 | 806 | ( 3 ) | - | - | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 5,
+      "quoted_text": "Total investments | 100.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The dl_rate_fill flag is driven by source-native undrawn commitment rows whose Reference, Spread, and Interest Rate columns are dashes, not by missing extraction of stated coupons.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 24,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate fill-rate warning: the bundle reports 133 missing-rate violations out of 359 units, but raw SOI rows show many First Lien - Undrawn positions where the filer itself prints dashes in the Reference, Spread, and Interest Rate columns while carrying unfunded par/cost/fair-value fields. Ordinary funded rows in the same schedule have populated Reference/Spread/Interest Rate cells, so the missing-rate pattern is localized to rule scope over source-native undrawn rows rather than a data extraction defect."
+}

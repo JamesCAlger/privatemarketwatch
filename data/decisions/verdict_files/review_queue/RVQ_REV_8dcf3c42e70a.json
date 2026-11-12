@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_8dcf3c42e70a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 48,
+      "quoted_text": "Madison Park Funding Ltd, Series 2025-65A | Structured Credit ($ 4,400 par, due 7/2038) | SOFR + 5.00% | 8.67% | cost 4,408 | fair value 4,219",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 1,
+      "quoted_text": "Madison Park Funding Ltd, Series 2025-72A | Structured Credit ($ 4,500 par, due 7/2038) | SOFR + 5.25% | 8.92% | cost 4,550 | fair value 4,359",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The position-key construction collapses distinct Madison Park series 2025-65A and 2025-72A into one duplicate key despite different instrument terms and values.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 13,
+        "row_index": 48
+      }
+    }
+  ],
+  "rationale": "B02 reports two duplicate position keys. Raw source shows two distinct current-period Madison Park Funding instruments: Series 2025-65A and Series 2025-72A. Their par amounts, spreads, interest rates, costs, and fair values differ, so they are not duplicate source rows. The normalized key shown by the flag omits the distinguishing series suffix and creates an identity collision; the key/extraction logic is therefore defective."
+}

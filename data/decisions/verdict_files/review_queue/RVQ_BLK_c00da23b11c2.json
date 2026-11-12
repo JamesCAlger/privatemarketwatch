@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_c00da23b11c2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1414815000,
+  "anchor_value": 1424815000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 9,
+      "quoted_text": "Total investments (cost of $ 1,470,378 and $ 1,319,316 , respectively) | 1,424,815 | 1,275,180",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 49,
+      "quoted_text": "Total Investment in Securities ( 94.6 %)* | $ | 1,470,378 | $ | 1,424,815",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Extracted fair value sum is 10000000 below the filing's investment schedule total; the source total and balance sheet total both support 1424815000.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 38,
+        "row_index": 49
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The filing balance sheet reports total investments of 1,424,815 thousand and the investment schedule reports Total Investment in Securities of 1,424,815 thousand, matching the companyfacts fair value anchor. The reviewed extracted position sum is 1,414,815,000, exactly 10,000,000 below that source-supported anchor. Targeted source review did not localize a single omitted row, so the defect is grounded as an aggregate extraction gap rather than a row-specific culprit."
+}

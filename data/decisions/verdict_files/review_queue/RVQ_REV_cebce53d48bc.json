@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_cebce53d48bc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd blank on 315 FX01 issue rows",
+  "anchor_value": "non-USD source principal/par requires an explicit USD-converted principal_amount_usd for debt par analytics",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 6,
+      "quoted_text": "Ancora Bidco PTY LTD term loan source row shows principal/par AUD 3,462 with USD cost 3,366 and fair value 3,497.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 50,
+      "row_index": 6,
+      "quoted_text": "Olyos delayed draw term loan source row shows non-USD principal/par EUR 1,273 with USD cost 1,263 and fair value 1,273.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 14,
+      "quoted_text": "Saarni term loan source row shows non-USD principal/par EUR 118 with USD cost 108 and fair value 118.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 rows have local-currency debt principal/par in source but blank principal_amount_usd in the extracted holdings output.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 49,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level check. The bundle's source_artifact_rows show FX01 firing because principal_amount_usd is blank for non-USD debt rows. Raw SOI rows confirm the source principal/par column is denominated in local currency for debt positions, e.g. AUD 3,462 for Ancora and EUR-denominated Olyos/Saarni rows, while cost and fair value are presented in USD thousands. Because the platform needs a USD-converted principal_amount_usd before par analytics, leaving that field blank is a real extraction/normalization gap, not a false alarm."
+}

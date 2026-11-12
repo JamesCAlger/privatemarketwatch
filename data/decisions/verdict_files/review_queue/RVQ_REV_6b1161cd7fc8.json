@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_6b1161cd7fc8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -3270.0,
+  "anchor_value": -3270.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 12,
+      "quoted_text": "AI Titan Parent, Inc. | CHS BDC 2 LLC | 738,323 | ( 3,270 ) | ( 1,846 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 15,
+      "quoted_text": "BVI Medical, Inc. | CHS BDC 2 LLC | 5,416,667 | ( 46,468 ) | ( 297,917 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 20,
+      "quoted_text": "Blazing Star Shields Direct Parent, LLC | CHS BDC 2 LLC | 4,044,231 | ( 36,816 ) | ( 90,995 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 9,
+      "quoted_text": "Associations, Inc. | APS CW SPV LLC | 1,834,744 | ( 12,043 ) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 grouped cell review. The raw schedule labels the relevant column Cost and explicitly prints the flagged negative values in parentheses. Representative rows across the schedule exactly match extracted costs, including -3,270, -12,043, -46,468, and -36,816. Nearby source and commitment rows show the pattern on revolvers or delayed-draw positions, so negativity alone is not a data defect; C107 is an overbroad monitoring rule for this filing. Residual risk is limited to uncited members of the 24-row group, but the repeated exact source pattern and exact matches make a pipeline data error unlikely."
+}

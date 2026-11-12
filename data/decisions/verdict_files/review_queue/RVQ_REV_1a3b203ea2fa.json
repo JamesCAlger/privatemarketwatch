@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1a3b203ea2fa",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 244.2789165470761,
+  "anchor_value": 215.60,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 134,
+      "row_index": 8,
+      "quoted_text": "December 31, 2022 Total | fair value 48,908,608 | Fair Value as % of Net Assets 215.60%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 135,
+      "row_index": 8,
+      "quoted_text": "December 31, 2021 Total | fair value 30,795,693 | Fair Value as % of Net Assets 239.57%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 117,
+      "row_index": 13,
+      "quoted_text": "Total Portfolio Investments, Cash and Cash Equivalents | 31,413,679 | 244.38%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted pct_of_net_assets sum 244.2789 is inconsistent with the December 31, 2022 investment portfolio total of 215.60% and instead aligns with the prior-period cash-inclusive schedule total of 244.38%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 117,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "PCT01 is an aggregate pct_of_net_assets check. The filing's December 31, 2022 investment schedule gives Total Investment Portfolio fair value as 215.60% of net assets, and the cash-inclusive 2022 total is only 221.56%. The flagged observed sum of 244.2789165470761 does not match the 2022 anchor and is close to the December 31, 2021 cash-inclusive total of 244.38%, indicating a comparative-period leak into the 2022 extraction rather than a valid current-period total."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_25b7936dc80d",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 33,
+      "quoted_text": "Fusion Holding, Corp. | Software & Tech Services | Term Loan | 10.25 % (S + 6.25 %; 0.75 % Floor) | 9/14/2029 | 16,430,447 | 16,216,416 | 15,773,229 | (15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 34,
+      "quoted_text": "Fusion Holding, Corp. | Software & Tech Services | Revolver | - (S + 6.00 %; 0.75 % Floor) | 9/15/2027 | - | ( 12,356 | ) | ( 55,168 | ) | (6)(7)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged the identifier as a subtotal candidate, apparently due to aggregate-like wording in the legal issuer name. The raw September 30, 2025 SOI rows are individual Fusion Holding, Corp. facilities with facility types, rate terms, maturity dates, funded par/cost/fair value amounts, and tickmarks; neither cited row is labeled Total or otherwise structured as an aggregate/subtotal. The stored rows therefore reflect source positions, so the PP01 subtotal flag is a false alarm."
+}

@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_54fb21a2fd52",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 1153606.0,
+  "anchor_value": 1130534.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 27,
+      "quoted_text": "D&D Buyer, LLC | 10/04/23 | Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) | 0.2 % | 1,153,606 | 10/04/28 | 1,153,606 | 1,130,534"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 1,153,606 cost belongs to the D&D Buyer revolver row, whose source fair value is 1,130,534; the adjacent D&D Buyer term loan is a separate position with fair value 31,654,959.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "X07 fired because the extracted row pairs cost 1,153,606 with a fair value more than 10x cost. In the raw schedule, table 23 row 27 shows that cost 1,153,606 is the D&D Buyer, LLC revolver and its fair value is 1,130,534, not an extreme appreciation. The next row is a separate D&D Buyer term loan, so the flag reflects a real extraction/row-alignment defect rather than a valid outlier."
+}

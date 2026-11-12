@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_a6b44544b214",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.47398843930635837,
+  "anchor_value": 1.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 5,
+      "quoted_text": "Total Investments | December 31, 2025 Fair Value 395,375,030 | December 31, 2024 Fair Value 517,910,117",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 51,
+      "row_index": 37,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | fair value 395,375,030 for the current 2025 SOI",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | ... | Amortized Cost (3) | Fair Value (4) | % of Net Assets (19)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "B01 counted 346 leaves for the 2025 report date even though source separates current 2025 fair value from comparative 2024 fair value; the low 164/346 coverage is driven by period-scoping, not absent source fair values.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 59,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw source shows fair value columns and values for the 2025 SOI, including total current-period fair value of 395,375,030 at table 51 row 37 and in the summary at table 59 row 5. The same summary separately presents December 31, 2024 fair value of 517,910,117, and the following comparative SOI layout also has a Fair Value column. Therefore the B01 failure (164/346 leaves have fair_value) is a real data error caused by comparative-period rows leaking into, or not being scoped out of, the 2025 completeness denominator rather than by missing fair value disclosure in the filing."
+}

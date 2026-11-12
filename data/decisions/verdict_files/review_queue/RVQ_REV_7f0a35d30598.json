@@ -1,0 +1,68 @@
+{
+  "review_id": "RVQ_REV_7f0a35d30598",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": "Nine source principal/par amounts denominated in CAD (C$)",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 32,
+      "quoted_text": "Canadian Orthodontic Partners Corp - delayed draw term loan - C$ 36 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 2,
+      "quoted_text": "Canadian Orthodontic Partners Corp - delayed draw term loan - C$ 29 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 3,
+      "quoted_text": "Canadian Orthodontic Partners Corp - delayed draw term loan PIK - C$ 383 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 4,
+      "quoted_text": "Canadian Orthodontic Partners Corp - revolving loan - C$ 264 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "Canadian Orthodontic Partners Corp - revolving loan - C$ 111 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 6,
+      "quoted_text": "Canadian Orthodontic Partners Corp - revolving loan - C$ 107 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Canadian Orthodontic Partners Corp - revolving loan PIK - C$ 49 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 8,
+      "quoted_text": "Canadian Orthodontic Partners Corp - term loan - C$ 315 principal/par",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 32,
+      "quoted_text": "CR Services Intermediate, LLC - term loan - C$ 248 principal/par",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The current-period schedule explicitly marks all nine flagged debt principal/par cells as Canadian-dollar amounts with the C$ prefix. The extracted principal_amount_usd is blank for each flagged row, so the platform lacks the explicit FX-converted USD principal required for USD par analytics. The raw source therefore confirms a localized extraction/conversion gap. No independent filing FX rate is needed to establish that the USD-normalized field is missing."
+}

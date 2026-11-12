@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_cfa56935ad94",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 86500,
+  "anchor_value": 73700,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 37,
+      "quoted_text": "Alcresta Therapeutics, Inc. (11) | First lien senior secured revolving loan | 9.24 % | SOFR (Q) | 5.50 % | 03/2031 | 86.5 | 73.7 | 73.5 | (2)(8)(13)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row reports principal 86.5, amortized cost 73.7, and fair value 73.5 in thousands, so the flagged extracted cost value 86500 reflects principal rather than amortized cost.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 37
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source fair value is 73.5 thousand against amortized cost 73.7 thousand, not below 5 percent of cost; the extracted row's X08 firing indicates a missing or wrong fair_value/cost mapping.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw schedule header identifies Principal, Amortized Cost, and Fair Value columns, and the cited Alcresta row shows 86.5 principal, 73.7 amortized cost, and 73.5 fair value, all in thousands. The queue artifact reports the flagged cost value as 86500 and the rule fired because fair value is below 5 percent of cost. The raw source does not show a distressed fair-value/cost relationship; it shows fair value approximately equal to amortized cost. Therefore the flag reflects a localized extraction or column-mapping defect, not a genuine distressed position."
+}

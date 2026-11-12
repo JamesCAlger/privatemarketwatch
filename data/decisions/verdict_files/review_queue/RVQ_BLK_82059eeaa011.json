@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_82059eeaa011",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_row_terms",
+  "observed_value": "SOFR",
+  "anchor_value": "S+ 725 PIK; S+ 700 PIK",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 13,
+      "quoted_text": "RQM+ Corp. (2) | Life Sciences Tools & Services | S+ 725 PIK | 1.00 | % | 11.21 | % | 8/2021 | 8/2029 | 17,067 | 16,958 | 13,653",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "TAUC Management, LLC (2) | Health Care Providers & Services | S+ 700 PIK | 1.00 | % | 10.82 | % | 2/2021 | 2/2027 | 8,406 | 8,386 | 7,229",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The current-quarter schedule contains a dedicated Spread above Index column and explicitly prints S+ 725 PIK for RQM+ and S+ 700 PIK for TAUC. Thus both flagged rows do carry structured index-plus-spread terms supporting the extracted SOFR reference; the ref_SOFR_no_structured_spread check is the error, not the source-backed data. No aggregate anchor is relevant."
+}

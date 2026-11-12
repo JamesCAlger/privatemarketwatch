@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_7494d427ce37",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row_all_in_rate",
+  "observed_value": 9.76,
+  "anchor_value": 19.82,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 13,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | 9.76 % | S + 6.50 % (Incl. 10.06 % PIK) | 04/02/29 | 10,990 | 10,809 | 10,551 | (5) (7)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw SOI row reports Streamland Media Midco LLC with Interest Rate 9.76% and Reference Rate and Spread 'S + 6.50% (Incl. 10.06% PIK)'. Under the pik_le_interest_rate all-in convention, interest_rate must be PIK-inclusive; storing 9.76 excludes the 10.06% PIK component, so the all-in rate is greater than the stored value."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_701fcc339f92",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8.25,
+  "anchor_value": 8.25,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 41,
+      "quoted_text": "Polytek | (o) | Senior Secured Term Loan | S+ | 8.25 % PIK | 11.93 % | 12/23/2020 | 8/15/2026 | 468,054 | 468,054 | 140,416",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell review. The raw March 31, 2026 investment schedule at table 17 row 41 explicitly reports Polytek's spread/PIK cell as 8.25% PIK, exactly matching the published pik_rate of 8.25. The absence of a declared or instance XBRL fact reflects a valid text extraction pathway, not an incorrect data value; the pathway-only flag is therefore a false alarm."
+}

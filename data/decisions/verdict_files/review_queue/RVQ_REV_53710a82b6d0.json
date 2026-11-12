@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_53710a82b6d0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 16.3333333333,
+  "anchor_value": 10.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 6,
+      "quoted_text": "KWOR Acquisition, Inc. | (5) (6) (17) (18) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.58 % | 02/28/2030 | 49 | 3 | 49 | --"
+    },
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "KWOR Acquisition, Inc. | (5) (6) (17) (18) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.58 % | 02/28/2030 | 71 | 5 | 71 | 0.01"
+    }
+  ],
+  "rationale": "Class 2 row-level check. The raw schedule shows the two flagged non-equity rows as KWOR Acquisition, Inc. first lien debt with cost/fair value of 3/49 and 5/71, respectively. The extracted costs and fair values match the source; the X07 warning reflects a real but source-disclosed high fair-value-to-cost ratio, not a platform data error."
+}

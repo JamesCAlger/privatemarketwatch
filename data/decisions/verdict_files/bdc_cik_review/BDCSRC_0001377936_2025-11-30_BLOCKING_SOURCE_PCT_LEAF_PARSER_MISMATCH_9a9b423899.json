@@ -1,0 +1,89 @@
+{
+  "changed_files": [],
+  "cik": "0001377936",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs. The GAV gate passes but does not prove the source-only row identity issue is safe to patch.",
+  "html_citations": [
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        9,
+        13,
+        17,
+        21,
+        22
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "SmartAC.com, LLC is a current-period position row with issuer, industry, first-lien instrument, SOFR cash coupon, maturity, cost, fair value, and percent-of-net-assets cells. It supports that at least part of the packet is real position undercoverage.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 1,
+      "table_index": 20
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        9,
+        13,
+        17,
+        21,
+        22
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "Axero Holdings, LLC is a current-period position row with issuer, industry, first-lien instrument, cash/PIK coupon terms, maturity, cost, fair value, and percent-of-net-assets cells. This is position evidence, but the row is not safely recoverable by a generic terminal-percentage rule alone.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 10,
+      "table_index": 19
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        9,
+        13,
+        17,
+        21,
+        22
+      ],
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "reason": "C2 Educational Systems, Inc. is a current-period control-investment position row with issuer, industry, first-lien instrument, SOFR cash coupon, maturity, cost, fair value, and percent-of-net-assets cells.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 5,
+      "table_index": 11
+    }
+  ],
+  "missing_evidence": "A safe patch needs a Saratoga-specific or otherwise bounded parser/staging mechanism that maps terminal-percentage hierarchy labels to issuer-level tranche rows without treating industry category summaries as positions. Missing evidence includes selected-table coverage for the real position rows outside the current parsed set, a deterministic row identity key linking XBRL source_row_id values to HTML issuer/tranche rows, and false-positive tests across Saratoga periods showing that affiliation/percentage/category prefixes do not create duplicate holdings or include subtotal rows.",
+  "patch_summary": "",
+  "primary_justification": "The bundle proves that the 2025-11-30 Saratoga packet contains real current-period positions missing from unified output, including Axero Holdings, SmartAC.com, and C2 Educational Systems rows with issuer, instrument, coupon, maturity, cost, fair value, and percent evidence. It also shows nearby industry summary rows with similar category labels, so a generic terminal-percentage parsing change would not be bounded enough to merge safely.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-11-30",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker remains live and is not hidden or suppressed. Unified holdings underrepresent specific Saratoga position rows until a tested row-identity and table-selection mechanism is implemented; a broad parser change would risk duplicate rows or subtotal leakage.",
+  "review_id": "BDCSRC_0001377936_2025-11-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_9a9b423899",
+  "reviewer_notes": "Manual review rejected the prior insufficient-evidence verdict. Evidence is sufficient to diagnose real position undercoverage, but insufficient to implement a bounded production patch because the candidate set mixes issuer/tranche rows with category summaries and requires row identity beyond the current bundle.",
+  "rule_type": "table_selection",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The reviewed packet remains an escalated source reconciliation blocker requiring a bounded Saratoga row-identity/table-selection fix.",
+  "tests_validation_plan": "Validate schema and evidence-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted Saratoga parser/table-selection tests and false-positive subtotal/category-summary tests before rebuilding outputs.",
+  "verdict": "ESCALATE"
+}

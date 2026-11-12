@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_3fede4dc60ab",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -256000.0,
+  "anchor_value": -256000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 4,
+      "quoted_text": "Consumer Services | First Lien(4)(5) - Undrawn | Reference -- | Spread -- | Interest Rate -- | Principal Amount $5,000 | Cost $-- | Fair Value $(84)"
+    },
+    {
+      "table_index": 46,
+      "row_index": 10,
+      "quoted_text": "Total Unfunded Debt Investments | $ | 144,094 | $ | ( 227 ) | $ | ( 256 ) | ( 0.09 ) | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counted unfunded debt commitments with source Interest Rate shown as em dash, causing legitimate blank rates to depress debt-rate coverage.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 46,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The C01 failure reports 66 debt rows without rate and residual fair value of -256000. The raw schedule has a separate Unfunded Debt Investments section where undrawn debt rows explicitly show Reference, Spread, and Interest Rate as em dash, and its total fair value is (256), matching the residual at thousand-dollar scale. Because the source says these unfunded commitments have no stated rate, the stored blanks are source-consistent and the check is over-scoped rather than exposing a data extraction defect."
+}

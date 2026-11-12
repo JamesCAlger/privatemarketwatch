@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_58309a1aeb5f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 220.3,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 20,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 259,337 | $ | 259,073 | 220.3 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule reports total investments at 220.3% of member's capital, but the reviewed artifact reports pct_sum=0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's schedule total line shows fair value of 259,073 and 220.3% of member's capital for total non-controlled-non-affiliated Portfolio Company investments, while the flag reports pct_sum=0.0%. The nonzero source percentage grounds an extraction gap in the percent-of-member-capital field."
+}

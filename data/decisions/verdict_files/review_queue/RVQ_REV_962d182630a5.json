@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_REV_962d182630a5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19,
+  "anchor_value": 19,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 16,
+      "quoted_text": "Steele Solutions, Inc. First Lien - Revolving Credit Facility shows Amortized Cost (30) and Fair Value (31)."
+    },
+    {
+      "table_index": 34,
+      "row_index": 18,
+      "quoted_text": "Superior Intermediate LLC First Lien - Revolving Credit Facility shows Amortized Cost (24) and Fair Value (25)."
+    },
+    {
+      "table_index": 34,
+      "row_index": 19,
+      "quoted_text": "Superior Intermediate LLC First Lien - Delayed Draw Term Loan shows Amortized Cost (61) and Fair Value (62)."
+    },
+    {
+      "table_index": 35,
+      "row_index": 27,
+      "quoted_text": "Amy's Kitchen, LLC First Lien - Delayed Draw Term Loan shows Amortized Cost (48) and Fair Value (53)."
+    },
+    {
+      "table_index": 35,
+      "row_index": 32,
+      "quoted_text": "CD&R Reign Topco, Inc. First Lien - Delayed Draw Term Loan shows Amortized Cost (199) and Fair Value (171)."
+    },
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "GS AcquisitionCo, Inc. First Lien - Delayed Draw Term Loan shows Amortized Cost (14) and Fair Value (218)."
+    },
+    {
+      "table_index": 36,
+      "row_index": 31,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. First Lien - Delayed Draw Term Loan shows Amortized Cost (35) and Fair Value (27)."
+    },
+    {
+      "table_index": 36,
+      "row_index": 33,
+      "quoted_text": "Jupiter Refuel US Buyer, Inc. First Lien - Delayed Draw Term Loan shows Amortized Cost (4) and Fair Value (3)."
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw Schedule of Investments itself presents these Amortized Cost cells as parenthetical negative amounts. The extracted signs match the source schedule for the sampled localized rows across the relevant SOI tables, and the schedule total fair value ties at 1,488,856. This is an advisory monitor firing on source-faithful negative cost rows, not a data error."
+}

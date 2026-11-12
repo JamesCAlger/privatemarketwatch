@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_BLK_597f6474c10b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "2030-06-30",
+  "anchor_value": "2030-06-28",
+  "confidence": 0.93,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 14,
+      "quoted_text": "Cherry Bekaert Advisory, LLC | First Lien Delayed Draw Term Loan | 6/30/2030",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 19,
+      "quoted_text": "Cherry Bekaert Advisory, LLC | First Lien Delayed Draw Term Loan | 6/28/2030",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row mismatch. The raw schedule supports both candidate dates for Cherry Bekaert Advisory delayed draw term loans: table 22 row 14 (and row 15) reports 6/30/2030, while table 22 row 19 reports 6/28/2030. The flagged identifier provides no principal, cost, or fair value with which to match a unique source row, so raw source cannot determine whether the identifier maturity or structured XBRL maturity is wrong. Human review of the fact-to-position pairing is required."
+}

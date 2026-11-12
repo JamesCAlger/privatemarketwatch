@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4ac8b2ab1115",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 254154676,
+  "anchor_value": 254154676,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | (5) | 1st Lien | 3M SOFR+ 6.50 % | 2.00 % | 11.83 % | 6/5/2023 | 6/5/2028 | Services: Business | $ | 2,486,670 | $ | 2,434,685 | $ | 2,474,237 | 1.73 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 53,
+      "quoted_text": "Total Investments | $ | 252,191,163 | $ | 254,154,676 | 178.19 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 11,
+      "quoted_text": "Total Non-controlled, non-affiliated investments | $ | 206,513,758 | $ | 208,574,078 | 193.08 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "B01 counted 510 schedule leaves for a current-period fair-value coverage check even though the current June 30 SOI rows have fair-value cells and tie to the filing total of 254,154,676.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 53
+      }
+    }
+  ],
+  "rationale": "The raw SOI shows actual current-period investment rows carry fair value, e.g. table 9 row 6 has fair value 2,474,237, and the current schedule total ties to the filing total of 254,154,676 at table 13 row 53 and balance-sheet/summary anchors. The bundle flag reports only 252 of 510 leaves with fair_value, which is consistent with the rule denominator including out-of-scope schedule structure and/or the comparative December 31 schedule, not with missing fair values in the current-period extracted holdings. The source therefore supports the stored current-period fair-value coverage and shows the B01 check scope is too broad."
+}

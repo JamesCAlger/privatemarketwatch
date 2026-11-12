@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_f39d1a122ce1",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -26223000.2575,
+  "anchor_value": 26223000.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 35,
+      "quoted_text": "CCBlue Bidco, Inc. subtotal: 26,322 cost, 26,223 fair value, 21,790 prior value, 2.22 percent",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The 26,223 thousand fair-value subtotal for CCBlue Bidco, Inc. ties to the 26.223 million residual and should not be treated as an independent income-identity unit.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 26,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation found the filing income statement itself reconciles: 2025 investment income components in table 22 rows 4-8 sum to total investment income of 150,258, and table 13 repeats the rounded 150.3 million total. The flagged residual is not supported by an income-source line; it matches the 26,223 thousand subtotal line for CCBlue Bidco, Inc. in the investment schedule, indicating a subtotal leaked into the identity population."
+}

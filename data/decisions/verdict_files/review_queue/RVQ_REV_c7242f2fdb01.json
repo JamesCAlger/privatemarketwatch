@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_c7242f2fdb01",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": 4997000,
+  "confidence": 0.76,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "A&R Logistics Holdings, Inc. | Road & Rail | Term Loan | SOFR | + | 5.75 % | (Q) | 10.79 % | 05/03/25 | 4,997 | $ | 4,965 | $ | 4,884 | (1)(6)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt rows disclose source par amounts, but principal_amount_usd is blank in the flagged extract; for A&R Logistics the source par is 4,997 thousand.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd. The raw June 30, 2023 schedule includes debt rows with explicit Par Amount / Shares values, including A&R Logistics Holdings, Inc. with par 4,997 and dollar-denominated amortized cost/fair value columns. The stored flagged value is blank, so the normalized USD principal field missed source par evidence. Targeted searches did not find a separate EUR, GBP, USD, U.S. dollar, or foreign-currency marker; this lowers confidence in the rule's stated non-USD sub-mechanism but does not remove the data defect that principal_amount_usd is missing where source par exists."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_4673ca639023",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "FX01 treated blank repeated currency-symbol cells in Par Amount as non-USD",
+  "anchor_value": "SOI schedule is dollar-denominated; the same schedule uses $ for Par Amount/Amortized Cost/Fair Value and the portfolio geographic breakdown is United States 100%",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 29,937,813 | $ | 29,078,052 | $ | 29,249,244"
+    },
+    {
+      "table_index": 5,
+      "row_index": 5,
+      "quoted_text": "Fenix Intermediate, LLC | Delayed Draw Term Loan B-1 - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | 1,795,371 | 1,795,371 | 1,754,078"
+    },
+    {
+      "table_index": 8,
+      "row_index": 2,
+      "quoted_text": "United States | 100 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX01 appears to classify rows with omitted repeated dollar symbols as non-USD, but the SOI table is dollar-denominated and the filing discloses the portfolio as United States 100%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 5,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The flagged rows have blank principal_amount_usd because FX01 interpreted source par rows without an explicit repeated currency symbol as non-USD. Raw source does not support that: table 5 row 4 establishes the Par Amount, Amortized Cost, and Fair Value columns are dollar-denominated with $ signs, and row 5 is the immediately following row in the same columns where the dollar sign is omitted as a repeated symbol. The filing's geographic breakdown also states United States 100%, with no evidence of foreign-currency par requiring FX conversion."
+}

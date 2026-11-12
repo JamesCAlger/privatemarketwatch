@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_7cfdfd908e7c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_source_row_structure",
+  "observed_value": "B02 reports 40 duplicate position keys, with Apex Service Partners, LLC as an example",
+  "anchor_value": "Raw SOI shows separate Apex line items sharing normalized issuer/investment/rate/maturity fields but carrying distinct par, cost, and fair value amounts",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 20,
+      "quoted_text": "Apex Service Partners, LLC | (6) (7) | First Lien Debt (Delayed Draw) | S + 5.00 % | 8.82 | % | 10/24/2030 | 3,067 | 3,054 | 3,081 | 0.22 | %"
+    },
+    {
+      "table_index": 63,
+      "row_index": 21,
+      "quoted_text": "Apex Service Partners, LLC | (6) (7) | First Lien Debt (Delayed Draw) | S + 5.00 % | 8.82 | % | 10/24/2030 | 3,075 | 3,050 | 3,089 | 0.22 | %"
+    }
+  ],
+  "rationale": "B02 is firing on duplicate normalized position keys, but the cited raw SOI rows show the filer disclosed two separate Apex delayed-draw first-lien debt rows with the same issuer, spread, interest rate, and maturity, while the par amount, amortized cost, and fair value differ. That makes the duplicate-key check overbroad for legitimate same-terms line items rather than evidence of a duplicated extraction row."
+}

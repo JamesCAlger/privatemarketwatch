@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_00ee5af20f2d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Portfolio Company Debt Securities- Canada Construction Technology Nexii Building Solutions, Inc. Type of Investment Secured Loan Investment Date August 27,2021 Maturity Date August 27,2025 Interest Rate Variable interest rate Prime + 7.0% or Floor rate 10.3%; EOT 2.5%",
+  "anchor_value": "Nexii Building Solutions, Inc.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 5,
+      "quoted_text": "Nexii Building Solutions, Inc. (10) | Secured Loan | August 27, 2021 | August 27, 2025 | Variable interest rate Prime + 7.0 % or Floor rate 10.3 %; EOT 2.5 % (8)(15) | $ | 10,665 | $ | 11,055 | $ | 10,146"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name includes portfolio-company header text, geography/sector labels, and investment terms instead of only the source Portfolio Company cell; source row issuer is Nexii Building Solutions, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 5,
+        "quoted_text": "Nexii Building Solutions, Inc. (10) | Secured Loan | August 27, 2021 | August 27, 2025 | Variable interest rate Prime + 7.0 % or Floor rate 10.3 %; EOT 2.5 % (8)(15) | $ | 10,665 | $ | 11,055 | $ | 10,146"
+      }
+    }
+  ],
+  "rationale": "The raw SOI table has a Portfolio Company column and row 25:5 shows the issuer cell as Nexii Building Solutions, Inc. (10), followed by separate cells for type, investment date, maturity, interest rate, principal, cost, and fair value. The stored issuer_name instead concatenates the column header, category labels (Debt Securities- Canada / Construction Technology), issuer, and multiple non-issuer fields, so the fmt_issuer_name flag is a real extraction/field-boundary error."
+}

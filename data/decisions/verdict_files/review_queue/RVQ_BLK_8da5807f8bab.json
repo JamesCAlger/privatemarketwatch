@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_8da5807f8bab",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "Datacor 2030-03-13; RCP Encore 2026-03-31",
+  "anchor_value": "Datacor 2030-03-11; RCP Encore 2026-06-30",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "Datacor, Inc. | Revolver | 3/11/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "RCP Encore Acquisition, Inc. | Term Loan | 6/30/2026",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Datacor Revolver identifier uses 3/13 with the current year, while the current source row states 3/11/2030 and the comparative row states 3/13/2029.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 13,
+        "row_index": 8
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "RCP Encore identifier uses the comparative maturity 3/31/2026 instead of the current source maturity 6/30/2026.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 20,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the full source rows resolves which field is wrong. The current filing schedule states 3/11/2030 for the Datacor Revolver at table 13 row 8 and 6/30/2026 for the RCP Encore Term Loan at table 20 row 19, matching the structured XBRL dates and contradicting the identifier dates. Comparative rows explain the leaked date components: Datacor is 3/13/2029 at table 31 row 7, and RCP Encore is 3/31/2026 at table 37 row 36. Thus the identifier-generation path leaked comparative maturity data; the structured maturity values are correct."
+}

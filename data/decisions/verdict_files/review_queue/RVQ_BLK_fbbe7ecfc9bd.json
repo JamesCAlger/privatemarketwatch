@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_fbbe7ecfc9bd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2026-08-26",
+  "anchor_value": "2028-08-26",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 27,
+      "quoted_text": "Jackson Paper Manufacturing Company | Initial Term Loan | 1M SOFR + 6.25% | Floor 1.00% | Interest Rate 10.02% | Initial Acquisition Date 10/1/2021 | Maturity Date 8/26/2028",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 28,
+      "quoted_text": "Jackson Paper Manufacturing Company | Revolving Loan | 1M SOFR + 6.25% | Floor 1.00% | Initial Acquisition Date 10/1/2021 | Maturity Date 8/26/2028",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 2 within-row comparison. The March 31, 2026 raw investment schedule gives maturity date 8/26/2028 for both the Jackson Paper Initial Term Loan and Revolving Loan, while the flagged identifier text says 8/26/2026. The structured XBRL-side value 2028-08-26 agrees with the raw schedule, so the identifier maturity is the defective field. A targeted raw-source search found no occurrence of 8/26/2026."
+}

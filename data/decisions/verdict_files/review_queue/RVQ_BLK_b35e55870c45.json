@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_b35e55870c45",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1164413000.0,
+  "anchor_value": 638563000.0,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 2,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 638,563 | $ | 640,076",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 638,563 | $ | 640,076 | $ | - | $ | 56,301 | $ | 583,775",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The extracted cost sum is 1,164,413,000, but the filing schedule reports Total Investments before Cash Equivalents cost of 638,563,000 and the fair value hierarchy independently reports Total Investments cost of 638,563,000. Even including cash equivalents gives only 667,334,000, so the extracted ledger materially overshoots the raw source anchor. The raw source anchors prove a real conservation error, but the evidence window did not localize a single raw source row accounting for the 525,850,000 excess."
+}

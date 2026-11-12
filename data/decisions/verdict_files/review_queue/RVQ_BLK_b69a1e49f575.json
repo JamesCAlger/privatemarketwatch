@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_BLK_b69a1e49f575",
+    "verdict":  "false_alarm",
+    "mechanism":  "rounding_tolerance_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.02,
+    "anchor_value":  0.02,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  33,
+                                  "row_index":  30,
+                                  "quoted_text":  "CB Buyer Inc (3)(7)(11) | First Lien Senior Secured Revolving Loan | Software | SOFR + 5.250 % | 8.971 % | 7/1/2024 | 7/1/2031 | 150 | 129 | 138 | 0.02 | %",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  25,
+                                  "row_index":  28,
+                                  "quoted_text":  "Total Net Assets | $ | 608,129 | $ | 352,123",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "False alarm: the source row reports fair value of 138 thousand and percentage of net assets of 0.02%. Against total net assets of 608,129 thousand, 138 / 608,129 * 100 = 0.02269%, which rounds to the reported 0.02%. The identity residual comes from applying an exact algebraic check to a rounded percentage disclosure, not from a wrong extracted value."
+}

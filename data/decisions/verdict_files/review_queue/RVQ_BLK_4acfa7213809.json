@@ -1,0 +1,76 @@
+{
+  "review_id": "RVQ_BLK_4acfa7213809",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": "five parsed/XBRL maturity disagreements",
+  "anchor_value": "filing maturity cells cited per finding",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 47,
+      "quoted_text": "TEAM Services | Senior Secured Initial Term Loan | acquisition 1/30/2026 | maturity 1/28/2033",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 10,
+      "quoted_text": "Micro Merchant Systems | Unitranche Initial Term Loan | acquisition 3/2/2022 | maturity 12/14/2027",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 39,
+      "quoted_text": "Leaf Home | Senior Secured Initial Term Loan | acquisition 9/4/2025 | maturity 9/4/2031",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 4,
+      "quoted_text": "Midwest Eye Services | Senior Secured Fourth Amendment Delayed Draw Term Loan | maturity 8/20/2027",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 46,
+      "quoted_text": "Terra Millennium | Senior Secured Initial Term Loan | acquisition 10/25/2024 | maturity 11/1/2030",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "TEAM Services maturity was parsed as 1/28/2023, but the matching filing row states 1/28/2033.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 11, "row_index": 47}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Micro Merchant Systems identifier fields do not match the filing row, whose maturity is 12/14/2027 rather than 2/2/2026 or 2/2/2033.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 23, "row_index": 10}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Leaf Home XBRL twin maturity 11/15/2029 is wrong; the filing row and parsed identifier both state 9/4/2031.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 15, "row_index": 39}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Midwest Eye Services flagged dates in 2030 do not match the filing maturity of 8/20/2027.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 50, "row_index": 4}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Terra Millennium XBRL twin maturity 9/4/2031 is wrong; the filing row and parsed identifier state 11/1/2030.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 15, "row_index": 46}
+    }
+  ],
+  "rationale": "This is a Class 2 within-row adjudication. Direct raw schedule rows resolve all five maturity conflicts. The TEAM, Leaf Home, and Terra Millennium filing rows give exact maturity cells that expose a year typo or a maturity copied from another position. Micro Merchant Systems and Midwest Eye Services additionally show broader identifier/row misalignment: the flagged investment descriptors and dates do not match the issuer's filing rows. The pattern is a localized extraction or row-association defect, not a bad check."
+}

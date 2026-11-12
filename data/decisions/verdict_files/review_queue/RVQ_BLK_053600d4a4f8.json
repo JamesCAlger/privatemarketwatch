@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_BLK_053600d4a4f8",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 81772,
+  "anchor_value": 81772,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 3,
+      "quoted_text": "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582) | 3.64 % | $ | 65,109 | 1.4 | % | $ | 65,109"
+    },
+    {
+      "table_index": 33,
+      "row_index": 4,
+      "quoted_text": "JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375) | 3.73 % | 16,663 | 0.4 | 16,663"
+    },
+    {
+      "table_index": 33,
+      "row_index": 5,
+      "quoted_text": "Total money market funds | 81,772 | 1.8 | 81,772",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "SRC_BDC02 said the two pipeline BDC money market rows had no matching current-period source fact. Raw source table 33 contains both named CUSIP rows for December 31, 2025: Morgan Stanley at fair value 65,109 and JPMorgan at fair value 16,663. Their sum equals the source's Total money market funds fair value of 81,772, so the source supports the rows and the row-match flag is a false alarm."
+}

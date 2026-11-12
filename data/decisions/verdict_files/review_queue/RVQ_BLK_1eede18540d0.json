@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_BLK_1eede18540d0",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "2030-03-31",
+    "anchor_value":  "2029-03-31",
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  31,
+                                  "row_index":  21,
+                                  "quoted_text":  "Agrofresh - Revolving Credit Facility | (11) | S + 5.50 % | 0.00 % | 9.32 % | 3/31/2029 | 3,306 | 3,199 | 3,199 | 0.10",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  31,
+                                  "row_index":  20,
+                                  "quoted_text":  "Agrofresh | S + 5.50 % | 0.00 % | 9.32 % | 3/31/2030 | 65,753 | 64,940 | 64,952 | 1.98",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The identifier for Agrofresh - Revolving Credit Facility carries 2030-03-31, but the source row maturity is 3/31/2029; 3/31/2030 belongs to the adjacent Agrofresh row.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  31,
+                                          "row_index":  21
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 2 row-level maturity mismatch. In the raw SOI, table 31 row 21 is Agrofresh - Revolving Credit Facility and its Maturity Date cell is 3/31/2029. The flagged observed identifier maturity 2030-03-31 is present on adjacent row 20 for Agrofresh, not the revolving credit facility. Therefore the identifier maturity is wrong and the structured/XBRL maturity is source-supported."
+}

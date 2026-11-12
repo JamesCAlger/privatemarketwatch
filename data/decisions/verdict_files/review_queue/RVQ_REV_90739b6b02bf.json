@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_90739b6b02bf",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 X02 flag for internal row key 349155 reports a blank interest_rate and basis_spread, but the bundle supplies no issuer, instrument, accession row coordinate, or other source-row identity for that key. The raw 2026-03-31 schedule was readable through the evidence CLI and contains rate-bearing and non-rate-bearing investment rows, but a targeted search for the row key and rate terms did not map row 349155 to a source row. Therefore the raw source cannot decide whether the blank is an extraction gap or is appropriate for a non-rate-bearing instrument; guessing a culprit would be ungrounded."
+}

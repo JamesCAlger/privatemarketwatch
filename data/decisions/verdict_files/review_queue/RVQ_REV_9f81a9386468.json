@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_9f81a9386468",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 113213531,
+  "anchor_value": 181356000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 4,
+      "quoted_text": "Non-controlled, non-affiliated investments, at fair value (cost of $ 185,605 and $ 220,859, respectively) | $ | 181,356 | $ | 215,975",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 80,
+      "quoted_text": "Total Investments | $ | 185,605 | $ | 181,356 | 92.27 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holdings coverage implied by the GAV_BDC02 ratio is about 113.214 million against a source investment fair value total of 181.356 million.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 12,
+        "row_index": 80
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the filing balance sheet and the schedule of investments agree that June 30, 2024 investments at fair value are 181.356 million. The queued rule artifact reports a BDC GAV reconciliation ratio of 0.6243, implying extracted covered fair value of about 113.214 million, far below the raw-source investment total. Because the source anchor is internally consistent and the extracted coverage is materially incomplete, the flag is a real extraction coverage error rather than a false alarm. The raw source does not isolate a single residual-tie row, so localization remains aggregate."
+}

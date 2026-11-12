@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_e73493bfe1a6",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 10,
+      "quoted_text": "American Physician Partners, LLC | ^ | (2)(3)(8)(11)(12) | Healthcare & Pharmaceuticals | SOFR | 10.25 % ( 100 % PIK) | 15.71 % | 12/16/2022 | 6/30/2023 | 3,641 | 3,233 | -- | --"
+    },
+    {
+      "table_index": 43,
+      "row_index": 11,
+      "quoted_text": "American Physician Partners, LLC | ^ | (2)(3)(8)(11)(12) | Healthcare & Pharmaceuticals | SOFR | 10.25 % ( 100 % PIK) | 15.71 % | 1/7/2019 | 8/5/2022 | 47,969 | 41,123 | -- | --"
+    },
+    {
+      "table_index": 44,
+      "row_index": 20,
+      "quoted_text": "Dermatology Associates | ^ | (2)(3)(8)(9) | Healthcare & Pharmaceuticals | SOFR | 11.31 % ( 100 % PIK) | 16.81 % | 2/15/2018 | 1/15/2024 | 12,782 | 6,106 | 9,122 | 0.83"
+    }
+  ],
+  "rationale": "Class 2 row-disposition review. The bundle identifies three positions as nonaccrual_source=footnote. The raw SOI rows for those three positions are readable and show issuer, footnote markers, and 100% PIK terms, but CLI searches for non-accrual/nonaccrual/accrual status/not accruing/cash basis did not expose footnote text or other raw language proving that the positions are on non-accrual. PIK-only or 100% PIK terms alone do not decide a nonaccrual_flag, so the source checked does not ground a real_error or a false_alarm."
+}

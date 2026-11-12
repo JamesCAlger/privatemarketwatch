@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_daa69e6e37d8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 0.7142857142857143,
+  "anchor_value": 0.8,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 20,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13 | % | 5/1/2029 | 110,967 | 109,915 | 100,875"
+    },
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88 | % | 5/1/2030 | 171,258 | 167,710 | 108,503"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2029 iHeartCommunications corporate bond has a 9.13% source coupon, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 20
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2030 iHeartCommunications corporate bond has a 10.88% source coupon, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "C01 flagged rate coverage because only 5 of 7 debt rows have extracted rates. The two missing-rate debt rows are the March 31, 2026 iHeartCommunications corporate bonds, and the raw SOI table gives explicit interest-rate cells of 9.13% and 10.88% for those rows. Because source rates exist but the extracted interest_rate fields are blank, the flag is a real extraction gap."
+}

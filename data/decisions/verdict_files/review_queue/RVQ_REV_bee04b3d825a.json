@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_bee04b3d825a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.68,
+  "anchor_value": 0.7,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 1,
+      "quoted_text": "Investment Type | Spread Above Index (1) | Interest Rate (2) | Acquisition Date | Maturity Date | Principal ($) / Shares (3) | Amortized Cost | Percentage of Net Assets | Fair Value (4)"
+    },
+    {
+      "table_index": 22,
+      "row_index": 7,
+      "quoted_text": "Arnott, LLC | LP units | N/A | N/A | 12/2024 | N/A | - | 125 | - | 125"
+    },
+    {
+      "table_index": 22,
+      "row_index": 17,
+      "quoted_text": "FR Vision Holdings, Inc. | LP units | N/A | N/A | 01/2024 | N/A | - | 109 | - | 141"
+    },
+    {
+      "table_index": 22,
+      "row_index": 39,
+      "quoted_text": "Eclipse Buyer, Inc. | Preferred stock | N/A | 12.50 % | Non-Cash | 09/2024 | N/A | - | 3,435 | 0.2 | 3,500"
+    },
+    {
+      "table_index": 23,
+      "row_index": 4,
+      "quoted_text": "Metal Supermarkets US Buyer, LLC(7)(10) | LLC units | N/A | N/A | 12/2024 | N/A | - | - | - | -"
+    }
+  ],
+  "rationale": "C04 failed because only 68.0% of 25 extracted equity rows have shares, just below the 70.0% threshold. The raw SOI has a Principal ($) / Shares column, but representative equity rows explicitly show no share/principal amount in that column for some LP units, preferred stock, and LLC units. Because the missing share values are present as source blanks/dashes rather than missed source quantities, the aggregate threshold fire is a rule-scope false alarm, not a grounded data error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_c25eb6944ea7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -8000.0,
+  "anchor_value": -8000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 22,
+      "quoted_text": "AAH Topco, LLC / First Lien(3)(4) - Undrawn / 12/2027 / principal 1,413 / cost ( 8 ) / fair value --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 10,
+      "quoted_text": "Total Unfunded Debt Investments | $ | 153,674 | $ | ( 586 ) | $ | ( 492 ) | ( 0.06 ) | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw schedule itself presents unfunded debt investments with parenthesized negative costs. The representative flagged AAH Topco undrawn row shows cost (8), matching the extracted -8000 value in thousands, and the schedule's unfunded debt total also has negative cost. This is a legitimate unfunded-position presentation rather than a data error."
+}

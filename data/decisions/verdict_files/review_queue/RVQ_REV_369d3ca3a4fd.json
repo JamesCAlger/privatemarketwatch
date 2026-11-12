@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_369d3ca3a4fd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.022388059701492536,
+  "anchor_value": 3,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "Experity, Inc. | Health Care Technology | 10.10 % | S + 5.50 % (Incl. 2.75 % PIK) | 02/24/28 | 578 | 576 | 573 | (6) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 17,
+      "quoted_text": "Experity, Inc. | Health Care Technology | 11.20 % | S + 5.75 % | 02/24/28 | 903 | 900 | 873 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 5,
+      "quoted_text": "PDDS Holdco, Inc. (dba Planet DDS) | Health Care Technology | 12.25 % | S + 7.50 % | 07/18/28 | 24,090 | 23,747 | 24,030 | (6) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 30,
+      "quoted_text": "PDDS Holdco, Inc. (dba Planet DDS) | Health Care Technology | 12.93 % | S + 7.50 % | 07/18/28 | 24,090 | 23,696 | 23,849 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 38,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | 10.10 % | S + 5.50 % | 05/08/28 | 21,334 | 21,188 | 21,120 | (6) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 32,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | 10.85 % | S + 5.50 % | 05/08/28 | 26,129 | 25,723 | 25,999 | (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "D06 observed only 3 of 134 issuers persisting, but raw current and comparative schedules show repeated issuers such as Experity, PDDS Holdco, and Admiral Buyer.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 3 continuity flag. The raw filing source is readable and contradicts the 2.2% continuity metric: multiple named investments recur across the September 30, 2024 SOI tables and the December 31, 2023 comparative SOI tables with stable issuer names and similar terms. For example, Experity appears at table 14 row 29 and table 29 row 17, PDDS Holdco appears at table 15 row 5 and table 29 row 30, and Admiral Buyer appears at table 11 row 38 and table 26 row 32. This grounds the flag as a real extraction/issuer-normalization defect rather than genuine portfolio discontinuity."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_83f3a10def80",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_schedule_rows",
+  "observed_value": "SOFR with no structured spread",
+  "anchor_value": "S + 550; S + 325; S + 410",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "Rochester Midland Corporation | First Lien Secured Debt - Term Loan | S + 550 , 1.00 % Floor | 08/01/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 31,
+      "quoted_text": "DG Investment Intermediate Holdings 2, Inc. | First Lien Secured Debt - Term Loan | S + 325 , 0.00 % Floor | 07/09/2032",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 23,
+      "quoted_text": "Gainwell Acquisition Corp. | First Lien Secured Debt - Term Loan | S + 410 , 0.75 % Floor | 10/01/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Gainwell's source spread is S + 410, while the flagged extracted identifier says S+400.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the identified source rows shows a structured S-plus-spread rate in every checked row, directly contradicting the rule mechanism ref_SOFR_no_structured_spread; the reference-corroboration flag is therefore a false alarm. Separately, the Gainwell spread value is misstated in the extracted identifier and is recorded as an advisory finding."
+}

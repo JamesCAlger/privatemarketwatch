@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_966065ef4e76",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -25000.0,
+  "anchor_value": -25000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 25 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 38 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 18,
+      "quoted_text": "AI Titan Parent, Inc.^(5) | One stop | N/A(6) | 08/2031 | - | ( 9 ) | - | ( 12 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "AP Adhesives Holdings, LLC^(5) | One stop | N/A(6) | 04/2032 | - | ( 82 ) | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but raw filing schedule rows show the same parenthesized Amortized Cost amounts in thousands. For example, ABC Legal shows (25) and (38), which tie to stored costs -25000 and -38000; AI Titan and AP Adhesives show the same source pattern. The extraction preserved the source sign and scale, so the negative-cost warning is not a data error for these rows."
+}

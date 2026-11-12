@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_cd90303b8733",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -30000.0,
+  "anchor_value": -30000.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 19,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | S + 5.50 % | 04/02/29 | 1,514 | -- | ( 30 | ) | (6) (7) (8)"
+    },
+    {
+      "table_index": 30,
+      "row_index": 17,
+      "quoted_text": "Streamland Media Midco LLC | 1,514 | -- in Unfunded Commitment Balances table"
+    }
+  ],
+  "rationale": "C103 flagged fair_value -30000 as a negative mark without matching negative cost or unfunded-commitment marker. The raw SOI row shows Streamland Media Midco LLC with par 1,514, blank/dash cost, fair value (30), and footnote (7). The filing's Unfunded Commitment Balances table separately lists Streamland Media Midco LLC with a March 31, 2025 unfunded commitment balance of 1,514. The negative fair value is therefore a filer-presented unfunded-commitment mark, so the stored fair_value is source-consistent and the C103 flag is a false alarm caused by lookthrough/marker context rather than a value defect."
+}

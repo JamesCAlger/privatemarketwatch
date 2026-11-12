@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_fa4bebf41244",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "UNIT_STANDARD_USD_T4ATXCB5IUEP8MXI6R_UPG",
+    "anchor_value":  "USD",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  210,
+                                  "row_index":  6,
+                                  "quoted_text":  "Term Loan | First Lien | 3M SOFR+ 5.00 % | 9.33 % | $ | 1,747,854 | $ | 1,772,476 | 1.09 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "fair_value_currency was stored as a generated custom unit string even though the source schedule presents the fair value in dollars.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  210,
+                                          "row_index":  6
+                                      }
+                     }
+                 ],
+    "rationale":  "FX02 flags fair_value_currency as non-USD. The source SOI row for 2X LLC Term Loan shows the fair value column under explicit dollar signs, including $ 1,772,476, so the extracted custom unit UNIT_STANDARD_USD_T4ATXCB5IUEP8MXI6R_UPG is not the source currency and should normalize to USD."
+}

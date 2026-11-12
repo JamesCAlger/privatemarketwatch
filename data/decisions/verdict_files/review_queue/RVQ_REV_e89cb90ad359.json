@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_e89cb90ad359",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10.13,
+  "anchor_value": 16.245,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 112,
+      "row_index": 20,
+      "quoted_text": "Net investment income (loss) (4) | 10.83 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 102,
+      "row_index": 6,
+      "quoted_text": "2025 distributions per unit total | $ | 1.012",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 112,
+      "row_index": 14,
+      "quoted_text": "Members' capital at the end of the period | $ | 9.99",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 expects distribution_rate <= income_yield_pct * 1.5. The raw filing reports 2025 net investment income ratio of 10.83%, so the heuristic threshold is 16.245%. The 2025 distributions table totals $1.012 per unit; using the financial highlights ending members' capital per unit of $9.99 gives a distribution rate of about 10.13%, which does not exceed the threshold. The source therefore supports the fund financials metric rather than the validation failure."
+}

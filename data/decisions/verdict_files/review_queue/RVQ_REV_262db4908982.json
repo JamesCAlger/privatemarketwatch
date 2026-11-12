@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_262db4908982",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on flagged non-USD debt rows",
+  "anchor_value": "source shows Euro-denominated debt principal requiring explicit USD conversion",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 0,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars unless otherwise noted Euro.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 37,
+      "quoted_text": "Monitorus Holding, LLC Revolver: First Lien, principal currency EUR, principal amount 1,251,514, cost 1,360,599, fair value 1,353,796.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 38,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan: First Lien, principal currency EUR, principal amount 3,585,699, cost 3,619,086, fair value 3,600,991.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Euro-denominated debt principal is present in the source schedule, but principal_amount_usd is missing in the extracted holdings for FX01 rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "FX01 is valid. The source schedule states debt par is USD unless marked Euro, and Monitorus debt rows carry EUR principal amounts. The review bundle flags principal_amount_usd as blank for non-USD debt rows, so the pipeline failed to populate an explicit USD-converted principal needed for par analytics."
+}

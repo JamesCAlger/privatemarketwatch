@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_ebaee821b582",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4277.724,
+  "anchor_value": 4277.724,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 22,
+      "quoted_text": "Total investments | $ | 4,277,643 | $ | 4,277,724 | 179.37 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 112,
+      "row_index": 8,
+      "quoted_text": "Total investments | $ | 3,159,171 | $ | 3,161,223 | 205.11 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 is an aggregate source/output count mismatch for report_date 2025-12-31. The raw source contains a current-period SOI ending at table 85 with Total investments fair value of 4,277,724 thousand, matching the bundle's fund_quarter_fv_m of 4,277.724. The filing also contains a separate prior-year SOI ending at table 112 with Total investments fair value of 3,161,223 thousand. The source-side count is inflated by comparative-period SOI structure, while the output is anchored to the current 2025 schedule, so the blocker is a check-side comparative leak rather than a real missing-holdings defect."
+}

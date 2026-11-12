@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_c6d24778b61c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd blank on FX01-flagged rows",
+  "anchor_value": "source par amounts are USD-denominated in the filing schedule",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Par Amount $ 45,818,273; Amortized Cost $ 45,808,482; Fair Value $ 45,818,273 for Navistar Defense Super Senior Revolver",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "Par Amount $ 698,149; Amortized Cost $ 698,149; Fair Value $ 698,149 for Twin Star 13th Amendment Priority Delayed Draw Term Loan",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 26,
+      "row_index": 4,
+      "quoted_text": "Par Amount/Shares $ 4,027,844; Amortized Cost $ 3,267,678; Fair Value $ 1,180,158 for Encompass Digital Media Revolver",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "FX01 assumes the flagged debt rows have non-USD source par requiring explicit FX conversion, but the raw 2025 schedule presents the debt par column in dollars. Representative rows across the continued debt tables show the par, amortized cost, and fair value columns carrying '$' and no foreign-currency denomination. The missing principal_amount_usd value is therefore a check/scope false alarm rather than a source-backed data error."
+}

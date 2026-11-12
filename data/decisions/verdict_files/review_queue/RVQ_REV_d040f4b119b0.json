@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d040f4b119b0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 200.33,
+  "anchor_value": 200.33,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Total Portfolio Investments | $ | 1,473,450 | $ | 1,444,805 | 200.33 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 32,
+      "quoted_text": "Total members' capital | $ | 721,209 | $ | 582,083",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Mantech International CP | (4) (6) (13) | S + | 5.75 % | 10.80 % | 09/14/2029 | 17,508 | $ | 17,191 | $ | 17,373 | 2.41 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule labels the field as Percentage of Net Assets and discloses total portfolio investments of 1,444,805, or 200.33% of total members' capital of 721,209. Representative position percentages are therefore expected to be expressed as percent of net assets and can legitimately exceed 1%; for example, Mantech International CP fair value 17,373 divided by members' capital 721,209 is about 2.41%, matching the source. The flag reflects a weak concentration screen applied to correctly disclosed percentages, not a data extraction error."
+}

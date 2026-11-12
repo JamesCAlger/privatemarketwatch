@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_472a5be923ca",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_cells",
+  "observed_value": [18.25, 18.75, 18.75],
+  "anchor_value": [18.25, 18.75, 18.75],
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC Protective Advance Term Loan - 25.00% inc PIK (PRIME + 18.25%, 4.60% Floor, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 13,
+      "quoted_text": "WDE TorcSill Holdings LLC Revolver - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC Term Loan - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "C115's expected spread range rejects valid whole-number contractual spreads of 18.25% and 18.75% that are printed in the schedule.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 5,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "Class 1 confirmation of the three flagged basis_spread cells. The current-period investment schedule prints PRIME + 18.25% for the Protective Advance Term Loan and SOFR + 18.75% for both the Revolver and Term Loan. These exactly match the stored whole-number percentage values, so extraction is correct and C115's expected-range check is too restrictive."
+}

@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_BLK_ee150bf5e33c",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.2,
+  "anchor_value": 0.15755784912409648,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 11,
+      "quoted_text": "RT Holdings Parent, LLC (2)(4)(7) | Class P-1 Units | 0.2 | % | 105,624 | 133,086 | 367,086",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 40,
+      "quoted_text": "Net Assets ( 100.0 %) | $ | 232,982,663"
+    }
+  ],
+  "rationale": "The raw schedule gives the flagged Class P-1 Units row as 0.2% of net assets with fair value 367,086, and the same schedule gives net assets of 232,982,663. The exact calculation is 367,086 / 232,982,663 * 100 = 0.157557849%, which rounds to the one-decimal source presentation of 0.2%. The stored values match the raw source; the identity flag is caused by applying an exact algebraic check to a rounded displayed percentage."
+}

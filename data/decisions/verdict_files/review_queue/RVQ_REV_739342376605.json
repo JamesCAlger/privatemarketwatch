@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_739342376605",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values U_AUD/U_CAD/U_EUR on flagged rows",
+  "anchor_value": "schedule cost and fair value columns are USD-denominated",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 6,
+      "quoted_text": "Ancora Bidco PTY LTD (6) | Unitranche First Lien Term Loan | B + 500, 50 Floor | 9.00% | 11/2030 | AUD 5,191 | Cost 3,370 | Fair Value 3,617",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 9,
+      "quoted_text": "Total Debt Investments Australia | $ | 3,992 | 0.8% | $ | 4,257",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 37,
+      "quoted_text": "Aryeh Bidco Investment Ltd. (6) | Unitranche First Lien Term Loan | S + 500, 75 Floor | 7.31% | 01/2033 | CAD 35,000 | Cost 24,967 | Fair Value 24,907",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 13,
+      "quoted_text": "Total Debt Investments Germany | $ | 10,200 | 2.0% | $ | 10,128",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The non-USD unit belongs to the principal/par column, while cost and fair value are reported in USD on the schedule.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. The filing schedule is in thousands and foreign-country subtotals print dollar signs for cost and fair value, while individual foreign debt rows place AUD/CAD/EUR in the principal amount column. The flagged cost_currency values therefore reflect a unit carried over from principal/par rather than the cost column."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_54e072dbf8b3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "U_CAD and U_GBP flags",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 grouped currency-cell review. The raw-source evidence CLI was invoked for overview, tables, and targeted currency queries, but every invocation returned only an XMLParsedAsHTMLWarning and no usable source text, table coordinates, or cells. The source therefore could not establish whether the flagged CAD/GBP XBRL units are correct or whether fair value should be USD; per the contract this is source_unavailable and must be escalated."
+}

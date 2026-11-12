@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_328bc12791ce",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "principal_amount_usd is blank on FX01 flagged rows",
+  "anchor_value": "source schedule discloses non-USD par amounts requiring USD conversion, e.g. CAD 258,891 and GBP 6,532",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(10) | CA + | 5.00 % | 7.55 % | 8/10/2022 | 8/10/2029 | CAD | 258,891 | 199,474 | 186,025 | 0.40",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 27,
+      "quoted_text": "Minerva Bidco, Ltd. | (4)(5)(6)(7)(8) | S + | 5.00 % | 9.22 % | 7/29/2025 | 11/16/2030 | GBP | 6,532 | 8,502 | 8,538 | 0.02",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt principal rows disclose foreign-currency par in source but the derived principal_amount_usd field is blank for FX01 flagged rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 25,
+        "quoted_text": "123Dentist, Inc. row discloses CAD par amount 258,891 with USD cost and fair value columns."
+      }
+    }
+  ],
+  "rationale": "FX01 asks whether non-USD debt principal rows are missing principal_amount_usd. The flag artifact lists principal_amount_usd as blank on the reviewed rows, and the raw schedule rows show explicit non-USD par values such as CAD 258,891 and GBP 6,532. Because these rows need an explicit USD principal conversion for par analytics and the derived USD principal is absent, the flag is a real data error rather than a false alarm."
+}

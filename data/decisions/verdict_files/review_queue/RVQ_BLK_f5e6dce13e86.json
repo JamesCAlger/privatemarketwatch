@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_f5e6dce13e86",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1334207000,
+  "anchor_value": 1507082000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Total Debt Investments | $ | 1,334,207 | $ | 1,334,005 | 182.10 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 10,
+      "quoted_text": "U.S. Treasury Bill | - | 3.61 % | 4/7/2026 | 174,487 | $ | 172,875 | $ | 172,864 | 23.60 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 27,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 1,507,082 | $ | 1,506,869 | 205.70 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The cost residual equals the U.S. Treasury Bill cost excluded from the private/debt subtotal: 1,507,082 - 1,334,207 = 172,875 thousand.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 10,
+        "quoted_text": "U.S. Treasury Bill cost 172,875 thousand"
+      }
+    }
+  ],
+  "rationale": "False alarm. The raw schedule shows Total Debt Investments cost of 1,334,207 thousand, which matches the observed extracted cost sum, while Total Investments cost of 1,507,082 thousand additionally includes a U.S. Treasury Bill with cost of 172,875 thousand. The conservation failure is caused by comparing the private/debt extract subtotal to a broader total-investments anchor."
+}

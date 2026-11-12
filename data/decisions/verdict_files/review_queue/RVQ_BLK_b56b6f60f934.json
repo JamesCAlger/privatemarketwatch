@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_b56b6f60f934",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1061901106,
+  "anchor_value": 645193114,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 19,
+      "quoted_text": "Total Controlled Affiliated investments | Fair Value at December 31, 2025 | 308,845,992",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | Fair Value at December 31, 2025 | 107,862,000",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rollforward table 28 controlled-affiliate fair value of 308,845,992 was included in holdings in addition to the Schedule of Investments total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 28,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rollforward table 29 non-controlled-affiliate fair value of 107,862,000 was included in holdings in addition to the Schedule of Investments total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 29,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's Schedule of Investments anchor is Total Debt & Equity Investments fair value 645,193,114 at table 27 row 26. The extracted holdings fair value is 1,061,901,106, a residual of 416,707,992. That residual equals the rollforward totals in table 28 row 19 (308,845,992) plus table 29 row 14 (107,862,000), showing rollforward disclosure tables were counted as holdings on top of the schedule. This is a real extraction/classification leak, not a bad source anchor."
+}

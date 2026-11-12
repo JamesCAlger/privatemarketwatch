@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_57f76fcb8380",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.05454545454545454,
+  "anchor_value": 0.5,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 17,
+      "quoted_text": "PMA Parent Holdings, LLC | First Lien Term Loan | SOFR(Q) | 0.75 % | 4.75 % | 8.42 % | 1/31/2031 | $ | 3,932,333 | 3,853,686 | 3,899,849 | 1.52 | % | F"
+    },
+    {
+      "table_index": 24,
+      "row_index": 16,
+      "quoted_text": "PMA Parent Holdings, LLC | First Lien Term Loan | SOFR(Q) | 0.75 | % | 5.25 | % | 9.58 | % | 1/31/2031 | $ | 3,942,189 | 3,897,350 | 3,950,073 | 1.53 | % | F"
+    },
+    {
+      "table_index": 17,
+      "row_index": 22,
+      "quoted_text": "Modigent, LLC (Pueblo) | First Lien Term Loan | SOFR(Q) | 0.75 % | 5.25 % | 8.92 % | 8/23/2028 | $ | 1,584,074 | 1,564,178 | 1,563,358 | 0.61 | % | F"
+    },
+    {
+      "table_index": 24,
+      "row_index": 21,
+      "quoted_text": "Modigent, LLC (Pueblo) | First Lien Term Loan | SOFR(Q) | 0.75 | % | 6.50 | % | 10.83 | % | 8/23/2028 | $ | 1,600,447 | 1,574,005 | 1,579,785 | 0.60 | % | F"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted issuer_name is populated with schedule section, industry, instrument, coupon, and maturity text instead of the source issuer cell, making issuer continuity artificially low.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "D06 fired on 5.45% issuer continuity, but the raw SOI uses stable issuer cells across current and comparative schedules, for example PMA Parent Holdings, LLC appears in both table 17 row 17 and table 24 row 16, and Modigent, LLC (Pueblo) appears in both table 17 row 22 and table 24 row 21. The observed extracted rows in the bundle show issuer_name values contaminated with 'Debt Investments', industry, instrument, reference rate, coupon, and maturity terms. Since those terms change between years while the source issuer remains stable, the low continuity is a real extraction defect rather than a source portfolio discontinuity."
+}

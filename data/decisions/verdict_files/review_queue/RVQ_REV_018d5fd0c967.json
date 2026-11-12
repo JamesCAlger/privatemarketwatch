@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_018d5fd0c967",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Aerospace & Defense ATS First Lien Senior Secured Loan SOFR Spread 5.75% Interest Rate 10.01% Maturity Date 7/12/2029",
+  "anchor_value": "ATS",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "ATS (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.75 % | 10.01 | % | 7/12/2029 | $ | 11,934 | 11,816 | 11,934"
+    },
+    {
+      "table_index": 13,
+      "row_index": 35,
+      "quoted_text": "Plaskolite PPC Intermediate II LLC (8)(15)(17)(18) | First Lien Senior Secured Loan | SOFR | 4.00 % ( 3.00 % PIK) | 11.31 | % | 5/9/2030 | $ | 19,120 | 18,750 | 18,738"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name contains sector, investment type, spread, interest-rate, and maturity text that the source keeps in separate schedule columns; the issuer for the cited row is ATS.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse-leak error. The raw schedule row has Portfolio Company as ATS, with First Lien Senior Secured Loan, SOFR, 5.75% spread, 10.01% interest rate, and 7/12/2029 maturity in separate columns. The observed extracted issuer_name concatenates those separate fields, so the stored issuer_name is not the clean entity/security name."
+}

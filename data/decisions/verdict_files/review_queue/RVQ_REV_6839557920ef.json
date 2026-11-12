@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_6839557920ef",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 34,
+      "quoted_text": "Delayed Draw Term Loan | (5) | First Lien | 3M SOFR+ 5.50 % | 1.00 % | 9.83 % | 4/11/2024 | 4/11/2030 | 542,116 | 537,003 | 542,116",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 71,
+      "quoted_text": "WER Holdings, LLC | Delayed Draw Term Loan | 962,586 | - | % | April 11, 2030",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-validation issue: the bundle reports one PRIVATE_CREDIT row_key with blank interest_rate/basis_spread, but it does not provide the issuer or instrument needed to map that row_key to a raw source row. Raw source was checked. The ordinary WER investment schedule line for Delayed Draw Term Loan has a stated cash rate of 9.83%, while the separate unfunded commitments table has a WER Delayed Draw Term Loan line with a dash in the unused commitment fee cell. Because the allowed evidence cannot show which source row produced row_key 435892, the source does not decide whether this is an extraction miss, a commitment-scope false alarm, or another row."
+}

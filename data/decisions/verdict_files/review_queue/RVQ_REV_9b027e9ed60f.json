@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_9b027e9ed60f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Raw source could not be adjudicated because the evidence CLI returned missing_cached_html for overview, tables, totals, and targeted roam against accession 0001145549-24-077154. The extracted artifact shows X07 fair_value exceeds 10x cost warnings, but the contract requires raw source grounding before deciding real_error or false_alarm."
+}

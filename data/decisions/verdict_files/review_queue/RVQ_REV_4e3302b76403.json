@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4e3302b76403",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "extract_total_fv",
+  "observed_value": 55.6,
+  "anchor_value": 100.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 75,
+      "row_index": 5,
+      "quoted_text": "ACP Tara Holdings, Inc. (dba Arcadia)(3)(4)(9) | First lien senior secured loan | S+ | 3.25 % | 12/2032 | 5,000 | 4,988 | 5,025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 38,
+      "quoted_text": "ABB/Con-cise Optical Group LLC(3)(4)(9) | First lien senior secured loan | S+ | 7.50 % | 2/2028 | 33,306 | 33,089 | 33,057",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 39,
+      "quoted_text": "AI Aqua Merger Sub, Inc. (dba Culligan)(3)(9) | First lien senior secured loan | S+ | 3.00 % | 7/2028 | 15,945 | 15,945 | 15,973",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Direct-lending loan rows have blank extracted interest_rate even though the SOI provides Ref. Rate plus Cash terms, for example ACP Tara shows S+ and 3.25%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 75,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The weak rule reports only 55.6% rate fill across 804 units with 357 violations. The bundle's sampled direct-lending holdings show blank interest_rate for loan rows including ACP Tara, ABB/Con-cise, and AI Aqua. Raw source table 75 has explicit Interest columns (Ref. Rate, Cash, PIK) and the cited rows populate Ref. Rate and Cash values for those same instruments. This supports an extraction gap rather than a source omission."
+}

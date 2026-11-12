@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_51c522b0e5ac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 201.09,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 20,
+      "quoted_text": "Total Investment Portfolio | 25,063,146 | 25,007,853 | 201.09 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 reports an extracted percentage sum of 0.0%, but the raw March 31, 2026 investment schedule explicitly reports Total Investment Portfolio fair value of 25,007,853 and Percentage of Net Assets of 201.09%. The filing balance sheet independently reports total investments at fair value of 25,007,853, confirming the schedule-total row. Thus the zero extracted percentage sum is a real aggregate extraction gap; the source percentage column was not captured. No single position is localized because the failure is column-wide."
+}

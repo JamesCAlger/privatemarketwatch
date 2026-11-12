@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_44beef0b5318",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 7.0,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 23,
+      "quoted_text": "Select Rehabilitation, LLC - Term Loan B (12) | Health Care Equipment & Services | Fixed 7.50 % PIK | 7.50 % | 12/29/2028 | 13,440 | 6,088 | 3,091 | 0.6 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The fixed-rate label was misparsed as basis_spread 7.0; basis_spread should be null and the stated fixed PIK interest rate is 7.50%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Two current-period extracted rows are flagged for one current-period source position, indicating a duplicate extraction of Select Rehabilitation Term Loan B.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 15,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the full raw-source row shows that 7.50% is explicitly labeled Fixed PIK and is repeated as the interest rate; it is not a floating spread. Therefore the stored basis_spread value 7.0 on both flagged rows is a real extraction error. The raw current-period schedule contains one such position while the artifact reports two flagged row keys, supporting a second duplicate-extraction finding. No aggregate anchor is applicable to this row-level rate-field defect."
+}

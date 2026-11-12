@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d7424577dc45",
+  "verdict": "false_alarm",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 179.475,
+  "anchor_value": 179.475,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 3,
+      "quoted_text": "All State Ag Parts, LLC: Cost 4,988; Fair Value 4,997",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investments (9) - 135.8%: Cost 196,338; Fair Value 179,475",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "Total Investments: Level 1 32; Level 2 -; Level 3 179,443; Total 179,475",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "B01 counts the separate Cost and Fair Value monetary cells as two leaves per investment, producing the mechanical 47/94 ratio even though the fair-value schedule is complete.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Raw source rows place Cost and Fair Value in distinct columns for each investment; table 10 row 3 is a representative row with both values. The exact 47/94 (50%) result is therefore the two-cell denominator shape, not evidence that half the investments lack fair value. The March 31, 2026 schedule total of 179.475 million at table 11 row 15 agrees exactly with the independent fair-value hierarchy total at table 18 row 6, and the flag reports zero residual fair value. B01 is firing on its population definition rather than a source-data omission."
+}

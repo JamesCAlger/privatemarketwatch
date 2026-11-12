@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a6fda3e087a5",
+  "verdict": "false_alarm",
+  "mechanism": "duplicate_key_under_specification",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": 509,
+  "anchor_value": 509,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "AA&D Midco, Inc. | (6) (7) (8) (11) | First Lien Debt | S + | 4.75 % | 8.40 % | 11/29/2030 | 35,393 | 35,059 | 35,039",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "AA&D Midco, Inc. | (6) (7) (11) | First Lien Debt | S + | 4.75 % | 8.40 % | 11/29/2030 | 6,660 | 6,597 | 6,594",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "AA&D Midco, Inc. | (6) (11) (18) | First Lien Debt | S + | 4.75 % | 8.40 % | 11/29/2030 | 1,981 | 1,931 | 1,928",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 reports duplicate normalized position keys, but the filing source prints three separate AA&D Midco rows with the same issuer, investment type, rate, and maturity. Their footnote sets and par, cost, and fair value amounts differ materially, proving they are distinct disclosed lots rather than duplicate extraction. The check's key omits source-level lot distinctions, so the cited example is a false positive and the 509 collision count is not evidence of 509 data duplicates."
+}

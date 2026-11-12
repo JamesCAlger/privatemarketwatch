@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_c72b2b8f1437",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -3000,
+  "anchor_value": 0,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 34,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | 6/30/2027 | 160 | \u2014 | ( 3 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "American Academy Holdings, LLC unfunded/revolver row has source amortized cost shown as dash, but extracted cost is -3000 from the negative fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "C107 flags negative cost. Most grouped examples are legitimate unfunded commitment rows where the SOI itself shows negative amortized cost, but American Academy Holdings, LLC is different: the SOI row shows par 160, amortized cost as dash/zero, and fair value (3), while the reviewed extracted row carries cost -3000. That is a source-grounded extraction error for the cost field."
+}

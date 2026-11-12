@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_8e1d6c037ee8",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 29.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 7,
+      "quoted_text": "AAH Topco, LLC | Healthcare | Delayed Draw Term Loan | 9.06 % ( S + 5.25 %; 0.75 % Floor) | 12/22/2027 | 3,176,329 | 3,143,908 | 3,176,329 | (15)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 10,
+      "quoted_text": "AAH Topco, LLC | Healthcare | Delayed Draw Term Loan | 9.06 % ( S + 5.25 %; 0.75 % Floor) | 12/22/2027 | 6,365,603 | 6,305,145 | 6,365,603 | (15)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Rows 7 and 10 are distinct source schedule rows with the same issuer, facility type, interest terms, and maturity but different funded par/cost/fair value amounts, creating a duplicate position key.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 51,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "B02 reports duplicate position keys for this CIK/quarter. The raw schedule confirms the issue: table 51 rows 7 and 10 are separate AAH Topco, LLC delayed draw term loan rows with identical visible key fields (issuer, industry, facility type, interest terms, and maturity) but different amounts. The filing total anchor was checked and ties to total investments, so this is localized as a position-key collision rather than an aggregate fair-value residual."
+}

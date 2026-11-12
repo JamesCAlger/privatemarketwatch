@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_99d834820229",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 22,
+      "quoted_text": "Atlas US Holdings, LP - Class X Preferred Units | Financial Services | NA | 15.00 % PIK | NA | 285,441 | $ | 342 | $ | 343 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "190 Octane Holdings, LLC - Series A-1 units (11) | Consumer Services | NA | NA | NA | 223,551 | $ | 377 | $ | 92 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity rows in the source schedule have populated Principal / Shares values, but the extracted C04 metric reports 0.0% of 9 equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C04 failed because the extracted data has 0.0% of 9 equity rows with shares. The raw schedule includes a Principal / Shares column and shows equity rows with share/unit counts, including 285,441 for Atlas US Holdings preferred units and 223,551 for 190 Octane Holdings common units. The source therefore supports shares being present; the defect is an extraction gap in carrying the schedule's Principal / Shares values onto equity holdings."
+}

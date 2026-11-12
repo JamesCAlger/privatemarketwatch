@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_ec3c225840e1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 4,
+      "quoted_text": "Warrants ( 380,385 units) | N/A | 09/22 | N/A | 4 | 750 | -- | % | (3) (7) (26) (28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 29,
+      "quoted_text": "Common Stock ( 454,545 shares) | N/A | 03/23 | N/A | 4 | 136 | -- | % | (7) (26) (28)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-validation item with four X07 fires. The raw June 2024 SOI confirms two exact cost=4 source rows whose fair values exceed 10x cost, so those two fires are source-backed high-appreciation positions rather than data errors. However, the bundle gives only row keys and cost values for the other two fires, and targeted CLI review of the June and embedded December SOI tables did not localize the queued cost values 97,000 and 12,000,000 to exact source rows. Because the raw source checked through the allowed CLI does not decide all four row fires, the overall issue remains ambiguous."
+}

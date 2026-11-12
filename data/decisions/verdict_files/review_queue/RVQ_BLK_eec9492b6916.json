@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_eec9492b6916",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6222056000.0,
+  "anchor_value": 5913363000.0,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 35,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (amortized cost of: $ 5,913,363 and $ 4,002,785 , respectively) | 5,819,755 | 4,008,973",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate cost conservation flag. The extracted cost sum is 6,222,056,000, but the filing's SOI total investments row and balance sheet parenthetical both state amortized cost of 5,913,363 thousand, i.e. 5,913,363,000. The source total agrees across independent filing locations, so the 308,693,000 overshoot is a real extraction-side conservation error rather than a bad source anchor. The exact row-level culprit is not fully localized from the available structure."
+}

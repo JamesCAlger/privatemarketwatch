@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_abe7871d5a38",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_source_cells",
+  "observed_value": 13,
+  "anchor_value": 13,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 13, "row_index": 20, "quoted_text": "7Ridge Investments | S + 9.00 % | 1.00 % | 12.70 % PIK", "ties_to_residual": false},
+    {"table_index": 13, "row_index": 21, "quoted_text": "7Ridge Investments - Delayed Draw Term Loan | S + 9.00 % | 1.00 % | 12.70 % PIK", "ties_to_residual": false},
+    {"table_index": 13, "row_index": 22, "quoted_text": "7Ridge Investments - Delayed Draw Term Loan add on | S + 9.00 % | 1.00 % | 12.70 % PIK", "ties_to_residual": false},
+    {"table_index": 14, "row_index": 10, "quoted_text": "JLL Partners Fund VII Secondary | S + 6.75 % | 1.00 % | 10.45 % PIK", "ties_to_residual": false},
+    {"table_index": 17, "row_index": 36, "quoted_text": "Nottingham Forest | N/A | N/A | 12.94 % PIK", "ties_to_residual": false},
+    {"table_index": 20, "row_index": 5, "quoted_text": "Ligado Networks LLC | N/A | N/A | 15.50 % PIK", "ties_to_residual": false},
+    {"table_index": 20, "row_index": 6, "quoted_text": "Ligado Networks LLC - DIP Facility - Backstop Incremental | N/A | N/A | 17.50 % PIK", "ties_to_residual": false},
+    {"table_index": 20, "row_index": 7, "quoted_text": "Ligado Networks LLC - DIP Facility - Delayed Draw Term Loan | N/A | N/A | 17.50 % PIK", "ties_to_residual": false},
+    {"table_index": 20, "row_index": 8, "quoted_text": "Ligado Networks LLC - DIP Roll-up | N/A | N/A | 17.50 % PIK", "ties_to_residual": false},
+    {"table_index": 21, "row_index": 4, "quoted_text": "Solvias AG - Holdco Note | N/A | N/A | 12.50 % PIK", "ties_to_residual": false},
+    {"table_index": 15, "row_index": 14, "quoted_text": "1440 Foods Topco LLC | S + 5.00 % | 0.00 % | 8.67 %", "ties_to_residual": false},
+    {"table_index": 13, "row_index": 9, "quoted_text": "Frontgrade Technologies Inc. - Revolving Credit Facility | S + 5.00 % | 0.75 % | 8.66 %", "ties_to_residual": false}
+  ],
+  "rationale": "Class 1 batch confirmation. The 13 provenance rows have declared_raw and instance_raw missing because these interest rates follow the filing-text pathway, but targeted raw-source review shows the published values in the filing's Interest Rate column: 15.50, 17.50, 8.67, 10.45, 12.50, 8.66, 12.94, and 12.70 percent. Repeated published values correspond to repeated position rows. Thus the stored values are source-supported and the text_pathway flag is a provenance limitation rather than a data error. No aggregate anchor is relevant."
+}

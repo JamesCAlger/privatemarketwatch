@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_edc056a6f978",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD-denominated schedule values ($)",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  4,
+                                  "row_index":  4,
+                                  "quoted_text":  "Columbia Helicopters Inc. | Last Out Term Loan - 15.54 % inc PIK ... | $ | 21,608,472 | $ | 20,010,689",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  7,
+                                  "row_index":  18,
+                                  "quoted_text":  "Total Debt Investments | 134.5 % | 1,063,118,695 | 1,048,072,561 | 1,006,788,468",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX03 flagged cost_currency value U_USD as not USD, but the raw SOI shows the amortized cost and fair value columns are dollar-denominated. Table 4 row 4 explicitly carries dollar signs for par, amortized cost, and fair value, and the debt investment total uses the same schedule columns. The source supports USD valuation amounts, so the warning is a check/unit-code scope false alarm rather than a data error in the holding."
+}

@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_41ddea0e542f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "interest_rate blank and basis_spread missing in extracted private credit row",
+  "anchor_value": "S+ 350, 0.75% Floor",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Ovation Parent Inc | First Lien Secured Debt | S+ 350 , 0.75 % Floor | 3/27/2031 | $ | 10,000 | $ | 9,975 | $ | 10,022 | (14)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source interest-rate cell discloses S+350 with a 0.75% floor, but the extracted private credit row has no interest_rate or basis_spread for income return computation.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 2 row validation: the flagged extracted holding for Kaman/Ovation Parent Inc is private credit and lacks rate data, but the raw SOI source row contains an Interest Rate column value of S+350 with a 0.75% floor. The raw source therefore decides the question: the disclosure was available and the extraction failed to populate usable rate fields."
+}

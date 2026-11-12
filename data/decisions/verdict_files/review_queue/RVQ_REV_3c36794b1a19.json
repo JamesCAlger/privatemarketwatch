@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_3c36794b1a19",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2025-11-17; 2025-12-22",
+  "anchor_value": "2026-03-31 report date",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 24,
+      "quoted_text": "MPI Engineered Technologies, LLC | Automobile Components | S + 17.00 % PIK | 01/15/20 | 11/17/25 | $ | 23,049 | $ | 20,011 | $ | 6,915 | (8) (12) (14)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | S + 6.75 % | 12/22/25 | 21,894 | 21,700 | 17,351 | (7) (8) (12) (14)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 27,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | S + 6.75 % | 12/22/25 | 11,689 | 11,586 | 9,264 | (7) (8) (12) (14)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 28,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | S + 6.75 % | 12/22/25 | 9,001 | 8,922 | 7,133 | (7) (8) (12) (14)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | S + 6.75 % | 12/22/25 | 6,416 | 6,360 | 5,085 | (7) (8) (12) (14)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 30,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | S + 6.75 % | 12/22/25 | 3,610 | 3,578 | 2,861 | (7) (8) (12) (14)"
+    }
+  ],
+  "rationale": "Class 1 repeated maturity-date check. The raw filing schedule shows the flagged pre-report-date maturities as printed source values for still-reported positions. X10's own evidence states matured positions can still be reported but need monitoring, so the stored values match source and this warning is not a source data error."
+}

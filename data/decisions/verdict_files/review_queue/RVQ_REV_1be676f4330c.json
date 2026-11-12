@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_1be676f4330c",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 318629,
+  "anchor_value": 545727,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 52,
+      "quoted_text": "SG Acquisition, Inc. | First Lien Revolver | S + 4.75 % | 4/3/2030 | - | ( 1 ) | - | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 11,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 316,371 | $ | 318,629 | 206.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged SG Acquisition First Lien Revolver row is sourced from the comparative-period SOI block with fair value total 318,629, while the current report-date SOI total is 545,727.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 44,
+        "row_index": 52
+      }
+    }
+  ],
+  "rationale": "PP03 is a within-row position-purity flag. The raw source shows SG Acquisition, Inc. First Lien Revolver in the comparative SOI block at table 44 row 52, and that block totals to 318,629 at table 47 row 11, matching the prior-period schedule total rather than the 2025 report-date schedule total of 545,727. Retaining that comparative-period row under report_date 2025 is therefore a real data error."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_123869f251c0",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001752724-25-113744, so the raw source could not be read. Per the adjudication contract, missing raw source requires an escalated ambiguous verdict with source_unavailable rather than guessing whether the GAV_NPORT01 coverage flag is valid."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_cc0d8cb57b74",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 337500.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X08 flag concerns a row where fair_value is below 5% of cost, but the permitted evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-20-069893. Raw source was therefore unavailable through the approved evidence path, so the source cannot decide whether this is a real distressed position, a data error, or a false alarm."
+}

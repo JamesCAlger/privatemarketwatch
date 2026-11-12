@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001916099",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "Insufficient bounded evidence to safely change production parsing for this CIK-quarter-mechanism packet without manual source-table adjudication and a tested rule. Needed evidence: coordinate-level source table classification for the blocker rows, proof that the rows are either true position rows or non-position aggregate/header rows, and a false-positive analysis showing any proposed parser/config rule would not suppress legitimate position-level holdings.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 7 current blocker row(s) in mechanism blocking_source_pct_leaf_parser_mismatch, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2025-12-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 336334000.000000.",
+  "review_id": "BDCSRC_0001916099_2025-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_82512bdef3",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Fix parser/staging for terminal-percentage source rows with issuer, instrument, rate, maturity, or other leaf evidence.. Sample identifiers: Investments Non-Controlled/Non-Affiliated First Lien Debt Automobile Components Purflux Holding S.\u00c0 R.L. Term Loan Interest Rate 8.51% Reference Rate EURIBOR Spread 6.25% Acquisition Date 11/03/2025 Maturity Date 11/4/2030 | Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies R.R. Donnelley & Sons Company Term Loan Interest Rate 8.47% Reference Rate SOFR Spread 4.75% Acquisition Date 8/12/2024 Maturity Date 8/8/2029 | Investments Non-Controlled/Non-Affiliated First Lien Debt Financial Services Intrum Investments and Financing AB (PUBL) Revolving Line of Credit Interest Rate 7.50% Reference Rate EURIBOR Spread 3.75% Acquisition Date 8/15/2025 Maturity Date 6/30/2028 | Investments Non-Controlled/Non-Affiliated First Lien Debt Professional Services BDO USA, P.C. Term Loan Interest Rate 8.27% Reference Rate SOFR Spread 5.00% Acquisition Date 1/22/2024 Maturity Date 8/31/2028 | Investments Non-Controlled/Non-Affiliated First Lien Debt Professional Servic",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

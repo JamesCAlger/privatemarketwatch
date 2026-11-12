@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_cdf010931814",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 289.479,
+  "anchor_value": 289.479,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 17,
+      "quoted_text": "Wine.com, Inc. | cost - | fair value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Streamland Media Holdings LLC | cost 4,055 | fair value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 89.7% | cost 310,164 | fair value 289,479",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Explicit em-dash fair values in source position rows were left null instead of normalized to zero, causing B01 completeness failure.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor-first review: the filing schedule total at table 10 row 20 is $289.479 million and agrees with the extracted quarter total of $289.479 million, so the aggregate fair-value anchor is not bad. The source SOI nevertheless explicitly supplies fair-value entries for zero-valued positions as em dashes, including Wine.com, Inc. at table 9 row 17 and Streamland Media Holdings LLC at table 10 row 6. Treating these source-present zero values as null makes the reported 74/115 non-null completeness a real extraction/normalization defect even though the summed fair value still ties to the filing total."
+}

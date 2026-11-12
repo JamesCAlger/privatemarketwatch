@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_d02ff8fed030",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 52000.0,
+  "anchor_value": 52000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "Techmer BB Bidco, LLC | Chemicals | Term Loan | SOFR | + | 5.25 % | (Q) | 10.51 % | 09/01/28 | 53 | 53 | 52 | (6)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Source row reports amortized cost 53 and fair value 52 (thousands), so fair value is about 98% of cost; an X08 fire on the 52,000-scale row indicates the fair-value cell was missed or mislocalized.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level check. The raw schedule row for Techmer BB Bidco shows amortized cost 53 and fair value 52, both in thousands. That source ratio is not below 5%, so the warning reflects a data extraction/localization defect rather than genuine severe distress."
+}

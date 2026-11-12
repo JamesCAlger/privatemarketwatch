@@ -1,0 +1,112 @@
+{
+  "changed_files": [
+    "pipeline/bdc_identifier.py",
+    "pipeline/source_reconciliation.py",
+    "tests/test_unified_holdings.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001902649",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV change from the verdict file. The proposed patches separate portfolio totals from real BlackRock Instrument leaf rows; after rebuild, aggregate total rows should be documented while issuer/instrument rows should be eligible for position-level output.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 11,
+      "row_index": 10,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Discovery Purchaser Corporation is a current-period position row with issuer, first-lien term loan instrument, SOFR reference, floor, spread, total coupon, maturity, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 11,
+      "row_index": 25,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34,
+        36
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Geo Parent Corporation is a current-period position row with borrower, first-lien term loan instrument, SOFR reference, spread, coupon, maturity, cost, fair value, and percent-of-net-assets detail."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 12,
+      "row_index": 21,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "TruGreen Limited Partnership is a current-period position row with issuer, first-lien term loan instrument, SOFR reference, floor, spread, coupon, maturity, cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Uses the BlackRock Instrument leaf fix so rows with issuer, instrument, rate, maturity, and economics are not filtered as hierarchy rows, together with terminal-percentage total/header handling for rows such as Total Debt Investments and Total Cash and Investments.",
+  "primary_justification": "This packet contains both aggregate total rows and real position rows. The HTML coordinates show current-period issuer/instrument rows for Discovery Purchaser, Geo Parent, and TruGreen, while the same bundle also shows total debt/cash-and-investment rows that should be documented as totals rather than positions. The bounded fix is to retain Instrument-marked leaf rows only when they include loan/equity terms plus rate or maturity evidence, and separately classify terminal-percentage total rows as non-position totals.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2023-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "Medium. The packet mixes true positions and aggregate rows. The implemented tests guard both sides: BlackRock Instrument leaf rows are retained only with leaf economics, while total/header and false-positive rows remain excluded.",
+  "review_id": "BDCSRC_0001902649_2023-09-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_8e10519e10",
+  "reviewer_notes": "Manually reviewed the bundle. The old blanket insufficient-evidence verdict was not adequate: sampled coordinates prove real missing position rows. The aggregate rows in the same packet, including Debt Investments and Total Cash and Investments terminal-percent rows, are handled by the source-reconciliation total/header rules rather than added as holdings.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "After affected outputs are rebuilt, issuer/instrument BlackRock rows should become eligible position rows and terminal-percentage total rows should be documented as total/header rows instead of remaining blockers.",
+  "tests_validation_plan": "Ran pytest tests/test_unified_holdings.py::TestPctPrefixCategorySubtotals tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict schema with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

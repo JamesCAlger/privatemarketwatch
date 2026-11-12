@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_1cdde80db420",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 46,
+  "anchor_value": 46,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Total Debt Investments | $ | 1,334,207 | $ | 1,334,005 | 182.10 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 26,
+      "quoted_text": "Total Debt Investments | $ | 812,205 | $ | 812,520 | 189.38 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The oracle source count of 113 combines the 46 current-year debt positions in tables 24-27 with the separate prior-year debt positions in tables 28-31.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 31,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Raw source separates the 2025 and 2024 schedules of investments. The 2025 debt schedule runs through table 27 and totals fair value of 1,334,005 thousand, matching the report_date/fund_quarter anchor; counting only debt position rows in those current-year pages gives 46, the output count. The 2024 schedule continues separately through table 31 and totals 812,520 thousand. The flagged source count of 113 is therefore the current 46 positions plus prior-year comparative rows, so the check over-counted the source population."
+}

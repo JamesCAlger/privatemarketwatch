@@ -1,0 +1,76 @@
+{
+  "review_id": "RVQ_REV_6a5d8f134046",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_CAD; U_EUR",
+  "anchor_value": "USD cost currency",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 23,
+      "quoted_text": "Surewerx Purchaser III, Inc. row: par amount is marked C$ 316; Cost (4) is a separate valuation column with 228.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 26,
+      "quoted_text": "Excelitas Technologies Corp. row: par amount is marked EUR 6,487; Cost (4) is a separate valuation column with 6,636.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 34,
+      "quoted_text": "Optimizely North America, Inc. row: par amount is marked EUR 558; Cost (4) is a separate valuation column with 601.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 28,
+      "quoted_text": "Optimizely North America, Inc. row: par amount is marked EUR 562; Cost is a separate valuation column with 604.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "Foreign currency from the par/share amount column propagated into cost_currency even though cost is disclosed in the separate BDC valuation cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "Foreign currency from the par/share amount column propagated into cost_currency even though cost is disclosed in the separate BDC valuation cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 39,
+        "row_index": 26
+      }
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "Foreign currency from the par/share amount column propagated into cost_currency even though cost is disclosed in the separate BDC valuation cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 34
+      }
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "Foreign currency from the par/share amount column propagated into cost_currency even though cost is disclosed in the separate BDC valuation cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 69,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The FX03 rows flag cost_currency values U_CAD/U_EUR. Raw source grids show the foreign currency markers in the Par Amount/Shares column, while the Cost (4) and Fair Value columns are separate BDC valuation columns. The stored cost_currency therefore appears to inherit the par amount currency instead of the USD valuation currency expected for BDC cost fields."
+}

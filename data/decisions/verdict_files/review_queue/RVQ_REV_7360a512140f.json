@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_7360a512140f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 17,
+      "quoted_text": "Metropolis Technologies, Inc. | Other Equity | maturity 5/16/2034 | Par Amount/Units: 0 | Amortized Cost: 20 | Fair Value: 20"
+    }
+  ],
+  "rationale": "C04 flagged that 0.0% of 1 equity rows have shares. The raw schedule's relevant Other Equity row for Metropolis Technologies, Inc. reports Par Amount/Units as 0, with cost and fair value both 20. Because the source does not provide a positive share/unit count for this equity position, the missing shares condition is source-driven rather than a data extraction error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d21a83704e33",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 181.4,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 86,
+      "row_index": 54,
+      "quoted_text": "Total | 100.0 | % | 181.4 | % | 100.0 | % | 148.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 33,
+      "quoted_text": "Total Investments - 181.4 % | $ | 15,704,123 | $ | 15,674,510",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "A07 reported pct_sum=0.0%, but the raw filing's industry rollup totals 100.0% of fair value and 181.4% of net assets for 2025, and the SOI total investments row separately shows 181.4% with fair value 15,674,510. The zero-percent metric is therefore a check/anchor artifact rather than a source data defect."
+}

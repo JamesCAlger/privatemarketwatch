@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_21b37ca50d3e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8.247849008857026,
+  "anchor_value": 15.09,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 87,
+      "row_index": 7,
+      "quoted_text": "For Calendar Year 2025 total per share amount $2.54 and total amount $287,867.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 95,
+      "row_index": 18,
+      "quoted_text": "Net investment income to average net assets (6) | 10.06 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 says distribution_rate must be <= income_yield_pct * 1.5. The flag's observed value is 8.247849008857026, while the raw financial highlights report 2025 net investment income to average net assets of 10.06%, giving a threshold of 15.09%. The source distribution schedule independently shows 2025 per-share distributions totaling $2.54. The observed distribution-rate value is below the source-derived threshold, so the source supports the data and the flag is a false alarm."
+}

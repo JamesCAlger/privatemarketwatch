@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1ed494815961",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -12191.0,
+  "anchor_value": -12191.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 31,
+      "quoted_text": "Electro Methods | Senior Secured Revolving Credit Facility | S+ | 4.75 % | 8.43 % | 2/6/2025 | 2/23/2032 | - | ( 12,191 | ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 30,
+      "quoted_text": "Tronair | Senior Secured Revolving Loan | S+ | 3.75 % | 7.43 % | 12/18/2025 | 12/22/2032 | - | ( 1,250 | ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 22,
+      "quoted_text": "Beta+ | Senior Secured Revolving Credit Loan | S+ | 4.25 % | 7.93 % | 6/24/2022 | 7/1/2027 | - | ( 6,216 | ) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "C107 flags source-disclosed negative amortized costs on revolving facilities even though the extracted signs and amounts match the filing.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 17,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "False alarm: the March 31, 2026 schedule itself prints parenthesized negative amortized cost for the flagged revolving facilities. The extracted values -12,191, -1,250, and -6,216 exactly match cited source rows, so negative cost is legitimate here and C107 is an overbroad monitoring rule rather than evidence of a data defect."
+}

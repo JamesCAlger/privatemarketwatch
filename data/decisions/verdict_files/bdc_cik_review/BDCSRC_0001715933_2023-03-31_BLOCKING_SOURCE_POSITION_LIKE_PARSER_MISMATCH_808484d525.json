@@ -1,0 +1,33 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001715933",
+  "confidence": "MEDIUM",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No immediate GAV effect from the verdict file itself. The proposed patch documents the 1044434959.000000 source row as a portfolio-level securities total instead of adding it as a pseudo-position.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Added exact total-header recognition for the normalized label 'debt equity securities' and focused regression coverage for TCW's 'Debt & Equity Securities' source row, including a false-positive issuer-bearing label that must remain blocking.",
+  "primary_justification": "The blocker row is not a missing position. The XBRL source row has only the identifier 'Debt & Equity Securities' with aggregate cost and fair value and no issuer, instrument terms, rate, maturity, par amount, or acquisition date. The same accession includes more specific child XBRL rows for industry buckets and issuer-level debt positions, so this sparse row is a hierarchy/portfolio total above production positions.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2023-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "Medium-low. The patch is exact to the normalized portfolio-total phrase and is guarded by a false-positive test for an issuer-bearing label, but this verdict is XBRL-based because the bundle did not provide a direct HTML coordinate for the exact 'Debt & Equity Securities' parent row.",
+  "review_id": "BDCSRC_0001715933_2023-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_808484d525",
+  "reviewer_notes": "Manually reviewed this TCW bundle on its merits. The source-only row is a top-level 'Debt & Equity Securities' fact with aggregate cost/fair value. Child evidence in the same accession contains more granular rows such as 'Debt Securities Commercial Services & Supplies', issuer-specific rows like WIS Corporation and Grand Circle Corporation, and detailed rate/maturity rows. The correct mechanism is an exact hierarchy-total exclusion, not a position parser expansion.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "After affected outputs are rebuilt, this row should classify as documented_source_total_header instead of blocking_source_position_like_parser_mismatch.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict schema with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

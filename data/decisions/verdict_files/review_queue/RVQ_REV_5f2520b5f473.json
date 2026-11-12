@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_5f2520b5f473",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 545727,
+  "anchor_value": 591810,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 30,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | 546,560 | $ | 545,727 | 235.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 46,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 593,625 | $ | 591,810 | 226.7 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Twenty-six earlier-period position facts were retained in the 2026-03-31 holdings population even though the filing presents a separate current-period schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 29,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "The raw filing separates two complete portfolio schedules. The current schedule closes at fair value 591,810 (table 18 row 46), whereas the separate comparative schedule closes at 545,727 (table 29 row 30). The flagged rows are explicitly identified as earlier-than-report-date facts, so retaining them in the 2026-03-31 position population is comparative-period leakage, not a defect in the source values."
+}

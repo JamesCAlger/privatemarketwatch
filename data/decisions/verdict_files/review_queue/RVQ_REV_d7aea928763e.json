@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_d7aea928763e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 202.94,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 67,
+      "row_index": 15,
+      "quoted_text": "Total Investments | $ | 25,572.5 | $ | 25,918.2 | (19) | 202.94 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source SOI total reports 202.94% of net assets, but the flagged extracted pct_sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 67,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "A07 is an aggregate flag. The source schedule's Total Investments row reports fair value of 25,918.2 and 202.94% of net assets, tying to the balance sheet total investments at fair value of 25,918. The observed extracted percentage sum is 0.0%, so the flag reflects a real extraction gap in the percent-of-net-assets field rather than a false alarm."
+}

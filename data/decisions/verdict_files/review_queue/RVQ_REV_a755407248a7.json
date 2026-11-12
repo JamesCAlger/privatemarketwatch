@@ -1,0 +1,13 @@
+{
+  "review_id": "RVQ_REV_a755407248a7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2153.682,
+  "anchor_value": 2153.908,
+  "confidence": 0.96,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 anchor triangulation shows a real 0.226 million fair-value shortfall: the extracted position sum is 2153.682 million, while the filing's Total Portfolio Investments is 2153.908 million at table 24 row 22. Raw source also contains two distinct rows with fair value 226 thousand (Surewerx Purchaser III, Inc. at table 10 row 25 and Reveal Data Solutions at table 49 row 10), so the available source structure does not uniquely localize which row caused the extraction gap. Some flagged blanks are legitimate zero-value dashes, as shown by KWOR Acquisition, Inc. at table 22 rows 2-3, but those do not explain the anchor disagreement. Escalation is requested only for culprit localization, not because the source was unavailable."
+}

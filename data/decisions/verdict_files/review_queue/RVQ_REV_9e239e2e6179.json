@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_9e239e2e6179",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.020833333333333332,
+  "anchor_value": 0.020833333333333332,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 14,
+      "quoted_text": "Total | $ | 2,988,655 | $ | 3,120,386 | $ | 347,531 | $ | 339,136"
+    },
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "Total new investment commitments | $ | 3,705,470 | $ | 347,854"
+    },
+    {
+      "table_index": 16,
+      "row_index": 5,
+      "quoted_text": "Denali Equity Holdings, LLC (1) | 15 | $ | 340,995 | $ | 354,399 | $ | 347,531 | $ | 339,136"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "D06 low issuer continuity reflects a real portfolio scale-up from one 2024 investment to a broad 2025 portfolio, not a localized extraction error.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 16,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "D06 flags 1/48 issuer persistence, but the raw filing schedule supports that low continuity: total investments increased from 339,136 in 2024 to 3,120,386 in 2025, with 2025 new investment commitments of 3,705,470, while Denali is the only comparative investment shown across both periods. The check is therefore over-scoped for this newly scaled portfolio rather than identifying a data error."
+}

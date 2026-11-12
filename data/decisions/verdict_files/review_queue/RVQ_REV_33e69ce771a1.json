@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_33e69ce771a1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 22,
+      "quoted_text": "Skillsoft Corp. ( 1,308 Class A shares) | (6)(12)(29) | - | - | - | 6/11/2021 | - | - | 508 | 25 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged two rows for fair_value below 5% of cost. Raw source localizes one flagged row: Skillsoft Corp. shows amortized cost 508 and fair value 25, so that low fair value is source-disclosed rather than an extraction error. The other flagged row has extracted cost 1,439, but permitted evidence queries/grid checks did not produce a decisive source coordinate for that row. Because the two-row item is only partially grounded, the source checked does not decide the full flag."
+}

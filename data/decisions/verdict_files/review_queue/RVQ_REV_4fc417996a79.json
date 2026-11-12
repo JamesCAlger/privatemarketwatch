@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_4fc417996a79",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 216314810,
+  "anchor_value": 216314810,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | (5) | First Lien | 3M SOFR+ 6.50 % | 2.00 % | 11.81 % | 6/5/2023 | 6/5/2028 | Services: Business | $ | 2,492,933 | $ | 2,438,339 | $ | 2,480,468 | 2.21 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 213,929,910 | $ | 216,314,810 | 192.71 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 62,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 213,929,910 | $ | 216,314,810",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw March 31, 2024 SOI prints fair value on ordinary investment rows, for example table 9 row 6 has fair value 2,480,468. The schedule total is 216,314,810 in both the SOI total row and the investment classification table, and the B01 source artifact reports residual_fv 0.0. That means the extracted FV anchor ties to the filing total; the 232/464 coverage failure is a denominator/scope issue rather than missing fair value in source-backed holdings."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_e72b301f3913",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 53,
+      "quoted_text": "Intelligent Brands, Inc. (f.k.a. Pruvit Ventures, Inc.) | Equity | January 16, 2020 | 30,357 | Common Stock | $ | 537 | $ | 10"
+    },
+    {
+      "table_index": 26,
+      "row_index": 31,
+      "quoted_text": "SI Tickets, Inc. | Warrant | May 11, 2022 | May 11, 2032 | Common Stock | 53,029 | $ | 2.52 | $ | 162 | $ | 6"
+    },
+    {
+      "table_index": 26,
+      "row_index": 35,
+      "quoted_text": "Trendly, Inc. | Warrant | January 16, 2020 | August 10, 2026 | Preferred Series A | 245,506 | $ | 1.14 | $ | 222 | $ | 1"
+    },
+    {
+      "table_index": 27,
+      "row_index": 39,
+      "quoted_text": "ZenDrive, Inc. | Warrant | July 16, 2021 | July 16, 2031 | Common Stock | 30,466 | $ | 2.46 | $ | 29 | $ | -"
+    },
+    {
+      "table_index": 28,
+      "row_index": 41,
+      "quoted_text": "Warrant | June 30, 2021 | June 30, 2031 | Common Stock | 79,325 | $ | 1.76 | 258 | 5"
+    },
+    {
+      "table_index": 29,
+      "row_index": 25,
+      "quoted_text": "Drone Racing League, Inc. | Warrant | October 17, 2022 | October 17, 2032 | Common Stock | 253,824 | $ | 6.76 | $ | 374 | $ | 1"
+    }
+  ],
+  "rationale": "X08 fired because fair value is below 5% of cost, but raw schedule rows show those low fair values are explicitly disclosed in the filing for equity/warrant positions. The stored low fair values therefore match source; the heuristic is over-scoping legitimate low-valued optionality rather than exposing a data error."
+}

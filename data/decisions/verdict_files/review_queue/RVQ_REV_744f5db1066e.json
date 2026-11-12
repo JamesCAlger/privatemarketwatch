@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_744f5db1066e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 29,
+      "quoted_text": "Grand Total | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The oracle reports pct_sum=0.0% for 2026-03-31, but the raw filing's industry-classification schedule is explicitly for March 31, 2026, contains populated category percentages, and reports Grand Total 100.00% at table 26 row 29. The zero observed sum therefore reflects a failure to extract or carry the disclosed percentage allocation, not an absent or zero source schedule."
+}

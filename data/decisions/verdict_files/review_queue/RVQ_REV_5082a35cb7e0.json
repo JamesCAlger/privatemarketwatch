@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_5082a35cb7e0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 1,
+      "quoted_text": "Investment (1)(2) | Industry (3) | Interest Rate (4) | Reference Rate and Spread (4) | Maturity | Par (6) | Cost | Fair Value | Footnotes"
+    },
+    {
+      "table_index": 51,
+      "row_index": 26,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | 8.76 % | S + 5.00 % | 12/05/31 | 24,347 | 23,954 | 23,950 | (7)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 27,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | S + 5.00 % | 12/05/31 | 3,106 | ( 46 | ) | ( 47 | ) | (7) (10)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 28,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | S + 5.00 % | 12/05/31 | 252 | ( 4 | ) | ( 4 | ) | (7) (10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rows 176398, 176399, and 176400 carry fair_value_currency U_CAD even though the AAG KP Borrower LLC fair value cells are in the dollar-denominated Fair Value column and the source rows show no CAD marker.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 currency/unit check on fair_value_currency. The flagged rows store U_CAD, but the raw source schedule for AAG KP Borrower LLC is in table 51 under the Fair Value dollar column, and rows 26-28 show fair values 23,950, (47), and (4) with no CAD indicator. The raw source therefore supports USD-denominated fair values, making the U_CAD extraction a real data error."
+}

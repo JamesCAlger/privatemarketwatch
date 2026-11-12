@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_e78e6d8e3840",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2521951000,
+  "anchor_value": 1812990000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 64,
+      "row_index": 15,
+      "quoted_text": "TOTAL INVESTMENTS - 256.2 % | $ | 1,942,096 | 1,812,990",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 67,
+      "row_index": 2,
+      "quoted_text": "Controlled Investments | Fair Value at December 31, 2024 | Gross Additions (Cost)(1) | Gross Reductions (Cost)(2) | Net Unrealized Gain (Loss) | Fair Value at December 31, 2025 | Net Realized Gain (Loss) | Interest Income(3) | Dividend Income | Fee Income",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 67,
+      "row_index": 9,
+      "quoted_text": "First Lien Term Loan | Gross Additions (Cost) 25,408 | Net Unrealized Gain (Loss) (2,275) | Fair Value at December 31, 2025 23,133 | Interest Income 2,019 | Fee Income 50",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Year-ended controlled-investments activity/disposition rows are being treated as holdings, adding non-SOI rows to the position fair value sum.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 67,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The filing's own schedule total for December 31, 2025 is fair value 1,812,990 thousand, while the extracted holdings sum is 2,521,951,000, an overage of 708,961,000. The source shows adjacent year-ended controlled-investments activity tables with company and investment names plus a Fair Value at December 31, 2025 column; these are rollforward/activity rows, not SOI position rows. Sample duplicated holdings such as American Clinical Solutions First Lien Term Loan match table 67's activity row rather than a separate investable position. Therefore the GAV over-coverage is a real extraction/scope error caused by leaking activity/disposition tables into holdings."
+}

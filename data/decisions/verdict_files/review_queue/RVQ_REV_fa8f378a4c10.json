@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_fa8f378a4c10",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  null,
+    "anchor_value":  "Purflux Holding S.A R.L. Term Loan principal 54,619 with EURIBOR reference rate; extracted principal_amount_usd is blank",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  45,
+                                  "row_index":  15,
+                                  "quoted_text":  "Purflux Holding S.A R.L. | (6)(7)(13) | Term Loan | 8.51 % | EURIBOR | 6.50 % | 11/03/2025 | 11/4/2030 | 54,619 | 52,265 | 53,325",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Non-USD debt principal is present in the SOI row, but principal_amount_usd is blank, so explicit FX conversion is missing.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  45,
+                                          "row_index":  15,
+                                          "quoted_text":  "Purflux Holding S.A R.L. | (6)(7)(13) | Term Loan | 8.51 % | EURIBOR | 6.50 % | 11/03/2025 | 11/4/2030 | 54,619 | 52,265 | 53,325"
+                                      }
+                     }
+                 ],
+    "rationale":  "FX01 is a real data error. The bundle flags blank principal_amount_usd for non-USD debt rows; the cited SOI row shows a debt principal of 54,619 with EURIBOR as the reference rate, indicating a non-USD source par amount that requires an explicit USD principal conversion before par analytics. The observed extracted value is blank, so the missing converted principal is an extraction/conversion gap rather than a false alarm."
+}

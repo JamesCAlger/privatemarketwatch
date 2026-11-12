@@ -1,0 +1,65 @@
+{
+  "review_id": "RVQ_REV_9b8ecd59f9c1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "USD principal equivalent required for non-USD debt principal",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "BCA Marketplace Ltd | (f)(j) | Commercial & Professional Services | SA | + | 6.3 % | ( 0.0 % PIK | / 2.5 % PIK) | 0.0 % | 03/31 | GBP | 5,066 | 6,447 | 6,854"
+    },
+    {
+      "table_index": 17,
+      "row_index": 14,
+      "quoted_text": "BCA Marketplace Ltd | (f)(j) | Commercial & Professional Services | E | + | 6.3 % | ( 0.0 % PIK | / 2.5 % PIK) | 0.0 % | 04/31 | EUR | 2,094 | 2,232 | 2,430"
+    },
+    {
+      "table_index": 17,
+      "row_index": 30,
+      "quoted_text": "Carrier Fire Protection | (f) | Commercial & Professional Services | E | + | 4.8 % | ( 0.0 % PIK | / 3.0 % PIK) | 0.5 % | 07/31 | EUR | 481 | 516 | 572"
+    },
+    {
+      "table_index": 17,
+      "row_index": 34,
+      "quoted_text": "Carrier Fire Protection | (h) | Commercial & Professional Services | E | + | 5.0 % | 0.5 % | 07/31 | EUR | 36 | 38 | 38"
+    },
+    {
+      "table_index": 19,
+      "row_index": 15,
+      "quoted_text": "CSafe Global | (f) | Transportation | SA | + | 5.8 % | 0.8 % | 12/28 | GBP | 960 | 1,213 | 1,330"
+    },
+    {
+      "table_index": 25,
+      "row_index": 31,
+      "quoted_text": "Veriforce LLC | (f) | Software & Services | SA | + | 5.0 % | 0.8 % | 11/31 | GBP | 1,687 | 2,114 | 2,327"
+    },
+    {
+      "table_index": 29,
+      "row_index": 15,
+      "quoted_text": "Income Contingent Student Loans 1 2002-2006 PLC, ABS | (f)(j) | Financial Services | 8.0 % | 07/56 | GBP | 2,942 | 3,661 | 4,037"
+    },
+    {
+      "table_index": 29,
+      "row_index": 16,
+      "quoted_text": "Income Contingent Student Loans 2 2007-2009 PLC, ABS | (f)(j) | Financial Services | 8.0 % | 07/58 | GBP | 8,776 | 10,918 | 12,041"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Eight current-period debt positions disclose non-USD principal amounts, but the extracted principal_amount_usd field is blank for those rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "FX01 is a Class 1 single-column flag. The row-validation artifact reports eight blank principal_amount_usd values for non-USD debt principal. The raw SOI rows show current-period principal amounts denominated in GBP or EUR for exactly eight debt positions, so the missing USD principal equivalent is a real extraction/normalization gap rather than a false alarm."
+}

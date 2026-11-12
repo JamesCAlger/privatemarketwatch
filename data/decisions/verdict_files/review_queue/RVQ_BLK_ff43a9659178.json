@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_ff43a9659178",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "12.0",
+  "anchor_value": "S + 12.00 % PIK",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 33,
+      "quoted_text": "Wine.com, LLC | Beverages | 16.79 % | S + 12.00 % PIK | 04/03/27 | 7,093 | 7,346 | 7,447 | (7) (8)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 34,
+      "quoted_text": "Wine.com, LLC | Beverages | 16.75 % | S + 12.00 % PIK | 04/03/27 | 2,076 | 1,596 | 3,672 | (6) (7) (8) (12)"
+    }
+  ],
+  "rationale": "Class 1 X04 check of the flagged basis_spread cells. The raw schedule rows for the two flagged Wine.com positions show Reference Rate and Spread as S + 12.00 % PIK, so the stored basis_spread value 12.0 is source-supported. The flag appears to come from treating these rows as fixed-coupon instruments, but the source describes a reference-rate-plus-spread term."
+}

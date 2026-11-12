@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_c2521f93d2a4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.75,
+  "anchor_value": 1.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13% | 5/1/2029 | 110,967 | 108,484 | 106,963",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 251,
+      "row_index": 22,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88% | 5/1/2030 | 171,258 | 163,600 | 148,143",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2029 iHeartCommunications corporate bond has source interest rate 9.13%, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 251,
+        "row_index": 21
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2030 iHeartCommunications corporate bond has source interest rate 10.88%, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 251,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "C01 failed because only 6 of 8 debt rows have extracted rates. The residual fair value 255,106 ties to the Corporate Bonds subtotal in table 251 row 24, and the two underlying iHeartCommunications corporate bond rows show explicit source rates of 9.13% and 10.88%. The bundled holdings slice has blank interest_rate for both matching debt rows, so the flag is a real extraction gap rather than a false alarm."
+}

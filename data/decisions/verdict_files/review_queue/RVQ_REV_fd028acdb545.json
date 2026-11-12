@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_fd028acdb545",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 1,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "Abracon Group Holding, LLC. (8)(12)(15)(17)(19)(27) | First Lien Senior Secured Loan | SOFR | 2.05% (4.60% PIK) | 10.32% | 7/6/2028 | principal 15,760 | cost 13,690 | market value 6,935",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 103,
+      "row_index": 4,
+      "quoted_text": "Non-accrual | amortized cost 13,690 | 0.8% | fair value 6,935 | 0.4%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing's Abracon position has cost 13,690 and market value 6,935, exactly equal to the filing's complete March 31, 2026 non-accrual category of amortized cost 13,690 and fair value 6,935. The one-to-one tie proves Abracon is the non-accrual position. The unified holding lacks a non-accrual field, so the flag identifies a real extraction gap rather than a false alarm."
+}

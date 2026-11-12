@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_REV_65e57c64427f",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 11.43429798723613,
+  "anchor_value": 16.575,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 140,
+      "row_index": 29,
+      "quoted_text": "Ratio of net investment income to average net assets(3)(4) | 11.05 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 140,
+      "row_index": 12,
+      "quoted_text": "Total dividends declared | ( 2.32 )"
+    },
+    {
+      "table_index": 140,
+      "row_index": 22,
+      "quoted_text": "Net asset value at end of period | $ | 20.37"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Source reports 2025 income_yield_pct as 11.05%, so F16 threshold is 16.575% and the observed distribution_rate of 11.4343% should not fail.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 140,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "The filing's financial highlights report net investment income to average net assets of 11.05% for 2025. The same table reports total dividends declared of 2.32 and ending NAV of 20.37, consistent with an approximately 11.4% distribution rate. Because 11.4343% is below 1.5 times the source income yield (16.575%), the F16 failure indicates the extracted income-yield metric or its scale is wrong rather than a genuine excessive distribution."
+}

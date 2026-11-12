@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_1b81814de017",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag row_key 413646 alleges a missing interest_rate and basis_spread. The cached raw filing was read successfully, but the bundle supplies no issuer, instrument, source context, or source-table coordinate for that row. A targeted raw-source search for 413646 returned zero hits because the pipeline row key is not a filing locator. The flagged cell therefore cannot be matched to a raw schedule row without scanning the filing-wide schedule haystack, so source evidence does not decide whether the missing rate is a real extraction defect or a valid non-rate-bearing position."
+}

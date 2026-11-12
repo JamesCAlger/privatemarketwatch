@@ -1,0 +1,79 @@
+{
+  "changed_files": [],
+  "cik": "0001383414",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_row_classification_candidates",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The CIK-quarter is already in over-coverage with gav_ratio 2.4215 and bdc_source_reconciliation_ratio 2.4196, so adding rows or broadly changing parser behavior without a traced mechanism would increase data-quality risk.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 15,
+      "row_index": 44,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The Preferred Equity/Partnership Interests 5.4% of Net Assets row is a security-type/category percentage header, not a production position row."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 13,
+      "row_index": 62,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The Common Equity/Partnership Interests/Warrants 24.7% of Net Assets row is a security-type/category percentage header, not a production position row."
+    },
+    {
+      "evidence_ref": "html_row_classification_candidates",
+      "table_index": 10,
+      "row_index": 2,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The Investments in Non-Controlled, Non-Affiliated Portfolio Companies 174.8% of Net Assets row is an affiliation/category header introducing a schedule section, not a leaf holding."
+    },
+    {
+      "evidence_ref": "html_row_classification_candidates",
+      "table_index": 10,
+      "row_index": 4,
+      "cell_indices": [
+        0,
+        1,
+        3,
+        6,
+        7,
+        9,
+        14,
+        17,
+        18,
+        21,
+        22
+      ],
+      "reason": "The A1 Garage Merger Sub row demonstrates that true position rows in the same filing carry issuer, maturity, industry, coupon/spread, par/shares, cost, and fair value cells, which is a different table shape from the one-cell category rows."
+    }
+  ],
+  "missing_evidence": "A bounded safe mechanism is missing for PennantPark 2024-03. The packet mixes clear category/total percentage headers with XBRL identifiers that append issuer-like names to percentage hierarchy text. The HTML coordinate evidence for several issuer-like blocker rows is not one-to-one: matched rows are often selected by broad industry terms such as Business Services or Aerospace and Defense rather than the named issuer in the XBRL identifier. Missing evidence: a traced CIK-specific mapping from XBRL dimensions to the correct source-table rows, proof of which issuer-like XBRL rows are genuine missing positions versus malformed rollups, and false-positive coverage showing that a parser change would not worsen the existing 2.42x over-coverage.",
+  "patch_summary": "",
+  "primary_justification": "Manual review does not support a bounded patch for this packet. Some sampled blocker rows are plainly non-position percentage headers or category rollups, including Preferred Equity/Partnership Interests 5.4% of Net Assets, Common Equity/Partnership Interests/Warrants 24.7% of Net Assets, and the Investments 246.9% of Net Assets total. Other source-only rows, such as AG Investco LP, QuantiTech InvestCo LP, Any Hour Services, Berwick Industrial Park, Burgess Point Purchaser Corporation, ENC Parent Corporation, HPA SPQ Aggregator LP, KL Stockton Co-Invest LP, and eCommission Holding Corporation, have source XBRL fair values and position-like text. The bundle does not provide one-to-one coordinate proof tying those issuer-like XBRL rows to the correct source-table rows; several coordinate candidates are broad industry-term matches rather than the named issuer. Therefore a broad rule to admit all hierarchy-plus-issuer rows would be unsafe, while a broad rule to classify the packet as aggregate/header would suppress apparently real position evidence.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2024-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The blocker remains unresolved. This verdict does not clear it by suppression: it escalates a mixed PennantPark parser/source-reconciliation defect that needs a CIK-specific trace and tested fix before rows are added, removed, or reclassified.",
+  "review_id": "BDCSRC_0001383414_2024-03-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_7ef205dc1b",
+  "reviewer_notes": "The packet reports 17 source-only blocker rows and affected source fair value of 1,596,918,000. Manual review found three classes inside the same packet: one-cell percentage headers/category rows, issuer-like equity rows embedded after percentage hierarchy text, and issuer/rate/maturity debt rows. The current CIK-quarter validation state is WARN with gav_flag over_coverage and bdc_source_reconciliation_flag over_coverage, so the safe next step is not a local broadening patch but a CIK-specific PennantPark extraction trace with regression tests.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No direct clearing effect. The packet should remain escalated until a bounded PennantPark parser/staging fix separates category headers from genuine leaf rows and the affected outputs are rebuilt through the pipeline.",
+  "tests_validation_plan": "Validate verdict schema and evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No production code tests are added because no safe bounded patch is proposed in this manual pass.",
+  "verdict": "ESCALATE"
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_e5f9d37e4e9a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1488856,
+  "anchor_value": 1694770,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 22,
+      "quoted_text": "Global Holdings Interco Parent LLC | First Lien - Term Loan | SOFR + 560 | (9) | 9.3 | 9/16/2027 | 1,589,546 | 1,590 | 1,589 | 0.2"
+    },
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Total investments | $ | 1,502,814 | 1,488,856 | 173.1"
+    },
+    {
+      "table_index": 13,
+      "row_index": 55,
+      "quoted_text": "Total investments | $ | 1,735,720 | 1,694,770 | 166.2"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged Global Holdings row is from the comparative December 31, 2025 schedule total of 1,488,856, not the March 31, 2026 schedule total of 1,694,770.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 18,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "PP03 flags a holdings row retained for the 2026-03-31 report_date even though its source period is earlier. The source contains the issuer in the comparative SOI block at table 18 row 22; that block ties to the comparative total investments fair value of 1,488,856 at table 20 row 4, while the current March 31, 2026 SOI total is 1,694,770 at table 13 row 55. Retaining the comparative-period row in the current holdings set is therefore a real data error."
+}

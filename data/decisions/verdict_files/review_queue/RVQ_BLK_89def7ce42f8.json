@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_89def7ce42f8",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 876,
+  "anchor_value": 876,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited) and December 31, 2025 | 11",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 90,
+      "row_index": 1,
+      "quoted_text": "March 31, 2026 | December 31, 2025",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "E07 compares 1,744 source rows with 876 output rows, but the raw filing explicitly contains consolidated schedules of investments for both March 31, 2026 and December 31, 2025. The table inventory shows two long schedule blocks, and the cited period headers confirm the comparative structure. The near-doubling in the oracle source count is therefore caused by counting both periods, while the output is correctly scoped to the requested March 31, 2026 report date."
+}

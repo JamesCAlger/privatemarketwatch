@@ -1,0 +1,106 @@
+{
+  "changed_files": [
+    "pipeline/bdc_identifier.py",
+    "tests/test_unified_holdings.py"
+  ],
+  "cik": "0001902649",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_row_classification_candidates",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV rule change. The patch restores eligible position-level BDC rows previously filtered as aggregate/category rows; after rebuilding unified outputs, GAV/source ratios should be rechecked for this CIK-quarter and adjacent BlackRock Private Credit Fund quarters.",
+  "html_citations": [
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_row_classification_candidates",
+      "reason": "Discovery Purchaser Corporation row is a current-period position row with issuer, first lien term loan instrument, SOFR reference, floor, spread, total coupon, maturity, cost, fair value, and pct-of-net-assets cells.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 7,
+      "table_index": 12
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_row_classification_candidates",
+      "reason": "Olympus Water US Holding Corporation (Solenis) row is a current-period position row with borrower, instrument, rate, maturity, cost, fair value, and pct-of-net-assets fields.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 10,
+      "table_index": 12
+    },
+    {
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "evidence_ref": "html_row_classification_candidates",
+      "reason": "Pregis Topco Corporation row is a current-period position row with first lien term loan instrument, SOFR reference, spread, coupon, maturity, cost, fair value, and pct-of-net-assets fields.",
+      "row_classification": "POSITION_ROW",
+      "row_index": 27,
+      "table_index": 13
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Bound the BDC aggregate/header filter so hierarchy rows with an explicit leaf marker of either Investment Type or Instrument, plus loan/equity terms and rate or maturity evidence, are not classified as aggregate rows. This fixes BlackRock Private Credit Fund rows such as Debt Investments ... Kaman Corporation Instrument First Lien Term Loan ... Maturity while preserving category/header filtering for rows that merely contain the word Instrument without leaf economics.",
+  "primary_justification": "The bundle evidence shows these are real current-period position rows, not aggregate/header rows: source-only blocker rows carry issuer, instrument, rate, maturity, and fair-value facts; HTML coordinate candidates classify sampled rows as POSITION_ROW with table coordinates; and the failure mechanism is specifically a terminal-percentage leaf parser mismatch. The production defect is the aggregate guard only recognized Investment Type leaf markers, while this filer uses Instrument.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch broadens the leaf-detail exception, so the main residual risk is accidentally retaining a category row that contains the word Instrument. The false-positive test keeps a bare Debt Investments Aerospace & Defense Instrument row classified as aggregate, and the guard still requires instrument terms plus rate or maturity evidence.",
+  "review_id": "BDCSRC_0001902649_2025-03-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_83178e9726",
+  "reviewer_notes": "Manual review of the bundle supports a bounded parser patch for this packet. The old bulk INSUFFICIENT_EVIDENCE verdict was replaced. Targeted tests run: pytest tests/test_unified_holdings.py::TestPctPrefixCategorySubtotals tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected to convert the 24 BlackRock Private Credit Fund 2025-03-31 source-only blocker rows from missing-from-pipeline to reconciled output rows after rebuilding unified holdings and validation outputs, because the affected XBRL identifiers will no longer be filtered as aggregate/category headers.",
+  "tests_validation_plan": "Run the targeted tests already used for this patch, then run python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. Because this changes unified holdings filtering, run python -m pipeline.main --unified --validate if practical before treating output counts as production.",
+  "verdict": "PATCH_PROPOSED"
+}

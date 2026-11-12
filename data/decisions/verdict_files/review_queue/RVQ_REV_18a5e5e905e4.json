@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_18a5e5e905e4",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 14,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 126,
+      "row_index": 10,
+      "quoted_text": "Knockout Intermediate Holdings I, Inc. - Perpetual Preferred Stock | (4) | SOFR + | 10.75 % | 15.03 % | 6/23/2022 | 49,020 | 47,795 | 69,363 | 0.18",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 126,
+      "row_index": 11,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 11/30/2021 | 45,090 | 43,963 | 58,392 | 0.15",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 33,
+      "quoted_text": "Inovalon Holdings, Inc. | (4)(10) | SOFR + | 10.50 % | 15.05 % PIK | 11/24/2021 | 11/24/2033 | 131,514 | 129,751 | 131,514 | 0.31",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row review. The flag lists 14 extracted PRIVATE_EQUITY rows with interest_rate values but only row_keys, not issuer names or source coordinates. Raw source shows some equity-section preferred instruments legitimately carry stated rates, e.g. Knockout perpetual preferred stock and Lobos Series A preferred shares in table 126. The same or nearby rate values also appear on debt/PIK rows, e.g. Inovalon in table 46. Without a row_key-to-issuer/source mapping, the raw source does not decide whether the flagged extracted rows are valid preferred-equity rates or misclassified debt rows."
+}

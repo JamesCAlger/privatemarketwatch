@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_1a92e0172194",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2023-01-09",
+  "anchor_value": "2033-01-09",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 34,
+      "quoted_text": "True Talent Advisory Borrower, LLC | S + 5.25 % | 1.50 % | 8.95 % | 1/9/2033 | 67,500 | 66,198 | 66,192 | 2.02",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 35,
+      "quoted_text": "True Talent Advisory Borrower, LLC - Delayed Draw Term Loan | (11) | S + 5.25 % | 1.50 % | 8.94 % | 1/9/2033 | - | (294) | (295) | (0.01)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw investment schedule shows 1/9/2033 for both flagged True Talent positions at table 19 rows 34 and 35, matching the structured XBRL maturity_date of 2033-01-09. The identifier-derived date 2023-01-09 is therefore a localized identifier extraction/parsing defect, not an XBRL maturity defect."
+}

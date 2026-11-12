@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_cb5bd265118a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2291186975,
+  "anchor_value": 2487588823,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | $ | 2,513,533,478 | $ | 2,487,588,823 | 186.80 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 56,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted March 31 position sum of 2,291,186,975 is 196,401,848 below the current schedule total and instead nearly matches the December 31 portfolio total of 2,292,614,325.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 56,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The filing's March 31, 2026 schedule reports Total Investment Portfolio fair value of 2,487,588,823 at table 33 row 22. The extracted holdings sum is only 2,291,186,975, a shortfall of 196,401,848, while the filing's December 31, 2025 schedule total is 2,292,614,325 at table 56 row 6, only 1,427,350 away from the extract. This close prior-period match grounds comparative-period leakage in the extracted holdings."
+}

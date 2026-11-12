@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_e708fea387e1",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  "fund=True;holdings=False",
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Evidence CLI returned status no_accession_resolved for overview, tables, totals, and targeted roam queries, so raw source was not available to adjudicate the F28 fund_financials/holdings coverage mismatch."
+}

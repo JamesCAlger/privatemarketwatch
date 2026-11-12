@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_dfd24f8c503a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2030-11-15",
+  "anchor_value": "2029-11-15",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 44,
+      "quoted_text": "Petvet Care Centers, LLC | First Lien Revolver | S + 6.00 % | 11/15/2029 | 70 | 65 | 44 | 8,23",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 43,
+      "quoted_text": "Petvet Care Centers, LLC | First Lien Term Loan | S + 6.00 % | 11/15/2030 | 21,762 | 21,436 | 20,185 | 8",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw schedule gives the Petvet First Lien Revolver a maturity of 11/15/2029, matching the structured XBRL value. The identifier's 11/15/2030 date belongs to the immediately preceding Petvet First Lien Term Loan row, so the identifier was assembled with the adjacent instrument's maturity."
+}

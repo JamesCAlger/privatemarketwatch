@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_c17a3b524b37",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.21468926553672316,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Software & Services | S+ 4.75 %, 0.75 % Floor | 8.47 | 9/1/2023 | 9/3/2030 | 10,516,647 | 10,372,616 | 10,422,269 | 1.76"
+    },
+    {
+      "table_index": 39,
+      "row_index": 8,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Software & Services | S+ 6.00 %, 0.75 % Floor | 10.36 | 9/1/2023 | 9/3/2030 | 10,596,118 | 10,427,328 | 10,504,801 | 1.93"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer extraction is polluted by instrument and terms text; the raw SOI has a separate Portfolio Company cell, while the extracted issuer_name in the bundle is the full row string.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "D06 failed with only 38/177 issuers persisting, but raw SOI rows show the same issuer persists across the 2025 and 2024 schedules when using the Portfolio Company cell. For example, Accela Inc/US appears in table 27 row 7 for 2025 and table 39 row 8 for 2024 with the same instrument and maturity. The bundle's extracted issuer_name is a concatenated full-row identifier rather than the source issuer cell, so rate and term changes break issuer continuity and make the low persistence metric a real extraction error."
+}

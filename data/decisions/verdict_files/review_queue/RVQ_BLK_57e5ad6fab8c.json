@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_57e5ad6fab8c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2783.476,
+  "anchor_value": 2783.476,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 20,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,767,878 | $ | 2,783,476 | 199.06 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 8,
+      "quoted_text": "Continuation subtotal line for Quantum Leap Buyer LLC carries aggregate principal/cost/fair value and percentage after the three instrument rows, showing the source table has non-position structural rows.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's current non-controlled/non-affiliated investment fair value total is 2,783,476 thousand, which equals the output anchor of 2,783.476 million, so the extracted current holdings are value-complete. The E07 source-count side is not a reliable position anchor here because the raw SOI is split across many tables and includes non-position rows such as headers, industry labels, continuation/subtotal lines, cash/cash-equivalent rows, and separate prior-period investment tables. The source therefore supports that the count mismatch is caused by rule scope/counting of raw table rows rather than a data error in the extracted holdings."
+}

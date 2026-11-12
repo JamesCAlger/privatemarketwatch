@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_879274482a98",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD ($)",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 5,
+      "quoted_text": "Burgess Point Purchaser Corporation | Initial Term Loan (First Lien) | ... | $ | 4,696,356 | $ | 4,206,281 | 2.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 37,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | $ | 438,839,857 | 395,375,030 | 203.7 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency value U_USD as not USD, but the raw schedule of investments presents the fair value column in dollars. A representative flagged holding, Burgess Point Purchaser Corporation, shows Fair Value with a dollar sign and value 4,206,281, and the schedule total is also dollar-denominated. The source therefore supports USD-denominated fair values; the defect is the rule treating the U_USD unit label as non-USD rather than a data error in the holding."
+}

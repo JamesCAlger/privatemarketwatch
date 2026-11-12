@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_ab7df4f7c726",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 8,
+  "anchor_value": 2,
+  "confidence": 0.72,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 13,
+      "quoted_text": "ARMStrong Receivable Management | First Lien Delayed Draw Term Loan | 8.55 % | 10/6/2026 | fair value (1)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "ARMStrong Receivable Management | First Lien Revolving Loan | 8.55 % | 10/5/2029 | fair value (1)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 aggregates eight alleged comparative-period rows. Raw-source table 13 shows that the two flagged ARMStrong values are present in the March 31, 2026 schedule and match the extracted 8.55 percent rates and negative $1 thousand fair values, so those two are not comparative leaks. Targeted raw-source queries did not return usable coordinates for the other six named positions. The mixed aggregate therefore cannot be adjudicated as wholly real or wholly false without guessing; row-level separation or human review is required."
+}

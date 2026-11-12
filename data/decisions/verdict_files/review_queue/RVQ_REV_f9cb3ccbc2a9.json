@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_f9cb3ccbc2a9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.11 % (SOFR + 7.50 %, 2.00 % Floor) | Amortized Cost $ 28,862,619 | Fair Value $ 29,345,648",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted cost_currency is U_USD even though the source Amortized Cost column is dollar-denominated and should normalize to USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 row-level currency/unit validation issue. The filing's investment schedule labels the relevant valuation columns as Amortized Cost and Fair Value and shows dollar markers on the cited CSAT Holdings LLC row, including Amortized Cost $ 28,862,619. The reviewed extracted value U_USD is therefore not the source currency but a nonstandard XBRL unit label that should have been normalized to USD. Source evidence decides the issue, so this is a real extraction/normalization error."
+}

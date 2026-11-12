@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_c9b45aacbb89",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 4381394000.0,
+  "anchor_value": 4277724000.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 21,
+      "quoted_text": "Total non-controlled/affiliated investments | 87,345 | 103,670 | 4.35%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 85,
+      "row_index": 22,
+      "quoted_text": "Total investments | $ | 4,277,643 | $ | 4,277,724 | 179.37%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted fair value sum exceeds the source/companyfacts total investments fair value by 103,670 thousand, exactly the subtotal for Total non-controlled/affiliated investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 85,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation: the filing's SOI total investments fair value is 4,277,724 thousand and the bundle's companyfacts_fv anchor is 4,277,724,000, while the extracted position fair value sum is 4,381,394,000. The difference is 103,670,000, matching the SOI subtotal row Total non-controlled/affiliated investments at 103,670 thousand, so the conservation failure is a real subtotal leak rather than a bad anchor."
+}

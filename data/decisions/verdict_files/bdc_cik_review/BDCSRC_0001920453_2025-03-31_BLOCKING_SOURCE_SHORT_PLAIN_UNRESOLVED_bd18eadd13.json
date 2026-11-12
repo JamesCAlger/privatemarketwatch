@@ -1,0 +1,33 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001920453",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "xbrl_rows_same_accession",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so the Total Investment Portfolio row is documented as a non-position total/header source row rather than treated as a missing holding.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Add investment portfolio to the existing total-header vocabulary so Total Investment Portfolio is classified as documented_source_total_header.",
+  "primary_justification": "Manual review covered the single blocker row. The raw and normalized identifier is Total Investment Portfolio / total investment portfolio, source_row_id 1032843, with source fair value 1,750,876,439. The label is an explicit portfolio-level total and lacks issuer, borrower, instrument, maturity, rate, share, or principal detail. Current same-CIK/date holdings examples contain detailed position rows under Investments Investments - non-controlled / non-affiliate, confirming the production output is already position-level rather than this aggregate label. Treating the total row as a holding would duplicate exposure and violate the position-level index contract.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The bundle has no source-targeted HTML coordinate candidate for this row, so the verdict is grounded in the source/XBRL identifier and existing classifier semantics rather than coordinate-backed HTML. The patch is limited to the total-header phrase investment portfolio under the existing Total/Subtotal prefix rule and remains guarded by entity/position signal checks. Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code.",
+  "review_id": "BDCSRC_0001920453_2025-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_bd18eadd13",
+  "reviewer_notes": "Source-only blocker row reviewed: source_row_id 1032843 Total Investment Portfolio FV 1,750,876,439. Bundle GAV status is PASS with comparison_source investments_at_fair_value, while the source reconciliation packet separately reports 74 missing rows across the CIK/date; this verdict addresses only the current one-row short-plain total-header packet.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_short_plain_unresolved to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

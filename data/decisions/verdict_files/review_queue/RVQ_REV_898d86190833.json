@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_898d86190833",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.493,
+  "anchor_value": 0.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 84,
+      "row_index": 28,
+      "quoted_text": "Asset coverage, end of period (7) | 178.94 | % | 181.98 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 73,
+      "row_index": 7,
+      "quoted_text": "Total borrowings outstanding | $ | 622,500 | $ | 470,600 | $ | 468,058 | $ | 470,600 | $ | 622,500 | $ | 494,600 | $ | 492,212 | $ | 494,600",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 7,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 858,951 | $ 825,525 | 220.04 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F26 compares economically different proxies. The filing's issuer-level leverage is directly anchored by 178.94% asset coverage and $470.600 million of total borrowings. The holdings view is an investment-portfolio composition measure whose schedule total is $825.525 million, not a second measure of the issuer's capital leverage. The reported 0.493 proxy divergence therefore does not establish a source-data error; the check uses a semantically invalid comparison anchor."
+}

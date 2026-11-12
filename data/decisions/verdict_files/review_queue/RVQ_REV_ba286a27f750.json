@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ba286a27f750",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.49382716049382713,
+  "anchor_value": 0.95,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 280,937 par, due 2/2031 ) | 2/13/2024 | SOFR + 5.75 % | 10.27 % | $ 277,851 | $ 281,792 | 7.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 42,
+      "quoted_text": "Total Debt Investments | 6,939,967 | 7,089,771 | 175.7 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 31,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2024 source schedule has fair-value cells for actual investment rows and totals, but the extracted B01 coverage is only 160 of 324 leaves.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value coverage flag. The raw 2024 schedule of investments includes a Fair Value column for position rows, for example Truck-Lite shows fair value 281,792, and the schedule totals show Total Debt Investments fair value 7,089,771 and Total Investments fair value 7,244,282. The stored coverage metric, 160 of 324 leaves with fair_value (49.4%), therefore reflects a real extraction/row-disposition gap rather than a source schedule with missing fair values."
+}

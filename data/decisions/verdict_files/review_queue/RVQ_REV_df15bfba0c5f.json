@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_df15bfba0c5f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 5,994,674 | $ | 6,029,967",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 37,
+      "quoted_text": "Total Investments (108.0 %) | $ | 160,948,819 | $ | 162,035,728",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency value U_USD as not USD, but the raw schedule of investments shows the cost and fair value columns are USD-denominated: cited position and total rows prefix the values with dollar signs. The observed unit label U_USD is therefore a filer/XBRL USD encoding, not evidence of a non-USD cost currency."
+}

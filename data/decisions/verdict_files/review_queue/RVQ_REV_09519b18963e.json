@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_09519b18963e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Investment Type | Reference Rate and Spread (2) | Floor | Interest Rate (2) | Initial Acquisition Date | Maturity Date | Par/Shares | Amortized Cost (3) | Fair Value (4) | % of Net Assets (18) | Footnotes"
+    },
+    {
+      "table_index": 50,
+      "row_index": 18,
+      "quoted_text": "Flexera Software LLC | Initial USD Term Loan | 3M SOFR + 4.50 % | 0.50 | % | 8.35 | % | 8/15/2025 | 8/16/2032 | 3,799,527 | 3,789,738 | 3,771,031 | 1.9 | % | (5)"
+    }
+  ],
+  "rationale": "FX01 asserts non-USD debt principal rows are missing principal_amount_usd. The raw SOI schedule exposes a Par/Shares column and USD/cost/fair-value-style dollar columns, but the checked source does not provide an explicit non-USD currency marker, FX rate, or converted USD principal for the flagged population. Targeted source searches for EUR, GBP, CAD, foreign currency, currency, denominated, dollars, and United States dollars did not decide the issue; the only explicit currency text found was USD/Dollar-labeled facilities. Because the raw source does not conclusively prove either a missing conversion defect or a false rule premise for all flagged rows, the item remains ambiguous."
+}

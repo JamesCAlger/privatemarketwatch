@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_1e5630f0732d",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "extract_rate_coverage",
+  "observed_value": 0.7751196172248804,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 36,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2028 | 13,795 | ( 147 ) | --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 82,
+      "row_index": 4,
+      "quoted_text": "2080 Media, Inc. | 1st Lien Senior Secured Revolving Loan | 13,795 | --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 67,
+      "row_index": 37,
+      "quoted_text": "AB Centers Acquisition Corporation (4)(6)(9) | 7/2/2031 | 16,655 | ( 232 ) | --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 82,
+      "row_index": 5,
+      "quoted_text": "AB Centers Acquisition Corporation | 1st Lien Senior Secured Revolving Loan | 16,655 | --",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C01 rate coverage includes unfunded commitment/revolving loan rows whose source SOI interest-rate cells are intentionally blank and separately disclosed in the unfunded commitments schedule.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 82,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C01 fired because the extracted debt-rate coverage is 0.7751196172248804 versus the 0.8 threshold, but the raw filing shows the missing-rate pattern is not an extraction defect for the cited residual rows. For 2080 Media and AB Centers, the SOI rows have debt-like maturity/par/cost/fair-value data but no reference-rate or interest-rate cells; the same issuers and amounts appear in the separate unfunded commitments table as revolving loan commitments. The source therefore supports the stored blank rates for this row class, and the check is over-scoped to commitment rows rather than identifying a data error."
+}

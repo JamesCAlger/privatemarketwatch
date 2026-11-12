@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_d3ea72b7979c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 400131924,
+  "anchor_value": 400131924,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 218,
+      "row_index": 58,
+      "quoted_text": "Total Investments | $ | 396,791,982 | $ | 400,131,924 | 200.44 %"
+    },
+    {
+      "table_index": 210,
+      "row_index": 5,
+      "quoted_text": "2X LLC | (4) | Berwyn, PA"
+    },
+    {
+      "table_index": 210,
+      "row_index": 6,
+      "quoted_text": "Term Loan | (5) | First Lien | 3M SOFR+ 5.00 % | 2.00 % | 8.67 % | 6/5/2023 | 6/5/2028 | Services: Business | $ | 1,763,343 | $ | 1,738,218 | $ | 1,763,343 | 0.88 %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 is counting issuer/header and other structural rows with intentionally blank fair-value cells in the denominator even though actual investment rows carry fair value and the schedule total ties.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 210,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The B01 aggregate failure reports 566/1150 leaves with fair value, but raw source shows the current schedule's Total Investments fair value is $400,131,924, matching the extracted fund-quarter fair value. Representative actual investment rows have populated fair-value cells, while issuer/header rows such as the 2X LLC grouping row are structural labels with blank value columns and should not be required to carry fair value. This makes the failed coverage denominator a rule-scope false alarm rather than a source-grounded missing fair-value defect."
+}

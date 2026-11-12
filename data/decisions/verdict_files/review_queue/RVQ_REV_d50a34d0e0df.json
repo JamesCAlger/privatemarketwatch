@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_d50a34d0e0df",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": "footnote_marker_16",
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 29,
+      "quoted_text": "Multi-Color Corporation and LABL, Inc. - third first lien senior secured loan; coupon blank; maturity 10/2028; principal 77,243.7; amortized cost 72,887.3; fair value 40,166.7; footnotes (2)(13)(16)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule localizes the flagged loan to table 20 row 29: it is the third Multi-Color Corporation and LABL, Inc. loan and carries footnote (16). However, the evidence CLI returned no readable definition of footnote (16), and targeted raw-source searches for non-accrual terminology returned no hits. The source therefore does not decide whether marker (16) denotes non-accrual, so confirming or rejecting the flag would require a guess."
+}

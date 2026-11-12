@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_c2c1555c1a13",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 648.055,
+  "anchor_value": 648.055,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 683,274 and $ 663,069, respectively) | 648,055 | 644,211",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 683,274 | $ | 648,055 | 115.7 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 663,069 | $ | 644,211 | 118.4 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source-side row count appears to include the comparative SOI-like schedule in tables 52-58; that block ties to the 644.211 prior-year investment total, not the 648.055 current-period total.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 57,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation supports the extracted current-period holdings rather than the E07 count flag. The filing statement row shows current and comparative investment totals of 648.055 and 644.211 million. The current SOI block reaches Total Investments of 648.055 in table 49, while the second SOI-like block reaches Total Investments of 644.211 in table 57, matching the comparative period. Because the output FV anchor is also 648.055 million, the 315 source-row denominator is overbroad from comparative-period leakage; the current extracted output count of 130 is not shown to be a data error."
+}

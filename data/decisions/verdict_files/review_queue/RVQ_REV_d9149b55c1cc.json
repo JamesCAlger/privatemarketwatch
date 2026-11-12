@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_d9149b55c1cc",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD, shown as dollars in the source schedule",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 5,
+      "quoted_text": "Burgess Point Purchaser Corporation | Initial Term Loan (First Lien) | 3M SOFR + 5.25 % | 9.19 % | 11/25/2024 | 7/25/2029 | 4,923,716 | $ | 4,696,356 | $ | 4,206,281 | 2.2 %"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency=U_USD as not USD, but the raw SOI schedule presents amortized cost and fair value for the flagged Burgess row in dollars. The source supports USD-denominated valuation fields; the issue is the validation rule's treatment of the custom unit label U_USD, not a data extraction error in the holding value. Other rows in the same table inherit the same USD schedule columns."
+}

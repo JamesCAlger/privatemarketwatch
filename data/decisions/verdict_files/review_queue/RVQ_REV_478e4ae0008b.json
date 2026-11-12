@@ -1,0 +1,72 @@
+{
+  "review_id": "RVQ_REV_478e4ae0008b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Any Hour, LLC | (6) | Other Debt | 13.00 % PIK | 13.00 % | 05/23/2031 | 3,627 | 3,577 | 3,444 | 0.10"
+    },
+    {
+      "table_index": 16,
+      "row_index": 16,
+      "quoted_text": "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) | (6) (14) | Other Debt | 16.25 % PIK | 16.25 % | 06/18/2028 | 500 | 352 | - | 0.00"
+    },
+    {
+      "table_index": 18,
+      "row_index": 40,
+      "quoted_text": "Fetch Insurance Services, LLC | (6) (10) | Other Debt | 12.75 % (incl. 3.75 % PIK) | 12.75 % | 10/31/2027 | 3,223 | 3,184 | 3,223 | 0.10"
+    },
+    {
+      "table_index": 26,
+      "row_index": 16,
+      "quoted_text": "KWOR Acquisition, Inc. | (6) (19) | Other Debt | S + | 8.00 % PIK | 12.20 % | 02/28/2030 | 4,897 | 4,897 | 4,897 | 0.14"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Any Hour issuer_name should be only Any Hour, LLC; extracted value leaked sector, investment type, PIK terms, interest rate, and maturity into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Familia issuer_name should be only Familia Intermediate Holdings I Corp. (Teasdale Latin Foods); extracted value leaked sector, investment type, PIK terms, interest rate, and maturity into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Fetch issuer_name should be only Fetch Insurance Services, LLC; extracted value leaked sector, investment type, PIK terms, interest rate, and maturity into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 40
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "KWOR issuer_name should be only KWOR Acquisition, Inc.; extracted value leaked section text, investment type, reference spread, PIK terms, interest rate, and maturity into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 26,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "C206 is a real parse-leak error. The raw SOI rows show the issuer in the first column and the investment type, reference spread or PIK terms, interest rate, maturity, par, cost, and fair value in separate columns. The flagged extracted issuer_name values concatenate those non-issuer fields into issuer_name for all four reviewed rows."
+}

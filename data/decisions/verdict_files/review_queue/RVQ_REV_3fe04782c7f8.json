@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_3fe04782c7f8",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted raw-source evidence CLI returned missing_cached_html for the filing accession 0001145549-21-068938 on overview, tables, totals, and a targeted roam query, so the source rows for the X07 cost/fair-value flags could not be checked."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_818308b72b8e",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_current_vs_comparative",
+  "observed_value": "2024-12-31 comparative schedule row retained for 2025-06-30",
+  "anchor_value": "2025-06-30 current schedule row exists",
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 14,
+      "quoted_text": "December 31, 2024 comparative schedule: Monitorus Holding, LLC Revolver, 3M SOFR+ 7.00 %, 1.00 % floor, 11.59 %, maturity 5/24/2027, fair value 1,434,519.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 23,
+      "quoted_text": "June 30, 2025 current schedule: Monitorus Holding, LLC Revolver, 3M SOFR+ 6.25 %, 1.00 % floor, 10.81 %, maturity 5/24/2027, fair value 1,434,519.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Consolidated Schedule of Investments as of June 30, 2025 (unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2024",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged Monitorus Holding, LLC Revolver was retained from the December 31, 2024 comparative schedule even though the June 30, 2025 current schedule has the same position with updated coupon terms.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 40,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-level comparative-period purity issue. The filing table of contents separates the June 30, 2025 schedule from the December 31, 2024 schedule. Monitorus Holding, LLC Revolver appears in both schedules, but the comparative row has 3M SOFR+7.00% / 11.59% while the current row has 3M SOFR+6.25% / 10.81%. Retaining the comparative-period row for the 2025-06-30 report date is therefore a real localized data error."
+}

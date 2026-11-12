@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_6996776d9b2b",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1635656618,
+  "anchor_value": 1635656618,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 12,
+      "quoted_text": "BPCP Craftsman Holdings, LLC (o) | Class A Units | 16 | 15,686 | 6,738",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 30,
+      "row_index": 10,
+      "quoted_text": "BPCP Craftsman Holdings, LLC | Class A Units | 4/9/2025 | 15,686",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "A supplementary acquisition-date/cost row repeats an SOI instrument and was treated as a fair-value-bearing portfolio leaf.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 30,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation reconciles: the filing reports total investments of 1,662,543,940, including money market funds of 26,887,322, leaving 1,635,656,618 for the extracted private portfolio. The B01 coverage failure is instead caused by supplementary acquisition-date/cost schedule rows being counted as leaves. BPCP Craftsman is decisive: the main SOI row at table 25 row 12 states cost 15,686 and fair value 6,738, while table 30 row 10 repeats the same instrument and cost in a schedule whose columns are only Investment, Type, Acquisition Date, and Acquisition Cost. The repeated cost-only row legitimately has no source fair value but is not a separate holding; counting it as a leaf creates the missing-fair-value population."
+}

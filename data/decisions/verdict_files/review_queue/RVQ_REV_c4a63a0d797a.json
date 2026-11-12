@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_c4a63a0d797a",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8.16660839160839,
+  "anchor_value": 0.5342196352434392,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 268,
+      "row_index": 3,
+      "quoted_text": "Net asset value, beginning of period | $ | 8.71"
+    },
+    {
+      "table_index": 268,
+      "row_index": 11,
+      "quoted_text": "Distributions declared (1)(7) | ( 0.41 )"
+    },
+    {
+      "table_index": 268,
+      "row_index": 22,
+      "quoted_text": "Ratio of net investment income (loss) to average net assets (5) | 8.81%"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "F16 observed ratio is 8.1666, but source financial highlights imply distribution yield of about 4.71% (0.41 / 8.71) versus income yield of 8.81%, so the correct distribution-to-income-yield ratio is about 0.534, below the 1.5 threshold.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 268,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 fund-level rate check. The filing's financial highlights show 2025 distributions declared of $0.41 per share, beginning NAV of $8.71, and ratio of net investment income to average net assets of 8.81%. That implies a distribution yield of about 4.71% and a distribution-to-income-yield ratio of about 0.534, which satisfies distribution_rate <= income_yield_pct * 1.5. The flagged observed ratio 8.1666 is therefore inconsistent with the raw source and appears to be a rate scaling or derived-ratio defect."
+}

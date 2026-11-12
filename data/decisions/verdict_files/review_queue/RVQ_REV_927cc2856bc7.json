@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_927cc2856bc7",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1779.362,
+  "anchor_value": 1780.072,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 41,
+      "quoted_text": "Trystar, LLC | First Lien Term Loan | S + 4.25 % | 8/6/2031 | 12,256 | 12,156 | 12,195 | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 42,
+      "quoted_text": "Trystar, LLC | First Lien Term Loan | S + 4.25 % | 8/6/2031 | 5,243 | 5,200 | 5,217 | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 43,
+      "quoted_text": "Trystar, LLC | First Lien Term Loan | S + 4.50 % | 8/6/2031 | 2,746 | 2,733 | 2,733 | 9",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing itself separately discloses multiple Trystar first-lien term-loan positions. Rows 41 and 42 have the same issuer, type, spread, and maturity but materially different principal, cost, and fair value; row 43 also has a different spread. B02's normalized position key collapses legitimate separate lots/tranches, so the named duplicate-key fire is a rule-key false alarm rather than duplicated extracted data. The filing schedule fair-value total is 1780.072 million (table 19 row 19); the extracted total of 1779.362 million is noted as residual risk but does not make these separately disclosed Trystar rows duplicates."
+}

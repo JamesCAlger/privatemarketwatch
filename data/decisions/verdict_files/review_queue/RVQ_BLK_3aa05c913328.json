@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_BLK_3aa05c913328",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 176479202.0,
+  "anchor_value": 184989238.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 22,
+      "quoted_text": "Total Debt & Equity Investments (2) | 110.5 | % | 178,386,271 | 176,479,202",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 25,
+      "quoted_text": "Total Cash Equivalents | 5.3 | % | 8,510,036 | 8,510,036 | 8,510,036",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 26,
+      "quoted_text": "Total Investments ( 115.8 %) | $ | 186,896,307 | $ | 184,989,238",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 8,510 | $ | - | $ | 176,479 | $ | 184,989",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The schedule_total anchor includes 8,510,036 of cash equivalents; the extracted fair value matches the source subtotal for debt and equity investments at 176,479,202.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 7,
+        "row_index": 25,
+        "quoted_text": "Total Cash Equivalents | 5.3 | % | 8,510,036 | 8,510,036 | 8,510,036"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the reported schedule total of 184,989,238 equals debt and equity investments of 176,479,202 plus cash equivalents of 8,510,036. The flagged observed value is exactly the source subtotal for Total Debt & Equity Investments, corroborated by the fair value hierarchy table where Level 3 debt/equity total is 176,479 and Level 1 cash equivalents are 8,510. The residual is therefore caused by using Total Investments, which includes cash equivalents, as the anchor for a private-market debt/equity extraction rather than by a missing or misstated private-market holding."
+}

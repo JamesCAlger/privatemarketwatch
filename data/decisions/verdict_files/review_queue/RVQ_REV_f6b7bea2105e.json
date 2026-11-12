@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_f6b7bea2105e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values contain concatenated schedule context such as 'Portfolio Company Debt Securities- Canada Construction Technology Nexii, Inc. Type of Investment Secured Loan Investment Date July 24,2024 Maturity Date July 1,2027 Interest Rate Fixed interest rate 10.0%; EOT 0.0%'",
+  "anchor_value": "Schedule source has clean Portfolio Company cells separate from Type of Investment, Investment Date, Maturity Date, Interest Rate, Principal Amount, Cost, and Fair Value columns.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Type of Investment (2) | Investment Date (3) | Maturity Date | Interest Rate (4) | Principal Amount (5) | Cost | Fair Value (6) | Footnotes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 5,
+      "quoted_text": "Nexii, Inc. | Secured Loan | July 24, 2024 | July 1, 2027 | Fixed interest rate 10.0 %; EOT 0.0 % | $ | 365 | $ | 365 | $ | 375 | (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 10,
+      "quoted_text": "GoFor Delivers, Inc. | Secured Loan | June 28, 2024 | July 1, 2028 | Variable interest rate Prime + 3.5 % or Floor rate 12.0 %; EOT 2.5 % | $ | 6,000 | $ | 6,027 | $ | 5,769 | (8)(10)(21)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 18,
+      "quoted_text": "Aledia, Inc. | Equipment Financing | March 31, 2022 | April 1, 2025 | Fixed interest rate 9.0 %; EOT 7.0 % | $ | 1,701 | $ | 2,971 | $ | 2,947 | (10)(14)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field captured row wrappers and adjacent schedule columns instead of only the clean Portfolio Company value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C206 is a real data error. The raw SOI table presents issuer names as clean Portfolio Company cells, with investment type, dates, maturity, interest rate, principal, cost, fair value, and footnotes in separate columns. The flagged extracted issuer_name values concatenate those separate source fields and higher-level wrappers into one issuer field, proving an extraction/wrapper parse failure rather than a valid issuer name."
+}

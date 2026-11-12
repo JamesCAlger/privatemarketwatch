@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_374ac9b07218",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "PPW Aero Buyer, Inc. | One stop | 09/2031 | fair value 14,433",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "PPW Aero Buyer, Inc. | One stop | 02/2029 | fair value 14,503",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The continuity check reports 0 persistent issuers although PPW Aero Buyer, Inc. occurs in both current and comparative investment schedules.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 32,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The D06 result says 0 of 841 issuers persist, but the filing itself provides a direct comparative anchor: PPW Aero Buyer, Inc. is present in the current schedule at table 9 row 8 and in the comparative schedule at table 32 row 6. Therefore continuity is at least one issuer, so the zero-continuity alert is a check/anchor false alarm rather than a current-quarter holding error. The anchor_value of 1 is a conservative proven lower bound, not a full issuer recount."
+}

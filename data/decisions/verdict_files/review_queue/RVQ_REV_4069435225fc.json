@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_4069435225fc",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 1079.0,
+  "anchor_value": 10.79,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 4,
+      "quoted_text": "Mario Purchaser, LLC | Unitranche First Lien Revolver | S + 1079 PIK | 10.18 % | 04/2028 | 174 | 162 | 0.0 | 144",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "basis_spread is stored as 1079.0, but the source term S + 1079 PIK is a basis-point spread and should normalize to 10.79 as a whole-number percentage.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 15,
+        "row_index": 4,
+        "quoted_text": "Mario Purchaser, LLC | Unitranche First Lien Revolver | S + 1079 PIK | 10.18 % | 04/2028 | 174 | 162 | 0.0 | 144"
+      }
+    }
+  ],
+  "rationale": "The flagged field is basis_spread=1079.0. The raw schedule row shows the interest term as S + 1079 PIK for Mario Purchaser, LLC, which is a spread expressed in basis points. The review artifact states spreads are stored as whole-number percentages, so this should be normalized to 10.79 rather than retained as 1079.0. The source therefore confirms a rate-scale extraction/normalization error."
+}

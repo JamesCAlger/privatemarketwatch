@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_1f4af35a332a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 288311000,
+  "anchor_value": 310164000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 89.7 % | $ | 310,164 | $ | 289,479",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation establishes a real aggregate cost extraction defect. The filing schedule total is cost 310.164 million and fair value 289.479 million (table 10, row 20). The extracted position sums are cost 288.311 million and fair value 289.479 million. Fair value therefore ties the filing exactly, while extracted cost is short by 21.853 million, which is the flagged -7.046 percent residual. This isolates the defect to cost extraction, but the available row-disposition structure does not safely identify a single culprit row."
+}

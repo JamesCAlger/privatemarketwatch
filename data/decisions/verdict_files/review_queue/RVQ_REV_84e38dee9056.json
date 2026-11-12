@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_84e38dee9056",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2 flagged maturities printed as due 9/2023",
+  "anchor_value": "report_date 2023-09-30; source discloses month/year only, not a day before quarter-end",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "Caris Life Sciences, Inc. | First-lien loan ($ 5,000 par, due 9/2023 ) | 9/21/2018 | 11.30 % | 11.30 % | 4,967 | 5,100 | 0.4 %"
+    },
+    {
+      "table_index": 16,
+      "row_index": 6,
+      "quoted_text": "Convertible note ($ 2,602 par, due 9/2023 ) | 9/21/2018 | 8.00 % | 8.00 % | 2,602 | 5,848 | 0.4 %"
+    }
+  ],
+  "rationale": "The weak flag reports two maturity_not_past violations. Raw source localizes both to Caris Life Sciences positions whose maturity text is only 'due 9/2023'. Because the report date is 2023-09-30 and the source gives month/year granularity with no day before quarter-end, the source does not support treating these maturities as past. The flag appears to come from a month-only date being interpreted too narrowly by the rule, not from a source data error."
+}

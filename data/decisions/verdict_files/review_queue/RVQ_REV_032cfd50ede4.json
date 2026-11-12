@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_032cfd50ede4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1207142000,
+  "anchor_value": 1207142000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 8,
+      "quoted_text": "Action Elevator Intermediate Holdings, LLC | Delayed Draw Term Loan | principal - | amortized cost ( 364 ) | fair value ( 364 )"
+    },
+    {
+      "table_index": 39,
+      "row_index": 9,
+      "quoted_text": "Action Elevator Intermediate Holdings, LLC | Revolving Line of Credit | principal - | amortized cost ( 146 ) | fair value ( 146 )"
+    },
+    {
+      "table_index": 42,
+      "row_index": 13,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 1,207,142 | $ | 1,216,443 | 200.15 | %"
+    }
+  ],
+  "rationale": "The fmt_cost weak flag is aggregate (28 of 80 rows, metric 35.0), and the raw SOI shows the questioned cost presentation is source-authentic rather than an extraction defect. Representative flagged-shape rows have zero principal and parenthesized amortized costs in the filing, including Action Elevator delayed draw at (364) and revolving line at (146), matching the extracted negative costs after the filing's thousands scale. The SOI total before cash reports amortized cost 1,207,142, so the source supports the cost format/negative-cost rows as valid filing data rather than bad extracted values."
+}

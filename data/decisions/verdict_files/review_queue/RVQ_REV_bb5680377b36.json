@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_bb5680377b36",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "principal_amount_usd is blank for FX01 issue rows",
+  "anchor_value": "SOI par amount explicitly marked as Euro; USD principal conversion required",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted in Euros (\"\\u20ac\").",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 28,
+      "quoted_text": "Monitorus Holding, LLC Revolver principal is marked \"\\u20ac\" 1,332,835 in the principal amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan principal is marked \"\\u20ac\" 2,367,791 in the principal amount column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 30,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan (PBDC SPV) principal is marked \"\\u20ac\" 1,441,939 in the principal amount column.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Euro-denominated debt principal rows were extracted without populated principal_amount_usd, leaving non-USD par unconverted for USD par analytics.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 28,
+        "quoted_text": "Revolver row shows Euro principal amount 1,332,835."
+      }
+    }
+  ],
+  "rationale": "FX01 is a real data error. The raw SOI footnote states par amounts are USD unless otherwise noted in Euros, and table 15 rows 28-30 explicitly mark Monitorus debt principal with the Euro symbol. The reviewed artifact reports principal_amount_usd as blank for non-USD debt rows, so the stored holding lacks the required explicit USD conversion for those Euro principal amounts."
+}

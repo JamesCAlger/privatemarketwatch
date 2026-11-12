@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_5870dc9382db",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include asset class, industry, investment type, and initial acquisition date text",
+  "anchor_value": "source schedule rows keep issuer name in the Portfolio Company column, separate from investment type and initial acquisition date",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 23,
+      "quoted_text": "Wash & Wax Holdings LLC | Class A Common Share | 4/30/2025 | N/A | 1,440 | 3,309,552 | 1,550,053 | 0.8 | % | (16)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 34,
+      "quoted_text": "IMB Holdco LLC | Series Z Units | 5/20/2024 | N/A | 164 | 163,748 | 10,045 | 0.0 | % | (6) (16)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Stored issuer_name for Wash & Wax Holdings LLC leaked Equity, Consumer Services, Class A Common Share, and Initial Acquisition Date 4/30/2025 from adjacent schedule dimensions/columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Stored issuer_name for IMB Holdco LLC leaked Equity, Wholesale, Series Z Units, and Initial Acquisition Date 5/20/2024 from adjacent schedule dimensions/columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "C206 is a within-row issuer_name parse-leak flag. The source schedule shows clean Portfolio Company names for the two current-period equity rows: Wash & Wax Holdings LLC and IMB Holdco LLC. The flagged extracted issuer_name values instead concatenate asset class/industry text plus investment type and initial acquisition date, so the stored issuer_name field is wrong while the raw source separates those fields. No aggregate anchor was needed."
+}

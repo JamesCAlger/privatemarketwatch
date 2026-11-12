@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_190f10f87882",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 67.5,
+  "anchor_value": 67.5,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 13,
+      "quoted_text": "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | - | ( 5 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Action Termite Control, LLC(5) | Senior secured | N/A(6) | 12/2032 | - | ( 2 ) | - | ( 2 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 7,
+      "quoted_text": "Jeppesen Holdings, LLC(5) | One stop | N/A(6) | 11/2032 | - | ( 3 ) | - | ( 7 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The rate-fill warning is driven by direct-lending rows where the filer explicitly reports Interest Rate as N/A(6), not by a missing rate in the raw source.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The flagged metric is aggregate rate fill for direct-lending rows. Raw SOI tables expose Interest Rate as a dedicated column; funded rows in the same schedule carry numeric rates, while many flagged-style rows are explicitly printed as N/A(6) with no principal and zero or negative carrying/fair-value amounts. Bundle examples with blank extracted rates, including ABC Legal Holdings and Action Termite Control, match source rows whose Interest Rate cell is N/A(6). The source therefore supports leaving these rates blank and indicates the weak rate-fill check is over-scoped for N/A/unfunded-style direct-lending rows rather than identifying a data extraction error."
+}

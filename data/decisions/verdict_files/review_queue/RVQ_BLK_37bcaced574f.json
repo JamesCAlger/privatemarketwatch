@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_37bcaced574f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": "Mountain 2031-06-07; Navex revolver 2032-10-14",
+  "anchor_value": "Mountain 2031-06-27; Navex revolver 2031-10-14",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 29,
+      "quoted_text": "Mountain Parent, Inc. | First Lien Term Loan | SOFR + 4.75 % | 8.45 % | 10/21/2024 | 6/27/2031 | 53,295 | 52,964 | 53,295 | 10.0 % | *3b(6)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 43,
+      "quoted_text": "Navex Global Holdings Corporation | First Lien Revolving Loan | SOFR + 5.00 % | - | 10/14/2025 | 10/14/2031 | - | ( 2 | ) | ( 2 | ) | 0.0 % | *(6)(8)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Mountain Parent First Lien Term Loan identifier truncates the source maturity 2031-06-27 to 2031-06-07.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Navex First Lien Revolving Loan identifier uses 2032-10-14, but the matching source row states 2031-10-14.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 43
+      }
+    }
+  ],
+  "rationale": "Class 2 review of each full matching source row decides which field is wrong. The Mountain term-loan row states 6/27/2031, so the identifier date 6/7/2031 is defective. The Navex revolving-loan row states 10/14/2031; separate Navex term-loan rows mature in 2032, showing the identifier's 10/14/2032 is a wrong sibling-instrument maturity. Both flagged mismatches are therefore source-grounded extraction defects."
+}

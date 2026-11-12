@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4ad38ea45cf3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 reports a fund_financials/holdings coverage mismatch in derived artifacts, but the raw-source evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted holdings/investment roam query. Because raw source was unavailable, the contract requires an ambiguous source_unavailable verdict rather than deciding whether the mismatch is real."
+}

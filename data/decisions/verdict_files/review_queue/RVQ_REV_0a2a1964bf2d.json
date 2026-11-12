@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_0a2a1964bf2d",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 18,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Condensed Consolidated Schedules of Investments as of March 31, 2024 and December 31, 2023 (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 71,
+      "row_index": 36,
+      "quoted_text": "CD&R Ulysses Equity Holdings, L.P. - Common Shares | (4)(6) | 6,000,000 | 6,090 | 5,040 | 0.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 5,
+      "quoted_text": "Caerus Midco 2 S.A. R.L - Additional Vehicle Units | (4)(6) | 988,290 | $ | 988 | $ | 109 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 29,
+      "quoted_text": "TPG IX Newark CI, L.P. - LP Interests | (4)(6) | 3,846,970 | 3,847 | 3,847 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 30,
+      "quoted_text": "Zoro Common Equity | (4) | 1,195,880 | 11,959 | 11,959 | 0.04",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The PP03 issue rows are prior-period schedule rows retained under report_date 2024-03-31; representative flagged identifiers appear in the December 31, 2023 SOI section rather than being new March 31 current-period facts.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 71,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-period purity flag. The raw filing has schedules as of both March 31, 2024 and December 31, 2023, and the flagged issue set consists of rows whose source period is earlier than the March 31 report date. Source coordinates show representative flagged identifiers in the December 31 schedule section, including CD&R Ulysses Equity Holdings, Caerus Midco 2, TPG IX Newark CI, and Zoro Common Equity. Those rows should not be retained as current-period holdings facts for report_date 2024-03-31, so the flag is a real comparative-period leak."
+}

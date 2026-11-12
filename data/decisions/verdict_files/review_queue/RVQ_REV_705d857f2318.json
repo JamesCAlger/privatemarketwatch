@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_705d857f2318",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 1,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 4,
+      "quoted_text": "SV Newco 2, Inc. continuation: First lien senior secured loan | 9.26 % | SOFR (Q) | 4.75 % | 06/2031 | principal 16,218.9 | amortized cost 15,996.0 | fair value 16,218.9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 5,
+      "quoted_text": "Blank company/investment continuation row repeats amortized cost 15,996.0 and fair value 16,218.9 for the preceding SV Newco 2 first lien loan.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The SV Newco 2 first lien loan should be one position; the value-only continuation row repeats the same cost and fair value and should not create a second duplicate key.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 65,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "B02 flags two duplicate position keys for SV Newco 2, Inc. first lien senior secured loan. The raw schedule shows one substantive SV Newco 2 first lien loan row with principal, amortized cost, and fair value, immediately followed by a blank-company/value-only row repeating the same amortized cost and fair value. That source structure supports a duplicate/double-count extraction defect rather than two distinct positions."
+}

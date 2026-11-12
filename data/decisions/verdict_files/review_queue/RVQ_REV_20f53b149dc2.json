@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_20f53b149dc2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "GBP/EUR fair_value_currency",
+  "anchor_value": "USD valuation column",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 1,
+      "quoted_text": "Currency Purchased | Currency Sold | Counterparty | Settlement Date | Unrealized Appreciation (Depreciation)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 5,
+      "quoted_text": "U.S. Dollars 3,343 | Euro 3,083 | Goldman Sachs Bank USA | 9/23/2024 | ( 91 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 6,
+      "quoted_text": "U.S. Dollars 3,819 | Euro 3,809 | Goldman Sachs Bank USA | 12/21/2023 | ( 374 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 9,
+      "quoted_text": "U.S. Dollars 6,868 | British Pound 6,303 | Goldman Sachs Bank USA | 10/15/2024 | ( 1,069 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 15,
+      "quoted_text": "Total | $ | ( 1,231 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Forward-currency rows with Euro or British Pound terms have the non-USD currency in the Currency Sold leg, while the valuation column is USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The source schedule separates instrument currencies from valuation: rows list U.S. Dollars purchased and Euro/British Pound sold, while the fair-value measure is the Unrealized Appreciation (Depreciation) column and the schedule total is marked with a dollar sign. The extracted fair_value_currency values GBP/EUR therefore reflect the derivative leg currency, not the fair-value currency."
+}

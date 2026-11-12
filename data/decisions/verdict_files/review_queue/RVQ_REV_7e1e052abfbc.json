@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_7e1e052abfbc",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -42254.0,
+  "anchor_value": -42254.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 2,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(m)(q) | Delayed Draw Term Loan | - | - | 11/27/2030 | - | $ | ( 42,254 | ) | $ | ( 63,000 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The filed schedule itself shows cost of (42,254) and fair value of (63,000) for the unfunded Dynamic Connections delayed draw term loan, exactly matching the extracted negative cost of -42254. C107 states that negative cost can be legitimate and is a monitoring warning; here the raw source confirms the sign and value, so the flag is a false alarm rather than a data error. No aggregate anchor is relevant."
+}

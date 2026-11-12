@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_8c66669f8357",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0180667049668404,
+  "anchor_value": 0.3545,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 16,
+      "quoted_text": "Debt (net of unamortized debt issuance costs $ 2,230,742 and $ 0 as of December 31, 2025 and December 31, 2024, respectively) | 1,039,821,825",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 34,
+      "quoted_text": "Total Net Assets | $ | 1,275,842,775 | $ | 775,094,681",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F26 is an aggregate leverage-proxy warning. Raw source shows total investment portfolio fair value of 2,292,614,325, equal to 179.79% of net assets, and balance-sheet debt of 1,039,821,825 against total net assets of 1,275,842,775. On a consistent NAV basis, the holdings-implied leverage proxy is 2,292,614,325 / 1,275,842,775 - 1 = 0.7969411 and the fund debt/NAV proxy is 1,039,821,825 / 1,275,842,775 = 0.8150078, a spread of 0.0180667, within the 20pp tolerance. The flagged 0.3545 divergence is therefore caused by a bad/mismatched anchor or denominator in the check, not a source data error."
+}

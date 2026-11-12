@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_7d720ea74b31",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.7666666666666667,
+  "anchor_value": 0.8,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "Cytracom, LLC (f)(h) | Delayed Draw Term Loan | - | - | 6/28/2027 | - | ( 4,640 | ) | ( 5,056 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 25,
+      "quoted_text": "Cytracom, LLC (f)(h) | Revolving Credit Facility | - | - | 6/28/2027 | - | ( 5,154 | ) | ( 5,618 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "Routeware, Inc (f)(h) | Delayed Draw Term Loan | - | - | 9/18/2031 | - | ( 22,051 | ) | ( 22,159 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 50,
+      "row_index": 1,
+      "quoted_text": "Investments - non-controlled/ non-affiliate | Commitment Type | Commitment Expiration Date | Unfunded Commitment ($)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts debt facility rows whose source reference-rate and interest-rate cells are literal dashes and whose cost/fair-value cells are zero or negative unfunded commitment marks.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "C01 failed because only 76.7% of 150 normalized debt rows have an interest rate, but the raw Schedule of Investments explicitly prints dashes, not rates, for sampled missing-rate delayed-draw and revolver rows such as Cytracom and Routeware. Those same issuers/facilities appear in the separate Unfunded Commitment schedule, so the missing rates are source-supported non-coupon commitment rows rather than extraction omissions. The check is therefore scoped too broadly for this filing's debt rows."
+}

@@ -1,0 +1,48 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV effect until source reconciliation artifacts are rebuilt. The patch classifies this source-only row as a non-position total row rather than adding or removing holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 47,
+      "row_index": 19,
+      "cell_indices": [
+        0,
+        17,
+        21,
+        24
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The Total Investments -- non-controlled/ non-affiliate row is an aggregate subtotal with section total label, aggregate cost, aggregate fair value, and aggregate percent of net assets, not a position-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Use the existing Fidelity total-header patch that recognizes singular non-affiliate total wording in Total Investments -- non-controlled/ non-affiliate as documented_source_total_header.",
+  "primary_justification": "Manual review found the single blocker row is a non-position total. The source coordinate at table 47 row 19 shows Total Investments -- non-controlled/ non-affiliate with aggregate cost, fair value, and percent-of-net-assets cells. It has no issuer, borrower, instrument, rate, maturity, principal, or share details. The row should not be added as a production holding.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch should only clear this blocker after source reconciliation is rebuilt through the approved pipeline. The existing false-positive test protects entity-bearing Air Freight & Logistics positions from being suppressed by the broader Fidelity total/header changes.",
+  "review_id": "BDCSRC_0001899996_2024-12-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_e5b68e42fb",
+  "reviewer_notes": "Source-only blocker row reviewed: source_row_id 940073 Total Investments -- non-controlled/ non-affiliate FV 1,583,881,521. Worklist GAV status is PASS with gav_flag ok and bdc_source_reconciliation_flag ok. This verdict addresses only the one-row total-header packet for Fidelity Private Credit Co LLC 2024-12-31.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_unclassifiable_after_review to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Existing targeted verification for the patch has run: pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

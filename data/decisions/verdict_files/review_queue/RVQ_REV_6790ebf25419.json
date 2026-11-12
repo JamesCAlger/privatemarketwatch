@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_6790ebf25419",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "ACP Falcon Buyer Inc | Systems Software | First Lien Revolver | SOFR+ | 5.50 % | 8/1/2029 | - | (89) | (13) | (5)(8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "ASP Integrity Acquisition Co LLC | Diversified Support Services | First Lien Term Loan | SOFR+ | 5.00 % | 3/6/2032 | - | (51) | (294) | (5)(8)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review. The raw schedule was readable and shows multiple private-credit rows with no stated cash interest rate but with a stated index and spread. The bundle identifies the flagged record only as row_key 408562 and does not map that key to an issuer, source table, or source row. Because the plausible rows cannot be tied uniquely to the flagged record, the source cannot decide whether this specific flag is a legitimate blank cash-rate cell, a missing basis-spread extraction, or another row-level defect. Adjudicating a particular row would be a guess."
+}

@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_d54f97d95945",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  0,
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Class 1 single-cell C104 warning for zero fair_value on the BCP SPECIAL OPP LP OFFSHORE FEEDER III holding. The bundle has a derived row showing fair_value 0.0, but the evidence CLI raw-source views (overview, tables, totals) all returned missing_cached_html for accession 0001145549-24-055544, so the raw source could not be checked. Per contract, unreadable raw source requires an ambiguous/source_unavailable verdict rather than guessing whether zero fair value is legitimate."
+}

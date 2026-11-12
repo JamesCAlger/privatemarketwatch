@@ -1,0 +1,28 @@
+{
+  "review_id": "RVQ_REV_46ad981f2eee",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_period",
+  "observed_value": 8,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 13, "row_index": 23, "ties_to_residual": false},
+    {"table_index": 14, "row_index": 18, "ties_to_residual": false},
+    {"table_index": 13, "row_index": 26, "ties_to_residual": false},
+    {"table_index": 13, "row_index": 27, "ties_to_residual": false},
+    {"table_index": 13, "row_index": 28, "ties_to_residual": false},
+    {"table_index": 14, "row_index": 14, "ties_to_residual": false}
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Eight earlier-period equity facts were retained in the March 31, 2026 holdings population even though matching current-schedule rows exist.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 13, "row_index": 23}
+    }
+  ],
+  "rationale": "The raw filing contains the March 31, 2026 investment schedule in tables 4-7 and the earlier comparative schedule in tables 11-14. The flagged TCW ND Parent, Tabhi Class B, AGY Classes A/B/C, and Encompass Class A lines occur in the earlier schedule (for example tables 13-14) and also have matching lines in the current schedule (tables 6-7). The flagged records are therefore extra comparative-period copies, not distinct March 31, 2026 positions. Two additional flagged rows identified in the bundle have the same earlier-period provenance and mechanism."
+}

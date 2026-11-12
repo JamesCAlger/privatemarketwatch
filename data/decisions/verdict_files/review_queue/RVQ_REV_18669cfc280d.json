@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_REV_18669cfc280d",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 5,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 22,
+      "quoted_text": "Atlas US Holdings, LP - Class X Preferred Units | Financial Services | NA | 15.00 % PIK | NA | 285,441 | 342 | 343"
+    },
+    {
+      "table_index": 15,
+      "row_index": 23,
+      "quoted_text": "Atlas US Holdings, LP - Class B-2 Units | Financial Services | NA | NA | NA | 857,787 | 873 | -"
+    },
+    {
+      "table_index": 15,
+      "row_index": 24,
+      "quoted_text": "EEP-EPS Fund I-A, LP - Series A-1 Preferred Units | Media & Entertainment | NA | NA | NA | 887,237 | 887 | 603"
+    },
+    {
+      "table_index": 15,
+      "row_index": 25,
+      "quoted_text": "Sea-K Investors, LLC - Preferred Equity (11)(12)(13) | Consumer Durables & Apparel | NA | 15.00 % PIK | NA | 3,495 | - | -"
+    },
+    {
+      "table_index": 15,
+      "row_index": 26,
+      "quoted_text": "VardimanBlack Holdings, LLC - Preferred Equity (11)(12) | Health Care Equipment & Services | NA | 6.00 % PIK | NA | 9,268,770 | 2,908 | 1,603"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Atlas US Holdings Class X Preferred Units is in the Preferred Equity section; it has a PIK preferred-equity rate, not a debt spread row with missing terms.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Atlas US Holdings Class B-2 Units is in the Preferred Equity section with NA spread and NA interest terms.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "EEP-EPS Fund I-A Series A-1 Preferred Units is in the Preferred Equity section with NA spread and NA interest terms.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 24
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Sea-K Investors Preferred Equity is in the Preferred Equity section; it has a PIK preferred-equity rate, not a debt spread row with missing terms.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "VardimanBlack Holdings Preferred Equity is in the Preferred Equity section; it has a PIK preferred-equity rate, not a debt spread row with missing terms.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 2 row-validation issue. The bundle reports five PRIVATE_CREDIT rows with blank interest_rate and basis_spread. Raw source table 15 has exactly five rows after the debt total under Equity Investments / Preferred Equity. Their spread cells are NA and their interest cells are either preferred-equity PIK rates or NA. The source therefore does not support treating these as private-credit debt rows requiring SOFR spread/rate extraction; the defect is classification/lookthrough of preferred equity into the private-credit rate rule scope."
+}

@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_174ae7ef6ddc",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD-denominated fair value columns",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Investments (1) Non-Controlled, Non-Affiliated Investments | Reference Rate Spread (4) | Interest Rate (5) | Maturity Date | Par Amount/ Shares | Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "MH Sub I, LLC Term Loan (8) | SOFR + 4.250 % | 9.095 % | 05/03/2028 | 2,475 | $ | 2,399 | $ | 2,462 | 1.24 %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 47,
+      "quoted_text": "Rivian Holdings/Auto LLC 144A (2) | SOFR + 5.625 % | 11.359 % | 10/15/2026 | 18,601 | 18,433 | 18,834 | 9.51 %"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value UNIT_USD as not USD. The raw SOI presents the affected holdings in Fair Value columns denominated with dollar symbols, including representative rows in table 12. UNIT_USD is therefore a USD unit representation, so the row values are source-consistent and the rule/check is overfiring on the unit label."
+}

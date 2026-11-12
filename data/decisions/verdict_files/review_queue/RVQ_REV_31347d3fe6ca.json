@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_31347d3fe6ca",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 10.43 % ( SOFR + 6.75 %, 1.75 % Floor) | $ | 5,959,899 | $ | 5,854,183",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency because the stored value is U_USD, but the raw schedule presents the amortized cost and fair value columns with dollar signs. The source therefore supports USD-denominated fair value; the warning appears to be caused by treating a USD unit id/label variant as non-USD rather than by a data error in the holding."
+}

@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_d49be49e7857",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 27,
+      "quoted_text": "Blue Bidco Ltd | Wireless Telecommunication Services | First Lien Term Loan | SONIA+ | 5.00 % | 9.16 % | 6/14/2032 | GBP | 3,381 | 3,337 | 3,355 | (5)(8)(9)(10)"
+    },
+    {
+      "table_index": 29,
+      "row_index": 23,
+      "quoted_text": "F&M BUYER LLC | Systems Software | First Lien Revolver | SOFR+ | 4.50 % | 3/18/2032 | - | ( 35 ) | ( 35 ) | (5)(8)(9)"
+    },
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "Whitney Merger Sub, Inc. | Application Software | First Lien Revolver | SOFR+ | 4.75 % | 7/3/2032 | - | ( 98 ) | ( 91 ) | (5)(8)(9)"
+    },
+    {
+      "table_index": 22,
+      "row_index": 28,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 159.4 % of net assets) | $ | 7,429,166 | $ | 7,433,861"
+    },
+    {
+      "table_index": 36,
+      "row_index": 13,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 151.90 % of net assets) | $ | 6,863,940 | $ | 6,899,031"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Ten PP03 rows are September 30, 2025 comparative schedule positions retained in the December 31, 2025 holdings period.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 36,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The source filing contains separate schedule blocks for December 31, 2025 and September 30, 2025. The current schedule total is 7,433,861 at table 22 row 28, while the comparative schedule total is 6,899,031 at table 36 row 13. Representative flagged issuers appear in the comparative block at tables 27, 29, and 36, matching the PP03 evidence that source_period is earlier than the report_date. These comparative positions should not be retained as current December 31 holdings rows."
+}

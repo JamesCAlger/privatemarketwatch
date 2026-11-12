@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a45498dfe44b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "row_key 322504 has blank interest_rate in the generated row-validation artifact",
+  "anchor_value": null,
+  "confidence": 0.38,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "X02 is a row-level missing-rate warning for a PRIVATE_CREDIT holding, but the bundle identifies the flagged holding only by internal row_key 322504 and does not provide issuer, instrument, table_index, or source row_index. Raw source was readable through the evidence CLI: overview and tables exposed the SOI tables, roam for 322504 returned zero hits, roam for the validation message returned zero hits, and a prefix hypothesis check of table 322 showed ordinary debt rows with populated reference-rate and interest-rate cells rather than the flagged missing-rate row. Because the raw source could not be tied to the flagged generated row, it does not decide whether the source omitted the rate or extraction failed to capture it. Under the skeptic default, this remains ambiguous with source_checked basis."
+}

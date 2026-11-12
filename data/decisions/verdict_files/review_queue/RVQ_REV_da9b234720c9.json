@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_da9b234720c9",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -16000.0,
+  "anchor_value": -16000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 17,
+      "quoted_text": "Heads Up Technologies, Inc. (4)(5)(9)(17)(21) | First Lien Senior Secured Loan - Revolver | - | - | - | 7/23/2030 | $ | - | ( 16 | ) | ( 17 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 27,
+      "quoted_text": "Chilton (4)(5)(9)(17)(21) | First Lien Senior Secured Loan - Delayed Draw | - | - | - | 2/5/2031 | $ | - | ( 22 | ) | ( 77 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values. Targeted raw-source checks show the same positions report parenthetical amortized-cost amounts in the schedule of investments, including Heads Up Technologies revolver with cost (16) and Chilton delayed draw with cost (22), matching the extracted -16000 and -22000 values in thousands. The flagged values are source-faithful unusual values rather than data errors."
+}

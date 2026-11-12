@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_2a5391d87471",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.11 % (SOFR + 7.50 %, 2.00 % Floor) | $ | 7,594,859 | $ | 7,721,962",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 25,
+      "quoted_text": "Total Investments ( 128.8 %) | $ | 156,354,446 | $ | 157,290,671",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency because the stored unit label is U_USD, but the raw schedule of investments shows the fair value column is dollar-denominated. The header names Fair Value, detail rows carry dollar signs for amortized cost and fair value, and the investment total is also shown with dollar signs. Source therefore supports USD valuation; the rule is over-strict on the unit label rather than identifying a non-USD fair value."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4b40c2ebdb27",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 5,
+      "quoted_text": "Neutron Holdings, Inc. | Term Loan | 10.00 % | N/A | 01/22/2024 | 9/30/2026 | $ | 30,000 | $ | 29,784 | $ | 30,090",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 2,
+      "quoted_text": "Eclipse Buyer, Inc. | Delayed Draw Term Loan | SOFR | 4.75 % | 09/06/2024 | 9/6/2031 | $ | - | $ | ( 18 ) | $ | 27",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX03 treats the raw unit code U_USD as non-USD even though the source investment schedule presents principal, amortized cost, and fair value in dollar columns.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 39,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The flagged value is cost_currency=U_USD across the affected rows. Raw source table 39 labels the schedule columns as Principal, Amortized Cost, and Fair Value and shows dollar markers for those monetary columns; representative flagged positions such as Neutron Holdings, Inc. and Eclipse Buyer, Inc. are displayed with '$' in the cost and fair value columns. The source therefore supports USD-denominated valuation fields. The flag is caused by the check not recognizing U_USD as a USD unit code, so this is a false alarm rather than a data error."
+}

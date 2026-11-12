@@ -1,0 +1,13 @@
+{
+  "review_id": "RVQ_BLK_2fb05f0a6659",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6126744000,
+  "anchor_value": 5804557000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Class 3 anchor triangulation decisively shows an extracted FV overstatement of USD 322,187,000: the position sum is USD 6,126,744,000, while the filing reports March 31, 2026 total investments at fair value of USD 5,804,557,000 at table 8 row 7. The same schedule total is independently repeated at table 41 row 34 and table 82 row 8. The many extracted rows and excess over the filing total are consistent with subtotal leakage, but no disclosed subtotal ties exactly to the residual, so the aggregate defect is proven while the culprit row remains unlocalized."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_0151f928f817",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 63.8,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 25,
+      "quoted_text": "AAH Topco undrawn row: First Lien(8)(9) - Undrawn with source dashes in Reference, Spread, and Interest Rate columns."
+    },
+    {
+      "table_index": 14,
+      "row_index": 9,
+      "quoted_text": "AAH Topco funded row: First Lien(8) with SOFR(M), + 5.25%, and 9.02% interest rate; funded rate extraction is present when source supplies a rate."
+    },
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "AAH Topco drawn row: First Lien(8)(9) - Drawn with SOFR(M), + 5.00%, and 8.77% interest rate."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The dl_rate_fill warning counts undrawn/unfunded debt investments even though the source intentionally prints dashes for Reference, Spread, and Interest Rate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 26,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The raw SOI separates funded/drawn debt rows from unfunded/undrawn rows. Funded AAH Topco rows carry source rates and the extracted holdings slice has corresponding rates, while the AAH Topco undrawn row and many other Undrawn roam hits show dashes in the Reference, Spread, and Interest Rate columns. The aggregate fill-rate warning is therefore caused by including source-blank undrawn commitments in the denominator, not by missed extractable direct-lending rates."
+}

@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_7421084bee91",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 47000,
+  "anchor_value": 47000,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "quoted_text": "Abacus Data Holdings, Inc. (dba Clutch Intermediate Holdings) | Software | 03/10/21 | 26,555 | 2,655 | 47 | (6) (7) (14)"
+    }
+  ],
+  "rationale": "The X08 row is localized to the March 31, 2025 equity schedule. The raw source shows Abacus Data Holdings common stock with cost 2,655 thousand and fair value 47 thousand, so the extracted low fair-value-to-cost relationship is source-supported. This is a distressed/low-value position in the filing, not a data extraction error."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_7fd56ca15a66",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw 10-Q source was successfully read through the evidence CLI. The flag covers seven text-pathway fields across six row IDs, but the bundle supplies no issuer or source table coordinates for those IDs, and targeted raw-source searches for the flagged published rate strings returned no matches. Therefore the source window does not permit confirmation or contradiction of the published values; row-to-source localization is required before adjudication."
+}

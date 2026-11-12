@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_97429e31c4bb",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 12043000,
+  "anchor_value": 12043000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28) | First lien senior secured loan | fair value 10,143",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 28,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28) | First lien senior secured delayed draw term loan | fair value 384",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(22)(28) | First lien senior secured delayed draw term loan | fair value 362",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 30,
+      "quoted_text": "Plasma Buyer LLC (dba PathGroup)(3)(4)(9)(28) | First lien senior secured revolving loan | fair value 1,154",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 104,
+      "row_index": 4,
+      "quoted_text": "Non-accrual | 19,200 | 0.4% | 12,043 | 0.2% | 18,836 | 0.3% | 15,517 | 0.2%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source confirms the four flagged PathGroup instruments share footnote (28). Their current fair values sum to 12,043 thousand (10,143 + 384 + 362 + 1,154), exactly matching the filing's current non-accrual fair-value total of 12,043 thousand. The extracted non-accrual classification is therefore source-supported; the review flag reflects expected rule scope rather than a data defect."
+}

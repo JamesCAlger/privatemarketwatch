@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_f981d1448f9b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 61463000,
+  "anchor_value": 58253000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 10,
+      "quoted_text": "ECP Parent, LLC source row: Shares/Units 268, Cost dash, Fair Value 290; extracted cost is 290000.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 49,
+      "row_index": 22,
+      "quoted_text": "Tank Holding Corp. source row: Shares/Units 850, Cost dash, Fair Value 2862; extracted cost is 2920000.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 15,
+      "quoted_text": "Equity Investments Total source cost is 58253 thousand.",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "ECP Parent, LLC has a dash in the source Cost column, but the extracted holding carries cost 290000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Tank Holding Corp. has a dash in the source Cost column, but the extracted holding carries cost 2920000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "The raw SOI equity schedule shows dash Cost cells for ECP Parent, LLC and Tank Holding Corp., while the bundle's extracted holdings carry nonzero costs for both. Summing the extracted equity costs shown in the bundle gives 61463000, but the source Equity Investments Total cost is 58253000; the 3210000 excess equals the two non-source costs, so the fmt_cost flag is a real localized extraction error rather than a false alarm."
+}

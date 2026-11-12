@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9caa73931fbd",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 4.5,
+  "anchor_value": 4.5,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 23,
+      "quoted_text": "DataBricks, Inc. Term Loan (5) | SOFR + 4.500 | % | 8.171 | % | 01/05/2032 | 1,450 | 1,445 | 1,425 | 0.84 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "CoreWeave Compute Acquisition Co. IV, LLC Initial Term Loan (4)(5) | SOFR + 6.000 | % | 9.700 | % | 05/16/2029 | 2,911 | 2,911 | 3,000 | 1.76 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell provenance check. Raw filing table 12 explicitly presents reference-rate spreads as rendered schedule text: DataBricks is SOFR + 4.500%, matching published basis_spread 4.5, and CoreWeave is SOFR + 6.000%, matching published 6.0. The bundle reports no declared or instance fact for these cells because they are text-table values; that text pathway is legitimate and does not make the published values erroneous. No aggregate anchor is relevant because affected fair value is zero and the flag concerns provenance rather than valuation."
+}

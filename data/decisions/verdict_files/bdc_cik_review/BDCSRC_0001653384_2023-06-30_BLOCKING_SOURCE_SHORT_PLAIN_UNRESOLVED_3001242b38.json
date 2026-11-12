@@ -1,0 +1,59 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001653384",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No immediate GAV effect from the verdict file itself. The proposed patch documents the source row as an affiliation-level header/total rather than adding a 1036661000.000000 pseudo-position to unified holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 16,
+      "row_index": 2,
+      "cell_indices": [
+        0
+      ],
+      "row_classification": "AGGREGATE_HEADER",
+      "reason": "The schedule row is the section label 'Non-Control/Non-Affiliate Investments' with no issuer, instrument, rate, maturity, cost, or fair-value cells for a production position."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 7,
+      "row_index": 5,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        9
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The row reports non-control/non-affiliate investments at fair value with current and comparative aggregate cost and fair-value amounts; it is not an issuer-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Uses the exact affiliation-header recognition added for the normalized label 'non control non affiliate investments'; existing focused tests cover this Runway label and issuer-bearing false positives.",
+  "primary_justification": "The blocker row is not a missing position. The XBRL row has only the sparse investment identifier 'Non-Control/Non-Affiliate Investments' and aggregate cost/fair value. HTML coordinates for the same quarter show the text as a section label and aggregate fair-value line, while detailed named investments appear separately under that hierarchy.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "Low. The patch is exact to a normalized affiliation-header phrase and does not clear labels that append an issuer, security, rate, maturity, or other leaf-position detail.",
+  "review_id": "BDCSRC_0001653384_2023-06-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_3001242b38",
+  "reviewer_notes": "Manually reviewed the single blocker for this Runway quarter. The source row is a non-control/non-affiliate section/total, not a borrower or security. Same-accession XBRL rows include child dimensions for common stocks, preferred stocks, and named senior secured term loan positions, confirming this sparse row is a hierarchy node.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "After affected outputs are rebuilt, this row should classify as documented_source_affiliation_header instead of blocking_source_short_plain_unresolved.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives after adding the exact normalized rule. Validate verdict schema with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_76a10327e6b5",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Term Loan | S + 5.25 % | 7/2/2031 | $ | 7,874 | $ | 7,759 | $ | 7,756 | 7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 20,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 259,337 | $ | 259,073 | 220.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency because the stored value is U_USD. The raw schedule of investments presents the fair value column with dollar signs, including source rows such as AB Centers Acquisition Corporation and the schedule total. U_USD is therefore a USD-denominated XBRL unit representation, not a non-USD fair-value currency defect."
+}

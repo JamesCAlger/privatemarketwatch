@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_2755462bd83b",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.88,
+  "anchor_value": 0.95,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 4,
+      "quoted_text": "ATS First Lien Senior Secured Loan - Revolver: principal, cost, and Market Value are disclosed as dashes.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 57,
+      "row_index": 25,
+      "quoted_text": "EXT Acquisitions First Lien Senior Secured Loan - Delayed Draw: principal, cost, and Market Value are disclosed as dashes.",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Rows with no disclosed market value are being treated as fair-value leaf holdings, depressing B01 coverage to 506/575.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 56,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value coverage flag, so this routes as Class 3. The SOI anchor row reports Investments Total of cost 1,664,992 and Market Value 1,681,258 at table 65 row 22. Source grids then localize the coverage failure to instrument-like rows whose Market Value cells are not numeric but disclosed as dashes, including table 56 row 4 and table 57 row 25. Those rows should not count as fair-valued leaf positions without a fair_value, so the flag reflects a real row-disposition/classification data error rather than an unavailable source value."
+}

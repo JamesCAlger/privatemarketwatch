@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_bcc1e265cf07",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1684.194192,
+  "anchor_value": 1681.258,
+  "confidence": 0.64,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 3,
+      "quoted_text": "Number of portfolio companies | 151"
+    },
+    {
+      "table_index": 20,
+      "row_index": 3,
+      "quoted_text": "Number of portfolio companies | 86"
+    }
+  ],
+  "rationale": "D06 is an aggregate continuity flag reporting 39.1% continuity (100/256 issuers persist). The raw filing source was readable and provides portfolio company count anchors for December 31, 2025 (151) and December 31, 2024 (86), plus investment fair value schedule totals near the extracted fund-quarter fair value, but it does not expose the platform's normalized issuer-key universe or prove whether 100 of 256 issuer keys should persist. No source row or anchor disagreement localizes a concrete data defect, and the filing alone does not show the check is wrong."
+}

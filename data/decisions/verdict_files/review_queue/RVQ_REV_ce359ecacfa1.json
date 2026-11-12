@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_ce359ecacfa1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 226.18,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 30,
+      "quoted_text": "Total Investments | $ | 21,468.5 | $ | 21,338.5 | 226.18 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0, but the source SOI total reports Total Investments at 226.18% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 54,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. The fair-value anchors agree at the filing level: the balance sheet reports total investments at fair value of 21,339 million, and the SOI total line reports fair value of 21,338.5 million, so this is not a fair-value residual problem. The A07 flag reports pct_sum=0.0%, but the raw SOI contains a % of Net Assets column and the Total Investments row reports 226.18%, proving the extracted percentage aggregate is missing rather than absent from source."
+}

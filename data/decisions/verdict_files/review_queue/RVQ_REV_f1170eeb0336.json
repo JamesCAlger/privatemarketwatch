@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_f1170eeb0336",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 10.568479960899316,
+  "anchor_value": 16.065,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 92,
+      "row_index": 6,
+      "quoted_text": "Per share distributions total $1.0970 for 2025."
+    },
+    {
+      "table_index": 102,
+      "row_index": 19,
+      "quoted_text": "Ratio to average net assets: Net investment income | 10.71 | % for 2025."
+    },
+    {
+      "table_index": 102,
+      "row_index": 9,
+      "quoted_text": "Distributions declared to stockholders from net investment income | ( 1.03 ) for 2025."
+    },
+    {
+      "table_index": 102,
+      "row_index": 10,
+      "quoted_text": "Distributions declared to stockholders from realized gains | ( 0.04 ) for 2025."
+    },
+    {
+      "table_index": 102,
+      "row_index": 11,
+      "quoted_text": "Return of capital distributions declared to stockholders | ( 0.03 ) for 2025."
+    }
+  ],
+  "rationale": "F16 expects distribution_rate <= income_yield_pct * 1.5. The flag's observed distribution rate is 10.568479960899316%, while the raw financial highlights show 2025 net investment income ratio of 10.71%, giving a threshold of 16.065%. The filing also discloses 2025 distributions of about $1.097 per share / $1.10 in the financial highlights, consistent with an approximately 10.6% distribution rate rather than a rate exceeding the income-yield heuristic. The source therefore supports the stored inputs and not the check failure."
+}

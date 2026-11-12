@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_5b182f302302",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 23,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 20,
+      "quoted_text": "Cirrascale Cloud Services, LLC / Equipment Financing / October 22, 2024 / April 1, 2027 / Fixed interest rate 10.2%; EOT 5.0% / footnote (19)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 44,
+      "row_index": 27,
+      "quoted_text": "Zandivio PLC / Secured Loan / October 30, 2024 / May 1, 2029 / Variable interest rate PRIME + 5.3% or Floor rate 13.8%; EOT 2.5% / footnotes (8)(10)(19)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The footnote-derived nonaccrual count is unsupported: source search returned zero accrual/nonaccrual references, while marker (19) appears on ordinary interest-bearing debt rows.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 30,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The flag reports 23 nonaccrual positions from footnotes. Raw-source checks via the evidence CLI found no matches for non-accrual, nonaccrual, non accrual, or accrual anywhere in the filing source, so the schedule anchor for disclosed nonaccrual language is 0. The rows tied to the extracted footnote marker are normal coupon-bearing investments, e.g. Cirrascale Cloud Services row 20 in table 30 and Zandivio row 27 in table 44, with stated interest terms and footnote markers but no nonaccrual disclosure. This grounds a real extraction/classification defect in the nonaccrual flag rather than a supported nonaccrual condition."
+}

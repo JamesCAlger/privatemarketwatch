@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ee8bdb1a1c68",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 66,
+      "quoted_text": "K2 Propco Class S Units: Par Amount/Shares 113",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 67,
+      "quoted_text": "K2 Pure Solutions Class S Units: Par Amount/Shares 897",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 71,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc.: Par Amount/Shares 25,000",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "C04 reports zero of six extracted equity rows with shares. The raw March 31, 2026 Schedule of Investments labels the field Par Amount/Shares and explicitly reports 113, 897, and 25,000 for the three cited common-stock positions, while the corresponding extracted holdings omit shares. Thus the zero observed coverage is contradicted by the raw filing and is a localized extraction gap. The anchor value 1.0 represents complete source disclosure for the three directly matched current-period common-stock rows inspected."
+}

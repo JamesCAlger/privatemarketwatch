@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_f007c5ba3c57",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd missing",
+  "anchor_value": "source par amounts are USD",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Navistar Defense, LLC; Par Amount $45,818,273",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Twin Star International, Inc.; Par Amount $741,783",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Encompass Digital Media, Inc.; Par Amount/Shares $4,145,688",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Country Breakdown of Portfolio: United States 100%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 asserts that 42 debt rows have non-USD source par requiring conversion. The raw schedule instead establishes a dollar sign in the Par Amount column on the first data row of each continued debt table (tables 4, 5, and 6); blank currency cells on following rows are the filing's carried-down presentation, not evidence of another currency. The filing's country breakdown also shows United States 100%. Thus the source par amounts are already USD, principal_amount_usd is not required for FX conversion, and the grouped flag is a currency-scope false positive."
+}

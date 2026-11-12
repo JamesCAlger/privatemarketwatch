@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_d05a8356604d",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "fair_value_currency=U_EUR",
+    "anchor_value":  "schedule fair value column is USD; euro symbol is in Par/Shares column",
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  36,
+                                  "quoted_text":  "First Lien Secured Debt - Corporate Bond | 5.00 % | 2/15/2027 | EUR | 1,000 | 1,072 | 1,003 | (3)(8)(9)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  10,
+                                  "row_index":  38,
+                                  "quoted_text":  "Total Capital Markets | $ | 91,266 | $ | 88,271",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "The source euro symbol belongs to Par/Shares, while Cost and Fair Value roll into dollar-denominated schedule totals; fair_value_currency was populated as U_EUR.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  10,
+                                          "row_index":  36
+                                      }
+                     }
+                 ],
+    "rationale":  "FX02 is a real data error. The source row shows EUR only in the Par/Shares currency position, followed by cost 1,072 and fair value 1,003 in the Cost/Fair Value columns. The same industry block totals Cost and Fair Value with dollar signs, so carrying U_EUR into fair_value_currency reflects a source-column/unit assignment error, not a valid non-USD fair value."
+}

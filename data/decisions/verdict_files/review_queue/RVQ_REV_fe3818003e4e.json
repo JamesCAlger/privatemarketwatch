@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_fe3818003e4e",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -70000,
+  "anchor_value": -70000,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 13,
+      "quoted_text": "AMI Buyer Inc (3)(7)(11) | First Lien Senior Secured Revolving Loan | SOFR + 5.000 % | 10/17/2024 | 10/17/2031 | par amount/shares -- | Amortized Cost ( 70 ) | Fair Value ( 26 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 11,
+      "quoted_text": "Alert SRC Newco LLC (3)(7)(11) | First Lien Senior Secured Revolving Loan | SOFR + 5.000 % | 12/11/2024 | 12/11/2030 | par amount/shares -- | Amortized Cost ( 28 ) | Fair Value ( 22 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 14,
+      "quoted_text": "Aprio Advisory Group LLC (3)(7) | First Lien Senior Secured Delayed Draw Term Loan | SOFR + 4.750 % | 12/23/2025 | 8/1/2031 | par amount/shares -- | Amortized Cost ( 193 ) | Fair Value ( 387 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 15,
+      "quoted_text": "Aprio Advisory Group LLC (3)(7) | First Lien Senior Secured Revolving Loan | SOFR + 4.750 % | 12/23/2025 | 8/1/2031 | par amount/shares -- | Amortized Cost ( 31 ) | Fair Value ( 31 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost values for review. The raw schedule of investments prints these amortized-cost cells in parentheses, so the stored negative signs are source-faithful rather than data errors. Representative cited rows tie the flagged extracted costs to the filing's own parenthetical amortized-cost amounts; no aggregate anchor was needed for this single-cell row-validation rule."
+}

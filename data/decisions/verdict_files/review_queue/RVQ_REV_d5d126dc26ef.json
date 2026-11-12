@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d5d126dc26ef",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_header",
+  "observed_value": "05/09/18",
+  "anchor_value": "Initial Acquisition Date (4)",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Elah Holdings, Inc. | Capital Markets | 05/09/18 | 69,386 | $ | 3,354 | $ | 3,354 | (6) (8) (13) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Investment (1) | Industry (2) | Initial Acquisition Date (4) | Shares (5) | Cost | Fair Value | Footnotes",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 treated 05/09/18 as evidence that the holding came from an earlier source period. Raw source table 10 instead labels that cell Initial Acquisition Date (4), while the filing and schedule are for March 31, 2026. The Elah Holdings row is therefore a current-schedule position carrying a historical acquisition-date attribute, not a comparative-period row. The stored identifier preserves the source semantics, so the flag is a false alarm caused by date-field misclassification."
+}

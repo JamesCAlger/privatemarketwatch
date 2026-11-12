@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_0c6c7aa4de16",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "interest_rate='', basis_spread='' on X02 flagged private-credit rows",
+  "anchor_value": "source table row contains Reference Rate and Spread SOFR + 6.00% with the Interest Rate cell blank",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 29,
+      "quoted_text": "M&D MidCo, Inc. | Term Loan | SOFR | + | 6.00 % | (Q) | [blank Interest Rate] | 8/31/2022 | 8/31/2028 | 63 | 63 | 63 | (6)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A private-credit term-loan row has source reference-spread terms (SOFR + 6.00%) but the flagged extract has neither interest_rate nor basis_spread, so the available basis leg was not captured.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "X02 flags private-credit rows where both interest_rate and basis_spread are missing. In the raw SOI schedule, table 42 row 29 is a Term Loan for M&D MidCo, Inc. with Reference Rate and Spread shown as SOFR + 6.00% (Q), while the Interest Rate cell is blank. The source therefore contains rate-term information that should satisfy the basis-spread side of the rule; the flagged blank extract is a real extraction gap rather than a false alarm. Some other source rows show N/A terms, so the aggregate 63-row flag may include mixed subcases, but this cited row grounds at least one real data defect."
+}

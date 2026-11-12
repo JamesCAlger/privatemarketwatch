@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_5d5acf111b21",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_soi_row",
+  "observed_value": "2002-02-24",
+  "anchor_value": "2028-02-24",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 24,
+      "quoted_text": "Hoffmaster Group, Inc. | 03/15/24 | Incremental Term Loan - 10.82 % (SOFR + 6.25 %, 2.00 % Floor) | 0.5 | % | 807,665 | 02/24/2 8 | 794,785 | 805,242"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The maturity date source cell is 02/24/2 8, i.e. 2028-02-24 after joining the split year, but the extracted maturity_date is 2002-02-24.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell maturity_date check. The flagged row stores maturity_date as 2002-02-24, making it appear before the 2024-12-31 report date. Raw SOI table 18 row 24 shows the same Hoffmaster Group Incremental Term Loan with the maturity cell rendered as 02/24/2 8, adjacent to the matching acquisition date, cost, and fair value. This is a formatting split of 02/24/28, not a 2002 maturity, so the stored maturity_date is a real extraction error."
+}

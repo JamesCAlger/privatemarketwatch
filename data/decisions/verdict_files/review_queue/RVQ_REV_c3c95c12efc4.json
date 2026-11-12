@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_c3c95c12efc4",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "raw_source_period_header",
+  "observed_value": 5,
+  "anchor_value": 0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 7,
+      "quoted_text": "CRS TH Holdings, Corp. (4)(5) | Senior Secured First Lien Delayed Draw Term Loan | 12/2032 | - | (1) | 0.0 | (3)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 55,
+      "row_index": 8,
+      "quoted_text": "CRS TH Holdings, Corp. (4)(5) | Senior Secured First Lien Revolver | 12/2032 | - | (2) | 0.0 | (2)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 63,
+      "row_index": 5,
+      "quoted_text": "Balance Partners (4)(5) | Senior Secured First Lien Revolver | 04/2030 | - | (4) | 0.0 | (4)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 73,
+      "row_index": 22,
+      "quoted_text": "Gryphon Partners 3.5, L.P. (11)(13)(14) | Partnership Interest | 145 | 0.0 | 20",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 74,
+      "row_index": 4,
+      "quoted_text": "Loadmaster Derrick & Equipment, Inc. (7) | Preferred Stock | 3,000,000 | $ | 3,000 | 0.4 | 3,000",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Five positions were retained from the December 31, 2025 comparative schedule in the March 31, 2026 dataset.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 55,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The filing identifies tables 55, 63, 73, and 74 as the Consolidated Schedule of Investments at December 31, 2025. The five flagged cells are present at the cited rows in those comparative tables, but the dataset and review item are keyed to March 31, 2026. Current-period tables begin with a March 31, 2026 header, so retaining facts sourced from the December schedule violates period purity even where a similarly named instrument also appears in the current schedule. The correct count of comparative-period rows in the report-date holdings dataset is zero."
+}

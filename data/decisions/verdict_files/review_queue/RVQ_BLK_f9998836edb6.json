@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_f9998836edb6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 6.0,
+  "anchor_value": 14.5,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 318,
+      "quoted_text": "American Student Transportaton Partners, Inc | (4) | Subordinated Debt | N/A | 6.00 % (Cash) 8.50 % (PIK) | 9/11/2029 | 1,640 | 1,600 | 1,569 | 0.33 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The March 31, 2024 SOI row shows the interest cell split into 6.00% cash and 8.50% PIK. The platform convention requires interest_rate to be all-in including PIK, but the stored interest_rate is 6.0, which captures only the cash leg and is less than the 14.5% cash-plus-PIK rate. This matches the rule residual because the PIK leg exceeds the stored cash-only rate."
+}

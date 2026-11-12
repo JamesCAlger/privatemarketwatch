@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_e014f62910b5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "Table 45 row 13 shows a EURIBOR first lien term loan with par 2,836 and USD-denominated cost/fair value 3,311/3,319, requiring explicit FX conversion for principal_amount_usd.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 13,
+      "quoted_text": "Flexera Software LLC | First Lien Term Loan | EURIBOR + 4.50 % | 6.43 % | 8/16/2032 | 2,836 | 3,311 | 3,319 | 0.2 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 is grounded by a EURIBOR debt row whose source par requires an explicit USD principal conversion, but the flagged principal_amount_usd field is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The bundle's row-validation issue states principal_amount_usd is blank for non-USD debt principal. Raw source table 45 row 13 shows a Flexera Software LLC first lien term loan indexed to EURIBOR with par 2,836 and separate cost/fair value amounts of 3,311 and 3,319. That is source evidence of a non-USD-linked debt principal where USD principal conversion should be explicitly represented before USD par analytics. The flag is therefore a real extraction/normalization gap, not a false alarm."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_1ceccdf45573",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -35000.0,
+  "anchor_value": -35000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 16,
+      "quoted_text": "A.P.A. Industries, LLC (6) | First lien senior secured revolving loan | S + | 6.25 % | 11.75 % | 1/10/2028 | 1,523 | ( 35 ) | ( 33 ) | ( 0.01 ) | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "ACES Intermediate, LLC (6) | First lien senior secured revolving loan | S + | 5.50 % | 10.72 % | 7/27/2027 | $ | 6,964 | $ | ( 113 ) | $ | ( 104 ) | ( 0.02 ) | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw schedule itself prints negative amortized cost for the flagged positions. The source is in thousands, so A.P.A. Industries row 12:16 amortized cost (35) maps to -35000 and ACES row 13:12 amortized cost (113) maps to -113000. Because the extracted negative costs match the source cells and C107 is an advisory monitor for values that can be legitimate, this is not a data error."
+}

@@ -1,0 +1,55 @@
+{
+    "review_id":  "RVQ_REV_09dea8b0125b",
+    "verdict":  "real_error",
+    "mechanism":  "unit_scale",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  18.17602622289461,
+    "anchor_value":  9.33,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  104,
+                                  "row_index":  3,
+                                  "quoted_text":  "February 26, 2025 distribution amount per unit $0.48",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  104,
+                                  "row_index":  4,
+                                  "quoted_text":  "May 7, 2025 distribution amount per unit $0.46",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  104,
+                                  "row_index":  5,
+                                  "quoted_text":  "August 6, 2025 distribution amount per unit $0.47",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  104,
+                                  "row_index":  6,
+                                  "quoted_text":  "November 5, 2025 distribution amount per unit $0.44",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  110,
+                                  "row_index":  22,
+                                  "quoted_text":  "Ratio of net investment income to average Members\u0027 Capital | 9.58 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "unit_scale",
+                         "detail":  "Stored distribution_rate is 18.176%, but source distributions total $1.85 per unit against approximately $19.8 members capital, about 9.33%, which does not exceed 1.5x the 9.58% income yield.",
+                         "fix_class":  "rate_rescale",
+                         "citation":  {
+                                          "table_index":  110,
+                                          "row_index":  8
+                                      }
+                     }
+                 ],
+    "rationale":  "F16 compares distribution_rate to income_yield_pct * 1.5. The raw source reports 2025 quarterly distributions per unit of $0.48, $0.46, $0.47, and $0.44, totaling $1.85, and the financial highlights report net investment income ratio of 9.58%. With members capital per unit around $19.83-$19.84, the source-backed distribution rate is about 9.33%, below the 14.37% heuristic threshold. The observed 18.176% value is therefore a bad extracted/computed fund_financials rate, not a source-supported high distribution."
+}

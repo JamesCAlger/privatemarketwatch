@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_fcbcc9e711a5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 48191300,
+  "anchor_value": 0,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 11,
+      "quoted_text": "Eclipse Topco / Class A common units row: Shares/Units 261, Amortized Cost 261.0, Fair Value 279.7; the Principal column is blank in the SOI grid.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 67,
+      "row_index": 6,
+      "quoted_text": "Amerivet Partners / Class A units row: Shares/Units 1,575, Amortized Cost 1,575.0, Fair Value dash; the Principal column is blank in the SOI grid.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 73,
+      "row_index": 13,
+      "quoted_text": "Unity Purchaser / Class A-1 units row: Shares/Units 2,271,000, Amortized Cost 2,271.0, Fair Value 2,198.6; the Principal column is blank in the SOI grid.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity/unit SOI rows have populated Shares/Units but blank Principal, yet the extract populated principal_amount_usd for X06 row keys 471890, 471925, 472024, 472230, and 472763.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 63,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The repeated shape is a Shares/Units-to-principal remap on non-debt rows, not a valid principal amount greater than fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 67,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 2 row validation: X06 flagged five principal_amount rows where principal_amount_usd exceeded fair value. Raw SOI grids show the implicated pattern is non-debt equity/unit rows with a Shares/Units value and no Principal value. Therefore the populated principal_amount_usd values are extraction defects caused by reading unit/share quantities as principal amounts."
+}

@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_39d7550a73e8",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  19,
+    "anchor_value":  null,
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  37,
+                                  "row_index":  38,
+                                  "quoted_text":  "Homeward, Inc. | Growth Capital Loan ( 19.00 % interest rate, 9.75 % EOT payment) | 12/30/2021 | 3,053 | 3,385 | 3,358 | 6/30/2026",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Homeward, Inc. has a fixed 19.00% stated interest rate in the SOI, but the extracted row carries basis_spread=19.0 as if it were a reference-rate spread.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  37,
+                                          "row_index":  38,
+                                          "quoted_text":  "Homeward, Inc. | Growth Capital Loan ( 19.00 % interest rate, 9.75 % EOT payment) | 12/30/2021 | 3,053 | 3,385 | 3,358 | 6/30/2026"
+                                      }
+                     }
+                 ],
+    "rationale":  "C115 flags basis_spread=19.0. The raw SOI row for Homeward, Inc. states a fixed 19.00% interest rate and 9.75% EOT payment, with no reference index or spread term such as Prime/SOFR + 19.00%. The flagged value is therefore a field-level extraction error: the fixed coupon was stored in basis_spread rather than only as the stated interest rate."
+}

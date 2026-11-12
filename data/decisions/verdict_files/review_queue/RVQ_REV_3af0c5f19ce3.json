@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_3af0c5f19ce3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_STANDARD_USD_LSNKGWMBD0ITLXWETK7ARG",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | First Lien | 3M SOFR+ 6.50 % | 2.00 % | 11.81 % | 6/5/2023 | 6/5/2028 | Services: Business | $ | 2,492,933 | $ | 2,438,339 | $ | 2,480,468 | 2.21 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 0,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars ($) unless otherwise noted Euro.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The cost_currency field retained a raw non-standard XBRL unit token even though the source schedule presents amortized cost in U.S. dollars.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 cost_currency validation issue. The bundle flags cost_currency as UNIT_STANDARD_USD_LSNKGWMBD0ITLXWETK7ARG, but the raw schedule shows the same investment row under Amortized Cost with dollar-denominated values, and the schedule footnote states par amounts are denominated in U.S. Dollars unless otherwise noted. The stored currency/unit token should have normalized to USD, so the flag is a real extraction/normalization error."
+}

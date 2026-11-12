@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_f38ef3ecdc9c",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 656258000,
+  "anchor_value": 648055000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 21,
+      "quoted_text": "Kent Water Sports Holdings, LLC - Delayed Draw Term Loan First-Out (13) | Consumer Durables & Apparel | SOFR + 10.00 % ( 1.00 % floor) PIK | 13.83 % | 10/18/2027 | 8,527 | 7,462 | 8,203 | 1.5 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 4,
+      "quoted_text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out | First Lien Senior Secured | 903 | 6,256 | 1,904 | ( 63 | ) | - | 106 | 8,203",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 49,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 683,274 | $ | 648,055 | 115.7 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The Kent Water Sports Holdings fair value of 8.203 million is counted once as a schedule position and again from the affiliated-investments rollforward, exactly matching the 8.203 million overshoot.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 69,
+        "row_index": 4,
+        "quoted_text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out | ... | Fair Value at December 31, 2025 | 8,203"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation: the bundle reports extracted fair_value sum 656.258 million versus companyfacts_fv 648.055 million, and the source schedule total for investments is also 648.055 million. The residual is 8.203 million. Source rows show Kent Water Sports Holdings at fair value 8.203 million in the SOI position table and the same 8.203 million in a separate non-controlled affiliated investments rollforward, so the extracted population double-counted that rollforward value rather than conserving to the investment total."
+}

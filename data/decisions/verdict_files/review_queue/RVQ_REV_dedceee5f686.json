@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_dedceee5f686",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The flag is localized to the Mexico Equity and Income Fund fair_value cell, but the allowed evidence CLI returned missing_cached_html for overview, tables, totals, and a targeted issuer query, so the raw source could not be checked. Per contract, unreadable raw source requires an ambiguous source_unavailable verdict rather than a guess."
+}

@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_REV_76172063777a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 50743911,
+  "anchor_value": 55874996,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 79,
+      "row_index": 16,
+      "quoted_text": "GTCR Investors LP - A-1 Units | (4) | 893,584 | 894 | 894 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 7,
+      "quoted_text": "Healthcomp Holding Company, LLC - Preferred Interest | (4) | 18,035 | 1,804 | 1,804 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 23,
+      "quoted_text": "Odyssey Holding Company, LLC | (4)(11) | SOFR + | 5.75 % | 11.14 % | 11/16/2025 | 4,211 | 4,211 | 4,211 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 29,
+      "quoted_text": "TPG IX Newark CI, L.P. - LP Interests | (4)(6) | 3,846,970 | 3,847 | 3,847 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 30,
+      "quoted_text": "Zoro Common Equity | (4) | 1,195,880 | 11,959 | 11,959 | 0.04",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "GTCR Investors LP - A-1 Units was retained from the comparative-period SOI block rather than the June 30, 2024 block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 79,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Healthcomp Holding Company, LLC - Preferred Interest was retained from the comparative-period SOI block rather than the June 30, 2024 block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 80,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Odyssey Holding Company, LLC 2 was retained from the comparative-period SOI block, where the row has the prior-period 11/16/2025 maturity.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 63,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "TPG IX Newark CI, L.P. - LP Interests was retained from the comparative-period SOI block rather than the June 30, 2024 block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 80,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Zoro Common Equity was retained from the comparative-period SOI block rather than the June 30, 2024 block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 80,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-level position-purity flag. The raw filing contains both the June 30, 2024 SOI block and a comparative-period SOI block. The comparative block ties to the December 31, 2023 schedule total of 50,743,911, while the June 30, 2024 schedule total is 55,874,996. The flagged rows are localized to rows in that comparative-period block, so retaining them under report_date 2024-06-30 is a real comparative-period leak."
+}

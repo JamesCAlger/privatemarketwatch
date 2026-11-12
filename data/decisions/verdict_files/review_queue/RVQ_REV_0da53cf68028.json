@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_0da53cf68028",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -10000.0,
+  "anchor_value": -10000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "AD Bidco, Inc. revolver source row reports cost (10) and fair value (10): Revolver | SOFR + 6.25 %, 11.6 % Cash | 03/24 | 03/30 | \\u2014 | ( 10 ) | ( 10 ) | \\u2014 | % | (6) (7) (12) (28)"
+    },
+    {
+      "table_index": 16,
+      "row_index": 26,
+      "quoted_text": "ATL II MRO Holdings Inc revolver source row reports negative cost and fair value: Revolver | SOFR + 5.50 %, 10.8 % Cash | 11/22 | 11/28 | \\u2014 | ( 24 ) | ( 13 ) | \\u2014 | % | (6) (7) (12) (28)"
+    }
+  ],
+  "rationale": "C107 flags negative cost values for review. Targeted raw-source evidence shows the flagged negative costs are printed in the filing schedule as parenthesized amounts for revolver positions, including AD Bidco (10) cost and ATL II MRO (24) cost. The extracted observed values therefore match the source, so the warning is not a data error."
+}

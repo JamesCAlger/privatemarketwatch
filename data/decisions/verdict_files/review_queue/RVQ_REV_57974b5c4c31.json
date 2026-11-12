@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_57974b5c4c31",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.43,
+  "anchor_value": 0.44,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 10,
+      "quoted_text": "Portfolio Companies at beginning of period | 22 | For the period from December 4, 2023 (Inception) to December 31, 2023 | -"
+    },
+    {
+      "table_index": 11,
+      "row_index": 11,
+      "quoted_text": "Number of new Portfolio Companies (2) | 28 | For the period from December 4, 2023 (Inception) to December 31, 2023 | 25"
+    },
+    {
+      "table_index": 11,
+      "row_index": 13,
+      "quoted_text": "Portfolio Companies at end of period | 50 | For the period from December 4, 2023 (Inception) to December 31, 2023 | 22"
+    }
+  ],
+  "rationale": "D06 is a quarter-level continuity flag reporting 43.0% continuity. The raw filing rollforward explains the low continuity: the portfolio had 22 companies at the beginning of 2024, added 28 new portfolio companies, had no 2024 exits, and ended with 50 portfolio companies. That source-implied continuity is about 22/50 = 44%, consistent with the flagged metric and attributable to portfolio growth rather than an extraction or data error."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_bd6a46c6c734",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 6.0,
+  "anchor_value": 6.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 8,
+      "quoted_text": "Anaplan Inc | (4)(5)(10) | SOFR + | 5.75 % | 11.08 % | 6/21/2029 | 200 | 198 | 200 | 0.00",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 9,
+      "quoted_text": "Anaplan, Inc. | (4)(7)(10) | SOFR + | 5.75 % | 11.08 % | 6/21/2029 | 537,534 | 529,263 | 537,534 | 1.58",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 10,
+      "quoted_text": "Aptean Inc | (4)(7)(10) | SOFR + | 5.25 % | 10.59 % | 1/29/2031 | 39,263 | 38,860 | 39,263 | 0.12",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 11,
+      "quoted_text": "Aptean Inc | (4)(7)(10) | SOFR + | 5.25 % | 10.59 % | 1/29/2031 | 345 | 312 | 312 | 0.00",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 reports duplicate position keys, but the raw SOI presents same-issuer adjacent rows as separate source positions, with distinct par, cost, and fair value amounts; Anaplan also differs by footnote set. The source therefore supports multiple positions sharing a normalized issuer/terms key rather than an extraction duplicate or wrong holding value. The check appears over-scoped for filers that split same-borrower loans into separate lots/positions."
+}

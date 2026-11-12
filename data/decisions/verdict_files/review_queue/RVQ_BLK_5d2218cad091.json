@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_5d2218cad091",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 155103000,
+  "anchor_value": 186110000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 9,
+      "quoted_text": "Warrants | Cost 2,491 | Fair Value 387",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 72,
+      "row_index": 10,
+      "quoted_text": "Short-Term Investments | Cost 28,516 | Fair Value 28,518",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 72,
+      "row_index": 12,
+      "quoted_text": "Total investments | Cost 186,110 | Fair Value 183,056",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Warrants cost of 2.491 million is present in the source schedule but absent from the extracted cost sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 72,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Short-Term Investments cost of 28.516 million is present in the source schedule total but absent from the extracted cost sum.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 72,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The source schedule reports total investments at cost of 186.110 million, while the artifact observed cost sum is 155.103 million. The 31.007 million undershoot is exactly explained by source categories omitted from the extracted sum: Warrants cost 2.491 million plus Short-Term Investments cost 28.516 million equals 31.007 million. Because the filing source anchors the total and localizes the residual to omitted schedule categories, this is a real extraction/classification gap rather than an ambiguous source issue."
+}

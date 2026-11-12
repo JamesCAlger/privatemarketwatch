@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_7a0680ba6dec",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 12,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Consolidated Schedule of Investments as of September 30, 2025 (Unaudited) | 5"
+    },
+    {
+      "table_index": 5,
+      "row_index": 16,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2024 | 28"
+    },
+    {
+      "table_index": 15,
+      "row_index": 12,
+      "quoted_text": "Generator Buyer, Inc. | First Lien Secured Debt - Term Loan | CORRA + 525 , 0.75 % Floor | 7/22/2030 | C$ | 8,734 | 6,253 | 6,197 | (9)(11)(20)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 12,
+      "quoted_text": "Generator Buyer, Inc. | First Lien Secured Debt - Term Loan | CORRA + 525 , 0.75 % Floor | 7/22/2030 | C$ | 8,778 | $ | 6,275 | $ | 6,027 | (12)(15)(17)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "A December 31, 2024 schedule row for Generator Buyer, Inc. shares the same position key as the September 30, 2025 schedule row and was included in the current-period holdings set.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 40,
+        "row_index": 12,
+        "quoted_text": "Generator Buyer, Inc. | First Lien Secured Debt - Term Loan | CORRA + 525 , 0.75 % Floor | 7/22/2030 | C$ | 8,778 | $ | 6,275 | $ | 6,027 | (12)(15)(17)"
+      }
+    }
+  ],
+  "rationale": "B02 reports 12 duplicate position keys. The source has separate schedules for September 30, 2025 and December 31, 2024. The example key appears once in the September schedule at table 15 row 12 and again in the December schedule at table 40 row 12, with different par/cost/fair value amounts. The duplicate is therefore not a true duplicate within the current schedule; it is caused by comparative-period schedule rows leaking into the current report-date extraction."
+}

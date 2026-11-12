@@ -1,0 +1,51 @@
+{
+  "review_id": "RVQ_BLK_01e533de68ef",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_row_presence",
+  "observed_value": 0,
+  "anchor_value": 5,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 53, "row_index": 11},
+    {"table_index": 53, "row_index": 13},
+    {"table_index": 53, "row_index": 14},
+    {"table_index": 53, "row_index": 19},
+    {"table_index": 53, "row_index": 22}
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Thrasio Holdings, Inc. appears as a current-period common stock source row but has no matched pipeline output row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 53, "row_index": 11}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "RPC ABC Investment Holdings LLC (dba ABC Plumbing) appears as a current-period common stock source row with fair value 1,228 but has no matched pipeline output row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 53, "row_index": 13}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "SEM Holdings, LLC (dba Southeast Mechanical, LLC) appears as a current-period common stock source row with fair value 1,579 but has no matched pipeline output row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 53, "row_index": 14}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "SDB HOLDCO, LLC (dba Specialty Dental Brands) appears as a current-period common stock source row but has no matched pipeline output row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 53, "row_index": 19}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Pluralsight, Inc. appears as a current-period common stock source row but has no matched pipeline output row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 53, "row_index": 22}
+    }
+  ],
+  "rationale": "SRC_BDC01 is a row-coverage flag. The raw current-period Schedule of Investments table 53, Equity Securities / United States / Common Stock, contains all five flagged portfolio company rows at rows 11, 13, 14, 19, and 22. The row-validation artifact in the bundle reports those eligible current-period BDC source rows have no pipeline output row, so this is a localized extraction gap rather than a false alarm."
+}

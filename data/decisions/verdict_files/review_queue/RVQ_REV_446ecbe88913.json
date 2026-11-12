@@ -1,0 +1,34 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_446ecbe88913",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD",
+    "rationale":  "FX02 flags fair_value_currency value U_USD as non-USD, but the raw investment schedule shows the flagged Legacy rows in the Cost and Market Value columns of a dollar-denominated schedule. The investment total row explicitly shows dollar signs for these columns, and the row values sum to the $1,215,000 schedule total. Source therefore supports USD fair value; the flag is a unit-label/rule-scope false alarm rather than a data error.",
+    "culprit_citations":  [
+                              {
+                                  "row_index":  4,
+                                  "table_index":  10,
+                                  "quoted_text":  "Legacy Corporate Lending HoldCo, LLC Preferred Equity cost 1,125,000 market value 1,125,000 under dollar-denominated Cost and Market Value columns"
+                              },
+                              {
+                                  "row_index":  5,
+                                  "table_index":  10,
+                                  "quoted_text":  "Legacy Corporate Lending HoldCo, LLC Class A Equity Interest cost 90,000 market value 90,000 under dollar-denominated Cost and Market Value columns"
+                              },
+                              {
+                                  "row_index":  6,
+                                  "table_index":  10,
+                                  "quoted_text":  "Legacy Corporate Lending HoldCo, LLC Class B Equity Interest cost - market value - under dollar-denominated Cost and Market Value columns"
+                              },
+                              {
+                                  "row_index":  9,
+                                  "table_index":  10,
+                                  "quoted_text":  "Investments Total shows dollar markers for Cost and Market Value, each $1,215,000"
+                              }
+                          ],
+    "confidence":  0.93
+}

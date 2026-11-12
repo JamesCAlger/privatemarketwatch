@@ -1,0 +1,44 @@
+{
+    "review_id":  "RVQ_BLK_c192cbc9a05c",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Raw SOI rows contain structured reference-rate/spread terms: E + 8.25 % PIK, SN + 8.00 % PIK, S + 7.50 % PIK, and S + 7.00 % PIK.",
+    "anchor_value":  "agentA_reference_uncorroborated / no_structured_spread flag asserted reference term was uncorroborated.",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  50,
+                                  "row_index":  32,
+                                  "quoted_text":  "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.33 % | E + 8.25 % PIK | 04/15/25 | 04/11/33 | EUR | 3,375 | $ | 3,840 | $ | 3,887 | (7) (8) (9)"
+                              },
+                              {
+                                  "table_index":  50,
+                                  "row_index":  33,
+                                  "quoted_text":  "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.26 % | E + 8.25 % PIK | 06/25/25 | 06/24/33 | EUR | 2,025 | 2,301 | 2,332 | (7) (8) (9)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  33,
+                                  "quoted_text":  "Solar Holdings Bidco Limited (dba SLR Consulting) | Professional Services | 11.72 % | SN + 8.00 % PIK | 09/13/24 | 10/04/32 | GBP | 14,127 | 18,277 | 18,662 | (7) (8) (9)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  49,
+                                  "quoted_text":  "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.23 % | S + 7.50 % PIK | 04/08/25 | 04/14/33 | 15,385 | $ | 15,182 | $ | 15,154 | (7) (8) (9)"
+                              },
+                              {
+                                  "table_index":  58,
+                                  "row_index":  34,
+                                  "quoted_text":  "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers \u0026 Services | 10.97 % | S + 7.00 % PIK | 03/18/27 | 3,593 | 3,693 | 3,613 | (7) (8) (10) (13) (15)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  23,
+                                  "quoted_text":  "GEMS Topco Limited (dba GEMS Education) | Diversified Consumer Services | S + 11.50 % PIK | 11/15/25 | 11/15/28 | 30,000 | - | - | (7) (9) (10)"
+                              }
+                          ],
+    "rationale":  "Class 2 within-row/content check. The raw schedule has explicit Interest Rate and Reference Rate and Spread columns. Targeted source reads for the flagged issuers show the reference-rate abbreviations and spreads in those columns, including EURIBOR-style E + 8.25 % PIK, SONIA-style SN + 8.00 % PIK, and SOFR-style S + 7.50 % PIK / S + 7.00 % PIK. Because the source corroborates the structured reference-rate/spread terms, the uncorraborated/no_structured_spread flag is a check false positive rather than a data error."
+}

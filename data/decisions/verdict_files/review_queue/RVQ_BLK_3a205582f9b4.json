@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_BLK_3a205582f9b4",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": "SOFR",
+  "anchor_value": "S + 5.00%",
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 14,
+      "quoted_text": "World Insurance Associates, LLC | First Lien Delayed Draw Term Loan | S + 5.00% | 4/3/2030 | 3,179 | 3,161 | 3,179 | 9,23",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule localizes the flagged instrument and prints its reference-rate-and-spread cell only as 'S + 5.00%'. Targeted source searches found no legend or disclosure defining 'S' as SOFR. The filing contains an unrelated weighted-average SOFR line, but that does not establish the benchmark for this specific loan. Therefore the source neither corroborates nor disproves the pipeline's SOFR expansion."
+}

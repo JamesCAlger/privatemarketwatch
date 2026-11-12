@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_ba1468fe543a",
+  "verdict": "false_alarm",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9,
+  "anchor_value": 9,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 38,
+      "quoted_text": "Emrld Borrower LP(7) | First lien senior secured term loan | SOFR + 2.50 % | 5/31/2030 | par 3,990 | amortized cost 4,020 | fair value 3,986"
+    },
+    {
+      "table_index": 10,
+      "row_index": 42,
+      "quoted_text": "Medline Borrower LP(7) | First lien senior secured term loan | SOFR + 2.75 % | 10/23/2028 | par 4,988 | amortized cost 5,023 | fair value 4,994"
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Select Medical Corp(7)(12) | First lien senior secured term loan | SOFR + 3.00 % | 3/6/2027 | par 7,000 | amortized cost 7,056 | fair value 6,997"
+    },
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Triwest Healthcare Alliance Corp(6)(7) | First lien senior secured term loan | SOFR + 5.50 % | 12/27/2027 | par 50,000 | amortized cost 49,127 | fair value 49,125"
+    },
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "Triwest Healthcare Alliance Corp(6)(9)(10)(11) | First lien senior secured delayed draw term loan | SOFR + 5.50 % | 11/1/2024 | par 50,000 | amortized cost (873) | fair value (875)"
+    },
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "Alterra Mountain Co(7) | First lien senior secured term loan | SOFR + 3.25 % | 8/17/2028 | par 5,000 | amortized cost 5,055 | fair value 5,008"
+    },
+    {
+      "table_index": 11,
+      "row_index": 24,
+      "quoted_text": "RH(7)(12) | First lien senior secured term loan | SOFR + 2.50 % | 10/20/2028 | par 7,979 | amortized cost 7,857 | fair value 7,662"
+    },
+    {
+      "table_index": 11,
+      "row_index": 36,
+      "quoted_text": "CQP Holdco LP(8)(12) | First lien senior secured term loan | SOFR + 2.25 % | 12/31/2030 | par 6,000 | amortized cost 6,050 | fair value 5,998"
+    },
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "McAfee Corp(8) | First lien senior secured term loan | SOFR + 3.25 % | 3/1/2029 | par 7,000 | amortized cost 7,047 | fair value 6,984"
+    }
+  ],
+  "rationale": "PP01 flagged nine bdc_investment_identifier values as subtotal or aggregate candidates because the extracted identifiers include schedule hierarchy labels. Raw SOI rows show each flagged issuer is an actual holding row with investment type, stated rate, maturity, par amount, amortized cost, and fair value. The source rows are not subtotal rows, so the PP01 diagnostic is overbroad for these identifiers."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_a6a1a7646f57",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Type of Investment (2) | Investment Date (3) | Maturity Date | Interest Rate (4) | Principal Amount (5) | Cost | Fair Value (6) | Footnotes"
+    },
+    {
+      "table_index": 42,
+      "row_index": 23,
+      "quoted_text": "Nexii, Inc. | Secured Loan | July 24, 2024 | July 1, 2027 | Fixed interest rate 10.0%; EOT 0.0% | $ | 365 | $ | 365 | $ | 317 | (10)(23)"
+    },
+    {
+      "table_index": 43,
+      "row_index": 5,
+      "quoted_text": "Motorway Online, Ltd | Secured Loan | December 23, 2025 | June 1, 2030 | Variable interest rate Base Rate + 7.9% or Floor rate 11.7%; EOT 2.8% | $ | 20,205 | $ | 19,621 | $ | 19,621 | (8)(10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "FX01 appears to treat Canada/Europe debt schedule sections as non-USD, but the raw schedule shows dollar-denominated principal amounts and no CAD/EUR/foreign-currency disclosure was found.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 42,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd for rows described as non-USD source par. The raw debt schedule header labels Principal Amount (5), and representative Canada and Europe debt rows show dollar signs in the Principal Amount, Cost, and Fair Value columns. Targeted source searches for foreign currency, CAD/EUR, Canadian dollar, and Euro currency returned no hits. The source therefore does not support the premise that these principal amounts require FX conversion; the check is over-scoped to geographic sections rather than a proven non-USD source currency."
+}

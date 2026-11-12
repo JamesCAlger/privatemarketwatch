@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_376ed3bafd70",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 7.0,
+  "anchor_value": 7.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 10,
+      "quoted_text": "ACT Acquisition Intermediate Holdco, LLC - Delayed Draw Term Loan | Media & Entertainment | SOFR + 7.00 % ( 1.00 % floor) | 12.83 % | 12/4/2028 | 1,407 | 1,387 | 1,383 | 0.2 | %"
+    },
+    {
+      "table_index": 42,
+      "row_index": 11,
+      "quoted_text": "ACT Acquisition Intermediate Holdco, LLC - Revolving Credit Line (4) | Media & Entertainment | SOFR + 7.00 % ( 1.00 % floor) | 12.83 % | 12/4/2028 | 108 | 99 | 95 | - | %"
+    }
+  ],
+  "rationale": "Class 2 within-row issue. The two flagged holdings carry basis_spread=7.0, and the raw SOI rows show the instruments are floating-rate loans with Spread Above Index of SOFR + 7.00% and a separate current Interest Rate of 12.83%. The stored basis spread is therefore supported by source; the X04 firing is a false alarm from treating these rows as fixed-coupon despite the SOFR spread disclosure."
+}

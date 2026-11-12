@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_22585b5423e9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1650565667,
+  "anchor_value": 1650565667,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Insight Technology Operation LLC (f)(i) | Revolving Credit Facility | - | - | 3/31/2031 | - | (1,868) | (1,869)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "Tex-Tech Industries Inc (f)(j) | Delayed Draw Term Loan | - | - | 1/13/2031 | - | (765) | (794)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 18,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(m) | Delayed Draw Term Loan | - | - | 11/27/2030 | - | (4,908) | (5,196)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 22,
+      "quoted_text": "PLA Buyer, LLC (f)(i) | Delayed Draw Term Loan | - | - | 11/22/2029 | - | (19,591) | (21,053)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 13,
+      "quoted_text": "Total Investment Portfolio | $ | 1,666,573,218 | $ | 1,650,565,667 | 207.49 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The weak dl_rate_fill flag is aggregate/rule-level: 44 of 213 direct-lending-like rows lack extracted interest_rate. Raw SOI rows show that multiple debt facility rows have the Reference Rate and Spread and Interest Rate columns disclosed as dashes, with par also dashed and small negative cost/fair value balances. Those source dashes match the blank stored interest_rate values rather than showing a missed extraction. The current-period investment schedule total also ties to the filing total of 1,650,565,667, so there is no aggregate anchor disagreement suggesting omitted positions."
+}

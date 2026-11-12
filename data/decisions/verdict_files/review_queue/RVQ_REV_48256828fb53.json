@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_48256828fb53",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 86,
+      "row_index": 52,
+      "quoted_text": "Amergin Asset Management, LLC(3)(4)(29)(30) | Specialty finance equity investment | N/A | N/A | 50,000,000 | $ | 1 | $ | 2,137",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "One X07-like source row is Amergin Asset Management, LLC, where the cost of 1 and fair value of 2,137 are printed in the SOI but the investment is explicitly a specialty finance equity investment, so this unit is a rule-scope/classification false alarm rather than a value error.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 86,
+        "row_index": 52
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "The second flagged extracted cost value of 11,667 could not be localized to a raw source row or exact source value using the permitted SOI, commitments, row-key, and value searches.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "quoted_text": "row_key 343373 has extracted cost 11667000.0 in the review bundle, but evidence CLI searches for 343373 and exact source value 11,667 returned no matching raw source row."
+      }
+    }
+  ],
+  "rationale": "X07 is a row-level cost/fair-value warning with two issue rows. Raw source checking found one SOI row with fair value more than 10x cost: Amergin Asset Management, LLC has amortized cost 1 and fair value 2,137, but the same source row states Specialty finance equity investment, so that unit is not a non-equity value defect. The other issue row, reported in the bundle as extracted cost 11,667,000, could not be tied to any raw source row or exact 11,667 source value through the permitted evidence CLI views. Because the two-row flag is only partially decided by source, the bounded adjudication is ambiguous rather than a false alarm or real error."
+}

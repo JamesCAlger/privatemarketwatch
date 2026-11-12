@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_778c3200b6f8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 49,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. (3)(7) | Retailers | N/A | N/A | N/A | 25,000 | 359 | 262 | 0.11%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 54,
+      "quoted_text": "GCOM (3)(7) | Technology | N/A | N/A | 8/11/2033 | 2,491,250 | 2,491 | 2,491 | 1.06%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Common stock row has a populated Par Amount/Shares value of 25,000, but the extracted equity share coverage check observed no populated shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 49
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Warrant row has a populated Par Amount/Shares value of 2,491,250, but the extracted equity share coverage check observed no populated shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 54
+      }
+    }
+  ],
+  "rationale": "C04 reported 0.0% of 2 equity rows have shares. The raw Schedule of Investments table has populated Par Amount/Shares cells for equity instruments, including Common Stocks with 25,000 shares and Warrants with 2,491,250 shares. Because source quantities are present but the extracted equity share coverage is zero, the flag is a real extraction gap rather than a false alarm."
+}

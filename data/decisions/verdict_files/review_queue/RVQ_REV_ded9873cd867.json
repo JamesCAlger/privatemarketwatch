@@ -1,0 +1,60 @@
+{
+  "review_id": "RVQ_REV_ded9873cd867",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values U_GBP, U_AUD, and U_EUR",
+  "anchor_value": "USD cost column shown by Schedule of Investments Cost column and dollar-denominated cost subtotals",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 2,
+      "quoted_text": "Header places Principal Amount, Par Value or Shares before Cost; the foreign currency marker is in the principal/par column, not the Cost column."
+    },
+    {
+      "table_index": 35,
+      "row_index": 47,
+      "quoted_text": "Hamsard 3778 Limited term loan shows GBP principal/par marker with Cost 3,612 and Fair Value 3,486."
+    },
+    {
+      "table_index": 36,
+      "row_index": 10,
+      "quoted_text": "Ancora Bidco PTY LTD term loan shows AUD 5,191 in principal/par, followed by Cost 3,345 and Fair Value 3,151."
+    },
+    {
+      "table_index": 35,
+      "row_index": 35,
+      "quoted_text": "Van Der Steen term loan shows EUR principal/par marker with Cost 3,448 and Fair Value 3,407."
+    },
+    {
+      "table_index": 35,
+      "row_index": 33,
+      "quoted_text": "Pitch MidCo B.V. term loan shows EUR principal/par marker with Cost 2,981 and Fair Value 2,967."
+    },
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "Total Debt Investments United Kingdom subtotal shows dollar marker for Cost 6,460 and dollar marker for Fair Value 6,327."
+    },
+    {
+      "table_index": 35,
+      "row_index": 42,
+      "quoted_text": "Total Debt Investments Netherlands subtotal shows dollar marker for Cost 7,886 and dollar marker for Fair Value 7,860."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX03 is a real cost_currency extraction defect: foreign principal/par units were assigned to cost_currency even though the Cost column is USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "The filing schedule separates Principal Amount, Par Value or Shares from Cost. The flagged rows show GBP, AUD, or EUR in the principal/par area, while their Cost amounts appear under the Cost column and roll into dollar-denominated cost subtotals. Therefore the non-USD cost_currency values are not source-supported cost units; they are a column/unit extraction error."
+}

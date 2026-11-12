@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_edba71b49712",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 223000,
+  "anchor_value": 200000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 9,
+      "quoted_text": "Second-lien note ($ 2,024 par, due 9/2029 ) (13) | 8/31/2023 | 7.10 | % | 7.10 % (incl. 1.25 % PIK) | 1,559 | 223 | 0.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual (2)(3) | 0.2 | 0.0",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual (2)(3) | 1.6 | 0.0",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The ASP Unifrax Holdings second-lien note is the only position whose $223k fair value and $1.559m amortized cost tie to the rounded non-accrual buckets of $0.2m fair value and $1.6m amortized cost.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 39,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "The flag is source-grounded. The SOI row for ASP Unifrax Holdings second-lien note shows amortized cost of 1,559 and fair value of 223, and the filing's non-accrual summary shows rounded non-accrual exposure of 1.6 cost and 0.2 fair value. Those amounts triangulate to this row, so the nonaccrual marker is a real localized data/surfacing defect rather than a false alarm."
+}

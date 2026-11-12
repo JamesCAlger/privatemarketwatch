@@ -1,0 +1,73 @@
+{
+  "review_id": "RVQ_REV_fcdb38532770",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6,
+  "anchor_value": 4,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 94.13 | 3.7 | 41.62 | 1.5",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 37,
+      "row_index": 26,
+      "quoted_text": "Thrasio, LLC | Broadline Retail | S + 7.00 % | 12/18/26 | $ | 35,972 | 35,555 | 21,224 | (5) (7) (8) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 2,
+      "quoted_text": "MedeAnalytics, Inc. | Health Care Technology | 3.00 % PIK | 10/23/28 | $ | 9,333 | $ | 6,075 | $ | 6,277 | (5) (7) (8) (10) (11)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 11,
+      "quoted_text": "Zodiac Intermediate, LLC (dba Zipari) | Health Care Technology | S + 8.00 % | 12/21/26 | 46,540 | 45,659 | 28,296 | (5) (7) (8) (10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 41,
+      "row_index": 12,
+      "quoted_text": "Zodiac Intermediate, LLC (dba Zipari) | Health Care Technology | S + 8.00 % | 12/22/25 | 7,000 | 6,843 | 4,256 | (7) (8) (10)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The artifact counts six non-accrual positions, but the current-period SOI has four footnote-(10) debt rows whose costs sum to the 94.13 non-accrual schedule anchor.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 18,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Honor HN Buyer rows in the current-period SOI carry footnotes (7)(8), (5)(7)(8), or (7)(8)(9), not the non-accrual footnote (10), so they should not be classified as non-accrual from this source.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 39,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Thrasio is a current-period footnote-(10) non-accrual row and is omitted from the six-row artifact sample.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 37,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "The filing's non-accrual anchor is 94.13, and the current-period SOI rows marked with footnote (10) have costs of 35.555, 6.075, 45.659, and 6.843, which reconcile to that anchor. The reviewed artifact reports six non-accrual positions and includes Honor rows that do not carry footnote (10) plus a prior-period MedeAnalytics row, while omitting current-period Thrasio. Raw source therefore shows a real extraction/classification error in the nonaccrual flag output."
+}

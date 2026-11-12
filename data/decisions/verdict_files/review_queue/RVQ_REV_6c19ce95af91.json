@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_6c19ce95af91",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 24,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 2,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. (5) | Restaurant owner and operator | First lien senior secured loan | 12/2016 | 08/2022 | 12.6 | -- | -- | (2)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 8,
+      "quoted_text": "API Commercial Inc., API Military Inc., and API Space Intermediate, Inc. | Provider of military aircraft aftermarket parts and distribution, repair and logistics services | First lien senior secured loan | 05/2022 | 08/2025 | 6.6 | 2.4 | 3.0 | (2)(10 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw source schedule is readable and representative flagged investments carry footnote marker (10), but targeted source searches for nonaccrual/accrual/accruing/cash basis/placed did not expose the footnote legend or any literal nonaccrual statement. Because the raw source available through the evidence CLI does not decide whether marker (10) proves nonaccrual status, this cannot be grounded as either a real data error or a false alarm."
+}

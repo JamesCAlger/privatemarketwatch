@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_3a4b8e9e3b44",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 3,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 9,
+      "quoted_text": "Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P. (4) | First lien senior secured loan | Amortized Cost 26.6 | Fair Value 28.4",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 2,
+      "quoted_text": "Ivy Hill Asset Management, L.P. (5) | Subordinated revolving loan | Amortized Cost 762.2 | Fair Value 762.2",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 17,
+      "quoted_text": "Visual Edge Technology, Inc., VEIT, LLC, and VEIT Topco, LLC (5)(13) | First lien senior secured revolving loan | Amortized Cost 1.5 | Fair Value 1.5",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Centric Brands current-period investment block is absent from pipeline output despite a populated source investment row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 66, "row_index": 9}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Ivy Hill current-period investment block is absent from pipeline output despite a populated source investment row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 23, "row_index": 2}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Visual Edge current-period investment block is absent from pipeline output despite a populated source investment row.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 40, "row_index": 17}
+    }
+  ],
+  "rationale": "Class 2 review of each named source row confirms three genuine current-period investments with populated fair values. The cited rows are position rows within investment schedules, not subtotal or narrative rows, while the flag records no corresponding pipeline output row. This grounds an extraction gap affecting all three issuer blocks."
+}

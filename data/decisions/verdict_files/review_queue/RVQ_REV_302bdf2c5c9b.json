@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_302bdf2c5c9b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 1,703,615,168 | $ | 1,662,543,940 | 100.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 19,
+      "quoted_text": "Total Investment Portfolio | $ | 1,703,615,168 | $ | 1,662,543,940 | 208.55 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "A07 observed pct_sum=0.0%, but the March 31, 2026 raw-source allocation schedule reports Total Investments at 100.0% of investments at fair value. The SOI independently reports a populated 208.55% of net assets for the same $1,662,543,940 portfolio. The zero therefore reflects a missing percentage extraction, not the filing's data."
+}

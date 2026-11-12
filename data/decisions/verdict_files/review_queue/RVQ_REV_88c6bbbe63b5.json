@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_88c6bbbe63b5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1153413327,
+  "anchor_value": 1153413327,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 1,200,205,656 | $ 1,153,413,327 | 185.82 %"
+    },
+    {
+      "table_index": 6,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 1,200,205,656 and $ 1,222,055,231, respectively) | 1,153,413,327 | 1,183,746,738"
+    },
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "Total | $ | 1,200,205,656 | $ | 1,153,413,327 | 100.00 | %"
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor check. The source provides a March 31, 2026 schedule total fair value of 1,153,413,327 and the balance sheet reports the same total investments at fair value. A classification summary also repeats the same fair-value total. The rule fired because the validation artifact had comparison_source=None/no_comparison, but raw source contains a usable matching denominator, so this is a check/anchor selection false alarm rather than a data error."
+}

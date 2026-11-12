@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_986f4705efc1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 15.1,
+  "anchor_value": 15.1,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 33,
+      "quoted_text": "First-lien loan ($ 1,327 par, due 9/2026 ) | 6/10/2021 | SOFR + 15.10 % | 18.97 % (incl. 18.47 % PIK) | 1,327 | 100 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check: the flagged basis_spread value 15.1 matches the raw Schedule of Investments source cell, which states Reference Rate and Spread as SOFR + 15.10 %. The data value is source-correct; the warning is caused by an over-narrow expected-range rule for unusually high but disclosed spreads."
+}

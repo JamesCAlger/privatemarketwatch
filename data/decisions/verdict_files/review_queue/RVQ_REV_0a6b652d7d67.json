@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_0a6b652d7d67",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 3.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 25,
+      "quoted_text": "48Forty Solutions LLC | Common Equities | Par Amount 872 | Cost - | Fair Value -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "Beauty Health Co | Common Equities | Par Amount 913,460 | Cost - | Fair Value 1,224,036",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 12,
+      "quoted_text": "Wesco Aircraft Holdings Inc | Common Equities | Par Amount 195,566 | Cost 7,459,569 | Fair Value 7,396,306",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing's equity rows contain non-empty Par Amount entries, but the extracted C04 metric reports zero of three equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "C04 failed because the extracted data reports 0.0% of three equity rows with shares. The raw schedule header labels the quantity column as Par Amount, and localized equity rows show populated values in that column for common equity positions, including 872 for 48Forty Solutions LLC, 913,460 for Beauty Health Co, and 195,566 for Wesco Aircraft Holdings Inc. The source therefore supports that share/quantity values were present but not captured."
+}

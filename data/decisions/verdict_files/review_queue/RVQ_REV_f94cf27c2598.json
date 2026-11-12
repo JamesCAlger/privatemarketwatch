@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_f94cf27c2598",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_schedule_cost_column",
+  "observed_value": -11000.0,
+  "anchor_value": -11000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "AeroMed Group LLC delayed draw: Cost (6), Fair Value (6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 12,
+      "quoted_text": "Eagle U.S. Purchaser, Inc. revolver: Cost (11), Fair Value (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Cool Buyer, Inc. delayed draw: Cost (1), Fair Value (4)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell review. The raw investment schedule prints the flagged negative costs in parentheses in the Cost column for unfunded delayed-draw and revolver positions. Representative values match the extracted signs and amounts exactly, including (6), (11), and (1), and the paired fair values are also negative. Negative cost is therefore legitimate for these positions; C107 is overbroad for this filing rather than identifying a data error."
+}

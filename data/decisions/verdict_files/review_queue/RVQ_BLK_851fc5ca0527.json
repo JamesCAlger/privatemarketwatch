@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_851fc5ca0527",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.2,
+  "anchor_value": 0.2477,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 10,
+      "quoted_text": "ACT Acquisition Intermediate Holdco, LLC - Delayed Draw Term Loan | Media & Entertainment | SOFR + 7.00 % ( 1.00 % floor) | 12.83 % | 12/4/2028 | 1,407 | 1,387 | 1,383 | 0.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 30,
+      "quoted_text": "Total Net Assets | $ | 558,355 | $ | 543,769",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The source schedule reports Percentage of Net Assets rounded to one decimal place. For the cited ACT Acquisition delayed draw row, fair value is 1,383 thousand and the filing total net assets anchor is 558,355 thousand, giving an exact percentage of about 0.2477%, which rounds to the reported 0.2%. The identity residual is therefore caused by applying a tight exact identity check to rounded source percentages, not by an incorrect extracted value."
+}

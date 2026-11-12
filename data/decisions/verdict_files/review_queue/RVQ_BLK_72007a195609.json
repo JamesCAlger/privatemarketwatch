@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_72007a195609",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1569.4,
+  "anchor_value": 1569.418,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 3,
+      "quoted_text": "EMS Buyer, Inc. | Unitranche First Lien Term Loan | S + 525 ( 100 Floor) | 9.07 % | 11/2027 | 11,331 | $ | 11,254 | 1.6 | % | 11,246",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 3,
+      "quoted_text": "Vantage Insurance Partners, Inc. (5)(11) | Unitranche First Lien Revolver | S + 650 ( 100 Floor) | 10.17 % | 12/2028 | 78 | $ | 73 | 0.0 | % | 33",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Auveco Holdings (5) | Unitranche First Lien Revolver | S + 525 ( 100 Floor) | 9.22 % | 05/2028 | 75 | $ | 73 | 0.0 | % | 75",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "EMS Buyer current-period SOI rows print S + 525, but the flagged 2025 artifact uses S + 575 from the comparative-period schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 37,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Vantage Insurance Partners current-period SOI rows print S + 650, but the flagged 2025 artifact uses S + 600 from the comparative-period schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 43,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Auveco Holdings current-period SOI row prints S + 525, but the flagged artifact stores 4.5 after concatenating through a neighboring GB Eagle Buyer term.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 3 routing: filing investment totals agree at the schedule anchor level (summary total about 1569.4 million and SOI total 1569.418 million), so the blocker is localized through the flagged spread rows. Raw SOI rows show current-period spreads of S + 525 for EMS Buyer, S + 650 for Vantage Insurance Partners, and S + 525 for Auveco Holdings. The flagged artifact instead carries 5.75 for EMS, 6.0 for Vantage, and 4.5 for Auveco. These are source-decided extraction defects, not a false alarm."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_33b232e04381",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 133,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 114,
+      "row_index": 17,
+      "quoted_text": "Balrog Acquisition, Inc., Balrog Topco, Inc. and Balrog Parent, L.P. | Manufacturer and distributor of specialty bakery ingredients | Second lien senior secured loan | 11.73 % | LIBOR (Q) | 7.00 % | 9/2021 | 9/2029 | 29.5 | 29.5 | 29.5 | (2)(11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 11,
+      "quoted_text": "Balrog Acquisition, Inc., Balrog Topco, Inc. and Balrog Parent, L.P. | Manufacturer and distributor of specialty bakery ingredients | First lien senior secured loan | 9.93 % | SOFR (M) | 4.50 % | 07/2023 | 09/2028 | 16.5 | 16.5 | 16.5 | (2)(11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 119,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 22,043.0 | $ | 21,779.8 | 227.97 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 21,864.0 | $ | 21,928.5 | 202.74 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 rows are comparative-period holdings retained under the 2023-09-30 report date; Balrog's flagged second-lien loan is in the December 31, 2022 schedule while the current schedule has a different first-lien Balrog position.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 114,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Raw source contains separate current and comparative investment schedules. The September 30, 2023 schedule totals at table 61 row 6, while the December 31, 2022 comparative schedule totals at table 119 row 9. A flagged Balrog second-lien loan appears in the comparative schedule at table 114 row 17, whereas the current schedule contains a different Balrog first-lien loan at table 53 row 11. This supports the PP03 flag: comparative-period position rows were retained as 2023-09-30 holdings."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "BDCSRC_0001950803_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_d08f66b566",
+  "cik": "0001950803",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a duplicate dimension-path mechanism: the blocker group is high-confidence blocking_extra_in_pipeline with 29 pipeline-only rows and no source-only blocker rows, while sampled residual detail shows output rows whose identifiers mostly append a trailing 'One'. Raw current-period source rows contain the same loans without that suffix carrying the same fair values and already reaching output, and also contain suffixed raw variants with source fair value but no output match. This indicates the pipeline is emitting or reconciling duplicate suffixed investmentidentifieraxis paths as separate production positions rather than collapsing them to the canonical current-period source row.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "source_only_blocker_rows",
+    "cik_validation_packet"
+  ],
+  "html_citations": [],
+  "changed_files": [
+    "pipeline/bdc_identifier.py",
+    "pipeline/bdc_filings.py",
+    "tests/test_bdc_cik_review.py",
+    "tests/test_bdc_cik_validator.py"
+  ],
+  "patch_summary": "Add a bounded BDC identifier/dimension normalization or duplicate-dimension filter that treats trailing dimension-member artifacts such as a terminal 'One' as non-identity-bearing when an otherwise identical current-period source/output row exists for the same CIK, accession, period, instrument, principal/cost/fair value, rate, and maturity. Cover the Stepstone Private Credit Fund LLC 2025-12-31 pattern plus a false-positive case where a terminal token is part of the actual issuer or instrument name and must remain distinct.",
+  "source_reconciliation_effect": "Expected to remove or match the 29 blocking_pipeline_only_position rows totaling 141,554,000 output fair value for this CIK/date/mechanism without suppressing unrelated source-only, value-mismatch, aggregate/header, or comparative-period residuals.",
+  "gav_effect": "Context only; GAV already passes at ratio 1.0, so the patch should not make an independent GAV pass/fail claim and should preserve current investment fair value reconciliation.",
+  "tests_validation_plan": "pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "The bundle provides 25 sampled detail rows from a 29-row blocker group, and 24 of those sampled rows show the terminal 'One' pattern; raw-source counterpart checks confirm the mechanism for multiple named examples but not every affected row. The patch must be guarded by same-period numeric and identity equality so legitimate distinct tranches or typed members are not collapsed.",
+  "reviewer_notes": "Do not use GAV improvement as the primary justification. HTML coordinate evidence was not needed for the mechanism because the numeric source of truth is the raw/XBRL source rows and the residual detail; the available audited HTML template selection is absent and source-row coordinate candidates are not reliable enough to drive this verdict."
+}

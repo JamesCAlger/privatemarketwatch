@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_70dfe48c9c24",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 101.12,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investment Portfolio | $ | 103,515,599 | $ | 104,556,936 | 101.12 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing's schedule total reports 101.12% of net assets, but the flagged artifact records pct_sum=0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 15,
+        "quoted_text": "Total Investment Portfolio | $ | 103,515,599 | $ | 104,556,936 | 101.12 %"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check: the raw SOI includes a % of Net Assets column and the Total Investment Portfolio row shows 101.12%, matching the schedule's fair value total of 104,556,936. The reviewed artifact reports pct_sum=0.0%, so the percentage field was not extracted/mapped rather than absent from source."
+}

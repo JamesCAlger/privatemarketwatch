@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_31e2c1c16418",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Five stored bdc_investment_identifier values include leaked schedule section text such as Debt Investments, Consumer Goods: Durable/Non-durable, or Forest Products & Paper before the issuer/instrument.",
+  "anchor_value": "The cited source rows show ordinary position rows where the issuer cell begins with the portfolio company name and the sector/subsector text appears only in separate heading or subtotal rows.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 7,
+      "quoted_text": "BCDI Meteor Acquisition, LLC | Initial Term Loan | 3M SOFR + 7.00 % | 1.00 | % | 11.43 | % | 12/29/2022 | 6/29/2028 | 24,562,500 | 24,123,322 | 24,149,850 | 9.2 | % | (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 8,
+      "quoted_text": "Hy Cite Enterprises, LLC | Term Loan | 3M SOFR + 8.00 % | 1.50 | % | 12.75 | % | 11/12/2021 | 11/10/2026 | 22,010,056 | 21,734,031 | 22,010,056 | 8.4 | % | (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 11,
+      "quoted_text": "Connect America.com, LLC | Term Loan B | 3M SOFR + 5.5 % | 1.75 | % | 9.83 | % | 10/11/2024 | 10/11/2029 | 4,993,750 | 4,993,750 | 4,993,750 | 1.9 | % | (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 31,
+      "quoted_text": "Jackson Paper Manufacturing Company | Initial Term Loan | 1M SOFR + 7.25 % | 1.00 | % | 11.90 | % | 10/1/2021 | 8/26/2026 | 10,982,963 | 10,882,245 | 10,702,898 | 4.1 | % | (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 32,
+      "quoted_text": "Jackson Paper Manufacturing Company | Revolving Loan | 1M SOFR + 7.25 % | 1.00 | % | - | 10/1/2021 | 8/26/2026 | - | (10,089) | (34,000) | 0.0 | % | (7) (8) (11) (13)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Consumer Goods: Durable and Debt Investments header text leaked into the BCDI Meteor and Hy Cite position identifiers.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 46, "row_index": 7}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Consumer Goods: Non-durable and Debt Investments header text leaked into the Connect America.com position identifier.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 46, "row_index": 11}
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Forest Products & Paper and Debt Investments header text leaked into both Jackson Paper position identifiers.",
+      "fix_class": "subtotal_filter",
+      "citation": {"table_index": 46, "row_index": 31}
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw SOI separates schedule headings/subtotals from actual position rows: for example, table 46 rows 7, 8, 11, 31, and 32 begin with the issuer names BCDI Meteor Acquisition, Hy Cite Enterprises, Connect America.com, and Jackson Paper Manufacturing Company. The flagged stored identifiers prepend schedule-level text such as Debt Investments, Consumer Goods: Durable/Non-durable, and Forest Products & Paper, so the PP01 purity flag is a real extraction defect rather than a false alarm."
+}

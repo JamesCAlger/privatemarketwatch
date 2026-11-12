@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4f1d93d3f440",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "B02 is a CIK-quarter duplicate-position-key flag, but the permitted evidence CLI returned missing_cached_html for the filing accession, so raw source tables could not be read. Per contract, the item cannot be adjudicated from extracted artifacts alone."
+}

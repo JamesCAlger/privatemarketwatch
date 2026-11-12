@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_25a445cb39b7",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 450.0,
+  "anchor_value": 4.5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 30,
+      "quoted_text": "Arrowhead Holdco Company | First Lien Secured Debt | S+ 450 , 0.75 % Floor | 8/31/2028 | 9,850 | 9,850 | 9,603",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "Mavis Tire Express Services Corp. | First Lien Secured Debt | S+ 411 , 0.75 % Floor | 5/4/2028 | 31,283 | 31,191 | 31,244",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 11,
+      "quoted_text": "Rochester Midland Corporation | First Lien Secured Debt | S+ 600 , 1.00 % Floor | 8/1/2029 | 17,910 | 4,696 | 4,689",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 26,
+      "quoted_text": "TZ Buyer LLC | First Lien Secured Debt | S+ 610 , 0.75 % Floor | 8/14/2028 | 29,259 | 28,246 | 28,674",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 32,
+      "quoted_text": "McGraw-Hill Education, Inc. | First Lien Secured Debt | S+ 486 , 0.50 % Floor | 7/28/2028 | 33,903 | 32,862 | 33,334",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "Zacapa S.a r.l. | First Lien Secured Debt | S+ 400 , 0.50 % Floor | 3/22/2029 | 10,411 | 10,359 | 10,351",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Basis spread values were stored as raw basis-point integers from source strings such as S+450 instead of percentage-point values such as 4.50.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 10,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell review. The flagged column is basis_spread and the source rows show spread terms as basis-point notation, for example S+ 450, S+ 411, S+ 600, S+ 610, S+ 486, and S+ 400. Under the C115 flag convention that spreads are stored as whole-number percentages, observed values like 450.0 represent an unconverted basis-point integer; the normalized percentage-point value should be 4.50. The source therefore confirms a rate-scale extraction/normalization defect rather than a false alarm."
+}

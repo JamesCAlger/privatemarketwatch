@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_061394021149",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Vortex Companies | Unitranche Initial Term Loan | Par/Shares $ 4,989,406 | Amortized Cost $ 4,935,088 | Market Value $ 4,989,398",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 25,
+      "quoted_text": "API Technologies | Senior Secured Term B-2 Loan (First Lien) | Par/Shares 1,142,523 | Amortized Cost 1,141,872 | Market Value 1,105,391",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 treats these debt rows as non-USD because principal_amount_usd is absent, but the raw investment schedule uses a dollar sign on the first detail row and carries that currency formatting down the same Par/Shares column. A sampled flagged holding, API Technologies, appears within that dollar-denominated schedule. The source principal is already USD, so no FX conversion is required and the check is mis-scoped."
+}

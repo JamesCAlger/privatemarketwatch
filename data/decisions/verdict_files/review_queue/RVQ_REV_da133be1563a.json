@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_da133be1563a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated fair value column marked with $",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 5,994,674 | $ | 6,029,967",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 37,
+      "quoted_text": "Total Investments ( 108.0 %) | $ | 160,948,819 | $ | 162,035,728",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value U_USD as not USD, but the raw SOI presents the affected fair value fields in dollar-denominated columns. Representative flagged position rows show Fair Value amounts under '$' columns, and the schedule total also marks total fair value with '$'. The source therefore supports USD denomination; the issue is the rule treating a noncanonical USD unit label as non-USD."
+}

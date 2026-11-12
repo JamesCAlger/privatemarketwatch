@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_66a7acd41659",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "companyfacts_fv",
+    "observed_value":  376227828,
+    "anchor_value":  183271179,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Raw source could not be adjudicated: overview, tables, totals, and targeted roam via the evidence CLI all returned status no_accession_resolved for CIK 0001490349 and report_date 2022-12-31. The bundle artifact shows extracted FV 376227828.0 versus companyfacts FV 183271179.0, but without usable raw source this cannot be localized or confirmed."
+}

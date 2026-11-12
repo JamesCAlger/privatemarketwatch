@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_64e26cf31068",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 254.1,
+  "anchor_value": 254.1,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Total investments | 1,350,788 | 1,355,641 | 254.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 28,
+      "quoted_text": "Total Net Assets | 532,953",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The A07 flag is an aggregate percentage threshold fire, but the raw schedule itself reports Total investments fair value of 1,355,641 at 254.1% of net assets. The balance sheet separately reports Total Net Assets of 532,953, supporting that this is a leveraged BDC percentage-of-net-assets presentation rather than an extraction error. The stored metric matches the source; the check scope/threshold is what is overbroad."
+}

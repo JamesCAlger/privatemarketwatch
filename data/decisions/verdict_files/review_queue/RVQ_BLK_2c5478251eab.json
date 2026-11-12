@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_2c5478251eab",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "Non-Controlled, Non-Affiliated Debt Investments / First Lien Senior Secured",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 4,
+      "quoted_text": "Non-Controlled, Non-Affiliated Debt Investments",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "First Lien Senior Secured",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Amplify Buyer, Inc. Term Loan | 3M SOFR + 4.75 % / 0.75 % | 8.42 % | 9/17/2032 | $ 9,000 | $ 8,957 | $ 8,944",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Flagged rows have blank exposure_type even though the source schedule places them under debt investment and first lien senior secured headings.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 27,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "C303 flags blank exposure_type values. The raw SOI schedule provides the missing controlled classification context: the affected rows are under Non-Controlled, Non-Affiliated Debt Investments and First Lien Senior Secured, and the cited Amplify Buyer row is one of the extracted flagged holdings. The stored observed value is blank while the source supports a debt/first-lien exposure classification, so the flag is a real extraction/classification error."
+}

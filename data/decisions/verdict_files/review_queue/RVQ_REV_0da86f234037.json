@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_0da86f234037",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "19.90 % PIK",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 13,
+      "quoted_text": "300 N. Michigan Mezz, LLC | (6)(11) | SF | 14.57 | % | 19.90 % PIK | 7/15/2020 | 7/15/2024 | 1,000 | 1,000 | 1,000 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holding has blank interest_rate, but the source row states 19.90% PIK with SF index and 14.57% spread.",
+      "fix_class": "all_pik_normalization",
+      "citation": {
+        "table_index": 18,
+        "row_index": 13,
+        "quoted_text": "300 N. Michigan Mezz, LLC | (6)(11) | SF | 14.57 | % | 19.90 % PIK | 7/15/2020 | 7/15/2024 | 1,000 | 1,000 | 1,000 | 0.1 | %"
+      }
+    }
+  ],
+  "rationale": "The bundle's holdings sample for 300 N. Michigan Mezz, LLC shows interest_rate blank, but raw source table 18 row 13 gives the rate-bearing terms: index SF, spread 14.57%, and Interest Rate 19.90% PIK. Because the raw SOI supplies a nonblank PIK interest rate that the extracted holding missed, the weak fmt_basis_spread flag reflects a real localized extraction gap rather than a false alarm."
+}

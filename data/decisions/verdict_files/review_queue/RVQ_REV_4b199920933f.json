@@ -1,0 +1,21 @@
+{
+    "review_id":  "RVQ_REV_4b199920933f",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.55,
+    "escalate":  true,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  17,
+                                  "row_index":  29,
+                                  "quoted_text":  "RCP Encore Acquisition, Inc. | Healthcare | Term Loan | cost 2,772,846 | fair value 28,404 | tickmark (16)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "X08 flagged two cost rows. Source table 17 row 29 confirms one flagged row is filer-reported, with cost 2,772,846 and fair value 28,404, so that row is a distressed/source-supported position rather than a data error. The second flagged extracted cost value, 1,187,009, could not be matched to a source row in the readable SOI grids; because one of the two issue rows remains unlocalized from raw source, the item is ambiguous rather than a whole-item false alarm."
+}

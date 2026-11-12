@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_b5d07d2636f0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 130,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 406,272,865 | 100.00 | % | $ | 398,843,940 | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted/oracle percentage sum is 0.0%, but the March 31, 2023 source allocation table reports Total Investments at 100.00% for both cost and fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 130,
+        "row_index": 12,
+        "quoted_text": "Total Investments | $ | 406,272,865 | 100.00 | % | $ | 398,843,940 | 100.00 | %"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The queue/oracle artifact reports pct_sum=0.0%, but the raw March 31, 2023 source table explicitly shows Total Investments at 100.00% with fair value 398,843,940 and cost 406,272,865; the same filing's schedule total row also reports Total Portfolio Investments of 406,272,865 cost and 398,843,940 fair value. This is a real extraction gap in the percentage field, not an unclear source or a bad filing total."
+}

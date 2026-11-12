@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_c80b95521b66",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3000,
+  "anchor_value": 500000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 23,
+      "quoted_text": "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged fair value below 5% of cost for TecoStar Holdings, Inc. The September 30, 2025 SOI is in thousands and the source row shows 500,000 shares, cost 500, and fair value 3. The extracted cost of 500000 and fair value of 3000 therefore match the raw source; the warning reflects a disclosed distressed/low-value equity position, not a data error."
+}

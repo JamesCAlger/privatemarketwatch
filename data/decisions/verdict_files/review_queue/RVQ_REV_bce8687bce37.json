@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_REV_bce8687bce37",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "cost_currency=U_AUD/U_CAD/etc.",
+    "anchor_value":  "USD cost/fair-value columns in source schedule",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  49,
+                                  "row_index":  2,
+                                  "quoted_text":  "Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  49,
+                                  "row_index":  6,
+                                  "quoted_text":  "Ancora Bidco PTY LTD (6) | Unitranche First Lien Term Loan | B + 500, 50 Floor | 8.60 % | 11/2030 | AUD 3,462 | 3,366 | 0.8 % | 3,497",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  49,
+                                  "row_index":  9,
+                                  "quoted_text":  "Total Debt Investments Australia | $ | 3,355 | 0.8 | % | $ | 3,504",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Foreign currency labels such as AUD are principal amount units, while the Cost and Fair Value columns are USD-denominated; cost_currency was populated from the principal/unit currency.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  49,
+                                          "row_index":  6
+                                      }
+                     }
+                 ],
+    "rationale":  "FX03 is a real row-level data error. In the raw schedule header, principal amount is a separate column from Cost and Fair Value. The Ancora row shows AUD 3,462 in the principal amount column, but cost and fair value are separate numeric schedule-dollar values; the Australia subtotal explicitly prefixes the Cost and Fair Value totals with $. Therefore the stored non-USD cost_currency reflects a principal-currency-to-cost-currency extraction/mapping error, not a true non-USD cost valuation field."
+}

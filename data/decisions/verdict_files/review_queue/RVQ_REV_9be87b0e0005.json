@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_9be87b0e0005",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 7,
+      "quoted_text": "Einstein Parent Inc (4)(9)(25) | SF + | 5.25 % | 8.92 % | 1/22/2031 | 94,062 | 92,554 | 91,042",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 8,
+      "quoted_text": "Einstein Parent Inc (4)(6)(9) | 1/22/2031 | 9,745 | (156) | (313)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The duplicate key collapses two distinct Einstein Parent Inc positions that share issuer and maturity but have different terms and amounts.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 29,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "B02 reports a duplicate position key, but the raw March 31, 2026 schedule shows two separate adjacent Einstein Parent Inc instruments. Row 7 is a funded SF+ loan with a 5.25% spread, 8.92% interest rate, par 94,062, amortized cost 92,554, and fair value 91,042. Row 8 is a separately footnoted revolver/unfunded exposure with par 9,745, negative amortized cost 156, and negative fair value 313. Shared issuer and maturity therefore do not establish duplication; the check key is under-specified."
+}

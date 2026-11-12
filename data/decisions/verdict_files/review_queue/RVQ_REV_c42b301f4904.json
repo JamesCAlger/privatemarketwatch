@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c42b301f4904",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "16.0",
+  "anchor_value": "16.00 %",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 11,
+      "quoted_text": "Preferred Equity"
+    },
+    {
+      "table_index": 17,
+      "row_index": 13,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) | N/A | 16.00 % | 5/16/2034 | $ | 4,800 | 4,732 | 4,733 | 2.9"
+    }
+  ],
+  "rationale": "The flag says a PRIVATE_EQUITY row has an interest_rate, but the raw SOI places the Metropolis Technologies row under the Preferred Equity section and prints an Interest Rate of 16.00% with N/A reference rate, maturity 5/16/2034, amortized cost 4,732, and fair value 4,733. The extracted row's PRIVATE_EQUITY/PREFERRED_EQUITY classification and 16.0 rate match the source, so the row is not a data error; X01 is overbroad for preferred equity with stated rates."
+}

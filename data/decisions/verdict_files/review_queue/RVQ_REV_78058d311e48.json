@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_78058d311e48",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 24,
+      "quoted_text": "Total Investments ( 168.5 %) | $ | 1,040,122,806 | $ | 1,029,942,922",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "Total Investments ( 170.4 %) | $ | 779,653,930 | $ | 784,362,855",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | 03/28/24 | Term Loan B - 10.83 % (SOFR + 6.50 %, 1.75 % Floor) | 4.7 % | $ 29,787,749 | 03/28/29 | $ 29,023,229 | $ 28,774,966",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2024 review scope contains 168 leaves although the filing has separate 2024 and 2023 investment schedules; only 84 leaves carry fair_value, matching a current/prior schedule scoping split rather than missing source disclosure.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 31,
+        "row_index": 11
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Representative current-period investment rows in the raw schedule have explicit Fair Value cells, so rows lacking fair_value in the extracted 2024-quarter dataset are not source blanks.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate coverage flag: the artifact reports 84/168 leaves with fair_value for report_date 2024-12-31. Raw source is readable and decisive. The 2024 schedule has explicit fair-value cells and totals to 1,029,942,922, while the same filing also contains a separate prior-year investment schedule totaling 784,362,855. This supports a real period-scoping/comparative-leak defect in the extracted quarter, not a false alarm caused by missing source fair values."
+}

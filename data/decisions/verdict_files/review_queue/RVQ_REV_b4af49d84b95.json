@@ -1,0 +1,16 @@
+{
+    "escalate":  true,
+    "ambiguity_basis":  "source_unavailable",
+    "verdict":  "ambiguous",
+    "review_id":  "RVQ_REV_b4af49d84b95",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "rationale":  "Evidence CLI returned no_accession_resolved for overview, tables, and totals for CIK 0000897419 report_date 2020-02-29, so raw source was not available to adjudicate whether the fund_financials/holdings coverage mismatch is a real data error or false alarm.",
+    "culprit_citations":  [
+
+                          ],
+    "confidence":  0
+}

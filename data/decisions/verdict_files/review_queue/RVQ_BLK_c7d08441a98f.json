@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_c7d08441a98f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_accession",
+  "observed_value": "",
+  "anchor_value": "0001930087-26-000024",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "Evidence CLI overview reports accession 0001930087-26-000024 for Golub Capital Private Credit Fund 10-Q, report_date 2025-12-31."
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Bleriot US Bidco Inc. Senior secured investment row appears in the raw investment schedule for accession 0001930087-26-000024."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Extracted BDC row_key 493672 is filing-derived but has blank accession_number; it should carry source accession 0001930087-26-000024.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "row_key 493672: column accession_number value is blank while evidence CLI overview accession is 0001930087-26-000024."
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Extracted BDC row_key 493673 is filing-derived but has blank accession_number; it should carry source accession 0001930087-26-000024.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "row_key 493673: column accession_number value is blank while evidence CLI overview accession is 0001930087-26-000024."
+      }
+    }
+  ],
+  "rationale": "C006 requires accession_number for filing-derived BDC rows so each extracted position remains traceable to its source filing. The raw-source overview for this bundle identifies accession 0001930087-26-000024, and the raw schedule contains investment rows under that accession. The two flagged extracted rows are source=bdc and have observed accession_number blank, so the missing accession is a real extraction/traceability defect rather than a false alarm."
+}

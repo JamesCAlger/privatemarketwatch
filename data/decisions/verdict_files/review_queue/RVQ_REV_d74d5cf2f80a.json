@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d74d5cf2f80a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2025-03-31 holdings include a prior-period Streamland row with maturity 03/31/25",
+  "anchor_value": "March 31, 2025 current Streamland debt rows show maturity 04/02/29; table 11 belongs to the December 31, 2024 comparative schedule",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 21,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | 14.09 % | S + 9.50 % (Incl. 2.75 % PIK) | 03/31/25 | 28,293 | 28,309 | 17,683 | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 18,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | 10.06 % | S + 5.50 % | 04/02/29 | 10,504 | 10,301 | 10,294 | (6) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "A December 31, 2024 comparative Streamland debt row with maturity 03/31/25 appears to have been treated as a March 31, 2025 holding; current-period Streamland debt rows show maturity 04/02/29.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 11,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The maturity flag is grounded in source: table 11 row 21 is a Streamland debt row with maturity 03/31/25, which is the suspicious date behind the rule fire. The same issuer's current March 31, 2025 debt schedule rows in tables 8 and 9 show maturity 04/02/29, while the table 11/12/13 schedule totals match the prior December 31, 2024 comparative totals. The defect is therefore not an expired current investment but a comparative-period row leaking into the current-period holdings."
+}

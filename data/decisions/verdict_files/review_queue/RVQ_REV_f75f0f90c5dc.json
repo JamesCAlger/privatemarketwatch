@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_f75f0f90c5dc",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 is a fund_financials/holdings coverage mismatch, but the permitted evidence CLI returned only status=no_accession_resolved for overview, tables, totals, and targeted roam, exposing no raw filing table, text, or total that can adjudicate whether holdings should be present."
+}

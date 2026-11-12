@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_e17a4aad5652",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 11,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 19,
+      "quoted_text": "March 31, 2026 Leaf Home revolver: S + 525, 0.75% Floor",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 83,
+      "row_index": 15,
+      "quoted_text": "December 31, 2025 Leaf Home revolver: P + 425, 0.75% Floor",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 17,
+      "quoted_text": "March 31, 2026 Garda World term loan: S + 275, 0.00% Floor",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 86,
+      "row_index": 17,
+      "quoted_text": "December 31, 2025 Garda World term loan: S + 300, 0.00% Floor",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 20,
+      "quoted_text": "March 31, 2026 Reliable Doors term loan: S + 550, 1.00% Floor",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 94,
+      "row_index": 5,
+      "quoted_text": "December 31, 2025 Reliable Doors term loan: S + 500, 1.00% Floor",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "All 11 flagged values are drawn from the comparative-period schedule rather than the March 31, 2026 schedule; representative issuer pairs prove the period leak.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 86,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "This is a Class 2 multi-row period-selection defect. The flag reports March 31, 2026 but its cited values match December 31, 2025 source rows. Representative exact mismatches are Leaf Home 4.25% flagged/comparative versus 5.25% current, Garda World 3.00% versus 2.75% current, and Reliable Doors 5.00% versus 5.50% current. The current-period schedule rows are the controlling anchors, so the 11-row comparative leakage is a real extraction error."
+}

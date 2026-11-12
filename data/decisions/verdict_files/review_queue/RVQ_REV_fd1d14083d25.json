@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_fd1d14083d25",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "Alaska Bidco Oy (3)(4) | First-lien loan (EUR 727 par, due 5/2030 ) | 5/30/2023 | E + 6.25 % | 9.89 | % | 754 | 766 (EUR 702 ) | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 27,
+      "quoted_text": "Edge Bidco B.V (3)(4) | First-lien loan (EUR 3,471 par, due 2/2029 ) | 2/24/2023 | E + 7.00 % | 10.60 % (incl. 3.25 % PIK) | 3,532 | 3,697 (EUR 3,389 ) | 0.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 15,
+      "quoted_text": "12,832 Class A | 3/24/2023 | 1,288 | 1,288 | 0.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged the identifiers as subtotal candidates because they include schedule or sector breadcrumbs such as Debt Investments, Financial Services, Equity and Other Investments, and Healthcare. The raw source rows are actual investments, not subtotal rows: Alaska Bidco and Edge Bidco each have issuer, instrument, acquisition date, rate, amortized cost, and fair value, and the Raptor Class A line has its own share-class investment, date, cost, and fair value under the Raptor issuer block. The check is overbroad for these position rows."
+}

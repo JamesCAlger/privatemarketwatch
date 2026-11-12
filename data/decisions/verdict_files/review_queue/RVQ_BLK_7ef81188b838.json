@@ -1,0 +1,15 @@
+{
+  "review_id": "RVQ_BLK_7ef81188b838",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw filing was read through the evidence CLI and contains detailed investment schedules with a Company column and named issuers. However, the four C201 records are identified only by internal row keys 291088, 291273, 291331, and 291341; the bundle supplies no investment identifier, values from the rest of those rows, or source coordinates, and the allowed evidence interface returns no matches for those keys. The exact flagged cells therefore cannot be aligned to raw-source rows. The evidence cannot distinguish an issuer extraction gap from a non-position heading or subtotal incorrectly admitted as a holding, so a grounded real_error or false_alarm determination is not possible.",
+  "residual_risk": "The four blanks may be genuine issuer extraction failures or structural non-position rows; exact row-to-source provenance is required to decide."
+}

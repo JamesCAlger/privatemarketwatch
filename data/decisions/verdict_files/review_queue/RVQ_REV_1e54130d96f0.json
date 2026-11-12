@@ -1,0 +1,22 @@
+{
+  "review_id": "RVQ_REV_1e54130d96f0",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PP03 flagged two rows as source period earlier than report_date",
+  "anchor_value": "Current-period SOI table 6 contains the same TCW ND Parent Holdings Class A Units and AGY Equity LLC Class D Preferred Units rows at June 30, 2023",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 12
+    },
+    {
+      "table_index": 6,
+      "row_index": 18
+    }
+  ],
+  "rationale": "Raw source shows the flagged identifiers are not solely comparative-period facts. In the June 30, 2023 SOI, table 6 row 12 lists TCW ND Parent Holdings LLC Class A Units with 0.0% of net assets and no fair value, and table 6 row 18 lists AGY Equity LLC Class D Preferred Units with 0.0% of net assets and no fair value. Although the same names also appear in prior-period or rollforward tables, the current-period SOI independently supports retaining these current zero-value positions; therefore the PP03 comparative-period flag is a false alarm."
+}

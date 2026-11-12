@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_a6e10a93eb31",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": 20.0,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 17,
+      "quoted_text": "FS NU Investors, LP | Consumer Services | 20.00 % (100 % PIK) | 8/9/2024 | 1 | 178 | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The flagged holding is FS NU Investors, LP, matched by cost 178 and fair value zero. Table 25 is headed with an All-In Rate column, and row 17 reports 20.00% (100% PIK) in that column. The pipeline stored 20.0 as basis_spread, but the raw source identifies it as the investment's all-in PIK rate, not a reference-rate spread. This is a localized column-mapping extraction error."
+}

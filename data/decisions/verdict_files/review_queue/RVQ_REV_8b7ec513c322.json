@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_8b7ec513c322",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "EUR",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 FX03 flag localized to row_key 221551 and cost_currency EUR, but the raw-source evidence CLI did not return usable source evidence: overview returned no content and subsequent permitted queries failed during process creation. The source cell therefore could not be checked against the filing, so the contract requires a fail-closed source_unavailable verdict."
+}

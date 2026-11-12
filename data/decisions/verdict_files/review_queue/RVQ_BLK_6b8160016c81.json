@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_6b8160016c81",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_schedule_row",
+  "observed_value": 271000.0,
+  "anchor_value": 271000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 4,
+      "quoted_text": "Business Services | First Lien(3)(4) - Undrawn | ... | Principal Amount $271 | Cost $(1) | Fair Value $0",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 30,
+      "quoted_text": "Business Services | First Lien(3)(4) - Undrawn | ... | Principal Amount 4,699 | Cost 0 | Fair Value 0",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review of the flagged principal-to-fair-value cells. The raw March 31, 2026 schedule explicitly identifies the affected pattern as undrawn first-lien commitments and presents nonzero principal amounts with zero or nominal cost and fair value. For an undrawn commitment, principal represents available commitment rather than funded exposure, so principal exceeding fair value by more than 10x is expected. The extracted value and units agree with the source; X06 is mis-scoped to undrawn positions."
+}

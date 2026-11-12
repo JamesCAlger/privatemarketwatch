@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_7011b8f3022f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "A8",
+  "anchor_value": "A8 - A (Feeder) L.P. (12)",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 6,
+      "quoted_text": "A8 - A (Feeder) L.P. (12) | Limited partnership interests | 03/2025 | 0.44 % | 1,000.3 | 716.1 | (6)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name was truncated to A8 although the source Company cell is A8 - A (Feeder) L.P. (12).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The flagged issuer-name formatting issue is confirmed in the raw source. The extracted holding has issuer_name A8 for the limited partnership interest, but the matching source row's Company cell reads A8 - A (Feeder) L.P. (12); the pipeline dropped the rest of the issuer name before appending the investment description."
+}

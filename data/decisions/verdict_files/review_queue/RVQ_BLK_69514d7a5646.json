@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_BLK_69514d7a5646",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR + 750",
+  "anchor_value": "SOFR + 750",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 4,
+      "quoted_text": "Carestream Health, Inc. (First Lien Term Loan) (5) | SOFR + 750 | 3.67 | % | 9/30/2027 | $ | 1,579,575 | $ | 1,459,426 | $ | 811,507"
+    }
+  ],
+  "rationale": "The flag says the Carestream reference term is uncorroborated, but the raw 2025 schedule row itself lists the holding with interest rate 'SOFR + 750' and base rate floor 3.67%, matching the extracted identifier term. The source supports the flagged reference/spread, so the check is over-firing rather than exposing a data error."
+}

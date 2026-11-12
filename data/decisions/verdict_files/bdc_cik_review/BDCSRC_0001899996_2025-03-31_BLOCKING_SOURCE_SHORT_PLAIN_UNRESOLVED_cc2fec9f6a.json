@@ -1,0 +1,32 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so the Total Investment Portfolio row is documented as a non-position total/header source row rather than treated as a missing holding.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Use the existing bounded total-header patch that adds investment portfolio to the total-header vocabulary, causing Total Investment Portfolio to classify as documented_source_total_header.",
+  "primary_justification": "Manual review covered the single blocker row. The raw and normalized identifier is Total Investment Portfolio / total investment portfolio, source_row_id 940494, with source fair value 1,650,565,667. The label is an explicit portfolio-level total and has no issuer, borrower, instrument, rate, maturity, principal, or share details. Same-accession source detail separately includes detailed investment rows such as Borrower/Instrument rows under Investments Investments -- non-controlled/ non-affiliated, confirming this row is an aggregate total rather than a production position. Treating the total row as a holding would duplicate exposure and violate the position-level index contract.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The bundle has no source-targeted HTML coordinate candidate for this exact row, so the packet verdict relies on the XBRL/source identifier and existing classifier semantics. The production patch remains bounded to the total-header phrase investment portfolio and is covered by false-positive tests so ordinary borrower rows containing investment-related terms are not suppressed.",
+  "review_id": "BDCSRC_0001899996_2025-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_cc2fec9f6a",
+  "reviewer_notes": "Source-only blocker row reviewed: source_row_id 940494 Total Investment Portfolio FV 1,650,565,667. Worklist GAV status is PASS with comparison_source investments_at_fair_value. This verdict addresses only the one-row short-plain total-header packet for Fidelity Private Credit Co LLC 2025-03-31.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_short_plain_unresolved to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

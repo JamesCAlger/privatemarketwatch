@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_fcf205a4e2ff",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": -0.008319363735061543,
+  "anchor_value": -0.008319363735061543,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "Advarra Holdings, Inc. | (4) (7) (10) | S + | 5.75 % | 10.83 % | 08/24/2029 | - | ( 14 ) | ( 60 ) | ( 0.01 )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Abracon Group Holdings, LLC | (4) (6) (10) | S + | 5.75 % | 10.89 % | 07/06/2028 | - | ( 14 ) | ( 24 ) | -"
+    },
+    {
+      "table_index": 17,
+      "row_index": 29,
+      "quoted_text": "Appfire Technologies, LLC | (4) (5) (10) | S + | 5.50 % | 10.70 % | 03/09/2027 | - | ( 7 ) | ( 23 ) | -"
+    }
+  ],
+  "rationale": "C404 flags negative pct_of_net_assets values, but the raw schedule shows these are filer-disclosed negative fair-value rows, including Advarra with fair value (60) and percentage (0.01), plus similar Abracon and Appfire rows whose small negative percentages round to dashes in the source. The negative stored percentages therefore reflect the source economics rather than a data error; the check is too broad for these negative fair-value/commitment valuation rows."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_50308d6cbe6f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The F33 flag reports distribution_rate=0.0 against expected 0 < distribution_rate < 30%, but the evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted distribution roam query. Raw source was therefore not available to adjudicate whether the zero distribution rate is a real data error or a valid source value."
+}

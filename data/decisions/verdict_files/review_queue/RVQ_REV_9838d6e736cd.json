@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_9838d6e736cd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 12.19,
+  "anchor_value": 12.19,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 19,
+      "quoted_text": "Noramco, LLC | Term Loan - 12.19 % inc PIK (SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source check confirms the stored 12.19 percent rate exactly matches the schedule. The source expressly labels the coupon as including PIK and separately states SOFR plus 8.38 percent, a 1.00 percent floor, and 0.38 percent PIK. A simple basis-spread formatting comparison does not apply cleanly to this mixed cash/PIK coupon, so the flagged value is correct and the check is overbroad."
+}

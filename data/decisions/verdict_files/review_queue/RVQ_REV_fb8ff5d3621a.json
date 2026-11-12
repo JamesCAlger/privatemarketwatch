@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_fb8ff5d3621a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "none",
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 13,
+      "quoted_text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) | Structured Credit ($ 4,400 par, due 7/2038 ) | 8/19/2025 | SOFR + 5.00 % | 9.32 | % | 4,407 | 4,407 | 0.2 | %"
+    },
+    {
+      "table_index": 43,
+      "row_index": 14,
+      "quoted_text": "Madison Park Funding Ltd, Series 2025-72A (3)(4)(9) | Structured Credit ($ 4,500 par, due 7/2038 ) | 8/18/2025 | SOFR + 5.25 % | 9.37 | % | 4,547 | 4,535 | 0.3 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two distinct Madison Park Funding Ltd Series 2025 CLO positions were collapsed into one duplicate position key despite different series suffixes, par amounts, acquisition dates, spreads, rates, costs, and fair values.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 43,
+        "row_index": 13
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The second Madison Park row is Series 2025-72A, not a duplicate of Series 2025-65A, so the key must preserve the full series identifier.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 43,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "B02 is a duplicate-position-key flag. The source rows for Madison Park Funding Ltd show two separate Series 2025 instruments: Series 2025-65A and Series 2025-72A. They also differ in par amount, acquisition date, spread, interest rate, amortized cost, fair value, and percent of net assets. The duplicate key therefore reflects an extraction/key-normalization loss of the series suffix, not a true duplicate source position."
+}

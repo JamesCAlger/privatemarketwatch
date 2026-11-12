@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_97ba627eb64a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X02 flag reports a PRIVATE_CREDIT row with missing interest_rate and basis_spread, but the bundle identifies the affected row only by internal row_key 434979 and does not provide issuer, security, cost, fair value, or source coordinates. The evidence CLI returned usable raw source: SOI tables 9-13 are readable and debt rows generally include Coupon, Floor, Cash, and PIK columns, while roam for row_key 434979 and rate-related terms did not localize the flagged extracted row in the raw filing. Without a source row match, the source checked does not decide whether the missing rate is an extraction defect, classification defect, or artifact mismatch."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_effc50406012",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480.975,
+  "anchor_value": 1480.975,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 62,
+      "row_index": 10,
+      "quoted_text": "Total investments, end of period | $ | 1,249,444 | $ | 594,186",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the current extracted fair value of 1,480.975 million equals the filing's current main schedule total of 1,249.444 million plus the subsidiary portfolio total of 231.531 million. The flag's source value 594 matches the comparative-period total of 594.186 million shown beside the current 1,249.444 million total. E07 therefore used a comparative-period monetary value as its source anchor; the current extraction is supported by the filing and the flag is a false alarm."
+}

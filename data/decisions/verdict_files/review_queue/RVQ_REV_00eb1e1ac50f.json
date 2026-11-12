@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_00eb1e1ac50f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": null,
+  "anchor_value": "AUD 5,600 and EUR 11,492 source par",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 11,
+      "quoted_text": "Sonar Acquisitionco, Inc. (dba SimPRO) | Construction & Engineering | 8.86 % | B + 4.75 % | 10/24/30 | AUD | 5,600 | 3,688 | 3,825 | (5) (6) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 30,
+      "quoted_text": "Hamilton Thorne, Inc. | Health Care Equipment & Supplies | 7.26 % | E + 5.25 % | 11/28/31 | EUR | 11,492 | 12,331 | 13,017 | (5) (6) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 1,
+      "quoted_text": "Par amount is denominated in U.S. Dollars (USD) unless otherwise noted, Australian Dollars (AUD), or Euros (EUR).",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Explicit AUD and EUR source par amounts have no populated principal_amount_usd conversion.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The filing footnote establishes USD as the default par denomination but explicitly permits AUD and EUR when marked. The current-period schedule explicitly marks Sonar Acquisitionco as AUD 5,600 and Hamilton Thorne as EUR 11,492. FX01 reports principal_amount_usd blank for the non-USD debt rows, so an explicit FX conversion is missing. The source does not provide a filing-date exchange rate, so the correct converted USD amounts are not localized; however, the missing-conversion defect itself is decisive. The queue aggregates many issue rows and may include overflagged USD-default continuations, which is residual scope risk rather than a basis to dismiss the cited real defects."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_45be01ee9f39",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 22.411557002513135,
+  "anchor_value": 8.001584472172707,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 3,
+      "quoted_text": "Net Asset Value Per Unit (accrual base), Beginning of Period | 2025 | $ | 50.49",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 11,
+      "quoted_text": "Total distributions (2) | 2025 | ( 4.04 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 25,
+      "quoted_text": "Ratio of net investment income to average net assets | 2025 | 17.72 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored distribution_rate is 22.411557%, but the source financial highlights support about 8.001584% from 4.04 distributions per unit divided by 50.49 beginning NAV per unit.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 61,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "F16 fired because the stored distribution_rate value 22.411557 exceeded the income-yield heuristic. Raw financial highlights show 2025 total distributions of 4.04 per unit and beginning NAV of 50.49 per unit, implying a distribution rate of 8.001584%, not 22.411557%. The same table gives the 2025 ratio of net investment income to average net assets as 17.72%, so the rule threshold is 26.58% and the source-supported distribution rate does not violate it. The defect is the stored distribution_rate, not the filer source."
+}

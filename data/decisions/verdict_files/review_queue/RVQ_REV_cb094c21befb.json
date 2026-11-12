@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_cb094c21befb",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -15000.0,
+  "anchor_value": -15000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 2,
+      "quoted_text": "AVSC Holding Corp. (4)(6)(9) | 12/5/2029 | 962 | ( 15 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 4,
+      "quoted_text": "Axiom Buyer, LLC (4)(6)(10) | 1/14/2030 | 1,905 | ( 41 ) | ( 22 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 6,
+      "quoted_text": "Certania Beteiligungen GmbH (4)(5)(6)(7) | 5/23/2029 | EUR 4,565 | ( 119 ) | ( 117 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 16,
+      "quoted_text": "Valence Surface Technologies LLC (4)(6)(10) | 6/13/2031 | 3,280 | ( 67 ) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw schedule of investments shows parenthesized amortized cost amounts in the Amortized Cost column for the checked rows. The extracted negative values therefore match the source presentation; the rule is an advisory monitor for source-backed negative costs rather than evidence of a data error."
+}

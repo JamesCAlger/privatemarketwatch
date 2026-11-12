@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_6c9b18c52e00",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2032-07-12; 2031-05-03",
+  "anchor_value": "2032-07-01; 2031-05-02",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 35,
+      "quoted_text": "Grid Alliance Partners, LLC | Term Loan | 8.45% | 7/1/2025 | 7/1/2032",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 6,
+      "quoted_text": "Blitz 24-34 GmbH | Term Loan | 8.91% | 5/3/2024 | 5/2/2031",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Grid Alliance identifier maturity 2032-07-12 is wrong; the source schedule maturity is 2032-07-01.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Blitz identifier maturity 2031-05-03 is wrong; the source schedule maturity is 2031-05-02.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 2 review of both flagged rows. The filing schedule independently shows Grid Alliance Term Loan maturity 7/1/2032 and Blitz Term Loan maturity 5/2/2031, exactly matching the structured XBRL values and contradicting the dates embedded in the generated identifiers. The identifier maturity parser/extraction is therefore defective for both rows."
+}

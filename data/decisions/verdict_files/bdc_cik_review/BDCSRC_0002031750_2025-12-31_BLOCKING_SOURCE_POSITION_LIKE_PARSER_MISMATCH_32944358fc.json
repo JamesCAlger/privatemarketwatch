@@ -1,0 +1,44 @@
+{
+  "review_id": "BDCSRC_0002031750_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_32944358fc",
+  "cik": "0002031750",
+  "report_date": "2025-12-31",
+  "verdict": "ESCALATE",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence shows one source-only bare identifier row for Denali Equity Holdings LLC with source fair value 2522500.0 and no pipeline output row, while separate raw/XBRL and unified evidence show the production Denali equity position as Denali Equity Holdings LLC, Other equity with fair value 354399000.0 already matched. HTML coordinate evidence supports the visible Denali SOI position row, but that row corresponds to the matched Other equity position, not the smaller bare source-only amount.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 52,
+      "row_index": 14,
+      "cell_indices": [
+        0,
+        24,
+        36,
+        48,
+        54,
+        57
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The visible current-period SOI row is Denali Equity Holdings LLC with shares, cost, and fair value 354399, matching the XBRL/unified Other equity position rather than the source-only bare identifier value 2522500.0."
+    }
+  ],
+  "changed_files": [],
+  "patch_summary": "No patch proposed. The evidence suggests a duplicate or bare dimension-path residual, but the bundle does not include enough raw fact-level context to determine whether 2522500.0 is a mis-scaled percentage, a non-position fact, or another valid source fact.",
+  "source_reconciliation_effect": "No automatic reconciliation change recommended from this bundle alone; suppressing or remapping the row could hide a real source fact without exact raw XBRL concept/value evidence.",
+  "gav_effect": "Context only; GAV passes and does not provide the primary justification.",
+  "tests_validation_plan": "If a human confirms the raw fact is a duplicate or non-position dimension path, add a targeted parser/classifier test for a bare issuer dimension coexisting with a matched instrument-suffixed equity row, plus a false-positive case where a bare issuer row is the only valid position; then run pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py and python -m pipeline.main --unified --validate.",
+  "requires_human_merge": false,
+  "missing_evidence": "Exact raw XBRL fact rows for context c-117/source_row_id 189, including concept names, units, decimals/scale, and any source extraction mapping that produced source_fair_value 2522500.0.",
+  "residual_risk": "The bare Denali source-only row may be a duplicated dimension path derived from the already matched Other equity position, but without raw fact-level evidence a suppression rule could incorrectly clear a genuine production position in another filing.",
+  "reviewer_notes": "HTML coordinate candidates include noisy matches in exhibit and other tables; table 52 row 14 is the relevant Denali SOI position row. The source-only blocker value does not appear in that visible row, while the matched Denali Other equity row aligns with the visible fair value."
+}

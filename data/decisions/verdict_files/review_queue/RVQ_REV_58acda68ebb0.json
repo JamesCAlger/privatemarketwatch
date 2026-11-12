@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_58acda68ebb0",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 946318463,
+  "anchor_value": 946318463,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 3,
+      "quoted_text": "Aerospace & Defense",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 3,
+      "quoted_text": "Consumer Services",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 35,
+      "quoted_text": "Cash Equivalents",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Investment-schedule structural rows such as industry labels and section labels are being counted as leaves even though they have no position-level fair value cell.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 4,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. Source anchors reconcile: the filing schedule total at table 6 row 38 is Total Investments fair value 946,318,463, and the fair-value hierarchy total independently reports 946,319 in thousands at table 23 row 5. Actual SOI investment rows carry Fair Value cells, but the schedule also contains non-position structural rows such as industry labels and section labels with no fair-value cell. The B01 failure reports 155/240 leaves with fair_value and 85 residual rows with zero residual fair value, which matches structural row leakage into the leaf denominator rather than a bad source total."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_e55007c24c31",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 reports a fund_financials/holdings coverage mismatch for CIK 0001919369 at 2022-12-31, but the allowed evidence CLI raw-source views returned no_accession_resolved for overview, tables, totals, and targeted roam. Without usable raw source, the contract requires a source_unavailable ambiguous verdict."
+}

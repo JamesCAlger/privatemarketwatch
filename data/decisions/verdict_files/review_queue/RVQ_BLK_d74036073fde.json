@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_BLK_d74036073fde",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "six basis_spread flags: 8.25, 8.25, 7.50, 7.50, 7.50, 7.00",
+  "anchor_value": "source shows floating reference-rate spreads for all six rows",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 39,
+      "quoted_text": "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.28 % | E + 8.25 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 40,
+      "quoted_text": "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.26 % | E + 8.25 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 43,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.23 % | S + 7.50 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 44,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 9.60 % | E + 7.50 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 45,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.17 % | S + 7.50 % PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 35,
+      "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | S + 7.00 % PIK",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 review of the six flagged basis_spread cells. The raw SOI places every flagged value in the Reference Rate and Spread column and explicitly prefixes it with a floating reference rate (E or S). PIK notation does not turn these instruments into fixed-coupon rows. Therefore the extracted basis_spread values are correct and X04 fired on an incorrect fixed-rate classification or rule premise. No aggregate anchor is applicable; the filing column and six exact source rows are the anchors."
+}

@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_f80f794e7cdf",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Automobile Components Crash Champions Investment Champions Financing Inc Type First Lien Secured Debt Interest Rate S+475, 0.00% Floor Maturity Date 2/23/2029",
+    "anchor_value":  "Champions Financing Inc",
+    "confidence":  0.95,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  25,
+                                  "quoted_text":  "Champions Financing Inc | First Lien Secured Debt | S+ 475 , 0.00 % Floor | 2/23/2029 | 19,000 | 18,811 | 19,095 | (14)(15)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  10,
+                                  "row_index":  24,
+                                  "quoted_text":  "Crash Champions",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "issuer_name should be Champions Financing Inc; the extracted value concatenated the surrounding industry/company grouping and separate instrument terms.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  10,
+                                          "row_index":  25
+                                      }
+                     }
+                 ],
+    "rationale":  "Raw source table 10 separates the group row Crash Champions from the investment row whose issuer cell is Champions Financing Inc, with investment type, rate, maturity, par, cost, and fair value in separate columns. The stored issuer_name instead includes industry/group text and instrument terms, so the C206 parse-leak flag is a real data error."
+}

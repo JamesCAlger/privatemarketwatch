@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_221475790ab5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency flagged as U_GBP/U_EUR on 6 rows",
+  "anchor_value": "Cost and Market Value columns are USD-denominated in the schedule totals",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 1,
+      "quoted_text": "Header places Principal/Shares before Cost and Market Value; the foreign currency symbol belongs to Principal/Shares, not Cost.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 12,
+      "quoted_text": "Reconomy row shows a non-USD symbol in the Principal/Shares area, followed by Cost 3,113 and Market Value 3,339.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 15,
+      "quoted_text": "Environmental Industries Total shows Cost and Market Value with USD dollar signs.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign principal/share currency symbols were propagated into cost_currency even though Cost and Market Value are USD-denominated schedule columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 59,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 single-cell currency check aggregated over six rows. The raw schedule header has Principal/Shares at the currency-symbol position and separate Cost and Market Value columns; representative non-USD rows show the foreign symbol before the principal/share amount, while cost and fair-value totals use USD. Therefore the stored non-USD cost_currency is a real extraction/mapping defect, not a valid cost denomination."
+}

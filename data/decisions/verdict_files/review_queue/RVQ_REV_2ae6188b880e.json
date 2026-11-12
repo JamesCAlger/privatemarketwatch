@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_2ae6188b880e",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1955403,
+  "anchor_value": 1955403,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Total investments at fair value (cost basis of $ 1,945,794 and $ 1,516,173 , respectively) | 1,955,403 | 1,528,317",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 32,
+      "quoted_text": "Total investments | $ | 2,061,265 | $ | 1,945,794 | $ | 74,132 | $ | 1,955,403 | 213.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "GAV_BDC02 reported no comparison denominator, but the raw filing includes a current-period investments-at-fair-value denominator. The balance sheet total investments at fair value is 1,955,403, and the investment schedule total investments row also reports fair value of 1,955,403. The source therefore supports the denominator and the warning is an anchor/check issue rather than a holdings data defect."
+}

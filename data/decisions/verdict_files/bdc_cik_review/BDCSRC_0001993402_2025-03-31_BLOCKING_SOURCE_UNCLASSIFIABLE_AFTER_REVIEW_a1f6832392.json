@@ -1,0 +1,41 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001993402",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "html_source_row_coordinate_candidates",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so exact total/header rows are documented as non-position exclusions.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 45,
+      "row_index": 28,
+      "cell_indices": [0, 6, 7, 10, 11, 12],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "Visible source row is the current-period Total Unfunded Commitments line with aggregate commitment and value columns, not a borrower or instrument holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify exact source-only total/header identifiers for non-controlled/non-affiliated total investments and total unfunded commitments as documented non-position rows, with a false-positive guard preserving real Total-name company rows as blocking.",
+  "primary_justification": "The two blocker identifiers are not production positions: one is Total Investments - non-controlled/non-affiliated and the other is an Investments non-controlled/non-affiliated Total Unfunded Commitments line. The bundle provides coordinate evidence for the commitment total, and the XBRL/source-only evidence shows both rows are totals rather than issuer-level holdings.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "The patch is limited to exact total/header shapes and should not suppress real Total-name issuers such as Total Safety Holdings LLC. Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code.",
+  "review_id": "BDCSRC_0001993402_2025-03-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_a1f6832392",
+  "reviewer_notes": "Manual review covered both source-only blocker rows: source_row_id 1132816 Total Investments - non-controlled/non-affiliated with source FV 2,586,320,000, and source_row_id 1133559 Investments-non-controlled/non-affiliated Total Unfunded Commitments with source FV -3,703,000. The patch does not add either row to unified holdings.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_unclassifiable_after_review to documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

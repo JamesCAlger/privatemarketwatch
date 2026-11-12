@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_9bff04aa59e0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 438708243,
+  "anchor_value": 909316005,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 33,
+      "quoted_text": "Total Cash Equivalents | 0.6 | % | 2,308,824 | 2,308,824",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 36,
+      "quoted_text": "Total Short-term Investments | 129.1 | % | 468,298,938 | 468,298,938",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 37,
+      "quoted_text": "Total Investments ( 250.7 %) | $ | 945,942,331 | $ | 909,316,005",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The extracted position fair value sum is 438,708,243, which matches the filing's Total Debt & Equity Investments row rather than the filing's Total Investments anchor of 909,316,005. The difference is 470,607,762, exactly equal to Total Cash Equivalents of 2,308,824 plus Total Short-term Investments of 468,298,938 in the same March 31, 2024 schedule. This localizes the undershoot to omitted investment rows rather than a bad schedule anchor."
+}

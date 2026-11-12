@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_32ce17571f76",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/holdings coverage mismatch for CIK 0001495584 at 2023-12-31, but the required evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query. Because raw source was unavailable, the coverage mismatch cannot be adjudicated from source."
+}

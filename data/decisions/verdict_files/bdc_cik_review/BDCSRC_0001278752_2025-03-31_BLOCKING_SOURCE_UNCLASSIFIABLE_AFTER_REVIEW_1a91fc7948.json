@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001278752",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "The cached deterministic review already exhausted numeric alias, total/header, cash bucket, rollup, position-like, and short-name hypotheses without a safe clearing mechanism. Needed evidence is the source filing table coordinates and row semantics proving whether each blocker is a production position, subtotal, unfunded/non-index row, or duplicate dimension path.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 1 current blocker row(s) in mechanism blocking_source_unclassifiable_after_review, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2025-03-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 14893000.000000.",
+  "review_id": "BDCSRC_0001278752_2025-03-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_1a91fc7948",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Escalate CIK-quarter source review; bounded deterministic review found no safe clearing mechanism.. Sample identifiers: Non-Controlled/Non-Affiliated Investments, Structured Products and Other",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

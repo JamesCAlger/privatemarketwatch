@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_f7de92ab55ff",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "",
+    "observed_value":  "principal_amount_usd is blank on flagged rows",
+    "anchor_value":  "source Par Amount is presented in dollar-denominated schedule columns",
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  3,
+                                  "quoted_text":  "AMF Levered II, LLC ... Par Amount | $ | 12,660 | Cost | $ | 12,486 | Fair Value | $ | 12,660",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  10,
+                                  "row_index":  4,
+                                  "quoted_text":  "Alimera Sciences, Inc. ... Par Amount 6,330 under the same dollar-denominated Par Amount/Cost/Fair Value schedule columns",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX01 fires only when non-USD debt principal lacks an explicit USD principal. The raw June 30, 2024 investment schedule (table 10) presents Par Amount, Cost, and Fair Value as dollar-denominated columns; the first flagged row has a dollar sign in the Par Amount/Cost/Fair Value cells and following rows continue under the same schedule. A targeted source search found no foreign-currency/CAD/EUR/GBP context. The missing principal_amount_usd therefore reflects a check/scope issue for USD source principal, not a data error requiring FX conversion."
+}

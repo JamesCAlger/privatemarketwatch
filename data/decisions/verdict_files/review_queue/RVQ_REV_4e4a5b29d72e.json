@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_4e4a5b29d72e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "A8",
+  "anchor_value": "A8 - A (Feeder) L.P.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 73,
+      "row_index": 31,
+      "quoted_text": "A8 - A (Feeder) L.P. (12) | Limited partnership interests | 03/2025 | 0.44 % | 1,000.3 | 718.3 | (6)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The C202 flag is correct. The source SOI row identifies the company as A8 - A (Feeder) L.P. and the investment as Limited partnership interests, while the extracted issuer_name is only A8. The short issuer is therefore a truncated extraction, not the source issuer name."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3824d1659f8c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PRIVATE_EQUITY rows carry interest_rate values 11.5, 6.0, and 10.5",
+  "anchor_value": "Raw filing shows those rates in the Interest Rate column for preferred equity instruments",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 22,
+      "quoted_text": "Cambium Holdings, LLC - Senior Preferred Interests | (4) | 11.50 % | 29,194,330 | 28,735 | 38,491 | 0.12",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 16,
+      "quoted_text": "Healthcomp Holding Company, LLC - Preferred Interest | (4) | 6.00 % | 18,035 | 1,804 | 1,804 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 34,
+      "quoted_text": "Lobos Parent, Inc. - Series A Preferred Shares | (4) | 10.50 % | 45,090 | 43,963 | 54,559 | 0.18",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row review. X01 flagged PRIVATE_EQUITY holdings solely because interest_rate is populated, but the raw schedule places the cited values in the Interest Rate column for preferred equity instruments: Senior Preferred Interests, Preferred Interest, and Series A Preferred Shares. The source supports both the equity-like instrument names and the stated rates, so the extraction is not shown to be wrong; the rule is overbroad for preferred equity with stated rates. No aggregate anchor was needed."
+}

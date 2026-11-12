@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_4eadfb017864",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -6466,
+  "anchor_value": 0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 19,
+      "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | 3M SOFR + 5.00 % | Floor 1.00 % | Interest Rate - | Initial Acquisition Date 8/22/2025 | Maturity Date 8/22/2031 | Par/Shares - | Amortized Cost - | Fair Value (20,517) | 0.0% | footnotes (7) (8) (13)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Stored cost for Milestone Technologies, Inc. Delayed Draw Term Loan is -6466, but the source row shows amortized cost as a dash and fair value as (20,517).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 19,
+        "quoted_text": "Milestone Technologies, Inc. Delayed Draw Term Loan shows Amortized Cost - and Fair Value (20,517)."
+      }
+    }
+  ],
+  "rationale": "The fmt_cost flag is not merely objecting to all parenthesized costs: several rows in the source schedule legitimately print negative amortized cost. However, the bundle's holdings sample includes Milestone Technologies, Inc. Delayed Draw Term Loan with cost -6466, while the raw source row has no amortized cost value for that instrument (dash) and only a negative fair value. That makes at least one flagged cost a source-grounded extraction error."
+}

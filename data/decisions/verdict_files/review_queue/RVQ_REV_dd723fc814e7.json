@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_dd723fc814e7",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 6,
+      "quoted_text": "SP-CREH 19 Highline LLC | Equities | 1,564,654 | ... | Fair Value at December 31, 2025 | - | ... | 70%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "TH Liquidating Trust | Trust Interest | 969,500 | ... | Fair Value at December 31, 2025 | 969,500 | ... | 14%"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "SP-CREH 19 Highline LLC equity row was retained from a comparative-period controlled-investments rollforward ending December 31, 2025, not a March 31, 2026 current-period position row.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "TH Liquidating Trust trust-interest row was retained from a comparative-period controlled-investments rollforward ending December 31, 2025, not a March 31, 2026 current-period position row.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "PP03 flagged two rows whose source period is earlier than the 2026-03-31 report date. Raw source table 33 is a controlled-investments rollforward with header 'Fair Value at December 31, 2024' through 'Fair Value at December 31, 2025'; its rows 6 and 7 are the flagged SP-CREH 19 Highline LLC equity and TH Liquidating Trust trust-interest facts. Those December 31, 2025 comparative-period facts should not be retained as current 2026-03-31 private markets holding rows."
+}

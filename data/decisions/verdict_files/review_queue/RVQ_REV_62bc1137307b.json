@@ -1,0 +1,68 @@
+{
+  "review_id": "RVQ_REV_62bc1137307b",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -3000,
+  "anchor_value": -3000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 33,
+      "quoted_text": "HLRS Holdco Limited First Lien Senior Secured Loan - Delayed Draw cost (3) market value (3)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "ERA Industries, LLC First Lien Senior Secured Loan - Delayed Draw cost (56) market value (57)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 9,
+      "quoted_text": "ERA Industries, LLC First Lien Senior Secured Loan - Revolver cost (19) market value (20)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 8,
+      "quoted_text": "LogRhythm, Inc. First Lien Senior Secured Loan - Revolver cost (14) market value (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 11,
+      "quoted_text": "SensorTower First Lien Senior Secured Loan - Revolver cost (7) market value (5)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 25,
+      "quoted_text": "City Barbeque, LLC First Lien Senior Secured Loan - Revolver cost (22) market value (22)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 31,
+      "quoted_text": "Vacation Rental Brands, LLC First Lien Senior Secured Loan - Revolver cost (47) market value (48)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 29,
+      "quoted_text": "DTIQ Technologies, Inc. First Lien Senior Secured Loan - Delayed Draw cost (31) market value (31)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 10,
+      "quoted_text": "Vessco Midco Holdings, LLC First Lien Senior Secured Loan - Revolver cost (10) market value (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw schedule of investments prints those costs in parentheses in the Cost column for each flagged loan/revolver row. The extracted negative values therefore match the filing source; the warning is not a data error."
+}

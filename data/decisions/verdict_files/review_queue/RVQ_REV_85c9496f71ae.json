@@ -1,0 +1,32 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "A07 observed pct_sum is 0.0, but the SOI schedule total reports Total Investments at 221.43% of net assets.",
+                         "citation":  {
+                                          "row_index":  30,
+                                          "table_index":  56,
+                                          "quoted_text":  "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %"
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_85c9496f71ae",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0,
+    "anchor_value":  221.43,
+    "rationale":  "Class 3 aggregate: the source schedule total row reports Total Investments, December 31, 2025 with fair value $849,354 and 221.43%, while the flagged A07 metric says pct_sum=0.0%. The filing total fair value also matches the extracted fund-quarter fair value, so the defect localizes to missing/failed percent extraction rather than a bad FV anchor.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  30,
+                                  "table_index":  56,
+                                  "quoted_text":  "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %"
+                              }
+                          ],
+    "confidence":  0.93
+}

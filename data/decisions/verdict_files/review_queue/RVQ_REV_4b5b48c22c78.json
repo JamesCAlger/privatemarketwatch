@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_REV_4b5b48c22c78",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 18320592,
+  "anchor_value": 18300000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 62,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | amortized cost 42.8 | fair value 18.3 | as of March 31, 2026",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 2,
+      "quoted_text": "BEL USA LLC | 1st Lien Term Loan | fair value 1,406,357"
+    },
+    {
+      "table_index": 11,
+      "row_index": 31,
+      "quoted_text": "BayMark Health Services Inc | 1st Lien Term Loan | fair value 4,002,095"
+    },
+    {
+      "table_index": 11,
+      "row_index": 32,
+      "quoted_text": "BayMark Health Services Inc | 1st Lien Delayed Draw Term Loan | fair value 2,495,583"
+    },
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "BayMark Health Services Inc | 2nd Lien Term Loan | fair value 216,667"
+    },
+    {
+      "table_index": 17,
+      "row_index": 5,
+      "quoted_text": "BayMark Health Services Inc | 2nd Lien Delayed Draw Term Loan | fair value 167,199"
+    },
+    {
+      "table_index": 14,
+      "row_index": 12,
+      "quoted_text": "National Dentex Corp | 1st Lien Term Loan | fair value 4,509,577"
+    },
+    {
+      "table_index": 14,
+      "row_index": 13,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | fair value 2,269,810"
+    },
+    {
+      "table_index": 14,
+      "row_index": 14,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | fair value 1,091,571"
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | fair value 360,946"
+    },
+    {
+      "table_index": 14,
+      "row_index": 16,
+      "quoted_text": "National Dentex Corp | 1st Lien Delayed Draw Term Loan | fair value 1,241,748"
+    },
+    {
+      "table_index": 14,
+      "row_index": 17,
+      "quoted_text": "National Dentex Corp | 1st Lien Revolver | fair value 559,039"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing discloses non-accrual investments of $18.3 million fair value, and the 11 cited rows sum to $18.321 million before rounding.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 62,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The raw filing has a dedicated non-accrual disclosure for March 31, 2026 showing fair value of $18.3 million. The flagged BEL USA, BayMark, and National Dentex schedule rows carry the matching non-accrual footnote pattern and their fair values sum to $18,320,592, which ties to the rounded $18.3 million non-accrual total. The flag is therefore source-grounded as a real extraction gap rather than a false alarm."
+}

@@ -1,0 +1,32 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001950803",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies exact Stepstone balance-sheet summary labels as documented aggregate/header source rows, not production positions.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Extend exact normalized total/header recognition from 'Liabilities in excess of Other Assets' to the equivalent Stepstone label 'Liabilities Less Other Assets'. Focused test coverage asserts both 'Liabilities Less Other Assets' and 'Net Assets' are documented source total/header rows while issuer-bearing false positives remain blocking.",
+  "primary_justification": "Manual review supports a bounded patch. The two blocker rows are source_row_id 1070774 ('Liabilities Less Other Assets', source fair value -93956910) and source_row_id 1070775 ('Net Assets', source fair value 1254909954). Both are short balance-sheet summary labels with no issuer, instrument, rate, maturity, shares, principal, or position-level terms. The same accession contains separate named Stepstone position rows in xbrl_rows_same_accession with issuer and instrument detail, confirming that these labels are not production position granularity.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2025-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded aggregate-total mechanism. Production outputs still need to be rebuilt and source reconciliation rerun before claiming these current blocker rows are cleared from generated artifacts.",
+  "review_id": "BDCSRC_0001950803_2025-06-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_cc3d319c6f",
+  "reviewer_notes": "Reviewed manually as row 59. The prior insufficient-evidence placeholder was not accurate: the XBRL source identifiers are exact balance-sheet summary labels and support a small tested source_reconciliation patch.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: exact Stepstone balance-sheet summary labels 'Liabilities Less Other Assets' and 'Net Assets' are documented as total/header source rows instead of remaining source-only blockers.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

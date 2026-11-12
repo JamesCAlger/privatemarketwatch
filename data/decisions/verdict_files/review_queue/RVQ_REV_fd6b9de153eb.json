@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_fd6b9de153eb",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 flags a fund_financials/holdings coverage mismatch for CIK 0001869040 on 2023-10-31, observed in the bundle as fund=True;holdings=False. The evidence CLI did not return usable raw filing source for overview, tables, totals, or a targeted holdings roam query; each returned status no_accession_resolved, so the source could not decide whether holdings are truly absent or the check/artifact is wrong."
+}

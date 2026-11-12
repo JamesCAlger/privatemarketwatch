@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_c96360763f41",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 4170156000.0,
+  "anchor_value": 4246035000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 23,
+      "quoted_text": "BlackRock Liquidity T-Fund - Institutional Shares | ... | 71,644 | ... | 71,644 | ... | 3.55",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 85,
+      "row_index": 30,
+      "quoted_text": "Total Unfunded Commitments | $ | 1,143,533 | $ | ( 4,234 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 72,
+      "row_index": 25,
+      "quoted_text": "Total Investments at fair value | $ | 4,241,699 | $ | 4,246,035 | 210.45 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Short-term investment BlackRock Liquidity T-Fund fair value 71,644 thousand is part of Total Investments at fair value but is absent from the extracted position sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 72,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Unfunded commitments fair value of negative 4,234 thousand is outside Total Investments at fair value but appears to have been included in the extracted position sum.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 85,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "The filing total and companyfacts anchor agree at 4,246,035 thousand. The schedule shows non-controlled/non-affiliated investments of 4,174,391 thousand plus short-term investments of 71,644 thousand, tying to Total Investments at fair value of 4,246,035 thousand. The observed extracted sum of 4,170,156 thousand is approximately the non-controlled investment subtotal after subtracting the separate negative unfunded commitments total of 4,234 thousand, so the conservation failure is a real extraction/classification error rather than a bad anchor."
+}

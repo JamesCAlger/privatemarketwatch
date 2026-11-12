@@ -1,0 +1,107 @@
+{
+  "review_id": "RVQ_REV_abf7477852a9",
+  "verdict": "real_error",
+  "mechanism": "footnote_nonaccrual",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 184539,
+  "anchor_value": 184539,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (2) | 184,539 | 0.74 | 110,346 | 0.70",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 61,
+      "row_index": 18,
+      "quoted_text": "Thrasio LLC (4)(10)(19)(23)(24) | SF + | 8.00 % | 6/18/2029 | 1,305 | 1,029 | 940"
+    },
+    {
+      "table_index": 61,
+      "row_index": 21,
+      "quoted_text": "Enstall Group B.V. (4)(5)(8)(19)(29) | E + | 6.50 % | 8/30/2028 | EUR | 66,292 | 69,257 | 41,330"
+    },
+    {
+      "table_index": 67,
+      "row_index": 2,
+      "quoted_text": "Baart Programs, Inc. (4)(10)(19)(25) | SF + | 5.00 % PIK | 6/11/2027 | 9,968 | 9,935 | 7,544"
+    },
+    {
+      "table_index": 67,
+      "row_index": 43,
+      "quoted_text": "Plasma Buyer LLC (4)(9)(19)(25) | SF + | 5.75 % PIK | 5/12/2029 | 86,973 | 81,936 | 63,036"
+    },
+    {
+      "table_index": 67,
+      "row_index": 44,
+      "quoted_text": "Plasma Buyer LLC (4)(9)(19)(25) | SF + | 6.25 % PIK | 5/12/2029 | 3,293 | 3,089 | 2,397"
+    },
+    {
+      "table_index": 67,
+      "row_index": 45,
+      "quoted_text": "Plasma Buyer LLC (4)(6)(9)(19)(25) | SF + | 5.75 % PIK | 5/12/2028 | 9,935 | 9,338 | 7,458"
+    },
+    {
+      "table_index": 76,
+      "row_index": 18,
+      "quoted_text": "Foundation Automotive Corp (4)(5)(10)(19)(25) | SF + | 7.75 % PIK | 12/23/2027 | 17,408 | 15,033 | 7,644"
+    },
+    {
+      "table_index": 76,
+      "row_index": 19,
+      "quoted_text": "Foundation Automotive US Corp (4)(10)(19)(25) | SF + | 7.75 % PIK | 12/24/2027 | 18,498 | 15,898 | 8,123"
+    },
+    {
+      "table_index": 76,
+      "row_index": 20,
+      "quoted_text": "Foundation Automotive US Corp (4)(10)(19)(25) | SF + | 7.75 % PIK | 12/23/2027 | 5,381 | 4,714 | 2,363"
+    },
+    {
+      "table_index": 76,
+      "row_index": 21,
+      "quoted_text": "Foundation Automotive US Corp (4)(6)(10)(19)(25) | SF + | 7.75 % | 12/23/2027 | 4,052 | 2,498 | 428"
+    },
+    {
+      "table_index": 76,
+      "row_index": 33,
+      "quoted_text": "Daphne S.P.A. (4)(5)(7)(19)(29) | E + | 6.75 % PIK | 5/23/2028 | EUR | 45,354 | 47,923 | 39,701"
+    },
+    {
+      "table_index": 76,
+      "row_index": 34,
+      "quoted_text": "Daphne S.P.A. (4)(5)(7)(19)(29) | E + | 6.75 % PIK | 5/23/2028 | EUR | 3,978 | 4,674 | 3,483"
+    },
+    {
+      "table_index": 77,
+      "row_index": 41,
+      "quoted_text": "DCA Acquisition Holdings LLC (4)(7)(19) | 13.13 % PIK | 12/28/2032 | 1,354 | 1,176 | 73"
+    },
+    {
+      "table_index": 77,
+      "row_index": 42,
+      "quoted_text": "DCA Acquisition Holdings LLC (4)(7)(19) | 13.13 % PIK | 12/28/2032 | 128 | 111 | 7"
+    },
+    {
+      "table_index": 77,
+      "row_index": 43,
+      "quoted_text": "DCA Acquisition Holdings LLC (4)(7)(19) | 13.13 % PIK | 12/28/2032 | 230 | 198 | 12"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "footnote_nonaccrual",
+      "detail": "Fifteen current-year schedule rows carry marker (19), and their fair values sum to the filing's non-accrual total of 184,539.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 24,
+        "row_index": 4,
+        "quoted_text": "Non-accrual (2) | 184,539 | 0.74 | 110,346 | 0.70"
+      }
+    }
+  ],
+  "rationale": "The raw filing contains a non-accrual aggregate row for 2025 of 184,539. The current-year SOI rows marked (19) for Thrasio, Enstall, Baart, Plasma Buyer, Foundation Automotive, Daphne, and DCA Acquisition Holdings total 184,539 in fair value (940 + 41,330 + 7,544 + 63,036 + 2,397 + 7,458 + 7,644 + 8,123 + 2,363 + 428 + 39,701 + 3,483 + 73 + 7 + 12). This supports the nonaccrual flag count of 15 rather than disproving it."
+}

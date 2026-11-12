@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_6dba4c92994b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values concatenate sector, portfolio company, investment type, index, spread, interest rate, and maturity",
+  "anchor_value": "raw SOI keeps Portfolio Company separate from Investment Type, Index, Spread, Interest Rate, and Maturity Date columns",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 5,
+      "quoted_text": "Portfolio Company=ATS; Investment Type=First Lien Senior Secured Loan; Index=SOFR; Spread=5.75%; Interest Rate=9.65%; Maturity Date=7/12/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 8,
+      "quoted_text": "Portfolio Company=Chase Industries, Inc.; Investment Type=First Lien Senior Secured Loan; Index=SOFR; Spread=5.65% (1.50% PIK); Interest Rate=10.82%; Maturity Date=11/11/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C206 is a real issuer_name parse leak: source issuer cells are clean portfolio company names while extracted issuer_name includes sector and instrument terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 56,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw schedule headers separate Portfolio Company, Investment Type, Index, Spread, Interest Rate, and Maturity Date. Representative flagged rows prove the extracted issuer_name is not the raw issuer cell: ATS appears as the portfolio company in table 56 row 5 with loan terms in adjacent columns, and Chase Industries, Inc. appears likewise in table 58 row 8. Therefore the C206 flag reflects a real extraction/normalization error, not a check false alarm."
+}

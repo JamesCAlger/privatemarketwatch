@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8f844ad96406",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 23,
+      "quoted_text": "V Global Holdings, LLC | (5) (7) (11) | First Lien Debt | S + 6.25% (incl. 3.70% PIK) | 10.05% | 01/02/2029 | par 7,799 | cost 7,739 | fair value 7,066",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 24,
+      "quoted_text": "V Global Holdings, LLC | (5) (7) (17) | First Lien Debt | S + 6.25% (incl. 3.70% PIK) | 9.53% | 01/02/2029 | par 400 | cost 395 | fair value 298",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The two rows producing the normalized V Global duplicate key are distinct source positions, not duplicate extraction. They differ in footnote identity ((11) versus (17)), stated interest rate (10.05% versus 9.53%), par, cost, and fair value. B02 therefore fires because its position key omits source-level discriminators; the extracted rows correctly preserve both investments."
+}

@@ -1,0 +1,84 @@
+{
+  "review_id": "RVQ_REV_edde129c77b8",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 82691082,
+  "anchor_value": 82691082,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Sunland Asphalt & Construction, LLC Term Loan B fair value 4,876,434"
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Propulsion Acquisition, LLC Term Loan fair value 4,278,756"
+    },
+    {
+      "table_index": 5,
+      "row_index": 10,
+      "quoted_text": "Five Star Buyer, Inc. Term Loan fair value 6,215,111"
+    },
+    {
+      "table_index": 5,
+      "row_index": 11,
+      "quoted_text": "Five Star Buyer, Inc. Delayed Draw Term Loan fair value 221,968"
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Alorica Inc. Term Loan fair value 9,987,550"
+    },
+    {
+      "table_index": 5,
+      "row_index": 17,
+      "quoted_text": "CSAT Holdings, LLC Term Loan fair value 8,339,538"
+    },
+    {
+      "table_index": 5,
+      "row_index": 20,
+      "quoted_text": "Del Real, LLC Term Loan fair value 7,343,783"
+    },
+    {
+      "table_index": 5,
+      "row_index": 21,
+      "quoted_text": "Signature Brands, LLC Term Loan fair value 9,886,481"
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Mark Andy, Inc. Term Loan fair value 6,796,894"
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Florida Marine Transporters, LLC Term Loan B fair value 10,045,204"
+    },
+    {
+      "table_index": 6,
+      "row_index": 10,
+      "quoted_text": "Hoffmaster Group, Inc. Revolver fair value 153,255"
+    },
+    {
+      "table_index": 6,
+      "row_index": 11,
+      "quoted_text": "Hoffmaster Group, Inc. Term Loan fair value 6,617,809"
+    },
+    {
+      "table_index": 6,
+      "row_index": 14,
+      "quoted_text": "Baxters North America, Inc. Term Loan fair value 7,928,299"
+    },
+    {
+      "table_index": 6,
+      "row_index": 17,
+      "quoted_text": "Total Debt Investments fair value 82,691,082"
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value completeness flag. In the raw June 30 schedule, the 13 debt/private-credit investment rows each have a fair value, and those row fair values sum to the source Total Debt Investments fair value of 82,691,082. The apparent 16-row residual comes from treating schedule structure and out-of-scope lines as leaves, including industry headers, blank/continuation rows, issuer subtotals, total rows, cash equivalents, short-term investments, and net asset lines. The source therefore supports the extracted private-credit fair-value coverage and makes the B01 denominator a classification/lookthrough false alarm."
+}

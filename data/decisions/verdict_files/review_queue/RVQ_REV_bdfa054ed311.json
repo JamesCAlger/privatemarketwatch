@@ -1,0 +1,72 @@
+{
+  "review_id": "RVQ_REV_bdfa054ed311",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 14,
+      "quoted_text": "AI Titan Parent, Inc.^(5) | One stop | SF + | 4.75 | % | N/A(6) | 08/2031 | \u2014 | ( 9 ) | \u2014 | \u2014"
+    },
+    {
+      "table_index": 17,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc.^(5) | One stop | SF + | 4.75 | % | N/A(6) | 08/2031 | \u2014 | ( 11 ) | \u2014 | \u2014"
+    },
+    {
+      "table_index": 14,
+      "row_index": 22,
+      "quoted_text": "Amberfield Acquisition Co.^(5) | One stop | SF + | 5.00 | % | N/A(6) | 05/2030 | \u2014 | ( 1 ) | \u2014 | \u2014"
+    },
+    {
+      "table_index": 11,
+      "row_index": 29,
+      "quoted_text": "Any Hour, LLC^(20) | One stop | N/A | 13.00 | % | PIK | 05/2031 | 5,005 | 4,920 | 0.2 | 4,955"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AI Titan Parent, Inc. One stop row has source spread SF + 4.75% but the extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AI Titan Parent, Inc. second One stop row has source spread SF + 4.75% but the extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Amberfield Acquisition Co. One stop row has source spread SF + 5.00% but the extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Any Hour, LLC One stop row has source interest rate 13.00% PIK but the extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "The X02 flag covers four PRIVATE_CREDIT rows stored with no interest_rate or basis_spread. The raw SOI rows decide the issue: AI Titan rows 14-15 and Amberfield row 22 disclose spread terms in the Spread Above Index column, while Any Hour row 29 discloses a 13.00% PIK interest rate. Because the source contains rate or spread terms that were not captured into either rate field, the warning is a real extraction_gap."
+}

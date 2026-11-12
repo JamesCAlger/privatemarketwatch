@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2749d2a44fab",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 10.75,
+  "anchor_value": 10.75,
+  "confidence": 0.76,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 6,
+      "quoted_text": "PAM Bidco Limited (United Kingdom) | (d)(e) | (7)(15) | Utilities: Water | FIXED | 10.75 % | 10.75 % | 10/29/2024 | 10/29/2031 | GBP | 78 | 103 | 104 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level check. The raw SOI row shows Reference Rate is FIXED, with Spread 10.75% and Interest Rate 10.75%. For a fixed-rate instrument this equality is the filed coupon structure, not evidence that a floating-rate basis spread was stored as the all-in rate."
+}

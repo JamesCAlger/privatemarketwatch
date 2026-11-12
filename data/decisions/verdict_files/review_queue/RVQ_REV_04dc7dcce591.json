@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_04dc7dcce591",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 9,
+  "anchor_value": 0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 30,
+      "quoted_text": "Race Winning Brands, Inc. | Term Loan | SOFR | + | 1.00 % ( 5.50 % PIK) | (Q) | 10.27 % | 6/2/2022 | 5/16/2029 | 11,085 | 10,866 | 9,207 | (1)(6)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 17,
+      "quoted_text": "Techmer BB Bidco, LLC | Delayed Draw Term Loan | SOFR | + | 0.25 % ( 5.50 % PIK) | (S) | 9.45 % | 9/1/2022 | 9/1/2030 | 2 | 2 | 1 | (6)(9)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 1,
+      "quoted_text": "VG Target Holdings, LLC | Term Loan | SOFR | + | 5.50 % ( 3.00 % PIK) | (Q) | 12.33 % | 6/2/2022 | 8/2/2027 | 6,753 | 6,083 | 2,026 | (6)(9)(13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 6,
+      "quoted_text": "A&R Logistics Holdings, Inc. | Term Loan | SOFR | + | 2.50 % ( 4.25 % PIK) | (Q) | 10.89 % | 6/2/2022 | 2/3/2028 | $ 5,044 | $ 5,041 | $ 4,489 | (6)(9)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The nonaccrual flag is supported only by PIK/footnote-bearing SOI rows; targeted source searches found no non-accrual, accruing, or non-income-producing designation.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 48,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "Class 2 row-disposition review. The flagged rows are ordinary SOI investment rows with PIK terms and footnotes, not rows explicitly marked non-accrual. Representative current-period source rows show Race Winning Brands, Techmer BB Bidco, VG Target Holdings, and A&R Logistics with stated interest rates, fair values, and PIK spread text. Evidence CLI searches for 'non-accrual non accrual footnote', 'accruing', and 'non income producing' returned zero hits across the source rows. The check therefore appears to have treated PIK/footnote annotations as nonaccrual evidence; the raw source available through the CLI does not support nine nonaccrual positions."
+}
+

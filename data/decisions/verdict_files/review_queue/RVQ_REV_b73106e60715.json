@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_b73106e60715",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_interest_rate_cells",
+  "observed_value": "interest_rate missing on 8 extracted rows",
+  "anchor_value": "11.50%, 13.00%, 15.00%, 15.00%, 14.00%, 13.25%, 13.25%, and 15.00% PIK",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 22, "row_index": 33, "quoted_text": "Oliver Packaging, LLC | Subordinated Debt | N/A | 11.50 % (PIK)", "ties_to_residual": false},
+    {"table_index": 23, "row_index": 2, "quoted_text": "Oliver Packaging, LLC | Subordinated Debt | N/A | 13.00 % (PIK)", "ties_to_residual": false},
+    {"table_index": 23, "row_index": 23, "quoted_text": "Allredi, LLC (Abrasive Products and Equipment) | Subordinated Debt | N/A | 15.00 % (PIK)", "ties_to_residual": false},
+    {"table_index": 23, "row_index": 24, "quoted_text": "Allredi, LLC (Abrasive Products and Equipment) | Subordinated Debt | N/A | 15.00 % (PIK)", "ties_to_residual": false},
+    {"table_index": 31, "row_index": 2, "quoted_text": "Esquire Deposition Solutions, LLC | Subordinated Debt | N/A | 14.00 % (PIK)", "ties_to_residual": false},
+    {"table_index": 34, "row_index": 7, "quoted_text": "Legacy Service Partners, LLC | Subordinated Debt (Delayed Draw) | N/A | 13.25 % (PIK)", "ties_to_residual": false},
+    {"table_index": 34, "row_index": 8, "quoted_text": "Legacy Service Partners, LLC | Subordinated Debt | N/A | 13.25 % (PIK)", "ties_to_residual": false},
+    {"table_index": 35, "row_index": 3, "quoted_text": "Armstrong Midco, LLC (Armstrong Transport Group) | Subordinated Debt | N/A | 15.00 % (PIK)", "ties_to_residual": false}
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Eight all-PIK debt rows have blank extracted interest_rate even though the source states the coupon entirely as PIK.",
+      "fix_class": "all_pik_normalization",
+      "citation": {"table_index": 22, "row_index": 33}
+    }
+  ],
+  "rationale": "Class 2 review of the full source rows identifies exactly eight current-period debt positions whose Interest Rate cells contain PIK-only coupons. The extracted rows have neither interest_rate nor basis_spread, so the all-in coupon was dropped rather than absent or inapplicable. The correct interest_rate for each all-PIK position is its stated PIK coupon."
+}

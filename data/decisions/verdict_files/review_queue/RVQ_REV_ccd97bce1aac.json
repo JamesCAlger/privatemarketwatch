@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_ccd97bce1aac",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -65000,
+  "anchor_value": -65000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "MRI Software, LLC | (4) (6) (10) | SOFR + 5.50 % | N/A | 2/10/2027 | - | ( 65 ) | ( 99 ) | ( 0.1 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The single fmt_cost violation is the negative amortized cost for MRI Software, LLC. The raw March 31, 2024 schedule itself reports amortized cost as (65) in thousands and fair value as (99), matching the extracted -65000 cost rather than showing a data extraction error. The flag is therefore a rule-scope false alarm for a source-supported negative cost value."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_fd2d66684e16",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 209.73,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 29,
+      "quoted_text": "Total Investments | $ | 29,647.5 | $ | 29,499.3 | (17) | 209.73 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 reports an extracted percentage sum of 0.0%, but the raw Schedule of Investments total row explicitly reports Total Investments of $29,499.3 million at 209.73% of net assets. The filing balance-sheet investment total of $29,499 million corroborates the schedule fair-value anchor, while the extracted fair-value total is nearby at $29,530.8 million. Thus the filing contains the percentage and the zero is a percentage-field extraction gap, not a bad source anchor."
+}

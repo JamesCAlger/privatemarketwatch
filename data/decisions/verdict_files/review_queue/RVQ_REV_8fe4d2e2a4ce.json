@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_8fe4d2e2a4ce",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 23,
+      "quoted_text": "PrimeFlight Acquisition, LLC | First Lien Secured Debt - Term Loan | S + 550, 1.00% Floor | 05/01/29 | 7,799 | 7,649 | 7,799",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "First Lien Secured Debt - Term Loan | S + 525, 0.00% Floor | 05/01/29 | 2,481 | 2,460 | 2,475",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 25,
+      "quoted_text": "First Lien Secured Debt - Term Loan | S + 475, 1.00% Floor | 05/01/29 | 995 | 986 | 980",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "The B02 duplicate key omits distinguishing coupon terms and therefore groups three distinct PrimeFlight term-loan tranches as duplicates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "The filing schedule separately presents three PrimeFlight term loans with the same maturity but different spreads/floors (S+550/1.00%, S+525/0.00%, and S+475/1.00%) and different par, cost, and fair-value amounts. These are distinct source instruments, so B02's reported duplicate key is over-broad rather than evidence of duplicated holdings. The schedule rows are the operative anchor; aggregate investment totals do not adjudicate key uniqueness."
+}

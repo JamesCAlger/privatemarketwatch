@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_533232da26f0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "principal_amount_usd is blank on FX01 issue rows",
+  "anchor_value": "source par is euro-denominated for cited Monitorus debt rows and requires explicit USD principal conversion",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 209,
+      "row_index": 6,
+      "quoted_text": "Monitorus Holding, LLC Revolver row shows euro par: Revolver | First Lien | 14.0 % | 10.00 % | 4.00 % | 5/24/2022 | 5/24/2027 | EUR | 1,263,890 | 1,374,053 | 1,360,312 | 1.26 %"
+    },
+    {
+      "table_index": 209,
+      "row_index": 7,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan row shows euro par: Delayed Draw Term Loan | First Lien | 14.00 % | 10.00 % | 4.00 % | 5/24/2022 | 5/24/2027 | EUR | 3,621,158 | 3,654,874 | 3,618,325 | 3.35 %"
+    },
+    {
+      "table_index": 213,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted Euro; the cited Monitorus rows are expressly noted as EUR."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2023 Monitorus Revolver has EUR par 1,263,890, so blank principal_amount_usd omits the required FX-normalized principal.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 209, "row_index": 6}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2023 Monitorus Delayed Draw Term Loan has EUR par 3,621,158, so blank principal_amount_usd omits the required FX-normalized principal.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 209, "row_index": 7}
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "The 70-row FX01 surface appears over-inclusive because the source convention makes unmarked par USD and many sampled issue rows, such as 2X LLC Term Loan, are dollar-denominated.",
+      "fix_class": "rule_scope",
+      "citation": {"table_index": 206, "row_index": 6}
+    }
+  ],
+  "rationale": "Raw source footnote states par is USD unless specifically noted Euro, and the Monitorus Revolver and Delayed Draw Term Loan rows are specifically marked EUR in the principal amount column. FX01 issue rows report blank principal_amount_usd, so these euro debt rows require an explicit USD conversion that was not captured. The broader count likely includes false-positive USD rows, but the cited euro rows ground a real extraction gap."
+}

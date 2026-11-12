@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_eb8a5d8c6a43",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_position_rows",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 23,
+      "quoted_text": "TCW Direct Lending Strategic Ventures LLC - Common membership Interests; 800 shares; 0.0% of net assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 24,
+      "quoted_text": "TCW Direct Lending Strategic Ventures LLC - Preferred membership Interests; 56,120 shares; amortized cost 56,120,000; fair value 33,303,300; 15.3% of net assets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw schedule table 5 confirms both flagged identifiers are individual investment rows, not subtotals: row 23 names Common membership Interests and supplies 800 shares, and row 24 names Preferred membership Interests and supplies shares, amortized cost, fair value, and net-assets percentage. The category header is separately printed at row 22, and the actual category subtotal is the blank-issuer aggregate at row 25. The check therefore mis-scoped the category phrase embedded in the constructed identifier and falsely treated valid positions as subtotal candidates."
+}

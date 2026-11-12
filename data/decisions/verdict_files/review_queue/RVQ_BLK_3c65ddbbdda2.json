@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_3c65ddbbdda2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2039-10-24",
+  "anchor_value": "2029-10-24",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 53,
+      "quoted_text": "Apex Service Partners, LLC Revolving Credit Loan (4)(6) | SOFR + 5.000 | % | 8.700 | % | 10/24/2029 | 253 | 116 | 116 | 0.07 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw investment schedule identifies the Apex Service Partners, LLC Revolving Credit Loan and gives its maturity as 10/24/2029. The structured maturity 2029-10-24 therefore matches the source, while the identifier maturity 2039-10-24 is wrong by one decade. This is a localized identifier construction or extraction defect."
+}

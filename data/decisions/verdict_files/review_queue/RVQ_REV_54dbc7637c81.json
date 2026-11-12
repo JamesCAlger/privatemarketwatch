@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_54dbc7637c81",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  "fund=True;holdings=False",
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Evidence CLI returned status no_accession_resolved for overview, tables, totals, and targeted roam, so raw filing source and anchors were not usable. Under the contract this must be treated as source_unavailable ambiguous rather than guessing whether the holdings absence is real."
+}

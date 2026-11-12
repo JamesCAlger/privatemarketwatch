@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_BLK_ec1bdd0358ea",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2157751,
+  "anchor_value": 2157751,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Total assets | $ | 4,611,867"
+    },
+    {
+      "table_index": 8,
+      "row_index": 32,
+      "quoted_text": "Total liabilities | 2,454,116"
+    },
+    {
+      "table_index": 8,
+      "row_index": 38,
+      "quoted_text": "Total net assets | 2,157,751"
+    }
+  ],
+  "rationale": "The raw March 31, 2026 balance sheet is internally exact: total assets of 4,611,867 less total liabilities of 2,454,116 equals reported total net assets of 2,157,751, all in thousands. The source therefore satisfies the NAV identity; the 100 percent violation flag reflects a bad internal anchor or rule input rather than a filing data error."
+}

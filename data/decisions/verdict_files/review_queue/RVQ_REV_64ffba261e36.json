@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_64ffba261e36",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": [16.5, 16.0],
+  "anchor_value": [16.5, 16.0],
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Volante Technologies, Inc. | First-lien loan ($ 2,712 par, due 9/2028 ) | 9/29/2023 | 16.50 % | 16.50 % PIK | 2,686 | 2,678 | 0.2 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 31,
+      "quoted_text": "Second-lien loan ($ 2,066 par, due 6/2027 ) | 3/13/2024 | 16.00 % | 16.00 % PIK | 2,005 | 1,999 | 0.1 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check on basis_spread. The two C115 flagged values, 16.5 and 16.0, match the raw filing's Reference Rate and Spread cells for the cited positions. The source also labels the interest rates as PIK, but it does not show a smaller spread that should replace the stored values. The flag is therefore a range-rule false alarm rather than a data extraction error."
+}

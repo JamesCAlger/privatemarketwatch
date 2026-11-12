@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_00363e99d0d4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 39,
+      "quoted_text": "Pretium PKG Holdings, Inc. | (9)(17) | SOFR + | 4.00 % | 9.53 % | 10/2/2028 | 23,471 | 23,163 | 14,561 | 0.06"
+    },
+    {
+      "table_index": 33,
+      "row_index": 6,
+      "quoted_text": "Pigments Services, Inc. | (4)(6)(11)(16)(17) | SOFR + | 8.35 % | 13.68 % | 4/14/2030 | $ | 18,572 | $ | 17,213 | $ | 11,329 | 0.04 | %"
+    },
+    {
+      "table_index": 33,
+      "row_index": 10,
+      "quoted_text": "CFCo LLC (Benefytt Technologies, Inc.) | (4)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/13/2038 | 86,098 | 12,715 | 12,131 | 0.05"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Pretium PKG Holdings, Inc. is a current-period schedule investment carrying footnote (17), the non-accrual marker used by the source artifact.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 39
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Pigments Services, Inc. is a current-period schedule investment carrying footnote (17), the non-accrual marker used by the source artifact.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 33,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CFCo LLC (Benefytt Technologies, Inc.) is a current-period schedule investment carrying footnote (17), the non-accrual marker used by the source artifact.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 33,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The raw current-period schedule localizes the flag to three investments with footnote (17): Pretium PKG Holdings, Pigments Services, and CFCo/Benefytt. The bundle's source artifact identifies those same three positions as footnote-derived non-accrual positions, and a roam for '(17)' shows only these three current-period rows plus a comparative-period Dominion row. The flag is therefore a real, localized extraction/classification gap rather than a false alarm."
+}

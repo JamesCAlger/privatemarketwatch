@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_c0b5660aece8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "non-USD debt principal/par amounts present in source: GBP 646, EUR 24911, and EUR 4529",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 10,
+      "quoted_text": "Packaging Coordinators Midco, Inc. row: First Lien (4)(7)(8)(17) | SONIA(D) | + | 4.50 % | 8.22 % | 10/2025 | 10/2032 | GBP | 646 | 866 | 866"
+    },
+    {
+      "table_index": 38,
+      "row_index": 8,
+      "quoted_text": "Datheos Bidco row: Business Services | First Lien(4)(7)(17) | Euribor(Q) | + | 5.00 % | 7.09 % | 12/2025 | 10/2032 | EUR | 24,911 | $ | 29,077 | $ | 29,076 | 2.41 | %"
+    },
+    {
+      "table_index": 48,
+      "row_index": 17,
+      "quoted_text": "Datheos Bidco row: Business Services | First Lien(9)(17) - Undrawn | 12/2025 | 10/2029 | EUR | 4,529 | $ | -- | $ | --"
+    }
+  ],
+  "rationale": "Class 1 FX01 checks the flagged principal_amount_usd cells. The bundle shows three private_markets_holdings FX01 rows with blank principal_amount_usd. Raw SOI evidence shows the corresponding debt principal/par amounts are explicitly non-USD: GBP 646 for Packaging Coordinators Midco, EUR 24,911 for Datheos funded debt, and EUR 4,529 for Datheos unfunded debt. Because the source contains non-USD par and the extracted USD principal field is blank, the flag is a real extraction/normalization gap rather than a false alarm."
+}

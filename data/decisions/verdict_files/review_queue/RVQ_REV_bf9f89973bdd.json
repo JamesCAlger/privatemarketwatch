@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_bf9f89973bdd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": "",
+  "anchor_value": "S + 6.50% (Incl. 5.50% PIK)",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 3,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | [blank interest rate] | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | 7,563 | 6,428 | 3,914",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Streamland has disclosed rate terms of S + 6.50% including 5.50% PIK, but both interest_rate and basis_spread were left missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 2 grouped-row review. Raw schedule table 12 row 3 explicitly discloses Streamland's reference spread and PIK terms while the extracted row has neither interest_rate nor basis_spread, establishing an extraction gap. The other two flagged rows are not additional extraction defects: table 12 row 9 (Sweep Midco) and row 12 (mPulse Mobile) have both rate columns blank in the filing and carry footnote (16). Thus the grouped X02 flag is real because one of its three issue rows is source-discordant, but remediation should not impute rates into the two source-faithful blank rows. No aggregate anchor applies."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_119356d8b4e3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 218.2,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 19,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 1,783,987 | $ | 1,780,072 | 218.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 26,
+      "quoted_text": "Total net assets | $ | 815,679 | $ | 677,000",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed an extracted percentage sum of 0.0%, but the March 31, 2026 investment schedule reports total investments of 1,780,072 and 218.2% of net assets. The balance sheet reports net assets of 815,679, independently corroborating the percentage because 1,780,072 / 815,679 is approximately 218.2%. The source therefore decisively shows that the extracted percentage field is missing rather than genuinely zero."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_59de4ada01a3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X02 flag concerns a private-credit row with missing interest_rate or basis_spread, but the mandated evidence CLI could not return usable raw source for this bundle: overview, tables, and totals reported no_accession_resolved for CIK 0002008748 and report_date 2025-12-31. Without source coordinates or source text, the contract requires a fail-closed ambiguous verdict with source_unavailable."
+}

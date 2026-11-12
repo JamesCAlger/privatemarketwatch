@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_81a6fa21b165",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "2020-09-15 acquisition date treated as past maturity candidate",
+  "anchor_value": "2026-12-29 maturity date in source schedule",
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "SSI Parent, LLC (fka School Specialty, Inc.) | Acquisition Date 09/15/20 | Term Loan - 11.78% (SOFR + 8.00%, 1.25% Floor) | Maturity Date 12/29/26",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 36,
+      "quoted_text": "U.S. Treasury Bill, Yield 3.60%, Maturity Date 07/28/26",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The maturity_not_past warning is not supported by the raw current SOI. In the debt schedule, the old 09/15/20 date appears under Acquisition Date, while the same row's Maturity Date is 12/29/26, after the 2026-03-31 report date. The current short-term investment row likewise discloses Maturity Date 07/28/26. I found no source row in the current investment schedules with a maturity before the report date, so the warning is best explained by date-field confusion rather than a real past-maturity holding."
+}

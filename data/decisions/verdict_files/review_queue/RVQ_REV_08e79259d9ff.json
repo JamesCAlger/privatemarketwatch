@@ -1,0 +1,79 @@
+{
+  "review_id": "RVQ_REV_08e79259d9ff",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 75920018,
+  "anchor_value": 147476202,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 25,
+      "quoted_text": "Total Investments (216.4%) | $ | 146,973,822 | $ | 147,476,202",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "Total Assets | $ | 148,164 | $ | 47,600",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 10,
+      "quoted_text": "Hoffmaster Group, Inc. | Revolver - 12.67% | Fair Value 153,255",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 11,
+      "quoted_text": "Hoffmaster Group, Inc. | Term Loan - 12.78% | Fair Value 6,617,809",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 20,
+      "quoted_text": "First American Government Obligation Fund, Yield 5.10% | Fair Value 5,858,270",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 23,
+      "quoted_text": "U.S. Treasury Bill, Yield 5.05% | Fair Value 58,926,850",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted BDC schedule fair value implied by the flag is 75,920,018, but the filing's June 30, 2023 schedule total investments are 147,476,202.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 6,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt rows for Hoffmaster Group with fair values 153,255 and 6,617,809 are present in the source schedule and are missing from the extracted total implied by the flag.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 6,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Cash equivalent and short-term investment rows totaling 64,785,120 are part of the schedule total used for the GAV reconciliation but are not included in the extracted observed value.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 6,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate triangulation: the filing's own total investments are 147,476,202, and total assets are 148,164 thousand, so the schedule and asset anchors agree within normal balance-sheet scale. The flagged observed ratio 0.5124 against total assets implies extracted fair value of about 75,920,018, far below the source schedule total. Source rows localize the gap to omitted schedule positions, including Hoffmaster debt rows and cash-equivalent/short-term investment rows."
+}

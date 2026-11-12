@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_0933a96a1b18",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 24,
+  "anchor_value": 15,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Tabhi Holdings, LLC (Mondee) Class B Common Units",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 8,
+      "quoted_text": "TCW ND Parent Holdings LLC Class A Units",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "Outform Holdings LLC Class A Common Units",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 11,
+      "quoted_text": "Shelterlogic Group Holdings, Inc Common Stock",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Nine equity positions from affiliated-investment rollforwards were added to the 15 unique positions in the primary equity schedule, producing 24 rows and artificial missing-share records.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 8,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The primary March 31, 2026 equity schedule spans tables 6 and 7 and contains 15 unique equity position rows; every one has a numeric Par Amount/Shares or Shares value (for example table 6 row 23 and table 7 row 4). Tables 8 and 9 are affiliated-investment fair-value rollforwards with no Shares column, yet they repeat exactly nine of those equity investments. The extracted population of 24 therefore equals 15 primary positions plus nine secondary-disclosure duplicates, and 15/24 produces the flagged 0.625. The defect is duplicate ingestion across disclosure dimensions, not absent source shares.",
+  "source_evidence_notes": "Primary schedule examples: table 6 row 23 TCW ND Parent Holdings Class A Units has 4,399 shares; table 7 row 4 WDE TorcSill Class A Units has 2,016,746 shares. Duplicate rollforward examples are cited above."
+}

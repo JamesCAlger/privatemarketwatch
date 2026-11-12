@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_BLK_a70333313c6c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR",
+  "anchor_value": "Raw source rows show abbreviated reference/spread values such as S + 10.00 % PIK, but no SOFR definition was found in targeted source searches.",
+  "confidence": 0.66,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 22,
+      "quoted_text": "Thrasio, LLC | Broadline Retail | 13.84 % | S + 10.00 % PIK | 06/18/29 | 5,687 | 5,620 | 5,630 | (7) (8) (11)"
+    },
+    {
+      "table_index": 41,
+      "row_index": 39,
+      "quoted_text": "ATX Networks Corp. | Communications Equipment | 9.67 % | S + 6.00 % PIK | 09/01/28 | 658 | 635 | 635 | (7) (8) (9)"
+    }
+  ],
+  "rationale": "This is a within-row reference-rate corroboration issue. The flagged extraction has agentA_value_pct=SOFR, and raw schedule rows place abbreviated values such as S + 10.00 % PIK and S + 6.00 % PIK in the Reference Rate and Spread column. Targeted evidence searches for SOFR, S SOFR, and Secured Overnight returned no hits, so the source checked here does not decide whether S is a defined SOFR abbreviation. Under the skeptic default, that is ambiguous rather than a real_error or false_alarm."
+}

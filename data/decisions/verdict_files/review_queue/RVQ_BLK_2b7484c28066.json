@@ -1,0 +1,58 @@
+{
+    "review_id":  "RVQ_BLK_2b7484c28066",
+    "verdict":  "real_error",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "schedule_total",
+    "observed_value":  148842798,
+    "anchor_value":  88037380,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  154,
+                                  "row_index":  8,
+                                  "quoted_text":  "Total Investments | $ | 86,632,872 | $ | 88,037,380 | $ | 82,823,308 | $ | 83,216,755",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  227,
+                                  "row_index":  4,
+                                  "quoted_text":  "Total investments at fair value | $ | 88,037,380 | $ | 83,216,755",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  188,
+                                  "row_index":  8,
+                                  "quoted_text":  "Total Investments | $ | 92,849,880 | $ | 94,254,388 | 97.9 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  188,
+                                  "row_index":  3,
+                                  "quoted_text":  "Total Money Market Funds | $ | 6,217,008 | $ | 6,217,008 | 6.5 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "classification_lookthrough",
+                         "detail":  "The raw schedule total of 94,254,388 includes 6,217,008 of money market funds, while the filing investment-fair-value anchor is 88,037,380 excluding that cash-equivalent row.",
+                         "fix_class":  "classification_fix",
+                         "citation":  {
+                                          "table_index":  188,
+                                          "row_index":  3
+                                      }
+                     },
+                     {
+                         "mechanism":  "unknown",
+                         "detail":  "The extracted/indexable holdings fair value of 148,842,798 exceeds the filing 2025 total investments at fair value of 88,037,380 by 60,805,418.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  154,
+                                          "row_index":  8
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate adjudication. The bundle observed/indexable position sum is 148,842,798, but the raw filing anchors 2025 total investments at fair value at 88,037,380 in table 154 row 8 and table 227 row 4. The SOI grand total in table 188 row 8 is 94,254,388 only because it includes the money market funds row of 6,217,008 shown in table 188 row 3; that row is outside the 88,037,380 investment-fair-value anchor. The observed value therefore materially over-covers the filing anchor. The exact residual does not localize to a single source row from the available row-disposition evidence, so localization is false, but the anchor disagreement proves a real aggregate data error."
+}

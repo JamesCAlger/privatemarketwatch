@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_5d265495c955",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "CAD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 1,
+      "quoted_text": "Unless otherwise indicated, issuers of debt and equity investments held by the Company ... are denominated in dollars.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 3,
+      "quoted_text": "Par amount is presented for debt investments ... Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Euro, Great British Pound (\"GBP\"), or Canadian dollar (\"CAD\").",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 2,
+      "quoted_text": "Total Portfolio Investments | $ | 1,932,697 | $ | 1,915,753 | 216.34 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged row stores fair_value_currency as CAD, but the raw schedule denotes portfolio fair values in dollars; CAD is only identified as a possible par-amount currency.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 28,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The source says debt and equity investments are denominated in dollars unless otherwise indicated, and the foreign-currency qualification explicitly applies to par amount, not fair value. Portfolio fair value totals are displayed with dollar signs, so a stored fair_value_currency of CAD reflects a currency attribution/extraction gap rather than a valid fair-value currency."
+}

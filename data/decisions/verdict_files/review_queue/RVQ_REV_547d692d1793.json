@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_547d692d1793",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -0.1,
+  "anchor_value": -0.0861,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "MRI Software, LLC | (4) (6) (10) | SOFR + 5.50 % | N/A | 2/10/2027 | - | ( 65 ) | ( 99 ) | ( 0.1 )"
+    },
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Total net assets | 114,978 | 74,677"
+    }
+  ],
+  "rationale": "The apparent format violation localizes to MRI Software, LLC. The filing reports fair value of (99) thousand and % of net assets of (0.1), while total net assets are 114,978 thousand; -99 / 114,978 * 100 = -0.0861%, which rounds to the reported (0.1)%. The negative percentage is therefore source-supported rather than a data error."
+}

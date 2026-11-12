@@ -1,0 +1,47 @@
+{
+  "changed_files": [],
+  "cik": "0001950803",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The three reviewed source-only rows are total/header-style source facts, not position-level holdings to add to unified holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 12,
+      "row_index": 16,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The selected source-table coordinate lands on the Asset Management & Custody Banks category segment, not a borrower or security row; the terminal total wording is documented in the bundled source identifier path."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 24,
+      "row_index": 13,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The selected source-table coordinate lands on the Asset Management & Custody Banks category segment, not a borrower or security row; the terminal total wording is documented in the bundled source identifier path."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review found that the three Stepstone 2024-03-31 blocker rows are not individual investments. The bundled source-only evidence identifies them as hierarchy paths ending in total lines: Total Investments Two, Total Investments and Cash and Cash Equivalents and Restricted Cash and Restricted Cash Equivalents, and Total Non-Controlled, Non-Affiliated Debt Investments. Their fair values duplicate or summarize category totals rather than identify a borrower/security; adding them as production positions would violate the position-level holdings contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-03-31",
+  "requires_human_merge": false,
+  "residual_risk": "The HTML coordinate candidates land on the category segment rather than the terminal total text, so this verdict relies on the bundled XBRL/source identifier path and source-only blocker evidence for the total wording. If Stepstone later reports similarly worded rows that include a borrower/security leaf after the total phrase, they should remain blocking until separately reviewed.",
+  "review_id": "BDCSRC_0001950803_2024-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_92ddb4d5ea",
+  "reviewer_notes": "No production patch is proposed for this packet. The rows are source total/header facts that were over-flagged as position-like because the category path contains terms such as Equity, Limited Partnership Interests, and Asset Management & Custody Banks. The decisive evidence is the terminal total wording in the source identifier path, not a borrower-level row coordinate.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "No production rows should be added. These rows should be treated as documented non-position total/header rows for review accounting.",
+  "tests_validation_plan": "Validate verdict schema and bundled evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "NO_PATCH_NEEDED"
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_c0e07ca3d695",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 431.0,
+  "anchor_value": 864.648,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 77,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 866,622 | $ | 864,648 | $ | 816,166 | $ | 818,661",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation confirms an aggregate under-extraction. The March 31, 2026 debt schedule lists UBS fair value of $314.633 million and Wells fair value of $550.015 million, and its total row reports $864.648 million. The flagged output is approximately $431 million, a $433.648 million shortfall and about half the filing total. The raw schedule therefore decides that the output is wrong, although the evidence does not identify a single output-side culprit row or the exact transformation that produced $431 million."
+}

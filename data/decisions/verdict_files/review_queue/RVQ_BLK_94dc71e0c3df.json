@@ -1,0 +1,51 @@
+{
+  "review_id": "RVQ_BLK_94dc71e0c3df",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.03,
+  "anchor_value": 0.03626642503617072,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 2,
+      "quoted_text": "Rock Star Mergersub, LLC | (4) (5) (6) | S + | 4.75 % | 8.61 % | 12/15/2031 | 2,102 | 572 | 576 | 0.03",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 57,
+      "row_index": 23,
+      "quoted_text": "Truck-Lite Co., LLC | (4) (5) (6) | S + | 4.75 % | 8.45 % | 2/13/2032 | 1,540 | 885 | 890 | 0.05",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 51,
+      "row_index": 40,
+      "quoted_text": "Total net assets | $ | 1,588,246 | $ | 1,200,629"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Rock Star Mergersub fair value 576 over total net assets 1,588,246 implies 0.0363% before rounding, not the printed 0.03%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 59,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Truck-Lite fair value 890 over total net assets 1,588,246 implies 0.0560% before rounding, not the printed 0.05%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 57,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "Class 2/structured identity check. The filing's own total net assets anchor is 1,588,246 (thousands). The cited investment schedule rows print fair value and % of net assets values that do not satisfy fair_value / total_net_assets * 100 within normal two-decimal rounding: Rock Star 576 / 1,588,246 * 100 = 0.0363%, which should round to 0.04%, while the source prints 0.03%; Truck-Lite 890 / 1,588,246 * 100 = 0.0560%, which should round to 0.06%, while the source prints 0.05%. The flag is therefore grounded in raw source as a real identity/value defect rather than a missing-source ambiguity."
+}

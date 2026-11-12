@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_09afa6fed75f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2845.623249,
+  "anchor_value": 2845.622,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 10,
+      "quoted_text": "MC CIF Wealth Management (UK) Ltd. | (7)(10) | Series Z2 Preferred Shares | 12.00 % ( 6.00 % PIK) | N/A | 8/12/2025 | 10,000 | 10,235 | 10,510",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Series Z2 has a 12.00% all-in rate with a 6.00% PIK component, but pik_rate was published as 12.00 instead of 6.00.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The schedule total of USD 2,845.622m substantially reconciles to the extracted USD 2,845.623249m and does not identify a valuation issue. Raw source at table 18 row 10 nevertheless decides the flagged text-pathway question: the Series Z2 row states an all-in 12.00% rate with 6.00% PIK, while the reviewed artifact publishes pik_rate as 12.00. The PIK component is therefore mis-extracted and should be 6.00. Other targeted text-derived rate rows checked against the schedule were supported by their source cells."
+}

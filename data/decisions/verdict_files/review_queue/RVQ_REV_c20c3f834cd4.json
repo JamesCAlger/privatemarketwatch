@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_c20c3f834cd4",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 212,
+      "row_index": 1,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments December 31, 2024 (in thousands)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 212,
+      "row_index": 11,
+      "quoted_text": "Pigments Services, Inc. | (4)(11)(17) | SOFR + | 8.25 % | 12.69 % PIK | 4/14/2023 | 4/14/2029 | 7,125 | 4,670 | 2,367 | 0.10",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 229,
+      "row_index": 1,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments December 31, 2023 (in thousands)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 229,
+      "row_index": 14,
+      "quoted_text": "Pigments Services, Inc. | (4)(11)(17) | SOFR + | 8.35 % | 13.71 % | 4/14/2030 | 5,695 | 4,705 | 2,893 | 0.11",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2024 holdings set appears to include matching Emerald JV Pigments rows from the filing's December 31, 2023 comparative schedule, creating duplicate normalized position keys.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 229,
+        "row_index": 1,
+        "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments December 31, 2023 (in thousands)"
+      }
+    }
+  ],
+  "rationale": "B02 reports four duplicate position keys for the 2024 CIK-quarter, with Pigments Services Inc 1, Emerald JV LP as an example. Raw source shows current-year Emerald JV schedule rows in table 212, including Pigments Services, Inc. row 11 under a December 31, 2024 heading. It also shows matching Pigments Services, Inc. rows in table 229 under an explicit December 31, 2023 Emerald JV schedule heading. Those prior-year comparative rows are not 2024 positions; including them in the 2024 extraction would create duplicate normalized keys. The flag is therefore a real data error, localized to comparative-period leakage."
+}

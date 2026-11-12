@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_45c7ca51a921",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Instrument | Industry | Rate | Interest Rate | Original Acquisition Date | Maturity Date | Par Amount | Cost / Amortized Cost | Fair Value | % of Net Assets"
+    },
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "175 3rd Street | 1st Lien Term Loan | Cost / Amortized Cost $ 8,961,113 | Fair Value $ 9,012,067"
+    },
+    {
+      "table_index": 16,
+      "row_index": 25,
+      "quoted_text": "WeTransfer BV | Par Amount EUR 8,232,915 | Cost / Amortized Cost 9,506,867 | Fair Value 8,531,803"
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because the stored unit string is U_USD. The raw SOI schedule identifies Cost / Amortized Cost and Fair Value as the valuation columns; the first investment row explicitly prints dollar signs for those columns, and foreign par rows show foreign currency only in Par Amount while Cost / Amortized Cost and Fair Value remain USD-denominated. U_USD is therefore a USD unit encoding, not evidence that BDC cost is non-USD."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_89422ae65276",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2244719425,
+  "anchor_value": 2244701289,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 142.2 % of Net Assets | 2,254,646,820 | 2,244,701,289 | 91.04 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 46,
+      "quoted_text": "Total Investments - 159.8 % of Net Assets | 1,035,050,829 | 1,040,393,586 | 96.23 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 reports a source/output count mismatch, but the raw source shows two SOI blocks: the current 2025 investment schedule totals $2,244,701,289 at table 45 row 20, while a separate prior-year schedule totals $1,040,393,586 at table 55 row 46. The bundle's extracted fund fair value of about $2,244,719,425 is anchored to the current-period schedule, so the 783 source count is inflated by comparative-period rows rather than proving missing current-period holdings."
+}

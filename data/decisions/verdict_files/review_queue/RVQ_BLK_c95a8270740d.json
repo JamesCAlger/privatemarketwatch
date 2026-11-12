@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_c95a8270740d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 131805000.0,
+  "anchor_value": 215975000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 166,
+      "row_index": 13,
+      "quoted_text": "Total Senior Unsecured | 42,712 | 40,061 | 18.04%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 166,
+      "row_index": 55,
+      "quoted_text": "Total Short-Term Investments | 46,543 | 46,553 | 20.96%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 166,
+      "row_index": 59,
+      "quoted_text": "Total Investments | $ | 220,859 | $ | 215,975 | 97.26%",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Raw source totals show the filing schedule total investments are 215.975m at table 166 row 59, matching the companyfacts fair-value anchor and the totals output. The extracted position sum is only 131.805m. The schedule structure localizes the undershoot to investment categories present in the filing but not reflected in the extract sum, notably senior unsecured investments of 40.061m and short-term investments of 46.553m in table 166. The source also shows subtotal rows in the same schedule, so the extraction appears to combine an omission of real categories with some subtotal leakage, but the governing conservation failure is a grounded extraction gap against the filing total."
+}

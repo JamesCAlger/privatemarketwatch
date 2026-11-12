@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_REV_f49e7c48b6fa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 40
+    },
+    {
+      "table_index": 16,
+      "row_index": 41
+    },
+    {
+      "table_index": 16,
+      "row_index": 42
+    },
+    {
+      "table_index": 90,
+      "row_index": 9
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Three Plasma Buyer LLC one-stop positions are non-accrual; the schedule's one-stop non-accrual principal, amortized cost, and fair value tie to those rows.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 90,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "The current SOI lists Plasma Buyer LLC one-stop rows at table 16 rows 40-42 with principal 501, 57, and 19; amortized cost 472, 54, and 18; and fair value 411, 47, and 16. The filing's investment-status table reports one-stop Non-accrual (3) at table 90 row 9 with principal 577, amortized cost 544, and fair value 474, exactly matching those three source rows. The flag for three non-accrual positions is therefore source-grounded."
+}

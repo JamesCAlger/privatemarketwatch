@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_9a116f694217",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 257,
+  "anchor_value": 257,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 5,
+      "quoted_text": "Total | 257 | $ | 2,651,286 | 100.0 | % | 199 | $ | 1,951,269 | 100.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 reported source=458 versus output=257, but the filing's own investment-count table shows December 31, 2025 Total Number of Investments = 257 and Fair Value = $2,651,286, which also ties to the filing's investment fair-value total. The extracted output count of 257 matches the raw schedule; the 458 source/check anchor is wrong."
+}

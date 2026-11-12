@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_75bb52c5c55c",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 385,
+  "anchor_value": 385,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Industry | Type of Investment (1)(2)(3) | Index | Spread | Cash Interest Rate (4)(5) | PIK | Maturity Date | Shares | Principal (6) | Cost | Fair Value | Notes"
+    },
+    {
+      "table_index": 22,
+      "row_index": 28,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 159.4 % of net assets) | $ | 7,429,166 | $ | 7,433,861"
+    },
+    {
+      "table_index": 26,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Industry | Type of Investment (1)(2)(3) | Index | Spread | Cash Interest Rate (4)(5) | PIK | Maturity Date | Shares | Principal (6) | Cost | Fair Value | Notes"
+    },
+    {
+      "table_index": 36,
+      "row_index": 13,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 151.90 % of net assets) | $ | 6,863,940 | $ | 6,899,031"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07 source count 749 combines the current-period SOI investment rows with prior-period SOI investment rows; output count 385 is the current-period scope.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 26,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "Raw source shows two separate SOI blocks with the same investment-table structure. The current-period block begins at table 12 and ties to the December 31, 2025 non-control/non-affiliate investment total of 7,433,861 at table 22 row 28, matching the flagged quarter's extracted current schedule scope. A second matching SOI block begins at table 26 and ties to the prior-period total of 6,899,031 at table 36 row 13. The flagged source/output mismatch is therefore explained by the E07 source-side count including comparative/prior-period rows, while the output count 385 is correctly limited to the current report date."
+}

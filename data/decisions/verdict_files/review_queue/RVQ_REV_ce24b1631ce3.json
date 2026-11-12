@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_ce24b1631ce3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 2,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 12,
+      "quoted_text": "Ambrosia Holdco Corp. / Distribution & Logistics | Ordinary Shares(3)(7) | Principal Amount, Par Value or Shares 19,197 | Cost $205 | Fair Value $205 | 0.02%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 14,
+      "quoted_text": "Pioneer Topco I, L.P. / Software | Ordinary Shares(3)(6) | Principal Amount, Par Value or Shares 10 | Cost -- | Fair Value -- | --%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule has Ambrosia ordinary shares with 19,197 shares, but the extract counted the equity row as missing shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule has Pioneer ordinary shares with 10 shares, but the extract counted the equity row as missing shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "C04 reports 0.0% of 2 equity rows have shares, but the raw schedule header includes a 'Principal Amount, Par Value or Shares' column and table 22 shows two ordinary-share equity rows with explicit share counts: Ambrosia has 19,197 shares and Pioneer has 10 shares. The source therefore supports the equity share values and the failure is a real extraction gap in capturing the shares column."
+}

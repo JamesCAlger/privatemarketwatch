@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_f22c87e78f81",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3.5,
+  "anchor_value": 12.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 18,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | Healthcare | First Lien Senior Secured Term Loan | CDOR + 7.00 %, 3.5 % Cash, 8.5 % PIK | 06/21 | 03/26 | 4,119 | 4,572 | 3,703 | 0.3 | % | (3) (5) (6) (7) (26)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 39,
+      "quoted_text": "Amalfi Midco | Healthcare | Subordinated Loan Notes | LIBOR + 2.00 %, 7.0 % Cash, 9.0 % PIK | 09/22 | 09/28 | 4,917 | 4,450 | 4,322 | 0.4 | % | (3) (6) (9) (33)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Rule pik_le_interest_rate uses the all-in coupon convention: interest_rate must include PIK. The source SOI rows disclose separate cash and PIK legs. Canadian Orthodontic Partners shows 3.5% Cash and 8.5% PIK, so the all-in stated coupon is 12.0%, while the stored rate reflected only the 3.5% cash leg. Amalfi Midco similarly shows 7.0% Cash and 9.0% PIK, all-in 16.0%, while the violation residual indicates the stored rate reflected only the 7.0% cash leg. The flag is therefore a real extraction gap, not a false alarm."
+}

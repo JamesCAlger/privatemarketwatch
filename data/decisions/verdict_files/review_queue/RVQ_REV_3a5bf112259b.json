@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_3a5bf112259b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "current SOI contains maturity dates before report date: 12/22/25 and 11/17/25",
+  "anchor_value": "raw source maturity dates match extracted past-maturity condition",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | S + 6.75 % | 12/22/25 | 21,894 | 21,700 | 17,351 | (7) (8) (12) (14)"
+    },
+    {
+      "table_index": 21,
+      "row_index": 24,
+      "quoted_text": "MPI Engineered Technologies, LLC | Automobile Components | S + 17.00 % PIK | 01/15/20 | 11/17/25 | $ | 23,049 | $ | 20,011 | $ | 6,915 | (8) (12) (14)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The maturity_not_past rule fires on current SOI rows whose printed maturity dates are before 2026-03-31, but the source itself reports those dates for still-held positions.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "False alarm: the raw March 31, 2026 schedule of investments prints past maturity dates for current holdings, including One GI LLC at 12/22/25 and MPI Engineered Technologies, LLC at 11/17/25. Because the source supports the extracted past-maturity values, the defect is the rule's scope rather than a data extraction error."
+}

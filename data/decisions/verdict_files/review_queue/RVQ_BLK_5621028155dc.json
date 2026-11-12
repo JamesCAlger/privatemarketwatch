@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_BLK_5621028155dc",
+    "verdict":  "real_error",
+    "mechanism":  "subtotal_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  711556000,
+    "anchor_value":  435764000,
+    "confidence":  0.96,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  38,
+                                  "row_index":  32,
+                                  "quoted_text":  "Common Unitholders capital | 711,556",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  38,
+                                  "row_index":  33,
+                                  "quoted_text":  "Accumulated overdistributed earnings | (275,792)",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  38,
+                                  "row_index":  34,
+                                  "quoted_text":  "Total Members Capital | 435,764",
+                                  "ties_to_residual":  true
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "subtotal_leak",
+                         "detail":  "Net assets used Common Unitholders capital of 711,556,000 instead of Total Members Capital of 435,764,000; the omitted accumulated overdistributed earnings is 275,792,000.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  38,
+                                          "row_index":  34
+                                      }
+                     }
+                 ],
+    "rationale":  "Source balance sheet table 38 reconciles: Total Assets 1,205,245,000 minus Total Liabilities 769,481,000 equals Total Members Capital 435,764,000. The failing residual -275,792,000 is exactly what results if net_assets is populated from row 32 Common Unitholders capital 711,556,000 instead of row 34 Total Members Capital, omitting row 33 accumulated overdistributed earnings."
+}

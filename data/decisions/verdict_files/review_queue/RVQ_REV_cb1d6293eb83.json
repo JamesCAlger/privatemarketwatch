@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_cb1d6293eb83",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 X05 flag identifies only opaque row_key 546287 and basis_spread 0.0. The raw filing was successfully read through the evidence CLI, but the bundle omits the flagged holding's issuer and instrument identity, and targeted source search cannot map the opaque row key to a source row. The filing contains many floating-rate positions, some with explicit spreads, while X05 itself allows that an all-in rate or source omission can explain a zero basis spread. Without an exact source-row match, the source does not decide whether this cell is defective. Escalation is requested for identity enrichment or human mapping, not because source was unavailable."
+}

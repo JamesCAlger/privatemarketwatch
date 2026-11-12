@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_5ee9e24bcc74",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -32000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 14,
+      "quoted_text": "360 Holdco, Inc. (360 Training) | (6) (10) | First Lien Debt (Delayed Draw) | S + 4.75 % | 8.42 | % | 8/2/2028 | 3,580 | - | ( 32 ) | - | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted cost for 360 Holdco delayed draw is -32000, but the SOI row shows amortized cost as a dash and fair value as (32), so the negative fair value was stored as cost.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 63,
+        "row_index": 14,
+        "quoted_text": "360 Holdco, Inc. (360 Training) | (6) (10) | First Lien Debt (Delayed Draw) | S + 4.75 % | 8.42 | % | 8/2/2028 | 3,580 | - | ( 32 ) | - | %"
+      }
+    }
+  ],
+  "rationale": "C107 flagged negative cost rows. Raw source confirms at least one flagged cost is not a legitimate negative cost: for 360 Holdco delayed draw, the SOI row places a dash in amortized cost and (32) in fair value, while the extracted holding has cost -32000. The filing total also ties the extracted fair value total, so this is localized to row/column extraction rather than an aggregate anchor issue. Some other delayed-draw rows, such as ARC Health OPCO, do show negative amortized cost in source, but the 360 Holdco row grounds a real data error in the flagged set."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "BDCSRC_0001803498_2025-12-31_BLOCKING_NUMERIC_ALREADY_MATCHED_OUTPUT_ALIAS_821e325da8",
+  "cik": "0001803498",
+  "report_date": "2025-12-31",
+  "verdict": "NO_PATCH_NEEDED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports preserving this blocker: the source-only row for Pinnacle Buyer, LLC | Emerald JV LP has source fair value 10147000.0, but numeric evidence points to a candidate output row that is already reconciled by stronger source identity, so clearing it as a second match would create an unsafe many-to-one reconciliation.",
+  "reconciliation_diagnosis": "DUPLICATE_DIMENSION_PATH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 99,
+      "row_index": 14,
+      "cell_indices": [
+        0,
+        6,
+        27,
+        45,
+        51,
+        57
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The source-row-targeted HTML candidate locates the current-period Emerald JV LP position context, but it does not establish an independent Pinnacle Buyer production row that should be added to unified output."
+    }
+  ],
+  "changed_files": [],
+  "patch_summary": "No patch proposed. The bundled reconciliation classifier already identifies the row as SRCONLY_NUMERIC_ALIAS_PRESERVE rather than a parser miss that can be safely cleared.",
+  "source_reconciliation_effect": "Expected no source-reconciliation change; preserving the blocker avoids incorrectly clearing a numeric alias to an output row already matched by stronger identity.",
+  "gav_effect": "Context only; GAV already passes and is not used as the primary justification.",
+  "tests_validation_plan": "No validation commands run because no patch is proposed. Required commands for any future patch attempt would be: pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate.",
+  "requires_human_merge": false,
+  "missing_evidence": "",
+  "residual_risk": "The bundle does not expose the already matched candidate output row details, so the review relies on the cached source-reconciliation classifier's numeric-alias evidence. Available HTML coordinates support the Emerald JV context but do not independently prove a patchable Pinnacle Buyer output omission.",
+  "reviewer_notes": "Raw source examples in the same bundle show Emerald JV rows classified under collapsed_duplicate_dimension_path, consistent with duplicate-dimension/look-through source rows that should not be blindly mapped onto a single already reconciled output."
+}

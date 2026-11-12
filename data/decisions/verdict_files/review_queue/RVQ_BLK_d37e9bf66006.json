@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_d37e9bf66006",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 173214000,
+  "anchor_value": 183056000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 179,
+      "row_index": 12,
+      "quoted_text": "Total Warrants | 2,491 | 387 | 0.22 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 179,
+      "row_index": 35,
+      "quoted_text": "Total U.S. Treasury Bills | 9,455 | 9,455 | 5.46 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 179,
+      "row_index": 41,
+      "quoted_text": "Total Investments | $ | 186,110 | $ | 183,056 | 105.60 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Warrants fair value of $0.387 million is in the source schedule and is part of total investments but is absent from the extracted holdings sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 179,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "U.S. Treasury Bills fair value of $9.455 million is in the source schedule and is part of total investments but is absent from the extracted holdings sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 179,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation: the filing schedule shows Total Investments fair value of $183.056 million, matching the comparison anchor, while the extracted holdings sum is $173.214 million. The $9.842 million shortfall localizes exactly to schedule subtotals for Warrants ($0.387 million) and U.S. Treasury Bills ($9.455 million), so the flag is a real extraction gap rather than a bad anchor."
+}

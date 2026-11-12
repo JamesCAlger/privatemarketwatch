@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_96ba63aaf44f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 29,
+      "quoted_text": "Series A preferred shares | 11.40 % | SOFR (Q) | 6.00 % | 01/2023 | 01/2029 | 3,834 | 3.8 | 4.3 | (2)(6)(11)"
+    },
+    {
+      "table_index": 38,
+      "row_index": 15,
+      "quoted_text": "Ferrellgas, L.P. and Ferrellgas Partners, L.P. | Distributor of propane and related accessories | Senior preferred units | 8.96 % | 03/2021 | 59,422 | 59.5 | 60.0"
+    },
+    {
+      "table_index": 50,
+      "row_index": 2,
+      "quoted_text": "Preferred units | 8.00 % | 06/2022 | 41,000 | 41.0 | 53.1"
+    },
+    {
+      "table_index": 45,
+      "row_index": 21,
+      "quoted_text": "OUTFRONT Media Inc. | Provider of out-of-home advertising | Series A convertible perpetual preferred stock | 7.00 % | 04/2020 | 25,000 | 25.0 | 26.3 | (2)(6)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 27,
+      "quoted_text": "Series A preferred stock | 17.47 % PIK | SOFR (Q) | 12.00 % | 09/2022 | 118,077 | 123.8 | 127.9 | (2)(11)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X01 treats any PRIVATE_EQUITY interest_rate as suspicious, but the source schedule includes income-producing preferred equity instruments with the cited coupon or PIK rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The five flagged values are coupon or PIK rates that appear in the filing on equity instruments such as preferred units, preferred shares, senior preferred units, and convertible perpetual preferred stock. The raw source therefore supports both PRIVATE_EQUITY classification and a non-empty interest_rate/coupon field; the warning is a rule-scope false alarm rather than a data error."
+}

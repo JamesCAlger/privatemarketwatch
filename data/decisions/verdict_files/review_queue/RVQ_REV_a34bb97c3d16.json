@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_a34bb97c3d16",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "source_schedule_classification",
+  "observed_value": "PRIVATE_CREDIT with missing interest_rate and basis_spread",
+  "anchor_value": "Warrant; interest rate not applicable",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "MHH Healthcare, L.P. appears beneath the Warrants heading; its reference rate, spread, interest rate, and maturity cells are blank, and fair value is 3,511,673.",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The MHH Healthcare warrant was classified as PRIVATE_CREDIT, causing X02 to require an inapplicable loan rate.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 23,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The raw schedule places MHH Healthcare, L.P. under the explicit Warrants section (table 23, heading row 11 and instrument row 13). The instrument source row has no reference rate, spread, interest rate, or maturity, which is appropriate for a warrant. Thus the blank rate is not an extraction omission; the actionable data error is the row's PRIVATE_CREDIT classification, which incorrectly brings the warrant into X02 scope."
+}

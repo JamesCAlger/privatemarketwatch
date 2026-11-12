@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_f3379071c7f5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 402522665,
+  "anchor_value": 402522665,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 38,
+      "quoted_text": "Total Portfolio Investments | $ | 421,382,402 | $ | 402,522,665",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Services: Business",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "B01 counts structural schedule leaves such as industry headings in the denominator even though they are not positions and correctly have no fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The filing's March 31, 2026 Total Portfolio Investments fair value is $402,522,665 at table 20 row 38, exactly matching the extracted fund-quarter fair value of $402,522,665 and the oracle residual_fv of zero. The source schedule also contains structural leaves such as the industry heading 'Services: Business' at table 10 row 4, which appropriately has no market value. Therefore the 898/1969 leaf coverage ratio uses an overbroad denominator and does not establish missing position fair values."
+}

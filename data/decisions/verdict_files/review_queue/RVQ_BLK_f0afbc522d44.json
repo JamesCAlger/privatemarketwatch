@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_f0afbc522d44",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "internal",
+  "observed_value": 7,
+  "anchor_value": 7,
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 review. The raw March 31, 2026 schedule was readable through the evidence CLI, but the seven X06 records are identified only by internal row keys (468331, 468359, 468454, 468663, 468873, 468874, and 469208). The bundle provides no issuer or instrument identifier for those rows, and targeted searches using their reported principal amounts did not yield a unique matching source row. Therefore the full source row needed to determine whether principal_amount, fair_value, or the rule scope is wrong cannot be identified without guessing."
+}

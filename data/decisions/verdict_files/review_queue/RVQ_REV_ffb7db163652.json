@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ffb7db163652",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -140000.0,
+  "anchor_value": 186181000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Accel International Holdings, LLC | First Lien Secured Debt - Term Loan | S + 450 , 0.50 % Floor | 04/26/2032 | $ | 187,003 | $ | 186,181 | $ | 185,133 | (4)(15)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Kaman Corp | First Lien Secured Debt - Term Loan | S + 250 , 0.50 % Floor | 02/26/2032 | 38,798 | 38,744 | 38,857 | (16)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 24,
+      "quoted_text": "TITAN BW BORROWER L.P. | First Lien Secured Debt - Term Loan | S + 250 Cash plus 2.88 % PIK, 0.50 % Floor | 07/24/2032 | 201,190 | 199,370 | 199,178 | (4)(16)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor creates negative-cost revolver or delayed-draw holdings that are not separate positions in the March 31, 2026 source schedule.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C107 is a repeated Class 1 negative-cost pattern. Raw-source checks for Accel International, Kaman, and TITAN BW BORROWER show positive-cost term-loan rows only. The extracted flagged rows instead add negative-cost revolver or delayed-draw positions (for example, Accel cost -140,000 versus the source term-loan cost 186,181,000). The same mismatch across sampled issuers grounds a systematic extraction artifact rather than legitimate negative investment cost. Residual risk is limited to uninspected flagged rows, but the repeated mechanism is strongly evidenced."
+}

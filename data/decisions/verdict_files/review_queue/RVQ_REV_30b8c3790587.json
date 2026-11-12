@@ -1,0 +1,34 @@
+{
+    "review_id":  "RVQ_REV_30b8c3790587",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "4 current-period debt rows extracted with blank interest_rate",
+    "anchor_value":  "The corresponding June 30, 2024 source rows also have blank Interest Rate cells",
+    "confidence":  0.82,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  17,
+                                  "row_index":  5,
+                                  "quoted_text":  "PlantSwitch, Inc. Convertible Promissory Note (First Lien Term Loan) (5) (6) | 9/21/2026 | $ | 2,000,000 | $ | 2,000,000 | $ | 2,000,000"
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  28,
+                                  "quoted_text":  "Vista Outdoor, Inc. | 3/15/2029 | 2,000,000 | 1,972,974 | 2,008,526"
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  31,
+                                  "quoted_text":  "iHeartCommunications, Inc. (8) | 5/1/2026 | 116,808 | 313,455 | 90,945"
+                              },
+                              {
+                                  "table_index":  17,
+                                  "row_index":  32,
+                                  "quoted_text":  "iHeartCommunications, Inc. (8) | 5/1/2027 | 214,073 | 584,792 | 79,365"
+                              }
+                          ],
+    "rationale":  "The dl_rate_fill weak flag is grounded in four private-credit rows with blank extracted interest_rate. In the June 30, 2024 schedule, table 17 has an Interest Rate header, and the flagged PlantSwitch, Vista Outdoor, and two iHeartCommunications rows contain maturity, principal, amortized cost, and fair value but no populated interest-rate cells. Nearby rows in the same table do populate rate terms, so the blanks appear to be source omissions for these rows rather than parser misses. Comparative December 2023 rows disclose rates for the same or similar instruments, but those are not current-period source values for the reviewed report date."
+}

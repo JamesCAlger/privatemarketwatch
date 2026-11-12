@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_6c2cada35a84",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Portfolio Company Debt Securities- Canada Real Estate Technology Maple Raptor Acquisition Inc. Type of Investment Secured Loan Investment Date April 28, 2025 Maturity Date April 28, 2030 Interest Rate Variable interest rate CORRA 3 Month Term + 9.4%; EOT 0.0%",
+    "anchor_value":  "Maple Raptor Acquisition Inc. (dba Rentsync)",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  42,
+                                  "row_index":  28,
+                                  "quoted_text":  "Maple Raptor Acquisition Inc. (dba Rentsync) | Secured Loan | April 28, 2025 | April 28, 2030 | Variable interest rate CORRA 3 Month Term + 9.4 %; EOT 0.0 % | $ | 19,757 | $ | 19,373 | $ | 19,897 | (8)(10)(20)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "issuer_name contains schedule section and investment-term text; source portfolio-company cell is only Maple Raptor Acquisition Inc. (dba Rentsync).",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  42,
+                                          "row_index":  28
+                                      }
+                     }
+                 ],
+    "rationale":  "C206 is a real issuer_name parse leak: the extracted value concatenates section path, investment type, investment date, maturity date, and interest-rate text into issuer_name, while the raw source schedule keeps portfolio company, type, dates, and rate in separate columns. The cited row shows the clean issuer in the Portfolio Company column and the leaked terms in other columns."
+}

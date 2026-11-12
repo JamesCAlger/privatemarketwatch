@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_fec5270076ae",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6127925000,
+  "anchor_value": 5819755000,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 70,
+      "row_index": 33,
+      "quoted_text": "Total Non-Controlled/Affiliate Company Investments | $ | 343,639 | $ | 308,170 | 10.9 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 70,
+      "row_index": 35,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted holdings total exceeds the filing total by exactly 308,170 thousand, matching the Total Non-Controlled/Affiliate Company Investments subtotal that should not be counted as an additional position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the filing's schedule and balance sheet show total investments at fair value of 5,819,755 thousand, while the extracted holdings total is 6,127,925 thousand. The 308,170 thousand overstatement exactly equals the cited subtotal row for Total Non-Controlled/Affiliate Company Investments, immediately above the schedule's TOTAL INVESTMENTS row, indicating a subtotal row was included in holdings as if it were a position."
+}

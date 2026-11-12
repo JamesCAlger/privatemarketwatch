@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9c36471e04ec",
+  "verdict": "false_alarm",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Two flagged X08 rows: cost 3500000.0 with fair value 100000.0, and cost 8000000.0 with fair value 100000.0.",
+  "anchor_value": "Raw SOI source shows ESCP PPG Holdings Class A-2 units at amortized cost 3.5 and fair value 0.1; SM Wellness Series A units at amortized cost 8.0 and fair value 0.1.",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 4,
+      "quoted_text": "ESCP PPG Holdings, LLC (4) / Class A-2 units / Shares 3,500 / Amortized Cost 3.5 / Fair Value 0.1",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 2,
+      "quoted_text": "SM Wellness Holdings, Inc. and SM Holdco, Inc. (15) / Series A units / Shares 8,041 / Amortized Cost 8.0 / Fair Value 0.1",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged fair value below 5% of cost for two rows. The raw schedule of investments prints those low fair values directly: 3.5 cost and 0.1 fair value for ESCP PPG Class A-2 units, and 8.0 cost and 0.1 fair value for SM Wellness Series A units. Because the source supports the extracted values, the flag identifies distressed or deeply marked-down positions rather than a data error."
+}

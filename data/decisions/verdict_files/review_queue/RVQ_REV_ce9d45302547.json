@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_ce9d45302547",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -2000,
+  "anchor_value": -2000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 29,
+      "quoted_text": "QBS Parent, Inc. (dba Quorum Software) | IT Services | S + 4.50 % | 06/03/32 | 371 | - | ( 2 ) | (7) (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 102,
+      "row_index": 43,
+      "quoted_text": "QBS Parent, Inc. (dba Quorum Software) | Unfunded Commitment Balances | 2,197 at December 31, 2025",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged fair_value -2000 as an unexplained negative. The source schedule row for QBS Parent shows fair value (2) with no negative cost, but the same issuer is explicitly listed in the filing's Unfunded Commitment Balances table for December 31, 2025. The negative mark is therefore an unfunded-commitment presentation that the rule should not treat as a data error."
+}

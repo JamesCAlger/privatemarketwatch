@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_REV_c9e4330fe4e4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Raw SOI rows contain stated rates: SF + 6.3%, SF + 6.0% with PIK terms, SF + 5.5%, SF + 5.0%, and SF + 5.0%.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 3,
+      "quoted_text": "Advanced Dermatology & Cosmetic Surgery | (f) | Health Care Equipment & Services | SF | + | 6.3 % | 1.0 % | 05/27 | $ | 4,103 | $ | 4,103 | $ | 4,103"
+    },
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "Affordable Care Inc | (f)(g) | Health Care Equipment & Services | SF | + | 6.0 % | ( 3.3 % PIK | / 3.3 % PIK) | 0.8 % | 08/28 | 8,426 | 8,440 | 8,248"
+    },
+    {
+      "table_index": 17,
+      "row_index": 5,
+      "quoted_text": "Amerivet Partners Management Inc | (f)(g) | Health Care Equipment & Services | SF | + | 5.5 % | 0.8 % | 02/28 | 6,565 | 6,565 | 6,533"
+    },
+    {
+      "table_index": 17,
+      "row_index": 6,
+      "quoted_text": "Arcfield Acquisition Corp | (g) | Capital Goods | SF | + | 5.0 % | 0.5 % | 10/31 | 10,388 | 10,388 | 10,312"
+    },
+    {
+      "table_index": 17,
+      "row_index": 7,
+      "quoted_text": "Arcfield Acquisition Corp | (h) | Capital Goods | SF | + | 5.0 % | 0.5 % | 10/31 | 1,175 | 1,175 | 1,166"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Advanced Dermatology & Cosmetic Surgery has a stated SF + 6.3% rate in source, but stored interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Affordable Care Inc has a stated SF + 6.0% rate plus PIK terms in source, but stored interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Amerivet Partners Management Inc has a stated SF + 5.5% rate in source, but stored interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Arcfield Acquisition Corp first position has a stated SF + 5.0% rate in source, but stored interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Arcfield Acquisition Corp second position has a stated SF + 5.0% rate in source, but stored interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "X02 flags five private credit holdings with blank stored interest_rate. The raw SOI source rows for those issuers show populated Rate (b) terms, including SF + 6.3%, SF + 6.0% with PIK terms, SF + 5.5%, and two SF + 5.0% Arcfield positions. Because source provides rate data that extraction failed to carry into interest_rate, the warning is a real extraction gap."
+}

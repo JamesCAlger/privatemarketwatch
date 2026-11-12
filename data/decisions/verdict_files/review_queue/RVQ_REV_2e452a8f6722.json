@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_2e452a8f6722",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated fair value schedule",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "175 3rd Street | 1st Lien Term Loan | Fair Value | $ 9,012,067",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 1,200,205,656 | $ 1,153,413,327 | 185.82 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "Total investments | $ | 812,979 | $ | 216,400,890 | $ | 936,199,458 | $ | 1,153,413,327",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 fired because fair_value_currency is stored as U_USD, but the raw SOI fair value column and investment totals are dollar-denominated. The source evidence supports USD fair values, so the flag reflects a validation/normalization comparison against the unit label rather than a real non-USD data error."
+}

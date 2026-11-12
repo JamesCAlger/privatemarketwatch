@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_898914b2afa6",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 32,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 11,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2025 | 18",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Revolver | S + 4.75 % | 7/26/2032 | - | (4) | - | 23",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Thirty-two December 31, 2025 schedule rows were retained as positions for the March 31, 2026 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 5,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The filing index labels the current Schedule of Investments as of March 31, 2026 at table 5 row 10 and separately labels the comparative Schedule of Investments as of December 31, 2025 at table 5 row 11. A flagged example, Titan BW Borrower L.P. First Lien Revolver, is present in the December 31, 2025 schedule at table 23 row 13, while its current-period counterpart is at table 11 row 14. The 32 flagged earlier-period rows are therefore comparative copies, not current-quarter positions, and should not be retained in the March 31, 2026 holdings population. No aggregate anchor is needed for this row-disposition defect."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_9e077439ebd6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5,
+  "anchor_value": 1.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Total investments | 1,350,788 | 1,355,641 | 254.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Saturn Sound Bidco Limited | First Lien Term Loan | SOFR + 5.25 % | 9.09 % | 12/2/2024 | 12/3/2031 | 60,289 | 59,359 | 59,836 | 11.2 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 4,
+      "quoted_text": "Firebird Co-Invest L.P. | LP Interest | 1/29/2025 | N/A | 4,790 | 5,315 | 1.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period investment schedule provides a Fair Value column and totals investments to 1,355,641, but the extracted coverage check sees fair value on only 135 of 270 leaves.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate fair-value coverage flag. Raw source is usable and shows the December 31, 2025 schedule has explicit Fair Value columns on the investment pages, including representative debt and equity rows, and the current-period total investments fair value is 1,355,641. Because the source does provide fair values while the check reports only 50.0% coverage, the flag is a real extraction coverage defect rather than a source omission."
+}

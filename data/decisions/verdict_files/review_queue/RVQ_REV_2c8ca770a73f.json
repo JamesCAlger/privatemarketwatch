@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_2c8ca770a73f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 reports a fund_financials/holdings coverage mismatch for CIK 0001869040 report_date 2024-04-30, with observed artifact value fund=True;holdings=False. The evidence CLI returned no_accession_resolved for overview, tables, and totals, so raw source could not be read to determine whether holdings should exist for this filing."
+}

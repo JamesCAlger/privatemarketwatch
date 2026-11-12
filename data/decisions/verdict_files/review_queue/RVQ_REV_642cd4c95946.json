@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_642cd4c95946",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR +5.75%",
+  "anchor_value": "SOFR + 5.75 %",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Bestpass, Inc. (3)(5) | First-lien loan ($ 59,800 par, due 5/2029 ) | 5/26/2023 | SOFR + 5.75 % | 11.08 | % | $ | 57,695 | $ | 59,501 | 2.5 | %"
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 323,497 par, due 2/2031 ) | 2/13/2024 | SOFR + 5.75 % | 11.06 | % | 319,961 | 320,809 | 13.5 | %"
+    },
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "First-lien revolving loan ($ 1,166 par, due 2/2030 ) | 2/13/2024 | SOFR + 5.75 % | 11.06 | % | 824 | 903 | 0.0 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted basis-spread text collapsed the filed 'SOFR + 5.75 %' spacing to 'SOFR +5.75%' for Bestpass.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted basis-spread text collapsed the filed 'SOFR + 5.75 %' spacing to 'SOFR +5.75%' for Truck-Lite.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Raw source table 8 prints the relevant Reference Rate and Spread cells as 'SOFR + 5.75 %'. The flagged extracted holdings identifiers instead contain 'SOFR +5.75%', so the rule is catching a real localized extraction/normalization defect in the basis-spread text rather than a bad check."
+}

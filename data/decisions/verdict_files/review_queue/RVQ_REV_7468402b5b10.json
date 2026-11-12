@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_7468402b5b10",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 5.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Header identifies the quantity column as Par Amount/ Shares.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 39,
+      "quoted_text": "K2 Propco Class S Units ... Par Amount/ Shares 897; Cost 285; Fair Value 297.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 40,
+      "quoted_text": "K2 Pure Solutions Class S Units ... Par Amount/ Shares 113; Cost 36; Fair Value 37.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 44,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. ... Par Amount/ Shares 25,000; Cost 359; Fair Value 158.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 52,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. warrant ... Par Amount/ Shares 47,166.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 56,
+      "quoted_text": "GCOM warrant ... Par Amount/ Shares 2,491,250; Cost 2,491; Fair Value 1,727.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule has share quantities for the June 30, 2024 common stock and warrant rows, but the extracted equity population has zero rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "C04 flagged 0.0% of 6 equity rows with shares. Raw source table 12 has a Par Amount/ Shares column and provides quantities on the equity rows, including 897, 113, 25,000, 47,166, and 2,491,250. The missing extracted share values are therefore a real extraction gap, not a source omission. The sixth extracted equity row appears to be a subtotal/extra equity row, but the core failure remains grounded by the source quantity cells."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_48d4ed72a0b8",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag covering seven specified blank interest_rate cells. The raw-source evidence CLI returned no usable source evidence (only a parser warning), and scoped retries failed at process creation, so the source could not be checked and no grounded adjudication is possible."
+}

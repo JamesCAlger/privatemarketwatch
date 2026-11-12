@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_44b196026bc9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": "2002-08-08",
+  "anchor_value": "2029-08-08",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 25,
+      "quoted_text": "123Dentist Inc. | Health Care Providers & Services | C + 5.00 % | 08/08/2 9 | CAD | 30,000 | ( 111 ) | ( 108 ) | (6) (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The maturity date was parsed as 2002-08-08, but the source maturity cell for 123Dentist Inc. shows 08/08/2 9, a future 08/08/29 maturity.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged stored maturity_date is 2002-08-08, before the 2025-09-30 report date. Raw source table 8 row 25 shows the 123Dentist Inc. maturity cell as 08/08/2 9, which is a split rendering of 08/08/29 and is not matured as of the report date. The flag therefore exposes a real extraction/normalization error in the stored maturity_date."
+}

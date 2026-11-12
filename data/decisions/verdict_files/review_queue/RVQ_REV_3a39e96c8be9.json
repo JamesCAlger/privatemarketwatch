@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_3a39e96c8be9",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -4235000,
+  "anchor_value": -4234000,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 30,
+      "quoted_text": "Total Unfunded Commitments | $ | 1,143,533 | $ | ( 4,234 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 85,
+      "row_index": 26,
+      "quoted_text": "YLG Holdings, Inc. | Delayed Draw Term Loan | 11/26/2026 | 2,242 | ( 11 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Unfunded commitment schedule rows without an interest-rate column are being counted as debt rows in the C01 rate-coverage denominator.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 85,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "C01 flags that only 72.0% of 1303 debt rows have an interest rate, with residual fair value -4,235,000 across 365 missing-rate rows. The filing source localizes that residual to the unfunded commitments schedule: table 85 row 30 reports Total Unfunded Commitments fair value of (4,234) thousand, matching the residual within filing rounding. These rows are commitments, not debt investment rows with an Interest Rate column, so the stored/checked debt population is over-inclusive rather than the source omitting rates from debt investments."
+}

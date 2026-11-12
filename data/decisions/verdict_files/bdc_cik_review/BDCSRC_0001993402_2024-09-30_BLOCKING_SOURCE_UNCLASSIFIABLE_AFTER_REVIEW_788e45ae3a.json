@@ -1,0 +1,76 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001993402",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No holdings or GAV values are changed. The patch changes source-only blocker classification so exact Antares total/category rows are documented as non-position exclusions.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 31,
+      "row_index": 2,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The Specialty Retail row is a one-cell industry/category label under secured debt, not a borrower or instrument holding."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 31,
+      "row_index": 19,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The Trading Companies and Distributors row is a one-cell industry/category label under secured debt, not a borrower or instrument holding."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 31,
+      "row_index": 26,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The Wireless Telecommunication Services row is a one-cell industry/category label under secured debt, not a borrower or instrument holding."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 39,
+      "row_index": 30,
+      "cell_indices": [
+        0,
+        6,
+        7,
+        10,
+        11,
+        12
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The Total Unfunded Commitments row is an aggregate commitment/value line, not a position-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Classify Antares-style secured-debt industry total labels for Specialty Retail, Trading Companies and Distributors, and Wireless Telecommunication Services as documented category headers. Existing total-header logic covers Total Unfunded Commitments and Total Investments - non-controlled/non-affiliated, with false-positive coverage preserving real position-like Total-name rows.",
+  "primary_justification": "All five reviewed blocker identifiers are non-position rows. Three are secured-debt industry/category total labels, one is an unfunded-commitments total, and one is Total Investments - non-controlled/non-affiliated. The source-table coordinates show the industry rows as one-cell labels and the unfunded commitment row as an aggregate total line. None should be added as production holdings.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-09-30",
+  "requires_human_merge": true,
+  "residual_risk": "Full blocker-count reduction still requires rebuilding source reconciliation outputs from current code. The patch is intentionally limited to named industry/category labels already seen in the Antares bundle and does not broaden issuer parsing.",
+  "review_id": "BDCSRC_0001993402_2024-09-30_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_788e45ae3a",
+  "reviewer_notes": "Manual review covered source_row_id 1130222 Specialty Retail Total, 1130243 Trading Companies and Distributors Total, 1130532 Wireless Telecommunication Services Total, 1130803 Total Unfunded Commitments, and 1130113 Total Investments - non-controlled/non-affiliated. The patch documents these as source reconciliation exclusions; it does not add, delete, or edit generated holdings rows.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this packet should move from blocking_source_unclassifiable_after_review to documented_source_category_header/documented_source_total_header and stop counting as a source-only blocker.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_cik_style_parser_residuals and the broader targeted source-reconciliation set: test_source_only_blocker_detail_classifies_headers_and_false_positives, test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows, test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking, and test_source_only_blocker_detail_classifies_cik_style_parser_residuals. Validate verdicts with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

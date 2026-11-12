@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_1d7873b734c9",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4,
+  "anchor_value": 4,
+  "confidence": 0.45,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 29,
+      "quoted_text": "Astra Acquisition Corp. | Application Software | First Lien Term Loan | SOFR+ | 6.75 % | 2/25/2028 | 7,337 | 6,453 | 2,935 | (5)(8)(11)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 30,
+      "quoted_text": "Astra Acquisition Corp. | Application Software | First Lien Term Loan | SOFR+ | 5.25 % | 10/25/2028 | 8,316 | 6,324 | - | (5)(8)(11)"
+    },
+    {
+      "table_index": 19,
+      "row_index": 33,
+      "quoted_text": "Pluralsight, LLC | Application Software | First Lien Term Loan | SOFR+ | 7.50 % | 8/22/2029 | 5,793 | 5,623 | 4,055 | (5)(8)(11)"
+    },
+    {
+      "table_index": 20,
+      "row_index": 29,
+      "quoted_text": "Saratoga | Diversified Financial Services | Credit Linked Note | SOFR+ | 5.33 % | 9.86 % | 12/31/2029 | 82,235 | 81,816 | 83,386 | (5)(8)(10)(12)"
+    }
+  ],
+  "rationale": "The raw SOI rows localize four candidate positions carrying footnote markers (11) or (12), matching the nonaccrual flag count, but targeted evidence CLI searches for non-accrual/accrual language and note-definition text did not expose the underlying definitions for those markers. The source was readable, but the visible table evidence alone does not decide whether those markers prove non-accrual status."
+}

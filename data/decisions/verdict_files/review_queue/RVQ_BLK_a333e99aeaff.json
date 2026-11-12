@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_a333e99aeaff",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_rows",
+  "observed_value": 0,
+  "anchor_value": 14790000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 43,
+      "quoted_text": "IRGSE Holding Corp. (7)(10) | Class A Units (50,140,171 units) | 12/21/2018 | 21,883 | 125 | 0.0%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 21,
+      "quoted_text": "Structured Credit Partners JV, LLC (4)(6)(11) | Partnership Interest (25.00% ownership) | 12/23/2025 | 14,665 | 14,665 | 1.0%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "IRGSE Holding Corp. Class A Units with fair value $125 thousand are a current-period position absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 12,
+        "row_index": 43
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Structured Credit Partners JV, LLC partnership interest with fair value $14.665 million is a current-period position absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 14,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "Raw March 31, 2026 schedule rows show both flagged issuers as individual investment positions with positive fair values, not headers or subtotals. IRGSE appears within an equity position block at table 12 row 43, and Structured Credit Partners appears directly beneath the Joint Venture Investments heading at table 14 row 21; the latter is separately followed by an aggregate total at row 23. Their absence from pipeline output is therefore a grounded missing-position extraction gap. The anchor value is the sum of the two specifically flagged source rows: $0.125 million plus $14.665 million."
+}

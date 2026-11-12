@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_REV_24a3663f98a7",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  "",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  56,
+                                  "row_index":  6,
+                                  "quoted_text":  "SC MidCo Oy term debt row reports principal EUR 83 while the flagged normalized principal_amount_usd is blank.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  60,
+                                  "row_index":  4,
+                                  "quoted_text":  "Greencross term debt row reports principal AUD 19,270 with USD cost/fair-value columns while principal_amount_usd is blank.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  60,
+                                  "row_index":  18,
+                                  "quoted_text":  "AX VI INV2 Holding AB term debt row reports principal EUR 10,735 with USD cost/fair-value columns while principal_amount_usd is blank.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Non-USD debt principal is captured only in source currency and principal_amount_usd is missing for FX01 rows.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  56,
+                                          "row_index":  6
+                                      }
+                     }
+                 ],
+    "rationale":  "FX01 is a real data error: raw SOI rows show non-USD debt principal/par amounts, but the row-validation artifact flags blank principal_amount_usd for the same CIK and period. The source does not show these as USD principal values; the normalized USD-principal field needs explicit FX conversion before USD par analytics."
+}

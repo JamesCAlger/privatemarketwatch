@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_ad6fbda48bc6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -219000,
+  "anchor_value": -219000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 2,
+      "quoted_text": "WorkWave Intermediate II, LLC | 1st Lien Senior Secured Delayed Draw Loan | $ | 10,847 | $ | ( 62 )"
+    },
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "CC WDW Borrower, Inc. | 1st Lien Senior Secured Delayed Draw Loan | 1,631 | ( 113 )"
+    },
+    {
+      "table_index": 16,
+      "row_index": 5,
+      "quoted_text": "The One Group, LLC | 1st Lien Senior Secured Revolving Loan | 887 | ( 26 )"
+    },
+    {
+      "table_index": 16,
+      "row_index": 6,
+      "quoted_text": "Ribbon Communications Operating Company, Inc | 1st Lien Senior Secured Revolving Loan | 849 | ( 17 )"
+    },
+    {
+      "table_index": 16,
+      "row_index": 15,
+      "quoted_text": "Total | $ | 17,189 | $ | ( 219 )",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "C103 flagged four negative fair_value rows, but the raw commitments schedule explicitly discloses those fair values as parenthesized negatives for unfunded commitments. The schedule total is also negative, so the extracted negative signs are source-faithful rather than a data error."
+}

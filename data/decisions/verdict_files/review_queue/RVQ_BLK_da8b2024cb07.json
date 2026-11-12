@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_da8b2024cb07",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "source_schedule",
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C301 identifies an empty index_classification at global row_key 132038, but the bundle supplies no issuer, instrument identifier, or source coordinate for that row. The raw filing was successfully read through the evidence CLI and contains the investment schedules, but a targeted search for the row key and field name returned no match. Thus the flagged source row cannot be identified or checked without scanning the schedule as a haystack, so the source does not decide whether the empty derived classification is a real extraction/classification defect or an out-of-scope instrument. Escalate for row-to-source localization evidence."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_e2ce57f3ba77",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_AUD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 47,
+      "quoted_text": "Sonar Acquisitionco, Inc. (dba SimPRO) | Construction & Engineering | 8.34 % | B + 4.75 % | 10/24/30 | AUD | 5,600 | 3,686 | 3,687 | (5) (6) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 1,
+      "quoted_text": "(4) | Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Australian Dollars (\"AUD\"), or Euros (\"EUR\").",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The AUD marker belongs to the Par/Shares field for the Sonar Acquisitionco row; cost is in the separate Cost column and should remain USD-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 47
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 single-cell check of cost_currency. The raw SOI row places AUD inside the Par/Shares group, while Cost and Fair Value are separate columns; footnote (4) defines AUD/EUR as exceptions for par amount denomination. The pipeline observed cost_currency as U_AUD, so it appears to have propagated the par currency marker into cost_currency. The source therefore grounds a real localized data error, not a false alarm."
+}

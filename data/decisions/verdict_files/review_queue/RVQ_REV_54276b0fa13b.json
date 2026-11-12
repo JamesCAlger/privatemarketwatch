@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_54276b0fa13b",
+    "verdict":  "false_alarm",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "PRIVATE_EQUITY row with interest_rate 11.4",
+    "anchor_value":  "Source row is Preferred LP Units with Interest: SOFR + 6.0% PIK, 11.4% PIK",
+    "confidence":  0.92,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  36,
+                                  "row_index":  36,
+                                  "quoted_text":  "Rocade Holdings LLC | Other Financial | Preferred LP Units (75,000 units) | SOFR + 6.0% PIK, 11.4% PIK | 02/23 | N/A | 78,451 | 78,451 | 6.2% | (7) (28) (29)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The X01 flag says a PRIVATE_EQUITY row has interest_rate 11.4, but the raw schedule row shows an equity-form instrument, Preferred LP Units, whose Interest column explicitly states SOFR + 6.0% PIK, 11.4% PIK. The stored equity classification and rate are both supported by the source, so the row is not a data error; the rule is overbroad for preferred equity units with stated PIK terms."
+}

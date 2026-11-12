@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_479a63b37a6d",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 17,
+      "quoted_text": "HOP Energy, LLC (2)(5) | 02/29/24 | Term Loan B - 13.83 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) | 0.0 % | Par Amount 6,644,922 | Maturity 12/09/27 | Amortized Cost 5,345,831 | Fair Value --"
+    }
+  ],
+  "rationale": "C104 flagged fair_value=0.0, but the raw SOI row shows HOP Energy, LLC Term Loan B with fair value rendered as a dash while other numeric fields on the same row are populated. Normalizing the filing dash to zero is source-faithful, so the row-level zero-fair-value warning is not a data error."
+}

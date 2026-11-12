@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_53b414b1685f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.625,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 2,
+      "quoted_text": "March 31, 2026 | March 31, 2026 | May 8, 2026 | $ | 0.625 | $ | 34,143",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 62,
+      "row_index": 8,
+      "quoted_text": "Distributions declared | ( 0.63 ) | ( 0.63 )",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The extracted distribution_rate is 0.0, but the filing's 2026 distribution schedule declares $0.625 per share and $34.143 million total, while the financial highlights independently report distributions declared of approximately $0.63 per share. The source therefore establishes a positive distribution and makes zero a localized extraction gap rather than a valid value or a bad check."
+}

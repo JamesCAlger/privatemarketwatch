@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_604b43f0c6ad",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 151.36,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 5,305,487.5 | $ | 5,351,428.1 | (13) | 151.36 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted A07 percentage sum is 0.0%, but the SOI schedule total reports Total Investments at 151.36% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate-style flag: the queue artifact reports pct_sum=0.0% with no detail rows, but the raw SOI total line has a populated % of Net Assets value of 151.36% for Total Investments. The source therefore supports a real extraction gap rather than a false alarm."
+}

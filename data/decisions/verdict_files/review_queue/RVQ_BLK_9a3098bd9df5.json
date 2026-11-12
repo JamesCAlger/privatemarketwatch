@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_9a3098bd9df5",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1635656618,
+  "anchor_value": 1635656618,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 64,
+      "row_index": 7,
+      "quoted_text": "Total Investments: Level 1 $26,887,322; Level 3 $1,635,656,618; Total $1,662,543,940",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 15,
+      "quoted_text": "State Street Institutional Treasury Plus Money Market Fund - 3.52%: fair value $26,887,322",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The extracted position sum of $1,635,656,618 exactly equals the filing's Level 3 investment total. The filing separately classifies $26,887,322 of money-market mutual funds as Level 1, and adding that amount produces the full portfolio total of $1,662,543,940. Thus the flagged residual is entirely explained by comparing a private-markets/Level 3 extract against an all-investments total; no missing or erroneous private-market fair value is shown."
+}

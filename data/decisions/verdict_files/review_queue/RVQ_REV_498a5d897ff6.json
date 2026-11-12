@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_498a5d897ff6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 3,
+      "quoted_text": "AMF Levered II, LLC (2) | Financial Services | S+ 705 | 1.00 | % | 11.39 | % | 12/2021 | 8/2028 | $ | 12,660 | $ | 12,596 | $ | 12,660",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Assertio Holdings, Inc. Common Stock | Pharmaceuticals | 7/2023 | 4,230 | $ | 17 | $ | 4",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Cost currency was stored as U_USD for USD-denominated BDC schedule rows; source cost columns are displayed with dollar signs and should normalize to USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "FX03 flags BDC cost_currency values of U_USD as non-USD. The raw SOI rows show the cost and fair-value columns are dollar-denominated, including table 10 row 3 with dollar signs before par amount, cost, and fair value, and table 11 row 6 with dollar signs before cost and fair value. The source supports USD, so retaining the non-canonical U_USD unit in cost_currency is a normalization/extraction defect rather than a valid non-USD source value."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_1ba22d48223e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 189.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 11,
+      "quoted_text": "Total Investments - 189.0 % | $ | 904,200 | $ | 901,521",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 91,
+      "row_index": 32,
+      "quoted_text": "Total | 100.0 | % | 189.0 | % | 100.0 | % | 150.3 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2025 schedule reports Total Investments at 189.0 percent of members' capital, but the oracle artifact reports pct_sum=0.0 percent.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 46,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's fair-value anchor is internally consistent: total investments at fair value are 901,521 thousand in the SOI and balance sheet, matching the bundle's 901.521 million fund-quarter fair value. The raw source nevertheless contains a nonzero percentage anchor: the SOI total row says Total Investments - 189.0 %, and Note 4 also totals 189.0 % for December 31, 2025. The flagged artifact reports pct_sum=0.0%, so the defect is a percentage extraction gap, not a true zero percentage and not a bad fair-value total."
+}

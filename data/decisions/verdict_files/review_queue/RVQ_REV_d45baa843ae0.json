@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_d45baa843ae0",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Extracted bdc_investment_identifier prepends schedule headers: Investment Debt Investments - 185.2% Canada - 2.9% 1st Lien/Senior Secured Debt - 2.9% Rodeo Buyer Company (dba Absorb Software)...",
+  "anchor_value": "Source Investment cells are Rodeo Buyer Company (dba Absorb Software) only; Debt Investments, Canada, and 1st Lien/Senior Secured Debt are separate header/subtotal context rows.",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 8,
+      "quoted_text": "Rodeo Buyer Company (dba Absorb Software) | Professional Services | 10.71 % | S + 6.25 % | 05/25/27 | 19,155 | 18,981 | 19,011 | (5) (6) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 9,
+      "quoted_text": "Rodeo Buyer Company (dba Absorb Software) | Professional Services | S + 6.25 % | 05/25/27 | 3,065 | ( 25 ) | ( 23 ) | (5) (6) (7) (9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted identifier for the funded Rodeo row includes schedule header context that is not part of the source Investment cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 8
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted identifier for the related Rodeo negative-cost row includes schedule header context that is not part of the source Investment cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "PP01 flags the position identifier as a subtotal/header contamination candidate. Raw source table 36 shows the actual investment cells at rows 8 and 9 are Rodeo Buyer Company (dba Absorb Software); the Debt Investments, Canada, and 1st Lien/Senior Secured Debt strings are separate schedule context rows above them, not part of the position name. The extracted bdc_investment_identifier therefore contains header context leaked into the identifier for both flagged rows."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_6d71bef4c0f5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -60886000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 13,
+      "quoted_text": "Total Assets | $ | 1,267,900 | $ | 1,042,765"
+    },
+    {
+      "table_index": 35,
+      "row_index": 22,
+      "quoted_text": "Total Liabilities | 448,800 | 431,536"
+    },
+    {
+      "table_index": 35,
+      "row_index": 31,
+      "quoted_text": "Total Members' Capital | 819,100 | 611,229"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2025 source balance sheet reconciles 1,267,900 - 448,800 - 819,100 to zero, but the extracted F10 value is -60,886,000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 35,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "F10 tests total assets minus total liabilities minus net assets. The filing's own 2025 balance sheet totals in table 35 reconcile exactly: total assets 1,267,900 less total liabilities 448,800 less total Members' Capital 819,100 equals 0. The validation artifact reports the extracted check value as -60,886,000, so the extracted fund_financials data disagree with the source schedule identity."
+}

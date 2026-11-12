@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d3777d16ae82",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 2.0,
+  "anchor_value": 2.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 16,
+      "quoted_text": "Kene Acquisition, Inc. and Kene Holdings, L.P.; Class A units; shares/units 4,549,000; amortized cost 0.5; fair value 8.8.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 19,
+      "quoted_text": "The Ultimus Group Midco, LLC, The Ultimus Group, LLC, and The Ultimus Group Aggregator, LP; Class A common units; shares/units 245; amortized cost 0.2; fair value 4.3.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X07 fired on two rows where extracted fair value exceeds 10x extracted cost. The raw SOI confirms both source pairs: Kene Class A units show amortized cost 0.5 and fair value 8.8, and Ultimus Class A common units show amortized cost 0.2 and fair value 4.3. Because the flagged values match source, the rule identified genuine extreme appreciation rather than a data extraction error."
+}

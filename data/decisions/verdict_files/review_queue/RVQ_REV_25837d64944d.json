@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_25837d64944d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_schedule_cells",
+  "observed_value": -26000.0,
+  "anchor_value": -26000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 18,
+      "quoted_text": "3BC Matrix Acquisition, LLC (6)(21) | First lien senior secured revolving loan | S + | 5.50 % | 9.17 % | 5/13/2025 | 5/13/2030 | $ | 1,564 | $ | ( 26 ) | $ | ( 24 ) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 18,
+      "quoted_text": "A. P. Nonweiler Co. Inc (6) | First lien senior secured revolving loan | S + | 5.00 % | 8.70 % | 9/30/2025 | 9/30/2030 | $ | 1,523 | $ | ( 21 ) | ( 18 ) | 0.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated-column review. The raw March 31, 2026 investment schedule explicitly prints negative amortized cost values in parentheses for flagged revolving-loan positions, including (26) thousand for 3BC Matrix and (21) thousand for A. P. Nonweiler; their corresponding fair values are also negative. The extracted observed values of -26000 and -21000 therefore preserve the filing signs. C107 flags legitimate source-reported negative amortized cost for review, so this grouped flag is a rule-scope false alarm rather than a data error."
+}

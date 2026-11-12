@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_738a748c598a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.2644,
+  "anchor_value": 0.0189,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 29,
+      "quoted_text": "Total liabilities | $ | 1,250,594,584 | $ | 1,086,943,680",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 37,
+      "quoted_text": "Total net assets | $ | 730,348,731 | $ | 607,051,545",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 58,
+      "quoted_text": "LIABILITIES IN EXCESS OF OTHER ASSETS - ( 169.34 %) | $ | ( 1,236,755,774 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 68,
+      "row_index": 59,
+      "quoted_text": "NET ASSETS- 100.00 % | $ | 730,348,731",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 10,
+      "quoted_text": "Total | $ | 1,982,020,670 | 100.00 % | $ | 1,967,104,505 | 100.00 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F26 compares two leverage proxies. The raw source gives balance-sheet liabilities of 1,250,594,584 and net assets of 730,348,731, implying liabilities/net assets of about 171.23%. The schedule of investments separately states liabilities in excess of other assets of 1,236,755,774, or 169.34% of net assets, and its portfolio-plus-cash total of 1,967,104,505 also implies about 169.34% leverage over net assets. Those source-grounded views differ by about 1.89 percentage points, not the flagged 26.44 percentage points. The flag appears to come from comparing mismatched scopes rather than from an error in the extracted fund financials or holdings anchors."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_ce96f52e523f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rate_cells",
+  "observed_value": "",
+  "anchor_value": "Reference rate and spread disclosed",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "AA&D Midco, Inc. (fka GB Eagle Buyer, Inc.) | First Lien Term Loan | S + 4.75 % | 11/29/2030 | $ | 7,932 | $ | 7,857 | $ | 7,853 | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | 5,041 | 4,995 | 5,041 | 9",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Credit rows have blank rate fields even though the SOI provides a reference rate and spread, including PIK where applicable.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell defect. The extracted AA&D Midco credit row has blank interest_rate and no basis_spread, but raw SOI table 11 row 5 discloses S + 4.75%. The same pattern is independently visible for Titan BW Borrower at table 11 row 12, where S + 5.38% including 2.88% PIK is disclosed while the extracted rate is blank. Thus X02 identifies a real loss of disclosed rate data, not a bad check. Residual risk is limited to whether all 99 flagged rows share the demonstrated mechanism; the cited representative rows decisively establish the flagged batch contains real errors."
+}

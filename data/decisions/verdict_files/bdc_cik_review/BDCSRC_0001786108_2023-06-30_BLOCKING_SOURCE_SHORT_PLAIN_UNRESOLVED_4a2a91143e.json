@@ -1,0 +1,48 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001786108",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies Trinity's portfolio-company investment total label as a documented aggregate/header source row, not a production position.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 35,
+      "row_index": 70,
+      "cell_indices": [
+        0,
+        12,
+        13,
+        16,
+        17
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The current-period source coordinate for source_row_id 664240 is 'Total Investment in Securities (96.5%)*' with aggregate cost and fair-value cells, not an issuer/instrument position row."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Use the tested source reconciliation total/header recognition for Trinity's exact 'Portfolio Company Investment in Securities' source identifier. Focused coverage in tests/test_validate_holdings.py asserts this label is documented as a source total/header.",
+  "primary_justification": "Manual review supports a bounded patch-covered verdict. The sole blocker row is source_row_id 664240, raw identifier 'Portfolio Company Investment in Securities', source fair value 1148018000. The HTML coordinate shows this maps to a current-period 'Total Investment in Securities' subtotal row with aggregate cost and fair value. It has no issuer, instrument, rate, maturity, shares, or principal position terms, while the same accession contains named Trinity positions separately in xbrl_rows_same_accession.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded aggregate-total mechanism. Production outputs still need to be rebuilt and source reconciliation rerun before claiming this current blocker row is cleared from generated artifacts.",
+  "review_id": "BDCSRC_0001786108_2023-06-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_4a2a91143e",
+  "reviewer_notes": "Reviewed manually as row 61. The prior insufficient-evidence placeholder was not accurate: the source identifier and HTML coordinate identify an aggregate investment-in-securities total row and support the existing tested source_reconciliation patch.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: exact Trinity portfolio-company investment total labels are documented as total/header source rows instead of remaining source-only blockers.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

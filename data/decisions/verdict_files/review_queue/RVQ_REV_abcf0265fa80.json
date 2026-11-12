@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_abcf0265fa80",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5087652,
+  "anchor_value": 5087652,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 28,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,092,024 | $ | 5,087,652 | 199.8 | %"
+    },
+    {
+      "table_index": 39,
+      "row_index": 9,
+      "quoted_text": "YBR OZ ECE, LLC | SF | 5.86 | % | 10.19 | % | 1/23/2025 | 1/23/2030 | 2,000 | 1,964 | 2,002 | 0.1 | %"
+    },
+    {
+      "table_index": 38,
+      "row_index": 24,
+      "quoted_text": "Baystate Sewage Disposal, LLC | SF | 6.00 | % | 10.33 | % | 6/30/2025 | 12/31/2030 | 4,400 | 4,312 | 4,312 | 0.2 | %"
+    },
+    {
+      "table_index": 38,
+      "row_index": 36,
+      "quoted_text": "ClearlyRated Capital, LLC (Delayed Draw) | (19)(20) | SF | 6.50 | % | 10.82 | % | 4/21/2025 | 4/21/2030 | 1,077 | - | - | 0.0 | %"
+    }
+  ],
+  "rationale": "PP03 flagged 21 rows as comparative-period facts retained in the 2025-06-30 holdings set, but targeted raw-source checks show representative flagged identifiers are actual June 30, 2025 schedule rows. The current investment schedule ties to the June 30, 2025 total fair value of 5,087,652, and flagged names such as YBR OZ ECE, Baystate Sewage Disposal, and ClearlyRated Capital appear in that current schedule with 2025 acquisition dates. Some names also exist in the December 31, 2024 comparative schedule, but the source does not support treating these flagged 2025 rows as leaked comparative rows. The rule appears over-scoped to a non-defective source/provenance condition rather than a data error."
+}

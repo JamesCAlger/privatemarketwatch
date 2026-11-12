@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_29f82157f76b",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "3M SOFR + 3.75%",
+  "anchor_value": "3M SOFR + 3.75%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "DexKo Global Inc. | Closing Date Dollar Term Loan (First Lien) | 3M SOFR + 3.75 % | 0.50 % | 7.68 % | 2/10/2025 | 10/4/2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "DexKo Global Inc. | Closing Date Dollar Term Loan (First Lien) | 1M SOFR + 3.75 % | 0.50 % | 7.58 % | 2/10/2025 | 10/4/2028",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell adjudication. The current-period raw schedule at table 8 row 9 states 3M SOFR + 3.75%, exactly matching the stored holding identifier and its 7.68% coupon. The conflicting 1M SOFR wording appears in the separate comparative-period schedule at table 13 row 6, alongside a different coupon and balances. The flagged 1M reference is therefore comparative-period leakage in the check, not an error in the current-quarter holding. No aggregate anchor is applicable."
+}

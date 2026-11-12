@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3555be3ab68f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 566083084,
+  "anchor_value": 566083084,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 243,
+      "row_index": 23,
+      "quoted_text": "Total Investments | $ | 566,083,084 | $ | 565,360,825 | 169.58 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 234,
+      "row_index": 5,
+      "quoted_text": "Petra Borrower, LLC Delayed Draw Term Loan | ... | Amortized Cost | $ | ( 12,278 ) | Fair Value | $ | ( 12,422 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 243,
+      "row_index": 15,
+      "quoted_text": "CIFC Stone Warehouse Ltd. - Subordinated Lender | ... | Outstanding Principal | $ | - | Amortized Cost | $ | 29,250,000 | Fair Value | $ | 29,250,000",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The fmt_cost flag is aggregate-level, but raw source shows the amortized cost column uses normal SEC table formatting: separate currency-symbol cells, repeated or omitted dollar signs within sections, em-dash/zero outstanding principal, and parenthesized negative cost basis for unfunded delayed draw loans. The schedule total for amortized cost is $566,083,084 and ties to the filing's own Total Investments row, so the checked source does not show an incorrect cost value."
+}

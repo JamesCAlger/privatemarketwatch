@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_0e5ebc9f8f69",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "Aviation Technical Services, Inc. First Lien Senior Secured Loan ... Cost $ 16,833 ... Market Value $ 16,824",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule presents BDC valuation Cost and Market Value as dollar amounts, but the extracted cost_currency is the noncanonical unit label U_USD instead of USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 currency-field validation. The raw Schedule of Investments row has dollar-denominated Cost and Market Value columns for the flagged BDC valuation fields, while the extracted field under review stores cost_currency as U_USD. That is a localized currency/unit normalization error rather than an ambiguous source issue."
+}

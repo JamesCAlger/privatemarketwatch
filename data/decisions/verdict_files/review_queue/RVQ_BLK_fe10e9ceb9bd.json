@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_fe10e9ceb9bd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 5671516000.0,
+  "anchor_value": 5398323000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 20,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 5,453,387 | $ | 5,398,323 | 199.6 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (amortized cost of: $ 5,453,387 and $ 4,002,785, respectively) | 5,398,323 | 4,008,973",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The September 30, 2025 Schedule of Investments reports total fair value of $5,398,323 thousand, and the statement of assets and liabilities independently reports the same amount; this also agrees with the companyfacts anchor of $5,398,323,000. The extracted position sum is $5,671,516,000, an overshoot of $273,193,000 (5.061%), so the extracted data are not conserved. Targeted residual, total, and cash-equivalent source queries did not identify a unique row or disclosed subtotal equal to the residual, so the error is real but not safely localized beyond aggregate extraction/row-disposition scope."
+}

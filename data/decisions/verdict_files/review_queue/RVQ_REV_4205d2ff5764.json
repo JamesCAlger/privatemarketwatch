@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_4205d2ff5764",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/ Share (2) | Cost | Market Value | % of NAV (3)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "Aviation Technical Services, Inc. First Lien Senior Secured Loan ... $ 17,037 ... $ 16,833 ... $ 16,824"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency value U_USD as not USD, but the raw SOI schedule is dollar-denominated: the Market Value column appears in the same table as explicit dollar markers for principal, cost, and market value. The defect is in the validation scope/alias handling for U_USD, not in the source fair value currency."
+}

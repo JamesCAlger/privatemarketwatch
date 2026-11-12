@@ -1,0 +1,60 @@
+{
+  "review_id": "RVQ_REV_4b7122f4cb58",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Two flagged bdc_investment_identifier values include trailing prior-period par amounts: GCOM ends with 15,739 and LEAF Home Solutions Note ends with 36,219.",
+  "anchor_value": "June 30, 2025 source rows keep the investment names separate from par/cost/fair-value numeric columns: GCOM par 17,113, cost 14,939, fair value 15,434; LEAF par 38,392, cost 38,334, fair value 37,589.",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 52,
+      "quoted_text": "GCOM (3)(6)(9) | N/A | 17.000 % | 02/16/2029 | 17,113 | 14,939 | 15,434 | 7.52 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 46,
+      "quoted_text": "GCOM (3)(6)(9) | N/A | 17.000 % | 02/16/2029 | 15,739 | 13,387 | 13,641 | 6.79 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 48,
+      "quoted_text": "LEAF Home Solutions Note (3)(6)(8) | N/A | 12.000 % | 02/26/2027 | 38,392 | 38,334 | 37,589 | 18.30 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 42,
+      "quoted_text": "LEAF Home Solutions Note (3)(6)(8) | N/A | 12.000 % | 02/26/2027 | 36,219 | 36,134 | 34,921 | 17.37 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The GCOM identifier is contaminated with 15,739, which is the prior-period par amount from the December 31, 2024 schedule, not part of the June 30, 2025 investment name.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 30,
+        "row_index": 46,
+        "quoted_text": "GCOM (3)(6)(9) | N/A | 17.000 % | 02/16/2029 | 15,739 | 13,387 | 13,641 | 6.79 | %"
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The LEAF Home Solutions Note identifier is contaminated with 36,219, which is the prior-period par amount from the December 31, 2024 schedule, not part of the June 30, 2025 investment name.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 30,
+        "row_index": 42,
+        "quoted_text": "LEAF Home Solutions Note (3)(6)(8) | N/A | 12.000 % | 02/26/2027 | 36,219 | 36,134 | 34,921 | 17.37 | %"
+      }
+    }
+  ],
+  "rationale": "PP01 is a within-row position-purity review. Six of the eight flagged identifiers resolve to ordinary June 30, 2025 source investment rows, but two flagged rows contain numeric tokens that do not belong in bdc_investment_identifier. The raw June 30, 2025 source rows show GCOM and LEAF as normal position names with current par/cost/fair-value columns, while the same names in the December 31, 2024 comparative schedule contain the exact leaked trailing numbers 15,739 and 36,219. That grounds a real identifier extraction/comparative-period leak for those rows."
+}

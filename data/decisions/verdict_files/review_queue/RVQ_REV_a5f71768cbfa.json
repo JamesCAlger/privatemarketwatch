@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_a5f71768cbfa",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "cost=1000; fair_value=2165000",
+  "anchor_value": "source row reports amortized cost $1 thousand and fair value $2,165 thousand for an equity Class A Units holding",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 20,
+      "quoted_text": "Amergin Asset Management, LLC(23)(25) | Class A Units | N/A | N/A | 50,000,000 | $ | 1 | $ | 2,165"
+    },
+    {
+      "table_index": 27,
+      "row_index": 18,
+      "quoted_text": "Equity Investments"
+    }
+  ],
+  "rationale": "X07 fired because fair value exceeds 10x cost on a non-equity premise, but the raw SOI places the localized holding under Equity Investments and describes it as Class A Units with N/A interest and maturity. The disclosed cost and fair value match the extracted values in thousands, so the data values are source-correct and the check is out of scope for this equity holding."
+}

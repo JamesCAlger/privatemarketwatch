@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_8ece739bac10",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 36000,
+  "anchor_value": -36000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 14,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Diversified Financial Services | S + 5.50 % | 05/08/28 | 2,330 | ( 36 | ) | ( 23 | ) | (5) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "HumanState Limited (dba PayProp) | Diversified Consumer Services | SN + 6.00 % | 11/23/28 | GBP | 270 | 1 | ( 5 | ) | (4) (5) (6) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 10,
+      "quoted_text": "HumanState Limited (dba PayProp) | 451 | 447",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "For flagged negative-fair-value rows such as Admiral Buyer, the source has both cost and fair value parenthesized, but the extracted holding carries a positive cost, causing C103 to fire on a source-valid negative fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Some source-valid negative fair values are tied to unfunded-commitment context that was not carried into the extracted row marker; HumanState appears in the unfunded commitment balance table.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 39,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 2 row-context adjudication. The raw schedule shows the representative flagged Admiral Buyer row with cost (36) and fair value (23), while the bundle's extracted holdings slice has the same fair value as -23000 but cost as positive 36000. The fair value cell is source-correct; the defect is loss of row context/sign during extraction. Other flagged rows follow the same pattern, and rows carrying footnote (8) also tie to the filing's unfunded commitment balance context, such as HumanState in the unfunded commitment table. Therefore C103 is a real row-level data error, but the localized culprit is not the negative fair value itself; it is the missing negative-cost/unfunded-marker context."
+}

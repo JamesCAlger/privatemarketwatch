@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_87ec07a5773e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 grouped single-column flag covering 53 missing interest-rate cells. Raw-source adjudication was unavailable because the evidence CLI could not start: Windows CreateProcessWithLogonW failed with error 1326. Under the fail-closed contract, no source-grounded judgment or localization can be made."
+}

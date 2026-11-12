@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_REV_c0bb6837e412",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 9,
+      "quoted_text": "ERA Industries, LLC First Lien Senior Secured Loan - Revolver has dashes in Index, Spread, and Interest Rate, with maturity 7/25/2030 and negative cost/market value."
+    },
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "ERA Industries, LLC First Lien Senior Secured Loan - Delayed Draw has dashes in Index, Spread, and Interest Rate, with maturity 7/25/2030 and negative cost/market value."
+    },
+    {
+      "table_index": 12,
+      "row_index": 22,
+      "quoted_text": "Electronic Merchant Systems, LLC First Lien Senior Secured Loan - Revolver has dashes in Index, Spread, and Interest Rate, with maturity 8/1/2030 and zero principal/cost/market value."
+    },
+    {
+      "table_index": 12,
+      "row_index": 33,
+      "quoted_text": "HLRS Holdco Limited First Lien Senior Secured Loan - Delayed Draw has dashes in Index, Spread, and Interest Rate, with maturity 9/27/2030 and negative cost/market value."
+    },
+    {
+      "table_index": 13,
+      "row_index": 18,
+      "quoted_text": "New Milani Group LLC First Lien Senior Secured Loan - Revolver has dashes in Index, Spread, and Interest Rate, with maturity 6/6/2026 and zero principal/cost/market value."
+    },
+    {
+      "table_index": 13,
+      "row_index": 23,
+      "quoted_text": "RoC Skincare First Lien Senior Secured Loan - Revolver has dashes in Index, Spread, and Interest Rate, with maturity 2/21/2030 and negative cost."
+    },
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Choreo First Lien Senior Secured Loan - Delayed Draw has dashes in Index, Spread, and Interest Rate, with maturity 2/18/2028 and zero principal/cost/market value."
+    },
+    {
+      "table_index": 14,
+      "row_index": 6,
+      "quoted_text": "Wealth Enhancement Group First Lien Senior Secured Loan - Revolver has dashes in Index, Spread, and Interest Rate, with maturity 10/2/2028 and negative cost."
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "Simplicity First Lien Senior Secured Loan - Revolver has dashes in Index, Spread, and Interest Rate, with maturity 12/2/2026 and negative cost."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X02 is firing on private-credit delayed-draw/revolver rows where the filer itself discloses no index, spread, or interest rate because the row is unfunded, zero-balance, or a negative carrying-balance line.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "The source schedule columns are Portfolio Company, Investment Type, Index, Spread, Interest Rate, Maturity Date, Principal/Share, Cost, and Market Value. For the localized credit rows reviewed, the raw filing shows dashes in the Index, Spread, and Interest Rate cells rather than omitted extraction: examples include ERA Industries rows 9-10, Electronic Merchant Systems row 22, HLRS row 33, New Milani row 18, RoC Skincare row 23, and Choreo/WEG/Simplicity rows 3, 6, and 15 of table 14. Neighboring funded loan rows in the same tables carry populated SOFR/BBSY spreads and rates, so the blank stored rate matches the source; the validation rule is over-scoped for these unfunded or negative/zero-balance credit lines."
+}

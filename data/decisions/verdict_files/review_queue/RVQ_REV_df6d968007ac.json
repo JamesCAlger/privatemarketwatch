@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_df6d968007ac",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 69816.976,
+  "anchor_value": 69816976,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Resco Products, Inc. | Term Loan - 11.44 % (SOFR + 6.50 %, 1.00 % Floor) | Amortized Cost 18,763,123 | Fair Value 18,166,993",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "HOP Energy, LLC | Term Loan - 14.94 % inc PIK (SOFR + 10.00 %, 2.00 % Floor, 2.75 % PIK) | Amortized Cost 22,130,144 | Fair Value 21,218,503",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 21,
+      "quoted_text": "Black Rock Coffee Holdings, LLC | Term Loan - 12.12 % inc PIK (SOFR + 7.00 %, 1.00 % Floor, 1.00 % PIK) | Amortized Cost 18,702,169 | Fair Value 18,551,101",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 22,
+      "quoted_text": "Red Robin International, Inc. | Term Loan - 11.62 % (SOFR + 6.00 %, 1.00 % Floor) | Amortized Cost 12,065,789 | Fair Value 11,880,379",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "Resco Products fair_value was stored as 18,166.993 instead of the source value 18,166,993.",
+      "fix_class": "unit_rescale",
+      "citation": {"table_index": 5, "row_index": 8}
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "HOP Energy fair_value was stored as 21,218.503 instead of the source value 21,218,503.",
+      "fix_class": "unit_rescale",
+      "citation": {"table_index": 5, "row_index": 14}
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "Black Rock Coffee fair_value was stored as 18,551.101 instead of the source value 18,551,101.",
+      "fix_class": "unit_rescale",
+      "citation": {"table_index": 5, "row_index": 21}
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "Red Robin term loan fair_value was stored as 11,880.379 instead of the source value 11,880,379.",
+      "fix_class": "unit_rescale",
+      "citation": {"table_index": 5, "row_index": 22}
+    }
+  ],
+  "rationale": "The X08 warnings are real data errors. For each flagged row, the source SOI shows fair value in full dollars and near amortized cost, not below 5% of cost. The extracted fair_values, 18,166.993, 21,218.503, 18,551.101, and 11,880.379, are exactly 1/1000 of the cited source fair values, while costs were extracted in full dollars. This is a fair_value unit scale defect, not distressed economics."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_9f3cb55c402a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2023-08-31",
+  "anchor_value": "2029-09-30",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 52,
+      "quoted_text": "Unsecured Note ($ 227 par, due 9/2029 ) | 8/31/2023 | 7.50 % | 7.50 % | 119 | 123 | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The stored maturity_date 2023-08-31 is the source Initial Acquisition Date; the investment text states the note is due 9/2029.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 52
+      }
+    }
+  ],
+  "rationale": "Class 1 maturity-date validation. The flagged value 2023-08-31 appears in the source row as the Initial Acquisition Date, while the same source row's investment description states 'due 9/2029'. Because report_date is 2023-09-30, the warning is caused by a real stored maturity-date extraction error rather than a genuinely matured position."
+}

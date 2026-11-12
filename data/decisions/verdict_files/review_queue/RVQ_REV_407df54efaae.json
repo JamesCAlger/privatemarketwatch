@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_407df54efaae",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3.09,
+  "anchor_value": 3.09,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 12,
+      "quoted_text": "Total Investments | $ | 1,385,574 | $ | 1,385,068 | 150.28 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 22,
+      "quoted_text": "GS Acquisitionco, Inc. subtotal: 29,907 cost, 29,839 fair value, 29,907 fair value, 3.24% of net assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 26,
+      "quoted_text": "Syndigo LLC subtotal: 29,689 cost, 29,389 fair value, 29,529 fair value, 3.20% of net assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 30,
+      "quoted_text": "Higginbotham Insurance Agency, Inc. subtotal: 27,905 cost, 27,801 fair value, 27,905 fair value, 3.03% of net assets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate concentration flag. The filing's own schedule total anchors at total investments fair value of 1,385,068 (in thousands) and 150.28% of net assets. Targeted source checks localize the three above-threshold issuer subtotal rows in the current SOI: GS Acquisitionco at 3.24%, Syndigo at 3.20%, and Higginbotham at 3.03% of net assets. The fourth nearby subtotal, Zone Climate Services, is exactly 3.00%, consistent with a strict greater-than threshold and the queue's n_violate=3. Because the source confirms the concentrations as disclosed filing values rather than bad extraction, subtotal leakage, duplicate rows, or anchor disagreement, the flag is a false alarm from rule scope."
+}

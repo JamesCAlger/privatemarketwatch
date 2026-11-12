@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_88b7e40c42dd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 16116059,
+  "anchor_value": 39599180,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 54,
+      "quoted_text": "Total Common Stocks | 15,262,503",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 64,
+      "quoted_text": "Total LLC Interests | 8,220,618",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 100.8% | 38,284,231 | 39,599,180",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Common Stocks fair value of 15,262,503 is in the source schedule but outside the observed extracted subtotal.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 19,
+        "row_index": 54
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "LLC Interests fair value of 8,220,618 is in the source schedule but outside the observed extracted subtotal.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 19,
+        "row_index": 64
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor-first review. The filing schedule total fair value is 39,599,180 at table 20 row 19, corroborated by the composition table total invested assets. The flagged 0.407 ratio matches an observed extracted subtotal of 16,116,059, which equals Senior Secured Loans 5,166,412 plus Corporate Bonds 175,477 plus Preferred Stocks 10,774,170. The source schedule also includes Common Stocks of 15,262,503 and LLC Interests of 8,220,618; those two localized subtotals explain the residual between the observed extracted subtotal and the schedule total."
+}

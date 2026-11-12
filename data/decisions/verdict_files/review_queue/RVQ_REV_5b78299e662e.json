@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_5b78299e662e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.840584972264246,
+  "anchor_value": 14.22087745839637,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 2,
+      "quoted_text": "December 26, 2025 | December 30, 2025 | $ | 0.475 | 9.5 | % | $ | 31,381"
+    },
+    {
+      "table_index": 6,
+      "row_index": 9,
+      "quoted_text": "Net investment income (loss) | $ | 1.88"
+    },
+    {
+      "table_index": 7,
+      "row_index": 8,
+      "quoted_text": "Net asset value per share | $ | 19.83"
+    },
+    {
+      "table_index": 7,
+      "row_index": 11,
+      "quoted_text": "Distributions declared per share | 1.91"
+    }
+  ],
+  "rationale": "Raw source supports a distribution yield around 9.5%-9.84%: the distribution schedule reports a 9.5% annualized yield for the December 2025 distribution, and annual distributions declared per share of 1.91 over NAV per share of 19.83 imply about 9.63%. Source NII per share is 1.88 over the same NAV per share, or about 9.48%; 1.5x that income yield is about 14.22%. The observed flagged distribution-rate value 9.840584972264246 is below this threshold, so the F16 fire is a rule-scope/heuristic false alarm rather than a source data defect."
+}

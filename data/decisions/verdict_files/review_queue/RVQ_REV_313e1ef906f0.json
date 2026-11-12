@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_313e1ef906f0",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC (3) | First-lien loan ($ 298,266 par, due 2/2032 ) | 2/13/2024 | SOFR + 5.00 % | 9.14 % | $ 295,508 | $ 298,267 | 6.9 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 29,
+      "quoted_text": "Total Investments | $ | 7,440,176 | $ | 7,724,072 | 179.8 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency values of U_USD as non-USD, but the raw investment schedule shows the amortized cost and fair value columns are dollar-denominated. The representative flagged holding row has dollar signs before both amortized cost and fair value, and the schedule total is also presented in dollars. U_USD is therefore an internal XBRL unit label for USD rather than a foreign-currency cost value."
+}

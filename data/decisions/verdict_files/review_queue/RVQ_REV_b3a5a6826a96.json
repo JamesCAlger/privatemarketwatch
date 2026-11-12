@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_b3a5a6826a96",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source rows show non-USD debt par requiring explicit USD principal conversion",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 11,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 28,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 79,
+      "row_index": 37,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 issue rows have blank principal_amount_usd even though current-period SOI rows disclose non-USD debt par amounts in EUR, GBP, and AUD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 74,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 1 single-column row-validation batch: the flagged column is principal_amount_usd, with 19 issue rows reported as blank. Raw source is readable. The SOI header places Par / Units before Amortized Cost and Fair Value, and current-period rows show non-USD debt par in that Par / Units field, for example Aurelia Netherlands EUR term loan at table 74 row 11, RL Datix GBP term loan at table 80 row 28, and Vermont Aus AUD term loan at table 79 row 37. Because the source par is explicitly non-USD and the extracted USD principal field is blank, the flag reflects a real FX conversion/extraction gap rather than a false alarm. No aggregate anchor was needed."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_55c84c0d5e5a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 176.6,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "Grand Total | 176.6 % | $ | 407,613,644 | $ | 370,055,950 | $ | 334,975,067",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 32,
+      "quoted_text": "Total Loan Investments | $ | 334,975,067",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period schedule discloses Percent of Net Assets grand total of 176.6%, but the check observed pct_sum as 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation: the source schedule's Grand Total row reports 176.6% in Percent of Net Assets and fair value of 334,975,067; the fair value is corroborated by Total Loan Investments of 334,975,067. The flagged observed pct_sum is 0.0%, so the raw source shows the percent-of-net-assets values were not captured rather than absent."
+}

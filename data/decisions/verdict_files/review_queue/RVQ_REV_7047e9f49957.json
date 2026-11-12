@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_7047e9f49957",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 174.51,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 82,
+      "row_index": 12,
+      "quoted_text": "Total | $ | 2,138,204 | $ | 2,177,821 | 100.00 | % | 174.51 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0, but the filing reports the investment total as 174.51% of net assets and 100.00% of total investments.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 82,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "The source artifact row for A07 reports pct_sum=0.0% for this CIK/quarter. Raw source table 82 row 12 gives the filing's own total investment row with fair value 2,177,821, percent of total investments 100.00%, and fair value as percent of net assets 174.51%. Because the reviewed extraction has a zero percent aggregate while the filing provides nonzero total-percentage anchors, the flag is a real aggregate extraction gap rather than a false alarm."
+}

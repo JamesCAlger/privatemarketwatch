@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_93ba0ba9929e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 14.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 35,
+      "quoted_text": "InnovateMR | (j) (s) (t) | Class A Units | 12/16/2021 | 387.31 | 387,311 | 588,723",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 36,
+      "quoted_text": "Industrial Services Group | (j) (s) (u) | Class A Units | 12/7/2022 | 238.10 | 238,095 | 239,347",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 5,
+      "quoted_text": "PracticeTek | (j) (s) (x) | Class A Units | 11/22/2021 | 344,833.35 | 377,255 | 354,188",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 23,
+      "quoted_text": "A1 Garage Door Service | (j) (s) (af) | Class A Common Units | 12/22/2022 | 272.73 | 272,727 | 274,638",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The SOI equity and preferred share rows contain populated Par/Shares values, but the extracted equity population has 0.0 percent of rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "C04 flags that 0.0% of 16 extracted equity rows have shares. The raw SOI uses a Par/Shares column for the equity and preferred shares section, and current-period equity rows such as InnovateMR, Industrial Services Group, PracticeTek, and A1 Garage Door Service have populated Par/Shares values. The source therefore supports shares for these equity holdings; the extracted data omitted or failed to map that column."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_8419c91cbd6c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_row",
+  "observed_value": null,
+  "anchor_value": 23635,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 26,
+      "quoted_text": "123Dentist Inc (4)(5)(9)(36) | C + | 5.00 % | 7.27 | % | 8/10/2029 | CAD | 23,635 | 16,742 | 16,995",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source reports CAD 23,635 par, but principal_amount_usd is blank, so the required USD-normalized principal was not produced.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 2 repeated-row issue. The raw investment schedule explicitly labels the par amount as non-USD (CAD 23,635) for a flagged holding, while FX01 reports principal_amount_usd as blank. The filing also contains USD/CAD forward rows, confirming that CAD exposure is translated and managed in USD terms. The defect is the missing USD normalization, not a false rule fire. A fair-value total anchor is not applicable to this row-level FX completeness rule."
+}

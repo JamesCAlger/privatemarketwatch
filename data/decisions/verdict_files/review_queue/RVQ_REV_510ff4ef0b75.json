@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_510ff4ef0b75",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "source_schedule_rate_terms",
+  "observed_value": 700.0,
+  "anchor_value": 7.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 28,
+      "quoted_text": "SEKO Global Logistics Network, LLC | First Lien Secured Debt - Term Loan | S + 700 PIK, 1.00 % Floor | 05/27/30 | 2,018 | 2,018 | 1,890 | (9)(17)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The source interest-rate cell states S + 700 PIK, where 700 is a basis-point spread. Because basis_spread is stored as a whole-number percentage, the correct stored value is 7.0, not 700.0. The flagged cell is therefore mis-scaled by 100x."
+}

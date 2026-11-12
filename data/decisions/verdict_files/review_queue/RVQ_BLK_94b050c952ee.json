@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_94b050c952ee",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "One stop",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 25 ) | - | -"
+    },
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "ABC Legal Holdings, LLC^(5) | One stop | N/A(6) | 08/2032 | - | ( 38 ) | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The two ABC Legal zero-fair-value rows have blank exposure_type in extracted holdings even though the source Investment Type cell is One stop.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The second ABC Legal zero-fair-value row also has source Investment Type One stop but blank exposure_type in extracted holdings.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "C303 flags missing exposure_type on row_keys 493672 and 493673. The source rows corresponding to ABC Legal Holdings, LLC show Investment Type as One stop for both flagged rows, so the controlled classification is present in the raw SOI but was not carried into exposure_type."
+}

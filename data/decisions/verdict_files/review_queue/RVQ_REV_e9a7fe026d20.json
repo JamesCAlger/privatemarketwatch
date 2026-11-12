@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_e9a7fe026d20",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "cost_currency values U_GBP, U_EUR, U_AFN, U_RSD, and U_AUD on flagged rows",
+  "anchor_value": "USD-denominated Cost column in the Schedule of Investments",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Industry/Company (34) | Investment Type | Interest Rate (13) | Maturity Date | Par/Shares/Units (3) | Cost (37) | Fair Value (1)(38)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Accel International Holdings, LLC | First Lien Secured Debt - Term Loan | S + 450, 0.50% Floor | 04/26/2032 | $ 187,003 | $ 186,181 | $ 185,133"
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Quito | First Lien Secured Debt - Term Loan | E + 500, 0.00% Floor | 01/22/2033 | EUR 95,313 | 109,786 | 107,964"
+    },
+    {
+      "table_index": 11,
+      "row_index": 11,
+      "quoted_text": "Total Air Freight & Logistics | $ | 160,530 | $ | 158,233"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged cost_currency values are non-USD even though the raw SOI presents the Cost and Fair Value columns as dollar-denominated; the foreign unit belongs to the par/principal field, not cost.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. The SOI headers define separate Par/Shares/Units, Cost, and Fair Value columns, and dollar markers appear on the Cost/Fair Value columns and totals. In the foreign-denominated example, the EUR marker is attached to the par/principal amount while the cost amount is under the dollar-denominated Cost column. The extracted non-USD cost_currency therefore reflects currency leakage from the par/principal field into cost_currency, not a valid non-USD cost column."
+}

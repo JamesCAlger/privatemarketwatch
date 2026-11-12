@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_BLK_48fadc6ec34c",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6,
+  "anchor_value": 0.5,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 9,
+      "quoted_text": "Quest Resource Management Group, LLC | SF | 7.61 | % | 11.49 | % | 12/30/2024 | 6/28/2030 | 14,192 | 14,039 | 12,841 | 0.6 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 59,
+      "row_index": 10,
+      "quoted_text": "The Gersh Agency, LLC | (11) | SF | 6.25 | % | 10.24 | % | 12/13/2024 | 11/20/2030 | 13,483 | 13,279 | 12,876 | 0.6 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 49,
+      "row_index": 8,
+      "quoted_text": "Dorado Acquisition, Inc. | (6)(7) | SF | 6.85 | % | 10.72 | % | 6/30/2021 | 6/30/2026 | 13,209 | 13,170 | 13,116 | 0.6 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Quest fair value 12,841 against net assets 2,830,579 implies about 0.5% after rounding, but the source row reports 0.6%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 47,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The Gersh Agency fair value 12,876 against net assets 2,830,579 implies about 0.5% after rounding, but the source row reports 0.6%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 59,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Dorado fair value 13,116 against net assets 2,830,579 implies about 0.5%, but the source row reports 0.6%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 49,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate-style identity flag. The filing anchors the denominator with Total net assets of 2,830,579 in table 38 row 37, and the schedule's TOTAL INVESTMENTS line of fair value 5,819,755 at 205.6% in table 70 row 35 ties to that denominator. Individual cited schedule rows do not tie to the same anchor after normal rounding: for example, Quest fair value 12,841 should be about 0.5% of net assets but is printed as 0.6%, matching the negative residual pattern in the bundle. The source is readable and supports a real percent-of-net-assets value defect rather than an anchor problem or false alarm."
+}

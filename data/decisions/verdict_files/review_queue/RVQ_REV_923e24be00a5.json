@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_923e24be00a5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "fair_value_currency extracted as non-USD units on 8 rows: U_GBP, U_EUR, U_AFN, U_RSD, U_AUD",
+  "anchor_value": "USD fair value currency shown by the schedule",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 158,
+      "row_index": 6,
+      "quoted_text": "BNP Paribas S.A. forward: notional sold is GBP, but Fair Value* is $ 144.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 159,
+      "row_index": 5,
+      "quoted_text": "Wells Fargo Bank National Association forward: notional sold is EUR, but Fair Value* is $ 1,429.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 159,
+      "row_index": 3,
+      "quoted_text": "Wells Fargo Bank National Association forward: notional sold is A$, but Fair Value* is $ 6,372.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 158,
+      "row_index": 13,
+      "quoted_text": "Morgan Stanley Bank N.A. forward: foreign notional amount appears in a notional column, but Fair Value* is $ 5.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 158,
+      "row_index": 25,
+      "quoted_text": "State Street Bank and Trust Company forward: foreign notional sold is Skr, but Fair Value* is $ 158.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign-currency notional units from forward-contract rows were attributed to fair_value_currency even though the Fair Value* column is dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 158,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The raw derivative schedules separate foreign-currency notional amount columns from the Fair Value* column; the cited rows show GBP, EUR, AUD, and other foreign units in notional columns while the fair value cell itself is preceded by '$'. Therefore the extracted non-USD fair_value_currency values are unit attribution errors, not valid non-USD BDC valuation fair values."
+}

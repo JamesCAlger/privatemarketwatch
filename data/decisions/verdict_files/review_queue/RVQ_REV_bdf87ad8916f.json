@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_bdf87ad8916f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 130,
+      "row_index": 6,
+      "quoted_text": "Non-accrual (3) | 2,413 | 2,419 | 969 | - | - | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 130,
+      "row_index": 9,
+      "quoted_text": "Non-accrual (3) | 17,923 | 14,125 | 7,578 | 5,066 | 2,133 | 2,381",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing's current-period schedule confirms the five flagged non-accrual positions. Cast & Crew alone ties exactly to table 130 row 6 at principal 2,413, amortized cost 2,419, and fair value 969. The other four flagged rows tie exactly to table 130 row 9: Inhance Parent (5,591/2,133/2,516), Panzura (69/64/57), Pluralsight (2,166/2,032/563), and RW AM Holdco (10,097/9,896/4,442) sum to principal 17,923, amortized cost 14,125, and fair value 7,578. Therefore the extracted count of five is source-supported; the advisory presence flag does not identify a data defect."
+}

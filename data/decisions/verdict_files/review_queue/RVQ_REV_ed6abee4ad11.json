@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_REV_ed6abee4ad11",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1445655,
+  "anchor_value": 1445655,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 28
+    },
+    {
+      "table_index": 43,
+      "row_index": 34
+    },
+    {
+      "table_index": 63,
+      "row_index": 20
+    },
+    {
+      "table_index": 63,
+      "row_index": 24
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 appears to count unfunded undrawn debt commitments as debt rows requiring interest_rate even though the source schedule prints no reference, spread, or interest rate for those rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 43,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "The raw SOI has funded debt rows with populated Reference, Spread, and Interest Rate columns, but unfunded debt rows labelled Undrawn show dash values in all three rate-related columns. Examples include table 43 rows 28 and 34, and table 63 rows 20 and 24. The filing totals tie internally to total investments of 1,445,655 (in thousands) at table 43 row 38 / table 69 row 6, so this is not an aggregate extraction miss. The low C01 rate-coverage metric is therefore caused by applying a debt-rate requirement to source rows where no rate is stated."
+}

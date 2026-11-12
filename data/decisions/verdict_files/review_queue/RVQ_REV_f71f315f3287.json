@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_f71f315f3287",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.0,
+  "anchor_value": 2974150.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Wholesale Supplies Plus Holdings, LLC | Class A Common Units | 10/1/2021 | N/A | 3,400 | 3,400,000 | 2,974,150 | 1.0 | % | (6)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source row has amortized cost 3,400,000 and fair value 2,974,150; the X08 flag indicates the extracted fair value was a tiny value, likely the adjacent 1.0 percent-of-net-assets cell.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "X08 fired because the extracted holding had fair value below 5% of cost 3,400,000. The raw schedule row for Wholesale Supplies Plus Holdings shows the fair value column as 2,974,150, which is about 87.5% of cost, followed by a separate 1.0 percent-of-net-assets cell. The flag is therefore a real extraction error in the fair_value field, not an economically distressed source position."
+}

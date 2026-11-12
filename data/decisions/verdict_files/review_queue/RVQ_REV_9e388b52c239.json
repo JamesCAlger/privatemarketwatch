@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_9e388b52c239",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 35339,
+  "anchor_value": 35339,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Continental Battery Company | (5) (11) (12) (13) | First Lien Debt | 7.00 % PIK | 11.29 % | 07/20/2028 | 6,473 | 6,415 | 1,992 | 0.18"
+    },
+    {
+      "table_index": 11,
+      "row_index": 12,
+      "quoted_text": "48Forty Solutions, LLC | (5) (9) (13) | First Lien Debt | S + | 6.00 % | 10.48 % | 11/30/2029 | 26,151 | 25,874 | 13,729 | 1.24"
+    },
+    {
+      "table_index": 11,
+      "row_index": 13,
+      "quoted_text": "48Forty Solutions, LLC | (5) (13) (17) | First Lien Debt | S + | 6.00 % | 10.48 % | 11/30/2029 | 3,131 | 3,050 | 1,268 | 0.11"
+    },
+    {
+      "table_index": 82,
+      "row_index": 4,
+      "quoted_text": "Non-accrual | 35,339 | 1.7 | 18,727 | 0.9",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Continental Battery Company first lien debt is part of the source-disclosed non-accrual population; its amortized cost is 6,415.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 8,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "48Forty Solutions, LLC first lien debt row with amortized cost 25,874 is part of the source-disclosed non-accrual population.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 11,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "48Forty Solutions, LLC first lien debt row with amortized cost 3,050 is part of the source-disclosed non-accrual population.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 11,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The three localized source rows all carry footnote (13), and their amortized costs sum to 35,339 (6,415 + 25,874 + 3,050). The filing separately reports September 30, 2025 non-accrual amortized cost of 35,339, so the non-accrual status is source-grounded and localized to these three debt positions."
+}

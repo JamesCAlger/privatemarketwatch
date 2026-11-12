@@ -1,0 +1,29 @@
+{
+    "review_id":  "RVQ_REV_538fd0045d1a",
+    "verdict":  "false_alarm",
+    "mechanism":  "anchor_bad",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  1.3065,
+    "anchor_value":  0.024715840784072518,
+    "confidence":  0.94,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  252,
+                                  "row_index":  19,
+                                  "quoted_text":  "Total Investments - 102.3% | cost 35,850,999 | fair value 37,591,400"
+                              },
+                              {
+                                  "table_index":  268,
+                                  "row_index":  20,
+                                  "quoted_text":  "Total Investments - 98.3% | cost 39,228,761 | fair value 44,527,127"
+                              },
+                              {
+                                  "table_index":  237,
+                                  "row_index":  12,
+                                  "quoted_text":  "Total assets | 38,169,968 | 46,576,001"
+                              }
+                          ],
+    "rationale":  "Raw source shows investment fair value of 37,591,400 at December 31, 2025 and 44,527,127 at December 31, 2024, a -0.155764 growth rate. The same filing shows total assets of 38,169,968 and 46,576,001, a -0.180480 growth rate. The absolute growth-rate difference is 0.024716, well below the 0.30 threshold and inconsistent with the flagged observed value 1.3065, so the stored/source values are correct and the F25 fire is a check/anchor false alarm."
+}

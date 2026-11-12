@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_929b1bdfdf7f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 325713000,
+  "anchor_value": 349365000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 103.1 % | $ | 349,365 | $ | 329,255",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 349,365 and $ 663,661 ) | $ | 329,255 | $ | 582,495",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted cost sum is 325.713 million, but the source schedule and balance sheet both state total investment cost of 349.365 million.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 38,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 3 cost conservation was anchored first. The filing's SOI total investments row reports cost of 349.365 million and fair value of 329.255 million, and the balance sheet independently states total investments at fair value with amortized cost of 349.365 million. The reviewed extract reports cost of only 325.713 million, an undershoot of 23.652 million, so the flag is a real extraction-gap data error. The SOI also shows the total consists of debt investments of 330.150 million and equity securities of 19.215 million, but the available row-disposition evidence does not isolate one exact omitted position set for the full residual."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_359a2b32272d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.14743589743589744,
+  "anchor_value": 0.5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Government Services | S+ 5.00 %, 0.75 % Floor | 9.33 | 9/1/2023 | 9/3/2030 | 10,569,628 | 10,416,769 | 10,468,259 | 1.93",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 8,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Government Services | S + 6.00 %, 0.75 % Floor | 10.36 | 9/1/2023 | 9/3/2030 | 10,596,118 | 10,427,328 | 10,504,801 | 1.93",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 12,
+      "quoted_text": "Allentown LLC | 1st Lien Term Loan | Healthcare Equipment & Supplies | S+ 7.15 %, 1.00 % Floor | 11.48 | 4/22/2022 | 4/22/2027 | 11,590,319 | 11,404,064 | 11,261,184 | 2.08",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 12,
+      "quoted_text": "Allentown LLC | 1st Lien Term Loan | Healthcare Equipment & Supplies | S + 6.10 %, 1.00 % Floor | 10.73 | 4/22/2022 | 4/22/2027 | 11,596,730 | 11,354,924 | 11,361,399 | 2.08",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer identity is not normalized to the portfolio-company cell; repeated issuers such as Accela Inc/US and Allentown LLC appear in both current and prior source schedules despite the 14.7% continuity metric.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "D06 is a CIK-quarter aggregate continuity failure: only 23 of 156 issuers persisted, below the 0.5 threshold. Raw source rows show the same portfolio companies recurring across June 30, 2025 and December 31, 2024 schedules, with ordinary rate, date, footnote, and value changes. The bundle's extracted issuer_name examples contain the entire instrument description rather than only the source portfolio-company cell, so exact issuer continuity is artificially low. This is a real extraction/normalization error rather than true portfolio turnover."
+}

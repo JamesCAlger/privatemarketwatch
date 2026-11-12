@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_60bf8fa19516",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8.5,
+  "anchor_value": null,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 11,
+      "quoted_text": "Signature Brands, LLC | 05/05/25 | 9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK) | 0.9 | % | 7,419,002 | 05/04/28 | 7,213,727 | 7,419,002"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "basis_spread was populated as 8.5 even though the source investment term is 17.50% Fixed Coupon, all PIK with no floating spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 11,
+        "quoted_text": "9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK)"
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check: the flagged cell is basis_spread=8.5 for the Signature Brands 9th Amendment Term Loan A. The raw SOI row identifies the instrument as 17.50% inc PIK with parenthetical terms of 17.50%, Fixed Coupon, all PIK. Because the source states a fixed coupon and does not disclose SOFR or another floating spread for this row, the stored basis_spread is a real extraction error."
+}

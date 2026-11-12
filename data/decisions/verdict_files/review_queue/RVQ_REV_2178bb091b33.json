@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_2178bb091b33",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Industry and row-wrapper text concatenated into issuer_name for eight rows",
+  "anchor_value": "Twin Star International, Inc.; WDE TorcSill Holdings LLC",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 16,
+      "quoted_text": "Twin Star International, Inc. | 06/12/23 | Incremental Delayed Draw Term Loan - 11.35 % inc PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 18,
+      "quoted_text": "Twin Star International, Inc. | 02/15/23 | Delayed Draw Term Loan - 11.35 % inc PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 13,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Revolver - 23.35 % inc PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 10/22/19 | Term Loan - 23.35 % inc PIK",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.00 % inc PIK",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The raw schedule separates Industry, Issuer, Acquisition Date, and Investment into distinct columns. In the cited rows the Issuer cell is the clean entity name, but all eight flagged issuer_name values contain adjacent industry, acquisition-date, or investment text. This is a grounded wrapper/column-boundary extraction gap, not legitimate issuer naming. No duplicate-position defect is established by this flag alone."
+}

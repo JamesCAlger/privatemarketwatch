@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_01cf0a4e2f56",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9404446000,
+  "anchor_value": 1218474000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 8,
+      "quoted_text": "Total investments (amortized cost-$ 1,225,206 and $ 1,236,888, respectively) | 1,218,474 | 1,287,273",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 266.5 % of Net Assets (12), (13) | 1,225,206 | 1,218,474",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 6,
+      "quoted_text": "Total investments | 1,218,474 | - | 209,485 | 942,953 | 66,036",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The raw parent filing total investments are 1,218,474 thousand, but the HTML aggregate extracted 9,404,446 thousand, indicating extra SOI-like tables were swept into the aggregate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 6,
+        "row_index": 8,
+        "quoted_text": "Total investments | 1,218,474"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The source balance sheet shows total investments of 1,218,474 thousand at December 31, 2025, the SOI total row repeats 1,218,474 thousand, and the fair-value hierarchy table also totals investments to 1,218,474 thousand. The bundle's companyfacts anchor is 1,218,474,000, matching those source totals after the thousand-dollar unit convention. The observed HTML aggregate is 9,404,446 thousand (9,404,446,000), so the extraction aggregate is materially inflated rather than the anchor being bad."
+}

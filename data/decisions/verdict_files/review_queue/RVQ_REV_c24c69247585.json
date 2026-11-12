@@ -1,0 +1,79 @@
+{
+  "review_id": "RVQ_REV_c24c69247585",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Matching SOI debt rows disclose rate/spread for the supplemental table 15 rows; one main-SOI Daintree row is genuinely blank in source.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 3,
+      "quoted_text": "Albion Fortress Intermediate Holdings LLC | First Lien - Term Loan | EUR | 22,936 | 23,005"
+    },
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "Albion Fortress Intermediate Holdings LLC | First Lien - Term Loan | EURIBOR + 575 | 7.8 | 7/31/2031 | 26,175 | 26,591"
+    },
+    {
+      "table_index": 15,
+      "row_index": 4,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Term Loan | CAD | 31,207 | 31,332"
+    },
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "Jupiter Refuel Canada Buyer, Inc. | First Lien - Term Loan | CORRA + 525 | 7.5 | 6/30/2031 | 22,916 | 22,523"
+    },
+    {
+      "table_index": 15,
+      "row_index": 7,
+      "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Term Loan | GBP | 15,974 | 15,839"
+    },
+    {
+      "table_index": 11,
+      "row_index": 10,
+      "quoted_text": "Ruby Bidco Holdings Limited | First Lien - Term Loan | SONIA + 500 | 8.7 | 9/12/2032 | 21,569 | 20,965"
+    },
+    {
+      "table_index": 15,
+      "row_index": 9,
+      "quoted_text": "Urban Gym Group B.V. | First Lien - Term Loan | EUR | 6,292 | 6,291"
+    },
+    {
+      "table_index": 11,
+      "row_index": 16,
+      "quoted_text": "Urban Gym Group B.V. | First Lien - Term Loan | EURIBOR + 675 | 8.8 | 10/28/2031 | 7,332 | 7,271"
+    },
+    {
+      "table_index": 11,
+      "row_index": 40,
+      "quoted_text": "Daintree Bidco Pty Limited | First Lien - Term Loan | 11/25/2032 | 9,000,000 | 8,865 | 8,827"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Eight flagged rows are supplemental currency/cost/FMV rows from table 15 with no rate columns, while matching SOI debt rows disclose reference spread and interest rate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 15,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "The Daintree Bidco Pty Limited main-SOI row is private credit but the source row itself leaves reference rate, spread, and interest rate blank.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 11,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "X02 is a Class 2 row-validation item. The nine-row flag is real in material part: table 15 supplies private-credit-looking issuer/investment/currency/cost/FMV rows with no rate fields, but the matching SOI debt rows for Albion, Jupiter, Ruby, and Urban show rate/spread and interest-rate values. The parser therefore stored supplemental rows as private credit holdings without carrying the rate-bearing SOI fields. One flagged Daintree row is different: the source SOI row itself has blank reference-rate/spread and interest-rate cells, so that subcase is source-blank rather than independently extractable."
+}

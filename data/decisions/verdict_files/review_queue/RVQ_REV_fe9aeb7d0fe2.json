@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_fe9aeb7d0fe2",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": "USD",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 21,
+      "quoted_text": "AEP Passion Intermediate Holdings, Inc. 2023 Incremental Delayed Draw Term Loan | Outstanding Principal | $ | 160",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 22,
+      "quoted_text": "AEP Passion Intermediate Holdings, Inc. 2023 Incremental Term A Loan | Outstanding Principal | 2,684",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 23,
+      "quoted_text": "Section subtotal | $ | 2,830 cost | $ | 2,735 fair value",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Continuation rows inherit USD from the section's printed dollar markers; blank repeated currency cells are not evidence of non-USD principal.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 25,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 3 source triangulation localizes the flag to presentation semantics, not a missing FX conversion. Table 25 identifies the amount column as Outstanding Principal (row 3). The first row of the AEP Passion section prints a dollar sign with principal 160 (row 21), the next row carries principal 2,684 in the same column while suppressing repeated currency symbols (row 22), and the section subtotal again prints dollar signs (row 23). Thus the raw filing shows USD amounts; treating continuation-row blanks as non-USD creates an overbroad FX01 flag. Residual risk is limited to unreviewed sections among the 1,267 flagged rows, but the repeated-symbol convention and section subtotal directly explain the aggregate pattern."
+}

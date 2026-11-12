@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_ec5d809c7126",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": -8847000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 11,
+      "quoted_text": "Total Assets | $ | 232,002 | $ | 215,438",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 19,
+      "quoted_text": "Total Liabilities | 18,472 | 8,419",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Total Members' Capital | 213,530 | 207,019",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 30,
+      "quoted_text": "Total Liabilities and Members' Capital | $ | 232,002 | $ | 215,438",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The March 31, 2026 filing balance sheet reports total assets of $232.002 million, total liabilities of $18.472 million, and total members' capital of $213.530 million. Liabilities plus members' capital equals assets exactly, and the filing separately prints total liabilities and members' capital of $232.002 million. The extracted F10 result instead has a -$8.847 million identity residual, proving a fund_financials extraction or field-selection defect. The raw aggregate anchors decide that the flag is real, but they do not safely localize which extracted field is wrong."
+}

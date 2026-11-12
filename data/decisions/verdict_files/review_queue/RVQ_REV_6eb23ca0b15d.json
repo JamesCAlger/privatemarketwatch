@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_6eb23ca0b15d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source-disclosed fixed PIK rate",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 32,
+      "quoted_text": "Quick Commerce Ltd. | Growth Capital Loan (6.00% PIK interest rate, 3.75% EOT payment)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 33,
+      "quoted_text": "Quick Commerce Ltd. | Growth Capital Loan (6.00% PIK interest rate, 3.75% EOT payment)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 3,
+      "quoted_text": "Sylva, Inc. | Growth Capital Loan (15.00% PIK interest rate, 7.41% EOT payment)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Sylva, Inc. | Growth Capital Loan (15.00% PIK interest rate, 8.47% EOT payment)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 missing-rate review. The flagged extracted PRIVATE_CREDIT cells have neither interest_rate nor basis_spread, but the raw March 31, 2026 schedule explicitly prints fixed PIK interest rates for affected debt rows, including two Quick Commerce loans at 6.00% and two Sylva loans at 15.00%. A PIK coupon is rate data and should populate the platform's all-in interest_rate field; leaving both rate fields blank is therefore a source-grounded extraction gap. Some other flagged loans may have genuinely undisclosed coupons, but that does not negate the confirmed defects in this aggregate nine-row flag."
+}

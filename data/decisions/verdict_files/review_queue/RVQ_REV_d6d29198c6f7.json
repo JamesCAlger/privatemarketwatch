@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d6d29198c6f7",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 25,
+      "quoted_text": "Goldman Sachs Financial Square Government Fund Institutional Share Class | Cash Equivalents | index blank | spread dash | 3.69%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 26,
+      "quoted_text": "Blackrock Liquidity Funds T Fund Institutional Share Class | Cash Equivalents | index blank | spread dash | 3.68%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X05 treated two cash-equivalent fund yields as floating coupons even though the source shows no index and no spread.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 38,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The two flagged rows are explicitly classified in the filing as Cash Equivalents. Their Index cells are blank and their Spread cells are dashes; 3.69% and 3.68% appear in the Interest Rate column as money-market fund yields. A missing basis_spread is therefore source-correct, and X05 is out of scope for these rows."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_a2978cfeab4d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 49.874,
+  "anchor_value": 49.874,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 22,
+      "quoted_text": "BlackRock Liquidity T-Fund - Institutional Shares | (14) | - | - | - | - | $ | 49,874 | $ | 49,874 | 2.31 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 review. The raw schedule identifies the exact 49.874 million holding and confirms its fair value at table 48 row 22. The published value is therefore correct, but every ledger field for ROW-41542ef30353d2b0 has src_context_id None and no declared or instance provenance. The no_provenance flag is a real extraction/provenance-linkage defect, not a fair-value defect."
+}

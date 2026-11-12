@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_adb41a8af81c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 565360825,
+  "anchor_value": 565360825,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 277,
+      "row_index": 1,
+      "quoted_text": "For the Period from April 3, 2023 (commencement of operations) to December 31, 2023"
+    },
+    {
+      "table_index": 269,
+      "row_index": 6,
+      "quoted_text": "Total | beginning balance zero at 4/3/2023 | net purchases 600,343,722 | net sales (35,326,876) | balance 12/31/2023 565,360,825"
+    }
+  ],
+  "rationale": "D06 fired on 0.0% issuer continuity, but the raw filing shows this was the fund's commencement period and the Level 3 rollforward begins with no investment balance at 4/3/2023 before purchases and sales during the period. The schedule total ties to the filing's fair value total of 565,360,825, so the continuity result is explained by rule scope for a new/ramp period rather than a source-backed data error."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_10fb514599dd",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4579623000,
+  "anchor_value": 4481018000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 20,
+      "quoted_text": "Total non-controlled/affiliated investments | fair value 98,605 | 3.87%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The 98.605 million affiliated-investments subtotal was retained in addition to its component positions, exactly explaining the excess over the filing total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 42,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The extracted position fair-value sum is 4,579.623 million, while the filing reports Total investments of 4,481.018 million at table 42 row 21. The 98.605 million excess exactly equals the Total non-controlled/affiliated investments subtotal at table 42 row 20. The filing also reports total net assets of 2,549.562 million at table 8 row 34, and 4,481.018 / 2,549.562 = 175.76%, matching the schedule's reported percentage at table 42 row 21. Thus the source identity is internally consistent and the extracted data double counts a subtotal."
+}

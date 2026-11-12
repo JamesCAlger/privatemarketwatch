@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_db55fc98aa74",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_row",
+  "observed_value": "SOFR + 5.00%",
+  "anchor_value": "SOFR + 5.00%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 11,
+      "quoted_text": "First-lien note ($ 14,085 par, due 10/2031) | 10/29/2024 | SOFR + 5.00% | 8.70%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The derived identifier says EUR 14,085, but the raw schedule identifies this SOFR position as $14,085 par.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 1 review of the flagged Sediver position. The raw schedule directly corroborates the flagged reference rate and structured spread: table 11 row 11 states SOFR + 5.00%. The ref_SOFR_no_structured_spread warning is therefore a false alarm. The likely trigger is a separate derived-identifier defect: it labels the par currency EUR although the source row states dollars; that mismatch is recorded as an advisory finding."
+}

@@ -1,0 +1,56 @@
+{
+    "review_id":  "RVQ_REV_b1ed381666df",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  6,
+    "anchor_value":  6,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  74,
+                                  "row_index":  4,
+                                  "quoted_text":  "Einstein Parent Inc (4)(9)(25) | SF + | 6.50 % | 10.36 | % | 1/22/2031 | 94,062 | 92,476 | 92,934",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  74,
+                                  "row_index":  5,
+                                  "quoted_text":  "Einstein Parent Inc (4)(6)(9) | 1/22/2031 | 9,745 | ( 164 ) | ( 117 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  84,
+                                  "row_index":  15,
+                                  "quoted_text":  "Einstein Parent Inc | 1st Lien Senior Secured Revolving Loan | 9,745 | ( 117 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  73,
+                                  "row_index":  42,
+                                  "quoted_text":  "Databricks Inc (4)(6)(7) | 1/3/2031 | 30,597 | ( 153 ) | ( 108 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  73,
+                                  "row_index":  43,
+                                  "quoted_text":  "Databricks Inc (4)(6)(7) | 1/5/2032 | 30,583 | ( 153 ) | ( 107 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  84,
+                                  "row_index":  5,
+                                  "quoted_text":  "Databricks Inc | 1st Lien Senior Secured Delayed Draw Loan | 30,597 | ( 108 )",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  84,
+                                  "row_index":  6,
+                                  "quoted_text":  "Databricks Inc | 1st Lien Senior Secured Delayed Draw Loan | 30,583 | ( 107 )",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "B02 fired on duplicate position keys at issuer/quarter scope, but the raw schedule shows same-issuer rows are distinct source positions or commitments, not duplicated extracted records. Einstein has an interest-bearing investment row and a separate unfunded revolving commitment row with matching 9,745/(117) commitment disclosure; Databricks similarly has two delayed-draw commitment rows with different maturity/par/fair values that are separately disclosed. The duplicate count reflects an over-broad key/rule scope rather than a source data error."
+}

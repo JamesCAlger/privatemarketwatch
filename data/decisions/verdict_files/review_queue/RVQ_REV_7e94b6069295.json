@@ -1,0 +1,19 @@
+{
+    "review_id":  "RVQ_REV_7e94b6069295",
+    "verdict":  "false_alarm",
+    "mechanism":  "source_zero_legitimate",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  0,
+    "anchor_value":  "dash in source fair value cell",
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  44,
+                                  "row_index":  5,
+                                  "quoted_text":  "Integrity Marketing Acquisition, LLC^ | One stop | SF + 6.50% | N/A(6) | 8/1/2026 | principal dash | amortized cost dash | percentage dash | fair value dash"
+                              }
+                          ],
+    "rationale":  "Class 1 single-cell check. The raw SOI row for Integrity Marketing Acquisition, LLC shows a dash in the Fair Value column, and the adjacent principal, amortized cost, and percentage columns are also dashes. The extracted fair_value of 0.0 is therefore a legitimate normalization of a no-amount source cell rather than a data defect."
+}

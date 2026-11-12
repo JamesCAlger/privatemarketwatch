@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_BLK_ce04077a7d85",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2101364499,
+  "anchor_value": 2292614325,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 24,
+      "quoted_text": "Total Money Market Mutual Funds | 13,143,788 | 13,143,788 | 1.03 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 4,
+      "quoted_text": "Total Fixed Income Mutual Funds | 179,607,284 | 178,106,038 | 13.96 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "State Street Institutional Treasury Plus Money Market Fund fair value 13,143,788 is in the schedule but absent from the extracted holdings total.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 64,
+        "row_index": 22,
+        "quoted_text": "State Street Institutional Treasury Plus Money Market Fund - 3.66 % (g)(n)(s) | Investor Class Units | 13,143,788 | 13,143,788 | 13,143,788"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Fidelity Floating Rate Central Fund fair value 178,106,038 is in the schedule but absent from the extracted holdings total.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 65,
+        "row_index": 2,
+        "quoted_text": "Fidelity Floating Rate Central Fund (g)(l)(m)(o) | 1,863,034 | $ | 179,607,284 | $ | 178,106,038"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate triangulation: the filing schedule shows Total Investment Portfolio fair value of 2,292,614,325, matching the comparison anchor, while the extracted holdings total is 2,101,364,499. The 191,249,826 shortfall equals the source fair values for Total Money Market Mutual Funds (13,143,788) plus Total Fixed Income Mutual Funds (178,106,038), so the flag is a real extraction gap rather than a bad anchor."
+}

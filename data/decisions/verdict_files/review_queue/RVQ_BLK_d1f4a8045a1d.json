@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_d1f4a8045a1d",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3197664000,
+  "anchor_value": 1222792000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 38,
+      "quoted_text": "TOTAL INVESTMENTS - 205.4 % | $ | 1,058,898 | $ | 1,222,792",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 42,
+      "quoted_text": "TOTAL INVESTMENTS - 196.2 % (Q) | $ | 939,066 | $ | 979,320",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The current-period investment anchor is 1222792000, but the HTML aggregate is 3197664000, indicating the extractor included non-current or repeated schedule structures rather than only the current investment total.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 19,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The raw filing schedule reports TOTAL INVESTMENTS fair value of 1222792 thousand at table 15 row 38, matching the companyfacts fair value anchor of 1222792000 in the bundle. The HTML extraction aggregate is 3197664000, so the stored aggregate overstates the current investment total by 1974872000. Adjacent raw-source tables include prior-period investment schedule totals, including table 19 row 42 at 979320 thousand, supporting a comparative-period or repeated-schedule leak. The exact residual is not fully row-localized, so localized is false, but the anchor disagreement is decisive."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_a26a3001968b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "filing_accession",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-114266",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "evidence_cli overview reports filing accession 0001193125-26-114266, while the C006 artifact rows 283898-283908 have accession_number value blank."
+    },
+    {
+      "table_index": 56,
+      "row_index": 34,
+      "quoted_text": "State Street Institutional U.S. Government Money Market Fund | 7-Day Yield 3.74 % | $ 13,450 | $ 13,450 | $ 13,450 | (14)(15)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Filing-derived BDC rows for this report lost the filing accession even though the raw source bundle identifies accession 0001193125-26-114266.",
+      "fix_class": "column_remap",
+      "citation": {
+        "quoted_text": "evidence_cli overview: accession = 0001193125-26-114266"
+      }
+    }
+  ],
+  "rationale": "C006 requires source traceability for filing-derived BDC/HTML rows. The raw source is readable and identifies the filing accession as 0001193125-26-114266; the flagged rows for the same CIK/report_date have blank accession_number. Because the accession is known from the raw source metadata and should be propagated to those rows, the blank stored value is a real metadata extraction/propagation error, not a false alarm."
+}

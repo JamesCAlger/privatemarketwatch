@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_b7ee8cc8c2aa",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1061901106,
+  "anchor_value": 645193114,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 19,
+      "quoted_text": "Total Controlled Affiliated investments | $ | 139,359,889 | $ | 198,828,274 | $ | ( 133,137 ) | $ | ( 4,280,231 ) | $ | ( 24,928,803 ) | $ | 308,845,992 | $ | 27,220,033",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | $ | 132,261,489 | $ | 15,178,008 | $ | ( 2,277,521 ) | $ | - | $ | ( 37,299,976 ) | $ | 107,862,000 | $ | 11,035,468",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The 2025 SOI debt and equity total of 645,193,114 is correct, but controlled-affiliate rollforward FV of 308,845,992 is also extracted as holdings.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 28,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The non-controlled-affiliate rollforward FV of 107,862,000 is also extracted as holdings; 645,193,114 + 308,845,992 + 107,862,000 equals the observed 1,061,901,106.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 29,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing's 2025 debt and equity investments total is 645,193,114 in table 27 row 26. The extracted quarter FV is 1,061,901,106, which exactly equals that schedule total plus the controlled and non-controlled affiliated rollforward fair value totals in tables 28 and 29. Those rollforward tables are movement disclosures for the same investments, not additional current holdings, so including them creates a duplicate aggregate."
+}

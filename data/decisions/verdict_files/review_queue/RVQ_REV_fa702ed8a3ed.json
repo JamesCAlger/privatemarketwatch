@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_fa702ed8a3ed",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8.736047388260634,
+  "anchor_value": 13.665,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 110,
+      "row_index": 17,
+      "quoted_text": "Ratio of net investment income to average Members' Capital (4) | 9.11 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 110,
+      "row_index": 7,
+      "quoted_text": "Distributions declared | ( 1.67 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 100,
+      "row_index": 18,
+      "quoted_text": "Total Distributions | $ 1.6705 | $ 312,944",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 35,
+      "quoted_text": "Net investment income after taxes | 321,016",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 compares distribution_rate to income_yield_pct * 1.5. The flagged observed distribution rate is 8.736047%, while the filing discloses a 2025 ratio of net investment income to average Members' Capital of 9.11%, giving a threshold of 13.665%. The same financial highlights and distribution schedule disclose 2025 distributions of about 1.67 per unit / 312.944 million, consistent with an approximately 8.8% distribution rate. The raw source therefore does not show distributions exceeding income yield by the rule standard; the fail appears driven by a bad income-yield anchor/check input."
+}

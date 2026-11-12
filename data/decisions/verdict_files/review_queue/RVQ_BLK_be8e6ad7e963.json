@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_be8e6ad7e963",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2291186975,
+  "anchor_value": 2487588823,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 13,
+      "quoted_text": "Total Money Market Mutual Funds | 16,951,323 | 16,951,323 | 1.27 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 20,
+      "quoted_text": "Total Fixed Income Mutual Funds | 184,021,376 | 179,450,525 | 13.47 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 68,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 196,401,848 | $ | 68,942,636 | $ | 2,222,244,339 | $ | 2,487,588,823",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The schedule anchor includes 196,401,848 of Level 1 mutual funds outside the private-position extract; subtracting them exactly reconciles the extract.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 68,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The filing reports total investment fair value of 2,487,588,823. It separately reports Level 1 investments of 196,401,848, comprising money market mutual funds of 16,951,323 and fixed income mutual funds of 179,450,525. Subtracting those public-fund positions yields 2,291,186,975, exactly the extracted private-position sum. The residual therefore reflects an over-broad schedule anchor, not missing or erroneous private-position fair value."
+}

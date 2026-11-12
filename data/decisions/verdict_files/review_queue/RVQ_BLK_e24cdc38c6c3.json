@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_e24cdc38c6c3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2.04,
+  "anchor_value": 9.29,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 12,
+      "quoted_text": "Island Bidco AB#(7)(8)(14)(24) | One stop | E + | 7.25 % | (d) | 2.04 % | cash/ | 7.25 % | PIK | 07/2028 | 785 | 696 | 0.1 | 785",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 29,
+      "quoted_text": "Ceres Groupe SAS & Ceres PikCo(7)(8)(19)(24) | Subordinated debt | E + | 8.00 % | (d) | 2.60 % | cash/ | 8.00 % | PIK | 07/2032 | 859 | 781 | 0.1 | 859",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 38,
+      "quoted_text": "Panzura, LLC(24) | One stop | N/A | 4.00 % | cash/ | 11.00 % | PIK | 08/2027 | 64 | 61 | - | 58",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The pik_le_interest_rate standard requires interest_rate to be the all-in coupon including PIK. The cited SOI rows disclose a cash leg and a separate PIK leg: Island Bidco shows 2.04% cash and 7.25% PIK, Ceres shows 2.60% cash and 8.00% PIK, and Panzura shows 4.00% cash and 11.00% PIK. The flagged residuals match pik_rate exceeding the stored cash-leg interest_rate, so the stored interest_rate is not all-in. This is a source-grounded extraction gap, not a false alarm."
+}

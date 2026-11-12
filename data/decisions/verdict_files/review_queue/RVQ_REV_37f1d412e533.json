@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_37f1d412e533",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 402522665,
+  "anchor_value": 402522665,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 22,
+      "quoted_text": "Electro Methods | Senior Secured Initial Term Loans | S+ | 4.75 % | 8.43 % | 2/6/2025 | 2/23/2032 | 2,977,500 | 2,938,206 | 2,970,056",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 31,
+      "quoted_text": "Electro Methods | Senior Secured Revolving Credit Facility | S+ | 4.75 % | 8.43 % | 2/6/2025 | 2/23/2032 | - | (12,191) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 27,
+      "quoted_text": "Tronair | Senior Secured Initial Term Loan | S+ | 3.75 % | 7.43 % | 12/18/2025 | 12/22/2032 | 399,000 | 394,130 | 396,008",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 30,
+      "quoted_text": "Tronair | Senior Secured Revolving Loan | S+ | 3.75 % | 7.43 % | 12/18/2025 | 12/22/2032 | - | (1,250) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "B02's normalized key collapses distinct term-loan and revolving-loan instruments that share issuer, rate, acquisition date, and maturity date.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 17,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Raw schedule rows show that the apparent duplicate keys are separate legal instruments, not repeated positions. Electro Methods has an Initial Term Loans row and a Revolving Credit Facility row at the same rate and dates, with different economics; Tronair likewise has an Initial Term Loan and a Revolving Loan. The filing schedule total is $402,522,665 and agrees with the extracted quarter fair value, so there is no aggregate inflation signal. B02 is firing because its key omits the investment-type distinction."
+}

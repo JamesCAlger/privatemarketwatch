@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_dca526809c56",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 missing-interest-rate flag for row_key 284871. The raw-source evidence CLI did not return usable source: overview returned empty output and later CLI launches failed with CreateProcessWithLogonW error 1326. The source cell therefore could not be checked, so the contract requires fail-closed ambiguity and escalation."
+}

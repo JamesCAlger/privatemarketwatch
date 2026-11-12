@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_aba40a549f9a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_EUR; U_GBP",
+  "anchor_value": "USD fair value columns; EUR/GBP symbols apply to Par/Shares",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "Saffron Bidco Ltd continuation row: First Lien Secured Debt - Term Loan | E+ 575, 0.75% Floor | 9/11/2031 | EUR symbol in Par/Shares area | 96 | Cost 104 | Fair Value 105",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 5,
+      "quoted_text": "Saffron Bidco Ltd continuation row: First Lien Secured Debt - Delayed Draw | SONIA+ 575, 0.75% Floor | 9/11/2031 | GBP symbol in Par/Shares area | dash | Cost (3) | Fair Value (1)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Header places columns as Industry/Company | Investment Type | Interest Rate | Maturity Date | Par/Shares | Cost | Fair Value",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The EUR symbol on the Saffron Bidco term-loan row belongs to Par/Shares, not Fair Value; fair_value_currency should remain USD/reporting currency.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The GBP symbol on the Saffron Bidco delayed-draw row belongs to Par/Shares, not Fair Value; fair_value_currency should remain USD/reporting currency.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The flagged observed values are U_EUR and U_GBP in fair_value_currency, but the raw SOI table header separates Par/Shares from Cost and Fair Value. In table 17, rows 4 and 5 show EUR/GBP symbols only in the Par/Shares area for Saffron Bidco continuation rows, while the Cost and Fair Value cells are subsequent valuation columns. The parser appears to have carried the local par currency into fair_value_currency."
+}

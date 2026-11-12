@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_16505deabb9e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "raw_schedule_rate_terms",
+  "observed_value": 550.0,
+  "anchor_value": null,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 review. The raw schedule was readable and contains numerous legitimate floating-rate rows stated as S + 550, so a 550 basis spread is not inherently defective. However, bundle row_key 355111 has no issuer, instrument, or source coordinate and could not be mapped to one exact raw-source row. The source therefore cannot decide whether the flagged row's fixed-rate classification is wrong or whether its basis_spread is wrong. Human or upstream row-key mapping is required; guessing a source row would violate the grounding standard."
+}

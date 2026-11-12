@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_d9770aab1312",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 2,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 6,
+      "quoted_text": "Eclipse Topco, Inc. | Preferred Stock | Principal / Shares: 72 | Cost: $735 | Fair Value: $706"
+    },
+    {
+      "table_index": 31,
+      "row_index": 9,
+      "quoted_text": "Red Griffin TopCo, LLC | Common Stock | Principal / Shares: 1,746 | Cost: 8,435 | Fair Value: 8,000"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Eclipse Topco preferred stock equity row has 72 shares in the source, but the extracted equity row does not carry shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Red Griffin TopCo common stock equity row has 1,746 shares in the source, but the extracted equity row does not carry shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "C04 fired because 0 of 2 extracted equity rows have shares. The raw SOI table 31 has a Principal / Shares column, and the two equity positions show explicit share counts: Eclipse Topco, Inc. preferred stock has 72 shares and Red Griffin TopCo, LLC common stock has 1,746 shares. The source therefore supports shares for both equity rows, so the missing extracted share values are a real extraction gap."
+}

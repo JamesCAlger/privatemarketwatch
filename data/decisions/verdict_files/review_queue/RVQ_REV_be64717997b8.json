@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_be64717997b8",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  200.9,
+    "anchor_value":  203.1,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  7,
+                                  "row_index":  14,
+                                  "quoted_text":  "Total Investments ( 203.1 %) | $ | 770,456,020 | $ | 772,888,903",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  7,
+                                  "row_index":  17,
+                                  "quoted_text":  "Net Assets ( 100 .0%) | $ | 380,618,812",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "PCT01 fired because extracted pct_of_net_assets sums to 200.9, but the raw schedule itself reports Total Investments at 203.1% of net assets and Net Assets at 100.0%. A sum above 100% is therefore source-supported for this leveraged BDC filing, so the expected-range check is out of scope rather than a data defect."
+}

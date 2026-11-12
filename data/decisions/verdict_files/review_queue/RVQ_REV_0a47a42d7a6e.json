@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_0a47a42d7a6e",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd missing after rows were classified non-USD",
+  "anchor_value": "USD",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Par Amount $ 29,412,589; subsequent debt rows continue in the same Par Amount column with the repeated dollar sign suppressed",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Geographic Breakdown of Portfolio: United States 100%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser failed to carry the leading USD dollar marker down the schedule's Par Amount column and consequently treated 56 USD debt rows as non-USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw schedule evidence shows a dollar sign on the first Par Amount, Amortized Cost, and Fair Value cells, with conventional suppression of that repeated symbol on following rows in the same columns. The filing also reports a 100% United States portfolio. Thus the flagged rows do not require FX conversion; FX01 fired because schedule-level USD currency context was not carried forward."
+}

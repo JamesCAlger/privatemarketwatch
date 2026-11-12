@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_e71be663eefc",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level review. The flagged rows localize to schedule rows where the Reference Rate and Spread cells show an abbreviated reference rate and separate spread, e.g. Continental Battery Company at table 32 row 20 shows 'S +' and '7.00 % PIK', Sweep Purchaser, LLC at table 34 row 28 shows 'S +' and '5.75 % PIK', FPG Intermediate Holdco, LLC at table 36 rows 8-10 shows 'S +' and '5.00 % PIK', Applitools, Inc. at table 37 row 14 shows 'S +' and '6.25 % PIK', and KWOR Intermediate I, Inc. at table 47 row 16 shows 'S +' and '8.00 % PIK'. However targeted source search found no 'SOFR' or 'Secured Overnight' legend in the raw source, so the source corroborates the abbreviated S-plus-spread text but does not decide whether normalizing S to SOFR is valid."
+}

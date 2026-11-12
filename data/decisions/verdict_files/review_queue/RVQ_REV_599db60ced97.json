@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_599db60ced97",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X05 flag concerns nine row-level missing basis_spread warnings for floating coupon holdings, which requires checking raw source terms. The evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-24-055544, so the raw source was not available for adjudication."
+}

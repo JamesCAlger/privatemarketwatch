@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_8f4fb498266a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -450000.0,
+  "anchor_value": -450000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 17,
+      "quoted_text": "Appfire Technologies, LLC^(5) | One stop | SF + | 4.75 | % | (i) | 8.45 | % | 03/2028 | 225 | 165 | \u2014 | ( 450 )"
+    },
+    {
+      "table_index": 14,
+      "row_index": 46,
+      "quoted_text": "Packaging Coordinators Midco, Inc.^(5) | One stop | N/A(6) | 07/2032 | \u2014 | ( 39 ) | \u2014 | ( 75 )"
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value rows, but the raw schedule explicitly presents the same negative fair values. Appfire is shown with fair value (450) in the fair value column, and Packaging Coordinators is shown as a ^(5)/N/A(6) line with amortized cost (39) and fair value (75). The source therefore supports the stored negative fair values as filer presentation rather than a data error in fair_value; the warning is an overbroad rule-scope fire on commitment-style schedule rows."
+}

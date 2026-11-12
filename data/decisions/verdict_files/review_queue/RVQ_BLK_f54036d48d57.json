@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_BLK_f54036d48d57",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.1,
+  "anchor_value": 0.6923740504358891,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 16,
+      "quoted_text": "Blue Owl Cross-Strategy Opportunities LLC(3)(5)(24)(30)(31)(34) | Specialty finance equity investment | N/A | N/A | 137,069 | 137,069 | 136,815"
+    },
+    {
+      "table_index": 90,
+      "row_index": 17,
+      "quoted_text": "Continuation/subtotal row: 193,074 | 218,184 | 1.1 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 69,
+      "row_index": 32,
+      "quoted_text": "Total Net Assets | 19,760,273 | 14,521,602"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The 1.1% value belongs to the continuation/subtotal row for the asset-based lending and fund finance equity group, not to the Blue Owl Cross-Strategy Opportunities LLC issuer row; 136,815 / 19,760,273 * 100 is about 0.692%.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 90,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Raw source table 90 row 16 prints Blue Owl Cross-Strategy Opportunities LLC with fair value 136,815 (thousands) and no percent of net assets in the row. The immediately following row 17 carries 1.1%, which is consistent with the aggregate fair value 218,184 divided by schedule Total Net Assets 19,760,273, not with the issuer's 136,815 fair value. The pipeline therefore attributed a subtotal/continuation-row percent to the issuer row, creating a real pct_of_net_assets identity error."
+}

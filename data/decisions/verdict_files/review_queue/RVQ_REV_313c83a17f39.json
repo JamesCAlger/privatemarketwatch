@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_313c83a17f39",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -27000,
+  "anchor_value": -27000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 21,
+      "quoted_text": "3BC Matrix Acquisition, LLC (6)(21) | First lien senior secured revolving loan | S + | 5.50 % | 9.22 | % | 5/13/2025 | 5/13/2030 | $ | 1,564 | $ | ( 27 ) | $ | ( 25 ) | 0.00 | %"
+    },
+    {
+      "table_index": 58,
+      "row_index": 19,
+      "quoted_text": "A. P. Nonweiler Co. Inc. (6) | First lien senior secured revolving loan | S + | 4.75 % | 8.42 | % | 9/30/2025 | 9/30/2030 | $ | 1,523 | $ | ( 22 ) | $ | ( 19 ) | 0.00 | %"
+    },
+    {
+      "table_index": 57,
+      "row_index": 25,
+      "quoted_text": "A.P.A. Industries, LLC (6)(9) | First lien senior secured revolving loan | S + | 5.25 % | 8.98 | % | 12/17/2025 | 1/10/2028 | $ | 1,979 | $ | ( 28 ) | $ | ( 20 ) | 0.00 | %"
+    }
+  ],
+  "rationale": "C107 flags negative cost rows for review. Raw SOI rows show the same negative amortized-cost cells in parentheses, in thousands, for representative flagged positions: (27), (22), and (28), which match extracted costs -27000, -22000, and -28000. The schedule total also ties to the bundle context (total investments fair value 4,277,724). The data is source-faithful; the flag is a monitoring rule firing on legitimate negative revolver balances rather than a data error."
+}

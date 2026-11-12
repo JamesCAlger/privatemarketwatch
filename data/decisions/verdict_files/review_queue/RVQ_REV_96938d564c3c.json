@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_96938d564c3c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 1000.0,
+  "anchor_value": 1000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 2,
+      "quoted_text": "LCG Vardiman Black, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | 12.43 % | S + 7.00 % | 03/18/27 | $ | 2,439 | $ | 1 | $ | 166 | (7) (8) (9) (11) (12)"
+    }
+  ],
+  "rationale": "Class 2 row check. The raw schedule row is a debt investment and source-discloses cost of $1 thousand and fair value of $166 thousand, matching the extracted cost of 1000 and the X07 ratio trigger. Because the source confirms the flagged values are correctly extracted, this is not a pipeline data error; it is a broad extreme-appreciation warning on a genuine source-disclosed low-cost position."
+}

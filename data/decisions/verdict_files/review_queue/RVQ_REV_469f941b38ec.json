@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_469f941b38ec",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 24,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 47,
+      "quoted_text": "Ben Nevis Midco Limited*(7)(9) | One stop | SF + | 5.50 % | (h) | 10.35 % | 03/2028 | 2,486 | 2,443 | 0.4 | 2,486",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,291,512 | 201.6 | 1,311,001",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 flagged 24 holdings whose source period is earlier than the report date; the source schedule contains those rows in the comparative September 30, 2024 block, not as current June 30, 2025 facts.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 31,
+        "row_index": 47
+      }
+    }
+  ],
+  "rationale": "The filing source is available. The current investment schedule totals 1,895,482 at table 25 row 10, while the later comparative schedule totals 1,311,001 at table 39 row 23, matching the September 30, 2024 comparative total shown in the filing totals output. A flagged issuer row such as Ben Nevis Midco Limited appears in that later comparative block at table 31 row 47. Retaining those earlier-period source rows under report_date 2025-06-30 is therefore a real comparative-period leak, not a false alarm."
+}

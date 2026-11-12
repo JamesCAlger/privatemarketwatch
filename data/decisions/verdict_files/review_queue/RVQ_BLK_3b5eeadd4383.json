@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_3b5eeadd4383",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480975000,
+  "anchor_value": 1249444000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The separate portfolio schedule's $231.531 million fair value was added to the filing's $1,249.444 million total, producing the extracted $1,480.975 million.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 33,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "The filing reports Total investments fair value of $1,249.444 million at table 20 row 23 (also table 12 row 7). Extracted holdings are $1,480.975 million, a $231.531 million excess. Table 33 row 62 is a separate Total portfolio investments schedule with fair value exactly $231.531 million, and table 30 row 4 independently presents that same amount as Investments at fair value in a separate balance sheet. Because $1,249.444 million + $231.531 million = $1,480.975 million exactly, the aggregate error is a full-schedule dimension double count rather than a bad filing anchor."
+}

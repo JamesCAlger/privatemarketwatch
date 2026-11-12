@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ed28d590088c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 184.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "By Light Professional IT Services LLC | First lien senior secured loan | Fair Value 11,910 | percent of net assets blank",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "Aerospace & Defense subtotal | Fair Value 66,259 | 2.3% of net assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 20,
+      "quoted_text": "Total Investments | Fair Value 5,217,369 | 184.0% of net assets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor-first review shows that the filing reports percent of net assets only on industry/subtotal rows, not on the underlying investment rows represented in the holdings extract. Table 10 row 6 has a valid position and fair value but a blank percent cell, while table 10 row 10 carries the 2.3% industry subtotal. The schedule grand total at table 21 row 20 is 184.0%. Therefore a 0.0 sum across position rows is faithful to the raw source structure; A07 is mis-scoped when it requires position-level percentages for this filing. No holding value defect is established."
+}

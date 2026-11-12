@@ -1,0 +1,26 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_cb08d6102ecd",
+    "mechanism":  "unit_id_normalization_false_positive",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD-denominated schedule cost values",
+    "rationale":  "FX03 flagged cost_currency because the stored value is U_USD. The raw SOI presents the same investment schedule as dollar-denominated: the schedule is in thousands, cost/fair-value columns are the valuation columns, and schedule totals are explicitly marked with dollar signs. Source therefore supports USD denomination; the check appears to be rejecting a USD unit identifier rather than a non-USD unit.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  2,
+                                  "table_index":  9,
+                                  "quoted_text":  "Crescent Capital BDC, Inc. Consolidated Schedule of Investments September 30, 2024 (in thousands, except share and per share data) (Unaudited); columns include Cost and Fair Value"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  8,
+                                  "table_index":  36,
+                                  "quoted_text":  "Total Investments | $ | 1,601,015 | 212.5 | % | $ | 1,591,433"
+                              }
+                          ],
+    "confidence":  0.88
+}

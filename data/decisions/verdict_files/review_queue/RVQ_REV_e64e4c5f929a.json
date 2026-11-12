@@ -1,0 +1,67 @@
+{
+  "review_id": "RVQ_REV_e64e4c5f929a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 7.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 4,
+      "quoted_text": "Resolute Investment Managers, Inc. | Equity | N/A | 12/29/2023 | 58 | 1,249 | 1,502 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 5,
+      "quoted_text": "Winterfell Co-Invest SCSP | Equity | N/A | 9/19/2022 | 3,586 | 3,635 | 7,423 | 0.5 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 9,
+      "quoted_text": "New Giving Acquisition, Inc. | Equity | N/A | 8/19/2022 | 2 | - | 1,007 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 13,
+      "quoted_text": "THL Fund IX Investors (Plymouth), L.P. | Equity | N/A | 9/1/2023 | 3,182 | 3,181 | 5,646 | 0.4 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 17,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Equity | N/A | 5/8/2024 | 375 | 3,750 | 712 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 5,
+      "quoted_text": "SPV CA IX, LLC | Equity | N/A | 7/18/2025 | 5,549 | 5,318 | 5,820 | 0.4 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 18,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Preferred Equity | N/A | 12/9/2025 | 44 | 272 | 544 | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "C04 reported 0 of 7 equity rows with shares, but the source schedule shows nonblank Par Amount / Units values for the cited equity and preferred equity rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The source schedule header labels a Par Amount / Units column, and the cited equity rows contain unit values such as 58, 3,586, 2, 3,182, 375, 5,549, and 44. The oracle flag reports 0.0% of 7 equity rows have shares, so the extracted share/unit field missed values present in raw source."
+}

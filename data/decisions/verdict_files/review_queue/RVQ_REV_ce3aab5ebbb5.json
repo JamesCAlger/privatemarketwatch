@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_ce3aab5ebbb5",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 24,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 86,
+      "row_index": 30,
+      "quoted_text": "Associations, Inc. | First lien senior secured revolving loan | 7/2028 | 2,058 | 2,058 | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 86,
+      "row_index": 33,
+      "quoted_text": "Bamboo US BidCo LLC | First lien senior secured revolving loan | 10/2029 | -- | 4,103 | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 88,
+      "row_index": 21,
+      "quoted_text": "Total Portfolio Company Commitments | $ | 84,739 | $ | 544,431 | $ | (1,374)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 83,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 5,187,099 | $ | 5,203,798 | 173.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rows flagged by PP03 are prior-period 2024 schedule or commitment rows retained under report_date 2025-12-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 86,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-set comparative-period purity flag. The raw filing has a current 2025 schedule whose totals reach 6,207,136, while the later schedule family totals to the 2024 amounts: table 83 row 24 shows Total Investments of 5,187,099 cost and 5,203,798 fair value, matching the 2024 comparative investment total, and table 88 row 21 shows Total Portfolio Company Commitments of 544,431, matching the 2024 unfunded commitments column. Flagged examples such as Associations, Inc. and Bamboo US BidCo LLC revolving loan rows appear in that 2024 commitment schedule family but were retained in holdings for report_date 2025-12-31. The check is therefore identifying a real comparative-period leak, not a false alarm."
+}

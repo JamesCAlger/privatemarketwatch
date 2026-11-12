@@ -1,0 +1,37 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "supplemental_table_leak",
+                         "fix_class":  "rule_scope",
+                         "detail":  "A supplemental activity-table row for Production Resource Group was treated as a holding; its $111.0 million fair value explains the $110.9 million overshoot against the schedule total within rounding.",
+                         "citation":  {
+                                          "row_index":  11,
+                                          "table_index":  64
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_BLK_0a782bfa8b9f",
+    "mechanism":  "supplemental_table_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  21607400000,
+    "anchor_value":  21496500000,
+    "rationale":  "Class 3 aggregate flag. Raw anchors show total investments at fair value of $21,496.5 million in the schedule, while the extracted holdings sum is $21,607.4 million. The $110.9 million overshoot localizes to table 64 row 11, a supplemental activity table row headed by purchases/redemptions/income/gains and fair value, not a primary schedule-of-investments position; its $111.0 million fair value matches the residual within rounding.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  11,
+                                  "table_index":  64,
+                                  "quoted_text":  "Production Resource Group, L.L.C. and PRG III, LLC | - | 0.7 | - | 5.2 | - | - | - | - | 12.0 | 111.0"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  30,
+                                  "table_index":  62,
+                                  "quoted_text":  "Total Investments | $ | 21,685.6 | $ | 21,496.5 | 207.61 %"
+                              }
+                          ],
+    "confidence":  0.93
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_28516aab33aa",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": 12,
+  "anchor_value": 12,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 20,
+      "quoted_text": "COP Village Green Acquisitions, Inc. (Village Green Holding) | Subordinated Debt (Delayed Draw) | Par Amount / Unit 536 | Amortized Cost (5) | Fair Value 2",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 5,
+      "quoted_text": "Emburse, Inc. | First Lien Debt (Delayed Draw) | Par Amount / Unit 529 | Amortized Cost (1) | Fair Value 2",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 6,
+      "quoted_text": "Emburse, Inc. | Revolving Loan | Par Amount / Unit 568 | Amortized Cost (1) | Fair Value 2",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw schedule rows show that X06 is firing on delayed-draw and revolving commitments. The filing itself reports the flagged par amounts in the Par Amount / Unit column while current amortized cost and fair value are near zero. Thus the extracted principal values are source-correct; the more-than-10x-fair-value rule is not valid for unfunded or minimally funded commitments. The issue is rule scope/classification, not a data value defect."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d036690ffbf7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "cost_currency stored as U_CAD/U_GBP on FX03 rows",
+  "anchor_value": "source schedule shows CAD/GBP only in Par Amount / Shares while Amortized Cost and Fair Value are separate valuation columns",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Asset Type | Reference Rate and Spread (2) | Interest Rate | Maturity Date | Par Amount / Shares (3) | Amortized Cost (4) | Fair Value | Percentage of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 11,
+      "quoted_text": "Onyx-Fire Protection Services Inc. | (6)(13)(15)(17) | First Lien Term Loan | C + 4.50 % | 6.78 % | 7/31/2031 | CAD 20,153 | 14,532 | 14,373 | 0.67",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 23,
+      "quoted_text": "Riser Interco, LLC | (13)(15)(17) | First Lien Term Loan | SON + 4.75 % | 8.49 % | 10/31/2029 | GBP 1,962 | 2,600 | 2,556 | 0.12",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor assigned the local par-amount unit (CAD/GBP) to cost_currency even though amortized cost is a separate valuation column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. The schedule header separates Par Amount / Shares from Amortized Cost and Fair Value. In the cited CAD and GBP rows, the local currency prefix appears only with the Par Amount / Shares value (for example CAD 20,153 and GBP 1,962), while Amortized Cost is the following numeric valuation column (14,532 and 2,600 respectively). Therefore storing cost_currency as U_CAD/U_GBP reflects unit propagation from the par amount field, not the source currency of the amortized-cost valuation. No aggregate anchor was needed because this is a localized row/column currency-unit defect."
+}

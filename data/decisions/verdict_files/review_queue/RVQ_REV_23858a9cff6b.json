@@ -1,0 +1,52 @@
+{
+    "review_id":  "RVQ_REV_23858a9cff6b",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "cost_currency values U_EUR and U_AUD",
+    "anchor_value":  "cost/fair value schedule is USD-denominated; EUR/AUD marks Par/Shares only",
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  40,
+                                  "row_index":  31,
+                                  "quoted_text":  "Hamilton Thorne, Inc. row shows EUR in the Par/Shares currency position, with Cost 12,293 and Fair Value 11,666 in the valuation columns.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  39,
+                                  "row_index":  32,
+                                  "quoted_text":  "Sonar Acquisitionco, Inc. (dba SimPRO) row shows AUD in the Par/Shares currency position, with Cost 3,682 and Fair Value 3,431 in the valuation columns.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  47,
+                                  "row_index":  1,
+                                  "quoted_text":  "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Australian Dollars (\"AUD\"), or Euros (\"EUR\").",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Hamilton Thorne has EUR marked for Par/Shares, but the cost valuation field should remain USD-denominated.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  40,
+                                          "row_index":  31
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Sonar Acquisitionco has AUD marked for Par/Shares, but the cost valuation field should remain USD-denominated.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  39,
+                                          "row_index":  32
+                                      }
+                     }
+                 ],
+    "rationale":  "FX03 is a real data error: the source uses EUR/AUD as Par/Shares denomination markers under footnote (4), while the investment schedule cost and fair value columns are USD valuation fields. The extracted cost_currency values U_EUR and U_AUD therefore reflect foreign par currency leaking into the cost currency field."
+}

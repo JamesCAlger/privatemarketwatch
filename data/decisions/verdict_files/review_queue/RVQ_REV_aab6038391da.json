@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_aab6038391da",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Portfolio Company Debt Securities- United States Artificial Intelligence & Automation Augmented Reality Concepts, Inc. Type of Investment Secured Loan Investment Date June 17, 2024 Maturity Date June 18, 2029 Interest Rate Variable interest rate SOFR 3 Month Term + 7.3%; EOT 0.0%",
+  "anchor_value": "Augmented Reality Concepts, Inc.",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 12,
+      "quoted_text": "Augmented Reality Concepts, Inc. | Secured Loan | June 17, 2024 | June 18, 2029 | Variable interest rate SOFR 3 Month Term + 7.3 %; EOT 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer name extraction concatenated grouping text and separate investment terms into issuer_name; the source row's issuer is only Augmented Reality Concepts, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "The raw schedule separates Portfolio Company from Type of Investment, Investment Date, Maturity Date, and Interest Rate. In table 15 row 12, the Portfolio Company cell is Augmented Reality Concepts, Inc., while the extracted issuer_name in the bundle includes schedule grouping text plus the secured-loan, date, maturity, and interest-rate fields. That is a real issuer-name formatting/extraction defect, not a false alarm."
+}

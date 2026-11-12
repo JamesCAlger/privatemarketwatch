@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_9e7fab5c12d3",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "2024-04-30",
+  "anchor_value": "2024-09-30",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | S+ 1026 , 1.00 % Floor | 4/30/2024 | 1,657 | 1,526 | 389 | (4)(8)(15)(24)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Current September 30, 2024 schedule row carries a nonzero fair value debt position with maturity 4/30/2024, which is before the report date.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Raw source confirms the flagged condition: the September 30, 2024 schedule of investments includes Heubach Holdings USA LLC as a first lien secured debt term loan with maturity 4/30/2024 and fair value 389. Because the maturity date precedes the report date while the position remains in the current schedule with nonzero fair value, the maturity_not_past flag is a real source-grounded defect rather than a parser-only false alarm."
+}

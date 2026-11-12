@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_406b00aa8e3b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4925925925925926,
+  "anchor_value": 0.95,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "2X LLC | (4) | Berwyn, PA",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Term Loan | (5) | 1st Lien | 3M SOFR+ 5.00 % | 9.00 % | $ | 1,740,548 | $ | 1,759,014 | 0.93 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 371,417,536 | $ | 376,434,763 | 199.41 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 is counting schedule grouping/header rows with no fair value as leaves even though actual investment rows have populated fair values.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw schedule includes structural issuer rows without fair value cells, such as the 2X LLC grouping row, but the following actual investment rows carry populated fair values in the Fair Value column. The schedule also discloses Total Investments fair value of 376,434,763. The low B01 coverage metric is therefore a denominator/scope issue, not a source-backed data error in the investment fair values."
+}

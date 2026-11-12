@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b1bd491c8039",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.8940476190476191,
+  "anchor_value": 0.8940476190476191,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 4,
+      "quoted_text": "ATS (5)(17) | First Lien Senior Secured Loan - Revolver | principal -- | cost -- | market value --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 39,
+      "quoted_text": "Investments Total | cost $1,811,390 | market value $1,815,082 | 180.5%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 treats source-reported dash market values on zero or unfunded investment leaves as missing fair values.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor-first review. The filing schedule reports market values on funded positions and an Investments Total market value of $1,815,082 thousand, but the ATS revolver leaf explicitly uses dashes for principal, cost, and market value. The extract's 751/840 nonblank rate therefore counts legitimate source-reported zero/unfunded leaves as completeness defects. B01 needs to exclude such leaves or treat source dashes as zero; the flagged aggregate is a false alarm, not evidence of missing extraction."
+}

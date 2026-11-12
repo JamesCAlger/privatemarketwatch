@@ -1,0 +1,87 @@
+{
+  "changed_files": [],
+  "cik": "0001925309",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "holdings_examples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 18,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        6,
+        10,
+        15,
+        19,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Lynx BidCo is a current-period position row with borrower, first-lien loan description, par amount, due date, acquisition date, reference rate/spread, stated interest rate including PIK, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 20,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        18,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "OutSystems Luxco SARL is a current-period position row with borrower, first-lien loan description, par amount, due date, acquisition date, reference rate/spread, interest rate, cost, fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 27,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        18,
+        23,
+        24
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Erling Lux Bidco SARL is a current-period position row with borrower, first-lien loan description, par amount, due date, acquisition date, reference rate/spread, interest rate, cost, fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "A bounded patch is not supported by this bundle alone. Missing evidence needed for a safe production fix: a row-identity mechanism that maps each Sixth Street XBRL investment identifier to the correct HTML table row rather than generic par/due-date candidates; a table-selection/continuation-row diagnosis explaining why the unified output contains only 64 matched rows while 25 source leaf rows remain missing; and false-positive tests across adjacent Sixth Street quarters showing the fix would add true positions without duplicating existing matched rows or merging distinct currency tranches.",
+  "patch_summary": "",
+  "primary_justification": "Manual review shows this packet is a real undercoverage/parser blocker, not a subtotal/header row and not an insufficient-evidence placeholder. The blocker rows are current-period Sixth Street loan positions with issuer names, first-lien loan descriptions, par amounts, due dates, acquisition dates, reference rates/spreads, interest rates, PIK terms for some rows, cost, fair value, and percent-of-net-assets evidence. However, the source-row coordinate candidates are not uniformly reliable: for example, the Elements Finco source rows are matched to unrelated Dye & Durham or Scorpio rows through generic 'par, due 4/2031' text, while other rows such as Lynx BidCo and OutSystems do map cleanly to true position rows. That mixed evidence supports escalation for a targeted parser/table-selection fix, not a safe one-off patch or a no-patch verdict.",
+  "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+  "report_date": "2024-09-30",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker remains unresolved and should be treated as live production undercoverage until a bounded, tested Sixth Street parsing fix is implemented and source reconciliation is rebuilt. Adding the rows without a reliable row-identity mechanism could duplicate existing positions or misassign currency tranches.",
+  "review_id": "BDCSRC_0001925309_2024-09-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_d7631c1ce1",
+  "reviewer_notes": "Reviewed manually as row 49. The correct outcome is escalation: evidence is strong that true source positions are missing, but not strong enough to implement a bounded patch from this bundle alone. The next engineering step is a CIK-scoped Sixth Street parser/table-selection investigation with tests for row identity and continuation/currency-tranche handling.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation packet remains a live blocker requiring a targeted parser/table-selection fix.",
+  "tests_validation_plan": "Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. Before any code patch, add focused tests for Sixth Street row identity, table selection, continuation rows, and distinct currency tranches.",
+  "verdict": "ESCALATE"
+}

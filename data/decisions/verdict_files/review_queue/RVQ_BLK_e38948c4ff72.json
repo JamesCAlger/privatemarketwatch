@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_BLK_e38948c4ff72",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": "identifier dates: 2028-08-05; 2031-08-27; 2030-10-24; 2030-09-19; 2029-04-01 (two rows); 2031-02-24",
+  "anchor_value": "source dates: 2027-08-05; 2030-10-02; 2029-10-24; 2029-09-19; 2030-04-01 (two rows); 2028-03-09",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 31,
+      "quoted_text": "Sonny's Enterprises, LLC | First Lien Debt | 9.31 % | 08/05/2027",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 18,
+      "quoted_text": "Iris Buyer, LLC | First Lien Debt | 8.92 % | 10/02/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 2,
+      "quoted_text": "Apex Service Partners, LLC | First Lien Debt | 8.67 % | 10/24/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 43,
+      "quoted_text": "Hyland Software, Inc. | First Lien Debt | 8.70 % | 09/19/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 16,
+      "row_index": 13,
+      "quoted_text": "Raptor Merger Sub Debt, LLC | First Lien Debt | 9.20 % | 04/01/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 29,
+      "quoted_text": "Appfire Technologies, LLC | First Lien Debt | 8.45 % | 03/09/2028",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 2 review of the full matching source rows shows that each XBRL residual date is the maturity printed for the specific flagged position, while the identifier carries a different date. The mismatches follow sibling-row contamination (including funded versus unfunded/revolver dates) or cross-row contamination; Appfire's identifier date 02/24/2031 is not its printed maturity, which is 03/09/2028. Raptor is duplicated in the flag, so one source coordinate grounds both flagged units. The flag therefore identifies real identifier maturity extraction defects, not bad XBRL dates."
+}

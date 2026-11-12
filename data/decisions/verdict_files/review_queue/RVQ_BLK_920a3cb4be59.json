@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_920a3cb4be59",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 141,
+  "anchor_value": 141,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 11,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (unaudited) and December 31, 2025 | 5",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source identifies two schedules of investments, for March 31, 2026 and December 31, 2025. The oracle source count of 268 decomposes exactly into the 141 report-date positions in output plus 127 comparative-period positions. Thus output=141 is the correct March 31, 2026 schedule count; the check incorrectly counted the comparative schedule in its source anchor."
+}

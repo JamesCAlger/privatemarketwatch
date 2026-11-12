@@ -1,0 +1,49 @@
+{
+    "review_id":  "RVQ_REV_7f900630cd11",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  62.4,
+    "anchor_value":  62.4,
+    "confidence":  0.78,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  48,
+                                  "row_index":  4,
+                                  "quoted_text":  "PetVet Care Centers, LLC / Consumer Services row: First Lien(8)(9) - Undrawn with Reference, Spread, and Interest Rate shown as dashes; cost (22), fair value (96).",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  9,
+                                  "quoted_text":  "Adelaide Borrower, LLC / Business Services row: First Lien(8)(9) - Undrawn with Reference, Spread, and Interest Rate shown as dashes; principal 1,048; cost and fair value shown as dashes.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  26,
+                                  "row_index":  6,
+                                  "quoted_text":  "Funded debt control row: First Lien(4)(7)(8), SOFR(Q) + 4.75%, Interest Rate 8.42%, showing the same schedule column carries rates when the instrument is funded.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  23,
+                                  "quoted_text":  "Total Unfunded Debt Investments | $ | (606) | $ | (536) | (0.04)%, confirming the cited dashed rows are a separate unfunded schedule section.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "rule_scope",
+                         "detail":  "The dl_rate_fill aggregate is counting unfunded first-lien commitment rows whose source interest-rate cells are explicit dashes, not extraction misses.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  48,
+                                          "row_index":  4
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate rate-fill warning. The raw schedule has explicit Interest Rate columns. Funded debt rows carry rates, e.g. table 26 row 6 has SOFR(Q) + 4.75% and Interest Rate 8.42%. In contrast, the unfunded debt section has First Lien - Undrawn rows with Reference, Spread, and Interest Rate printed as dashes, and table 48 row 23 totals those rows as Total Unfunded Debt Investments. Treating those source-correct dashed unfunded commitments as direct-lending rate-fill violations makes the check overbroad rather than proving missing source extraction."
+}

@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_0c2860eb43b8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 156078000,
+  "anchor_value": 203856000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "GCOM (4)(11)(12) | N/A | N/A | 08/11/2033 | 2,491,250 | 2,491 | 252 | 0.15 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 61,
+      "quoted_text": "Total Short-Term Investments | 47,530 | 47,526 | 27.91 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 65,
+      "quoted_text": "Total Investments | $ | 210,328 | $ | 203,856 | 119.73 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The GCOM warrant with fair value 252 thousand is absent from the extracted position sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 13,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Short-term investments with fair value 47.526 million are omitted from conservation scope; together with the warrant they exactly explain the 47.778 million residual.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 13,
+        "row_index": 61
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation supports the filing total. The schedule reports total investments of 203.856 million (table 13 row 65), independently repeated as total assets in the fair-value hierarchy (table 60 row 11), while the extracted sum is 156.078 million. The 47.778 million shortfall equals the 47.526 million short-term-investment subtotal plus the 0.252 million GCOM warrant exactly. The source therefore localizes the conservation failure to omitted positions/scope, not an erroneous schedule anchor."
+}

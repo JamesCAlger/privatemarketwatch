@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_75dafdec4580",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 288,
+  "anchor_value": 2,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "AA&D Midco, Inc. First Lien Term Loan | Principal / Shares $ 7,932",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Spruce Bidco II Inc. First Lien Term Loan | Principal / Shares CAD 194",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 31,
+      "quoted_text": "Spruce Bidco II Inc. First Lien Term Loan | Principal / Shares JPY 20,693",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule contains both USD debt rows (the dollar sign is printed at the start of the schedule and carried forward across subsequent rows) and explicitly non-USD principal rows, including CAD 194 and JPY 20,693. The review item aggregates 288 FX01 fires but the available evidence does not map its row keys to source coordinates. Therefore raw source confirms that some FX01 cases can be genuine while also showing that an overbroad currency inference could falsely flag ordinary USD rows; it does not decide the aggregate flag's composition. Human or downstream row-key localization is required."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_284f6eed99e5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 195.73,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 81,
+      "row_index": 18,
+      "quoted_text": "Total Investments | $ | 11,482,053.0 | $ | 11,549,149.4 | (14) | 195.73 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted percentage sum is 0.0%, but the source schedule total investments row reports 195.73% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 81,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw schedule total at table 81 row 18 reports Total Investments fair value of 11,549,149.4 and % of Net Assets of 195.73%, while the queued A07 metric reports pct_sum=0.0%. The filing total investments fair value is corroborated by table 50 row 12 (11,549,149). This is a grounded schedule-total disagreement, indicating the % of net assets column was not extracted or mapped into the checked metric."
+}

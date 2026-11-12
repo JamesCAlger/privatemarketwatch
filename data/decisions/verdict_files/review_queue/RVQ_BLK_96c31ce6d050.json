@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_96c31ce6d050",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "PRIVATE_CREDIT",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 4,
+      "quoted_text": "Non-Controlled, Non-Affiliated Debt Investments"
+    },
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "First Lien Senior Secured"
+    },
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Amplify Buyer, Inc. Term Loan | 3M SOFR + 4.75 % / 0.75 % | 8.42 % | 9/17/2032 | cost 8,957 | fair value 8,944"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Rows flagged by C304 have blank asset_class even though the source schedule classifies the positions as non-controlled, non-affiliated debt investments, which maps to PRIVATE_CREDIT.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 27,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "C304 flags blank asset_class on affected holdings rows. The raw SOI places the cited positions under Non-Controlled, Non-Affiliated Debt Investments and First Lien Senior Secured, with individual loan rows such as Amplify Buyer, Inc. Term Loan. That source structure makes the controlled asset_class classifiable as PRIVATE_CREDIT, so the blank observed value is a real extraction/classification defect rather than a false alarm."
+}

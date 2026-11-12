@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_c49ea66b9a8c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 10,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 16,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 19,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign-currency principal amounts of 643, 24,911, and 4,529 have no populated USD-principal conversion in the extracted rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "The source schedule explicitly marks the three debt principal amounts as foreign currency at tables 21 row 10, 24 row 16, and 34 row 19. In the same schedule rows, later cost and fair-value columns are separately dollar-denominated, proving that the principal figures are not already USD. The flagged extracted rows leave principal_amount_usd blank, so an explicit FX-normalized principal required for USD par analytics is missing. No aggregate anchor is applicable to this Class 1 field-completeness check."
+}

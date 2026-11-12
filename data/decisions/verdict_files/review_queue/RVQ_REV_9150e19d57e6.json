@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9150e19d57e6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 7,
+      "quoted_text": "Spotless Brands, LLC | footnote marker ^ | Consumer Services | SOFR | spread 6.75% | interest rate 12.08% | par/principal none | amortized cost (507) | fair value 190",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 8,
+      "quoted_text": "Spotless Brands, LLC | footnote marker +# | Consumer Services | SOFR | spread 6.50% | interest rate 12.03% | par/principal 13,888 | amortized cost 13,651 | fair value 13,898",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 flagged duplicate position keys, with Spotless Brands, LLC first lien debt as the example. The raw schedule shows two separate Spotless Brands rows, not a duplicated extracted row: the rows differ by footnote/type marker, spread, interest rate, par/principal amount, amortized cost, fair value, and percent of net assets. The check is collapsing distinct source positions under an over-coarse key, so this flag is a false alarm rather than a data error."
+}

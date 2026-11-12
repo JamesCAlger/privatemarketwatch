@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_fd9f0b240d31",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 410050595,
+  "anchor_value": 249694433,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 11,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) - Revolver - 6.00% inc PIK - Fair Value 17,092,378",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) - Fair Value 249,694,433",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "December 31, 2025 schedule positions were included with March 31, 2026 positions, overstating extracted fair value by 160,356,162.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 8,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted position fair value of 410,050,595 versus the March 31, 2026 filing schedule total for debt and equity investments of 249,694,433, an excess of 160,356,162 and the flagged ratio of 1.6422. The source has separate March 31, 2026 and December 31, 2025 schedules, and comparative table 8 contains exact matches to extracted holdings, including Overton Chicago Gear Revolver at 17,092,378. The schedule anchor is therefore sound and the extraction includes comparative-period rows."
+}

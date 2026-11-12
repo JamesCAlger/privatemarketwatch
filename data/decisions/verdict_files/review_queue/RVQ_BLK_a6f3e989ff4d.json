@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_a6f3e989ff4d",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1013243399,
+  "anchor_value": 657323982,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 25,
+      "quoted_text": "Total Debt & Equity Investments (7) | 147.3 | % | 828,061,833 | 657,323,982",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Controlled Affiliated investments | Fair Value at March 31, 2026 | 246,700,365",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | Fair Value at March 31, 2026 | 109,219,052",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted position sum includes controlled and non-controlled affiliate rollforward rows already represented in the debt and equity schedule, overstating fair value by 355,919,417.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The filing's debt and equity schedule totals 657,323,982, while the extracted holdings total is 1,013,243,399. The exact 355,919,417 excess equals the March 31, 2026 controlled-affiliate rollforward total of 246,700,365 plus the non-controlled-affiliate rollforward total of 109,219,052. Those rollforward tables repeat named investments from the Schedule of Investments, proving a dimension/section double count rather than an anchor defect."
+}

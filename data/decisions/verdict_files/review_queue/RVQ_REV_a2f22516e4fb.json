@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_a2f22516e4fb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 14.99,
+  "anchor_value": 179.79,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted percentage-of-net-assets aggregate is 14.99%, but the filing's own total investment portfolio row reports 179.79% for the same $2,292,614,325 fair value total.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 65,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing anchors total investments at fair value to $2,292,614,325 and the SOI total investment portfolio row reports 179.79% of net assets. The flagged extracted pct_sum is 14.99%, so the source does not support the observed aggregate percentage; this is an extraction gap in the percentage-of-net-assets aggregate rather than a false alarm."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_43929970592f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_DASORC5G6KMGZ3CKZQSWFA",
+  "anchor_value": "USD-denominated source schedule",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 199,
+      "row_index": 3,
+      "quoted_text": "Investments | Footnotes | Security (2) | Coupon | Floor | Cash | Date | Maturity | Industry | Principal Amount/Shares (3) | Amortized Cost | Fair Value (1) | % of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 199,
+      "row_index": 7,
+      "quoted_text": "Revolver | (5) | First Lien | 1M SOFR+ 6.50 % | 1.00 % | 10.93 % | 5/17/2022 | 5/17/2028 | 810,347 | 810,347 | 806,295 | 1.00 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 204,
+      "row_index": 0,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars ('$') unless otherwise noted Euro (EUR).",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because the extracted unit was UNIT_STANDARD_USD_DASORC5G6KMGZ3CKZQSWFA rather than plain USD. Raw SOI evidence shows the relevant schedule columns are Amortized Cost and Fair Value in dollar-denominated presentation, and the currency footnote states amounts are denominated in U.S. Dollars unless otherwise noted. Targeted searches for Euro/EUR found only that generic footnote and no affected position, so the flagged USD-prefixed unit is a normalization/rule-scope false alarm rather than a real non-USD cost value."
+}

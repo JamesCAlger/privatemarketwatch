@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_b4f61f1d212f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 203.7,
+  "anchor_value": 203.7,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) | Investment Type | Reference Rate and Spread (2) | Floor | Interest Rate (2) | Initial Acquisition Date | Maturity Date | Par/Shares | Amortized Cost (3) | Fair Value (4) | % of Net Assets (18) | Footnotes"
+    },
+    {
+      "table_index": 51,
+      "row_index": 37,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | $ | 438,839,857 | 395,375,030 | 203.7 | % | (19)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 38,
+      "quoted_text": "Liabilities in Excess of Other Assets | ( 201,273,242 ) | - 103.7 | %"
+    },
+    {
+      "table_index": 51,
+      "row_index": 39,
+      "quoted_text": "Total Net Assets | $ | 194,101,788 | 100.0 | %"
+    }
+  ],
+  "rationale": "The raw schedule explicitly uses a percent-of-net-assets column. For 2025, total non-controlled/non-affiliated investments are reported as 203.7% of net assets, liabilities in excess of other assets are -103.7%, and total net assets are 100.0%. Percentages above 100% are therefore source-supported leverage presentation, not erroneous extracted percent values."
+}

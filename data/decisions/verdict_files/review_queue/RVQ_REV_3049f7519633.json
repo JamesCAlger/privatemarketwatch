@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_3049f7519633",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 735,
+  "anchor_value": 359,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "Artisan Bidco, Inc. (3) | First-lien loan ($ 38,438 par, due 11/2029) | Amortized Cost $37,903 | Fair Value $38,245",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 376-row comparative investment schedule was included in the 735-row completeness denominator, leaving the 359 current-period rows as the applicable schedule population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 18,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 reports 359 of 735 leaves with fair value and exactly 376 residual rows. Raw source contains a second parallel investment schedule at tables 18-24; table 18 row 4 is a fully valued Artisan Bidco position with fair value $38,245, while the current-period schedule is separately presented at tables 8-14. Thus the 376-row residual is the comparative schedule leaking into the denominator, not missing fair values on current-period positions. The applicable schedule population is 359 rather than 735."
+}

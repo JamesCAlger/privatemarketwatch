@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_0007bc685b76",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 210.45,
+  "anchor_value": 210.45,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 25,
+      "quoted_text": "Total Investments at fair value | $ | 4,241,699 | $ | 4,246,035 | 210.45 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 37,
+      "quoted_text": "Total net assets | 2,017,605 | 1,246,661",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Raw source totals reconcile: total investments at fair value are 4,246,035 (thousands) and total net assets are 2,017,605 (thousands), giving 4,246,035 / 2,017,605 * 100 = 210.45%, which matches the schedule's printed Percentage of Net Assets. The extracted fair value anchor in the bundle also matches 4,246.035 million, so the pct-of-net-assets identity flag is not grounded in a filing data error."
+}

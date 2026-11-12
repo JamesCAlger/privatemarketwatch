@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_7e732887f956",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "X02 flags internal row_key 434865 as a PRIVATE_CREDIT row with missing interest_rate/basis_spread, but the bundle does not identify the issuer, instrument, cost, fair value, or source coordinate for that row. Raw SOI tables 9-13 were checked and show the March 31, 2024 investment schedule has rate columns (Coupon, Floor, Cash, PIK), with debt rows carrying rate data; however, without a source-localizable row for 434865, the raw source does not decide whether the internal missing value is a real extraction gap or a row-scope/mapping false alarm."
+}

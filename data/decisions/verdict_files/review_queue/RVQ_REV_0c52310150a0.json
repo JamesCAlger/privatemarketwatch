@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0c52310150a0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 14.037875145610506,
+  "anchor_value": 20.085,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 27,
+      "quoted_text": "Ratio of net investment income to average net assets | 13.39 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 12,
+      "quoted_text": "Total distributions | ( 9.41 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 expects distribution_rate <= income_yield_pct * 1.5. The filing financial highlights disclose a 2025 ratio of net investment income to average net assets of 13.39%, so the source-based threshold is 20.085%. The flagged distribution_rate value 14.037875145610506 is below that threshold, and the distributions row is separately disclosed in the same financial highlights table; the flag is therefore a heuristic false alarm rather than a source data error."
+}

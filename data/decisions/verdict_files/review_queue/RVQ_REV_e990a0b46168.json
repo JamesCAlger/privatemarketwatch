@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_e990a0b46168",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1063118695,
+  "anchor_value": 1063118695,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | Last Out Term Loan - 15.54 % inc PIK | Par Amount $ 21,727,133 | Amortized Cost $ 21,608,472 | Fair Value $ 20,010,689",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 18,
+      "quoted_text": "Total Debt Investments | 134.5 % | Par Amount 1,063,118,695 | Amortized Cost 1,048,072,561 | Fair Value 1,006,788,468",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 32,
+      "quoted_text": "Total Investments (144.1 %) | $ 1,093,709,783 | $ 1,080,322,297",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 fired because rows were treated as non-USD source par with missing principal_amount_usd, but the raw SOI schedule is dollar-denominated. The debt table header is Par Amount / Amortized Cost / Fair Value, the first debt row explicitly carries dollar signs for those amount columns, subsequent rows inherit the same currency formatting, and the debt and investment totals tie as dollar schedule amounts. No source evidence shows foreign-currency par requiring FX conversion, so the check is out of scope for these rows rather than identifying a data defect."
+}

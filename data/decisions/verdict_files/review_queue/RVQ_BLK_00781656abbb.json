@@ -1,0 +1,13 @@
+{
+  "review_id": "RVQ_BLK_00781656abbb",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 5026719000.0,
+  "anchor_value": 4876989000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate conservation failure. The extracted fair value sum is 5,026,719,000, but the raw filing anchors agree at 4,876,989,000: table 46 row 9 states Total investments at fair value of 4,876,989 for 2025, table 78 row 13 states Total Investments with fair value 4,876,989, and table 114 row 11 repeats the category roll-up fair value total of 4,876,989. Because the source schedule total and balance-sheet total agree while the extracted position sum overshoots by 149,730,000, the flag is a real aggregate data error. The visible source structure does not localize the full residual to one row, subtotal, or comparative-period line, so the verdict is not row-localized."
+}

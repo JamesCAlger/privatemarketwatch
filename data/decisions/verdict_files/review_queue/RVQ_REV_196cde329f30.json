@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_196cde329f30",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  10,
+    "anchor_value":  10,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  9,
+                                  "row_index":  35,
+                                  "quoted_text":  "B\u0027laster Holdings, LLC (7) | Chemicals | 9.07 % ( S + 4.75 %) | 10/25/2029 | 1,625,167 | 1,611,038 | 1,612,978 | 0.3 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  9,
+                                  "row_index":  36,
+                                  "quoted_text":  "B\u0027laster Holdings, LLC (7) | Chemicals | 9.03 % ( S + 4.75 %) | 10/25/2029 | 4,366,834 | 4,296,307 | 4,257,663 | 0.8 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "B02 flagged duplicate position keys, with B\u0027laster Holdings as the example. The raw June 30, 2025 schedule shows two adjacent B\u0027laster Holdings rows, but they are distinct source positions: rate 9.07% with principal/par 1,625,167 and fair value 1,612,978, and rate 9.03% with principal/par 4,366,834 and fair value 4,257,663. The duplicate-key check is collapsing legitimately separate filing rows rather than exposing duplicated extracted data."
+}

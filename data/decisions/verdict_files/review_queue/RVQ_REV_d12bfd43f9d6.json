@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d12bfd43f9d6",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on 22 flagged rows",
+  "anchor_value": "source schedule table 10 is USD-denominated for Par Amount; blank currency symbol cells after the first row are table formatting continuation, not non-USD source par",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Description | Industry | Spread above Index (3) | Floor | Interest Rate (1) | Acquisition Date | Maturity Date | Par Amount | Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 3,
+      "quoted_text": "AMF Levered II, LLC (2) | Financial Services | S+ 705 | 1.00 | % | 11.39 | % | 12/2021 | 8/2028 | $ | 12,660 | $ | 12,596 | $ | 12,660",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "All State Ag Parts, LLC (2) | Trading Companies & Distributors | S+ 650 (6) | 1.00 | % | 10.76 | % | 9/2021 | 9/2026 | 5,011 | 4,990 | 5,011",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 appears to treat blank repeated currency-symbol cells in a USD schedule as non-USD par, causing 22 rows to be flagged even though the source table presents Par Amount in dollars.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Raw source table 10 is the September 30, 2025 bank debt schedule. Its header names Par Amount, Cost, and Fair Value, and the first data row prints dollar signs in those monetary columns. Later rows in the same table omit repeated dollar symbols while retaining the same monetary column positions, e.g. All State Ag Parts shows 5,011 / 4,990 / 5,011 under Par Amount / Cost / Fair Value. The source therefore does not show non-USD debt principal requiring FX conversion; the FX01 premise is a false alarm caused by interpreting formatting blanks as non-USD currency."
+}

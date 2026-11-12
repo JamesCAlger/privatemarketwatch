@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_f423e37ec0d5",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 13,
+      "quoted_text": "Coastal Marina Holdings, LLC | Subordinated Term Loan | 8.0 % Cash | 11/21 | 11/31 | 8,310 | 7,910 | 7,986 | 0.3 | % | (6)(7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 14,
+      "quoted_text": "Coastal Marina Holdings, LLC | Subordinated Term Loan | 8.0 % Cash | 11/21 | 11/31 | 3,831 | 3,685 | 3,682 | 0.1 | % | (6)(7)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing schedule independently shows two adjacent Coastal Marina Holdings, LLC subordinated term loans with the same label, rate, acquisition date, and maturity date, but different principal amounts (8,310 and 3,831), costs (7,910 and 3,685), and fair values (7,986 and 3,682). The extracted count of two therefore matches the two source positions. B02's descriptive position key collapses legitimate separate lots and the duplicate-key flag is a false alarm. Residual risk is limited to the other seven keys summarized by the aggregate check, which were not individually identified by the blinded bundle."
+}

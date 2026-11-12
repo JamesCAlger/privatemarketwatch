@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_410dcdf61c0e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "principal_amount_usd is blank on 106 FX01 rows",
+  "anchor_value": "raw SOI rows disclose non-USD Par Amount/Units, e.g. GBP 1,181, GBP 1,225, GBP 2,030, GBP 1,465, and GBP 827",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 80,
+      "row_index": 3,
+      "quoted_text": "Artemis Bidco Limited (4)(5)(7)(20)(31) | SN + | 6.00 % PIK | 9.73 % | 9/8/2028 | GBP | 1,181 | 1,542 | 1,592",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 4,
+      "quoted_text": "Artemis Bidco Limited (4)(5)(7)(20)(31) | SN + | 6.00 % PIK | 9.73 % | 9/8/2028 | GBP | 1,225 | 1,600 | 1,652",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 80,
+      "row_index": 5,
+      "quoted_text": "Artemis Bidco Limited (4)(5)(7)(20)(31) | SN + | 6.00 % PIK | 9.73 % | 9/8/2028 | GBP | 2,030 | 2,651 | 2,737",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt principal is present in the source as GBP par, but principal_amount_usd is blank in the extracted holding rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 80,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "FX01 asks whether non-USD debt principal lacks an explicit USD converted principal. The bundle's row-validation artifact shows 106 rows with blank principal_amount_usd. The raw SOI confirms the source contains non-USD Par Amount/Units, including Artemis Bidco Limited rows with GBP par amounts in table 80 rows 3-5. Because the platform has non-USD source principal but no principal_amount_usd value for par analytics, the flag is a real extraction/normalization gap."
+}

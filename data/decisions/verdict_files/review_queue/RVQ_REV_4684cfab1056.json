@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_4684cfab1056",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_rate_columns",
+  "observed_value": "blank extracted interest_rate on sampled direct lending rows",
+  "anchor_value": "raw SOI has Ref. Rate and Cash rate cells for those rows",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 28,787 | 28,535 | 27,817"
+    },
+    {
+      "table_index": 15,
+      "row_index": 13,
+      "quoted_text": "Acrisure, LLC | Unsecured notes | N/A | 8.50 % | 6/2029 | 3,000 | 3,000 | 2,966"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extraction left interest_rate blank for rate-bearing debt rows even though the SOI provides Ref. Rate and Cash columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate/rule-scope warning: the bundle reports 176 of 364 dl_rate_fill violations and its sampled holdings show blank interest_rate for direct lending positions. Raw source is readable and the current-period SOI tables expose rate columns (Ref. Rate, Cash, PIK). Targeted source rows matching sampled extracted positions show nonblank rate information, e.g. Prometheus has Ref. Rate S+ and Cash 4.50 %, while Acrisure unsecured notes have Cash 8.50 %. The flag is therefore a real extraction gap rather than a false alarm."
+}

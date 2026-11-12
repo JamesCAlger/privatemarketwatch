@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_dfe68177959c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -0.02,
+  "anchor_value": -0.02,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 4,
+      "quoted_text": "Project Essential Bidco, Inc. / Software | First Lien - Undrawn | cost (9) | fair value (167) | percent of net assets (0.02)%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 36,
+      "quoted_text": "Business Services | First Lien - Undrawn | principal 3,957 | cost (40) | fair value (37) | percent of net assets (0.01)%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 38,
+      "quoted_text": "Consumer Products | First Lien - Undrawn | principal 1,844 | cost (8) | fair value (129) | percent of net assets (0.01)%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 10,
+      "quoted_text": "Total Unfunded Debt Investments | principal 153,674 | cost (586) | fair value (492) | percent of net assets (0.06)%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C404 flagged three negative pct_of_net_assets values. The raw schedule itself reports negative percent-of-net-assets values for unfunded first-lien positions, including (0.02)% and (0.01)% rows, and the source schedule total for unfunded debt investments is also negative at (0.06)%. The stored negative percentages are therefore source-backed and reflect legitimate unfunded-commitment presentation rather than a data extraction error."
+}

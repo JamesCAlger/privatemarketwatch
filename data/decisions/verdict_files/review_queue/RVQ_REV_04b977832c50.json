@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_04b977832c50",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "P+400, 1.00% Floor",
+  "anchor_value": "P + 400, 1.00% Floor",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "AeroMed Group LLC | First Lien Secured Debt - Term Loan | P + 400 , 1.00 % Floor | 02/25/31",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell format check. The extracted identifier reports P+400 with a 1.00% floor, and raw Schedule of Investments table 10 row 4 prints the same term as P + 400, 1.00% Floor. Adjacent row 5 independently repeats P + 400 for the same issuer and maturity, while row 6 validly uses S + 500 for a different revolver. The source therefore supports the flagged basis/spread rather than a data defect; the weak formatting check is the false positive. No aggregate anchor is applicable."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_d89a23c6e1d5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.5,
+  "anchor_value": 6.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 41,
+      "quoted_text": "CoolSys, Inc. | (5)(8)(14) | First Lien Term Loan | S + 6.00 % | 9.93 % (Incl. 3.50 % PIK) | 2/11/2030 | 200 | 198 | 169 | 0.02",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw schedule row states a reference spread of S + 6.00% and separately reports an all-in interest rate of 9.93% including 3.50% PIK. The extracted identifier instead reports S + 9.50%, exactly 6.00% + 3.50%, showing that the PIK component was incorrectly added to the reference spread. The spread field is therefore wrong; the source value is 6.00%."
+}

@@ -1,0 +1,38 @@
+{
+    "review_id":  "RVQ_REV_85ea2930e5c1",
+    "verdict":  "real_error",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.49484536082474229,
+    "anchor_value":  0.95,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  24,
+                                  "row_index":  11,
+                                  "quoted_text":  "Total Investments (170.4%) | $ | 779,653,930 | $ | 784,362,855",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  27,
+                                  "row_index":  21,
+                                  "quoted_text":  "Total Investments (232.7%) | $ | 455,856,311 | $ | 456,190,434",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Rows from the comparative December 31, 2022 schedule appear to be counted in the 2023 leaf population, driving B01 coverage to 48/97 even though the 2023 schedule has its own fair-value total.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  27,
+                                          "row_index":  21,
+                                          "quoted_text":  "Total Investments (232.7%) | $ | 455,856,311 | $ | 456,190,434"
+                                      }
+                     }
+                 ],
+    "rationale":  "B01 is a real data error. The raw source contains a consolidated schedule for both 2023 and 2022. The 2023 schedule total is table 24 row 11, fair value $784,362,855, while the adjacent comparative schedule has a distinct total at table 27 row 21, fair value $456,190,434. The flagged 48/97 fair-value coverage is consistent with comparative-period schedule rows being included in the 2023 leaf population rather than a source omission."
+}

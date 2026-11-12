@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_5561c76d9b35",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -23000,
+  "anchor_value": -23000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 8,
+      "quoted_text": "ARC Health OPCO, LLC | Subordinated Debt (Delayed Draw) | par 1,667 | amortized cost (23) | fair value (47)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 24,
+      "quoted_text": "Cool Buyer, Inc. | Subordinated Debt (Delayed Draw) | par 1,000 | amortized cost (10) | fair value (40)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The March 31, 2026 investment schedule explicitly presents negative amortized costs in parentheses for delayed-draw positions. ARC Health shows (23) thousand, exactly matching the extracted -23000 dollars; another delayed-draw row independently shows the same legitimate negative-cost pattern. The extraction is faithful and C107's generic negative-cost warning does not distinguish this delayed-draw presentation."
+}

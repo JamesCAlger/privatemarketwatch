@@ -1,0 +1,18 @@
+{
+  "review_id": "RVQ_REV_f71c1d3ee766",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": -1000.0,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "quoted_text": "C103 artifact row identifies row_key 447846 and fair_value -1000.0, but the raw-source evidence views do not map that row_key to a unique source row; source searches show many candidate rows with fair value ( 1 )."
+    }
+  ],
+  "rationale": "C103 is a within-row negative fair value review. The source was readable, and searches for accounting-parenthesis negatives found many schedule rows with fair value ( 1 ), often with a (5) marker, but the bundle and evidence CLI claim/flagged views do not identify the issuer or source coordinate for row_key 447846. Without a unique raw-source row, I cannot determine whether the flagged -1000 fair value is an unexplained negative, a sign-consistent unfunded/commitment presentation, or a marker extraction miss."
+}

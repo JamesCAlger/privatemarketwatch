@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_9737b6bab7ad",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 9,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured delayed draw term loan | T + | 9.00 % PIK | 11.62 | % | 7/28/2023 | 3/19/2026 | C$ | 372 | 258 | 73 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 10,
+      "quoted_text": "Canadian Orthodontic Partners Corp (8) | First lien senior secured revolving loan | T + | 9.00 % | 12.93 | % | 7/28/2023 | 12/31/2026 | C$ | 151 | 137 | 41 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 11,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured revolving loan | T + | 9.00 % | 11.62 | % | 7/28/2023 | 12/31/2026 | C$ | 264 | 184 | 52 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 12,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured revolving loan | T + | 9.00 % PIK | 12.93 | % | 7/28/2023 | 12/31/2026 | C$ | 101 | 134 | 20 | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 13,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured term loan | T + | 9.00 % | 11.62 | % | 2/26/2025 | 12/31/2026 | C$ | 307 | 202 | 60 | 0.00 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Five current-period Canadian-dollar debt rows have non-USD source principal/par amounts, but the extracted principal_amount_usd cells are blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 69,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "FX01 flagged five blank principal_amount_usd cells. The raw SOI includes current-period debt rows denominated in Canadian dollars, with explicit C$ principal/par amounts, so the missing USD-normalized principal is a real extraction/normalization gap rather than a false alarm."
+}

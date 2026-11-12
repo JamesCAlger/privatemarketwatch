@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_691f78b69dc0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -42000.0,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 77,
+      "row_index": 29,
+      "quoted_text": "Portfolio Company | Commitment Type | Commitment Expiration Date | Funded Commitment | Commitment | Fair Value (23): AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured revolving loan | 8/2031 | - | 4,245 | (42)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source reports (42) as commitment fair value, but the extracted holding stores -42000 as cost even though this source table has no cost field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 77,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 1 source-cell review. The flagged AI Titan revolving-loan cost of -42000 exactly matches the filing's (42), in thousands, in the Fair Value column of a commitments schedule whose header is Portfolio Company, Commitment Type, Commitment Expiration Date, Funded Commitment, Commitment, Fair Value. Because the source provides no amortized-cost or cost cell for this row, populating holding cost with the negative commitment fair value is a column-mapping extraction error. Other representative flagged revolving-loan rows show the same source structure, including Accommodations Plus Technologies at table 77 row 26. No aggregate anchor is applicable to this single-column semantic defect."
+}

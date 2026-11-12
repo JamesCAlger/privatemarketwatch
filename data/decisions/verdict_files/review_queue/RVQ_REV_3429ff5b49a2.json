@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_3429ff5b49a2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1534345,
+  "anchor_value": 1534345,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 14,
+      "quoted_text": "Sweep Midco LLC | Commercial Services & Supplies | 03/12/36 | $ | 14,704 | $ | - | $ | - | (6) (7) (8) (16)"
+    },
+    {
+      "table_index": 39,
+      "row_index": 5,
+      "quoted_text": "Thrasio Holdings, Inc. | Broadline Retail | 06/18/24 | 235,056 | $ | - | $ | - | (6) (8) (11) (16)"
+    },
+    {
+      "table_index": 39,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 161.4 % | $ | 1,596,478 | $ | 1,534,345"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Zero fair-value investment rows are printed as dashes in the Fair Value column and should be normalized as 0.0 rather than omitted from fair_value coverage.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "B01 is a Class 3 aggregate coverage flag: 407 of 446 extracted leaves carry fair_value, below the 0.95 threshold, with 39 residual rows and residual fair value of 0.0. The filing's SOI total investments fair value ties to the schedule anchor at 1,534,345, so this is not an anchor disagreement. The raw SOI still shows investment leaves with explicit Fair Value cells printed as dashes, for example Sweep Midco LLC and Thrasio Holdings, Inc.; those are zero fair values, not non-investment headers. Treating those cells as missing produces a real coverage extraction gap even though the monetary residual is zero."
+}

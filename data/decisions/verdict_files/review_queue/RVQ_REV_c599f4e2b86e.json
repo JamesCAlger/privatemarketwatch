@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_c599f4e2b86e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "12.63% PIK; SONIA; spread 7.50%",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 23,
+      "quoted_text": "22 HoldCo Limited | Sports and entertainment platform | Senior subordinated loan | 12.63 % PIK | SONIA (S) | 7.50 % | 08/2023 | 08/2033 | 60.9 | 57.9 | 60.9 | (2)(6)(11)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged 22 HoldCo Limited private-credit row has blank extracted interest_rate and basis_spread, but the source SOI row discloses 12.63% PIK with SONIA reference and 7.50% spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "X02 fired because private-credit rows have no extracted interest_rate or basis_spread. The source schedule has explicit rate terms for a flagged row: 22 HoldCo Limited Senior subordinated loan shows Coupon 12.63% PIK, Reference SONIA (S), and Spread 7.50%, while the bundle's extracted holding for that same row has an empty interest_rate. This grounds the flag as a real extraction gap rather than a false alarm."
+}

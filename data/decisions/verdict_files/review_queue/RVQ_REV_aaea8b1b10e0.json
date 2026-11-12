@@ -1,0 +1,89 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_aaea8b1b10e0",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  0,
+    "anchor_value":  0,
+    "rationale":  "Class 1 single-cell check. The C104 item flags fifteen holdings with stored fair_value 0.0. Raw SOI grids for the current period show exactly fifteen corresponding position rows where the Fair Value cell is a dash, the filing convention for zero/no value. The observed normalized value is therefore source-consistent; the rule warning is over-broad for legitimate zero fair-value positions rather than a data defect.",
+    "culprit_citations":  [
+                              {
+                                  "row_index":  20,
+                                  "table_index":  13,
+                                  "quoted_text":  "BioXcel Therapeutics, Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  22,
+                                  "table_index":  13,
+                                  "quoted_text":  "BioXcel Therapeutics, Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  23,
+                                  "table_index":  13,
+                                  "quoted_text":  "BioXcel Therapeutics, Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  16,
+                                  "table_index":  14,
+                                  "quoted_text":  "Delta Leasing SPV II LLC Warrants; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  31,
+                                  "table_index":  14,
+                                  "quoted_text":  "Establishment Labs Holdings Inc. First Lien Term Loan; Cost 1; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  32,
+                                  "table_index":  14,
+                                  "quoted_text":  "Establishment Labs Holdings Inc. First Lien Term Loan; Cost 1; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  26,
+                                  "table_index":  15,
+                                  "quoted_text":  "iCIMs, Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  32,
+                                  "table_index":  15,
+                                  "quoted_text":  "Impel Pharmaceuticals Inc. Warrants; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  33,
+                                  "table_index":  15,
+                                  "quoted_text":  "Innocoll Pharmaceuticals Limited Warrants; Cost 85; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  30,
+                                  "table_index":  16,
+                                  "quoted_text":  "MRI Software LLC First Lien Term Loan; Cost (136); Fair Value dash"
+                              },
+                              {
+                                  "row_index":  3,
+                                  "table_index":  17,
+                                  "quoted_text":  "NFM and J, L.P. First Lien Term Loan; Cost (124); Fair Value dash"
+                              },
+                              {
+                                  "row_index":  8,
+                                  "table_index":  18,
+                                  "quoted_text":  "scPharmaceuticals Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  9,
+                                  "table_index":  18,
+                                  "quoted_text":  "scPharmaceuticals Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  18,
+                                  "table_index":  18,
+                                  "quoted_text":  "Seres Therapeutics, Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              },
+                              {
+                                  "row_index":  19,
+                                  "table_index":  18,
+                                  "quoted_text":  "Seres Therapeutics, Inc. First Lien Term Loan; Cost dash; Fair Value dash"
+                              }
+                          ],
+    "confidence":  0.93
+}

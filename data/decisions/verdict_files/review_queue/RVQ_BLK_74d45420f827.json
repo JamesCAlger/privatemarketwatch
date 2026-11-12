@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_74d45420f827",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2101364499,
+  "anchor_value": 2292614325,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 64,
+      "row_index": 22,
+      "quoted_text": "State Street Institutional Treasury Plus Money Market Fund - 3.66 % (g)(n)(s) | Investor Class Units | 13,143,788 | 13,143,788 | 13,143,788",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 2,
+      "quoted_text": "Fidelity Floating Rate Central Fund (g)(l)(m)(o) | 1,863,034 | $ | 179,607,284 | $ | 178,106,038",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 93,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 191,249,826 | $ | 80,534,379 | $ | 2,020,830,120 | $ | 2,292,614,325",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Level 1 money market mutual fund fair value of 13,143,788 is present in the source schedule but absent from extracted holdings.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 64,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Level 1 fixed income mutual fund fair value of 178,106,038 is present in the source schedule but absent from extracted holdings.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 65,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "E01 is an aggregate Class 3 failure. The filing schedule total is 2,292,614,325, while extracted holdings fair value is 2,101,364,499. The 191,249,826 shortfall exactly matches the Level 1 Total Investments bucket in table 93, row 11, composed of the State Street money market fund at 13,143,788 and the Fidelity Floating Rate Central Fund at 178,106,038. These source rows should be represented in holdings for the schedule total to reconcile."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a68f89764245",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The C04 flag is aggregate/coverage-shaped, but the allowed evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001752724-25-113744. Because raw source was unavailable through the permitted adjudication window, the missing-share question cannot be decided."
+}

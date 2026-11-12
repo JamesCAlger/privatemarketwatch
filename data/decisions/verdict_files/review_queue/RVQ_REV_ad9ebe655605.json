@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ad9ebe655605",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_principal",
+  "observed_value": null,
+  "anchor_value": "non-USD principal disclosed in the raw schedule",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 6,
+      "quoted_text": "Ancora Bidco PTY LTD (6) | Unitranche First Lien Term Loan | B + 500, 50 Floor | 9.00% | 11/2030 | AUD 5,191 | 3,370 | 0.7 | 3,617",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 19,
+      "quoted_text": "Saarni (6) | Unitranche First Lien Term Loan | E + 525 | 7.58% | 03/2032 | EUR 101 | 108 | 0.0 | 117",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 12,
+      "quoted_text": "HSBC Continental Europe (6) | Unsecured Debt | E + 725 | 9.33% | 02/2033 | EUR 10,000 | 11,803 | 2.3 | 11,559",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt principal is present in the raw schedule, but principal_amount_usd is missing across the flagged rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX01 is a grouped Class 1 pattern. The current-period raw schedule explicitly discloses foreign-currency principal for representative flagged debt positions, including AUD 5,191 for Ancora Bidco and EUR 101 and EUR 10,000 for Saarni and HSBC Continental Europe. The flagged principal_amount_usd field is blank, so the pipeline omitted the required explicit FX-normalized principal. The source is readable and decisive; this is a real extraction/normalization defect rather than a false alarm."
+}

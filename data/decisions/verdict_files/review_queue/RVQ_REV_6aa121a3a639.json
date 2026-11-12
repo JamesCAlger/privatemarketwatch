@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_6aa121a3a639",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 198160,
+  "anchor_value": 198160,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 144, "row_index": 4, "quoted_text": "Non-accrual (2) | 198,160 | 0.81 | 184,539 | 0.74", "ties_to_residual": false},
+    {"table_index": 18, "row_index": 10, "quoted_text": "Aesthetics Australia Group Pty Ltd (4)(5)(8)(19)(35) | B + | 9.38 % PIK | 3/21/2028 | AUD | 61,678 | 39,575 | 25,471", "ties_to_residual": true},
+    {"table_index": 21, "row_index": 42, "quoted_text": "Baart Programs, Inc. (4)(10)(19)(25) | SF + | 5.00 % PIK | 6/11/2027 | 10,018 | 9,935 | 7,577", "ties_to_residual": true},
+    {"table_index": 33, "row_index": 8, "quoted_text": "DCA Acquisition Holdings LLC (4)(7)(19) | 13.13 % PIK | 12/28/2032 | 1,398 | 1,176 | 73", "ties_to_residual": true},
+    {"table_index": 33, "row_index": 9, "quoted_text": "DCA Acquisition Holdings LLC (4)(7)(19) | 13.13 % PIK | 12/28/2032 | 132 | 111 | 7", "ties_to_residual": true},
+    {"table_index": 33, "row_index": 10, "quoted_text": "DCA Acquisition Holdings LLC (4)(7)(19) | 13.13 % PIK | 12/28/2032 | 238 | 198 | 12", "ties_to_residual": true},
+    {"table_index": 15, "row_index": 28, "quoted_text": "Enstall Group B.V. (4)(5)(8)(19)(29) | E + | 6.50 % | 8/30/2028 | EUR | 66,292 | 67,687 | 36,080", "ties_to_residual": true},
+    {"table_index": 31, "row_index": 23, "quoted_text": "Foundation Automotive Corp (4)(5)(10)(19)(25) | SF + | 7.75 % PIK | 12/27/2027 | 17,924 | 15,032 | 7,474", "ties_to_residual": true},
+    {"table_index": 31, "row_index": 24, "quoted_text": "Foundation Automotive US Corp (4)(10)(19)(25) | SF + | 7.75 % PIK | 12/24/2027 | 19,062 | 15,897 | 7,949", "ties_to_residual": true},
+    {"table_index": 31, "row_index": 25, "quoted_text": "Foundation Automotive US Corp (4)(10)(19)(25) | SF + | 7.75 % PIK | 12/23/2027 | 5,550 | 4,714 | 2,314", "ties_to_residual": true},
+    {"table_index": 31, "row_index": 26, "quoted_text": "Foundation Automotive US Corp (4)(6)(10)(19)(25) | SF + | 7.75 % | 12/23/2027 | 4,052 | 3,193 | 1,149", "ties_to_residual": true},
+    {"table_index": 29, "row_index": 40, "quoted_text": "Medallia Inc (4)(9)(19)(25) | SF + | 6.00 % | 10/29/2028 | 82,826 | 80,815 | 49,828", "ties_to_residual": true},
+    {"table_index": 22, "row_index": 29, "quoted_text": "Plasma Buyer LLC (4)(9)(19)(25) | SF + | 5.75 % PIK | 5/12/2029 | 89,021 | 81,936 | 49,777", "ties_to_residual": true},
+    {"table_index": 22, "row_index": 30, "quoted_text": "Plasma Buyer LLC (4)(9)(19)(25) | SF + | 6.25 % PIK | 5/12/2029 | 3,374 | 3,089 | 1,887", "ties_to_residual": true},
+    {"table_index": 22, "row_index": 31, "quoted_text": "Plasma Buyer LLC (4)(6)(9)(19)(25) | SF + | 5.75 % PIK | 5/12/2028 | 10,172 | 9,335 | 5,646", "ties_to_residual": true},
+    {"table_index": 22, "row_index": 32, "quoted_text": "Plasma Buyer LLC (4)(6)(9)(19)(25) | SF + | 6.25 % PIK | 3/31/2027 | 6,356 | 1,816 | 1,943", "ties_to_residual": true},
+    {"table_index": 15, "row_index": 24, "quoted_text": "Thrasio LLC (4)(10)(19)(23)(25) | SF + | 8.00 % | 6/18/2029 | 1,305 | 1,014 | 973", "ties_to_residual": true}
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Sixteen current-period schedule rows marked with footnote (19) sum to the filing's 198,160 non-accrual fair value anchor.",
+      "fix_class": "classification_fix",
+      "citation": {"table_index": 144, "row_index": 4}
+    }
+  ],
+  "rationale": "The filing has a March 31, 2026 non-accrual fair value line of 198,160. The sixteen current-period investment schedule rows carrying footnote (19) have fair values 25,471, 7,577, 73, 7, 12, 36,080, 7,474, 7,949, 2,314, 1,149, 49,828, 49,777, 1,887, 5,646, 1,943, and 973, which sum exactly to 198,160. The raw source therefore supports the non-accrual flag and localizes it to those source rows."
+}

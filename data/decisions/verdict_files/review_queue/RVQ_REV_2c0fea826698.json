@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_2c0fea826698",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "92 flagged rows with missing interest_rate and basis_spread",
+  "anchor_value": "mixed or unresolved at cohort level; ADF Capital is explicitly shown with dashes",
+  "confidence": 0.78,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 78,
+      "row_index": 5,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. | - | - | - | - | - | - | - | - | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 cohort flag covering 92 identified missing-rate cells. The raw schedule has dedicated Coupon, Reference, and Spread columns, but a targeted flagged example (ADF Capital, table 78 row 5) contains explicit dashes rather than a disclosed rate, so that blank is source-supported and not an extraction omission. The evidence inspected does not establish that all 92 flagged rows share that disposition, nor does one source-supported blank disprove possible omissions elsewhere in the cohort. The grouped flag therefore cannot be adjudicated uniformly as real_error or false_alarm without row-by-row source localization."
+}

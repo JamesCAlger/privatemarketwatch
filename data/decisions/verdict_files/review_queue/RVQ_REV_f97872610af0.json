@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_f97872610af0",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.35,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Raw source was checked through the evidence CLI. The schedule contains rows for flagged issuers, e.g. AEC Parent Holdings at table 26 row 6 with footnotes (9)(17), and Atlas CC Acquisition Corp. at table 15 rows 7-9 with footnotes including (10). The filing also contains aggregate non-accrual percentage rows, e.g. table 280 row 35. However targeted CLI searches for accrual/non-accrual wording and footnote-definition language did not expose a source row defining the issuer-level footnote semantics or directly tying the flagged issuers to non-accrual status. Without that source definition, the flag cannot be grounded as either a real data error or a false alarm."
+}

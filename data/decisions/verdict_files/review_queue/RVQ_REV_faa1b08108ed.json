@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_REV_faa1b08108ed",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 23,
+  "anchor_value": 23,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "Quantum Leap Buyer LLC | (4)(5)(6) | Delayed Draw Term Loan | SOFR | 4.50 % | 9/05/2025 | 9/6/2032 | $ | - | $ | ( 62 | ) | $ | ( 62 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 24,
+      "quoted_text": "Action Elevator Intermediate Holdings, LLC | (4)(5)(6) | Revolving Line of Credit | SOFR | 5.00 % | 10/31/2024 | 10/31/2030 | - | ( 127 | ) | ( 50 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "SCP WQS Buyer, LLC | (4)(5)(6) | Delayed Draw Term Loan | SOFR | 5.25 % | 7/17/2025 | 10/2/2029 | - | ( 154 | ) | ( 154 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 15,
+      "quoted_text": "BVI Medical, Inc. | (4)(5)(6) | Revolving Line of Credit | SOFR | 6.25 % | 3/07/2025 | 3/8/2032 | - | ( 75 | ) | ( 152 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 9,
+      "quoted_text": "Rocket Youth Brands Holdco LLC | (4)(5)(6) | Delayed Draw Term Loan | SOFR | 5.00 % | 6/20/2025 | 6/20/2031 | - | ( 224 | ) | ( 235 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 26,
+      "quoted_text": "Denali Intermediate Holdings, Inc. | (4)(5)(6) | Revolving Line of Credit | SOFR | 5.50 % | 8/26/2025 | 8/26/2032 | - | ( 63 | ) | ( 62 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 8,
+      "quoted_text": "CB Buyer, Inc. | (4)(5)(6) | Revolving Line of Credit | SOFR | 5.25 % | 7/01/2024 | 7/1/2031 | - | ( 13 | ) | ( 5 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flags 23 negative fair_value rows, but the raw schedule of investments prints those fair values in parentheses in the Fair Value (3) column for delayed draw term loans and revolving lines of credit. The extracted negative signs match the filing; the defect is the rule scope treating source-backed negative fair values as review issues rather than an extraction/data error."
+}

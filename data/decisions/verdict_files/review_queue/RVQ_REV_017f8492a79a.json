@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_017f8492a79a",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 179,
+      "row_index": 4,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. (3)(6) | N/A | N/A | 09/08/2028 | 47,166 | $ | -- | $ | -- | 0.00 | %"
+    }
+  ],
+  "rationale": "C104 flagged a zero fair_value. The matching raw SOI row for the West Marine/Rising Tide Holdings warrant shows the fair value cell as a dash and percentage of net assets as 0.00%, so a stored fair_value of 0.0 is consistent with the filing rather than a row data error."
+}

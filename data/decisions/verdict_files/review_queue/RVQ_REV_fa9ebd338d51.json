@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_fa9ebd338d51",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -492000,
+  "anchor_value": -492000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 28,
+      "quoted_text": "ACI Group Holdings, Inc. section: Healthcare | First Lien(3)(4) - Undrawn | ... | 591 | ( 6 ) | ( 14 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 29,
+      "quoted_text": "ACI Group Holdings, Inc. section: First Lien(3)(4) - Undrawn | ... | 660 | - | ( 16 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 10,
+      "quoted_text": "Total Unfunded Debt Investments | $ | 153,674 | $ | ( 586 ) | $ | ( 492 ) | ( 0.06 ) | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged negative fair_value cells are source-faithful unfunded/undrawn debt investment marks, not extraction errors. The source schedule reports ACI Group Holdings undrawn rows with fair values of (14) and (16) thousand, matching flagged values of -14000 and -16000, and the filing's own Total Unfunded Debt Investments fair value is negative at (492) thousand. Negative fair value is therefore a legitimate liability-style mark for unfunded commitments here, so C103 is too broad for these rows."
+}

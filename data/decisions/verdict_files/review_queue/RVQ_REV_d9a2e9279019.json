@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_REV_d9a2e9279019",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 76,
+      "row_index": 10,
+      "quoted_text": "CFCo, LLC (Benefytt Technologies, Inc.) | (4)(5)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/11/2023 | 9/13/2038 | 86,098 | 12,571 | 0 | 0.00"
+    },
+    {
+      "table_index": 87,
+      "row_index": 17,
+      "quoted_text": "Box Co-Invest Blocker, LLC - (BP Alpha Holdings, L.P.) - Class A Units | (4) | 12/10/2021 | 3 | 3,308 | 0 | 0.00"
+    },
+    {
+      "table_index": 89,
+      "row_index": 13,
+      "quoted_text": "WHCG Purchaser, Inc. - Class A Common Units | (4) | 8/2/2024 | 10,966,377 | 0 | 0 | 0.00"
+    },
+    {
+      "table_index": 92,
+      "row_index": 10,
+      "quoted_text": "Pigments Holdings LP - LP Interest | (4)(6)(16) | 4/14/2023 | 3,943 | 0 | 0 | 0.00"
+    },
+    {
+      "table_index": 92,
+      "row_index": 14,
+      "quoted_text": "CFCo, LLC (Benefytt Technologies, Inc.) - Class B Units | (4)(16) | 9/28/2023 | 134,166,603 | 0 | 0 | 0.00"
+    },
+    {
+      "table_index": 92,
+      "row_index": 18,
+      "quoted_text": "Material+ Holding Company, LLC - Class C Units | (4)(16) | 6/14/2024 | 63,589 | 0 | 0 | 0.00"
+    },
+    {
+      "table_index": 225,
+      "row_index": 14,
+      "quoted_text": "Pigments Holdings LP - LP Interest | (4) | 4/14/2023 | 1,212 | 0 | 0 | 0.00"
+    },
+    {
+      "table_index": 225,
+      "row_index": 16,
+      "quoted_text": "Box Co-Invest Blocker, LLC - (BP Alpha Holdings, L.P.) - Class A Units | (4) | 1/19/2022 | 1 | 780 | 0 | 0.00"
+    },
+    {
+      "table_index": 225,
+      "row_index": 25,
+      "quoted_text": "WHCG Purchaser, Inc. - Class A Common Units | (4) | 8/2/2024 | 667,649 | 0 | 0 | 0.00"
+    }
+  ],
+  "rationale": "C104 flagged nine extracted holdings because fair_value is zero. The raw SOI source search for rows with a zero fair-value cell returned exactly nine matching source rows, each showing the fair value column as 0 and the percentage column as 0.00. The observed extracted value therefore agrees with the filing source cells; the review warning is not a data error."
+}

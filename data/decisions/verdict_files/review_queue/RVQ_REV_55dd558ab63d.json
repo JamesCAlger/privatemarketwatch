@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_55dd558ab63d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -2746.0,
+  "anchor_value": -2746.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 233,
+      "row_index": 26,
+      "quoted_text": "Echo Purchaser, Inc. Delayed Draw Term Loan (Exostar) | (1)(2)(3)(4)(5)(7)(8)(12) | 3M SOFR + 0.00 % / 0.00 % | 0.00 % | 11/17/2029 | - | ( 187 | ) | ( 189 | ) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 233,
+      "row_index": 31,
+      "quoted_text": "PracticeTek Purchaser, LLC Delayed Draw Term Loan | (1)(2)(3)(4)(5)(7)(8)(12) | 3M SOFR + 0.00 % / 1.00 % | 0.00 % | 8/30/2029 | - | ( 2,746 | ) | ( 16 | ) | 0.00 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 249,
+      "row_index": 0,
+      "quoted_text": "(6) | Investment has undrawn commitments. Unamortized fees are classified as unearned income which reduces cost basis, which may result in a negative cost basis. A negative fair value may result from the unfunded commitment being valued below par. The investment may be subject to an unused/letter of credit facility fee.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C107 flags source-backed negative amortized cost on delayed draw rows where the filing footnote explains negative cost basis can result from undrawn commitments and unamortized fees.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 249,
+        "row_index": 0
+      }
+    }
+  ],
+  "rationale": "The flagged condition is negative cost. Raw source rows show the same negative amortized cost values in parentheses for delayed draw term loans, including Echo Purchaser at (187) and PracticeTek Purchaser at (2,746). The filing's footnote (6) states that undrawn commitments and unamortized fees may result in a negative cost basis, so these values are source-backed and disclosed rather than extraction errors."
+}

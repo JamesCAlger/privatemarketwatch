@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_39cabc2f6c72",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 1,
+      "quoted_text": "Investments (1) Non-Controlled, Non-Affiliated Investments | Industry | Reference Rate Spread (4) | Interest Rate (5) | Maturity Date | Par Amount/ Shares | Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 13,
+      "row_index": 0,
+      "quoted_text": "(1) | All investments are U.S. domiciled."
+    },
+    {
+      "table_index": 11,
+      "row_index": 19,
+      "quoted_text": "Polaris Newco, LLC Dollar Term Loan | Technology | SOFR + 4.114 % | 9.431 | % | 06/02/2028 | 6,912 | 6,715 | 6,635 | 2.81 | %"
+    }
+  ],
+  "rationale": "FX01 asserts non-USD debt principal requires an explicit USD conversion, but the raw September 30, 2023 schedule does not identify the flagged debt par amounts as non-USD. The SOI header presents Par Amount/Shares alongside Cost and Fair Value, the filing footnote states all investments are U.S. domiciled, targeted searches for EUR/GBP/CAD/non-USD returned no source hits, and at least one flagged debt row is expressly a Dollar Term Loan. The missing principal_amount_usd is therefore a rule-scope false alarm rather than a source-proven data defect."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_1ea3526931ee",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2000,
+  "anchor_value": 2000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 20,
+      "quoted_text": "BioXcel Therapeutics, Inc. | Pharmaceuticals | Warrants | 15,566 | 74 | 2 | (8)(10)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule row for BioXcel Therapeutics warrants shows Cost 74 and Fair Value 2 in the Cost and Fair Value columns. The extracted values behind the X08 warning therefore match the source; the low fair-value-to-cost ratio is a source-disclosed warrant valuation, not a data extraction or column-mapping error."
+}

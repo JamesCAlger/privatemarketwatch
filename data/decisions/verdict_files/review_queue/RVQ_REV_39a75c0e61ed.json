@@ -1,0 +1,96 @@
+{
+  "review_id": "RVQ_REV_39a75c0e61ed",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "Five extracted issuer_name values include leaked dimension, type, rate, interest-rate, or maturity text.",
+  "anchor_value": "The raw schedule rows show clean issuer names in the issuer cell, with type, rate, interest rate, and maturity in separate columns.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 18,
+      "quoted_text": "Principal Lighting Group Holdings, LLC (i)(l)(q) | Term Loan | SOFR + 5.25 % | 8.96 % | 11/4/2030 | 22,183,120 | 21,900,417 | 22,116,570",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 23,
+      "quoted_text": "Dragonfly Pond Works (f)(i)(q) | Delayed Draw Term Loan | SOFR + 5.25 % | 8.99 % | 8/16/2030 | 3,195,792 | 3,167,651 | 3,195,792",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 12,
+      "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 5/3/2029 | 53,475 | 53,475 | 45,079",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 13,
+      "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 12/31/2029 | 32,085 | 32,085 | 25,706",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 14,
+      "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 12/31/2029 | 42,780 | 42,780 | 32,846",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Principal Lighting Group Holdings, LLC issuer_name leaked the debt category, instrument type, and maturity from adjacent schedule fields.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 43,
+        "row_index": 18,
+        "quoted_text": "Principal Lighting Group Holdings, LLC (i)(l)(q) | Term Loan | SOFR + 5.25 % | 8.96 % | 11/4/2030 | 22,183,120 | 21,900,417 | 22,116,570"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Dragonfly Pond Works issuer_name leaked the debt category, instrument type, and maturity from adjacent schedule fields.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 43,
+        "row_index": 23,
+        "quoted_text": "Dragonfly Pond Works (f)(i)(q) | Delayed Draw Term Loan | SOFR + 5.25 % | 8.99 % | 8/16/2030 | 3,195,792 | 3,167,651 | 3,195,792"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Usw Holdings, LLC issuer_name leaked instrument type, rate terms, interest rate, and maturity from adjacent schedule fields for the 5/3/2029 note.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 52,
+        "row_index": 12,
+        "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 5/3/2029 | 53,475 | 53,475 | 45,079"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Usw Holdings, LLC issuer_name leaked instrument type, rate terms, interest rate, and maturity from adjacent schedule fields for one 12/31/2029 note.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 52,
+        "row_index": 13,
+        "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 12/31/2029 | 32,085 | 32,085 | 25,706"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Usw Holdings, LLC issuer_name leaked instrument type, rate terms, interest rate, maturity, and an ordinal suffix from adjacent schedule fields for another 12/31/2029 note.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 52,
+        "row_index": 14,
+        "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 12/31/2029 | 42,780 | 42,780 | 32,846"
+      }
+    }
+  ],
+  "rationale": "C206 is a real localized issuer_name extraction error. The flagged values concatenate the debt category and term fields into issuer_name, but the raw SOI schedule presents the issuer as the first cell and the type, reference rate/spread, interest rate, and maturity as separate cells. The cited rows cover each affected issuer_name shape, including the three Usw Holdings convertible note rows."
+}

@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_1192b88da7f2",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 1000.0,
+  "anchor_value": 1000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 12,
+      "quoted_text": "Alcresta Holdings, LP continuation row: Common Equity - Equity Unit | N/A | N/A | 1,176 Shares | cost 1 | fair value 88 | (4)(9)(34)"
+    }
+  ],
+  "rationale": "X07 fired because extracted cost is 1000.0 and fair value is 88000.0, a ratio above 10x. The raw SOI row reports the same economics in thousands: Alcresta Holdings, LP common equity has cost 1 and fair value 88. Because the source confirms the stored cost and fair value, the warning reflects an extreme disclosed appreciation ratio rather than a data error."
+}

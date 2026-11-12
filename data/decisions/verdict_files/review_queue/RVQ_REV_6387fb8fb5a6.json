@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_6387fb8fb5a6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1334.005,
+  "anchor_value": 1334.005,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Total Debt Investments | $ | 1,334,207 | $ | 1,334,005 | 182.10 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 26,
+      "quoted_text": "Total Debt Investments | $ | 812,205 | $ | 812,520 | 189.38 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 8,
+      "quoted_text": "Atlantic Squared Supply LLC | First lien senior secured term loan | SOFR + 6.00% | 11/17/2030 | fair value 63,524",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 8,
+      "quoted_text": "LS Group OpCo Acquisition LLC | First lien senior secured term loan | SOFR + 3.00% | 4/23/2031 | fair value 6,993",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "D06 flagged low issuer continuity at 25/58 persisted issuers (43.1%) versus a 50% threshold. The raw filing shows complete current and prior investment schedules with debt-investment fair-value totals that tie the extracted context: 2025 debt fair value is 1,334,005 thousand and 2024 debt fair value is 812,520 thousand. Targeted schedule rows show materially different issuer populations across the two periods, consistent with portfolio turnover and growth rather than a malformed current extraction or missing schedule. The check is therefore over-scoped for this filing rather than identifying a source-backed data error."
+}

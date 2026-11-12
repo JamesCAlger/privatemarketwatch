@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_691f26f63a39",
+  "verdict": "false_alarm",
+  "mechanism": "unit_alias_canonicalization",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated schedule ($)",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 11.11 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 29,050,755 | $ | 29,086,349",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 37,
+      "quoted_text": "Total Investments ( 178.1 %) | $ | 951,786,466 | $ | 942,838,942",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 fired because cost_currency was stored as U_USD, but the raw investment schedule presents the Amortized Cost and Fair Value columns in dollars. A representative flagged holding row shows explicit dollar markers before both valuation amounts, and the schedule total likewise presents total investments with dollar markers. The source therefore supports USD-denominated valuation fields; the flag is a validator/unit-canonicalization false alarm rather than a real non-USD cost currency error."
+}

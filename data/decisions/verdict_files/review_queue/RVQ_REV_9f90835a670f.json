@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_9f90835a670f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_date_vs_report_date",
+  "observed_value": "2026-03-31",
+  "anchor_value": "2026-03-31",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 18,
+      "quoted_text": "Premier Imaging, LLC (dba Lucid Health) | Health Care Providers & Services | 9.93 % | S + 6.00 % (Incl. 3.27 % PIK) | 03/31/26 | 19,125 | 19,125 | 14,296 | (6) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 19,
+      "quoted_text": "Premier Imaging, LLC (dba Lucid Health) | Health Care Providers & Services | 9.93 % | S + 6.00 % (Incl. 3.27 % PIK) | 03/31/26 | 12,503 | 12,503 | 9,346 | (6) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Premier Imaging, LLC (dba Lucid Health) | Health Care Providers & Services | 9.93 % | S + 6.00 % (Incl. 3.27 % PIK) | 03/31/26 | 5,294 | 5,294 | 3,957 | (6) (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 21,
+      "quoted_text": "Premier Imaging, LLC (dba Lucid Health) | Health Care Providers & Services | 9.93 % | S + 6.00 % (Incl. 3.27 % PIK) | 03/31/26 | 3,354 | 3,354 | 2,507 | (6) (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw investment schedule shows the implicated Premier Imaging positions mature on 03/31/26, exactly equal to the 2026-03-31 report date. A maturity equal to the as-of date is not in the past, so these rows satisfy maturity_not_past. The flag is therefore a rule boundary/scope false alarm rather than a source-data defect. The weak artifact reports five violations while four source rows are visible at this date, leaving minor count-localization risk but not changing the boundary adjudication."
+}

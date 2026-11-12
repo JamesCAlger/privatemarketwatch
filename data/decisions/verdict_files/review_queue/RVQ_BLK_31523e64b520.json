@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_BLK_31523e64b520",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 545.46,
+  "anchor_value": 545.727,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 30,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | 546,560 | $ | 545,727 | 235.2 | %"
+    },
+    {
+      "table_index": 47,
+      "row_index": 11,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 316,371 | $ | 318,629 | 206.5 | %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Commitment Expiration Date | Unfunded Commitment | Fair Value"
+    }
+  ],
+  "rationale": "E07 reports a row-count mismatch, source=661 vs output=357, but the raw source shows the current 2025 investment schedule closes at fair value 545.727 million while the extracted output fair value is 545.460 million, a tight anchor. The excess source rows are explained by schedule sections outside the current holdings row scope: a separate unfunded-commitments table and a comparative prior-period portfolio schedule whose total is 318.629 million, not the 2025 current portfolio. The row-count oracle is therefore counting out-of-scope/comparative source rows rather than showing missing current holdings."
+}

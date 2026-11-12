@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_47eef7228b62",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.24,
+  "anchor_value": 5772929,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 7,
+      "quoted_text": "Kaman Corporation | First Lien Term Loan | SOFR(Q) | Floor -- | Spread 2.50% | Total Coupon 6.32% | Maturity 1/30/2032 | Principal $5,772,929 | Cost 5,754,549 | Fair Value 5,803,266 | % of Total Cash and Investment 0.24%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged principal amount value 0.24 matches the percent-of-total column, while the same source row's principal amount is 5,772,929.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row localization. The raw schedule row for Kaman Corporation shows Principal of $5,772,929 and a separate % of Total Cash and Investment value of 0.24%. Because the flag metric is 0.24 under fmt_principal_amount, the stored/observed principal value appears to have come from the percentage column rather than the Principal column."
+}

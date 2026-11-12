@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_51524691fc89",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Source SOI row has non-USD debt par amount: GBP 1,271",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 24,
+      "quoted_text": "ST Athena Global LLC | (6)(8)(13)(17) | First Lien Term Loan | SON + 5.25 % | 8.82 % | 6/26/2030 | GBP 1,271 | 1,596 | 1,696 | 0.08",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A debt position has a non-USD Par Amount / Shares value (GBP 1,271), but the flagged principal_amount_usd field is blank and needs an explicit USD conversion before par analytics.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 43,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "FX01 flags non-USD debt principal rows missing principal_amount_usd. The raw SOI header identifies column Par Amount / Shares, and table 43 row 24 is a First Lien Term Loan with Par Amount / Shares shown as GBP 1,271. The bundle's row-validation artifact reports principal_amount_usd is blank for FX01 rows, so the missing USD-normalized principal is a real extraction/normalization gap rather than a false alarm."
+}

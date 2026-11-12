@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_b815b06fb278",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 917425138,
+  "anchor_value": 917425138,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 14,
+      "quoted_text": "Infrabuild Australia Pty Ltd | 1st Lien Term Loan | Industrial Products & Services | S+ 9.00 %, 3.50 % Floor | 14.31 | 5/26/2023 | 5/26/2026 | fair value 14,322,572",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 3,
+      "quoted_text": "Infrabuild Australia Pty Ltd | 1st Lien Term Loan | Industrial Products & Services | S+ 9.00 %, 3.50 % Floor | 14.35 % | 5/26/2023 | 5/26/2026 | fair value 14,342,616",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Dye & Durham Corp | 1st Lien Term Loan | Software & Services | C+ 5.75 %, 0.75 % Floor | 11.04 | 12/3/2021 | 12/3/2027 | fair value 3,491,659",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 6,
+      "quoted_text": "Dye & Durham Corp | 1st Lien Term Loan | Software & Services | C+ 5.75 %, 0.75 % Floor | 11.20 | 12/3/2021 | 12/3/2027 | fair value 3,506,126",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer identity extraction is contaminated with section, instrument, rate, and date text; raw source keeps Portfolio Company separate, causing recurring issuers to miss continuity matching when terms change.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "D06 is a Class 3 aggregate continuity flag. Source coverage anchors tie: the filing reports total investments at fair value of 917,425,138 for March 31, 2024, and the SOI total uses the same value. The low observed continuity metric, 20/136 = 0.1471, is not supported by the raw SOI: representative issuer rows such as Infrabuild Australia Pty Ltd and Dye & Durham Corp appear in both March 31, 2024 and December 31, 2023 schedules with issuer, instrument, rate, dates, and fair value in separate columns. The bundle sample shows extracted issuer_name values concatenating country, investment class, instrument, industry, rate, acquisition date, and maturity date into the issuer identity; term/rate changes therefore create artificial non-continuity. This is a real extraction defect, not genuine issuer turnover."
+}

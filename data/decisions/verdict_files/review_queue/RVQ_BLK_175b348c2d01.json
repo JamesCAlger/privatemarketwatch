@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_175b348c2d01",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 410050595,
+  "anchor_value": 249694433,
+  "confidence": 0.98,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4 | % | 258,299,078 | 249,694,433",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "Non-controlled/non-affiliated investments (amortized cost of $ 27,646 and $ 27,643, respectively) | $ | 27,619 | $ | 27,145",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "Controlled affiliated investments (amortized cost of $ 230,653 and $ 363,730, respectively) | 222,076 | 236,579",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The March 31, 2026 schedule reports debt and equity fair value of $249,694,433, while the extracted position sum is $410,050,595, an excess of $160,356,162. The balance sheet independently corroborates the schedule in rounded thousands: $27,619,000 non-controlled/non-affiliated plus $222,076,000 controlled affiliated equals $249,695,000. The filing's $572,771,377 total investments is not the appropriate comparison because it also includes $321,170,326 of short-term investments and $1,906,618 of cash equivalents. Source structure suggests possible cross-table or comparative contamination, but it does not safely localize the excess to a specific row, so the mechanism remains unknown and escalation is requested."
+}

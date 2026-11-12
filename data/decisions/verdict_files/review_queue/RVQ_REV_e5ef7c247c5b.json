@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e5ef7c247c5b",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19.61949591280654,
+  "anchor_value": 9.373297002724795,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 11,
+      "quoted_text": "Total distributions | ( 8.60 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 12,
+      "quoted_text": "Net Asset Value Per Unit (accrual base), End of Period | $ | 91.75",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 21,
+      "quoted_text": "Ratio of net investment income to average net assets (4) | 10.70 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Stored distribution_rate is 19.6195%, but the 2025 financial highlights show total distributions of 8.60 per unit and ending NAV of 91.75, implying about 9.37%.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 47,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "F16 compares distribution_rate to income_yield_pct * 1.5. The source reports the 2025 ratio of net investment income to average net assets as 10.70%, so the threshold is 16.05%. The same financial highlights report 2025 total distributions of 8.60 per unit and ending NAV of 91.75, implying a distribution rate of about 9.37%, not the observed 19.6195%. The flag is therefore grounded as a real data error localized to the stored distribution_rate rather than a valid high-distribution source fact."
+}

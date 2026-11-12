@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_3eeab2399dad",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Commitment Expiration Date | Unfunded Commitment | Fair Value (3)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 2,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | 7/2/2026 | $ | 1,432 | $ | ( 22 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 61,
+      "quoted_text": "Total Unfunded Portfolio Company Commitments | $ | 69,555 | $ | ( 679 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 20,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 259,337 | $ | 259,073 | 220.3 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 requires a non-USD source principal before missing principal_amount_usd is a data error. The raw SOI and unfunded commitment schedules show dollar-denominated amount columns: the commitment schedule prints dollar signs on the first affected commitment row and on the total, and the investment schedule total is also dollar-denominated. Targeted source searches for EUR, GBP, and CAD returned no hits. The source therefore does not support the rule premise that these are non-USD source par amounts; the warning is a false alarm in the check, not a holdings data defect."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_169f6fa2fdcd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 1,
+      "quoted_text": "Portfolio Investments ... Par/Shares | Amortized Cost | Market Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 6,
+      "quoted_text": "LegalShield ... Par/Shares | $ | 4,387,500 | $ | 4,359,043 | $ | 4,389,682",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule is USD-denominated, but cost_currency was stored as a custom non-USD unit token instead of normalized USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX03 flags cost_currency values stored as UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA. The raw portfolio schedule labels the amount columns as Amortized Cost and Market Value and shows dollar signs in the amount cells, e.g. table 15 row 6 has USD dollar markers for par/shares, amortized cost, and market value. The source therefore supports USD denomination; the defect is the extraction/normalization of the currency unit, not the filing data."
+}

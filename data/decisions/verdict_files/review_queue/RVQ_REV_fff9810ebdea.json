@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_fff9810ebdea",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 24,
+      "quoted_text": "Total Cash and Investments - 156.2 % of Net Assets | 2,465,923,369 | 100.00 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 142.2 % of Net Assets | 2,254,646,820 | 2,244,701,289 | 91.04 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 22,
+      "quoted_text": "Cash and Cash Equivalents - 14.0 % of Net Assets | 221,222,080 | 8.96 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source schedule has a % of Total Cash and Investment anchor of 100.00%, split between investments at 91.04% and cash at 8.96%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review: the raw filing schedule explicitly provides the percentage anchor. Table 45 row 24 reports Total Cash and Investments at 100.00%, with row 20 Total Investments at 91.04% and row 22 Cash and Cash Equivalents at 8.96%. The flagged artifact reports pct_sum=0.0%, so the source supports a real extraction/column capture error rather than a false alarm."
+}

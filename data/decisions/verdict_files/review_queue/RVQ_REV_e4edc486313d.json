@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e4edc486313d",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.83 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 29,787,749 | $ | 29,023,229 | $ | 28,774,966",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "Harvey Gulf Holdings, LLC | Term Loan B - 10.61 % (SOFR + 6.25 %, 2.00 % Floor) | $ | 41,115,842 | $ | 40,815,030 | $ | 41,033,611",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 10,
+      "quoted_text": "Total Debt Investments (3) | 154.2 % | 952,266,166 | 941,903,290",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd on supposed non-USD debt principal rows. Raw SOI schedule headers and representative rows show Par Amount, Amortized Cost, and Fair Value are dollar-denominated with dollar signs on the schedule, and targeted source searches for EUR, GBP, CAD, and foreign currency returned no hits. The source therefore does not support a non-USD par requiring FX conversion; the flag appears to come from currency/source classification rather than a data error in the extracted holding."
+}

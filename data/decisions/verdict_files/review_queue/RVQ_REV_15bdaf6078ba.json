@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_15bdaf6078ba",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6,
+  "anchor_value": 1.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 252,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) (2) | Preferred Dividend Rate | Shares | Amortized Cost (3) | Fair Value",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 4,
+      "quoted_text": "777 Partners, LLC (6) (7) | 10.00% | 750 | 750,000 | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 10,
+      "quoted_text": "Apnimed, Inc. (6) (7) | 135,122 | 1,199,993 | 1,599,844",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 13,
+      "quoted_text": "Sapience Therapeutics, Inc. (Series B-1 Preferred Shares) (6) (7) (10) | 1,619,048 | 4,080,000 | 4,679,252",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The six preferred-stock equity positions have source Shares values in table 252, so the 9-of-15 share completeness metric missed extractable preferred-stock shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 252,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "C04 reports that only 60.0% of 15 equity rows have shares, but the raw SOI source shows a Shares column for the preferred-stock table and preferred rows with share counts such as 777 Partners at 750 shares, Apnimed at 135,122 shares, and Sapience B-1 at 1,619,048 shares. The common and LLC equity rows in table 251 also have a Shares header, while table 252 supplies the missing preferred-stock share values. The failure is therefore a localized extraction gap rather than a source disclosure gap."
+}

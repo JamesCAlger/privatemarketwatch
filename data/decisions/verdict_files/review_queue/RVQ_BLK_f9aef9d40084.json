@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_f9aef9d40084",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "Revolver",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 78,
+      "row_index": 41,
+      "quoted_text": "Experigreen Intermediate Holdings, Inc. | Revolver | 12/10/2032 | 3,169 | ( 16 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Stored exposure_type is blank, but the source commitment row identifies the exposure as Revolver.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 78,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "C303 flags a missing controlled exposure_type. The reviewed holdings context shows the Experigreen commitment row has blank exposure_type, while the raw filing table header labels column 2 as Commitment Type and table 78 row 41 gives the commitment type as Revolver for Experigreen Intermediate Holdings, Inc. The source therefore decides the controlled classification, so the blank stored value is a real data error."
+}

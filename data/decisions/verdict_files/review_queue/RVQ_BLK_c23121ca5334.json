@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_c23121ca5334",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_accession",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-095711",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 5,
+      "quoted_text": "Burgess Point Purchaser Corporation | Initial Term Loan (First Lien) | 3M SOFR + 5.25% | Interest Rate 9.19% | Initial Acquisition Date 11/25/2024 | Maturity Date 7/25/2029 | Amortized Cost $4,696,356 | Fair Value $4,206,281; evidence CLI overview accession: 0001193125-26-095711",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A filing-derived BDC holding row has an empty accession_number even though the raw filing accession is 0001193125-26-095711.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C006 requires accession_number for source traceability. The flagged artifact records observed accession_number as empty for a filing-derived BDC row, but the evidence CLI overview for the same raw filing reports accession 0001193125-26-095711 and table 48 row 5 is a concrete SOI position from that filing. The defect is localized to extraction/metadata propagation, not to the raw source."
+}

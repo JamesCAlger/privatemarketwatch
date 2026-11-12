@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_25564d9f6fd3",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 149.5,
+  "anchor_value": 149.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 36,
+      "quoted_text": "Total Investments, June 30, 2024 ( 149.5 %)* | $ | 2,347,320 | $ | 2,643,030 | $ | 2,631,138",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The isolated percent-of-net-assets format violation localizes to the SOI total-investments row, which is an aggregate schedule total rather than a position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 38,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "The source shows net assets of 1,759,611 and total investments at fair value of 2,631,138, which reconciles to the schedule total of 149.5% of net assets. A targeted source search found exactly one 149.5% row: table 38 row 36, labeled 'Total Investments, June 30, 2024', not an individual portfolio company position. Because the rule fired once across the percent-of-net-assets population and the only matching outlier is an aggregate total line, the defect is a localized subtotal/total leak rather than a valid position value."
+}

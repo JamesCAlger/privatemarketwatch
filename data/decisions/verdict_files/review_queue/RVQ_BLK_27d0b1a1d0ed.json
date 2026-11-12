@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_27d0b1a1d0ed",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4434408000,
+  "anchor_value": 4493774000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 23,
+      "quoted_text": "Total Short-Term Investments | 49,874 | 49,874 | 2.31",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 61,
+      "row_index": 41,
+      "quoted_text": "Total Unfunded Commitments | $ | 1,087,013 | $ | ( 9,492 | )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 24,
+      "quoted_text": "Total Investments at fair value | $ | 4,537,269 | $ | 4,493,774 | 208.26 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted position sum omits $49.874 million of short-term investments included in the filing's total investments at fair value.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 48,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extracted position sum nets the $9.492 million negative fair value of unfunded commitments against investments even though it is outside the filing's investment total.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 61,
+        "row_index": 41
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted fair value of $4,434.408 million versus the filing schedule total of $4,493.774 million, a $59.366 million shortfall. Raw source localizes the full residual: $49.874 million of short-term investments is omitted, and the $9.492 million negative fair value of unfunded commitments is improperly netted into the investment position sum. Their sum is exactly $59.366 million."
+}

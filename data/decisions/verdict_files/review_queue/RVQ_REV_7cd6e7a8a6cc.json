@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_7cd6e7a8a6cc",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "375.0; 750.0; 400.0; 400.0; 675.0; 100.0",
+  "anchor_value": "3.75; 7.50; 4.00; 4.00; 6.75; 1.00",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 247,
+      "row_index": 7,
+      "quoted_text": "Auris Luxembourg III S.a.r.l. (First Lien Term Loan) (7) (8) | SOFR + 375 | 5.87 | % | 2/27/2026 | 1,453,650 | 1,450,998 | 1,438,750"
+    },
+    {
+      "table_index": 247,
+      "row_index": 8,
+      "quoted_text": "Carestream Health, Inc. (First Lien Term Loan) (9) | SOFR + 750 | 5.36 | % | 9/30/2027 | 658,467 | 581,366 | 514,635"
+    },
+    {
+      "table_index": 247,
+      "row_index": 10,
+      "quoted_text": "Covenant Surgical Partners, Inc. (First Lien Delayed Draw Term Loan) (9) | SOFR + 400 | 5.38 | % | 7/1/2026 | 333,333 | 333,679 | 261,000"
+    },
+    {
+      "table_index": 247,
+      "row_index": 11,
+      "quoted_text": "Covenant Surgical Partners, Inc. (First Lien Term Loan) (9) | SOFR + 400 | 5.38 | % | 7/1/2026 | 1,597,232 | 1,599,049 | 1,250,633"
+    },
+    {
+      "table_index": 247,
+      "row_index": 12,
+      "quoted_text": "Sound Inpatient Physicians (Second Lien Term Loan) (9) | SOFR + 675 | 5.64 | % | 6/26/2026 | 1,555,556 | 1,500,056 | 127,556"
+    },
+    {
+      "table_index": 247,
+      "row_index": 17,
+      "quoted_text": "NexPoint Capital REIT, LLC (First Lien Term Loan) (5) (6) (10) | PRIME + 100 | 8.00 | % | 3/25/2025 | 463,314 | 463,314 | 463,314"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Floating-rate basis_spread values were stored as basis-point integers rather than whole-number percentages; 375, 750, 400, 400, 675, and 100 should be 3.75, 7.50, 4.00, 4.00, 6.75, and 1.00.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 247,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 1 source check. The C115 rows flag basis_spread values of 375.0, 750.0, 400.0, 400.0, 675.0, and 100.0. The 2023 SOI source rows print these as spread terms such as SOFR + 375 and PRIME + 100, i.e. basis points. The platform evidence states spreads are stored as whole-number percentages, so the stored values are off by 100x and should be 3.75, 7.50, 4.00, 4.00, 6.75, and 1.00."
+}

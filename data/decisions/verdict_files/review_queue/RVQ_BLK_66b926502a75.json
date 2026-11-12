@@ -1,0 +1,52 @@
+{
+    "review_id":  "RVQ_BLK_66b926502a75",
+    "verdict":  "real_error",
+    "mechanism":  "dimension_double_count",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  1061901106,
+    "anchor_value":  645193114,
+    "confidence":  0.96,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  27,
+                                  "row_index":  26,
+                                  "quoted_text":  "Total Debt \u0026 Equity Investments (7) | 148.3 | % | 809,253,307 | 645,193,114",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  28,
+                                  "row_index":  19,
+                                  "quoted_text":  "Total Controlled Affiliated investments | ... | Fair Value at December 31, 2025 | 308,845,992",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  29,
+                                  "row_index":  14,
+                                  "quoted_text":  "Total Non-Controlled Affiliated Investments | ... | Fair Value at December 31, 2025 | 107,862,000",
+                                  "ties_to_residual":  true
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "dimension_double_count",
+                         "detail":  "The extracted fair value exceeds the Debt \u0026 Equity Investments anchor by 416,707,992, exactly the sum of controlled and non-controlled affiliated rollforward fair values that duplicate SOI holdings.",
+                         "fix_class":  "dedup",
+                         "citation":  {
+                                          "table_index":  28,
+                                          "row_index":  19
+                                      }
+                     },
+                     {
+                         "mechanism":  "dimension_double_count",
+                         "detail":  "The non-controlled affiliated rollforward fair value of 107,862,000 is part of the same duplicate auxiliary disclosure included in the extracted holdings sum.",
+                         "fix_class":  "dedup",
+                         "citation":  {
+                                          "table_index":  29,
+                                          "row_index":  14
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate check. Raw source table 27 gives Total Debt \u0026 Equity Investments fair value of 645,193,114, consistent with the companyfacts anchor in the bundle. The extracted private holdings sum is 1,061,901,106, an overshoot of 416,707,992. That residual equals table 28 Total Controlled Affiliated investments fair value 308,845,992 plus table 29 Total Non-Controlled Affiliated Investments fair value 107,862,000. Those tables are affiliated-investment rollforward disclosures, not additional SOI positions, so their inclusion double counts investments already represented in the schedule."
+}

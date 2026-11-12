@@ -1,0 +1,13 @@
+{
+  "review_id": "RVQ_BLK_f12d01af3838",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 37223203000,
+  "anchor_value": 35500450000,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate mismatch. The extracted 876-position fair-value sum is USD 37,223,203,000. Raw filing table 10 row 7 reports March 31, 2026 total investments at fair value of USD 35,500,450,000 (amounts in thousands), and schedule table 37 row 24 and fair-value hierarchy table 111 row 14 independently report the same current-period total. The USD 1,722,753,000 excess is 4.853 percent of the filing total, exactly matching the flag metric. Raw source therefore proves an extraction-population error, but the aggregate schedule structure does not safely identify a single culprit row; remediation should inspect row disposition/population scope."
+}

@@ -1,0 +1,32 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies exact Fidelity total-investment labels as documented aggregate/header source rows, not production positions.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Add exact normalized Fidelity total-header recognition for 'Investments, Total Investments -- non-controlled/ affiliated' and the corresponding investments/investments hierarchy form, alongside existing non-affiliated total-investment coverage. Focused source reconciliation test coverage now includes the affiliated and non-affiliated siblings.",
+  "primary_justification": "Manual review supports a bounded patch-covered verdict. The two blocker rows are source_row_id 937609 ('Investments, Total Investments -- non-controlled/ affiliated') and source_row_id 937540 ('Investments, Total Investments -- non-controlled/ non-affiliated'). Both rows have total-investment labels, no issuer, no instrument, no rate, no maturity, no shares, and aggregate fair values. The source-row HTML coordinate evidence is empty for these exact XBRL rows, so the diagnosis is XBRL-only. The same bundle contains named Fidelity position rows separately, confirming that these total labels are not the position granularity.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2023-06-30",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded aggregate-total mechanism. Production outputs still need to be rebuilt and source reconciliation rerun before claiming this current blocker row is cleared from generated artifacts.",
+  "review_id": "BDCSRC_0001899996_2023-06-30_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_00eddf057c",
+  "reviewer_notes": "Reviewed manually as row 56. The prior insufficient-evidence placeholder was not accurate: the XBRL source identifiers are exact total-investment aggregate labels and support a small tested source_reconciliation patch.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: exact Fidelity total-investment rows for non-controlled/affiliated and non-controlled/non-affiliated buckets are documented as total/header source rows instead of remaining source-only blockers.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_8173162efb99",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 37,
+  "anchor_value": 0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 12,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2025 | 32",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 21,
+      "quoted_text": "Al Altius US Bidco, Inc. comparative schedule position: Business Services | First Lien(2)(6)(8) | SOFR(S) | + | 4.75 % | 8.36 % | 05/2024 | 12/2028 | 11,744 | 11,702 | 11,744",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Thirty-seven positions sourced from the December 31, 2025 comparative Schedule of Investments were retained in the March 31, 2026 holdings population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 45,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The filing explicitly identifies a separate Consolidated Schedule of Investments as of December 31, 2025 (table 7 row 12). The flagged Al Altius position is present in that comparative schedule block at table 45 rows 20-21, while the March 31, 2026 schedule separately presents the issuer at table 17 rows 18-20 with different cost values. Retaining the earlier-period fact in the report-date holdings population is therefore a grounded comparative-period leakage error. The expected count of comparative rows in the report-date population is zero."
+}

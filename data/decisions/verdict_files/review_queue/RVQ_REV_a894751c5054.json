@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_a894751c5054",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": "source rows contain non-USD Principal (6) values requiring explicit USD principal conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "ACESO Holding 4 S.A.R.L. | First Lien Term Loan | Principal (6): EUR 8,508 | Cost: 9,816 | Fair Value: 9,877 | Notes: (5)(8)(10)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 37,
+      "quoted_text": "Aurelia Netherlands B.V. | First Lien Term Loan | Principal (6): EUR 99,155 | Cost: 110,705 | Fair Value: 116,453 | Notes: (5)(8)(10)"
+    },
+    {
+      "table_index": 22,
+      "row_index": 13,
+      "quoted_text": "Violin Finco Guernsey Limited | First Lien Term Loan | Principal (6): GBP 40,334 | Cost: 50,780 | Fair Value: 54,251 | Notes: (5)(8)(10)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt principal values are present in the source schedule while the reviewed principal_amount_usd field is blank, so USD principal conversion is missing for FX-sensitive par analytics.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 12,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "FX01 is a row-validation warning for missing principal_amount_usd on non-USD debt principal. The raw SOI header has Principal (6), Cost, and Fair Value columns; cited rows show foreign-currency principal values such as EUR 8,508 and GBP 40,334 in Principal (6), while the reviewed artifact reports blank principal_amount_usd for FX01 issue rows. The source therefore confirms an extraction/normalization gap rather than a false alarm. No total anchor was used because this is not an aggregate fair-value reconciliation rule."
+}

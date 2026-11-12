@@ -1,0 +1,32 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001849894",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded source reconciliation patch classifies the exact MSD total-investment label as a documented aggregate/header source row, not a production position.",
+  "html_citations": [],
+  "missing_evidence": "",
+  "patch_summary": "Use the tested source reconciliation total-header recognition for the exact normalized MSD label 'Investments Investments Total Investments - non-controlled/non-affiliated'. Focused coverage in tests/test_validate_holdings.py asserts that this row is documented as a source total/header while issuer-bearing rows with similar words remain blocking.",
+  "primary_justification": "Manual review supports a bounded patch-covered verdict. The sole blocker row is source_row_id 839017, raw identifier 'Investments Investments Total Investments - non-controlled/non-affiliated', with source fair value 1187235000. The identifier is an aggregate total for the non-controlled/non-affiliated investment bucket: it has total-investment wording, no issuer, no instrument, no rate, no maturity, and no shares/principal position terms. The same accession contains separate named MSD position rows with issuer, lien, industry, rate/spread, maturity, cost, and fair value in xbrl_rows_same_accession, confirming that this total label is not the production position granularity.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "report_date": "2023-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded aggregate-total mechanism. Production outputs still need to be rebuilt and source reconciliation rerun before claiming this current blocker row is cleared from generated artifacts.",
+  "review_id": "BDCSRC_0001849894_2023-03-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_deefae9dea",
+  "reviewer_notes": "Reviewed manually as row 58. The prior insufficient-evidence placeholder was not accurate: the XBRL source identifier is an exact total-investment aggregate label and is covered by the existing small tested source_reconciliation patch.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: exact MSD total-investment rows for the non-controlled/non-affiliated bucket are documented as total/header source rows instead of remaining source-only blockers.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives after the source_reconciliation patch. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

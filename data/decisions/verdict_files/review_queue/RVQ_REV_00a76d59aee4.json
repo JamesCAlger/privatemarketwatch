@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_00a76d59aee4",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "current_period_schedule",
+  "observed_value": "11.08, 8.22, 1.75, 11.08",
+  "anchor_value": "current-period source differs or omits the comparative value",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 18,
+      "quoted_text": "TM Restaurant Group LLC | Hotels, Restaurants & Leisure | 11.08 % | S + 7.25 % | 07/26/28 | 10,473 | 10,313 | 8,850 | (5) (6) (7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 39,
+      "quoted_text": "QBS Parent, Inc. (dba Quorum Software) | IT Services | 8.22 % | S + 4.50 % | 06/03/32 | 2,105 | 182 | 181 | (5) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 38,
+      "quoted_text": "PT Intermediate Holdings III, LLC (dba Parts Town) | Trading Companies & Distributors | 8.67 % | S + 5.00 % (Incl. 1.75 % PIK) | 04/09/30 | 14,257 | 14,239 | 14,043 | (5) (6) (7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 38,
+      "quoted_text": "PT Intermediate Holdings III, LLC (dba Parts Town) | Trading Companies & Distributors | 8.45 % | S + 4.75 % | 04/09/30 | 14,321 | 14,304 | 14,106 | (5) (6) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The four text-pathway rates were sourced from the December 31 comparative schedule rather than the March 31 current-period schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 35,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "The filing separates the March 31, 2026 schedule in tables 8-14 from the December 31, 2025 comparative schedule in tables 32-38. Exact-value searches place 11.08, 8.22, and 1.75 only in comparative tables 35-37. At issuer level, TM Restaurant has 11.08 in comparative table 35 row 18 but no current-period interest rate in table 11 row 13, and Parts Town has 1.75 PIK in comparative table 37 row 38 but its current-period row at table 13 row 38 shows 8.45 percent and S + 4.75 percent with no PIK. Thus the published text-derived values for the 2026-03-31 rows are comparative-period leakage, not valid current-period values."
+}

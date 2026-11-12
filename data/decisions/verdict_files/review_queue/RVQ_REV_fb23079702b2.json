@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_fb23079702b2",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 643000.0,
+  "anchor_value": 643000.0,
+  "confidence": 0.86,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 10,
+      "quoted_text": "First Lien(4)(7)(8)(18) | SONIA(D) | + | 5.00 % | 8.73 % | 10/2025 | 10/2032 | EUR | 643 | 842 | 846",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review. Raw schedule table 21 row 10 confirms that the published principal_amount of 643000 is correct for the EUR 643 thousand position, so that flagged unit is harmless. The other provenance unit (src_context_id c-380) has no issuer, row identifier usable in source, or published value, and the scoped raw-source evidence does not map that context to a schedule row. Because the flag covers both units, the source checked does not decide whether the second exclusion is correct; a false-alarm or real-error verdict would require guessing. Escalate for context-to-source localization."
+}

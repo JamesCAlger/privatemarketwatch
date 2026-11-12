@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_8d288ba4a939",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1216443.0,
+  "anchor_value": 1216443.0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 4,
+      "quoted_text": "Automobiles",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 42,
+      "row_index": 13,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 1,207,142 | $ | 1,216,443 | 200.15 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "B01 counted non-position classification and subtotal leaves with no fair-value cell in the denominator even though raw investment rows carry fair values and the schedule total is present.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 39,
+        "row_index": 4,
+        "quoted_text": "Automobiles"
+      }
+    }
+  ],
+  "rationale": "B01 reports only 80 of 180 leaves with fair_value, but the raw SOI structure shows classification leaves such as table 39 row 4 ('Automobiles') that are not investment positions and naturally have no fair-value cell. The investment schedule itself carries fair-value columns for position rows and ties to the filing total: table 42 row 13 reports Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents with fair value 1,216,443. The low leaf coverage is therefore caused by the check's denominator including non-position leaves, not by missing fair values in source-backed holdings."
+}

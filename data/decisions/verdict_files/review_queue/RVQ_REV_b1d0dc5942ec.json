@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_b1d0dc5942ec",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 285000,
+  "anchor_value": 285000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 14,
+      "quoted_text": "Metropolis Technologies, Inc. | (4) (15) | 5/16/2034 | 280 | 20 | 285 | 0.0",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-row validation. The X07 flag reports fair_value exceeding 10x cost for Metropolis Technologies common equity. Raw source table 15 row 14 shows the same position with amortized cost 20 and fair value 285 in the filing schedule, corresponding to extracted cost 20000 and fair_value 285000 after the schedule's thousands scale. The extracted data matches the source; the warning reflects an extreme appreciation case rather than a source-grounded data error."
+}

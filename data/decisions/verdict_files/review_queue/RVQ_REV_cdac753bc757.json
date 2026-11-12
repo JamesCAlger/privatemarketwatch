@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_cdac753bc757",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "-89000; -187000",
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 84,
+      "row_index": 29,
+      "quoted_text": "Femur Buyer Inc | 1st Lien Senior Secured Revolving Loan | 2,414 | ( 89 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 86,
+      "row_index": 24,
+      "quoted_text": "Spanx, LLC | 1st Lien Senior Secured Revolving Loan | 4,334 | ( 740 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 76,
+      "row_index": 28,
+      "quoted_text": "Spanx, LLC (4)(6)(9)(25) | SF + | 5.25 % | 9.19 | % | 11/18/2027 | 5,000 | 634 | ( 187 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged negative fair values of -89000 and -187000. Raw source shows these are filer-presented negative fair value marks, not extraction sign errors: Femur Buyer Inc appears in the unfunded commitment schedule as a 1st Lien Senior Secured Revolving Loan with fair value (89), and Spanx has a source SOI row with fair value (187) plus a separate revolving-loan unfunded commitment schedule row. Because the values are source-presented and the issue is the rule not recognizing the commitment/revolver presentation, the flag is a false alarm."
+}

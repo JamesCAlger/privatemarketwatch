@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_1e627c998562",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Principal Amount",
+  "anchor_value": "embedded schedule header, not a portfolio position",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 102,
+      "row_index": 30,
+      "quoted_text": "Portfolio Company | Investment Type (1)(2) | Interest | Acq. Date | Maturity Date | Principal Amount | Cost | Fair Value | % of Net Assets * | Notes"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "An embedded repeated schedule header was treated as a candidate investment row, leaving the Principal Amount header text in the principal amount field.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 102,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "The only localized malformed principal-amount evidence in raw source is table 102 row 30, which is a repeated column header inside the schedule, not an investment. The following rows restart the section with Control Investments, Debt Investments, Aerospace & Defense, and then the actual Skyvault Holdings LLC debt row with a numeric $5,738 principal amount. Treating the header text Principal Amount as a principal amount is therefore a real row-filtering/extraction defect."
+}

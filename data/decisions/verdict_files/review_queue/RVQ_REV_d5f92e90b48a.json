@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d5f92e90b48a",
+  "verdict": "real_error",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "no_comparison",
+  "anchor_value": 352232987,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 414,055,669 | $ | 352,232,987 | $ | 438,839,857 | $ | 395,375,030",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "Total Investments | $ | 414,055,669 | $ | 352,232,987 | 211.7 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "GAV_BDC02 reported no comparison denominator, but the filing provides a March 31, 2026 total investments fair value denominator of 352,232,987.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 20,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The raw filing is readable and contains the comparison anchor the check says is absent. Table 20 row 5 separately summarizes March 31, 2026 Total Investments at fair value of 352,232,987, matching the schedule total in table 11 row 28; therefore the no_comparison result is a real anchor/extraction defect."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d665015cb034",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6748466257668712,
+  "anchor_value": 0.8,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 6,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | S + 5.25 % | 7/2/2031 | cost (10) | fair value (21)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 26,
+      "quoted_text": "Any Hour LLC | First Lien Delayed Draw Term Loan | S + 5.00 % | 5/23/2030 | principal 194 | cost 178 | fair value 164",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 7,
+      "quoted_text": "Blackbird Purchaser, Inc. | First Lien Revolver | S + 5.50 % | 12/19/2029 | principal 23 | cost 20 | fair value 21",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source SOI discloses reference-rate spreads for delayed draw and revolver debt rows, but the extracted holdings sample carries blank interest_rate for corresponding rows, driving coverage to 67.5% against the 80% rule threshold.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "C01 is a cik-quarter aggregate rate-coverage check: only 110 of 163 debt rows have a stored rate (0.6748466257668712, below the 0.8 threshold). Raw SOI rows show the rates are present in the Reference Rate and Spread column for debt rows that the bundle sample shows with blank interest_rate, including AB Centers delayed draw (S + 5.25 %), Any Hour delayed draw (S + 5.00 %), and Blackbird revolver (S + 5.50 %). The failure is therefore a real extraction gap, not source absence or a bad threshold."
+}

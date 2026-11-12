@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_f5a24a6c35ec",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal amount retained with currency marker: EUR 13,809",
+  "anchor_value": "numeric principal amount 13,809 with EUR handled separately",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 19,
+      "quoted_text": "Pluto Holdco Limited | First Lien Secured Debt - Term Loan | 5.96 % PIK | 6/5/2026 | EUR 13,809 | 14,978 | 16,188 | (3)(4)(8)(9)(10)(20)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source principal cell includes a euro currency marker; the principal amount should be normalized as 13,809 with the EUR marker separated rather than retained in the numeric principal field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell format adjudication. The schedule's Par/Shares/Units column for Singular Bank / Pluto Holdco Limited is the source row carrying a foreign-currency principal marker: EUR 13,809. A numeric principal amount field should not retain the currency marker, so the weak fmt_principal_amount flag is a real extraction-format defect rather than a false alarm. No aggregate anchor was needed."
+}

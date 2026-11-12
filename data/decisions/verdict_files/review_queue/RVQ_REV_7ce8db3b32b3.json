@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_7ce8db3b32b3",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8.84,
+  "anchor_value": 8.35,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 13,
+      "quoted_text": "MIWD Holdco (7) | Senior Secured First Lien Term Loan | S + 350 | 8.35 % | 03/2031 | 285 | 284 | 0.2 | 286",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 28,
+      "quoted_text": "Iris Buyer LLC (5) | Unitranche First Lien Delayed Draw Term Loan | S + 625 ( 100 Floor) | 10.85 % | 10/2030 | 330 | 318 | 0.2 | 341",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The derived holding identifier embeds MIWD Holdco Interest Rate 8.84%, but the raw SOI row and structured interest_rate show 8.35%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 13
+      }
+    },
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The derived holding identifier embeds Iris Buyer LLC delayed draw Interest Rate 11.58%, but the raw SOI row and structured interest_rate show 10.85%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The fmt_basis_spread flag is grounded by rows where the derived bdc_investment_identifier carries an interest-rate value that does not match the raw schedule. For MIWD Holdco, the bundle identifier says Interest Rate 8.84% while the raw SOI row prints S + 350 and 8.35%, matching the structured interest_rate. For Iris Buyer LLC delayed draw, the bundle identifier says Interest Rate 11.58% while the raw SOI row prints S + 625 (100 Floor) and 10.85%, again matching the structured interest_rate. The defect is localized to the formatted identifier/source-field assembly, not the numeric interest_rate extraction."
+}

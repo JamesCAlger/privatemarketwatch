@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_f8a497fb9ed1",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 203.1,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 4,
+      "quoted_text": "Total Investments | $ | 21,446,647.6 | $ | 21,332,903.9 | (18) | 203.10 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 observed a 0.0% aggregate, but the raw March 31, 2026 schedule explicitly reports Total Investments at 203.10% of net assets. The schedule total also reports fair value of 21,332,903.9 (in thousands), matching the bundle's 21,332.9039 million position context. The zero percentage is therefore a grounded extraction gap, not a source-supported value."
+}

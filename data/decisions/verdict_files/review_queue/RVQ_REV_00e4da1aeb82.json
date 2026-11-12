@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_00e4da1aeb82",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6538461538461539,
+  "anchor_value": 1.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 6,
+      "quoted_text": "Funded debt row shows First Lien with Reference SOFR(Q), Spread 4.50%, and Interest Rate 8.49%.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 20,
+      "quoted_text": "First Lien - Undrawn row has dashes in Reference, Spread, and Interest Rate columns.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 47,
+      "row_index": 7,
+      "quoted_text": "Total Unfunded Debt Investments: principal 216,346, cost (478), fair value (270), percent of net assets (0.03)%.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 51,
+      "row_index": 5,
+      "quoted_text": "Interest Rate Type summary totals 100.00% of investments at fair value.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts unfunded debt commitments with source dashes in the rate columns as debt rows missing rates, depressing row coverage to 65.4%.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 46,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The raw schedule distinguishes funded debt from unfunded debt commitments. Funded debt rows carry Reference, Spread, and Interest Rate values, while undrawn/unfunded debt rows have source dashes in those rate-related columns and are separately totaled as Unfunded Debt Investments with de minimis negative fair value. The C01 failure is therefore caused by including structurally unrated unfunded commitments in a debt-row rate-coverage denominator, not by a source data error in the extracted funded debt rates."
+}

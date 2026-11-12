@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_6c5b6c7d1206",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1673526000,
+  "anchor_value": 1598857000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 1,623,906 | 213.5 | % | $ | 1,598,857",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 95,
+      "row_index": 10,
+      "quoted_text": "Total investments | $ | 1,623,906 | $ | 1,598,857 | $ | ( 25,049 | ) | $ | 1,592,688 | $ | 1,582,075 | $ | ( 10,613 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the issue. The raw filing schedule reports 2024 total investments fair value of 1,598,857 thousand, and the reconciliation table repeats the same amount; this matches the companyfacts_fv anchor in the bundle. The extracted holdings fair value sum is 1,673,526,000, exceeding the source schedule total by 74,669,000. Because the source total and companyfacts agree while the extracted position sum overshoots, the conservation flag is a real aggregate data error. The exact leaking row is not localized from the available row-disposition structure."
+}

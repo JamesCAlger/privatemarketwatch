@@ -1,0 +1,44 @@
+{
+    "review_id":  "RVQ_REV_f066f96be0a3",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  2,
+    "anchor_value":  2,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  51,
+                                  "row_index":  1,
+                                  "quoted_text":  "CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2025 (in thousands, except share and per share data)"
+                              },
+                              {
+                                  "table_index":  51,
+                                  "row_index":  21,
+                                  "quoted_text":  "TecoStar Holdings, Inc. | Common Stock | 500,000 | 500 | 0.0 | 3"
+                              },
+                              {
+                                  "table_index":  55,
+                                  "row_index":  1,
+                                  "quoted_text":  "CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2025 (in thousands, except share and per share data)"
+                              },
+                              {
+                                  "table_index":  55,
+                                  "row_index":  5,
+                                  "quoted_text":  "Lexipol (Ranger Buyer, Inc.) | Common Stock | 638 | 638 | 0.1 | 881"
+                              },
+                              {
+                                  "table_index":  55,
+                                  "row_index":  6,
+                                  "quoted_text":  "Lexipol (Ranger Buyer, Inc.) | Common Stock | 638 | - | 0.0 | 173"
+                              },
+                              {
+                                  "table_index":  55,
+                                  "row_index":  7,
+                                  "quoted_text":  "Lexipol (Ranger Buyer, Inc.) | Common Stock | 5 | 5 | 0.0 | 6"
+                              }
+                          ],
+    "rationale":  "PP03 flagged two rows as comparative-period facts retained for report_date 2025-12-31. Raw SOI evidence shows the same TecoStar and Lexipol common-stock positions in the current December 31, 2025 schedule, so the reviewed flag is a rule-scope false alarm rather than a real retained-prior-period-only data error."
+}

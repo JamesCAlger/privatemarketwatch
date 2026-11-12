@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_746692be2e3c",
+  "verdict": "false_alarm",
+  "mechanism": "currency_unit_normalization",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 47,
+      "quoted_text": "Rivian Holdings/Auto LLC 144A (2) | SOFR + 5.625 % | 11.359 % | 10/15/2026 | 18,601 | 18,433 | 18,834 | 9.51 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Total Investments | $ | 211,709 | $ | 208,185 | 105.09 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 2,
+      "quoted_text": "(Amounts in thousands) | Cost | Fair Value | Cost | Fair Value",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 says the BDC cost XBRL unit is not USD, but the flagged value is UNIT_USD. The raw schedule's cost and fair-value columns are dollar-denominated, with dollar signs on the same investment schedule totals and a related cost/fair-value summary marked amounts in thousands. The check is therefore misclassifying the USD unit label rather than identifying a source currency defect."
+}

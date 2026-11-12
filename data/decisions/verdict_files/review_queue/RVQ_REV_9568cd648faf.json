@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_9568cd648faf",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 41,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(17) | 6/30/2027 | 160 | - | ( 1 )"
+    },
+    {
+      "table_index": 52,
+      "row_index": 42,
+      "quoted_text": "American Academy Holdings, LLC (4)(17)(23) | SF + | 9.75 % (incl 5.25 % PIK) | 13.58 | % | 6/30/2027 | 6,839 | 6,839 | 6,790"
+    },
+    {
+      "table_index": 22,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 5,570 | 0.29 | - | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The 2025 SOI localizes the non-accrual classification to two American Academy Holdings, LLC rows marked (17), while the filing also reports a current-period non-accrual category.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 52,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "The current-period SOI has two American Academy Holdings, LLC rows carrying footnote marker (17), and the same filing reports a December 31, 2025 non-accrual category of 5,570 / 0.29%. This supports the nonaccrual flag as a real source-backed classification issue rather than a false alarm. The footnote definition text itself was not exposed by the evidence CLI, so confidence is below perfect, but the issuer rows and filing-level non-accrual category ground the classification."
+}

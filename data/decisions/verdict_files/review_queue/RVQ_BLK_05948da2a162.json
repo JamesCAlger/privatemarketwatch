@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_05948da2a162",
+  "verdict": "real_error",
+  "mechanism": "cash_equivalent_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 211749000.0,
+  "anchor_value": 192754000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 22,
+      "quoted_text": "Cash Equivalents Total | $ | 18,995 | $ | 18,995 | 17.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 36,
+      "row_index": 23,
+      "quoted_text": "Investments and Cash Equivalents Total | $ | 211,726 | $ | 211,749 | 192.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Raw source totals show investments fair value of 192,754 thousand in table 6 row 6 and table 36 row 18, matching the companyfacts_fv anchor of 192,754,000. The extracted observed sum is 211,749,000, which matches table 36 row 23, Investments and Cash Equivalents Total. The 18,995,000 overshoot equals the cash equivalents total in table 36 row 22, so cash equivalents were included in an investments fair-value conservation sum."
+}

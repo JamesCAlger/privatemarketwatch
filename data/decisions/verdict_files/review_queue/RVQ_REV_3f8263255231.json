@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_3f8263255231",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 13249000.0,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X08 warning: the issue artifact reports cost 13249000.0 and row_key 270223 but does not provide issuer or fair_value context. Raw source was readable, but targeted evidence_cli searches for row_key 270223, normalized value 13249000.0, and exact source-style amount 13,249 returned no usable matching source row. Nearby source rows around 13 million show fair value close to cost, for example table 37 row 16 shows Sierra Enterprises, LLC context with cost 13,425 and fair value 14,405, but the mismatch in amount and missing issuer in the issue artifact prevent a grounded tie to the flagged row. Source therefore does not decide whether the warning is a real extraction/value error or a false alarm."
+}

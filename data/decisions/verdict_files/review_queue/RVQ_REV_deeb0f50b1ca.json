@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_deeb0f50b1ca",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4548,
+  "anchor_value": 0.9905708247033453,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 29,
+      "quoted_text": "Total Investments ( 211.5 %) | $ | 687,902,445 | $ | 686,157,510",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 14,
+      "quoted_text": "Total Assets | $ | 692,689 | $ | 464,146",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Hudson Technologies Company | Last Out Term Loan - 12.31 % (SOFR + 7.50 %, 1.00 % Floor) | Fair Value | $ | 6,059,560",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Resco Products, Inc. | Term Loan - 11.44 % (SOFR + 6.50 %, 1.00 % Floor) | Fair Value | 18,166,993",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "HOP Energy, LLC | Term Loan - 14.94 % inc PIK (SOFR + 10.00 %, 2.00 % Floor, 2.75 % PIK) | Fair Value | 21,218,503",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "Several debt-investment fair values are extracted at one-thousandth of the source value, causing the extracted GAV ratio to be 0.4548 while the filing schedule total investments divided by total assets is about 0.9906.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. Raw source totals show fair value of total investments of 686,157,510 in table 6 row 29 and total assets of 692,689 thousand in table 11 row 14, giving an anchor ratio of about 0.9906, inside the GAV_BDC02 0.8-1.2 band. The flagged observed ratio is 0.4548. The discrepancy localizes to unit-scale extraction in position fair values: for example, the source reports Hudson Technologies fair value 6,059,560, Resco Products fair value 18,166,993, and HOP Energy fair value 21,218,503, while the bundle's holdings slice carries those as 6059.56, 18166.993, and 21218.503. The filing source supports a real extraction/unit-scale error rather than a true low GAV condition."
+}

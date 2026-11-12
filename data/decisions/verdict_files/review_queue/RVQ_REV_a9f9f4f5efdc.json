@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_a9f9f4f5efdc",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_source_cost_column",
+  "observed_value": -71635.0,
+  "anchor_value": -71635.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(l)(m) | Delayed Draw Term Loan | - | - | 11/27/2030 | - | ( 71,635 ) | ( 107,157 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 9,
+      "quoted_text": "Cytracom LLC (f)(i)(l) | Revolving Credit Facility | - | - | 6/28/2027 | - | ( 8,472 ) | ( 38,711 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell flag. The filing's Cost column explicitly presents the flagged amounts in parentheses, including cost (71,635) for Dynamic Connections and cost (8,472) for Cytracom; the adjacent fair values are also parenthesized and par amount is blank. The extracted negative costs therefore agree with raw source. C107's generic warning that cost is negative is not evidence of a data defect for these disclosed rows."
+}

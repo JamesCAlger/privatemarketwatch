@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_6398717d31e2",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "December 31, 2025 source-period facts retained under report_date 2026-03-31",
+  "anchor_value": "March 31, 2026 schedule only",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 1,
+      "quoted_text": "Interest Rate and Cross-currency Swaps as of December 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 16,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 35,490 | 35,168 | 35,110",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 35,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 35,490 | - | 35,180 | 34,294",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "December 31, 2025 schedule facts were retained as positions for the March 31, 2026 report date despite a distinct current-period schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 63,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "The filing explicitly presents separate schedules as of March 31, 2026 and December 31, 2025. The AI Titan instrument appears in the current-period schedule at table 27 row 35 with fair value 34,294 and again in the comparative schedule at table 63 row 16 with fair value 35,110. PP03 identifies rows whose source period is earlier than the assigned 2026-03-31 report date; retaining those comparative facts in the current-quarter position population is a real comparative-period contamination defect. The period-boundary anchor is independently visible in the December 31, 2025 source section at table 71 row 1."
+}

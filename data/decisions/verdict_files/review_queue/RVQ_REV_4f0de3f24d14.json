@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_4f0de3f24d14",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 25,
+      "quoted_text": "AAH Topco, LLC / Consumer Services / First Lien(3)(4) - Undrawn; Reference, Spread, and Interest Rate cells are dashes in the filing.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 6,
+      "quoted_text": "ACI Group Holdings, Inc. / Healthcare / First Lien(3)(4) - Undrawn; Reference, Spread, and Interest Rate cells are dashes in the filing.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X02 is firing on unfunded/undrawn private-credit commitments whose source rows intentionally have no Reference, Spread, or Interest Rate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 39,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The flagged sample rows with blank extracted interest_rate are undrawn debt commitments. Raw SOI rows for AAH Topco and ACI Group Holdings show Type of Investment as First Lien - Undrawn and the filing itself prints no Reference, Spread, or Interest Rate for those rows. The extracted blank rate therefore matches source; the X02 check is over-scoped for unfunded/undrawn commitments rather than identifying a missing coupon extraction."
+}

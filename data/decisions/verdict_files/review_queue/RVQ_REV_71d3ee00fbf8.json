@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_71d3ee00fbf8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 3798939,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 10,
+      "quoted_text": "Navistar Defense, LLC Revolver - 16.01 % inc PIK ... Fair Value at September 30, 2023 $3,798,939",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 8,
+      "quoted_text": "Navistar Defense, LLC (2) (5) | Revolver - 16.01 % inc PIK ... Fair Value $3,798,939",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The controlled-affiliate Navistar Defense revolver was extracted with fair_value 0, but the raw controlled-affiliate schedule reports Fair Value at September 30, 2023 of 3,798,939.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 7,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 1 value check. C104 flags zero fair_value rows. Several equity rows have source dashes in the fair-value column and appear legitimately zero, but the sampled controlled-affiliate Navistar Defense, LLC Revolver row is not zero in raw source: the controlled-affiliate roll-forward table gives Fair Value at September 30, 2023 as 3,798,939, and the main SOI row for the same revolver also shows Fair Value 3,798,939. The stored zero is therefore a localized extraction gap."
+}

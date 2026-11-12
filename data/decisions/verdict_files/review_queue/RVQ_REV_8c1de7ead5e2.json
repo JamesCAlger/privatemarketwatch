@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_8c1de7ead5e2",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.4,
+  "anchor_value": 0.5,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 34,
+      "quoted_text": "Eclipse Topco, Inc. | Preferred Stock | Principal / Shares 28 | Cost 322 | Fair Value 332",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 38,
+      "quoted_text": "Red Griffin TopCo, LLC | Common Stock | Principal / Shares 764 | Cost 3,694 | Fair Value 609",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 42,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | Principal / Shares blank | Cost 160 | Fair Value 198",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 43,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | Principal / Shares blank | Cost dash | Fair Value 2",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C04 applies a stock-share completeness threshold to L.P. interests, for which the source appropriately reports no shares.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 18,
+        "row_index": 42
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule supplies shares for both actual stock positions: 28 for Eclipse preferred stock and 764 for Red Griffin common stock. The two Firebird rows are explicitly L.P. interests and the Principal / Shares cells are blank, which is appropriate for partnership interests and is not an extraction defect. On the visible source equity disposition, stock-share coverage is 2 of 4 positions (0.5), not the oracle's 2 of 5 (0.4), and the only missing-share rows are non-stock L.P. interests. C04 therefore fires because its denominator/scope treats all equity-classified positions as requiring shares."
+}

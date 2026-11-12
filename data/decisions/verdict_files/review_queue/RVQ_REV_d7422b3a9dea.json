@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_d7422b3a9dea",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "Portfolio Company Debt Securities- Canada Construction Technology Nexii Building Solutions, Inc. Type of Investment Secured Loan Investment Date August 27,2021 Maturity Date August 27,2025 Interest Rate Variable interest rate Prime + 7.0% or Floor rate 10.3%; EOT 2.5%",
+  "anchor_value": "Nexii Building Solutions, Inc. (10)",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 5,
+      "quoted_text": "Nexii Building Solutions, Inc. (10) | Secured Loan | August 27, 2021 | August 27, 2025 | Variable interest rate Prime + 7.0 % or Floor rate 10.3 %; EOT 2.5 % (8)(15) | $ | 10,258 | $ | 10,508 | $ | 10,085"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name captured surrounding schedule context and terms instead of only the Portfolio Company value; source issuer is Nexii Building Solutions, Inc. (10).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The bundle's extracted issuer_name for the Nexii debt row contains the schedule heading/category, geography, sector, investment type, investment date, maturity date, interest rate, and EOT terms. The raw source schedule separates those fields and shows the Portfolio Company cell as only Nexii Building Solutions, Inc. (10), so the issuer-name format flag reflects a real extraction defect."
+}

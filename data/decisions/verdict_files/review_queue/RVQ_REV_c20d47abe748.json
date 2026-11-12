@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_c20d47abe748",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.1301942686442867,
+  "anchor_value": 0.13,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 139,
+      "row_index": 3,
+      "quoted_text": "Senior Secured Loans - First Lien | Fair Value 4,575,722 | 12.4%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 139,
+      "row_index": 5,
+      "quoted_text": "Corporate Bonds | Fair Value 209,378 | 0.6%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 139,
+      "row_index": 6,
+      "quoted_text": "Common Stocks | Fair Value 11,713,775 | 31.9%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 139,
+      "row_index": 7,
+      "quoted_text": "Preferred Stock | Fair Value 11,467,477 | 31.2%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 139,
+      "row_index": 9,
+      "quoted_text": "Total Invested Assets | Fair Value 36,753,538 | 100.0%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 0,
+      "quoted_text": "A business development company, such as the Company (BDC)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Vehicle type BDC was treated as PRIVATE_CREDIT even though the source schedule shows only 13.0% private credit and 63.1% common plus preferred stock.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 139,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate strategy validation. The filing confirms that the company is a BDC, but its March 31, 2026 portfolio composition shows senior secured loans at 12.4% and corporate bonds at 0.6%, totaling 13.0% private credit. Common stocks are 31.9% and preferred stock is 31.2%, together 63.1%, against total invested assets of 36,753,538. Therefore the PRIVATE_CREDIT strategy derived solely from vehicle_type=bdc is inconsistent with the raw portfolio mix; the flag identifies a real classification error rather than a bad mix check."
+}

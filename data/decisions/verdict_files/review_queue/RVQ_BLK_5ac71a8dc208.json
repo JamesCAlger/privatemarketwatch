@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_5ac71a8dc208",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6207.165,
+  "anchor_value": 6207.136,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 16,
+      "quoted_text": "Total Investments | $ | 6,206,603 | $ | 6,207,136 | 173.4 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 2,
+      "quoted_text": "Company(1)(25) | Investment | Ref. Rate | Cash | PIK | Maturity Date | Par / Units | Amortized Cost(2)(27) | Fair Value | % of Net Assets",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw 2025 schedule of investments uses tables 49-63 and ends at table 63 row 16 with Total Investments fair value of $6,207,136 thousand. The bundle's extracted fund-quarter fair value is $6,207.165 million, a tight match to that raw schedule total. The E07 message reports source=780 versus output=440, but the raw current-period schedule total and structure do not support missing 340 current holdings; the failing source count appears to include rows outside the current holdings scope, likely comparative or non-position schedule material, so the check is overbroad rather than exposing a data error."
+}

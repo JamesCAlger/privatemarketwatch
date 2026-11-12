@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_dbd6ca80b1c4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 544.170799,
+  "anchor_value": 230.281379,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments (108.0%) | $ | 231,571,333 | $ | 230,281,379",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 11,
+      "quoted_text": "Total Assets | $ | 232,002 | $ | 215,438",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation establishes a real aggregate extraction error. The extracted holdings fair value is $544.170799 million, but the filing's current schedule totals investments at $230.281379 million and the balance sheet independently reports total assets of $232.002 million. The schedule also contains a separate prior-period total of $212.941349 million at table 13 row 20, indicating comparative source structure, but the raw source does not uniquely allocate the full excess between comparative leakage and repeated rendered rows; therefore the aggregate defect is grounded while the individual culprit rows remain unlocalized."
+}

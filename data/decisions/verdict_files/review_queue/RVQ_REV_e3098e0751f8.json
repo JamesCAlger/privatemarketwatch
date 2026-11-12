@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_e3098e0751f8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1355.641,
+  "anchor_value": 1355.641,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Total investments | 1,350,788 | 1,355,641 | 254.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 28,
+      "quoted_text": "Total Net Assets | 532,953",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F21 fired because holdings fair value divided by net assets is just above the heuristic ceiling. Raw source confirms the numerator and denominator: the schedule reports total investments fair value of 1,355,641 and 254.1% of net assets, and the balance sheet reports total net assets of 532,953. The extracted holdings fair value is therefore source-consistent; the flag reflects an issuer leverage/profile outside the rule threshold rather than a data extraction error."
+}

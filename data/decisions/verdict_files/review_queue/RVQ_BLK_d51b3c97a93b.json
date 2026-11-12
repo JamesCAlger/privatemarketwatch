@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_d51b3c97a93b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4876989000,
+  "anchor_value": 4876989000,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 62,
+      "row_index": 6,
+      "quoted_text": "Durare Bidco, LLC | Revolver | SOFR + 4.75 %, 8.6 % Cash | 08/25 | 08/32 | - | ( 111 ) | ( 102 ) | 1.6 | % | (7)(8)(16)(31) (32)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 62,
+      "row_index": 5,
+      "quoted_text": "Durare Bidco, LLC | First Lien Senior Secured Term Loan | SOFR + 4.75 %, 8.6 % Cash | 08/25 | 08/32 | 44,545 | 44,008 | 44,055 | 1.6 | % | (7)(8)(16)(30) (31)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Durare Bidco, LLC Revolver carries 1.6% of net assets despite fair value of (102), while the adjacent term loan with fair value 44,055 also carries 1.6%; the revolver percentage should be approximately zero or dash.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 62,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triage found the filing schedule total coherent: total investments fair value is 4,876,989 thousand, matching the reported investment total anchor. The identity failure localizes to at least one source row rather than a bad aggregate anchor: table 62 row 6 reports Durare Bidco, LLC Revolver fair value (102) thousand but % of Net Assets 1.6%, the same percentage as the adjacent Durare term loan at 44,055 thousand. Against total net assets of 2,841,371 thousand, (102) thousand is approximately 0.0%, not 1.6%, producing the large residual and making the flag a real data error."
+}

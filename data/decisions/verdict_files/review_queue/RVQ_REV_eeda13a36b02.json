@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_eeda13a36b02",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -57000,
+  "anchor_value": -57000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 33,
+      "quoted_text": "Femur Buyer Inc | 1st Lien Senior Secured Revolving Loan | 2,414 | ( 49 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 42,
+      "row_index": 25,
+      "quoted_text": "Yes Energy LLC | 1st Lien Senior Secured Revolving Loan | 2,443 | ( 8 )",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw filing's schedule headed Investments, Commitment Type, Unfunded Commitment, Fair Value explicitly reports Femur Buyer Inc fair value as (49) thousand and Yes Energy LLC fair value as (8) thousand. These exactly match the two flagged extracted values of -49000 and -8000. Both rows are identified as 1st Lien Senior Secured Revolving Loan unfunded commitments, so the negative marks are filer presentation and C103 fired because it did not carry the commitment classification into the row check."
+}

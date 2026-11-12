@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_2cf79e4b1df4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Flagged extracted identifiers include EdgeEdge Bidco B.V for the Raptor debt row and Raptor equity continuation rows without the Raptor issuer.",
+  "anchor_value": "Raw source table 8 identifies row 21 as Raptor US Buyer II Corp. first-lien loan and rows 48-57 as Raptor US Buyer II Corp. ordinary share classes; row 58 is the subtotal.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "Raptor US Buyer II Corp. (3) | First-lien loan ($ 86,364 par, due 3/2029 ) | 3/24/2023 | SOFR + 6.75 % | 11.63 | % | 83,176 | 83,556 | 10.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 48,
+      "quoted_text": "Raptor US Buyer II Corp. (8)(10) | 8,636 Ordinary Shares | 3/24/2023 | 864 | 864 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 49,
+      "quoted_text": "8,636 Class A | 3/24/2023 | 864 | 864 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged debt identifier for the $86.364 million par 3/2029 loan carries EdgeEdge Bidco B.V, but the raw source row issuer is Raptor US Buyer II Corp.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 21,
+        "quoted_text": "Raptor US Buyer II Corp. (3) | First-lien loan ($ 86,364 par, due 3/2029 ) | 3/24/2023 | SOFR + 6.75 % | 11.63 | % | 83,176 | 83,556 | 10.3 | %"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged equity identifiers are actual Raptor share-class positions, not schedule totals, but the extracted identifiers omit the carried-forward Raptor issuer and include section headings instead.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 48,
+        "quoted_text": "Raptor US Buyer II Corp. (8)(10) | 8,636 Ordinary Shares | 3/24/2023 | 864 | 864 | 0.1 | %"
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The raw source subtotal for the Raptor ordinary share classes is row 58, while the flagged class rows 49-57 are individual positions; PP01's subtotal signature is therefore over-broad for those rows.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 8,
+        "row_index": 58,
+        "quoted_text": "8,640 | 8,640 | 1.0 | %"
+      }
+    }
+  ],
+  "rationale": "Raw source table 8 localizes the problem. The second flagged debt row is not EdgeEdge Bidco B.V; it is Raptor US Buyer II Corp. at table 8 row 21. The equity class rows are also Raptor continuation rows under row 48, while the actual subtotal is row 58. Thus the flagged set is not simply a false PP01 subtotal alarm: it contains source-grounded identifier extraction defects caused by row-continuation/context carryover. No aggregate anchor was needed."
+}

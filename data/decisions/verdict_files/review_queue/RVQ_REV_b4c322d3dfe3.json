@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_b4c322d3dfe3",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2339502,
+  "anchor_value": 2339502,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value | 2,339,502 | 1,216,443",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents | $ | 2,317,918 | $ | 2,339,502 | 204.79 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "Quantum Leap Buyer LLC | Term Loan | 8.50 % | SOFR | 4.50 % | 9/05/2025 | 9/6/2032 | 12,500 | 12,376 | 12,376",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 is counting structural or continuation leaf rows in a two-line SOI layout even though valued investment rows and the schedule total fair value are present and tied.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 13,
+        "row_index": 7,
+        "quoted_text": "Quantum Leap Buyer LLC | Term Loan | 8.50 % | SOFR | 4.50 % | 9/05/2025 | 9/6/2032 | 12,500 | 12,376 | 12,376"
+      }
+    }
+  ],
+  "rationale": "B01 reports only 206/457 leaves with fair_value, but the filing source has a standard multi-row SOI layout where valuation-bearing investment rows sit among section and continuation rows. The schedule total fair value of 2,339,502 ties to the balance-sheet total investments at fair value of 2,339,502, and the flagged artifact reports residual_fv 0.0. The low leaf coverage is therefore a rule-scope/counting artifact, not a raw-source data error."
+}

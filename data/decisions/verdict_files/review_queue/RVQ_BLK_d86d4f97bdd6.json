@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_d86d4f97bdd6",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 927,
+  "anchor_value": 455,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Total Investments in Portfolio Companies | $ | 367,496 | $ | 359,400 | $ | (8,096) | 455 | 185 | (1)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 6,
+      "quoted_text": "Total Investments in Portfolio Companies | $ | 372,310 | $ | 359,897 | $ | (12,413) | 465 | 160 | (1)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "Total portfolio company investments | $ | 359,400 | 100.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Oracle source-side count appears to include the separate December 31, 2024 comparative investment schedule instead of scoping only to December 31, 2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 11,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's current-period schedule total is 359.400 million and the current 2025 investments-by-type table reports 455 portfolio company investments. The immediately separate comparative 2024 table reports 465 investments. The flagged source value of 927 is therefore not supported as the current-period population; it is consistent with an oracle source-side comparative-period leak, while the output value of 460 is close to the current 2025 investment population and does not show a grounded missing-current-data defect. Raw source decides the issue as a false alarm in the E07 check."
+}

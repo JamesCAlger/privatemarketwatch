@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_e290dfee1a6a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 68.7,
+  "anchor_value": 68.7,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 23,
+      "quoted_text": "ABC Legal Holdings, LLC# | One stop | SF + | 4.25 % | (j) | 7.92 % | 08/2032 | 5,137 | 5,114 | 0.4 | 5,028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | - | ( 5 ) | - | ( 21 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 25,
+      "quoted_text": "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | - | ( 7 ) | - | ( 33 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The rate-fill warning counts source-declared N/A(6) direct-lending rows with zero principal and negative cost/fair value as missing extracted rates, while adjacent coupon-bearing rows have stated rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "This is an aggregate dl_rate_fill review. The source SOI has explicit Interest Rate columns, and direct-lending rows with actual coupons are populated, e.g. ABC Legal Holdings row 23 shows SF + 4.25% and 7.92%. The adjacent ABC Legal rows 24 and 25 are separate One stop rows where the source itself prints N/A(6), zero principal, and negative amortized cost/fair value. Roam for N/A/N/A(6) returned many identical source-declared N/A debt rows across the SOI. The flag therefore reflects the check treating source N/A rows as rate-fill violations, not an extraction/data error."
+}

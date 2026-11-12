@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_73dd6365eb2d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -23000,
+  "anchor_value": -23000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 13,
+      "quoted_text": "Velocity Buyer, Inc. | Revolver | N/A | 1/24/2025 | 1/24/2031 | - | ( 23 ) | - | (2)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 1,
+      "quoted_text": "Lightspeed Buyer, Inc. | Revolver | N/A | 12/2/2024 | 2/3/2027 | - | ( 2 ) | - | (2)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 34,
+      "quoted_text": "Alert SRC Newco LLC | Revolver | N/A | 12/11/2024 | 12/11/2030 | $ - | $( 7 ) | $ - | (2)(6)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "Negative amortized cost is source-stated for unfunded revolver or delayed-draw rows and is not a data extraction error.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 47,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "C107 flags negative cost values, but the raw investment schedule prints the same parenthesized amortized-cost amounts for the affected instruments. For example, Velocity Buyer is shown with amortized cost (23) and fair value zero, matching the stored -23000 after the table's thousands scale; Lightspeed Buyer and Alert SRC Newco show the same pattern. The data value is source-faithful, so the warning is a rule-scope/monitoring false alarm rather than a real data error."
+}

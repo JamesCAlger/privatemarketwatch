@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_3505a753f21c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Twin Star International, Inc.",
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 5,
+      "quoted_text": "Twin Star International, Inc. | 01/29/25 | 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.1 | % | 426,040 | 06/18/26 | 426,040 | 426,040",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name is blank in the extracted row, but the source Issuer column for the matching 14th Amendment Delayed Draw Term Loan row is Twin Star International, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C201 checks that issuer_name is present. The flagged holding has issuer_name blank, while the raw Schedule of Investments row for the same 01/29/25 14th Amendment Delayed Draw Term Loan, 25.00% inc PIK, maturity 06/18/26, fair value 426,040 shows Issuer = Twin Star International, Inc. This grounds the missing issuer as an extraction gap rather than a false alarm."
+}

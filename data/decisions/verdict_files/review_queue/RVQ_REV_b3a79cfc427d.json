@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_b3a79cfc427d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "Charlie RF Voltron Acquisition, Inc. | Delayed Draw Term Loan | N/A | 3/12/2026 | 3/12/2032 | - | ( 4 ) | ( 2 ) | (2)(6)(9)"
+    },
+    {
+      "table_index": 16,
+      "row_index": 22,
+      "quoted_text": "Velocity Buyer, Inc. | Revolver | N/A | 1/24/2025 | 1/24/2031 | - | ( 22 ) | - | (2)(6)(9)"
+    },
+    {
+      "table_index": 19,
+      "row_index": 6,
+      "quoted_text": "Allergy & Clinical MidCo, LLC | Delayed Draw Term Loan | SOFR | + | 4.75 % | (S) | 8.37 % | 1/29/2025 | 1/29/2031 | 129 | 10 | 124 | (6)(9)"
+    },
+    {
+      "table_index": 41,
+      "row_index": 15,
+      "quoted_text": "Healthfuse, LLC | Revolver | N/A | 1/10/2025 | 1/10/2031 | - | ( 18 | ) | - | (2)(6)(9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X07 is firing on debt/revolver rows whose source amortized-cost and fair-value cells are correctly extracted, including negative-cost commitment rows and one low-cost delayed draw term loan.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Raw SOI rows confirm the challenged amortized-cost and fair-value values: negative-cost revolver/DDTL rows such as Charlie RF Voltron and Velocity Buyer are filed that way, and Allergy & Clinical MidCo is filed with amortized cost 10 and fair value 124. The flag is caused by X07 treating these source-correct small or negative cost bases as data errors, not by an extraction or normalization defect."
+}

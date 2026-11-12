@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_23f785d4133d",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_alarm",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_STANDARD_USD_KQJVLDFGZ0E38P0J92LZQA",
+  "anchor_value": "USD-denominated fair value cells in source schedule",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "2X LLC Term Loan fair value is shown under the Fair Value column as $ 1,763,501.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 15,
+      "quoted_text": "AdCellerant LLC Term A Loan fair value is shown under the Fair Value column as $ 3,402,088.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 20,
+      "quoted_text": "AGT Robotique Inc. Term Loan fair value is shown under the Fair Value column as $ 5,032,336.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_normalization_false_alarm",
+      "detail": "FX02 treated the internal standard USD unit token as non-USD even though the raw fair value cells are dollar-denominated.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "This is a Class 1 currency/unit check on fair_value_currency. The flagged value is an internal token named UNIT_STANDARD_USD_KQJVLDFGZ0E38P0J92LZQA, and the raw investment schedule prints the fair value column in dollars for representative flagged holdings. Source rows 10:6, 10:15, and 10:20 show fair values preceded by '$', so the source supports USD denomination and the FX02 fire is a normalization/check false alarm rather than a true non-USD fair value."
+}

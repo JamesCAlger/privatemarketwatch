@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_2192d955467f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "The raw filing source was readable. The schedule of investments is in USD thousands and table 52 establishes the relevant columns, including Principal Amount, Cost, and Fair Value. A representative principal-amount row with accounting-style split currency cells, Lambir Bidco Limited at table 60 row 2, shows '$ | 2,889' under Principal Amount followed by '$ | 2,711' cost and '$ | 2,771' fair value. That presentation appears to be a source display convention rather than a clear wrong value, and the blinded bundle does not expose which extracted principal_amount_usd value caused the one fmt_principal_amount_usd violation. Because the raw source does not decide the single flagged defect, the adjudication remains ambiguous."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_2bc180881db9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5.0,
+  "anchor_value": 16.99,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 18,
+      "quoted_text": "Alto Pharmacy Holdings, Inc. | First Lien Term Loan | SOFR+ | spread 11.50% | Cash Interest Rate 5.00% | PIK 11.99% | maturity 10/14/2027",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 2,
+      "quoted_text": "Delta Leasing SPV II LLC | Subordinated Debt Term Loan | Cash Interest Rate 3.00% | PIK 7.00% | maturity 8/31/2029",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 14,
+      "quoted_text": "Establishment Labs Holdings Inc. | First Lien Term Loan | Cash Interest Rate 3.00% | PIK 6.00% | maturity 4/21/2027",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The authoritative standard requires interest_rate to be the all-in stated coupon including PIK. The source SOI has separate Cash Interest Rate and PIK columns for flagged positions. The bundle/extract kept the cash leg as interest_rate (for example Alto stored 5.0 while the source row shows 5.00% cash and 11.99% PIK; Delta stored 3.0 while source shows 3.00% cash and 7.00% PIK; Establishment Labs stored 3.0 while source shows 3.00% cash and 6.00% PIK). Therefore the stored interest_rate is not all-in and is below cash plus PIK."
+}

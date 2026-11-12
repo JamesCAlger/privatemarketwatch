@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_7e5f9c7becdb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "9 X02 rows with blank interest_rate and no basis_spread",
+  "anchor_value": "Source schedule rows show rate terms, including spread above index or explicit PIK rate",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 12,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | SF + | 4.75 % | N/A(6) | 08/2031 | - | ( 3 ) | - | ( 3 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 29,
+      "quoted_text": "Amberfield Acquisition Co.(5) | One stop | SF + | 5.00 % | N/A(6) | 05/2030 | - | ( 35 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 8,
+      "quoted_text": "Anaplan, Inc.(5) | One stop | SF + | 5.25 % | N/A(6) | 06/2028 | - | ( 2 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 39,
+      "quoted_text": "Any Hour, LLC(20) | One stop | N/A | 13.00 % | PIK | 05/2031 | 2,590 | 2,543 | 0.4 | 2,564",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 13,
+      "quoted_text": "Arrow Buyer, Inc.(5) | One stop | SF + | 5.75 % | N/A(6) | 07/2030 | - | ( 13 ) | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rows with N/A(6) interest still disclose a spread above index, so storing both interest_rate and basis_spread as blank misses available source rate terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 61,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Any Hour, LLC discloses an explicit 13.00% PIK rate, but the extracted row has blank interest_rate and no basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 56,
+        "row_index": 39
+      }
+    }
+  ],
+  "rationale": "X02 flagged private-credit rows because both interest_rate and basis_spread are blank. The raw schedule rows show available rate terms for matching flagged positions: spread-above-index values such as SF + 4.75%, 5.00%, 5.25%, and 5.75% on rows where the interest-rate column is N/A(6), plus an explicit Any Hour 13.00% PIK rate. The source therefore supports the warning as a real extraction gap rather than a false alarm."
+}

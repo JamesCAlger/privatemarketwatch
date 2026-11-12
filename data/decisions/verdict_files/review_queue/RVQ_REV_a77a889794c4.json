@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_a77a889794c4",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": [-3000, -11000, -31000, -12000, -10000, -13000, -2000],
+  "anchor_value": [-3000, -11000, -31000, -12000, -10000, -13000, -2000],
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 11,
+      "quoted_text": "CDM Fitness Holdings, LLC | ... | Cost | ( 3 ) | Fair Value | ( 5 )"
+    },
+    {
+      "table_index": 37,
+      "row_index": 4,
+      "quoted_text": "Good Feet Worldwide LLC | ... | Cost | ( 11 ) | Fair Value | ( 11 )"
+    },
+    {
+      "table_index": 36,
+      "row_index": 20,
+      "quoted_text": "HAI Hospitality, Inc. | ... | Cost | ( 31 ) | Fair Value | ( 44 )"
+    },
+    {
+      "table_index": 36,
+      "row_index": 21,
+      "quoted_text": "HAI Hospitality, Inc. | ... | Cost | ( 12 ) | Fair Value | ( 16 )"
+    },
+    {
+      "table_index": 36,
+      "row_index": 27,
+      "quoted_text": "PF Atlantic Holdco 2, LLC | ... | Cost | ( 10 ) | Fair Value | ( 15 )"
+    },
+    {
+      "table_index": 36,
+      "row_index": 30,
+      "quoted_text": "SugarCRM Inc. | ... | Cost | ( 13 ) | Fair Value | ( 21 )"
+    },
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "VRC Companies, LLC (dba Vital Records Control) | ... | Cost | ( 2 ) | Fair Value | ( 2 )"
+    }
+  ],
+  "rationale": "C107 flags seven negative cost values for review. The raw source schedule shows matching parenthesized cost amounts for those positions, so the extracted negative costs are source-faithful rather than data errors. Because the rule's own evidence states negative cost can be legitimate but should be monitored, this fire is a false alarm for data quality."
+}

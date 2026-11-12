@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_f694907369ed",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "UNIT_STANDARD_USD_-Q8F-ZP5NEQ4GVMXVXZTWA",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 0,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\") unless otherwise noted Euro.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "American Refrigeration, LLC Term Loan shows principal amount, amortized cost, and fair value columns with dollar signs: $ 3,736,348; $ 3,642,939; $ 3,642,939.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 10,
+      "quoted_text": "Archer Systems, LLC Term Loan shows principal amount, amortized cost, and fair value columns with dollar signs: $ 9,703,108; $ 9,529,548; $ 9,412,016.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flagged cost_currency because the stored XBRL unit label is UNIT_STANDARD_USD_-Q8F-ZP5NEQ4GVMXVXZTWA rather than the plain USD token. The raw schedule, however, presents the affected investment cost and fair value columns with dollar signs, and footnote (3) says par amounts are denominated in U.S. Dollars unless otherwise noted. The source therefore supports USD-denominated valuation fields; the warning is a unit-token normalization/rule-scope false alarm, not a real non-USD cost currency error."
+}

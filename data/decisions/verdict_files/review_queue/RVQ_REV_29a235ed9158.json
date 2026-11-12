@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_29a235ed9158",
+  "verdict": "false_alarm",
+  "mechanism": "rule_threshold_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 27.5,
+  "anchor_value": 27.5,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "JMP Credit Advisors CLO V LTD | Subordinated Securities, effective interest 27.5 % | CLO Fund Securities | 7/17/30 | 57.2 % | 10/22/21 | 6,519 | 6,519 | (3)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged private_markets_holdings interest_rate value is 27.5 for JMP Credit Advisors CLO V LTD. The raw source row for the matching security states \"effective interest 27.5 %\", so the extracted value matches the filing. The C113 warning is therefore a validation-range false alarm rather than a data error."
+}

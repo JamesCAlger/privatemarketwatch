@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_fc121eedb33a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 329,
+  "anchor_value": 488,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 23,
+      "quoted_text": "Total Investment Portfolio | $ | 2,138,204 | $ | 2,177,821 | 174.51 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule contains 488 investment positions but the output contains only 329, leaving 159 source positions unrepresented at the position-count level.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 61,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "E07 is a Class 3 aggregate coverage check. The raw filing's SOI reaches a current-period Total Investment Portfolio of $2,177,821 thousand at table 61 row 23, matching the filing-level investment total, so the source anchor is not bad. The flagged artifact reports source=488 versus output=329 for this CIK/quarter, a 32.6% count shortfall. With readable source and no contrary anchor evidence, this is a real extraction coverage error rather than a false alarm."
+}

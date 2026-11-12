@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4380b8e1f2f2",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "X02 flags row_key 198363 as a PRIVATE_CREDIT row with blank interest_rate and basis_spread, but the bundle does not identify the issuer or source row for that row_key. The 2025 source schedule tables are readable: actual loan/debt position rows reviewed in tables 27-34 generally carry explicit Rate and Interest Rate cells, while blank or N/A rate cells occur on headers, subtotals, equities, warrants, trust interests, real estate, and cash-equivalent rows. Without a source coordinate or row identity for row_key 198363, the raw source does not decide whether the defect is a real missing-rate extraction, a classification/lookthrough issue, or a false alarm."
+}

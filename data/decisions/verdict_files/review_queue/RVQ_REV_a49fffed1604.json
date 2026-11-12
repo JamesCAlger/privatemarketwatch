@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a49fffed1604",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1780.57,
+  "anchor_value": 1780.57,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 4,
+      "quoted_text": "March 31, 2026 | $ | 1,780.57",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 21,
+      "quoted_text": "Common units (146,634 units issued and outstanding at March 31, 2026) | $ | 265,318",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 23,
+      "quoted_text": "Total member's capital | $ | 261,092",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing explicitly reports NAV Per Unit of $1,780.57 for March 31, 2026 in table 52 row 4, exactly matching the flagged stored value. It also reconciles to the balance sheet: total member's capital of $261.092 million divided by 146,634 outstanding units is approximately $1,780.57 per unit. Therefore the data is correct and F30's generic upper bound of $1,000 is unsuitable for this issuer's high-denomination units."
+}

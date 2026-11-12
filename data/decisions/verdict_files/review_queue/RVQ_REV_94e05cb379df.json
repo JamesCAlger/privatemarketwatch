@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_94e05cb379df",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Equity Wholesale IMB Holdco LLC (formerly, WSP Holdco LLC) Series P Units Initial Acquisition Date 5/15/2023",
+  "anchor_value": "IMB Holdco LLC (formerly, WSP Holdco LLC)",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 17,
+      "quoted_text": "IMB Holdco LLC (formerly, WSP Holdco LLC) | Series P Units | 5/15/2023 | N/A | 374 | 374,000 | 575,721 | 0.2 | % | (6)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name incorrectly includes the Equity/Wholesale context, investment type Series P Units, and initial acquisition date; the source issuer cell is only IMB Holdco LLC (formerly, WSP Holdco LLC).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Raw source table 14 row 17 keeps the issuer in the Portfolio Company cell and places Series P Units and 5/15/2023 in separate investment type and initial acquisition date columns. The stored issuer_name concatenates those separate fields and the Equity/Wholesale context, so the C206 parse-leak flag is a real localized data error."
+}

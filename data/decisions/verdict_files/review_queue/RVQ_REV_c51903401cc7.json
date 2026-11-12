@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_c51903401cc7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "maturity dates 2025-12-22 for five One GI LLC rows and 2025-11-17 for one MPI Engineered Technologies, LLC row",
+  "anchor_value": "raw source schedule maturity cells",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 32,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 21,951 | 21,951 | 19,976 | (7) (8) (14)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 33,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 11,720 | 11,713 | 10,665 | (7) (8) (14)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 34,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 9,025 | 9,021 | 8,213 | (7) (8) (14)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 35,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 6,433 | 6,429 | 5,854 | (7) (8) (14)"
+    },
+    {
+      "table_index": 45,
+      "row_index": 36,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 3,610 | 3,610 | 3,285 | (7) (8) (14)"
+    },
+    {
+      "table_index": 52,
+      "row_index": 24,
+      "quoted_text": "MPI Engineered Technologies, LLC | Automobile Components | S + 12.00 % (Incl. 6.00 % PIK) | 01/15/20 | 11/17/25 | $ | 23,049 | $ | 20,011 | $ | 9,220 | (8) (12) (14)"
+    }
+  ],
+  "rationale": "X10 fired because the extracted maturity_date values precede the 2025-12-31 report date. The raw schedule confirms those exact maturity dates in the maturity column for all six flagged positions, so the stored maturity values are source-faithful. Matured positions can still be reported with fair value; this is a monitoring/rule-scope alert rather than a data error."
+}

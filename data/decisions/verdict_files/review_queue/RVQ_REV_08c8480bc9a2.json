@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_08c8480bc9a2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 7.33 % | C + 4.75 % | 11/01/30 | CAD | 7,811 | 5,553 | 5,559 | (7) (8) (9)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 14,
+      "quoted_text": "Aryeh Bidco Investment Ltd. (dba Dentalcorp) | Health Care Providers & Services | 7.31 % | C + 5.00 % | 01/14/33 | CAD | 5,206 | 3,714 | 3,705 | (7) (9)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Total Canada | $ | 108,282 | $ | 107,195"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The CAD label belongs to the par currency column, but the cost and fair value columns roll to the dollar-denominated Total Canada subtotal; fair_value_currency was stored as U_CAD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 single-cell currency check on fair_value_currency. In the raw SOI table, CAD appears immediately before par for Canadian loans, while cost and fair value are separate valuation columns and the Canada subtotal shows both cost and fair value with dollar signs. The flagged U_CAD therefore reflects leakage of the par currency into fair_value_currency, not a CAD fair-value valuation field."
+}

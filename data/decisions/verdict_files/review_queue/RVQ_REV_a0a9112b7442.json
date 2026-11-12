@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_a0a9112b7442",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Hudson Technologies Company | Last Out Term Loan - 12.31 % ... | Amortized Cost $ 5,964,585 | Fair Value $ 6,059,560",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 29,
+      "quoted_text": "Total Investments (211.5 %) | $ 687,902,445 | $ 686,157,510",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX02 rows store fair_value_currency as U_USD even though the SOI Fair Value column is dollar-denominated; normalize U_USD to USD for these BDC fair-value facts.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 5,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 1 currency-cell check. The flagged rows have observed fair_value_currency U_USD, but the raw schedule of investments presents fair value amounts in a dollar-denominated Fair Value column. Table 5 row 4 explicitly shows dollar signs for amortized cost and fair value, and table 6 row 29 confirms total investments are also presented with dollar signs. The source supports USD, not U_USD, so the non-USD currency value is a real normalization/extraction error. No aggregate anchor was needed."
+}

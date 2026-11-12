@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_755a61658f58",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1280,
+  "anchor_value": 2558,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 5,
+      "quoted_text": "Total Investments | $ | 3,320,878 | $ | 3,313,853 | 158.88 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 90,
+      "row_index": 34,
+      "quoted_text": "Total Investments | $ | 3,008,238 | $ | 3,008,628 | 161.57 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows two distinct full investment schedules in the raw filing: the report-date schedule ends at table 50 with fair value 3,313,853, while the comparative schedule ends at table 90 with fair value 3,008,628. The E07 source count of 2,558 is almost exactly twice the current-quarter output count of 1,280, consistent with the oracle counting both current and comparative schedule rows. Because output is scoped to 2026-03-31, comparing it with a mixed-period source-row anchor creates the apparent 50.0 percent shortfall; the flag is not grounded as a current-period data loss."
+}

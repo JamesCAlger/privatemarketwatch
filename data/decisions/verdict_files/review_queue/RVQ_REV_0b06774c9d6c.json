@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_0b06774c9d6c",
+  "verdict": "false_alarm",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "8.25,7.00,7.50,7.00,7.50,7.50,8.25",
+  "anchor_value": "8.25,7.00,7.50,7.00,7.50,7.50,8.25",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 9, "row_index": 39, "quoted_text": "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.28 % | E + 8.25 % PIK", "ties_to_residual": false},
+    {"table_index": 9, "row_index": 40, "quoted_text": "INK (BC) FINCO S.R.L. (dba Namirial) | Software | 10.26 % | E + 8.25 % PIK", "ties_to_residual": false},
+    {"table_index": 17, "row_index": 35, "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | S + 7.00 % PIK", "ties_to_residual": false},
+    {"table_index": 17, "row_index": 36, "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | 10.77 % | S + 7.00 % PIK", "ties_to_residual": false},
+    {"table_index": 10, "row_index": 43, "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.23 % | S + 7.50 % PIK", "ties_to_residual": false},
+    {"table_index": 10, "row_index": 44, "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 9.60 % | E + 7.50 % PIK", "ties_to_residual": false},
+    {"table_index": 10, "row_index": 45, "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.17 % | S + 7.50 % PIK", "ties_to_residual": false}
+  ],
+  "rationale": "The filing's investment schedule explicitly prints the seven basis spreads: two 8.25% PIK rows, two 7.00% PIK rows, and three 7.50% PIK rows. These exactly match the seven published basis_spread values. declared_raw and instance_raw are absent because these values are disclosed through schedule text rather than standalone XBRL facts; text_pathway is therefore expected provenance, not a data defect."
+}

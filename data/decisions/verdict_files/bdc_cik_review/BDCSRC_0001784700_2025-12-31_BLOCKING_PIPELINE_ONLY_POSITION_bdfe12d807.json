@@ -1,0 +1,26 @@
+{
+  "review_id": "BDCSRC_0001784700_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_bdfe12d807",
+  "cik": "0001784700",
+  "report_date": "2025-12-31",
+  "verdict": "ESCALATE",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation residual evidence classifies 11 current-period pipeline rows as extra_in_pipeline with no source_row_id or source_fair_value, but bundled raw current-period source evidence contradicts that classification for a subset: six sampled blocker identifiers have exact raw source fair values equal to the output fair values. The local bundle does not include enough complete source rows or matching diagnostics to determine whether the remaining five rows are true pipeline-only rows or the same raw-source-present matching/filtering failure.",
+  "reconciliation_diagnosis": "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "cik_validation_packet"
+  ],
+  "html_citations": [],
+  "changed_files": [],
+  "patch_summary": "",
+  "source_reconciliation_effect": "No patch proposed. Human review should reconcile why source_reconciliation_detail_samples reports blank source fields while raw_source_rows_current_period contains exact current-period source fair values for six blocker rows.",
+  "gav_effect": "Context only; GAV reconciliation passes and is not used as the primary justification.",
+  "tests_validation_plan": "If a bounded fix is identified, run: pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": false,
+  "missing_evidence": "Complete raw current-period source rows and source reconciliation match diagnostics for all 11 output_row_id values 3609-3619, including Accupac, NS and Associates, Easy Ice, and Krayden rows that are not exact matches in the bundled raw source sample.",
+  "residual_risk": "The blocker may be a real source-matching/filtering defect for all 11 rows, but the bundle only proves exact raw source support for six rows and HTML coordinate candidates mostly hit table headers rather than reliable position coordinates.",
+  "reviewer_notes": "Escalation is based on source-reconciliation evidence, not GAV. The worklist and residual rows show affected_output_fair_value 4472000 and affected_source_fair_value 0. The detail sample rows have empty source_row_id/source_fair_value, yet raw_source_rows_current_period includes exact source_fair_value matches for Horizon Freight (-39000), 3G Intermediate (46000), Source Holding Delaware (98000), ADPD Holdings (1000), Zavation Medical Products (52000), and SGA Dental Partners (102000)."
+}

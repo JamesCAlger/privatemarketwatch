@@ -1,0 +1,39 @@
+{
+  "review_id": "RVQ_REV_d8d3b7dfedc0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9.036384736428008,
+  "anchor_value": 9.87,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 139,
+      "row_index": 16,
+      "quoted_text": "Net investment income to average net assets | 9.87 | %"
+    },
+    {
+      "table_index": 139,
+      "row_index": 8,
+      "quoted_text": "Distributions declared (4) | ( 2.39 | )"
+    },
+    {
+      "table_index": 26,
+      "row_index": 6,
+      "quoted_text": "Total | $ | 2.2917 | $ | 0.0952 | $ | 2.3869 | $ | 167,321"
+    },
+    {
+      "table_index": 19,
+      "row_index": 9,
+      "quoted_text": "Net investment income (loss) | 164,075"
+    },
+    {
+      "table_index": 141,
+      "row_index": 10,
+      "quoted_text": "Total taxable income | $ | 164,258"
+    }
+  ],
+  "rationale": "F16 flagged a distribution-rate versus income-yield heuristic, but the raw filing does not show a data error. The financial highlights disclose net investment income to average net assets of 9.87% for 2025, while distributions declared were $2.39 per share and the distributions table totals $2.3869 per share / $167.321 million. The income statement reports net investment income of $164.075 million and the tax table reports taxable income of $164.258 million, both essentially in line with total distributions. The source therefore supports a normal distribution-income relationship rather than a mis-extracted value."
+}

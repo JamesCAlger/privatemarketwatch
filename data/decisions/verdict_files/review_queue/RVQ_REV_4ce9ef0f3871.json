@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_4ce9ef0f3871",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.8191045439,
+  "anchor_value": 0.8965690572,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 41,
+      "quoted_text": "Total net assets | 2,934,192 | 2,841,371",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 77,
+      "row_index": 11,
+      "quoted_text": "Total portfolio fair value | 5,156,571 | 100%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "F26 compares differently scoped leverage views and reports a 28.05-point divergence even though source-derived debt/net-assets and debt-investment-share differ by only 7.75 points.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 77,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Raw filing values show fund debt of 2,403,410 (credit facilities 957,521 plus debt securitization 406,440 plus notes 1,039,449) against net assets of 2,934,192, or 81.91%. The investment schedule shows senior and subordinated debt fair value of 4,623,222 against total portfolio fair value of 5,156,571, or 89.66%. These independently disclosed views differ by 7.75 percentage points, below F26's 20-point threshold, while the flag reports 28.05 points. The underlying source data are coherent; the failure arises from the check's anchor or scope construction."
+}

@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_ff6fe8fda60a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 10,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Sunland Asphalt & Construction, LLC (3) | 06/16/23 | Term Loan B - 13.19 % inc PIK (SOFR + 7.88 %, 1.75 % Floor, 0.50 % PIK) | 7.2 % | $ | 5,007,634 | 06/16/28 | $ | 4,822,811 | $ | 4,876,434"
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Mark Andy, Inc. (3) | 06/16/23 | Term Loan - 12.87 % (SOFR + 7.50 %, 1.50 % Floor) | 10.0 % | $ | 6,971,173 | 06/16/28 | $ | 6,798,324 | $ | 6,796,894"
+    },
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Alorica Inc. | 12/21/22 | Term Loan - 11.57 % (SOFR + 6.88 %, 1.50 % Floor) | 45.0 % | $ | 10,304,836 | 12/21/27 | $ | 10,151,194 | $ | 10,150,263"
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd because the affected debt rows were treated as non-USD par. The raw SOI uses accounting-table dollar markers for the Par Amount, Amortized Cost, and Fair Value columns: the headers identify Par Amount and the first detail row in each relevant SOI block carries the dollar sign in those amount columns, while later rows omit repeated dollar markers in the same columns. A targeted source search found no currency/foreign-currency language. The source therefore supports USD-denominated par presentation rather than non-USD par requiring FX conversion, so the FX01 firing is a false alarm from rule scope/currency-marker interpretation."
+}

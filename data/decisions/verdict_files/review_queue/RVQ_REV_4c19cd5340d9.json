@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_4c19cd5340d9",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C107 identifies 83 negative-cost cells, but the raw filing source could not be read through the required evidence CLI because both scoped invocation attempts failed at process creation (CreateProcessWithLogonW error 1326) before the CLI executed. The contract therefore requires an infrastructure-based ambiguous verdict without guessing whether the negative values are legitimate source disclosures or extraction defects."
+}

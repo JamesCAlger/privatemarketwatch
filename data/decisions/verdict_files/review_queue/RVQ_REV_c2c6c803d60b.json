@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c2c6c803d60b",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -23000,
+  "anchor_value": -23000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 3,
+      "quoted_text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) | Health Care Providers & Services | 13.50 % | P + 5.00 % | 08/15/25 | 4,565 | 59 | ( 23 | ) | (7) (8) (9)"
+    },
+    {
+      "table_index": 82,
+      "row_index": 34,
+      "quoted_text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) | 4,450 | 2,467"
+    }
+  ],
+  "rationale": "The flagged fair value is correctly extracted from the raw SOI: HOPCo shows cost 59 and fair value (23), i.e. -23000 in filing units. The same issuer appears in the filing's Unfunded Commitment Balances table for December 31, 2023 with 4,450, so the negative mark is an unfunded-commitment presentation rather than an erroneous fair_value."
+}

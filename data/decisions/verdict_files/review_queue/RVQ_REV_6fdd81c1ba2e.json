@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_6fdd81c1ba2e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5334,
+  "anchor_value": 0.03764339671558839,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 8,
+      "quoted_text": "Total assets | 349,209,446 | 387,246,061"
+    },
+    {
+      "table_index": 15,
+      "row_index": 75,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 337,496,226 | $ | 325,772,154 | 160.0 | %"
+    },
+    {
+      "table_index": 46,
+      "row_index": 62,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 378,081,148 | $ | 376,992,972 | 197.9 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "F25 observed a 0.5334 growth spread, but source total investments fell from 376,992,972 to 325,772,154 while total assets fell from 387,246,061 to 349,209,446, implying only a 0.037643 spread.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 75
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchor check. The raw filing total-assets row shows 349,209,446 at June 30, 2024 and 387,246,061 at December 31, 2023, a -0.098223 growth rate. The Schedule of Investments total fair value rows show 325,772,154 at June 30, 2024 and 376,992,972 at December 31, 2023, a -0.135867 growth rate. The absolute spread is 0.037643, well below the F25 0.30 tolerance, so the flagged observed metric 0.5334 is inconsistent with the filing anchors."
+}

@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_eced3bd0cb48",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "12.73 % PIK; SONIA (S); spread 7.50 %",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 9,
+      "quoted_text": "22 HoldCo Limited | Senior subordinated loan | 12.73 % PIK | SONIA (S) | 7.50 % | 08/2033 | 21,591.2 | 21,497.4 | 21,591.2 | (2)(5)(7)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 18,
+      "quoted_text": "22 HoldCo Limited (8) | Senior subordinated loan | 12.96 % PIK | SONIA (S) | 7.50 % | 08/2033 | 14,698.0 | 14,049.2 | 14,097.2 | (3)(5)(6)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holding for 22 HoldCo Limited has blank interest_rate and basis_spread, but the SOI row states 12.73% PIK with SONIA (S) reference and 7.50% spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 69,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The comparative 22 HoldCo Limited row also carries explicit loan terms, 12.96% PIK with SONIA (S) reference and 7.50% spread, confirming this is not a source omission pattern.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 99,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "The X02 flag reports private credit rows with blank stored interest_rate and no basis_spread. The raw SOI source for the flagged 22 HoldCo Limited senior subordinated loan contains explicit rate terms: coupon 12.73% PIK, reference SONIA (S), and spread 7.50%. The source therefore decides the question: the missing stored rate/spread is an extraction gap, not a legitimate blank source value."
+}

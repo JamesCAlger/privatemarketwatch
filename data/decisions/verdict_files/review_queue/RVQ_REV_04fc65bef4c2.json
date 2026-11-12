@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_04fc65bef4c2",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 849.354,
+  "anchor_value": 849.354,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 2,
+      "quoted_text": "Non-Controlled/Non-Affiliated Investments:",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 3,
+      "quoted_text": "Senior Secured First Lien Loans",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 4,
+      "quoted_text": "Aerospace & Defense",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "B01 completeness is depressed because structural SOI rows such as section, investment-type, and industry headers have no fair_value but appear to be counted in the leaf population; actual investment rows around them carry fair_value and the schedule total ties to 849.354 million.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 42,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's own total investments at fair value is 849,354, and the extracted fund-quarter fair value in the bundle is 849.354 million, so the amount anchor is not bad. Raw SOI grid rows show structural headings inside the investment schedule with no fair value cells, e.g. table 42 rows 2-4, while the same schedule has position rows with fair value and a total row tying to 849,354. A B01 ratio of 738/1443 leaves with fair_value is therefore grounded as a row-disposition/classification defect: non-position structural rows are being admitted into the completeness denominator rather than a missing source total."
+}

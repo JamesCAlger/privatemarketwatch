@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_99f123c1b3f6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 1,
+      "quoted_text": "Investment (1)(5) | Industry (2) | Interest Rate (3) | Reference Rate and Spread (3) | Maturity | Par (4) | Cost | Fair Value | Footnotes"
+    },
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Trader Corporation | Automobiles | 10.46 % | C + 5.50 % | 12/21/29 | CAD | 74,722 | $ | 54,076 | $ | 54,619 | (6) (7) (8)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "Recochem, Inc | Chemicals | 11.03 % | C + 5.75 % | 11/01/30 | CAD | 7,951 | 5,628 | 5,812 | (6) (7) (8)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 12,
+      "quoted_text": "Recochem, Inc | Chemicals | 11.10 % | S + 5.75 % | 11/01/30 | CAD | 1,294 | 190 | 208 | (6) (7) (8) (9)"
+    },
+    {
+      "table_index": 8,
+      "row_index": 28,
+      "quoted_text": "Total Canada | $ | 150,635 | $ | 150,668"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CAD from the Par currency column was propagated into fair_value_currency even though the Cost and Fair Value columns are dollar-denominated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. In table 8, the header places CAD immediately before Par (4), while Cost and Fair Value are separate dollar columns. The affected Canada rows show CAD only in the par currency slot, and the Canada subtotal explicitly shows Fair Value with a dollar sign. Therefore observed fair_value_currency=U_CAD is wrong; fair value should be USD-denominated."
+}

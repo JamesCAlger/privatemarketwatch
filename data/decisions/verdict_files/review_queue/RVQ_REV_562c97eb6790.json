@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_562c97eb6790",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 4,
+      "quoted_text": "Columbia Helicopters Inc. | Last Out Term Loan - 15.90 % inc PIK ... | Par Amount | $ | 17,995,432",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Grand Circle Corporation | Term Loan - 16.41 % ... | Par Amount | $ | 38,795,944",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Centric Brands Inc. | Term Loan - 12.38 % ... | Par Amount | $ | 45,260,691",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 flags all 39 debt rows because principal_amount_usd is blank under a supposed non-USD source par condition. Raw source tables 4, 5, and 6 are the 2023 debt schedule pages and show the Par Amount column with dollar-denominated rows; a targeted source search found no EUR, GBP, foreign currency, Canadian, or other currency markers. The non-USD premise is therefore unsupported by the filing source, so missing principal_amount_usd is not a real data defect for this flag."
+}

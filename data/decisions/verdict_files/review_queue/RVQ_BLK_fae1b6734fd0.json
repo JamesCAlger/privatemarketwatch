@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_fae1b6734fd0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Frontgrade 5.25%; Dealer Tire 2.00%; Tarpon Towers 4.58%",
+  "anchor_value": "Frontgrade 5.00%; Dealer Tire 3.00%; Tarpon Towers 4.75%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 11,
+      "quoted_text": "Frontgrade Technologies Holdings Inc. | Aerospace & Defense | 8.65 % | S + 5.00 % | 01/09/30 | 1,459 | 1,450 | 1,426 | (7) (8)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 11,
+      "row_index": 31,
+      "quoted_text": "Dealer Tire Financial, LLC | Automobile Components | 6.67 % | S + 3.00 % | 07/02/31 | 5,160 | 5,150 | 5,134",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 14,
+      "quoted_text": "Tarpon Towers II LLC | Wireless Telecommunication Services | 8.25 % | S + 4.75 % | 02/01/29 | 28,283 | 28,140 | 28,141 | (7) (8)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 46,
+      "row_index": 14,
+      "quoted_text": "Tarpon Towers II LLC | Wireless Telecommunication Services | 8.30 % | S + 4.58 % | 02/01/29 | 28,283 | 28,129 | 28,141 | (7) (8)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Frontgrade 8.65% tranche was assigned 5.25%, but its matching source row states S + 5.00%.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 11, "row_index": 11}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Dealer Tire was assigned 2.00%, but the matching source row states S + 3.00%.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 11, "row_index": 31}
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Tarpon Towers was assigned the comparative-schedule 4.58% instead of the current-period 4.75%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {"table_index": 25, "row_index": 14}
+    }
+  ],
+  "rationale": "The raw March 31, 2026 SOI rows contradict every flagged Agent A spread. Frontgrade's exact 8.65% tranche states S + 5.00%, Dealer Tire states S + 3.00%, and Tarpon Towers states S + 4.75%. Tarpon's flagged 4.58% is separately visible in comparative table 46, establishing comparative leakage for that item."
+}

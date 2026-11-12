@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001588272",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "Insufficient bounded evidence to safely change production parsing for this CIK-quarter-mechanism packet without manual source-table adjudication and a tested rule. Needed evidence: coordinate-level source table classification for the blocker rows, proof that the rows are either true position rows or non-position aggregate/header rows, and a false-positive analysis showing any proposed parser/config rule would not suppress legitimate position-level holdings.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 1 current blocker row(s) in mechanism blocking_source_short_plain_unresolved, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2023-09-30",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 49048230.000000.",
+  "review_id": "BDCSRC_0001588272_2023-09-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_1831f9eb59",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Review short plain identifier against the source filing; no deterministic clearing evidence exists.. Sample identifiers: Net Assets",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

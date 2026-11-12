@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_f73b6664cdae",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_soi_row",
+  "observed_value": "",
+  "anchor_value": "GBP-denominated par in source rows requires an explicit USD principal_amount_usd conversion",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 14,
+      "quoted_text": "Clearcourse Partnership Acquireco Finance Limited | IT Services | 13.70 % | SN + 8.75 % (Incl. 9.85 % PIK) | 07/25/28 | GBP | 6,415 | $ | 7,680 | $ | 7,790",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 15,
+      "quoted_text": "Clearcourse Partnership Acquireco Finance Limited | IT Services | 13.70 % | SN + 8.75 % (Incl. 9.85 % PIK) | 07/25/28 | GBP | 5,211 | 4,626 | 4,545",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "UK debt rows carry GBP par in the source while the flagged holdings rows have blank principal_amount_usd, so the USD principal conversion is missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "FX01 flags non-USD debt principal rows with missing principal_amount_usd. The filing's SOI shows Clearcourse debt with Par denominated in GBP while cost and fair value are presented in USD, so the source establishes a non-USD par value that needs an explicit USD principal_amount_usd conversion. The flagged blank observed value is therefore a real extraction/normalization gap, not a false alarm."
+}

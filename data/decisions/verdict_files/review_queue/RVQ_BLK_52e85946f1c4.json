@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_52e85946f1c4",
+  "verdict": "false_alarm",
+  "mechanism": "source_match_false_negative",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 56001000,
+  "anchor_value": 56001000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 21,
+      "quoted_text": "BlackRock Liquidity T-Fund - Institutional Shares | (11) | $ | 56,001 | $ | 56,001 | 7.64 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 23,
+      "quoted_text": "Total Investments at fair value | $ | 1,666,882 | $ | 1,665,503 | 227.20 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "SRC_BDC02 flagged the BlackRock Liquidity T-Fund - Institutional Shares row as having no matching current-period source fact. Raw source table 65 row 21 contains that exact security under Short-term Investments with fair value $56,001 thousand. The same table's total investments at fair value is $1,665,503 thousand, tying to the bundle's 1,665.503 million quarter total, so table 65 is the current-period schedule. The validation flag is therefore a source-matching false alarm, not a data error."
+}

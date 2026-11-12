@@ -1,0 +1,63 @@
+{
+  "review_id": "RVQ_REV_248569b3f3c2",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2024"
+    },
+    {
+      "table_index": 35,
+      "row_index": 48,
+      "quoted_text": "COPILOT Provider Support Services, LLC | Revolver | First Lien | 3M SOFR+ 6.50% | 2.00% | 10.98% | 11/22/2022 | 11/22/2027 | 261,116 | 261,116 | 259,810 | 0.16%"
+    },
+    {
+      "table_index": 39,
+      "row_index": 14,
+      "quoted_text": "Monitorus Holding, LLC | Revolver | First Lien | 3M SOFR+ 7.00% | 1.00% | 11.59% | 5/24/2022 | 5/24/2027 | 1,332,835 | 1,449,009 | 1,434,519 | 0.88%"
+    },
+    {
+      "table_index": 40,
+      "row_index": 9,
+      "quoted_text": "RIA Products Aggregator, LLC Class A Units | Equity | 5/1/2023 | 64,698 | 62,419 | 62,420 | 0.04%"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "COPILOT Provider Support Services, LLC Revolver was retained from the December 31, 2024 schedule for report_date 2025-03-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 35,
+        "row_index": 48
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Monitorus Holding, LLC Revolver was retained from the December 31, 2024 schedule for report_date 2025-03-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 39,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "RIA Products Aggregator, LLC Class A Units was retained from the December 31, 2024 schedule for report_date 2025-03-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 40,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "PP03 flagged three position-purity rows whose bundle evidence says their source period is earlier than the 2025-03-31 report_date. The raw source table of contents identifies a separate Consolidated Schedule of Investments as of December 31, 2024, and the cited culprit rows appear in that comparative-period schedule block rather than being March 31, 2025 current-period rows. Retaining those December 31, 2024 source rows in the March 31, 2025 holdings population is a real comparative-period leak."
+}

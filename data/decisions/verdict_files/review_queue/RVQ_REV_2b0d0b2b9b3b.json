@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2b0d0b2b9b3b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2023-11-01",
+  "anchor_value": "2023-11-01",
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 23,
+      "quoted_text": "Ligado Networks LLC | (8)(9)(13) | N/A | N/A | 15.50 % | 11/1/2023 | 12,853 | 11,071 | 2,121 | 0.10",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The raw schedule header places cell 9 in the Maturity Date column, and the cited Ligado Networks LLC row prints 11/1/2023, matching the stored 2023-11-01 value. Because the source confirms the past maturity date is accurately extracted and the bundle notes matured positions can still be reported but need monitoring, the X10 fire is not a data error."
+}

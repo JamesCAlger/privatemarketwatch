@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_8319f664d922",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 365.0000000000001,
+  "anchor_value": 0,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "D07 is a CIK-quarter aggregate median-rate-shift flag with no detail rows in the bundle. Raw source was readable: the investment schedule tables use a split header for Reference Rate Spread / Floor and Cash Interest Rate / PIK Rate, and sample extracted current rows match the raw source cells (for example table 27 rows 7-18). The filing also contains a debt-rate comparison table where cited 2025 vs 2024 borrowing rates differ by smaller, source-supported amounts (for example table 89 rows 4-6). The evidence does not localize a bad row, bad field, or independent aggregate rate anchor that proves the 365 bps oracle metric is a true data error or a false alarm. Under the skeptic default, this remains genuinely ambiguous after source review."
+}

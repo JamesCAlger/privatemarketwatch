@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_07dc3487922a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "filing_schedule_cells",
+  "observed_value": -37000,
+  "anchor_value": -37000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 28,
+      "quoted_text": "AKAM Buyer, Inc. | First Lien Delayed Draw Term Loan | (10) | SOFR + 4.75 %, 0.75 % Floor | 8.45 % | 2/27/2028 | - | ( 37 | ) | ( 75 | ) | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 7,
+      "quoted_text": "Accordion Partners LLC | First Lien Revolving Loan | (10) | SOFR + 5.00 %, 0.75 % Floor | 8.68 % | 11/17/2031 | - | ( 24 | ) | ( 10 | ) | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source check confirms that the filing itself reports negative cost values in parentheses for flagged loan rows. In the cited AKAM row, filing cost (37) thousand matches extracted cost -37000, and in the cited Accordion row, filing cost (24) thousand matches extracted cost -24000. Negative cost is therefore not an extraction defect here; C107 is an advisory rule whose sign-only scope produces a false alarm for these source-faithful positions. Residual risk is limited to uncited members of the 69-row batch, but the repeated source pattern and exact matches support the batch-level conclusion."
+}

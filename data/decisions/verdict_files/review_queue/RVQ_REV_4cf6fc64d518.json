@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4cf6fc64d518",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.3006,
+  "anchor_value": 1.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Investments - Non-control/Non-affiliate, at fair value (cost June 30, 2024: $459,910; cost September 30, 2023: $106,781) | $ | 464,197 | $ | 106,794",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments (143.7% of net assets) | $ | 459,910 | $ | 464,197",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 4,
+      "quoted_text": "Total investments at fair value | - | - | 464,197 | 464,197",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw filing repeatedly anchors June 30, 2024 investments at fair value at 464,197, while F20 reports a non-pass canonical GAV reconciliation for source_fv_missing_or_under_extracted.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The raw source has a clear schedule-total anchor: investments at fair value are 464,197 on the balance sheet, the SOI total, and the fair value hierarchy. The SOI also separates cash and cash equivalents at 177,933 and total portfolio investments plus cash at 642,130, so the investments-at-fair-value anchor is not ambiguous. Because the flagged F20 row reports canonical GAV reconciliation WARN with scope source_fv_missing_or_under_extracted rather than PASS, the defect is a real extraction/reconciliation gap, not a source ambiguity or false alarm."
+}

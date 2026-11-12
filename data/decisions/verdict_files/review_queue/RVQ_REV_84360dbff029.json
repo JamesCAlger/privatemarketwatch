@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_84360dbff029",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 10,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 11.00 % | 4/30/2024 | $ | 485 | $ | 447 | $ | 243 | (4)(8)(16)(30)"
+    },
+    {
+      "table_index": 43,
+      "row_index": 8,
+      "quoted_text": "Material Holdings, LLC | First Lien Secured Debt - Term Loan | S + 610 Cash plus 9.77 % PIK, 0.00 % Floor | 8/19/2027 | 6,621 | 6,306 | 3,013 | (4)(16)(30)(33)"
+    }
+  ],
+  "rationale": "The evidence CLI returned usable raw source and the cited schedule rows show the same positions carrying footnote marker (30), but targeted source searches for non-accrual/accrual wording and likely footnote-definition text did not expose a definition tying (30) to nonaccrual status. Without the raw footnote definition, the source confirms the flagged rows exist but does not decide whether the nonaccrual flag is a real data error or a false alarm."
+}

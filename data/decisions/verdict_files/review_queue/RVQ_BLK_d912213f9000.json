@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_d912213f9000",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2020-08-31",
+  "anchor_value": "2028-08-31",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 18,
+      "quoted_text": "Arrowhead Holdco Company | Delayed Draw Term Loan | SOFR | + | 2.50 % ( 2.75 % PIK) | (Q) | 6.34 % | 6/2/2022 | 8/31/2028 | 2,692 | 2,673 | 2,153 | (6)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Maturity parser produced 2020-08-31 for an Arrowhead Holdco row whose source maturity is 8/31/2028.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 42,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level maturity dispute. The bundle's flagged Arrowhead Holdco row reports Agent A parsed value 2020-08-31 against XBRL residual 2028-08-31; the raw schedule row shows maturity 8/31/2028, so the structured/XBRL maturity is correct and the Agent A parsed maturity is a real extraction error."
+}

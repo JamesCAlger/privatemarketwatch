@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_93abb4cc9ae8",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The F33 flag reports distribution_rate = 0.0 for CIK 0001495584 as of 2023-12-31, but the required evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted distribution-term roam query. Because raw source was not available through the allowed interface, the source cannot adjudicate whether the zero distribution rate is a real data error or a valid reported value."
+}

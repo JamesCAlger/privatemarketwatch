@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_a4f0debb73c3",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 16,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2024 | 28"
+    },
+    {
+      "table_index": 46,
+      "row_index": 29,
+      "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 500 , 1.00 % Floor | 11/27/2030 | - | ( 1 ) | ( 1 ) | (15)(18)(19)(20)"
+    },
+    {
+      "table_index": 46,
+      "row_index": 30,
+      "quoted_text": "First Lien Secured Debt - Revolver | S + 500 , 1.00 % Floor | 11/27/2030 | - | ( 1 ) | ( 1 ) | (15)(18)(19)(20)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Uniguest delayed-draw debt was retained from the December 31, 2024 comparative schedule in a September 30, 2025 report-date holdings set.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 46,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Uniguest revolver debt was retained from the December 31, 2024 comparative schedule in a September 30, 2025 report-date holdings set.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 46,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-level position-purity flag, so this was routed as Class 2. The filing table of contents labels the comparative schedule as December 31, 2024, and the flagged Uniguest delayed-draw and revolver rows appear in that comparative schedule at table 46 rows 29-30. Because the reviewed report_date is September 30, 2025, retaining those comparative-period rows in the report-date holdings set is a real data error."
+}

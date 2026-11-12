@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_6601d8fd0f2f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 385.0,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate duplicate-key flag. The overview, tables, totals, and targeted Dwyer Instruments roam commands returned no usable raw-source text or table coordinates, only an XMLParsedAsHTMLWarning. The bundle reports 385 duplicate keys and supplies extracted holdings context, but the raw source could not be read through the required evidence interface, so whether the shared keys are true duplicate positions or distinct instruments collapsed by extraction cannot be adjudicated."
+}

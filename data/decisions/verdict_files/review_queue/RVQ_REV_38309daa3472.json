@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_38309daa3472",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "34 X02 rows with blank interest_rate/basis_spread",
+  "anchor_value": "source schedule shows dash/dash for reference rate and interest rate on cited unfunded commitment rows",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 6,
+      "quoted_text": "Penn Quarter Partners, LLC (f)(i)(q) | Delayed Draw Term Loan | - | - | 8/25/2031 | - | ( 16,543 | ) | ( 17,536 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 7,
+      "quoted_text": "Penn Quarter Partners, LLC (f)(i)(q) | Revolving Credit Facility | - | - | 8/25/2031 | - | ( 16,531 | ) | ( 17,536 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 2,
+      "quoted_text": "Penn Quarter Partners, LLC | Delayed Draw Term Loan | 8/25/2031 | $ | 2,805,683",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 97,
+      "row_index": 3,
+      "quoted_text": "Penn Quarter Partners, LLC | Revolving Credit Facility | 8/25/2031 | 1,402,842",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 21,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(m)(q) | Delayed Draw Term Loan | - | - | 11/27/2030 | - | ( 4,277 | ) | ( 6,928 | )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 22,
+      "quoted_text": "Dynamic Connections, Ltd (f)(i)(m)(q) | Revolving Credit Facility | - | - | 11/27/2030 | - | ( 1,425 | ) | ( 2,309 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X02 flagged blank interest_rate/basis_spread on private-credit rows, but the raw schedule itself prints '-' in both Reference Rate and Spread and Interest Rate for the cited delayed draw/revolver rows, with '-' par amount and negative cost/fair value. The related commitments table separately lists the same Penn Quarter instruments as unfunded commitments. The extraction therefore preserved the source; the rule is over-scoped for these unfunded commitment/negative-value rows rather than exposing a missed rate value."
+}

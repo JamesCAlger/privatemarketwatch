@@ -1,0 +1,73 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001513363",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No immediate GAV effect from the verdict file itself. The proposed patch documents the source row as an affiliation-level header/total rather than adding a 1063342000.000000 pseudo-position to unified holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 8,
+      "row_index": 46,
+      "cell_indices": [
+        0
+      ],
+      "row_classification": "AGGREGATE_HEADER",
+      "reason": "The selected schedule row is the section label 'Non-control/Non-affiliate Investments' with no issuer, instrument, rate, maturity, cost, or fair-value cells for a production position."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 12,
+      "row_index": 18,
+      "cell_indices": [
+        0,
+        10,
+        11,
+        14,
+        15,
+        18,
+        19
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The row is the total for non-control/non-affiliate investments and carries aggregate cost, fair value, and percent-of-net-assets amounts, not issuer-level holding detail."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 4,
+      "row_index": 8,
+      "cell_indices": [
+        0,
+        3,
+        7
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The row reports non-control/non-affiliate investments at fair value with current and comparative aggregate amounts; it is not a leaf security row."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Added exact affiliation-header recognition for the normalized label 'non control non affiliate investments' and focused regression coverage for the Fidus 'Non-control/Non-affiliate Investments' source row while preserving issuer-bearing false-positive coverage.",
+  "primary_justification": "The blocker row is not a missing position. The XBRL row has only the sparse investment identifier 'Non-control/Non-affiliate Investments' with aggregate cost and fair value, and the HTML coordinates show the same label as a section header plus aggregate total/fair-value lines. Detailed named portfolio-company rows appear separately under the section.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2025-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "Low. The patch is exact to the normalized affiliation-header phrase and does not clear labels that include an issuer, security type, rate, maturity, investment date, or other leaf-position detail.",
+  "review_id": "BDCSRC_0001513363_2025-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_eaad271cc8",
+  "reviewer_notes": "Manually reviewed this Fidus bundle on its merits. The same normalized label appears in the source-only blocker, in current-period HTML section and total rows, and as a parent prefix for detailed child rows such as 2KDirect, 301 Edison, AOM Intermediate, APM Intermediate, and Acendre. It should be excluded as a hierarchy header/total, not parsed as a position.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "After affected outputs are rebuilt, this row should classify as documented_source_affiliation_header instead of blocking_source_short_plain_unresolved.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict schema with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

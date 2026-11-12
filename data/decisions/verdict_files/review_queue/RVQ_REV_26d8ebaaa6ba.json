@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_REV_26d8ebaaa6ba",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 14.0,
+  "anchor_value": 5.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 20.0 | 0.6 | 49.0 | 1.4",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 2,
+      "quoted_text": "Astra Acquisition Corp. (3)(14) | Second-lien loan ($ 40,084 par, due 10/2029 ) | 10/22/2021 | P + 9.88 % | 16.63 | % | 39,489 | - | 0.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 4,
+      "quoted_text": "Second-lien note ($ 2,024 par, due 9/2029 ) (14) | 8/31/2023 | 7.10 | % | 7.10 % (incl. 1.25 % PIK) | 1,559 | 223 | 0.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 32,
+      "quoted_text": "American Achievement, Corp. (3)(14) | First-lien loan ($ 26,664 par, due 9/2026 ) | 9/30/2015 | SOFR + 7.35 % | 11.22 % (incl. 10.72 % PIK) | 25,848 | 19,665 | 1.2 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rows from the prior-year schedule were included in the 2025 nonaccrual count, including IRGSE rows that are not current-year nonaccrual rows.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 48,
+        "row_index": 3,
+        "quoted_text": "IRGSE Holding Corp. (3)(6) | First-lien loan ($ 30,261 par, due 6/2025 ) | 12/21/2018 | SOFR + 9.65 % | 13.98 | % | 28,594 | 28,823 | 1.8 | %"
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Current-year rows with non-nonaccrual footnotes were included, such as Varinem (3)(4) and Bed Bath (3)(15), even though the current nonaccrual anchor reconciles to the (14) row group only.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 40,
+        "row_index": 35,
+        "quoted_text": "Bed Bath and Beyond Inc. (3)(15) | ABL FILO term loan ($ 5,910 par, due 8/2027 ) | 9/2/2022 | SOFR + 9.90 % | 13.62 | % | 5,851 | 4,758 | 0.3 | %"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source-supported 2025 nonaccrual set is five positions: Astra Acquisition, ASP Unifrax second-lien note, and the three American Achievement debt rows, whose fair values sum to about $20.0 million.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 40,
+        "row_index": 33,
+        "quoted_text": "First-lien loan ($ 1,327 par, due 9/2026 ) | 6/10/2021 | SOFR + 15.10 % | 18.97 % (incl. 18.47 % PIK) | 1,327 | 100 | 0.0 | %"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. The filing's current-year non-accrual fair value anchor is $20.0 million. The current-year schedule rows marked by the nonaccrual footnote structure reconcile to that anchor: Astra Acquisition at $0, ASP Unifrax second-lien note at $0.223 million, and the American Achievement debt row group at $19.665 million, $0.100 million, and $0.059 million, totaling about $20.047 million before rounding. The observed flag count is 14, so it over-includes rows outside that source-supported current-year nonaccrual set, including prior-year IRGSE rows and current Bed Bath/Varinem rows with different footnotes. The flag is therefore a real extraction/classification error."
+}

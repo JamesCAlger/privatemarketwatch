@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_f5c5cb6cb726",
+  "verdict": "real_error",
+  "mechanism": "column_remap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -14000,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "Accupac, LLC | Personal Products | Delayed Draw Term Loan | N/A | 0.00 % | 01/16/26 | - | - | ( 15 | ) | (2)(6)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 16,
+      "quoted_text": "Techmer BB Bidco, LLC | Chemicals | Delayed Draw Term Loan | N/A | 0.00 % | 09/01/28 | - | - | ( 1 | ) | (2)(6)(9)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "column_remap",
+      "detail": "Accupac delayed draw term loan has no amortized cost in the June 30 source row, but the extracted cost is negative while the source negative amount is fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "column_remap",
+      "detail": "Techmer BB Bidco delayed draw term loan has no amortized cost in the June 30 source row, but the extracted cost is negative while the source negative amount is fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 1 review of the C107 negative-cost flagged cells. Several negative amortized-cost rows are source-grounded and would not be defects by themselves, but the flagged set includes Accupac and Techmer rows where the June 30 SOI shows amortized cost as a dash and fair value as a parenthesized negative amount. The extracted cost is therefore populated from the wrong source column for those rows, so the flag is a real localized data error."
+}

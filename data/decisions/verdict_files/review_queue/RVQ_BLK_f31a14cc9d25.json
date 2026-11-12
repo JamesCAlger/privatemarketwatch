@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_f31a14cc9d25",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 26791556000,
+  "anchor_value": 25063146000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 25,063,146 and $ 25,109,408 at March 31, 2026 and December 31, 2025, respectively) | 25,007,853 | 25,337,420",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 31,
+      "quoted_text": "Total Investments - Non-Controlled/Non-Affiliated | $ | 24,490,371 | $ | 24,439,690 | 196.52 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Extracted cost exceeds the filing schedule total by $1,728,410,000, and the source schedule contains explicit subtotal rows among position rows.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 35,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag. The extracted position cost sum is $26,791,556,000, while the filing's own March 31, 2026 amortized-cost total is $25,063,146,000; the $1,728,410,000 excess is 6.896% of the schedule total, exactly matching the flag. Raw schedule rows include explicit industry and disposition totals, supporting subtotal leakage. The aggregate mechanism is established, but the complete set of leaked subtotal rows is not uniquely localized from the available row-disposition evidence."
+}

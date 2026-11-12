@@ -1,0 +1,29 @@
+{
+    "review_id":  "RVQ_REV_e53359b960cb",
+    "verdict":  "false_alarm",
+    "mechanism":  "anchor_bad",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  10.28144376899696,
+    "anchor_value":  14.115,
+    "confidence":  0.9,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  155,
+                                  "row_index":  8,
+                                  "quoted_text":  "Stockholder distributions - ordinary income | ( 1.03 )"
+                              },
+                              {
+                                  "table_index":  155,
+                                  "row_index":  21,
+                                  "quoted_text":  "Ratio of net investment income to average net assets | 9.41 | %"
+                              },
+                              {
+                                  "table_index":  134,
+                                  "row_index":  15,
+                                  "quoted_text":  "Total distributions declared | $ | 1.029 | $ | 249,201"
+                              }
+                          ],
+    "rationale":  "Raw source shows 2025 distributions of about 1.03 per share/1.029 total declared per share and a 2025 ratio of net investment income to average net assets of 9.41%. The F16 threshold from the source income-yield anchor is 9.41 * 1.5 = 14.115%, which is above the flagged observed distribution rate of 10.28144376899696%, so the fail is caused by the validation anchor/input rather than a reported fund-financial data error."
+}

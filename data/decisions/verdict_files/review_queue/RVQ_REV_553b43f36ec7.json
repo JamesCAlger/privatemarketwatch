@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_553b43f36ec7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "06/2024",
+  "anchor_value": "06/2024",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 15,
+      "quoted_text": "Slickdeals Holdings, LLC (6) | Unitranche First Lien Term Loan | S + 625 ( 100 Floor) | 11.60 % | 06/2024 | 13,911 | 13,860 | 1.9 | 13,911"
+    }
+  ],
+  "rationale": "The raw September 30, 2024 schedule itself lists the Slickdeals Holdings, LLC Unitranche First Lien Term Loan with maturity/dissolution date 06/2024. Because the observed past maturity matches the source row, the extraction is not wrong; the maturity_not_past check is too strict for a source-disclosed position that remains on the schedule after its stated maturity."
+}

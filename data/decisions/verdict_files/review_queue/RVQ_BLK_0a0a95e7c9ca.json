@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_0a0a95e7c9ca",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5.5,
+  "anchor_value": 9.99,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 41,
+      "quoted_text": "AMEX Holding III Corp Delayed Draw Term Loan | (1)(2)(3)(4)(5)(7)(11) | 3M SOFR + 5.50 % / 1.00 % | 0.00 | % / 9.99 % | 3/31/2028 | $ | 226,944 | $ | 225,792 | $ | 202,336 | 0.02 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 42,
+      "quoted_text": "AMEX Holding III Corp Term Loan | (1)(2)(3)(4)(5)(7)(11) | 3M SOFR + 6.65 % / 1.00 % | 0.00 | % / 9.99 % | 3/31/2028 | 5,103,722 | 5,078,522 | 4,550,309 | 0.36 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Under the pik_le_interest_rate all-in convention, interest_rate must include the PIK leg. The source rows for AMEX Holding III show reference spread/floor values of 3M SOFR + 5.50% / 1.00% and 3M SOFR + 6.65% / 1.00%, while the Cash Interest Rate / PIK Rate column shows 0.00% cash / 9.99% PIK. The flagged stored interest_rate is the reference spread, not the all-in PIK-inclusive coupon, so pik_rate exceeds interest_rate because the extractor kept the wrong rate field."
+}

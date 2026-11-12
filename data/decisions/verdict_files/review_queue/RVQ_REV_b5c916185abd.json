@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_b5c916185abd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 773069,
+  "anchor_value": 773069,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 15,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Revolver | S + 5.25 % | 7/2/2031 | principal - | cost ( 5 ) | fair value ( 2 ) | footnote 9"
+    },
+    {
+      "table_index": 32,
+      "row_index": 69,
+      "quoted_text": "Total Unfunded Portfolio Company Commitments | $ | 152,628 | $ | ( 653 )"
+    },
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 773,069 | $ | 778,371 | 218.4 | %"
+    }
+  ],
+  "rationale": "Class 3 aggregate fmt_cost warning. Raw SOI rows show the supposedly bad negative cost values are printed as parenthesized amounts in the Cost column for zero-principal revolver/delayed-draw positions, and the filing separately reports negative fair values for unfunded commitments. The filing's own investment total ties to the schedule total at amortized cost 773,069, so the source supports the extracted negative-cost formatting rather than a data error."
+}

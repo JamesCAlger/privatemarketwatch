@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_4b9aa8b32a05",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5475,
+  "anchor_value": 0.8,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 28,787 | 28,525 | 28,478",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Current-period SOI debt rows expose Ref. Rate and Cash rate terms, but corresponding extracted holdings such as AI Titan have blank interest_rate, driving only 54.75% debt-rate coverage.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "C01 is an aggregate debt-rate coverage flag: 181 of 400 debt rows are missing interest_rate, for observed coverage 0.5475 below the 0.8 threshold. Raw source schedule table 49 has explicit rate columns (Ref. Rate, Cash, PIK), and the AI Titan first-lien senior secured loan row cited above contains Ref. Rate S+ and Cash 4.50%, while the bundled extracted holding for the same issuer/instrument has blank interest_rate. This grounds the failure as a source-backed extraction gap rather than a false alarm."
+}

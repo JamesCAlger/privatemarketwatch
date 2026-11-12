@@ -1,0 +1,91 @@
+{
+  "review_id": "RVQ_BLK_1f02f57c3f67",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1233842301.0,
+  "anchor_value": 1183746738.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 1,222,055,231 and $ 919,774,172 , respectively) | 1,183,746,738 | 891,045,657",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 23,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 1,222,055,231 | $ 1,183,746,738 | 199.35 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 25,
+      "quoted_text": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class | Money Market Fund | 11,056,883 | 11,056,883 | 11,056,883 | 1.86",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 26,
+      "quoted_text": "Total Cash Equivalents | 11,056,883 | 11,056,883 | 1.86 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 28,
+      "quoted_text": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class | Money Market Fund | 12,954,969 | 12,954,969 | 12,954,969 | 2.18",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 29,
+      "quoted_text": "Total Restricted Cash Equivalents | 12,954,969 | 12,954,969 | 2.18 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 37,
+      "row_index": 12,
+      "quoted_text": "Total Interest Rate Swaps | $ | 918,249",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 13,
+      "quoted_text": "Total | $ | ( 112,188 )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Cash-equivalent rows appear after Total Investments, December 31, 2025 and are outside the investment fair-value anchor.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 34,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Cash-equivalent subtotal rows duplicate the adjacent cash-equivalent detail values and should not be summed into investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 34,
+        "row_index": 26
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Derivative fair-value totals are disclosed in separate derivative schedules, not in Total Investments, and should not be included in the investment conservation sum.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 37,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation. The filing's investment anchors agree: the balance sheet and schedule both report Total investments at fair value of 1,183,746,738 for December 31, 2025. The extracted position sum is 1,233,842,301, an overshoot of 50,095,563. The source schedule then lists cash equivalents and restricted cash equivalents after Total Investments, including detail and subtotal rows of 11,056,883 and 12,954,969; those rows are outside the investment total and explain 48,023,704 of the overshoot if both detail and subtotal cash-equivalent rows are included. Separate derivative schedules also show fair-value totals of 918,249 for interest rate swaps and (112,188) for foreign currency forwards, supporting the same out-of-scope fair-value leak mechanism. The exact residual is not fully itemized from the available row citations, but the anchor disagreement and cited out-of-scope rows establish a real data error rather than a bad anchor."
+}

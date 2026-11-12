@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_ecc34906738a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "cost_currency=GBP",
+  "anchor_value": "source places GBP symbol in Par / Units, not Amortized Cost",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Armstrong Bidco Limited(11)(21) | First lien senior secured loan | SA + | 5.00 % | 6/2029 | GBP symbol | 26,570 | 31,986 | 32,187 | 2.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Armstrong Bidco Limited(11)(21) | First lien senior secured delayed draw term loan | SA + | 5.00 % | 6/2029 | GBP symbol | 13,863 | 16,680 | 16,794 | 1.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The GBP symbol was assigned to cost_currency for the Armstrong Bidco loan rows even though the symbol is in the Par / Units column and the following values are amortized cost.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The delayed draw term loan has the same misplaced GBP symbol in Par / Units, with amortized cost shown separately as 16,680.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "FX03 is a real data error. The flagged holdings store cost_currency=GBP for the two Armstrong Bidco Limited rows, but the raw SOI grid shows the GBP symbol in the Par / Units column immediately before 26,570 and 13,863. The amortized cost values are the separate following values, 31,986 and 16,680, so the GBP unit was carried from par/units onto cost_currency rather than grounded in the cost column."
+}

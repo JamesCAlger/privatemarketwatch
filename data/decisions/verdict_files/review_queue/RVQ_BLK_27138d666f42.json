@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_27138d666f42",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4.75,
+  "anchor_value": 4.5,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 10,
+      "quoted_text": "MedBridge Holdings, LLC | Term Loan | 8.16% (S + 4.50%; 1.00% Floor) | 12/23/2026",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 29,
+      "quoted_text": "Saab Purchaser, Inc. | Term Loan | 8.19% (S + 4.50%; 0.75% Floor) | 11/12/2031",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 5,
+      "quoted_text": "Wealth Enhancement Group, LLC | Delayed Draw Term Loan | 7.91% (S + 4.25%; 1.00% Floor) | 10/2/2028",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The three flagged spreads were taken from the comparative schedule instead of the current-period schedule: MedBridge 4.50%, Saab 4.50%, and Wealth Enhancement 4.25% are current.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 17,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule shows MedBridge at S + 4.50%, Saab at S + 4.50%, and Wealth Enhancement at S + 4.25%, each 0.25 percentage points below the flagged values. The later comparative-period tables show the flagged 4.75%, 4.75%, and 4.50% values respectively, proving a comparative-period extraction leak rather than an XBRL reconciliation false alarm. observed_value and anchor_value illustrate the MedBridge/Saab mismatch; all three exact current values are grounded in the cited rows."
+}

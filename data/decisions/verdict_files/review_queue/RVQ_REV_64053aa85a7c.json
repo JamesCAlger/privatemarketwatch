@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_64053aa85a7c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "GAV_NPORT01 is an aggregate coverage flag requiring source-backed anchor triangulation, but the evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-24-055544. Because raw source was unavailable through the required evidence window, the item cannot be adjudicated as a real error or false alarm."
+}

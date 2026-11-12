@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_095ff351d7ea",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 29,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 64,
+      "row_index": 26,
+      "quoted_text": "blank investment/name cell with subtotal values: cost $47,974, fair value $48,049, net assets 2.59%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 33,
+      "quoted_text": "blank investment/name cell with subtotal values: cost $7,138, fair value $7,095, net assets 0.38%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 14,
+      "quoted_text": "blank investment/name cell with subtotal values: cost $38,663, fair value $38,827, net assets 2.09%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 32,
+      "quoted_text": "blank investment/name cell with subtotal values: cost $43,092, fair value $49,937, net assets 2.68%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Rows with blank issuer/investment cells and populated cost/fair value totals are structural subtotal rows that leaked into private_markets_holdings as positions.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 64,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "C201 flags holdings rows whose issuer_name is blank. The raw SOI grid shows structural subtotal lines with empty investment/name cells but populated cost and fair value amounts; these are not issuer-bearing positions and should not be emitted as holdings records with missing issuer_name. Normal adjacent rows carry issuer names, confirming the blank-name numeric rows are structural rollups rather than valid unnamed positions."
+}

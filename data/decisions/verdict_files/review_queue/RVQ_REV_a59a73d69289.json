@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a59a73d69289",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X02 flag for missing interest_rate/basis_spread on row_key 560628 could not be adjudicated because the permitted evidence CLI did not return raw source rows, table coordinates, or rate-term text for the bundle; overview, tables, totals, roam, and grid all returned no_accession_resolved with rows_seen=2. Per contract, unreadable raw source requires ambiguous/source_unavailable rather than guessing."
+}

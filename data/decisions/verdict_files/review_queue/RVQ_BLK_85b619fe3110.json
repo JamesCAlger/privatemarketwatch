@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_85b619fe3110",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1873983000,
+  "anchor_value": 1536368000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 64,
+      "row_index": 10,
+      "quoted_text": "TOTAL INVESTMENTS-- 162.8 % | $ | 1,521,693 | 1,536,368",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 3,
+      "quoted_text": "Unfunded Loan Commitments | ( 257,115 ) | ( 257,115 )",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 64,
+      "row_index": 8,
+      "quoted_text": "Unfunded Commitments | ( 57,422 ) | ( 57,422 )",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source nets Senior Secured Loans by an Unfunded Loan Commitments fair-value offset of -257.115 million, but the extracted fair-value sum overshoots the reported investment anchor.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 56,
+        "row_index": 3
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source nets Asset Based Finance by an Unfunded Commitments fair-value offset of -57.422 million, contributing to the conservation overshoot.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 64,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check: the filing total investments row and companyfacts anchor are 1,536.368 million, while the extracted fair-value sum is 1,873.983 million. The SOI disposition shows gross category totals are reduced by explicit negative unfunded commitment rows, including -257.115 million and -57.422 million. Those source rows support an extraction gap in the position set, so the conservation overshoot is a real data error rather than a bad anchor. The cited negative rows explain most, but not necessarily all, of the residual; the independent anchor disagreement grounds the verdict."
+}

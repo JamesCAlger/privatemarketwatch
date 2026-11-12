@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_07dd92308cc3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3.0,
+  "anchor_value": 9.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "Delta Leasing SPV II LLC | Specialized Finance | Subordinated Debt Term Loan | 3.00 % | 7.00 % | 8/31/2029 | 6,724 | 6,724 | 6,724 | (8)(9)(10)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Establishment Labs Holdings Inc. | Health Care Technology | First Lien Term Loan | 3.00 % | 6.00 % | 4/21/2027 | 10,719 | 10,592 | 10,237 | (8)(10)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The SOI has separate Cash Interest Rate and PIK columns. Flagged rows show cash-pay interest of 3.00% with additional PIK of 7.00% for Delta Leasing and 6.00% for Establishment Labs. Under the platform all-in convention, interest_rate should include PIK, so storing 3.0 rather than the PIK-inclusive coupon (9.0% for Establishment Labs, 10.0% for Delta Leasing) is a real extraction gap."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_ad71d133c1ee",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1888798000,
+  "anchor_value": 1951269000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 5,
+      "quoted_text": "Structured Credit Investments Total | $ | 62,534 | $ | 62,471 | 4.19 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted position sum omits the $62.471 million structured credit investment category, exactly equal to the conservation residual.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 52,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The filing schedule reports total investment fair value of $1.951269 billion, matching the companyfacts anchor, while the extracted 176-position sum is $1.888798 billion. Their $62.471 million difference exactly equals the raw-source Structured Credit Investments Total fair value at table 52 row 5, localizing the undershoot to an extraction gap for that investment category."
+}

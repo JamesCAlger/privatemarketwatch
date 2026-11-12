@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_61878657e311",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 179475000,
+  "anchor_value": 179475000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investments (9) - 135.8 % | $ | 196,338 | $ | 179,475",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 32 | $ | - | $ | 179,443 | $ | 179,475",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 250,849 | $ | 254,797",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted position sum of 179,475,000 agrees exactly with the filing's Schedule of Investments total and the independent fair-value hierarchy Total Investments line. The 250,849,000 comparison is explicitly Total assets, so E01 compared investments with a broader balance-sheet asset anchor. The holdings value is correct and the check is a false alarm caused by a bad anchor."
+}

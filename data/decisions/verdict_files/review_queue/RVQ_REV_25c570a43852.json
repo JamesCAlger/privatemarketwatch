@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_25c570a43852",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [],
+  "rationale": "X02 flags an extracted PRIVATE_CREDIT row_key 434366 with blank interest_rate/basis_spread, but the review bundle does not provide an issuer or investment identifier for that row. The raw SOI tables were readable; tables 199-201 contain the investment schedule with Coupon and Cash columns, but the allowed evidence window does not tie row_key 434366 to a specific source row. Without that row linkage, source does not decide whether the missing extracted rate is a real extraction error or whether the row is not a debt position requiring a rate."
+}

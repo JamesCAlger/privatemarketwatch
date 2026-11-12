@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_8402da635abf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_interest",
+  "observed_value": 6.5,
+  "anchor_value": 5.25,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 4,
+      "quoted_text": "Exterro, Inc. | Software & Tech Services | Revolver | - % ( S + 5.25 %; 1.00 % Floor) | 6/1/2027 | - | ( 9,322 ) | - | (6)(7)"
+    },
+    {
+      "table_index": 55,
+      "row_index": 7,
+      "quoted_text": "Exterro, Inc. | Software & Tech Services | Delayed Draw Term Loan | - % ( S + 5.25 %; 1.00 % Floor) | 6/1/2027 | - | ( 5,789 ) | - | (6)(7)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Exterro revolver spread was extracted as 6.50%, but the source row shows S + 5.25% with a 1.00% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 55,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Exterro delayed draw term loan spread was extracted as 6.50%, but the source row shows S + 5.25% with a 1.00% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 55,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row check. The bundle's flagged identifiers report Exterro Revolver and Delayed Draw Term Loan spreads as S + 6.50%, but the raw December 31, 2025 schedule rows for those exact facilities show S + 5.25% with a 1.00% floor. The flagged spread value is therefore a real extraction/localization error, not a false alarm."
+}

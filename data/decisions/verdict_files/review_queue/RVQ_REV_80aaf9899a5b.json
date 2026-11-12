@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_80aaf9899a5b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name extracted as a concatenation of category, country, portfolio company, instrument, industry, rate, interest rate, acquisition date, and maturity date text",
+  "anchor_value": "source SOI keeps the portfolio company in its own cell, e.g. Accela Inc/US, with instrument, industry, rate, interest rate, and dates in separate cells",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 9,
+      "quoted_text": "Accela Inc/US | 1st Lien Term Loan | Government Services | S+ 6.00 %, 0.75 % Floor | 10.85 | 9/1/2023 | 9/3/2030 | 10,596,118 | 10,423,954 | 10,500,254 | 1.94",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name should be the clean portfolio company name, but the extracted value includes adjacent SOI dimensions and term fields.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "C206 is a real issuer_name parse leak. The raw SOI row cited above separates Portfolio Company from Instrument, Industry, Rate, Interest Rate, Original Acquisition Date, and Maturity Date. The flagged holding stores those adjacent fields inside issuer_name, so the extracted issuer_name is not the clean entity name shown by the source."
+}

@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_47769d24dc1d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19.7,
+  "anchor_value": 19.7,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 11,
+      "quoted_text": "Acronis International | (4) (5) (10) (13) (14) | SOFR + 5.85 % | 11.29 | % | 4/1/2027 | 15,000 | 14,746 | 14,737 | 19.7"
+    },
+    {
+      "table_index": 31,
+      "row_index": 27,
+      "quoted_text": "Total net assets | 74,677 | -"
+    }
+  ],
+  "rationale": "The concentration is source-disclosed rather than a data extraction defect: the Schedule of Investments reports Acronis International at fair value 14,737 thousand and 19.7% of net assets, which ties to total net assets of 74,677 thousand. The warning therefore reflects a real issuer concentration in the filing, not a bad stored position value, subtotal leak, duplicate, unit scale issue, or bad anchor."
+}

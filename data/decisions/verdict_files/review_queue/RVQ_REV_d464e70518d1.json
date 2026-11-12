@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d464e70518d1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.46551724137931033,
+  "anchor_value": 0.5,
+  "confidence": 0.45,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "D06 is an aggregate continuity heuristic: the artifact reports 135/290 issuers persisted, below the 0.5 threshold. The raw filing source is readable and contains June 30, 2024 and December 31, 2023 investment schedules; schedule totals tie internally at table 29 row 12 for June 2024 total investments of 1,385,068 and table 49 row 28 for December 31, 2023 total investments of 1,320,435. Those anchors do not prove a data defect, and the source does not provide a row-level culprit or an independent issuer-continuity anchor that decides whether the 46.6% persistence result is wrong rather than genuine portfolio turnover or a heuristic false positive."
+}

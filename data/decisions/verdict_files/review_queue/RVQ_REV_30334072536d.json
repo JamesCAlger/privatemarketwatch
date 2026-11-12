@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_30334072536d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 5,
+      "quoted_text": "Central Parent, Inc. | SOFR + 3.25 % | 7.55 % | 7/6/2029 | Par Amount/ Units 9,925 | Amortized Cost $ 9,944 | Fair Value $ 8,313",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "Mews Systems B.V. | SOFR + 9.00 % | 13.31 % | 9/14/2029 | Par Amount/ Units 17,254 | Amortized Cost $ 16,095 | Fair Value $ 16,934",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 requires non-USD source par before missing principal_amount_usd is a defect. The raw SOI rows expose numeric par amounts under Par Amount/ Units and USD-denominated amortized cost/fair value, but do not disclose a non-USD par currency. Targeted evidence_cli searches for currency, foreign currency par amount, Euro/EUR/GBP, and denominated returned no source hits. The flag's non-USD premise is therefore not supported by the raw source, so the missing USD-converted principal field is a check false alarm rather than a data error."
+}

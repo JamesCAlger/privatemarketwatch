@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_ccd366f14e46",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -22000.0,
+  "anchor_value": null,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 2,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | Commitment Expiration Date 7/2/2026 | Unfunded Commitment $1,432 | Fair Value $(22)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Unfunded-commitment fair value rows were normalized with negative fair value also stored as cost; the cited source row has no Cost column and shows Fair Value $(22).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "C107 flags negative cost rows. The cited raw source row is in the Unfunded Portfolio Company Commitments schedule, whose header is Portfolio Company, Investment Type, Commitment Expiration Date, Unfunded Commitment, and Fair Value. For AB Centers Acquisition Corporation, the source shows an unfunded commitment of $1,432 and a negative fair value of $(22), but it does not disclose a negative cost. The normalized holding has cost -22000 and fair_value -22000, indicating the negative fair value was copied into cost for commitment rows. This is a real data error in the cost field, not a legitimate negative-cost investment disclosure."
+}

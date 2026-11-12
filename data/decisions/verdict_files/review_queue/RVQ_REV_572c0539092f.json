@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_572c0539092f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | 1.00 | % | 7.01 | % | 11.62 | % | 2/25/2026 | $ | 807,497 | $ | 802,603 | $ | 784,887 | 0.29 | % | F"
+    },
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | 1.00 | % | 6.75 | % | 12.39 | % | 4/15/2026 | $ | 831,967 | $ | 824,767 | $ | 812,832 | 0.31 | % | F"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw schedule has a distinct issuer column, but extracted issuer_name values are contaminated with section, industry, instrument, rate, maturity, and other row text, making issuer continuity collapse to 0 of 222.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "D06 is a CIK-quarter continuity aggregate flag. The raw source shows issuer names as their own column, for example ALCV Purchaser, Inc. (AutoLenders), and the same issuer is visible again in another schedule table. The bundle's sample extracted holdings instead place the entire investment description into issuer_name, e.g. prefixed with Debt Investments and including instrument, ref, coupon, maturity, and other terms. That extraction/normalization defect is a plausible source-grounded cause of the observed 0.0 continuity, so the flag is a real data error rather than a false alarm."
+}

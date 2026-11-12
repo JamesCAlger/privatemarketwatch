@@ -1,0 +1,62 @@
+{
+  "review_id": "RVQ_REV_fceb72d3058f",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_cells",
+  "observed_value": [12.5, 6.67, 8.99, 325.0, 12.5, 550.0, 5.86, 13.0, 5.96],
+  "anchor_value": [12.5, 6.67, 8.99, 325.0, 12.5, 550.0, 5.86, 13.0, 5.96],
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 5,
+      "quoted_text": "Soho House Holdings Limited | Unsecured Debt - Corporate Bond | 12.50 % PIK | 01/29/2033 | 14,627 | 14,387 | 14,235 | (4)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 19,
+      "quoted_text": "January Capital Holdco, LLC | First Lien Secured Debt - Term Loan | 6.67 % PIK | 09/13/2029 | 55,849 | 55,023 | 55,849 | (4)(8)(16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 15,
+      "quoted_text": "Mari Miami II LLC | First Lien Secured Debt - Term Loan | 8.99 % PIK | 10/01/2032 | 64,980 | 64,529 | 64,492 | (4)(16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 17,
+      "quoted_text": "TricorBraun Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 325 , 0.50 % Floor | 03/03/2031 | 17,829 | 17,042 | 16,991 | (15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 8,
+      "quoted_text": "Legends Hospitality Holding Company, LLC | First Lien Secured Debt - Term Loan | S + 550 Cash plus 2.75 % PIK, 0.75 % Floor | 08/22/2031 | 100,754 | 99,165 | 99,243 | (4)(9)(10)(16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 20,
+      "quoted_text": "BX Frontier Member I LLC | First Lien Secured Debt - Delayed Draw | 5.86 % PIK | 12/31/2060 | 35,207 | 35,207 | 34,844 | (4)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 31,
+      "quoted_text": "Cascade Intermediate II, Inc. | First Lien Secured Debt - Term Loan | 13.00 % PIK | 09/24/2033 | 23,998 | 23,557 | 22,138 | (4)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 26,
+      "quoted_text": "Pluto Holdco Limited | First Lien Secured Debt - Term Loan | 5.96 % PIK | 06/05/2026 | EUR 13,809 | 14,975 | 15,961 | (3)(4)(8)(9)(10)(22)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated-cell provenance review. The raw Schedule of Investments contains the published rates and spreads in text cells, including explicit PIK labels for 12.50%, 6.67%, 8.99%, 5.86%, 13.00%, and 5.96%, and explicit S+325/S+550 notation. The flag arises because declared_raw and instance_raw are absent for these text-pathway fields; that absence does not contradict the correctly extracted published values. No aggregate anchor is relevant."
+}

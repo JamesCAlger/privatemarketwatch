@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_0f1b559607f3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Portfolio Company Debt Securities- Canada Construction Technology Nexii, Inc. Type of Investment Secured Loan Investment Date July 24, 2024 Maturity Date July 1, 2027 Interest Rate Fixed interest rate 10.0%; EOT 0.0%",
+  "anchor_value": "Nexii, Inc.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 19,
+      "quoted_text": "Nexii, Inc. | Secured Loan | July 24, 2024 | July 1, 2027 | Fixed interest rate 10.0 %; EOT 0.0 % | $ | 365 | $ | 365 | $ | 374 | (10)(22)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name concatenates schedule/category and term columns; source row keeps issuer as Nexii, Inc. with type, dates, and rate in separate columns.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 27,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "C206 is confirmed: the raw SOI table header separates Portfolio Company, Type of Investment, Investment Date, Maturity Date, and Interest Rate, and row 19 has the clean issuer Nexii, Inc. in the Portfolio Company column. The extracted issuer_name instead concatenates the debt-security category, geography/industry label, investment type, dates, and interest-rate text, so the flagged issuer_name is a real wrapper/column extraction defect."
+}

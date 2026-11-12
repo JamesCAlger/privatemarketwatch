@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_cb1a159de488",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_cells",
+  "observed_value": "fair_value_currency values U_EUR and U_AUD",
+  "anchor_value": "source schedule presents Cost and Fair Value in dollar columns; EUR/AUD labels apply to Par/Shares",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 43,
+      "quoted_text": "Hamilton Thorne, Inc. | Health Care Equipment & Supplies | 8.28 % | E + 5.50 % | 11/28/31 | EUR | 11,492 | 12,299 | 12,177",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 35,
+      "quoted_text": "Sonar Acquisitionco, Inc. (dba SimPRO) | Construction & Engineering | 8.90 % | B + 4.75 % | 10/24/30 | AUD | 5,600 | 3,683 | 3,464",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 1,
+      "quoted_text": "Par amount is presented for debt investments, while the number of shares or units owned is presented for equity investments. Par amount is denominated in U.S. Dollars (\"$\" or \"USD\") unless otherwise noted, Australian Dollars (\"AUD\"), or Euros (\"EUR\").",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Hamilton Thorne carries EUR in the Par/Shares currency slot, but Cost and Fair Value remain dollar-denominated; fair_value_currency should not be U_EUR.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 43
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Sonar Acquisitionco carries AUD in the Par/Shares currency slot, but Cost and Fair Value remain dollar-denominated; fair_value_currency should not be U_AUD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 row-level currency flag. The raw SOI has separate columns for Par/Shares, Cost, and Fair Value. The foreign currency labels EUR and AUD appear in the Par/Shares area for the cited rows, and footnote (4) explains that these alternate currencies qualify par/share amounts. The Cost and Fair Value columns are dollar columns, so storing U_EUR or U_AUD as fair_value_currency is a localized extraction/column mapping error."
+}

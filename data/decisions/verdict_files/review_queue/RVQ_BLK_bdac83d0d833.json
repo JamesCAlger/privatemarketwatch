@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_bdac83d0d833",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1418197000,
+  "anchor_value": 1402593000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 22,
+      "quoted_text": "24,922 | 24,847 | 15,604 | 1.60 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 32,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 1,422,609 | $ | 1,402,593 | 143.97 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The blank subtotal row for Notorious Topco/Consumer Products has fair value 15,604 thousand, exactly matching the 15.604 million extraction overshoot above the 1,402,593 thousand filing total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 15,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation: the filing total investments fair value is 1,402,593 thousand (table 32 row 24 and table 63 row 6), which matches the companyfacts anchor of 1,402,593,000. The extracted position sum is 1,418,197,000, an overshoot of 15,604,000. Source table 15 row 22 is a blank subtotal row with fair value 15,604 thousand following the Notorious Topco investment lines, so the conservation failure is a real subtotal leak rather than a bad anchor."
+}

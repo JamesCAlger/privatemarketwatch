@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_BLK_9820df68892a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 8,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 10, "row_index": 10},
+    {"table_index": 13, "row_index": 3},
+    {"table_index": 13, "row_index": 4},
+    {"table_index": 13, "row_index": 5},
+    {"table_index": 11, "row_index": 10},
+    {"table_index": 11, "row_index": 11},
+    {"table_index": 11, "row_index": 16},
+    {"table_index": 11, "row_index": 17}
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Eight distinct eligible current-period schedule positions are present in source but absent from pipeline output.",
+      "fix_class": "missing_position_add",
+      "citation": {"table_index": 10, "row_index": 10}
+    }
+  ],
+  "rationale": "Class 2 source-row adjudication. The March 31, 2026 schedule contains the flagged Albion term loan; three Jupiter Canada facilities; Ruby term and delayed-draw loans; and Urban Gym term and delayed-draw loans at the cited coordinates. Each is a distinct investment row with a reported fair value, including negative fair values for the Jupiter delayed-draw row. The flag records zero matching pipeline rows for these eight source positions, so the source schedule count of eight versus observed output count of zero establishes a missing-position extraction gap. No aggregate companyfacts anchor was needed."
+}

@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_fd07ff5a193e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 1,
+      "quoted_text": "Portfolio Investments ... Amortized Cost ... Market Value"
+    },
+    {
+      "table_index": 19,
+      "row_index": 6,
+      "quoted_text": "Ned Stevens 2022-2 | ... | $ | 4,326,092 | ... | $ | 4,225,719 | ... | $ | 4,326,092"
+    },
+    {
+      "table_index": 19,
+      "row_index": 8,
+      "quoted_text": "A Place For Mom | Senior Secured Term Loan | S+ | 4.50 | % | 9.09 | % | 7/28/2017 | 2/10/2026 | 2,160,331 | 2,160,383 | 2,160,331"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule's Market Value column is USD-denominated, but fair_value_currency was stored as custom unit UNIT_STANDARD_USD_TJGR_KXHI0CIJAMHOSYKXA instead of normalized USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a row-level currency/unit validation issue. The raw portfolio schedule labels the valuation columns as Market Value and shows dollar signs on the same table's first data row; the flagged A Place For Mom row is in that Market Value column with fair value 2,160,331. The extracted fair_value_currency value is an unnormalized custom USD unit token rather than USD, so the source supports the flag as a real extraction/normalization error. No aggregate anchor was needed."
+}

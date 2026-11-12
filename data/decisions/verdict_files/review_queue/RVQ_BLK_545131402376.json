@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_545131402376",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 410050595,
+  "anchor_value": 249694433,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4 | % | 258,299,078 | 249,694,433",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The extracted holdings fair-value sum is 410,050,595, but the March 31, 2026 filing schedule reports Total Debt & Equity Investments fair value of 249,694,433; the oracle comparison independently equals that same schedule total. The extraction is therefore overstated by 160,356,162. Nearby cash-equivalent and short-term-investment rows do not individually tie to that residual, so the aggregate extraction defect is real but its specific source row is not localized."
+}

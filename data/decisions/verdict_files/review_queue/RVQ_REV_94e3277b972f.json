@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_94e3277b972f",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 3,
+      "quoted_text": "Structured Credit Partners JV, LLC, Class A | Investment Funds | blank Reference Rate, Spread, and Interest Rate | Par/Principal Amount 1 | Cost 1 | Fair Value 1",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 5,
+      "quoted_text": "Structured Credit Partners JV, LLC, Class C | Investment Funds | blank Reference Rate, Spread, and Interest Rate | Par/Principal Amount, Cost, and Fair Value shown as dashes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 4,
+      "quoted_text": "Structured Credit Partners JV, LLC, Class B | Investment Funds | FIXED | 10.74% Spread | 10.74% Interest Rate",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review. The raw schedule identifies Classes A and C as Investment Funds and leaves their Reference Rate, Spread, and Interest Rate fields blank; Class C also has no carrying value, while Class A is a nominal $1 interest. The immediately adjacent Class B is the rate-bearing class and explicitly reports FIXED and 10.74%. Thus the source supports the missing values for A and C, and X02 is firing because fund interests were placed within PRIVATE_CREDIT rule scope rather than because rate data was omitted."
+}

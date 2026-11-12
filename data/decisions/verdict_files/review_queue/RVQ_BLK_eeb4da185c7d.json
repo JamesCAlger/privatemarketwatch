@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_BLK_eeb4da185c7d",
+  "verdict": "real_error",
+  "mechanism": "cash_equivalent_leak",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 18347880000.0,
+  "anchor_value": 17428014000.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 21,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 17,464,213 | $ | 17,428,014 | (2)(6)(30)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 22,
+      "quoted_text": "Goldman Sachs Financial Square Government Fund Institutional | N/A | N/A | 293,062 | 293,062 | 293,062 | (7)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 23,
+      "quoted_text": "State Street Institutional U.S. Government Money Market Fund Opportunity | N/A | N/A | 300,000 | 300,000 | 300,000 | (7)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 24,
+      "quoted_text": "US Bank GCTS0095 | N/A | N/A | 31,914 | 31,914 | 31,914 | (7)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 58,
+      "row_index": 25,
+      "quoted_text": "Total Investments after Cash Equivalents | $ | 18,089,189 | $ | 18,052,990",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 17,400,605 | $ | 3,462 | $ | 16,498 | $ | 6,483 | $ | 966 | $ | 17,428,014 | 153.3 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The bundle reports extracted fair value of 18,347,880,000 against companyfacts_fv of 17,428,014,000. The raw filing schedule independently shows Total Investments before Cash Equivalents fair value of 17,428,014 thousand, and the industry summary total also shows 17,428,014 thousand, matching the companyfacts anchor. The schedule then lists three cash-equivalent rows with fair values of 293,062, 300,000, and 31,914 thousand and an after-cash-equivalents total of 18,052,990 thousand. Therefore the observed extracted holdings sum overshoots the source-supported pre-cash anchor; at least the cash-equivalent rows are being included against the wrong conservation anchor, although an additional 294,890 thousand gap remains unlocalized by the targeted residual search."
+}

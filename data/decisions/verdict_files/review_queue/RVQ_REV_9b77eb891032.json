@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_9b77eb891032",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8632.315,
+  "anchor_value": 8632.315,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Truck-Lite Co., LLC: amortized cost 300,603; fair value 300,658",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 43,
+      "quoted_text": "Total Investments: amortized cost 8,595,040; fair value 8,632,315",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 divides 241 fair-value leaves by 482 combined amortized-cost and fair-value leaves, producing an artificial 50 percent coverage rate.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 8,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw source shows investment rows contain paired amortized-cost and fair-value cells, while the schedule total fair value of 8,632.315 million exactly matches the extracted fund-quarter fair value. The 241/482 metric therefore counts both value columns in its denominator; it does not demonstrate 241 holdings with missing fair value. The data are correct and the B01 check scope is wrong."
+}

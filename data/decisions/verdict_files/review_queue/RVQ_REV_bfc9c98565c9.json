@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_bfc9c98565c9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "internal_source_cell",
+  "observed_value": -90000.0,
+  "anchor_value": -90000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 25,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2028 | 13,795 | ( 90 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 32,
+      "quoted_text": "AB Centers Acquisition Corporation (4)(6)(9) | 7/2/2031 | 24,356 | ( 239 ) | ( 134 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 21,
+      "quoted_text": "ABC Legal Holdings, LLC (4)(6)(9) | 8/13/2032 | 24,138 | ( 230 ) | 241",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule of investments itself presents negative amortized cost for the flagged position type: the extracted -90000 exactly matches the source parenthetical (90), and the same presentation recurs for other unfunded or revolver-style rows, including (239), (230), and (147). The extraction preserved the source sign; C107 is overbroad because negative amortized cost is legitimate for these positions."
+}

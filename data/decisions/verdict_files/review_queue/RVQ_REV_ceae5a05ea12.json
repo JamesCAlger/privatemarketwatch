@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_REV_ceae5a05ea12",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "U_USD",
+    "anchor_value":  "USD dollar-denominated Fair Value column in source schedule",
+    "confidence":  0.94,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  10,
+                                  "row_index":  5,
+                                  "quoted_text":  "R1 Holdings, LLC (f) | Term Loan | SOFR + 6.25 % | 11.11 % | 12/29/2028 | 5,407,004 | $ | 5,203,116 | $ | 5,251,823",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  11,
+                                  "row_index":  15,
+                                  "quoted_text":  "Total Investment Portfolio | $ | 103,515,599 | $ | 104,556,936 | 101.12 %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX02 flags fair_value_currency value U_USD as non-USD, but the raw schedule presents the affected Fair Value column with dollar signs and the total investment portfolio fair value is also dollar-denominated. U_USD is therefore an internal USD unit label, not evidence of a non-USD fair value."
+}

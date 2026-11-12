@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_8635c8528ffc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_CAD/U_GBP in cost_currency",
+  "anchor_value": "USD cost column; CAD/GBP belongs to par amount",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Asset Type | Reference Rate and Spread (2) | Interest Rate | Maturity Date | Par Amount / Shares (3) | Amortized Cost (4) | Fair Value | Percentage of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 13,
+      "quoted_text": "SureWerx Purchaser III Inc. | (8)(13)(17) | First Lien Term Loan | C + 5.25 % | 7.52 % | 12/28/2029 | CAD 16,903 | 12,349 | 11,978 | 0.59",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 10,
+      "quoted_text": "Onyx-Fire Protection Services Inc. | (6)(13)(15)(17) | First Lien Term Loan | C + 4.50 % | 6.77 % | 7/31/2031 | CAD 18,453 | 13,287 | 13,445 | 0.67",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 24,
+      "quoted_text": "ST Athena Global LLC | (6)(8)(13)(17) | First Lien Term Loan | SON + 5.25 % | 8.82 % | 6/26/2030 | GBP 1,271 | 1,596 | 1,696 | 0.08",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor assigned the par amount currency prefix (CAD/GBP) to cost_currency even though cost is a separate dollar-denominated amortized cost column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level currency localization. The SOI header separates Par Amount / Shares from Amortized Cost and Fair Value, and the cited rows place CAD or GBP only in the par amount cell before separate amortized cost and fair value amounts. Therefore cost_currency=U_CAD/U_GBP is a real extraction/field-mapping error, not a valid non-USD cost amount."
+}

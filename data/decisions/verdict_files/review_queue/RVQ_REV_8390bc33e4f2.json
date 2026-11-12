@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_8390bc33e4f2",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 29,
+  "anchor_value": 29,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "ACI Group Holdings, Inc. | (4)(5)(7)(10)(17) | SOFR + | 5.50 % | 9.21 % | 8/2/2021 | 8/2/2027 | 21,267 | 21,171 | 14,769 | 0.03",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 304,
+      "row_index": 35,
+      "quoted_text": "Percentage of assets on non-accrual, at amortized cost (5) | 2.4 | % | 0.6 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 304,
+      "row_index": 36,
+      "quoted_text": "Percentage of assets on non-accrual, at fair value (5) | 1.4 | % | 0.4 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 review. The March 31, 2026 schedule directly marks flagged debt positions with the common (17) footnote, including ACI Group Holdings at table 27 row 25; other targeted rows show the same marker. The filing independently reports material non-accrual exposure of 2.4% at amortized cost and 1.4% at fair value in table 304 rows 35-36. These raw-source anchors corroborate the extracted 29-position non-accrual population, so the advisory flag is not a data defect. Residual risk is limited to exact marker-count reproducibility because the filing does not print a standalone position-count total."
+}

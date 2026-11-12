@@ -1,0 +1,106 @@
+{
+  "review_id": "RVQ_REV_bff2ecaf0e74",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 6,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 69,
+      "row_index": 35,
+      "quoted_text": "Augusta Sportswear | Senior Secured Initial Term Loan | S+ | 5.50 | % | 10.09 | % | 11/2/2016 | 4/25/2025 | 2,001,028 | 1,999,579 | 1,991,023",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 14,
+      "quoted_text": "Dynatect (A&A) | Senior Secured Term B Loan | L+ | 4.50 | % | 9.27 | % | 8/16/2019 | 9/30/2024 | 1,689,870 | 1,680,609 | 1,689,870",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 66,
+      "row_index": 30,
+      "quoted_text": "Excelitas | Unitranche Closing Date Euro Term Loan | L+ | 5.75 | % | 10.52 | % | 6/15/2022 | 8/12/2029 | 2,969,565 | 3,013,358 | 2,947,293",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 31,
+      "quoted_text": "Keter Environmental Services | Senior Secured Revolving Loan | L+ | 6.50 | % | 11.27 | % | 11/5/2021 | 10/29/2027 | 27,360 | 26,585 | 27,223",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 10,
+      "quoted_text": "Safe Fleet | Initial Term Loan (Second Lien) | S+ | 6.75 | % | 11.34 | % | 2/23/2022 | 2/2/2026 | 500,000 | 500,000 | 495,000",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 35,
+      "quoted_text": "TRC Companies | Senior Secured Initial Term Loan (Second Lien) | L+ | 6.75 | % | 11.52 | % | 11/19/2021 | 12/7/2029 | 2,000,000 | 1,980,000 | 1,980,000",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Augusta Sportswear was retained from the December 31, 2022 comparative schedule; the March 31, 2023 source row has a 10.41% rate while the comparative row has 10.09%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 69,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Dynatect (A&A) was retained from the December 31, 2022 comparative schedule; the March 31, 2023 source row has a 9.69% rate while the comparative row has 9.27%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 70,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Excelitas was retained from the December 31, 2022 comparative schedule; the March 31, 2023 source row has a 10.94% rate while the comparative row has 10.52%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 66,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Keter Environmental Services revolver was retained from the December 31, 2022 comparative schedule; the March 31, 2023 source row has an 11.69% rate while the comparative row has 11.27%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 69,
+        "row_index": 31
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Safe Fleet was retained from the December 31, 2022 comparative schedule; the March 31, 2023 source row has an 11.66% rate while the comparative row has 11.34%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 69,
+        "row_index": 10
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "TRC Companies second-lien loan was retained from the December 31, 2022 comparative schedule; the March 31, 2023 source row has an 11.94% rate while the comparative row has 11.52%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 63,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "PP03 is a within-row position-purity issue. The raw filing separates the current March 31, 2023 portfolio schedule from the December 31, 2022 comparative schedule: tables 15-24 carry March rows and tables 62-71 carry December rows, with footnote text stating December 31, 2022 rates for the comparative schedule. The six flagged holdings correspond to December schedule rows and should not be retained as 2023-03-31 source-period facts; matching March rows exist with current-period rates for the same instruments."
+}

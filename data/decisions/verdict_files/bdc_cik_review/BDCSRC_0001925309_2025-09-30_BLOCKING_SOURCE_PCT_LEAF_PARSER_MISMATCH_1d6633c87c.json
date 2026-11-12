@@ -1,0 +1,27 @@
+{
+  "changed_files": [],
+  "cik": "0001925309",
+  "confidence": "MEDIUM",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "The missing evidence is an exact coordinate-level source-table match for the cited blocker rows, such as Elements Finco Limited and Lynx BidCo, plus a bounded parser mechanism explaining why these 31 source rows are absent from unified holdings while adjacent Sixth Street rows are present. The bundle's HTML coordinate candidates match generic 'par, due' text and land on other borrowers, so they are not safe evidence for the cited source rows. A safe patch would also need false-positive coverage showing it does not add comparative rows, continuation rows, or category/total rows as production positions.",
+  "patch_summary": "",
+  "primary_justification": "Manual review of the source-only blocker rows shows real position-like XBRL identifiers: borrower names, first-lien loan/note terms, par amounts, due dates, acquisition dates, reference rates, spreads, interest rates, and in some cases PIK terms. However, the bundled coordinate candidates do not substantiate those exact rows; for example, candidates for Elements Finco Limited are selected because they share generic 'par, due 4/2031' terms but the row text belongs to Dye & Durham Corp., Big Wombat Holdings, or Scorpio Bidco. Without exact source-table coordinates or a demonstrated extraction mechanism, a production patch would risk adding the wrong rows or broadening parser behavior beyond the evidence.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2025-09-30",
+  "requires_human_merge": false,
+  "residual_risk": "The 31 rows remain unresolved blockers. The likely data-quality risk is undercoverage of real Sixth Street positions, but the current bundle does not provide enough exact row evidence to implement a bounded fix safely.",
+  "review_id": "BDCSRC_0001925309_2025-09-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_1d6633c87c",
+  "reviewer_notes": "This verdict is not based on lack of effort or a blanket policy. The rows were reviewed on their merits: the XBRL identifiers look like position rows, but the available HTML evidence is not row-specific enough and no bounded parser/staging failure mode was proven for this CIK-quarter packet.",
+  "rule_type": "",
+  "source_reconciliation_effect": "No source reconciliation change is made. The packet remains blocking until exact row coordinates or a tested CIK-scoped parser fix supports adding or matching these positions.",
+  "tests_validation_plan": "Validate schema and evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No production code tests are added because no bounded patch is proposed.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

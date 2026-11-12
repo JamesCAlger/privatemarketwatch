@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_72c4fd391304",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -10388,
+  "anchor_value": -10388,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 15,
+      "quoted_text": "FirstEnroll LLC | Healthcare | Revolver | -- % ( S + 4.75 %; 1.00 % Floor) | 9/19/2031 | - | ( 10,388 ) | ( 7,267 ) | (6)(7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 20,
+      "quoted_text": "LivTech Purchaser, Inc. | Software & Tech Services | Revolver | -- % ( S + 5.00 %; 0.75 % Floor) | 11/24/2031 | - | ( 16,930 ) | ( 14,995 ) | (6)(7)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 22,
+      "quoted_text": "Lotus HPI Buyer, Inc | Healthcare | Delayed Draw Term Loan | -- % ( S + 6.25 %; 1.00 % Floor) | 1/21/2030 | - | ( 32,038 ) | ( 395,623 ) | (6)(7)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost rows. The raw schedule itself presents negative Cost amounts in parentheses for revolver and delayed draw rows with no funded par, so the extracted negative sign is not a data error. This is a validation-scope false alarm for legitimate source-presented negative cost values, not an extraction defect."
+}

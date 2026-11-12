@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_eff7a00eb3d5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 29,
+      "quoted_text": "Grand Total | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source industry percentage schedule has populated percentage rows totaling 100.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The queue flag reports pct_sum=0.0% for 0002052152 at 2025-12-31. Raw source table 36 is the industry percentage schedule for total investments at fair value and shows individual industry percentages with a Grand Total of 100.00%, so the extracted zero aggregate is inconsistent with the filing schedule rather than a true zero in the filing."
+}

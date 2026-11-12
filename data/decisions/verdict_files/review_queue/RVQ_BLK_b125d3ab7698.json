@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_b125d3ab7698",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 934.425,
+  "anchor_value": 934.425,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 33,
+      "quoted_text": "Total Investments before Cash Equivalents | Cost 968,958 | Fair Value 934,425",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 27,
+      "quoted_text": "Total Trading Companies & Distributors | Cost 25,996 | Fair Value 26,054",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 28,
+      "quoted_text": "Wireless Telecommunication Services",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows that the output fair value of 934.425 million exactly equals the filing schedule's Total Investments before Cash Equivalents of 934.425 million at table 28 row 33. The raw schedule also contains non-position structural rows counted in the 613-row source measure, including an industry subtotal at row 27 and an industry heading at row 28. Therefore 613 is not a valid position-count anchor against the 294 extracted positions; E07 is a false alarm caused by a bad source-row-count anchor."
+}

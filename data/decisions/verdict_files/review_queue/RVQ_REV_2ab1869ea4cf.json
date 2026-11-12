@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_2ab1869ea4cf",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 1,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 36,
+      "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | 10.77 % | S + 7.00 % PIK | 03/18/27 | 3,547 | 3,759 | 3,689 | (7) (8) (13) (15)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 99,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 27.21 | 0.2 | 27.21 | 0.2",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 35,
+      "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | S + 7.00 % PIK | 03/18/27 | 31,574 | 27,212 | 13,892 | (7) (8) (13) (14)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The filing's non-accrual amortized cost of $27.21 million ties to the Vardiman row with cost 27,212 only; the second Vardiman row with cost 3,759 should not be counted as non-accrual.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 17,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "The source schedule reports Non-accrual amortized cost of 27.21 million. In the SOI, Vardiman row 35 has cost 27,212, which ties to that schedule amount, while Vardiman row 36 has additional cost 3,759 and a separate footnote set. Treating both source artifact rows as non-accrual overstates the non-accrual positions from one source-supported position to two."
+}

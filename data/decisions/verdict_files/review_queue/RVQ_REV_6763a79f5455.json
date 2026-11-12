@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_6763a79f5455",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 76.1,
+  "anchor_value": 76.1,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 22,
+      "quoted_text": "Atlas AU Bidco Pty Ltd / Atlas US Finco, Inc. (f)(h) | Revolving Credit Facility | - | - | 12/9/2028 | - | ( 75,805 | ) | ( 16,949 | )"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The filing itself reports dashes for reference rate/spread and interest rate on at least one direct-lending revolver with negative cost and fair value, so a blank extracted interest_rate is source-faithful rather than a data error.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "The dl_rate_fill flag is aggregate, but the raw schedule row for Atlas AU Bidco Pty Ltd / Atlas US Finco, Inc. Revolving Credit Facility shows '-' in the reference-rate/spread and interest-rate positions under the schedule columns, with maturity 12/9/2028 and negative cost/fair value. The stored blank interest_rate for that direct-lending row matches the source. This supports a rule-scope false alarm: source-blank revolvers are included in the fill-rate denominator/violations even when no rate is disclosed."
+}

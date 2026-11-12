@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_992b96a93a11",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "EUR-denominated principal rows require explicit USD principal conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted in Euros.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 37,
+      "quoted_text": "Revolver | ... | EUR | 1,332,835 | ...",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 38,
+      "quoted_text": "Delayed Draw Term Loan | ... | EUR | 2,339,934 | ...",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 39,
+      "quoted_text": "Delayed Draw Term Loan (PBDC SPV) | ... | EUR | 1,424,975 | ...",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD EUR principal appears in the source schedule while principal_amount_usd is blank in the validation issue, so USD principal conversion was not populated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 15,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "FX01 is a within-row currency normalization issue. The source footnote establishes that debt par is USD unless specifically marked in euros, and the cited Monitorus/Sapphire debt rows are marked EUR in the principal amount column. The reviewed artifact reports blank principal_amount_usd for non-USD debt principal, so the missing USD-converted principal is a real extraction/normalization gap rather than a false alarm."
+}

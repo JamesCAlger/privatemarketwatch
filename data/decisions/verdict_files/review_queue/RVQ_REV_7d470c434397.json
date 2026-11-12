@@ -1,0 +1,76 @@
+{
+    "review_id":  "RVQ_REV_7d470c434397",
+    "verdict":  "real_error",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "5 rows retained in the 2024-06-30 holdings extract even though the source evidence places them in the December 31, 2023 schedule block",
+    "anchor_value":  "0 comparative-period rows should be retained as current 2024-06-30 positions",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  67,
+                                  "row_index":  29,
+                                  "quoted_text":  "Total Investments, December 31, 2023 (188.1%)* | $ | 2,209,345 | $ | 2,467,727 | $ | 2,458,929",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  45,
+                                  "row_index":  41,
+                                  "quoted_text":  "Aptus 1829. GmbH | Common Stock (49 shares) | N/A | 09/21 | N/A | 12 | - | -% | (3) (7) (26) (28)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  48,
+                                  "row_index":  30,
+                                  "quoted_text":  "Canadian Orthodontic Partners Corp. | Class A Equity (500,000 units) | N/A | 05/22 | N/A | 389 | - | -% | (3) (7) (26) (28)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  61,
+                                  "row_index":  33,
+                                  "quoted_text":  "ROI Solutions LLC | Business Services | First Lien Senior Secured Term Loan | SOFR + 5.00%, 10.4% Cash | 05/21 | 08/25 | 6,263 | 6,263 | 6,263 | 0.5% | (6) (7) (8) (16)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "The source schedule block ending at table 67 row 29 is explicitly December 31, 2023, so rows from tables 44-67 are comparative-period positions for the June 30, 2024 filing.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  67,
+                                          "row_index":  29
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Aptus 1829. GmbH Common Stock appears as a December 31, 2023 schedule row and should not be retained as a June 30, 2024 current position.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  45,
+                                          "row_index":  41
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "Canadian Orthodontic Partners Corp. Class A Equity appears as a December 31, 2023 schedule row and should not be retained as a June 30, 2024 current position.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  48,
+                                          "row_index":  30
+                                      }
+                     },
+                     {
+                         "mechanism":  "comparative_leak",
+                         "detail":  "ROI Solutions LLC term loan appears in the December 31, 2023 schedule block, matching the PP03 comparative-period warning.",
+                         "fix_class":  "comparative_period_filter",
+                         "citation":  {
+                                          "table_index":  61,
+                                          "row_index":  33
+                                      }
+                     }
+                 ],
+    "rationale":  "PP03 flagged rows whose source period is earlier than the 2024-06-30 report date. The raw filing separates the current investment schedule, which totals at table 38 row 36 as Total Investments, June 30, 2024, from the comparative schedule, which totals at table 67 row 29 as Total Investments, December 31, 2023. Representative warned instruments are present inside the comparative block, including Aptus 1829 common stock at table 45 row 41, Canadian Orthodontic Partners Class A Equity at table 48 row 30, and ROI Solutions at table 61 row 33. Retaining these as current 2024-06-30 holdings is therefore a real comparative-period leak."
+}

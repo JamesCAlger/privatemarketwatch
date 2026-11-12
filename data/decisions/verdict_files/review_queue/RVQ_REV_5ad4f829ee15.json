@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_5ad4f829ee15",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2292614325,
+  "anchor_value": 2292614325,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 60,
+      "row_index": 2,
+      "quoted_text": "Erosion Intermediate Holdings LLC (f)(i)(l) | Revolving Credit Facility | maturity 9/30/2029 | cost $(19,806) | fair value $-",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 61,
+      "row_index": 9,
+      "quoted_text": "Scp 3pl Topco, LLC (m)(p) | Common Units | cost 6,754 | fair value -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 61,
+      "row_index": 25,
+      "quoted_text": "Warshaw Holdings, LLC (p) | Common Units | cost 264,368 | fair value -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 62,
+      "row_index": 13,
+      "quoted_text": "Pillr Health Holdings, LP (l)(m)(p) | Common Units | cost - | fair value -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 63,
+      "row_index": 11,
+      "quoted_text": "Cci Prime Holdings, LLC (p) | Series A Preferred Units | cost 427,914 | fair value -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Five investment leaves disclose a dash in the Fair Value column, which should normalize to zero instead of blank for B01 fair-value completeness.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 60,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the schedule total fair value of 2,292,614,325 matches the extracted fund-quarter fair value, so the aggregate total is not the defect. The B01 failure is localized to five investment leaves whose source Fair Value cells are dashes: Erosion Intermediate Holdings, SCP 3PL Topco Common Units, Warshaw Common Units, Pillr Health Common Units, and CCI Prime Series A Preferred Units. Those source cells decide the question: the positions have disclosed fair values of zero/dash, but the extraction left fair_value blank, reducing completeness to 51/56."
+}

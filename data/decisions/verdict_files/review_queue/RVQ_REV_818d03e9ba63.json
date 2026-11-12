@@ -1,0 +1,20 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_818d03e9ba63",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  16,
+    "anchor_value":  16,
+    "rationale":  "Class 2 row-level check. The raw SOI places Metropolis Technologies, Inc. under the Preferred Equity heading and shows N/A reference rate with 16.00% in the Interest Rate column on the same row. The extracted PRIVATE_EQUITY/PREFERRED_EQUITY classification and 16.0 rate therefore match source; X01 is overbroad for coupon-bearing preferred equity rather than identifying a data defect.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  16,
+                                  "table_index":  17,
+                                  "quoted_text":  "Metropolis Technologies, Inc. | (4) (20) | N/A | 16.00 % | 5/16/2034 | $ | 4,800 | 4,732 | $ | 4,734 | 2.5"
+                              }
+                          ],
+    "confidence":  0.93
+}

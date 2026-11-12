@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_06eac4c6e54e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 38,
+      "quoted_text": "Preferred Equity - Cumulative Preferred | N/A | 12/10/2124 | 34,000 | $ | 34 | $ | 34",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 35,
+      "quoted_text": "Common Equity/Partnership Interests - Membership Interest | N/A | N/A | 1,788,576 | 1,789 | 1,789 | (12)(14)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Preferred equity row has 34,000 in the Par/Shares source column, but C04 reports no equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 38
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Common equity row has 1,788,576 in the Par/Shares source column, but C04 reports no equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "C04 reports 0.0% of 2 equity rows have shares. The raw investment schedule shows the two equity rows and both have numeric Par/Shares values: preferred equity has 34,000 and common equity has 1,788,576. The flag is therefore a real extraction gap in the shares/par field, not a source ambiguity."
+}

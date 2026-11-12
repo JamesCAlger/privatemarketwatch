@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_de8cf1638ef3",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 166.3,
+  "anchor_value": 166.04,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 34,
+      "quoted_text": "Total Investments | 1,614,726 | 1,597,977 | 166.3",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 34,
+      "quoted_text": "Total net assets | 962,397 | 946,703",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw source shows that the extracted schedule values are faithful: the March 31, 2026 schedule explicitly reports total investment fair value of 1,597,977 and 166.3% of net assets, while the balance sheet reports total net assets of 962,397. Recomputing from those independently disclosed totals gives 166.04%, approximately 166.0% at the filing's one-decimal presentation, not 166.3%. The flag therefore reflects a filing-level identity mismatch or unsuitable exact recomputation anchor, not a platform data error. Position-level percentages are also presented only to one decimal, so strict per-row algebra is sensitive to source rounding."
+}

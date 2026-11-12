@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_db38c8fc889c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR flagged as reference_uncorroborated/no structured spread",
+  "anchor_value": "Raw SOI rows show SOFR index with 5.75 % spread for both SauceCo positions",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 12,
+      "quoted_text": "SauceCo HoldCo, LLC (5)(17)(18) | First Lien Senior Secured Loan - Revolver | SOFR | 5.75 % | 9.44 | % | 5/13/2030 | $ | 2,598 | 2,572 | 2,598",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 13,
+      "quoted_text": "SauceCo HoldCo, LLC (8)(17)(18) | First Lien Senior Secured Loan | SOFR | 5.75 % | 9.42 | % | 5/13/2030 | $ | 48,841 | 47,403 | 48,841",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row reference-terms check. The flagged rows are SauceCo positions where Agent A treated SOFR as uncorroborated/no structured spread, but the source table header labels columns as Index (1), Spread (1), Interest Rate, and the exact source rows show SOFR in the index column with 5.75 % in the spread column and interest rates of 9.44% and 9.42%. The source therefore corroborates the reference/spread structure; the flag is a check false alarm, not a data defect."
+}

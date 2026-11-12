@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_1ff6d99ca452",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 4,
+      "quoted_text": "GB Eagle Buyer, Inc. ... Cost (4) $ 10,179 ... Fair Value $ 10,179 ...",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 35,
+      "quoted_text": "Total Debt Investments | $ | 2,209,615 | $ | 2,166,821 | 192.88 | %",
+      "ties_to_residual": false
+    },
+    {
+      "quoted_text": "Targeted roam query for CAD and EUR returned n_hits=0 across the filing source."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Four fair_value_currency rows were stored as U_CAD or U_EUR even though the source fair value schedule presents cost and fair value in USD and contains no CAD/EUR source terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 35
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 currency-cell validation. The flagged artifact reports four fair_value_currency values as U_CAD/U_EUR, but the raw SOI source presents the Cost and Fair Value columns with dollar signs, including individual investment rows and the total debt investment line. A targeted roam query for CAD/EUR found no source presentation supporting foreign-currency fair value units. The non-USD fair_value_currency values are therefore a real extraction/tag carry-through defect rather than a false alarm."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_1af28b31c581",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": [-56000.0, -53225.0, -4550.0, -23460.0, -115861.0],
+  "anchor_value": [-56000.0, -53225.0, -4550.0, -23460.0, -115861.0],
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 22,
+      "quoted_text": "MIS Acquisition, LLC | Revolving Loan | 3M SOFR + 6.75 % | 1.00 | % | -- | 11/16/2023 | 11/17/2028 | -- | ( 55,014 | ) | ( 56,000 | ) | 0.0 | % | (7) (8) (11) (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 28,
+      "quoted_text": "Steele Solutions, Inc. | Revolving Loan | 3M SOFR + 7.25 % | 0.50 | % | -- | 3/18/2022 | 3/18/2027 | -- | ( 24,845 | ) | ( 53,225 | ) | 0.0 | % | (7) (8) (11) (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 22,
+      "quoted_text": "Apryse Software Corp (fka PDFTron US Acquisition Corp.) | 2023-1 Incremental Delayed Draw Term Loan | 1M SOFR + 6.00 % | 1.00 | % | -- | 3/21/2023 | 3/21/2025 | -- | ( 13,354 | ) | ( 4,550 | ) | 0.0 | % | (5) (7) (8) 10) (11) (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 27,
+      "quoted_text": "SailPoint Technologies Holdings Inc. | Revolving Loan | 1M SOFR + 6.00 % | 0.75 | % | -- | 8/16/2022 | 8/16/2028 | -- | ( 28,911 | ) | ( 23,460 | ) | 0.0 | % | (7) (8) (11) (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 43,
+      "quoted_text": "IMB Midco LLC (formerly, WSP Midco LLC) | Revolving Loan | 3M SOFR + 7.00 % | 1.00 | % | -- | 10/1/2021 | 4/27/2027 | -- | ( 10,133 | ) | ( 115,861 | ) | 0.0 | % | (7) (8) (11) (13)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged five negative fair_value cells. The raw SOI schedule itself reports each corresponding fair value in parentheses, matching the extracted negative values: MIS Acquisition -56,000; Steele Solutions -53,225; Apryse Software -4,550; SailPoint -23,460; and IMB Midco -115,861. Because the stored values match the source schedule, the negative-value warning is not a data error."
+}

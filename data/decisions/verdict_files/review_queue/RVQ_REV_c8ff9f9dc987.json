@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_c8ff9f9dc987",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 5026719000,
+  "anchor_value": 4876989000,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 9,
+      "quoted_text": "Total investments at fair value | 4,876,989 | 3,094,065"
+    },
+    {
+      "table_index": 78,
+      "row_index": 13,
+      "quoted_text": "Total Investments, December 31, 2023 ( 171.6 %)* | $ | 4,898,459 | $ | 4,876,989"
+    }
+  ],
+  "rationale": "F26 is an aggregate leverage-proxy warning. Raw source anchors reconcile internally: balance sheet total investments at fair value are $4,876.989m, the schedule total fair value is also $4,876.989m, and the schedule states 171.6% of net assets, consistent with $4,876.989m / $2,841.371m. The bundle's extracted holdings total is $5,026.719m, so the holdings-side aggregate is overstated by $149.730m. Targeted residual search did not localize a specific row or subtotal, so the defect is aggregate-grounded but not row-localized."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_ae2bed211afa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on FX01 flagged non-USD debt rows",
+  "anchor_value": "source schedule shows non-USD par requiring explicit USD principal conversion; example: EUR 114,257 par for ENV Bidco AB",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "ENV Bidco AB | (4)(6)(7)(8) | E + | 5.25 % | 7.61 % | 12/12/2024 | 7/19/2029 | EUR | 114,257 | 113,949 | 123,176 | 0.29",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule contains non-USD debt par (EUR 114,257 for ENV Bidco AB), but the normalized principal_amount_usd field is blank for FX01 rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 29,
+        "quoted_text": "ENV Bidco AB | (4)(6)(7)(8) | E + | 5.25 % | 7.61 % | 12/12/2024 | 7/19/2029 | EUR | 114,257 | 113,949 | 123,176 | 0.29"
+      }
+    }
+  ],
+  "rationale": "FX01 flags blank principal_amount_usd for non-USD debt principal. Raw source table 14 row 29 shows a debt investment, ENV Bidco AB, with reference rate E+, maturity 7/19/2029, and Par Amount/Units explicitly denominated in EUR 114,257. Because the source par is non-USD, the USD principal field needs an explicit FX-converted value for par analytics; leaving it blank is a real data error rather than a false alarm."
+}

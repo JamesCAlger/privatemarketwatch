@@ -15503,3 +15503,15 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Owner queue: 23 reasons rejected as dispositions (misfires; 16 already cleared by the merged repairs), 1 at more evidence. 0 dispositions accepted, 0 verdicts retired.
 - Revoked DS-003-1803498, DS-007-1812554, DS-007-1837532 in `data/overrides/finding_dispositions/v05_2026-10-06.json`.
 - No code changed, no tests run, no rebuild. Cleared is not data correct.
+
+## 2026-11-12 - Single findings workflow built (not yet cut over)
+
+- Spec `docs/superpowers/specs/2026-11-12-single-findings-workflow-design.md`, plan `docs/superpowers/plans/2026-11-12-single-findings-workflow.md`. Owner decisions: production is the only build of record; fixes enter in batches; six statuses quoted; decisions in git; every batch ledger kept.
+- New: `pipeline/finding_status.py` (state + decision facts -> one of six statuses; unknown state raises), `pipeline/decision_store.py` (append-only `data/decisions/*.jsonl`, one writer with actor rules and quote-on-page check; adapters over dispositions, retirements, proposals), `pipeline/batch_compare.py`, `scripts/run_batch.py`, `scripts/status.py`, `scripts/decide.py`, `scripts/migrate_decision_store.py`, `scripts/decision_store_parity.py`, skill `.claude/skills/findings-workflow`.
+- Changed: `scripts/findings_ledger.py` adds a `status` column and `--build-time`; detailed states and the gate's definition of outstanding are unchanged.
+- Migration run once: 1,177 fund-agent conclusions, 45 check-repair requests, 31 owner requests, 185 owner-queue rulings into `data/decisions/`; 4,391 reviewer verdict files copied byte-for-byte to `data/decisions/verdict_files/` (the ledger still reads them from `data/output`).
+- Parity on the 1,014 sandbox-era outstanding findings (`docs/investigations/v05_readings/decision_store_parity.md`): agent review 78, data fix 882, check repair 38, owner ruling 16; 1 outside the expected mapping (a confirmed-error conclusion its review did not support).
+- Rehearsal: `run_batch.py --from ledger --until compare` on sandbox rgA3's output dir wrote a batch folder and `status.py` read it. No production batch has run; `data/output/batches/` does not exist yet.
+- Deviations from the spec, recorded in the plan: status is a derived ledger column, not two new detailed states; the disposition, retirement and proposal stores stay where they are and are read through adapters; a reviewed finding with no verdict file that stops firing is flagged by the batch comparison but not held outstanding.
+- Tests: 198 pass across the new files and the ledger, gate, disposition and retirement tests. Full suite not run.
+- Old skills (`v05-fund-clearing`, `quarter-pass-operator`), `outstanding_status.py` and `owner_queue.py` are unchanged until the first production batch.

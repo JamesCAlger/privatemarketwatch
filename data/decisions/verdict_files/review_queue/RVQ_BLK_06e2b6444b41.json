@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_06e2b6444b41",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 270.0,
+  "anchor_value": 444.724,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 97,
+      "row_index": 6,
+      "quoted_text": "For the Year Ended December 31, 2025 Total assets purchases: $444,724; ending balance: $887,532",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The current-period Level 3 roll-forward total assets purchases anchor is 444.724 million, materially above the 270.0 million observed output.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 97,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The oracle source value 458.238 million corresponds to the 2024 comparative purchases row, while the 2025 purchases row is 444.724 million.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 97,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation: the filing's investment fair value total ties to extracted fair value at 901.521 million, so this is not a broad FV anchor failure. The E07 comparison concerns a purchases/additions-style schedule anchor. Raw source table 97 shows current-period 2025 Total assets Purchases of 444.724 million, while the flag's observed output is 270.0 million. The source value cited by the oracle, 458.238 million, is the 2024 comparative purchases total, but correcting that anchor still leaves a material disagreement. The raw source therefore supports a real extraction gap rather than a false alarm."
+}

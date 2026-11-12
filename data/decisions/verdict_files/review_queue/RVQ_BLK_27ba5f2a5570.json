@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_27ba5f2a5570",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 544170799,
+  "anchor_value": 224956333,
+  "confidence": 0.97,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (2) | 105.5 | % | 226,246,287 | 224,956,333",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 5,325 | $ | - | $ | 224,956 | $ | 230,281",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The extracted position sum of 544,170,799 conflicts with two independent raw-filing presentations of the March 31, 2026 debt-and-equity fair value: the schedule total is 224,956,333 and the fair-value hierarchy reports Level 3 investments of 224,956 thousand. The filing also contains a distinct prior-period investment schedule (208,515,038 at table 13 row 16), making comparative-period leakage the leading mechanism. Aggregate structure does not uniquely identify every leaked or duplicated row, so localization is intentionally coarse and escalation is requested."
+}

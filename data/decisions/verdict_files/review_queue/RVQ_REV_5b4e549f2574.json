@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_5b4e549f2574",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5087652,
+  "anchor_value": 5087652,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 29,
+      "quoted_text": "601 Lafayette Mezz LLC (Delayed Draw) | (12)(19)(20) | SF | 9.50 | % | 13.83 | % | 7/17/2024 | 2/9/2028 | 20,500 | \u2014 | \u2014 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 15,
+      "quoted_text": "95 Percent Buyer, LLC (Revolver) | (19) | SF | 5.60 | % | 9.92 | % | 11/24/2021 | 11/24/2026 | 809 | \u2014 | \u2014 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 36,
+      "quoted_text": "A360, Inc. (Delayed Draw) | (19)(20) | SF | 5.50 | % | 9.83 | % | 12/19/2024 | 12/19/2030 | 4,437 | \u2014 | \u2014 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (amortized cost of: $ 5,092,024 and $ 4,002,785 , respectively) | 5,087,652 | 4,008,973",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged zero fair_value rows, but targeted raw-source checks show the cited positions are unfunded delayed draw or revolver rows whose amortized cost and fair value are printed as dashes with 0.0% of net assets. The filing's June 30, 2025 total investments at fair value is 5,087,652, matching the schedule total, so the zero fair values are source-correct and the advisory check is overbroad rather than evidence of a data error."
+}

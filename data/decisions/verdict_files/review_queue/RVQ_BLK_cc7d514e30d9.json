@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_cc7d514e30d9",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1004,
+  "anchor_value": 1004,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "Total investments and money market funds | $ | 9,921,026 | 223.4 | % | $ | 9,995,180",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 48,
+      "quoted_text": "Total investments and money market funds | $ | 8,891,977 | 220.9 | % | $ | 8,967,887",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07 source count appears to include the September 30, 2025 comparative SOI block even though the reviewed report_date is December 31, 2025.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 55,
+        "row_index": 48
+      }
+    }
+  ],
+  "rationale": "This is a Class 3 aggregate count flag. The filing has a current December 31, 2025 SOI block ending at table 33, whose total investments and money market funds are 9,995,180, and a separate later comparative September 30, 2025 SOI block ending at table 55, whose total is 8,967,887. The financial anchor is tight: the bundle reports extracted fair value of 9,910.705 million against the filing investment total of 9,913,408 thousand excluding money market funds. The E07 source count of 1,892 versus output count of 1,004 is therefore best explained by the check counting comparative-period source rows, not by missing current-period positions."
+}

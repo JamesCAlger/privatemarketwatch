@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8ebb166b1c27",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1469.243,
+  "anchor_value": 1469.243,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "Sweep Midco LLC | Commercial Services & Supplies | 03/12/36 | Par 14,704 | Cost dash | Fair Value dash | (6) (7) (8) (16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 25,
+      "quoted_text": "Total Investments - 154.8% | Cost 1,557,384 | Fair Value 1,469,243",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The check treats every extracted leaf as requiring fair value, but the raw schedule contains legitimate leaves with explicit dashes in both cost and fair value, exemplified by Sweep Midco LLC at table 12 row 8. The extracted fund fair value of 1,469.243 million agrees exactly with the filing's Total Investments fair value of 1,469,243 thousand at table 13 row 25. Thus the 89.8% cell-coverage ratio reflects denominator scope over non-valued commitment-like leaves, not missing portfolio fair value data."
+}

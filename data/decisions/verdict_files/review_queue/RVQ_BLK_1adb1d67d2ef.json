@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_1adb1d67d2ef",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 337225000.0,
+  "anchor_value": 26680000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 6,
+      "quoted_text": "$ | 13,958 | $ | 14,777 | $ | - | $ | - | $ | ( 2,118 ) | $ | 26,680 | $ | 464",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 168.9% | $ | 325,237 | $ | 316,555",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation issue. Raw source table 24 is an affiliated/control-investment rollforward whose fair value at December 31, 2024 totals 26.680 million, matching the conservation anchor. The extraction observed by the flag sums 337.225 million, which is far above that affiliated subtotal and even above the full investment schedule total of 316.555 million in table 23. This indicates a scope/classification lookthrough error: broader schedule rows were included in a check anchored to the affiliated-investment subtotal."
+}

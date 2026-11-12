@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_713dad309107",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 6,
+      "quoted_text": "Total | $ | 593,625 | 100.0 | % | $ | 591,810 | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag. The oracle observed a 0.0% sum, but the filing's current-period investment summary reports 100.0% for total investments at fair value. Its component percentages in table 33 are also populated and sum to 100.0% (99.7%, 0.1%, 0.1%, and 0.1%). Thus the schedule anchor is internally supported and the zero extracted percentage sum is a real extraction gap."
+}

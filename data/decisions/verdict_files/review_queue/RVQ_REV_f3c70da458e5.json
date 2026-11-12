@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_f3c70da458e5",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2087081,
+  "anchor_value": 2087081,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 190.0 % | $ | 2,124,410 | $ | 2,087,081",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 2,
+      "quoted_text": "Debt Investments - 185.2 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 3,
+      "quoted_text": "Canada - 2.9 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 4,
+      "quoted_text": "1st Lien/Senior Secured Debt - 2.9 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "B01 denominator is counting SOI section/category heading rows as leaves even though source shows they are structural labels with no fair-value cell to extract.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 36,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the raw SOI schedule total fair value is 2,087,081 at table 42 row 26, matching the filing total for total investments at fair value. The oracle artifact reports residual_fv 0.0, so the aggregate value anchor is not missing fair value. The cited missing-value pattern is row-disposition, not a source data defect: rows such as 'Debt Investments - 185.2 %', 'Canada - 2.9 %', and '1st Lien/Senior Secured Debt - 2.9 %' are structural section/category labels in the SOI, not investment leaves that should carry fair value. Therefore the B01 threshold failure reflects overbroad leaf counting rather than erroneous source extraction."
+}

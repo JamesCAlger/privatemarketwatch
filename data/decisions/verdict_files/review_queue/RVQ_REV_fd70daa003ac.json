@@ -1,0 +1,48 @@
+{
+  "review_id": "RVQ_REV_fd70daa003ac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 16.5 and 16.0",
+  "anchor_value": "source rows show those values as fixed/all-PIK interest rates, not benchmark spreads",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 7,
+      "quoted_text": "Volante Technologies, Inc. | First-lien loan ($ 3,072 par, due 9/2028 ) | 9/29/2023 | 16.50 | % | 16.50 % PIK | 3,063 | 3,141 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 19,
+      "quoted_text": "Second-lien loan ($ 9,388 par, due 6/2027 ) | 3/13/2024 | 16.00 | % | 16.00 % PIK | 9,191 | 9,553 | 0.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Volante Technologies has 16.50% printed as a fixed/all-PIK rate, so basis_spread=16.5 should not be treated as a benchmark spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 7,
+        "quoted_text": "Volante Technologies, Inc. | First-lien loan ($ 3,072 par, due 9/2028 ) | 9/29/2023 | 16.50 | % | 16.50 % PIK | 3,063 | 3,141 | 0.1 | %"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Equinox second-lien row has 16.00% printed as a fixed/all-PIK rate, so basis_spread=16.0 should not be treated as a benchmark spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 36,
+        "row_index": 19,
+        "quoted_text": "Second-lien loan ($ 9,388 par, due 6/2027 ) | 3/13/2024 | 16.00 | % | 16.00 % PIK | 9,191 | 9,553 | 0.2 | %"
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level review. The raw schedule rows show the two flagged numeric values in rows where the same percentage is disclosed as PIK interest rate and no benchmark-plus spread is present for those cells. The defect is not scale; it is extraction into basis_spread from a fixed/all-PIK rate cell."
+}

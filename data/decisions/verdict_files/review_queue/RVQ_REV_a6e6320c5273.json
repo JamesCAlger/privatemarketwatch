@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_a6e6320c5273",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 52,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 17,
+      "quoted_text": "Polar Technology Group LLC - Equity Interest - Principal/Shares 52 - Cost 52 - Market Value 52",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing supplies Principal/Shares values for equity positions, but the extracted shares field is missing across the flagged 36-row equity population.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "C04 reports 0 of 36 equity rows with shares. The raw schedule header explicitly labels the field Principal/Shares, and table 12 row 17 is an Equity Interest with 52 in that field. Additional equity rows returned by the targeted source query likewise contain Principal/Shares values. Therefore the zero extracted coverage is a real, systemic shares-column extraction gap. The anchor value records the cited source value, not an aggregate count."
+}

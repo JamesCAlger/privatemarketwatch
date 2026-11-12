@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_2da93f133068",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate and blank basis_spread on three PRIVATE_CREDIT rows",
+  "anchor_value": "raw source shows N/A for Reference Rate Spread/Floor and Cash Interest Rate/PIK Rate on private credit fund LP interests",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 27,
+      "quoted_text": "Castlelake Consumer Receivables Opportunity III, L.P. Fund | (6)(16)(17)(18)(25) | N/A | N/A | N/A | 4,010 | 4,071 | 6,016 | 0.32 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 28,
+      "quoted_text": "Castlelake Consumer Receivables Opportunity IV, L.P. Fund | (6)(16)(17)(19)(25) | N/A | N/A | N/A | 6,535 | 6,558 | 7,582 | 0.41 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 30,
+      "quoted_text": "Fidelity Evergreen Private Credit Fund LP | (6)(16)(17)(21)(25) | N/A | N/A | N/A | 19,301 | 19,301 | 23,212 | 1.24 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X02 is firing on private credit fund limited partnership interests whose source schedule has no coupon fields to extract.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 65,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "The flagged condition is missing interest_rate/basis_spread, but the raw Statement of Investments classifies the localized rows under Non-Controlled, Non-Affiliated Private Credit Funds / Limited Partnership Interests and prints N/A in the reference-rate, cash-interest/PIK, and maturity columns. The blank stored rate fields therefore reflect the source for non-coupon fund interests; the X02 check is over-scoped rather than identifying an extraction defect."
+}

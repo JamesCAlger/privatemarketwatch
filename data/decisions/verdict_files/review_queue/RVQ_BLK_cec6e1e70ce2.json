@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_cec6e1e70ce2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 10024000,
+  "anchor_value": 10024000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 23,
+      "quoted_text": "COMM 2025-180W X | 1.35 | % | 7/28/2025 | 8/10/2042 | 10,024 | 852 | - | 569 | 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level review. The filing schedule identifies COMM 2025-180W X under Interest-only securities and shows outstanding principal balance of 10,024 and fair value of 569, both in thousands. The stored principal_amount_usd of 10,024,000 matches the raw source; the high principal-to-fair-value ratio is expected for this interest-only security presentation, so X06 is a rule-scope false alarm rather than a data error."
+}

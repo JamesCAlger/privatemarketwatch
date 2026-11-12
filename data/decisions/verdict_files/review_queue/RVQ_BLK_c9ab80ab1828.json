@@ -1,0 +1,59 @@
+{
+  "review_id": "RVQ_BLK_c9ab80ab1828",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 17476,
+  "anchor_value": 17476,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 5,
+      "quoted_text": "Interest income | $ | 3,613"
+    },
+    {
+      "table_index": 33,
+      "row_index": 6,
+      "quoted_text": "Interest income paid-in-kind | 124"
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "Other fee income | 68"
+    },
+    {
+      "table_index": 33,
+      "row_index": 9,
+      "quoted_text": "Interest income | 5"
+    },
+    {
+      "table_index": 33,
+      "row_index": 10,
+      "quoted_text": "Interest income paid-in-kind | 31"
+    },
+    {
+      "table_index": 33,
+      "row_index": 13,
+      "quoted_text": "Interest income | 3,601"
+    },
+    {
+      "table_index": 33,
+      "row_index": 14,
+      "quoted_text": "Interest income paid-in-kind | 4,706"
+    },
+    {
+      "table_index": 33,
+      "row_index": 15,
+      "quoted_text": "Dividend income | 5,328"
+    },
+    {
+      "table_index": 33,
+      "row_index": 17,
+      "quoted_text": "Total investment income | 17,476"
+    }
+  ],
+  "rationale": "Class 3 aggregate income identity check. The raw statement of operations for 2025 shows component investment income of 3,613 + 124 + 68 + 5 + 31 + 3,601 + 4,706 + 5,328, with zero/blank other fee rows, summing exactly to the schedule total investment income of 17,476. The source identity therefore balances; the flagged residual is not a source data error."
+}

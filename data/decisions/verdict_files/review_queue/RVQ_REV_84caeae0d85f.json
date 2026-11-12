@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_84caeae0d85f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 11,
+      "quoted_text": "Dye & Durham Corp. (3)(4)(12) | First-lien loan ($ 955 par, due 4/2031 ) | 4/4/2024 | SOFR + 4.10 % | 8.43 % | 941 | 964 | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 16,
+      "quoted_text": "Lynx BidCo (3)(4) | First-lien loan ($ 39,996 par, due 7/2031 ) | 7/5/2024 | SOFR + 7.11 % | 11.75 % (incl. 5.61 % PIK) | 38,963 | 39,182 | 1.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 7,
+      "quoted_text": "Artisan Topco LP (8) | Class A Preferred Units ( 7,882,736 units) | 11/7/2023 | 7,883 | 6,602 | 0.2 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 42,
+      "quoted_text": "Total Debt Investments | 6,939,967 | 7,089,771 | 175.7 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 29,
+      "quoted_text": "Total Equity and Other Investments | 140,027 | 154,511 | 3.8 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged identifiers that include schedule hierarchy terms such as Debt Investments, Business Services, and Equity and Other Investments. Raw source shows representative flagged rows are individual positions with issuer, instrument, acquisition date, cost, and fair value, not subtotal or aggregate rows. The actual subtotal rows are separate rows such as Total Debt Investments and Total Equity and Other Investments, so the PP01 subtotal-candidate diagnostic is overbroad for these position rows."
+}

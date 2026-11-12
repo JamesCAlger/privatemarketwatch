@@ -1,0 +1,70 @@
+{
+  "review_id": "RVQ_BLK_b0b10f135933",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_rows",
+  "observed_value": 8,
+  "anchor_value": 0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Crimson FLS Acquisition, Inc. | First Lien Term Loan | S + 4.50 % | 8.17 % | 2/18/2033",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 66,
+      "row_index": 23,
+      "quoted_text": "The Hiller Companies, LLC | First Lien Delayed Draw Term Loan | S + 5.00 % | 8.67 % | 6/20/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 34,
+      "row_index": 31,
+      "quoted_text": "Safety Borrower Holdings LLC | First Lien Revolver | S + 4.75 % | 8.41 % | 12/19/2032",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 14,
+      "quoted_text": "Skopima Consilio Parent LLC | First Lien Term Loan | S + 3.75 % | 7.41 % | 5/12/2028",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 20,
+      "quoted_text": "VT Topco, Inc. | First Lien Term Loan | S + 3.00 % | 6.66 % | 8/9/2030",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 21,
+      "quoted_text": "YA Intermediate Holdings II, LLC | First Lien Term Loan | S + 5.00 % | 8.69 % | 10/1/2031",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Identifier maturity parsing permutes or corrupts date components; for example Crimson is stored as 2/28/2033 while the source row states 2/18/2033.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 16,
+        "row_index": 20
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Safety revolver is paired to 2028-11-13 even though its source row states 12/19/2032, indicating cross-row or neighboring-issuer date association.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the full named source rows decides the issue. The filing schedule states 2/18/2033 for Crimson, 5/12/2028 for Skopima, 8/9/2030 for VT Topco, and 10/1/2031 for all three YA facilities, matching the structured twin rather than the identifier dates. Safety's source revolver maturity is 12/19/2032, so its alleged 2028-11-13 twin is an unrelated row association. Hiller's source delayed-draw maturity is 6/20/2030, matching neither flagged value and independently confirming corrupted extraction. Thus the eight warnings expose real identifier/date extraction or row-association errors."
+}

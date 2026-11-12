@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_97983b1e6a8a",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -24000,
+  "anchor_value": 0,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 7,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Positive-cost first lien term loan has a negative fair value of (24) thousand with no source-visible unfunded marker.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 26,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The source schedule row for Marmoutier Holding B.V. shows a First Lien Senior Secured Term Loan with principal 2,654, cost 2,415, and fair value (24). This is not a sign-consistent negative-cost revolver/unfunded-commitment presentation; targeted source checks found no unfunded or non-accrual note language resolving the negative fair value. The C103 flag is therefore grounded in the source row."
+}

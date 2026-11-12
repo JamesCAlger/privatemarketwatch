@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_686bece60ec5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2831026000,
+  "anchor_value": 2831026000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 10,
+      "quoted_text": "ACP Falcon Buyer Inc | First Lien Revolver | principal dash | Cost ( 149 ) | Fair Value ( 123 ) | notes (5)(8)(9)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 12,
+      "quoted_text": "ADC Therapeutics SA | First Lien Term Loan | principal dash | Cost ( 60 ) | Fair Value ( 60 ) | notes (5)(8)(9)(10)"
+    },
+    {
+      "table_index": 19,
+      "row_index": 15,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) | $ | 2,831,026 | $ | 2,857,808"
+    }
+  ],
+  "rationale": "The fmt_cost weak flag appears to be driven by unusual cost formatting, especially parenthesized negative costs. Raw SOI rows show those values are printed that way in the Cost column, not introduced by extraction: for example ACP Falcon Buyer Inc shows Cost (149) and ADC Therapeutics SA shows Cost (60), both with principal shown as a dash. The extracted sample preserves these source values as -149000 and -60000 after the filing's thousands scale. The schedule cost total is also printed as $2,831,026, consistent with a schedule-total anchor of 2,831,026,000 after scaling. Source therefore supports the observed formatting rather than a data defect."
+}

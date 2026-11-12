@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_d1dff9638774",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 35918948,
+  "anchor_value": 35918948,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 90,
+      "row_index": 35,
+      "quoted_text": "Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 32,
+      "quoted_text": "Total Net Assets | 19,760,273",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F23 is an aggregate row-count flag for a reported-percent validation, but the bundle does not identify the failing source row and its F23 source artifact row is SKIP with blank value and mechanism. Raw source was readable: the 2025 SOI Total Investments fair value is 35,918,948 and the balance sheet Total Net Assets is 19,760,273, which supports the reported total percentage of 181.8%. Those anchors do not prove a data defect or a false alarm for the one unlocalized row-count unit, so the question remains source-checked ambiguous."
+}

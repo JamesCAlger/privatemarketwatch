@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_4f1826622868",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_row",
+  "observed_value": 0.0,
+  "anchor_value": 5.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 16,
+      "quoted_text": "SRP Eagle Buyer Inc Initial Term Loan | 3M SOFR + 5.00 % / 1.50 % | 8.70 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Initial Term Loan source states a 5.00% spread, but the flagged basis_spread is 0.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 16
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "The grouped X05 flag includes at least one legitimate zero-spread floating row, so remediation must not overwrite every flagged zero uniformly.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 25,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The raw schedule at table 25 row 16 explicitly reports 3M SOFR + 5.00% for SRP Eagle Buyer Inc Initial Term Loan, while X05 reports basis_spread 0.0, proving an extraction gap. Table 25 row 15 separately reports an actual 0.00% spread, so the 13-row grouped warning is mixed and row-specific remediation is required. No aggregate anchor is relevant."
+}

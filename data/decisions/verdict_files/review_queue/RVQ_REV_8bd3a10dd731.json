@@ -1,0 +1,22 @@
+{
+  "review_id": "RVQ_REV_8bd3a10dd731",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 14
+    },
+    {
+      "table_index": 17,
+      "row_index": 15
+    }
+  ],
+  "rationale": "C104 flagged zero fair_value rows. The raw Schedule of Investments shows the cited AI Titan Parent rows with principal shown as dash, amortized cost of (9) and (11), percentage of net assets shown as dash, and fair value shown as dash. The pipeline's 0.0 fair_value is therefore a faithful numeric normalization of the source zero/dash fair-value disclosure, not a data error."
+}

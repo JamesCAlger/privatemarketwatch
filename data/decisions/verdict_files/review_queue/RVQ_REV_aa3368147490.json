@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_aa3368147490",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 100,
+  "anchor_value": 0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 33,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance equity investment | N/A | N/A | 27,363 | - | $ | 27,403 | $ | 33,249",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 49,
+      "row_index": 7,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance equity investment | N/A | $ | 27,363 | $ | 36,471 | $ | -",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 4,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(c) | 93,464 | 2,201 | - | (2,359) | 93,306 | - | 1,763 | -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The AAM equity position is represented once in the SOI, while matching issuer/investment labels in the commitments and affiliate-rollforward tables are supplemental disclosures that must not become additional positions.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 49,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate duplicate-key flag. The filing's SOI at table 36 row 33 contains the actual AAM equity position with fair value 33,249. The same label occurs in the separately headed commitments schedule at table 49 row 7 and in an affiliate fair-value rollforward at table 50 row 4. These are different disclosure roles, not additional holdings. Their ingestion as position rows explains the duplicate normalized keys and establishes a dimension/table-role double count. The internal B02 threshold is zero duplicate keys; 100 were observed."
+}

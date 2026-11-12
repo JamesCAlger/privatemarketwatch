@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_4cd474d22d97",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": null,
+  "anchor_value": "explicit non-USD par amount requiring FX conversion",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 29,
+      "quoted_text": "123Dentist Inc. | (4) (5) (8) (9) | C + | 5.00 % | 7.28 % | 8/10/2029 | CAD | 5,938 | 4,326 | 4,255 | 0.26",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 19,
+      "quoted_text": "Aurelia Netherlands Midco 2 B.V. | (4) (5) (9) | E + | 4.75 % | 6.77 % | 5/29/2031 | EUR | 54,814 | 59,880 | 62,841 | 3.83",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 38,
+      "quoted_text": "Packaging Coordinators Midco, Inc. | (4) (5) (8) | SN + | 5.00 % | 8.73 % | 10/15/2032 | GBP | 2,513 | 3,294 | 3,289 | 0.20",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 grouped field check. The March 31, 2026 schedule explicitly identifies debt par in CAD, EUR, and GBP, with separate cost and fair-value amounts, while all 16 flagged holdings have blank principal_amount_usd. The raw source therefore confirms that an explicit FX conversion is required and was not populated. Representative citations cover each disclosed non-USD currency; no aggregate anchor is applicable."
+}

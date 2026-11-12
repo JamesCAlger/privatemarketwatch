@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_de3fa4d8c54f",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 20230930,
+  "anchor_value": 20240630,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 19,
+      "quoted_text": "Azul Systems, Inc.* | Senior secured | SF + | 4.50 | % | (j) | 10.04 | % | 04/2027 | 3,000 | 3,000 | 0.5 | 3,000",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 21,
+      "quoted_text": "Azul Systems, Inc.* | Senior secured | SF + | 4.50 | % | (g) | 9.98 | % | 04/2027 | 3,000 | 3,000 | 0.2 | 3,000",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The flagged Azul Systems row is a comparative-period version retained into the 2024-06-30 holdings even though the current-period schedule has a separate Azul row.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 25,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "PP03 is a row-disposition issue. The source contains a current-period Azul Systems row at table 16 row 21 with interest rate 9.98% and a separate comparative-period Azul Systems row at table 25 row 19 with interest rate 10.04%. The flagged artifact describes a source period earlier than the 2024-06-30 report date retained as a comparative-period fact, so the defect is the comparative row leaking into the current holdings rather than a missing current source position."
+}

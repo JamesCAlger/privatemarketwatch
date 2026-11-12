@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_f17f62c53ba0",
+  "verdict": "false_alarm",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 612000,
+  "anchor_value": 612000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 14,
+      "quoted_text": "CFCo LLC (Benefytt Technologies, Inc.) | (4)(8)(16)(17)(18) | 0.00 % | 0.00 % | 9/13/2038 | 86,098 | 12,571 | 612 | 0.00"
+    }
+  ],
+  "rationale": "The X08 warning is for fair value below 5% of cost. The raw SOI row for CFCo LLC (Benefytt Technologies, Inc.) reports cost 12,571 and fair value 612, matching the stored dollar values of 12,571,000 and 612,000 after the filing's thousands scale. The low ratio is therefore present in the source and is not an extraction or normalization data error."
+}

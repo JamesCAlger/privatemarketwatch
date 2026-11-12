@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_1b2f50402c62",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.08695652173913043,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 5,
+      "quoted_text": "2024 schedule row: 48Forty Solutions LLC, 1st Lien Term Loan, fair value 4,689,958.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 6,
+      "quoted_text": "2023 schedule row: 48Forty Solutions LLC, 1st Lien Term Loan, fair value 6,202,715.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 8,
+      "quoted_text": "2024 schedule row: Accela Inc/US, 1st Lien Term Loan, fair value 10,504,801.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 9,
+      "quoted_text": "2023 schedule row: Accela Inc/US, 1st Lien Term Loan, fair value 9,499,359.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "D06 continuity is understated: representative issuers including 48Forty Solutions LLC and Accela Inc/US recur in both the 2024 and 2023 source schedules, but the artifact reports only 14 of 161 issuers persisting.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 27,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The filing's own schedule totals anchor the 2024 and 2023 investment schedules at 891,045,657 and 876,197,259, matching the balance-sheet total investments. Within those anchored schedules, the raw grids show recurring issuer rows across periods, including 48Forty Solutions LLC in table 27 row 5 and table 37 row 6, and Accela Inc/US in table 27 row 8 and table 37 row 9. That source evidence contradicts the artifact's 8.7% continuity metric and points to an extraction or issuer-normalization gap rather than genuine portfolio discontinuity."
+}

@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_60614704ae81",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  29000,
+    "anchor_value":  0,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  29,
+                                  "row_index":  17,
+                                  "quoted_text":  "ASP MCS Acquisition Corp. (6) | Common Stock | 791 | - | 0.0 | 51",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Extracted ASP MCS Common Stock One carries cost 29000, but the source Cost cell is a dash, indicating no stated cost for that row.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  29,
+                                          "row_index":  17,
+                                          "quoted_text":  "ASP MCS Acquisition Corp. (6) | Common Stock | 791 | - | 0.0 | 51"
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 2 localization from the bundle sample: the extracted holding ASP MCS Acquisition Corp. Common Stock One reports cost 29000 and fair value 51000. The raw September 30, 2024 SOI row at table 29 row 17 has the same issuer/security with par/shares 791, Cost shown as -, percent 0.0, and Fair Value 51. The stored cost is therefore not supported by the source cost column."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_b21f4fe457c4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1334005000,
+  "anchor_value": 1506869000,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 10,
+      "quoted_text": "U.S. Treasury Bill | - | 3.61 % | 4/7/2026 | 174,487 | $ | 172,875 | $ | 172,864 | 23.60 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 27,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 1,507,082 | $ | 1,506,869 | 205.70 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted holdings fair value omits the U.S. Treasury Bill position with fair value 172,864 thousand, which exactly bridges Total Debt Investments 1,334,005 thousand to Total Investments 1,506,869 thousand.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 27,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the source schedule reports Total Debt Investments fair value of 1,334,005 thousand, but Total Investments fair value of 1,506,869 thousand. The difference is 172,864 thousand, exactly matching the cited U.S. Treasury Bill row, so the aggregate E01 failure is a real extraction gap rather than an anchor issue."
+}

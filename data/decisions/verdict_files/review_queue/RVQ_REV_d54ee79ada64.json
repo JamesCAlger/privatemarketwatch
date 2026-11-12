@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_d54ee79ada64",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5594413.0,
+  "anchor_value": 37591400.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 200,
+      "row_index": 3,
+      "quoted_text": "Senior Secured Loans - First Lien | fair value $5,339,307 | 14.2%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 200,
+      "row_index": 6,
+      "quoted_text": "Corporate Bonds | fair value $255,106 | 0.7%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 200,
+      "row_index": 10,
+      "quoted_text": "Total Invested Assets | fair value $37,591,400 | 100%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 260,
+      "row_index": 0,
+      "quoted_text": "A business development company, such as the Company (\"BDC\"), may not acquire any asset other than a qualifying asset...",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Vehicle type BDC drove PRIVATE_CREDIT strategy even though the filer composition shows credit-like assets of only $5,594,413, or 14.9% of $37,591,400 total invested assets.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 200,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Raw source confirms NexPoint is a BDC, but the filing's own December 31, 2025 portfolio composition does not support a PRIVATE_CREDIT strategy assignment from vehicle type alone: senior secured loans are $5,339,307 (14.2%) and corporate bonds are $255,106 (0.7%), totaling $5,594,413, while total invested assets are $37,591,400. Common stocks and preferred stock together are 62.2% of fair value, so the fund_strategy_validation flag reflects a real strategy classification/lookthrough defect rather than a false alarm."
+}

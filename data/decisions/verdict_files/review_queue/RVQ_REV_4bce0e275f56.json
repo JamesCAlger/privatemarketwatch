@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_4bce0e275f56",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 121,
+      "row_index": 5,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc.; Amortized Cost dash; Fair Value dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 24,
+      "quoted_text": "ADG, LLC, GEDC Equity, LLC and RC IV GEDC Investor LLC Membership units; Amortized Cost dash; Fair Value dash",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows. For the checked flagged examples, the raw SOI column context shows Fair Value is printed as a dash, not as a nonzero amount missed by extraction: ADF Capital row has Principal 12.6 with Amortized Cost and Fair Value both dash, and the ADG Membership units row has Shares/Units 3,000,000 with Amortized Cost and Fair Value both dash. The stored 0.0 fair_value is therefore source-consistent for these zero-value positions; the advisory zero-FV check is not identifying a data error. No aggregate anchor was needed for this row-cell warning group."
+}

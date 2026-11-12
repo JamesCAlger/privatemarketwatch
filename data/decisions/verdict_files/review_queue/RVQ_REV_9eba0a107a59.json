@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_9eba0a107a59",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_interest_rate_column",
+  "observed_value": 9123.0,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "AeroMed Group LLC | First Lien Secured Debt - Term Loan | P + 400, 1.00% Floor | 02/25/31",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "Eagle U.S. Purchaser, Inc. | First Lien Secured Debt - Term Loan | S + 500, 0.75% Floor | 12/31/32",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 6,
+      "quoted_text": "Eagle U.S. Purchaser, Inc. | First Lien Secured Debt - Term Loan | S + 500, 0.75% Floor | 12/31/32",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "D07 is an aggregate median-rate-shift flag. The raw March 2026 schedule has ordinary floating-rate terms, including P + 400 and S + 500, and the comparative schedule also shows S + 500 for a matching position. Yet the reviewed current-quarter holdings rows for these debt positions carry blank interest_rate values. The asserted 9123 bp shift is therefore caused by failure to extract the schedule's rate column, not by a genuine portfolio-wide rate change. The defect is source-grounded but pervasive, so it is not localized to one row."
+}

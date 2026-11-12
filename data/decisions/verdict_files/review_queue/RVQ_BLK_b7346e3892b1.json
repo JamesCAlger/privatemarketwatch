@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_b7346e3892b1",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 367,
+  "anchor_value": 367,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments (unaudited) as of March 31, 2026 | 7",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 6,
+      "row_index": 9,
+      "quoted_text": "Consolidated Schedule of Investments as of September 30, 2025 | 20",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 10,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments (159.4% of net assets) | $ | 7,114,591 | $ | 7,019,058",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "E07 is a false alarm caused by comparative-period leakage in the oracle source count. The raw filing explicitly identifies a March 31, 2026 schedule and a separate September 30, 2025 schedule. The flagged source count of 731 equals the 367 current-period output rows plus 364 comparative-period rows. The current schedule total fair value is $7,019.058 million, matching the extracted quarter fair value, so 367 is the correctly scoped current-period count and 731 is a two-period anchor."
+}

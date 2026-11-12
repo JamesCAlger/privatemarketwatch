@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_2fb255dd3908",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 232.6,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 30,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 1,576,277 | $ | 1,574,901 | 232.6 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 49,
+      "row_index": 6,
+      "quoted_text": "Total | $ | 1,576,277 | 100.0 | % | $ | 1,574,901 | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule reports total investments at 232.6% of net assets, but the extracted A07 percentage sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "A07 is an aggregate percentage-sum flag. The raw filing's current-period investment schedule total reports fair value of $1,574,901 thousand and 232.6% of net assets, and the investment-type summary independently totals fair value at $1,574,901 thousand and 100.0% of total investments. The queued metric is pct_sum=0.0%, so the source shows the percentage data exists and the extraction/check input missed it rather than the check being a false alarm."
+}

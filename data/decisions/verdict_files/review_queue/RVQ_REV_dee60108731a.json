@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_dee60108731a",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -33000.0,
+  "anchor_value": -33000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 1,
+      "quoted_text": "Header: Company | Investment | Reference Rate and Spread | Interest Rate | Maturity Date | Principal/ Par Amount | Amortized Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 12,
+      "row_index": 16,
+      "quoted_text": "A.P.A. Industries, LLC (6) | First lien senior secured revolving loan | S + | 6.25 % | 11.75 % | 1/10/2028 | 1,523 | ( 35 ) | ( 33 ) | ( 0.01 ) | %"
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "ACES Intermediate, LLC (6) | First lien senior secured revolving loan | S + | 5.50 % | 10.72 % | 7/27/2027 | $ | 6,964 | $ | ( 113 ) | $ | ( 104 ) | ( 0.02 ) | %"
+    },
+    {
+      "table_index": 15,
+      "row_index": 14,
+      "quoted_text": "Beghou Consulting, LLC (6) | First lien senior secured revolving loan | S + | 6.00 % | 11.50 % | 5/1/2028 | 2,654 | ( 71 ) | ( 71 ) | ( 0.01 ) | %"
+    }
+  ],
+  "rationale": "C103 flags negative fair_value rows. The raw Schedule of Investments header places Fair Value after Amortized Cost, and representative flagged revolving-loan rows report the same negative fair values in parentheses in that source column, e.g. A.P.A. Industries fair value (33), ACES Intermediate fair value (104), and Beghou Consulting fair value (71), matching the extracted -33000, -104000, and -71000 values in thousands. The stored values are source-faithful; the negative fair value warning is not a data error."
+}

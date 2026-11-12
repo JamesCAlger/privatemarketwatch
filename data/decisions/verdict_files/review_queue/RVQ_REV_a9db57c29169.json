@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a9db57c29169",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_source_unavailable",
+  "observed_value": 15.1,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag localized to private_markets_holdings row_key 131934, basis_spread=15.1. The raw-source evidence CLI was invoked for overview, targeted roam queries, and tables, but returned no usable source content (only an XMLParsedAsHTMLWarning), so the source cell and its column context could not be adjudicated. Per the fail-closed contract, no error or false alarm is inferred."
+}

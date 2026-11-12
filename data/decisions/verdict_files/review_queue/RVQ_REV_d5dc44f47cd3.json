@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_d5dc44f47cd3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 13,
+  "anchor_value": null,
+  "confidence": 0.55,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 7,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. (5) | Restaurant owner and operator | First lien senior secured loan | 12/2016 | 8/2022 | 7.6 | -- | -- | (2)(10)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 28,
+      "quoted_text": "API Commercial Inc., API Military Inc., and API Space Intermediate, Inc. | Provider of military aircraft aftermarket parts and distribution, repair and logistics services | First lien senior secured loan | 5/2022 | 8/2025 | 7.4 | 3.6 | 3.7 | (2)(10)"
+    },
+    {
+      "table_index": 54,
+      "row_index": 11,
+      "quoted_text": "Rug Doctor, LLC and RD Holdco Inc. (5) | Manufacturer and marketer of carpet cleaning machines | Second lien senior secured loan | 1/2017 | 10/2026 | 23.9 | 22.1 | 9.9 | (2)(10)"
+    }
+  ],
+  "rationale": "The bundle flags 13 positions as nonaccrual via a footnote mechanism. Targeted CLI checks found the flagged schedule rows carrying footnote marker (10), but searches for non-accrual/non accrual/accrue/accrued/non-income producing and footnote-definition wording did not return a raw source definition that proves what (10) means. Because the source is readable but the decisive footnote definition is not exposed in the checked evidence, the flag cannot be confirmed or dismissed from raw source."
+}

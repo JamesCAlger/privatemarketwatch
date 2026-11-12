@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_e0dcc8a60206",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.5833333333333334,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 37,
+      "quoted_text": "NMG Holdings Co., Inc. 8.50 %, 10/1/2028 | 10/1/2028 | 1,400,000 | 1,404,149 | 1,428,627",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The NMG Holdings corporate bond row contains an 8.50% coupon in the source instrument text, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "C01 is an aggregate debt-rate coverage flag. The current SOI table has an Interest Rate heading and the extracted artifact reports 5 of 12 debt rows without rates. At least one missing-rate debt row is source-decided: the NMG Holdings Co., Inc. corporate bond source row explicitly includes '8.50 %' in the instrument text while the extracted holding for that same issuer/maturity has blank interest_rate. That makes the flag a real extraction gap rather than a false alarm."
+}

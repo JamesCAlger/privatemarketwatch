@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_cfda194887f1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 118177527,
+  "anchor_value": 118177527,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 17,
+      "quoted_text": "Total Debt Investments (2) | 96.8 | % | 117,241,302 | 118,177,527",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 20,
+      "quoted_text": "First American Government Obligation Fund, Yield 5.30 % | 3.8 | % | 4,675,555 | 4,675,555 | 4,675,555",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 23,
+      "quoted_text": "U.S. Treasury Bill, Yield 5.26 % | 28.2 | % | 35,000,000 | 34,437,589 | 34,437,589",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 reports only 20/40 leaves with fair value, but the raw schedule's private-credit debt detail is complete for the relevant population. The extracted debt fair values sum to 118,177,527, exactly matching the source Total Debt Investments fair value at table 17 row 17. The source also contains cash-equivalent and short-term-investment rows with fair values, which are outside the private-credit debt population and explain a broader denominator/scope issue rather than a missing fair value in the extracted debt holdings."
+}

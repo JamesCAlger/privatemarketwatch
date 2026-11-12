@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_3d49d2e7dfcb",
+  "verdict": "real_error",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 1495157,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 2,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 1,507,910 | $ | 1,495,157",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 1,507,910 | $ | 1,495,157 | $ | - | $ | 91,846 | $ | 1,403,311",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 10,
+      "quoted_text": "Total Assets | $ | 1,552,028 | $ | 1,541,762",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "GAV_BDC02 reported no comparison denominator even though the filing provides a March 31, 2026 investment fair value anchor of 1,495,157 thousand and total assets of 1,552,028 thousand.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 45,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The flag states the BDC GAV reconciliation has no comparison denominator. Raw source contradicts that: the schedule and fair-value hierarchy both disclose Total Investments fair value of 1,495,157 thousand for March 31, 2026, and the balance sheet separately discloses Total Assets of 1,552,028 thousand. The absence of a comparison denominator is therefore an anchor/extraction availability defect, not an undecidable source condition."
+}

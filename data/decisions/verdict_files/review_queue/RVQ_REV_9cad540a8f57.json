@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_9cad540a8f57",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Portfolio Company Debt Securities- Canada Construction Technology Nexii Building Solutions, Inc. Type of Investment Secured Loan Investment Date August 27,2021 Maturity Date August 27,2025 Interest Rate Variable interest rate Prime + 7.0% or Floor rate 10.3%; EOT 2.5%",
+  "anchor_value": "Nexii Building Solutions, Inc.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 5,
+      "quoted_text": "Nexii Building Solutions, Inc. (10) | Secured Loan | August 27, 2021 | August 27, 2025 | Variable interest rate Prime + 7.0 % or Floor rate 10.3 %; EOT 2.5 % | $ | 10,000 | $ | 9,888 | $ | 10,009",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 17,
+      "quoted_text": "GoFor Industries, Inc. (10)(21) | Secured Loan (18) | January 21, 2022 | February 1, 2026 | Variable interest rate Prime + 8.8 % or Floor rate 12.0 %; EOT 2.5 % | $ | 9,570 | $ | 9,385 | $ | 7,476",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name field concatenates country/sector wrappers and separate Type of Investment, Investment Date, Maturity Date, and Interest Rate columns instead of retaining the clean Portfolio Company issuer.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C206 is confirmed. In the raw schedule, the header separates Portfolio Company, Type of Investment, Investment Date, Maturity Date, and Interest Rate. For table 23 row 5 the source Portfolio Company cell is only Nexii Building Solutions, Inc. (10), with loan type, dates, and rate in separate cells; the stored issuer_name instead concatenates the Canada/Construction Technology wrappers plus those separate row terms. Table 23 row 17 shows the same structure for another flagged row, confirming a parser extraction gap rather than a valid issuer value."
+}

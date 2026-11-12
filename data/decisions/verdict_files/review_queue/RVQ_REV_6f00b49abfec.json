@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_6f00b49abfec",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 27.212,
+  "anchor_value": 27.21,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 33,
+      "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | S + 7.00 % PIK | 03/18/27 | 30,694 | 27,212 | 18,800 | (7) (8) (13) (14)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 27.21 | 0.2 | - | -",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The filing discloses a 2025 non-accrual amortized-cost bucket of $27.21 million, tying to the Vardiman Black Holdings PIK debt row with amortized cost of $27.212 million.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 58,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Source checked via evidence CLI. Table 29 reports Non-accrual amortized cost of $27.21 million for December 31, 2025. The flagged Vardiman Black Holdings (dba Specialty Dental Brands) debt row in table 58 has amortized cost 27,212 thousand, blank stated interest rate, S + 7.00% PIK terms, and the nonaccrual-associated footnotes, so the nonaccrual flag is source-supported and localized to that row. The 0.002 difference is filing rounding from thousands to millions."
+}

@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_416bcac92bd7",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0.35,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Class 2 row-level X02 flag: the bundle identifies eight private-credit dataset row_keys with blank interest_rate and basis_spread, but does not expose issuer/instrument fields for those row_keys. Raw source was readable via the evidence CLI. Current-period schedule rows contain rate-bearing private-credit instruments, including PIK/complex-rate rows (for example table 47 row 20: Cool Buyer subordinated debt with N/A spread and 10.00% Cash / 2.75% PIK interest; table 57 row 8: New You Bariatric first lien debt with 9.24% PIK), but the evidence CLI cannot map row_key 454105 or the other flagged row_keys back to a source row. Because the exact flagged rows cannot be matched to raw source, the source checked does not decide whether the eight blanks are extraction defects or non-rate-bearing rows."
+}

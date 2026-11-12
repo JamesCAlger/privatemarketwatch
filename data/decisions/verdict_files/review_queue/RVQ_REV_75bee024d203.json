@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_75bee024d203",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_cell",
+  "observed_value": -34000.0,
+  "anchor_value": -34000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 10,
+      "quoted_text": "First Lien Secured Debt - Revolver | S + 475, 0.50% Floor | 7/24/2032 | Par - | Cost (34) | Fair Value (37)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 19,
+      "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 475, 0.75% Floor | 2/13/2032 | Par - | Cost (39) | Fair Value (15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "First Lien Secured Debt - Revolver | S + 500, 2.00% Floor | 12/29/2032 | Par - | Cost (37) | Fair Value (39)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell confirmation. The filing's investment schedule explicitly presents parenthesized negative amounts in the Cost column for the flagged unfunded revolver and delayed-draw positions. The representative flagged value -34000 matches source Cost (34) in thousands, and additional rows show the same source pattern. C107 only monitors negative cost and does not establish that a source-reported negative cost is erroneous; therefore the flag is a false alarm caused by rule scope, not an extraction defect."
+}

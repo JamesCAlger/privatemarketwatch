@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4e1d50fd1262",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1013243399,
+  "anchor_value": 657323982,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Controlled Affiliated investments ... Fair Value at March 31, 2026 $246,700,365",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments ... Fair Value at March 31, 2026 $109,219,052",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 25,
+      "quoted_text": "Total Debt & Equity Investments (7) ... Fair Value $657,323,982",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Controlled and non-controlled affiliated rollforward totals totaling $355,919,417 were added to the underlying debt and equity positions, inflating extracted FV from $657,323,982 to $1,013,243,399.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation proves a double count. The filing schedule reports total debt and equity investments of $657,323,982, whereas extracted holdings FV is $1,013,243,399. The $355,919,417 excess exactly equals the controlled-affiliated total of $246,700,365 plus the non-controlled-affiliated total of $109,219,052. These rollforward aggregate rows were therefore counted in addition to their underlying positions; the F25 growth divergence is a real extraction defect."
+}

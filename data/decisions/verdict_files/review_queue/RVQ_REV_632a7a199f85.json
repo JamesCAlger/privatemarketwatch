@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_632a7a199f85",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 29,
+      "quoted_text": "$ | 402,522,665 | 100.00 | % | $ | 407,509,401 | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 reports pct_sum=0.0%, but the raw filing's March 31, 2026 industry-disposition table contains percentage values and totals them to 100.00% at table 40 row 29. The same row reports fair value of $402,522,665, which agrees with the portfolio schedule total and the extracted quarter fair value of $402.522665 million. The zero percentage sum is therefore a real extraction gap, not a bad total anchor."
+}

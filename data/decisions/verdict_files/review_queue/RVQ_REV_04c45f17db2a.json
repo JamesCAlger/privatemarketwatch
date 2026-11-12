@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_04c45f17db2a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 6391.054,
+  "anchor_value": 6391.054,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 7,
+      "quoted_text": "Total investments | $ | 6,389,065 | $ | 6,391,054 | 100.00 | %"
+    },
+    {
+      "table_index": 37,
+      "row_index": 13,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | $ | 6,389,065 | $ | 6,391,054 | 194.94 | %"
+    }
+  ],
+  "rationale": "B01 fired because only 360/697 leaves carried fair_value, but the aggregate fair value is complete: the flagged artifact reports fund_quarter_fv_m 6391.054 and residual_fv 0.0, while the raw filing schedule totals show fair value of 6,391,054 thousand for total investments. The low leaf-coverage metric is therefore a rule-scope false alarm rather than a missing fair-value data error."
+}

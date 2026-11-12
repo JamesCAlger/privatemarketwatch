@@ -1,0 +1,43 @@
+{
+    "review_id":  "RVQ_BLK_c8606c481bc8",
+    "verdict":  "real_error",
+    "mechanism":  "dimension_double_count",
+    "localized":  true,
+    "anchor_used":  "companyfacts_fv",
+    "observed_value":  2679916000,
+    "anchor_value":  2651286000,
+    "confidence":  0.94,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  61,
+                                  "row_index":  5,
+                                  "quoted_text":  "Total investments--non-controlled/affiliated | $ | 28,982 | $ | 28,630 | 1.62 | %",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  61,
+                                  "row_index":  6,
+                                  "quoted_text":  "Total investments | $ | 2,676,109 | $ | 2,651,286 | 150.17 | %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  43,
+                                  "row_index":  6,
+                                  "quoted_text":  "Total investments, at fair value (amortized cost of $ 2,676,109 and $ 2,008,800, respectively) | 2,651,286 | 1,951,269",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "dimension_double_count",
+                         "detail":  "The extracted fair value sum exceeds the companyfacts and filing total investment fair value anchor by 28.630 million, exactly the non-controlled/affiliated investment subtotal already included in total investments.",
+                         "fix_class":  "dedup",
+                         "citation":  {
+                                          "table_index":  61,
+                                          "row_index":  5
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate conservation issue. The filing total and companyfacts anchor agree at 2,651,286,000 for total investments at fair value, while the extracted position sum is 2,679,916,000. The 28,630,000 overshoot equals the source row Total investments--non-controlled/affiliated fair value of 28,630, indicating that affiliated investments were counted once in the filing total and once again in the extracted sum."
+}

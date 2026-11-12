@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_7221f4a1723d",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 234.9,
+  "anchor_value": 234.9,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Raw schedule table 20 labels the field Percentage of Net Assets and reports Total investments of 1,249,444 as 234.9%. This exactly matches the flagged 234.9 aggregate. The filing also reports Total Net Assets of 531,517, and 1,249,444 / 531,517 is approximately 234.9%, so a value above 100% is valid for this leveraged fund. PCT01 incorrectly applies a near-100% expectation to percentage of net assets."
+}

@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_ac36db19adb5",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -0.01,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 11, "row_index": 30},
+    {"table_index": 12, "row_index": 11},
+    {"table_index": 13, "row_index": 8},
+    {"table_index": 13, "row_index": 24},
+    {"table_index": 14, "row_index": 11},
+    {"table_index": 16, "row_index": 8},
+    {"table_index": 13, "row_index": 31}
+  ],
+  "rationale": "C404 flagged seven negative pct_of_net_assets values. The raw SOI itself prints these current-period rows with negative percentages in the % of Net Assets column: Azurite Intermediate Holdings Inc. (0.01), Coupa Holdings LLC (0.01), Guava Buyer LLC (0.01), LAC Acquisition LLC d/b/a Lighthouse Autism Center (0.01), Mounty US Holdings (0.01), Wrangler Topco, LLC (0.01), and Mercury Bidco LLC (0.02), all shown as parenthesized negative percentages. These are not extraction errors; they are source-present negative percentages on unfunded revolver or delayed-draw positions with negative fair values."
+}

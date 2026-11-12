@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_4d02abc81f5e",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -34000.0,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 6,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured revolving loan | 8/2031 | - | 3,443 | (103)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 38,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured revolving loan | 8/2031 | - | 3,443 | (34)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 6,
+      "quoted_text": "AlphaSense, Inc. | First lien senior secured delayed draw term loan | 6/2029 | - | 4,064 | (30)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 6,
+      "quoted_text": "AlphaSense, Inc. | First lien senior secured delayed draw term loan | 6/2029 | - | 4,064 | (10)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The negative cost is the prior-period commitment fair value loaded into a field absent from the commitments schedule; current fair value is separately and correctly extracted.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 46,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "This is a Class 2 within-row localization issue. The raw commitments schedules do not disclose amortized cost. For AI Titan, the extracted cost of -34,000 matches the prior-period fair value of (34) at table 46 row 38, while the current-period fair value is (103) at table 25 row 6 and is separately stored as -103,000. AlphaSense independently repeats the pattern: stored cost -10,000 matches prior fair value (10), while current fair value is (30). Thus the negative cost flags identify a comparative-period fair-value-to-cost mapping defect, not legitimate source-reported costs."
+}

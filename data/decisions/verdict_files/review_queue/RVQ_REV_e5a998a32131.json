@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_e5a998a32131",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw-source evidence CLI returned no usable source content for overview, tables, or a targeted non-USD principal/currency/par query; only an XMLParsedAsHTMLWarning was emitted. The 758 FX01 warnings therefore cannot be confirmed or rejected from raw source in this adjudication run."
+}

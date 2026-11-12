@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d6a125db45f5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "",
+  "anchor_value": "",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 23,
+      "quoted_text": "ABC Group Holdings Inc (4)(5)(9)(26) | E + | 5.88 % | 7.78 | % | 8/22/2031 | EUR | 8,594 | 9,719 | 9,756",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 48,
+      "quoted_text": "Grain Connect Limited (4)(5)(16)(29) | SN + | 8.50 % (incl 6.00 % PIK) | 12.23 | % | 8/8/2030 | GBP | 2,212 | 2,882 | 2,902",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 39,
+      "quoted_text": "PF Finco PTY LTD (4)(5)(10)(32) | B + | 6.75 % | 10.57 | % | 5/30/2030 | AUD | 10,463 | 6,610 | 6,899",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt rows have source par amounts in EUR, GBP, and AUD, but principal_amount_usd is blank in the extracted holdings issue rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "FX01 flags non-USD debt principal rows with blank principal_amount_usd. The raw schedule header identifies a Par Amount/Units column, and cited current-period rows show foreign-currency par values such as EUR 8,594, GBP 2,212, and AUD 10,463 while the flagged source artifact records principal_amount_usd as blank. Because non-USD par cannot safely support USD principal analytics without an explicit conversion, the missing USD principal is a real extraction/normalization gap."
+}

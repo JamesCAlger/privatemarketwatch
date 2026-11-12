@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_de1079f66450",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": "EUR 37 thousand principal",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 7,
+      "quoted_text": "Addev Group (France) | EURIBOR | Par/Principal Amount EUR 37 (thousand)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate flag covering 30 rows. Raw schedule table 14 row 7 confirms a debt position whose par is explicitly non-USD (EUR 37 thousand), while FX01 reports principal_amount_usd blank. The source therefore establishes that a currency conversion is required and the normalized USD principal was not populated. No filing-total anchor is applicable to this row-level currency-normalization rule; the cited source row directly grounds the defect. Residual risk is limited to whether every one of the 30 aggregated issue rows has the same mechanism, but the aggregate flag is real because at least the cited constituent is a confirmed defect."
+}

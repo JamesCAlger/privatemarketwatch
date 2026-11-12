@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_3a25da820c24",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1490456000.0,
+  "anchor_value": 1246701000.0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "A separate members-equity entity portfolio schedule with cost of $231.731 million was ingested into the same position population as the parent schedule, producing look-through contamination.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 33,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The extracted 179-position cost sum is $1,490.456 million, while the filing's March 31, 2026 schedule total is $1,246.701 million, an overstatement of $243.755 million (19.552%). The filing separately presents a members-equity entity with investments costing $231.731 million (table 30 row 4) and its own portfolio schedule totaling the same cost (table 33 row 62), while the parent schedule carries an AGL EPCI I LP interest (table 20 row 19). This structure supports classification/look-through contamination. The secondary portfolio total is close to but does not fully equal the residual, so the aggregate defect is certain while some residual composition remains for remediation to re-ground."
+}

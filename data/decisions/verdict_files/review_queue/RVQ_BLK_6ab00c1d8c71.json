@@ -1,0 +1,97 @@
+{
+  "review_id": "RVQ_BLK_6ab00c1d8c71",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "identifier maturity values: Aurora 2032-07-14 and 2032-09-03; Steward Partners 2028-12-14; SupplyHouse 2028-07-01; Options IT 2030-12-29; Mitratech 2031-12-22",
+  "anchor_value": "raw schedule maturity values: Aurora 2032-09-08; Steward Partners 2028-10-14; SupplyHouse 2032-07-01; Ohio Transmission 2030-12-19 for the 5.75%/9.40% terms; Mitratech 2031-12-02",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 21,
+      "quoted_text": "Aurora Energy Research | Senior Secured Delayed Draw Term Facility Notes | S+ | 5.00 % | 8.65 % | 9/8/2032 | Services: Business | 166,667 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 36,
+      "quoted_text": "Aurora Energy Research | Senior Secured Original Revolving Facility Notes | S+ | 5.00 % | 8.65 % | 9/8/2032 | Services: Business | 55,556 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 71,
+      "row_index": 42,
+      "quoted_text": "Steward Partners | Senior Secured Revolving Loan | S+ | 4.75 % | 8.40 % | 10/14/2028 | Banking, Finance, Insurance & Real Estate | 125,000 | 69,444",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 71,
+      "row_index": 43,
+      "quoted_text": "SupplyHouse | Senior Secured Revolving Credit Loan | S+ | 4.00 % | 7.65 % | 7/1/2032 | Capital Equipment | 125,000 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 47,
+      "quoted_text": "Ohio Transmission | Senior Secured Delayed Draw Term Loan | S+ | 5.75 % | 9.40 % | 12/19/2030 | Capital Equipment | 40,329 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 53,
+      "quoted_text": "Mitratech | Senior Secured Delayed Draw Term Loan | S+ | 4.75 % | 8.40 % | 12/2/2031 | Services: Business | 22,936 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Aurora Energy Research identifier maturities 7/14/2032 and 9/3/2032 are not supported by the raw rows, which show 9/8/2032 for the matched facilities.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 71,
+        "row_index": 21
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Steward Partners revolving loan identifier maturity 12/14/2028 should be 10/14/2028 per the raw schedule.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 71,
+        "row_index": 42
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "SupplyHouse revolving credit loan identifier maturity 7/1/2028 should be 7/1/2032 per the raw schedule.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 71,
+        "row_index": 43
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged Options IT terms match an Ohio Transmission delayed draw term loan maturing 12/19/2030, so the identifier has both issuer/row association and maturity defects.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 72,
+        "row_index": 47
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Mitratech delayed draw term loan identifier maturity 12/22/2031 should be 12/2/2031 per the raw schedule.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 72,
+        "row_index": 53
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw source rows for the flagged issuers and terms support the structured/XBRL maturity values, while the identifier-parsed dates are absent from the source or, for the Options IT item, attached to the wrong issuer/row. This grounds the flag as a real extraction/identifier construction error rather than a false alarm."
+}

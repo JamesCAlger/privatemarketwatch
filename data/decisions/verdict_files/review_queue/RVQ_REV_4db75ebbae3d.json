@@ -1,0 +1,41 @@
+{
+  "review_id": "RVQ_REV_4db75ebbae3d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 37,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | C + | 5.50 % | 10.65 % | 8/10/2029 | CAD | 205,798 | 156,372 | 146,207 | 0.61"
+    },
+    {
+      "table_index": 19,
+      "row_index": 46,
+      "quoted_text": "Caramel Bidco Limited | (4)(5)(6)(7)(8) | S + | 6.00 % | 10.43 % | 2/24/2029 | GBP | 60,000 | 78,306 | 71,840 | 0.30"
+    },
+    {
+      "table_index": 19,
+      "row_index": 47,
+      "quoted_text": "Caramel Bidco Limited | (4)(5)(6)(8) | E + | 6.00 % | 9.78 % | 2/24/2024 | EUR | 14,000 | 15,580 | 14,435 | 0.06"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 is valid: non-USD par amounts are explicitly labeled in the source schedule, but affected extracted debt rows have blank principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 19,
+        "row_index": 37,
+        "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | C + | 5.50 % | 10.65 % | 8/10/2029 | CAD | 205,798 | 156,372 | 146,207 | 0.61"
+      }
+    }
+  ],
+  "rationale": "The FX01 artifact rows flag blank principal_amount_usd for non-USD debt principal. Raw source rows in the Schedule of Investments show par amounts preceded by currency labels such as CAD, GBP, and EUR while cost and fair value are separately reported in USD columns. Because the source provides non-USD par and the extracted USD principal field is missing, the warning reflects a real extraction/normalization gap rather than a false alarm."
+}

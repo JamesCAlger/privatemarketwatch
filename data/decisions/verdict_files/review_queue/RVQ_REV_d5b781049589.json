@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_d5b781049589",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 550.0,
+  "anchor_value": 5.5,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "Rochester Midland Corporation | First Lien Secured Debt - Term Loan | S + 550 , 1.00 % Floor | 08/01/2029 | 12,424 | 12,258 | 12,269 | (4)(9)(15)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 5,
+      "quoted_text": "Olympus Water US Holding Corporation | First Lien Secured Debt - Term Loan | S + 325 , 0.00 % Floor | 11/03/2032 | 18,801 | 18,750 | 18,172 | (16)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 550.0 is a basis-point value from source term S + 550; under whole-number percent storage it should be 5.50.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 13,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored basis_spread 325.0 is a basis-point value from source term S + 325; under whole-number percent storage it should be 3.25.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 14,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C115 flags basis_spread values 550.0 and 325.0 as outside the expected percentage range, and the bundle states spreads are stored as whole-number percentages. The cited raw SOI rows show those source terms are S + 550 and S + 325 basis-point spreads, so the extracted values retained basis points instead of normalizing to 5.50 and 3.25 percent."
+}

@@ -1,0 +1,106 @@
+{
+  "review_id": "RVQ_BLK_86bb381d8715",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Flagged parsed/structured maturity values include 2020-10-15, 2020-02-24, 2031-12-02, 2020-09-26, 2020-08-12, 2026-10-30, 2030-07-26, and 2031-07-28.",
+  "anchor_value": "Filing schedule maturity cells show 10/15/31, 02/24/31, 12/26/31, 09/26/30, 08/12/30, 08/31/28 or 09/03/30 by row, 08/29/31, 07/28/31 or 07/26/30 by Avetta row, and 07/14/31.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 41,
+      "quoted_text": "Geo TopCo Corporation (fka Geotechnical Merger Sub, Inc.) | Construction & Engineering | 8.40 % | S + 4.50 % | 10/15/31 | 663 | 657 | 659 | (7) (8)"
+    },
+    {
+      "table_index": 44,
+      "row_index": 24,
+      "quoted_text": "Project Accelerate Parent, LLC (dba ABC Fitness) | Financial Services | 8.97 % | S + 5.25 % | 02/24/31 | 12,928 | 12,825 | 12,863 | (7) (8)"
+    },
+    {
+      "table_index": 48,
+      "row_index": 9,
+      "quoted_text": "Rotation Buyer, LLC (dba Rotating Machinery Services) | Machinery | 8.42 % | S + 4.75 % | 12/26/31 | 19,712 | 19,537 | 19,515 | (7) (8)"
+    },
+    {
+      "table_index": 44,
+      "row_index": 22,
+      "quoted_text": "Newtek Merchant Solutions, LLC (dba NewtekOne) | Financial Services | 9.22 % | S + 5.50 % | 09/26/30 | 16,800 | 16,639 | 16,632 | (7) (8) (9)"
+    },
+    {
+      "table_index": 44,
+      "row_index": 26,
+      "quoted_text": "Eagle Family Foods Group LLC | Food Products | 8.79 % | S + 5.00 % | 08/12/30 | 809 | 802 | 801 | (7) (8)"
+    },
+    {
+      "table_index": 65,
+      "row_index": 31,
+      "quoted_text": "Recorded Books Inc. (dba RBMedia) | Media | S + 5.75 % | 08/31/28 | 749 | ( 17 | ) | ( 7 | ) | (6) (8) (9)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 23,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus) | Software | S + 4.50 % | 08/29/31 | 896 | ( 7 | ) | ( 9 | ) | (7) (8) (10)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 34,
+      "quoted_text": "Artifact Bidco, Inc. (dba Avetta) | Software | S + 4.15 % | 07/28/31 | 2,586 | ( 10 | ) | ( 13 | ) | (7) (8) (10)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 37,
+      "quoted_text": "Aurora Acquireco, Inc. (dba AuditBoard) | Software | 8.17 % | S + 4.50 % | 07/14/31 | 600 | 595 | 595 | (7) (8) (9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two-digit or slash-date maturity parsing maps multiple 2030/2031 filing maturities to 2020 dates, for example Geo TopCo source maturity 10/15/31 was flagged as 2020-10-15.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 41,
+        "row_index": 41
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Rotation Buyer source maturity is 12/26/31, but the flagged identifier-side value is 2031-12-02.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AI Titan source rows for the S + 4.50 percent position mature 08/29/31, while the flagged identifier text carried 10/30/26.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Artifact Bidco has separate source rows maturing 07/28/31 and 07/26/30, and the flagged rows cross those maturity values between sibling rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 34
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Aurora Acquireco source rows mature 07/14/31, while the flagged identifier-side value is 2031-07-28 from a neighboring issuer pattern.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level adjudication: the filing schedule rows provide explicit maturity cells for the flagged issuers. The raw source confirms the rule fire is not a false alarm: several Agent A identifier-side dates are century/date-token parse errors, and several structured dates or identifier dates are taken from the wrong sibling issuer/instrument row. The source rows above ground the mismatches directly."
+}

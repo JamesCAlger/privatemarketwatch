@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_142828bb0330",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 6.0,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "B02 is a cik-quarter duplicate-position-key flag reporting 6 duplicate keys, with the bundle example 'iqhq inc iqhq inc'. The permitted evidence CLI raw-source commands all returned missing_cached_html for accession 0001752724-23-267682, so the raw filing source could not be read and the duplicate cannot be adjudicated from source."
+}

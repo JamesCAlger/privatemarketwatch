@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_ac4db28bd7fa",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.7583892617449665,
+  "anchor_value": 0.8,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Commitment Expiration Date | Unfunded Commitment | Fair Value (3)"
+    },
+    {
+      "table_index": 31,
+      "row_index": 2,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | 7/2/2026 | $ | 1,333 | $ | ( 7 | )"
+    },
+    {
+      "table_index": 31,
+      "row_index": 14,
+      "quoted_text": "Capstone Acquisition Holdings, Inc. | First Lien Delayed Draw Term Loan | 8/28/2026 | 729 | ( 5 | )"
+    },
+    {
+      "table_index": 31,
+      "row_index": 22,
+      "quoted_text": "Dwyer Instruments, LLC | First Lien Delayed Draw Term Loan | 11/20/2026 | 161 | ( 2 | )"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C01 counts unfunded commitment disclosure rows as debt rows requiring interest_rate even though the source commitment table has no reference-rate/spread column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 31,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The fail is driven by blank interest_rate on rows such as AB Centers, Capstone, and Dwyer delayed draw/revolver commitments. In the raw filing these rows appear in the unfunded commitments table, whose columns are Portfolio Company, Investment Type, Commitment Expiration Date, Unfunded Commitment, and Fair Value, with no Reference Rate and Spread column. Therefore the blank rate is source-faithful for these commitment rows; the check is over-scoped when it treats them as debt rows requiring a rate."
+}

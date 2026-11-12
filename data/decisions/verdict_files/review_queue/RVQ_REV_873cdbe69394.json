@@ -1,0 +1,62 @@
+{
+  "review_id": "RVQ_REV_873cdbe69394",
+  "verdict": "real_error",
+  "mechanism": "footnote",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7,
+  "anchor_value": 7,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 17,
+      "quoted_text": "National Dentex Corp(7)(12)(29) | 1st Lien Term Loan | Healthcare Providers & Services | S+ 8.15 %, 1.00 % Floor | 12.45 | 10/26/2020 | 4/3/2026 | 11,546,729 | 11,326,824 | 8,599,427 | 1.59",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 18,
+      "quoted_text": "National Dentex Corp(7)(12)(29) | 1st Lien Delayed Draw Term Loan | Healthcare Providers & Services | S+ 8.15 %, 1.00 % Floor | 12.45 | 10/26/2020 | 4/3/2026 | 5,811,828 | 5,699,243 | 4,328,359 | 0.80",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 19,
+      "quoted_text": "National Dentex Corp(7)(29) | 1st Lien Delayed Draw Term Loan | Healthcare Providers & Services | S+ 8.15 %, 1.00 % Floor | 12.45 | 4/4/2024 | 4/3/2026 | 924,199 | 889,643 | 688,297 | 0.13",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "National Dentex Corp(7)(23)(29) | 1st Lien Delayed Draw Term Loan | Healthcare Providers & Services | S+ 10.15 %, 1.00 % Floor | 14.45 | 10/29/2024 | 4/3/2026 | 1,981,726 | 580,738 | 1,475,890 | 0.27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "National Dentex Corp(6)(7)(29) | 1st Lien Revolver | Healthcare Providers & Services | S+ 7.15 %, 1.00 % Floor ( 0.50 % on unfunded) | 11.45 | 10/26/2020 | 4/3/2026 | 1,486,897 | 1,126,241 | 772,815 | 0.14",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 16,
+      "quoted_text": "Thunder Grandparent Inc. (dba Telestream, Inc)(7)(8)(15)(29) | 1st Lien Term Loan | Software & Services | S+ 9.85 %, 1.00 % Floor | 14.17 | 10/15/2020 | 10/15/2025 | 16,252,711 | 15,168,892 | 14,126,021 | 2.61",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 17,
+      "quoted_text": "Thunder Grandparent Inc. (dba Telestream, Inc)(6)(7)(15)(29) | 1st Lien Revolver | Software & Services | S+ 9.85 %, 1.00 % Floor ( 0.50 % on unfunded) | 14.17 | 10/15/2020 | 10/15/2025 | 1,364,452 | 1,051,553 | 950,342 | 0.18",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 35.8 | 3.9 | % | 30.9 | 3.5 | % | 51.7 | 5.6 | % | 45.8 | 5.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw filing supports the nonaccrual flag. The SOI rows for the five National Dentex instruments and two Thunder Grandparent/Telestream instruments all carry footnote marker (29), matching the seven positions in the queue item. The filing also reports a March 31, 2025 non-accrual bucket of $35.8 million amortized cost and $30.9 million fair value in table 52, confirming that non-accrual exposure exists in the period. The source therefore supports the flag rather than showing a check-only false alarm."
+}

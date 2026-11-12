@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8c650e75cf4c",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated fair value in the filing schedule",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "Carlstar Group, LLC (3) | First-lien loan ($ 33,150 par, due 7/2027 ) | 7/8/2022 | SOFR + 6.60 % | 11.34 % | $ | 32,353 | $ | 32,734 | 2.4 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 6,
+      "quoted_text": "Acceo Solutions, Inc. (3)(4)(5) | First-lien loan (CAD 57,353 par, due 10/2025 ) | 7/6/2018 | C + 4.75 % | 9.78 % | 43,273 | 42,696 (CAD 57,783 ) | 3.1 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency='U_USD' as not USD. The raw schedule's Fair Value column is dollar-denominated: a plain USD loan shows a dollar-marked fair value of 32,734, and a CAD par loan shows fair value 42,696 with only the CAD equivalent parenthesized. The source therefore supports the extracted fair values as USD-denominated; the check appears to be rejecting the unit label U_USD rather than exposing a data error."
+}

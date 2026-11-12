@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_e105e6e2274f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 3247998,
+  "anchor_value": 36725695,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 16,
+      "quoted_text": "AGY Holdings Corp. (2) | 05/27/22 | Delayed Draw Term Loan - 15.60 % inc PIK (SOFR + 10.00 %, 1.50 % Floor, 6.00 % PIK) | 5.7 | % | 36,725,711 | 09/21/27 | 36,725,695 | 33,346,945",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Stored cost for AGY Holdings Corp. Delayed Draw Term Loan is 3,247,998, but the June 30, 2024 investment schedule shows amortized cost 36,725,695 and fair value 33,346,945.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 4,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "The X07 warning is a true data error: the extracted row used cost 3,247,998 with fair value 33,346,945, creating an artificial greater-than-10x fair-value-to-cost ratio. The raw schedule row for the same issuer and instrument shows amortized cost 36,725,695 and fair value 33,346,945, so the fair value is source-supported but the stored cost is wrong."
+}

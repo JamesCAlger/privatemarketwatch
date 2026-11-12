@@ -1,0 +1,49 @@
+{
+    "review_id":  "RVQ_REV_5f723d58f7d8",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  -11000,
+    "anchor_value":  0,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  17,
+                                  "row_index":  11,
+                                  "quoted_text":  "Cohnreznick Advisory LLC | (4) (6) (11) | First Lien Debt (Delayed Draw) | S + 4.00 % | 8.30 | % | 3/31/2032 | 3,477 | ( 11 ) | - | - | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Cohnreznick delayed draw row has amortized cost (11) but fair value is a dash, so extracted fair_value -11000 is a column/cell extraction error.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  17,
+                                          "row_index":  11
+                                      }
+                     },
+                     {
+                         "mechanism":  "unknown",
+                         "detail":  "PT Intermediate fair value (1) is present in the source on a First Lien Debt (Delayed Draw) row with footnote 11, so that sub-row is a rule-scope false positive rather than a data error.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  19,
+                                          "row_index":  7
+                                      }
+                     },
+                     {
+                         "mechanism":  "unknown",
+                         "detail":  "Thermostat Purchaser fair value (4) is present in the source on a First Lien Debt (Delayed Draw) row with footnote 11, so that sub-row is a rule-scope false positive rather than a data error.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  19,
+                                          "row_index":  15
+                                      }
+                     }
+                 ],
+    "rationale":  "C103 reviewed three negative fair_value issue values. Raw source localizes the -11000 issue to Cohnreznick Advisory LLC: the row is delayed draw debt, but the negative (11) appears in the Amortized Cost column while the Fair Value column is a dash, so storing fair_value=-11000 is a real extraction error. The -1000 and -4000 issue values match PT Intermediate and Thermostat Purchaser delayed-draw rows with footnote 11 and are filer presentation/rule-scope exceptions, but the bundle contains at least one grounded real data error."
+}

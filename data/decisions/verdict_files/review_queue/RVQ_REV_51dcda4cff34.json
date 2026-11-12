@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_51dcda4cff34",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": -19000,
+  "anchor_value": -19000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 31,
+      "quoted_text": "AAG KP Borrower LLC (dba KUIU) | Textiles, Apparel & Luxury Goods | S + 5.00 % | 12/05/31 | 1,297 | ( 19 | ) | ( 19 | ) | (5) (8)"
+    },
+    {
+      "table_index": 43,
+      "row_index": 31,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus) | Software | S + 4.50 % | 08/29/31 | 734 | ( 6 | ) | ( 7 | ) | (5) (7) (8)"
+    },
+    {
+      "table_index": 54,
+      "row_index": 1,
+      "quoted_text": "(8) | Position or portion thereof is an unfunded commitment, and no interest is being earned on the unfunded portion. The unfunded commitment may be subject to a commitment termination date that may expire prior to the maturity date stated. The negative cost, if applicable, is the result of the capitalized discount being greater than the principal amount outstanding on the loan. The negative fair value, if applicable, is the result of the capitalized discount on the loan."
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but the raw SOI prints the same negative costs in the Cost column for rows carrying footnote 8, and footnote 8 expressly states that negative cost may apply to unfunded commitments when capitalized discount exceeds principal outstanding. The extracted negative costs therefore match the source and the rule fire is advisory rather than a data error."
+}

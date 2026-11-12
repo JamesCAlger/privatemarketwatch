@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_d2c644b6bd72",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "9.75% PIK",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 11,
+      "quoted_text": "AI Altius Bidco, Inc. | (4)(5)(8) | 9.75 % | 9.75 % PIK | 12/21/2029 | 27,000 | 26,595 | 26,865 | 0.08"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AI Altius Bidco, Inc. first-lien private credit row has stored interest_rate blank, but the source schedule states 9.75% PIK in the interest-rate column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The flagged extracted holding for AI Altius Bidco, Inc. has no interest_rate or basis_spread, but the matching source schedule row shows Reference Rate and Spread 9.75% and Interest Rate 9.75% PIK for the 12/21/2029 position. The missing extracted rate is therefore a source-grounded extraction gap, not a false alarm."
+}

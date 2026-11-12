@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_487cc1b52295",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7019.058,
+  "anchor_value": 7019.058,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 3,
+      "quoted_text": "107-109 Beech OAK22 LLC | Real Estate Development | First Lien Revolver | 11.00 % | 5/27/2026 | $ | 9,600 | $ | 9,593 | $ | 9,600 | (8)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 7,019,058 | 100.00 | % | 159.44 | % | $ | 6,899,031 | 100.00 | % | 151.90 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation contradicts A07's reported pct_sum of 0.0%. The March 31 schedule reports total fair value of $7,019.058 million, 100.00% of total investments, and 159.44% of net assets; the extracted quarter fair value is also $7,019.058 million. A direct SOI spot check at table 12 row 3 reports an 11.00% rate, matching the extracted holding's 11.0. Thus usable percentage data exists in raw source and is correctly represented in the extracted position, while the oracle aggregate is zero; the flag reflects a bad check/input anchor rather than a data defect."
+}

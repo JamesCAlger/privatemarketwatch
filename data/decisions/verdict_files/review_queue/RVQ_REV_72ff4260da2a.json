@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_72ff4260da2a",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 8.0,
+  "anchor_value": null,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "Thrasio, LLC | Broadline Retail | 11.93 % | S + 8.00 % | 06/18/29 | 4,729 | 4,722 | 4,682 | (6) (8) (11)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The published 8.0 was assigned to pik_rate, but the source places 8.00% in the Reference Rate and Spread column as S + 8.00%, with no PIK designation.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "Class 1 multi-cell provenance review. Raw source confirms the numeric text pathway for the spread values, including 10.26% at table 8 row 20, but decisively contradicts the pik_rate classification for published 8.0: table 8 row 21 prints S + 8.00% in the Reference Rate and Spread column and does not label it PIK. Thus at least one of the eight flagged cells is a real field-classification error. No aggregate anchor is applicable."
+}

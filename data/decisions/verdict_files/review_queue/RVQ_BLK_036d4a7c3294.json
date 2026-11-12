@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_BLK_036d4a7c3294",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2101364499,
+  "anchor_value": 2101364499,
+  "confidence": 0.87,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %"
+    },
+    {
+      "table_index": 64,
+      "row_index": 24,
+      "quoted_text": "Total Money Market Mutual Funds | 13,143,788 | 13,143,788 | 1.03 %"
+    },
+    {
+      "table_index": 64,
+      "row_index": 25,
+      "quoted_text": "Total Investments -- non-controlled/ non-affiliate | 2,135,060,196 | 2,114,508,287 | 165.83 %"
+    }
+  ],
+  "rationale": "E07 is an aggregate count-scope flag reporting source=56 vs output=314, but the raw current investment schedule is split across many SOI tables and the value anchor supports the output universe. The schedule shows Total Investments -- non-controlled/non-affiliate fair value of 2,114,508,287 and Money Market Mutual Funds fair value of 13,143,788; excluding the money-market row gives 2,101,364,499, matching the bundle's extracted fund_quarter_fv_m of 2101.364499. The raw source therefore supports the output scope, and the 56 source count is not a reliable raw-source anchor for this filing."
+}

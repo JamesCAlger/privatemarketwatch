@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_b6b283ae9e19",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2 fmt_basis_spread violations in extracted holdings text",
+  "anchor_value": "raw SOI rows show clean reference-rate/spread and interest-rate cells",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 30,
+      "quoted_text": "Merit Software Finance Holdings, LLC (3) | First-lien loan ($ 10,714 par, due 6/2029 ) | 6/20/2024 | SOFR + 7.50 % | 12.42 | % | 10,363 | 10,414 | 0.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 24,
+      "quoted_text": "Wrangler TopCo, LLC (3) | First-lien loan ($ 124,248 par, due 9/2029 ) | 7/7/2023 | SOFR + 6.00 % | 10.92 | % | 121,553 | 125,815 | 4.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Merit Software source row has only SOFR + 7.50% and 12.42% interest, while the extracted identifier is contaminated with an additional nonexistent 12.84% rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Wrangler TopCo source row has SOFR + 6.00% and 10.92% interest, while the extracted identifier carries a conflicting nonexistent 12.05% rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 24
+      }
+    }
+  ],
+  "rationale": "The raw SOI table rows decide the question. The filing separates Reference Rate and Spread from Interest Rate, and the localized rows show clean values: Merit Software is SOFR + 7.50% with 12.42% interest, and Wrangler TopCo is SOFR + 6.00% with 10.92% interest. The extra/conflicting rates visible in the extracted holdings identifier text are not present in raw source, so the flag reflects a real downstream extraction/identifier contamination rather than a filing-level ambiguity."
+}

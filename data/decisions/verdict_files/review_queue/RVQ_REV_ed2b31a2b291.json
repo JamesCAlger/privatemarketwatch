@@ -1,0 +1,32 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_ed2b31a2b291",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  201.59999999999968,
+    "anchor_value":  201.6,
+    "rationale":  "The PCT01 flag is based on the extracted pct_of_net_assets sum of 201.6%, but raw source confirms this exact total. The schedule reports Total investments at 201.6% of net assets with fair value 1,311,001 (in thousands), and the statement of financial condition reports Total Net Assets of 650,202 (in thousands), so 1,311,001 / 650,202 = 201.6%. The high percentage reflects leverage/borrowings in the BDC and is not an extraction data error.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  23,
+                                  "table_index":  67,
+                                  "quoted_text":  "Total investments | 1,291,512 | 201.6 | 1,311,001"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  39,
+                                  "table_index":  50,
+                                  "quoted_text":  "Total Net Assets | 650,202 | 182,684"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  4,
+                                  "table_index":  50,
+                                  "quoted_text":  "Non-controlled / non-affiliate company investments at fair value (amortized cost of $ 1,291,512 and $ 316,817, respectively) | $ | 1,311,001 | $ | 318,915"
+                              }
+                          ],
+    "confidence":  0.96
+}

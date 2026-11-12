@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_0c27b5e965e2",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Pipeline row for Baxter Planning Systems, LLC delayed draw term loan at report_date 2025-12-31: cost -10000, fair_value -15000, acquisition 2024-05-20, maturity 2031-05-20.",
+  "anchor_value": "Current-period source schedule table 33 row 26 shows the same Baxter Planning Systems, LLC delayed draw term loan with amortized cost (10), fair value (15), acquisition 5/20/2024, maturity 5/20/2031.",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 26,
+      "quoted_text": "Baxter Planning Systems, LLC; First Lien Senior Secured Delayed Draw Term Loan; Air Freight & Logistics; SOFR + 5.750%; 5/20/2024; 5/20/2031; par amount/shares zero; amortized cost (10); fair value (15)."
+    }
+  ],
+  "rationale": "The PP03 warning says the position is a comparative-period row, but raw source table 33 is the current investment schedule for the 2025 report and row 26 supports the reviewed holding exactly. A similar Baxter delayed draw row also appears in the comparative schedule, but the current-period source row means the 2025 extracted holding is not erroneous."
+}

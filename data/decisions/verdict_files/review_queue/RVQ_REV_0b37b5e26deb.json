@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_0b37b5e26deb",
+  "verdict": "false_alarm",
+  "mechanism": "text_pathway_valid",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": 12.0,
+  "anchor_value": 12.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 11,
+      "quoted_text": "Wine.com, LLC | Beverages | 15.93 % | S + 12.00 % PIK | 04/01/28 | 8,709 | 8,877 | 7,572 | (6) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 12,
+      "quoted_text": "Wine.com, LLC | Beverages | 15.93 % | S + 12.00 % PIK | 04/01/28 | 2,430 | 1,951 | 3,942 | (6) (8) (9) (12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 review of the two flagged basis_spread records. The raw schedule's Reference Rate and Spread column states S + 12.00% PIK for both Wine.com, LLC rows at table 9 rows 11 and 12. The published basis_spread of 12.0 therefore matches the raw source; the text_pathway provenance warning is not a data error. No aggregate anchor is relevant to this field-level provenance check."
+}

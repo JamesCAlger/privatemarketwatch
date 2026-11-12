@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_122f3ab944be",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 17,
+  "anchor_value": 8,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 7,
+      "quoted_text": "Total | $ | 47,490 | $ | 26,465 | $ | 48,502 | $ | 29,558",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 25,
+      "quoted_text": "Sea-K Investors, LLC - Preferred Equity (11)(12)(13) | Consumer Durables & Apparel | NA | 15.00 % PIK | NA | 3,495 | - | - | 0.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The artifact counted 17 flagged rows, but the March 31, 2025 non-accrual disclosure ties to 8 current SOI investment rows; the remaining matched non-accrual rows are December 31, 2024 comparatives.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 58,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Sea-K Investors, LLC preferred equity was flagged even though the non-accrual table lists only Kent Water Sports, OneCare Media, Select Rehabilitation, and VardimanBlack Holdings.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 15,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "The raw non-accrual table lists four March 31, 2025 portfolio-company amounts totaling cost 47,490 and fair value 26,465: Kent Water Sports, OneCare Media, Select Rehabilitation, and VardimanBlack Holdings. Those amounts tie to 8 current-period SOI investment rows, while the reviewed artifact reports 17 rows by also including December 31, 2024 comparative rows and Sea-K Investors, LLC, which appears in the investment schedule but is absent from the non-accrual disclosure."
+}

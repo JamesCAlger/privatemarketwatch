@@ -1,0 +1,70 @@
+{
+  "changed_files": [],
+  "cik": "0001950803",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "holdings_examples",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 30,
+      "row_index": 37,
+      "cell_indices": [
+        0
+      ],
+      "row_classification": "AGGREGATE_HEADER",
+      "reason": "Non-Controlled, Non-Affiliated Private Credit Funds is a section header without numeric position values; it identifies a fund bucket, not a position-level holding."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 30,
+      "row_index": 38,
+      "cell_indices": [
+        0
+      ],
+      "row_classification": "UNCLASSIFIABLE",
+      "reason": "Limited Partnership Interests is a category/header line with no issuer, instrument, maturity, cost, fair value, or percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 82,
+      "row_index": 7,
+      "cell_indices": [
+        0,
+        3,
+        7,
+        8,
+        11,
+        15,
+        16,
+        19,
+        20
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "The Private Credit Funds row is a category summary with aggregate private-credit-fund fair values and percentages; it does not disclose a specific fund/issuer name and should not be promoted to a production position."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "Manual review shows the two Stepstone source-only blocker rows are aggregate/category rows, not missing position-level holdings. The raw identifiers end in Total Investments or Total Non-Controlled, Non-Affiliated Private Equity Funds under a Limited Partnership Interests hierarchy. The coordinate evidence for the same bucket points to a section header, a category/header line, and a broad Private Credit Funds summary row rather than a named fund interest. Adding these rows would aggregate many underlying fund interests into one synthetic constituent and would violate the repository's position-level data semantics.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-09-30",
+  "requires_human_merge": false,
+  "residual_risk": "No production rows should be added for these two aggregate/category rows. The broader Stepstone quarter still has over-coverage warnings in the GAV/source reconciliation context, but this verdict only clears this source-only category-total packet and does not resolve unrelated Stepstone over-coverage risk.",
+  "review_id": "BDCSRC_0001950803_2024-09-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_bcc437c1bb",
+  "reviewer_notes": "Reviewed manually as row 55. This is a no-patch verdict because the evidence supports intentional non-production treatment: these are fund-bucket totals/category headers, not position rows. The prior insufficient-evidence placeholder was too weak because coordinate-level evidence is available and supports an aggregate/header diagnosis.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "No source or output data changes. The packet is documented as intentionally non-blocking aggregate/header evidence and should not be used to add synthetic position rows.",
+  "tests_validation_plan": "Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code patch or targeted pytest is required for this verdict.",
+  "verdict": "NO_PATCH_NEEDED"
+}

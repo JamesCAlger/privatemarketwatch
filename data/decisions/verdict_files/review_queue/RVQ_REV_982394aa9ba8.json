@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_982394aa9ba8",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PP03 flagged Equine Network LLC Revolver and MacKenzie-Childs Acquisition Inc. Revolver as comparative-period rows.",
+  "anchor_value": "Both revolver positions are present in the June 30, 2024 source schedule.",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 36,
+      "quoted_text": "Equine Network, LLC / Revolver / 1st Lien / 1M SOFR+ 6.50% / 11.96% cash / investment date 5/22/2023 / maturity 5/22/2028 / principal 176,599 / amortized cost 176,599 / fair value 175,716 / 0.12% net assets"
+    },
+    {
+      "table_index": 12,
+      "row_index": 6,
+      "quoted_text": "MacKenzie-Childs Acquisition, Inc. / Revolver / 1st Lien / 3M SOFR+ 6.00% / 11.48% cash / investment date 9/2/2022 / maturity 9/2/2027 / principal 717,020 / amortized cost 717,020 / fair value 713,435 / 0.50% net assets"
+    }
+  ],
+  "rationale": "The PP03 warning says the two holdings were retained as comparative-period facts, but raw source shows matching current-period investment rows for both flagged revolvers in the June 30, 2024 schedule. The same names also appear in the December 31, 2023 comparative schedule and in unfunded commitment tables, but that does not make the current-period extracted holdings erroneous when the June 30 schedule itself contains the positions. The check appears over-broad for positions that persist across periods."
+}

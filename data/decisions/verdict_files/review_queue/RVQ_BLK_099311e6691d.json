@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_BLK_099311e6691d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 24138000.0,
+  "anchor_value": 241000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 62,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC (4)(6)(9) | 8/13/2032 | 24,138 | ( 235 ) | 241"
+    }
+  ],
+  "rationale": "X06 flagged principal_amount_usd of 24,138,000 as more than 10x fair value, but the SOI itself states par amount 24,138 and fair value 241 for the same ABC Legal Holdings row, both in the filing's thousands convention. The stored principal and fair value therefore reflect the raw source; the check is overbroad for distressed or low-fair-value debt positions rather than revealing a scale or FX extraction error."
+}

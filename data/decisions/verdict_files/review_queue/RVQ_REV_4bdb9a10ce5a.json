@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_4bdb9a10ce5a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "N/A",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 243,
+      "row_index": 15,
+      "quoted_text": "CIFC Stone Warehouse Ltd. - Subordinated Lender | (1)(3)(5)(10)(11) | N/A | N/A | N/A | $ | - | $ | 29,250,000 | $ | 29,250,000 | 8.77 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged extracted row has blank interest_rate/basis_spread, and the raw source row for CIFC Stone Warehouse Ltd. - Subordinated Lender shows N/A in both the Reference Rate Spread / Floor column and the Cash Interest Rate / PIK Rate column, with N/A maturity as well. The missing rate is therefore source-faithful; the X02 check is over-scoped for this warehouse/subordinated lender row rather than exposing a data extraction error."
+}

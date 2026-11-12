@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_f8a6271e78b9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6111111111111112,
+  "anchor_value": 0.8611111111111112,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 24,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 64,
+      "row_index": 13,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 17,
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Raw SOI equity rows contain numeric Par Amount / Shares on 31 of 36 investment rows, but the extracted C04 metric reports only 22 of 36 equity rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 65,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate coverage flag. The C04 source artifact reports 61.1% share coverage for 36 equity rows, below the 70% threshold. Raw SOI tables 63-65 localize the equity section and show 36 equity investment rows before Total Equity Investments; 31 have numeric values in the Par Amount / Shares column. Examples include Clarity Technologies Holdings, LP with 6 shares in table 63 row 24, DeLorean Topco, L.P. with 435 shares in table 64 row 13, and the section total at table 65 row 17. The raw-source coverage is 31/36 = 86.1%, so the failing extracted metric is a real extraction gap rather than a true absence of source shares."
+}

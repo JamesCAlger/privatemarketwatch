@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_73fc4dcf4e07",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 372000,
+  "anchor_value": 372000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 63,
+      "row_index": 32,
+      "quoted_text": "Buckman Laboratories | (9) | Common | - | - | - | 372 | 373 | 372 | 0.05",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged identifier contains category context (non-controlled/non-affiliated, Equity Investments, Chemicals), but the raw schedule shows Buckman Laboratories is a real position row, not a subtotal/category-only line: table 63 row 32 lists Buckman Laboratories, asset type Common, amortized cost 373 and fair value 372 (in thousands). The surrounding grid shows Chemicals is only the section header on row 30 and the Buckman row is a distinct holding beneath it, so the subtotal-candidate flag is a false alarm."
+}

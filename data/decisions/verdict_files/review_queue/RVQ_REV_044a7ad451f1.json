@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_044a7ad451f1",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "interest_rate=9.67; basis_spread=6.00",
+  "anchor_value": "interest_rate=9.67; basis_spread=6.00",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 20,
+      "quoted_text": "Tighitco Inc (i)(l)(q) | Term Loan | SOFR + 6.00 % | 9.67 % | 2/28/2030 | 8,703,297 | 8,595,697 | 8,668,484",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The current-period raw schedule directly prints SOFR + 6.00% in the Reference Rate and Spread column and 9.67% in the Interest Rate column for the Tighitco Inc term loan. Both text-pathway published values exactly match the source; the warning reflects unavailable inline-fact provenance rather than a data error."
+}

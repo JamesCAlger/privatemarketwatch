@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_123a33cfe242",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 15,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | -- | 434 | 537",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 16,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | -- | -- | 5",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 11,
+      "quoted_text": "Red Griffin TopCo, LLC | Common Stock | 1,746 | 8,435 | 1,391",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 7,
+      "quoted_text": "Eclipse Topco, Inc. | Preferred Stock | 72 | 831 | 855",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C04 includes two L.P. Interest rows in the shares-required denominator even though the source reports no shares for that instrument type.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 19,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule contains four extracted PRIVATE_EQUITY rows, but only two are share-bearing stock instruments. Common Stock has 1,746 shares at table 19 row 11 and Preferred Stock has 72 shares at row 7. The two rows without shares are L.P. Interest positions at rows 15 and 16, for which the filing itself prints a dash in Principal / Shares. Thus the source supports 2 of 2 applicable stock rows with shares; the reported 50% metric is caused by including non-share-based partnership interests in the denominator."
+}

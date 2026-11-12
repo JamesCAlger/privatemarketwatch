@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_315ec06f5457",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2168000.0,
+  "anchor_value": 30708000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 22,
+      "quoted_text": "AAM Series 2.1 Aviation Feeder, LLC(17)(19)(23)(24)(26)(31) | LLC Interest | N/A | N/A | 30,706 | $ | 30,708 | $ | 30,706 | 0.4 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted non-equity row uses cost 2168000, but the source LLC Interest row shows amortized cost 30708000 and fair value 30706000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The source places the position under Equity Investments as an LLC Interest, so the extracted OTHER/UNCLASSIFIED classification is wrong.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 31,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "X07 fired because the extracted non-equity row has fair_value 30706000 against cost 2168000. The raw schedule row for AAM Series 2.1 Aviation Feeder, LLC is an LLC Interest under Equity Investments with amortized cost 30708000 and fair value 30706000, so the >10x relationship is caused by extraction/classification error rather than a real source economics outlier."
+}

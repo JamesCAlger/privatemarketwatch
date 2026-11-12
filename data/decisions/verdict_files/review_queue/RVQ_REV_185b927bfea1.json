@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_185b927bfea1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -0.1,
+  "anchor_value": -0.1,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 21,
+      "quoted_text": "MRI Software, LLC | (4) (6) (10) | SOFR + 5.50 % | N/A | 2/10/2027 | - | ( 65 ) | ( 99 ) | ( 0.1 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C404 flagged pct_of_net_assets = -0.1 for MRI Software, LLC. The raw Schedule of Investments row itself reports fair value (99) and % of Net Assets (0.1), so the extracted negative percentage matches the filing. This is a monitorable negative source value, not an extraction or normalization data error."
+}

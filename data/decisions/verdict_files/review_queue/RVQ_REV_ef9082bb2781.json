@@ -1,0 +1,54 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "comparative_leak",
+                         "fix_class":  "comparative_period_filter",
+                         "detail":  "B01 denominator appears to include a separate comparative-period SOI block even though the 2024 current-period SOI has fair values and ties to Total Investments of 256,654,766.",
+                         "citation":  {
+                                          "row_index":  11,
+                                          "table_index":  37,
+                                          "quoted_text":  "Total Non-controlled, non-affiliated investments | $ | 206,513,758 | $ | 208,574,078 | 193.08 %"
+                                      }
+                     },
+                     {
+                         "mechanism":  "classification_lookthrough",
+                         "fix_class":  "classification_fix",
+                         "detail":  "Issuer/group rows in the SOI are labels without fair value, while adjacent investment leaf rows carry fair value, so label rows should not be counted as fair-value-bearing leaves.",
+                         "citation":  {
+                                          "row_index":  5,
+                                          "table_index":  9,
+                                          "quoted_text":  "2X LLC issuer label row has no cost or fair value cells; adjacent Term Loan row carries fair value."
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_ef9082bb2781",
+    "mechanism":  "comparative_leak",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  0.49467275494672752,
+    "anchor_value":  1,
+    "rationale":  "Class 3 aggregate review. The filing source provides a current-period SOI total fair value of 256,654,766 at table 15 row 22, and representative current investment rows have populated fair value cells. The source also contains a separate comparative SOI block ending with 208,574,078 at table 37 row 11. The observed B01 metric, 325/657 = 0.4947, is therefore grounded as a row-scope/comparative-period leak rather than an absence of fair values in the source.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  22,
+                                  "table_index":  15,
+                                  "quoted_text":  "Total Investments | $ | 255,095,531 | $ | 256,654,766 | 180.45 %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  11,
+                                  "table_index":  37,
+                                  "quoted_text":  "Total Non-controlled, non-affiliated investments | $ | 206,513,758 | $ | 208,574,078 | 193.08 %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  6,
+                                  "table_index":  9,
+                                  "quoted_text":  "2X LLC Term Loan current-period investment row carries fair value $1,776,963"
+                              }
+                          ],
+    "confidence":  0.78
+}

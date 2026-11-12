@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_REV_e97694a021bf",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "extracted row flagged with cost 315000.0 and fair_value greater than 10x cost",
+    "anchor_value":  "source row shows cost 315000 and fair_value 294000",
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  18,
+                                  "row_index":  24,
+                                  "quoted_text":  "AI Titan Parent, Inc. (dba Prometheus) | Software | 8.17 % | S + 4.50 % | 08/29/31 | 1,433 | 315 | 294 | (7) (8) (10)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "For the AI Titan row with cost 315, the source fair value is 294, so the extracted fair value that made fair_value exceed 10x cost is misassociated or otherwise wrong.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  18,
+                                          "row_index":  24
+                                      }
+                     }
+                 ],
+    "rationale":  "X07 is a Class 2 row validation issue. The raw SOI row for AI Titan Parent, Inc. (dba Prometheus) with the flagged cost shows par 1,433, cost 315, and fair value 294 (amounts in thousands). That is not an extreme appreciation relationship; fair value is below cost. Because the extracted row nonetheless triggered fair_value \u003e 10x cost for cost 315000.0, the defect is an extraction/row association error in the stored fair_value, not a false alarm in the rule."
+}

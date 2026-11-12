@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2777b729ac58",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 13,
+      "quoted_text": "Total Investments | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag: A07 observed pct_sum=0.0% with zero detail rows, but the raw March 31, 2026 industry-classification schedule explicitly reports Total Investments at 100.0%. The schedule also contains populated industry percentage rows, so the zero extracted sum is an extraction gap rather than a source value or anchor defect."
+}

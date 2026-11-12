@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_b81c213bf58c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "U_EUR",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 4,
+      "quoted_text": "Financiere N (dba Nemera) row has Par currency EUR, while Cost and Fair Value columns are explicitly dollar-denominated: Cost $ 12,799; Fair Value $ 13,296.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 is a Class 1 single-cell currency validation. The flagged stored cost_currency is U_EUR, but the raw schedule table header separates Par from Cost/Fair Value, and row 4 shows EUR only in the Par currency position while the Cost column is marked with a dollar sign. The validator is correctly flagging a valuation field carrying the par currency instead of USD. This is a localized extraction gap, not a false alarm."
+}

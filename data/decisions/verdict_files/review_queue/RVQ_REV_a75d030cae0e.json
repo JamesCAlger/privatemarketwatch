@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_a75d030cae0e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.38,
+  "anchor_value": 8.38,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 21,
+      "quoted_text": "Noramco, LLC | 07/01/16 | Term Loan - 12.51 % inc PIK ( SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK) | 11.7 | % | 27,642,846 | 05/01/26 | 27,642,846 | 27,145,275",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Noramco's investment terms contain a SOFR basis spread of 8.38% and a separate 0.38% PIK leg; treating 0.38% as the basis spread would be a field extraction error.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 22,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The current debt schedule localizes the one-of-eight basis-spread format issue to Noramco. The raw investment cell states 'SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK', so the basis spread is 8.38% while 0.38% is explicitly the PIK leg. This supports a real extraction/localization defect rather than a source-supported basis spread of 0.38%."
+}

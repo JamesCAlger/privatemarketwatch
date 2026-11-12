@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_83788572a053",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 201772770,
+  "anchor_value": 201772770,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 43,
+      "quoted_text": "Total Investments - 89.33 % of Net Assets | $ | 215,078,392 | $ | 201,772,770 | 89.53 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 42,
+      "quoted_text": "Total Investments - 80.50 % of Net Assets | 222,558,514 | 210,055,893 | 81.66 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing's March 31, 2026 schedule total is 201,772,770, exactly matching both the balance-sheet total investments and the extracted fund-quarter fair value of 201.772770 million. The filing separately presents a December 31, 2025 investment schedule totaling 210,055,893. Thus output=247 is consistent with the current-period schedule while the oracle's source=542 count is contaminated by comparative-period schedule structure; the count comparison is the defect, not the extracted current-quarter data."
+}

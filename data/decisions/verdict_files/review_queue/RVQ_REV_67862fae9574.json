@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_67862fae9574",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "flagged basis_spread values include 1075.0, 1000.0, 1225.0, 650.0, and 775.0",
+  "anchor_value": "source Interest Term spreads are stated as terms such as S + 525, S + 550, S + 650, S + 675, or S + 775, with all-in Interest Rate shown separately",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 25,
+      "quoted_text": "Oliver Packaging LLC | Senior Secured First Lien Term Loan | S + 550 ( 100 Floor) (including 50 PIK) | 10.75 % | 07/2028 | 250 | 246 | 0.0 | 246",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "Learn-It Systems, LLC | Senior Secured First Lien Term Loan | S + 525 ( 100 Floor) (including 275 PIK) | 10.00 % | 09/2026 | 4,443 | 4,407 | 0.6 | 4,443",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 28,
+      "quoted_text": "Evolution BuyerCo, Inc. | Unitranche First Lien Delayed Draw Term Loan | S + 675 ( 100 Floor) | 12.25 % | 04/2028 | 249 | 245 | 0.0 | 249",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "MHS Acquisition Holdings, LLC | Senior Secured First Lien Term Loan | S + 650 ( 100 Floor) | 11.78 % | 07/2027 | 39 | 39 | 0.0 | 39",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 13,
+      "quoted_text": "Lash Opco LLC | Unitranche First Lien Term Loan | S + 775 ( 100 Floor) (including 510 PIK) | 12.94 % | 03/2026 | 3,047 | 3,033 | 0.4 | 2,921",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "basis_spread values 650 and 775 are source basis-point spreads stored as whole-number percentages; they should be normalized to 6.50 and 7.75.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 11,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "unit_scale",
+      "detail": "basis_spread values 1000, 1075, and 1225 reflect all-in Interest Rate cells scaled by 100 rather than the source Interest Term spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 51,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "The raw SOI separates Interest Term from Interest Rate. The flagged basis_spread values are not valid whole-number percentage spreads: 1075, 1000, and 1225 match all-in Interest Rate cells such as 10.75%, 10.00%, and 12.25% scaled by 100, while the corresponding source spread terms are lower values such as S + 550, S + 525, and S + 675. Other flagged values such as 650 and 775 are source basis-point notation that require percentage normalization to 6.50 and 7.75 under the platform convention."
+}

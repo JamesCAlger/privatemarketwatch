@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001925309",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "Insufficient bounded evidence to safely change production parsing for this CIK-quarter-mechanism packet without manual source-table adjudication and a tested rule. Needed evidence: coordinate-level source table classification for the blocker rows, proof that the rows are either true position rows or non-position aggregate/header rows, and a false-positive analysis showing any proposed parser/config rule would not suppress legitimate position-level holdings.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 13 current blocker row(s) in mechanism blocking_source_pct_leaf_parser_mismatch, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2024-03-31",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 619791000.000000.",
+  "review_id": "BDCSRC_0001925309_2024-03-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_ea5c7b2d97",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Fix parser/staging for terminal-percentage source rows with issuer, instrument, rate, maturity, or other leaf evidence.. Sample identifiers: Debt Investments Business Services OutSystems Luxco SARL First-lien loan (EUR 3,004 par, due 12/2028) Initial Acquisition Date 12/8/2022 Reference Rate and Spread E + 5.75% Interest Rate 9.58 % | Debt Investments Chemicals Erling Lux Bidco SARL First Lien Delayed Draw Term Loan (NOK 7,427 par, due 9/2028) Acquisition Date 9/6/2022 Reference Rate and Spread N + 6.75% Interest Rate 11.45 % | Debt Investments Chemicals Erling Lux Bidco SARL First-lien loan (EUR 7,239 par, due 9/2028) Initial Acquisition Date 9/6/2022 Reference Rate and Spread E + 6.75% Interest Rate 10.64% | Debt Investments Chemicals Erling Lux Bidco SARL First-lien loan (GBP 13,388 par, due 9/2028) Acquisition Date 9/6/2022 Reference Rate and Spread S + 6.75% Interest Rate 11.94 % | Debt Investments Communications Babylon Finco Limited First lien loan ($89,521 par, due 1/2031) Acquisition Date 1/26/2024 Reference Rate and Spread SOFR + 6.25% Interest Rate 11.57 %",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

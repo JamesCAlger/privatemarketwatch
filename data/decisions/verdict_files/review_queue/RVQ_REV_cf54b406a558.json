@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_cf54b406a558",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_source_schedule_cells",
+  "observed_value": "11.17; 11.57",
+  "anchor_value": "11.17; 11.57",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 10,
+      "quoted_text": "BCTO Ignition Purchaser, Inc. (3) | First-lien holdco loan ($ 224,892 par, due 10/2030 ) | 4/18/2023 | SOFR + 7.50 % | 11.17 % PIK | 221,684 | 225,454 | 5.4 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 36,
+      "quoted_text": "Roll Up DIP term loan ($ 45,919 par) | 4/24/2023 | SOFR + 7.90 % | 11.57 % PIK | 45,919 | 36,391 | 0.9 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source verification. The filing schedule explicitly reports 11.17% PIK for BCTO Ignition and 11.57% PIK for the Bed Bath and Beyond Roll Up DIP loan, exactly matching the two published interest_rate values in the flagged provenance rows. The absence of a declared or instance XBRL fact is expected for schedule text and does not make either published value erroneous."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_044406930118",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480975000,
+  "anchor_value": 1249444000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 4,
+      "quoted_text": "Investments at fair value (cost/amortized cost of $ 231,731 ) | $ | 231,531",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "A separately presented $231.531 million portfolio schedule was included in addition to the filing's $1,249.444 million investment total, exactly explaining the overstatement.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 62
+      }
+    }
+  ],
+  "rationale": "The filing repeatedly reports March 31, 2026 total investments at fair value of $1,249.444 million (including table 12 row 7 and table 20 row 23). The extracted holdings sum is $1,480.975 million, an excess of exactly $231.531 million. Raw source table 30 row 4 and table 33 row 62 independently identify a separate portfolio schedule totaling $231.531 million. The exact residual tie shows that this separate schedule was double counted rather than representing additional consolidated investments."
+}

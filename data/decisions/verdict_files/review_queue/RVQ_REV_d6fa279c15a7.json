@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_d6fa279c15a7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -20000,
+  "anchor_value": -20000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "Minuteman Security Technologies, Inc. (4)(5) | Senior Secured First Lien Revolver | 02/2029 | - | ( 20 | ) | - | -"
+    },
+    {
+      "table_index": 33,
+      "row_index": 7,
+      "quoted_text": "Lion Cashmere Bidco Limited (4)(5)(11) | Unitranche First Lien Delayed Draw Term Loan | 03/2028 | GBP | - | ( 52 | ) | ( 0.0 | ) | ( 126 | )"
+    }
+  ],
+  "rationale": "C107 flags negative cost values. The raw September 30, 2024 schedule of investments prints parenthesized amounts in the Cost column for the flagged pattern, including (20) and (52) in cited SOI rows. The extracted negative costs therefore reflect the source presentation rather than a data error."
+}

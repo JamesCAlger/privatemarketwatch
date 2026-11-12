@@ -1,0 +1,34 @@
+{
+    "review_id":  "RVQ_BLK_8d95c658219b",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  8108654,
+    "anchor_value":  8108654,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  37,
+                                  "row_index":  1,
+                                  "quoted_text":  "Company (1)(9) | Investment | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Amortized Cost (2) (7) | Fair Value (6) | Percentage of Net Assets"
+                              },
+                              {
+                                  "table_index":  37,
+                                  "row_index":  26,
+                                  "quoted_text":  "sector subtotal row with only amortized cost 1,493,814 and fair value 1,546,100, not a position"
+                              },
+                              {
+                                  "table_index":  40,
+                                  "row_index":  9,
+                                  "quoted_text":  "Total Debt Investments | 7,734,357 | 7,919,661 | 189.9 | %"
+                              },
+                              {
+                                  "table_index":  40,
+                                  "row_index":  40,
+                                  "quoted_text":  "Total Investments | $ | 7,892,866 | $ | 8,108,654 | 194.4 | %"
+                              }
+                          ],
+    "rationale":  "E07 is a CIK-quarter aggregate count flag (source=444 vs output=120), but the raw SOI tables are not one-row-per-position source counts: they include headers, blank rows, sector headings, sector subtotals, class subtotals, and final totals. The filing schedule total fair value is 8,108,654 and the bundle output fund quarter fair value is 8,108.654 million, so the normalized holdings tie exactly to the raw schedule total. The 444 source count is therefore an overbroad rule-scope/raw-table count, not evidence that 324 investment positions are missing."
+}

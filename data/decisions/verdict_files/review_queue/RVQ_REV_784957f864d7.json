@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_784957f864d7",
+  "verdict": "real_error",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_CAD, U_JPY, U_GBP, U_EUR, U_EUR",
+  "anchor_value": "USD",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "The schedule displays dollar signs for Principal / Shares, Cost, and Fair Value.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 30,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments: Cost 546,560; Fair Value $545,727.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unit_scale",
+      "detail": "Five cost facts carry foreign XBRL units although the filing presents the investment schedule in dollars.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 29,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "Class 1 source confirmation. The raw schedule labels Cost and Fair Value with dollar signs (table 11 row 5), and its final investment total is explicitly dollar-denominated (table 29 row 30). No CAD, JPY, GBP, or EUR denomination appears in the targeted source search. Thus the five extracted foreign cost_currency values conflict with the filing's USD schedule presentation and are unit-mapping errors."
+}

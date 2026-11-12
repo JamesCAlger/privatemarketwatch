@@ -1,0 +1,22 @@
+{
+  "review_id": "RVQ_REV_0832e37dc4b4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": 9.700000000000001,
+  "anchor_value": 9.70,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "Tabhi Purchaser, LLC (Mondee) Delayed Draw Term Loan - 9.70% inc PIK",
+      "ties_to_residual": true
+    },
+    {
+      "quoted_text": "Tabhi Purchaser, LLC (Mondee) Term Loan B - 9.70% inc PIK",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 format check. The source schedule expresses the two Tabhi Purchaser rates as 9.70%, while the extracted numeric values are 9.700000000000001. These are equal rates; the apparent excess precision is ordinary binary floating-point representation, so fmt_basis_spread is firing on representation rather than a source-value error. Other inspected schedule rates are likewise printed to two decimal places."
+}

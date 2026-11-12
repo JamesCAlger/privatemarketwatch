@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_3b1f3524ce41",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 147,
+  "anchor_value": 174,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 2,
+      "quoted_text": "Non Controlled/Non Affiliate Investments",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 4,
+      "quoted_text": "Aerospace & Defense",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 35,
+      "quoted_text": "Investments and Cash Equivalents Total | 516,345 | 518,156 | 195.7 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "SOI section/category header rows with no Market Value cells are being treated as leaves, causing 27 fair_value-missing leaves while source investment rows and totals carry market values.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 12,
+        "row_index": 4,
+        "quoted_text": "Aerospace & Defense"
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate completeness flag. The filing's SOI structure shows non-position section/category rows such as table 12 rows 2 and 4 with blank valuation columns, followed by actual investment rows with Market Value and anchored by the schedule total at table 17 row 35 (Market Value 518,156). The bundle's metric of 147/174 leaves with fair_value and residual_fv 0.0 is therefore not a missing source valuation total; it is a row-disposition defect where non-leaf headers are counted as extract leaves."
+}

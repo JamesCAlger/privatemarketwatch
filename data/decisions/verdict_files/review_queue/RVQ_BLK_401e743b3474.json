@@ -1,0 +1,31 @@
+{
+    "review_id":  "RVQ_BLK_401e743b3474",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  "2027-03-21",
+    "anchor_value":  "2027-03-31",
+    "confidence":  0.96,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  49,
+                                  "row_index":  7,
+                                  "quoted_text":  "Stateline Power, LLC | (4) (7) (22) | SOFR + 4.31 % | 8.03 | % | 3/31/2027 | 5,217 | 5,217 | 5,217 | 0.6",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Identifier/parsed maturity carries 2027-03-21, but the source maturity date for Stateline Power, LLC is 2027-03-31.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  49,
+                                          "row_index":  7
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 2 row-level maturity mismatch. The raw SOI table header places cell 10 under Maturity Date, and table 49 row 7 for Stateline Power, LLC shows 3/31/2027. The flagged identifier/agentA parsed value is 2027-03-21, so the identifier-side maturity is wrong and the structured XBRL maturity 2027-03-31 agrees with source."
+}

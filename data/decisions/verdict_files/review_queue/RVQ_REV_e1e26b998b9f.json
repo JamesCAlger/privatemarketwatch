@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_e1e26b998b9f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate and blank basis_spread on flagged extracted private-credit commitment rows",
+  "anchor_value": "source SOI rows also leave reference-rate/spread and interest-rate columns blank for those commitment rows",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 71,
+      "row_index": 27,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2028 | 13,795 | ( 101 ) | -"
+    },
+    {
+      "table_index": 71,
+      "row_index": 30,
+      "quoted_text": "2080 Media, Inc. (4)(6)(9) | 3/14/2029 | 27,282 | ( 249 ) | -"
+    },
+    {
+      "table_index": 82,
+      "row_index": 5,
+      "quoted_text": "2080 Media, Inc. | 1st Lien Senior Secured Revolving Loan | 13,795 | -"
+    },
+    {
+      "table_index": 62,
+      "row_index": 10,
+      "quoted_text": "ABC Legal Holdings, LLC (4)(6)(9) | 8/13/2032 | 24,138 | ( 235 ) | 241"
+    },
+    {
+      "table_index": 82,
+      "row_index": 8,
+      "quoted_text": "ABC Legal Holdings, LLC | 1st Lien Senior Secured Delayed Draw Loan | 24,138 | 241"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X02 is firing on delayed-draw/revolving commitment rows where the source schedule itself has no reference-rate or interest-rate cells, while funded rows for the same issuers do disclose rates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 71,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "Targeted source checks for flagged missing-rate rows show the stored blanks match the filing: 2080 Media commitment rows in the SOI omit both reference-rate/spread and interest-rate fields, and the matching commitment table identifies delayed draw or revolving loan commitments. ABC Legal shows the same pattern. Because nearby funded rows for the same issuers do carry rates, the issue is not a broad extraction failure; X02 is over-scoped to commitment rows where the source does not provide a rate."
+}

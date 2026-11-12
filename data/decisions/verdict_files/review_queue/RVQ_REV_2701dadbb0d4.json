@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_2701dadbb0d4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -767000,
+  "anchor_value": -767000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 8,
+      "quoted_text": "Exclusive Resorts Real Estate Holdings I, LLC(6)(8)(11)(12) | First lien senior secured delayed draw term loan | SOFR + 5.00 % | 12/3/2030 | - | ( 58 | ) | ( 59 | ) | ( 0.01 | )%"
+    },
+    {
+      "table_index": 26,
+      "row_index": 28,
+      "quoted_text": "JF Acquisition LLC(6)(8)(11)(12) | First lien senior secured delayed draw term loan | SOFR + 5.75 % | 6/18/2030 | - | ( 91 | ) | ( 64 | ) | ( 0.01 | )%"
+    },
+    {
+      "table_index": 26,
+      "row_index": 29,
+      "quoted_text": "JF Acquisition LLC(6)(8)(11)(12) | First lien senior secured revolving loan | SOFR + 5.75 % | 6/18/2030 | - | ( 71 | ) | ( 79 | ) | ( 0.01 | )%"
+    },
+    {
+      "table_index": 24,
+      "row_index": 9,
+      "quoted_text": "Atlantic Squared Supply LLC(6)(8)(11)(12) | First lien senior secured delayed draw term loan | SOFR + 6.00 % | 11/17/2030 | - | ( 88 | ) | ( 91 | ) | ( 0.01 | )%"
+    },
+    {
+      "table_index": 24,
+      "row_index": 13,
+      "quoted_text": "Advanced Technology Services Inc(6)(8)(11)(12) | First lien senior secured delayed draw term loan | SOFR + 5.00 % | 4/21/2031 | - | ( 117 | ) | ( 132 | ) | ( 0.02 | )%"
+    },
+    {
+      "table_index": 25,
+      "row_index": 7,
+      "quoted_text": "Hand Family Companies Holdings, LLC(6)(8)(11)(12) | Unsecured delayed draw term loan | SOFR + 9.00 % | 11/29/2030 | - | ( 250 | ) | ( 279 | ) | ( 0.04 | )%"
+    },
+    {
+      "table_index": 25,
+      "row_index": 8,
+      "quoted_text": "Hand Family Companies Holdings, LLC(6)(8)(11)(12) | Unsecured delayed draw term loan | SOFR + 9.00 % | 11/29/2030 | - | ( 92 | ) | ( 102 | ) | ( 0.01 | )%"
+    }
+  ],
+  "rationale": "C107 flagged seven negative cost values, but each is printed in the raw schedule of investments as a parenthetical amortized-cost amount in thousands. The extracted values equal the source amounts scaled to dollars: -58k, -91k, -71k, -88k, -117k, -250k, and -92k, summing to -767000. Because the source confirms the negative costs rather than contradicting them, this is a monitoring false alarm rather than a data error."
+}

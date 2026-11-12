@@ -1,0 +1,56 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001899996",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV change is made by the verdict file. The bounded patch classifies this Fidelity source-only row as a documented total/header row rather than adding it to production holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 38,
+      "row_index": 2,
+      "cell_indices": [
+        0
+      ],
+      "reason": "The filing table begins this section with 'Investments -- non-controlled/ non-affiliate', showing the blocker label belongs to an affiliation-section header, not an issuer position."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 46,
+      "row_index": 17,
+      "cell_indices": [
+        0,
+        16,
+        17,
+        20,
+        21,
+        24
+      ],
+      "reason": "The current-period row is a subtotal: 'Total Investments -- non-controlled/ non-affiliate' with aggregate cost, fair value, and percent-of-net-assets cells, and no borrower, instrument, rate, or maturity fields."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Use the bounded source reconciliation total/header patch already added in pipeline/source_reconciliation.py for Fidelity labels matching 'Total Investments -- non-controlled/ non-affiliate'. Focused regression coverage in tests/test_validate_holdings.py asserts this exact label is documented as a source total/header while issuer-bearing rows in the same hierarchy remain blocking position-like rows.",
+  "primary_justification": "The blocker is not a missing production holding. The bundled source row is the 2023-12-31 Fidelity subtotal 'Total Investments -- non-controlled/ non-affiliate' with fair value 1,379,664,900 and 204.36% of net assets. HTML coordinates show a non-affiliate section header and a selected current-period subtotal row, not a position row. A bounded total/header classification is appropriate because the row has total wording and aggregate numeric columns, while the false-positive test keeps borrower-level rows under the same non-affiliate hierarchy from being suppressed.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "This verdict documents the bounded classification mechanism; production outputs still need to be rebuilt and source reconciliation rerun before claiming the current blocker pool no longer contains this row.",
+  "review_id": "BDCSRC_0001899996_2023-12-31_BLOCKING_SOURCE_UNCLASSIFIABLE_AFTER_REVIEW_944b4dc1c3",
+  "reviewer_notes": "Manual review found coordinate-level evidence that the row is an aggregate non-affiliate subtotal. It should remain out of position-level unified holdings and be documented as a source-only total/header row.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "Expected effect after rebuild: this Fidelity subtotal is classified as documented_source_total_header instead of blocking_source_unclassifiable_after_review.",
+  "tests_validation_plan": "Focused test coverage exists in tests/test_validate_holdings.py for this exact 'Total Investments -- non-controlled/ non-affiliate' label and a false-positive issuer-bearing Fidelity row. Validate verdict integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_REV_0fb280211dd8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 489103168000.0,
+  "anchor_value": 12434974000.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Class I net assets $4,902,071 thousand; the adjacent Class I shares and NAV rows are 197,713,842 and $24.79.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 8,
+      "quoted_text": "Class D net assets $1,072,185 thousand; the adjacent Class D shares and NAV rows are 43,243,811 and $24.79.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 12,
+      "quoted_text": "Class F net assets $5,645,655 thousand; the adjacent Class F shares and NAV rows are 227,707,232 and $24.79.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 16,
+      "quoted_text": "Class S net assets $815,063 thousand; the adjacent Class S shares and NAV rows are 32,873,257 and $24.79.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 38,
+      "quoted_text": "Total net assets | 12,434,974 | 12,436,831",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The fund-level identity combines incompatible class or scale fields; the source class rows and consolidated total reconcile within NAV rounding.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The filing reports total net assets of $12,434,974 thousand. Its four class share counts total 501,538,142 and every class reports NAV per share of $24.79, implying $12,433,130,540, only about 0.015% below filed net assets because NAV per share is rounded. The flagged residual of $489,103,168,000 is therefore impossible under the raw schedule and shows the extracted identity used incompatible class and/or scale values. This is a grounded extraction defect, not a filing-level identity failure."
+}

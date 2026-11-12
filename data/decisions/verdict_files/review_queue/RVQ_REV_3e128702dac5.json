@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_3e128702dac5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 942796,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 1,
+      "quoted_text": "Industry/Company | Investment Type | Interest Rate (8) | Maturity Date | Par/Shares (3) | Cost (26) | Fair Value (1)(27)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 4,
+      "quoted_text": "Eagle Aggregator Ltd | Common Equity - Preferred Stocks | N/A | N/A | 36,288 Shares | $ 49 | $ 49 | (9)(11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 36,
+      "quoted_text": "Total Investments | $ | 962,492 | $ | 942,796 | (2)(7)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2025 filing contains a schedule of investments with individual positions and total fair value of 942,796, but private_markets_holdings is absent for this CIK/date.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 23,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "F28 expects fund_financials and holdings to be consistently present or absent. The raw source is readable and contains holdings-style SOI tables for December 31, 2025, including issuer-level rows with investment type, rate, par, cost, and fair value columns, and a Total Investments fair value of 942,796. Because the bundle reports fund=True;holdings=False, the absence of holdings is a real extraction coverage error rather than a false alarm."
+}

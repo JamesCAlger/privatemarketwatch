@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_811e0d9c00c1",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 438642876,
+  "anchor_value": 249694433,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4 | % | 258,299,078 | 249,694,433",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 4,
+      "row_index": 12,
+      "quoted_text": "Overton Chicago Gear, LLC - Revolver - 6.00% inc PIK - fair value 17,092,378",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 4,
+      "row_index": 13,
+      "quoted_text": "Overton Chicago Gear, LLC - Term Loan A - 6.00% inc PIK - fair value 11,499,903",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted holdings slice contains second copies of the Overton revolver and term loan even though the source schedule presents each instrument once.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 4,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation establishes a real aggregate defect. The source schedule reports debt fair value of 86,897,322 and equity fair value of 162,797,111, totaling 249,694,433 at table 5 row 31, but the extracted position sum is 438,642,876, an overstatement of 188,948,443. The filing's 572,771,377 grand total is broader than the platform's private debt-and-equity scope because table 5 separately includes 1,906,618 of cash equivalents and 321,170,326 of short-term U.S. Treasury investments. The extracted slice includes duplicate representations of source instruments, including the Overton revolver and term loan, supporting dimension double-count rather than a bad filing anchor. The complete duplicate set is not localized from the bounded evidence, so localized is false."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_da3488ce6cef",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2155846,
+  "anchor_value": 2155846,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 7,
+      "quoted_text": "Big Apple Advisory, LLC | (6) (10) | Revolving Loan | S + 4.50 % | 8.24 | % | 11/18/2031 | 1,740 | ( 15 ) | 5 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 27,
+      "quoted_text": "COP Village Green Acquisitions, Inc. (Village Green Holding) | (6) (10) | Subordinated Debt (Delayed Draw) | N/A | 12.25 | % | 3/26/2031 | 536 | ( 5 ) | 2 | - | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 15,
+      "quoted_text": "Total Investments | $ | 2,164,611 | $ | 2,155,846 | 155.32 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X06 fired because principal_amount_usd is more than 10x fair_value on 15 rows, but raw SOI rows show the large ratios are disclosed source economics for delayed-draw/revolver positions, not extraction scale defects. The cited Big Apple row discloses par 1,740 and fair value 5, matching a stored principal of 1,740,000 after the schedule's thousand-dollar scale; the cited COP Village Green delayed draw row similarly discloses par 536 and fair value 2. The schedule total fair value of 2,155,846 ties to the bundle's fund-quarter FV, so the source scale is intact. The check is overbroad for low/negative-FV delayed-draw and revolving positions."
+}

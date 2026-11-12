@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_2172005ad391",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_alias",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD-denominated source amounts shown with dollar signs",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | 03/28/24 | Term Loan B - 10.43 % ( SOFR + 6.75 %, 1.75 % Floor) | 2.8 | % | $ | 6,079,110 | 03/28/29 | $ | 5,959,899 | $ | 5,854,183",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 5,
+      "quoted_text": "Fenix Intermediate LLC | 03/28/24 | Delayed Draw Term Loan B-1 - 10.43 % ( SOFR + 6.75 %, 1.75 % Floor) | 0.2 | % | 364,564 | 03/28/29 | 364,564 | 351,075",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX03 flags cost_currency value U_USD as not USD, but raw Schedule of Investments rows use dollar-denominated amortized cost and fair value columns. Representative flagged rows show dollar signs in the par amount, amortized cost, and fair value columns; rows without repeated dollar signs are continuation rows under the same USD-denominated table header. The source supports USD denomination, so the defect is in the rule/unit-label normalization rather than the extracted holding data."
+}

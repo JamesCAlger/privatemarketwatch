@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_1f6b80fb115d",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 1000.0,
+  "anchor_value": 1000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 29,
+      "quoted_text": "KWOR Acquisition, Inc. | (5) (6) (18) (19) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.56 % | 2/28/2030 | 49 | 1 | 49 | --",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 30,
+      "quoted_text": "KWOR Acquisition, Inc. | (5) (6) (18) (19) | First Lien Debt | S + | 6.25 % (incl. 5.25 % PIK) | 10.56 % | 2/28/2030 | 71 | 1 | 71 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level X07 review. The flag fires because the stored cost is 1000 while fair value is more than 10x cost for two non-equity rows. Raw SOI rows show the same values in thousands: KWOR Acquisition first-lien debt with cost 1 and fair values 49 and 71, so the pipeline values are source-faithful and the warning is an economic outlier/rule-scope false alarm rather than a data error."
+}

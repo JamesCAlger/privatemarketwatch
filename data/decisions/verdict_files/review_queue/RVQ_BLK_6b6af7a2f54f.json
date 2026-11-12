@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_6b6af7a2f54f",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3313.441,
+  "anchor_value": 3313.441,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 3,324,332 | $ | 3,313,441 | 214.8 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 3,324,332 and $ 3,323,282, respectively) | 3,313,441 | 3,347,317",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing schedule and balance sheet independently state March 31, 2026 investments at fair value of $3,313.441 million, exactly matching the extracted fund-quarter fair value of $3,313.441 million. Therefore the E07 comparison of source=735 to output=216 is not a valid position-completeness anchor; it counts unlike units or source artifacts and is a false alarm rather than a grounded missing-data defect. No individual culprit row is localized because the value anchors leave no residual."
+}

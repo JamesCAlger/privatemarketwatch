@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_2fd74a5b0977",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 202000,
+  "anchor_value": 202000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 9,
+      "quoted_text": "Mitel Networks | Common Equity - Stock | N/A | N/A | 733,019 Shares | 3,465 | 202 | (8)(36)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 source check. Table 18 row 9 is a populated security position for Mitel Networks: investment type Common Equity - Stock, 733,019 shares, cost 3,465 and fair value 202, with filing amounts in thousands. The rule treated the category-like words Common Equity as evidence of a subtotal, but the raw schedule shows they are the investment type of a real position. The actual category subtotal is separately labeled Total Communications Equipment at table 18 row 12. Thus the extracted position is source-supported and the category_keyword_no_position flag is a false alarm."
+}

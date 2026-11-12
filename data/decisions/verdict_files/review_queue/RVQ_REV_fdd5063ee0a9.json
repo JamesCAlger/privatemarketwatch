@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_fdd5063ee0a9",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "cost_currency flags: U_CAD, U_JPY, U_EUR",
+  "anchor_value": "raw-source grid shows rendered schedule cost/fair-value columns with dollar signs, but does not expose XBRL unitRef metadata or map row_keys 522133/522135/522194 to filing coordinates",
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "FX03 is a Class 1 single-cell currency-unit check. I checked the raw source through the evidence CLI: overview/tables identify the schedule-of-investments tables, grid table 11 shows visible Cost and Fair Value cells rendered with dollar signs, and targeted roam queries for CAD, JPY, EUR, U_CAD, U_JPY, U_EUR, and the internal row keys returned no hits. The CLI source view is usable but does not expose the XBRL unit metadata needed to prove whether the non-USD cost_currency values are source facts or extraction artifacts, so the source does not decide the flag."
+}

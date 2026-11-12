@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_0a81d234eedd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 407509401,
+  "anchor_value": 407509401,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 28,
+      "quoted_text": "InnovateMR | (j) (o) (q) | Class A Units | 12/16/2021 | 387 | 387,311 | 527,662",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 29,
+      "quoted_text": "Industrial Services Group | (j) (o) (r) | Class A Units | 12/7/2022 | 238 | 238,095 | 420,663",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 5,
+      "quoted_text": "Cherry Bekaert | (j) (o) (ak) | Class A Units | 6/30/2022 | 129,870 | 61,388 | 339,458",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flag is a category-keyword/subtotal candidate, but the source shows the flagged identifiers are actual equity/preferred-share investment rows, not leaked category or subtotal rows. Table 38 rows 25-26 are section/category headers, while rows 28-29 have issuer names, footnotes, investment type, acquisition date, shares, amortized cost, and market value. Table 39 row 5 shows the same structure under another category. The filing schedule total fair value is 407,509,401, matching the observed extract total, so there is no anchor disagreement supporting a real subtotal leak."
+}

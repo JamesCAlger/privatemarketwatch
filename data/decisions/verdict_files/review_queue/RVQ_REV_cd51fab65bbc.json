@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_REV_cd51fab65bbc",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | 6/30/2027 | 160 | -- | --"
+    },
+    {
+      "table_index": 16,
+      "row_index": 9,
+      "quoted_text": "American Academy Holdings, LLC | 1st Lien Senior Secured Revolving Loan | 160 | --"
+    },
+    {
+      "table_index": 14,
+      "row_index": 29,
+      "quoted_text": "CC WDW Borrower, Inc. (4)(6)(10) | 1/27/2028 | 1,631 | (58) | (113)"
+    },
+    {
+      "table_index": 16,
+      "row_index": 4,
+      "quoted_text": "CC WDW Borrower, Inc. | 1st Lien Senior Secured Delayed Draw Loan | 1,631 | (113)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 35,
+      "quoted_text": "MBS Services Holdings, LLC (4)(6)(10) | 2/26/2026 | 110 | (1) | --"
+    },
+    {
+      "table_index": 13,
+      "row_index": 38,
+      "quoted_text": "Mood Media Borrower, LLC (4)(6)(10) | 12/31/2025 | 1,761 | (4) | --"
+    },
+    {
+      "table_index": 13,
+      "row_index": 42,
+      "quoted_text": "Showtime Acquisition, L.L.C. (4)(6)(12) | 8/7/2028 | 262 | (4) | --"
+    },
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "Patriot Acquisition Topco S.A R.L. (4)(5)(6)(10) | 1/29/2028 | 61 | (1) | 1"
+    },
+    {
+      "table_index": 14,
+      "row_index": 6,
+      "quoted_text": "Patriot Acquisition Topco S.A R.L. (4)(5)(6)(10) | 1/29/2028 | 78 | (1) | --"
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "WorkWave Intermediate II, LLC (4)(6)(9) | 6/29/2027 | 10,847 | (156) | (62)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 36,
+      "quoted_text": "Ribbon Communications Operating Company, Inc (4)(5)(6)(10) | 6/21/2029 | 849 | (17) | (17)"
+    },
+    {
+      "table_index": 14,
+      "row_index": 45,
+      "quoted_text": "The One Group, LLC (4)(6)(7) | 10/31/2028 | 887 | (26) | (26)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "X02 is applying a rate-required private-credit check to footnote-(6) commitment or negative-balance SOI rows whose source rate fields are blank and, where separately listed, are unfunded commitments.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 16,
+        "row_index": 1,
+        "quoted_text": "Investments-non-controlled/non-affiliated | Commitment Type | Unfunded Commitment | Fair Value"
+      }
+    }
+  ],
+  "rationale": "The raw SOI rows that triggered X02 have blank Reference Rate and Spread and Interest Rate cells in the filing, not missing extraction. They are footnote-(6) commitment/negative-balance rows, and examples tie directly to the unfunded-commitments schedule: American Academy is a 1st Lien Senior Secured Revolving Loan with unfunded commitment 160 and no fair value, and CC WDW Borrower is a 1st Lien Senior Secured Delayed Draw Loan with unfunded commitment 1,631 and fair value (113). The check is therefore over-scoped for these commitment/disposition rows rather than identifying a data error in interest_rate."
+}

@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_4589941fe574",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 4,
+      "quoted_text": "ACI Group Holdings, Inc. | Delayed Draw Term Loan | 8/2/2024 | 20,482 | -"
+    },
+    {
+      "table_index": 39,
+      "row_index": 5,
+      "quoted_text": "ACI Group Holdings, Inc. | Revolver | 8/2/2027 | 18,259 | -"
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows. The raw filing's unfunded-commitments table labels the final column as Fair Value and prints a dash for affected commitment rows, which is the source presentation of zero/no fair value rather than a conflicting extracted value. The filing totals also reconcile at the investment schedule level, so the zero fair values are not evidence of a data error."
+}

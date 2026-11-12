@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_805d176774de",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "GSV PracticeTek Holdings, LLC | Software provider for medical practitioners | Class A units | 8.00 % PIK | 3/2021 | 12,429,675 | 0.7 | 13.6 | (2)"
+    },
+    {
+      "table_index": 33,
+      "row_index": 2,
+      "quoted_text": "Series C common units | 10.00 %PIK | 4/2021 | 4,979,318 | 0.2 | 7.5 | (2)"
+    },
+    {
+      "table_index": 39,
+      "row_index": 10,
+      "quoted_text": "Series A preferred stock | 8.00 % PIK | 1/2017 | 73,804,135 | 1.3 | 39.1"
+    }
+  ],
+  "rationale": "X07 flagged three rows because fair value exceeded 10x amortized cost. The raw schedule itself shows the low amortized costs and higher fair values for the cited rows, matching the extracted values rather than showing a transcription, scale, or column-placement error. The flag is therefore a weak extreme-appreciation review hit, not a confirmed data error."
+}

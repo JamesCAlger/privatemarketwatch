@@ -1,0 +1,31 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "column_remap",
+                         "detail":  "The extracted issuer_name includes debt category, geography, sector, type, investment date, maturity date, and interest-rate text instead of only the Portfolio Company value.",
+                         "citation":  {
+                                          "row_index":  28,
+                                          "table_index":  42
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_5e4d1c7cbcc1",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Portfolio Company Debt Securities- Canada Real Estate Technology Maple Raptor Acquisition Inc. Type of Investment Secured Loan Investment Date April 28, 2025 Maturity Date April 28, 2030 Interest Rate Variable interest rate CORRA 3 Month Term + 9.4%; EOT 0.0%",
+    "anchor_value":  "Maple Raptor Acquisition Inc. (dba Rentsync)",
+    "rationale":  "Raw SOI table 42 keeps Portfolio Company, Type of Investment, Investment Date, Maturity Date, Interest Rate, cost, and fair value in separate columns; the observed issuer_name concatenates those neighboring fields into the issuer field. The source issuer for the cited row is only Maple Raptor Acquisition Inc. (dba Rentsync), so the fmt_issuer_name flag is a real extraction/column-boundary error.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  28,
+                                  "table_index":  42,
+                                  "quoted_text":  "Maple Raptor Acquisition Inc. (dba Rentsync) | Secured Loan | April 28, 2025 | April 28, 2030 | Variable interest rate CORRA 3 Month Term + 9.4 %; EOT 0.0 % | $ | 19,757 | $ | 19,373 | $ | 19,897 | (8)(10)(20)"
+                              }
+                          ],
+    "confidence":  0.92
+}

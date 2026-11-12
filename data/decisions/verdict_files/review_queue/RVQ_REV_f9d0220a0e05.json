@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_f9d0220a0e05",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 18,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Preferred Equity | N/A | 12/9/2025 | 44 | 272 | 544 | 0.0 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 20,
+      "row_index": 17,
+      "quoted_text": "ACC Ultimate Holdings, L.P. | Equity | N/A | 5/8/2024 | 375 | 3,750 | 282 | 0.0 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "SPV CA IX, LLC | Equity | (10)(12)(14)(15) | N/A | 7/18/2025 | 8,972 | 8,740 | 9,404 | 0.7 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity quantities disclosed in the schedule's Par Amount / Units column were not mapped into the extracted shares field.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 3 completeness flag confirmed from raw source. The filing schedule labels the quantity column Par Amount / Units and reports populated quantities for equity positions, including 44 units for ACC Ultimate preferred equity, 375 units for ACC Ultimate equity, and 8,972 units for SPV CA IX equity. The oracle observed zero of seven extracted equity rows with shares, so the source-supported quantity coverage (1.0) disagrees with the extracted coverage (0.0). This is a column-mapping extraction gap, not a valid absence of source quantities."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_b25a3786af76",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 17.35513307984791,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted evidence CLI did not expose usable raw source for CIK 0001786108 report date 2022-12-31. Overview, tables, totals, and targeted roam all returned status no_accession_resolved, so the F16 distribution-rate versus income-yield heuristic cannot be adjudicated from raw source."
+}

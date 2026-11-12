@@ -1,0 +1,33 @@
+{
+  "review_id": "RVQ_REV_35cad00f38ec",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 20,
+  "anchor_value": 20,
+  "confidence": 0.42,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 91,
+      "row_index": 27,
+      "quoted_text": "Absolute Dental Group LLC and Absolute Dental Equity, LLC (5) | Dental services provider | First lien senior secured revolving loan | 06/2021 | 06/2026 | 23.7 | 23.1 | 18.0 | (2)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 91,
+      "row_index": 32,
+      "quoted_text": "ADG, LLC, GEDC Equity, LLC and RC IV GEDC Investor LLC (5) | Dental services provider | First lien senior secured loan | 10.82 % ( 3.00 % PIK) | SOFR (Q) | 7.00 % | 09/2016 | 09/2026 | 15.7 | 15.7 | 15.7 | (2)(9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 123,
+      "row_index": 17,
+      "quoted_text": "Eagle Football Holdings BidCo Limited and Eagle Football Holdings Limited (13) | Multi-club sports platform | Senior subordinated loan | 20.00 % PIK | 12/2022 | 12/2028 | 1.4 | 1.4 | 1.4 | (2)(6)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The queue item reports 20 nonaccrual positions sourced from a footnote. The CLI-accessible raw schedule confirms representative flagged investments and footnote markers, including table 91 rows 27 and 32 and table 123 row 17, but targeted raw-source searches for non-accrual, nonaccrual, accrual, non accruing, not accruing, and footnote returned no readable disclosure text tying those markers to nonaccrual status. Because the source was checked but does not decide whether the footnote classification is correct or a data error, the adjudication remains ambiguous."
+}

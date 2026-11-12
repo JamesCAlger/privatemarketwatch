@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_bffe44c38d87",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "CAD/EUR/GBP stored as fair_value_currency on 15 flagged rows",
+  "anchor_value": "Fair Value column in the BDC investment schedule is separate from the Par Amount /Units currency column and should be USD-denominated",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 1,
+      "quoted_text": "Investments-non-controlled/ non-affiliated (1) | Footnotes | Reference Rate and Spread | Interest Rate (2) | Maturity Date | Par Amount /Units | Cost (3) | Fair Value | % of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 22,
+      "quoted_text": "123Dentist Inc. | (4) (5) (8) (9) | C + | 5.00 % | 7.27 % | 8/10/2029 | CAD | 5,953 | 4,337 | 4,343 | 0.27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 28,
+      "quoted_text": "Packaging Coordinators Midco, Inc. | (4) (5) | SN + | 4.75 % | 8.47 % | 7/9/2032 | GBP | 2,526 | 3,309 | 3,372 | 0.21",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 5,
+      "quoted_text": "Aurelia Netherlands Midco 2 B.V. | (4) (5) (9) | E + | 4.75 % | 6.78 % | 5/29/2031 | EUR | 54,814 | 59,819 | 64,215 | 4.04",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor appears to assign the Par Amount /Units currency code to fair_value_currency for foreign-denominated instruments, although Fair Value is a separate schedule column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 59,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The source schedule header places Par Amount /Units before Cost (3) and Fair Value, and representative flagged rows show CAD, EUR, or GBP immediately before par amount while the fair value is the later numeric column. The stored fair_value_currency values therefore reflect the instrument/par currency, not the fair value currency expected for BDC valuation fields."
+}

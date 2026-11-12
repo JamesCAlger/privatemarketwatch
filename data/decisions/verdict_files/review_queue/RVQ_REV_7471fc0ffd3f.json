@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_7471fc0ffd3f",
+  "verdict": "false_alarm",
+  "mechanism": "unit_scale",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD-denominated cost columns in source schedule",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 1,
+      "quoted_text": "Investments (1) Non-Controlled, Non-Affiliated Investments | Industry | Reference Rate Spread (4) | Interest Rate (5) | Maturity Date | Par Amount/ Shares | Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Alorica, Inc. Term Loan (3) | IT Services | SOFR + 6.875 % | 12.191 % | 12/21/2027 | 12,313 | $ | 12,194 | $ | 12,195 | 5.17 %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Total Investments | $ | 233,185 | $ | 230,604 | 97.74 %"
+    }
+  ],
+  "rationale": "FX03 flags cost_currency as not USD, but the artifact value is UNIT_USD and the raw investment schedule presents cost and fair value as dollar-denominated columns. Representative table 11 row 4 and the table 12 total both show dollar signs for cost/fair value, so the source supports USD rather than a non-USD cost currency. The defect is in the check's treatment of the internal UNIT_USD token, not in the extracted holding value."
+}

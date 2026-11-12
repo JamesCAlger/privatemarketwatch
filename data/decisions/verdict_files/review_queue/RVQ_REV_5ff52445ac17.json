@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_5ff52445ac17",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_interest_rate",
+  "observed_value": "",
+  "anchor_value": 8.67,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "AVSC Holding Corp. (4)(6)(9)(22) | SF + | 5.00 % | 8.67 | % | 12/5/2029 | 962 | 159 | 173",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell flag. The extracted AVSC Holding Corp.2 private-credit row has a blank interest_rate, but the matching March 31, 2026 source schedule row reports Interest Rate 8.67%. This directly grounds a localized extraction gap. No aggregate anchor was used."
+}

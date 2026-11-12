@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_3ddb2d0b059c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "45 FX01 rows reported missing principal_amount_usd for non-USD source par",
+  "anchor_value": "raw source checked via evidence CLI did not expose a decisive non-USD source-par marker for the flagged investment rows",
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The evidence CLI returned usable raw source, including schedule-of-investments tables. Searches for currency codes and denomination text did not find non-USD source-par markers in the investment schedules; currency hits were foreign-currency forwards and foreign-currency P&L lines. A checked candidate investment row, table 194 row 40 (OI European Group BV (8)), shows par amount 550, cost 491, and fair value 482, but the raw row does not state that the par is non-USD or provide a USD conversion. Because the raw source does not decide whether the flagged missing principal_amount_usd values are real FX conversion defects, the item is ambiguous rather than a confirmed error or false alarm."
+}

@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_BLK_0abd14a965ac",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "identifier maturities: Grid Alliance Partners LLC Term Loan = 2032-10-14; GarageCo Intermediate II LLC Term Loan = 2029-12-30",
+  "anchor_value": "source schedule maturities: Grid Alliance Partners LLC Term Loan = 2032-07-01; GarageCo Intermediate II LLC Term Loan = 2032-08-02",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 35,
+      "quoted_text": "Grid Alliance Partners LLC | (6) | Term Loan | 8.42 % | SOFR | 4.75 % | 7/01/2025 | 7/1/2032 | 49,196 | 48,739 | 48,950"
+    },
+    {
+      "table_index": 46,
+      "row_index": 22,
+      "quoted_text": "GarageCo Intermediate II LLC | (6) | Term Loan | 8.10 % | SOFR | 4.25 % | 8/01/2025 | 8/2/2032 | 16,485 | 16,330 | 16,320"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Grid Alliance Partners LLC Term Loan identifier carries maturity 2032-10-14, but the source schedule row shows maturity 7/1/2032 and the structured maturity matches the source.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "GarageCo Intermediate II LLC Term Loan identifier carries maturity 2029-12-30, but the source schedule row shows maturity 8/2/2032 and the structured maturity matches the source.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 46,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication: the raw Schedule of Investments rows identify the issuer, instrument, acquisition date, maturity date, cost, and fair value. For both flagged rows, the source schedule maturity equals the structured XBRL maturity in the bundle and disagrees with the generated identifier maturity, so the flag is a real data error localized to identifier/date extraction rather than the structured maturity field."
+}

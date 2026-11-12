@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_3595b713a641",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 202.01,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 66,
+      "row_index": 22,
+      "quoted_text": "Total Investments | $ | 24,706.7 | $ | 24,973.4 | (19) | 202.01 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the filing schedule total reports Total Investments at 202.01% of net assets.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 66,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The raw source SOI total row reports Total Investments fair value of 24,973.4 and 202.01% of net assets, while the flagged extraction/check artifact reports pct_sum=0.0%. The filing source therefore decides the issue as a missing or unmapped percent-of-net-assets extraction, not a valid zero percent total."
+}

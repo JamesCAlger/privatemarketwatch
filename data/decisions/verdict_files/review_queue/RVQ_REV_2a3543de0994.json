@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_2a3543de0994",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 7,
+      "quoted_text": "ADF Capital, Inc., ADF Restaurant Group, LLC, and ARG Restaurant Holdings, Inc. (5) | Restaurant owner and operator | First lien senior secured loan | 12/2016 | 8/2022 | 7.6 | - | - | (2)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 25,
+      "quoted_text": "ADG, LLC and RC IV GEDC Investor LLC membership units show amortized cost 3.0 and fair value dash in the source schedule.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 54,
+      "row_index": 30,
+      "quoted_text": "Total Investments | $ | 21,468.5 | $ | 21,338.5 | 226.18 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags fair_value equal to zero. Raw schedule rows show the flagged zero values are source dashes rather than nonzero amounts missed by extraction: ADF Restaurant has dash amortized cost and dash fair value, and ADG membership units has amortized cost 3.0 with fair value dash. The schedule total of fair value is 21,338.5, matching the filing total 21,339 after rounding, so the zero-normalized rows do not create an anchor disagreement. The rule warning is therefore a precision false alarm for source-reported nil fair values, not a data error."
+}

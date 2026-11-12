@@ -1,0 +1,68 @@
+{
+  "changed_files": [],
+  "cik": "0001287750",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect from this verdict. The reviewed source-only row is a higher-level Ivy Hill total, while production holdings already contain the position-level Ivy Hill member interest and subordinated revolving loan.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 67,
+      "row_index": 13,
+      "cell_indices": [
+        0,
+        6,
+        12,
+        18,
+        24,
+        30,
+        36,
+        42,
+        48,
+        54,
+        60
+      ],
+      "reason": "The Ivy Hill row is a summary-style row with multiple financial columns and final fair value of 1,955.7, matching the source-only aggregate amount rather than a distinct security description."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 27,
+      "row_index": 28,
+      "cell_indices": [
+        0,
+        6,
+        12,
+        18,
+        21,
+        24,
+        30,
+        36,
+        45,
+        51,
+        57,
+        60
+      ],
+      "reason": "The source table separately shows an Ivy Hill subordinated revolving loan with coupon, reference rate, spread, acquisition date, maturity, cost, and fair value cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "",
+  "primary_justification": "The source-only row Ivy Hill Asset Management, L.P. has fair value 1,955.7M and is not a separate production position. Current production holdings for the same CIK/date include Ivy Hill Asset Management, L.P., Member interest at 1,932.7M and Ivy Hill Asset Management, L.P., Subordinated revolving loan at 23.0M, which sum to the source-only amount. The bundled HTML evidence also shows the 1,955.7 row as a summary-style Ivy Hill row and separately shows the subordinated revolving loan as a position row. Adding the short Ivy Hill label would duplicate exposure.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2024-06-30",
+  "requires_human_merge": false,
+  "residual_risk": "This verdict does not create a global many-to-one clearing rule. A deterministic future rule would need exact same-CIK/date fair-value summation and borrower identity checks before treating other short plain identifiers as non-blocking.",
+  "review_id": "BDCSRC_0001287750_2024-06-30_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_4694282f2a",
+  "reviewer_notes": "No production patch is proposed. The existing position-level output is more granular than the source-only Ivy Hill label, and the short source label is a duplicate aggregate of existing Ivy Hill component positions.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "No production row should be added for the reviewed Ivy Hill short label. It is intentionally non-blocking when documented as a borrower/investee total equal to existing component holdings.",
+  "tests_validation_plan": "Validate verdict schema and bundled evidence references with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. No code tests are added because no production code patch is proposed.",
+  "verdict": "NO_PATCH_NEEDED"
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_35b3cf390716",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 231531,
+  "anchor_value": 231531,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 1,
+      "quoted_text": "Investments | Investment Type | Reference Rate and Spread (1) | All In Rate (1) | Acquisition Date | Maturity Date | Par ($) / Shares | Cost/Amortized Cost | Fair Value | Footnotes",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 13,
+      "quoted_text": "Members' equity | $ | 85,083",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The 63-row underlying portfolio schedule has no percentage-of-net-assets field and must not be tested with the consolidated schedule identity.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 33,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The flag is a Class 3 scope mismatch. Raw table 33 is the 63-row underlying portfolio schedule: its header contains fair value but no Percentage of Net Assets column, and row 62 ties its fair value to 231,531. The related balance sheet reports members' equity of 85,083 at table 30 row 13. By contrast, the consolidated schedule tables 17-20 explicitly contain Percentage of Net Assets and use consolidated Total Net Assets of 531,517 (table 12 row 30). Applying pct_of_net_assets_identity across the underlying schedule is therefore a classification/lookthrough rule-scope error; the raw source does not show a bad position value."
+}

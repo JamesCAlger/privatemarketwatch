@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_d744b52a4614",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "FX01 issue rows have blank principal_amount_usd and assert non-USD source par requiring FX conversion",
+  "anchor_value": "Raw SOI table 5 shows the flagged debt par amounts in USD: Alorica 10,253,311; Del Real 516,200 and 8,517,298; Florida Marine 11,259,570; Hoffmaster 167,522 and 6,631,072",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Alorica Inc. | Term Loan - 11.57 % (SOFR + 6.88 %, 1.50 % Floor) | $ | 10,253,311 | 12/21/27 | $ | 10,108,019 | $ | 10,068,752"
+    },
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Del Real, LLC | Revolver - 13.53 % (SOFR + 8.50 %, 2.00 % Floor) | 516,200 | 03/28/28 | 516,200 | 502,004"
+    },
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Del Real, LLC (3) | Term Loan - 13.53 % inc PIK (SOFR + 8.50 %, 2.00 % Floor, 1.50 % PIK) | 8,517,298 | 03/28/28 | 8,224,845 | 8,283,073"
+    },
+    {
+      "table_index": 5,
+      "row_index": 11,
+      "quoted_text": "Florida Marine Transporters, LLC | Term Loan B - 13.36 % (SOFR + 8.50 %, 2.00 % Floor) | 11,259,570 | 03/17/28 | 10,945,735 | 10,943,176"
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Hoffmaster Group, Inc. | Revolver - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | 167,522 | 02/24/28 | 167,522 | 165,344"
+    },
+    {
+      "table_index": 5,
+      "row_index": 15,
+      "quoted_text": "Hoffmaster Group, Inc. | Term Loan - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | 6,631,072 | 02/24/28 | 6,559,910 | 6,544,868"
+    }
+  ],
+  "rationale": "FX01 is premised on non-USD source par needing an explicit FX conversion. The raw schedule of investments for the six flagged debt rows is a USD-denominated Par Amount table: the first flagged debt row carries the dollar sign in the Par Amount/Amortized Cost/Fair Value columns, and the subsequent rows continue in the same column structure with numeric USD par amounts. The raw source therefore does not support the non-USD condition that triggered FX01."
+}

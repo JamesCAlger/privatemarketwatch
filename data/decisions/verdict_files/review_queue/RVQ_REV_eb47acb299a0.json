@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_eb47acb299a0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_row",
+  "observed_value": null,
+  "anchor_value": "EURIBOR loan par 2,384; USD-basis cost 2,551 and fair value 2,694",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 22,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan (4)(7)(9) | EURIBOR + 5.750 | % | 7.769 | % | 08/14/2029 | 2,384 | 2,551 | 2,694 | 1.58 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The raw schedule identifies SubCalidora as a EURIBOR loan and reports par of 2,384 separately from USD-basis cost of 2,551 and fair value of 2,694. The reviewed principal_amount_usd is blank, so this row lacks the explicit USD principal normalization required for par analytics. The citation proves at least one row in the aggregated FX01 flag; the remaining flagged rows were not individually adjudicated."
+}

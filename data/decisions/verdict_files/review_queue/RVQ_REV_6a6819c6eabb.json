@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_6a6819c6eabb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.003937007874015748,
+  "anchor_value": 0.5,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(M) | Floor 1.00% | Spread 6.86% | Total Coupon 11.19% | Maturity 2/25/2026 | Fair Value 783,028"
+    },
+    {
+      "table_index": 19,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | Floor 1.00% | Spread 7.01% | Total Coupon 11.34% | Maturity 2/25/2026 | Fair Value 794,545"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer continuity is understated because issuer_name is overcaptured with category, instrument, reference-rate, coupon, and maturity text instead of the issuer column value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "D06 reports only 1 of 254 issuers persisting (0.003937), but the raw schedules show the same issuer column value, ALCV Purchaser, Inc. (AutoLenders), in both the June 30, 2025 schedule and the December 31, 2024 comparative schedule. The bundle's extracted holdings sample shows issuer_name populated with the full category/instrument/terms string, so routine changes in ref/coupon terms break exact issuer continuity even when the raw issuer persists."
+}

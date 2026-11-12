@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_df5b0108ffcf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1796706145,
+  "anchor_value": 1796706145,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 27,
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 25,
+      "row_index": 6,
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Investment rows with source fair value rendered as a dash are being counted as missing fair_value rather than normalized to zero.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate fair_value coverage flag: 1089 of 1182 leaf rows have fair_value, below the 0.95 threshold. The source schedule total is internally anchored: Total Investments fair value is 1,796,706,145 in the SOI and ties to the balance sheet total investments, so the issue is not a schedule-total disagreement. The source contains bona fide investment rows whose fair value cell is a dash, meaning disclosed zero fair value, including American Physician Partners, LLC Term Loan at table 10 row 27 and GHP-EIP Aggregator, LLC Common Units at table 25 row 6. Counting those disclosed zero fair values as missing is an extraction/normalization gap, so the flag is a real data error."
+}

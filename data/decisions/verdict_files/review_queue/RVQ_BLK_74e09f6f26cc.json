@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_BLK_74e09f6f26cc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "SOFR",
+  "anchor_value": "no index disclosed",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 9,
+      "quoted_text": "Chartbeat | Subordinated Debt | no index | 16.00% PIK | 16.00%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 17,
+      "row_index": 10,
+      "quoted_text": "Chartbeat | Subordinated Debt | no index | 16.00% PIK | 16.00%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 34,
+      "quoted_text": "AGS American Glass Services Acquisition, LLC | First Lien Senior Secured Loan - Revolver | no index | no spread | no interest rate",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 13,
+      "row_index": 35,
+      "quoted_text": "AGS American Glass Services Acquisition, LLC | First Lien Senior Secured Loan - Delayed Draw | no index | no spread | no interest rate",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two Chartbeat subordinated-debt rows falsely encode SOFR although the source index is blank and the 16.00% spread is explicitly PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The AGS revolver and delayed-draw rows inherited SOFR, 5.50%, and 9.17% from the funded loan even though their own source terms are blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "Class 2 source-row review proves all four flagged identifiers contain an unsupported SOFR reference. Chartbeat rows 9-10 disclose no index and label 16.00% as PIK; AGS rows 34-35 disclose no index, spread, or interest rate, unlike the adjacent funded loan at row 33. The flag is therefore a real extraction error, not an uncorroborated-source false alarm."
+}

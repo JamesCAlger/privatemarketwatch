@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_77bbae05101c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The permitted evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-21-068938, so the raw source could not be read. Per the adjudication contract, no source-grounded decision can be made."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_aa3b3773c40f",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 731497000,
+  "anchor_value": 342015000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 328,400 and $ 363,547 , respectively) | 342,015 | 409,665",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 10,
+      "quoted_text": "Total Investments | $ | 343,435 | $ | 328,400 | $ | 342,015 | 277.6 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The filing's balance sheet anchor and investment schedule both report December 31, 2025 total investments at fair value of 342,015 thousand, matching the companyfacts fair-value anchor of 342,015,000. The HTML extraction aggregate is 731,497,000, so the extracted aggregate is not source-supported. The source also contains 2024 comparative fair-value totals, but the 389,482,000 residual does not tie to one disclosed subtotal row, so the defect is localized only to the aggregate extraction anchor."
+}

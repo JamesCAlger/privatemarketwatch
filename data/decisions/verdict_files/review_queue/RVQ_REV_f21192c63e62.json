@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_f21192c63e62",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate html_carry flag could not be adjudicated because the allowed evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query, so raw source anchors and row structure were not available."
+}

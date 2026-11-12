@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_12c8c548dfa0",
+  "verdict": "false_alarm",
+  "mechanism": "unit_normalization_false_positive",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.15 % (SOFR + 7.50 %, 2.00 % Floor) | Fair Value $ 7,711,793"
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Florida Marine Transporters, LLC | Term Loan B - 13.44 % (SOFR + 8.00 %, 2.00 % Floor) | Fair Value $ 9,849,852"
+    },
+    {
+      "table_index": 6,
+      "row_index": 21,
+      "quoted_text": "Total Investments (139.7 %) | $ 163,170,628 | $ 163,929,983"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency values of U_USD as non-USD, but the raw Schedule of Investments presents the flagged Fair Value column in dollars. Table 5 row 4 and table 6 row 4 show representative flagged debt positions with dollar-denominated fair values, and table 6 row 21 shows the investment total also dollar-denominated. The stored token U_USD is therefore a USD unit representation, not a non-USD source value; the check is misclassifying the unit token."
+}

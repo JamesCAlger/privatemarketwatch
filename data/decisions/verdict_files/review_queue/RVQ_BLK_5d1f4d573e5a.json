@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_5d1f4d573e5a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 3540315000.0,
+  "anchor_value": 3475258000.0,
+  "confidence": 0.98,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 24,
+      "quoted_text": "Total Investments - 221.0 % | $ | 3,673,582 | $ | 3,475,258",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 6,
+      "quoted_text": "Total investments, at fair value (cost of $ 3,673,582 and $ 3,573,791 ) | $ | 3,475,258 | $ | 3,414,329",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive: the filing schedule total and balance-sheet total independently agree at $3,475,258,000, matching the companyfacts anchor, while the extracted position sum is $3,540,315,000, an overshoot of $65,057,000. The nearby $65,957,000 Total Equity Securities row at table 52 row 23 suggests a possible subtotal leak, but it does not tie exactly to the residual (a $900,000 difference), so the specific culprit is not localized and requires escalation."
+}

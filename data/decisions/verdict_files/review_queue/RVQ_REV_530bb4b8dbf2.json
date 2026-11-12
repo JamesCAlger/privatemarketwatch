@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_530bb4b8dbf2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 24.88,
+  "anchor_value": 24.88,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "AI Convoy US Borrower, LLC ^(8)(12)(19) | Senior secured | SF + | 3.75 | % | (h) | 9.12 | % | 01/2027 | $ | 10,824 | $ | 10,825 | 0.8 | % | $ | 10,839"
+    },
+    {
+      "table_index": 9,
+      "row_index": 12,
+      "quoted_text": "Accelya Lux Finco S.A.R.L.*(8)(12)(18) | One stop | SF + | 7.00 | % | (g) | 8.43 | % | cash/ | 4.00 | % | PIK | 12/2026 | 1,538 | 1,485 | 0.1 | 1,492"
+    },
+    {
+      "table_index": 19,
+      "row_index": 31,
+      "quoted_text": "Total investments | 2,500,863 | 181.2 | 2,507,023"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "fmt_cost is flagging ordinary SOI cost formatting where dollar signs are sparse but the amortized cost values are source-presented in thousands and extracted at the correct scale.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 9,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The raw SOI presents investment rows with principal, amortized cost, percentage of net assets, and fair value in thousands; dollar signs appear on some rows/total lines but not every cost cell. The bundle sample for AI Convoy carries cost 10825000.0, matching source amortized cost 10,825 in thousands, and Accelya similarly maps source amortized cost 1,485 to 1485000.0. The source therefore supports the extracted cost format/scale, so the aggregate fmt_cost warning is a rule-scope false alarm rather than a data defect."
+}

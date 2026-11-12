@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_BLK_dcde7644d343",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 7.00593332861521,
+  "anchor_value": 3.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 46,
+      "quoted_text": "QF Holdings, Inc. | (4) (8) (22) (23) | SOFR + 4.50 % | 8.19 | % | 12/15/2032 | 33,449 | 33,242 | 33,224 | 3.5"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "QF Holdings, Inc. source row reports fair value 33,224 thousand and 3.5% of net assets, while the identity residual implies about 7.006% was used.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 46
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate pct-of-net-assets identity flag. Filing anchors show total investments at fair value of 1,468,228 thousand and total net assets of 946,703 thousand. The largest localized residual is QF Holdings, Inc.; using the row residual of -33,101,381 dollars with fair value 33,224,000 dollars implies an observed pct-of-net-assets value of about 7.006%, but the raw SOI row states 3.5. The discrepancy is too large for one-decimal rounding, so the flag reflects a real extracted percentage identity defect."
+}

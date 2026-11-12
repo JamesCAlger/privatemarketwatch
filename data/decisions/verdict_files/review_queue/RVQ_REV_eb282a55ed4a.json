@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_eb282a55ed4a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 6,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 163,
+      "row_index": 7,
+      "quoted_text": "Allied Universal Holdco LLC | (9) | SOFR + | 3.75 % | 8.95 % | 5/12/2028 | 2,000 | 1,940 | 1,958 | 1.43"
+    },
+    {
+      "table_index": 163,
+      "row_index": 8,
+      "quoted_text": "Allied Universal Holdco, LLC | (9) | SOFR + | 3.75 % | 8.95 % | 5/12/2028 | 3,573 | 3,412 | 3,479 | 2.55"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Two distinct Verdelite JV source rows for Allied Universal have the same visible issuer, terms, rate, and maturity after punctuation normalization but different par, cost, and fair value, so the extracted position key collides instead of preserving row identity.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 163,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "B02 reports six duplicate position keys, with the example key allied universal holdco llc verdelite jv lp. The raw Verdelite JV June 30, 2023 schedule shows adjacent Allied Universal rows with matching normalized issuer and identical SOFR + 3.75%, 8.95% interest, and 5/12/2028 maturity, but different par/cost/fair-value amounts (2,000/1,940/1,958 and 3,573/3,412/3,479). That means the duplicate key is source-grounded as a real row-identity/key-collision defect, not merely a repeated extraction of the same numeric row."
+}

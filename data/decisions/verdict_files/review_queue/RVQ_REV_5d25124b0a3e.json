@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_5d25124b0a3e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "no_comparison",
+  "anchor_value": "Total Assets 232002000; schedule Total Investments 230281379; fair value hierarchy Total 230281000",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 11,
+      "quoted_text": "Total Assets | $ | 232,002 | $ | 215,438",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments ( 108.0 %) | $ | 231,571,333 | $ | 230,281,379",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 5,325 | $ | - | $ | 224,956 | $ | 230,281",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "GAV_BDC02 reported no comparison denominator, but the filing provides total assets of 232002 thousand and investment fair value anchors that tie to the schedule.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The warning value is no_comparison, but raw source is readable and contains usable aggregate anchors: the schedule reports Total Investments fair value of 230281379 at table 8 row 20, the fair value hierarchy reports total investments of 230281 thousand at table 21 row 5, and the statement of assets reports Total Assets of 232002 thousand at table 15 row 11. Therefore the missing comparison denominator is an extraction or anchor-linking defect, not an undecidable source gap."
+}

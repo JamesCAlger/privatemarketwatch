@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_1071fea18b05",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "retained current-period holding row for Alliance Environmental Group A-1 Preferred Units with amortized cost 331126 and market value '-'",
+  "anchor_value": "current-period holdings should exclude rows with no current market value",
+  "confidence": 0.89,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 38,
+      "quoted_text": "Alliance Environmental Group | (j) (o) (az) | A-1 Preferred Units | 9/30/2019 | 331 | 331,126 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Alliance Environmental Group A-1 Preferred Units has no current-period market value in the 2025 schedule, so retaining it as a current holding is a comparative-period leak.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 39,
+        "row_index": 38,
+        "quoted_text": "Alliance Environmental Group | (j) (o) (az) | A-1 Preferred Units | 9/30/2019 | 331 | 331,126 | -"
+      }
+    }
+  ],
+  "rationale": "PP03 is a within-row position-purity warning. The raw 2025 portfolio table header identifies columns including Acquisition Date, Par/Shares, Amortized Cost, and Market Value; the cited Alliance Environmental Group A-1 Preferred Units row shows acquisition date 9/30/2019, amortized cost 331,126, and a dash for Market Value. That supports the flag that the row is not a valid current-period holding and was retained from comparative/non-current schedule structure."
+}

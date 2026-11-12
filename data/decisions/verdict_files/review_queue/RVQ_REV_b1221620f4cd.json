@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_b1221620f4cd",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 A07 aggregate flag reports pct_sum=0.0% with no detail rows. The scoped evidence CLI was checked using overview, tables, and totals, but returned no usable raw-source content or anchor values (only an XMLParsedAsHTMLWarning). Therefore the filing total, companyfacts anchor, position sum, and any culprit row cannot be triangulated or cited; the contract requires fail-closed source_unavailable ambiguity."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_b387f2d73e49",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 246,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 2,
+      "quoted_text": "Banyan Software Holdings, LLC and Banyan Software, LP (15) | Vertical software businesses holding company | First lien senior secured revolving loan | 9.86 % | SOFR (M) | 5.50 % | 01/2023 | 10/2026 | 1.0 | 1.0 | 1.0 | (2)(6)(11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 143,
+      "row_index": 31,
+      "quoted_text": "Total Investments | $ | 26,374.0 | $ | 26,719.9 | (19) | 200.09 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 70,
+      "row_index": 7,
+      "quoted_text": "Total Investments | $ | 26,777.5 | $ | 27,130.3 | (18) | 198.44 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The review item covers 246 holdings rows retained under the 2025-03-31 report_date even though they come from the separate December 31, 2024 comparative SOI block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 143,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "PP03 flags rows whose source period is earlier than the report date. The raw filing contains a current SOI block with Total Investments of 27,130.3 at table 70 row 7 and a separate comparative SOI block with Total Investments of 26,719.9 at table 143 row 31, matching the December 31, 2024 amount shown in the balance sheet totals. Rows in that comparative SOI block, such as table 85 row 2, are source-period rows for the prior period and should not be retained as 2025-03-31 position facts. The observed PP03 count is therefore a real comparative-period leak, not a false alarm."
+}

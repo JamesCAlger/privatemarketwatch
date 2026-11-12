@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_d7b02c485b02",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2024-04-30",
+  "anchor_value": "2024-04-30",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 11.00 % | 4/30/2024 | $ | 485 | $ | 447 | $ | 243 | (4)(8)(16)(30)"
+    }
+  ],
+  "rationale": "The X10 flag is for maturity_date before report_date. Raw source table 13 row 15, in the September 30, 2025 Schedule of Investments, reports Heubach Holdings USA LLC with maturity date 4/30/2024 and fair value 243. The stored value 2024-04-30 matches the source, so the extraction is not a data error; this is an advisory monitoring condition for a matured position still reported by the filer."
+}

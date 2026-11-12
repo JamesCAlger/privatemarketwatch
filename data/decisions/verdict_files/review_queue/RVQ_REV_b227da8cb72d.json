@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_b227da8cb72d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_schedule_cell",
+  "observed_value": -61000,
+  "anchor_value": -61000,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 15,
+      "quoted_text": "SRP Eagle Buyer Inc Delayed Draw Term Loan | Cost* (61) | Fair Value (77)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 17,
+      "quoted_text": "SRP Eagle Buyer Inc Revolving Loan | Cost* (24) | Fair Value (31)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. Table 25 row 3 identifies the relevant column as Cost*. Rows 15 and 17 print costs of (61) and (24) in the filing's thousands presentation, exactly matching extracted costs of -61000 and -24000. The adjacent fair values are also parenthesized, supporting intentional negative carrying amounts rather than a sign extraction defect. C107 is therefore an overbroad advisory flag on source-supported negative values."
+}

@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_9de6c09054d2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "A8",
+  "anchor_value": "A8 - A (Feeder) L.P.",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 36,
+      "quoted_text": "A8 - A (Feeder) L.P. (11) | Limited partnership interest | 03/2025 | 0.04 % | 1,000.3 | 1,141.1 | (2)(5)"
+    }
+  ],
+  "rationale": "The extracted holdings row stores issuer_name as only \"A8\", but the raw SOI company cell at table 23 row 36 is \"A8 - A (Feeder) L.P. (11)\" for the same limited partnership interest. The issuer name was truncated, so the fmt_issuer_name warning is a real extraction-format error."
+}

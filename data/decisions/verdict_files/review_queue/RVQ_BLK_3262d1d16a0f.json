@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_3262d1d16a0f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "SOFR with no structured spread",
+  "anchor_value": "SOFR + 6.00%",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "CareRing Health, LLC (j)(q) | Delayed Draw Term Loan | SOFR + 6.00% | 9.67 % | 5/4/2028 | 6,484,697 | 6,473,978 | 6,426,335",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The filing's current-period CareRing delayed draw term loan row explicitly discloses the reference rate and spread as SOFR + 6.00%. The flagged structured representation retained SOFR but lacks the disclosed 6.00% spread, so the flag identifies a localized extraction gap."
+}

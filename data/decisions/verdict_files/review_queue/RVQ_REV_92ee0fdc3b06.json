@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_92ee0fdc3b06",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 169.58,
+  "anchor_value": 169.58,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 243,
+      "row_index": 21,
+      "quoted_text": "Total Non-Controlled, Non-Affiliated Debt Investments | $ | 566,083,084 | $ | 565,360,825 | 169.58 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 243,
+      "row_index": 23,
+      "quoted_text": "Total Investments | $ | 566,083,084 | $ | 565,360,825 | 169.58 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 229,
+      "row_index": 32,
+      "quoted_text": "Total net assets | $ | 333,384,130",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw filing reports both total investment rows at 169.58% of net assets, and the balance sheet net-assets anchor supports the percentage: fair value 565,360,825 divided by total net assets 333,384,130 equals approximately 169.58%. The flag appears to treat a percentage over 100% as malformed, but in this leveraged BDC filing it is source-backed and arithmetically consistent."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_73f2a491d257",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "2024-06-30",
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "X10 flags a maturity_date of 2024-06-30 before the 2024-09-30 report date. The raw source was readable, but targeted evidence searches for 2024-06-30 and common source display variants (6/30/2024, 06/30/2024, 6/30/24, June 30 2024, Jun 30 2024, and spaced forms) returned no matching source rows, so the source does not ground whether the extracted maturity date is correct or erroneous."
+}

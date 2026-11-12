@@ -1,0 +1,60 @@
+{
+  "review_id": "BDCSRC_0001930087_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_fa5e4c5457",
+  "cik": "0001930087",
+  "report_date": "2025-12-31",
+  "verdict": "ESCALATE",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence identifies two blocking extra-in-pipeline cash rows with output fair value of 81772000 and no matching current-period source fair value. Coordinate-level HTML evidence shows the same money-market fund rows visible as current-period position rows with fair-value cells matching the output amounts, but the raw current-period source evidence does not provide reconciled numeric source facts for both rows.",
+  "reconciliation_diagnosis": "HTML_PRESENT_TABLE_NOT_PARSED",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 33,
+      "row_index": 4,
+      "cell_indices": [
+        3,
+        24,
+        27,
+        57,
+        63,
+        69
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "JPMorgan money-market fund source-only target is visible as a current-period position row outside the selected table set, with fair value 16663 matching the pipeline output row."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 33,
+      "row_index": 3,
+      "cell_indices": [
+        3,
+        24,
+        27,
+        57,
+        58,
+        63,
+        66,
+        69,
+        70
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Morgan Stanley money-market fund source-only target is visible as a current-period position row outside the selected table set, with fair value 65109 matching the pipeline output row."
+    }
+  ],
+  "changed_files": [],
+  "patch_summary": "",
+  "source_reconciliation_effect": "No patch applied. A bounded parser or table-selection fix would be expected to convert the visible current-period cash rows into source facts and remove the two extra-in-pipeline residual rows if raw numeric extraction confirms the HTML values.",
+  "gav_effect": "Context only; GAV already passes and is not used as the primary justification.",
+  "tests_validation_plan": "After a human-selected parser/config patch: pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": false,
+  "missing_evidence": "Need human review of the parser/table-selection code path and raw numeric extraction for the cash tables. The bundle shows HTML coordinates and one raw source row excluded_no_fair_value, but does not provide reconciled raw numeric source facts for both cash rows.",
+  "residual_risk": "HTML coordinates support identity and row classification only. A parser patch could over-include cash or comparative-period rows unless table-period assignment and numeric cell extraction are verified against false-positive cash rows.",
+  "reviewer_notes": "Escalated because the residual is source-reconciliation based and the HTML rows appear to be production positions, but the local bundle is not sufficient to identify a bounded code patch without risking over-broad table inclusion."
+}

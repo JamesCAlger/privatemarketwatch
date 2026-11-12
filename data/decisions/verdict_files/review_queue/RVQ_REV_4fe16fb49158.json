@@ -1,0 +1,38 @@
+{
+    "escalate":  false,
+    "verdict":  "false_alarm",
+    "review_id":  "RVQ_REV_4fe16fb49158",
+    "mechanism":  "classification_lookthrough",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  300732065,
+    "anchor_value":  300732065,
+    "rationale":  "B01 reports only 351/706 leaves with fair_value, but the raw schedule shows a structural issuer/grouping row without fair value followed by investment child rows that do have fair value. The current-period schedule total of 300,732,065 ties to the statement of assets and liabilities at the same fair value, so the low completeness ratio is caused by counting grouping/structural rows as leaves rather than by missing fair values on actual investments.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  5,
+                                  "table_index":  210,
+                                  "quoted_text":  "2X LLC issuer/header row has no fair value cells; it is a grouping row, not an investment position."
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  6,
+                                  "table_index":  210,
+                                  "quoted_text":  "Term Loan | First Lien | 3M SOFR+ 5.00 % | ... | amortized cost 1,747,854 | fair value 1,772,476 | 1.09 %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  12,
+                                  "table_index":  217,
+                                  "quoted_text":  "Total Investments | $ | 297,791,269 | $ | 300,732,065 | 185.19 %"
+                              },
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  3,
+                                  "table_index":  206,
+                                  "quoted_text":  "Non-controlled, non-affiliated investments, at fair value (amortized cost of $ 297,791,269 and $ 206,513,758, respectively) | $ | 300,732,065 | $ | 208,574,078"
+                              }
+                          ],
+    "confidence":  0.82
+}

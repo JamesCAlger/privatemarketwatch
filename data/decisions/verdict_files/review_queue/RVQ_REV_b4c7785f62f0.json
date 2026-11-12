@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_b4c7785f62f0",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": -12191,
+  "anchor_value": -12191,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 39,
+      "quoted_text": "Electro Methods | Senior Secured Revolving Credit Facility | S+ | 4.75 % | 8.40 % | 2/6/2025 | 2/23/2032 | - | ( 12,191 | ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 37,
+      "quoted_text": "Tronair | Senior Secured Revolving Loan | S+ | 3.75 % | 7.40 % | 12/18/2025 | 12/22/2032 | - | ( 1,250 | ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 38,
+      "quoted_text": "Whitcraft | Senior Secured Revolving Loan | S+ | 5.00 % | 8.65 % | 3/31/2023 | 9/30/2031 | - | ( 10,714 | ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 26,
+      "quoted_text": "Engine & Transmission Exchange | (j) | Senior Secured Revolving Loan | S+ | 5.00 % | 8.65 % | 5/26/2023 | 5/29/2029 | -- | ( 15,392 | ) | --",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "C107 negative-cost warning is firing on source-disclosed parenthesized amortized cost for revolving loan rows with no market value, not on an extraction error.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 36,
+        "row_index": 39
+      }
+    }
+  ],
+  "rationale": "The flag reports negative cost values such as -12191 for Electro Methods. Raw SOI table 36 shows the same row under the Amortized Cost column as parenthesized (12,191) with par/shares '-' and market value '-', and the same pattern appears for Tronair, Whitcraft, and Engine & Transmission Exchange revolving loan rows. The extracted signed costs therefore match the source; the advisory C107 check is overbroad for these source-disclosed unfunded/revolving cost balances."
+}

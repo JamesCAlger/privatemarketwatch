@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_f99e74a372de",
+  "verdict": "false_alarm",
+  "mechanism": "currency_inference_false_positive",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 127,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "MRO Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 450, 0.50% Floor | 10/4/2032 | $ | 47,961 | $ | 48,162 | $ | 47,602",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 12,
+      "quoted_text": "Vantage Specialty Chemicals Holdings, Inc. | First Lien Secured Debt - Term Loan | S + 675 Cash plus 8.99% PIK | 8/29/2029 | $ | 15,877 | $ | 15,399 | $ | 15,242",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 4,
+      "quoted_text": "Goldman Sachs Financial Square Government Fund Institutional Shares | N/A | N/A | $ | 24,340 | $ | 24,340 | $ | 24,340",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 asserts that non-USD debt principal requires explicit FX conversion before par analytics, but the raw schedule rows inspected show dollar signs in the Par/Shares, Cost, and Fair Value columns, with no foreign-currency denomination terms found by targeted source searches. The missing principal_amount_usd warning is therefore not grounded as a non-USD conversion defect for this filing; it appears to be a currency inference/carry-forward false positive."
+}

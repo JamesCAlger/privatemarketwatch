@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_a3337b6aa912",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "PRIVATE_EQUITY rows carry source-disclosed coupon or PIK rates: 8.96, 6.0, 13.75, 7.0, and 15.75",
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 9,
+      "quoted_text": "Ferrellgas, L.P. and Ferrellgas Partners, L.P. | Distributor of propane and related accessories | Senior preferred units | 8.96 % | 3/2021 | 59,422 | 59.5 | 60.0",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 19,
+      "quoted_text": "Series E-1 preferred stock | 6.00 % PIK | 6/2022 | 166,059 | 14.2 | 14.2 | (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 8,
+      "quoted_text": "Preferred units | 13.75 % ( 9.25 % PIK) | 10/2015 | 59,453 | 77.1 | 77.1 | (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 11,
+      "quoted_text": "Series A preferred stock | 7.00 % PIK | 5/2021 | 68,601 | 75.6 | 75.6 | (2)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 18,
+      "quoted_text": "Senior preferred stock | 15.75 % ( 7.00 % PIK) | LIBOR (Q) | 12.00 % | 4/2021 | 65,761 | 68.0 | 72.0 | (2)(6)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X01 flagged PRIVATE_EQUITY holdings because interest_rate was populated. The raw schedule shows these are preferred equity, preferred units, or preferred stock instruments, and the rates are explicitly disclosed in the coupon column, including PIK rates. The stored rate is therefore source-supported; the rule is overbroad for yield-bearing preferred equity rather than identifying a data defect."
+}

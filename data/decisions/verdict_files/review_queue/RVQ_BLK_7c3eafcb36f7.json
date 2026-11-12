@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_7c3eafcb36f7",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C207 flags row_key 544957 because bdc_investment_identifier is blank. Raw filing source was available and checked through the evidence CLI, but an exact query for 544957 returned zero hits. The bundle provides no issuer, instrument terms, source context ID, or source table coordinate for the flagged row, so the blank identifier prevents matching this specific unified row to a source position. The source therefore cannot establish whether an identifier was dropped or whether the row is outside the identifier-bearing position scope. Escalate for provenance-based row localization."
+}

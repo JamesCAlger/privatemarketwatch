@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_fd1cc1a42061",
+  "verdict": "false_alarm",
+  "mechanism": "unit_code_normalization_false_positive",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "UNIT_USD",
+  "anchor_value": "USD",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 1,
+      "quoted_text": "Investments (1) Non-Controlled, Non-Affiliated Investments | Industry | Reference Rate Spread (4) | Interest Rate (5) | Maturity Date | Par Amount/ Shares | Cost | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Alorica, Inc. Term Loan (3) | IT Services | SOFR + 6.875 % | 12.191 % | 12/21/2027 | 12,313 | $ | 12,194 | $ | 12,195 | 5.17 %"
+    },
+    {
+      "table_index": 12,
+      "row_index": 15,
+      "quoted_text": "Total Investments | $ | 233,185 | $ | 230,604 | 97.74 %"
+    }
+  ],
+  "rationale": "FX02 flagged fair_value_currency value UNIT_USD as non-USD, but UNIT_USD denotes USD and the raw SOI presents the flagged holdings' fair value column in dollars. The investment schedule header identifies the Fair Value column, representative rows carry dollar markers for cost and fair value, and the schedule total is explicitly $230,604. The check is therefore misclassifying a USD unit code rather than exposing a data error."
+}

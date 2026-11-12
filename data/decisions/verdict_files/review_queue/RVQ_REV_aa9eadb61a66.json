@@ -1,0 +1,79 @@
+{
+  "review_id": "RVQ_REV_aa9eadb61a66",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 68419777,
+  "anchor_value": 76531118,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 139,
+      "row_index": 13,
+      "quoted_text": "Total Investment Portfolio | 68,985,671 | 68,419,777 | 176.02",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 122,
+      "row_index": 10,
+      "quoted_text": "CFCo, LLC (Benefytt Technologies, Inc.) comparative schedule row with fair value 0",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 135,
+      "row_index": 17,
+      "quoted_text": "Caerus Midco 2 comparative schedule row: Additional Vehicle Units",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 135,
+      "row_index": 18,
+      "quoted_text": "Caerus Midco 2 comparative schedule row: Vehicle Units",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 137,
+      "row_index": 7,
+      "quoted_text": "Connatix Parent, LLC - Class L Common Units comparative schedule row",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 136,
+      "row_index": 13,
+      "quoted_text": "Falcon Top Parent, LLC - Class A Common Units comparative schedule row",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 133,
+      "row_index": 12,
+      "quoted_text": "Jupiter Ultimate Holdings, LLC - Class A Common Units comparative schedule row",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 90,
+      "row_index": 8,
+      "quoted_text": "Pye-Barker Fire & Safety, LLC comparative schedule row",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 99,
+      "row_index": 11,
+      "quoted_text": "US Oral Surgery Management Holdco, LLC comparative schedule row",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Rows sourced from the earlier comparative investment schedule were retained under report_date 2025-09-30.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 139,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "PP03 is a real data error. The raw filing has a current September 30, 2025 investment schedule whose total investment portfolio fair value is 76,531,118 (table 71 row 18, matching the balance sheet total investments at fair value), and a separate comparative schedule whose total investment portfolio fair value is 68,419,777 (table 139 row 13, matching the December 31, 2024 balance sheet comparative amount). The flagged positions are localized to the earlier comparative schedule block but were retained in private_markets_holdings under the 2025-09-30 report_date. That is a comparative-period leakage defect, not a false alarm."
+}

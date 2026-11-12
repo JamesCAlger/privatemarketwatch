@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_584bb5ea3ee4",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares"
+    },
+    {
+      "table_index": 18,
+      "row_index": 27,
+      "quoted_text": "Total First Lien Debt | $ | 2,218,610 | $ | 2,177,304 | $ | 2,196,268 | 192.25 | %"
+    },
+    {
+      "table_index": 22,
+      "row_index": 2,
+      "quoted_text": "Goldman Sachs Bank USA | USD | 10,610 | SEK | 100,000 | 12/17/2025 | $ | ( 62 | )"
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd on debt holdings as if source principal were non-USD. The raw investment schedules show debt Principal, Amortized Cost, and Fair Value in dollar-denominated columns, with First Lien Debt totals explicitly dollar-marked. The only explicit non-USD currency tokens found in source are in the foreign currency forward contract table, not in debt holding principal rows. Therefore the FX conversion requirement is not supported by the raw holding source; the flag is a rule/classification scope false alarm rather than a real missing USD principal value."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_c89570778bc1",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480975000,
+  "anchor_value": 1249444000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 4,
+      "quoted_text": "Investments at fair value (cost/amortized cost of $ 231,731 ) | $ | 231,531",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted fair-value total includes a separate 231.531 million portfolio schedule on top of the filing total, exactly explaining the excess.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 30,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The filing reports total investments of 1,249.444 million and 234.9% of net assets; with total net assets of 531.517 million, the computed percentage is about 235.1%, consistent after rounding. The flagged extracted total is 1,480.975 million, exceeding the filing total by exactly 231.531 million. That residual is independently printed as investments at fair value in table 30 row 4 and as total portfolio investments in table 33 row 62, proving that a separate schedule was added to the consolidated investment total. The F23 flag is therefore a real extraction double-count error, not an error in the reported percentage."
+}

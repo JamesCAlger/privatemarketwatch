@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_dbad3d12d63b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5.0,
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Arrowhead Pharmaceuticals, Inc. (4) | First-lien loan ($ 27,177 par, due 8/2031) | 8/7/2024 | 15.00% | 15.00% | 26,999 | 29,962 | 1.9%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The source row shows a fixed 15.00% reference-rate value and a 15.00% interest rate; it does not show a 5.00% floating spread. The extracted basis_spread of 5.0 is therefore unsupported and conflicts with the fixed-rate source row, consistent with a rate-field extraction or row-association gap."
+}

@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_c6bc94ae3f91",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "DCA Investment Holding LLC source row carries footnotes (8)(14)(17)",
+  "anchor_value": null,
+  "confidence": 0.45,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 29,
+      "quoted_text": "DCA Investment Holding LLC | (8)(14)(17) | First Lien Term Loan | S + 8.41 % | 12.06 % | 4/3/2028 | 197 | 195 | 174 | 0.02",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged 2025 DCA Investment Holding LLC position is localized to table 50 row 29 and carries footnote marker (17), but targeted raw-source searches for non-accrual/accrual wording and footnote (17) did not expose the footnote definition or any text establishing that the position is non-accrual. The source row alone does not decide whether the nonaccrual_flag is a real data error or a false alarm."
+}

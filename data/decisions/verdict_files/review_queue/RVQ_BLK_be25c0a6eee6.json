@@ -1,0 +1,22 @@
+{
+  "review_id": "RVQ_BLK_be25c0a6eee6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 160307000,
+  "anchor_value": 210328000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 13, "row_index": 19, "quoted_text": "Total Warrants | 2,491 | 252 | 0.15 | %", "ties_to_residual": true},
+    {"table_index": 13, "row_index": 61, "quoted_text": "Total Short-Term Investments | 47,530 | 47,526 | 27.91 | %", "ties_to_residual": true},
+    {"table_index": 13, "row_index": 65, "quoted_text": "Total Investments | $ | 210,328 | $ | 203,856 | 119.73 | %", "ties_to_residual": false},
+    {"table_index": 55, "row_index": 11, "quoted_text": "Total investments | $ | 210,328 | $ | 203,856 | $ | 186,110 | $ | 183,056", "ties_to_residual": false}
+  ],
+  "findings": [
+    {"mechanism": "extraction_gap", "detail": "The March 31, 2026 warrants cost of 2.491 million is omitted from the extracted position sum.", "fix_class": "missing_position_add", "citation": {"table_index": 13, "row_index": 19}},
+    {"mechanism": "extraction_gap", "detail": "The March 31, 2026 short-term investments cost of 47.530 million is omitted from the extracted position sum.", "fix_class": "missing_position_add", "citation": {"table_index": 13, "row_index": 61}}
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The SOI grand total at table 13 row 65 and the independent investments summary at table 55 row 11 both report March 31, 2026 total cost of 210.328 million. The extracted 160.307 million equals the included category totals of debt 154.347 million, common stock 0.680 million, and preferred stock 5.280 million. The exact 50.021 million residual is the sum of omitted warrants cost 2.491 million (table 13 row 19) and omitted short-term investments cost 47.530 million (table 13 row 61). Thus the anchor is sound and the conservation failure is a localized extraction coverage gap affecting two investment classifications."
+}

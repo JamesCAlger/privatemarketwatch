@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_REV_d1e314cec6d4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "Funded Par Amount present in source rows",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 4,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Term Loan | 8.91 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 9,659,914 | 9,567,427 | 9,587,464 | (8)(15)"
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Delayed Draw Term Loan | 8.91 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 84,366 | 64,005 | 73,794 | (6)(8)(15)"
+    },
+    {
+      "table_index": 21,
+      "row_index": 6,
+      "quoted_text": "Syntax Systems Ltd. | Digital Infrastructure & Services | Term Loan | 9.26 % ( S + 5.00 %; 0.75 % Floor) | 10/27/2028 | 8,513,804 | 8,473,696 | 8,407,382 | (8)(15)"
+    },
+    {
+      "table_index": 21,
+      "row_index": 12,
+      "quoted_text": "SumUp Holdings Luxembourg | Software & Tech Services | Delayed Draw Term Loan | 10.69 % ( S + 6.5 %; 1.5 % Floor) | 5/23/2031 | 10,088,201 | 10,002,752 | 10,088,201 | (6)(8)(15)"
+    },
+    {
+      "table_index": 21,
+      "row_index": 18,
+      "quoted_text": "Labvantage Systems Limited | Software & Tech Services | Term Loan | 9.56 % ( S + 5.25 %; 1.00 % Floor) | 12/23/2030 | 19,670,177 | 19,346,968 | 19,473,475 | (8)(15)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX01 fired because principal_amount_usd is blank even though the source SOI has Funded Par Amount values for the non-U.S. debt rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The flagged extracted rows have blank principal_amount_usd, but the raw SOI table provides Funded Par Amounts for the affected Canada, Luxembourg, and United Kingdom corporate debt positions. The missing extracted USD principal field is therefore a real extraction gap rather than a false alarm."
+}

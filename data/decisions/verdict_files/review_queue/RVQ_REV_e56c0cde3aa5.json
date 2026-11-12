@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e56c0cde3aa5",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd blank on FX01 rows",
+  "anchor_value": "source par amounts presented in USD, not non-USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | Par Amount | $ | 6,171,921 | Amortized Cost | $ | 5,994,674 | Fair Value | $ | 6,029,967",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "RPM Purchaser, Inc. | Term Loan B - 11.71 % (SOFR + 6.25 %, 2.00 % Floor) | Par Amount/Shares | $ | 6,373,893 | Amortized Cost | $ | 6,206,762 | Fair Value | $ | 6,412,137",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.11 % (SOFR + 7.50 %, 2.00 % Floor) | Par Amount | $ | 7,839,556 | Amortized Cost | $ | 7,594,859 | Fair Value | $ | 7,721,962",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Florida Marine Transporters, LLC | Term Loan B - 13.47 % (SOFR + 8.00 %, 2.00 % Floor) | Par Amount | $ | 9,232,860 | Amortized Cost | $ | 9,014,571 | Fair Value | $ | 9,158,997",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 requires non-USD source par before missing principal_amount_usd is a defect. The raw SOI pages reviewed through the evidence CLI show the relevant debt schedules presenting par, amortized cost, and fair value in dollars, with explicit dollar signs on the first debt row of each schedule page and no EUR/CAD/GBP currency markers found by targeted roam queries. Because the source does not support the non-USD premise, the flag is a rule-scope false alarm rather than a data error."
+}

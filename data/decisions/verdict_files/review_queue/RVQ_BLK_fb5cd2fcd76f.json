@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_fb5cd2fcd76f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 542123,
+  "anchor_value": 542123,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 26,
+      "quoted_text": "S4T Holdings Corp. (Vistria ESS Holdings, LLC) | Equity Units | 12/27/2021 | N/A | 200 | 200,000 | 542,123 | 0.3 | % | (16)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "SRC_BDC02 flagged the BDC holding as having no matching current-period source fact, but the raw filing schedule contains the exact S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units row in table 51 row 26 with fair value 542,123. The surrounding totals in table 51 tie this schedule to the 2025 investment total of 395,375,030, so the source-match failure is a check false alarm rather than a data error."
+}

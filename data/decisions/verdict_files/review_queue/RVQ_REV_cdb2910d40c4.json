@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_cdb2910d40c4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 112159901,
+  "anchor_value": 112159901,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 13,
+      "quoted_text": "Total Debt Investments (2) | 95.6 | % | 111,400,546 | 112,159,901",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 21,
+      "quoted_text": "Total Investments ( 139.7 %) | $ | 163,170,628 | $ | 163,929,983",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The raw SOI shows 17 current-period private-credit debt position rows across tables 5 and 6, each with a Fair Value cell, and those extracted debt fair values sum to the schedule Total Debt Investments fair value of 112,159,901. The 34-row denominator in B01 is not supported as 34 current private-credit positions in the source; it appears to include non-position or out-of-scope schedule structure, while the intended debt-position fair-value extraction ties to the filing."
+}

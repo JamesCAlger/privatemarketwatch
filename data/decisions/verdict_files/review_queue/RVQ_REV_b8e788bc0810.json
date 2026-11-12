@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_b8e788bc0810",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.15,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C01 is an aggregate rate-completeness flag requiring raw-source structural review. The evidence CLI was invoked for overview, tables, and a targeted issuer query, but each completed without usable source output and returned only an XMLParsedAsHTMLWarning. No raw-source coordinates, quotations, table structure, or anchors were available to decide whether the 71.6% rate coverage reflects missing debt rates or non-debt rows in the denominator. The contract therefore requires a fail-closed source_unavailable verdict."
+}

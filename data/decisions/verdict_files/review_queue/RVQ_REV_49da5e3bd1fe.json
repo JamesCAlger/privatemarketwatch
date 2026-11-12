@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_49da5e3bd1fe",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_period",
+  "observed_value": 9,
+  "anchor_value": 0,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 3,
+      "row_index": 7,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (unaudited) and September 30, 2025",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 13,
+      "quoted_text": "Amberfield Acquisition Co. | One stop | SF + 5.50% | 9.50% | 05/2030 | 69 | 69 | 69",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 40,
+      "row_index": 13,
+      "quoted_text": "DCCM, LLC | One stop | N/A | 06/2032 | (9)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Nine September 30, 2025 schedule rows were retained in the March 31, 2026 holdings population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 45,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "The filing expressly contains separate investment schedules for March 31, 2026 and September 30, 2025. Raw-source pairs confirm that flagged variants occur in the comparative schedule: for example, Amberfield One stop appears at table 45 row 13 in the earlier schedule and at table 20 row 26 in the current schedule, while DCCM comparative variants appear at table 40 rows 12-13 and current variants at table 14 rows 26-27. A report-date holdings dataset should contain zero earlier-period schedule rows, but nine were retained; this is a localized comparative-period extraction leak."
+}

@@ -1,0 +1,38 @@
+{
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "fix_class":  "classification_fix",
+                         "detail":  "The artifact counts Legends Hospitality Holding Company as non-accrual from a footnote, but the 2025 source row has a blank Footnotes cell; the filing reports only one debt investment on non-accrual status.",
+                         "citation":  {
+                                          "row_index":  4,
+                                          "table_index":  35,
+                                          "quoted_text":  "Legends Hospitality Holding Company row has a blank Footnotes cell."
+                                      }
+                     }
+                 ],
+    "escalate":  false,
+    "verdict":  "real_error",
+    "review_id":  "RVQ_REV_5229461db412",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  2,
+    "anchor_value":  1,
+    "rationale":  "The queue artifact reports two non-accrual positions, including Legends Hospitality Holding Company. The filing-level source anchor at table 16 row 10 reports only one debt investment on non-accrual status for December 31, 2025. The localized Legends source row at table 35 row 4 has a blank Footnotes cell, so the artifact footnote-based non-accrual classification for that row is unsupported; Ligado can account for the single non-accrual investment.",
+    "culprit_citations":  [
+                              {
+                                  "ties_to_residual":  false,
+                                  "row_index":  10,
+                                  "table_index":  16,
+                                  "quoted_text":  "Number of debt investments on non-accrual status | 1 | 1"
+                              },
+                              {
+                                  "ties_to_residual":  true,
+                                  "row_index":  4,
+                                  "table_index":  35,
+                                  "quoted_text":  "Legends Hospitality Holding Company | [blank Footnotes] | S + 5.50 % | 0.75 % | 9.23 % (Incl 2.75 % PIK) | 8/22/2031 | 65,519 | 64,436 | 64,504 | 1.97"
+                              }
+                          ],
+    "confidence":  0.93
+}

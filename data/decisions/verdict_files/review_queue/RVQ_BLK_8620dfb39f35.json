@@ -1,0 +1,76 @@
+{
+  "review_id": "RVQ_BLK_8620dfb39f35",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "identifier parsed maturities: 2028-12-04; 2031-03-04; 2031-06-07; 2032-10-14",
+  "anchor_value": "source/structured maturities: 2028-12-14; 2031-05-04; 2031-06-27; 2031-10-14",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 28,
+      "quoted_text": "CSafe Acquisition Company, Inc. | First Lien Term Loan | SOFR + 5.75 % | 9.95 % | 5/8/2025 | 12/14/2028",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 29,
+      "row_index": 45,
+      "quoted_text": "Maverick Power, LLC | First Lien Term Loan | SOFR + 5.00 % | 8.89 % | 11/4/2025 | 5/4/2031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 32,
+      "quoted_text": "Mountain Parent, Inc. | First Lien Term Loan | SOFR + 4.75 % | 8.42 % | 10/21/2024 | 6/27/2031",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 43,
+      "quoted_text": "Navex Global Holdings Corporation | First Lien Revolving Loan | SOFR + 5.00 % | - | 10/14/2025 | 10/14/2031",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CSafe First Lien Term Loan identifier carries maturity 2028-12-04, but the source row maturity is 2028-12-14.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Maverick Power First Lien Term Loan identifier carries maturity 2031-03-04, but the source row maturity is 2031-05-04.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 45
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Mountain Parent First Lien Term Loan identifier carries maturity 2031-06-07, but the source row maturity is 2031-06-27.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 32
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Navex Global First Lien Revolving Loan identifier carries maturity 2032-10-14, but the source row maturity is 2031-10-14.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 43
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw SOI rows show the maturity date matching the structured/XBRL value for each flagged holding and disagreeing with the date embedded in the extracted identifier/Agent A parsed value. The defect is localized to identifier/date extraction rather than the source schedule or structured maturity field."
+}

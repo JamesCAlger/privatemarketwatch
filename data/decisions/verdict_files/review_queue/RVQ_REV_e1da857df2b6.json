@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_e1da857df2b6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2138204,
+  "anchor_value": 2138204,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 5,
+      "quoted_text": "Carbon Topco, Inc. (4)(6)(9) | 5/1/2030 | $ 1,332 | $ ( 21 ) | $ -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 9,
+      "quoted_text": "Tikehau Motion Midco SARL (4)(5)(6)(7) | EUR 7,635 | ( 174 ) | ( 102 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 23,
+      "quoted_text": "Total Investment Portfolio | $ | 2,138,204 | $ | 2,177,821 | 174.51 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 45,
+      "row_index": 6,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 2,138,204 and $ 982,565 at December 31, 2025 and 2024, respectively) | 2,177,821 | 984,954",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw schedule contains parenthesized amortized-cost rows, including Carbon Topco with amortized cost $(21) and fair value zero, and Tikehau Motion Midco with amortized cost $(174) and fair value $(102). These are source-presented values, not extraction defects. The schedule total investment portfolio amortized cost is $2,138,204 and ties to the balance sheet disclosure of total investments at fair value with amortized cost of $2,138,204. The fmt_cost warning therefore appears to be a weak rule-scope/format alarm on valid source formatting rather than a real data error."
+}

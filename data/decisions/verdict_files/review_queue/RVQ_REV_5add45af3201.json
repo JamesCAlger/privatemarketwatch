@@ -1,0 +1,24 @@
+{
+    "review_id":  "RVQ_REV_5add45af3201",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  6,
+    "anchor_value":  null,
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  12,
+                                  "row_index":  24,
+                                  "quoted_text":  "Sikich - Warrants - principal/share 5 - cost 0 - market value 596"
+                              },
+                              {
+                                  "table_index":  12,
+                                  "row_index":  25,
+                                  "quoted_text":  "Sikich - Warrants - principal/share 2 - cost 0 - market value 170"
+                              }
+                          ],
+    "rationale":  "B02 flags duplicate position keys, with the example key pointing to Sikich Warrants. Raw SOI table 12 has two separate adjacent Sikich Warrant rows: row 24 has principal/share 5 and market value 596, while row 25 has principal/share 2 and market value 170. The duplicate key arises because the check collapses distinct source rows that share company and investment type; the extracted split positions are source-supported rather than duplicate records."
+}

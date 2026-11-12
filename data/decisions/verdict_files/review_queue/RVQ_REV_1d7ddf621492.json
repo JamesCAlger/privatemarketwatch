@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_1d7ddf621492",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 reports a fund_financials/holdings coverage mismatch for 2011-09-30 (fund=True; holdings=False), but the approved evidence CLI returned no_accession_resolved for overview, tables, totals, and targeted roam queries. Raw source was therefore unavailable through the allowed evidence path, so the presence or absence of a holdings schedule cannot be adjudicated."
+}

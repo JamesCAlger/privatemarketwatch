@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_4733f58d0e4e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 38,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(7)(10) | C + | 5.50 % | 10.79 % | 8/10/2029 | CAD | 237,162 | 181,540 | 173,517 | 0.56"
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "ENV Bidco AB | (4)(6)(7)(8) | E + | 5.75 % | 9.65 % | 7/19/2029 | EUR | 114,140 | 113,143 | 119,693 | 0.39"
+    }
+  ],
+  "rationale": "FX01 is a row-level principal_amount_usd check. The raw schedule contains debt rows with Par Amount/Units explicitly denominated in non-USD currencies, including CAD 237,162 for 123Dentist and EUR 114,140 for ENV Bidco AB. The reviewed artifact reports principal_amount_usd blank for non-USD debt rows, so the missing USD principal conversion is a real extraction/normalization gap rather than a false alarm."
+}

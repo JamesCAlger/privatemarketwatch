@@ -1,0 +1,28 @@
+{
+  "review_id": "BDCSRC_0001919369_2025-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_79b1ba05b1",
+  "cik": "0001919369",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "HIGH",
+  "primary_justification": "Source-reconciliation evidence supports a source-side scale normalization defect for the exact matched QF Holdings, Inc. position: source fair value is 33224.0 while output fair value is 33224000.0, and the same exact-identifier detail row also shows cost and principal amount at the same 1000x source/output scale difference. This is a matched value_mismatch, not a missing production position.",
+  "reconciliation_diagnosis": "XBRL_ONLY_NO_HTML_COORDINATE",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period"
+  ],
+  "html_citations": [],
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "patch_summary": "Apply audited BDC value_rescale adjustments to source-side rows before matched source/output reconciliation, or otherwise exclude already-corrected value_rescale deltas from the scale-or-unit blocker classification. Add a focused regression for CIK 0001919369, report date 2025-12-31, QF Holdings, Inc. showing source fair_value 33224.0 normalizes to 33224000.0 before comparison, plus a false-positive case where non-1000x differences remain blockers.",
+  "source_reconciliation_effect": "Expected to clear the single blocking_fair_value_scale_or_unit_candidate row for QF Holdings, Inc. by aligning the source fair_value scale with the exact-identifier output row, without clearing unrelated source-only or non-scale residuals.",
+  "gav_effect": "Context only; expected no independent pass/fail claim because GAV already passes and the proposed change targets matched source-reconciliation comparison.",
+  "tests_validation_plan": "pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py tests/test_validate_holdings.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "No exact coordinate-level HTML citation is available in the bundle for the QF Holdings, Inc. row or the 33,224 fair value; html_source_row_coordinate_candidates only provides generic Holdings, Inc. matches that do not identify the blocker row.",
+  "residual_risk": "The patch must be scoped to audited value_rescale adjustments or an equivalent exact 1000x source/output scale rule, because globally rescaling source rows would corrupt rows that already reconcile in dollars.",
+  "reviewer_notes": "The raw current-period source row and source_reconciliation_detail_samples show the same exact identifier with source_fair_value 33224.0 versus output_fair_value 33224000.0. The worklist classifies one fair_value blocker, zero source-only blockers, and an exact_identifier match tier."
+}

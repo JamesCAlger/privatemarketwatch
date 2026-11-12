@@ -1,0 +1,62 @@
+{
+  "review_id": "RVQ_BLK_4b3396f505a0",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1975499000,
+  "anchor_value": 1608953000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (amortized cost-$ 1,586,885 and $ 1,052,863 , respectively) | 1,608,953 | 1,064,073",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 33,
+      "quoted_text": "Total Senior Secured Loans-First Lien | 1,526,351 | 1,537,628",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 31,
+      "row_index": 34,
+      "quoted_text": "Unfunded Loan Commitments | (259,939) | (259,939)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 31,
+      "row_index": 35,
+      "quoted_text": "Net Senior Secured Loans-First Lien | 1,266,412 | 1,277,689",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 10,
+      "quoted_text": "Total Asset Based Finance | 398,682 | 409,394",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 11,
+      "quoted_text": "Unfunded Commitments | (80,013) | (80,013)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 12,
+      "quoted_text": "Net Asset Based Finance | 318,669 | 329,381",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 13,
+      "quoted_text": "TOTAL INVESTMENTS- 141.4 % | $ | 1,586,885 | 1,608,953",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the source total investments at fair value is 1,608,953 thousand in both the balance sheet and the investment schedule, matching the companyfacts anchor of 1,608,953,000. The reviewed extraction sums fair_value to 1,975,499,000, an overshoot of 366,546,000. The raw schedule shows gross subtotal rows followed by unfunded commitment deductions and net category rows; the filing total ties to the net structure, not to gross subtotal accumulation. This supports a real extraction/conservation error, though the exact extracted row set was not fully localized from source structure alone."
+}

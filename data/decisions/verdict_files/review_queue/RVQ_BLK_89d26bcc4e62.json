@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_89d26bcc4e62",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 80938.296,
+  "anchor_value": 82199.346,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 281,
+      "row_index": 16,
+      "quoted_text": "ABG Intermediate Holdings 2, LLC | (8) | SOFR + | 2.25 % | 5.92 % | 12/13/2024 | 12/21/2028 | 385 | 385 | 385 | 0.35",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 29,
+      "quoted_text": "ABG Intermediate Holdings 2, LLC | (8) | SOFR + | 2.25 % | 5.92 % | 4/4/2025 | 2/13/2032 | 5,198 | 5,078 | 5,180 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Distinct JV look-through investment rows were omitted even though the filing separately discloses them from the fund's direct positions.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 281,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor-first review found filing total fair value of 82199.346 million versus extracted fair value of 80938.296 million. Raw source then localizes the coverage mechanism: ABG Intermediate Holdings 2 is disclosed twice with different acquisition dates, maturities, and values - a direct fund position at table 39 row 29 and a separate JV look-through position at table 281 row 16. The flagged JV-qualified position is therefore a real separately disclosed exposure, not a duplicate-name false alarm. The aggregate anchor supports incomplete coverage, although the cited row alone does not explain the full residual."
+}

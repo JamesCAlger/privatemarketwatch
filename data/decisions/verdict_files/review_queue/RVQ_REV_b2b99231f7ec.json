@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_b2b99231f7ec",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 200,
+  "anchor_value": 200,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 64,
+      "quoted_text": "SMA Technologies Holdings, LLC (8)(10) | Class A Units ( 200 units) | 11/21/2022 | 200 | 200 | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 37,
+      "quoted_text": "SMA Technologies Holdings, LLC (8)(10) | Class A Units ( 200 units) | 11/21/2022 | 200 | 200 | 0.0 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged the SMA Technologies Holdings, LLC Class A Units row as a comparative-period row, but raw source table 8, the March 31, 2023 investment schedule, contains the same current-period position with 200 amortized cost and 200 fair value. Table 9 contains the December 31, 2022 counterpart, but the flagged value is not solely a comparative-period fact because it is also present in the current schedule."
+}

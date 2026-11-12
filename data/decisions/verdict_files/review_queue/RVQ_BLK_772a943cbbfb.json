@@ -1,0 +1,86 @@
+{
+  "review_id": "RVQ_BLK_772a943cbbfb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "agentA_value_pct=SOFR; several extracted identifiers also assign SOFR spreads to rows whose source reference fields are dash-only",
+  "anchor_value": "raw SOI rows show either the full structured SOFR + spread or a dash-only reference/interest pair for the matching instrument row",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 9,
+      "quoted_text": "User Zoom Technologies, Inc. (i) | Term Loan | SOFR + 7.50 % | 11.15 % | 4/5/2029 | 805,412 | 789,304 | 789,304"
+    },
+    {
+      "table_index": 57,
+      "row_index": 2,
+      "quoted_text": "ACP Packaging IntermediateCo, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 10/22/2031 | - | $ | ( 84,354 | ) | $ | ( 87,048 | )"
+    },
+    {
+      "table_index": 57,
+      "row_index": 6,
+      "quoted_text": "Currier Plastics Acquisition, LLC (f)(i)(l) | Revolving Credit Facility | - | - | 9/19/2031 | - | ( 41,406 | ) | ( 43,005 | )"
+    },
+    {
+      "table_index": 60,
+      "row_index": 27,
+      "quoted_text": "Plains All American Pipeline LP (g)(l)(m)(u) | Floating Rate Note | SOFR + 4.11 % | 8.70 % | 7,000,000 | 6,988,000 | 7,019,859"
+    },
+    {
+      "table_index": 57,
+      "row_index": 10,
+      "quoted_text": "Firmapak Intermediary LLC (f)(i)(l) | Revolving Credit Facility | - | - | 2/4/2031 | - | ( 26,138 | ) | -"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "User Zoom term loan source reference is SOFR + 7.50%, so storing only SOFR loses the structured spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "ACP Packaging revolving credit facility source has dashes for reference and interest rate, not SOFR + 6.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Currier Plastics revolving credit facility source has dashes for reference and interest rate, not SOFR + 4.75%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Plains floating rate note source reference is SOFR + 4.11%, so storing only SOFR loses the structured spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 60,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Firmapak revolving credit facility source has dashes for reference and interest rate, not SOFR + 5.50%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "The raw SOI decides the flag. For rows such as User Zoom and Plains, the source Reference Rate and Spread column contains a complete SOFR + spread value while the flagged Agent A value is only SOFR. For rows such as ACP Packaging, Currier Plastics, and Firmapak revolving credit facilities, the matching source rows carry dashes in both Reference Rate and Spread and Interest Rate, while the flagged extracted identifiers assign SOFR-based spread terms. Both shapes are source-grounded extraction defects."
+}

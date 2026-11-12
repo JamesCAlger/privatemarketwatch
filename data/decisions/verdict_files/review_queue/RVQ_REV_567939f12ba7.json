@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_567939f12ba7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -27581.0,
+  "anchor_value": -27581.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 14,
+      "quoted_text": "Skydio, Inc | First Lien Delayed Draw Term Loan B | SOFR(M) | 2.50 | % | 5.00 | % | 8.67 | % | 12/4/2029 | $ | - | ( 27,581 | ) | ( 3,750 | ) | - | D/E",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell check. The March 31, 2026 investment schedule explicitly reports Skydio delayed-draw tranche B cost as parenthesized 27,581 and fair value as parenthesized 3,750, while principal is blank. The extracted cost of -27581 exactly matches that raw source cell. Negative cost is therefore a legitimate disclosed value for this unfunded delayed-draw exposure, and C107's sign-only warning is a rule-scope false alarm rather than a data error."
+}

@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_92ecf3389912",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Evidence CLI returned missing_cached_html for the cached filing HTML, including overview, totals, and tables, so raw source was unavailable through the allowed evidence window. Under the adjudication contract this cannot be adjudicated from source and must be retried/escalated as source_unavailable."
+}

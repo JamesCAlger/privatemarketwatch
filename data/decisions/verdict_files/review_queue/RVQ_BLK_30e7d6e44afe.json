@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_30e7d6e44afe",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2636306000,
+  "anchor_value": 2604079000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 7,
+      "quoted_text": "Total investments-non-controlled/affiliated | cost 32,648 | fair value 32,227",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 29,
+      "row_index": 8,
+      "quoted_text": "Total investments | cost 2,654,429 | fair value 2,604,079",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The 32,227,000 affiliated-investments subtotal is included in addition to its underlying positions, exactly explaining the excess over the schedule total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 29,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 source schedule reports total investments at fair value of 2,604,079,000 (table 29 row 8), while the extracted position sum is 2,636,306,000. The 32,227,000 excess exactly equals the source's Total investments-non-controlled/affiliated subtotal (table 29 row 7), establishing that this subtotal leaked into the extracted position population alongside underlying affiliated positions."
+}

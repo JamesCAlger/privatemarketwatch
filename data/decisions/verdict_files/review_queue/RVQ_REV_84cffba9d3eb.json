@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_84cffba9d3eb",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.6738351254480287,
+  "anchor_value": 0.6738351254480287,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 38,
+      "quoted_text": "AAH Topco funded First lien row shows SOFR(M), 5.50% spread, and 10.70% interest rate."
+    },
+    {
+      "table_index": 27,
+      "row_index": 4,
+      "quoted_text": "Diamondback Acquisition First lien - Undrawn row has dash placeholders in Reference, Spread, and Interest Rate columns."
+    },
+    {
+      "table_index": 27,
+      "row_index": 15,
+      "quoted_text": "Total Unfunded Debt Investments are separately subtotaled, showing unfunded commitments in the debt schedule."
+    },
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "Interest Rate Type table totals investments to 100.00%, while row-level unfunded commitments may have no stated rate."
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C01 counts unfunded or undrawn debt commitments in the rate-required denominator even though the source schedule leaves those rate columns blank/dash and subtotals them separately as unfunded debt.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The raw SOI supports the extracted blank interest_rate values for undrawn/unfunded debt rows rather than showing missed rates. In the same schedule, funded debt rows such as AAH Topco carry SOFR(M), spread, and interest rate values, while an undrawn row shows dash placeholders in Reference, Spread, and Interest Rate, and the schedule separately totals Unfunded Debt Investments. The 67.4% metric is therefore caused by applying the C01 rate-completeness denominator to unfunded commitments, not by a source-level data error."
+}

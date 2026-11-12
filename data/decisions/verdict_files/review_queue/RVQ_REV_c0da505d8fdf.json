@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_c0da505d8fdf",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 854000.0,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X07 flag reports cost 854000.0 for fair_value exceeding 10x cost, but the bundle does not identify issuer or fair_value for row_key 483608. Raw-source CLI checks for 854, 854000, row_key 483608, and nearby 853/855/856/857 did not locate a matching investment row with cost 854 and fair value over 10x cost. The closest candidate seen was table 8 row 15, Jupiter Refuel Canada Buyer Inc. (dba 4Refuel), with cost 857 and fair value 857, which would not substantiate X07. Because the flagged row cannot be decisively mapped to source, the source checked does not decide whether the flag is a real data error or false alarm."
+}

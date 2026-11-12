@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_7ca7ea3ee696",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 30,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 23,
+      "quoted_text": "Azul Systems, Inc.* | Senior secured | SF + | 4.50 | % | (g) | 9.25 | % | 04/2027 | 3,000 | 3,000 | 0.2 | 3,000",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 43,
+      "quoted_text": "Total investments | 3,246,424 | 188.5 | 3,265,298",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 9,
+      "quoted_text": "Total investments | 4,041,237 | 198.5 | 4,053,838",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 flags 30 holdings rows whose source period is earlier than the 2024-12-31 report date; the source has a separate comparative investment schedule with September-period totals, and representative flagged Azul appears in that comparative schedule.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "The filing contains separate investment schedules for December 31, 2024 and September 30, 2024. The current schedule total fair value is 4,053,838, while the later comparative schedule totals 3,265,298 and contains representative flagged rows such as Azul Systems, Inc. at table 33 row 23 with the September-period rate context. Retaining those earlier-period rows in the 2024-12-31 holdings set is a real comparative-period leak, not a false alarm."
+}

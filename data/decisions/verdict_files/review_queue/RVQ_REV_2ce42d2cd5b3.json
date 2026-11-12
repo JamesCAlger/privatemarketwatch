@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_2ce42d2cd5b3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.72,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 10,
+      "quoted_text": "22 HoldCo Limited (10) | Senior subordinated loan | 12.96 % PIK | SONIA (S) | 7.50 % | 08/2033 | 16,120.3 | 15,622.3 | 16,120.3 | (2)(5)(7)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The flagged 22 HoldCo Limited private credit row has blank extracted interest_rate/basis_spread even though the SOI row discloses a 12.96% PIK coupon, SONIA reference, and 7.50% spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level validation. The X02 flag says private credit rows lack interest_rate or basis_spread. For at least one flagged row, 22 HoldCo Limited, the raw SOI provides rate terms in the Coupon, Reference, and Spread columns while the extracted holding row in the bundle has blank interest_rate. That grounds a real extraction gap. Some source rows checked for unfunded revolving loans show blank rate terms and zero principal/fair value in the filing, so the review item may contain mixed source-blank rows; the verdict is grounded on the localized 22 HoldCo miss rather than an aggregate anchor."
+}

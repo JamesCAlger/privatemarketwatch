@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_4c0c080f08f4",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -79000.0,
+  "anchor_value": -79000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 11,
+      "quoted_text": "AP Adhesives Holdings, LLC^(5) | One stop | N/A(6) | 04/2032 | - | ( 79 ) | - | ( 165 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 12,
+      "quoted_text": "AP Adhesives Holdings, LLC^(5) | One stop | N/A(6) | 04/2031 | - | ( 38 ) | - | ( 80 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class-pattern review of C107 negative-cost warnings. The raw schedule explicitly reports parenthesized negative amortized cost for the flagged positions: AP Adhesives rows show (79) and (38) thousand, matching extracted costs of -79000 and -38000. These N/A-principal rows also carry negative fair values, confirming that the signs are intentional source disclosures rather than a cost-column sign parsing defect. C107 itself describes negative cost as potentially legitimate and advisory, so the flag is a false alarm for data quality."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a2d952b1d72b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2.2422,
+  "anchor_value": 2.2422,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Total Investments | $ | 347,854 | $ | 347,854 | 224.22 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 20,
+      "quoted_text": "Total net assets | 155,137",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 11,
+      "quoted_text": "Term loan payable (net of deferred financing costs of $ 5,533 ) | $ | 206,971",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "A07 fired on pct_sum=2.2422, but the raw schedule itself reports Total Investments of 347,854 fair value equal to 224.22% of net assets. The balance sheet reports total net assets of 155,137, and 347,854 / 155,137 = 2.2422. The filing also reports a 206,971 term loan payable, so investments exceeding 100% of net assets is source-supported leverage rather than a data extraction error."
+}

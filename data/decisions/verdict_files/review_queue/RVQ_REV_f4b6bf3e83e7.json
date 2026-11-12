@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_f4b6bf3e83e7",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "EURIBOR + 10.5 % PIK, 14.4 % PIK",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 31,
+      "quoted_text": "Subordinated Term Loan | EURIBOR + 10.5 % PIK, 14.4 % PIK | 05/23 | 11/30 | 342 | 343 | 336 | -- | % | (3) (6) (7) (9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The Adhefin International subordinated term loan was extracted with blank interest_rate even though the SOI Interest column states EURIBOR + 10.5 % PIK, 14.4 % PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 14,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "X02 flags private-credit rows with neither interest_rate nor basis_spread. The bundle includes an Adhefin International subordinated term loan holding with blank interest_rate, but the raw SOI row has explicit PIK interest terms in the Interest column. That makes the missing stored rate an extraction gap, not a source-level absence or a rule false alarm."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_dfb23d5945be",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 0.0,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "601 Lafayette Mezz LLC (Delayed Draw) | (12)(19)(20) | SF | 9.50 | % | 13.79 | % | 7/17/2024 | 2/9/2028 | 20,500 | - | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 14,
+      "quoted_text": "95 Percent Buyer, LLC (Revolver) | (19) | SF | 5.60 | % | 9.92 | % | 11/24/2021 | 11/24/2026 | 809 | - | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 25,
+      "quoted_text": "A360, Inc. (Delayed Draw) | (19)(20) | SF | 5.50 | % | 9.80 | % | 12/19/2024 | 12/19/2030 | 4,437 | - | - | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flags zero fair_value rows. Raw SOI rows show the filer itself presents these delayed-draw and revolver commitments with dashes in amortized cost and fair value and 0.0% of net assets, so storing fair_value as 0.0 is source-consistent. The warning is an overbroad review rule for legitimate unfunded or zero-fair-value commitment rows, not a data error."
+}

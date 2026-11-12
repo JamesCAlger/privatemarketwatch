@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_951641c761e5",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 114,
+  "anchor_value": 231,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 20,
+      "quoted_text": "Total Investments (152.7%) | $ | 1,272,824,189 | $ | 1,250,833,285",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 24,
+      "quoted_text": "Total Investments (168.5%) | $ | 1,040,122,806 | $ | 1,029,942,922",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The 2025 filing contains a separate prior-period SOI with total fair value 1,029,942,922; the B01 denominator includes those comparative rows, producing 114 current-year fair-value rows out of 231 extracted leaves.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 33,
+        "row_index": 24,
+        "quoted_text": "Total Investments (168.5%) | $ | 1,040,122,806 | $ | 1,029,942,922"
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The raw SOI has a current-year investment schedule with a 2025 total fair value of 1,250,833,285 (table 28 row 20) and a distinct comparative schedule with a prior-period total fair value of 1,029,942,922 (table 33 row 24). Representative current investment rows also show source fair-value cells, so the 114/231 B01 completeness failure is not because the source omits fair values; it is caused by comparative-period rows being included in the 2025 extracted leaf population."
+}

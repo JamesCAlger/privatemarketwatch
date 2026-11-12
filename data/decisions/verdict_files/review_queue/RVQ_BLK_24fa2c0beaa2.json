@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_24fa2c0beaa2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_rows",
+  "observed_value": 0,
+  "anchor_value": 4,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 11,
+      "quoted_text": "Thrasio Holdings, Inc.; 252,754 shares; cost dash; fair value dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 14,
+      "quoted_text": "SEM Holdings, LLC (dba Southeast Mechanical, LLC); 1,100 shares; cost 1,100; fair value 1,078",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 19,
+      "quoted_text": "SDB HOLDCO, LLC (dba Specialty Dental Brands); 731,038 shares; cost dash; fair value dash",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 22,
+      "quoted_text": "Pluralsight, Inc.; 4,836,698 shares; cost 13,167; fair value dash",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Four disclosed current-period equity positions are absent from pipeline output, including one with fair value 1,078 and three zero-fair-value positions with disclosed share counts.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 22,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "The March 31, 2026 source schedule at table 22 directly lists all four flagged issuers as position rows. SEM Holdings has 1,100 shares, cost 1,100, and fair value 1,078; Thrasio, SDB HOLDCO, and Pluralsight each have disclosed share counts despite dash fair values. Thus zero fair value does not make them non-positions, and omission of all four from pipeline output is a grounded extraction/completeness error. No monetary grand-total residual is needed because the four source rows directly localize the defect."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_a8796578c912",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1608021000.0,
+  "anchor_value": 1665503000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 65,
+      "row_index": 21,
+      "quoted_text": "BlackRock Liquidity T-Fund - Institutional Shares | fair value 56,001",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 23,
+      "quoted_text": "Total Investments at fair value | cost 1,666,882 | fair value 1,665,503",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The schedule includes BlackRock Liquidity T-Fund - Institutional Shares with fair value 56.001 million under Short-term Investments, which is included in Total Investments at fair value but is missing from the extracted fair-value sum.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 65,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The filing's own anchors agree with the companyfacts fair-value anchor: balance sheet Total investments at fair value is 1,665,503 thousand, and the investment schedule total is also 1,665,503 thousand. The extracted observed value is 1,608,021,000 versus the 1,665,503,000 anchor, so the conservation failure is real. The source structure localizes most of the undershoot to short-term investments: the schedule reports BlackRock Liquidity T-Fund - Institutional Shares at fair value 56,001 thousand and then Total Investments at fair value 1,665,503 thousand. A smaller residual remains versus the non-controlled/non-affiliated subtotal, so the aggregate error is grounded but not fully localized to every row."
+}

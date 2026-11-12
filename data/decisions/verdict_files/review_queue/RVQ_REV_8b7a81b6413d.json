@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_8b7a81b6413d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.06926406926406926,
+  "anchor_value": 0.5,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | 1.00 % | 7.01 % | 10.71 % | 4/15/2028 | $ | 758,558 | 757,157 | 758,558 | 0.34 | % | F"
+    },
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "ALCV Purchaser, Inc. (AutoLenders) | First Lien Term Loan | SOFR(Q) | 1.00 % | 7.01 % | 10.68 % | 3/31/2026 | $ | 766,715 | 766,197 | 765,181 | 0.30 | % | F"
+    },
+    {
+      "table_index": 11,
+      "row_index": 16,
+      "quoted_text": "PMA Parent Holdings, LLC | First Lien Term Loan | SOFR(Q) | 0.75 % | 4.75 % | 8.45 % | 1/31/2031 | $ | 3,932,333 | 3,853,686 | 3,885,145 | 1.72 | % | F"
+    },
+    {
+      "table_index": 18,
+      "row_index": 17,
+      "quoted_text": "PMA Parent Holdings, LLC | First Lien Term Loan | SOFR(Q) | 0.75 % | 4.75 % | 8.42 % | 1/31/2031 | $ | 3,932,333 | 3,853,686 | 3,899,849 | 1.52 | % | F"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "D06 continuity is artificially low because issuer identity is not being keyed to the raw Issuer cell; the source schedule shows repeated issuers across March 31, 2026 and December 31, 2025.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "D06 reports only 16 of 231 issuers persisting, but raw source schedule pages show repeated issuer/instrument rows between the March 31, 2026 schedule and the December 31, 2025 comparative schedule. ALCV Purchaser, Inc. (AutoLenders) appears in both table 11 row 4 and table 18 row 4, and PMA Parent Holdings, LLC appears in both table 11 row 16 and table 18 row 17. This supports an extraction/keying defect in issuer continuity rather than true portfolio discontinuity."
+}

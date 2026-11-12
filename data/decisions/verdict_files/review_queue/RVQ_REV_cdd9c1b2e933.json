@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_cdd9c1b2e933",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | Term Loan B - 10.43 % (SOFR + 6.75 %, 1.75 % Floor) | $ | 29,487,621 | $ | 28,909,368 | $ | 28,396,579",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw SOI presents amortized cost and fair value as USD-denominated dollar amounts, but the extracted cost_currency is the XBRL unit identifier U_USD instead of canonical USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 currency-field check. The source SOI table labels the valuation columns Amortized Cost and Fair Value and shows dollar signs for the same row group, including Fenix Intermediate, LLC with dollar-denominated par, amortized cost, and fair value amounts. The stored value U_USD is not the canonical USD currency expected for BDC valuation fields, so this is a normalization/extraction defect rather than a non-USD source fact."
+}

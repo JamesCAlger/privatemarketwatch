@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_f4b093f8ec6d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 2,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C04 reports that 0 of 2 extracted equity rows have shares, but the raw-source evidence CLI returned no usable source text and the targeted retry failed at process creation. The filing schedule therefore could not be checked to determine whether shares or units are disclosed, inapplicable, or omitted by extraction. Per the fail-closed contract, the flag cannot be adjudicated from the oracle message alone."
+}

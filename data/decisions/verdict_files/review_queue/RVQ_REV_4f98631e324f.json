@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_4f98631e324f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.7774647887323943,
+  "anchor_value": 0.8,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Term Loan | S + 4.50 % | 11/29/2030 | $ | 31,447 | $ | 31,139 | $ | 31,132 | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | 17,419 | 17,255 | 17,419 | 9",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Debt positions with blank stored interest_rate have explicit Reference Rate and Spread values in the SOI, including GB Eagle Buyer, Inc. at S + 4.50%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The same extraction gap affects PIK-inclusive debt terms, including Titan BW Borrower L.P. at S + 5.38% including 2.88% PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "C01 flags rate coverage for debt rows: the artifact reports only 276 of 355 debt rows with a rate (77.746%, below the 80% threshold). Raw SOI tables include a Reference Rate and Spread column for the debt schedule, and cited rows show explicit source rates for positions whose stored holdings examples have blank interest_rate. This is therefore a real extraction gap rather than a false alarm."
+}

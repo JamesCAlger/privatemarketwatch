@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_b48a3219d89f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 122000,
+  "anchor_value": 2818000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 54,
+      "quoted_text": "Walker Edison Holdco LLC(23)(25) | Common Equity | N/A | N/A | 29,167 | 2,818 | 122 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-local check. The raw SOI row shows amortized cost of 2,818 thousand and fair value of 122 thousand for Walker Edison Holdco LLC common equity, so the extracted cost and fair value are source-supported. Fair value is 4.3% of cost, below the X08 threshold, but this is a disclosed low mark rather than a data error."
+}

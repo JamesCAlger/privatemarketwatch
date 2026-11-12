@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_276544d25159",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1334005000.0,
+  "anchor_value": 1334005000.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Total Debt Investments | $ | 1,334,207 | $ | 1,334,005 | 182.10 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 10,
+      "quoted_text": "U.S. Treasury Bill | -- | 3.61 % | 4/7/2026 | 174,487 | $ | 172,875 | $ | 172,864 | 23.60 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 27,
+      "row_index": 11,
+      "quoted_text": "Total Investments | $ | 1,507,082 | $ | 1,506,869 | 205.70 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The 172.864m residual is a U.S. Treasury Bill included in Total Investments but outside the extracted debt/private-market holdings total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 27,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Raw source shows extracted fair value of 1,334.005m ties exactly to the filing's Total Debt Investments line. The broader Total Investments/companyfacts anchor is 1,506.869m because it includes a U.S. Treasury Bill with fair value 172.864m, exactly the flagged residual. This is a conservation rule scope/classification false alarm, not a defect in the extracted private debt holdings total."
+}

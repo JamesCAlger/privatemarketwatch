@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_5736fb834b0f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 153.57,
+  "anchor_value": 153.57,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 11,
+      "quoted_text": "Total United States of America 1st Lien/Secured Loans | 981,617,153 | 953,252,026 | 153.57",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 19,
+      "row_index": 23,
+      "quoted_text": "Total Investments, March 31, 2026 | $ 1,200,205,656 | $ 1,153,413,327 | 185.82 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 40,
+      "quoted_text": "Total net assets | 620,958,706 | 593,835,119",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flagged high percent-of-net-assets value is printed in the raw schedule: table 16 row 11 reports 153.57 for the United States 1st Lien/Secured Loans subtotal. The same schedule reports total investments at 185.82% of net assets, while the balance sheet reports net assets of 620,958,706 against investments at fair value of 1,153,413,327. Percent-of-net-assets values above 100% are therefore a filing-level leverage presentation, not a pipeline data defect."
+}

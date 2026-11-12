@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_BLK_ee30aa308895",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1467904175.0,
+  "anchor_value": 1109133812.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 383,
+      "row_index": 36,
+      "quoted_text": "TOTAL INVESTMENTS - 280.0% (b) | $ | 1,136,387,874 | $ | 1,109,133,812 | 280.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 382,
+      "row_index": 14,
+      "quoted_text": "Sub Total Non-control/Non-affiliate investments | 1,011,840,007 | 1,016,247,566 | 256.5 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 383,
+      "row_index": 17,
+      "quoted_text": "Sub Total Affiliate investments | 49,429,192 | 52,710,911 | 13.4 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 383,
+      "row_index": 35,
+      "quoted_text": "Sub Total Control investments | 75,118,675 | 40,175,335 | 10.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. Raw source anchors total investments at fair value to 1,109,133,812 in the schedule and statement total, while the extracted position sum is 1,467,904,175, an overshoot of 358,770,363. The source grid shows subtotal and total rows embedded in the investment schedule alongside individual position rows, including non-control/non-affiliate, affiliate, control, and final TOTAL INVESTMENTS rows. Those rows are not investee positions and explain a subtotal/total-row leak into the extracted position universe rather than a bad filing anchor."
+}

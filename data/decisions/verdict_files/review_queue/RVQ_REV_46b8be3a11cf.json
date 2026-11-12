@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_46b8be3a11cf",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19.32,
+  "anchor_value": 6.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 2,
+      "quoted_text": "Foundation Risk Partners, Corp. | 5.6% | Business Services | 19.3%"
+    },
+    {
+      "table_index": 3,
+      "row_index": 2,
+      "quoted_text": "BCDI Meteor Acquisition, LLC | 6.0% | High Tech Industries | 19.6%"
+    },
+    {
+      "table_index": 60,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 395,375,030 | 100.0 | % | $ | 517,910,117 | 100.0 | %"
+    }
+  ],
+  "rationale": "The flag metric of 19.32 does not describe a current-period portfolio-company position concentration. In the raw source, the current 2025 top portfolio company is BCDI Meteor Acquisition, LLC at 6.0% of portfolio, while 19.3% appears on the comparative 2024 Business Services industry concentration line. The schedule total confirms the concentration table is portfolio-percentage based, so the weak firing is a comparative/industry concentration being treated as a position-concentration defect rather than an error in the extracted current holdings."
+}

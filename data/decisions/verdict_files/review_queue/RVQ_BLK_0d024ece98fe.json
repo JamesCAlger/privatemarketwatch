@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_0d024ece98fe",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "basis_spread values 0.5 and 5.25 on flagged rows",
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 within-row conflict: X04 flags two rows as fixed coupon instruments carrying basis_spread. The raw-source evidence CLI returned no usable source content (only an XMLParsedAsHTMLWarning), and a direct overview retry failed at process creation. Therefore the source could not establish whether rate classification or basis_spread is wrong; fail closed as source_unavailable."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_1787378c1fb5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "TERM",
+  "anchor_value": "+ 1232",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 26,
+      "quoted_text": "Dawson Logan 2025-L5, LP (5)(8)(11) | Unsecured Debt | + 1232 | 12.32 % | 10/2040 | $ | 918 | $ | 918 | 0.1 | % | $ | 918",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Dawson Logan source states only '+ 1232'; the extracted reference token 'TERM' is unsupported.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "Class 2 review of both flagged rows. Dawson Logan at table 38 row 26 prints '+ 1232' in Interest Term and provides no reference-rate token, so agentA_value_pct 'TERM' is an extraction artifact. Loadmaster at table 18 row 16 explicitly prints 'F + 1200' and therefore that sub-flag is corroborated, but the combined review item still contains the grounded Dawson defect."
+}

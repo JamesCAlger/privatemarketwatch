@@ -1,0 +1,80 @@
+{
+  "review_id": "RVQ_REV_4b49ce42b9af",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 9,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 16,
+      "quoted_text": "Born To Run, LLC ( 692,841 Class A units) | (14) | - | - | - | 4/1/2021 | - | - | 693 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 87,
+      "row_index": 15,
+      "quoted_text": "Calienger Holdings, L.L.C. ( 568,181 Class A units) | (14)(15) | - | - | - | 10/21/2022 | - | - | 568 | 568 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 20,
+      "quoted_text": "MV Receivables II, LLC ( 1,822 shares of common stock) | (10)(15) | - | - | - | 7/29/2021 | - | - | 750 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 21,
+      "quoted_text": "MV Receivables II, LLC (warrant to purchase up to 1.0 % of the equity) | (10)(15) | - | - | - | 7/28/2021 | 7/28/2031 | - | 453 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 88,
+      "row_index": 34,
+      "quoted_text": "Nastel Technologies, LLC (Revolver) | (17) | SF | 6.61 | % | 11.96 | % | 9/21/2022 | 9/21/2027 | 368 | - | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 25,
+      "quoted_text": "Sabrosura Foods, LLC et al ( 7,022 Class AA units) | (14) | - | - | - | 11/22/2022 | - | - | 10 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 26,
+      "quoted_text": "Sabrosura Foods, LLC et al ( 8,322 Class AAA units) | (14) | - | - | - | 3/17/2023 | - | - | 8 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 86,
+      "row_index": 5,
+      "quoted_text": "StormTrap, LLC ( 640,000 Class A preferred units) | (15) | n/a | n/a | 8.00 % PIK | 3/25/2022 | - | - | 640 | 640 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 73,
+      "row_index": 11,
+      "quoted_text": "The Kyjen Company, LLC | SF | 7.50 | % | 12.96 % PIK | 9/13/2022 | 4/3/2026 | 3 | 3 | 3 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Nine PP03 rows are prior-period SOI positions retained under the 2024-12-31 report date.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 89,
+        "row_index": 33,
+        "quoted_text": "TOTAL INVESTMENTS | $ | 2,523,064 | $ | 2,528,167 | 194.1 | %"
+      }
+    }
+  ],
+  "rationale": "The filing contains distinct SOI blocks: the current-year block totals $4,008,973 at table 69 row 8, while the prior-year SOI block totals $2,528,167 at table 89 row 33. The flagged PP03 identifiers match rows in the prior-year block, including Born To Run/BTR, Calienger, MV Receivables II, Nastel, Sabrosura, StormTrap, and Kyjen. Retaining those prior-period source rows as holdings for report_date 2024-12-31 is a real comparative-period leak, not a false alarm."
+}

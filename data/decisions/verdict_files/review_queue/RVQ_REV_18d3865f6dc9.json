@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_18d3865f6dc9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 213.4,
+  "anchor_value": 213.4,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 2,
+      "quoted_text": "Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value"
+    },
+    {
+      "table_index": 4,
+      "row_index": 35,
+      "quoted_text": "Total net assets | 748,807 | 742,594"
+    },
+    {
+      "table_index": 36,
+      "row_index": 13,
+      "quoted_text": "Investments and Cash Equivalents Total | $ | 1,607,461 | 213.4 | % | $ | 1,597,879"
+    }
+  ],
+  "rationale": "Raw source shows the schedule column is Percentage of Net Assets, not percentage of portfolio fair value. The balance sheet reports total net assets of 748,807, and the schedule reports investments and cash equivalents fair value of 1,597,879 with 213.4%; 1,597,879 / 748,807 = 213.4%. The percentage exceeding 100% is therefore expected for this leveraged BDC and the format check is a false alarm."
+}

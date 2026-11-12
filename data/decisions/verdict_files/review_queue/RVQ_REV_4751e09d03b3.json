@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_4751e09d03b3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 211,
+  "anchor_value": null,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 16,
+      "quoted_text": "Total Power Limited | First Lien Secured Debt - Term Loan | CORRA + 450, 0.75% Floor | 07/22/30 | C$ | 8,690 | 6,225 | 6,268",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 structural flag. Raw schedule table 44 row 16 explicitly reports C$8,690 par for a debt position, with USD-denominated cost and fair value of 6,225 and 6,268 in the filing's USD financial statements. The FX01 artifact reports principal_amount_usd blank on non-USD debt rows. Thus the source establishes that an explicit foreign-currency principal requires a separate USD-normalized principal, and the missing field is a real extraction/conversion gap. Filing totals were reviewed for structural context but are not a valid anchor for position-level principal conversion, so no numeric anchor is asserted."
+}

@@ -1,0 +1,64 @@
+{
+  "review_id": "RVQ_REV_c3b630232736",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -9319,
+  "anchor_value": 0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 22,
+      "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | Amortized Cost - | Fair Value ( 6,466 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 33,
+      "quoted_text": "CP Iris Holdco I, Inc. | Delayed Draw Term Loan (First Lien) | Amortized Cost - | Fair Value ( 1,236 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 50,
+      "row_index": 19,
+      "quoted_text": "Flexera Software LLC | Revolving Loan | Amortized Cost - | Fair Value ( 1,617 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Milestone Technologies delayed draw term loan stored cost -6466, but the SOI shows Amortized Cost as dash and Fair Value as (6466).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 22,
+        "quoted_text": "Milestone Technologies, Inc. | Delayed Draw Term Loan | Amortized Cost - | Fair Value ( 6,466 )"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CP Iris delayed draw term loan stored cost -1236, but the SOI shows Amortized Cost as dash and Fair Value as (1236).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 48,
+        "row_index": 33,
+        "quoted_text": "CP Iris Holdco I, Inc. | Delayed Draw Term Loan (First Lien) | Amortized Cost - | Fair Value ( 1,236 )"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Flexera revolving loan stored cost -1617, but the SOI shows Amortized Cost as dash and Fair Value as (1617).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 50,
+        "row_index": 19,
+        "quoted_text": "Flexera Software LLC | Revolving Loan | Amortized Cost - | Fair Value ( 1,617 )"
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell review of C107 negative cost rows. The raw SOI confirms that most flagged negative costs are source-presented as parenthetical Amortized Cost values, so those rows are not data errors. However, three flagged rows are source-grounded extraction errors: the stored negative cost equals the source Fair Value while the source Amortized Cost cell is a dash. Those localized column-value defects make the reviewed bundle a real_error. No aggregate anchor was needed."
+}

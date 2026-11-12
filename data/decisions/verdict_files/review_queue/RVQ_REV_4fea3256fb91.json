@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_4fea3256fb91",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -425000.0,
+  "anchor_value": -425000.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 12,
+      "quoted_text": "Sky Merger Sub, LLC - Revolving Credit Facility | Cost (8): (425) | Fair Value: (426)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 31,
+      "quoted_text": "Fullsteam - Delayed Draw Term Loan | Cost (8): (35) | Fair Value: (25)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 16,
+      "quoted_text": "Trillium FlowControl - Delayed Draw Term Loan | Cost (8): (16) | Fair Value: (16)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 28,
+      "quoted_text": "Elessent Clean Technologies Inc. - Revolving Credit Facility | Cost (8): (204) | Fair Value: (204)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 29,
+      "quoted_text": "Solvias AG - Revolving Credit Facility | Cost (8): (404) | Fair Value: (472)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values. The raw schedule of investments prints these costs as parenthesized negative amounts in the Cost (8) column for the same instruments, including the largest flagged example, Sky Merger Sub, LLC - Revolving Credit Facility, where the source cost is (425), matching the extracted -425000.0 after the filing's thousands scale. Other flagged rows show the same source-literal pattern. The negative costs are therefore not extraction data errors; the warning is a legitimate-source-value false alarm."
+}

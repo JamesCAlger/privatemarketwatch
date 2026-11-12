@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_BLK_ff4ccc7b2ca6",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5.5,
+  "anchor_value": 5.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 22,
+      "quoted_text": "ASP Integrity Acquisition Co LLC | (4)(5)(6) | Delayed Draw Term Loan | SOFR | 5.00 % | 3/06/2025 | 3/6/2027 | - | ( 20 | ) | ( 89 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "The extracted identifier stores Spread 5.50%, but the raw Schedule of Investments row for the delayed draw term loan shows Spread 5.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 45,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The flagged row is ASP Integrity Acquisition Co LLC Delayed Draw Term Loan with extracted spread 5.50%. Raw source table 45 row 22 has the same issuer and investment type, reference rate SOFR, and spread cell 5.00%, so the stored spread value is wrong."
+}

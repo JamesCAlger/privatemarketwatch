@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_d68844f524f0",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 37.75206718346252,
+  "anchor_value": 10.47054747054747,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 15,
+      "quoted_text": "Class I 2025 distributions total: per share $1.5109; amount $51,541",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 7,
+      "row_index": 14,
+      "quoted_text": "December 31, 2025 Class I NAV Per Share: $14.43",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 79,
+      "row_index": 19,
+      "quoted_text": "Ratio of net investment income to average net assets: 10.3%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored distribution_rate is 37.752%, but source distributions of 1.5109 per share over 14.43 NAV imply about 10.47%, close to the 10.3% NII ratio.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 21,
+        "row_index": 15,
+        "quoted_text": "Class I 2025 distributions total: per share $1.5109; amount $51,541"
+      }
+    }
+  ],
+  "rationale": "F16 compares distribution_rate to income_yield_pct * 1.5. The raw source does not support the flagged 37.752% distribution rate: Class I distributions total $1.5109 per share and December 31, 2025 NAV is $14.43, which implies approximately 10.47%. The financial highlights source also reports a 10.3% ratio of net investment income to average net assets. Because the source-supported distribution rate is below 1.5 times the source NII yield, the flag reflects a real stored distribution_rate defect rather than an economic exception."
+}

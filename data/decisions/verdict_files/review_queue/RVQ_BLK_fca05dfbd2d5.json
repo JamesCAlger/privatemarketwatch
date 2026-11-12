@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_fca05dfbd2d5",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 19267000000,
+  "anchor_value": 13008600000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 84,
+      "row_index": 36,
+      "quoted_text": "TOTAL INVESTMENTS - 222.4 % | $ | 13,740.8 | 13,008.6",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 7,
+      "quoted_text": "48Forty Solutions LLC | Commercial & Professional Services | ... | 11/2029 | 180.2 | 179.5 | 86.0",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 89,
+      "row_index": 3,
+      "quoted_text": "48Forty Solutions LLC | $ | 148.5 | ... | $ | 86.0 | ...",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Supplemental fair-value rollforward rows are being extracted as holdings in addition to the SOI schedule rows; 48Forty Solutions LLC fair value 86.0 appears in both table 48 row 7 and table 89 row 3.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 89,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the filing schedule total is 13,008.6 million at table 84 row 36, while the extracted holdings sum in the review bundle is 19,267.0 million, an overage of 6,258.4 million. Raw source shows at least one concrete duplicate mechanism: 48Forty Solutions LLC fair value 86.0 is present as a true SOI holding at table 48 row 7 and again in a supplemental fair-value rollforward at table 89 row 3. The check is therefore identifying a real extraction over-coverage error, not a bad schedule anchor."
+}

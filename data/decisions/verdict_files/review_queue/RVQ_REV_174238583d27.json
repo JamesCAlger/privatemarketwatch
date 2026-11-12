@@ -1,0 +1,18 @@
+{
+"review_id":"RVQ_REV_174238583d27",
+"verdict":"false_alarm",
+"mechanism":"classification_lookthrough",
+"localized":true,
+"anchor_used":"schedule_total",
+"observed_value":4959000,
+"anchor_value":4959000,
+"confidence":0.97,
+"escalate":false,
+"culprit_citations":[
+{"table_index":11,"row_index":4,
+"quoted_text":"USD sign appears with principal 8,579."},
+{"table_index":11,"row_index":5,
+"quoted_text":"Next row continues with principal 4,959."}
+],
+"rationale":"USD is established, then carried into continuation rows."
+}

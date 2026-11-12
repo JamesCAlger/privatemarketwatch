@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_19bbbd725a65",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "",
+  "anchor_value": "USD-denominated Par/Shares column; no non-USD source par requiring FX conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 1,
+      "quoted_text": "Industry/Company | Investment Type | Interest Rate (8) | Maturity Date | Par/Shares (3) | Cost (26) | Fair Value (1)(27)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Jonathan Acquisition Company | First Lien Secured Debt - Term Loan | S + 510 , 1.00 % Floor | 12/22/2026 | $ | 7,835 | $ | 7,790 | $ | 7,739 | (17)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Sperry Acquisition, LLC | First Lien Secured Debt - Term Loan | S + 525 , 0.75 % Floor | 2/3/2031 | 4,788 | 4,722 | 4,727 | (9)(17)"
+    },
+    {
+      "table_index": 10,
+      "row_index": 11,
+      "quoted_text": "Total Aerospace & Defense | $ | 12,560 | $ | 12,510"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "FX01 appears to treat continuation rows without repeated dollar symbols as non-USD, but the raw SOI places them in the same USD Par/Shares, Cost, and Fair Value columns.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX01 flagged missing principal_amount_usd for alleged non-USD debt principal, but the raw SOI evidence does not show foreign-currency par. Table 10 defines a Par/Shares column beside Cost and Fair Value; row 4 prints dollar signs for par/cost/fair value, continuation row 6 omits repeated symbols while staying in those same columns, and the industry total row is dollar-denominated. The missing USD principal is therefore not grounded as a non-USD conversion defect; the check is over-scoping accounting-symbol omissions."
+}

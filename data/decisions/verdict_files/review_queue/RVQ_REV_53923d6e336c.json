@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_53923d6e336c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "C104 flags two internal private_markets_holdings rows (row_key 306679 and 307129) with fair_value 0.0. The evidence CLI returned usable raw source, and the filing contains many unfunded-commitment rows where the Fair Value cell is a dash, which could legitimately normalize to zero (for example table 37 row 9 and table 41 row 2). However, the raw source does not contain the internal row keys and the bundle does not provide issuer names or source coordinates for the two flagged rows. Because the two flagged zero values cannot be mapped to specific source rows, source evidence does not decide whether they are legitimate zero fair values or extraction defects."
+}

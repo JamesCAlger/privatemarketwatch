@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_de3cbf14dec2",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 57,
+  "anchor_value": 57,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 28,
+      "quoted_text": "Total Investments | 1,460,156 | 1,468,228 | 155.3",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 55,
+      "row_index": 8,
+      "quoted_text": "Total Investments - Non-controlled/non-affiliated | 504,119 | 506,574 | 190.7",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The current-period SOI in tables 48-50 contains 57 issuer/instrument rows and ties to the 2025 schedule total, while adjacent tables 53-55 are the 2024 comparative SOI and should not be included in a 2025 row-count anchor.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 55,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "E07 is a CIK-quarter aggregate count flag. The raw current-period Schedule of Investments spans tables 48-50 and contains 57 issuer/instrument rows after excluding headers, industry/category labels, subtotals, cash, and grand-total rows; its total fair value row is table 50 row 28 at 1,468,228 thousand, matching the bundle's output fair value of 1,468.228 million. The oracle source count of 91 is not the 2025 position count; it is inflated by adjacent comparative-period SOI rows in tables 53-55, whose total at table 55 row 8 is 506,574 thousand for the prior period. Therefore the output row count is source-correct for report_date 2025-12-31 and the flag is a false alarm caused by comparative-period leakage in the count anchor."
+}

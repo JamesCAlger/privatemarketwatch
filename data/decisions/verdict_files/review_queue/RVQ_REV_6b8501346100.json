@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_6b8501346100",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1,
+  "anchor_value": 1,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 5,
+      "quoted_text": "Ligado Networks LLC | (12) | N/A | N/A | 15.50 % PIK | 12/31/2026 | 16,697 | 8,763 | 5,366 | 0.16",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 88,
+      "row_index": 10,
+      "quoted_text": "Number of debt investments on non-accrual status | 1 | 1",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing identifies Ligado Networks LLC with footnote (12), matching the flagged position, and independently reports one debt investment on non-accrual status at March 31, 2026. The observed extracted count of 1 equals the filing anchor of 1, so the data is correct and the advisory presence-based check is a false alarm."
+}

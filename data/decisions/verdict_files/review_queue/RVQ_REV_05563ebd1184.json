@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_05563ebd1184",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_cell",
+  "observed_value": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Machinery Harvey Tool Company, LLC Investment Type Revolver Reference Rate and Spread S + 4.50% Maturity Date 8/6/2032",
+  "anchor_value": "Harvey Tool Company, LLC",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 7,
+      "quoted_text": "Harvey Tool Company, LLC | First Lien Revolver | S + 4.50 % | 8/6/2032 | - | ( 1 | ) | - | 23",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw schedule at table 16 row 7 places Harvey Tool Company, LLC alone in the Portfolio Company column and places First Lien Revolver, S + 4.50%, and 8/6/2032 in separate columns. The stored issuer_name concatenates those fields with section and dimension-path wrapper text, so it is not the clean issuer entity required by C206."
+}

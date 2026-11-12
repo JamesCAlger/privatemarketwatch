@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_4b2296750a9f",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1588.604,
+  "anchor_value": 1588.604,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Adelaide Borrower LLC | First Lien Senior Secured Term Loan | Amortized Cost 23,732 | Fair Value 24,090",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Portfolio Investments | 1,598,063 | 1,588,604",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 3,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited) and December 31, 2025",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extract has 257 additional leaves without fair value even though source position rows carry fair value and the populated current-period values already tie the filing total.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 9,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "B01 is an aggregate completeness flag, so this is Class 3. The filing's March 31, 2026 position rows explicitly include fair value; for example table 9 row 4 reports fair value 24,090. The current-period portfolio schedule totals fair value at 1,588,604 in table 14 row 8, exactly matching the extract total of 1,588.604 million. Thus the 257 leaves lacking fair value are not supported as source positions with legitimately absent fair value. With 261 populated leaves and 257 unpopulated leaves, the near one-for-one extra population indicates an extraction-side duplicate/dimensional row-disposition defect. The filing contains both March 31, 2026 and December 31, 2025 schedules, making comparative-period handling a plausible source of the duplication, but the exact duplicating dimension is not localized from the available evidence."
+}

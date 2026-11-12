@@ -1,0 +1,48 @@
+{
+  "review_id": "RVQ_REV_3c6a7d958384",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "",
+  "anchor_value": "EUR 3,585,699 source principal requiring explicit USD conversion",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 32,
+      "quoted_text": "Monitorus Holding, LLC Delayed Draw Term Loan shows Principal Amount/Shares as EUR 3,585,699, cost 3,619,086, fair value 3,460,339.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 0,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted Euro.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Monitorus Holding, LLC Delayed Draw Term Loan has EUR source principal but missing principal_amount_usd, so FX conversion was not captured.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 10,
+        "row_index": 32
+      }
+    },
+    {
+      "mechanism": "unknown",
+      "detail": "Most other debt rows in the same schedule are USD by the filing footnote or explicit dollar sign, so blank repeated currency symbols should not by themselves imply non-USD.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 0
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row FX01 review. The raw schedule footnote says debt par is USD unless otherwise noted Euro, and table 10 row 32 is expressly a EUR principal row for Monitorus Holding, LLC Delayed Draw Term Loan with EUR 3,585,699 principal. Because the flagged field principal_amount_usd is blank, the non-USD debt row lacks the required explicit USD conversion. The same source also shows many surrounding rows are USD by dollar signs or the default footnote, so remediation should localize FX handling rather than blanket-flag inherited blank currency-symbol cells."
+}
+
+

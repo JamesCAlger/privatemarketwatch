@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_2a40ea158864",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "Portfolio Company Debt Securities- Canada Construction Technology Nexii, Inc. Type of Investment Secured Loan Investment Date July 24, 2024 Maturity Date July 1, 2027 Interest Rate Fixed interest rate 10.0%; EOT 0.0%",
+  "anchor_value": "Nexii, Inc.",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 25,
+      "quoted_text": "Nexii, Inc. | Secured Loan | July 24, 2024 | July 1, 2027 | Fixed interest rate 10.0 %; EOT 0.0 % | $ | 365 | $ | 365 | $ | 324 | (10)(24)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The issuer_name was built by concatenating schedule group labels and row terms; the source Portfolio Company cell is only Nexii, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 25,
+        "quoted_text": "Nexii, Inc. | Secured Loan | July 24, 2024 | July 1, 2027 | Fixed interest rate 10.0 %; EOT 0.0 % | $ | 365 | $ | 365 | $ | 324 | (10)(24)"
+      }
+    }
+  ],
+  "rationale": "The bundle's observed issuer_name includes the investment category, industry, type of investment, investment date, maturity date, and interest-rate terms. In the raw SOI, those are separate fields around row 25 of table 25; the Portfolio Company source cell is only Nexii, Inc. This confirms a real issuer-name extraction/column-mapping defect, not a formatting false alarm."
+}

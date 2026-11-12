@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_2b9c9480347e",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.7036976170912084,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F16 is a fund-level distribution-rate versus income-yield heuristic, but the evidence CLI returned no usable raw-source output for overview, tables, totals, or targeted roam queries. The raw source therefore could not be checked, so the contract requires a fail-closed source_unavailable ambiguity rather than a guess."
+}

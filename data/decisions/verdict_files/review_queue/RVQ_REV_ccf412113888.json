@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_ccf412113888",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 1,
+      "quoted_text": "Industry Classification | Percentage of Total Investments (at Fair Value) as of September 30, 2025"
+    },
+    {
+      "table_index": 33,
+      "row_index": 39,
+      "quoted_text": "| | 100.0 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the source industry-percentage schedule for September 30, 2025 contains percentage rows and totals 100.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 33,
+        "row_index": 39,
+        "quoted_text": "| | 100.0 | %"
+      }
+    }
+  ],
+  "rationale": "The review bundle reports A07 as failing with pct_sum=0.0%. Raw source table 33 is the September 30, 2025 industry-classification percentage table and its final row shows a 100.0% total. The zero observed percentage sum is therefore an extraction gap, not a genuine absence of source percentages."
+}

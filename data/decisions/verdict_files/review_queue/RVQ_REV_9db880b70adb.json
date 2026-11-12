@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_9db880b70adb",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 64,
+  "anchor_value": 64,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 75,
+      "row_index": 1,
+      "quoted_text": "Company | Commitment Type (1)(2) | Total Commitment | Unfunded Amount"
+    },
+    {
+      "table_index": 75,
+      "row_index": 2,
+      "quoted_text": "Stack SJ Holdings Parent A-I, LLC | Delayed Draw Term Loan | $ | 137,500 | $ | 81,758"
+    },
+    {
+      "table_index": 75,
+      "row_index": 10,
+      "quoted_text": "Sierra Equity Holdings LLC | Equity | 425,424 | 271,994"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The nine residual rows are unfunded commitment disclosures with total commitment and unfunded amount fields, not source rows with a fair value column.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 75,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "B01 reported 64 of 73 leaves with fair_value. Raw source shows the nine-row residual localizes to table 75, an unfunded commitments schedule with columns Company, Commitment Type, Total Commitment, and Unfunded Amount, and no Fair Value column. The investment and cash-equivalent schedules carry fair value columns and schedule totals, including Total investments of 3,120,386 and Total Cash Equivalents of 347, while the nine commitment rows are off-schedule commitment disclosures. The stored 64 fair-value-bearing leaves are therefore consistent with the source population to which fair_value applies; the failing denominator is over-broad."
+}

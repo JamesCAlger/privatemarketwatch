@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_bd6b718a9b87",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2291186975,
+  "anchor_value": 2487588823,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 13,
+      "quoted_text": "Total Money Market Mutual Funds | 16,951,323 fair value",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 20,
+      "quoted_text": "Total Fixed Income Mutual Funds | 179,450,525 fair value",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | $ | 2,487,588,823 fair value",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "E01 uses the full portfolio total without removing 196,401,848 of money-market and fixed-income mutual funds that are outside the extracted private-markets holdings scope.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 33,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The filing reports total investment portfolio fair value of 2,487,588,823. Its separately identified money-market mutual funds of 16,951,323 and fixed-income mutual funds of 179,450,525 sum to the entire 196,401,848 difference. Subtracting them yields 2,291,186,975, exactly the extracted holdings total. Thus the extracted private-markets universe reconciles, while E01 compares it to an unadjusted full-portfolio anchor."
+}

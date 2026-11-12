@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_1379472571c2",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2312971976,
+  "anchor_value": 2513533478,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 22,
+      "quoted_text": "Total Investment Portfolio | $ | 2,513,533,478 | $ | 2,487,588,823 | 186.80 %",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation establishes a real aggregate cost omission: the raw March 31, 2026 investment schedule reports total portfolio cost of $2,513,533,478, while the 343 extracted positions sum to $2,312,971,976, a shortfall of $200,561,502 (7.979%). The raw schedule separately reports fixed-income mutual-fund cost of $184,021,376 and money-market mutual-fund cost of $16,951,323, which structurally explains nearly all of the residual, but their combined $200,972,699 exceeds the residual by $411,197. Therefore the aggregate extraction gap is decisive, while an exact row-level culprit is not safely localized and should be escalated for remediation-level reconciliation."
+}

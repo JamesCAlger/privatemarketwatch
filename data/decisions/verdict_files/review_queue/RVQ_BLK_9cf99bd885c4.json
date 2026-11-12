@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_9cf99bd885c4",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "source_schedule_spread",
+  "observed_value": 65.0,
+  "anchor_value": 5.65,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 37,
+      "quoted_text": "Chase Industries, Inc. | First Lien Senior Secured Loan | SOFR | 5.65% (1.50% PIK) | 10.82% | 11/11/2027",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The flagged identifier reports SOFR Spread 65%, but the matching current-period source row reports a 5.65% spread, with 1.50% PIK separately disclosed, and a 10.82% interest rate. The instrument type and maturity match exactly. The spread therefore lost its decimal during extraction or identifier construction; the correct source value is 5.65%, not 65%."
+}

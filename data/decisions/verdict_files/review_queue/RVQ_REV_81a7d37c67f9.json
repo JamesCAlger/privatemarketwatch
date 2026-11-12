@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_81a7d37c67f9",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": "principal_amount_usd is blank on FX01 issue rows",
+  "anchor_value": "source schedule discloses non-USD CAD par amounts requiring USD principal conversion",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 53,
+      "row_index": 28,
+      "quoted_text": "123Dentist, Inc. | (4)(6)(10) | CA + | 5.00 % | 7.27 % | 8/10/2022 | 8/10/2029 | CAD | 258,226 | 199,099 | 188,136 | 0.40",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 53,
+      "row_index": 29,
+      "quoted_text": "123Dentist, Inc. | (4)(5)(6)(10) | CA + | 5.00 % | 7.27 % | 8/9/2024 | 8/10/2029 | CAD | 34,682 | 25,114 | 25,268 | 0.05",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD CAD par is present in the source schedule, but principal_amount_usd is blank for the corresponding FX01 rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 53,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "FX01 asks whether non-USD debt principal is missing a USD-converted principal amount. The bundle's issue rows identify principal_amount_usd as blank, and the raw source schedule for matching 123Dentist debt rows shows CAD in the Par Amount/Units column before the par amounts. That source establishes the rows are non-USD debt positions requiring explicit USD principal conversion, so the blank reviewed field is a real extraction/normalization gap rather than a false alarm."
+}

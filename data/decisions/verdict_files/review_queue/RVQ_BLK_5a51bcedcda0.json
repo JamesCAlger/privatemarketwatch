@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_5a51bcedcda0",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 184466000,
+  "anchor_value": 184466000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 135.8 % | $ | 199,200 | $ | 184,466",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 6,
+      "quoted_text": "Total Investments | $ | 24 | $ | - | $ | 184,442 | $ | 184,466",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 254,797 | $ | 359,383",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted holdings fair value of 184,466,000 ties exactly to the filing schedule total investments, including the fair value hierarchy total. The apparent residual comes from comparing the holdings schedule to total assets of 254,797,000, which is a broader balance-sheet anchor rather than a source error in the holdings fair value."
+}

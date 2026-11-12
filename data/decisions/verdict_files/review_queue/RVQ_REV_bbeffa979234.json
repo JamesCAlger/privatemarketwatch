@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_bbeffa979234",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate, LLC | 03/28/24 | Term Loan B - 11.84 % (SOFR + 6.50 %, 1.75 % Floor) | $ | 29,078,052 | $ | 29,249,244"
+    },
+    {
+      "table_index": 7,
+      "row_index": 35,
+      "quoted_text": "Total Investments ( 182.9 %) | $ | 991,136,356 | $ | 993,614,639"
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency because the extracted unit value is U_USD rather than the literal USD. The raw SOI table shows the fair value column is dollar-denominated, including dollar signs on the position line and schedule total, and a targeted source search found no U_USD text in the filing tables. This supports that U_USD is a USD unit-id/normalization artifact, not evidence of a non-USD fair value."
+}

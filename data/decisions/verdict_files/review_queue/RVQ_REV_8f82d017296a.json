@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_8f82d017296a",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 row-level X05 review for three holdings rows with blank basis_spread could not be adjudicated because the evidence CLI returned missing_cached_html for overview, tables, totals, and a targeted roam query for accession 0001752724-25-113744. Without a usable raw source row, the contract requires source_unavailable ambiguity rather than guessing whether the missing basis_spread is a real extraction defect or a false alarm."
+}

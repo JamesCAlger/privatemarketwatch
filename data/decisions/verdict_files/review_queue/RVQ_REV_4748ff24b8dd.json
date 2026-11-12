@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_4748ff24b8dd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2023-06-30",
+  "anchor_value": "2027-07-05",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 16,
+      "quoted_text": "GME Supply | (j) (k) | Senior Secured Initial Term Loan | S+ | 6.25 | % | 11.52 | % | 6/30/2023 | 7/5/2027 | 3,470,243 | 3,374,811 | 3,374,811"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The GME Supply senior secured term loan appears to have the acquisition date 2023-06-30 treated as maturity, while the source maturity date is 2027-07-05.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "The raw schedule header places Acquisition Date before Maturity Date. In table 21 row 16, GME Supply's 6/30/2023 value is in the Acquisition Date column and the same source row reports Maturity Date 7/5/2027. A maturity_not_past fire at report date 2023-06-30 is therefore a real extraction error caused by using the acquisition date as maturity."
+}

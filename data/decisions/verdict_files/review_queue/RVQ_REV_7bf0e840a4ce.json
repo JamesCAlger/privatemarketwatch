@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_7bf0e840a4ce",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "-94.6; -7.6",
+  "anchor_value": "-94.6; -7.6",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC (1 )(2)(3)(4)(5 ) | Preferred Equity | Cost 1,125,000 | Market Value 1,125,000 | % of NAV - 94.6%"
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC, Class A (1)(2)(3)(4)(5) | Equity Interest | Cost 90,000 | Market Value 90,000 | % of NAV - 7.6%"
+    },
+    {
+      "table_index": 6,
+      "row_index": 27,
+      "quoted_text": "Total Net Assets | $ | ( 1,188,729 | ) | $ | ( 1,088,939 | )"
+    }
+  ],
+  "rationale": "The flagged negative pct_of_net_assets values are printed in the raw investment schedule for the two position rows. The filing also reports negative Total Net Assets at September 30, 2023, so positive fair values divided by negative NAV produce negative percentages. The extracted values match the source cells; the C404 warning is therefore a legitimate negative percentage rather than a data error."
+}

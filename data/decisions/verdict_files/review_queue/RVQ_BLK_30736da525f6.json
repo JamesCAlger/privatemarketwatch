@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_30736da525f6",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 341,
+  "anchor_value": 341,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 19,
+      "quoted_text": "Current-period Total Investment Portfolio: cost 1,703,615,168; fair value 1,662,543,940.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 50,
+      "row_index": 4,
+      "quoted_text": "Comparative-period Total Investment Portfolio: cost 1,677,854,551; fair value 1,639,681,521.",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "The comparative schedule repeats Penn Quarter Partners with 8.82% and fair value 3,684,914, distinct from the current schedule row.",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count of 733 combines 341 current-period positions with 392 comparative-period positions; the output count of 341 is correctly period-scoped.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 50,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw source shows two complete investment schedules: the current schedule ends at table 29 with fair value 1,662,543,940, and the comparative schedule ends at table 50 with fair value 1,639,681,521. The same Penn Quarter instrument appears with different period-specific values in tables 10 and 32. E07's source count 733 equals the 341 current rows retained in output plus 392 comparative rows, so the oracle counted both periods while the output correctly selected the report-date schedule."
+}

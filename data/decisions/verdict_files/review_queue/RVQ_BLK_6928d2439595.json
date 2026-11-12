@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_6928d2439595",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 354399000,
+  "anchor_value": 354399000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 14,
+      "quoted_text": "Denali Equity Holdings LLC (1)(5) | 09/2024 | 3,749 | 340,995 | 354,399 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "SRC_BDC01 alleges that the Denali Equity Holdings LLC current-period BDC source row has no pipeline output row. The raw source row is a substantive Other equity investment in table 52, row 14, with cost 340,995 and fair value 354,399, and it ties exactly to the Total other equity subtotal in row 15. The bundle's unified holdings context already includes Denali Equity Holdings LLC, Other equity with cost 340,995,000 and fair value 354,399,000, so the missing-output check is not supported for this localized current-period row."
+}

@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_927ce4ac3561",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "0.0 fair_value in five flagged derived rows",
+  "anchor_value": null,
+  "confidence": 0.35,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 5,
+      "quoted_text": "ACI Group Holdings, Inc. | Delayed Draw Term Loan | 8/2/2024 | 17,886 | -"
+    },
+    {
+      "table_index": 44,
+      "row_index": 30,
+      "quoted_text": "Cash and Cash Equivalents"
+    }
+  ],
+  "rationale": "C104 flags five derived holdings rows whose only provided identity is row_key and fair_value=0.0. Raw source was available and checked. The filing contains legitimate nil fair-value cells in unfunded commitment rows, shown by a dash in the fair-value column, and also blank SOI section headers such as Cash and Cash Equivalents that could normalize to zero if mis-extracted. Because the bundle and evidence CLI do not expose issuer/source coordinates for row_keys 311669, 311670, 312240, 312417, and 312418, the raw source does not decide whether the five flagged zero fair values are legitimate nil values, spurious header rows, or another extraction defect."
+}

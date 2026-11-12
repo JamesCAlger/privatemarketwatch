@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_BLK_006639e932e2",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2006.885,
+  "anchor_value": 2006.885,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 48,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 2,006,365 | $ | 2,006,885 | 166.30 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 28,
+      "row_index": 15,
+      "quoted_text": "AAH Topco, LLC"
+    },
+    {
+      "table_index": 28,
+      "row_index": 16,
+      "quoted_text": "Consumer Services | First Lien(8) | SOFR(M) | + | 5.25 % | 9.07 % | 11/2023 | 12/2027 | 22,885 | 22,769 | 22,885"
+    },
+    {
+      "table_index": 28,
+      "row_index": 17,
+      "quoted_text": "First Lien(8)(9) - Drawn | SOFR(M) | + | 5.00 % | 8.82 % | 03/2025 | 12/2027 | 5,489 | 5,469 | 5,489"
+    },
+    {
+      "table_index": 28,
+      "row_index": 18,
+      "quoted_text": "28,238 | 28,374 | 2.35 %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 24,
+      "quoted_text": "Consumer Services | First Lien(8)(9) - Undrawn | 03/2025 | 03/2027 | 13,707 | -- | -- | -- %"
+    }
+  ],
+  "rationale": "E07 compares a raw source count of 760 to an output count of 427, but the raw schedule is not one row per position. The cited AAH Topco source block uses separate issuer, instrument, subtotal, and unfunded rows, while the extracted sample includes the actual AAH funded and unfunded positions. The aggregate fair-value anchor ties exactly: the filing total investments fair value is 2,006,885 thousand and the bundle reports fund_quarter_fv_m of 2,006.885. The flag is therefore caused by an inflated/non-comparable source row-count anchor, not a demonstrated holdings extraction defect."
+}

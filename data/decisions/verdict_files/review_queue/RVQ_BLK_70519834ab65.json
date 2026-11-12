@@ -1,0 +1,50 @@
+{
+  "review_id": "RVQ_BLK_70519834ab65",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1801300000.0,
+  "anchor_value": 1764774000.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 7,
+      "quoted_text": "Blank-name subtotal row under FIRE: Real Estate senior secured loans: fair value 4,761",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 11,
+      "quoted_text": "Blank-name subtotal row under Services: Business senior secured loans: fair value 3,500",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 15,
+      "quoted_text": "Blank-name subtotal row under Transportation: Cargo senior secured loans: fair value 5,057",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 22,
+      "quoted_text": "Blank-name subtotal row under FIRE: Real Estate junior secured loans: fair value 10,237",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 32,
+      "quoted_text": "Blank-name subtotal row under Services: Business equity securities: fair value 4,328",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 22,
+      "row_index": 35,
+      "quoted_text": "Blank-name subtotal row under Transportation: Cargo equity securities: fair value 8,643",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. The filing reports TOTAL INVESTMENTS fair value of 1,764,774 thousand at table 22 row 39, consistent with the balance sheet total investments at fair value and fair value hierarchy total investments rows. The extracted holding sum is 1,801,300,000, an overshoot of 36,526,000. In table 22, six blank-name local subtotal rows have fair values 4,761, 3,500, 5,057, 10,237, 4,328, and 8,643 thousand, summing exactly to the 36,526 thousand residual. These rows are subtotals, not investee positions, so the flag is a real extraction data error."
+}

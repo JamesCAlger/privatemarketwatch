@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_d631971f7f9f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 12,
+  "anchor_value": 12,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 27,
+      "quoted_text": "CBTS Borrower, LLC and CBTS TopCo, L.P. (10) | Series A-2 preferred shares | 12/2024 | 1,200,000 | 1,200.0 | 1,200.0 | (2)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 8,
+      "quoted_text": "Priority Waste Holdings LLC, Priority Waste Holdings Indiana LLC and Priority Waste Super Holdings, LLC | First lien senior secured revolving loan | 9.81 % | SOFR (Q) | 5.50 % | 08/2029 | 1.9 | 1.8 | 1.9 | (2)(7)(12)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 33,
+      "quoted_text": "ADMA Biologics Inc. (10) | First lien senior secured revolving loan | 8.06 % | SOFR (Q) | 3.75 % | 12/2027 | 0.6 | 0.6 | 0.6 | (2)(5)(7)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged these rows as comparative-period facts retained for report_date 2025-03-31, but raw source shows representative flagged instruments in the March 31, 2025 schedule of investments block itself. The same issuers may also appear in the December 31, 2024 comparative block, but the current-period citations show the flagged rows are source-supported current SOI rows rather than stale comparative-only rows."
+}

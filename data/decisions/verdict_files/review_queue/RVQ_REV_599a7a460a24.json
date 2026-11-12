@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_599a7a460a24",
+  "verdict": "real_error",
+  "mechanism": "cash_equivalent_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 603748,
+  "anchor_value": 464197,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 5,
+      "quoted_text": "Cash equivalents | 139,551 | Total 139,551",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 7,
+      "quoted_text": "U.S. Treasury Bills | Cost 139,551 | Fair Value 139,551",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "cash_equivalent_leak",
+      "detail": "The 139,551 U.S. Treasury Bills cash-equivalent fair value is included in the observed aggregate, producing 603,748 instead of the investments-only fair-value anchor of 464,197.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 17,
+        "row_index": 5,
+        "quoted_text": "Cash equivalents | 139,551 | Total 139,551"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing's investments-only fair-value total is 464,197 (table 17 row 4), while total assets at fair value are 603,748 (table 17 row 6). The difference is the cash-equivalent line of 139,551 (table 17 row 5), also shown in the schedule as U.S. Treasury Bills under Cash and Cash Equivalents and Restricted Cash (table 10 rows 6-7). The flagged ratio 1.3006 corresponds to 603,748 / 464,197, so the holdings aggregate improperly includes cash equivalents against an investments-only denominator."
+}

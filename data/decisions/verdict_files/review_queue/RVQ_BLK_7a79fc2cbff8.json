@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_7a79fc2cbff8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "flag artifact has SOFR detected from identifier with blank metric/no structured corroboration",
+  "anchor_value": "raw SOI rows contain separate Ref and Spread cells for the affected instruments",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 10,
+      "quoted_text": "Skydio, Inc | First Lien Term Loan | SOFR(M) | 2.50 | % | 2.75 % Cash + 2.75 % PIK | 9.17 | % | 12/4/2029 | $ | 7,711,220 | 7,652,362 | 7,641,819 | 0.31 | % | E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 14,
+      "quoted_text": "Gympass US, LLC | First Lien Term Loan | SOFR(M) | 1.00 | % | 3.25 % Cash + 3.25 % PIK | 10.34 | % | 8/29/2029 | $ | 2,849,124 | 2,841,564 | 2,877,615 | 0.12 | % | E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 30,
+      "quoted_text": "Madison Logic Holdings, Inc. | First Lien Term Loan | SOFR(M) | 1.00 | % | 4.73 % Cash + 2.37 % PIK | 10.72 | % | 12/29/2028 | $ | 2,274,371 | 2,241,294 | 1,976,428 | 0.08 | % | E",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 28,
+      "quoted_text": "Streamland Media Midco LLC | First Out Term Loan | SOFR(Q) | 1.00 | % | 6.76 % PIK | 10.43 | % | 3/31/2029 | $ | 1,461,957 | 1,461,957 | 1,461,957 | 0.06 | % | E",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw SOI provides structured Ref and Spread cells for affected SOFR instruments, but the flagged artifact treats the SOFR reference as uncorroborated/metric blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 2 row-level review. The flagged rows are SOFR instruments whose concatenated identifiers include reference-rate and spread terms, while the flag artifact has blank metric/no structured corroboration. Raw source rows show these terms are not merely free text: the SOI schedule has explicit columns Issuer, Instrument, Ref(B), Floor, Spread, Total Coupon, Maturity, Principal, Cost, and Fair Value; cited rows place SOFR(M) or SOFR(Q) in the Ref column and the cash/PIK spread in the Spread column. Therefore the source corroborates structured reference/spread fields that the extraction/check failed to carry through."
+}

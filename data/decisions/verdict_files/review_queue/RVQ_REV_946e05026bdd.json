@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_946e05026bdd",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -21000,
+  "anchor_value": -21000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 19,
+      "row_index": 18,
+      "quoted_text": "Zarya Intermediate, LLC | (4) (5) (11) (14) | S + | 6.50 % | 11.84 % | 7/1/2027 | \u2014 | \u2014 | ( 21 ) | \u2014",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 33,
+      "quoted_text": "Zarya Intermediate, LLC | Revolver | 7/1/2027 | 2,807 | ( 20 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged a negative fair_value of -21000 as unexplained, but the raw filing shows the Zarya Intermediate investment line with fair value (21) and footnote (14), and the related commitments schedule identifies Zarya Intermediate, LLC as a Revolver with an unfunded commitment and negative fair value. The source therefore supports this as an unfunded-commitment presentation, not a data error in the extracted fair value."
+}

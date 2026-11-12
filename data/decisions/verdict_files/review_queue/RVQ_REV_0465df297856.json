@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_0465df297856",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank on flagged extracted rows",
+  "anchor_value": "raw source includes non-USD debt par requiring explicit USD conversion, e.g. EURIBOR-linked SubCalidora term loan par 2,384",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 28,
+      "quoted_text": "SubCalidora 2 S.a r.l. Term Loan (2)(3)(13) | EURIBOR + 5.750 % | 8.105 % | 08/14/2029 | Par Amount/Shares 2,384 | Cost 2,536 | Fair Value 2,823",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 25,
+      "row_index": 0,
+      "quoted_text": "(13) Investment is Spain domiciled.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule contains a EURIBOR-linked Spain-domiciled debt row with par 2,384, but the extracted principal_amount_usd field is blank, so USD-converted par is missing.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "FX01 is a row-validation flag for missing principal_amount_usd where non-USD source par requires explicit FX conversion. The raw June 30, 2025 schedule includes SubCalidora 2 S.a r.l. Term Loan with EURIBOR reference rate, par amount 2,384, and Spain domicile footnote, while the flagged artifact reports principal_amount_usd as blank. That grounds a real extraction gap for at least the non-USD debt row; no aggregate anchor was used."
+}

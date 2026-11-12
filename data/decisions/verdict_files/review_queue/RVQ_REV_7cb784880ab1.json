@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_7cb784880ab1",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -11000.0,
+  "anchor_value": -11000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Revolving Loan | Cost/Amortized Cost (11) | Fair Value (11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 35,
+      "quoted_text": "Cliffwater LLC | First Lien Revolving Loan | Cost/Amortized Cost (10) | Fair Value (10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 52,
+      "quoted_text": "Solis Mammography Buyer, Inc. | First Lien Revolving Loan | Cost/Amortized Cost (4) | Fair Value (4)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flags negative cost generically, but the raw investment schedule itself prints parenthesized negative Cost/Amortized Cost amounts for unfunded revolving and delayed-draw positions. The extracted Titan value of -11000 exactly matches the filing's (11) in thousands, and corroborating Cliffwater and Solis rows show the same legitimate presentation pattern. The data is source-faithful; the check is overbroad for these commitment-related positions."
+}

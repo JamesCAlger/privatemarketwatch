@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_f880d8380bda",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "internal",
+  "observed_value": 3,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 27,
+      "quoted_text": "Pace Industries, Inc. (2)(4)(7) | Common Stock | 0.0% | 971,418 | 2,110,522 | --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 15,
+      "quoted_text": "Pace Industries, Inc. (2)(4)(9) | HoldCo Term Loan - 5.89% inc PIK | 110,137,754 | 06/01/40 | 78,137,869 | --",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 23,
+      "quoted_text": "TCW Direct Lending Strategic Ventures LLC (2)(4)(6) | Common membership Interests | 0.0% | 800 | -- | --",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Three December 31, 2025 comparative-schedule positions were retained under report_date 2026-03-31.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 9,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "The filing index identifies paired Schedules of Investments for March 31, 2026 and December 31, 2025. The three flagged positions occur in the comparative schedule tables: Pace Common Stock at table 9 row 27, Pace HoldCo Term Loan at table 8 row 15, and TCW Strategic Ventures Common membership Interests at table 9 row 23. Retaining those earlier-period facts as March 31, 2026 position rows is a comparative-period leak. The affected cells are fully localized; no aggregate anchor is needed."
+}

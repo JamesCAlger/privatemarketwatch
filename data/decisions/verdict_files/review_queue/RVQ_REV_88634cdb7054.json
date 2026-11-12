@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_88634cdb7054",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6,
+  "anchor_value": 6,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 45,
+      "row_index": 32,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 21,951 | 21,951 | 19,976 | (7) (8) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 33,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 11,720 | 11,713 | 10,665 | (7) (8) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 34,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 9,025 | 9,021 | 8,213 | (7) (8) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 35,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 6,433 | 6,429 | 5,854 | (7) (8) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 36,
+      "quoted_text": "One GI LLC | Health Care Providers & Services | 10.57 % | S + 6.75 % | 12/22/25 | 3,610 | 3,610 | 3,285 | (7) (8) (14)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 24,
+      "quoted_text": "MPI Engineered Technologies, LLC | Automobile Components | S + 12.00 % (Incl. 6.00 % PIK) | 01/15/20 | 11/17/25 | $ | 23,049 | $ | 20,011 | $ | 9,220 | (8) (12) (14)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The six maturity_not_past hits are source-disclosed current-period debt rows with maturities before 2025-12-31, not extraction-created dates.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 45,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "The flag count is six, and the current-period SOI source itself lists exactly six debt investment rows with maturity dates before the 2025-12-31 report date: five One GI LLC rows dated 12/22/25 and one MPI Engineered Technologies, LLC row dated 11/17/25. Because the flagged maturity values are present in raw source and are not parser inventions or row misalignment, this is a false alarm for the extraction data; the rule is over-scoped for source-disclosed held positions with past maturity dates."
+}

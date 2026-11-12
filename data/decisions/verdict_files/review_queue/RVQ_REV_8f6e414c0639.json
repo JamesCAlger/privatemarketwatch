@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_8f6e414c0639",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.1448,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 87,
+      "row_index": 23,
+      "quoted_text": "Total unused commitments to extend financing | $ | 98,136 | $ | 114,328",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The flagged 0.1448 ratio localizes to unused commitments, not an investment fair-value row with a reported percent-of-net-assets field.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 87,
+        "row_index": 23,
+        "quoted_text": "Total unused commitments to extend financing | $ | 98,136 | $ | 114,328"
+      }
+    }
+  ],
+  "rationale": "Source totals show net assets of 678,784 and the value matching the flag is 98,136 / 678,784, but the cited row is a financing-commitments disclosure, not a portfolio fair-value or percent-of-net-assets row. F23 appears to have applied the percent-of-net-assets consistency rule outside its intended scope."
+}

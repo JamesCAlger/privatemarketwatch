@@ -1,0 +1,55 @@
+{
+  "review_id": "RVQ_BLK_108d197cf4cb",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.3894,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 29,
+      "quoted_text": "Heights Buyer, LLC | (8)(13) | First Lien Term Loan | S + 5.75 % | 9.50 % | 8/25/2028 | 5,294 | 5,294 | 5,294 | 0.72"
+    },
+    {
+      "table_index": 46,
+      "row_index": 30,
+      "quoted_text": "Heights Buyer, LLC | (8)(13) | First Lien Term Loan | S + 5.00 % | 8.75 % | 8/25/2028 | 921 | 917 | 916 | 0.12"
+    },
+    {
+      "table_index": 46,
+      "row_index": 31,
+      "quoted_text": "Heights Buyer, LLC | (12)(13) | First Lien Delayed Draw Term Loan | S + 5.75 % | 9.50 % | 8/25/2028 | 867 | 859 | 867 | 0.12"
+    },
+    {
+      "table_index": 46,
+      "row_index": 32,
+      "quoted_text": "Heights Buyer, LLC | (7)(12)(13) | First Lien Delayed Draw Term Loan | S + 5.00 % | 8.75 % | 8/25/2028 | 1,254 | ( 3 | ) | ( 6 | ) | -"
+    },
+    {
+      "table_index": 58,
+      "row_index": 3,
+      "quoted_text": "KENE Acquisition, Inc. (aka Entrust) | (8)(14) | First Lien Term Loan | S + 4 .75 % | 8.40 % | 2/7/2031 | $ | 1,788 | $ | 1,783 | $ | 1,783 | 0.24 | %"
+    },
+    {
+      "table_index": 58,
+      "row_index": 11,
+      "quoted_text": "Monarch Buyer, Inc. | (7)(12)(15) | First Lien Delayed Draw Term Loan | S + 4 .50 % | 8.15 % | 6/2/2032 | 2,051 | 148 | 143 | 0.02"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The raw SOI rows show the flagged spreads and interest rates as printed, so the nonzero agentA_spread_vs_xbrl residual is on the XBRL reconciliation side rather than the source schedule terms.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 46,
+        "row_index": 29
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The filing rows for the six flagged instruments print the same reference-rate spread, interest rate, maturity, and asset type carried in the Agent A identifiers: Heights Buyer rows at S + 5.75% / 9.50% and S + 5.00% / 8.75%, KENE at S + 4.75% / 8.40%, and Monarch at S + 4.50% / 8.15%. Because raw source confirms the schedule-term side while the flag reports nonzero agentA_spread_vs_xbrl residuals, the error is localized to extraction/reconciliation of the XBRL side, not a false alarm."
+}

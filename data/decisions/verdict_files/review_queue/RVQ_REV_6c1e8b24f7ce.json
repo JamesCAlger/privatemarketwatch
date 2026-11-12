@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_6c1e8b24f7ce",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "foreign-currency source principal requiring USD conversion",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 28,
+      "quoted_text": "Spruce Bidco II Inc. | First Lien Term Loan | C + 4.75 % | 1/30/2032 | CAD 194 | 132 | 141 | 11",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 34,
+      "row_index": 30,
+      "quoted_text": "Spruce Bidco II Inc. | First Lien Term Loan | T + 5.00 % | 1/30/2032 | JPY 20,745 | 132 | 132 | 17",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign-currency debt principal amounts are present in source but principal_amount_usd is blank in the extracted holdings rows, so par analytics lack the required USD-normalized principal.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 34,
+        "row_index": 28
+      }
+    }
+  ],
+  "rationale": "FX01 flags missing principal_amount_usd for non-USD debt principal. The raw SOI source includes explicit foreign-currency principal values in the Principal / Shares column, including Spruce Bidco II Inc. CAD 194 and JPY 20,745 rows. The reviewed artifact records principal_amount_usd as blank for FX01 rows, so the flag is a real extraction/normalization gap rather than a false alarm."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_66d716470596",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "non-USD par amounts present in source schedule, e.g. C$ 2,993 and EUR 5,560",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 16,
+      "quoted_text": "Hercules Borrower, LLC | (6) (11) | First Lien Debt | C + | 4.75 % | 7.01 % | 12/15/2028 | C$ 2,993 | 2,083 | 2,161 | 0.06",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 27,
+      "quoted_text": "Excelitas Technologies Corp. | (6) (11) | First Lien Debt | E + | 5.25 % | 7.15 % | 08/13/2029 | EUR 5,560 | 5,687 | 6,497 | 0.19",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 75,
+      "row_index": 1,
+      "quoted_text": "(1) | Variable rate loans to the portfolio companies bear interest at a rate that is determined by reference to either CORRA (\"C\") or EURIBOR (\"E\") or SOFR (\"S\") or SONIA (\"SA\")or an alternate base rate (commonly based on the Federal Funds Rate (\"F\") or the U.S. Prime Rate (\"P\")), which generally resets periodically.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt rows have source par amounts in foreign currency, but the extracted principal_amount_usd field is blank instead of carrying an explicit USD conversion.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "FX01 is a real extraction gap. The validation rows show non-USD debt principal_amount_usd is missing, while the raw SOI schedule contains foreign-currency par amounts such as Hercules Borrower C$ 2,993 and Excelitas EUR 5,560. The footnote defines C as CORRA, E as EURIBOR, and SA as SONIA, confirming these are non-USD benchmark/currency contexts that require explicit FX conversion before USD par analytics."
+}

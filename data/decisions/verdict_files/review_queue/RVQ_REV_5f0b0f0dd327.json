@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_5f0b0f0dd327",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "n/a",
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 14,
+      "quoted_text": "Automated Industrial Robotics US HoldCo Inc. | (12)(24) | Index n/a | Spread n/a | Interest Rate n/a | 8/5/2025 | 8/5/2032 | Principal 2,928 | Amortized Cost 2,857 | Fair Value 2,935",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The X02 missing-rate warning includes PRIVATE_CREDIT rows where the raw SOI itself reports Index, Spread, and Interest Rate as n/a, so the extracted blank rate is source-faithful.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 44,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows with no interest_rate or basis_spread, but the cited schedule-of-investments row has n/a printed in the Index, Spread, and Interest Rate columns. The observed blank extracted rate therefore matches the raw source rather than proving an extraction or normalization defect."
+}

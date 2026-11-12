@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_091f42807ffb",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 544170799,
+  "anchor_value": 230281379,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments (108.0%) | $231,571,333 amortized cost | $230,281,379 fair value",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 29,
+      "quoted_text": "Total Members' Capital | 213,530 (thousands)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing schedule reports March 31, 2026 total investment fair value of $230,281,379 and explicitly labels it 108.0% of net assets. The balance sheet reports members' capital of $213,530,000; $230,281,379 / $213,530,000 = 107.84%, which rounds to the filed 108.0%. The queued aggregate of $544,170,799 is therefore overstated by $313,889,420. The schedule contains position rows plus debt, equity, cash-equivalent, combined, and grand-total rows, supporting subtotal leakage as the aggregate mechanism, but the evidence does not safely isolate one included subtotal combination, so localized is false."
+}

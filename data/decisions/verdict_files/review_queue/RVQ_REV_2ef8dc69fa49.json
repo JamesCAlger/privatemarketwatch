@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_2ef8dc69fa49",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 325772154,
+  "anchor_value": 325772154,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 27,
+      "quoted_text": "48forty Intermediate Holdings, Inc. | (16) | S+ 6.10 % | 11.44 % | 10/11/2022 | 12/1/2026 | 14,736,842 | 14,273,291 | 13,669,895 | 6.7"
+    },
+    {
+      "table_index": 44,
+      "row_index": 29,
+      "quoted_text": "48forty Intermediate Holdings, Inc. | (16) | S+ 6.10 % | 11.45 % | 10/11/2022 | 12/1/2026 | 14,812,030 | 14,299,832 | 13,807,774 | 7.2"
+    },
+    {
+      "table_index": 13,
+      "row_index": 43,
+      "quoted_text": "BB-HH Platform, Inc. (dba Preferred Care Home Health) | (10)(17) | S + 7.00 % + 1.50 % PIK | 12.32 % Cash + 1.50 % PIK | 5/16/2023 | 5/16/2028 | 6,728,201 | 6,570,886 | 6,711,380 | 3.3"
+    },
+    {
+      "table_index": 15,
+      "row_index": 75,
+      "quoted_text": "TOTAL INVESTMENTS | $ | 337,496,226 | $ | 325,772,154 | 160.0 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer identity is polluted by loan terms in extracted rows; raw source keeps Portfolio Company separate from spread, interest rate, maturity, cost, and fair value, making issuer-continuity artificially low when terms change.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 27
+      }
+    }
+  ],
+  "rationale": "D06 reports only 44/150 issuers persisting. The raw schedule rows show issuer identity as the Portfolio Company cell, with spread, rate, maturity, cost, and fair value in separate columns. The bundle's extracted holdings for the same filing place full loan terms inside issuer_name for examples such as 48forty Intermediate Holdings and BB-HH Platform. The cited current and comparative source rows show the issuer persists while rate terms can vary, so keying continuity on polluted issuer_name values creates artificial churn. The filing total anchor is available and ties to the schedule total of 325,772,154, so this is localized to issuer/name extraction rather than missing schedule coverage."
+}

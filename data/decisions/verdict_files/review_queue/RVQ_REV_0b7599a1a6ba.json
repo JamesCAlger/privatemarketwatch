@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_0b7599a1a6ba",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 4,
+      "quoted_text": "West Marine/Rising Tide Holdings, Inc. (3)(7) | N/A | N/A | 09/08/2028 | 47,166 | $ | - | $ | - | 0.00%"
+    },
+    {
+      "table_index": 12,
+      "row_index": 9,
+      "quoted_text": "Mavenir Systems, Inc. (3)(7) | N/A | N/A | N/A | 1,235,313 | - | - | 0.00%"
+    }
+  ],
+  "rationale": "C104 flagged two holdings because fair_value normalized to 0. The raw investment schedule shows both corresponding warrant rows with a dash in the Fair Value column and 0.00% of net assets, so the extracted zero fair values match source. This is a review-rule overfire on legitimate zero-value warrants, not a data error."
+}

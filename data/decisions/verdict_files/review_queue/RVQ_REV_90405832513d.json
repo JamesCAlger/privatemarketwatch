@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_90405832513d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "principal_amount_usd is blank for FX01 issue rows",
+  "anchor_value": "source debt rows disclose non-USD principal amounts requiring explicit USD conversion",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Crusoe Bidco Limited (11) | Unitranche First Lien Term Loan | SN + 652.66 | 11.72 % | 12/2025 | GBP | 6,128 | cost 7,645 | fair value 8,193",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 15,
+      "quoted_text": "Nurture Landscapes (11) | Unitranche First Lien Delayed Draw Term Loan | SN + 650 | 11.49 % | 06/2028 | GBP | 11,000 | cost 13,364 | fair value 14,707",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt principal is present in the source schedule, but principal_amount_usd is blank on the flagged rows instead of carrying an explicit USD conversion.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 32,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "FX01 is a within-row FX normalization issue. The raw SOI header identifies a Principal Amount, Par Value or Shares column, and debt rows in the United Kingdom section disclose GBP principal amounts, e.g. Crusoe Bidco Limited has GBP 6,128 principal with cost and fair value populated. The review artifact reports principal_amount_usd is blank for these non-USD debt rows, so the source requires an explicit FX conversion that the extraction/normalization layer did not populate."
+}

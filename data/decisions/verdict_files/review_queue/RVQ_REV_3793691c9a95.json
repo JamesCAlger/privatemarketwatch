@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_3793691c9a95",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2,
+  "anchor_value": 2,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Centrexion Therapeutics, Inc. Warrants | Pharmaceuticals | 6/2019 | 56,483 | 27 | 4",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 9,
+      "quoted_text": "Meditrina, Inc. Warrants | Health Care Equipment & Supplies | 12/2022 | 15,858 | 12 | 10",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The current March 31, 2026 investment schedule contains both flagged positions at table 11 rows 8 and 9. The same positions also appear in the December 31, 2025 comparative schedule at table 15 rows 7 and 8, with unchanged values. Therefore an earlier-period source context does not establish a comparative leak: the filing independently presents both positions in the current schedule. PP03's period-purity flag is a false alarm for these two rows."
+}

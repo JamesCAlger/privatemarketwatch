@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_BLK_dd1c73619e66",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.3,
+  "anchor_value": 0.2,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 27,
+      "quoted_text": "Total Net Assets | 1,607,721"
+    },
+    {
+      "table_index": 41,
+      "row_index": 27,
+      "quoted_text": "Mitnick TA Aggregator, L.P. (11) | Membership Interest ( 0.43 % ownership) | 5,249 | 3,176 | 0.3 | %"
+    },
+    {
+      "table_index": 43,
+      "row_index": 13,
+      "quoted_text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) | Structured Credit ($ 4,400 par, due 7/2038 ) | 4,407 | 4,407 | 0.2 | %"
+    },
+    {
+      "table_index": 43,
+      "row_index": 33,
+      "quoted_text": "Total Investments | $ | 3,323,282 | $ | 3,347,317 | 208.2 | %"
+    }
+  ],
+  "rationale": "Raw source shows row-level Percentage of Net Assets values that do not agree with fair value divided by the filing's Total Net Assets, while the schedule total anchor ties. Total investments of 3,347,317 divided by Total Net Assets of 1,607,721 equals 208.20%, matching the disclosed total percentage of 208.2%. But Mitnick fair value of 3,176 equals 0.1975% of net assets, which rounds to 0.2%, not the disclosed 0.3%; Madison Park fair value of 4,407 equals 0.2741%, which rounds to 0.3%, not the disclosed 0.2%. The flag is therefore a real row-level source arithmetic/value defect, not a bad total anchor."
+}

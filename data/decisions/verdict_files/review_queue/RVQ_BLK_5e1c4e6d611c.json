@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_5e1c4e6d611c",
+  "verdict": "real_error",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 29051900000.0,
+  "anchor_value": 28692600000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 27,
+      "quoted_text": "Total Investments | $ | 28,566.5 | $ | 28,692.6 | (17) | 200.35 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 198,
+      "row_index": 7,
+      "quoted_text": "Total investments | $ | 28,693",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source anchors agree that total investments at fair value are about $28.693 billion: the schedule total reports $28,692.6 million and the fair-value measurement table reports $28,693 million. The flagged extracted position sum is $29.0519 billion, an overage of about $359.3 million versus the source anchor. The source structure did not expose a single residual-sized subtotal or row, so this is grounded as an aggregate extraction overage rather than a localized row defect."
+}

@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_988e88226793",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "issuer_name values include duplicated schedule/category text and instrument terms, e.g. DDebt Investments...Wharf Street...Sr Secured Revolver...ebt Investments...First Lien Term Loan and Debt Debt Investments Health Care Providers & Services PHC Buyer...Instrument First Lien Term Loan...",
+  "anchor_value": "Source issuer cells are clean issuer-only names: Wharf Street Rating Acquisition LLC (KBRA); PHC Buyer, LLC (Patriot Home Care).",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 28,
+      "quoted_text": "Wharf Street Rating Acquisition LLC (KBRA) | Sr Secured Revolver | SOFR(Q) | 0.75 | % | 6.00 | % | 11.52 | % | 12/10/2027 | $ | - | ( 3,724 | ) | ( 7,731 | ) | 0.00 | % | E/F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 29,
+      "quoted_text": "Wharf Street Rating Acquisition LLC (KBRA) | First Lien Term Loan | SOFR(Q) | 0.75 | % | 6.00 | % | 11.52 | % | 12/10/2027 | $ | 2,610,358 | 2,573,028 | 2,534,397 | 0.98 | % | F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 9,
+      "quoted_text": "PHC Buyer, LLC (Patriot Home Care) | First Lien Term Loan | SOFR(Q) | 0.75 | % | 6.00 | % | 11.50 | % | 5/4/2028 | $ | 1,496,853 | 1,472,871 | 1,467,665 | 0.57 | % | F",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Wharf Street issuer_name fused the Debt Investments/category label and two instrument rows instead of preserving issuer-only Wharf Street Rating Acquisition LLC (KBRA).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PHC Buyer issuer_name fused schedule/category text and instrument terms instead of preserving issuer-only PHC Buyer, LLC (Patriot Home Care).",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row/field localization: the source Schedule of Investments rows have issuer-only cells separate from Instrument, Ref, coupon, maturity, cost, and fair value columns. The reviewed extracted issuer_name values contain duplicated labels plus instrument and coupon/maturity text, so the issuer_name field is wrong and the flag is a real extraction/column mapping error."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_18bdc100a798",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 21,
+  "anchor_value": 21,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 79,
+      "quoted_text": "Total Investments - 101.9% | $ | 34,241,464 | $ | 36,753,538",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company (1) (2) | Interest Rate | Base Rate Floor | Maturity Date | Principal Amount | Amortized Cost (3) | Fair Value",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag as an oracle anchor error. The March 31, 2026 schedule in table 17 has exactly 21 position rows: 5, 8-11, 20-21, 30, 33, 36-37, 42, 45, 52, 55, 63-64, and 69-72. This equals the output count of 21, not the oracle source count of 44. The same schedule reports total investment fair value of 36,753,538, matching the extracted fund-quarter fair value, so there is no evidence of missing output positions."
+}

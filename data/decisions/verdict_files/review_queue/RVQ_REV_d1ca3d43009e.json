@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_d1ca3d43009e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": "principal_amount_usd missing on 19 flagged rows",
+  "anchor_value": "foreign-currency par disclosed in the investment schedule",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 14,
+      "quoted_text": "Aurelia Netherlands B.V. - First lien senior secured EUR term loan; EUR par 55,027; amortized cost 62,192; fair value 63,402",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 34,
+      "quoted_text": "RL Datix Holdings (USA), Inc. - First lien senior secured GBP term loan; GBP par 30,607; amortized cost 41,306; fair value 39,656",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Non-USD debt par is retained in source currency but the required USD principal field is missing on the flagged rows.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 17,
+        "row_index": 14
+      }
+    }
+  ],
+  "rationale": "Class 1 repeated-cell review. The raw March 31, 2026 investment schedule explicitly identifies debt as EUR or GBP and prints local-currency par, while adjacent amortized cost and fair value are USD amounts. The 19 flagged records have blank principal_amount_usd, so the platform lacks the explicit FX-normalized principal required for USD par analytics. Source coordinates directly ground the defect; no aggregate anchor is needed."
+}

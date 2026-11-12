@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_e67df70787f6",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1013243399,
+  "anchor_value": 657323982,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "Total Controlled Affiliated investments | $ | 254,893,382 | $ | 1,705,253 | $ | ( 2,324 ) | $ | - | $ | ( 9,895,946 ) | $ | 246,700,365 | $ | 4,365,599",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 14,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | $ | 106,857,004 | $ | 4,366,776 | $ | ( 1,354,454 ) | $ | - | $ | ( 650,274 ) | $ | 109,219,052 | $ | 2,796,825",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 7,
+      "row_index": 25,
+      "quoted_text": "Total Debt & Equity Investments (7) | 147.3 | % | 828,061,833 | 657,323,982",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "Affiliated-investment rollforward ending fair values of 246,700,365 and 109,219,052 were added again; their 355,919,417 sum exactly equals the excess over the 657,323,982 schedule total.",
+      "fix_class": "dedup",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "The filing schedule reports Total Debt & Equity Investments fair value of 657,323,982, while extracted holdings sum to 1,013,243,399. The excess is 355,919,417, exactly equal to the controlled and non-controlled affiliated rollforward ending fair values of 246,700,365 plus 109,219,052. Those rollforward amounts duplicate investments already represented in the schedule, proving a dimension/section double count rather than a bad filing anchor."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_9e6071aec11a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "c04_metric_threshold",
+  "observed_value": 0.4,
+  "anchor_value": 0.7,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 26,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | Principal / Shares: - | Cost 160 | Fair Value 195",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 39,
+      "row_index": 27,
+      "quoted_text": "Firebird Co-Invest L.P. | L.P. Interest | Principal / Shares: - | Cost - | Fair Value 2",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C04 fired because only 40% of equity rows have Principal / Shares populated, but the raw schedule shows the missing share counts are explicit dashes for L.P. Interest rows. Preferred Stock and Common Stock rows in the same equity section have share counts, while the L.P. Interest rows do not disclose shares in source. The stored blanks for those rows therefore reflect the filing, and the check is overbroad for partnership interests rather than proving an extraction defect."
+}

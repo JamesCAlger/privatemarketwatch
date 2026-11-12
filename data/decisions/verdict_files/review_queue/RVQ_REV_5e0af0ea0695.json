@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_5e0af0ea0695",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 36.9,
+  "anchor_value": 185.4,
+  "confidence": 0.72,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate flag. Raw filing source was checked through the evidence CLI. The filing's schedule reports Total Investments of $35,500,450 thousand and 185.4% of net assets at table 37 row 24, but no raw-source row contains the flagged 36.9% value, and the bundle provides no detail row or issuer for the single alleged >25% outlier. The source therefore does not identify which position or field produced the derived pct_sum, so a real error or false alarm cannot be grounded without guessing."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_58df928bffe5",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "190 Octane Financing, LLC - Delayed Draw Term Loan | Consumer Services | SOFR + 5.50 % ( 1.00 % floor) + 1.50 % PIK | 11.37 % | 5/10/2027 | $ | 4,860 | $ | 4,819 | $ | 4,525 | 0.8 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 20,
+      "quoted_text": "Total Investments | $ | 656,916 | $ | 634,626 | 117.2 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Fair value is USD-denominated in the source schedule, but fair_value_currency is stored as the raw unit-like value U_USD rather than normalized USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency values of U_USD. The raw schedule of investments presents fair value under dollar-marked columns, including a representative position with fair value $4,525 and the schedule total investments at fair value of $634,626. Because the source is USD-denominated, storing U_USD in the currency field is a real normalization/extraction error rather than a valid non-USD source value."
+}

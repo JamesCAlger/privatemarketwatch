@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_25f407bbe28d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date",
+  "anchor_value": "Twin Star International, Inc.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 17,
+      "quoted_text": "Twin Star International, Inc. | 06/12/23 | Incremental Delayed Draw Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) | 0.3 | % | 1,180,224 | 06/18/26 | 1,180,224 | 1,180,224"
+    },
+    {
+      "table_index": 25,
+      "row_index": 5,
+      "quoted_text": "Twin Star International, Inc. | 01/29/25 | 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.1 | % | 426,040 | 06/18/26 | 426,040 | 426,040"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Issuer extraction leaked wrapper text and the acquisition-date label; source issuer cell is only Twin Star International, Inc. with acquisition date in a separate column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 25,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "C206 is a Class 1 issuer_name parse-leak flag. The flagged observed issuer_name includes industry/path text and the acquisition-date label, while the raw SOI has a clean Issuer column value of Twin Star International, Inc. and a separate Acquisition Date column. That confirms a localized extraction/parsing defect rather than a false alarm."
+}

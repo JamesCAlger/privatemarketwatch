@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_d7bcada437c6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 65, "row_index": 8},
+    {"table_index": 67, "row_index": 6},
+    {"table_index": 67, "row_index": 7},
+    {"table_index": 68, "row_index": 25},
+    {"table_index": 72, "row_index": 23},
+    {"table_index": 72, "row_index": 24},
+    {"table_index": 74, "row_index": 6},
+    {"table_index": 94, "row_index": 14},
+    {"table_index": 96, "row_index": 7},
+    {"table_index": 96, "row_index": 15},
+    {"table_index": 99, "row_index": 17},
+    {"table_index": 104, "row_index": 34}
+  ],
+  "rationale": "C104 flagged twelve holdings with fair_value normalized to 0.0. Raw SOI rows show a dash in the Fair Value position for the corresponding twelve zero-FV holdings, including ADLP LLC membership interest at table 74 row 6 and similar zero-FV equity/warrant rows at the cited coordinates. The source therefore supports the zero value; the warning is an overbroad review rule for legitimate nil fair-value positions, not a data error."
+}

@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_REV_9eac72f7358a",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_row_fair_value",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 2,
+      "quoted_text": "AVSC Holding Corp. (4)(6)(9) | 12/5/2029 | 962 | ( 15 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 5,
+      "quoted_text": "Carbon Topco, Inc. (4)(6)(9) | 5/1/2030 | $ | 1,332 | $ | ( 21 ) | $ | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 16,
+      "quoted_text": "Valence Surface Technologies LLC (4)(6)(10) | 6/13/2031 | 3,280 | ( 67 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 54,
+      "row_index": 24,
+      "quoted_text": "FC Compassus LLC (4)(6)(7) | 11/26/2030 | 2,716 | ( 33 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 56,
+      "row_index": 50,
+      "quoted_text": "CohnReznick Advisory LLC (6)(7) | 3/31/2032 | 49 | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 33,
+      "quoted_text": "IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units | 230,248 | 230 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 19,
+      "quoted_text": "NE SPV Holdco, LLC (4)(19)(21) - Common Units | 4,139 | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C104 flagged rows because fair_value was stored as 0. Raw SOI rows show the corresponding fair-value cells as dashes, including multiple debt rows and equity/common-unit rows. A dash in these schedule fair-value cells represents a nil value, so normalization to 0 is source-consistent rather than a data error. The issue is rule scope: zero fair value can be legitimate and should not be treated as an extraction defect when it is directly present as a dash in the filing."
+}

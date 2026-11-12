@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_147bf6d7efbc",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3,
+  "anchor_value": 3,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 26,
+      "quoted_text": "Inhance Parent, Inc.^(7)(24) | One stop | N/A | 20.00 | % | PIK | 06/2029 | 5,325 | 2,133 | 0.1 | 2,503",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 27,
+      "row_index": 15,
+      "quoted_text": "Pluralsight, LLC^(7)(24) | One stop | SF + | 7.50 | % | (i) | 11.32 | % | PIK | 08/2029 | 2,085 | 2,032 | -- | 1,626",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 15,
+      "row_index": 10,
+      "quoted_text": "RW AM Holdco LLC^(7) | One stop | SF + | 5.25 | % | (i) | 9.02 | % | 04/2028 | 10,097 | 9,896 | 0.1 | 5,553",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 122,
+      "row_index": 9,
+      "quoted_text": "Non-accrual (3) | 17,507 | 14,061 | 9,682 | 5,066 | 2,133 | 2,381",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Three current-period one-stop positions are non-accrual; their principal, amortized cost, and fair value tie to the schedule's non-accrual one-stop totals.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 122,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Raw source confirms the non-accrual flag. Table 122 row 9 reports current-period one-stop non-accrual totals of principal 17,507, amortized cost 14,061, and fair value 9,682. The three localized SOI rows tie to those totals: Inhance Parent 5,325/2,133/2,503, Pluralsight 2,085/2,032/1,626, and RW AM Holdco 10,097/9,896/5,553. Because the source confirms three non-accrual positions rather than disproving the check, this is a real source-backed extraction/classification gap."
+}

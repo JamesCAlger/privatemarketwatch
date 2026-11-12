@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_145d1f90d61d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": "EUR 95,313 (in schedule units)",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Quito | First Lien Secured Debt - Term Loan | E + 500, 0.00% Floor | 01/22/2033 | EUR | 95,313 | 109,786 | 107,964",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 grouped FX01 flag. The raw investment schedule explicitly presents Quito's term-loan par as EUR 95,313 at table 11 row 4, while FX01 reports principal_amount_usd blank for the non-USD debt population. A non-USD principal is therefore present in source but the required USD-normalized principal was not populated, which is an extraction/FX-normalization gap. The citation localizes a concrete affected position; the bundle's aggregate count does not permit source confirmation of every grouped row without a prohibited haystack scan."
+}

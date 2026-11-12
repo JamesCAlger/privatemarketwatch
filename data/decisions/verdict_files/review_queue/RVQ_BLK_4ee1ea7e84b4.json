@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_BLK_4ee1ea7e84b4",
+  "verdict": "false_alarm",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 102,
+      "row_index": 23,
+      "quoted_text": "Total non-controlled/non-affiliated - debt commitments | $ | 874,202 | $ | 5,076,414 | $ | ( 11,163 )"
+    },
+    {
+      "table_index": 102,
+      "row_index": 32,
+      "quoted_text": "Total non-controlled/affiliated - debt commitments | $ | - | $ | 694 | $ | ( 14 )"
+    },
+    {
+      "table_index": 102,
+      "row_index": 44,
+      "quoted_text": "Total Portfolio Company Commitments | $ | 1,289,177 | $ | 5,301,647 | $ | ( 11,228 )"
+    }
+  ],
+  "rationale": "The three SRC_BDC01 flagged values are subtotal or grand-total commitment rows in the source schedule, not individual portfolio-company positions. The adjacent rows in table 102 show individual company commitments above these total lines, so their absence from private_markets_holdings is expected and the missing-row check is over-scoped to totals."
+}

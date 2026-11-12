@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_d92e6109c5a1",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1787.98,
+  "anchor_value": 1787.98,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 27,
+      "row_index": 27,
+      "quoted_text": "Net asset value per unit | $ | 1,787.98 | $ | 1,810.37"
+    },
+    {
+      "table_index": 6,
+      "row_index": 13,
+      "quoted_text": "December 31, 2025 | $ | 1,787.98"
+    }
+  ],
+  "rationale": "F30 flagged NAV per share/unit of 1787.98 as outside 0.01 to 1000, but the raw filing explicitly reports NAV per unit of $1,787.98 at December 31, 2025. The same value is supported by the balance sheet NAV section showing net assets of $232,005 thousand and 129,757 common units outstanding, which yields approximately $1,787.98 per unit. The stored value is source-correct; the validation range is not appropriate for this filer/unit structure."
+}

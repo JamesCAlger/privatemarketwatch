@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_a979361876d9",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -14000.0,
+  "anchor_value": -14000.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Abracon Group Holdings, LLC | (4) (6) (10) | S + | 5.75 % | 10.89 % | 07/06/2028 | - | ( 14 ) | ( 24 ) | -"
+    },
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "Advarra Holdings, Inc. | (4) (7) (10) | S + | 5.75 % | 10.83 % | 08/24/2029 | - | ( 14 ) | ( 60 ) | ( 0.01 )"
+    },
+    {
+      "table_index": 17,
+      "row_index": 29,
+      "quoted_text": "Appfire Technologies, LLC | (4) (5) (10) | S + | 5.50 % | 10.70 % | 03/09/2027 | - | ( 7 ) | ( 23 ) | -"
+    }
+  ],
+  "rationale": "C107 flagged negative cost values, but targeted raw-source rows show those negative costs are printed in the filing's investment schedule in the Cost column, with matching negative fair values on the same rows. The extracted values therefore reflect source presentation rather than a pipeline data error; the rule is overbroad for this filing's negative-cost/unfunded exposure rows."
+}

@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_828bc1cf35be",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.273,
+  "anchor_value": 1898691121,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 13,
+      "quoted_text": "Notes payable: $535,810,695",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 14,
+      "quoted_text": "Credit facility payable: $696,000,000",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 27,
+      "row_index": 42,
+      "quoted_text": "Total Investments - (265.02%): cost $1,934,491,247; fair value $1,898,691,121",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 79,
+      "row_index": 20,
+      "quoted_text": "Asset coverage ratio (7): 158%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation finds no source data error. The March 31 balance sheet reports notes payable of $535,810,695 and credit facility payable of $696,000,000, while the investment schedule totals $1,898,691,121 and the filing reports a 158% asset coverage ratio. These figures are internally coherent. F26 compares fund capital-structure leverage with a holdings-composition proxy; those measure different economic concepts, so a 27.3 percentage-point divergence does not establish a bad extracted value. The flag is therefore a rule-scope false alarm, with no row-level culprit to localize."
+}

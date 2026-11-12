@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_36d6a4f11c10",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_schedule_row",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 14,
+      "quoted_text": "Flexera Software LLC | First Lien Term Loan | EURIBOR + 4.50 %, 0.50 % Floor | 6.45 % | 8/16/2032 | 2,836 | 3,312 | 3,201 | 0.2 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The March 31, 2026 source schedule contains a Flexera term loan whose EURIBOR benchmark identifies non-USD principal and reports par of 2,836, while the extracted principal_amount_usd is blank. The distinct cost of 3,312 and fair value of 3,201 also show that the filing carries USD-scale valuation amounts separately from the foreign-currency par. FX01 therefore identifies a real missing FX-normalized principal field. The filing does not disclose the exact converted USD principal or conversion rate, so no numeric anchor value is asserted."
+}

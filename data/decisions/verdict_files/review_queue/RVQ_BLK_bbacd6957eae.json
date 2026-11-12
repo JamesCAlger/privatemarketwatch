@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_bbacd6957eae",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 902,
+  "anchor_value": 2196,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 1,610,881 | $ | 1,609,502 | 100.00 | % | 219.56 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 65,
+      "row_index": 18,
+      "quoted_text": "Total Investments - non-controlled/non-affiliated | 1,610,881 | 1,609,502 | 219.56",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "E07 output is 902, but the filing's non-controlled/non-affiliated schedule total is 219.56 percent of net assets, i.e. 2196 in the rule's basis-point scale.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 65,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The filing total was checked first: table 18 row 5 and schedule table 65 row 18 both report non-controlled/non-affiliated investments at fair value of 1,609,502 and fair value as % of net assets of 219.56. The flag's observed output is 902, and source search found no 90.2 or 90.20 aggregate anchor; the 902 hits are individual position amounts, not the total. The raw source therefore supports the E07 source anchor and shows the extracted output is materially low."
+}

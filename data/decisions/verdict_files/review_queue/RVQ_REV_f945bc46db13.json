@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_f945bc46db13",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 1.0,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 30,
+      "quoted_text": "HydroSource Logistics, LLC (2)(4) | 04/05/24 | Warrant, expires 4/4/34 | 0.0 % | 380 | - | 210,328",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The sole equity investment is a HydroSource Logistics warrant with 380 shown under the source schedule's Par Amount/Shares column, but the extracted equity share coverage is 0 of 1.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 7,
+        "row_index": 30
+      }
+    }
+  ],
+  "rationale": "C04 fails because the extracted data reports 0.0% of 1 equity rows with shares. In the raw schedule, table 7 uses the header Par Amount/Shares and row 30 is the only equity position: HydroSource Logistics, LLC warrant, fair value 210,328, with 380 in that column. The source therefore supplies shares for the equity row; the defect is an extraction gap in carrying that shares value into the normalized equity row."
+}

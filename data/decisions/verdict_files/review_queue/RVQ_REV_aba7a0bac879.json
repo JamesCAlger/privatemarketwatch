@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_aba7a0bac879",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 31,
+  "anchor_value": 161.30,
+  "confidence": 0.86,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 84,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 161.30 | 4.7 | % | 95.80 | 2.8",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The filing's March 31, 2026 credit-status table reports non-accrual investments at $161.30 million of amortized cost, or 4.7% of total investments, but the flag reports a count of 31 positions. The filing anchor and flagged metric use different units, and the accessible raw source does not disclose a position count that can confirm or refute 31. The source therefore does not decide whether the extracted count is erroneous."
+}

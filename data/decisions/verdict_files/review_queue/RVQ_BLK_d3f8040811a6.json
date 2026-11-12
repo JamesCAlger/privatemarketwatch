@@ -1,0 +1,18 @@
+{
+  "review_id": "RVQ_BLK_d3f8040811a6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_filing_accession",
+  "observed_value": "",
+  "anchor_value": "0001193125-26-206313",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "quoted_text": "Raw-source overview: accession 0001193125-26-206313; flagged holdings row_key 132038: accession_number is blank.",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The raw-source filing overview identifies accession 0001193125-26-206313 for Sixth Street Specialty Lending, Inc., Form 10-Q, report date 2026-03-31. The flagged filing-derived holdings row 132038 has a blank accession_number, so the required traceability value was dropped during extraction or row assembly."
+}

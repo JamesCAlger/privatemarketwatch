@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_d80e6c82ba2e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 22491891,
+  "anchor_value": 22491891,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 3,
+      "quoted_text": "ITP Aero header row has no investment type, cost, or fair value cells; the following Propulsion BC Newco LLC investment row carries fair value 3,499.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Creative Planning header row has blank investment terms and fair value cells; the following Creative Planning, LLC term loan row carries fair value 48,743.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 58,
+      "row_index": 20,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 22,294,362 | $ | 22,491,891 | (2)(6)(32)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 is counting structural issuer or industry label rows with intentionally blank fair-value cells as missing fair-value leaves even though actual investment rows carry fair values.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "The raw SOI tables show structural label rows with blank fair-value cells, followed by actual investment rows that contain cost and fair value. Examples include table 10 row 3 (ITP Aero header) followed by row 4 with fair value 3,499, and table 11 row 7 (Creative Planning header) followed by row 8 with fair value 48,743. The aggregate fair-value anchor also reconciles: table 58 reports Total Investments before Cash Equivalents fair value of 22,491,891, matching the extracted total implied by zero residual_fv in the flag bundle. The B01 completeness failure is therefore caused by check scope over structural rows, not a real missing fair-value data defect."
+}

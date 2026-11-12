@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_bd10407e7fda",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 67.5,
+  "anchor_value": 100.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 6,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Delayed Draw Term Loan | S + 5.25 % | 7/2/2031 | - | (10) | (21) | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "AB Centers Acquisition Corporation | First Lien Revolver | S + 5.25 % | 7/2/2031 | - | (2) | (2) | 9",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 26,
+      "quoted_text": "Any Hour LLC | First Lien Delayed Draw Term Loan | S + 5.00 % | 5/23/2030 | 194 | 178 | 164 | 7,9",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Direct-lending rows with blank extracted interest_rate have explicit Reference Rate and Spread values in the source schedule, for example AB Centers DDT/Revolver at S + 5.25% and Any Hour DDT at S + 5.00%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "The flag reports only 67.5% rate fill for 163 direct-lending units, and the bundled holdings slice shows sampled direct-lending DDT/revolver rows with blank interest_rate. Raw source rows in the schedule of investments contain a Reference Rate and Spread column with populated rates for those same instruments, e.g. AB Centers Acquisition Corporation DDT and Revolver both show S + 5.25%, and Any Hour LLC DDT shows S + 5.00%. The missing extracted interest_rate values therefore reflect an extraction/column-mapping gap rather than absent source disclosure."
+}

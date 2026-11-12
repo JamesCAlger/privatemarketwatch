@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_4e1a42f4ccad",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "U_CAD",
+  "anchor_value": "USD",
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 14,
+      "quoted_text": "Hercules Borrower, LLC | (6) (11) | First Lien Debt | C + | 4.75 % | 7.06 % | 12/15/2028 | C$ 2,985 | 2,079 | 2,118 | 0.07",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 33,
+      "quoted_text": "Surewerx Purchaser III, Inc. | (6) (11) (15) | First Lien Debt | C + | 5.25 % | 7.51 % | 12/28/2029 | C$ 2,585 | 1,867 | 1,852 | 0.06",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 28,
+      "row_index": 4,
+      "quoted_text": "Par amount is denominated in U.S. Dollars unless otherwise noted, including Canadian dollar (CAD).",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Hercules Borrower fair_value_currency incorrectly inherited CAD from the C$ par amount; fair value 2,118 is in the USD fair-value column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 14
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Surewerx Purchaser III fair_value_currency incorrectly inherited CAD from the C$ par amount; fair value 1,852 is in the USD fair-value column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "The raw schedule places C$ only on each par amount, while cost and fair value are separate unmarked dollar columns. The filing's currency footnote likewise describes foreign-currency notation specifically for par amount. Therefore U_CAD in fair_value_currency for both flagged rows is a source-column/unit attribution error; the schedule supports USD fair values."
+}

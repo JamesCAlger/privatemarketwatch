@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_565c4feaff20",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1417.789,
+  "anchor_value": 1417.789,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 8,
+      "quoted_text": "Total Investments | $ | 1,418,136 | $ | 1,417,789 | $ | 665,676 | $ | 666,141",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 4,
+      "quoted_text": "Adelaide Borrower LLC | First Lien Senior Secured Term Loan | SOFR + 6.750 % (Incl. 3.375 % PIK) | 10.422 % | $ | 23,702 | $ | 24,090",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B01 appears to count amortized-cost leaves in the denominator even though source SOI rows and the schedule total carry fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 41,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "B01 reports only 189 of 378 leaves with fair_value, but the raw source shows separate Amortized Cost and Fair Value columns and the 2025 schedule total fair value is 1,417,789 thousand, matching the bundle's extracted fund_quarter_fv_m of 1,417.789 million. A sampled SOI investment row also carries a fair value cell beside amortized cost. The flag is therefore caused by the check's denominator/scope counting non-fair-value leaves rather than by missing fair values in source or extraction."
+}

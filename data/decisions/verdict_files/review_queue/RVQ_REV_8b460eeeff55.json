@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8b460eeeff55",
+  "verdict": "false_alarm",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480.975,
+  "anchor_value": 1480.975,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 23,
+      "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 62,
+      "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag. The raw filing's two current-period investment schedules report fair value totals of 1,249.444 million (table 20 row 23) and 231.531 million (table 33 row 62), which sum exactly to the extracted fund-quarter fair value of 1,480.975 million. Raw position rows also place fair value in the Fair Value column (for example table 17 rows 5-9). The check reports 297 populated fair values out of 594 leaves while the bundle identifies 297 units; the exact 2x denominator is a dimension/leaf double-count in check scope, not 297 missing source or extracted fair values."
+}

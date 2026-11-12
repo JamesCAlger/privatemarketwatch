@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_5770c90a7997",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 24,
+  "anchor_value": 24,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 26,
+      "row_index": 15,
+      "quoted_text": "Absolute Dental Group LLC and Absolute Dental Equity, LLC (5)(13) | First lien senior secured revolving loan | coupon blank | (2)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 16,
+      "quoted_text": "First lien senior secured loan | coupon blank | (2)(8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 21,
+      "quoted_text": "ADG, LLC, GEDC Equity, LLC and RC IV GEDC Investor LLC | Second lien senior secured loan | coupon blank | (2)(8)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw filing schedule rows confirm the extracted non-accrual pattern: affected debt instruments have blank coupon fields and carry footnote marker (8), while nearby accruing instruments disclose coupons and marker (9). The bundle identifies 24 such source-backed positions, matching the observed count of 24. Therefore the underlying data are supported by the filing and the advisory nonaccrual_flag is a false alarm as a data-error detector; residual risk is limited to not independently recounting every marked row because the contract forbids haystack scanning."
+}

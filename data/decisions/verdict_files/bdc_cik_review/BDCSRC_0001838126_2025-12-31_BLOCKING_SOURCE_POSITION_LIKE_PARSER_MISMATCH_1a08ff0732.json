@@ -1,0 +1,65 @@
+{
+  "review_id": "BDCSRC_0001838126_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_1a08ff0732",
+  "cik": "0001838126",
+  "report_date": "2025-12-31",
+  "verdict": "PATCH_PROPOSED",
+  "confidence": "MEDIUM",
+  "primary_justification": "Source-reconciliation evidence supports a real current-period position set missing from unified output: the blocker group has 17 missing_from_pipeline rows with $1,449,195,000 of source fair value, and detail samples show XBRL/current-period debt_position_leaf rows with HPS_CORPORATE_LENDING_DEBT_LEAF_V3 signatures, source fair values, principal/rate evidence where available, and blank output row fields.",
+  "reconciliation_diagnosis": "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "raw_source_rows_current_period",
+    "html_source_row_coordinate_candidates",
+    "gav_reconciliation",
+    "position_purity"
+  ],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 180,
+      "row_index": 11,
+      "cell_indices": [
+        0,
+        6,
+        9,
+        15,
+        21,
+        27,
+        33,
+        39
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "EHOB, LLC appears as a current-period debt position row with rate, maturity, cost, principal, and fair-value cells; selected_by_template_or_detector=false supports a parser/staging coverage gap rather than an aggregate/header classification."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 181,
+      "row_index": 2,
+      "cell_indices": [
+        0,
+        6,
+        12,
+        13,
+        18,
+        19
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Brandt Information Services, LLC 1 appears in a debt-position-like row outside the selected table set; this is coordinate support only, with XBRL/source reconciliation retained as the numeric source of truth."
+    }
+  ],
+  "changed_files": [
+    "pipeline source/parser or audited HPS Corporate Lending table-selection/staging config",
+    "tests covering HPS Corporate Lending debt leaf rows plus a false-positive aggregate/header case"
+  ],
+  "patch_summary": "Bounded patch should route HPS_CORPORATE_LENDING_DEBT_LEAF_V3 debt_position_leaf rows that have current-period XBRL fair value and pass signature status into unified holdings, or adjust the audited HPS table/staging selection so the omitted SOI continuation rows are included. Add regression coverage for this CIK/date and a negative case to avoid admitting aggregate, header, subtotal, comparative-period, or weak substring HTML matches.",
+  "source_reconciliation_effect": "Expected to reduce or clear the 17 blocking_source_position_like_parser_mismatch missing_from_pipeline rows for CIK 0001838126 report date 2025-12-31, without clearing unrelated residuals or value mismatches.",
+  "gav_effect": "Context only; GAV already passes at 1.0, so the patch should not rely on GAV improvement as its justification.",
+  "tests_validation_plan": "pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py; python -m pipeline.main --unified --validate",
+  "requires_human_merge": true,
+  "missing_evidence": "",
+  "residual_risk": "HTML coordinate evidence is partial and includes weak substring candidates for several blocker identifiers; implementation should be driven by XBRL/source reconciliation rows and exact parser/staging rules, not by generic HTML name fragments. The raw_source_rows_current_period evidence lists only 11 missing rows while source_only_blocker_rows lists 17, so validation must confirm the full blocker group is addressed.",
+  "reviewer_notes": "Do not patch generated CSV or frontend JSON outputs. The mechanism is source-reconciliation based: current-period source rows are parsed as position-like debt leaves with source fair values but have no unified output identities. HTML is cited only for identity/classification support."
+}

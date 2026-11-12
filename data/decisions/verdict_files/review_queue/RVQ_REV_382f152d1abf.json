@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_382f152d1abf",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "2002-02-24",
+  "anchor_value": "2028-02-24",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 24,
+      "quoted_text": "Hoffmaster Group, Inc. | 03/15/24 | Incremental Term Loan - 10.82 % (SOFR + 6.25 %, 2.00 % Floor) | 0.5 | % | 807,665 | 02/24/2 8 | 794,785 | 805,242"
+    }
+  ],
+  "rationale": "The flagged holding is localized to the Hoffmaster Group, Inc. incremental term loan. The extracted maturity_date is 2002-02-24, which is before the 2024-12-31 report date, but the raw SOI row shows the maturity as 02/24/2 8, a spaced rendering of 02/24/28. The correct maturity is therefore 2028-02-24, so the maturity_not_past flag reflects a real date extraction/parsing error rather than a past-maturity instrument."
+}

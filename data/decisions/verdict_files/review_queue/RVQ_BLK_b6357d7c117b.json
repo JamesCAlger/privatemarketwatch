@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_b6357d7c117b",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 377949,
+  "anchor_value": 377949,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 54,
+      "quoted_text": "Total Unfunded Portfolio Company Commitments | $ | 377,949 | $ | ( 1,982 | )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source table 22 is an unfunded-commitment schedule. Row 54 follows the individual portfolio-company commitment rows and is explicitly the terminal total, with unfunded commitments of 377,949 and fair value of (1,982), in thousands. It is not an investee position, so the absence of a corresponding extracted position is correct and the category-keyword/no-position flag is a false alarm."
+}

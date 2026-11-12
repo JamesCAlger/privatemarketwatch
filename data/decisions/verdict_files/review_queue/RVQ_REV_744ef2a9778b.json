@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_744ef2a9778b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 164829686,
+  "anchor_value": 164829686,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 40,
+      "quoted_text": "Total Non-controlled, non-affiliated investments | $ | 165,413,414 | $ | 164,829,686 | 192.44 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 6,
+      "quoted_text": "Term Loan | First Lien | 3M SOFR+ 6.50 % | 1.50 % | 11.40 % | 3/31/2023 | 3/31/2028 | Services: Business | $ | 3,736,348 | $ | 3,642,939 | $ | 3,642,939 | 4.25 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate coverage flag: the raw SOI uses separate numeric leaves for principal/shares, amortized cost, fair value, and percent of net assets. The current-period investment rows therefore naturally have only one fair-value leaf among multiple numeric leaves, while the SOI fair-value total is present and matches the observed fair-value anchor at 164,829,686. The 145/290 fair-value-leaf ratio is a denominator/rule-scope artifact, not evidence that fair values are missing from the holdings."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_12caadf85bc6",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 26587210000,
+  "anchor_value": 25007853000,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 20,
+      "quoted_text": "Total Investment Portfolio | $ | 25,063,146 | $ | 25,007,853 | 201.09 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 25,063,146 and $ 25,109,408 at March 31, 2026 and December 31, 2025, respectively) | 25,007,853 | 25,337,420",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The March 31, 2026 Schedule of Investments total and the balance-sheet total independently agree at $25,007,853,000, while the extracted holdings sum is $26,587,210,000, an excess of $1,579,357,000. The filing also contains separate alternate portfolio schedules near $1.5-$1.6 billion, supporting an entity/dimension scope leak. The exact leaked row set is not safely localized from the available row-disposition evidence, so localized is false."
+}

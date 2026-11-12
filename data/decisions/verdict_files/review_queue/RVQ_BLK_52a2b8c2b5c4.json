@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_52a2b8c2b5c4",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_source_row",
+  "observed_value": "SOFR / 15.00% spread",
+  "anchor_value": "SOFR / 15.00% spread",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 23,
+      "quoted_text": "NEP Group Holdings, Inc. | (14) | Series B Preferred Shares | 18.68 % PIK | SOFR | 15.00 % | 10/16/2025 | 10,000 | 10,400 | 10,468",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 within-row review. The filing schedule header identifies separate Dividend Rate, Reference Rate, and Spread columns. In table 18 row 23, the NEP Series B Preferred Shares row reports 18.68% PIK, SOFR, and 15.00% in those respective columns. Thus the structured SOFR reference rate and 15.00% spread are directly corroborated by raw source; the uncorroborated-reference check is wrong. No aggregate anchor is relevant."
+}

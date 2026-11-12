@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_REV_c76d5f34ca8f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 25.0,
+  "anchor_value": 25.0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 25,
+      "row_index": 4,
+      "quoted_text": "Twin Star International, Inc. | 10/03/24 | 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.2 | % | $ | 698,149 | 06/18/26 | $ | 698,149 | $ | 698,149"
+    },
+    {
+      "table_index": 25,
+      "row_index": 5,
+      "quoted_text": "Twin Star International, Inc. | 01/29/25 | 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.1 | % | 426,040 | 06/18/26 | 426,040 | 426,040"
+    },
+    {
+      "table_index": 25,
+      "row_index": 6,
+      "quoted_text": "Twin Star International, Inc. | 01/29/25 | 14th Amendment Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.2 | % | 977,875 | 06/18/26 | 977,875 | 977,875"
+    },
+    {
+      "table_index": 25,
+      "row_index": 7,
+      "quoted_text": "Twin Star International, Inc. | 03/31/25 | 15th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.2 | % | 676,966 | 06/18/26 | 676,966 | 676,966"
+    },
+    {
+      "table_index": 25,
+      "row_index": 8,
+      "quoted_text": "Twin Star International, Inc. | 03/31/25 | 15th Amendment Discretionary Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.2 | % | 659,849 | 06/18/26 | 659,849 | 659,849"
+    },
+    {
+      "table_index": 25,
+      "row_index": 9,
+      "quoted_text": "Twin Star International, Inc. | 06/11/25 | 16th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 0.3 | % | 1,274,000 | 06/18/26 | 1,274,000 | 1,274,000"
+    },
+    {
+      "table_index": 25,
+      "row_index": 10,
+      "quoted_text": "Twin Star International, Inc. | 08/22/25 | 17th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) | 1.5 | % | 6,516,680 | 06/18/26 | 6,516,680 | 6,516,680"
+    },
+    {
+      "table_index": 25,
+      "row_index": 15,
+      "quoted_text": "WDE TorcSill Holdings LLC (2) | 08/13/24 | Protective Advance Term Loan - 25.00 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) | 0.8 | % | 3,088,490 | 04/30/28 | 3,088,490 | 3,442,740"
+    }
+  ],
+  "rationale": "C117 flags pik_rate values above 20% as outliers. Raw SOI rows show the flagged 25.0 rates are actually disclosed as 25.00% inc PIK, with the coupon described as fixed/all PIK or otherwise all PIK. The stored value therefore matches source; the flag is an advisory outlier rather than a data error."
+}

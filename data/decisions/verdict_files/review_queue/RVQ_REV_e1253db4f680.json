@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_e1253db4f680",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": -54.4,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Investments Total | $ | 646,250 | $ | 646,250 | - 54.4 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0, but the source investment schedule reports Investments Total at -54.4% of NAV.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 8,
+        "quoted_text": "Investments Total | $ | 646,250 | $ | 646,250 | - 54.4 | %"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor check: the raw schedule total in table 10 row 8 shows Investments Total fair value of 646,250 and -54.4% of NAV, while the flagged oracle metric reports pct_sum=0.0%. The related controlled-affiliate roll-forward confirms the 646,250 fair value but provides no contrary percentage anchor. The source therefore grounds an aggregate percentage extraction gap rather than a false alarm."
+}

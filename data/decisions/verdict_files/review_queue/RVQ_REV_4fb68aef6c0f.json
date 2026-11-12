@@ -1,0 +1,73 @@
+{
+  "review_id": "RVQ_REV_4fb68aef6c0f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "non-USD principal present in source schedule",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 44,
+      "row_index": 4,
+      "quoted_text": "CD&R Madison Parent Ltd (United Kingdom) | ^ | (2)(6)(13) | Business Services | SONIA | 6.25 %, 2.00 % PIK | 13.44 % | 2/27/2023 | 2/27/2030 | \\u00a3 | 261 | 301 | 335 | 0.03",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 5,
+      "quoted_text": "CD&R Madison Parent Ltd (United Kingdom) | ^ | (2)(6) | Business Services | EURIBOR | 5.75 %, 2.00 % PIK | 11.71 % | 2/27/2023 | 2/27/2030 | \\u20ac | 122 | 125 | 136 | 0.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 4,
+      "quoted_text": "Excelitas Technologies Corp. | + | (2) | Capital Equipment | EURIBOR | 5.75 % | 9.74 % | 8/12/2022 | 8/12/2029 | \\u20ac | 2,525 | 2,548 | 2,751 | 0.25",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 8,
+      "quoted_text": "Hadrian Acquisition Limited (United Kingdom) | + | (2)(3)(6)(9) | Diversified Financial Services | SONIA | 5.25 %, 3.43 % PIK | 13.87 % | 2/28/2022 | 2/28/2029 | \\u00a3 | 7,593 | 9,899 | 9,630 | 0.87",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 9,
+      "quoted_text": "Hadrian Acquisition Limited (United Kingdom) | + | (2)(3)(6)(13) | Diversified Financial Services | SONIA | 5.00 %, 2.75 % PIK | 12.94 % | 2/28/2022 | 2/28/2029 | \\u00a3 | 1,964 | 2,277 | 2,476 | 0.22",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 45,
+      "row_index": 18,
+      "quoted_text": "Infront Luxembourg Finance S.\\u00c0 R.L. (Luxembourg) | +# | (2)(6) | Leisure Products & Services | EURIBOR | 9.00 % | 12.96 % | 5/28/2021 | 5/28/2027 | \\u20ac | 33,000 | 39,377 | 36,339 | 3.29",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 6,
+      "quoted_text": "Stonegate Pub Company Bidco Limited (United Kingdom) | + | (2)(6) | Beverage & Food | SONIA | 8.50 % | 13.69 % | 3/12/2020 | 3/12/2028 | \\u00a3 | 20,000 | 24,876 | 22,204 | 2.01",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 51,
+      "row_index": 18,
+      "quoted_text": "CD&R Madison Parent Ltd (United Kingdom) | Delayed Draw | 1.50 | \\u00a3 | 43 | 1",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Source schedule contains non-USD debt principal amounts, but the extracted holdings rows flagged by FX01 have blank principal_amount_usd.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 44,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "FX01 flagged eight rows where non-USD source debt principal exists but principal_amount_usd is blank in the extracted holdings issue rows. The raw schedule shows GBP and EUR principal cells in the Par/Principal Amount column for current-period debt rows; those rows require USD-normalized principal for par analytics, so the blank extracted principal_amount_usd is a real extraction/normalization gap rather than a false alarm."
+}

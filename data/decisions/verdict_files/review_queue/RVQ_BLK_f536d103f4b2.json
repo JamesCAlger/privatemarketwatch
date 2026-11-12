@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_f536d103f4b2",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 544170799,
+  "anchor_value": 224956333,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "3.6% | 7,708,952 | 7,490,795 (blank issuer/investment industry subtotal row)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 10,
+      "quoted_text": "5.2% | 11,098,538 | 11,090,676 (blank issuer/investment industry subtotal row)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (2) | 105.5% | 226,246,287 | 224,956,333",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "Blank-issuer industry subtotal rows are interleaved with genuine positions and inflate the extracted position sum above the filing total.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 5,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation is decisive. The extracted position sum is 544,170,799, while the filing schedule reports total debt and equity investments at fair value of 224,956,333 (table 8 row 16); the filing's fair-value hierarchy independently reports Level 3 investments of 224,956 thousand (table 21 row 5). The schedule contains repeated blank-issuer industry subtotal rows among position rows, including table 5 rows 7 and 10, establishing subtotal leakage as the extraction mechanism. Cash equivalents are separately reported and do not explain the 319,214,466 excess."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_428491f87b9c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -9000.0,
+  "anchor_value": -9000.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 17,
+      "row_index": 19,
+      "quoted_text": "Appfire Technologies, LLC | (4) (5) (10) | S + | 5.50 % | 10.33 % | 03/09/2027 | 24 | 17 | ( 9 ) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level check. The flagged holding row is source-faithful: the schedule row for Appfire Technologies, LLC shows par 24, cost 17, and fair value (9), matching the extracted fair_value of -9000. The row is in the investment schedule, while the separate unfunded commitment table lists different Appfire commitment rows with fair values (32) and (3), so this is not an extraction of an unfunded-commitment fair value into the funded row. Because the challenged value is correct against raw source, the C103 warning is a false alarm rather than a data error."
+}

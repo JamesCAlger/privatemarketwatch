@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_ac32aa962e08",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 844882000.0,
+  "anchor_value": 849354000.0,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 874,196 and $ 823,217 , respectively) | 849,354 | 804,115",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate check. Raw filing totals show total investments at fair value of 849,354 thousand in both the investment schedule and balance sheet, matching the companyfacts_fv anchor. The extracted position sum in the bundle is 844,882,000, an undershoot of 4,472,000. Cash equivalents are disclosed separately below total investments, so they do not explain the undershoot. The available totals structure does not localize the missing amount to a specific position row, but the source-backed anchor disagreement proves an extraction gap."
+}

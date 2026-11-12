@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_132cc32b61f4",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 327,
+  "anchor_value": 327,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 4,
+      "quoted_text": "Total Investment Portfolio | $ | 1,677,854,551 | $ | 1,639,681,521 | 209.61 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 71,
+      "row_index": 20,
+      "quoted_text": "Total Investment Portfolio | $ | 1,590,134,722 | $ | 1,583,881,521 | 209.69 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The source-count side of E07 appears to include a later comparative-period investment schedule ending at the 2024 fair value total, while the reviewed report_date is 2025-12-31.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 71,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "E07 compares source=597 to output=327 for the 2025-12-31 CIK-quarter, but the raw filing separates the current and comparative schedules. The current investment schedule closes at table 57 row 4 with fair value 1,639,681,521, matching the flagged fund_quarter_fv_m for 2025. A separate later schedule closes at table 71 row 20 with fair value 1,583,881,521, the 2024 comparative total also shown in the filing totals. That comparative-period segment should not be counted as 2025 current positions, so the aggregate count mismatch is a check/source-scope false alarm rather than a current-output data error."
+}

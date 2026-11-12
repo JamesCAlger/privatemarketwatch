@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_BLK_767b8d48f093",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2943.767,
+  "anchor_value": 2943.879,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Total Investments, at fair value (amortized cost of $2,963,987 and $2,883,469, respectively) | 2,943,879 | 2,882,954",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation disproves the apparent 51.7% coverage loss. The filing reports current total investments at fair value of $2,943.879 million, while the extracted holdings total is $2,943.767 million, a difference of only $0.112 million (about 0.004%). Therefore an output count of 342 cannot represent omission of roughly half the investment value. The source count of 708 is not a comparable position-count anchor; it is consistent with duplicated or fact-level cardinality (for example, multiple monetary facts per investment). E07 is a false alarm caused by a bad source-count anchor, not a holdings data error."
+}

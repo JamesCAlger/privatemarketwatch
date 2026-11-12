@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_2534c71f2c04",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  67.1,
+    "anchor_value":  100,
+    "confidence":  0.75,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  29,
+                                  "row_index":  4,
+                                  "quoted_text":  "ACI Group Holdings, Inc. - First Lien - Undrawn: Reference, Spread, and Interest Rate columns are source dashes.",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  5,
+                                  "quoted_text":  "Interest Rate Type schedule totals to 100.00 percent of investments.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "rule_scope",
+                         "detail":  "The dl_rate_fill warning is counting source-native no-rate unfunded commitments as missing-rate defects; funded direct-lending rows nearby carry disclosed rates.",
+                         "fix_class":  "rule_scope",
+                         "citation":  {
+                                          "table_index":  29,
+                                          "row_index":  4
+                                      }
+                     }
+                 ],
+    "rationale":  "False alarm. The raw schedule shows at least one representative flagged-style direct-lending unfunded commitment with dashes in the Reference, Spread, and Interest Rate columns, so a blank extracted interest_rate is source-faithful for that row rather than a data error. Nearby funded ACI rows in table 19 have disclosed rates of 9.80 percent and 9.30 percent, indicating the issue is the aggregate check scope over unfunded commitments, not a general inability to extract disclosed rates. The rate-type summary also totals the investments to 100.00 percent, so the low 67.1 percent fill metric is not independently a source-grounded defect."
+}

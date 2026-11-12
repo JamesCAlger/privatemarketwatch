@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_a0428284ae24",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 250,
+  "anchor_value": 0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "MMGY Global LLC Term Loan | SOFR + 5.50% | par 7,408,002 | cost $7,305,249 | fair value $7,230,210",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 6,
+      "quoted_text": "MMGY Global LLC Revolving Credit Facility | SOFR + 5.50% | par 572,401 | cost 546,446 | fair value 523,338",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw schedule table 13 shows accounting-style currency-symbol suppression: row 5 prints dollar signs for the cost and fair-value columns, while the immediately following USD SOFR loan row 6 omits the repeated symbols but remains in the same columns. The par column contains numeric amounts and no contrary foreign-currency label. Treating blank repeated presentation cells as non-USD creates the 250 FX01 fires; the check's currency classification is wrong, not the source data. No aggregate anchor is applicable; schedule_total names the filing schedule used as the source anchor."
+}

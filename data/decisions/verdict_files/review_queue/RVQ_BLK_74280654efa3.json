@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_74280654efa3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1166759000,
+  "anchor_value": 3347317000,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 43,
+      "row_index": 33,
+      "quoted_text": "Total Investments | $ | 3,323,282 | $ | 3,347,317 | 208.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 35,
+      "row_index": 7,
+      "quoted_text": "Total investments at fair value (amortized cost of $ 3,323,282 and $ 3,539,153 , respectively) | 3,347,317 | 3,518,412",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "HTML extraction captured only 59 rows totaling 1,166,759,000, while the raw investment schedule total fair value is 3,347,317,000.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 43,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate flag. The raw SOI total row reports Total Investments fair value of 3,347,317 thousand, and the balance sheet total investments at fair value reports the same 3,347,317 thousand. The bundle's companyfacts fair value is 3,347,317,000, agreeing with the raw filing anchor after scale, but the HTML extraction sum is only 1,166,759,000 across 59 rows. The check is therefore identifying a real extraction gap rather than a bad anchor."
+}

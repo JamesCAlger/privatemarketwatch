@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_ad1a2660ff45",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "n/a",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 18,
+      "quoted_text": "Adept AG Holdings, LLC | (12)(21)(22) | n/a | n/a | n/a | 3/31/2025 | 8/11/2027 | 88 | 83 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 19,
+      "quoted_text": "Arcserve Cayman Opco LP | (21) | n/a | n/a | n/a | 3/16/2021 | 3/16/2027 | 988 | 968 | - | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 3,
+      "quoted_text": "Vice Acquisition Holdco, LLC | (21)(28) | n/a | n/a | n/a | 5/2/2019 | n/a | 477 | $ | 477 | $ | - | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Private credit rows exist where the filer reports n/a for Index, Spread, and Interest Rate, leaving no usable rate or basis spread for income-return computation.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 31,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows with no interest_rate or basis_spread. Raw SOI rows for debt positions show the rate fields are explicitly n/a rather than a numeric rate: Adept AG Holdings, Arcserve Cayman Opco, and Vice Acquisition Holdco each have n/a in Index, Spread, and Interest Rate with principal/cost shown. The missing rate condition is therefore real in the source-backed platform data, not an unreadable-source case or a parser-only false alarm."
+}

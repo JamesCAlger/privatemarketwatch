@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_63726d31f752",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_period_false_positive",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 166,
+  "anchor_value": 166,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 21,
+      "quoted_text": "ACAS Equity Holdings Corporation (5) | Investment company | Common stock | 01/2017 | 589 | 0.4 | 0.4 | (6)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 28,
+      "quoted_text": "Class B common units | 07/2022 | 100,000 | 0.1 | 0.1 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP03 flagged these holdings as comparative-period rows, but raw source checks show representative flagged positions are present in the current 2024-09-30 schedule of investments with matching values. ACAS common stock appears as a current SOI row at table 46 row 21 with fair value 0.4 million, matching the extracted 400000 fair value. AHR Class B common units appears under the current AHR position group at table 21 row 28 with fair value 0.1 million, matching the extracted 100000 fair value. The warning therefore appears to be a rule-scope/source-period false positive rather than a retained comparative-period fact."
+}

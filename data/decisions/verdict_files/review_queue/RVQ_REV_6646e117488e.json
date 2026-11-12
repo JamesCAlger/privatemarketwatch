@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_6646e117488e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -18000,
+  "anchor_value": 40090000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 13,
+      "quoted_text": "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582) | 5.2 % | (18) | $ | 40,090 | 6.1 | % | $ | 40,090",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted fair_value -18000 appears to come from note marker (18), while the source row's fair value is $40,090 thousand.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 47,
+        "row_index": 13,
+        "quoted_text": "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio (CUSIP 61747C582) | 5.2 % | (18) | $ | 40,090 | 6.1 | % | $ | 40,090"
+      }
+    }
+  ],
+  "rationale": "C103 flags 17 negative fair_value rows. Raw source shows several negative fair values are real schedule amounts, but at least one flagged value is a data error: the source row for Morgan Stanley Institutional Liquidity Funds has note marker (18) near the rate and a positive fair value of $40,090 thousand, so the stored -18000 fair_value is a parsing/extraction defect rather than the source fair value."
+}

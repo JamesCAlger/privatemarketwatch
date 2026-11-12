@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_39e87034b245",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "12/23/2025; 3/31/2025; 12/8/2025",
+  "anchor_value": "Acquisition Date (not source period)",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 30,
+      "quoted_text": "FH DMI Buyer Inc | First Lien Senior Secured Revolving Loan | SOFR + 4.750% | Acquisition Date 12/23/2025 | Maturity Date 10/11/2030",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Goldeneye Parent, LLC | First Lien Senior Secured Revolving Loan | SOFR + 4.750% | Acquisition Date 3/31/2025 | Maturity Date 3/31/2032",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 19,
+      "quoted_text": "PROS Parent, Inc. | First Lien Senior Secured Revolving Loan | SOFR + 4.750% | Acquisition Date 12/8/2025 | Maturity Date 12/9/2032",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw SOI source shows each flagged earlier date in the Acquisition Date column of a position reported at March 31, 2026, followed by a distinct future Maturity Date. PP03 has mistaken an instrument acquisition date embedded in the identifier for a comparative source period; the three retained rows are valid current-report positions."
+}

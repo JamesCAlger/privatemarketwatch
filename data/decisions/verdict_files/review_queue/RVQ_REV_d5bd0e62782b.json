@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_d5bd0e62782b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Company United Musculoskeletal Partners Acquisition Holdings, LLC, Industry Health Care Providers & Services, Type of Investment Delayed Draw Term Loan, Reference Rate and Spread SOFR + 5.75%, Interest Rate 10.79%/10.81%/11.03%, Maturity 07/15/28",
+  "anchor_value": "United Musculoskeletal Partners Acquisition Holdings, LLC",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 37,
+      "quoted_text": "United Musculoskeletal Partners Acquisition Holdings, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 5.75 % | (Q) | 10.79 % | 07/15/28 | 596 | 587 | 574 | (6)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 39,
+      "quoted_text": "United Musculoskeletal Partners Acquisition Holdings, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 5.75 % | (Q) | 10.81 % | 07/15/28 | 863 | 849 | 831 | (2)(6)(9)"
+    },
+    {
+      "table_index": 13,
+      "row_index": 38,
+      "quoted_text": "United Musculoskeletal Partners Acquisition Holdings, LLC | Health Care Providers & Services | Delayed Draw Term Loan | SOFR | + | 5.75 % | (Q) | 11.03 % | 07/15/28 | 379 | 373 | 365 | (6)(9)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name contains the full row descriptor for the 10.79% delayed draw loan; correct issuer_name is United Musculoskeletal Partners Acquisition Holdings, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 37
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name contains the full row descriptor for the 10.81% delayed draw loan; correct issuer_name is United Musculoskeletal Partners Acquisition Holdings, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 39
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name contains the full row descriptor for the 11.03% delayed draw loan; correct issuer_name is United Musculoskeletal Partners Acquisition Holdings, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "C203 is a Class 1 issuer_name length flag. The raw schedule of investments separates the issuer name from industry, investment type, spread, interest rate, and maturity on table 13 rows 37-39. The stored flagged values concatenate those separate fields into issuer_name, so the data field is wrong rather than the check."
+}

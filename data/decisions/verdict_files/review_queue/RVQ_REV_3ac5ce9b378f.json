@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3ac5ce9b378f",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2292614325,
+  "anchor_value": 2292614325,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 13,
+      "quoted_text": "Cadence - Southwick, Inc. (i)(l)(r) | Term Loan | SOFR + 4.75 % | 8.74 % | 5/3/2029 | 7,028,306 | 6,891,270 | 7,028,306",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 46,
+      "row_index": 15,
+      "quoted_text": "Cadence - Southwick, Inc. (i)(q) | Term Loan | SOFR + 4.75 % | 8.72 % | 5/3/2029 | 1,307,832 | 1,289,465 | 1,307,832",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 65,
+      "row_index": 6,
+      "quoted_text": "Total Investment Portfolio | $ | 2,314,667,480 | $ | 2,292,614,325 | 179.79 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 flags duplicate position keys, with the bundle example pointing to Cadence - Southwick term loans. Raw source shows two separate Cadence - Southwick Term Loan rows, not duplicate text: row 13 has interest rate 8.74%, par 7,028,306, cost 6,891,270, fair value 7,028,306, while row 15 has interest rate 8.72%, par 1,307,832, cost 1,289,465, fair value 1,307,832. The filing schedule total fair value is also readable and ties to the bundle's fund fair value, so the duplicate-key flag is best explained by an over-coarse duplicate key rather than a source data duplication."
+}

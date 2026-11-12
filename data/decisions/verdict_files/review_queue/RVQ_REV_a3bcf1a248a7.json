@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a3bcf1a248a7",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 179475000,
+  "anchor_value": 179475000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "Total Investments (9) - 135.8 % | $ | 196,338 | $ | 179,475",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Companies less than 5% owned (cost: $ 157,354 and $ 160,647 , respectively) | $ | 152,230 | $ | 157,472",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 5,
+      "quoted_text": "Companies 5% to 25% owned (cost: $ 38,984 and $ 38,553 , respectively) | 27,245 | 26,994",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "GAV_BDC02 flagged no comparison denominator, but the raw filing provides one. The current-period schedule reports Total Investments fair value of 179,475 (in thousands), and the balance sheet investment categories 152,230 plus 27,245 also tie to 179,475. The extracted current holdings fair values sum to 179,475,000 dollars, matching the schedule anchor, so the flag is a check/anchor-selection false alarm rather than a data error."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_984cbbed3de0",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.09,
+  "anchor_value": 0.09,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 77,
+      "row_index": 16,
+      "quoted_text": "Total distributions declared to common shareholders: (0.09) per share for the three months ended March 31, 2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 6,
+      "quoted_text": "Net investment income (loss): 0.02 per share for the three months ended March 31, 2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 77,
+      "row_index": 32,
+      "quoted_text": "Net investment income (loss) after fees waived or reimbursed: 1.56% for the three months ended March 31, 2026",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source confirms the extracted economic relationship: the filing reports a $0.09 per-share distribution, $0.02 per-share net investment income, and a 1.56% annualized NII ratio. The distribution exceeding 1.5 times the income-yield heuristic therefore reflects the issuer's disclosed results, not a wrong extracted field. F16 is a heuristic false positive for this quarter."
+}

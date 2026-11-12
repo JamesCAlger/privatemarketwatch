@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_14dcabf49a9c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 209.61,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 4,
+      "quoted_text": "Total Investment Portfolio | $ | 1,677,854,551 | $ | 1,639,681,521 | 209.61 %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extracted percentage-of-net-assets sum is 0.0%, but the source schedule total is 209.61% for Total Investment Portfolio.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check: the oracle observed pct_sum is 0.0%, while the filing's own SOI total row reports Total Investment Portfolio fair value of $1,639,681,521 and Percentage of Net Assets of 209.61%. The same schedule also ties to the fund_quarter_fv_m anchor in the bundle, so the raw source decides the issue as a real extraction gap rather than a false alarm."
+}

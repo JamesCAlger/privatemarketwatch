@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_3749359df91b",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 745224,
+  "anchor_value": 225436,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 92,
+      "row_index": 0,
+      "quoted_text": "AS OF DECEMBER 31, 2025 | AS OF DECEMBER 31, 2024",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 92,
+      "row_index": 7,
+      "quoted_text": "Unaffiliated investments at market value | $ | 56,271* | $ | 745,224*",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 92,
+      "row_index": 10,
+      "quoted_text": "Total Market value (Note 6) | 225,436 | 1,060,474",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 110,
+      "row_index": 10,
+      "quoted_text": "TOTAL INVESTMENTS (Cost $ 89,914,530 ) - ( 95.8 %) | 225,436",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted HTML fair value sum 745,224 is the 2024 unaffiliated investments at market value, while the 2025 schedule and balance sheet total is 225,436.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 92,
+        "row_index": 7
+      }
+    }
+  ],
+  "rationale": "The filing presents columns for December 31, 2025 and December 31, 2024. In the same balance sheet, 745,224 appears under the 2024 column for unaffiliated investments at market value, while the 2025 total market value is 225,436. The schedule of investments also states TOTAL INVESTMENTS of 225,436 for 2025. Therefore the html_agg observed value is a comparative-period leak from the raw source, not the correct 2025 aggregate."
+}

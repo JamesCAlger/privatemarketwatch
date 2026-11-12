@@ -1,0 +1,48 @@
+{
+  "review_id": "RVQ_REV_0981187c09e3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "12.000 % PIK; 17.000 % PIK",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 178,
+      "row_index": 44,
+      "quoted_text": "Mavenir Systems, Inc. 2L Term Loan (2)(3) | N/A | 12.000 % PIK | 07/26/2030 | 561 | 357 | 219 | 0.13 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 178,
+      "row_index": 53,
+      "quoted_text": "GCOM (3)(8) | N/A | 17.000 % PIK | 02/16/2029 | 18,633 | 16,662 | 16,724 | 9.65 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Mavenir Systems, Inc. 2L Term Loan source row has interest rate 12.000% PIK, but the extracted private-credit row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 178,
+        "row_index": 44,
+        "quoted_text": "Mavenir Systems, Inc. 2L Term Loan (2)(3) | N/A | 12.000 % PIK | 07/26/2030 | 561 | 357 | 219 | 0.13 | %"
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "GCOM source row has interest rate 17.000% PIK, but the extracted private-credit row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 178,
+        "row_index": 53,
+        "quoted_text": "GCOM (3)(8) | N/A | 17.000 % PIK | 02/16/2029 | 18,633 | 16,662 | 16,724 | 9.65 | %"
+      }
+    }
+  ],
+  "rationale": "X02 flags two private-credit rows with blank interest_rate and basis_spread. The raw SOI source has explicit PIK interest rates for the corresponding debt instruments: Mavenir Systems, Inc. 2L Term Loan shows 12.000% PIK, and GCOM shows 17.000% PIK. Because source supplies rate data that the extracted rows missed, this is a real extraction gap."
+}

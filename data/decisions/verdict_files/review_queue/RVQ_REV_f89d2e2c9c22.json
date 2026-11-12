@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_f89d2e2c9c22",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 1000.0,
+  "anchor_value": 1000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 121,
+      "row_index": 4,
+      "quoted_text": "Amergin Asset Management, LLC(24)(26) | Class A Units | N/A | N/A | 50,000,000 | $ | 1 | $ | 1,555 | -- | %"
+    }
+  ],
+  "rationale": "X07 fired because fair_value exceeds 10x cost for a purported non-equity position. The raw SOI row shows the stored cost and fair value are correctly sourced from an equity-style position: Amergin Asset Management, LLC, Class A Units, with N/A interest and maturity, amortized cost $1 thousand and fair value $1,555 thousand. The value relationship is real in source but outside the rule's non-equity scope."
+}

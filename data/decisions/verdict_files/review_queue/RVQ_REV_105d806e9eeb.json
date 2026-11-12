@@ -1,0 +1,62 @@
+{
+    "review_id":  "RVQ_REV_105d806e9eeb",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  407509401,
+    "anchor_value":  407509401,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  36,
+                                  "row_index":  29,
+                                  "quoted_text":  "Electro Methods | Senior Secured Initial Term Loans | S+ | 4.75 % | 8.40 % | 2/6/2025 | 2/23/2032 | 2,985,000 | 2,944,260 | 2,977,538",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  39,
+                                  "quoted_text":  "Electro Methods | Senior Secured Revolving Credit Facility | S+ | 4.75 % | 8.40 % | 2/6/2025 | 2/23/2032 | - | ( 12,191 | ) | -",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  35,
+                                  "quoted_text":  "Tronair | (k) | Senior Secured Initial Term Loan | S+ | 3.75 % | 7.40 % | 12/18/2025 | 12/22/2032 | 400,000 | 395,000 | 395,000",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  37,
+                                  "quoted_text":  "Tronair | (k) | Senior Secured Revolving Loan | S+ | 3.75 % | 7.40 % | 12/18/2025 | 12/22/2032 | - | ( 1,250 | ) | -",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  31,
+                                  "quoted_text":  "Whitcraft | Senior Secured Initial Term Loan | S+ | 5.00 % | 8.65 % | 3/31/2023 | 9/30/2031 | 1,945,000 | 1,898,396 | 1,930,413",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  38,
+                                  "quoted_text":  "Whitcraft | Senior Secured Revolving Loan | S+ | 5.00 % | 8.65 % | 3/31/2023 | 9/30/2031 | - | ( 10,714 | ) | -",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  19,
+                                  "quoted_text":  "Engine \u0026 Transmission Exchange | (j) | Senior Secured Term Loan A | S+ | 5.00 % | 8.65 % | 5/26/2023 | 5/29/2029 | 4,168,763 | 4,089,483 | 4,168,763",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  26,
+                                  "quoted_text":  "Engine \u0026 Transmission Exchange | (j) | Senior Secured Revolving Loan | S+ | 5.00 % | 8.65 % | 5/26/2023 | 5/29/2029 | - | ( 15,392 | ) | -",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "B02 reports four duplicate position keys, but the raw SOI rows show the alleged duplicate families are separate facilities sharing issuer/rate/maturity: term loans and revolving loans have distinct investment type labels and separate cost/fair-value rows. The schedule total independently ties to 407,509,401, so there is no aggregate duplicate-counting evidence; the check/key is too coarse rather than the source data being duplicated."
+}

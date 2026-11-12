@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_a66b3c47f6a0",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 review of three flagged comparative-period identifier cells could not be grounded because the evidence CLI returned no usable source for overview, tables, or targeted issuer queries; only an XMLParsedAsHTMLWarning was emitted. Per the fail-closed contract, no data-quality judgment is made and the item requires an evidence-cache or parser retry."
+}

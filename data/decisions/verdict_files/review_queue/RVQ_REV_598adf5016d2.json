@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_598adf5016d2",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  "",
+    "observed_value":  0,
+    "anchor_value":  0,
+    "confidence":  0.45,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Class 2 row-level X08 review: the bundle lists three flagged row_keys with only cost values (5.1m, 23.7m, 45.1m) and no issuer/instrument identifiers. Raw source was readable via the evidence CLI. One cost-only candidate could be checked in the SOI (table 57 row 16 shows Common stock with 5.1 amortized cost and dash fair value), but cost-only searches for 23.7m and 45.1m produced multiple non-culprit or adjacent/subtotal matches and did not uniquely identify the flagged rows. Because the exact source rows for all three row_keys cannot be localized from the provided raw-source window, the source checked does not decide whether the X08 item is a data error or a true distressed-position warning."
+}

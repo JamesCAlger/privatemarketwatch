@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_7d10a29444a7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1573.935,
+  "anchor_value": 1574.901,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 30,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 1,576,277 | $ | 1,574,901 | 232.6 | %"
+    },
+    {
+      "table_index": 41,
+      "row_index": 51,
+      "quoted_text": "Total Unfunded Portfolio Company Commitments | $ | 383,802 | $ | ( 1,880 | )"
+    },
+    {
+      "table_index": 46,
+      "row_index": 11,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 773,069 | $ | 778,371 | 218.4 | %"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "E07's source count appears to use mixed-scope source tables, including unfunded commitments and comparative prior-year investment schedules, while the current funded schedule total is tightly aligned with the output fair value.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 41,
+        "row_index": 51
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Tables 42-46 are comparative prior-year investment schedules tying to fair value 778,371, not the 2025 current funded holdings population.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 46,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "The raw 2025 funded schedule total is fair value 1,574,901, which is tight to the extracted fund-quarter fair value of 1,573.935 million in the bundle and does not support a 45.6% current-holdings extraction gap. The extra source-side scope is identifiable in raw source: tables 39-41 are unfunded commitments, ending with Total Unfunded Portfolio Company Commitments, and tables 42-46 are the comparative prior-year schedule tying to 778,371 rather than the 2025 total. Therefore the E07 count comparison is using an overbroad source population, so the blocker flag is a false alarm rather than a real current data error."
+}

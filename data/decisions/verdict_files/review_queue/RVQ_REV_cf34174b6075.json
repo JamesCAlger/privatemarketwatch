@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_cf34174b6075",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1179576000,
+  "anchor_value": 1179576000,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 41,
+      "row_index": 40,
+      "quoted_text": "Kleinfelder Intermediate, LLC^(5) | One stop | SF + | 6.25 | % | N/A(6) | 9/1/2030 | - | ( 4 ) | - | ( 4 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 20,
+      "quoted_text": "COP Exterminators Acquisitions, Inc.^(5) | Senior secured | SF + | 5.50 | % | N/A(6) | 7/1/2029 | - | ( 1 ) | - | ( 1 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 10,
+      "quoted_text": "Total investments | 1,179,576 | 180.4 | 1,178,633",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 4,
+      "quoted_text": "Non-controlled/non-affiliate company investments at fair value (amortized cost of $ 1,179,576 ) | $ | 1,178,633",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source shows the apparent fmt_cost outliers are source-disclosed SOI rows with no principal, N/A interest, and parenthetical amortized cost/fair value amounts, not extraction errors. The SOI total investments amortized cost of 1,179,576 thousand ties to the balance-sheet amortized-cost anchor of 1,179,576 thousand, so the source supports the recorded cost treatment and the weak format flag is over-scoped for these legitimate parenthetical cost rows."
+}

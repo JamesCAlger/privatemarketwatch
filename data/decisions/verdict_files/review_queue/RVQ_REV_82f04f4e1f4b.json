@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_82f04f4e1f4b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "FX01 flagged 17 rows as non-USD debt principal missing principal_amount_usd",
+  "anchor_value": "Raw schedule Par Amount column is USD-denominated with dollar signs and dollar par amounts",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 1,
+      "quoted_text": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value"
+    },
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "CSAT Holdings LLC | Term Loan - 13.15 % (SOFR + 7.50 %, 2.00 % Floor) | $ | 7,869,176 | $ | 7,609,793 | $ | 7,711,793"
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Florida Marine Transporters, LLC | Term Loan B - 13.44 % (SOFR + 8.00 %, 2.00 % Floor) | $ | 9,969,486 | $ | 9,719,673 | $ | 9,849,852"
+    }
+  ],
+  "rationale": "FX01 requires a non-USD source par amount before treating a missing principal_amount_usd as a data error. The raw SOI tables show a Par Amount column with dollar-denominated debt rows; the displayed source does not show foreign-currency par requiring FX conversion. The flag therefore appears to be a rule-scope false alarm rather than a holdings data defect."
+}

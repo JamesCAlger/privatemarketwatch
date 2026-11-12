@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_d6bd7493cd7c",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 11,
+      "quoted_text": "HPC GPFS Arsenal Co-Invest (Cayman) LP | maturity 5/14/2036 | amortized cost 1,081 | fair value 1,080 | 0.2% of net assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "Mews Systems B.V. | maturity 9/14/2029 | units 19,200 | amortized cost 1,312 | fair value 1,536 | 0.3% of net assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 20,
+      "quoted_text": "Rapyd Netherlands B.V. | SOFR + 11.00% | interest rate 15.18% | maturity 9/13/2030 | par 30,742 | amortized cost 27,606 | fair value 28,652",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 3,
+      "quoted_text": "Mews Systems B.V. | SOFR + 9.00% | interest rate 13.31% | maturity 9/14/2029 | par 17,254 | amortized cost 16,095 | fair value 16,934",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 15,
+      "quoted_text": "Acronis International | SOFR + 5.85% (1.00% PIK) | interest rate 11.28% | maturity 4/1/2027 | par 20,258 | amortized cost 20,057 | fair value 20,258",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged five bdc_investment_identifier values as aggregate/subtotal candidates, but the raw investment schedule shows each is a concrete issuer position row with position-level terms and/or units, amortized cost, fair value, and net-asset percentage. Actual subtotal rows are separate lines such as Total First-Lien Debt and Total Other Equity, not these five issuer rows. The rule appears to have matched contextual section text embedded in otherwise valid identifiers rather than a real subtotal leak."
+}

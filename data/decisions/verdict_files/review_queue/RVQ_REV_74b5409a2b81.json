@@ -1,0 +1,122 @@
+{
+  "review_id": "RVQ_REV_74b5409a2b81",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 7,
+      "quoted_text": "LVF Holdings Inc | 1st Lien Delayed Draw Term Loan | S+ 5.50 % | Interest Rate - | cost (59,361) | fair value (57,234)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 25,
+      "quoted_text": "48Forty Solutions LLC | Common Equities | Rate N/A | Interest Rate N/A"
+    },
+    {
+      "table_index": 15,
+      "row_index": 38,
+      "quoted_text": "JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class | Money Market Fund | rate fields blank"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "LVF Holdings 1st Lien Delayed Draw Term Loan is a credit row with source Rate S+ 5.50 % but Interest Rate shown as a dash, so the pipeline should retain usable basis-spread/rate data instead of both rate fields being empty.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "48Forty Solutions common equity is not private credit; N/A rate fields are expected and the row should not be scoped to X02 as PRIVATE_CREDIT.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 14,
+        "row_index": 25
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Beauty Health common equity is not private credit; N/A rate fields are expected and the row should not be scoped to X02 as PRIVATE_CREDIT.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 14,
+        "row_index": 26
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Monomoy Capital Partners IV-Titan partnership interests are equity exposure, not private credit; N/A rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 14,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Wesco Aircraft common equity is not private credit; N/A rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "SP-CREH 19 Highline common equity is not private credit; N/A rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 23
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "TH Liquidating Trust trust-interest row is not private credit; N/A rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 27
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "TH Liquidating Trust second trust-interest row is not private credit; N/A rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 28
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "1035 Mecklenburg Highway real estate property is not private credit; N/A rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "JPMorgan Treasury money market fund is a cash equivalent, not private credit; blank rate fields are expected.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 15,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "X02 flagged 10 PRIVATE_CREDIT rows with no interest_rate or basis_spread. Raw source shows one true credit row, LVF Holdings 1st Lien Delayed Draw Term Loan, has Rate S+ 5.50 % but a dash in Interest Rate, so losing both usable rate fields is an extraction gap. The remaining no-rate rows are source-disclosed common equities, partnership interests, trust interests, real estate, or a money market fund with N/A/blank rate fields; treating them as PRIVATE_CREDIT is a classification/lookthrough defect rather than a valid missing-rate condition."
+}

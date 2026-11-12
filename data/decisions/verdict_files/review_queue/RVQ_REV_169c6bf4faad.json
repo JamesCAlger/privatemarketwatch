@@ -1,0 +1,32 @@
+{
+    "review_id":  "RVQ_REV_169c6bf4faad",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  "source_cell",
+    "observed_value":  "UNIT_STANDARD_USD_VUORH33YOEEJJWMWYX6SZA",
+    "anchor_value":  "USD ($)",
+    "confidence":  0.91,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  9,
+                                  "row_index":  11,
+                                  "quoted_text":  "AIP ATCO Buyer, LLC Term Loan fair value column shows $ 8,646,002",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  9,
+                                  "row_index":  12,
+                                  "quoted_text":  "AIP ATCO Buyer, LLC Revolver fair value column shows 1,211,468 under the same Fair Value ($) column",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  14,
+                                  "row_index":  0,
+                                  "quoted_text":  "Par amount is denominated in U.S. Dollars ($) unless otherwise noted Euro.",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX02 flagged fair_value_currency because the stored value is an internal unit id, UNIT_STANDARD_USD_VUORH33YOEEJJWMWYX6SZA, rather than the literal USD. Raw source shows the flagged investment schedule fair value amounts are in dollar columns, and the filing footnote says par amounts are denominated in U.S. Dollars unless otherwise noted. The source supports USD denomination, so the data value is semantically USD and the rule is over-scoped to the unit-id spelling."
+}

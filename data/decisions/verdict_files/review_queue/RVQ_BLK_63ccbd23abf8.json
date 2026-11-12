@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_63ccbd23abf8",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3993514000,
+  "anchor_value": 2605347000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 6,
+      "quoted_text": "Total Investments - 250.4 % of Net Assets (11), (12) | $ | 2,683,700 | $ | 2,605,347",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 2,
+      "quoted_text": "Total investments | $ | 1,195,016 | $ | 1,084,649",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 2,
+      "quoted_text": "Total investments | $ | 193,151",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extracted fair value includes the standalone PSSL total investments of 1,195,016 thousand in addition to the consolidated schedule total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 30,
+        "row_index": 2
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The extracted fair value includes the standalone PSSL II total investments of 193,151 thousand in addition to the consolidated schedule total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 39,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the filing's consolidated Total Investments fair value is 2,605,347 thousand, matching the companyfacts/comparison anchor of 2,605,347,000. The observed extracted holdings fair value is 3,993,514,000, which equals the consolidated schedule total plus the separate PSSL total investments of 1,195,016 thousand and PSSL II total investments of 193,151 thousand. The over-coverage is therefore a real source-grounded lookthrough/scope error, not a false alarm."
+}

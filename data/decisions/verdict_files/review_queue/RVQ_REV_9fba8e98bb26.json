@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_9fba8e98bb26",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 59,
+  "anchor_value": 59,
+  "confidence": 0.74,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 15,
+      "quoted_text": "First Brands Group, LLC | (21) | SF | 10.00 | % | 13.67 % PIK | 10/2/2025 | 6/29/2026 | 13,935 | 11,508 | 3,626 | 0.1 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 25,
+      "quoted_text": "FLEET Response, LLC (46,462 Series A preferred units) | (17)(21) | n/a | n/a | 10.00 % PIK | 12/30/2024 | - | - | - | - | 0.0%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate review. Targeted raw-source schedule searches show the repeated footnote marker (21) on current-period positions, consistent with the reported count of 59, but the evidence CLI returned no non-accrual wording and did not expose the footnote legend defining marker (21). Without that definition, raw source does not decide whether these positions are genuinely non-accrual or whether the engine mapped an unrelated footnote. The source was usable, so this is source_checked ambiguity, not source_unavailable."
+}

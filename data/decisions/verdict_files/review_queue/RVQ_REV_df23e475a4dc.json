@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_df23e475a4dc",
+  "verdict": "false_alarm",
+  "mechanism": "distressed_position_not_data_error",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 200000.0,
+  "anchor_value": 200000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 46,
+      "row_index": 21,
+      "quoted_text": "Common stock | 12/2019 | 861,000 | 6.0 | 0.2 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 2 row-level X08 review. The raw SOI row for the flagged position shows amortized cost 6.0 million and fair value 0.2 million, so the below-5%-of-cost condition is present in the source itself. Because the extracted low fair value matches the filing rather than a parser or unit error, this is a distressed/marked-down position, not a data error."
+}

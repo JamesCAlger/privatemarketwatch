@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_9ad5a72dc736",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "source_row_structure",
+  "observed_value": 25,
+  "anchor_value": 0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 3,
+      "quoted_text": "Aptean Inc | Revolving Credit Facility | Prime + 3.75% | 10.50% | 1/30/2031 | par 24,234 | cost 24,234 | fair value 23,507",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 4,
+      "quoted_text": "Aptean Inc | Revolving Credit Facility | SOFR + 4.75% | 8.42% | 1/30/2031 | par 169,640 | cost 169,640 | fair value 164,551",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 5,
+      "quoted_text": "MMGY Global LLC | Term Loan | SOFR + 5.50% | 9.20% | 4/26/2029 | par 7,408,002 | cost 7,305,249 | fair value 7,230,210",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 7,
+      "quoted_text": "MMGY Global LLC | Term Loan | SOFR + 5.50% | 9.20% | 4/26/2029 | par 2,955,267 | cost 2,920,098 | fair value 2,884,340",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B02 treats normalized position-key collisions as duplicates, but the raw March 31, 2026 schedule separately discloses economically distinct positions. Aptean's two revolving facilities differ in reference rate, coupon, par, cost, and fair value. MMGY's two term-loan rows share issuer, type, spread, coupon, and maturity but have different par, cost, fair value, and footnote attributes, demonstrating separate tranches rather than duplicate extraction. The check's key omits discriminating source fields, so the 25 collisions do not establish data errors."
+}

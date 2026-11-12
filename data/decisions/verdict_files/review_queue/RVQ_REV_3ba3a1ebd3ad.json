@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_3ba3a1ebd3ad",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "source_row",
+  "observed_value": 12000,
+  "anchor_value": 12000,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 33,
+      "row_index": 25,
+      "quoted_text": "Skillsoft Corp. ( 1,308 Class A shares) (~) (<) (h) | - | - | - (###) | 6/11/2021 | - | - | 508 | 12 | 0.0 | %"
+    }
+  ],
+  "rationale": "X08 fired because fair value is below 5% of cost, but the raw March 31, 2024 schedule itself reports Skillsoft Corp. with amortized cost 508 and fair value 12, in thousands. The extracted scaled values therefore match source; this is a source-confirmed distressed equity valuation, not a holdings data error."
+}

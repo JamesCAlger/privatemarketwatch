@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_88ba93054b15",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "no_comparison",
+  "anchor_value": 410565306,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 12,
+      "quoted_text": "Total Assets | $ | 410,565,306 | $ | 404,727,054",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 47,
+      "quoted_text": "Total Investments | $ | 402,245,114 | $ | 405,398,306 | 206.36 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The filing provides a March 31, 2026 Total Assets denominator of 410,565,306, but the GAV_BDC02 artifact reports comparison_source=None/no_comparison.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 6,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "GAV_BDC02 fired because the BDC GAV reconciliation had no comparison denominator. Raw source is readable and supplies the missing denominator in the balance sheet: Total Assets for March 31, 2026 is 410,565,306. The investment schedule also carries Total Investments fair value of 405,398,306, showing the schedule anchor needed for reconciliation. Therefore the flag reflects a real extraction/anchor gap rather than source ambiguity."
+}

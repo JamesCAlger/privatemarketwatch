@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_3116a7a22a51",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -72000.0,
+  "anchor_value": null,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 20,
+      "quoted_text": "Eagan Parent, Inc. | Delayed Draw Term Loan | 9/8/2027 | 4,804 | (72), where table 54 row 1 labels the final numeric column Fair Value (1), not cost",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source's negative fair value of $72 thousand was stored as cost of -$72,000; cost is not presented in this commitment schedule.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 54,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "C107 is a repeated Class 1 negative-cost flag. Raw table 54 is explicitly an unfunded-commitment schedule: row 1 labels the two measures Unfunded Commitment and Fair Value, and row 20 reports Eagan Parent's 4,804 commitment and parenthesized 72 fair value. The flagged observed cost of -72000 therefore comes from the Fair Value column, while no cost is disclosed in that source row. This grounds a column-remap extraction error."
+}

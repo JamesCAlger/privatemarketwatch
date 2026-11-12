@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_8218a838af25",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 13, "row_index": 16, "quoted_text": "SK Neptune Husky Group Sarl | First Lien Secured Debt - Term Loan | 5.50 % | 1/3/2029 | 9,588 | 9,448 | dash fair value"},
+    {"table_index": 14, "row_index": 30, "quoted_text": "First Lien Secured Debt - Revolver | S + 550, 0.75% Floor | 1/31/2030 | dash par | (137) cost | dash fair value"},
+    {"table_index": 15, "row_index": 30, "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 425, 0.50% Floor | 6/15/2028 | dash par | (140) cost | dash fair value"},
+    {"table_index": 21, "row_index": 32, "quoted_text": "First Lien Secured Debt - Revolver | S + 625, 1.00% Floor | 10/4/2028 | dash par | (7) cost | dash fair value"},
+    {"table_index": 24, "row_index": 6, "quoted_text": "First Lien Secured Debt - Delayed Draw | S + 250, 0.00% Floor | 10/1/2032 | dash par | (10) cost | dash fair value"},
+    {"table_index": 25, "row_index": 5, "quoted_text": "First Lien Secured Debt - Revolver | S + 450, 0.50% Floor | 4/26/2032 | dash par | (151) cost | dash fair value"}
+  ],
+  "rationale": "C104 flagged six stored fair_value values of 0.0. The raw SOI source uses dash fair-value cells for these zero-valued positions, including the cited rows. Since the stored zero matches the filing presentation rather than replacing a nonzero fair value, the C104 warning is not a real data error."
+}

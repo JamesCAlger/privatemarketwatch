@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_5b5f55c904b4",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 562,
+  "anchor_value": 1089,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 235.7 % | $ | 3,403,111 | $ | 3,228,940",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 18,
+      "quoted_text": "Total Investments - 229.2 % | $ | 3,395,166 | $ | 3,261,721",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count combines 562 current-period positions with 527 comparative-period positions, producing 1089, while the output is correctly scoped to the current period.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 41,
+        "row_index": 18
+      }
+    }
+  ],
+  "rationale": "Raw source shows two distinct investment schedules: the current schedule totals fair value at 3,228,940 (table 23 row 19), while the comparative schedule totals 3,261,721 (table 41 row 18). The flagged arithmetic decomposes exactly as 1089 source rows = 562 current output rows + 527 comparative rows. Therefore the output count is correctly period-scoped and E07 is a false alarm caused by comparative-period leakage in the oracle source anchor."
+}

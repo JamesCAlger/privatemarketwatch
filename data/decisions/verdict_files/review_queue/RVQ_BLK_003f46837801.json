@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_003f46837801",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 1325637936.0,
+  "anchor_value": 1310591331.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Total Non-Controlled Affiliated Investments | $ | 20,039,850 | $ | 3,434,607 | $ | ( 29,963 | ) | $ | - | $ | ( 8,397,889 | ) | $ | 15,046,605 | $ | 1,445,832",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 9,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (3) | 154.6% | amortized cost 1,318,252,325 | fair value 1,310,591,331",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted fair value sum exceeds the debt and equity investments anchor by 15,046,605, exactly matching the roll-forward subtotal for Total Non-Controlled Affiliated Investments.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 10,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate triangulation shows the filing's Schedule of Investments debt and equity total fair value is 1,310,591,331, matching the companyfacts_fv anchor. The extracted position sum is 1,325,637,936, an overshoot of 15,046,605. Table 10 row 5 is a roll-forward total, not an investment position, and its September 30, 2025 fair value is exactly 15,046,605, so the conservation failure is a localized subtotal leak."
+}

@@ -1,0 +1,20 @@
+{
+    "review_id":  "RVQ_REV_8a1053e58fb6",
+    "verdict":  "false_alarm",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "nonaccrual_positions=1 for Arise Holdings, Inc. | First Lien Debt 2",
+    "anchor_value":  "source row shows Arise Holdings, Inc. First Lien Debt with 8.24% (PIK), footnotes (6) (14), par 2,415, amortized cost 153, fair value dash; no nonaccrual/accrual-status wording found in raw source queries",
+    "confidence":  0.82,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  64,
+                                  "row_index":  16,
+                                  "quoted_text":  "Arise Holdings, Inc. | (6) (14) | First Lien Debt | S + 4.50 % | 8.24 % (PIK) | 12/9/2027 | 2,415 | 153 | - | - | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "Class 1 localized source check. The flagged row is present in the SOI, but the source text identifies the interest as PIK and does not disclose nonaccrual status. Targeted raw-source searches for non-accrual, non accrual, non accruing, and accrual status returned no hits. The nonaccrual flag appears to be an over-inference from footnote/PIK text rather than a source-supported nonaccrual position."
+}

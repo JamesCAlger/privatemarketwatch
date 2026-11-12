@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_c3b1b50b01cd",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 475.0,
+  "anchor_value": 4.75,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 9,
+      "quoted_text": "Fairbanks Morse Defense (7) | Senior Secured First Lien Term Loan | S + 475 ( 75 Floor) | 9.99 % | 06/2028 | 373 | 364 | 0.5 | 371"
+    },
+    {
+      "table_index": 8,
+      "row_index": 21,
+      "quoted_text": "Harbor Freight Tools USA, Inc (7) | Senior Secured First Lien Term Loan | S + 275 ( 50 Floor) | 8.18 % | 10/2027 | 998 | 984 | 1.3 | 992"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Fairbanks Morse Defense source term is S + 475 bps, equivalent to a 4.75 whole-number percent spread; stored basis_spread is 475.0.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 8,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "rate_scale",
+      "detail": "Harbor Freight Tools source term is S + 275 bps, equivalent to a 2.75 whole-number percent spread; stored basis_spread is 275.0.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 8,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "C115 flags basis_spread values stored outside the expected percentage range. The raw SOI rows show spread terms as S + 475 and S + 275, which are basis-point notation and correspond to 4.75% and 2.75%, while the extracted values are 475.0 and 275.0. The row context also shows normal all-in interest rates of 9.99% and 8.18%, confirming the spread terms were not percentage-rate values."
+}

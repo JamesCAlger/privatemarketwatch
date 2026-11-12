@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_928633fc9cf3",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The raw 10-Q source was readable through the evidence CLI, but the flag identifies four interest_rate records only by opaque row_id and src_context_id. The bundle provides no issuer, instrument, table_index, or row_index for those records, and targeted source searches do not map the identifiers or published 0.0 values to filing rows. Therefore the source cannot distinguish a true zero rate, a blank/not-applicable rate normalized to zero, or a missed textual rate without guessing. No independent rate anchor is available for these four cells."
+}

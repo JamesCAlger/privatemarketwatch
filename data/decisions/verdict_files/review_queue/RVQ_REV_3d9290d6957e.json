@@ -1,0 +1,68 @@
+{
+  "review_id": "RVQ_REV_3d9290d6957e",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 9,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 63,
+      "quoted_text": "Edge Bidco B.V (3)(4)(5) | First-lien loan (EUR 3,423 par, due 2/2029 ) | 2/24/2023 | E + 7.00 % | 10.02 % (incl. 3.25 % PIK) | 3,473 | 3,579 (EUR 3,294 ) | 0.3 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 75,
+      "quoted_text": "RMCF IV CIV XXXV, LP. (11) | Partnership Interest ( 11.94 % ownership) | 6/8/2021 | 1,000 | 1,293 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "Merative L.P. (11)(12)(13) | 989,691 Class A-1 Units | 6/30/2022 | 9,897 | 9,897 | 0.7 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 2,
+      "quoted_text": "Dryden Senior Loan Fund, Series 2018-55A (3)(4)(9) | Structured Product ($ 1,000 par, due 4/2031 ) | 7/25/2022 | L + 2.85 % | 7.64 % | 907 | 885 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 3,
+      "quoted_text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) | Structured Product ($ 1,500 par, due 7/2034 ) | 8/17/2022 | L + 6.50 % | 11.29 % | 1,428 | 1,334 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 7,
+      "quoted_text": "Gulf Stream Meridian, Series 2021-4A (3)(4)(9) | Structured Product ($ 1,015 par, due 7/2034 ) | 6/3/2022 | L + 6.35 % | 11.14 % | 933 | 893 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Gulf Stream Meridian, Series 2021-6A (3)(4)(9) | Structured Product ($ 2,000 par, due 1/2037 ) | 9/12/2022 | L + 6.36 % | 11.15 % | 1,816 | 1,744 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 11,
+      "quoted_text": "Madison Park CLO, Series 2018-28A (3)(4)(9) | Structured Product ($ 1,000 par, due 7/2030 ) | 6/28/2022 | L + 5.25 % | 10.04 % | 887 | 915 | 0.1 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 19,
+      "quoted_text": "Pikes Peak CLO, Series 2021-9A (3)(4)(9) | Structured Product ($ 2,000 par, due 10/2034 ) | 8/31/2022 | L + 6.58 % | 11.39 % | 1,782 | 1,786 | 0.1 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "PP01 flagged nine bdc_investment_identifier values as subtotal candidates because the extracted identifiers include broad section/classification phrases such as Debt Investments, Equity and Other Investments, Healthcare, Education, and Structured Credit. Raw SOI evidence shows each flagged item is an actual position row with an issuer/instrument, acquisition date, monetary columns, and fair value; nearby grid context separates true subtotal/header rows from these positions. The diagnostic is therefore overbroad for these identifiers rather than exposing a data error."
+}

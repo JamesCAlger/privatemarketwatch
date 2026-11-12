@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_edc8a43e0b44",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 437923000,
+  "anchor_value": 342015000,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 61,
+      "row_index": 8,
+      "quoted_text": "Total Affiliate Investments | $ | 4,038 | $ | 27,652 | $ | 99,945 | 81.2 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 10,
+      "quoted_text": "Total Investments | $ | 343,435 | $ | 328,400 | $ | 342,015 | 277.6 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 8,
+      "quoted_text": "Total investments, at fair value (amortized cost of $ 328,400 and $ 363,547 , respectively) | 342,015 | 409,665",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The affiliate subtotal row carries $99.945 million of fair value and appears immediately before the filing's $342.015 million Total Investments row, so treating it as an indexable holding overstates the schedule against the source anchor.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 61,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate reconciliation. The filing's schedule total and balance-sheet anchor both report total investments at fair value of $342.015 million, while the extracted/indexable holdings sum is $437.923 million. The source therefore supports an over-coverage error. The localized schedule structure shows a non-position subtotal row, Total Affiliate Investments, with $99.945 million fair value directly above Total Investments; this subtotal is a source-grounded culprit for the over-coverage rather than a valid holding."
+}

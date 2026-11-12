@@ -1,0 +1,76 @@
+{
+  "review_id": "RVQ_REV_03f0fe0afb1a",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 69.2,
+  "anchor_value": 100.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 29,
+      "quoted_text": "Carrols Restaurant Group 5.875 %, 07/01/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 30,
+      "quoted_text": "Vista Outdoor, Inc. 4.50 %, 03/15/2029",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 35,
+      "quoted_text": "iHeartCommunications, Inc. (7) 6.38 %, 05/01/2026",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 36,
+      "quoted_text": "iHeartCommunications, Inc. (7) 8.38 %, 05/01/2027",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Carrols Restaurant Group source row states a 5.875% bond coupon, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 29
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Vista Outdoor, Inc. source row states a 4.50% bond coupon, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 30
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "iHeartCommunications, Inc. 2026 bond source row states a 6.38% coupon, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 35
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "iHeartCommunications, Inc. 2027 bond source row states an 8.38% coupon, but the extracted interest_rate is blank.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 36
+      }
+    }
+  ],
+  "rationale": "The flag is an aggregate fill-rate issue for direct-lending rate extraction. The source schedule has coupon rates for the four corporate bond rows cited above, but the bundle's extracted holdings slice shows blank interest_rate for those same four private-credit positions. Current-period schedule totals tie to 45,918,606, so this is not an anchor problem; it is a localized extraction gap for coupons embedded in the portfolio-company text rather than the Interest Rate column."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_2e0dba7b55d1",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 405398306,
+  "anchor_value": 405398306,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 47,
+      "quoted_text": "Total Investments | $ | 402,245,114 | $ | 405,398,306 | 206.36 %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Term Loan | First Lien | 3M SOFR+ 5.00 % | 2.00 % | 8.70 % | 6/5/2023 | 6/5/2028 | Services: Business | $ | 1,758,833 | $ | 1,735,944 | $ | 1,758,833 | 0.90 %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation resolves the flag as a false alarm. The filing's schedule total fair value is $405,398,306 at table 18 row 47, exactly equal to the extracted quarter fair value of $405,398,306. A representative investment row at table 10 row 6 spans numerous populated source cells for one position, so the oracle's source count of 1,328 is not comparable to the 326 output-position count. The count anchor is mis-scoped while the value anchor confirms portfolio coverage."
+}

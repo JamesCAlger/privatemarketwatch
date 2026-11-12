@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_BLK_293be72888cf",
+  "verdict": "real_error",
+  "mechanism": "dimension_double_count",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1480975000,
+  "anchor_value": 1249444000,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 33, "row_index": 62, "quoted_text": "Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531", "ties_to_residual": true},
+    {"table_index": 20, "row_index": 23, "quoted_text": "Total investments | 1,246,701 | 1,249,444 | 234.9 %", "ties_to_residual": false}
+  ],
+  "findings": [
+    {
+      "mechanism": "dimension_double_count",
+      "detail": "The extracted position sum includes the separate 231.531 million portfolio schedule in addition to the filing's 1,249.444 million consolidated investment total.",
+      "fix_class": "dedup",
+      "citation": {"table_index": 33, "row_index": 62}
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows extracted holdings of 1,480.975 million versus the filing schedule total of 1,249.444 million. The 231.531 million excess is exact and is independently printed as the total of the separate portfolio schedule at table 33 row 62. The balance sheet reports total assets of 1,316.257 million at table 12 row 14, so the E02 ratio failure is caused by adding that separate schedule into the consolidated position population, not by an understated total-assets anchor."
+}

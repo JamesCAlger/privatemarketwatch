@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_ef89b8025d2c",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 2415.98,
+  "anchor_value": 2415.98,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 2,440,232 | $ | 2,415,980 | 166.92 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 40,
+      "quoted_text": "Total net assets | $ | 1,447,407 | $ | 1,388,129",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 33,
+      "row_index": 14,
+      "quoted_text": "360 Holdco, Inc. (360 Training) | (15) | First Lien Debt | S + 4.75 % | 8.42 | % | 8/2/2028 | 3,928 | 3,911 | 3,881 | 0.27 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation supports the extracted data. The filing reports Total Investments fair value of 2,415,980 (thousands), exactly equal to the extracted position sum of 2,415.980 million, and reports net assets of 1,447,407 (thousands). Their ratio is 166.918..., which rounds to the filing's 166.92%. The sampled 360 Holdco row likewise has fair value 3,881 (thousands), whose share of net assets is 0.268..., correctly printed as 0.27%. Thus the source uses two-decimal displayed percentages and the identity flag's 9.11% violation rate reflects inadequate rounding tolerance, not erroneous extracted values."
+}

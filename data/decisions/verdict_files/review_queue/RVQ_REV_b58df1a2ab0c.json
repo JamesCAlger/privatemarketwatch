@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_b58df1a2ab0c",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC Equity Interest; Cost 71,250; Market Value 71,250"
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Legacy Corporate Lending HoldCo, LLC Preferred Equity; Cost 575,000; Market Value 575,000"
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "FIRE: Finance Total; Cost $646,250; Market Value $646,250"
+    }
+  ],
+  "rationale": "FX03 is a row-level currency validation issue on cost_currency for the two Legacy Corporate Lending HoldCo rows. In the raw investment schedule, rows 4 and 5 are in the Cost column, and row 6 prints the dollar sign on the same Cost column total. The stored cost_currency value is U_USD rather than USD, so the source supports a real currency extraction defect rather than a false alarm."
+}

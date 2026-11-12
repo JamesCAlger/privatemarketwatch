@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d5510405f4db",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The X10 flag concerns three localized maturity_date values before the 2025-03-31 report_date, but the permitted evidence CLI returned missing_cached_html for the filing accession 0001752724-25-113744 on overview, tables, and totals. Because the raw source could not be read through the allowed channel, the contract requires an ambiguous source_unavailable verdict rather than a source judgment."
+}

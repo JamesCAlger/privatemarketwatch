@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_1df694588e0b",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": null,
+  "confidence": 0.94,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 flag identifies missing exposure_type at dataset row key 544957, but the bundle does not identify that row's issuer or instrument. The raw filing was readable through the evidence CLI; a targeted roam for '544957 exposure_type' returned zero hits, so no source table coordinate can be tied to the flagged cell. The source therefore cannot decide whether the missing classification is an extraction defect or an unclassifiable instrument without a row-key-to-source mapping."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_745140bbfe32",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "blank interest_rate and basis_spread on flagged PRIVATE_CREDIT rows",
+  "anchor_value": "raw source shows the sampled flagged blank-rate rows are unfunded revolving or delayed-draw commitments with no stated reference-rate or interest-rate cells",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 58,
+      "row_index": 20,
+      "quoted_text": "Albers Aerospace Holdings LLC (4)(6)(7) | 6/22/2031 | 1,983 | ( 30 ) | ( 30 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 2,
+      "quoted_text": "Albers Aerospace Holdings LLC | 2nd Lien Senior Secured Delayed Draw Loan | $ | 1,983 | $ | ( 30 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 2,
+      "quoted_text": "AVSC Holding Corp. (4)(6)(9) | 12/5/2029 | 962 | ( 15 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 62,
+      "row_index": 7,
+      "quoted_text": "AVSC Holding Corp. | 1st Lien Senior Secured Revolving Loan | 962 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X02 is firing on unfunded commitment rows whose raw SOI cells for Reference Rate and Spread and Interest Rate are blank.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 62,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "The row-validation issue is not a source/extraction defect for the sampled flagged rows. In the SOI, Albers Aerospace Holdings LLC has blank Reference Rate and Spread and Interest Rate cells while carrying maturity 6/22/2031, par 1,983, amortized cost (30), and fair value (30); the commitments table separately identifies the same issuer and amount as a 2nd Lien Senior Secured Delayed Draw Loan unfunded commitment. AVSC Holding Corp. shows the same pattern: a blank-rate SOI row with par 962 and fair value zero, matched by the commitments table as a 1st Lien Senior Secured Revolving Loan unfunded commitment. The extracted blank rate therefore matches the raw source; the rule is over-scoped when it treats these unfunded commitment rows as missing income-rate data."
+}

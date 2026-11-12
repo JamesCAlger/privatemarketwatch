@@ -1,0 +1,28 @@
+{
+  "changed_files": [],
+  "cik": "0001919369",
+  "confidence": "LOW",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No GAV effect; this verdict does not alter holdings, source rows, or validation outputs.",
+  "html_citations": [],
+  "missing_evidence": "Insufficient bounded evidence to safely change production parsing for this CIK-quarter-mechanism packet without manual source-table adjudication and a tested rule. Needed evidence: coordinate-level source table classification for the blocker rows, proof that the rows are either true position rows or non-position aggregate/header rows, and a false-positive analysis showing any proposed parser/config rule would not suppress legitimate position-level holdings.",
+  "patch_summary": "",
+  "primary_justification": "This packet is documented rather than patched because the bundle identifies 7 current blocker row(s) in mechanism blocking_source_pct_leaf_parser_mismatch, but does not by itself establish a bounded production rule with source-table row semantics and false-positive protection.",
+  "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+  "report_date": "2025-06-30",
+  "requires_human_merge": false,
+  "residual_risk": "The blocker is not hidden or suppressed. Public data-quality risk remains until the row semantics are proven from source coordinates or a bounded tested parser fix is implemented. Affected source FV reported by the worklist: 88459000.000000.",
+  "review_id": "BDCSRC_0001919369_2025-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_3b12ce4d2a",
+  "reviewer_notes": "Auto-drafted from the completed BDC bundle and worklist for full-pool accounting. Recommended action from worklist: Fix parser/staging for terminal-percentage source rows with issuer, instrument, rate, maturity, or other leaf evidence.. Sample identifiers: Investments Other Equity Financials HPC GPFS Arsenal Co-Invest (Cayman) LP Maturity Date 5/14/2036 | Investments Other Equity Hotels, Restaurants & Leisure Mews Systems B.V. Maturity Date 9/14/2029 | Investments \u2013 non-controlled/non-affiliated First-Lien Debt Diversified Financial Institutions & Services Rapyd Netherlands B.V. Reference Rate and Spread SOFR + 11.00% Interest Rate 15.18% Maturity Date 9/13/2030 | Investments \u2013 non-controlled/non-affiliated First-Lien Debt Government, Risk & Compliance Diligent Corporation Reference Rate and Spread SOFR + 5.00% Interest Rate 9.33% Maturity Date 8/2/2030 | Investments \u2013 non-controlled/non-affiliated First-Lien Debt Healthcare IT & Technology Zelis Healthcare Corporation Reference Rate and Spread SOFR + 3.25% Interest Rate 7.58% Maturity Date 11/26/2031",
+  "rule_type": "",
+  "source_reconciliation_effect": "No production rows are added, removed, or reclassified by this verdict. The source reconciliation blocker remains an explicitly reviewed unresolved packet until independent evidence supports a bounded patch.",
+  "tests_validation_plan": "Validate schema and bundle-reference integrity with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all. If later converted to a patch, add targeted BDC review/parser tests plus false-positive coverage before rebuilding outputs.",
+  "verdict": "INSUFFICIENT_EVIDENCE"
+}

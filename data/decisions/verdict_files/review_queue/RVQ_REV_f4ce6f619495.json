@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_f4ce6f619495",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "issuer_name values include sector and loan terms: Secured Debt Electronic Equipment, Instruments and Components Dwyer Instruments, LLC First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.75% Interest Rate Floor 0.75% Interest Rate 11.17% Maturity Date 7/21/2027; Secured Debt Electronic Equipment, Instruments and Components Excelitas Technologies Corp. First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 0.75% Interest Rate 10.57% Maturity Date 8/12/2029",
+  "anchor_value": "Source table issuer cells are clean: Dwyer Instruments, LLC; Excelitas Technologies Corp.",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 12,
+      "quoted_text": "Dwyer Instruments, LLC | (5)(8) | First Lien Delayed Draw Term Loan | S + 5.75 % | 0.75 % | 11.17 % | 7/21/2027 | 16 | 16 | 16 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 13,
+      "quoted_text": "Excelitas Technologies Corp. | (5)(8) | First Lien Term Loan | S + 5.25 % | 0.75 % | 10.57 % | 8/12/2029 | 193 | 191 | 192 | 0.04",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Dwyer issuer_name should be Dwyer Instruments, LLC; extracted value leaked sector, asset type, spread, rate floor, interest rate, and maturity terms into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 12
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Excelitas issuer_name should be Excelitas Technologies Corp.; extracted value leaked sector, asset type, spread, rate floor, interest rate, and maturity terms into issuer_name.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 20,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "C206 is confirmed from raw source. The SOI table header separates Investments, Asset Type, Reference Rate and Spread, Interest Rate Floor, Interest Rate, and Maturity Date. In table 20 the Dwyer delayed-draw row has a clean issuer cell, Dwyer Instruments, LLC, with the loan terms in separate columns; the flagged extracted issuer_name concatenates those terms into the issuer field. The same structure holds for Excelitas Technologies Corp. on the first-lien term-loan row. This is a localized issuer_name extraction_gap, not an aggregate-anchor issue."
+}

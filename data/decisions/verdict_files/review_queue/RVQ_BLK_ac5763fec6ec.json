@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_BLK_ac5763fec6ec",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6.5,
+  "anchor_value": 6.25,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 15,
+      "quoted_text": "Lynx BidCo (3)(4) | First-lien loan ($ 43,487 par, due 7/2031) | 7/5/2024 | SOFR + 6.25% | 9.95%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "First-lien loan (EUR 64,600 par, due 7/2031) | 7/5/2024 | E + 6.25% | 8.38%",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The USD Lynx spread was stored as 6.50% but the source row states SOFR + 6.25%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 15
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The EUR Lynx spread was stored as 6.50% but the source row states E + 6.25%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "Class 2 review of the full Lynx BidCo rows localizes the defect to the extracted spread. The raw March 31, 2026 schedule states 6.25% for both the USD and EUR instruments, whereas the flagged extracted identifiers state 6.50%. The interest rates, par amounts, dates, costs, and fair values otherwise align, so the reconciliation flag reflects a real 0.25 percentage-point spread extraction error rather than a bad check."
+}

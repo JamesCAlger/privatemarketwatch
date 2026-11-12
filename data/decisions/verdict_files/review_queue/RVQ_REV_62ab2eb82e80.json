@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_62ab2eb82e80",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1519948000,
+  "anchor_value": 1519948000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Non-controlled/non-affiliated investments, at fair value (amortized cost of $ 1,523,723 and $ 1,507,082 , respectively) | $ | 1,519,948 | $ | 1,506,869",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Investments | $ | 1,523,723 | $ | 1,519,948 | 206.46 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The flag says the BDC GAV reconciliation has no comparison denominator, but the raw filing provides one. The balance sheet reports non-controlled/non-affiliated investments at fair value of $1,519,948 thousand, and the investment schedule total investments fair value is also $1,519,948 thousand. The holdings fair-value total therefore ties to the filing source; the warning is caused by a missing/bad comparison anchor in the check, not by a source data defect."
+}

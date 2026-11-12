@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_b132a44ac5d2",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 30,
+  "anchor_value": 0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 236,
+      "row_index": 1,
+      "quoted_text": "BCRED Emerald JV LP Consolidated Schedule of Investments December 31, 2024 (in thousands) (Unaudited)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 236,
+      "row_index": 7,
+      "quoted_text": "AGI Group Holdings LP - Class A-2 Common Units | (4) | 1/19/2022 | 194 | $ | 208 | $ | 266 | 0.01 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 111,
+      "row_index": 14,
+      "quoted_text": "Pibb Member, LLC | (4)(5)(6)(8)(16) | 6.41 % | 6.41 % | 11/22/2024 | 11/22/2049 | 2,250 | 2,250 | 2,250 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "PP03 identifies 30 holdings rows whose source period is earlier than 2025-03-31; source tables include December 31, 2024 SOI rows for flagged positions such as AGI Group Holdings LP and Pibb Member, LLC.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 236,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The raw filing contains separate March 31, 2025 and December 31, 2024 schedule-of-investments sections. The flagged PP03 rows are reported as retained comparative-period facts under report_date 2025-03-31. The cited December 31, 2024 schedule heading and flagged rows show that prior-period SOI rows were available to leak into the current-period holdings extraction; current-period holdings should not retain rows whose source period is earlier than the report date."
+}

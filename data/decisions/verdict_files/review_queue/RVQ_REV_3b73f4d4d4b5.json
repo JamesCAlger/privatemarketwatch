@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_3b73f4d4d4b5",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Fenix Intermediate LLC | Term Loan B - 10.76 % (SOFR + 6.75 %, 1.75 % Floor) | Fair Value | $ | 5,869,079",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Baxters North America, Inc. | Term Loan - 11.07 % (SOFR + 6.88 %, 1.75 % Floor) | Fair Value | $ | 7,411,003",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 8,
+      "row_index": 20,
+      "quoted_text": "Total Investments (102.5 %) | $ | 221,201,220 | $ | 221,817,660",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX02 flags fair_value_currency value U_USD as not USD, but raw SOI evidence shows the fair value column and investment totals are dollar-denominated. U_USD is a USD unit label/namespace form, not a non-USD currency in the source. The check is over-strict on unit-label normalization rather than exposing a data error in fair_value_currency."
+}

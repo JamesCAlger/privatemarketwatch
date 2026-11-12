@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_23bb7bec3a4b",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 73,
+      "row_index": 9,
+      "quoted_text": "SimiTree Acquisition, LLC | First lien senior secured delayed draw term loan | S + | 5.25 % + 1.75 PIK | 11.10 | % | 2/26/2025 | 5/17/2026 | 886 | 884 | 881 | 0.04 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 73,
+      "row_index": 11,
+      "quoted_text": "SimiTree Acquisition, LLC | First lien senior secured term loan | S + | 5.25 % + 1.75 PIK | 11.10 | % | 2/26/2025 | 5/17/2026 | 1,239 | 1,236 | 1,232 | 0.05 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Current-period SimiTree rows carry a PIK spread leg formatted as 1.75 PIK rather than 1.75 % PIK, so the basis/spread term needs normalization.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 73,
+        "row_index": 9
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The same SimiTree malformed PIK spread format appears on the current-period term loan row.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 73,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The raw current-period SOI rows for SimiTree show the reference-rate/spread field as S + 5.25 % + 1.75 PIK, missing the percent sign on the PIK leg. The same issuer's comparative-period rows use S + 5.25 % + 1.75 % PIK, supporting that the current rows should be normalized as a percentage PIK spread rather than left as a malformed basis/spread term. The two cited current rows match the weak gate's n_violate=2 after excluding the immaterial tiny delayed-draw row."
+}

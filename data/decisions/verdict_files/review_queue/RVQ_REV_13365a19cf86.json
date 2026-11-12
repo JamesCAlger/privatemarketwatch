@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_13365a19cf86",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "extracted holding has blank maturity_date and cost/fair_value 21,145/19,967",
+  "anchor_value": "source rows 31 and 32 mature 10/31/2028; row 33 is an unlabeled subtotal with no maturity",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 33,
+      "quoted_text": "blank subtotal row: cost 21,145 and fair value 19,967 with no maturity date",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 31,
+      "quoted_text": "LJ Perimeter Buyer, Inc. | S + 6.65 % | 1.00 % | 10.94 % | 10/31/2028 | 19,073 | 18,695 | 17,652 | 0.72",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 32,
+      "quoted_text": "LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan | S + 6.65 % | 1.00 % | 10.95 % | 10/31/2028 | 2,452 | 2,450 | 2,315 | 0.10",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted LJ Perimeter Buyer delayed-draw row with blank maturity carries the source subtotal amounts 21,145 cost and 19,967 fair value, not a separate investment.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 13,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source investment rows for LJ Perimeter Buyer show maturity 10/31/2028, so the blank maturity comes from subtotal row promotion rather than a past-maturity position.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 32
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The bundle's sampled extracted row for LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan has blank maturity_date and cost/fair_value of 21,145/19,967. In the raw source, table 13 rows 31 and 32 are the actual LJ Perimeter investment rows and both mature 10/31/2028. Table 13 row 33 is an unlabeled subtotal with those combined cost/fair value amounts and no maturity date. The flag therefore identifies a real extraction defect, specifically a subtotal line promoted as a position with missing maturity, not a true past maturity in the source."
+}

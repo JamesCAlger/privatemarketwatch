@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_60bb5442923d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate html_carry flag requires triangulating the filing schedule total, companyfacts fair value anchor, and extracted HTML position sum. The evidence CLI returned status no_accession_resolved for overview, tables, totals, and a targeted roam query, so no usable raw-source schedule, total, or citation was available to adjudicate the discrepancy."
+}

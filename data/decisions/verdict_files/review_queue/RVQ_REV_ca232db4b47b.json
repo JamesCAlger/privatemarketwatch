@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_ca232db4b47b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8.044887640449433,
+  "anchor_value": 11.94,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 20,
+      "quoted_text": "Ratio of net investment income to average net assets | 7.96% for Year Ended December 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 74,
+      "row_index": 8,
+      "quoted_text": "Distributions to stockholders from net investment income (a) | (0.72) for Year Ended December 31, 2025",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 2,
+      "quoted_text": "2025 quarterly distribution per common share: $0.180",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "December 2025 quarterly distribution per common share: $0.180",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "F16 is a fund-level heuristic flag. Raw source shows 2025 distributions of $0.180 per quarter, or $0.72 per share annually, matching the financial highlights distribution from net investment income of 0.72 per share. The same financial highlights report a 2025 ratio of net investment income to average net assets of 7.96%. The observed distribution rate of 8.044887640449433% is not more than 1.5 times that income-yield anchor; 1.5 * 7.96% = 11.94%. The source therefore supports the underlying fund values and not the failure condition."
+}

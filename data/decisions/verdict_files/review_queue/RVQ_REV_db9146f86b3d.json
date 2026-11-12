@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_db9146f86b3d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 2418.074,
+  "anchor_value": 2418.075,
+  "confidence": 0.84,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 20,
+      "quoted_text": "Total Investment in Securities (221.0 %)* | $ | 2,396,883 | $ | 2,418,075",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 5,
+      "quoted_text": "Applied Digital Corporation | Equipment Financing | March 25, 2024 | March 1, 2026 | Fixed interest rate 19.0 %; EOT 0.0 % | $ 1,530 | $ 1,531 | $ 1,554",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "B01 fired because only 1664 of 3844 extracted leaves carried fair_value, but the aggregate FV is not missing: the extracted fund-quarter FV is 2418.074 million and the raw schedule total for investment securities is 2,418,075 thousand, tying within rounding. Representative SOI rows also show explicit Fair Value cells on investment rows. The flag reflects row-coverage scope/counting behavior rather than a source-grounded data error."
+}

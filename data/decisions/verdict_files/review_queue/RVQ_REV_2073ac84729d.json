@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_2073ac84729d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 24,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 37,
+      "quoted_text": "A1 Garage Door Service | Class A Common Units | acquisition 12/22/2022 | Par/Shares 273 | amortized cost 272,727 | market value 509,932"
+    },
+    {
+      "table_index": 24,
+      "row_index": 6,
+      "quoted_text": "Hissho Sushi | Class A Units | acquisition 4/7/2022 | Par/Shares 25,000 | amortized cost 200,046 | market value 430,201"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Equity positions in the source schedule have populated Par/Shares values, but the extracted private-equity rows report zero rows with shares.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 23,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "C04 reports 0.0% of 24 equity rows have shares. Raw SOI table headers include a Par/Shares column, and equity rows in tables 23 and 24 contain explicit share/unit counts, including A1 Garage Door Service with 273 and Hissho Sushi with 25,000. The source therefore contradicts the extracted absence of shares; this is a real extraction gap rather than a false alarm."
+}

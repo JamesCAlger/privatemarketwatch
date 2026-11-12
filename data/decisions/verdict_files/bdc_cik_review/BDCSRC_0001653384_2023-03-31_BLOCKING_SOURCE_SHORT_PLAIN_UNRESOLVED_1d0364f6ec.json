@@ -1,0 +1,59 @@
+{
+  "changed_files": [
+    "pipeline/source_reconciliation.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001653384",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "cik_validation_packet",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "gav_reconciliation",
+    "holdings_examples",
+    "html_source_row_coordinate_candidates",
+    "xbrl_rows_same_accession"
+  ],
+  "gav_effect": "No immediate GAV effect from the verdict file itself. The proposed patch documents the source row as an affiliation-level header/total rather than adding a 1066654000.000000 pseudo-position to unified holdings.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 14,
+      "row_index": 2,
+      "cell_indices": [
+        0
+      ],
+      "row_classification": "AGGREGATE_HEADER",
+      "reason": "The selected schedule row is the section label 'Non-Control/Non-Affiliate Investments' with no issuer, instrument, rate, maturity, cost, or fair-value cells for a production position."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 7,
+      "row_index": 5,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        9
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "The row reports non-control/non-affiliate investments at fair value with cost and fair-value totals for current and comparative periods; it is an aggregate fair-value line, not an issuer-level holding."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Added exact affiliation-header recognition for the normalized label 'non control non affiliate investments' and a focused regression test for Runway's 'Non-Control/Non-Affiliate Investments' source row while preserving issuer-bearing affiliation false-positive coverage.",
+  "primary_justification": "The blocker row is not a missing position. The bundled XBRL row has only the investment identifier 'Non-Control/Non-Affiliate Investments' and a fair value equal to the aggregate non-control/non-affiliate investment total. The HTML evidence shows the same text as a section label and as an aggregate fair-value row, while detailed issuer rows exist separately under that section. Treating this as a production position would violate the position-level data contract.",
+  "reconciliation_diagnosis": "AGGREGATE_OR_HEADER",
+  "report_date": "2023-03-31",
+  "requires_human_merge": true,
+  "residual_risk": "Low. The patch is exact to a normalized affiliation-header phrase and does not clear labels that append an issuer, security, rate, maturity, or other leaf-position detail.",
+  "review_id": "BDCSRC_0001653384_2023-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_1d0364f6ec",
+  "reviewer_notes": "Manually reviewed the single blocker. This is a non-control/non-affiliate section/total for Runway Growth Finance Corp., not a borrower or security. The supporting XBRL evidence also includes child dimensions such as senior secured term loans, common stocks, preferred stocks, and named issuers, confirming that the sparse label is a hierarchy node above detailed holdings.",
+  "rule_type": "aggregate_subtotal_exclusion",
+  "source_reconciliation_effect": "After affected outputs are rebuilt, this row should classify as documented_source_affiliation_header instead of blocking_source_short_plain_unresolved.",
+  "tests_validation_plan": "Ran pytest tests/test_validate_holdings.py::TestBdcSourceReconciliation::test_source_only_blocker_detail_classifies_headers_and_false_positives. Validate verdict schema with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_ae758efc30dd",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "FX01 rows have blank principal_amount_usd, but the raw source par amounts are USD-denominated debt par amounts, not non-USD par requiring FX conversion.",
+  "anchor_value": "Raw SOI Par Amount column shows dollar-denominated par amounts.",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 4,
+      "quoted_text": "Hudson Technologies Company | Last Out Term Loan - 12.31 % (SOFR + 7.50 %, 1.00 % Floor) | Par Amount $ 6,059,560",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 4,
+      "quoted_text": "Hoffmaster Group, Inc. | Revolver - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) | Par Amount $ 558,813",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "FX01 asserts that non-USD source par lacks principal_amount_usd and requires explicit FX conversion. The raw schedule of investments for the affected debt rows presents Par Amount in dollars, with dollar signs on the first debt row in table 5 and the continuation in table 6, and targeted source searches found no EUR/CAD/GBP/non-USD or foreign-currency marker. The check's non-USD premise is therefore unsupported by the source, so the FX01 firing is a false alarm rather than a data error."
+}

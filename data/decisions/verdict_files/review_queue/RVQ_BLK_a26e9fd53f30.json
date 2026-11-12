@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_a26e9fd53f30",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.04,
+  "anchor_value": 0.0449498902,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 215,
+      "row_index": 45,
+      "quoted_text": "Mobotrex Acquisition, LLC Revolver fair value $89,730 and % of net assets 0.04%",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 206,
+      "row_index": 26,
+      "quoted_text": "Net Assets $199,626,715",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 218,
+      "row_index": 60,
+      "quoted_text": "NET ASSETS $199,626,715 100.00%",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor check: the filing schedule and balance sheet agree that net assets are $199,626,715 and total investments are $400,131,924. The source schedule expresses investment rows as percent of net assets rounded to two decimals. The largest residual row is explained by rounding: Mobotrex Acquisition, LLC Revolver has fair value $89,730; $89,730 / $199,626,715 * 100 = 0.0449498902%, which rounds to the printed 0.04%. Reconstructing fair value from the rounded percentage implies about $79,850.69 and creates the approximately $9,879.31 residual, so the stored source values are internally consistent and the flag is an over-tight identity check rather than a data error."
+}

@@ -1,0 +1,24 @@
+{
+  "review_id": "RVQ_REV_a4ddfde32269",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -4000,
+  "anchor_value": -4000,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 1,
+      "quoted_text": "Investments (1) | Footnotes | Asset Type | Reference Rate and Spread (2) | Interest Rate | Maturity Date | Par Amount / Shares | Amortized Cost (4) | Fair Value | Percentage of Net Assets"
+    },
+    {
+      "table_index": 56,
+      "row_index": 26,
+      "quoted_text": "Bridges Consumer Healthcare Intermediate LLC | (7)(12)(13) | First Lien Delayed Draw Term Loan | S + 5.25 % | 8.83 % | 12/22/2031 | 2,000 | ( 4 | ) | - | -"
+    }
+  ],
+  "rationale": "C107 flagged negative cost values. Raw source table 56 identifies the column as Amortized Cost (4), and row 26 prints the Bridges Consumer Healthcare Intermediate LLC delayed draw term loan with amortized cost shown in parentheses as (4), i.e. -4 thousand. The extracted observed value of -4000 matches the source after the filing's thousands scale, so the negative cost is source-reported rather than a pipeline data error."
+}

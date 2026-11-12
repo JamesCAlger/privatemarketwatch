@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_910c27725dbb",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 184.466,
+  "anchor_value": 184.466,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 19,
+      "quoted_text": "Total Bank Debt/Senior Secured Loans | $ | 165,617 | $ | 162,467",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 135.8 % | $ | 199,200 | $ | 184,466",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "E07 source count appears to include non-position or out-of-scope schedule rows, while the 2025 investment schedule contains 23 extractable private holdings and ties to the 184.466 million total.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 23,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "False alarm. This is a Class 3 aggregate count flag, but the raw current-period investment schedule localizes cleanly: table 22 has 16 loan position rows before its subtotal, and table 23 has 7 private equity/preferred position rows before Total Investments, matching the 23 output rows. The schedule total fair value is 184.466 million, equal to the extracted quarter fair value in the bundle; the larger source=116 count is therefore an overbroad rule-scope/count anchor rather than evidence of missing holdings."
+}

@@ -1,0 +1,48 @@
+{
+  "review_id": "RVQ_REV_87aa407ee453",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 46,
+      "quoted_text": "Total Retailers | 359 | 158 | 0.08 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 58,
+      "quoted_text": "Total Technology | 2,491 | 1,727 | 0.88 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted Common Stocks | Retailers | Total Retailers holding is a source subtotal row, not an investee position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 12,
+        "row_index": 46,
+        "quoted_text": "Total Retailers | 359 | 158 | 0.08 | %"
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The extracted Warrants | Technology | Total Technology holding is a source subtotal row, not an investee position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 12,
+        "row_index": 58,
+        "quoted_text": "Total Technology | 2,491 | 1,727 | 0.88 | %"
+      }
+    }
+  ],
+  "rationale": "PP01 is a position-purity review. Raw source table 12 shows the flagged Total Retailers and Total Technology extracted holdings are explicit subtotal rows following individual position rows, so those rows are real subtotal leaks. The other two flagged identifiers, Puris Term Loan and K2 Pure Solutions Nocal Holding Term Loan, are source position rows in tables 11 and 12, so they appear to be false-positive members of the four-row warning set rather than additional defects. Because the reviewed item aggregates the four PP01 issue rows and two are grounded source subtotal leaks, the item is adjudicated as a real_error."
+}

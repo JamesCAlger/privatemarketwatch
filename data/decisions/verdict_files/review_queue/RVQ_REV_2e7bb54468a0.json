@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_2e7bb54468a0",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "source_cell",
+  "observed_value": -68000,
+  "anchor_value": -68000,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 20,
+      "quoted_text": "MRI Software, LLC | (4) (6) (10) | SOFR + 5.50 % | N/A | 2/10/2027 | -- | ( 68 ) | ( 125 ) | ( 0.2 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The flagged extracted cost of -68000 matches the raw source amortized cost cell: table 35 row 20 reports MRI Software, LLC with Amortized Cost (68) in thousands and Fair Value (125). Because the source confirms the negative cost rather than contradicting it, the C107 warning is an advisory false alarm for this row, not a data extraction error."
+}

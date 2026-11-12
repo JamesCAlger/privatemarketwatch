@@ -1,0 +1,76 @@
+{
+    "review_id":  "RVQ_BLK_b17a5a9e4624",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Generated bdc_investment_identifier maturity dates include 2028-06-15, 2030-04-30, 2025-12-09, 2030-05-31, 2031-08-15, and 2032-01-03 for cited rows.",
+    "anchor_value":  "Raw source schedule maturity dates for the cited current-year rows are 2030-06-15, 2031-04-30, 2026-06-05, 2028-11-01, 2032-12-23, and 2031-01-03 respectively.",
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  41,
+                                  "row_index":  26,
+                                  "quoted_text":  "AMCP Clean Acqusition Company, LLC | First Lien Secured Debt - Term Loan | S + 425, 0.50% Floor | 6/15/2030",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  43,
+                                  "row_index":  3,
+                                  "quoted_text":  "USA DeBusk LLC | First Lien Secured Debt - Term Loan | S + 525, 0.75% Floor | 4/30/2031",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  36,
+                                  "row_index":  19,
+                                  "quoted_text":  "Pluto Holdco Limited | First Lien Secured Debt - Term Loan | 5.96% PIK | 6/5/2026",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  71,
+                                  "row_index":  11,
+                                  "quoted_text":  "DRS Holdings III, Inc. | First Lien Secured Debt - Term Loan | S + 525, 1.00% Floor | 11/1/2028",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  83,
+                                  "row_index":  5,
+                                  "quoted_text":  "Victors Purchaser, LLC | First Lien Secured Debt - Revolver | S + 450, 0.50% Floor | 12/23/2032",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  77,
+                                  "row_index":  8,
+                                  "quoted_text":  "Databricks, Inc. | First Lien Secured Debt - Term Loan | S + 450, 0.00% Floor | 1/3/2031",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  60,
+                                  "row_index":  14,
+                                  "quoted_text":  "Novotech SG Holdings Pte. Ltd./ Novotech Aus Bidco Pty Ltd/Novotech Holdings USA LLC | First Lien Secured Debt - Term Loan | S + 500, 0.50% Floor | 6/27/2031",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Generated identifiers are carrying maturity dates that disagree with the current-year Schedule of Investments maturity cells; several structured maturity_date values match the raw source instead.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  43,
+                                          "row_index":  3
+                                      }
+                     },
+                     {
+                         "mechanism":  "genuine_value_defect",
+                         "detail":  "Databricks current-year source maturity is 1/3/2031, while the generated identifier says 1/3/2032 and the structured twin in the bundle says 2032-01-05.",
+                         "fix_class":  "column_remap",
+                         "citation":  {
+                                          "table_index":  77,
+                                          "row_index":  8
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 2 row-level adjudication. The raw Schedule of Investments source is available and decides the issue. For multiple flagged rows, the filing maturity cell contradicts the date embedded in bdc_investment_identifier; examples include AMCP Clean 6/15/2030 vs identifier 6/15/2028, USA DeBusk 4/30/2031 vs identifier 4/30/2030, Pluto Holdco 6/5/2026 vs identifier 12/9/2025, DRS Holdings III 11/1/2028 vs identifier 5/31/2030, and Service Express revolver 12/23/2032 vs identifier 8/15/2031. This is a real generated-data defect, localized to the row identifier/maturity extraction path, not a false alarm."
+}

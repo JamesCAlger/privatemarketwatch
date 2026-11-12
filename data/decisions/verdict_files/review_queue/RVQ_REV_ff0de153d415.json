@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_ff0de153d415",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "source_row_currency_columns",
+  "observed_value": "cost_currency populated as GBP/EUR from the foreign Currency Sold leg",
+  "anchor_value": "valuation amounts are USD-denominated in the source rows",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 5,
+      "quoted_text": "U.S. Dollars 3,343 | Euro 3,083 | Goldman Sachs Bank USA | 9/23/2024 | ( 91 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 6,
+      "quoted_text": "U.S. Dollars 3,819 | Euro 3,809 | Goldman Sachs Bank USA | 12/21/2023 | ( 374 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 9,
+      "quoted_text": "U.S. Dollars 6,868 | British Pound 6,303 | Goldman Sachs Bank USA | 10/15/2024 | ( 1,069 )",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "FX forward rows used the foreign Currency Sold leg as cost_currency even though the valuation/unrealized amount is presented in USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 5
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The British Pound leg is a traded currency, not the denomination of the valuation field expected by FX03.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 30,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 row-validation issue on cost_currency. The raw forward-currency schedule separates Currency Purchased/Sold from the dollar valuation column; the cited rows show U.S. Dollars in one leg, Euro or British Pound in the other leg, and the Unrealized Appreciation (Depreciation) valuation column expressed with dollar notation. The flagged GBP/EUR cost_currency values therefore come from the traded-currency leg rather than the USD valuation field, so the flag is a real localized extraction/mapping error."
+}

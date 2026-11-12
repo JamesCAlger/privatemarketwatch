@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_64e9d7aedb66",
+  "verdict": "false_alarm",
+  "mechanism": "rounding_tolerance",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1694.77,
+  "anchor_value": 1694.77,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 6,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value | 1,694,770 | 1,488,856",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 6,
+      "row_index": 36,
+      "quoted_text": "Total Net Assets | 1,020,130 | 859,855",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 6,
+      "quoted_text": "Champions Fing Inc | Fair Value 9,886 | % of Net Assets 1.0",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted investment fair value total of USD 1,694.770 million agrees exactly with both the filing schedule total (table 13 row 55) and the balance-sheet investment total (table 6 row 7). The filing reports net assets of USD 1,020.130 million (table 6 row 36). Source position percentages are printed to one decimal: for example, Champions Fing Inc has fair value USD 9.886 million, which is 0.9691% of net assets and correctly rounds to the disclosed 1.0% (table 10 row 6). The 13.08% violation rate therefore reflects a check that does not accommodate source display rounding, not erroneous extracted values."
+}

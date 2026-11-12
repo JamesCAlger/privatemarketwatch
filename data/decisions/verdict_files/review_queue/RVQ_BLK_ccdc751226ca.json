@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_ccdc751226ca",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 25145.811,
+  "anchor_value": 25149.083,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments as of March 31, 2026 (Unaudited) | 7",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 5,
+      "row_index": 9,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2025 | 78",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 61,
+      "row_index": 20,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 25,426,426 | $ | 25,149,083 | (2)(6)(34)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation shows the extracted current-quarter fair value of $25,145.811 million closely agrees with the March 31, 2026 filing schedule total of $25,149.083 million (a $3.272 million, approximately 0.013% difference), despite the row-count flag. The filing table of contents proves that it contains two full investment schedules: March 31, 2026 and December 31, 2025. The source count of 1,619 versus 772 output rows is therefore a comparative-period scope leak in the oracle source counter, while the current-period output is supported by the filing total."
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_29a43da0a693",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 210055669,
+  "anchor_value": 210055893,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 38,
+      "quoted_text": "Grey Orange International Inc. | Warrants to Purchase Common Stock | 5/6/2032 | 1,122 | \\u2014 | 224 | \\u2014 | F/G/H",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 42,
+      "quoted_text": "Total Investments - 80.50 % of Net Assets | 222,558,514 | 210,055,893 | 81.66 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Extracted fair value is short by 224, matching the Grey Orange International Inc. warrant fair value in the source schedule.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 23,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate anchors decide the issue. The filing's own 2025 investment total is 210,055,893, while the bundle's extracted quarter FV is 210,055,669. The 224 residual localizes to the source row for Grey Orange International Inc. warrants, which carries fair value 224 immediately before the source equity and total-investments rows."
+}

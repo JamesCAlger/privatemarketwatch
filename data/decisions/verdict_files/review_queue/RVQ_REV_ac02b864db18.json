@@ -1,0 +1,38 @@
+{
+    "review_id":  "RVQ_REV_ac02b864db18",
+    "verdict":  "false_alarm",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "",
+    "anchor_value":  "USD-denominated principal in raw SOI table context",
+    "confidence":  0.86,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  56,
+                                  "row_index":  26,
+                                  "quoted_text":  "Senior Direct Lending Program, LLC | Limited Partnership Units | SOFR | + | 8.00 % | (Q) | Current Yield: 11.75 % | 12/31/36 | 183,603 | 177,962 | 165,702 | (2)(4)(5)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  56,
+                                  "row_index":  27,
+                                  "quoted_text":  "$ 177,962 | $ 165,702 | 43.20 %",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  42,
+                                  "row_index":  5,
+                                  "quoted_text":  "AIM Acquisition, LLC | Term Loan | SOFR | + | 4.75 % | (S) | 8.58 % | 6/2/2022 | 12/2/2027 | $ 10,912 | $ 10,846 | $ 10,912 | (1)(6)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  42,
+                                  "row_index":  13,
+                                  "quoted_text":  "Horizon Freight Holdings, Inc. | Term Loan | SOFR | + | 5.00 % | (Q) | 8.67 % | 8/22/2024 | 8/22/2030 | 6,475 | 6,395 | 6,313 | (1)(6)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "FX01 says non-USD source par requires explicit FX conversion before par analytics, but the raw source checked through the evidence CLI does not show non-USD principal. The SOI principal/amortized cost/fair value columns are dollar-denominated: table 42 row 5 explicitly carries dollar signs, while later rows in the same columns (for example table 42 row 13) omit repeated currency symbols as continuation formatting. The flagged Senior Direct Lending Program source row similarly sits in the same USD-denominated investment table, with dollar signs appearing on the adjacent total/carry-forward line. No EUR/GBP/CAD currency markers were found by targeted source queries. The check is therefore treating source-format currency carry-forward or missing repeated symbols as non-USD."
+}

@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_4c1fb492bfdb",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "raw_source_schedule",
+  "observed_value": -5000.0,
+  "anchor_value": -5000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | -- | ( 5 ) | -- | ( 21 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 12,
+      "row_index": 25,
+      "quoted_text": "ABC Legal Holdings, LLC(5) | One stop | N/A(6) | 08/2032 | -- | ( 7 ) | -- | ( 33 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 20,
+      "row_index": 49,
+      "quoted_text": "AI Titan Parent, Inc.(5) | One stop | N/A(6) | 08/2031 | -- | ( 3 ) | -- | ( 15 )",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 repeated single-cell review. The filing schedule explicitly presents negative amortized cost in parentheses for the flagged positions. For example, ABC Legal Holdings rows disclose amortized cost (5) and (7), matching extracted costs -5000 and -7000, and AI Titan Parent discloses (3), matching -3000. Because the extracted negative signs agree with raw source, C107's generic negative-cost warning is a false alarm for these filer-disclosed values."
+}

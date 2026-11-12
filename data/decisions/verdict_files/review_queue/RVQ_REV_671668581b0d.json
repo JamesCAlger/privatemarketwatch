@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_671668581b0d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 5,
+  "anchor_value": 5,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 22,
+      "row_index": 11,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) (2)(4)(9) | 08/22/24 | Revolver - 6.00 % inc PIK ( 6.00 %, Fixed Coupon, all PIK) | 7.3 | % | 17,092,378 | 01/31/28 | 17,092,378 | 17,092,378",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 12,
+      "quoted_text": "Overton Chicago Gear, LLC (fka H-D Advanced Manufacturing Company) (2)(4)(9) | 08/22/24 | Term Loan A - 6.00 % inc PIK ( 6.00 %, Fixed Coupon, all PIK) | 4.9 | % | 11,499,903 | 01/31/28 | 11,497,411 | 11,499,903",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 15,
+      "quoted_text": "Pace Industries, Inc. (2)(4)(9) | 06/01/20 | HoldCo Term Loan - 5.89 % inc PIK (SOFR + 2.00 %, 1.50 % Floor, all PIK) | 0.0 | % | 110,137,754 | 06/01/40 | 78,137,869 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 16,
+      "quoted_text": "Pace Industries, Inc. (2)(4)(9) | 06/01/20 | Term Loan - 12.17 % inc PIK (SOFR + 8.25 %, 1.50 % Floor, all PIK) | 10.5 | % | 85,511,026 | 10/14/26 | 68,091,752 | 24,456,153",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 22,
+      "row_index": 17,
+      "quoted_text": "Pace Industries, Inc. (2)(4)(9) | 10/07/22 | Revolver - 12.31 % inc PIK (SOFR + 8.25 %, 1.50 % Floor, all PIK) | 3.0 | % | 24,759,073 | 10/14/26 | 19,869,725 | 7,081,095",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The allowed raw-source CLI localizes exactly five 2025 debt schedule rows carrying footnote (9), matching the five positions in the nonaccrual flag. However, targeted source checks for non-accrual, accrual, cash basis, not accruing, status, default, and related wording did not expose a source row defining footnote (9) as non-accrual. Because the source row markers alone do not decide whether the flag is a real non-accrual data defect or a false alarm, the adjudication remains ambiguous after source review."
+}

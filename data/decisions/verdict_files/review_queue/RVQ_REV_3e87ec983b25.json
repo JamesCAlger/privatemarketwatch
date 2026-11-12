@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_3e87ec983b25",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_rate_column",
+  "observed_value": 53,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 5,
+      "quoted_text": "Capstone Acquisition Holdings, Inc. | First Lien Term Loan | S + 4.50 % | 11/12/2029 | cost 11,494 | fair value 11,612",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 25,
+      "quoted_text": "Any Hour LLC | First Lien Term Loan | S + 5.00 % | 5/23/2030 | cost 16,083 | fair value 16,072",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 28,
+      "quoted_text": "KL Stockton Intermediate II, LLC | First Lien Term Loan | 13.00 % PIK | 5/23/2031 | cost 724 | fair value 738",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Direct-lending rows have blank stored interest_rate even though the source Reference Rate and Spread column contains stated rates/spreads.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 11,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The flag reports 53 missing direct-lending rates. Raw source table 11 has an explicit Reference Rate and Spread column, and rows represented in the holdings slice with blank interest_rate contain populated source rate terms, including S + 4.50 %, S + 5.00 %, and 13.00 % PIK. The check is therefore identifying a real extraction gap rather than a false alarm."
+}

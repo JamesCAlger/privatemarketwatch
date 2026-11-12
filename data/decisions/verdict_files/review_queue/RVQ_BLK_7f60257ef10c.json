@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_BLK_7f60257ef10c",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.86,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 2 review of three within-row maturity conflicts. The cached raw filing was readable through the evidence CLI, but targeted searches for LBM Acquisition LLC, Nexus Buyer LLC, and WH Borrower LLC returned no matching source rows. The source view therefore cannot determine whether the identifier dates (2030-12-03, 2031-08-31, 2032-08-20) or the structured XBRL dates (2031-06-06, 2031-07-31, 2032-02-20) are correct. No maturity anchor or source coordinate is available, so the item remains ambiguous rather than guessing a culprit."
+}

@@ -1,0 +1,58 @@
+{
+  "review_id": "RVQ_REV_358871c1d053",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8,
+  "anchor_value": 6,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 25,
+      "quoted_text": "Veristat Group Inc. | First Lien Secured Debt - Term Loan | 10.52% | 03/31/27 | (5)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 7,
+      "quoted_text": "Veristat Group Inc. | First Lien Secured Debt - Term Loan | 10.50% | 03/31/27 | (5)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 18,
+      "quoted_text": "Parcelshield Holdings LLC | First Lien Secured Debt - Term Loan | 9.34% | 09/30/27 | (5)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 48,
+      "row_index": 33,
+      "quoted_text": "Parcelshield Holdings LLC | First Lien Secured Debt - Term Loan | 9.32% | 09/30/27 | (5)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "December 31 comparative Veristat and Parcelshield rows were added alongside their March 31 rows, inflating the current-quarter count from six to eight.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 48,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Kauffman was represented with the December 31 rate of 10.27% rather than the March 31 rate of 10.30%.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 44,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 period-scope adjudication. The March 31 schedule marks six current instruments with footnote (5): Kauffman (table 16 row 16), two Midwest Vision loans (table 19 rows 24-25), Veristat (table 20 row 25), Parcelshield (table 21 row 18), and AWRG Borrower (table 21 row 22). The eight-row artifact also contains December 31 comparative versions of Veristat (table 48 row 7) and Parcelshield (table 48 row 33), while Kauffman's artifact rate 10.27% comes from comparative table 44 row 10 instead of current table 16 row 16 at 10.30%. Thus the nonaccrual status is source-supported, but the reported count of eight is a comparative-period extraction defect; the current schedule count is six."
+}

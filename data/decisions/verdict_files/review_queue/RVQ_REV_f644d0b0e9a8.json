@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_f644d0b0e9a8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source schedule par values present; see citations",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Saturn Sound Bidco Limited | First Lien Term Loan | SOFR + 5.25 % | 9.09 % | 12/2/2024 | 12/3/2031 | Par ($) / Shares: 60,289 | Cost/Amortized Cost: 59,359 | Fair Value: 59,836",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 34,
+      "quoted_text": "Flexera Software LLC | First Lien Term Loan | EURIBOR + 4.50 % | 6.38 % | 8/15/2025 | 8/16/2032 | Par: 10,601 | Cost/Amortized Cost: 12,386 | Fair Value: 12,419",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "principal_amount_usd is blank even though the source schedule provides debt par values under the Par ($) / Shares column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 29,
+        "row_index": 6
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "EURIBOR-linked Flexera debt has non-USD par economics requiring explicit USD principal normalization before par analytics.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 31,
+        "row_index": 34
+      }
+    }
+  ],
+  "rationale": "FX01 flags missing principal_amount_usd. The raw schedule of investments supplies debt par amounts for the flagged quarter, including Saturn Sound Bidco Limited with Par ($) / Shares of 60,289 while the artifact value is blank. The schedule also includes a Flexera Software LLC first lien term loan tied to EURIBOR with par 10,601 and USD cost/fair value of 12,386/12,419, showing that explicit USD principal normalization is material for at least one non-USD debt row. The missing normalized principal field is therefore a real extraction/normalization gap, not a false alarm."
+}

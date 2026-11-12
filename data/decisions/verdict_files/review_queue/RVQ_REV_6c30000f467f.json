@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_6c30000f467f",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 2,
+      "quoted_text": "Artisan Topco LP (8)(10) | Class A Preferred Units ( 7,882,736 units) | 11/7/2023 | 7,883 | 7,883 | 0.3 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 5,
+      "quoted_text": "Warrior TopCo LP (8)(10) | Class A Units ( 9,576,271 units) | 7/7/2023 | 9,576 | 9,576 | 0.4 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 18,
+      "quoted_text": "SMA Technologies Holdings, LLC (8) | Class A Units ( 200 units) | 11/21/2022 | 200 | 200 | 0.0 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "PP03 flagged three identifiers as comparative-period rows, but each security also appears in the March 31, 2024 schedule of investments as a current-period position.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 10,
+        "row_index": 2
+      }
+    }
+  ],
+  "rationale": "The flagged identifiers for Artisan Topco LP, Warrior TopCo LP, and SMA Technologies Holdings, LLC are all present in the current March 31, 2024 equity and other investments schedule at table 10 rows 2, 5, and 18. Matching comparative rows also appear in table 13, but the raw source does not support treating these identifiers as solely prior-period facts for the 2024-03-31 report. The PP03 warning is therefore a rule-scope false alarm for rows that are valid current-period positions."
+}

@@ -1,0 +1,45 @@
+{
+  "review_id": "RVQ_REV_703684f97eb1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 7,
+  "anchor_value": 0,
+  "confidence": 0.62,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 30,
+      "row_index": 8,
+      "quoted_text": "Applied Digital Corporation continuation row: Equipment Financing | June 21, 2024 | April 1, 2026 | Fixed interest rate 19.0 %; EOT 0.0 % | 1,647 | 1,648 | 1,677 | (9)(10)(14)(19)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 30,
+      "row_index": 13,
+      "quoted_text": "Cirrascale Cloud Services, LLC | Equipment Financing | June 27, 2024 | September 1, 2026 | Fixed interest rate 12.7 %; EOT 4.0 % | $ | 7,986 | $ | 8,858 | $ | 8,901 | (9)(14)(19)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 5,
+      "quoted_text": "Nomad Health, Inc. | Secured Loan | June 12, 2024 | September 30, 2027 | Fixed interest rate 10.0 %; EOT 0.0 % | $ | 500 | $ | 500 | $ | 372 | (18)(23)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 12,
+      "quoted_text": "3DEO, Inc. | Equipment Financing | February 1, 2025 | February 1, 2028 | Fixed interest rate 0.1 %; EOT 2.2 % | $ | 1,806 | $ | 1,826 | $ | 1,176 | (14)(18)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 20,
+      "quoted_text": "Total Investment in Securities ( 221.0 %)* | $ | 2,396,883 | $ | 2,418,075",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 aggregate/non-row flag. The filing's schedule total of fair value, $2,418,075 thousand, ties the bundle's fund_quarter_fv_m of about $2,418.074 million, so the investment schedule itself is usable. Targeted source checks found the flagged positions as SOI rows with footnote markers such as (18), (19), and (23), but evidence_cli searches for non-accrual/nonaccrual/accrual, not currently accruing, and income producing returned no decisive source text. Because the raw source available through the CLI does not define the relevant footnote markers as non-accrual, the flag cannot be confirmed as a real defect or cleared as a false alarm without guessing."
+}

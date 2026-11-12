@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_371a470651db",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.99,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 1 provenance review of two basis_spread cells (published 0.5 and 5.25). The evidence CLI returned no usable overview, table inventory, coordinates, or targeted roam evidence; it emitted only an XMLParsedAsHTMLWarning. Raw source therefore could not confirm whether either text-pathway value matches its source column, so the contract requires a fail-closed source_unavailable outcome."
+}

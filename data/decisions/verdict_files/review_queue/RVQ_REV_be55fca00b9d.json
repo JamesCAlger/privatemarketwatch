@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_be55fca00b9d",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8420468,
+  "anchor_value": 8420468,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 10,
+      "row_index": 22,
+      "quoted_text": "First Lien Secured Debt - Revolver | S+ 575 , 0.75 % Floor | 2/13/2030 | 16,000 | 181 | 173 | (4)(11)(15)(28)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 23,
+      "quoted_text": "144,540 | 144,483",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 32,
+      "row_index": 23,
+      "quoted_text": "Total Investments | $ | 8,420,468 | $ | 8,474,656 | (2)(6)(27)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The fmt_cost flag appears to be triggered by missing repeated currency-symbol cells on continuation rows, not by a wrong cost value. In the raw SOI, table 10 row 22 omits the dollar symbol in the par/cost/fair-value symbol cells, but the numeric cost 181 is still in the Cost column and row 23 rolls it into the combined Clarience subtotal: 144,359 + 181 = 144,540. The schedule total also reports Total Investments cost of 8,420,468, matching the anchor used here. Source therefore supports the stored cost values and shows a filing/table-format convention rather than a data defect."
+}

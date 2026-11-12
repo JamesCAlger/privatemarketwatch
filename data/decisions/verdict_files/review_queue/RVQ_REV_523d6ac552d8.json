@@ -1,0 +1,46 @@
+{
+  "review_id": "RVQ_REV_523d6ac552d8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "raw_schedule_rows",
+  "observed_value": "Two issuer_name values contain instrument terms and maturity/rate text",
+  "anchor_value": "Hy-Tek Opco, LLC; Usw Holdings, LLC",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 22,
+      "quoted_text": "Hy-Tek Opco, LLC (i)(l)(q) | Term Loan | SOFR + 5.50 % | 9.20 % | 9/19/2028 | 16,754,822 | 16,613,601 | 16,687,802",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 21,
+      "quoted_text": "Usw Holdings, LLC (m) | Convertible Promissory Note | 18.00 % ( 18.00 % PIK) | 18.00 % | 12/31/2029 | 106,949 | 106,949 | 106,949",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name leaked type and maturity text; the source issuer is Hy-Tek Opco, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 22
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "issuer_name leaked type, rate, PIK, and maturity text; the source issuer is Usw Holdings, LLC.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 21
+      }
+    }
+  ],
+  "rationale": "The raw schedule separates issuer, instrument type, rate terms, and maturity into distinct columns. The two flagged issuer_name values concatenate those adjacent fields instead of retaining the clean issuers Hy-Tek Opco, LLC and Usw Holdings, LLC."
+}

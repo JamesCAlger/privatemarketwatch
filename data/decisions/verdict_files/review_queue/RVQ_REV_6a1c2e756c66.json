@@ -1,0 +1,30 @@
+{
+  "review_id": "RVQ_REV_6a1c2e756c66",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3496473000,
+  "anchor_value": 3496473000,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 5
+    },
+    {
+      "table_index": 12,
+      "row_index": 10
+    },
+    {
+      "table_index": 12,
+      "row_index": 25
+    },
+    {
+      "table_index": 20,
+      "row_index": 4
+    }
+  ],
+  "rationale": "The raw SOI presents cost in thousands and includes source-disclosed negative parenthetical cost values for revolver or stub rows. Examples include ACP Falcon Buyer Inc First Lien Revolver with principal shown as dash, cost (142), fair value dash; AmSpec Parent LLC First Lien Revolver with principal shown as dash, cost (225), fair value (212); and WP CPP Holdings LLC First Lien Revolver with principal shown as dash, cost (138), fair value (129). These are source values in the cost column, not extraction-created cost defects. The filing's own non-control/non-affiliate investment total cost is 3,496,473 thousand, matching the balance-sheet cost anchor for investments, so the aggregate cost-format warning is over-scoped to valid source formatting."
+}

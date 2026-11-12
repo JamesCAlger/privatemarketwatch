@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_cbba95a30a70",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "U_EUR",
+  "anchor_value": "USD cost valuation; EUR marker belongs to Par/Shares",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 1,
+      "quoted_text": "Header places Par/Shares (3), Cost (25), and Fair Value (1)(26) in separate columns.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 37,
+      "quoted_text": "First Lien Secured Debt - Term Loan | E + 525, 0.00% Floor | 01/07/31 | EUR marker | 95 | 98 | 106 | (9)(22)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The non-USD marker is the par/share denomination, but the extracted cost_currency is U_EUR for a BDC cost valuation that should remain USD.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 18,
+        "row_index": 37
+      }
+    }
+  ],
+  "rationale": "FX03 is a Class 1 single-cell currency validation issue. The raw schedule header separates Par/Shares from Cost and Fair Value, and the cited EUR row puts the foreign-currency marker in the par/share position while cost and fair value are the valuation amounts. Therefore a stored cost_currency of U_EUR is a real localized extraction/unit bleed defect, not a correct source value."
+}

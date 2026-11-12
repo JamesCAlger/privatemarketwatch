@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_BLK_61d891cb586f",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 323261150.0,
+  "anchor_value": 48480496.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 5,
+      "row_index": 7,
+      "quoted_text": "Total investments, at fair value (cost of $ 57,062,399 and $ 68,120,235, respectively) | 48,480,496 | 70,818,041",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 18,
+      "quoted_text": "TOTAL INVESTMENTS - 92.9 % | $ | 57,062,399 | $ | 48,480,496",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 33,
+      "quoted_text": "TOTAL INVESTMENTS - 108.4 % | $ | 68,120,235 | $ | 70,818,041",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extraction aggregate includes comparative-period investment schedule fair values even though the 2025 source and companyfacts fair value anchor is 48,480,496.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 17,
+        "row_index": 33
+      }
+    },
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The source contains subtotal and rollforward total rows with fair value-like columns that should not be counted as current-period positions.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 13,
+        "row_index": 33
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate adjudication. The filing's financial statement total investments at fair value and the 2025 schedule total both show 48,480,496, matching the companyfacts anchor of 48,480,496. The HTML extraction artifact reports html_fv_sum of 323,261,150 across 133 units, producing a 6.6679x ratio. Source totals show the correct current-period aggregate and also expose similarly shaped comparative-period and rollforward/subtotal fair-value rows, so the flag is a real aggregate extraction error caused by structural leakage rather than a bad companyfacts anchor."
+}

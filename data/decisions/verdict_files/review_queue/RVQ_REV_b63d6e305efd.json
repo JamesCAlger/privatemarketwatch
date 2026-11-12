@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_b63d6e305efd",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 200,
+      "row_index": 10,
+      "quoted_text": "Total Invested Assets | $ | 35,850,999 | $ | 37,591,400 | 100%",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 19,
+      "quoted_text": "Total Investments - 102.3% | $ | 35,850,999 | $ | 37,591,400",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source discloses portfolio percentage totals of 100% for invested assets and 102.3% for total investments, but the extracted A07 pct_sum is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 200,
+        "row_index": 10
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate review. The raw filing's investment composition table shows Total Invested Assets fair value of 37,591,400 with Percentage of Portfolio of 100%, and the schedule of investments shows Total Investments - 102.3% with the same fair value. The bundle's A07 observed pct_sum is 0.0%, so the source supports a percentage extraction gap rather than a false alarm or an unresolved source question. The fair value anchor itself matches the source total; the defect is that the disclosed percentage structure was not captured."
+}

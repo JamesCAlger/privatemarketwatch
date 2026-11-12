@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_08e05374097f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 766000,
+  "anchor_value": 0,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 24,
+      "quoted_text": "Sikich (10)(12)(17) | Warrants | - | - | - | - | 5 | - | 596",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 12,
+      "row_index": 25,
+      "quoted_text": "Sikich (10)(12)(17) | Warrants | - | - | - | - | 2 | - | 170",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 24,
+      "row_index": 6,
+      "quoted_text": "Warrants | - | - | 766 | 0.1",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Sikich warrant rows have source cost dash/zero, but extracted holdings carry market value as cost for 596000 and 170000.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 24,
+        "quoted_text": "Sikich (10)(12)(17) | Warrants | - | - | - | - | 5 | - | 596"
+      }
+    }
+  ],
+  "rationale": "The filing schedule columns are Portfolio Company, Investment Type, Index, Spread, Interest Rate, Maturity Date, Principal/Share, Cost, Market Value. In table 12 rows 24 and 25, the Sikich warrant rows show Cost as '-' and Market Value as 596 and 170. The bundle's holdings slice for the same two Sikich Warrants carries cost 596000 and 170000, matching market value rather than the source Cost column. Note table 24 also summarizes Warrants with amortized cost '-' and fair value 766, confirming the correct warrant cost anchor is zero/dash, not 766000."
+}

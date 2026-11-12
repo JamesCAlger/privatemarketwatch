@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_BLK_22ce4be87e47",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 56,
+      "row_index": 29,
+      "quoted_text": "Alchemy US Holdco 1 LLC (4)(6)(10)(24) | SF + | 6.50 % | 10.34 | % | 7/31/2029 | 1,203 | 107 | 75"
+    },
+    {
+      "table_index": 59,
+      "row_index": 27,
+      "quoted_text": "Ares Secondaries Pbn Finance Co IV LLC (4)(5)(6)(7)(24) - Class A | SF + | 2.90 % | 6.89 | % | 4/14/2039 | 997 | 7 | 27"
+    },
+    {
+      "table_index": 59,
+      "row_index": 28,
+      "quoted_text": "Ares Secondaries Pbn Finance Co IV LLC (4)(5)(6)(7)(24) - Class C | SF + | 8.50 % | 12.49 | % | 4/14/2039 | 7,000 | 73 | 297"
+    },
+    {
+      "table_index": 54,
+      "row_index": 31,
+      "quoted_text": "Indigo Purchaser, Inc. (4)(6)(9)(24) | SF + | 5.00 % | 8.87 | % | 11/21/2031 | 2,845 | 182 | 250"
+    },
+    {
+      "table_index": 54,
+      "row_index": 9,
+      "quoted_text": "Patriot Acquisition Topco Sarl (4)(5)(6)(10)(24) | SF + | 4.75 % | 8.59 | % | 1/28/2028 | 78 | 5 | 6"
+    },
+    {
+      "table_index": 54,
+      "row_index": 37,
+      "quoted_text": "Raven Acquisition Holdings LLC (6)(7) | 11/19/2031 | 222 | ( 2 ) | 1"
+    },
+    {
+      "table_index": 57,
+      "row_index": 37,
+      "quoted_text": "Tricentis Operations Holdings Inc (4)(6)(9) | 2/11/2032 | 3,748 | ( 35 ) | 2"
+    }
+  ],
+  "rationale": "X06 flags principal_amount_usd as more than 10x fair_value, but the raw schedule rows show the same par amounts and low fair values in the filing itself. The discrepancy is economic valuation/par relationship, not an extraction scale or FX defect in principal_amount_usd; the row-validation rule is over-scoped for distressed or near-zero fair-value positions."
+}

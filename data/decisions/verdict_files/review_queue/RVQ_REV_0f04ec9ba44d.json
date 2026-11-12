@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_0f04ec9ba44d",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 6207.165,
+  "anchor_value": 6207.136,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 55,
+      "row_index": 25,
+      "quoted_text": "Aptean Acquiror, Inc. (dba Aptean)(3)(4)(8)(22) | First lien senior secured revolving loan | S+ | 4.65 % | 1/2031 | 971 | 948 | 971",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 66,
+      "row_index": 12,
+      "quoted_text": "Aptean Acquiror, Inc. (dba Aptean) | First lien senior secured revolving loan | 1/2031 | 971 | 2,428 | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 16,
+      "quoted_text": "Total Investments | $ | 6,206,603 | $ | 6,207,136 | 173.4 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "B02 is treating a legitimate investment row and a separate unfunded-commitment row with the same issuer/instrument terms as duplicate position keys.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 66,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "The named duplicate example localizes to two different source schedules: table 55 is the schedule of investments with Aptean's funded revolving-loan position at fair value 971, while table 66 is the unfunded commitments schedule with the same issuer/instrument and separate commitment fields. The filing total fair value is 6,207,136 thousand, matching the extracted fund-quarter fair value of 6,207.165 million within rounding/noise, so the duplicate-key check appears over-scoped rather than proving duplicated holdings."
+}

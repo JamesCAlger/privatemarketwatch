@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_BLK_d7a4596c94fd",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 464,
+  "anchor_value": 464,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 74,
+      "row_index": 6,
+      "quoted_text": "March 31, 2026: Total investments in portfolio companies; Number of Investments = 462",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 3,
+      "quoted_text": "British Pound Sterling foreign currency forward contract",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 33,
+      "row_index": 4,
+      "quoted_text": "Euro foreign currency forward contract",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The raw March 31, 2026 source supports 464 current-period positions: the filing explicitly reports 462 portfolio-company investments, and the current schedule contains two individual foreign-currency forward contracts. Thus 462 + 2 = 464, exactly matching output. The oracle source value 925 is not supported as a current-period count and appears period-contaminated or otherwise duplicated, so E07 is a false alarm caused by a bad anchor."
+}

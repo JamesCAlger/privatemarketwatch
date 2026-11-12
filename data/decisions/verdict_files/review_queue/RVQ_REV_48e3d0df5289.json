@@ -1,0 +1,21 @@
+{
+  "review_id": "RVQ_REV_48e3d0df5289",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 891256739,
+  "anchor_value": 891256739,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 6, "row_index": 8},
+    {"table_index": 15, "row_index": 36},
+    {"table_index": 11, "row_index": 12},
+    {"table_index": 11, "row_index": 25},
+    {"table_index": 13, "row_index": 12},
+    {"table_index": 13, "row_index": 16},
+    {"table_index": 13, "row_index": 26}
+  ],
+  "rationale": "Class 3 aggregate concentration check. The filing total investments at fair value is 891,256,739 in both the balance sheet and the schedule total, so the aggregate anchor is internally consistent. The cited current-period SOI rows disclose individual positions above 2.5% of net assets: DMT Solutions 3.31%, GOJO 3.59%, Stryten 2.52%, Thunder Grandparent 2.61%, and Wrangler Topco 2.52%. The flag is therefore driven by source-disclosed position concentration, not a data extraction error."
+}

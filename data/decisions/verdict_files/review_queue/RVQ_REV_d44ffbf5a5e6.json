@@ -1,0 +1,33 @@
+{
+    "review_id":  "RVQ_REV_d44ffbf5a5e6",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_checked",
+    "mechanism":  "unknown",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  1861296462,
+    "anchor_value":  1861296462,
+    "confidence":  0.55,
+    "escalate":  true,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  51,
+                                  "row_index":  27,
+                                  "quoted_text":  "American Physician Partners, LLC | Healthcare | Term Loan | -- ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) | 3/31/2026 | 6,791,604 | 5,733,816 | - | (16)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  52,
+                                  "row_index":  15,
+                                  "quoted_text":  "Blink Holdings, Inc. | Consumer Non-Cyclical | Term Loan | -- % ( S + 5.50 %; 1.00 % Floor) | 3/31/2026 | 873,971 | 602,258 | - | (16)",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  54,
+                                  "row_index":  10,
+                                  "quoted_text":  "Delaware Valley Management Holdings, Inc. | Healthcare | Term Loan | -- % ( S + 6.25 %; 1.00 % Floor) | 3/31/2026 | 2,657,013 | 1,511,867 | 539,108 | (5)(16)",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The raw schedule rows for representative flagged issuers carry tickmark (16), and totals tie to the filing schedule total. However, evidence_cli searches for non-accrual language and footnote-definition language returned no decisive source text defining tickmark (16) as non-accrual. Because the source checked through the allowed CLI does not decide whether the footnote tag is truly a non-accrual marker, the adjudication is ambiguous rather than a guess."
+}

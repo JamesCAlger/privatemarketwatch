@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_0916150967d3",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "fair_value_currency flagged as U_GBP/U_EUR on six rows",
+  "anchor_value": "Source schedule places GBP/EUR symbols under Principal/Shares, not Market Value; fair value should remain USD-denominated",
+  "confidence": 0.89,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 57,
+      "row_index": 31,
+      "quoted_text": "Goodfellow (6)(17)(18) | First Lien Senior Secured Loan - Delayed Draw | SONIA | 5.25 % | 8.98 | % | 2/10/2032 | GBP symbol | 265 | 341 | 352",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 14,
+      "quoted_text": "Reconomy (6)(13)(17)(21) | First Lien Senior Secured Loan | EURIBOR | 6.25 % | 8.27 | % | 7/12/2029 | EUR symbol | 937 | 1,022 | 1,100",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The parser appears to assign the Principal/Shares currency symbol to fair_value_currency for non-USD loan rows; Market Value is a separate column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "FX02 is a Class 1 single-field currency-unit flag. Raw schedule coordinates show the non-USD symbols are positioned in the Principal/Shares column before the principal/share amount, while Cost and Market Value are distinct columns to the right. Therefore the stored fair_value_currency values U_GBP/U_EUR are not supported for the fair value field; the extraction has leaked the principal currency into fair_value_currency."
+}

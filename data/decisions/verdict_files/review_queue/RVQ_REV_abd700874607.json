@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_abd700874607",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 448682343.0,
+  "anchor_value": 163919000.0,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate html_carry flag: the bundle artifact reports html_fv_sum 448682343.0 versus companyfacts/internal fair value anchor 163919000.0, but the permitted evidence CLI returned no_accession_resolved for overview, totals, tables, and targeted roam, so raw source tables/text were unavailable and the discrepancy cannot be adjudicated from source."
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_ebf0d7a1779d",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": 3.4909090909090907,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "CNT01 is a CIK-quarter position count stability flag with no row key, but the evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-24-077154. Because the raw filing source was unavailable, the flag cannot be adjudicated from source."
+}

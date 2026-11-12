@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_a8bd13892662",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 18,
+  "anchor_value": 24515.628,
+  "confidence": 0.55,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 23,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 13.75 % | 1/3/2029 | $ | 485 | $ | 466 | $ | 243 | (4)(8)(16)(30)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 85,
+      "row_index": 24,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 24,414,425 | $ | 24,515,628 | (2)(6)(31)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The raw source is available and shows the schedule total used by the bundle, plus rows in the flagged set carrying footnote markers such as (4)(8)(16)(30). However targeted source queries for non-accrual/nonaccrual, non accrual, accrual status, not accruing, non-income, income producing, and cash income returned no hits, and the exposed source did not provide a readable footnote definition proving that the 18 flagged positions are or are not nonaccrual. Because the source checked does not decide the question, the bounded adjudication outcome is ambiguous."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_BLK_5ad79a068ebf",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 24515.628,
+  "anchor_value": 24515.628,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 85,
+      "row_index": 24,
+      "quoted_text": "Total Investments before Cash Equivalents | $ | 24,414,425 | $ | 24,515,628 | (2)(6)(31)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 104,
+      "row_index": 1,
+      "quoted_text": "Industry/Company | Investment Type | Interest Rate (12) | Maturity Date | Par/Shares (3) | Cost (29) | Fair Value (1)(30)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 31,
+      "row_index": 9,
+      "quoted_text": "Non-controlled/non-affiliated investments (cost - $ 24,414,425 and $ 14,609,338 at December 31, 2025 and 2024, respectively) | $ | 24,515,628 | $ | 14,555,535",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "E07 appears to compare the current-period output row count against a source population that includes separate prior-period schedule rows, while the 2025 schedule fair-value anchor ties exactly.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 104,
+        "row_index": 1
+      }
+    }
+  ],
+  "rationale": "The flag reports source=1451 versus output=752, but raw source shows the 2025 investment schedule total is $24,515,628 thousand before cash equivalents, matching the bundle's extracted 24,515.628 million fair-value anchor. The filing also contains separate comparative prior-period investment schedule tables with the same position columns, beginning at table 104, so the count mismatch is best explained by E07 including comparative-period source rows in its denominator rather than by missing current-period holdings."
+}

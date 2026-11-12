@@ -1,0 +1,44 @@
+{
+  "review_id": "RVQ_REV_6a1be4425668",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "9.13%; 10.88%",
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 251,
+      "row_index": 21,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 9.13 | % | 5/1/2029 | 110,967 | 108,484 | 106,963"
+    },
+    {
+      "table_index": 251,
+      "row_index": 22,
+      "quoted_text": "iHeartCommunications, Inc. (8) | 10.88 | % | 5/1/2030 | 171,258 | 163,600 | 148,143"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2029 iHeartCommunications corporate bond source row has an Interest Rate of 9.13%, but the extracted private credit row has blank interest_rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 251,
+        "row_index": 21
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The 2030 iHeartCommunications corporate bond source row has an Interest Rate of 10.88%, but the extracted private credit row has blank interest_rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 251,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row adjudication. The flagged holdings rows are private credit corporate bonds with blank extracted interest_rate values. In the raw schedule table 251, the header row labels the field as Interest Rate and the matching iHeartCommunications rows show 9.13% for maturity 5/1/2029 and 10.88% for maturity 5/1/2030. The source therefore decides the question: the missing extracted rates are real extraction gaps, not a false alarm."
+}

@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_46d3ac8b220d",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 22000,
+  "anchor_value": 22000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 7,
+      "quoted_text": "Buckeye Parent, LLC | ^ | (6)(10) | Automotive | 12/22/2021 | 442 | 442 | 22 | 0.00",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "X08 flagged fair_value below 5% of cost for Buckeye Parent, LLC. The raw March 31, 2024 investment schedule shows the same disclosed values in thousands: shares/units 442, cost 442, and fair value 22. The low fair value is therefore source-supported severe distress, not an extraction or normalization data error."
+}

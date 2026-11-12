@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_014d0e49e8c6",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 21112000,
+  "anchor_value": 21112000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 91,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual | 21,112 | 2.5 | 6,111 | 0.7",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 4,
+      "quoted_text": "Race Winning Brands, Inc. | Term Loan | SOFR | + | 1.00 % (5.50 % PIK) | (Q) | 10.35 % | 6/2/2022 | 5/16/2029 | 386 | 373 | 297 | (6)(9)(12)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "The filing explicitly reports $21.112 million of investments on non-accrual at March 31, 2026 (2.5% of amortized cost), and the investment schedule contains footnoted instrument rows underlying the nonaccrual extraction. The flag therefore surfaces a genuine disclosed portfolio status rather than a data defect; the schedule anchor agrees with the observed non-accrual balance. The aggregate flag is not localized to one erroneous row."
+}

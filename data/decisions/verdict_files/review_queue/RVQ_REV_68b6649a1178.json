@@ -1,0 +1,52 @@
+{
+    "review_id":  "RVQ_REV_68b6649a1178",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  true,
+    "anchor_used":  "schedule_total",
+    "observed_value":  36507217,
+    "anchor_value":  120131851,
+    "confidence":  0.93,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  5,
+                                  "row_index":  21,
+                                  "quoted_text":  "First American Government Obligation Fund, Yield 4.65 % | fair value 14,548,634",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  24,
+                                  "quoted_text":  "U.S. Treasury Bill, Yield 4.59 % | fair value 69,076,000",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  5,
+                                  "row_index":  26,
+                                  "quoted_text":  "Total Investments (252.0 %) | fair value 120,131,851",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Cash equivalents fair value 14,548,634 is in the investment schedule but absent from the extracted holdings total used by the GAV check.",
+                         "fix_class":  "missing_position_add",
+                         "citation":  {
+                                          "table_index":  5,
+                                          "row_index":  21
+                                      }
+                     },
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Short-term investments fair value 69,076,000 is in the investment schedule but absent from the extracted holdings total used by the GAV check.",
+                         "fix_class":  "missing_position_add",
+                         "citation":  {
+                                          "table_index":  5,
+                                          "row_index":  24
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate anchor check: the extracted holdings total reflected only Total Debt Investments fair value 36,507,217, producing the flagged 0.3031 ratio versus total assets. Raw source table 5 shows additional investment schedule rows for cash equivalents fair value 14,548,634 and short-term investments fair value 69,076,000; adding these to debt equals the source Total Investments fair value 120,131,851, which reconciles to the filing total assets anchor of 120,437,000. The flag is therefore a real extraction gap in the holdings total rather than a bad source anchor."
+}

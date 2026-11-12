@@ -1,0 +1,65 @@
+{
+  "review_id": "RVQ_REV_f3938475fdd7",
+  "verdict": "false_alarm",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "unfunded_commitment_schedule",
+  "observed_value": -257000,
+  "anchor_value": -257000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 51,
+      "row_index": 5,
+      "quoted_text": "OMEGA II AB (dba Fortnox) | Software | STIBOR + 4.25 % | 06/17/32 | SEK | 37,895 | 10 | ( 21 | ) | (7) (8) (9) (10)"
+    },
+    {
+      "table_index": 112,
+      "row_index": 47,
+      "quoted_text": "OMEGA II AB (dba Fortnox) | 4,116 | -"
+    },
+    {
+      "table_index": 51,
+      "row_index": 43,
+      "quoted_text": "Consilio Midco Limited (dba Cyncly) | Software | S + 4.75 % | 04/08/25 | 04/16/32 | 13,205 | - | ( 132 | ) | (7) (8) (9) (10)"
+    },
+    {
+      "table_index": 111,
+      "row_index": 39,
+      "quoted_text": "Consilio Midco Limited (dba Cyncly) | 33,013 | -"
+    },
+    {
+      "table_index": 51,
+      "row_index": 51,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | Software | 11.82 % | S + 7.50 % PIK | 04/08/25 | 04/14/33 | 6,620 | 17 | ( 82 | ) | (7) (8) (9) (10)"
+    },
+    {
+      "table_index": 114,
+      "row_index": 36,
+      "quoted_text": "Consilio IntermediateCo Limited (dba Cyncly) | 6,603 | -"
+    },
+    {
+      "table_index": 53,
+      "row_index": 46,
+      "quoted_text": "Orthrus Limited (dba Ocorian) | Commercial Services & Supplies | SN + 6.25 % (Incl. 2.75 % PIK) | 12/05/31 | GBP | 1,084 | 103 | ( 22 | ) | (7) (8) (9) (10)"
+    },
+    {
+      "table_index": 112,
+      "row_index": 52,
+      "quoted_text": "Orthrus Limited (dba Ocorian) | 1,461 | 3,031"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "C103 flagged four negative fair values, but each source row carries footnote (10) and ties to an issuer in the unfunded commitment balance schedule.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 51,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "The flagged negative fair values are not unexplained extraction errors. The SOI presents them as parenthetical fair value marks on footnote (10) rows, and the same issuers appear in the unfunded commitment balance schedules: OMEGA II AB/Fortnox, Consilio Midco, Consilio IntermediateCo, and Orthrus/Ocorian. C103 should not treat these source-disclosed unfunded commitment marks as bad negative fair values."
+}

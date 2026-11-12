@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_e37dabb1d0f2",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 3557000,
+  "anchor_value": 3557000,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 17,
+      "quoted_text": "Load One Purchaser Corporation | First lien senior secured revolving loan | Principal/Par Amount 3,557 | Amortized Cost 353 | Fair Value 350",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 15,
+      "row_index": 27,
+      "quoted_text": "AirPro Diagnostics, LLC | First lien senior secured delayed draw term loan | Principal/Par Amount 3,163 | Amortized Cost 8 | Fair Value 13",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "unknown",
+      "detail": "X06 treats source-correct principal amounts on revolving and delayed-draw commitments as errors solely because fair value is less than one-tenth of principal.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 15,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 1 source checks confirm the flagged principal values are faithfully extracted from the March 31, 2026 schedule. The schedule explicitly reports principal 3,557 versus fair value 350 for a revolving loan and principal 3,163 versus fair value 13 for a delayed draw term loan. These low fair values on commitment-style instruments make the greater-than-10x ratio real but do not make the principal erroneous; the defect is X06 rule scope, not the data. Residual risk is that the other 11 flagged rows were not individually cited, although the item-level pattern and two directly matching flagged values establish the mechanism."
+}

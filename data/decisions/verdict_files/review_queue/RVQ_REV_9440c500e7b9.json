@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_9440c500e7b9",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "raw_source_cell",
+  "observed_value": 5.0,
+  "anchor_value": 5.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 15,
+      "row_index": 14,
+      "quoted_text": "World Insurance Associates, LLC | First Lien Delayed Draw Term Loan | S + 5.00% | 4/3/2030",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source-cell verification. The provenance artifact flags published basis_spread 5.0 only because declared_raw and instance_raw are unavailable on the text pathway. Raw filing table 15, row 14 explicitly reports the Reference Rate and Spread as S + 5.00%, which confirms the published basis_spread of 5.0. The data value is correct; the warning is a provenance-check false alarm for a text-derived cell."
+}

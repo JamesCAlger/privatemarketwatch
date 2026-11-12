@@ -1,0 +1,27 @@
+{
+  "review_id": "RVQ_REV_38e9efc2d98f",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_checked",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 50.0,
+  "anchor_value": 13.422818791946309,
+  "confidence": 0.82,
+  "escalate": true,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 10,
+      "quoted_text": "Distributions to common shareholders | ( 1.20 ) | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 4,
+      "quoted_text": "Per share net asset value at beginning of period | $ | 8.94",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Raw source shows a $1.20 distribution per common share for the three months ended March 31, 2026 and beginning NAV per share of $8.94. Their unannualized ratio is 13.42%, within the F33 range, while annualizing the same quarterly distribution gives 53.69%, broadly consistent with the flagged 50%. The filing does not state a distribution rate or specify the platform metric's annualization convention, so raw source cannot decide whether 50% is a data defect or a valid annualized measure."
+}

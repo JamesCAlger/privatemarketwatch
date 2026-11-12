@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_510b9d94a640",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "cost_currency populated as CAD/EUR/GBP on flagged rows",
+  "anchor_value": "source table places CAD/EUR/GBP before Par Amount /Units; Cost (3) and Fair Value are separate columns",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 59,
+      "row_index": 1,
+      "quoted_text": "Investments-non-controlled/ non-affiliated (1) | Footnotes | Reference Rate and Spread | Interest Rate (2) | Maturity Date | Par Amount /Units | Cost (3) | Fair Value | % of Net Assets",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 59,
+      "row_index": 22,
+      "quoted_text": "123Dentist Inc. | (4) (5) (8) (9) | C + | 5.00 % | 7.27 % | 8/10/2029 | CAD | 5,953 | 4,337 | 4,343 | 0.27",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 63,
+      "row_index": 5,
+      "quoted_text": "Aurelia Netherlands Midco 2 B.V. | (4) (5) (9) | E + | 4.75 % | 6.78 % | 5/29/2031 | EUR | 54,814 | 59,819 | 64,215 | 4.04",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 83,
+      "row_index": 15,
+      "quoted_text": "Speed Midco 3 S.a r.l. | (4) (5) (7) (9) | SN + | 4.95 % | 9.90 % | 6/5/2031 | GBP | 2,498 | 3,140 | 3,121 | 0.26",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Foreign currency codes were assigned to cost_currency even though the source layout shows those codes preceding Par Amount /Units while Cost (3) is a separate column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 59,
+        "row_index": 22
+      }
+    }
+  ],
+  "rationale": "FX03 is a real error. In the source investment schedule, the header orders the columns as Maturity Date, Par Amount /Units, Cost (3), and Fair Value; the foreign currency token appears between maturity date and the par amount, while the cost value appears two numeric fields later. Representative flagged rows show CAD/EUR/GBP before par amounts (for example CAD 5,953 followed by cost 4,337, EUR 54,814 followed by cost 59,819, and GBP 2,498 followed by cost 3,140). Therefore the pipeline's non-USD cost_currency values are sourced from the par/principal currency position rather than the cost column."
+}

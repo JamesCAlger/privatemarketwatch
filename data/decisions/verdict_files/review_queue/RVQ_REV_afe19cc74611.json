@@ -1,0 +1,20 @@
+{
+  "review_id": "RVQ_REV_afe19cc74611",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -0.1,
+  "anchor_value": -0.1,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 4,
+      "quoted_text": "OneCare Media, LLC - Revolving Credit Line (4)(12) | Media & Entertainment | SOFR + 4.50 % ( 1.00 % floor) | 8.92 % | 9/29/2026 | $ | - | $ | ( 6 ) | $ | ( 288 ) | - 0.1 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C404 flagged pct_of_net_assets = -0.1, but the raw Schedule of Investments row for OneCare Media, LLC - Revolving Credit Line shows fair value as negative $(288) thousand and Percentage of Net Assets as - 0.1%. The stored value matches the source cell, so the warning is a rule-scope monitor rather than a data error."
+}

@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_51d6646f476b",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1473450,
+  "anchor_value": 1473450,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 19,
+      "quoted_text": "Total Portfolio Investments | $ | 1,473,450 | $ | 1,444,805 | 200.33 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 13,
+      "row_index": 8,
+      "quoted_text": "48Forty Solutions, LLC | (4) (5) (11) (13) | S + | 5.75 % | 11.04 % | 11/30/2026 | 25,728 | 25,282 | 25,138 | 3.49",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 3,
+      "quoted_text": "Abracon Group Holdings, LLC | (4) (6) (10) | S + | 5.75 % | 10.89 % | 07/06/2028 | - | ( 14 ) | ( 24 ) | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The filing source itself uses ordinary numeric cost cells without repeated dollar signs and parenthesized negative cost adjustment rows, so the format pattern is source-backed rather than a data error.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 3
+      }
+    }
+  ],
+  "rationale": "The raw schedule presents portfolio investments in thousands with a filing total cost of 1,473,450. Representative extracted rows match the source cost cells, including 48Forty Solutions cost 25,282 and Abracon's parenthesized cost (14). The rule appears to be flagging valid accounting/table formatting, not an incorrect stored cost."
+}

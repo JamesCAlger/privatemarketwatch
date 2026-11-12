@@ -1,0 +1,26 @@
+{
+    "review_id":  "RVQ_BLK_7bc0313a15b1",
+    "verdict":  "false_alarm",
+    "mechanism":  "rule_scope",
+    "localized":  true,
+    "anchor_used":  null,
+    "observed_value":  "Accuserve Term Loan: Reference Rate SOFR, Spread 5.25%; Trystar Revolving Line of Credit: Reference Rate SOFR, Spread 4.25%",
+    "anchor_value":  "Raw schedule rows show the same reference-rate and spread terms",
+    "confidence":  0.94,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  48,
+                                  "row_index":  31,
+                                  "quoted_text":  "Accuserve Solutions, Inc. | (6) | Term Loan | 9.09 % | SOFR | 5.25% | 3/15/2024 | 3/15/2030 | 22,274 | 22,124 | 20,270",
+                                  "ties_to_residual":  false
+                              },
+                              {
+                                  "table_index":  47,
+                                  "row_index":  6,
+                                  "quoted_text":  "Trystar, LLC | (4)(5)(6) | Revolving Line of Credit | SOFR | 4.25 % | 8/06/2024 | 8/6/2031 | - | ( 16 | ) | -",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "rationale":  "The agentA_reference_uncorroborated flag reports SOFR reference-rate terms lacking structured spread corroboration. The raw SOI schedule has separate Reference Rate and Spread columns and directly corroborates both flagged identifiers: Accuserve Term Loan is SOFR with 5.25% spread, and Trystar Revolving Line of Credit is SOFR with 4.25% spread. The stored identifier terms match the source, so the check is over-scoped rather than a data error."
+}

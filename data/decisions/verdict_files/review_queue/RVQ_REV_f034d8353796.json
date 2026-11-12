@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_f034d8353796",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The bundle indicates raw source should exist, but the evidence CLI returned no_accession_resolved for overview, tables, totals, and a targeted roam query, so no raw source tables, totals, or coordinates were available to adjudicate the html_carry flag."
+}

@@ -1,0 +1,16 @@
+{
+    "review_id":  "RVQ_REV_2f249fea1dea",
+    "verdict":  "ambiguous",
+    "ambiguity_basis":  "source_unavailable",
+    "mechanism":  "unknown",
+    "localized":  false,
+    "anchor_used":  null,
+    "observed_value":  null,
+    "anchor_value":  null,
+    "confidence":  0,
+    "escalate":  true,
+    "culprit_citations":  [
+
+                          ],
+    "rationale":  "Evidence CLI returned no_accession_resolved for overview, tables, totals, and targeted roam queries, so raw source and anchors were not available to adjudicate F16 distribution rate versus income yield."
+}

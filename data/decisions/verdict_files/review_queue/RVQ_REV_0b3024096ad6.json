@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_0b3024096ad6",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 10,
+      "quoted_text": "Gainwell Acquisition Corp. Term B Loan | Pharmaceuticals | SOFR + 4.100 % | 9.490 % | 10/01/2027 | 4,863 | 4,824 | 4,756 | 2.02 %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 15,
+      "quoted_text": "McAfee Corp. Term Loan | Technology | SOFR + 3.850 % | 9.165 % | 03/01/2029 | 6,913 | 6,577 | 6,763 | 2.87 %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 21,
+      "quoted_text": "Sophia, L.P. Term Loan B | Technology | SOFR + 3.600 % | 8.916 % | 10/07/2027 | 6,912 | 6,713 | 6,905 | 2.93 %"
+    },
+    {
+      "table_index": 11,
+      "row_index": 25,
+      "quoted_text": "Victoria's Secret & Co. Initial Term Loan | Retailers | SOFR + 3.512 % | 8.903 % | 08/02/2028 | 2,886 | 2,863 | 2,828 | 1.20 %"
+    }
+  ],
+  "rationale": "PP01 flagged identifiers containing the hierarchy 'Debt Investments | First Lien Senior Secured', but the raw schedule shows each flagged item is an individual first-lien loan row with complete position fields. The actual subtotal is a separate row, 'Total First Lien Secured' at table 11 row 28, so these four flagged rows are not subtotal or aggregate leakage."
+}

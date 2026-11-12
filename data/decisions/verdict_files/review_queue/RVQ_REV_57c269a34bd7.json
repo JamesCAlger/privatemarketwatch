@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_57c269a34bd7",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -77000.0,
+  "anchor_value": -77000.0,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 23,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | S + 5.50 % | 05/08/28 | 2,881 | ( 18 | ) | ( 14 | ) | (6) (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 27,
+      "quoted_text": "BSI3 Menu Buyer, Inc (dba Kydia) | Financial Services | S + 6.00 % | 01/25/28 | 1,924 | ( 18 | ) | ( 77 | ) | (6) (7) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 41,
+      "row_index": 28,
+      "quoted_text": "Charger Debt Merger Sub, LLC (dba Classic Collision) | Specialty Retail | S + 4.75 % | 05/31/30 | 2,178 | ( 20 | ) | ( 22 | ) | (6) (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 44,
+      "row_index": 26,
+      "quoted_text": "Admiral Buyer, Inc. (dba Fidelity Payment Services) | Financial Services | S + 5.50 % | 05/08/28 | 2,330 | ( 34 | ) | ( 12 | ) | (7) (8) (9)",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C103 flagged negative fair_value values, but the raw SOI source itself reports parenthesized negative fair values for these positions. The stored negatives match the source presentation, so the data is not erroneous; the review rule is over-broad for source-disclosed negative fair-value rows."
+}

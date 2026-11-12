@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_5c7ac10f5144",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "U_USD",
+  "anchor_value": "USD",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 21,
+      "row_index": 4,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Term Loan | 8.91 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 9,659,914 | 9,567,427 | 9,587,464 | (8)(15)"
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "RevauAdvanced Underwriting Inc. | Financials | Delayed Draw Term Loan | 8.91 % ( S + 4.75 %; 0.75 % Floor) | 5/10/2032 | 84,366 | 64,005 | 73,794 | (6)(8)(15)"
+    },
+    {
+      "table_index": 25,
+      "row_index": 22,
+      "quoted_text": "Total Investments - ( 257.41 %) | $ | 1,808,750,592 | $ | 1,796,706,145"
+    }
+  ],
+  "rationale": "FX03 fired because extracted cost_currency is U_USD, but the raw SOI shows the flagged positions in the Cost and Fair Value columns and the schedule total explicitly denominates those columns with dollar signs. The Canada/French/Luxembourg labels identify issuer geography/security grouping, not non-USD valuation currency, so treating U_USD as non-USD is a rule-scope false alarm rather than a data error."
+}

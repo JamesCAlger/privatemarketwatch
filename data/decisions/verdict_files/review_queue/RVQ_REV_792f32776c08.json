@@ -1,0 +1,38 @@
+{
+  "review_id": "RVQ_REV_792f32776c08",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 184466000,
+  "anchor_value": 184466000,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 23,
+      "row_index": 13,
+      "quoted_text": "Total Investments (10) - 135.8 % | $ | 199,200 | $ | 184,466",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 23,
+      "row_index": 15,
+      "quoted_text": "U.S. Treasury Bill ( 3.61 % yield) | Government | 12/2025 | 2/2026 | 50,000 | 49,798 | 49,798",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 16,
+      "quoted_text": "Total Investments & Cash Equivalents - 172.5 % | $ | 248,998 | $ | 234,264",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 18,
+      "row_index": 11,
+      "quoted_text": "Total assets | $ | 254,797 | $ | 359,383",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "GAV_BDC02 fired because extracted BDC investment fair value of 184.466 million is 0.724 of the total-assets proxy of 254.797 million. The raw schedule confirms that 184.466 million is exactly the filing's Total Investments, while the filing separately presents a 49.798 million U.S. Treasury Bill cash equivalent and Total Investments & Cash Equivalents of 234.264 million. The low ratio is therefore caused by comparing investments-only holdings to full-fund total assets while excluding cash equivalents, not by an incorrect extracted fair value."
+}

@@ -1,0 +1,49 @@
+{
+  "review_id": "RVQ_REV_6e2efe25c85e",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.024793388429752067,
+  "anchor_value": 0.5,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 5,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 8.41 % | S + 4.75 % | 11/01/30 | $ | 14,383 | $ | 14,181 | $ | 14,239 | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 26,
+      "row_index": 5,
+      "quoted_text": "Rocket Bidco, Inc. (dba Recochem) | Chemicals | 8.60 % | S + 4.75 % | 11/01/30 | $ | 14,420 | $ | 14,208 | $ | 14,384 | (7) (8) (9)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 23,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus) | Software | 8.17 % | S + 4.50 % | 08/29/31 | 7,167 | 7,108 | 7,024 | (7) (8)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 21,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus) | Software | 8.22 % | S + 4.50 % | 08/29/31 | 7,167 | 7,106 | 7,095 | (7) (8)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "Issuer extraction includes mutable country/security-type hierarchy percentages even though the source issuer cell is the clean portfolio company name, breaking issuer continuity.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 8,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "D06 reports only 3 of 121 issuers persisting, but the raw schedule shows clear recurring issuers across the March 31, 2026 block and the December 31, 2025 comparison block, including Rocket Bidco, Inc. (dba Recochem) at table 8 row 5 and table 26 row 5, and AI Titan Parent, Inc. (dba Prometheus) at table 18 row 23 and table 36 row 21. The bundle's extracted issuer examples prepend hierarchy labels and percentages such as country and debt-class text to issuer_name, while the source issuer cells themselves contain only the company names. The continuity failure is therefore a real extraction/localization defect, not source portfolio turnover."
+}

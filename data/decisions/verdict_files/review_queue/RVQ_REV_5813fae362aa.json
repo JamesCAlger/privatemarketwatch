@@ -1,0 +1,73 @@
+{
+  "review_id": "RVQ_REV_5813fae362aa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "fair_value_currency extracted as non-USD units: U_AUD, U_CAD, U_EUR, U_CHF, U_GBP",
+  "anchor_value": "schedule fair value columns are USD-denominated, shown by dollar-signed country and investment totals",
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 6,
+      "quoted_text": "Ancora Bidco PTY LTD row has AUD only in Principal Amount/Par/Shares, with Fair Value 3,497 in the Fair Value column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 49,
+      "row_index": 9,
+      "quoted_text": "Total Debt Investments Australia shows Cost $ 3,355 and Fair Value $ 3,504.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 7,
+      "quoted_text": "Avidity Acquisition B.V. row has EUR only in Principal Amount/Par/Shares, with Fair Value 145 in the Fair Value column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 18,
+      "quoted_text": "Total Debt Investments Netherlands shows Cost $ 12,373 and Fair Value $ 13,346.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 39,
+      "quoted_text": "Solvias AG LP row has CHF only in Principal Amount/Par/Shares, with Fair Value 11,617 in the Fair Value column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 47,
+      "row_index": 40,
+      "quoted_text": "Total Debt Investments Switzerland shows Cost $ 9,953 and Fair Value $ 11,617.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 23,
+      "quoted_text": "Hamsard 3778 Limited row has GBP only in Principal Amount/Par/Shares, with Fair Value 3,837 in the Fair Value column.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 48,
+      "row_index": 41,
+      "quoted_text": "Total Debt Investments United Kingdom shows Cost $ 11,620 and Fair Value $ 12,075.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The extractor assigned the local currency shown in the principal amount column to fair_value_currency even though fair value is in the schedule's dollar-denominated Fair Value column.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 6
+      }
+    }
+  ],
+  "rationale": "FX02 is a real data error. The raw schedule headings separate Principal Amount, Par Value or Shares from Cost and Fair Value. Rows with local-currency principal amounts, such as AUD, EUR, CHF, and GBP, still roll up to country totals where the Cost and Fair Value columns are explicitly dollar-signed. The stored fair_value_currency values therefore came from the principal/par unit rather than the fair value unit."
+}

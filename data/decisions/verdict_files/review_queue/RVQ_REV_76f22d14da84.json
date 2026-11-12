@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_76f22d14da84",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": -3000.0,
+  "anchor_value": 0.0,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "American Academy Holdings, LLC (4)(6)(13) | maturity 6/30/2027 | par 160 | Amortized Cost (3) em dash | Fair Value em dash",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "American Academy Holdings, LLC continuation row has source Amortized Cost shown as an em dash/zero, but the artifact stores cost -3000.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 12,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "C107 flags ten negative cost rows. Raw SOI tables show nine parenthesized amortized-cost values that match the negative extracted costs, but table 12 row 31 for American Academy Holdings, LLC shows Amortized Cost and Fair Value as dashes rather than a negative amount. The stored -3000.0 cost is therefore not supported by the raw source."
+}

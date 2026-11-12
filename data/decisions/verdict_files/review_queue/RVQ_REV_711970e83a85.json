@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_711970e83a85",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": 5.0,
+  "anchor_value": 13.75,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 32,
+      "row_index": 27,
+      "quoted_text": "Alloy Technologies, Inc. | Growth Capital Loan (Prime + 5.25 % interest rate, 13.75 % floor, 5.00 % EOT payment) | 8/8/2024 | 1,057 | 1,083 | 1,083 | 8/31/2027"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Alloy Technologies interest_rate was captured as the 5.00% EOT payment instead of the stated Prime + 5.25% interest term with a 13.75% floor.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 32,
+        "row_index": 27,
+        "quoted_text": "Alloy Technologies, Inc. | Growth Capital Loan (Prime + 5.25 % interest rate, 13.75 % floor, 5.00 % EOT payment) | 8/8/2024 | 1,057 | 1,083 | 1,083 | 8/31/2027"
+      }
+    }
+  ],
+  "rationale": "The bundle's holdings slice shows Alloy Technologies, Inc. Growth Capital Loan stored with interest_rate 5.0. The raw SOI row identifies 5.00% as the EOT payment, while the interest-rate clause is Prime + 5.25% with a 13.75% floor. The stored value is therefore an extraction of the wrong term, not a valid interest rate."
+}

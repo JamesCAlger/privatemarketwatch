@@ -1,0 +1,75 @@
+{
+  "review_id": "RVQ_REV_4686b85afb16",
+  "verdict": "real_error",
+  "mechanism": "classification_lookthrough",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 121125,
+  "anchor_value": 121125,
+  "confidence": 0.95,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 18,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 121,125 | 1.8 | 29,237 | 0.5"
+    },
+    {
+      "table_index": 37,
+      "row_index": 23,
+      "quoted_text": "Continental Battery Company | (6) (7) (8) (10) (13) (14) | First Lien Debt | S + | 7.00 % PIK | 11.29 % | 07/20/2028 | 12,945 | 11,731 | 5,480 | 0.16"
+    },
+    {
+      "table_index": 40,
+      "row_index": 40,
+      "quoted_text": "48Forty Solutions, LLC | (6) (8) (14) | First Lien Debt | S + | 6.00 % | 10.48 % | 11/30/2029 | 47,378 | 46,014 | 19,425 | 0.57"
+    },
+    {
+      "table_index": 40,
+      "row_index": 41,
+      "quoted_text": "48Forty Solutions, LLC | (6) (14) (18) | First Lien Debt | S + | 6.00 % | 10.48 % | 11/30/2029 | 5,684 | 5,380 | 1,484 | 0.04"
+    },
+    {
+      "table_index": 43,
+      "row_index": 16,
+      "quoted_text": "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) | (6) (14) | Other Debt | 16.25 % PIK | 16.25 % | 06/18/2028 | 500 | 352 | - | 0.00"
+    },
+    {
+      "table_index": 43,
+      "row_index": 17,
+      "quoted_text": "Teasdale Foods, Inc. (Teasdale Latin Foods) | (6) (8) (10) (14) | First Lien Debt | S + | 7.65 % (incl. 3.40 % PIK) | 12.11 % | 12/20/2027 | 3,643 | 3,583 | 2,699 | 0.08"
+    },
+    {
+      "table_index": 43,
+      "row_index": 42,
+      "quoted_text": "DCA Investment Holdings, LLC | (6) (8) (11) (14) | First Lien Debt | S + | 6.50 % | 12.08 % | 04/03/2028 | 49,307 | 48,880 | 40,161 | 1.19"
+    },
+    {
+      "table_index": 43,
+      "row_index": 43,
+      "quoted_text": "DCA Investment Holdings, LLC | (6) (8) (11) (14) | First Lien Debt | S + | 6.50 % | 12.08 % | 04/03/2028 | 3,787 | 3,750 | 3,085 | 0.09"
+    },
+    {
+      "table_index": 50,
+      "row_index": 17,
+      "quoted_text": "Astra Acquisition Corp. | (14) | First Lien Debt | S + | 5.25 % | 0.00 % | 02/25/2028 | 844 | 759 | 165 | 0.00"
+    },
+    {
+      "table_index": 50,
+      "row_index": 18,
+      "quoted_text": "Astra Acquisition Corp. | (14) | First Lien Debt | S + | 5.25 % | 0.00 % | 10/25/2028 | 1,185 | 676 | - | 0.00"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The nine flagged debt rows have amortized cost totaling 121,125, matching the filing's 2025 Non-accrual aggregate.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 18,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "Raw source confirms the nonaccrual flag. The filing reports a 2025 Non-accrual amortized cost of 121,125 in table 18 row 4, and the nine cited schedule rows sum to the same amortized cost: 11,731 + 46,014 + 5,380 + 352 + 3,583 + 48,880 + 3,750 + 759 + 676 = 121,125. The flag is therefore source-grounded and not a false alarm."
+}

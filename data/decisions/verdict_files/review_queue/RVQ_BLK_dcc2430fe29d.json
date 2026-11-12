@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_dcc2430fe29d",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 452995434,
+  "anchor_value": 468088797,
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 31,
+      "quoted_text": "Total Non-controlled/Non-affiliated investments | $ | 493,818,509 | 468,088,797 | 202.2 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 23,
+      "row_index": 4,
+      "quoted_text": "Total Investments | $ | - | $ | 129,460,295 | $ | 338,628,502 | $ | 468,088,797",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 aggregate conservation check. The filing's investment schedule total and fair-value hierarchy both show total investments fair value of 468,088,797 for June 30, 2025, while the extracted holdings sum in the bundle is 452,995,434. The source anchor is therefore not bad; the extracted position total undershoots the raw source by 15,093,363, consistent with an extraction coverage gap. I did not localize a single omitted position because the row-disposition evidence available through the CLI did not isolate one row equal to the full residual."
+}

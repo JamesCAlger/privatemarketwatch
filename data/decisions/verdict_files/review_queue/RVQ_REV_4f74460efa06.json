@@ -1,0 +1,34 @@
+{
+  "review_id": "RVQ_REV_4f74460efa06",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "extracted interest_rate blank and no basis_spread for flagged PRIVATE_CREDIT rows",
+  "anchor_value": "raw SOI Interest Term and Interest Rate cells are blank for the cited delayed-draw/revolver rows",
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 7,
+      "quoted_text": "Ancora Bidco PTY LTD (4)(5)(6) | Unitranche First Lien Delayed Draw Term Loan | [blank Interest Term] | [blank Interest Rate] | 11/2030 | AUD 0 | (11) | 0.0 | 7"
+    },
+    {
+      "table_index": 49,
+      "row_index": 27,
+      "quoted_text": "Husky Holding LLC (5)(6)(7) | Senior Secured First Lien Delayed Draw Term Loan | [blank Interest Term] | [blank Interest Rate] | 02/2029 | - | - | 0.0 | 1"
+    },
+    {
+      "table_index": 49,
+      "row_index": 35,
+      "quoted_text": "KLICK INC. (4)(5)(6) | Unitranche First Lien Delayed Draw Term Loan | [blank Interest Term] | [blank Interest Rate] | 11/2032 | - | (9) | (0.0) | (18)"
+    },
+    {
+      "table_index": 49,
+      "row_index": 36,
+      "quoted_text": "KLICK INC. (4)(5)(6) | Unitranche First Lien Revolver | [blank Interest Term] | [blank Interest Rate] | 11/2032 | - | (17) | (0.0) | (18)"
+    }
+  ],
+  "rationale": "X02 flagged PRIVATE_CREDIT rows because both interest_rate and basis_spread are missing. In the raw December 31, 2025 schedule, the cited delayed-draw/revolver rows have empty Interest Term and Interest Rate cells, while adjacent regular term-loan rows in the same table show populated rate terms and rates. The extracted blank values therefore match the source for this class of rows; the defect is the check applying to source-blank unfunded/commitment-style credit rows, not a data extraction error."
+}

@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_aefca8faf0b4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": "116/154 leaves with fair_value (0.7532467532467533)",
+  "anchor_value": "Schedule and balance-sheet total investments at fair value both 329255",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 37,
+      "row_index": 7,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 10,879 | $ | 9,410 | $ | 7,506 | (6) (8) (11)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "Wine.com, LLC | Beverages | 11/14/18 | 337,425 | $ | 2,900 | $ | -- | (6) (8) (13)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 39,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | $ | 21,349 | $ | -- | $ | -- | (7) (8) (10) (12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "B01 reports 38 leaf rows without fair_value even though the SOI position-row structure includes Fair Value cells, including numeric and zero-value dash cells.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 37,
+        "row_index": 7
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Zero fair-value positions shown as dash cells should be normalized as fair_value 0 rather than treated as missing.",
+      "fix_class": "unit_rescale",
+      "citation": {
+        "table_index": 38,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 3 triangulation shows the filing anchor is internally consistent: the SOI total investments at fair value is 329,255 and the balance sheet total investments at fair value is also 329,255. The B01 failure is therefore not an anchor problem. The raw SOI grids show position rows have Fair Value cells, including numeric fair values such as Streamland Media Midco LLC at 7,506 and zero-value positions represented by dash cells such as Wine.com. Because the extracted artifact reports only 116 of 154 leaves with fair_value, the missing fair_value condition is a real extraction/normalization gap rather than a false alarm."
+}

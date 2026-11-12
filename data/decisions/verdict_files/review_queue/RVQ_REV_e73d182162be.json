@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_e73d182162be",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 0.3876,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "Class 3 aggregate F21 check could not be adjudicated because the evidence CLI returned missing_cached_html for overview, tables, and totals for accession 0001145549-21-068938, so no filing total, source table, or raw-source anchor was available."
+}

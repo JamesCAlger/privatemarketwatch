@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_52707d869ed4",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": -11292.0,
+  "anchor_value": -11292.0,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 11,
+      "row_index": 17,
+      "quoted_text": "PMA Parent Holdings, LLC | Sr Secured Revolver | SOFR(Q) | 0.75 % | 4.75 % | 8.45 % | 1/31/2031 | $ | -- | ( 11,292 | ) | ( 6,775 | ) | -- | E/F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 33,
+      "quoted_text": "JF Acquisition, LLC (JF Petroleum) | First Lien Delayed Draw Term Loan | SOFR(M) | 1.00 % | 5.50 % | 9.18 % | 6/18/2030 | $ | -- | ( 4,044 | ) | ( 4,084 | ) | -- | E/F",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 11,
+      "row_index": 36,
+      "quoted_text": "Titan Home Improvement, LLC (Renuity) | First Lien Delayed Draw Term Loan | SOFR(Q) | 1.00 % | 4.75 % | 8.42 % | 5/31/2030 | $ | -- | ( 1,956 | ) | -- | -- | E/F",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 1 source checks confirm that the filing itself presents the flagged costs as parenthesized negative amounts in the Cost column. The extracted values match those source cells exactly, including PMA Parent Holdings cost (11,292), JF Acquisition cost (4,044), and Titan Home Improvement cost (1,956). Negative cost is therefore a legitimate disclosed schedule value here; C107 is a monitoring rule whose sign-only warning does not establish a data error."
+}

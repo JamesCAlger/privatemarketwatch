@@ -1,0 +1,43 @@
+{
+  "review_id": "RVQ_REV_1e885d4974e2",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 100.0,
+  "anchor_value": 35500450000.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 36,
+      "row_index": 20,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance debt investment | 12.00% | 7/2030 | fair value 60,057 (thousands)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 36,
+      "row_index": 33,
+      "quoted_text": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC | Specialty finance equity investment | fair value 33,249 (thousands)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 37,
+      "row_index": 24,
+      "quoted_text": "Total Investments | cost 36,024,256 | fair value 35,500,450 | 185.4% (amounts in thousands)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The concentration check treated the entire CIK-quarter as one unit even though the source schedule contains many distinct investment positions.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 36,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "Class 3 review. The flag reports n_units=1 and 100% concentration, but raw source shows multiple distinct positions, including separate AAM Series 1.1 debt and equity rows at table 36 rows 20 and 33. The filing schedule total is $35,500,450 thousand at table 37 row 24, independently confirming a broad multi-position portfolio. Therefore the position data shown are not concentrated in one position; the check is scoped/grouped at the CIK-quarter level and its 100% result is a false alarm. The extract total of $37,223.203 million does not equal the schedule total, but that separate aggregate mismatch is not sufficient to attribute a position defect and does not explain the one-unit concentration premise."
+}

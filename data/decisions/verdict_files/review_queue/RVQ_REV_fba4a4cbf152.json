@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_fba4a4cbf152",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "CAD 13,261,059 par requiring explicit USD principal conversion",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 17,
+      "quoted_text": "KeyData Associates Inc. | Closing Date Term Loan | 3M CDOR + 7.00 % | 1.00 | % | 12.52 | % | 10/1/2021 | 7/16/2026 | CAD 13,261,059 | 10,288,760 | 9,767,297 | 3.6 | % | (5) (10)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "KeyData Associates debt has source par in CAD 13,261,059, but principal_amount_usd is blank and needs an explicit USD converted principal for par analytics.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 8,
+        "row_index": 17
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell review. The raw SOI row for KeyData Associates Inc. shows a non-USD par/shares value, CAD 13,261,059, while the flagged extracted principal_amount_usd value is blank. Because FX01 requires explicit USD conversion for non-USD debt principal, the blank USD principal is a real extraction gap rather than a false alarm."
+}

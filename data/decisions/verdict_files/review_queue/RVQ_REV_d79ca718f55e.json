@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_d79ca718f55e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 12769251.0,
+  "anchor_value": 37591400.0,
+  "confidence": 0.96,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 200,
+      "row_index": 10,
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 252,
+      "row_index": 19,
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "HTML extraction carried only 12769251 of fair value while the filing schedule and composition tables show total invested assets of 37591400 for December 31, 2025.",
+      "fix_class": "missing_position_add",
+      "citation": {
+        "table_index": 252,
+        "row_index": 19
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The bundle's HTML reconciliation reports html_fv_sum 12769251 against cf_fv 37591400. Raw source anchors support the larger value: table 200 row 10 shows Total Invested Assets with fair value 37591400, and table 252 row 19 shows Total Investments with fair value 37591400. Because the filing schedule total agrees with the internal/companyfacts anchor and disagrees with the extracted HTML position sum, the carry flag is a real extraction gap rather than a false alarm or bad anchor."
+}

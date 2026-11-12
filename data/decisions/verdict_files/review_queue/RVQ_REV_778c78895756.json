@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_778c78895756",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0,
+  "anchor_value": 2,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 31,
+      "quoted_text": "Metropolis Technologies, Inc. | Preferred Equity | Interest Rate 16.00% | Maturity 5/16/2034 | Par Amount/Units 4,320 | Amortized Cost 4,277 | Fair Value 4,281",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 40,
+      "row_index": 32,
+      "quoted_text": "Metropolis Technologies, Inc. | Preferred Equity | Interest Rate 17.50% | Maturity 5/16/2034 | Par Amount/Units 480 | Amortized Cost 456 | Fair Value 459",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The two preferred equity rows have source Par Amount/Units of 4,320 and 480, but the extracted equity rows have no shares/units populated.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 31
+      }
+    }
+  ],
+  "rationale": "C04 reports that 0 of 2 equity rows have shares. The raw schedule's Preferred Equity section lists both Metropolis Technologies preferred equity rows with Par Amount/Units values: 4,320 and 480. Because the source contains the units and the extracted equity rows are missing them, the flag is a real extraction gap rather than a false alarm."
+}

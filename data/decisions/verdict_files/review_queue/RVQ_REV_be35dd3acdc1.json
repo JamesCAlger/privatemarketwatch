@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_be35dd3acdc1",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": 75193891.79,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "The flagged X07 row is H/2 Special Opportunities Fund with fair_value 75193891.79 and cost 6828312.83, but the evidence CLI returned missing_cached_html for overview, tables, totals, and targeted roam, so raw source could not be read to decide whether the >10x cost relationship is an actual source value or an extraction/data error."
+}

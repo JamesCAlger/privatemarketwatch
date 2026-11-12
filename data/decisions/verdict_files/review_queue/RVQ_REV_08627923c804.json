@@ -1,0 +1,73 @@
+{
+  "review_id": "RVQ_REV_08627923c804",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "Four issuer_name cells include section/industry/instrument/terms text instead of only the issuer.",
+  "anchor_value": "The source schedule separates clean Company cells from Investment, date, rate, cost, and fair-value terms.",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 19,
+      "quoted_text": "ASP Unifrax Holdings, Inc. (12) | First-lien loan ($ 1,127 par, due 12/2025 ) (3) | 8/25/2023 | SOFR + 3.90 % | 9.20 | % | 1,061 | 1,082 | 0.0 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 21,
+      "quoted_text": "Secured note ($ 1,226 par, due 9/2028 ) | 12/19/2023 | 5.25 % | 5.25 % | 841 | 800 | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 9,
+      "row_index": 22,
+      "quoted_text": "Unsecured note ($ 1,059 par, due 9/2029 ) | 8/31/2023 | 7.50 % | 7.50 % | 581 | 582 | 0.0 %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 4,
+      "quoted_text": "Newark FP Co-Invest, L.P. (8)(10) | Partnership ( 8,555,356 units) | 11/8/2023 | 8,572 | 8,572 | 0.4 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 10,
+      "row_index": 8,
+      "quoted_text": "AF Eagle Parent, L.P. (8)(10) | Partnership Units ( 337,024 units) | 11/27/2023 | 11,364 | 11,364 | 0.5 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "ASP Unifrax continuation note rows were stored with debt section, industry, issuer, instrument, acquisition date, reference rate, and interest rate text in issuer_name instead of the clean issuer ASP Unifrax Holdings, Inc.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 9,
+        "row_index": 21
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Newark FP Co-Invest was stored with equity section, industry, partnership terms, and acquisition date in issuer_name though the source Company cell is Newark FP Co-Invest, L.P.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 4
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "AF Eagle Parent was stored with equity section, industry, partnership units, and acquisition date in issuer_name though the source Company cell is AF Eagle Parent, L.P.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 10,
+        "row_index": 8
+      }
+    }
+  ],
+  "rationale": "This is a Class 1 issuer_name parse-leak defect. The flagged values concatenate schedule section and industry labels plus Investment, date, reference-rate, and interest-rate text into issuer_name. In the raw source, the relevant schedule rows keep the clean company names in the Company column or row context, while the note/partnership terms are separate Investment/terms columns. Therefore the C206 flag is a real localized extraction error, not a false alarm."
+}

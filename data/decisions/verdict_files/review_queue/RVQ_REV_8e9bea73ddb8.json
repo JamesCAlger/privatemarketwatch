@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_8e9bea73ddb8",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 218.4,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 31,
+      "row_index": 11,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 773,069 | $ | 778,371 | 218.4 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source schedule reports total investments at 218.4% of net assets, but the extracted A07 percentage aggregate is 0.0%.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 31,
+        "row_index": 11
+      }
+    }
+  ],
+  "rationale": "A07 is an aggregate review item. Raw source totals show non-controlled/non-affiliated portfolio company investments with cost 773,069, fair value 778,371, and 218.4% of net assets at table 31 row 11. The flagged observed pct_sum is 0.0%, so the source decides this as an extraction gap in the percentage-of-net-assets aggregate, not a bad source anchor."
+}

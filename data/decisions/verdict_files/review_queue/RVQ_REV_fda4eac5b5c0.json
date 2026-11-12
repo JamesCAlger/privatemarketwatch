@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_REV_fda4eac5b5c0",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source rows disclose nonblank Ref. Rate and Cash coupon",
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 49,
+      "row_index": 15,
+      "quoted_text": "AI Titan Parent, Inc. (dba Prometheus Group) | First lien senior secured loan | S+ | 4.50 % | 8/2031 | 28,787 | 28,525 | 28,478"
+    },
+    {
+      "table_index": 57,
+      "row_index": 29,
+      "quoted_text": "AQ Carver Buyer, Inc. (dba CoAdvantage) | First lien senior secured loan | S+ | 5.50 % | 8/2029 | 9,775 | 9,645 | 9,275"
+    },
+    {
+      "table_index": 49,
+      "row_index": 12,
+      "quoted_text": "Accommodations Plus Technologies LLC | First lien senior secured loan | S+ | 5.25 % | 5/2032 | 20,748 | 20,554 | 20,437"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Private-credit SOI rows disclose reference-rate and cash-coupon cells, but extracted holdings have blank interest_rate and no basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 49,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "X02 flags private-credit rows with no interest_rate or basis_spread. The raw SOI has explicit rate columns: for example AI Titan shows Ref. Rate S+ and Cash 4.50%, AQ Carver shows S+ and 5.50%, and Accommodations Plus Technologies shows S+ and 5.25%, while the bundle's corresponding extracted holdings rows have blank interest_rate. The source therefore decides the issue as a missed rate extraction, not a false alarm."
+}

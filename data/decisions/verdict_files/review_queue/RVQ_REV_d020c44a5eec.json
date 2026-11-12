@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_d020c44a5eec",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": "",
+  "observed_value": "fund=True;holdings=False",
+  "anchor_value": "",
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "F28 is a Class 3 coverage mismatch: the validation artifact reports fund_financials present and holdings absent for CIK 0001176984 as of 2024-06-30. The permitted evidence CLI returned status no_accession_resolved for overview, tables, totals, and targeted roam, so raw source tables and anchors were not available to adjudicate whether the holdings absence is a real extraction/data defect or a valid no-holdings case."
+}

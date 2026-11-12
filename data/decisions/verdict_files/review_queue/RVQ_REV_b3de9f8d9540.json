@@ -1,0 +1,56 @@
+{
+  "review_id": "RVQ_REV_b3de9f8d9540",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 5,
+  "anchor_value": 0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 42,
+      "row_index": 5,
+      "quoted_text": "AnalytiChem Holding GmbH continuation row in the December 31, 2022 SOI block: First Lien Senior Secured Term Loan, EURIBOR + 6.00 %, 7.7 % Cash, maturity 10/28, principal 7,237, cost 7,238, fair value 7,085.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 42,
+      "row_index": 6,
+      "quoted_text": "AnalytiChem Holding GmbH continuation row in the December 31, 2022 SOI block: First Lien Senior Secured Term Loan, LIBOR + 6.00 %, 10.8 % Cash, maturity 12/28, principal 951, cost 951, fair value 931.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 43,
+      "row_index": 2,
+      "quoted_text": "Argus Bidco Limited appears in the December 31, 2022 SOI block as High Tech Industries, First Lien Senior Secured Term Loan, EURIBOR + 5.75 %, 8.0 % Cash, principal 616, cost 566, fair value 600.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 60,
+      "row_index": 24,
+      "quoted_text": "TSYL Corporate Buyer, Inc. appears in the December 31, 2022 SOI block as Technology, First Lien Senior Secured Term Loan, SOFR + 4.75 %, 9.2 % Cash, principal 637, cost 591, fair value 591.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 61,
+      "row_index": 9,
+      "quoted_text": "Vital Buyer, LLC appears in the December 31, 2022 SOI block as Technology, First Lien Senior Secured Term Loan, LIBOR + 5.50 %, 10.2 % Cash, principal 963, cost 947, fair value 962.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Five holdings rows are prior-period SOI facts retained under the 2023-09-30 report date; they should be scoped to the December 31, 2022 comparative schedule, not the current quarter positions.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 62,
+        "row_index": 29,
+        "quoted_text": "Total Investments, December 31, 2022 (198.5 %)* | $ | 2,038,976 | $ | 2,187,501 | $ | 2,157,880"
+      }
+    }
+  ],
+  "rationale": "PP03 is a position-purity warning, and the raw source decides it: the filing contains a current September 30, 2023 SOI block ending with Total Investments, September 30, 2023, and a separate comparative December 31, 2022 SOI block ending with Total Investments, December 31, 2022. The flagged issuers/rows cited above are in the comparative block while the extracted holdings are attached to report_date 2023-09-30, so this is a real comparative-period leakage error rather than a false alarm. One Argus flagged value says Common Stock in the extracted artifact, but raw source did not expose a Common Stock match; that mismatch does not defeat the comparative-period mechanism because the cited Argus source row is still in the prior-period SOI block."
+}

@@ -1,0 +1,19 @@
+{
+  "review_id": "RVQ_REV_a5ab392daf01",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 7,
+  "anchor_value": 7,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 6, "row_index": 12},
+    {"table_index": 6, "row_index": 15},
+    {"table_index": 6, "row_index": 16},
+    {"table_index": 6, "row_index": 17},
+    {"table_index": 6, "row_index": 18}
+  ],
+  "rationale": "PP03 flagged seven rows as comparative-period facts, but the raw filing contains the same flagged instruments in the current schedule table for the 2023-09-30 report. Table 6 shows TCW ND Parent Holdings LLC Class A Units at row 12 and AGY Equity LLC Class A Preferred, Class B Preferred, Class C Common, and Class D Preferred Units at rows 15-18 under the current equity schedule structure with 0.0 percent of net assets and fair value shown as blank/dash. The two prefixed extracted identifiers correspond to the same current table 6 industry sections (Aerospace & Defense for TCW; Chemicals for AGY Class D). The source therefore supports current-period position rows; the comparative-period warning is a false alarm rather than a data error."
+}

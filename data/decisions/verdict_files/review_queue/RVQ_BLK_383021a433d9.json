@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_383021a433d9",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 898,
+  "anchor_value": 898,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 24,
+      "quoted_text": "Expenses waived by the Adviser: (724)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 14,
+      "row_index": 26,
+      "quoted_text": "Net investment income: 898",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The income identity must use net expenses of 1,987 after the 724 adviser waiver, not gross expenses of 2,711.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 14,
+        "row_index": 25
+      }
+    }
+  ],
+  "rationale": "Raw statement table 14 reports total investment income of 2,885 (row 14), gross expenses of 2,711 (row 23), a 724 adviser waiver (row 24), net expenses of 1,987 (row 25), and net investment income of 898 (row 26). The source identity is 2,885 - 1,987 = 898. The flag is therefore a false alarm caused by applying the identity to gross expenses without the disclosed waiver."
+}

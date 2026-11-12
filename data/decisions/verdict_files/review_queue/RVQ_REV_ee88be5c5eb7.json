@@ -1,0 +1,22 @@
+{
+  "review_id": "RVQ_REV_ee88be5c5eb7",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 8,
+  "anchor_value": 8,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {"table_index": 19, "row_index": 16, "quoted_text": "CSafe Global | (f) | Transportation | SF | + | 5.8 % | 0.8 % | 03/29 | $ | 504 | 504 | 504"},
+    {"table_index": 17, "row_index": 22, "quoted_text": "Cadence Education LLC | (h) | Consumer Services | SF | + | 5.0 % | 0.8 % | 05/30 | 353 | 353 | 353"},
+    {"table_index": 27, "row_index": 32, "quoted_text": "Discover Financial Services, Subordinated Loan | (h)(j)(l) | Financial Services | 15.0 % | 09/34 | $ | 7 | 7 | 7"},
+    {"table_index": 19, "row_index": 25, "quoted_text": "DuBois Chemicals Inc | (h) | Materials | SF | + | 4.5 % | 0.8 % | 06/31 | 1,894 | 1,888 | 1,894"},
+    {"table_index": 23, "row_index": 11, "quoted_text": "Model N Inc | (h) | Software & Services | SF | + | 4.8 % | 0.8 % | 06/31 | 1,258 | 1,256 | 1,258"},
+    {"table_index": 23, "row_index": 31, "quoted_text": "Revere Superior Holdings Inc | (f) | Software & Services | SF | + | 5.0 % | 1.0 % | 10/29 | 298 | 298 | 297"},
+    {"table_index": 23, "row_index": 36, "quoted_text": "Rialto Capital Management LLC | (h) | Financial Services | SF | + | 5.0 % | 0.8 % | 12/30 | 232 | 232 | 232"},
+    {"table_index": 27, "row_index": 7, "quoted_text": "Wealth Enhancement Group LLC | (h) | Financial Services | SF | + | 5.0 % | 1.0 % | 10/28 | 298 | 298 | 298"}
+  ],
+  "rationale": "PP03 flagged eight holdings as comparative-period rows retained for report_date 2025-06-30. Raw source review shows matching current-period SOI rows in the June 30, 2025 schedule for each flagged issuer/ordinal; the later December 31, 2024 rows are similar but do not make the current rows invalid. The check appears to have confused similar prior-period rows with the current-period positions, so the data rows are source-supported."
+}

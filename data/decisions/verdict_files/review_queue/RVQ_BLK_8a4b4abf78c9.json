@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_8a4b4abf78c9",
+  "verdict": "false_alarm",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1469.243,
+  "anchor_value": 1469.243,
+  "confidence": 0.98,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 25,
+      "quoted_text": "Total Investments - 154.8 % | $ | 1,557,384 | $ | 1,469,243",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 19,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 161.4 % | $ | 1,596,478 | $ | 1,534,345",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The E07 source count includes the separate December 31, 2025 comparative investment schedule even though the reviewed output is for March 31, 2026.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 19,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "The filing presents separate current and comparative schedules. The March 31, 2026 schedule total at table 13 row 25 is $1,469.243 million, exactly equal to the extracted fund-quarter fair value of $1,469.243 million. The second schedule ends at table 19 row 26 with a different $1,534.345 million total, which the filing's March 31, 2026 versus December 31, 2025 balance-sheet presentation identifies as the comparative period. Thus the 373-row source count is inflated by comparative-period rows, while the 164-row current-period output is supported by the reconciled current schedule total. The E07 flag is a false alarm caused by a comparative-period leak in its source-count anchor."
+}

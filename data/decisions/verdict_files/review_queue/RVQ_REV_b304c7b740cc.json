@@ -1,0 +1,35 @@
+{
+  "review_id": "RVQ_REV_b304c7b740cc",
+  "verdict": "real_error",
+  "mechanism": "genuine_value_defect",
+  "localized": true,
+  "anchor_used": "report_date",
+  "observed_value": "2024-04-30",
+  "anchor_value": "2025-06-30",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 13,
+      "row_index": 4,
+      "quoted_text": "Heubach Holdings USA LLC | First Lien Secured Debt - Term Loan | 11.00 % | 4/30/2024 | $ | 485 | $ | 427 | $ | 243 | (4)(8)(16)(28)"
+    },
+    {
+      "table_index": 5,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments as of June 30, 2025 (Unaudited) | 7"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "genuine_value_defect",
+      "detail": "Current-period Heubach Holdings USA LLC first lien term loan carries maturity 2024-04-30, before the 2025-06-30 report date, with nonzero fair value.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 13,
+        "row_index": 4
+      }
+    }
+  ],
+  "rationale": "The June 30, 2025 Schedule of Investments includes a Heubach Holdings USA LLC first lien secured debt term loan with maturity date 4/30/2024 and fair value $243. The stated maturity is before the report date, so the maturity_not_past flag is source-grounded and localized to that row."
+}

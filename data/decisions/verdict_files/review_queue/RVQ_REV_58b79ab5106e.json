@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_58b79ab5106e",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 39.66,
+  "anchor_value": "Specialty Retail",
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 28,
+      "row_index": 23,
+      "quoted_text": "Specialty Retail | March 31, 2026 cost 39,626 | fair value 39,811 | 3.2%",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The numeric cost 39,626 (represented as 39.66 in the flag) was used as exposure_type instead of the row label Specialty Retail.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 28,
+        "row_index": 23
+      }
+    }
+  ],
+  "rationale": "Raw source table 28 row 23 identifies the exposure category as Specialty Retail and separately reports March 31, 2026 cost of 39,626, fair value of 39,811, and 3.2%. The flagged metric 39.66 matches the scaled cost, so a numeric amount was mapped into the categorical exposure_type field."
+}

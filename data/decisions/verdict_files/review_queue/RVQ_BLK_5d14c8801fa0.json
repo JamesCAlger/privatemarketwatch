@@ -1,0 +1,54 @@
+{
+  "review_id": "RVQ_BLK_5d14c8801fa0",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": false,
+  "anchor_used": "companyfacts_fv",
+  "observed_value": 2128161158.0,
+  "anchor_value": 691956192.0,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 7,
+      "row_index": 26,
+      "quoted_text": "Total Debt & Equity Investments (7) | 143.3 | % | 844,551,095 | 691,956,192",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 24,
+      "row_index": 6,
+      "quoted_text": "Total Assets | $ | 401,563 | $ | - | $ | 691,956 | $ | 1,093,519",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 14,
+      "row_index": 8,
+      "quoted_text": "Total Debt & Equity Investments (7) | 160.6 | % | 986,086,557 | 847,197,092",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The raw source contains a prior-period debt and equity investment schedule totaling 847,197,092 that must not be summed into the June 30, 2025 companyfacts Level 3 fair value anchor of 691,956,192.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 14,
+        "row_index": 8,
+        "quoted_text": "Total Debt & Equity Investments (7) | 160.6 | % | 986,086,557 | 847,197,092"
+      }
+    },
+    {
+      "mechanism": "classification_lookthrough",
+      "detail": "The current fair value disclosure separates Level 1 cash equivalents and short-term investments from the Level 3 debt and equity total, so those rows are outside the companyfacts_fv anchor scope.",
+      "fix_class": "classification_fix",
+      "citation": {
+        "table_index": 24,
+        "row_index": 6,
+        "quoted_text": "Total Assets | $ | 401,563 | $ | - | $ | 691,956 | $ | 1,093,519"
+      }
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The filing's current schedule reports Total Debt & Equity Investments fair value of 691,956,192, and the fair value hierarchy table reports Level 3 total assets of 691,956 thousand, matching the companyfacts_fv anchor. The extracted holdings sum is 2,128,161,158, which is more than three times the current Level 3 debt/equity anchor and also exceeds the current Total Investments line of 1,093,518,278. Source structure shows prior-period investment schedule totals and non-Level-3 cash/short-term buckets near the leaked amounts, so the aggregate conservation failure is a real extraction/scope error rather than a bad anchor. The exact residual is not fully localized to one row, so localized is false."
+}

@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_3e863b4dd818",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 2.0,
+  "anchor_value": 11.0,
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 54,
+      "row_index": 33,
+      "quoted_text": "Amalfi Midco | Subordinated Loan Notes | 2.0 % Cash, 9.0 % PIK | 09/22 | 09/28 | 5,943 | 5,416 | 5,492 | 0.3 | % | (3)(7)(32)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 59,
+      "row_index": 21,
+      "quoted_text": "Acogroup | First Lien Senior Secured Term Loan | 4.0 % Cash, EURIBOR + 2.9 % PIK, 6.6 % PIK | 05/21 | 10/26 | 27,320 | 28,750 | 20,107 | 1.0 | % | (3)(7)(8)(11) (30)(32)",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "The rule-specific standard requires interest_rate to be the all-in coupon including PIK. The cited SOI rows disclose separate cash and PIK legs. Amalfi shows 2.0% cash plus 9.0% PIK, so the all-in stated coupon is 11.0%, while the stored interest_rate reflected the 2.0% cash leg. Acogroup likewise shows 4.0% cash with PIK components, while the stored interest_rate reflected only 4.0%. The flag is therefore a real extraction gap, not a false alarm."
+}

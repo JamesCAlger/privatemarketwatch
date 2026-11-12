@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_47cfa1cc3b42",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 978154000,
+  "anchor_value": 978154000,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 12,
+      "row_index": 16,
+      "quoted_text": "A.P.A. Industries, LLC (6) | First lien senior secured revolving loan | S + | 6.25 % | 11.75 % | 1/10/2028 | 1,523 | ( 35 ) | ( 33 ) | ( 0.01 ) | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 17,
+      "row_index": 21,
+      "quoted_text": "Total investments | $ | 978,154 | $ | 984,342 | 164.92 | %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "The source schedule legitimately reports some amortized cost cells as parenthesized negative amounts; the extractor preserved the signed values and the schedule total ties.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 12,
+        "row_index": 16
+      }
+    }
+  ],
+  "rationale": "The fmt_cost flag is driven by negative amortized cost values, but the raw SOI itself prints those costs in parentheses. For example, A.P.A. Industries revolving loan shows amortized cost (35) and fair value (33), matching the extracted -35000 and -33000 after thousands scaling. The filing's own Total investments row reports amortized cost 978,154 and fair value 984,342, so the signed costs are part of the source schedule rather than extraction errors."
+}

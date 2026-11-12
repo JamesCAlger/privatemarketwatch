@@ -1,0 +1,25 @@
+{
+  "review_id": "RVQ_REV_cc4082988635",
+  "verdict": "false_alarm",
+  "mechanism": "unknown",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0,
+  "anchor_value": 0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 14,
+      "row_index": 25,
+      "quoted_text": "48Forty Solutions LLC | Common Equities | par 872 | cost dash | fair value dash | percent dash"
+    },
+    {
+      "table_index": 15,
+      "row_index": 28,
+      "quoted_text": "TH Liquidating Trust | Trust Interest | par 14% | cost dash | fair value dash | percent dash"
+    }
+  ],
+  "rationale": "C104 flagged two extracted fair_value values of 0.0. The raw March 31, 2025 schedule shows the corresponding 48Forty Solutions common equity row and TH Liquidating Trust trust-interest row with dashes in the Fair Value column, so representing those source dashes as zero is source-consistent rather than a data error. The warning is therefore an overbroad advisory flag for legitimate zero/no-value positions."
+}
+

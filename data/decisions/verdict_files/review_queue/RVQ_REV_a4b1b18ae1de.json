@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_a4b1b18ae1de",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "S + 6.50 % (Incl. 5.50 % PIK)",
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 7,389 | $ | 6,428 | $ | 5,099 | (6) (7) (8) (12)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "Streamland Media Midco LLC was extracted with blank interest_rate/basis_spread even though the SOI row discloses reference spread S + 6.50% including 5.50% PIK.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 38,
+        "row_index": 9,
+        "quoted_text": "Streamland Media Midco LLC | Entertainment | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 7,389 | $ | 6,428 | $ | 5,099 | (6) (7) (8) (12)"
+      }
+    }
+  ],
+  "rationale": "X02 flags three private-credit rows with no extracted interest_rate or basis_spread. Raw SOI evidence decides at least one as a real extraction defect: Streamland Media Midco LLC has a blank Interest Rate column but a populated Reference Rate and Spread cell, S + 6.50 % (Incl. 5.50 % PIK), while the extracted flagged row carries no rate data. Targeted checks for Sweep Midco LLC and mPulse Mobile, Inc. showed source rows with both rate fields blank, so those rows do not independently prove extraction error; the review item is still a real_error because the bundled X02 issue set includes the localized Streamland miss."
+}

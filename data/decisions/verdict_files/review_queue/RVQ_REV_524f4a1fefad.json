@@ -1,0 +1,14 @@
+{
+  "review_id": "RVQ_REV_524f4a1fefad",
+  "verdict": "ambiguous",
+  "ambiguity_basis": "source_unavailable",
+  "mechanism": "unknown",
+  "localized": false,
+  "anchor_used": null,
+  "observed_value": null,
+  "anchor_value": null,
+  "confidence": 0.0,
+  "escalate": true,
+  "culprit_citations": [],
+  "rationale": "GAV_BDC02 is an aggregate anchor/reconciliation flag, but the evidence CLI could not resolve the raw filing source for this CIK and period. The targeted totals, tables, and roam commands returned status no_accession_resolved with rows_seen=2, so no schedule total, companyfacts anchor, position-sum triangulation, or source table citation was available. Per contract, this is source_unavailable rather than a substantive judgment."
+}

@@ -1,0 +1,125 @@
+{
+  "changed_files": [
+    "pipeline/bdc_identifier.py",
+    "pipeline/source_reconciliation.py",
+    "tests/test_unified_holdings.py",
+    "tests/test_validate_holdings.py"
+  ],
+  "cik": "0001902649",
+  "confidence": "HIGH",
+  "evidence_refs": [
+    "worklist_row",
+    "source_residual_rows",
+    "source_only_blocker_rows",
+    "source_reconciliation_detail_samples",
+    "html_source_row_coordinate_candidates",
+    "holdings_examples",
+    "xbrl_rows_same_accession",
+    "cik_validation_packet",
+    "gav_reconciliation"
+  ],
+  "gav_effect": "No direct GAV effect from the verdict. The proposed bounded parser/reconciliation patch changes classification of BlackRock terminal-percentage total rows and instrument-hierarchy leaf rows; affected outputs must be rebuilt through the pipeline before production counts are treated as cleared.",
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 26,
+      "row_index": 19,
+      "cell_indices": [
+        0,
+        25,
+        29,
+        33,
+        34
+      ],
+      "row_classification": "SUBTOTAL_ROW",
+      "reason": "Total Debt Investments - 167.9% of Net Assets is an aggregate subtotal row with total label and aggregate cost/fair-value/percent cells, not a position-level holding."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 20,
+      "row_index": 11,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Discovery Purchaser Corporation is a current-period position row with borrower, instrument, reference rate, floor, spread, coupon, maturity, principal/cost/fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 20,
+      "row_index": 27,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "Geo Parent Corporation is a current-period position row with borrower, instrument, reference rate, spread, coupon, maturity, principal/cost/fair value, and percent-of-net-assets cells."
+    },
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 21,
+      "row_index": 26,
+      "cell_indices": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        18,
+        20,
+        21,
+        25,
+        29,
+        33,
+        34
+      ],
+      "row_classification": "POSITION_ROW",
+      "reason": "TruGreen Limited Partnership is a current-period position row with borrower, instrument, reference rate, floor, spread, coupon, maturity, principal/cost/fair value, and percent-of-net-assets cells."
+    }
+  ],
+  "missing_evidence": "",
+  "patch_summary": "Bounded patch already implemented for the BlackRock pattern: source reconciliation now classifies exact terminal-percentage total/header labels such as Cash and Investments / Debt Investments totals as aggregate rows, and bdc_identifier treats the BlackRock hierarchy label 'Instrument' as a leaf-detail marker when paired with loan/equity terms and rate/maturity evidence. Focused tests cover the instrument leaf hierarchy and false positives for non-leaf Instrument text.",
+  "primary_justification": "Manual review of row 54 shows a mixed BlackRock packet, not an insufficient-evidence case. The large terminal-percentage rows are totals/subtotals and should not become production positions. The borrower-level rows with 'Instrument' in the XBRL identifier, such as Discovery Purchaser Corporation, Geo Parent Corporation, and TruGreen Limited Partnership, are real current-period positions with rate and maturity evidence. The implemented bounded patch addresses both sides of this pattern: exclude terminal percentage totals while allowing genuine 'Instrument' hierarchy leaves through the BDC identifier logic.",
+  "reconciliation_diagnosis": "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+  "report_date": "2023-12-31",
+  "requires_human_merge": true,
+  "residual_risk": "The verdict is patch-based and remains provisional until affected source reconciliation outputs are rebuilt through the approved pipeline. The targeted tests reduce false-positive risk for generic Instrument text, but production blocker counts should not be treated as cleared until rebuild/validation confirms the current artifacts.",
+  "review_id": "BDCSRC_0001902649_2023-12-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_4fd48c1e61",
+  "reviewer_notes": "Reviewed manually as row 54. This is consistent with the earlier BlackRock 2024 rows: the row merits support a bounded patch, not a blanket insufficient-evidence verdict. Aggregate terminal-percentage rows and real instrument-leaf rows are separated by the patch rather than widened or suppressed.",
+  "rule_type": "row_classification",
+  "source_reconciliation_effect": "Expected effect after rebuild: BlackRock terminal-percentage total/header rows are classified as non-position aggregate/header evidence, while true borrower/instrument leaf rows remain eligible for unified holdings matching rather than being filtered as hierarchy headers.",
+  "tests_validation_plan": "Already run targeted tests for the patch: pytest tests/test_unified_holdings.py targeted instrument hierarchy tests, pytest tests/test_validate_holdings.py targeted source reconciliation tests, and pytest tests/test_bdc_cik_review.py tests/test_html_soi_evidence.py. Validate verdict integrity after this row with python scripts/bdc_cik_review/validate_verdicts.py --output-dir data/output/bdc_cik_review --all.",
+  "verdict": "PATCH_PROPOSED"
+}

@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_REV_1505bd970410",
+  "verdict": "real_error",
+  "mechanism": "rate_scale",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 37.60206718346252,
+  "anchor_value": 10.47054747054747,
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 72,
+      "row_index": 15,
+      "quoted_text": "Class I 2025 distributions total per share $1.5109 and amount $51,541.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 69,
+      "row_index": 14,
+      "quoted_text": "December 31, 2025 Class I NAV per share $14.43.",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rate_scale",
+      "detail": "Stored distribution_rate is 37.602%, but source annual Class I distributions of 1.5109 per share over Dec. 31 NAV of 14.43 imply about 10.47%, within the rule range.",
+      "fix_class": "rate_rescale",
+      "citation": {
+        "table_index": 72,
+        "row_index": 15
+      }
+    }
+  ],
+  "rationale": "F33 is an aggregate fund_financials rate check. The raw source distribution schedule reports 2025 Class I total distributions of $1.5109 per share and $51.541 million, and the NAV schedule reports December 31, 2025 Class I NAV per share of $14.43. Those source anchors imply a distribution/NAV rate of approximately 10.47%, not the stored 37.602067%; therefore the flagged stored value is a real data error rather than a false alarm."
+}

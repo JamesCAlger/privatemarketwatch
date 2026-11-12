@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_10bdf849349d",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 4.5,
+  "anchor_value": 5.0,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 20,
+      "row_index": 40,
+      "quoted_text": "UFT Buyer LLC (dba United Flow Technologies) | Trading Companies & Distributors | 8.70 % | S + 5.00 % (Incl. 2.75 % PIK) | 12/06/32 | 10,476 | 10,375 | 10,345 | (7) (8)",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 38,
+      "row_index": 39,
+      "quoted_text": "UFT Buyer LLC (dba United Flow Technologies) | Trading Companies & Distributors | 8.27 % | S + 4.50 % | 12/06/32 | 10,383 | 10,280 | 10,279 | (7)",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "The extracted current-quarter position uses the comparative-period 8.27% and S + 4.50% identifier instead of the current 8.70% and S + 5.00% terms.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 20,
+        "row_index": 40
+      }
+    }
+  ],
+  "rationale": "Class 2 within-row review. The flagged identifier states 8.27% and S + 4.50%, but the current-period UFT row at table 20 row 40 has matching current monetary values (cost 10,375 and fair value 10,345) and states 8.70% and S + 5.00% including 2.75% PIK. The flagged terms instead match the comparative row at table 38 row 39. This grounds a comparative-period identifier leak; no aggregate anchor was needed."
+}

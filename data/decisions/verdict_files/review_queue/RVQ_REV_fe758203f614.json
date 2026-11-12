@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_fe758203f614",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "source_schedule_period",
+  "observed_value": "2025-12-31",
+  "anchor_value": "2026-03-31",
+  "confidence": 0.94,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 52,
+      "row_index": 12,
+      "quoted_text": "Carnegie Dartlet, LLC Revolving Loan | (3)(4)(5)(6)(7)(8) | 3M SOFR + 0.50 % / 1.00 % | 0.50 % | 2/7/2030 | - | (1) | - | 0.00 %",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "A prior-period schedule row was retained in the 2026-03-31 holdings output; the same Carnegie revolving position also appears in the current schedule at table 10 row 19.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 52,
+        "row_index": 12
+      }
+    }
+  ],
+  "rationale": "PP03 is a Class 2 period-purity flag. Raw source contains the Carnegie Dartlet revolving loan in both table 10 row 19 and table 52 row 12, while the flagged record is explicitly identified as sourced from a period earlier than the 2026-03-31 report date. Retaining the comparative schedule instance as a current-quarter holding is a comparative-period extraction leak."
+}

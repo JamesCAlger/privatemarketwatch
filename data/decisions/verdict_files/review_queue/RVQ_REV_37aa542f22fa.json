@@ -1,0 +1,52 @@
+{
+  "review_id": "RVQ_REV_37aa542f22fa",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "fair_value_currency stored as U_GBP, U_EUR, and U_CAD on flagged rows",
+  "anchor_value": "raw SOI fair value column is USD; non-USD marker belongs to Par/Shares",
+  "confidence": 0.9,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 16,
+      "row_index": 10,
+      "quoted_text": "Brush Group Bidco Limited | First Lien Secured Debt - Term Loan | SONIA + 500, 0.00% Floor | 07/30/31 | GBP | 5,970 | $ | 7,800 | $ | 7,941",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 18,
+      "row_index": 37,
+      "quoted_text": "Natus Sensory, Inc. continuation | First Lien Secured Debt - Term Loan | E + 525, 0.00% Floor | 01/07/31 | EUR | 95 | 98 | 106",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 16,
+      "row_index": 24,
+      "quoted_text": "Total Power Limited | First Lien Secured Debt - Term Loan | CORRA + 450, 0.75% Floor | 07/22/30 | C$ | 8,668 | 6,214 | 6,106",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "GBP par currency was assigned to fair_value_currency even though the source row's fair value is in the USD fair value column.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 16, "row_index": 10}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "EUR par currency was assigned to fair_value_currency even though the source row places EUR in Par/Shares, not Fair Value.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 18, "row_index": 37}
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "CAD par currency was assigned to fair_value_currency even though the source row places C$ in Par/Shares, not Fair Value.",
+      "fix_class": "column_remap",
+      "citation": {"table_index": 16, "row_index": 24}
+    }
+  ],
+  "rationale": "FX02 is a real data error. The flagged non-USD values are localized to fair_value_currency, but raw SOI rows show the non-USD currency marker in the Par/Shares area while the valuation columns are the filing's Cost and Fair Value columns. The extractor carried local principal currency into fair_value_currency rather than preserving USD valuation currency. Source was available and checked via evidence_cli."
+}

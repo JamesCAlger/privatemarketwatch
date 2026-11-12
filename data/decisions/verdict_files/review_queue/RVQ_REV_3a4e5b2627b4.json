@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_3a4e5b2627b4",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": "",
+  "anchor_value": "source coupon populated",
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 40,
+      "row_index": 17,
+      "quoted_text": "Senior subordinated loan | 14.00 % PIK | 04/2025 | 04/2035 | 13.8 | 13.2 | 13.4",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 52,
+      "row_index": 19,
+      "quoted_text": "22 HoldCo Limited | Sports and entertainment platform | Senior subordinated loan | 12.16 % PIK | SONIA (S) | 7.50 % | 08/2023 | 08/2033 | 66.4 | 61.6 | 66.4 | (2)(6)(10)",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 26,
+      "quoted_text": "Second lien senior secured loan | 10.00 % PIK | 06/2023 | 03/2027 | 48.4 | 48.4 | 48.4 | (2)",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "PIK-only private-credit coupons are present in the source coupon column but were left blank in extracted interest_rate.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 40,
+        "row_index": 17
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "22 HoldCo Limited senior subordinated loan has source coupon 12.16% PIK but the flagged extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 52,
+        "row_index": 19
+      }
+    },
+    {
+      "mechanism": "extraction_gap",
+      "detail": "ADG second lien senior secured loan has source coupon 10.00% PIK but the flagged extracted row has no interest_rate or basis_spread.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 21,
+        "row_index": 26
+      }
+    }
+  ],
+  "rationale": "X02 flags PRIVATE_CREDIT rows with no extracted interest_rate or basis_spread. The raw Ares Capital schedule includes explicit Coupon, Reference, and Spread columns. For flagged missing-rate examples, the source rows show populated coupon cells, including 14.00% PIK for 15484880 Canada senior subordinated loan, 12.16% PIK for 22 HoldCo Limited senior subordinated loan, and 10.00% PIK for ADG second lien senior secured loan. The blank extracted values therefore reflect a coupon extraction gap rather than a correct absence of source rate data."
+}

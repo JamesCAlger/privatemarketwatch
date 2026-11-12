@@ -1,0 +1,29 @@
+{
+  "review_id": "RVQ_REV_a21100fca400",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 1.10,
+  "anchor_value": 1.095,
+  "confidence": 0.82,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 39,
+      "row_index": 38,
+      "quoted_text": "Total Entertainment Software - 1.10 %* | 3,584 | 3,646 | 2,889"
+    },
+    {
+      "table_index": 8,
+      "row_index": 24,
+      "quoted_text": "Total net assets | $ | 245,834 | $ | 263,782"
+    },
+    {
+      "table_index": 52,
+      "row_index": 43,
+      "quoted_text": "Total Investments in Portfolio Companies - 136.44 %* (4)(5) | $ | 372,310 | $ | 359,897"
+    }
+  ],
+  "rationale": "The apparent 1.10 percent basis spread is source-supported. The raw source row is in the prior-period SOI block: fair value 2,889 divided by the December 31, 2024 net assets anchor 263,782 equals 1.095 percent, which rounds to the printed 1.10 percent. The same prior-period block total, 359,897 / 263,782, rounds to the printed 136.44 percent. The source value is therefore correct; the flag reflects use of the wrong basis/check context rather than a data error."
+}

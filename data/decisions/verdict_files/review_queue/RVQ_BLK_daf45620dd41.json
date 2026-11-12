@@ -1,0 +1,40 @@
+{
+  "review_id": "RVQ_BLK_daf45620dd41",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "",
+  "observed_value": "basis_spread values 10.0, 6.5, and 5.75 are present in source reference-rate/spread cells",
+  "anchor_value": "source shows floating reference-rate/spread disclosures, not fixed-rate-only instruments",
+  "confidence": 0.88,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 34,
+      "row_index": 20,
+      "quoted_text": "Thrasio, LLC | Broadline Retail | S + 10.00 % PIK | 06/18/29 | $ | 16,346 | $ | 11,402 | $ | 12,300 | (6) (7) (8) (11) (12)"
+    },
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 7,389 | $ | 6,428 | $ | 5,099 | (6) (7) (8) (12)"
+    },
+    {
+      "table_index": 34,
+      "row_index": 28,
+      "quoted_text": "Sweep Purchaser LLC | Commercial Services & Supplies | 9.58 % | S + 5.75 % PIK | 06/30/27 | 20,242 | 20,160 | 20,039 | (6) (7) (8)"
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "rule_scope",
+      "detail": "X04 is firing on rows whose source Reference Rate and Spread cells explicitly contain S plus a spread, so the basis_spread values are source-supported.",
+      "fix_class": "rule_scope",
+      "citation": {
+        "table_index": 34,
+        "row_index": 20
+      }
+    }
+  ],
+  "rationale": "The X04 issue says fixed coupon rows should not carry basis_spread, but the raw schedule rows with the disputed spread values disclose floating reference-rate terms in the Reference Rate and Spread column. Thrasio discloses S + 10.00% PIK, Streamland discloses S + 6.50% including PIK, and Sweep Purchaser discloses S + 5.75% PIK. The stored basis_spread values therefore match source terms; the check/classification treating these rows as fixed-rate-only is the defect."
+}

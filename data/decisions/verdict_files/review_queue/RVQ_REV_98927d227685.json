@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_98927d227685",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 57,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 420,392,905 | 100.00 | % | $ | 407,509,401 | 100.00 | %",
+      "ties_to_residual": true
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "A07 observed pct_sum is 0.0%, but the raw source has a December 31, 2025 total investments percentage of 100.00% tied to fair value 407,509,401.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 57,
+        "row_index": 9
+      }
+    }
+  ],
+  "rationale": "Class 3 aggregate check. The flag reports A07 pct_sum=0.0% for the CIK-quarter, but the filing's percentage-of-total-investments table shows December 31, 2025 Total Investments fair value of 407,509,401 and Percentage of Total Investments of 100.00%. That source row matches the bundle's internal fair value anchor of 407.509401 million, so the zero percentage sum is an extraction/column mapping miss rather than a true absence of percentage data."
+}

@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_90476e4c25c6",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 20.0,
+  "anchor_value": null,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 24,
+      "row_index": 13,
+      "quoted_text": "FS NU Investors, LP | (a) | (6) | Consumer Services | 20.00 % ( 100 % PIK) | 8/9/2024 | 1 | 149 | 174 | 0.01",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "extraction_gap",
+      "detail": "The source value 20.00% (100% PIK) is in the All-In Rate column for FS NU Investors, LP, but the flagged stored field is basis_spread=20.0.",
+      "fix_class": "column_remap",
+      "citation": {
+        "table_index": 24,
+        "row_index": 13
+      }
+    }
+  ],
+  "rationale": "Class 1 single-cell check. The raw source table header places FS NU Investors, LP in an Equity Investments table with an All-In Rate column, and row 13 shows 20.00% (100% PIK). The queued issue is basis_spread=20.0; source supports that 20.0 is an all-in PIK rate, not a basis spread, so the stored basis_spread field is erroneous. No aggregate anchor was needed."
+}

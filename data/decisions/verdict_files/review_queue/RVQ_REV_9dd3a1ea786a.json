@@ -1,0 +1,61 @@
+{
+  "review_id": "RVQ_REV_9dd3a1ea786a",
+  "verdict": "real_error",
+  "mechanism": "comparative_leak",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 318915,
+  "anchor_value": 1311001,
+  "confidence": 0.93,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 75,
+      "row_index": 77,
+      "quoted_text": "Total investments | 316,817 | 174.6 | 318,915",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 31,
+      "row_index": 1,
+      "quoted_text": "As of September 30, 2024 | As of September 30, 2023",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 23,
+      "quoted_text": "Anaplan, Inc.(5) | One stop | SF + | 6.50 % | N/A(6) | 06/2028 | - | ( 2 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 72,
+      "row_index": 31,
+      "quoted_text": "Bynder BidCo, Inc.& Bynder BidCo B.V.(5)(7)(14) | One stop | SF + | 7.25 % | N/A(6) | 01/2029 | - | ( 1 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 73,
+      "row_index": 15,
+      "quoted_text": "PING Identity Holding Corp.(5) | One stop | SF + | 7.00 % | N/A(6) | 10/2028 | - | ( 1 ) | - | -",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 73,
+      "row_index": 31,
+      "quoted_text": "Zendesk, Inc.(5) | One stop | SF + | 6.50 % | N/A(6) | 11/2028 | - | ( 20 ) | - | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "comparative_leak",
+      "detail": "Flagged position rows come from the comparative September 30, 2023 schedule block, not the September 30, 2024 current-position block.",
+      "fix_class": "comparative_period_filter",
+      "citation": {
+        "table_index": 75,
+        "row_index": 77
+      }
+    }
+  ],
+  "rationale": "The raw filing contains current and comparative schedules. The comparative schedule is anchored by the 318,915 total investments amount, matching the September 30, 2023 column shown elsewhere, while the 2024 current investments total is 1,311,001. The flagged PP03 rows are retained as 2024 holdings despite source-period evidence pointing to the comparative 2023 schedule, so this is a real comparative-period leak rather than a false alarm."
+}

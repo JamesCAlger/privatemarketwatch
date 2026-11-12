@@ -1,0 +1,37 @@
+{
+    "review_id":  "RVQ_REV_039348a4d001",
+    "verdict":  "real_error",
+    "mechanism":  "extraction_gap",
+    "localized":  false,
+    "anchor_used":  "schedule_total",
+    "observed_value":  222.1,
+    "anchor_value":  253.3,
+    "confidence":  0.88,
+    "escalate":  false,
+    "culprit_citations":  [
+                              {
+                                  "table_index":  18,
+                                  "row_index":  6,
+                                  "quoted_text":  "Total Investments | $ | 1,370,484,937 | $ | 1,343,608,252 | $ | 1,279,792,804 | 253.3 | %",
+                                  "ties_to_residual":  true
+                              },
+                              {
+                                  "table_index":  18,
+                                  "row_index":  8,
+                                  "quoted_text":  "Net Assets | $ | 505,213,440 | 100.0 | %",
+                                  "ties_to_residual":  false
+                              }
+                          ],
+    "findings":  [
+                     {
+                         "mechanism":  "extraction_gap",
+                         "detail":  "Extracted pct_of_net_assets aggregate is 222.1%, but the filing schedule total investments line is 253.3% of net assets.",
+                         "fix_class":  "missing_position_add",
+                         "citation":  {
+                                          "table_index":  18,
+                                          "row_index":  6
+                                      }
+                     }
+                 ],
+    "rationale":  "Class 3 aggregate PCT01 flag. The source schedule anchors total investments at 1,279,792,804, equal to 253.3% of net assets of 505,213,440. The flagged extracted pct_of_net_assets sum is 222.1%, so the extracted aggregate does not tie to the filing total. The source decides the question as an extraction aggregate gap rather than a false alarm."
+}

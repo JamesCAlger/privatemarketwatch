@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_8cc0de0bf444",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 1519.014,
+  "anchor_value": 1512.098,
+  "confidence": 0.86,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 47,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 1,525,141 | $ | 1,512,098 | 154.32 | %",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 21,
+      "row_index": 30,
+      "quoted_text": "Total net assets | $ | 979,831 | $ | 983,730",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "Class 3 anchor check. The filing's SOI total investments fair value is 1,512.098 million and the balance sheet net-assets denominator is 979.831 million, yielding the reported 154.32% of net assets. The bundle's extracted fund_quarter_fv_m is 1,519.014 million, which is 6.916 million above the filing schedule total, so the F23 percentage inconsistency reflects an extraction-side FV total error rather than a false alarm. Targeted residual searches for 6,916/6.916 did not identify a single source row, so the defect is not row-localized."
+}

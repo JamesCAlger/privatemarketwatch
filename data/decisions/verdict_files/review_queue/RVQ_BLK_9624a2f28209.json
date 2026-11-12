@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_BLK_9624a2f28209",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": false,
+  "anchor_used": "schedule_total",
+  "observed_value": 544170799,
+  "anchor_value": 224956333,
+  "confidence": 0.99,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 8,
+      "row_index": 16,
+      "quoted_text": "Total Debt & Equity Investments (2) | 105.5 | % | 226,246,287 | 224,956,333",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 21,
+      "row_index": 5,
+      "quoted_text": "Total | $ | 5,325 | $ | - | $ | 224,956 | $ | 230,281",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "Class 3 anchor triangulation decides the flag. The extracted position fair-value sum is 544,170,799, but the filing's exact debt-and-equity schedule total is 224,956,333. The fair-value hierarchy independently corroborates Level 3 debt-and-equity investments of 224,956 thousand and total investments including 5,325 thousand of cash equivalents of 230,281 thousand. The observed sum therefore overstates the applicable schedule anchor by 319,214,466 (141.901 percent of the anchor), exactly matching the flag. Raw source proves an aggregate extraction defect, but the row-disposition evidence does not safely localize one culprit or distinguish duplicate, subtotal, and comparative leakage."
+}

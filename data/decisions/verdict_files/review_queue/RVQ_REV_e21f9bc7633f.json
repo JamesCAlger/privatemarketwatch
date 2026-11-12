@@ -1,0 +1,26 @@
+{
+  "review_id": "RVQ_REV_e21f9bc7633f",
+  "verdict": "real_error",
+  "mechanism": "extraction_gap",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 0.0,
+  "anchor_value": 100.0,
+  "confidence": 0.92,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 50,
+      "row_index": 22,
+      "quoted_text": "Total | 100.0 | % | 161.4 | % | 100.0 | % | 190.0 | %",
+      "ties_to_residual": true
+    },
+    {
+      "table_index": 39,
+      "row_index": 26,
+      "quoted_text": "Total Investments - 161.4 % | $ | 1,596,478 | $ | 1,534,345",
+      "ties_to_residual": true
+    }
+  ],
+  "rationale": "A07 is an aggregate percentage-total flag: the checked artifact reports pct_sum=0.0% for this CIK-quarter. Raw source is decisive. The filing's industry allocation table totals December 31, 2025 fair value percentage to 100.0% and net assets percentage to 161.4%, and the SOI total row also states Total Investments - 161.4% with fair value 1,534,345. The extracted value of zero therefore reflects a missed percentage extraction/normalization, not an absent or unclear source percentage."
+}

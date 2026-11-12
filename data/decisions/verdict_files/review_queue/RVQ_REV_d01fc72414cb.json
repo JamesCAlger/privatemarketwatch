@@ -1,0 +1,31 @@
+{
+  "review_id": "RVQ_REV_d01fc72414cb",
+  "verdict": "real_error",
+  "mechanism": "subtotal_leak",
+  "localized": true,
+  "anchor_used": null,
+  "observed_value": 0.0,
+  "anchor_value": null,
+  "confidence": 0.78,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 9,
+      "row_index": 5,
+      "quoted_text": "0.0 | % | 39,578 | -",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "subtotal_leak",
+      "detail": "The third zero-fair-value flagged row localizes to a blank equity subtotal/rollup line, not an investable position.",
+      "fix_class": "subtotal_filter",
+      "citation": {
+        "table_index": 9,
+        "row_index": 5
+      }
+    }
+  ],
+  "rationale": "Class 1 source check for C104. The raw September 2025 SOI has two legitimate position rows with Fair Value printed as a dash: HOP Energy Term Loan B at table 7 row 17 and Superior Industries Common Stock at table 9 row 4. The remaining zero-FV hit corresponds to table 9 row 5, a blank rollup line repeating the Superior subtotal values with no issuer, acquisition date, or investment. A zero value on the source position is not itself an error, but extracting the blank subtotal/rollup row as a holding is a localized subtotal leak."
+}

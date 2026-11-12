@@ -1,0 +1,37 @@
+{
+  "review_id": "RVQ_BLK_94a31dd6bbca",
+  "verdict": "false_alarm",
+  "mechanism": "anchor_bad",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": 42,
+  "anchor_value": 25,
+  "confidence": 0.97,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 4,
+      "row_index": 21,
+      "quoted_text": "Total Debt Investments | 39.8 | % | 86,770,613 | 86,897,322",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 5,
+      "row_index": 38,
+      "quoted_text": "Total Investments (262.7%) | 581,376,022 | 572,771,377",
+      "ties_to_residual": false
+    }
+  ],
+  "findings": [
+    {
+      "mechanism": "anchor_bad",
+      "detail": "The E07 source count of 137 includes non-position table structure; the current SOI in tables 4 and 5 has 25 line-item positions.",
+      "fix_class": "anchor_fix",
+      "citation": {
+        "table_index": 5,
+        "row_index": 38
+      }
+    }
+  ],
+  "rationale": "Raw source shows the current March 31, 2026 schedule in tables 4 and 5. Counting issuer/instrument rows yields 8 debt positions in table 4 and 17 additional positions in table 5 (15 equity, one cash equivalent, and one short-term investment), for 25, not 137. The filing totals at table 4 row 21 and table 5 row 38 close the same schedule. Therefore the oracle's 137 source anchor is contaminated by headers, industry labels, subtotals, comparative or note-table structure, so its 137-versus-42 comparison cannot establish missing output positions. Residual risk: this adjudication invalidates the E07 anchor but does not independently prove that all 42 output rows are correctly scoped."
+}

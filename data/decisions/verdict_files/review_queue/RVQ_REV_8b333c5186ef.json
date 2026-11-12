@@ -1,0 +1,32 @@
+{
+  "review_id": "RVQ_REV_8b333c5186ef",
+  "verdict": "false_alarm",
+  "mechanism": "rule_scope",
+  "localized": true,
+  "anchor_used": "schedule_total",
+  "observed_value": -776000.0,
+  "anchor_value": -776000.0,
+  "confidence": 0.91,
+  "escalate": false,
+  "culprit_citations": [
+    {
+      "table_index": 35,
+      "row_index": 14,
+      "quoted_text": "MRO Holdings, Inc. | First Lien Secured Debt - Revolver | S + 450 , 0.50 % Floor | 5/5/2032 | -- | ( 776 ) | ( 213 )",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 20,
+      "quoted_text": "TITAN BW BORROWER L.P. delayed draw line shows cost ( 79 ) and fair value ( 168 ) in the SOI.",
+      "ties_to_residual": false
+    },
+    {
+      "table_index": 35,
+      "row_index": 21,
+      "quoted_text": "TITAN BW BORROWER L.P. revolver line shows cost ( 315 ) and fair value ( 336 ) in the SOI.",
+      "ties_to_residual": false
+    }
+  ],
+  "rationale": "C107 flagged negative cost values for review, but the raw schedule of investments prints the sampled flagged amounts as parenthesized negative cost values on revolving or delayed-draw debt lines. For example, MRO Holdings, Inc. shows a revolver with cost (776) and fair value (213), matching the extracted -776000 cost, and Triumph/TITAN rows similarly show costs (79) and (315). The source therefore supports the stored sign rather than proving a data error; the rule is a monitoring warning on legitimate negative costs."
+}
