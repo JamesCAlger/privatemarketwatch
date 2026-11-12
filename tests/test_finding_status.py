@@ -92,6 +92,12 @@ def test_unsupported_or_incomplete_conclusion_goes_back_to_review(conclusion):
     assert status_of("open", Facts(conclusion="insufficient_evidence", conclusion_supported=True)) == fs.NEEDS_AGENT_REVIEW
 
 
+def test_incomplete_proposal_goes_back_to_the_agent_unless_a_verdict_stands():
+    facts = Facts(proposal_class=fs.INCOMPLETE_PROPOSAL, conclusion="false_alarm", conclusion_supported=True)
+    assert status_of("open", facts) == fs.NEEDS_AGENT_REVIEW
+    assert status_of("remediation_pulled", facts) == fs.NEEDS_DATA_FIX
+
+
 @pytest.mark.parametrize("state", sorted(fs.UNREVIEWED_STATES))
 def test_unreviewed_states_need_agent_review(state):
     assert status_of(state) == fs.NEEDS_AGENT_REVIEW

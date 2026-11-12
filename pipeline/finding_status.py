@@ -18,6 +18,7 @@ First match wins:
   5  a proposal in a store class stands (as_filed, not_applicable,
      informational)                                                 needs_owner_ruling
   6  state carries a real-error verdict                             needs_data_fix
+  6b a store-class proposal exists but fails the evidence bar       needs_agent_review
   7  supported fund-agent conclusion confirmed_error                needs_data_fix
   8  supported fund-agent conclusion false_alarm                    needs_check_repair
   9  supported fund-agent conclusion source_ambiguity               needs_owner_ruling
@@ -54,6 +55,7 @@ KNOWN_STATES = RESOLVED_STATES | HUMAN_STATES | REAL_ERROR_STATES | UNREVIEWED_S
 
 MISFIRE_CLASSES = frozenset({"rule_problem", "false_alarm"})
 STORE_CLASSES = frozenset({"as_filed", "not_applicable", "informational"})
+INCOMPLETE_PROPOSAL = "incomplete"  # a store-class proposal whose evidence fails the bar
 CONCLUSIONS = ("confirmed_error", "false_alarm", "source_ambiguity", "insufficient_evidence")
 
 
@@ -86,6 +88,9 @@ def status_of(state: str, facts: Facts = NO_FACTS) -> str:
         return NEEDS_OWNER_RULING
     if state in REAL_ERROR_STATES:
         return NEEDS_DATA_FIX
+    if facts.proposal_class == INCOMPLETE_PROPOSAL:
+        # a disposition was proposed but its evidence does not meet the bar: the agent finishes it
+        return NEEDS_AGENT_REVIEW
     if facts.conclusion_supported:
         if facts.conclusion == "confirmed_error":
             return NEEDS_DATA_FIX
