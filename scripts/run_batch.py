@@ -10,7 +10,12 @@ chain, then the check stages, then the ledger):
 
     extract fieldstatus highlights financials unified returns refresh frontend
     nonaccrual validate oracle provenance shadow queue
-    ledger compare gate reattest
+    holdings ledger compare gate reattest
+
+``holdings`` keeps a copy of this build's published holdings in the batch folder and compares it,
+fund by fund and field by field, with the previous batch's copy (pipeline.holdings_compare): a
+fund whose rows moved when no recorded fix named it is listed as unexplained. The findings ledger
+cannot see a value that changed without tripping a rule; this stage can.
 
 Run it on the owner's go only; about six hours from ``extract``; needs ~14 GB free for ``unified``.
 No fund build, pytest or code edit in this checkout while it runs. It stops at the first failing
@@ -57,7 +62,7 @@ BUILD_STAGES = (
     ("shadow", ["scripts/shadow_validation_runner.py"], 8, True),
     ("queue", ["-m", "pipeline.review_queue", "--emit-bdc-worklist"], 8, True),
 )
-TAIL_STAGES = ("ledger", "compare", "gate", "reattest")
+TAIL_STAGES = ("holdings", "ledger", "compare", "gate", "reattest")
 STAGE_NAMES = tuple(s[0] for s in BUILD_STAGES) + TAIL_STAGES
 
 
@@ -141,6 +146,39 @@ def latest(output_dir: Path) -> dict:
     return json.loads(pointer.read_text(encoding="utf-8")) if pointer.exists() else {}
 
 
+def _batch_fixes(output_dir: Path, decisions_dir: Path | None) -> list[dict]:
+    """Standing fix records made since the previous batch's build (all of them for a first batch)."""
+    from pipeline import decision_store
+    since = latest(output_dir).get("build_time", "")
+    return [e for e in decision_store.standing(decision_store.load_native(decisions_dir))
+            if e["type"] == "fix_record" and (not since or e.get("recorded_at", "") > since)]
+
+
+def _holdings_stage(batch_dir: Path, output_dir: Path, decisions_dir: Path | None, copy=None) -> dict:
+    """Snapshot this build's holdings into the batch and compare with the previous batch's snapshot."""
+    import shutil
+    from pipeline import holdings_compare
+    source = Path(output_dir) / "private_markets_holdings.parquet"
+    if not source.exists():
+        return {"snapshot": False, "note": "no private_markets_holdings.parquet in the output dir"}
+    (copy or shutil.copyfile)(source, batch_dir / "holdings.parquet")
+    previous = latest(output_dir)
+    prior = Path(output_dir) / "batches" / previous["batch_id"] / "holdings.parquet" if previous else None
+    if prior is None or not prior.exists():
+        return {"snapshot": True, "compared": False,
+                "note": "no previous batch snapshot to compare with; the next batch compares with this one"}
+    named = sorted({str(c) for fix in _batch_fixes(output_dir, decisions_dir)
+                    for c in (fix.get("expects") or {}).get("ciks", [])})
+    rows = holdings_compare.compare(batch_dir / "holdings.parquet", prior, named_ciks=named)
+    with open(batch_dir / "holdings_diff.csv", "w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=holdings_compare.COLUMNS, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+    summary = holdings_compare.summarize(rows)
+    summary.update(snapshot=True, compared=True, previous_batch=previous["batch_id"], funds_named_by_fixes=len(named))
+    return summary
+
+
 def _ledger_stage(batch_dir: Path, output_dir: Path, build_time: str, run) -> int:
     validity = batch_dir / "disposition_validity.csv"
     checked = run([PY, "-m", "pipeline.disposition_validity", "--output-dir", str(output_dir), "--out", str(validity)],
@@ -159,9 +197,7 @@ def _compare_stage(batch_dir: Path, output_dir: Path, decisions_dir: Path | None
     previous = latest(output_dir)
     prior_path = Path(output_dir) / "batches" / previous["batch_id"] / "findings_ledger.csv" if previous else None
     prior = _read_csv(prior_path) if prior_path and prior_path.exists() else []
-    since = previous.get("build_time", "") if previous else ""
-    fixes = [e for e in decision_store.standing(decision_store.load_native(decisions_dir))
-             if e["type"] == "fix_record" and (not since or e.get("recorded_at", "") > since)]
+    fixes = _batch_fixes(output_dir, decisions_dir)
     rows = batch_compare.compare(prior, current, fixes) if previous else []
     with open(batch_dir / "compare.csv", "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=batch_compare.COLUMNS, lineterminator="\n")
@@ -243,6 +279,16 @@ def run_batch(*, batch_id: str, output_dir: Path, quarters: list[str], start: st
             return stop(name)
     build_time = holdings_build_time(output_dir)
     meta["build_time"] = build_time
+    if "holdings" in wanted:
+        t0 = time.time()
+        try:
+            meta["holdings"] = _holdings_stage(batch_dir, output_dir, decisions_dir)
+        except Exception as exc:  # a failed comparison must not pass silently, nor become the current batch
+            record("holdings", "error", time.time() - t0, str(exc)[:200])
+            return stop("holdings")
+        note = meta["holdings"].get("note") or "%d fund(s) moved, %d unexplained" % (
+            meta["holdings"]["funds_moved"], meta["holdings"]["funds_moved_unexplained"])
+        record("holdings", 0, time.time() - t0, note)
     if "ledger" in wanted:
         t0 = time.time()
         code = _ledger_stage(batch_dir, output_dir, build_time, run)
