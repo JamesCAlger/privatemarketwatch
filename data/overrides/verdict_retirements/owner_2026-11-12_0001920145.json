@@ -1,0 +1,43 @@
+{
+ "_note": "Goldman Sachs Private Credit (0001920145), B01 2025-12-31, fund loop nbgp finish run. Written by fund-agent-0001920145-nbgp-finish-2026-11-12 on the ruling D-263 (delegated reviewer for the owner, 2026-11-12): D-072 'keep the undrawn lines' has no end date and covers 2025-12-31. The delegated reviewer's ruling, not the owner's own words; the owner may revoke it by deleting this file. Corrected 2026-11-12 after the independent review: the verdict's third citation (table 68 row 17, 0-based) is the SDB HOLDCO COMMON line, not the preferred.",
+ "retirements": [
+  {
+   "retirement_id": "VR-OWN-1920145-01",
+   "review_id": "RVQ_REV_8c296e626e8f",
+   "verdict_sha256": "aacab1daaec73962154978a061c4056033ff094b2e6c344abd96c7e51ae3f261",
+   "cik": "0001920145",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "report_date": "2025-12-31",
+   "reason": "The verdict cites three leaf rows of 0001193125-26-088668 whose fair-value cell is a dash: table 49 row 6 (A.C.N. AUD 230,366 undrawn line) and table 49 row 18 (Ranch Bidco EUR 34,699 undrawn line), both printed with par only, cost and value '-'; and table 68 row 17, the SDB HOLDCO COMMON stock line (27,194,622 units, printed '$ - $ -'). Owner ruling D-072 ('keep the undrawn lines', recorded as DS-N5-B01-1920145) accepts par-only undrawn lines as not published and has no end date; D-263 (2026-11-12, delegated reviewer) confirms it covers 2025-12-31. The cited SDB common line is an owned position and is published in the final sandbox at its printed values (27,194,622 units, cost 0, fair value 0). The SDB preferred (table 68 row 22, 13,194,756 units, cost 3,101) is not cited by the verdict; it is published at 13,194,756 units, cost 3,101,000, fair value 0. Inconsistency noted for the owner: inside this fund some par-only undrawn lines are published at fair value 0 (where the context carries a zero fact, e.g. Corinthia Bidco 15,000 at 2026-03-31) while A.C.N. and Ranch Bidco are not published; other funds publish par-only lines at 0.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088668",
+     "quote": "A.C.N. 664 616 371 Pty Ltd (dba Aspen Pharmacare) Pharmaceuticals B + 4.75 % 12/23/32 AUD 230,366 - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088668",
+     "quote": "Ranch Bidco B.V. (dba Innovad) Biotechnology E + 4.75 % 12/01/32 EUR 34,699 $ - $ -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088668",
+     "quote": "SDB HOLDCO, LLC (dba Specialty Dental Brands) Health Care Providers & Services 03/29/24 27,194,622 $ - $ -",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "final sandbox published SDB HOLDCO, LLC at 2025-12-31: Common Stock shares_held 27194622.0, cost 0.0, fair_value 0.0; Preferred Stock shares_held 13194756.0, cost 3101000.0, fair_value 0.0 (scratch/fund_runs/0001920145/nbgpe_sdb.py nbgpf)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001920145/nbgpe_sdb.py nbgpf",
+   "owner_words": "Delegated reviewer for the owner (owner instruction 2026-11-12), D-263: D-072 covers 2025-12-31; retire RVQ_REV_8c296e626e8f",
+   "decided_by": "owner",
+   "decided_on": "2026-11-12"
+  }
+ ]
+}

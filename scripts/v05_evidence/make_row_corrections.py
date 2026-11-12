@@ -1313,6 +1313,17 @@ if ASIF in held and ASIF_LOOP_FILE.exists():
         EXACT.add(spec["identifier"])
         context_by_spec[(ASIF, spec["quarter"], spec["identifier"], tuple(sorted(spec["fields"])))] = spec_context(spec)
 
+# Goldman Sachs Private Credit, fund-clearing loop (nbgp, 2026-11-11): printed names, instruments, units and one cost
+# sign, each spec keyed by the row's context and generated with its printed line by
+# scratch/fund_runs/0001920145/nbgp_specs.py, in row_correction_specs/0001920145.json (exact identifiers).
+GS_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001920145.json"
+if GS in held and GS_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(GS_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((GS, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1920145-fundloop"))
+        EXACT.add(spec["identifier"])
+        context_by_spec[(GS, spec["quarter"], spec["identifier"], tuple(sorted(spec["fields"])))] = spec_context(spec)
+
 # AB Private Credit Investors (fund-clearing 2026-10-25): a spec that supersedes an earlier spec of the same row
 # names the row's context (correction_context). Its CSV line is keyed by that context, so it is appended after the
 # earlier plain line and the build applies it last. Its field set must differ from every plain spec of the same row.

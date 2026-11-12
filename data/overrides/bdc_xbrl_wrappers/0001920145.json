@@ -136,7 +136,8 @@
     ],
     "no_prefix_is_aggregate": true,
     "category_marker_re": "^(?:common stock|preferred stock|equity securities)(?:\\s+united\\s+states|\\s+cayman\\s+islands)?(?:\\s+(?:common|preferred)\\s+stock)?(?:\\s*-\\s*[\\d.]+%)?$",
-    "industry_from_identifier_re": "(?i)\\sIndustry\\s+(.+?)\\s+(?:Interest\\s+Rate|Reference\\s+Rate|Maturity|Initial\\s+Acquisition)"
+    "industry_from_identifier_re": "(?i)(?:\\sIndustry|(?<=[a-z.)])Industry|\\s|(?<=[.)]))((?<=Industry)\\s*\\S.*?|(?:Commercial Services & Supplies|Construction & Engineering|Diversified Consumer Services|Wireless Telecommunication Services|Health Care Providers & Services|Health Care Equipment & Services|Health Care Equipment & Supplies|Consumer Staples Distribution & Retail|Textiles, Apparel & Luxury Goods|Oil, Gas & Consumable Fuels|Leisure Equipment & Products|Aerospace & Defense|Professional Services|Health Care Technology|Containers & Packaging|Building Products|Food Products|Capital Goods|Chemicals|Software|Beverages|Distributors|Machinery|Financial Services|Insurance|IT Services|Pharmaceuticals|Automobile Components|Trading Companies & Distributors|Leisure Products|Media|Hotels, Restaurants & Leisure|Technology Hardware & Equipment|Electrical Equipment|Specialty Retail|Energy Equipment & Services|Entertainment|Air Freight & Logistics|Electric Utilities|Household Products|Metals & Mining|Real Estate Mgmt\\. & Development|Diversified Financial Services|Automobiles|Household Durables|Ground Transportation|Telecommunications|Life Sciences Tools & Services|Industrial Conglomerates|Technology Hardware, Storage & Peripherals|Semiconductors & Semiconductor Equipment|Biotechnology|Water Utilities|Construction Materials|Telecommunication Services|Rail Transportation|Transportation Infrastructure|Passenger Airlines))\\s+(?:Interest\\s+Rate|Reference\\s+Rate|Maturity|Initial\\s+Acquisition|Effective\\s+Yield)",
+    "issuer_name_strip_re": "(?:\\s*\\bIndustry\\s*|(?<=[a-z.)])Industry\\s*|\\s+|(?<=[.)]))(?:Commercial Services & Supplies|Construction & Engineering|Diversified Consumer Services|Wireless Telecommunication Services|Health Care Providers & Services|Health Care Equipment & Services|Health Care Equipment & Supplies|Consumer Staples Distribution & Retail|Textiles, Apparel & Luxury Goods|Oil, Gas & Consumable Fuels|Leisure Equipment & Products|Aerospace & Defense|Professional Services|Health Care Technology|Containers & Packaging|Building Products|Food Products|Capital Goods|Chemicals|Software|Beverages|Distributors|Machinery|Financial Services|Insurance|IT Services|Pharmaceuticals|Automobile Components|Trading Companies & Distributors|Leisure Products|Media|Hotels, Restaurants & Leisure|Technology Hardware & Equipment|Electrical Equipment|Specialty Retail|Energy Equipment & Services|Entertainment|Air Freight & Logistics|Electric Utilities|Household Products|Metals & Mining|Real Estate Mgmt\\. & Development|Diversified Financial Services|Automobiles|Household Durables|Ground Transportation|Health Care & Services|Telecommunications|Life Sciences Tools & Services|Industrial Conglomerates|Technology Hardware, Storage & Peripherals|Semiconductors & Semiconductor Equipment|Biotechnology|Water Utilities|Construction Materials|Consumer Retail|Telecommunication Services|Utilities|Environmental|Rail Transportation|Transportation Infrastructure|Passenger Airlines)$"
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -307,6 +308,40 @@
     ],
     "par_tagged_as_units": [
       "rows_near_cost"
+    ],
+    "untagged_values": [
+      "0000950170-24-056854 C_6ebd6e2d-4b69-4944-87c6-7f040579579a fair_value 0 USD",
+      "0000950170-24-056854 C_6ebd6e2d-4b69-4944-87c6-7f040579579a cost 0 USD",
+      "0000950170-24-126294 C_6f5e6061-4781-45fa-8da6-344c1d81b081 fair_value 0 USD",
+      "0000950170-24-126294 C_6f5e6061-4781-45fa-8da6-344c1d81b081 cost 0 USD",
+      "0000950170-25-032199 C_c33777af-6217-4ba7-a268-623e8643b7d6 fair_value 0 USD",
+      "0000950170-25-032199 C_c33777af-6217-4ba7-a268-623e8643b7d6 cost 0 USD",
+      "0000950170-25-107338 C_19b9c8ba-b543-4625-8dd7-c6878bd6cf6d fair_value 0 USD",
+      "0001193125-25-277550 C_9c70b358-5e42-47a4-b4c7-754c024b6d4f fair_value 0 USD",
+      "0001193125-25-277550 C_9c70b358-5e42-47a4-b4c7-754c024b6d4f cost 0 USD",
+      "0001193125-25-277550 C_38b3accc-2e88-4f3e-95e4-311513067078 fair_value 0 USD",
+      "0001193125-26-088668 C_de2a5dca-9a3b-4975-89f8-80a26299f30b fair_value 0 USD",
+      "0001193125-26-088668 C_de2a5dca-9a3b-4975-89f8-80a26299f30b cost 0 USD",
+      "0001193125-26-088668 C_5348bf53-0626-4892-98bd-aeae32ab0f2b fair_value 0 USD",
+      "0001193125-26-219885 C_412e81f7-39e5-40f5-b1ad-2b4f46426220 fair_value 0 USD",
+      "0001193125-26-219885 C_412e81f7-39e5-40f5-b1ad-2b4f46426220 cost 0 USD",
+      "0001193125-26-219885 C_d88042c5-cc58-4a68-90ff-d8d78c425ee9 fair_value 0 USD",
+      "0001193125-26-340582 C_634f393b-e3d9-4c4c-a00e-b28e4afa40a1 fair_value 0 USD",
+      "0001193125-26-340582 C_634f393b-e3d9-4c4c-a00e-b28e4afa40a1 cost 0 USD",
+      "0001193125-26-340582 C_fee8ecfe-5cb7-4769-bfe4-9388787dff6f fair_value 0 USD",
+      "0000950170-24-126294 C_9025d846-8331-4fdf-a524-95baefa7bb11 fair_value 0 USD",
+      "0000950170-24-126294 C_c31d9b40-35ca-406f-975f-ed3a1d4efd5a fair_value 0 USD",
+      "0000950170-24-126294 C_08a3f3eb-e232-429c-99ff-8dfb0a94f2af fair_value 0 USD",
+      "0000950170-24-126294 C_460bc369-d15c-4a5b-a51e-d9ccaa4ec9f7 fair_value 0 USD",
+      "0000950170-24-126294 C_5fd01a09-bc67-434b-bc85-b357f43c08da fair_value 0 USD",
+      "0000950170-25-107338 C_f65d9c5b-296d-41c8-a717-1dfddee91c5f fair_value 0 USD",
+      "0000950170-25-107338 C_1973561e-b6d4-4ce7-bbad-41fd3c869cdf fair_value 0 USD",
+      "0000950170-25-107338 C_500a6d8c-002d-404b-8029-317af16c98e5 fair_value 0 USD",
+      "0001193125-25-277550 C_8d50c388-818c-443f-91ff-7a5e9151e529 fair_value 0 USD",
+      "0001193125-25-277550 C_8ec55971-f30e-495a-b17b-3bed323cd175 fair_value 0 USD",
+      "0001193125-25-277550 C_8ee807bd-c768-43cf-a751-53e96b934880 fair_value 0 USD",
+      "0001193125-25-277550 C_ef72dd3a-0cfe-4fe6-bdf1-068835d0eb9b fair_value 0 USD",
+      "0001193125-25-277550 C_4f6235f6-862f-4b34-925f-85a52ec463a9 fair_value 0 USD"
     ]
   }
 }

@@ -1,0 +1,1102 @@
+{
+ "cik": "0001920145",
+ "investigator_id": "fund-agent-0001920145-nbgp-finish-2026-11-12",
+ "label": "nbgpf",
+ "before": "rg1b",
+ "status": "6 of 6 builds used; final sandbox nbgpf (same published values as nbgpe); 0 outstanding (B01 2025-12-31 verdict retired on D-263); 13 industry-label corrections staged in row_corrections.csv and not yet built",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 201,
+   "why": "printed company name: industry label cut from the end of the name (wrapper issuer_name_strip_re, 107 rows) and context-scoped row corrections (typos, heading fragments, another company's member, CLO 11/13, FINCO/BIDCO, '(dba ...)' dropped)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 47,
+   "why": "printed instrument where the member's headings were left in it, and CLO equity 'Subordinated Notes' on all 15 CLO equity rows (row corrections; the wrapper strip tried in round 1 reached no row and was removed)"
+  },
+  {
+   "column": "cost",
+   "rows": 1,
+   "why": "Esperanto 2024-09-30 undrawn CHF line: printed '( 407 )', published +407,000 -> -407,000 (owner order D-253)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 2,
+   "why": "RPC ABC preferred (01/09/26) 2026-03-31 and 2026-06-30: printed 320,487 units; 221 had been copied from FS WhiteWater's line"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 4,
+   "why": "Diameter CLO 11 Class D1 and E at 2025-09-30 and 2025-12-31: published CAD (the tag's unit), the page prints dollar lines; USD"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 4,
+   "why": "same 4 Diameter rows: par in dollars (30,000 / 15,000 thousand)"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "same 4 Diameter rows: 1.0"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 4,
+   "why": "same 4 Diameter rows: source_usd"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 3,
+   "why": "Beach Acquisition and Sazerac 2025-06-30, INK FINCO undrawn 2025-09-30: the spread had been published as the rate; the page prints no rate; blank"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 226,
+   "why": "rows carrying this run's row corrections"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 216,
+   "why": "printed industry read from members without the word 'Industry' (wrapper industry_from_identifier_re, 119 rows), 17 labels holding the next column ('IT Services Interest') corrected, and 80 labels that differed from the printed industry cell (round 2) set to the printed label"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 129,
+   "why": "follows extracted_industry: GICS now mapped from the printed label instead of the name lookup"
+  },
+  {
+   "column": "position_id",
+   "rows": 222,
+   "why": "chains re-formed after name repairs; links set by position_match_overrides/0001920145.json (4 round 1, 22 round 2: cross-currency links of Spectrum, Northstar/North Star, Solar SLR, Sonar, Rocket, Financiere N)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 1,
+   "why": "same Esperanto row as cost"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 3,
+   "why": "follows interest_rate on the same 3 rows"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 3,
+   "why": "follows interest_rate on the same 3 rows"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 37,
+   "why": "follows gics_sub_industry"
+  }
+ ],
+ "rows_added": 25,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Wrapper dispatch.issuer_name_strip_re: cut a GICS industry label glued to the end of the issuer name (members without the word 'Industry'). Dry run over every distinct name (nbgp_strip_dryrun.py): 107 rows, 48 names, every removed text an industry label; no other name changed.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070289",
+     "text": "AAP Buyer Inc. Chemicals 7.07 % S + 2.75 % 09/09/31"
+    }
+   ]
+  },
+  {
+   "what": "Wrapper dispatch.industry_from_identifier_re widened: reads the printed industry where the member carries no 'Industry' word (119 rows had none). Equal to the old pattern on all 5,812 rows it read; 122 new reads, all fund labels (nbgp_industry_dryrun.py).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070289",
+     "text": "AAP Buyer Inc. Chemicals 7.07 % S + 2.75 % 09/09/31"
+    }
+   ]
+  },
+  {
+   "what": "Wrapper source_encodings.untagged_values: 25 owned lines the page prints with '-' fair value (SDB HOLDCO / LCG Vardiman Black common and preferred, 12 contexts; 13 undrawn debt lines with a printed cost) published at fair value 0 (cost 0 where printed '-'); rows added 25.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-088668",
+     "text": "Health Care Providers & Services 03/29/24 13,194,756 3,101 -"
+    },
+    {
+     "accession": "0001193125-25-277550",
+     "text": "Software S + 5.00 % 09/19/29 4,525 ( 47 ) -"
+    }
+   ]
+  },
+  {
+   "what": "Position match overrides (data/overrides/position_match_overrides/0001920145.json, 26 entries; built by nbgp_overrides.py). Round 1: Spectrum EUR term loan 2024-09-30 -> 2024-12-31 (EUR 7,910 -> 7,910), Algae PikCo -> BidCo reject, BEP 46,061 -> 1,506 reject. Round 2: every cross-currency link the reviewer listed whose same-currency successor is printed: Spectrum EUR 7,890 -> 7,870 and the 2025-09-30 swap (EUR 7,851 -> 11,242, USD 8,460 -> 12,139); Northstar/North Star NOK, USD and GBP tranches (2024-09 to 2025-12); Solar SLR GBP PIK, AUD, CAD and GBP loans (2024-12 to 2026-03); Sonar AUD/USD swap 2025-09 -> 12; Rocket USD 12,668 -> 14,367; rejects for Financiere N undrawn EUR 16,831 -> USD 3,171 and North Star USD 18,171 -> NOK 158,670.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-032199",
+     "text": "Spectrum Safety Solutions Purchaser, LLC (dba Carrier Industrial Fire) Machinery 8.33 % E + 5.00 % 07/01/31 EUR 7,910 8,374 8,071"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 99 rows - issuer names set to the printed company (typos, heading fragments, another company's member, CLO 11 vs 13, FINCO vs BIDCO, printed '(dba ...)', full stops and commas), with the printed instrument where the member's headings were in it.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-039857",
+     "text": "Ingram Micro, Inc. Technology Hardware & Equipment 9.04 % L + 3.50 % 06/30/28 334 328 333"
+    },
+    {
+     "accession": "0000950170-23-039857",
+     "text": "Icebox Holdco III, Inc. Building Products S + 3.75 % 12/22/28 224 218 217"
+    },
+    {
+     "accession": "0000950170-23-039857",
+     "text": "Mavis Tire Express Services Corp. Automobiles S + 4.00 % 05/04/28 598 588 592"
+    },
+    {
+     "accession": "0000950170-23-039857",
+     "text": "Coretrust Purchasing Group LLC Diversified Financial Services 11.85 % S + 6.75 % 10/01/29 37,758 36,652 36,814"
+    },
+    {
+     "accession": "0000950170-23-060350",
+     "text": "Circustrix Holdings, LLC (dba SkyZone) Leisure Equipment & Products 12.08 % S + 6.75 % 07/18/28 25,052 24,438 24,426"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "Alliant Holdings Intermediate, LLC Insurance 8.83 % S + 3.50 % 11/06/30 811 808 814"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 2 rows - RPC ABC preferred (01/09/26) published under FS WhiteWater with its units: printed company and 320,487 units.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219885",
+     "text": "RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 01/09/26 320,487 $ 320 $ 320"
+    },
+    {
+     "accession": "0001193125-26-340582",
+     "text": "RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 01/09/26 320,487 $ 320 $ 327"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 13 rows - instrument_description set to the printed lien class where it held a heading ('Debt Investments', 'United States', 'Italy', '129.7%1st Lien...').",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219885",
+     "text": "INK (BC) BIDCO S.R.L. (dba Namirial) Software 7.14 % E + 5.00 % 04/15/25 04/11/32 EUR 15,749 17,936 17,794"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "Fullsteam Operations LLC Financial Services S + 8.25 % 11/27/29 2,052 ( 59 ) ( 21 )"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "NEXUS Buyer LLC Financial Services S + 4.50 % 12/13/28 1,325 1,310 1,313"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "AWP Group Holdings, Inc. Commercial Services & Supplies 14.16 % S + 8.75 % 12/23/30 4,545 4,460 4,511"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "AWP Group Holdings, Inc. Commercial Services & Supplies 14.16 % S + 8.75 % 12/23/30 15,909 15,608 15,790"
+    },
+    {
+     "accession": "0000950170-24-126294",
+     "text": "Reynolds Group Holdings, Inc. Containers & Packaging 7.35 % S + 2.50 % 09/24/28 9,483 9,509 9,474"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 17 rows - extracted_industry set to the printed label where it held the member's next column ('IT Services Interest', 'Distributors Interest Rate7.42%').",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060350",
+     "text": "American Builders & Contractors Supply Co., Inc. Distributors 7.42 % S + 2.00 % 01/15/27 3,863 3,861 3,855"
+    },
+    {
+     "accession": "0000950170-23-060350",
+     "text": "BBB Industries LLC Automobile Components 10.67 % S + 5.25 % 07/25/29 1,072 1,023 1,009"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "Reynolds Consumer Products LLC Household Durables 7.18 % S + 1.75 % 02/04/27 1,650 1,650 1,653"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "AWP Group Holdings, Inc. Commercial Services & Supplies 14.16 % S + 8.75 % 12/23/30 15,909 15,608 15,790"
+    },
+    {
+     "accession": "0000950170-24-096416",
+     "text": "McAfee, LLC Technology Hardware & Equipment 8.58 % S + 3.25 % 03/01/29 4,037 4,023 4,027"
+    },
+    {
+     "accession": "0000950170-24-096416",
+     "text": "Project Boost Purchaser, LLC Software 8.96 % S + 3.50 % 06/01/26 3,485 3,494 3,486"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 11 rows - CLO subordinated notes 2025-09-30 to 2026-03-31 (11 rows; the 4 at 2026-06-30 are set together with their names): instrument set to the printed 'Subordinated Notes'.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277550",
+     "text": "Diameter Capital CLO 11, Ltd. - Subordinated Notes Financial Services 8.80 % 08/04/25 07/20/38 $ 8,770 $ 8,770 $ 8,672"
+    },
+    {
+     "accession": "0001193125-25-277550",
+     "text": "Madison Park Funding LXX, Ltd. - Subordinated Notes Financial Services 11.18 % 07/09/25 09/04/38 20,090 18,633 18,909"
+    },
+    {
+     "accession": "0001193125-25-277550",
+     "text": "Octagon 78, Ltd. - Subordinated Notes Financial Services 9.71 % 07/09/25 10/20/38 23,344 20,085 20,211"
+    },
+    {
+     "accession": "0001193125-26-088668",
+     "text": "Diameter Capital CLO 11, Ltd. - Subordinated Notes Financial Services 8.85 % 07/09/25 07/20/38 $ 8,770 $ 8,770 $ 8,313"
+    },
+    {
+     "accession": "0001193125-26-088668",
+     "text": "Diameter Capital CLO 13, Ltd. - Subordinated Notes Financial Services 8.11 % 11/26/25 01/20/39 7,580 7,580 7,580"
+    },
+    {
+     "accession": "0001193125-26-088668",
+     "text": "Madison Park Funding LXX, Ltd. - Subordinated Notes Financial Services 11.07 % 08/04/25 09/04/38 20,090 18,624 18,051"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 4 rows - Diameter CLO 11 Class D1 and E at 2025-09-30 and 2025-12-31: par currency published CAD (unit of the tag) on dollar lines; USD, par in dollars, rate 1.0.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277550",
+     "text": "Diameter Capital CLO 11, Ltd. - Class D1 Financial Services 5.05 % S + 2.85 % 07/09/25 07/20/38 30,000 $ 30,000 $ 30,165"
+    },
+    {
+     "accession": "0001193125-25-277550",
+     "text": "Diameter Capital CLO 11, Ltd. - Class E Financial Services 9.25 % S + 5.05 % 07/14/25 07/20/38 15,000 15,000 14,996"
+    },
+    {
+     "accession": "0001193125-26-088668",
+     "text": "Diameter Capital CLO 11, Ltd. - Class D1 Financial Services 7.13 % S + 2.85 % 07/09/25 07/20/38 30,000 $ 30,000 $ 30,156"
+    },
+    {
+     "accession": "0001193125-26-088668",
+     "text": "Diameter Capital CLO 11, Ltd. - Class E Financial Services 9.33 % S + 5.05 % 07/09/25 07/20/38 15,000 15,000 15,007"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 3 rows - interest_rate published as the spread where the page prints no rate (Beach Acquisition, Sazerac 2025-06-30; INK FINCO undrawn 2025-09-30); blank.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-107338",
+     "text": "Beach Acquisition Bidco LLC Textiles, Apparel & Luxury Goods S + 3.25 % 06/25/32 2,175 2,187 2,186"
+    },
+    {
+     "accession": "0000950170-25-107338",
+     "text": "Sazerac Company, Inc. Beverages S + 2.50 % 06/25/32 $ 4,750 $ 4,740 $ 4,744"
+    },
+    {
+     "accession": "0001193125-25-277550",
+     "text": "INK (BC) FINCO S.R.L. (dba Namirial) Software E + 5.00 % 07/15/33 EUR 2,025 ( 47 ) ( 47 )"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 1 rows - Esperanto BidCo undrawn CHF line 2024-09-30: printed cost ( 407 ), published +407,000; set -407,000 (owner order D-253).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-126294",
+     "text": "Esperanto BidCo AG (dba BSI Software) Software SARON + 5.00 % 09/10/31 CHF 24,087 $ ( 407 ) $ ( 249 )"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections, context-scoped (scripts/v05_evidence/row_correction_specs/0001920145.json via make_row_corrections.py; each matched to its printed line by name, par, cost and fair value, exactly one hit): 93 rows - extracted_industry set to the industry cell printed on the row where the published label differed (80 rows, $2.28B, published in nbgpe/nbgpf; GICS follows; plus 13 more rows found after nbgpe, staged in row_corrections.csv and NOT in the final sandbox): healthcare providers labelled Health Care Equipment, 'Trading Companies & Distributor', HighTower, Mitchell, Amspec, Sparta, Citadel.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-026156",
+     "text": "Circustrix Holdings, LLC (dba SkyZone) Leisure Products 12.11 % S + 6.75 % 07/18/28 24,990 24,392 24,490"
+    },
+    {
+     "accession": "0000950170-24-026156",
+     "text": "Circustrix Holdings, LLC (dba SkyZone) Leisure Products S + 6.75 % 07/18/28 3,212 ( 38 ) ( 64 )"
+    },
+    {
+     "accession": "0000950170-24-026156",
+     "text": "Circustrix Holdings, LLC (dba SkyZone) Leisure Products S + 6.75 % 07/18/28 1,606 ( 37 ) ( 32 )"
+    },
+    {
+     "accession": "0000950170-24-026156",
+     "text": "Harbor Freight Tools USA, Inc. Specialty Retail S + 2.75 % 10/19/27 974 962 972"
+    },
+    {
+     "accession": "0000950170-24-026156",
+     "text": "MH Sub I, LLC IT Services 9.61 % S + 4.25 % 05/03/28 74 71 73"
+    },
+    {
+     "accession": "0000950170-24-056854",
+     "text": "Harbor Freight Tools USA, Inc. Specialty Retail S + 2.75 % 10/19/27 2,149 2,128 2,146"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "position chain Northstar NOK 118,694 (2024-06-30) / NOK 118,397 (2024-09-30) -> USD 11,166 (2024-12-31), position bf754a60; and the other three force_pair overrides without effect (Spectrum EUR 7,890 -> 7,870, Northstar USD 10,582, Solar AUD 16,301 2025-12-31 -> 2026-03-31)",
+   "hypotheses": [
+    "the override reaches the pair table (21 forced in the log) but _coexistence_vetoed drops the forced NOK -> NOK edge at position-id assignment: USD-converted par ratio 1.081 against 1.006 for the USD 11,166 twin with the same maturity (r3_veto.py); the supplementary B2 stage then joins NOK to USD because the NOK -> NOK union never formed. Same veto for Spectrum #4 and Solar #21; Northstar #8 cause not verified. Shared code, REQ-NBGP-2; a further build would not change it"
+   ]
+  },
+  {
+   "finding": "position chains kept across a printed maturity change (Alliant 2027->2030, KKR Apple 2028->2031, Colossus 07/32->01/33, Orthrus 11/28->12/05, Fluid-Flow 03/31/28 -> 03/04/33) and the 2023-06-30 -> 2023-09-30 par ramp (AlixPartners, Ingram Micro, Mavis Tire)",
+   "hypotheses": [
+    "refinancing or add-on of the same facility (same company and lien, consecutive quarters); not read line by line, no override written"
+   ]
+  },
+  {
+   "finding": "undrawn par-only lines (A.C.N. 664 616 371, Ranch Bidco EUR 34,699 and others) not published",
+   "hypotheses": [
+    "D-072 / D-263 keep them unpublished; other funds publish such lines at 0 (inconsistency for the owner)"
+   ]
+  }
+ ],
+ "orchestrator_requests": [
+  {
+   "request_id": "REQ-NBGP-2",
+   "classification": "verification_bug",
+   "file": "pipeline/position_matching.py (_coexistence_vetoed, COEXISTENCE_TWIN_PA_TOLERANCE = 1.02)",
+   "what": "A position match override (force_pair) reaches the pair table (position_matches.csv, match_method B2_exact_name_override) but the edge is dropped when position ids are assigned: the coexistence (twin) veto compares principal_amount_usd within 2 pct, so an FX move makes a line in another currency with similar USD par look like the better twin of the end row and vetoes the forced edge. 4 of the 21 force_pair overrides of 0001920145 have no effect on position_id in nbgpf (checked on the built position_id by reviewer_nbgpe/r5_overrides.py, not by the log count 'Match overrides applied: 4 rejected, 21 forced'). Not a verification-check bug; it is a shared matching defect, filed under the nearer of the two allowed classes.",
+   "why": "Verified cause for Northstar (r3_veto.py nbgpe): NOK 118,397 = USD 11,233,645 (2024-09-30) against NOK 118,100 = USD 10,388,537 (2024-12-31) is a ratio of 1.081 > 1.02, while the USD 11,166 line (2024-12-31) is within 1.006 with the same maturity 2029-05-03, so _coexistence_vetoed returns True for the forced NOK -> NOK edge. Because that union never forms, the supplementary B2 stage can join NOK 118,397 to USD 11,166 (SUPP_B2_contested_name_key; its date-uniqueness guard would refuse it if the NOK -> NOK union existed). Skipping overridden pairs in the supplementary stage, as first proposed, would remove the wrong link but leave the NOK chain broken. Same veto drops Spectrum #4 (EUR 7,890 vs the USD 8,464 line) and Solar #21 (AUD 16,301 vs CAD 14,958 / GBP 8,266); Northstar #8 (USD 10,582 -> USD 10,582) is not vetoed itself and did not form; probable cause, unverified: the 1:1 end-row contest with the C_normalized pair USD 11,192 undrawn -> USD 10,582 (which is vetoed). Published rows affected (position_id only; fair value, par, currency and cost unchanged): Northstar NOK 118,694 (2024-06-30) and NOK 118,397 (2024-09-30) in chain bf754a60, which continues on USD 11,166 / 11,139 / 12,353 (2024-12-31 to 2025-06-30); NOK 118,100 (2024-12-31) is a singleton fa0e4812; the NOK chain 15ab8d0c starts only at 2025-03-31; USD 10,582 split 2c317456 (to 2024-09-30) / ac456fd3 (from 2024-12-31); Spectrum EUR term loan split 9d5cd265 (ends 2025-03-31) / 33600f5e (from 2025-06-30); Solar AUD BBSW loan split 78cf2f60 (ends 2025-12-31) / 1fcdaeca (from 2026-03-31). Also unlinked with no override: Spectrum USD 8,468 undrawn (d6275227, ends 2025-03-31) -> USD 8,464 drawn (927c7412, from 2025-06-30), and the Solar CAD 14,958 loan split 0eb25451 (to 2025-06-30) / a986c44e (from 2025-09-30) by the same veto.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126294",
+     "text": "Northstar Acquisition HoldCo, LLC (dba n2y) Software 9.75 % N + 5.00 % 05/03/29 NOK 118,397 10,959 11,163"
+    },
+    {
+     "accession": "0000950170-25-032199",
+     "text": "Northstar Acquisition HoldCo, LLC (dba n2y) Software"
+    }
+   ],
+   "next_action": "Orchestrator: in shared matching code exempt override edges (reject/force_pair) from the coexistence veto, and/or compare par in its own currency when both rows share a currency; tests: a forced pair whose USD-converted par drifts beyond 1.02 still links, a genuine twin veto still fires. Then rebuild this fund and check all 21 force_pairs on the built position_id (and the unlinked Spectrum USD 8,468 -> 8,464 and Solar CAD 14,958 pairs, which need new overrides). This run changed no shared code."
+  }
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-NBGP-1",
+   "classification": "acceptance_change",
+   "resolution": "implemented",
+   "response": "Ruled 2026-11-12 (D-263): D-072 (keep the undrawn lines) has no end date and covers 2025-12-31 for Goldman Sachs Private Credit. Verdict RVQ_REV_8c296e626e8f retired through the store (data/overrides/verdict_retirements/owner_2026-11-12_0001920145.json, VR-OWN-1920145-01) with the printed A.C.N. and Ranch Bidco lines as evidence; the SDB HOLDCO COMMON line (27,194,622 units, printed '$ - $ -'), which is the verdict's third cited row (t68 r17, 0-based tables and rows), is published at its printed values (cost 0, fair value 0); the preferred (t68 r22) is published at 13,194,756 units, cost 3,101,000, fair value 0 and is not cited. Ledger stage re-run on the final sandbox: 0 outstanding. Not a statement that the data is correct; the par-only undrawn lines stay unpublished.",
+   "authority": "delegated reviewer acting for the owner (owner instruction 2026-11-12), decided in D-263 (REQ-NBGP-1 entry)",
+   "original_request": {
+    "request_id": "REQ-NBGP-1",
+    "file": "data/overrides/finding_dispositions (owner) / verdict RVQ_REV_8c296e626e8f",
+    "what": "Decide whether the owner's D-072 ruling (Goldman Sachs Private Credit undrawn lines printed with a par only stay unpublished) covers 2025-12-31; if yes, the B01 2025-12-31 verdict can be retired (its third cited row, SDB HOLDCO preferred, is now published at the printed values); if no, every par-only undrawn line in every quarter should be published at 0 from the page, reversing D-072.",
+    "why": "The verdict's remaining cited rows are printed par-only undrawn commitments; the standing rule cannot decide whether D-072 excludes them.",
+    "classification": "acceptance_change",
+    "evidence": [
+     {
+      "accession": "0001193125-26-088668",
+      "text": "A.C.N. 664 616 371 Pty Ltd (dba Aspen Pharmacare) Pharmaceuticals B + 4.75 % 12/23/32 AUD 230,366 - -"
+     },
+     {
+      "accession": "0001193125-26-088668",
+      "text": "Ranch Bidco B.V. (dba Innovad) Biotechnology E + 4.75 % 12/01/32 EUR 34,699 $ - $ -"
+     }
+    ],
+    "quotes": [
+     {
+      "accession": "0001193125-26-088668",
+      "text": "Ranch Bidco B.V. (dba Innovad) Biotechnology E + 4.75 % 12/01/32 EUR 34,699 $ - $ -"
+     }
+    ],
+    "next_action": "Owner rules on the reach of D-072 (DS-N5-B01-1920145); the orchestrator then either records a retirement or sends the fund back for an untagged_values pass over all par-only lines."
+   }
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "instrument-text-glued-to-issuer-name",
+   "what": "Industry label glued to the end of the issuer name where the filer's member lacks the word 'Industry' (107 rows, 10 quarters): 'AAP Buyer Inc. Chemicals'. Fixed by the wrapper strip.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 520.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (page basis) already compares the name with the printed first cell.",
+   "quote": {
+    "accession": "0000950170-25-070289",
+    "text": "AAP Buyer Inc. Chemicals 7.07 % S + 2.75 % 09/09/31"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on these rows in the untouched build nbgpa (60 rows at 2025-03-31) and passes them in nbgpd.",
+    "reference": "pipeline/candidate_rules.py issuer_name_differs_from_page (issuer_name_printed)"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "extracted_industry blank on 119 non-cash rows whose member carries the industry without the word 'Industry'; GICS came from the name lookup or was blank. Fixed by the widened industry_from_identifier_re.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-06-30",
+    "2025-03-31",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a non-cash row with blank extracted_industry whose member text contains one of the fund's own printed industry labels.",
+   "quote": {
+    "accession": "0000950170-25-070289",
+    "text": "AAP Buyer Inc. Chemicals 7.07 % S + 2.75 % 09/09/31"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares a blank industry with the member text; the suggested check is exact (label list of the fund) and cannot fire on rows that print no industry."
+   }
+  },
+  {
+   "observation_key": "industry-label-holds-next-column",
+   "what": "extracted_industry kept the member's next column on 17 rows ('IT Services Interest', 'Distributors Interest Rate7.42%'); the shared tail strip in unified_holdings requires a word boundary after 'Rate', so 'Rate7.42%' survives; three labels mapped to no GICS. Fixed by row corrections.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 7.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag any extracted_industry containing the whole words 'Interest' or 'Rate' (case-sensitive, word boundaries; not substrings, 'Industrial Conglomerates' contains 'rate') or a percent sign.",
+   "quote": {
+    "accession": "0000950170-23-060350",
+    "text": "American Builders & Contractors Supply Co., Inc. Distributors 7.42 % S + 2.00 % 01/15/27 3,863 3,861 3,855"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A word-boundary regex on the published label is deterministic; GICS industry names contain neither whole word nor a percent sign (a substring match on 'rate' would fire on the 7 'Industrial Conglomerates' rows)."
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "The filer's member names another company on 11 lines at 2024-12-31 (Rotation Buyer on Spectrum Safety, Sunshine Cadence on VASA, Superman on Superior Environmental, TricorBraun on Trident TPI), CLO 11 on CLO 13 Class D1 (2026-03-31, 2026-06-30), FS WhiteWater on RPC ABC's preferred (2026-03-31, 2026-06-30), BIDCO on FINCO 2nd lien (2025-12-31..2026-06-30). Fixed by context-scoped corrections.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 70.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed compares the published name with the printed first cell.",
+   "quote": {
+    "accession": "0000950170-25-032199",
+    "text": "Spectrum Safety Solutions Purchaser, LLC (dba Carrier Industrial Fire) Machinery 9.59 % S + 5.00 % 07/01/31 31,896 31,442 31,418"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on the 2024-12-31 and 2026-03-31/06-30 rows in nbgpa; the FINCO/BIDCO and CLO 11/13 rows were not flagged (the wrong name is printed elsewhere in the filing) and were found by the strict audit nbgp_name_audit.py.",
+    "reference": "pipeline/candidate_rules.py issuer_name_differs_from_page (issuer_name_printed)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-printed-elsewhere-passes-check",
+   "what": "issuer_name_printed passes a published name that the fund prints as a name anywhere (elsewhere_ok): INK (BC) BIDCO on FINCO lines, CLO 11 on a CLO 13 line, names missing a printed '(dba ...)' passed. 46 rows found only by a strict first-cell audit.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 25.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Within one filing, flag a row whose first printed cell differs from the published name after legal-form folding even when the published name is printed for another row.",
+   "quote": {
+    "accession": "0001193125-26-219885",
+    "text": "INK (BC) FINCO S.R.L. (dba Namirial) Software 10.28 % E + 8.25 % PIK 04/15/25 04/11/33 EUR 3,555 $ 4,052 $ 4,017"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The elsewhere pass is deliberate (D-207 spelling variants); a row-level first-cell comparison restricted to different legal entities (BIDCO/FINCO, CLO numbers) would catch these without the spelling false alarms."
+   }
+  },
+  {
+   "observation_key": "owned-line-printed-dash-unpublished",
+   "what": "Owned equity lines printed with '-' fair value (SDB HOLDCO / LCG Vardiman Black common 20,103,551 and 27,194,622 shares, preferred 9,754,188 / 13,194,756 at cost 3,101) and 13 undrawn lines with a printed cost were not published (no fair-value fact). Published at 0 from the page (25 rows).",
+   "field": "fair_value",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "B01 position contexts without a fair value.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "Health Care Providers & Services 03/29/24 13,194,756 3,101 -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 fired on these contexts in nbgpa (2025-06-30 RVQ_REV_a3e52bf808b2 among others).",
+    "reference": "pipeline oracle check B01"
+   }
+  },
+  {
+   "observation_key": "bracketed-cost-published-positive",
+   "what": "Esperanto BidCo undrawn CHF line 2024-09-30: printed '$ ( 407 )', tagged without the sign, published +407,000 next to a fair value of -249,000. Fixed by correction (owner order D-253). Searched every quarter for cost > 0 with fair value < 0 on an undrawn line: no other row.",
+   "field": "cost",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": -0.2,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag an undrawn line (no rate) whose cost is positive while its fair value is negative.",
+   "quote": {
+    "accession": "0000950170-24-126294",
+    "text": "Esperanto BidCo AG (dba BSI Software) Software SARON + 5.00 % 09/10/31 CHF 24,087 $ ( 407 ) $ ( 249 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "PP01 flagged the row only as a subtotal candidate; a sign-consistency check on undrawn lines is deterministic and narrow."
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-facility-currency",
+   "what": "After the name repairs the matcher chained lines of one borrower across currencies (rg1b 28 cross-currency links, nbgpd 27). 22 position_match_overrides reset them (Spectrum EUR/USD swaps, Northstar, Solar SLR, Sonar, Rocket, Financiere N). nbgpf has 5 left (nbgp_xcur.py nbgpf; nbgpf and nbgpe publish the same values): Northstar NOK 118,397 -> USD 11,166 at 2024-12-31 (the override reaches the pair table but the coexistence veto drops the forced NOK -> NOK edge, so the supplementary B2 stage joins NOK to USD: REQ-NBGP-2); Solar SLR BBSW loan AUD 16,301 -> USD -> AUD (2025-03-31 to 2025-09-30: the 2025-06-30 filing itself prints '$ 16,301' for that line, same rate basis B + 5.25 %, 10/06/31, so the link is right and the printed currency is the filer's); Packaging Coordinators SN + 5.00 % loan USD 25,126 (2026-03-31) -> GBP 18,800 (2026-06-30), fair value 24,875 -> 24,688 (the filing re-prints the same loan in GBP; link kept); VisionSafe 2024-06-30 -> 2024-09-30 (no par currency on one side).",
+   "field": "position_id",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 55.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Flag a chain link whose principal currency changes, or whose par changes by more than 10x with a new maturity.",
+   "quote": {
+    "accession": "0000950170-25-107338",
+    "text": "Solar Holdings Bidco Limited (dba SLR Consulting) Professional Services 9.47 % B + 5.25 % 10/06/31 $ 16,301 $ 10,878 $ 10"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "nbgp_chain_check.py / nbgp_xcur.py list such links deterministically; the matcher has no currency veto (same key on Ares, D-257). A currency-change flag also fires on the legitimate Packaging and Solar links above and needs a par/fair-value ratio test to separate them."
+   }
+  },
+  {
+   "observation_key": "industry-label-differs-from-printed-cell",
+   "what": "nbgpf (and nbgpe) still publish 13 extracted_industry labels that differ from the printed industry cell, so this observation is NOT fixed in the final sandbox: Medline Borrower 2023-06-30 'Health Care' (printed 'Health Care Equipment & Supplies'); Conservice 'Commercial Services s & Supplies'; CST Buyer 'Diversified Consumer services'; AllSpring, CQP, Citadel, DRW and Franklin Square 2023-06-30 'Diversified Financial services' (printed 'Services'); Heartland Dental 2023-12-31 'Health Care Providers and Services' (printed '&'); Amspec and Westwood 2024-09-30 'Professional Services' + U+FEFF; 123Dentist 2025-09-30 'HealthCare Providers & Services'; OneSky 2026-03-31 'Air Freight and Logistics' (printed '&'). 80 other wrong labels were fixed in nbgpe/nbgpf by row corrections. The 13 corrections are written (nbgpe_specs_add.py, each printed line found once; row_correction_specs and row_corrections.csv), were checked against the page by the nbgpf reviewer (exact string, ASCII), and are to be applied and checked by the next production build; they were not built here (six builds used, my slip: the CSV was not regenerated before the sixth build). My earlier audit (nbgp_industry_audit.py, '5,758 rows, 0 differ') missed Heartland, Amspec, Westwood, 123Dentist and OneSky because it folds case, '&'/'and' and non-letters (k() keeps letters only, so '&' vs 'and' and U+FEFF vanish) and skips rows with no printed-row join or whose printed cell contains a digit; it was run on nbgpd and nbgpe before these rows were looked at individually. The reviewer's exact whole-fund audit (r28_industry_all.py nbgpf, 5,652 rows compared, 288 ambiguous between current and comparative prints and 27 with no printed row not compared) finds exactly these 13.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "Compare the published extracted_industry with the printed industry cell of the row EXACTLY, after only whitespace and no-break-space normalisation, and flag zero-width characters (U+FEFF); no case folding and no '&'/'and' folding (folding hides 8 of these 13: Heartland, OneSky and the six lower-case 'services' rows).",
+   "quote": {
+    "accession": "0000950170-25-070289",
+    "text": "AAP Buyer Inc. Chemicals 7.07 % S + 2.75 % 09/09/31"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the published industry with the printed cell; the exact comparison is deterministic (reviewer_nbgpf/r28_industry_all.py is one implementation)."
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Diameter Capital CLO 11 Class D1 (30,000) and Class E (15,000) at 2025-09-30 and 2025-12-31 carried par currency CAD (the tag's unit) on lines the page prints in dollars; this produced CAD -> USD chain links at 2026-03-31. Fixed by 4 row corrections (USD, par in dollars, rate 1.0).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 45.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose par currency differs from the currency marker printed on the line.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "Diameter Capital CLO 13, Ltd. - Class D1 Financial Services 6.28 % S + 2.55 % 11/26/25 01/20/39 5,580 5,580 5,580"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule checks par currency against the printed marker (the same key exists on another fund with 44 rows); the check is deterministic."
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Three rows published interest_rate equal to the spread (Beach Acquisition and Sazerac 2025-06-30: 3.25 / 2.5; INK FINCO undrawn 2025-09-30: 5.0) where the page prints no interest rate. Fixed by blanking through row corrections.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose interest_rate equals its basis_spread while the printed line shows no all-in rate.",
+   "quote": {
+    "accession": "0001193125-25-277550",
+    "text": "INK (BC) FINCO S.R.L. (dba Namirial) Software E + 5.00 % 07/15/33 EUR 2,025 ( 47 ) ( 47 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No existing rule compares interest_rate with the spread; the check is deterministic and narrow."
+   }
+  },
+  {
+   "observation_key": "position-chain-kept-across-refinancing-maturity",
+   "what": "Chains kept across a printed maturity change at about the same par: Alliant 2027 -> 2030, KKR Apple 2028 -> 2031, Colossus 07/32 -> 01/33, Orthrus 11/28 -> 12/05, Fluid-Flow Products 03/31/28 -> 03/04/33 (2025-12-31 -> 2026-03-31). Read as refinancings of one facility; not read line by line, no override.",
+   "field": "position_id",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a chain link whose maturity moves by more than 12 months.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "Diameter Capital CLO 13, Ltd. - Class D1 Financial Services 6.28 % S + 2.55 % 11/26/25 01/20/39 5,580 5,580 5,580"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A maturity-jump flag on chain links is deterministic; it also fires on genuine refinancings, so it is a flag, not a gate."
+   }
+  },
+  {
+   "observation_key": "dash-fair-value-rows-carry-xbrl-field-source",
+   "what": "The 25 rows published from untagged_values (page '-' fair value) carry fair_value_source 'xbrl_field' although no fair-value fact exists for their contexts. Provenance label only, value 0 as printed. Also LCG Vardiman Black common 2024-03-31 instrument 'Common stock' (printed 'Common Stock'). Left: label and case only.",
+   "field": "fair_value_source",
+   "quarters": [
+    "2024-03-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a row whose fair_value_source is xbrl_field with no fair-value fact for its context.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "Health Care Providers & Services 03/29/24 13,194,756 3,101 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The suggested check is deterministic (fair_value_source xbrl_field and no fair-value fact for the row's context); a source label that overstates the evidence matters to the auditability chain, although no value changes."
+   }
+  },
+  {
+   "observation_key": "position-match-override-dropped-by-coexistence-veto",
+   "what": "4 of the 21 force_pair overrides of position_match_overrides/0001920145.json have no effect on the built position_id (reviewer_nbgpe/r5_overrides.py on nbgpf; the build log still says '21 forced'): #4 Spectrum EUR 7,890 (2025-03-31, fv 8,446,000) -> EUR 7,870 (2025-06-30, fv 9,132,000): chains 9d5cd265 / 33600f5e split; #7 Northstar NOK 118,397 (2024-09-30, fv 11,163,000) -> NOK 118,100 (2024-12-31, fv 10,323,000): bf754a60 continues on USD 11,166, NOK 118,100 is the singleton fa0e4812; #8 Northstar USD 10,582 (fv 1,550,000) -> USD 10,582 (fv -53,000): 2c317456 / ac456fd3 split (cause not verified: not vetoed itself; probably the 1:1 end-row contest with the vetoed C_normalized pair USD 11,192 undrawn -> USD 10,582); #21 Solar AUD 16,301 (2025-12-31, fv 10,878,000) -> AUD 16,301 (2026-03-31, fv 11,247,000): 78cf2f60 / 1fcdaeca split. #4, #7 and #21 are dropped by _coexistence_vetoed (USD-converted par within 2 pct; verified for #7 with reviewer_nbgpe/r3_veto.py: ratio 1.081 for the NOK pair, 1.006 for the USD 11,166 twin). Also unlinked, no override: Spectrum USD 8,468 undrawn (d6275227, ends 2025-03-31) -> USD 8,464 drawn (927c7412, from 2025-06-30), and Solar CAD 14,958 split 0eb25451 (to 2025-06-30) / a986c44e (from 2025-09-30). Published values other than position_id are unaffected. See REQ-NBGP-2.",
+   "field": "position_id",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "After a build, check that each force_pair override's begin and end rows share a position_id and each reject's do not (reviewer_nbgpe/r5_overrides.py does this).",
+   "quote": {
+    "accession": "0000950170-25-107338",
+    "text": "Solar Holdings Bidco Limited (dba SLR Consulting) Professional Services 9.47 % B + 5.25 % 10/06/31 $ 16,301 $ 10,878 $ 10"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Deterministic: a position-match override is 'effective' when the built position_id agrees with it; the build log's 'forced' count is not evidence of effect."
+   }
+  },
+  {
+   "observation_key": "par-only-lines-published-and-unpublished-inside-one-fund",
+   "what": "Inside this fund some printed par-only lines (par or units, cost '-', fair value '-') are published at cost 0 and fair value 0 and others are not published at all. Recount on nbgpf (nbgpf_paronly_unpub.py; rows in paronly_nbgpf_2025-12-31.csv and paronly_nbgpf_2026-03-31.csv): 2025-12-31 37 printed par-only lines in the current schedule, 24 unpublished (A.C.N. x3, Ranch Bidco 34,699, Aryeh Bidco x3, Optima, Unit4 x3, GEMS Topco x2, SI Swan 13,724, AP Kona x2, Apple Bidco x3, Clearwater x3, Dawn Bidco x2) and 13 matched to a published row (12 published rows with par > 0 and cost = fair value = 0: Kryptona x2, North Star 275,000, Sundance x2, TL Sapphire x3, Pike x2, Trystar x2); 2026-03-31 34 printed lines, 12 unpublished (Unit4 x3, Advanced Cooling x2, Auctane, Burgess Pigment x2, Envero x3, Tiger) and 22 matched (21 published rows at 0: Apple AU Finco x4, DBG, Corinthia x3, AQ Sunshine x2, Atwell x3, Clearwater x3, Enverus, Octane, OneStream x3). The name-prefix match may count one extra published line per quarter. The same Clearwater lines (584,354 / 108,214 / 70,339) are unpublished at 2025-12-31 and published at 0 at 2026-03-31. Mechanism (reviewer's r24_ixrow.py): published lines carry tagged dash cost and fair-value facts, unpublished ones only a principal fact. Not changed: for the owner (D-072 / D-263).",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Flag a printed par-only line ('-' cost and '-' fair value) that is not published while another par-only line of the same fund and quarter is, or that is published in another quarter.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "A.C.N. 664 616 371 Pty Ltd (dba Aspen Pharmacare) Pharmaceuticals B + 4.75 % 12/23/32 AUD 230,366 - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "B01 does not detect this: it raises a finding only when fewer than 95 pct of leaf contexts have a fair value, and it raised nothing at 2026-03-31 where 12 par-only lines are unpublished. The suggested check needs the printed row (page reader) and the published rows; it is deterministic."
+   }
+  },
+  {
+   "observation_key": "issuer-name-drops-printed-trailing-full-stop",
+   "what": "42 published non-cash, non-CLO rows (24 quarter-name pairs, 21 names) carry an issuer name that drops the full stop the page prints at the end of the name: Hamilton Thorne, Inc (2025-09-30, 2025-12-31), Frontgrade Technologies Holdings Inc (2025-06-30 to 2025-12-31), Froneri International Ltd (2025-12-31), Netrisk Group Luxco 4 S.a r.l (2025-06-30), Crosby US Acquisition Corp (2024-12-31), Genesee & Wyoming Inc (2026-03-31), Hyland Software, Inc, Harbor Freight Tools USA, Inc, ASM Buyer, Inc and others (rows: nbgpf_names_stop.csv, own script nbgpf_names_stop.py: the name is not followed by its row's printed industry label, but the name plus a full stop is). Cosmetic, no value effect. Earlier statements here and in notes.md that 0 names were 'not printed as written' are wrong for these rows: nbgp_name_on_page.py accepts a name followed by any non-letter, including the full stop. No corrections written (coordinator instruction).",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Compare the published issuer_name with the printed first cell of the row exactly (no 'followed by a non-letter' pass), after legal-form-neutral normalisation only for spelling variants the owner accepted.",
+   "quote": {
+    "accession": "0001193125-25-277550",
+    "text": "Hamilton Thorne, Inc. Health Care Equipment & Supplies 7.60 % E + 5.50 % 11/28/3"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed folds legal-form punctuation by design (D-207); a trailing-full-stop-only difference is below its tolerance. An exact first-cell comparison would flag these 42 rows and any similar cosmetic differences; it is a flag, not a gate."
+   }
+  },
+  {
+   "observation_key": "undrawn-par-only-lines-unpublished",
+   "what": "Undrawn commitments printed with a par and '-' cost and value (A.C.N. 664 616 371 AUD 230,366 / 40,011 / 23,037, Ranch Bidco EUR 34,699 at 2025-12-31; 7-34 contexts a quarter) are not published; the owner's D-072 accepted that for four named quarters and D-263 (delegated reviewer, 2026-11-12) extends it to 2025-12-31 (no end date). Other funds publish par-only lines at 0: an inconsistency for the owner.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "B01 position contexts without a fair value.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "A.C.N. 664 616 371 Pty Ltd (dba Aspen Pharmacare) Pharmaceuticals B + 4.75 % 12/23/32 AUD 230,366 - -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 reports these contexts (excluded_no_fair_value) every quarter; verdict retired on D-263 (REQ-NBGP-1).",
+    "reference": "pipeline oracle check B01"
+   }
+  },
+  {
+   "observation_key": "dash-cost-published-blank",
+   "what": "Ranch Bidco EUR 10,410 line at 2025-12-31 prints cost '-' and fair value 40; cost is published blank, not 0. Left: one row, no fair-value effect.",
+   "field": "cost",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.04,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag a published row with a fair value and a blank cost where the printed line has a dash in the cost cell.",
+   "quote": {
+    "accession": "0001193125-26-088668",
+    "text": "Ranch Bidco B.V. (dba Innovad) Biotechnology E + 4.75 % 12/01/32 EUR 10,410 - 40"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "No published field holds the printed cost cell; a reliable check needs the page reader's cell positions, which the build does not keep per row."
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [],
+ "resolved_findings": [
+  {
+   "finding_id": "RVQ_BLK_0467314ce4d0",
+   "rule": "issuer_name_printed 2023-09-30",
+   "how": "Circustrix typo/industry glue fixed (correction + strip); rule no longer flags"
+  },
+  {
+   "finding_id": "RVQ_BLK_e31aba290714",
+   "rule": "issuer_name_printed 2023-12-31",
+   "how": "Onyx 'Inc.Industry Software' fixed by strip"
+  },
+  {
+   "finding_id": "RVQ_BLK_6cf2c651130c",
+   "rule": "issuer_name_printed 2024-03-31",
+   "how": "Northstar '(aka N2Y)' -> printed '(dba n2y)'"
+  },
+  {
+   "finding_id": "RVQ_BLK_9a7cf62497e6",
+   "rule": "issuer_name_printed 2024-09-30",
+   "how": "AWP industry glue (strip), BBB Industries heading (correction)"
+  },
+  {
+   "finding_id": "RVQ_BLK_fe670b845316",
+   "rule": "issuer_name_printed 2024-12-31",
+   "how": "members of Rotation Buyer/Sunshine Cadence/Superman/TricorBraun on Spectrum/VASA/Superior/Trident lines -> printed company (11 rows)"
+  },
+  {
+   "finding_id": "RVQ_BLK_71891d1539d4",
+   "rule": "issuer_name_printed 2025-03-31",
+   "how": "60 rows: industry glue (strip) and MRock/VWand/VWhite typos"
+  },
+  {
+   "finding_id": "RVQ_BLK_4b5f344ec376",
+   "rule": "issuer_name_printed 2025-06-30",
+   "how": "20 rows: heading fragments (Admiral, Fluid-Flow, Supreme, Kenan, Sonar, VASA) and industry glue"
+  },
+  {
+   "finding_id": "RVQ_BLK_6521069052a0",
+   "rule": "issuer_name_printed 2025-09-30",
+   "how": "Proneri -> Froneri, Advarra 'In', NAVEX, RPC ABC/VisionSafe glue"
+  },
+  {
+   "finding_id": "RVQ_BLK_fc7e2604552d",
+   "rule": "issuer_name_printed 2025-12-31",
+   "how": "Oryx heading fragment, CloudBees/FS WhiteWater/Peppertree/SEM/VisionSafe/Whitewater glue"
+  },
+  {
+   "finding_id": "RVQ_BLK_5e3c93599309",
+   "rule": "issuer_name_printed 2026-03-31",
+   "how": "K2 Towers/AP Kona/Beach/Colossus/Sazerac/VB-S1 heading fragments, ExamWorks, Optima, RPC ABC preferred"
+  },
+  {
+   "finding_id": "RVQ_BLK_f894fdafc604",
+   "rule": "issuer_name_printed 2026-06-30",
+   "how": "AGS Health (country India), IRB ('United State'), Diameter, Optima, SLR Consulting, CLO equity"
+  },
+  {
+   "finding_id": "RVQ_BLK_2848a6b63e4d",
+   "rule": "units_printed 2026-03-31",
+   "how": "RPC ABC preferred 320,487 units"
+  },
+  {
+   "finding_id": "RVQ_BLK_e4d63aaad35a",
+   "rule": "units_printed 2026-06-30",
+   "how": "RPC ABC preferred 320,487 units"
+  },
+  {
+   "finding_id": "RVQ_REV_a3e52bf808b2",
+   "rule": "B01 2025-06-30",
+   "how": "SDB HOLDCO preferred and three undrawn lines with a printed cost published at fair value 0; remaining par-only undrawn lines below the B01 threshold"
+  },
+  {
+   "finding_id": "RVQ_REV_8c296e626e8f",
+   "rule": "B01 2025-12-31",
+   "how": "verdict retired by VR-OWN-1920145-01 on D-263 (delegated reviewer): D-072 covers 2025-12-31; the verdict cites A.C.N. AUD 230,366 and Ranch Bidco EUR 34,699 (printed par only, cost and value dashes) and the SDB HOLDCO COMMON line (27,194,622 units, printed '$ - $ -'; table 68 row 17, 0-based), which is published in nbgpf at its printed values (cost 0, fair value 0); the SDB preferred (13,194,756 units, cost 3,101) is not cited and is published at cost 3,101,000, fair value 0 (nbgpe_sdb.py nbgpf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_fae1b6734fd0",
+   "rule": "agentA_spread_vs_xbrl 2026-03-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-01)"
+  },
+  {
+   "finding_id": "RVQ_BLK_ed8d7cb7784c",
+   "rule": "agentA_maturity_vs_xbrl 2025-12-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-02)"
+  },
+  {
+   "finding_id": "RVQ_BLK_c48761127b70",
+   "rule": "agentA_maturity_vs_xbrl 2026-03-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-03)"
+  },
+  {
+   "finding_id": "RVQ_REV_44b196026bc9",
+   "rule": "X10 2025-09-30",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-04)"
+  },
+  {
+   "finding_id": "RVQ_REV_bb834e3bdce2",
+   "rule": "PP01 2024-09-30",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-05)"
+  },
+  {
+   "finding_id": "RVQ_REV_258a597d29be",
+   "rule": "FX02 2025-12-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-06)"
+  },
+  {
+   "finding_id": "RVQ_REV_b81c213bf58c",
+   "rule": "FX03 2025-12-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-07)"
+  },
+  {
+   "finding_id": "RVQ_REV_597dbdf65151",
+   "rule": "FX02 2026-03-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-08)"
+  },
+  {
+   "finding_id": "RVQ_REV_59da0bc6c9d0",
+   "rule": "A07 2026-03-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-09)"
+  },
+  {
+   "finding_id": "RVQ_BLK_d86a4069ddc1",
+   "rule": "fv_conservation 2023-12-31",
+   "how": "verdict retired under the standing rule D-252 (VR-FL-1920145-10)"
+  }
+ ],
+ "verdict_retirements": {
+  "files": [
+   "data/overrides/verdict_retirements/standing_rule_fundloop_0001920145_2026-11-11.json",
+   "data/overrides/verdict_retirements/owner_2026-11-12_0001920145.json"
+  ],
+  "file": "data/overrides/verdict_retirements/standing_rule_fundloop_0001920145_2026-11-11.json",
+  "owner_ruling_entry": "VR-OWN-1920145-01 (RVQ_REV_8c296e626e8f, D-263)",
+  "count": 10,
+  "rerun": "python scratch/fund_runs/0001920145/nbgp_retirements.py nbgpf"
+ },
+ "tests_run": [
+  "python -m pytest -q tests/test_bdc_xbrl_wrapper.py tests/test_source_encodings.py: 655 passed",
+  "python -m pytest -q tests/test_position_match_overrides.py: 14 passed",
+  "python -m pytest -q tests/test_verdict_retirements.py: 12 passed (finish run, with owner_2026-11-12_0001920145.json present)"
+ ],
+ "not_done": [
+  "No page sample of 20 random rows (orchestrator's step); no independent review.",
+  "Chain links that cross a printed maturity in the same company and lien (refinancings) were not read line by line.",
+  "Solar SLR AUD/USD (2025-06-30 printed with a dollar sign) and Packaging Coordinators USD 25,126 -> GBP 18,800 links were read on the page and kept; not a statement that the printed currency is right.",
+  "Pytest beyond tests/test_verdict_retirements.py, the semantic diff and re-attestation were not run in the finish run (earlier run: wrapper/source_encodings 655 passed, match overrides 14 passed).",
+  "No 20-row page sample exists for nbgpe/nbgpf; the independent review on file (0001920145_nbgpe.json) is of nbgpe and its digest no longer matches this report.",
+  "The 13 industry-label corrections appended to row_corrections.csv after nbgpe were never built (six builds used): 16 of their field comparisons differ in nbgpf, and the build that applies them is unverified for unmatched corrections, field diff and chain.",
+  "Industry labels were compared with the printed cell for 2023-06-30 by page-line reading of odd labels only, not field by field for all 132 rows.",
+  "Ranch Bidco EUR 10,410 2025-12-31 printed '-' cost published blank (left).",
+  "Rows with no printed row in the page reader (2023-06-30 all 132 rows; 1-19 a quarter later) were checked by the name-on-page scan only, not field by field.",
+  "A clean ledger is not data correct."
+ ],
+ "carried_note": "Nothing was carried forward from an earlier report. The only finding outstanding at the start of this run that is not cleared by a fix, RVQ_REV_8c296e626e8f (B01 2025-12-31), was investigated on the page in this run (cited rows resolved to table 49 rows 6 and 18 and table 68 row 17 of 0001193125-26-088668, read as printed; SDB common and preferred published values checked in the sandbox) and is retired by VR-OWN-1920145-01 under D-263; it is not outstanding in nbgpf, so `investigations` is empty as the contract asks (one entry per outstanding review_id). The evidence is in data/overrides/verdict_retirements/owner_2026-11-12_0001920145.json, `resolved_findings` and request_resolution_history here, and scratch/fund_runs/0001920145/notes.md."
+}
