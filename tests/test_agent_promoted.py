@@ -1020,6 +1020,45 @@ def test_apply_promoted_rules_scope_carryover_excused_by_review():
     assert audits[0]["drift"] == ""
 
 
+def test_rule_for_absent_quarter_reads_pending_not_noop():
+    """Owner ruling D-253: Q2-2026 rules while the build ends at 2026-03-31 are pending.
+    Covers a quarter-scoped rule and an 'all'-scope rule whose evidence quarter is absent."""
+    scoped = _valid_rule(predicate="issuer_name = 'Nothing'", rule_id="q2_scoped",
+                         scope={"quarters": ["2026-06-30"]},
+                         measured_impact={"2026-06-30": {"rows": 1, "fv": 5.0}})
+    structural = _valid_rule(predicate="issuer_name = 'Nothing'", rule_id="q2_all",
+                             measured_impact={"2026-06-30": {"rows": 1, "fv": 5.0}})
+    out, audits = ap.apply_promoted_rules(_q_rows(), {"0000000123": [scoped, structural]})
+    assert len(out) == 3
+    assert [a["drift"] for a in audits] == ["pending", "pending"]
+    assert all("2026-06-30 not in build" in a["message"] and "latest 2026-03-31" in a["message"]
+               for a in audits)
+
+
+def test_rule_whose_quarter_is_in_build_and_matches_nothing_stays_noop():
+    """A real error must still fail: quarters present, 0 rows changed -> noop drift. Also a
+    scope with one present and one absent quarter, and an 'all' rule with no evidence quarter."""
+    present = _valid_rule(predicate="issuer_name = 'Nothing'", rule_id="q1",
+                          scope={"quarters": ["2026-03-31"]},
+                          measured_impact={"2026-03-31": {"rows": 1, "fv": 5.0}})
+    mixed = _valid_rule(predicate="issuer_name = 'Nothing'", rule_id="q1q2",
+                        scope={"quarters": ["2026-03-31", "2026-06-30"]})
+    all_evidence_present = _valid_rule(predicate="issuer_name = 'Nothing'", rule_id="all_q4",
+                                       measured_impact={"2025-12-31": {"rows": 1, "fv": 5.0}})
+    no_evidence = _valid_rule(predicate="issuer_name = 'Nothing'", rule_id="all_bare")
+    _, audits = ap.apply_promoted_rules(
+        _q_rows(), {"0000000123": [present, mixed, all_evidence_present, no_evidence]})
+    assert [a["drift"] for a in audits] == ["noop", "noop", "noop", "noop"]
+
+
+def test_pending_quarters_helper():
+    assert ap.pending_quarters({"scope": {"quarters": ["2026-06-30"]}}, {"2026-03-31"}) == ["2026-06-30"]
+    assert ap.pending_quarters({"scope": {"quarters": ["2026-06-30"]}}, {"2026-06-30"}) == []
+    assert ap.pending_quarters({"scope": {"quarters": ["all"]},
+                                "measured_impact": {"2026-06-30": {"rows": 1}}}, {"2026-03-31"}) == ["2026-06-30"]
+    assert ap.pending_quarters({"scope": {"quarters": ["all"]}}, {"2026-03-31"}) == []
+
+
 def test_apply_promoted_rules_all_scope_and_row_add_exempt_from_carryover():
     rule_all = _valid_rule(predicate="issuer_name = 'Dup Row'",
                            measured_impact={"2025-12-31": {"rows": 2, "fv": 455.9}})

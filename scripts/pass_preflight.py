@@ -164,7 +164,9 @@ def check_rule_hygiene(audit_path: Path = DEFAULT_AUDIT) -> dict[str, Any]:
     with Path(audit_path).open("r", encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
             status, drift = str(row.get("status") or ""), str(row.get("drift") or "")
-            if status != "ok" or drift:
+            # 'pending' (target quarters not in the build yet, owner ruling D-253) is not
+            # drift; quarter_acceptance lists those rules under promoted_rules.pending_rules.
+            if status != "ok" or (drift and drift != "pending"):
                 bad.append({"rule_id": row.get("rule_id", ""), "cik": row.get("cik", ""),
                             "status": status, "drift": drift})
     ok = not bad

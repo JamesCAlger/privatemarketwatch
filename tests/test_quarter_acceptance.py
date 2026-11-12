@@ -428,6 +428,35 @@ def test_scope_carryover_counts_as_drift(tmp_path):
     assert res["checks"][2]["pass"] is False
 
 
+def test_pending_rule_listed_not_counted_as_drift(tmp_path):
+    """Owner ruling D-253: a rule whose quarters are not in the build reads 'pending'. It is
+    listed in the acceptance output and does not count toward n_drift; a noop rule beside it
+    (quarters in the build, 0 rows) still counts."""
+    kw = _setup(tmp_path, ledger_rows=[_cons_row(c, "pass") for c in
+                                       ("0000000001", "0000000002", "0000000003")],
+                audit_rows=[{"layer": "unified_agent_rules", "cik": "0000000001", "rule_id": "q2_rule",
+                             "rule_type": "row_exclusion", "status": "ok", "rows_changed": 0,
+                             "drift": "pending",
+                             "message": "pending: target quarter(s) 2026-06-30 not in build"}])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    pr = res["metrics"]["promoted_rules"]
+    assert pr["n_drift"] == 0 and pr["n_pending"] == 1
+    assert pr["pending_rules"] == [{"cik": "0000000001", "rule_id": "q2_rule",
+                                   "message": "pending: target quarter(s) 2026-06-30 not in build"}]
+    assert next(c for c in res["checks"] if c["id"] == "drift")["pass"] is True
+
+    kw = _setup(tmp_path, ledger_rows=[_cons_row(c, "pass") for c in
+                                       ("0000000001", "0000000002", "0000000003")],
+                audit_rows=[{"layer": "unified_agent_rules", "cik": "0000000001", "rule_id": "q2_rule",
+                             "status": "ok", "drift": "pending", "message": "m"},
+                            {"layer": "unified_agent_rules", "cik": "0000000002", "rule_id": "stale",
+                             "status": "ok", "rows_changed": 0, "drift": "noop"}])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    assert res["metrics"]["promoted_rules"]["n_drift"] == 1
+    assert res["metrics"]["promoted_rules"]["n_pending"] == 1
+    assert next(c for c in res["checks"] if c["id"] == "drift")["pass"] is False
+
+
 # --------------------------------------------------------------------------- promoted inputs that failed to load
 
 ADMISSION_HEADER = ["path", "admission_status", "loaded", "reason", "sha256"]
