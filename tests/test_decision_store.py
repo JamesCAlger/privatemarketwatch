@@ -39,6 +39,15 @@ def request(**over):
     return entry
 
 
+def owner_question(**over):
+    entry = {"type": "owner_request", "cik": CIK, "finding_ids": [RID], "quarters": [],
+             "statement": "Does the printed filer industry count as covered?", "evidence": [],
+             "request_id": "REQ-2", "resolution": "open",
+             "decided_by": "agent:fund-agent-x", "decided_on": "2026-11-12"}
+    entry.update(over)
+    return entry
+
+
 def fix(**over):
     entry = {"type": "fix_record", "cik": CIK, "finding_ids": [RID], "quarters": [],
              "statement": "Wrapper strips the industry label.", "evidence": [],
@@ -53,7 +62,7 @@ def at(hour):
 
 
 def test_each_native_type_appends_and_reads_back(tmp_path):
-    for entry in (verdict(), ruling(), request(), fix()):
+    for entry in (verdict(), ruling(), request(), owner_question(), fix()):
         ds.append(entry, actor=entry["decided_by"], directory=tmp_path)
     loaded = ds.load_native(tmp_path)
     assert sorted(e["type"] for e in loaded) == sorted(ds.NATIVE_TYPES)
@@ -187,6 +196,16 @@ def test_check_repair_request_stands_until_implemented(tmp_path):
     ds.append(request(resolution="implemented", statement="done in abc123", decided_by="owner"),
               actor="owner", directory=tmp_path, now=at(10))
     assert not facts(ds.load_native(tmp_path)).check_repair
+
+
+def test_owner_request_waits_for_the_owner(tmp_path):
+    ds.append(owner_question(), actor="agent:fund-agent-x", directory=tmp_path, now=at(9))
+    got = facts(ds.load_native(tmp_path))
+    assert got.owner_request and not got.check_repair
+    assert fs.status_of("open", got) == fs.NEEDS_OWNER_RULING
+    ds.append(owner_question(resolution="declined", statement="owner said no", decided_by="owner"),
+              actor="owner", directory=tmp_path, now=at(10))
+    assert not facts(ds.load_native(tmp_path)).owner_request
 
 
 def test_proposal_classes_and_rulings():

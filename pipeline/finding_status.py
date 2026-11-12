@@ -14,7 +14,8 @@ First match wins:
   2  a fix is recorded and no build has run since                   fix_awaiting_build
   3  a check-repair request stands, or a proposal says the check
      misfires (class rule_problem / false_alarm)                    needs_check_repair
-  4  state needs a human (needs_human, evidence_backlog)            needs_owner_ruling
+  4  state needs a human (needs_human, evidence_backlog), or an
+     acceptance question about it waits for the owner               needs_owner_ruling
   5  a proposal in a store class stands (as_filed, not_applicable,
      informational)                                                 needs_owner_ruling
   6  state carries a real-error verdict                             needs_data_fix
@@ -64,6 +65,7 @@ class Facts:
     """What the decision store says about one finding (see pipeline.decision_store.facts_by_finding)."""
     fix_queued: bool = False          # a standing fix_record newer than the ledger's build names it
     check_repair: bool = False        # a standing check_repair_request names it
+    owner_request: bool = False       # a standing owner_request (acceptance question) names it
     proposal_class: str = ""          # class of a proposal that still bears on it, else ""
     conclusion: str = ""              # fund agent's conclusion, "" when none
     conclusion_supported: bool = False  # an independent review supported that conclusion
@@ -82,7 +84,7 @@ def status_of(state: str, facts: Facts = NO_FACTS) -> str:
         return FIX_AWAITING_BUILD
     if facts.check_repair or facts.proposal_class in MISFIRE_CLASSES:
         return NEEDS_CHECK_REPAIR
-    if state in HUMAN_STATES:
+    if state in HUMAN_STATES or facts.owner_request:
         return NEEDS_OWNER_RULING
     if facts.proposal_class in STORE_CLASSES:
         return NEEDS_OWNER_RULING

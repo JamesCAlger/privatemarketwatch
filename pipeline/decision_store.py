@@ -29,7 +29,7 @@ from pathlib import Path
 
 from pipeline import finding_status
 
-NATIVE_TYPES = ("verdict", "owner_ruling", "check_repair_request", "fix_record")
+NATIVE_TYPES = ("verdict", "owner_ruling", "check_repair_request", "owner_request", "fix_record")
 ADAPTED_TYPES = ("disposition", "verdict_retirement", "disposition_proposal")
 TYPES = NATIVE_TYPES + ADAPTED_TYPES
 RULINGS = ("accept", "reject", "more", "approve", "decline")
@@ -48,8 +48,8 @@ _ACTOR = re.compile(r"(owner|delegate:\S.*|check:\S.*|agent:\S.*)")
 _ALLOWED = {
     "owner": set(NATIVE_TYPES),
     "delegate": set(NATIVE_TYPES),
-    "check": {"verdict", "check_repair_request", "fix_record"},
-    "agent": {"verdict", "check_repair_request", "fix_record"},
+    "check": {"verdict", "check_repair_request", "owner_request", "fix_record"},
+    "agent": {"verdict", "check_repair_request", "owner_request", "fix_record"},
 }
 
 
@@ -112,10 +112,10 @@ def validate(entry) -> list[str]:
             errs.append("an owner_ruling records the words")
         if not (_text(entry, "reason_key") or _text(entry, "request_id") or ids):
             errs.append("an owner_ruling names a reason_key, a request_id or finding_ids")
-    elif kind == "check_repair_request":
+    elif kind in ("check_repair_request", "owner_request"):
         if not _text(entry, "request_id"):
             errs.append("missing request_id")
-        if not _text(entry, "check"):
+        if kind == "check_repair_request" and not _text(entry, "check"):
             errs.append("missing check (the rule or file to repair)")
         if entry.get("resolution") not in REQUEST_RESOLUTIONS:
             errs.append("resolution must be one of %s" % (REQUEST_RESOLUTIONS,))
@@ -315,6 +315,7 @@ def facts_by_finding(entries: list[dict], ledger_rows: list[dict], *, build_time
     rulings = _reason_rulings(live)
     fix_ids: set[str] = set()
     repair_ids: set[str] = set()
+    owner_ids: set[str] = set()
     verdicts: dict[str, tuple[str, dict]] = {}
     proposals: dict[tuple, list[dict]] = {}
     request_state: dict[str, tuple[str, dict]] = {}
@@ -324,7 +325,7 @@ def facts_by_finding(entries: list[dict], ledger_rows: list[dict], *, build_time
         if kind == "fix_record":
             if build_time and _text(e, "recorded_at") > build_time:
                 fix_ids.update(e["expects"]["finding_ids"])
-        elif kind == "check_repair_request":
+        elif kind in ("check_repair_request", "owner_request"):
             rid = e["request_id"]
             if rid not in request_state or stamp >= request_state[rid][0]:
                 request_state[rid] = (stamp, e)
@@ -338,7 +339,7 @@ def facts_by_finding(entries: list[dict], ledger_rows: list[dict], *, build_time
                     proposals.setdefault((cik, e.get("engine"), e.get("rule_name"), quarter), []).append(e)
     for _stamp, e in request_state.values():
         if e["resolution"] in OPEN_RESOLUTIONS:
-            repair_ids.update(e.get("finding_ids", []))
+            (repair_ids if e["type"] == "check_repair_request" else owner_ids).update(e.get("finding_ids", []))
     order = {klass: i for i, klass in enumerate(
         ("rule_problem", "false_alarm", "as_filed", "not_applicable", "informational", INCOMPLETE, ""))}
     out = {}
@@ -350,7 +351,8 @@ def facts_by_finding(entries: list[dict], ledger_rows: list[dict], *, build_time
         klass = min(classes, key=lambda c: order[c]) if classes else ""
         verdict = verdicts.get(rid, ("", {}))[1]
         out[rid] = finding_status.Facts(
-            fix_queued=rid in fix_ids, check_repair=rid in repair_ids, proposal_class=klass,
+            fix_queued=rid in fix_ids, check_repair=rid in repair_ids, owner_request=rid in owner_ids,
+            proposal_class=klass,
             conclusion=verdict.get("conclusion", ""),
             conclusion_supported=verdict.get("review_outcome") == "supported")
     return out
