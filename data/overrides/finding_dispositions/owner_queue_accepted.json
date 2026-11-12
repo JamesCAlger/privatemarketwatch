@@ -14856,7 +14856,7 @@
     }
    ],
    "rerun": "python scratch/fund_runs/0001950803/q.py spyg \"select fair_value, src_context_id from H where cast(report_date as varchar)[:10]='2025-09-30' and issuer_name ilike 'Puma%'\"",
-   "decided_by": "owner, 2026-11-12, reason fv-corrected-by-owner-ruling-where-printed-line-misprints: \"Accept (owner answer 2026-11-12 to REQ-spy-3: accept reason fv-corrected-by-owner-ruling-where-printed-line-misprints for the two Puma Buyer 2025-09-30 source findings)\"",
+   "decided_by": "owner, 2026-11-12, reason fv-corrected-by-owner-ruling-where-printed-line-misprints: \"Accept (owner ruling 2026-11-12 on REQ-spy-3, D-262; queue state synced by the delegated reviewer, no new decision)\"",
    "decided_on": "2026-11-12",
    "rows": [
     {
@@ -18024,7 +18024,7 @@
     }
    ],
    "rerun": "python scratch/fund_runs/0001950803/q.py spyg \"select fair_value, src_context_id from H where cast(report_date as varchar)[:10]='2025-09-30' and issuer_name ilike 'Puma%'\"",
-   "decided_by": "owner, 2026-11-12, reason fv-corrected-by-owner-ruling-where-printed-line-misprints: \"Accept (owner answer 2026-11-12 to REQ-spy-3: accept reason fv-corrected-by-owner-ruling-where-printed-line-misprints for the two Puma Buyer 2025-09-30 source findings)\"",
+   "decided_by": "owner, 2026-11-12, reason fv-corrected-by-owner-ruling-where-printed-line-misprints: \"Accept (owner ruling 2026-11-12 on REQ-spy-3, D-262; queue state synced by the delegated reviewer, no new decision)\"",
    "decided_on": "2026-11-12",
    "rows": [
     {

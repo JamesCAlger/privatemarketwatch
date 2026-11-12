@@ -15494,3 +15494,12 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Check repair (owner ruling 2026-11-12, REQ-spy-1): pipeline/oracle_checks.py `_a01_drop_l_delimiter`; A01's printed-heading pairing compares section and member keys without the filer's lone 'l' delimiter and glued row numbers, only where the subtotal's own section carries a lone 'l'. Exact equality and section restriction unchanged. tests/test_oracle_checks.py +4 (173 pass). Measured on 66 accepted funds / 58 sandboxes: clears Stepstone 2025-03-31 only, adds 0.
 - Owner rulings recorded per proposal in owner_queue_accepted.json (DS-X02-1674760-20, DS-X05-1950803-13, DS-SRC_BDC03-1950803-14, DS-blocking_fair_value_disagreement-1950803-15) and verdict retirement VR-OWN-1674760-01. owner_queue.py `rule` accepts a whole reason key and fails if any member misses the bar; single-proposal rulings were written by scratch scripts applying rule()'s transform and bar check.
 - Sandbox only: production not rebuilt; nothing published or pushed.
+
+## 2026-11-12 - Delegated owner review of the v0.5/v1 owner queue (D-263)
+
+- Owner instruction: an agent acts as the human reviewer for everything except new-rule suggestions. Rulings are in decision log D-263 and `docs/investigations/v05_owner_queue.csv`.
+- Design spec for one findings workflow (production the only build of record, batched fixes, six statuses, decisions in git): `docs/superpowers/specs/2026-11-12-single-findings-workflow-design.md`. Not built.
+- Check stages re-run on 35 pre-repair fund sandboxes (holdings not rebuilt). Outstanding 1,139 -> 1,012 -> 1,014 after three revocations (`outstanding_status.md`, 2026-11-12): 160 stale findings gone, 33 new unreviewed, 2 BCRED F28 reopened.
+- Owner queue: 23 reasons rejected as dispositions (misfires; 16 already cleared by the merged repairs), 1 at more evidence. 0 dispositions accepted, 0 verdicts retired.
+- Revoked DS-003-1803498, DS-007-1812554, DS-007-1837532 in `data/overrides/finding_dispositions/v05_2026-10-06.json`.
+- No code changed, no tests run, no rebuild. Cleared is not data correct.

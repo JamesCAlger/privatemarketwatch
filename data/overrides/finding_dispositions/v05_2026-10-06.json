@@ -80,6 +80,11 @@
   },
   {
    "disposition_id": "DS-003-1803498",
+   "revoked": {
+    "revoked_on": "2026-11-12",
+    "revoked_by": "delegated reviewer acting for the owner (owner instruction 2026-11-12: act as the human reviewer for everything except new-rule suggestions); REQ-NBBC-1, D-263",
+    "reason": "The statement is false for BCRED: data/raw/filings/bdc_html/1803498 holds the 10-Qs for 2022-03-31 (0001803498-22-000013) and 2022-06-30 (0001803498-22-000017) with printed schedules. The holdings are missing, not absent; F28 reopens for both quarters."
+   },
    "class": "not_applicable",
    "engine": "fund_financials",
    "rule_name": "F28",
@@ -769,6 +774,11 @@
   },
   {
    "disposition_id": "DS-007-1812554",
+   "revoked": {
+    "revoked_on": "2026-11-12",
+    "revoked_by": "delegated reviewer acting for the owner (owner instruction 2026-11-12: act as the human reviewer for everything except new-rule suggestions); nboc-REQ-1, D-263",
+    "reason": "The row it cited (context c-738) was Klick Inc.'s delayed draw published under a Jellyfish label (D-254 defect B). After the relabel C103 flags 0 rows at 2026-03-31, so the entry closes nothing live and must not close a recurrence."
+   },
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C103",
@@ -805,6 +815,11 @@
   },
   {
    "disposition_id": "DS-007-1837532",
+   "revoked": {
+    "revoked_on": "2026-11-12",
+    "revoked_by": "delegated reviewer acting for the owner (owner instruction 2026-11-12: act as the human reviewer for everything except new-rule suggestions); REQ-NBAP-2, D-263",
+    "reason": "Its C103 rows of 2023-09-30 were undrawn lines whose cost the page prints in brackets but which were published positive, a real error fixed from the page in D-258. The entry closes nothing live and must not close a recurrence."
+   },
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C103",
