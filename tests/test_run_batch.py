@@ -1,5 +1,6 @@
 """scripts/run_batch.py with the stage commands stubbed: what is written, and when the pointer moves."""
 import csv
+import datetime
 import json
 from pathlib import Path
 
@@ -122,7 +123,47 @@ def test_from_ledger_runs_only_the_tail_and_compares_with_the_previous_batch(tmp
     assert outcomes == {"A": "fixed", "B": "closed_other", "N": "new_finding"}
     meta = json.loads((batch / "batch.json").read_text(encoding="utf-8"))
     assert meta["compare"]["previous_batch"] == "b1" and meta["compare"]["fix_records"] == 1
+    assert "holdings" not in meta  # started at ledger: the holdings stage did not run
     assert rb.latest(tmp_path / "out")["batch_id"] == "b2"
+
+
+def meta_of(tmp_path, batch_id):
+    return json.loads((tmp_path / "out" / "batches" / batch_id / "batch.json").read_text(encoding="utf-8"))
+
+
+def _holdings(path, rows):
+    import duckdb
+    path.parent.mkdir(parents=True, exist_ok=True)
+    con = duckdb.connect()
+    con.execute("CREATE TABLE t (row_id VARCHAR, cik VARCHAR, fair_value DOUBLE, lien_position VARCHAR)")
+    con.executemany("INSERT INTO t VALUES (?, ?, ?, ?)", rows)
+    con.execute("COPY t TO '%s' (FORMAT PARQUET)" % path.as_posix())
+    con.close()
+
+
+def test_holdings_are_snapshotted_and_compared_with_the_previous_batch(tmp_path):
+    out = tmp_path / "out"
+    ledger = [row("A", "open", "needs_agent_review")]
+    _holdings(out / "private_markets_holdings.parquet", [("r1", "1", 10.0, "First Lien"), ("r2", "2", 20.0, "First Lien")])
+    assert go(tmp_path, "b1", Runner(ledger), start="holdings", until="compare") == 0
+    first = meta_of(tmp_path, "b1")["holdings"]
+    assert first["snapshot"] and not first["compared"]
+    assert (out / "batches" / "b1" / "holdings.parquet").exists()
+    decision_store.append({"type": "fix_record", "cik": "0000000001", "finding_ids": ["A"], "quarters": [],
+                           "statement": "fixed", "evidence": [], "files": ["w.json"], "tested_in": "sbx",
+                           "expects": {"finding_ids": ["A"], "ciks": ["0000000001"]},
+                           "decided_by": "agent:a", "decided_on": "2026-11-12"},
+                          actor="agent:a", directory=tmp_path / "decisions",
+                          now=datetime.datetime(2099, 1, 1))  # after the first batch's build, whatever the clock
+    # fund 1 changes as its fix intended; fund 2 loses a lien that no fix named and no rule flags
+    _holdings(out / "private_markets_holdings.parquet", [("r1", "1", 12.0, "First Lien"), ("r2", "2", 20.0, None)])
+    assert go(tmp_path, "b2", Runner(ledger), start="holdings", until="compare") == 0
+    second = meta_of(tmp_path, "b2")["holdings"]
+    assert second["compared"] and second["previous_batch"] == "b1"
+    assert second["funds_moved"] == 2 and second["unexplained_ciks"] == ["0000000002"]
+    with open(out / "batches" / "b2" / "holdings_diff.csv", newline="", encoding="utf-8") as fh:
+        diff = {r["cik"]: r for r in csv.DictReader(fh)}
+    assert diff["0000000001"]["named_by_fix"] == "True" and diff["0000000002"]["changed_fields"] == "lien_position:1"
 
 
 def test_skip_and_bad_batch_id(tmp_path):
