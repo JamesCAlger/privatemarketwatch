@@ -1,0 +1,37 @@
+{
+ "_note": "Owner rulings 2026-11-11 on Silver Capital (fund loop, sandbox svda); written by scratch/fund_runs/0001674760/record_owner_rulings_2026-11-11.py",
+ "retirements": [
+  {
+   "retirement_id": "VR-OWN-1674760-01",
+   "review_id": "RVQ_BLK_7494d427ce37",
+   "verdict_sha256": "8a0f8a204fd46806491db9b489dc83d85f8a6e7e0bd5acca0e81911f12251dc8",
+   "cik": "0001674760",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2025-09-30",
+   "reason": "The page prints '9.76 % S + 6.50 % (Incl. 10.06 % PIK)': a PIK part larger than the all-in rate, so no consistent interest_rate exists; the owner's 2026-11-10 handling (DS-...-11) publishes it blank and keeps 9.76 in interest_rate_reported. The verdict's 19.82 counts the included PIK twice. Retired by owner ruling, not under standing rule D-252 (independent review rejected that route).",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "quote": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "quote": "Streamland Media Midco LLC Entertainment 10.00 % S + 5.50 % (Incl. 9.07 % PIK) 04/02/29 1,528 1,528 1,467",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "DS-financial_convention_unresolved-1674760-11 (owner 2026-11-10): interest_rate published blank for this row, printed 9.76 kept in interest_rate_reported; reviewer scratch/fund_runs/0001674760/independent-review.json supported the investigation (source_ambiguity)."
+    }
+   ],
+   "rerun": "duckdb: SELECT issuer_name, interest_rate, interest_rate_reported, pik_rate, basis_spread FROM 'scratch/fund_sandbox/svda/output/private_markets_holdings.parquet' WHERE cik='0001674760' AND report_date='2025-09-30' AND issuer_name ILIKE '%streamland%'",
+   "owner_words": "Retire under DS-11 (owner answer 2026-11-11 to SVD-R2: retire verdict RVQ_BLK_7494d427ce37 under DS-financial_convention_unresolved-1674760-11)",
+   "decided_by": "owner",
+   "decided_on": "2026-11-11"
+  }
+ ]
+}

@@ -440,6 +440,44 @@
    }
   },
   {
+   "disposition_id": "PD-X02-1674760-20",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "The one row flagged at 2025-12-31 (sandbox svda) is the Chase Industries second-lien line printed '11/11/27 16,405 - -' (context C_4abeafd8-77e9-4c3a-8812-e8f9fc6a7767): no interest rate, reference rate or spread is printed, and the context carries only maturity and principal facts (no rate, spread or PIK tag). Cost and fair value are printed '-' and published 0. Same row and reason as the 2026-03-31 entry PD-X02-1674760-9. No fix applies.",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001674760",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-0d32ddc29a3d8354"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "quarter": "2025-12-31",
+     "cik": "0001674760",
+     "verbatim": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - - (6) (8) (13)",
+     "quote": "'Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - - (6) (8) (13)': no rate or spread printed; cost and fair value printed '-'"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py svda X02 0001674760 2025-12-31; python scripts/v05_evidence/filing_grep.py 0001674760 000119312526088636 xml C_4abeafd8-77e9-4c3a-8812-e8f9fc6a7767",
+   "decided_by": "PROPOSED by agent fund-agent-svd-0001674760-2026-11-11 (2026-11-11); not accepted by the owner",
+   "decided_on": "2026-11-11",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer (RVQ_REV_819b71684d43) found the Streamland Media Midco last-out line published without rate or spread although the page prints 'S + 6.50 % (Incl. 5.50 % PIK)'. It no longer stands: in svda that row publishes spread 6.50 and pik_rate 5.50 as printed, its Interest Rate cell is blank on the page, and it is not flagged. The verdict was retired under standing rule D-252 (VR-FL-1674760-02). The only X02 row now is the Chase line, which prints no rate."
+   }
+  },
+  {
    "disposition_id": "PD-merged_context_excluded-1674760-10",
    "class": "as_filed",
    "engine": "provenance_reverify",

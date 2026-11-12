@@ -320,9 +320,9 @@
   "basis": "D-220, gate INCOMPLETE with investigation COMPLETE: 87 findings, 80 outstanding, 78 proposed, 2 parked (2022 html_agg / html_carry); 14/14 quarters tie (4 before); sample 2/20 on the warrant (maturity fixed, class shared); five builds"
  },
  "0001674760": {
-  "label": "svce",
-  "accepted_on": "2026-10-20",
-  "basis": "D-221, gate PASS with investigation COMPLETE: 114 findings, 59 outstanding, all proposed; 14/14 quarters tie; sample 0/20; SVC-R1 (interest expense) and SVC-R2 (lien after instrument correction) deferred to the second rule batch; five builds"
+  "label": "svda",
+  "accepted_on": "2026-11-12",
+  "basis": "D-261, gate PASS with investigation COMPLETE: 80 findings, 0 outstanding; 14/14 quarters tie; sample 0/20; 7 verdicts retired (D-252), 1 retired and 1 X02 accepted by owner ruling 2026-11-11 (SVD-R1/R2); one build, no data change vs svce beyond float noise and provenance columns. Earlier: D-221 (svce)"
  },
  "0001988280": {
   "label": "mlff",
