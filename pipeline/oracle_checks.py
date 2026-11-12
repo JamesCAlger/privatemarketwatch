@@ -201,6 +201,13 @@ def _a01_heading_rows(holdings_df: pd.DataFrame | None, source_detail_df: pd.Dat
     return rows
 
 
+def _a01_drop_l_delimiter(key: str) -> str:
+    """A normalised member key without the filer's lone 'l' delimiter tokens and the row numbers
+    glued to them ('debt investments l first lien senior secured 1l application software' ->
+    'debt investments first lien senior secured application software')."""
+    return re.sub(r" +", " ", re.sub(r"(?:^| )(?:\d+ ?)?l(?= |$)", " ", key)).strip()
+
+
 def _a01_printed_heading_sum(
     rollup_key: str, family: str, rows: pd.DataFrame,
 ) -> tuple[float, int, str] | None:
@@ -238,7 +245,13 @@ def _a01_printed_heading_sum(
     section = " ".join(words[:cut]).removesuffix(" and").strip()
     in_section = pool
     if section:
-        in_section = pool[pool["member_norm"].str.match(_a01_child_key_pattern(section) + r"(?: |$)", na=False)]
+        members = pool["member_norm"]
+        if re.search(r"(?:^| )l(?= |$)", section):
+            # Filer dialect: a lone 'l' (a printed '|') separates the section's levels, and some
+            # members of the same section drop it or glue a row number to it ('secured 1l',
+            # 'secured 2 l'). Only where the subtotal's own section carries the delimiter.
+            section, members = _a01_drop_l_delimiter(section), members.map(_a01_drop_l_delimiter)
+        in_section = pool[members.str.match(_a01_child_key_pattern(section) + r"(?: |$)", na=False)]
     paired = in_section[in_section["heading_key"].eq(heading)]
     if paired.empty:
         return None

@@ -14817,6 +14817,59 @@
    "legacy_unscoped": true
   },
   {
+   "disposition_id": "DS-SRC_BDC03-1950803-14",
+   "class": "informational",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001950803"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "The one flagged row is Puma Buyer's Initial Term Loan at 2025-09-30 (context ...DrugRetailPumaBuyerLLCInitialTermLoan...). Its published fair value 13,829 thousand differs from the tagged 3,829,000 because the owner ruled on 2026-11-12 (REQ-spy-2, 'Correct to 13,829') that the printed and tagged 3,829 is a misprint: the line's own 0.92 %, the printed industry subtotal and the filed total use 13,829, and with it the quarter ties. The check correctly reports that the published value is not the filed fact; no fix applies (the difference is the ruling).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279957",
+     "verbatim": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 4.25 % / 0.50 % 8.25 % 3/29/2032 $ 13,829 $ 13,728 $ 3,829 0.92 %",
+     "quote": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 4.25 % / 0.50 % 8.25 % 3/29/2032 $ 13,829 $ 13,728 $ 3,829 0.92 % -- the line prints fair value 3,829 (tagged 3,829,000) for a 13,829 par loan, with 0.92 % of net assets",
+     "quarter": "2025-09-30",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279957",
+     "verbatim": "$ 13,712 $ 13,829 0.92 %",
+     "quote": "$ 13,712 $ 13,829 0.92 % -- the Drug Retail subtotal printed after the line (cost 13,712 = 13,728 less the revolver's 16) uses 13,829",
+     "quarter": "2025-09-30",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279957",
+     "verbatim": "respectively) $ 2,645,502 $ 1,570,542",
+     "quote": "respectively) $ 2,645,502 $ 1,570,542 -- the filed total ties only with 13,829",
+     "quarter": "2025-09-30",
+     "cik": "0001950803"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001950803/q.py spyg \"select fair_value, src_context_id from H where cast(report_date as varchar)[:10]='2025-09-30' and issuer_name ilike 'Puma%'\"",
+   "decided_by": "owner, 2026-11-12, reason fv-corrected-by-owner-ruling-where-printed-line-misprints: \"Accept (owner answer 2026-11-12 to REQ-spy-3: accept reason fv-corrected-by-owner-ruling-where-printed-line-misprints for the two Puma Buyer 2025-09-30 source findings)\"",
+   "decided_on": "2026-11-12",
+   "rows": [
+    {
+     "cik": "0001950803",
+     "quarter": "2025-09-30",
+     "source_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Drug Retail | Puma Buyer, LLC Initial Term Loan | 3M SOFR +4.25% / 0.50% | 8.55% | 3/29/2032",
+     "issuer": "Puma Buyer, LLC",
+     "instrument": "First Lien Senior Secured, Puma Buyer, LLC Initial Term Loan",
+     "published_row_id": "ROW-8de57d9218965539"
+    }
+   ]
+  },
+  {
    "disposition_id": "DS-SRC_BDC03-1975736-1",
    "class": "as_filed",
    "engine": "row_validation",
@@ -16487,6 +16540,203 @@
    "legacy_unscoped": true
   },
   {
+   "disposition_id": "DS-X05-1950803-13",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X05",
+   "ciks": [
+    "0001950803"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The 19 floating rows flagged at 2025-12-31 with a zero spread each print 'SOFR + 0.00 %' on their own line: three funded loans (Puma Buyer 17.1M, ABC Technologies 9.1M, MoboTrex 6.2M), Certified Collision (nil par, printed 5.00 % coupon) and 15 undrawn lines. The published zero is the printed figure. No fix: the page prints it. Same reason as the accepted DS-X05-1950803-1 for the fund's other quarters; this quarter was held back by a real-error verdict, retired in this run (standing rule D-252) because its three cited rows now publish their printed spreads.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-128890",
+     "verbatim": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 0.00 % / 0.50 % 0.00 % 3/29/2032 $ 17,057 $ 16,946 $ 17,057 0.91 %",
+     "quote": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 0.00 % / 0.50 % 0.00 % 3/29/2032 $ 17,057 $ 16,946 $ 17,057 0.91 % -- largest flagged row (17.06M): printed spread and coupon 0.00 %",
+     "quarter": "2025-12-31",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-128890",
+     "verbatim": "ABC Technologies Inc. Term Loan B (3)(5)(7)(12)(24)(25) 1M SOFR + 0.00 % / 0.75 % 0.00 % / 11.92 % 8/22/2031 $ 9,411 $ 9,085 $ 9,065 0.49 %",
+     "quote": "ABC Technologies Inc. Term Loan B (3)(5)(7)(12)(24)(25) 1M SOFR + 0.00 % / 0.75 % 0.00 % / 11.92 % 8/22/2031 $ 9,411 $ 9,085 $ 9,065 0.49 % -- printed spread 0.00 % with cash 0.00 % / PIK 11.92 %; published spread 0, PIK 11.92",
+     "quarter": "2025-12-31",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-128890",
+     "verbatim": "MoboTrex, LLC Term Loan (3)(4)(5)(7)(12) 3M SOFR + 0.00 % / 1.00 % 0.00 % 6/7/2030 6,237 6,193 6,190 0.33 %",
+     "quote": "MoboTrex, LLC Term Loan (3)(4)(5)(7)(12) 3M SOFR + 0.00 % / 1.00 % 0.00 % 6/7/2030 6,237 6,193 6,190 0.33 % -- third funded flagged row: printed 0.00 %",
+     "quarter": "2025-12-31",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-128890",
+     "verbatim": "Certified Collision Group Acquisition Corp. Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 0.00 % / 1.00 % 5.00 % 5/17/2027 - - - 0.00 %",
+     "quote": "Certified Collision Group Acquisition Corp. Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 0.00 % / 1.00 % 5.00 % 5/17/2027 - - - 0.00 % -- printed spread 0.00 % with a 5.00 % coupon; published spread 0, rate 5.00",
+     "quarter": "2025-12-31",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-128890",
+     "verbatim": "Signature Investor LLC Term Loan B (4)(5)(6)(7)(8)(29) 3M SOFR + 0.00 % / 1.75 % 0.00 % 5/4/2028 - - ( 92 ) 0.00 %",
+     "quote": "Signature Investor LLC Term Loan B (4)(5)(6)(7)(8)(29) 3M SOFR + 0.00 % / 1.75 % 0.00 % 5/4/2028 - - ( 92 ) 0.00 % -- undrawn line printed at 0.00 %; the other 14 flagged rows are undrawn lines printed the same way (notes.md)",
+     "quarter": "2025-12-31",
+     "cik": "0001950803"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py spyg X05 0001950803 2025-12-31; python scratch/fund_runs/0001950803/q.py spyg \"select issuer_name, instrument_description, basis_spread from H where cast(report_date as varchar)[:10]='2025-12-31' and coupon_type='Floating' and coalesce(basis_spread,0)=0\"",
+   "decided_by": "owner, 2026-11-12, reason x05-zero-spread-printed-on-the-row: \"Accept as filed (owner answer 2026-11-12 to the X05 2025-12-31 question: accept PD-X05-1950803-13)\"",
+   "decided_on": "2026-11-12",
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer cited Amplify Buyer (printed 4.75), Assembled Intelligence (5.25) and Minds Buyer Second Amendment Incremental (5.00) published with spread 0.0. In spyg they publish 4.75, 5.25 and 5.00 and are no longer flagged; the verdict is retired (VR-FL-1950803-05). Every row still flagged prints 0.00 %."
+   },
+   "rows": [
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-0302831acd1a21a0",
+     "issuer": "Certified Collision Group Acquisition Corp.",
+     "instrument": "First Lien Senior Secured, Certified Collision Group Acquisition Corp. Initial Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-347b1ba39fdfab5a",
+     "issuer": "Cerity Partners Equity Holding LLC",
+     "instrument": "First Lien Senior Secured, Cerity Partners Equity Holding LLC 2025-B Incremental Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-520ab011c88a5bb3",
+     "issuer": "Packaging Coordinators Midco, Inc.",
+     "instrument": "First Lien Senior Secured, Packaging Coordinators Midco, Inc. 2025 General Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-55777a3779f6d0ff",
+     "issuer": "Signature Investor LLC",
+     "instrument": "First Lien Senior Secured, Signature Investor LLC Term Loan B"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-78917400df77437e",
+     "issuer": "Moonlight Parent, Inc.",
+     "instrument": "First Lien Senior Secured, Moonlight Parent, Inc. Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-8390eea05364bcdc",
+     "issuer": "MoboTrex, LLC",
+     "instrument": "First Lien Senior Secured, MoboTrex, LLC Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-a941f7d54ebaf9b8",
+     "issuer": "Packaging Coordinators Midco, Inc.",
+     "instrument": "First Lien Senior Secured, Packaging Coordinators Midco, Inc. 2025 Initial Dollar Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-ab178dbe1aab4436",
+     "issuer": "Vacation Rental Brands, LLC",
+     "instrument": "First Lien Senior Secured, Vacation Rental Brands, LLC 2nd Amendment Delayed Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-b469f5e035c61d2f",
+     "issuer": "Creek Parent, Inc.",
+     "instrument": "First Lien Senior Secured, Creek Parent, Inc. Revolving Credit"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-ba39992aacc155aa",
+     "issuer": "SkyMark Refuelers, LLC",
+     "instrument": "First Lien Senior Secured, SkyMark Refuelers, LLC Delayed Draw Term Loan B"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-cbc42237ea4d57e5",
+     "issuer": "Arcline Liberty Buyer LLC",
+     "instrument": "First Lien Senior Secured, Arcline Liberty Buyer LLC Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-ccf2f64c2b94892b",
+     "issuer": "ABC Technologies Inc.",
+     "instrument": "First Lien Senior Secured, ABC Technologies Inc. Term Loan B"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-d546766607322024",
+     "issuer": "Packaging Coordinators Midco, Inc.",
+     "instrument": "First Lien Senior Secured, Packaging Coordinators Midco, Inc. 2025 Specified Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-db3b516019d137ec",
+     "issuer": "Helios Service Partners, LLC",
+     "instrument": "First Lien Senior Secured, Helios Service Partners, LLC Delayed Draw Term Loan 2022"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-e129723e69206412",
+     "issuer": "Prestige Employee Administrators, LLC",
+     "instrument": "First Lien Senior Secured, Prestige Employee Administrators, LLC Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-e219824ed1bb35d4",
+     "issuer": "Puma Buyer, LLC",
+     "instrument": "First Lien Senior Secured, Puma Buyer, LLC Initial Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-e26f1e6d5c4f9ea5",
+     "issuer": "CT Technologies Intermediate Holdings, Inc.",
+     "instrument": "First Lien Senior Secured, CT Technologies Intermediate Holdings, Inc. 2025-B Special Purpose Delayed Draw Term Loan"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-fd473bbc71cec718",
+     "issuer": "GMF Parent, Inc.",
+     "instrument": "First Lien Senior Secured, GMF Parent, Inc.Revolver 12/25"
+    },
+    {
+     "cik": "0001950803",
+     "quarter": "2025-12-31",
+     "row_id": "ROW-ff6deaa2754dda58",
+     "issuer": "Packaging Coordinators Midco, Inc.",
+     "instrument": "First Lien Senior Secured, Packaging Coordinators Midco, Inc. 2025 Revolving Loan"
+    }
+   ]
+  },
+  {
    "disposition_id": "DS-X05-1976336-9",
    "class": "as_filed",
    "engine": "row_validation",
@@ -17733,6 +17983,59 @@
    "decided_by": "owner, 2026-11-10, reason netted-commitment-tagged-on-another-member: \"run the recommendation for the first 13\"",
    "decided_on": "2026-11-10",
    "legacy_unscoped": true
+  },
+  {
+   "disposition_id": "DS-blocking_fair_value_disagreement-1950803-15",
+   "class": "informational",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001950803"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "The one flagged row is Puma Buyer's Initial Term Loan at 2025-09-30 (context ...DrugRetailPumaBuyerLLCInitialTermLoan...). Its published fair value 13,829 thousand differs from the tagged 3,829,000 because the owner ruled on 2026-11-12 (REQ-spy-2, 'Correct to 13,829') that the printed and tagged 3,829 is a misprint: the line's own 0.92 %, the printed industry subtotal and the filed total use 13,829, and with it the quarter ties. The check correctly reports that the published value is not the filed fact; no fix applies (the difference is the ruling).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279957",
+     "verbatim": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 4.25 % / 0.50 % 8.25 % 3/29/2032 $ 13,829 $ 13,728 $ 3,829 0.92 %",
+     "quote": "Puma Buyer, LLC Initial Term Loan (3)(4)(5)(7)(12) 3M SOFR + 4.25 % / 0.50 % 8.25 % 3/29/2032 $ 13,829 $ 13,728 $ 3,829 0.92 % -- the line prints fair value 3,829 (tagged 3,829,000) for a 13,829 par loan, with 0.92 % of net assets",
+     "quarter": "2025-09-30",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279957",
+     "verbatim": "$ 13,712 $ 13,829 0.92 %",
+     "quote": "$ 13,712 $ 13,829 0.92 % -- the Drug Retail subtotal printed after the line (cost 13,712 = 13,728 less the revolver's 16) uses 13,829",
+     "quarter": "2025-09-30",
+     "cik": "0001950803"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279957",
+     "verbatim": "respectively) $ 2,645,502 $ 1,570,542",
+     "quote": "respectively) $ 2,645,502 $ 1,570,542 -- the filed total ties only with 13,829",
+     "quarter": "2025-09-30",
+     "cik": "0001950803"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001950803/q.py spyg \"select fair_value, src_context_id from H where cast(report_date as varchar)[:10]='2025-09-30' and issuer_name ilike 'Puma%'\"",
+   "decided_by": "owner, 2026-11-12, reason fv-corrected-by-owner-ruling-where-printed-line-misprints: \"Accept (owner answer 2026-11-12 to REQ-spy-3: accept reason fv-corrected-by-owner-ruling-where-printed-line-misprints for the two Puma Buyer 2025-09-30 source findings)\"",
+   "decided_on": "2026-11-12",
+   "rows": [
+    {
+     "cik": "0001950803",
+     "quarter": "2025-09-30",
+     "source_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Drug Retail | Puma Buyer, LLC Initial Term Loan | 3M SOFR +4.25% / 0.50% | 8.55% | 3/29/2032",
+     "issuer": "Puma Buyer, LLC",
+     "instrument": "First Lien Senior Secured, Puma Buyer, LLC Initial Term Loan",
+     "published_row_id": "ROW-8de57d9218965539"
+    }
+   ]
   },
   {
    "disposition_id": "DS-blocking_fair_value_disagreement-1975736-2",

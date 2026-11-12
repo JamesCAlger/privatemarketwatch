@@ -15487,3 +15487,10 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Orchestrator request: revoke/narrow DS-007-1812554 (C103 2026-03-31 as_filed rested on a misattributed row; C103 flags 0 rows after the relabel).
 - Review round 1 (report only): Fullsteam 2023-03-31 instrument correction is prefixed by the issuer strip (known shared defect instrument-correction-prefixed-by-issuer-strip), parked, not fixed; twin-ordinal and chain-count (3,189 -> 3,122) explanations added.
 - Tests: 278 passed across test_source_encodings, test_bdc_xbrl_html_bridge(_fields), test_filer_cash_and_subtotal_keys, test_principal_reference_fx, test_crescent_wrapper_reading, test_page_labelled_contexts, test_relabelled_contexts. Full suite not run.
+
+## 2026-11-12 - Fund loop D-261/D-262: Silver Capital and Stepstone cleared; A01 'l'-delimiter repair
+
+- Silver Capital (0001674760) sandbox svda and Stepstone (0001950803) sandbox spyg: gate PASS, investigation COMPLETE, 0 outstanding each; registered in accepted_sandboxes.json. Details in v05_decision_log.md D-261, D-262.
+- Check repair (owner ruling 2026-11-12, REQ-spy-1): pipeline/oracle_checks.py `_a01_drop_l_delimiter`; A01's printed-heading pairing compares section and member keys without the filer's lone 'l' delimiter and glued row numbers, only where the subtotal's own section carries a lone 'l'. Exact equality and section restriction unchanged. tests/test_oracle_checks.py +4 (173 pass). Measured on 66 accepted funds / 58 sandboxes: clears Stepstone 2025-03-31 only, adds 0.
+- Owner rulings recorded per proposal in owner_queue_accepted.json (DS-X02-1674760-20, DS-X05-1950803-13, DS-SRC_BDC03-1950803-14, DS-blocking_fair_value_disagreement-1950803-15) and verdict retirement VR-OWN-1674760-01. owner_queue.py `rule` accepts a whole reason key and fails if any member misses the bar; single-proposal rulings were written by scratch scripts applying rule()'s transform and bar check.
+- Sandbox only: production not rebuilt; nothing published or pushed.

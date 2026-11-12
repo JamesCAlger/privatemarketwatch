@@ -9,7 +9,7 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 |---|---|---|---|---|---|---|---|---|---|
 | row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| instrument_and_class | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
+| instrument_and_class | 20 | 5.0% (0.9-23.6) | 0 | 1 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 1 | 0 | 0 |
 | cost | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 1 | 0 | 0 |
 | principal_amount | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 1 | 0 | 0 |
@@ -23,14 +23,15 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0001950803 | 20 | 0.0% (0.0-16.1) | 60.0% (38.7-78.1) |
+| 0001950803 | 20 | 5.0% (0.9-23.6) | 60.0% (38.7-78.1) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
-| to 2023-12-31 | 1 | 0.0% (0.0-79.3) | 100.0% (20.7-100.0) |
+| to 2023-12-31 | 1 | 100.0% (20.7-100.0) | 100.0% (20.7-100.0) |
 | 2024 on | 19 | 0.0% (0.0-16.8) | 57.9% (36.3-76.9) |
 
-Published errors: 0
+Published errors: 1
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
+| C016 | 2023-09-30 | instrument_and_class | wrong | pipeline | page prints 'Delayed Draw Term B Loan' (member has it); published description is the SPV column 'MassMutual SPV I Facility' instead of the instrument |

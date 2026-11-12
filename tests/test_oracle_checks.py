@@ -461,6 +461,50 @@ class TestA01PrintedHeadingPairing:
         ]
         assert self._run("91724000", leaves, key="debt investments oil gas and consumable fuels").status == "pass"
 
+    @staticmethod
+    def _stepstone_application_software():
+        """Stepstone 2025-03-31 (REQ-spy-1): the subtotal's member separates levels with a lone 'l';
+        of the rows printed under Application Software some members carry the 'l', some drop it,
+        some glue a row number to it ('secured 1l', 'secured 2 l')."""
+        pre = "non controlled non affiliated debt investments"
+        return [
+            ("C_a", f"{pre} l first lien senior secured l application software acme term loan", "40000000", "Application Software", "40000000", "debt"),
+            ("C_b", f"{pre} first lien senior secured application software beta term loan", "50000000", "Application Software", "50000000", "debt"),
+            ("C_c", f"{pre} l first lien senior secured 1l application software gamma term loan", "17000000", "Application Software", "17000000", "debt"),
+            ("C_d", f"{pre} l first lien senior secured 2 l application software delta revolver", "10617664", "Application Software", "10617664", "debt"),
+        ]
+
+    STEPSTONE_KEY = "non controlled non affiliated debt investments l first lien senior secured l application software"
+
+    def test_l_delimiter_variants_of_one_section_are_paired(self):
+        r = self._run("117617664", self._stepstone_application_software(), key=self.STEPSTONE_KEY)
+        assert r.status == "pass"
+        assert "1 tie by printed heading" in r.message
+
+    def test_l_delimiter_a_printed_row_left_unpublished_still_fails(self):
+        """Real error under the dialect: a row printed under the heading was not published."""
+        leaves = self._stepstone_application_software()
+        leaves[2] = leaves[2][:4] + (None, "debt")
+        assert self._run("117617664", leaves, key=self.STEPSTONE_KEY).status == "fail"
+
+    def test_l_delimiter_rows_of_another_section_are_not_paired(self):
+        """False-positive guard: dropping the delimiter does not merge sections; second-lien rows
+        printed under the same heading do not meet the first-lien subtotal."""
+        second = ("C_e", "non controlled non affiliated debt investments l second lien l application software eps loan",
+                  "5000000", "Application Software", "5000000", "debt")
+        leaves = self._stepstone_application_software() + [second]
+        assert self._run("117617664", leaves, key=self.STEPSTONE_KEY).status == "pass"
+        assert self._run("122617664", leaves, key=self.STEPSTONE_KEY).status == "fail"
+
+    def test_a_lone_l_is_kept_where_the_subtotal_section_has_no_delimiter(self):
+        """Gate: members are only rewritten when the subtotal's own section carries a lone 'l'."""
+        from pipeline.oracle_checks import _a01_drop_l_delimiter
+        assert _a01_drop_l_delimiter("debt investments l first lien 1l x") == "debt investments first lien x"
+        leaves = [("C_a", "debt investments l first lien education acme loan", "1000000", "Education", "1000000", "debt"),
+                  ("C_b", "debt investments first lien education beta loan", "2000000", "Education", "2000000", "debt")]
+        # subtotal section without the delimiter: the 'l' member is not rewritten into it, so 3,000,000 does not tie
+        assert self._run("3000000", leaves, key="debt investments first lien education").status == "fail"
+
     def test_a_subtotal_whose_key_repeats_in_the_filing_is_not_paired(self):
         """Ambiguity: two subtotals on one member key (Sixth Street Lending Partners 2025-03-31)."""
         r = self._run("148585000", self._sixth_street_education(),

@@ -140,7 +140,8 @@
       "First Lien": "(?:^|\\|)\\s*FLSS\\s*(?:\\||$)",
       "Second Lien": "(?:^|\\|)\\s*SLSS\\s*(?:\\||$)"
     },
-    "industry_from_identifier_re": "^\\s*\"?(?:Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+Debt\\s+Investments|NCNA\\s+Debt\\s+Inv\\.)\\s*\\|\\s*(?:(?:First|Second)\\s+Lien\\s+Senior\\s+Secured|FLSS|SLSS)?\\s*\\|?\\s*((?:Industrial\\s+Machinery\\s+&\\s+Supplies\\s+&\\s+Components|Human\\s+Resource\\s+&\\s+Employment\\s+Services|Diversified\\s+Support\\s+Services|Insurance\\s+Brokers|Diversified\\s+Real\\s+Estate\\s+Activities|Diversified\\s+Financial\\s+Services|Diversified\\s+Metals\\s+&\\s+Mining|Electronic\\s+Equipment\\s+&\\s+Instruments|Health\\s+Care\\s+Equipment)(?=\\s*[A-Z0-9][^|]*\\|)|[^|]+?(?=\\s*\\|))"
+    "industry_from_identifier_re": "^\\s*\"?(?:Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+Debt\\s+Investments|NCNA\\s+Debt\\s+Inv\\.)\\s*\\|\\s*(?:(?:First|Second)\\s+Lien\\s+Senior\\s+Secured|FLSS|SLSS)?\\s*\\|?\\s*((?:Industrial\\s+Machinery\\s+&\\s+Supplies\\s+&\\s+Components|Human\\s+Resource\\s+&\\s+Employment\\s+Services|Diversified\\s+Support\\s+Services|Insurance\\s+Brokers|Diversified\\s+Real\\s+Estate\\s+Activities|Diversified\\s+Financial\\s+Services|Diversified\\s+Metals\\s+&\\s+Mining|Electronic\\s+Equipment\\s+&\\s+Instruments|Health\\s+Care\\s+Equipment)(?=\\s*[A-Z0-9][^|]*\\|)|[^|]+?(?=\\s*\\|))",
+    "instrument_description_strip_re": ",?\\s*\\d{1,2}M\\s*SOFR\\s*\\+\\s*[\\d.]+\\s*%\\s*/\\s*[\\d.]+\\s*%\\s*$"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -335,6 +336,9 @@
     "untagged_values": [
       "0001193125-26-128890 C_87b01fd1-66fa-4342-a869-291e18491c8b principal_amount 231000",
       "0001193125-26-128890 C_2f9d719a-4138-47c3-8721-7bcf6579447d principal_amount 70000"
+    ],
+    "relabelled_contexts": [
+      "0001193125-25-067163 PAsOn12_31_2024_NonControlledNonAffiliatedDebtInvestmentsFirstLienSeniorSecuredHomebuilding3MSOFR685150112111272028TypedMemberusgaapInvestmentIdentifierAxis :: Non-Controlled, Non-Affiliated Debt Investments| First Lien Senior Secured Homebuilding|3M SOFR + 6.85% / 1.50%|11.21%|11/27/2028 :: Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Homebuilding | Campany Roof Maintenance, LLC Delayed Draw Term Loan | 3M SOFR + 6.85% / 1.50% | 11.21% | 11/27/2028 One"
     ]
   }
 }
