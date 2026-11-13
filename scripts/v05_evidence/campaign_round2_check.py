@@ -254,6 +254,9 @@ def t_fx02(rows, ctx) -> list[dict]:
         ok, why = row_fv(r, require_fact=False)
         if not ok:
             fails.append({"row_id": r["row_id"], "test": "fair_value", "why": why})
+        ok, why = row_bound(r)
+        if not ok:
+            fails.append({"row_id": r["row_id"], "test": "row_id", "why": why})
     return fails
 
 
@@ -277,6 +280,32 @@ def t_cost_fv(rows) -> list[dict]:
     return fails
 
 
+def row_bound(r: dict) -> tuple[bool, str]:
+    """The published row is the row of its own context: row_id = 'ROW-' + md5('bdc|accession|context')[:16]
+    (pipeline/unified_holdings._assign_row_ids). A row carrying another row's context (two contexts
+    swapped between rows of equal value) or a duplicate on one context ('|dupN') fails."""
+    import hashlib
+    want = "ROW-" + hashlib.md5(("bdc|%s|%s" % (r.get("accession_number") or "", r.get("src_context_id") or "")
+                                 ).encode("utf-8")).hexdigest()[:16]
+    return r["row_id"] == want, "row_id %s, its context's id %s" % (r["row_id"], want)
+
+
+def not_subtotal_line(r: dict) -> tuple[bool, str]:
+    """The row's own schedule line names a position: its first cell has letters and is not a total. A
+    subtotal fact (an industry or category total, a blank continuation line repeating a value) has a
+    blank or numeric first cell, or reads 'Total ...'."""
+    fl = filing(r["cik"], r["accession_number"])
+    if not fl.ok:
+        return False, "filing not cached"
+    tr = next((f["tr"] for f in fl.facts.get((FV, r["src_context_id"]), []) if f["tr"]), None)
+    if tr is None:
+        return True, "no fair-value line (tested elsewhere)"
+    cells = fl.cells_by_tr.get(tr) or []
+    first = cells[0] if cells else ""
+    ok = bool(re.search(r"[A-Za-z]{3}", first)) and not re.match(r"(?i)\s*(sub)?total\b", first)
+    return ok, "first cell %r" % first[:60]
+
+
 def t_positions(rows, require_fact=True) -> list[dict]:
     """every row a position with its own fair-value fact at the report date, one row per context"""
     fails, seen = [], {}
@@ -288,6 +317,12 @@ def t_positions(rows, require_fact=True) -> list[dict]:
         ok, why = row_fv(r, require_fact=require_fact)
         if not ok:
             fails.append({"row_id": r["row_id"], "test": "fair_value", "why": why})
+        ok, why = not_subtotal_line(r)
+        if not ok:
+            fails.append({"row_id": r["row_id"], "test": "subtotal", "why": why})
+        ok, why = row_bound(r)
+        if not ok:
+            fails.append({"row_id": r["row_id"], "test": "row_id", "why": why})
         k = (r["accession_number"], r["src_context_id"])
         if k in seen:
             fails.append({"row_id": r["row_id"], "test": "duplicate_context", "why": "same context as %s" % seen[k]})
@@ -305,9 +340,16 @@ def all_in_expected(r: dict) -> tuple[float | None, str]:
     if re.search(r"(?i)incl", line):
         rf = own_fact(r, RATE)
         return (pct(rf), "line prints an all-in rate including PIK") if rf else (None, "includes-PIK line, no rate fact")
-    cf = own_fact(r, CASHR) or own_fact(r, RATE)
-    if cf is None:
+    cf = own_fact(r, CASHR)
+    rf = own_fact(r, RATE)
+    if cf is None and rf is None:
         return pik, "PIK-only coupon"
+    if cf is None:
+        # no PaidInCash fact: the stated rate is the cash leg only where the line itself labels it cash
+        # ('6.70 % Cash', '4.00 % cash/'); otherwise it may be the all-in coupon - fail closed
+        if not (rf["shown"] and re.search(re.escape(rf["shown"]) + r"\s*%?\s*\)?\s*cash", line, re.I)):
+            return None, "no cash-leg fact and the line does not label %s as cash" % rf["shown"]
+        cf = rf
     if cf["shown"] and pikf["shown"] and cf["tr"] == pikf["tr"]:
         return round(pct(cf) + pik, 6), "cash %s + PIK %s printed separately" % (pct(cf), pik)
     return None, "cash and PIK legs not both on the line"
@@ -449,8 +491,11 @@ def check(rule: str, spec: dict, con, holdings: str, cik: str, rd: str, rows=Non
         # recorded, not tested: the quarter's other PIK rows (the claim is about the cited rows)
         ctx["other_pik_rows_not_all_in"] = len(t_pik(rows)) if spec.get("rate") else None
     elif rule == "E07":
-        if False:
-            pass
+        if spec.get("count_claim", True):
+            # the verdict's claim is the printed count of positions; the check compares XBRL members, not
+            # the printed count (round-2 review: 0002049733 '106' printed vs 107 rows), so it cannot decide
+            fails.append({"test": "claim", "why": "the verdict cites a printed position count, which the check "
+                                                 "does not read (it counts XBRL members)"})
         else:
             allrows = quarter_rows(con, holdings, cik, rd, keep_underlying=True)
             fails += t_positions(allrows)
@@ -504,6 +549,36 @@ def plants(rule: str, spec: dict, rows: list[dict]) -> list[tuple[str, list[dict
     if rule == "FX02":
         out += [("fv_currency_eur", swap(med, fair_value_currency="U_EUR")),
                 ("fv_local_value", swap(med, fair_value=(med["fair_value"] or 0) * 0.92 + 1000))]
+        # two rows of equal fair value carrying each other's context (no published value changes)
+        byfv = {}
+        pair = None
+        for r in rows:
+            if r["fair_value"] is not None and r["fair_value"] in byfv:
+                pair = (byfv[r["fair_value"]], r)
+                break
+            byfv.setdefault(r["fair_value"], r)
+        if pair is None and len(rows) > 1:
+            pair = (rows[0], rows[1])
+        if pair:
+            a, b = pair
+            out.append(("context_swap", [dict(r, src_context_id=b["src_context_id"]) if r is a else
+                                         dict(r, src_context_id=a["src_context_id"]) if r is b else r for r in rows]))
+    if rule == "X02" and spec.get("positions") and rows:
+        fl = filing(rows[0]["cik"], rows[0]["accession_number"])
+        used = {r["src_context_id"] for r in rows}
+        for (name, ctx), facts in (fl.facts.items() if fl.ok else []):
+            c = fl.contexts.get(ctx) or {}
+            if name != FV or ctx in used or c.get("instant") != rows[0]["report_date"] or not c.get("dims"):
+                continue
+            tr = facts[0]["tr"]
+            first = (fl.cells_by_tr.get(tr) or [""])[0] if tr else ""
+            if tr and (not re.search(r"[A-Za-z]{3}", first) or re.match(r"(?i)\s*(sub)?total\b", first)):
+                import hashlib
+                rid = "ROW-" + hashlib.md5(("bdc|%s|%s" % (med["accession_number"], ctx)).encode()).hexdigest()[:16]
+                out.append(("subtotal_as_credit_row", rows + [dict(med, row_id=rid, src_context_id=ctx,
+                                                                   fair_value=printed_value(fl, facts[0]),
+                                                                   asset_class="PRIVATE_CREDIT")]))
+                break
     if rule == "X07":
         wc = [r for r in rows if r["cost"]]
         t = wc[len(wc) // 2] if wc else med

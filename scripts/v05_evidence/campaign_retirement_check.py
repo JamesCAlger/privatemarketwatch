@@ -207,9 +207,15 @@ class Filing:
     def schedule_line(self, context: str) -> str | None:
         """The first schedule (non roll-forward) line carrying the context's own fair-value fact."""
         for f in self.facts.get((FV, context), []):
-            if f["tr"] and not self.is_rollforward_line(f["tr"]):
+            if f["tr"] and not self.is_rollforward_line(f["tr"]) and self._has_position_fact(f["tr"], context):
                 return f["line"]
         return None
+
+    def _has_position_fact(self, tr: str, context: str) -> bool:
+        """A schedule line tags more of the position than its fair value (cost, par, count, rate or
+        percent of net assets on the same context); a roll-forward line that tags only the closing fair
+        value does not (round-2 review)."""
+        return any(f["context"] == context and f["name"] != FV for f in self.tr_facts.get(tr, []))
 
     def is_usd(self, f: dict) -> bool:
         return self.units.get(f.get("unit"), f.get("unit") or "").upper().endswith("USD")

@@ -23,7 +23,7 @@ PAGE = """<?xml version="1.0" encoding="utf-8"?>
 </ix:resources></ix:header></div>
 <table>
 <tr><td>Delta Leasing SPV</td><td>Term Loan</td>
- <td><ix:nonFraction name="us-gaap:InvestmentInterestRate" contextRef="d1" scale="-2">3.00</ix:nonFraction> %</td>
+ <td><ix:nonFraction name="us-gaap:InvestmentInterestRate" contextRef="d1" scale="-2">3.00</ix:nonFraction> % Cash</td>
  <td><ix:nonFraction name="us-gaap:InvestmentInterestRatePaidInKind" contextRef="d1" scale="-2">7.00</ix:nonFraction> %</td>
  <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtCost" unitRef="usd" contextRef="d1" scale="3">990</ix:nonFraction></td>
  <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="d1" scale="3">1,000</ix:nonFraction></td></tr>
@@ -57,6 +57,8 @@ def fl(tmp_path, monkeypatch):
 
 
 def _row(rid, ctx, fv, **kw):
+    import hashlib
+    rid = "ROW-" + hashlib.md5(("bdc|%s|%s" % (ACC, ctx)).encode()).hexdigest()[:16]   # bound to its context
     r = {"row_id": rid, "cik": CIK, "accession_number": ACC, "src_context_id": ctx, "report_date": RD,
          "fair_value": fv, "shares_held": None, "pct_of_net_assets": None, "asset_category": "FIRST_LIEN",
          "index_classification": "DIRECT_LENDING", "record_class": "parent_schedule", "issuer_name": "",
@@ -81,7 +83,7 @@ def rows():
 def test_pik_all_in_passes_and_cash_leg_fails(fl, rows):
     spec = {"rate": [{"issuer": "Delta Leasing"}]}
     assert c2.check("pik_le_interest_rate", spec, None, "", CIK, RD, rows=rows)["ok"]
-    cash = [dict(r, interest_rate=3.0) if r["row_id"] == "A" else r for r in rows]
+    cash = [dict(r, interest_rate=3.0) if r["src_context_id"] == "d1" else r for r in rows]
     assert not c2.check("pik_le_interest_rate", spec, None, "", CIK, RD, rows=cash)["ok"]
     for name, p in c2.plants("pik_le_interest_rate", spec, rows):
         assert not c2.check("pik_le_interest_rate", spec, None, "", CIK, RD, rows=p)["ok"], name
@@ -113,3 +115,17 @@ def test_printed_currency_ignores_benchmark_names():
     assert c2.printed_currency("Flexera | EURIBOR + 4.50 % | 2,836") is None
     assert c2.printed_currency("Total Power | CORRA + 450 | C$ | 8,690") == "CAD"
     assert c2.printed_currency("X | GBP | 1 | EUR | 2") == "AMBIGUOUS"
+
+
+def test_fx02_context_swap_between_equal_values_fails(fl, rows):
+    same = [dict(r, fair_value=430_000.0) if r["src_context_id"] == "d2" else r for r in rows]
+    a, b = same[1], same[2]
+    swapped = [dict(r, src_context_id="d3") if r is a else dict(r, src_context_id="d2") if r is b else r for r in same]
+    assert not c2.check("FX02", {}, None, "", CIK, RD, rows=swapped)["ok"]
+
+
+def test_pik_without_a_cash_label_fails_closed(fl, rows, monkeypatch):
+    # the stated rate is not labelled cash on the line: it may be the all-in coupon, so no expectation
+    monkeypatch.setattr(base, "row_line", lambda r: "Delta Leasing SPV Term Loan 3.00 % 7.00 % 990 1,000")
+    exp, why = c2.all_in_expected(rows[0])
+    assert exp is None and "does not label" in why

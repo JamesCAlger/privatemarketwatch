@@ -32,7 +32,7 @@ PAGE = """<?xml version="1.0" encoding="utf-8"?>
 <tr><td>Total investments</td>
  <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c0" scale="3">1,300</ix:nonFraction></td></tr>
 <tr><td>Money Market Fund</td>
- <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c3" scale="3">200</ix:nonFraction></td></tr>
+ <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtCost" unitRef="usd" contextRef="c3" scale="3">200</ix:nonFraction></td> <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c3" scale="3">200</ix:nonFraction></td></tr>
 <tr><td>Cash equivalents</td>
  <td><ix:nonFraction name="us-gaap:CashEquivalentsAtCarryingValue" unitRef="usd" contextRef="c0" scale="3">200</ix:nonFraction></td></tr>
 <tr><td>Acme Corp (December 31, 2025)</td><td>First Lien Term Loan</td>
