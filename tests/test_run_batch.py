@@ -172,3 +172,18 @@ def test_skip_and_bad_batch_id(tmp_path):
     assert "frontend" not in runner.calls and "reattest" not in runner.calls
     with pytest.raises(SystemExit):
         rb.main(["--batch-id", "bad id", "--dry-run"])
+
+
+def test_gate_note_counts_checks(tmp_path):
+    path = tmp_path / "acceptance.json"
+    path.write_text(json.dumps({"verdict": "FAIL", "checks": [
+        {"id": "fund_coverage", "pass": True},
+        {"id": "promoted_rule_drift", "pass": False},
+        {"id": "outstanding_findings", "pass": False},
+        {"id": "unfinished_investigations", "pass": None}]}), encoding="utf-8")
+    assert rb.gate_note(path) == ("FAIL: 1 pass, 2 fail, 1 not assessable "
+                                  "(promoted_rule_drift, outstanding_findings)")
+
+
+def test_gate_note_missing_output(tmp_path):
+    assert rb.gate_note(tmp_path / "missing.json").startswith("no acceptance output")

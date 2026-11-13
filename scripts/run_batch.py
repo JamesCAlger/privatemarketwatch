@@ -208,6 +208,23 @@ def _compare_stage(batch_dir: Path, output_dir: Path, decisions_dir: Path | None
     return summary
 
 
+def gate_note(path: Path) -> str:
+    """One-line tally of an acceptance JSON: verdict, pass/fail counts and the failing check ids."""
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "no acceptance output (exit 0 pass, 1 fail, 2 not assessable)"
+    checks = doc.get("checks") or []
+    failed = [c.get("id", "?") for c in checks if c.get("pass") is False]
+    other = [c for c in checks if c.get("pass") not in (True, False)]
+    note = "%s: %d pass, %d fail" % (doc.get("verdict", "?"), len(checks) - len(failed) - len(other), len(failed))
+    if other:
+        note += ", %d not assessable" % len(other)
+    if failed:
+        note += " (" + ", ".join(failed) + ")"
+    return note
+
+
 def _write_parquet(batch_dir: Path) -> bool:
     try:
         import duckdb
@@ -315,7 +332,7 @@ def run_batch(*, batch_id: str, output_dir: Path, quarters: list[str], start: st
                         "--out", str(batch_dir / ("acceptance_%s.json" % quarter)),
                         "--funds-out", str(batch_dir / ("acceptance_%s_funds.csv" % quarter))],
                        log_path=batch_dir / ("gate_%s.log" % quarter), output_dir=output_dir)
-            record("gate " + quarter, code, time.time() - t0, "0 pass, 1 fail, 2 not assessable")
+            record("gate " + quarter, code, time.time() - t0, gate_note(batch_dir / ("acceptance_%s.json" % quarter)))
     if "reattest" in wanted:
         t0 = time.time()
         code = run([PY, "scripts/reattest_quarters.py", "check"], log_path=batch_dir / "reattest.log",
