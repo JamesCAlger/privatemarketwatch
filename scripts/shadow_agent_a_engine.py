@@ -162,7 +162,7 @@ _SORT_KEY = ("cik", "report_date", "rule_name", "identifier", "row_id", "mechani
 
 _COVERAGE_FIELDS = ["cik", "report_date", "rule_name", "identifier", "accession_number",
                     "src_context_id", "fair_value", "cost", "reason"]
-_EXCLUDED_FIELDS = ["cik", "signature", "reason", "carried_flags", "previous_file"]
+_EXCLUDED_FIELDS = ["cik", "signature", "reason", "carried_flags", "fund_level_flags", "previous_file"]
 
 # The field each rule tests. The subtotal rule tests no value: its flag on a published row is
 # dropped when the row's own line is a position line (compare_row).
@@ -627,8 +627,36 @@ def carry_forward(previous: Path | None, excluded: list[tuple[str, str, str]]) -
                         "previous_file": str(previous) if previous else ""})
         logger.warning("  WARNING agentA cohort_excluded %s [%s]: %s -> %d previous flags carried forward%s",
                        cik, sig, reason, len(mine),
-                       "" if prev_rows else " (NO previous flags file: its findings are not carried)")
+                       "" if prev_rows else " (NO previous flags file: only the fund-level agentA_cohort_excluded "
+                                            "flags stand for it)")
     return carried, records
+
+
+COHORT_EXCLUDED_RULE = "agentA_cohort_excluded"
+
+
+def cohort_excluded_flags(excluded: list[tuple[str, str, str]], quarters: Callable[[str], list[str]]) -> list[dict]:
+    """One fund-level flag per excluded fund and quarter (review R2-2): the exclusion is an outstanding
+    item in the ledger even where there is no previous flags file to carry (a fresh fund sandbox) and
+    for a quarter that no previous file covers (the new quarter that pushed the grammar out).
+    mechanism is the reason class only ('gate_error' / 'held_out_fail'), so the review id is stable
+    while the detailed reason text changes."""
+    out = []
+    for cik, sig, reason in excluded:
+        mech = "gate_error" if str(reason).startswith("gate error") else "held_out_fail"
+        for rd in quarters(cik):
+            f = _flag(COHORT_EXCLUDED_RULE, cik, rd, "warn", mech,
+                      f"fund-level: grammar [{sig}] excluded: {reason}", metric_name="cohort_excluded")
+            f["printed_check"] = "cohort_excluded"
+            out.append(f)
+    return out
+
+
+def _quarters(con, parquet: str, cik: str) -> list[str]:
+    return [r[0] for r in con.execute(
+        f"""SELECT DISTINCT CAST(report_date AS VARCHAR)[:10] FROM read_parquet('{parquet}')
+            WHERE CAST(cik AS VARCHAR)='{cik}' AND CAST(period AS VARCHAR)=CAST(report_date AS VARCHAR)
+            ORDER BY 1""").fetchall()]
 
 
 def _sorted(rows: list[dict], key=_SORT_KEY) -> list[dict]:
@@ -673,6 +701,10 @@ def run(*, bdc_holdings: Path, published: Path, out_dir: Path, ciks: list[str] |
     carried, excluded_records = carry_forward(previous, excluded)
     page = page or PageReader()
     con = duckdb.connect()
+    fund_level = cohort_excluded_flags(excluded, lambda c: _quarters(con, parquet, c))
+    carried += fund_level
+    for rec in excluded_records:
+        rec["fund_level_flags"] = sum(1 for f in fund_level if f["cik"] == rec["cik"])
     rows, coverage, audit, checks = [], [], [], Counter()
     n_candidates = 0
     for cik, sig, _conf in cohort:

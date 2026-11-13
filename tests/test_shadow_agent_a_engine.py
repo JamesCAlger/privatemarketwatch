@@ -278,12 +278,14 @@ def test_d1_fund_leaving_cohort_keeps_its_flags(tmp_path, monkeypatch):
     _write_flags(prev, [old, other])
     monkeypatch.setattr(eng, "build_cohort", lambda parquet: (
         [], [("0001920453", "AFFIL SECDEBT REFRATE RATE MAT", "2026-06-30: completeness 89.8% < 90.0%")], []))
+    monkeypatch.setattr(eng, "_quarters", lambda con, parquet, cik: ["2026-03-31"])
     out = tmp_path / "shadow"
     eng.run(bdc_holdings=tmp_path / "x.parquet", published=tmp_path / "y.parquet", out_dir=out,
             page=_page(), previous=prev)
     import csv
     flags = list(csv.DictReader(open(out / eng.FLAGS_NAME, encoding="utf-8")))
-    assert [(f["cik"], f["rule_name"], f["mechanism"], f["printed_check"]) for f in flags] == [
+    assert sorted((f["cik"], f["rule_name"], f["mechanism"], f["printed_check"]) for f in flags) == [
+        ("0001920453", "agentA_cohort_excluded", "held_out_fail", "cohort_excluded"),
         ("0001920453", "agentA_maturity_vs_xbrl", "identifier_maturity_ne_structured", "cohort_excluded")]
     rec = list(csv.DictReader(open(out / eng.EXCLUDED_NAME, encoding="utf-8")))
     assert rec[0]["cik"] == "0001920453" and rec[0]["carried_flags"] == "1" and "completeness" in rec[0]["reason"]
@@ -433,3 +435,41 @@ def test_d031_ambiguous_margin_fails_closed():
     p = _pub(maturity_date="2028-12-29", basis_spread=4.73, instrument_type="Term Loan")
     flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [p], _page(b))
     assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("field_unreadable", "basis_spread")]
+
+
+def test_r2_2_fresh_sandbox_excluded_fund_reaches_the_ledger_as_findings(tmp_path, monkeypatch):
+    """A fund sandbox has no previous flags file. An excluded fund still gets one fund-level flag per
+    quarter, and the shadow adapter + review queue turn each into a review item (a ledger finding)."""
+    import shadow_adapter as adp
+    from pipeline.review_queue import _queue_item
+    import duckdb
+
+    monkeypatch.setattr(eng, "build_cohort", lambda parquet: (
+        [], [("0001920453", "AFFIL SECDEBT REFRATE RATE MAT", "2026-06-30: completeness 89.8% < 90.0%"),
+             ("0000000007", "SIG", "gate error: boom")], []))
+    monkeypatch.setattr(eng, "_quarters", lambda con, parquet, cik: ["2025-12-31", "2026-03-31"])
+    sandbox = tmp_path / "sandbox_output"
+    out = sandbox / "shadow"
+    eng.run(bdc_holdings=tmp_path / "x.parquet", published=tmp_path / "y.parquet", out_dir=out,
+            page=_page(), previous=out / eng.PREVIOUS_NAME)  # does not exist
+    monkeypatch.setattr(adp, "OUTPUT_DIR", sandbox)
+    con = duckdb.connect()
+    rows = con.execute(f"SELECT * FROM ({adp._agent_a_select()})").fetchdf().astype(str).to_dict("records")
+    items = [_queue_item(r) for r in rows]
+    got = sorted((i["cik"], i["report_date"], i["rule_name"], i["mechanism"], i["lane"]) for i in items if i)
+    assert got == [("0000000007", "2025-12-31", "agentA_cohort_excluded", "gate_error", "blocker"),
+                   ("0000000007", "2026-03-31", "agentA_cohort_excluded", "gate_error", "blocker"),
+                   ("0001920453", "2025-12-31", "agentA_cohort_excluded", "held_out_fail", "blocker"),
+                   ("0001920453", "2026-03-31", "agentA_cohort_excluded", "held_out_fail", "blocker")]
+    import csv
+    rec = {r["cik"]: r for r in csv.DictReader(open(out / eng.EXCLUDED_NAME, encoding="utf-8"))}
+    assert rec["0001920453"]["carried_flags"] == "0" and rec["0001920453"]["fund_level_flags"] == "2"
+
+
+def test_r2_1_thousands_separator_bp_margin_in_the_engine():
+    # 0001383414 PRA Events 2023-03-31: '3M L+1,050' with a published 1.0 spread is a mismatch, not equal
+    b = _bridge(printed_row="PRA Events | First Lien | 3M L+1,050 | 17.00 % | 3/26/2027 | 1,234", printed_margin=None,
+                reference_rate_type="LIBOR")
+    p = _pub(basis_spread=1.0, reference_rate_type="LIBOR", instrument_type=None)
+    assert eng.compare_row("agentA_reference_uncorroborated", p, b) == ("mismatch", ["basis_spread"])
+    assert eng.compare_row("agentA_reference_uncorroborated", dict(p, basis_spread=10.5), b) == ("equal", [])

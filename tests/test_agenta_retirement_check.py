@@ -21,6 +21,11 @@ import agenta_retirement_check as chk  # noqa: E402
     ("Hurricane | Term Loan | SONIA+625 Cash plus 6.25% PIK, 1.00% Floor | 11/21/2029", "SONIA", 12.5, [1.0]),
     ("Magaya | Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030", "SOFR", 5.75, [0.75]),
     ("Dan Newlin | Revolving Line of Credit SOFR 6.50 % 3/10/2026 1/28/2031", "SOFR", 6.5, []),
+    # R2-1: basis points with a thousands separator
+    ("QuantiTech | Term Loan | 3M | S+1,000 | 15.31 | % | 2/4/2026", "SOFR", 10.0, []),
+    ("PRA Events | First Lien | 3M L+1,050 | 17.00 % | 8/7/2025 | 1,234 | 1,200", "LIBOR", 10.5, []),
+    # R2-4: a seven-letter code
+    ("Mertus | Term Loan | EURIBOR + 6.25% | 10.02 % | 6/30/2029", "EURIBOR", 6.25, []),
 ])
 def test_parse_rate(line, code, total, floors):
     r = chk.parse_rate(line)
@@ -30,6 +35,14 @@ def test_parse_rate(line, code, total, floors):
 @pytest.mark.parametrize("line", [
     "Walnut Parent | Term Loan | SOFR | + | 2.88% (3.38% PIK) | (Q) | 10.07% | 6/2/2022 | 11/9/2029",
     "Great Lakes Dental | Unitranche First Lien Revolver | S + 725 (300 PIK), 100 Floor | 11.10% | 06/2027",
+    # R2-3: the space-separated form of the same shape
+    "Titan Cloud | Term Loan | SOFR | 2.00% (4.60% PIK) | 11.94 % | 9/7/2029",
+    "Mertus | Term Loan | EURIBOR | 6.25% (0.75% PIK) | 10.02 % | 6/30/2029",
+    # R2-4: a minus after the code
+    "X | Term Loan | SOFR - 0.10% | 4.50 % | 6/30/2029",
+    # R2-5: two margin alternatives on one line
+    "PT Intermediate | First Lien | (S +CSA + 4.75%/ S + 5.00% incl. 1.75% PIK) | 9.31 % | 11/1/2028",
+    "Y | First Lien | (S + 5.75% cash)/S + 6% incl. 120bp PIK | 10.1 % | 11/1/2028",
 ])
 def test_parenthetical_pik_without_includes_is_ambiguous(line):
     # one filer means cash 2.88 plus PIK 3.38 (published 6.26), another means 7.25 of which 3.00 PIK

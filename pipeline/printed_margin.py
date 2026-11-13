@@ -3,13 +3,18 @@
 Shared by the agentA shadow engine (scripts/shadow_agent_a_engine.py) and the agentA retirement check
 (scripts/v05_evidence/agenta_retirement_check.py), so both read a printed margin the same way:
 
-- the margin is the number printed after the benchmark code: 'S + 5.25 %', 'S+525' (basis points),
-  'SOFR 5.00 %', or the cell labelled Cash / Spread / PIK;
+- the margin is the number printed after the benchmark code: 'S + 5.25 %', 'S+525' and 'L+1,050'
+  (basis points), 'SOFR 5.00 %', or the cell labelled Cash / Spread / PIK;
 - a number labelled Floor ('1.00 % Floor', '(100 Floor)', 'Floor 1.00 %') is a floor, never the margin;
 - per D-031 the published spread is the total margin: 'X % Cash + Y % PIK' or 'X Cash plus Y % PIK'
   is X + Y; '(includes Y % PIK)' is X; 'S + 0.00 %; 0.75 % Floor; 5.75 % PIK' is 5.75;
-- two or more unlabelled numbers after the code (a floor column next to a spread column) are ambiguous:
-  ``total`` is None and a caller must fail closed.
+- ambiguous, so ``total`` is None and a caller must fail closed:
+  - two or more unlabelled numbers after the code (a floor column next to a spread column);
+  - 'X % (Y % PIK)' without 'includes' (filers use it for both 'plus' and 'of which');
+  - a minus after the code ('SOFR - 0.10 %': a negative margin or a dash placeholder);
+  - two benchmark-plus-margin expressions on one line ('S + CSA + 4.75 % / S + 5.00 % incl. ...').
+  The exception: 'CODE - Y % PIK' / 'CODE n % Y % PIK' (a floor column, then a PIK-only margin), which
+  0001902649 prints and its rate check confirms.
 Text only; the line is the row as printed, cells joined by spaces (or ' | ', which is treated as space).
 """
 from __future__ import annotations
@@ -20,9 +25,14 @@ BENCHMARK_CODES = {"S": "SOFR", "SF": "SOFR", "SOFR": "SOFR", "TSOFR": "SOFR", "
                    "E": "EURIBOR", "EURIBOR": "EURIBOR", "P": "PRIME", "PRIME": "PRIME", "SONIA": "SONIA",
                    "SN": "SONIA", "SARON": "SARON", "STIBOR": "STIBOR", "CORRA": "CORRA", "BBSY": "BBSY",
                    "BBSW": "BBSW", "CDOR": "CDOR", "NIBOR": "NIBOR", "C": "CDOR", "SA": "SARON"}
-CODE_RE = re.compile(r"\b([A-Z]{1,6})(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|-\s|\s)(?=\s*(?:\d|-))")
+CODE_RE = re.compile(r"\b([A-Z]{1,7})(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|-\s|\s)(?=\s*(?:\d|-))")
+_ALT_RE = re.compile(r"\b(?:%s)(?:\s*\([A-Z0-9]{1,3}\))?\s*\+" % "|".join(sorted(BENCHMARK_CODES, key=len, reverse=True)))
 DATE_RE = re.compile(r"(?<![\d/])(\d{1,2})/(\d{1,2})/(\d{2}|\d{4})(?![\d/])")
-NUM_RE = re.compile(r"(?<![\w.])(\d{1,4}(?:\.\d+)?)\s*(%?)\s*(Floor|floor|Cash|cash|PIK|pik)?")
+NUM_RE = re.compile(r"(?<![\w.,])(\d{1,2},\d{3}(?![\d.,])|\d{1,4}(?:\.\d+)?)\s*(%?)\s*(Floor|floor|Cash|cash|PIK|pik)?")
+
+
+def _ambiguous(bench: str, floors: list[float]) -> dict:
+    return {"code": bench, "cash": None, "pik": None, "total": None, "floors": floors}
 
 
 def parse_rate(line: str) -> dict | None:
@@ -34,6 +44,8 @@ def parse_rate(line: str) -> dict | None:
         bench = BENCHMARK_CODES.get(code.upper())
         if not bench or (len(code) <= 2 and sep != "+"):
             continue
+        if len(_ALT_RE.findall(line)) > 1:
+            return _ambiguous(bench, [])  # two margin alternatives printed on one line
         seg = line[m.end():]
         d = DATE_RE.search(seg)
         seg = seg[:d.start()] if d else seg[:90]
@@ -46,14 +58,17 @@ def parse_rate(line: str) -> dict | None:
                 label = "floor"
             if not label and re.search(r"spread\s*:?\s*$", before):  # 'Spread 3.50 %'
                 label = "spread"
-            value = float(n.group(1))
-            if not n.group(2) and "." not in n.group(1) and value >= 25:
-                value /= 100.0  # basis points
+            text = n.group(1)
+            value = float(text.replace(",", ""))
+            if not n.group(2) and "." not in text and value >= 25:
+                value /= 100.0  # basis points ('S+525', 'L+1,050')
             nums.append((value, label, n.start()))
         floors = [v for v, lab, _ in nums if lab == "floor"]
         rest = [(v, lab, pos) for v, lab, pos in nums if lab != "floor"]
         if includes:
             rest = [(v, lab, pos) for v, lab, pos in rest if pos < includes.start()]
+        if sep.startswith("-") and rest and rest[0][1] != "pik":
+            return _ambiguous(bench, floors)  # 'SOFR - 0.10 %': sign or dash placeholder
         cash = pik = None
         if sep == "+" and rest:
             cash = rest[0][0]
@@ -79,13 +94,17 @@ def parse_rate(line: str) -> dict | None:
                 pik = pk[0] if pk else None
                 floors += [v for v, lab, pos in rest if not lab and pos < cash_pos]  # a floor column first
             elif labelled:  # PIK only, after an unlabelled floor column
-                cash, pik = 0.0, labelled[0][0]
                 pik_pos = next(pos for v, lab, pos in rest if lab == "pik")
-                floors += [v for v, lab, pos in rest if not lab and pos < pik_pos]
+                before_pik = [v for v, lab, pos in rest if not lab and pos < pik_pos]
+                if before_pik and seg[:pik_pos].rstrip().endswith("("):
+                    # 'SOFR 2.00 % (4.60 % PIK)': cash plus PIK, or a floor? the line does not say
+                    return _ambiguous(bench, floors)
+                cash, pik = 0.0, labelled[0][0]
+                floors += before_pik
             elif len(unlabelled) == 1:
                 cash = unlabelled[0]
             else:
-                return {"code": bench, "cash": None, "pik": None, "total": None, "floors": floors}
+                return _ambiguous(bench, floors)
         total = None if cash is None else round(cash + (pik or 0.0), 6)
         return {"code": bench, "cash": cash, "pik": pik, "total": total, "floors": floors}
     return None
