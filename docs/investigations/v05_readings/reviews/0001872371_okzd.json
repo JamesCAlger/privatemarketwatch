@@ -1,0 +1,486 @@
+{
+ "reviewer_id": "agent:reviewer-oscf-20261113-opus",
+ "report_digest": "af5fd9d38214f2be4b05b9d4c065b2ffda1d6619af2079a501cd02f4bdfd98c4",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_4f1bbe0f4f94",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Revolver SOFR+ 7.25 % 12.34 % 5/3/2029 1,397 1,305 1,307 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_caba0761928b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000014",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 11.43 % 6/3/2027 14,239 14,086 13,952 (5)(8)(9)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0cfa0e2fb93f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 10.12 % 4/20/2036 3,800 3,800 3,864 (5)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ea42a99fa392",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000008",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 10.90 % 6/3/2027 15,825 15,586 16,056 (5)(8)(9)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_07dd8d567170",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a4329c91e620",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Woodmont 2022-9 Trust Multi-Sector Holdings CLO Notes SOFR+ 7.77 % 11.44 % 10/25/2036 9,385 9,302 9,387 (5)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Janus Bidco Limited Application Software First Lien Term Loan SONIA+ 5.50 % 4/25/2031 - - - (4)(5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_001ec129f2a8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Printed Shares cell of the row's own FV line: PetVet c-224 6,338,000 (published 6,338,000; okza 6,338); BioXcel warrants c-87 138,000; Delta Leasing c-124 139,794 and c-123 139,677 (okzd = printed). Eyesouth c-156 142,278 also corrected (not in this finding).",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "PetVet Care Centers, LLC Health Care Services Preferred Equity 6,338,000 6,211 6,217 (8)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d1e86c986cfc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Printed Shares cell of the row's own FV line: PetVet c-224 6,338,000 (published 6,338,000; okza 6,338); BioXcel warrants c-87 138,000; Delta Leasing c-124 139,794 and c-123 139,677 (okzd = printed). Eyesouth c-156 142,278 also corrected (not in this finding).",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "BioXcel Therapeutics, Inc. Pharmaceuticals Warrants 138,000 74 1 (8)(10)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Delta Leasing SPV II LLC Specialized Finance Common Stock 139,794 2 2 (8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9d9ec85e8097",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzd: PASS, published-basis sum 5,821,583,000 on 358 rows = printed Total Investments 5,821,583; 0 cash-class or Short Term Investment Fund rows. The check tests the verdict's claim (cash line counted in the investments sum). BNY line printed below the total.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000008",
+     "text": "Investments ( 154.1 % of net assets) $ 5,812,788 $ 5,821,583 BNY Mellon Short Term Investment Fund 61,575 61,575"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_50c08724a7aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzd: PASS. Independent page check (a07.py, a07b.py): the schedule header has no percent-of-net-assets column (Portfolio Company | Industry | Type of Investment | Index | Spread | Cash Interest Rate | PIK | Maturity Date | Shares | Principal | Cost | Fair Value | Notes); every InvestmentOwnedPercentOfNetAssets fact sits on category/total contexts (e.g. 'Total Non-Control/Non-Affiliate Investments (142.5 % of net assets)', 'Senior Secured Debt ... 93.06 % 132.64 %', EquitySecuritiesMember); 0 of the quarter's published rows has a context carrying a pct fact. So A07's sum of position pct (0) against 100 pct is not a missing extraction: no position prints or tags a percent. Weakness noted: retire_check's printed-cell test only looks for the words '% of net assets' in a cell and would miss a bare percent column; my header check covers that.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total $ 2,857,808 100.00 % 142.52 %"
+    },
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes"
+    },
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 2,831,026 $ 2,857,808"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7c138b86fba2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzd: PASS. Independent page check (a07.py, a07b.py): the schedule header has no percent-of-net-assets column (Portfolio Company | Industry | Type of Investment | Index | Spread | Cash Interest Rate | PIK | Maturity Date | Shares | Principal | Cost | Fair Value | Notes); every InvestmentOwnedPercentOfNetAssets fact sits on category/total contexts (e.g. 'Total Non-Control/Non-Affiliate Investments (142.5 % of net assets)', 'Senior Secured Debt ... 93.06 % 132.64 %', EquitySecuritiesMember); 0 of the quarter's published rows has a context carrying a pct fact. So A07's sum of position pct (0) against 100 pct is not a missing extraction: no position prints or tags a percent. Weakness noted: retire_check's printed-cell test only looks for the words '% of net assets' in a cell and would miss a bare percent column; my header check covers that.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Total $ 3,519,936 100.00 % 142.47 %"
+    },
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_62c38e39e999",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzd: PASS. Independent page check (a07.py, a07b.py): the schedule header has no percent-of-net-assets column (Portfolio Company | Industry | Type of Investment | Index | Spread | Cash Interest Rate | PIK | Maturity Date | Shares | Principal | Cost | Fair Value | Notes); every InvestmentOwnedPercentOfNetAssets fact sits on category/total contexts (e.g. 'Total Non-Control/Non-Affiliate Investments (142.5 % of net assets)', 'Senior Secured Debt ... 93.06 % 132.64 %', EquitySecuritiesMember); 0 of the quarter's published rows has a context carrying a pct fact. So A07's sum of position pct (0) against 100 pct is not a missing extraction: no position prints or tags a percent. Weakness noted: retire_check's printed-cell test only looks for the words '% of net assets' in a cell and would miss a bare percent column; my header check covers that.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Total $ 7,433,861 100.00 % 159.40 %"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1df9107cb6ab",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzd: PASS; every published row's context ends on the report date (XML parser) and the published-basis sum equals the printed total of the report date alone (2,857,808 / 3,519,936), so no September 30, 2023 comparative row (1,927,237) is published. The check tests the claim.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 2,831,026 $ 2,857,808"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3baac39a9700",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzd: PASS; every published row's context ends on the report date (XML parser) and the published-basis sum equals the printed total of the report date alone (2,857,808 / 3,519,936), so no September 30, 2023 comparative row (1,927,237) is published. The check tests the claim.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 3,496,473 $ 3,519,936"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ea35e398cf18",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Verdict: non-USD par rows (Bain Euro CLO 2021-2, Bamboo, Carlyle Euro CLO, CD&R Firefly, GoldenTree EUR CLO 2, Madison Park Euro XIV, Quantum) had blank principal_amount_usd. Re-ran: PASS, 8 non-USD published rows, all with principal_amount_usd; my sweep (ccy_sweep.py) finds each of the 8 converted at the build's own rate for its published currency. Separate defect in the same quarter outside this verdict: four rows the agent re-set to USD keep a USD par computed at the old tag's rate (ADC Therapeutics c-42 11,229,115 vs par 10,406,000; Acquia c-41; Ardonagh c-60; Radar c-265) - see the currency observation rejection.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Bain Capital Euro CLO 2021-2 Multi-Sector Holdings CLO Notes E+ 3.40 % 7.33 % 7/17/2034 EUR 1,210 1,248 1,246 (5)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a894751c5054",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Verdict: non-USD par without principal_amount_usd, harm stated as missing USD principal for FX-sensitive par analytics. The cited ACESO/Aurelia/Violin rows are converted correctly, but retire_check's FX01 test counts only presence of principal_amount_usd; it cannot see a wrong value. In this quarter the agent's own currency corrections left principal_amount_usd at the old tag's rate on published non-USD rows: Spruce c-366 JPY par 2,251,646,000 -> USD 321,981,096 (CNY rate; FV 14,230,000); North Star c-281 NOK 68,811,000 -> USD 92,530,152 (GBP rate; FV 6,822,000); Bamboo c-73 EUR 15,757,000 -> 15,757,000 unconverted; Intralot c-197 GBP 41,506,000 unconverted; North Star c-278, c-284 GBP unconverted. The retirement reason's claim that each row's currency equals the page 'so the USD figure is right' (script docstring) is false for these rows. Retire only after principal_amount_usd / principal_fx_rate_to_usd / principal_fx_status follow the corrected currency, with a check that tests the value, not presence.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 7.87 % 9/27/2031 34,034 37,367 39,512 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 6.06 % 1/30/2032 JPY 2,251,646 14,349 14,230 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 4.50 % 8.38 % 5/3/2029 Nkr 68,811 6,194 6,822 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Bamboo US Bidco LLC Health Care Equipment First Lien Term Loan E+ 5.00 % 7.07 % 9/30/2030 EUR 15,757 16,375 18,321 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Intralot Capital Luxembourg S.A. Casinos & Gaming First Lien Term Loan SONIA+ 5.50 % 9.22 % 10/7/2031 GBP 41,506 54,682 54,800 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_07dd92308cc3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000008",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,719 10,592 10,237 (8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6498a098eaa7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,883 10,764 10,448 (8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2bc180881db9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000017",
+     "text": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 5.00 % 11.99 % 10/14/2027 13,299 12,386 12,236 (5)(8)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c81b93466a1e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000011",
+     "text": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 4.94 % 11.99 % 10/14/2027 14,541 13,797 13,342 (5)(8)"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "rejected",
+   "rationale": "Currency values: every one of the 126 corrections equals the row's own printed marker or own index currency (none set on a dash line, none carried from a neighbouring line); the 5 North Star 'kr' + NIBOR+ rows follow the index (NOK), accepted. But the fix is incomplete and the report's statement 'Par is converted at the build's own H.10 rate' is false: the corrections change principal_amount_currency only; principal_amount_usd, principal_fx_rate_to_usd and principal_fx_status are unchanged from okza (holdings_field_diff okzd okza lists no principal_amount_usd change). All 126 corrected rows (98 published) now carry a USD par computed at the old tag's rate or not converted at all: published USD par 8,405.6M against 2,070.5M FV on these rows; Spruce 2026-03-31 c-361 JPY par 2,245,988,000 published as USD 2,245,988,000 with status source_usd, and 2026-06-30 c-366 the same (the X06 example the observation says is fixed is not). Published row keys: 0001872371-23-000012/c-180/ROW-c32992a18a552840 2023-06-30 North Star Acquisitionco, LL EUR->USD paru 40,094,964 (fx status reference_fx); 0001872371-24-000008/c-265/ROW-e8e386c75126535b 2024-03-31 Radar Bidco Sarl GBP->USD paru 28,433,250 (fx status reference_fx); 0001872371-24-000008/c-41/ROW-250b15103cfcf131 2024-03-31 Acquia Inc. EUR->USD paru 12,049,231 (fx status reference_fx); 0001872371-24-000008/c-42/ROW-7ae2ace7d8d47040 2024-03-31 ADC Therapeutics SA EUR->USD paru 11,229,115 (fx status reference_fx); 0001872371-24-000008/c-60/ROW-95aaac4bd03b1db2 2024-03-31 Ardonagh Midco 3 PLC EUR->USD paru 96,293,488 (fx status reference_fx); 0001872371-24-000011/c-203/ROW-4aa4cf17a9b8edf9 2024-06-30 Janus Bidco Limited USD->GBP paru 2,439,000 (fx status source_usd); 0001872371-24-000011/c-248/ROW-68d4b884e1fd6b5b 2024-06-30 North Star Acquisitionco, LL DKK->NOK paru 9,958,203 (fx status reference_fx); 0001872371-24-000011/c-288/ROW-e08c3fc0717f6d85 2024-06-30 Quantum Bidco Limited USD->GBP paru 8,377,000 (fx status source_usd); 0001872371-24-000011/c-356/ROW-8f483e71e212b642 2024-06-30 Violin Finco Guernsey Limite USD->GBP paru 46,900,000 (fx status source_usd); 0001872371-24-000011/c-41/ROW-73916926be0d0842 2024-06-30 Acquia Inc. EUR->USD paru 11,959,903 (fx status reference_fx); 0001872371-24-000011/c-42/ROW-3ab3377a394b86b2 2024-06-30 ADC Therapeutics SA EUR->USD paru 11,145,867 (fx status reference_fx); 0001872371-24-000011/c-98/ROW-4d1e6f1083b0b1c4 2024-06-30 CD&R Firefly Bidco Limited USD->GBP paru 1,500,000 (fx status source_usd); 0001872371-24-000011/c-99/ROW-d2ec5549028d918a 2024-06-30 CD&R Firefly Bidco Limited USD->GBP paru 18,365,000 (fx status source_usd); 0001872371-24-000014/c-195/ROW-711e03e6e8ff7547 2024-09-30 Janus Bidco Limited USD->GBP paru 2,439,000 (fx status source_usd); 0001872371-24-000014/c-196/ROW-300bbdf7302a7eb3 2024-09-30 Janus Bidco Limited GBP->USD paru 72,641,339 (fx status reference_fx); 0001872371-24-000014/c-249/ROW-dfa16ee5178bb3f5 2024-09-30 North Star Acquisitionco, LL EUR->GBP paru 3,517,362 (fx status reference_fx); 0001872371-24-000014/c-250/ROW-b16c0cb78ec8e9cb 2024-09-30 North Star Acquisitionco, LL DKK->NOK paru 10,339,069 (fx status reference_fx); 0001872371-24-000014/c-292/ROW-9ddaab98b12cb405 2024-09-30 Quantum Bidco Limited USD->GBP paru 8,377,000 (fx status source_usd); 0001872371-24-000014/c-353/ROW-ab390a3a84fdf690 2024-09-30 Violin Finco Guernsey Limite USD->GBP paru 46,900,000 (fx status source_usd); 0001872371-24-000014/c-37/ROW-585b6b8936f69193 2024-09-30 ACESO Holding 4 S.A.R.L USD->EUR paru 34,034,000 (fx status source_usd); 0001872371-24-000014/c-97/ROW-56d1390327de1021 2024-09-30 CD&R Firefly Bidco Limited USD->GBP paru 18,365,000 (fx status source_usd); 0001872371-25-000004/c-252/ROW-b0cd8872a08da1ad 2024-12-31 North Star Acquisitionco, LL DKK->NOK paru 864,587 (fx status reference_fx); 0001872371-25-000004/c-34/ROW-a23186e578dde6d8 2024-12-31 ACESO Holding 4 S.A.R.L USD->EUR paru 37,980,000 (fx status source_usd); 0001872371-25-000004/c-97/ROW-51c129babca271e2 2024-12-31 CD&R Firefly Bidco Limited USD->GBP paru 23,239,000 (fx status source_usd); 0001872371-25-000008/c-270/ROW-37f0e035a2d7032f 2025-03-31 North Star Acquisitionco, LL DKK->NOK paru 9,956,448 (fx status reference_fx); 0001872371-25-000008/c-271/ROW-816cb0a075cb5302 2025-03-31 North Star Acquisitionco, LL DKK->USD paru 4,029,112 (fx status reference_fx); 0001872371-25-000008/c-273/ROW-f5d271bb62bbe1b4 2025-03-31 North Star Acquisitionco, LL DKK->USD paru 191,862 (fx status reference_fx); 0001872371-25-000008/c-337/ROW-14cfc6130414c361 2025-03-31 Spruce Bidco I Inc. CNY->JPY paru 311,844,227 (fx status reference_fx); 0001872371-25-000014/c-271/ROW-b3cb2e66c4e4061c 2025-06-30 North Star Acquisitionco, LL DKK->NOK paru 10,855,696 (fx status reference_fx); 0001872371-25-000014/c-310/ROW-ccd7cb8c43c76346 2025-06-30 Poseidon Midco AB USD->EUR paru 50,768,000 (fx status source_usd); 0001872371-25-000014/c-349/ROW-ebc6ecb13129eca6 2025-06-30 Spruce Bidco I Inc. CNY->JPY paru 315,897,035 (fx status reference_fx); 0001872371-25-000018/c-343/ROW-bcdd75ba118532b6 2025-09-30 Spruce Bidco I Inc. CNY->JPY paru 317,081,472 (fx status reference_fx); 0001872371-26-000004/c-146/ROW-2f1e136f3d7c796e 2025-12-31 eShipping, LLC GBP->USD paru 25,488,788 (fx status reference_fx); 0001872371-26-000004/c-147/ROW-f1571387c754390c 2025-12-31 eShipping, LLC GBP->USD paru 601,081 (fx status reference_fx); 0001872371-26-000004/c-165/ROW-d08d9e2176e88e84 2025-12-31 Flexera Software LLC EUR->USD paru 13,705,301 (fx status reference_fx); 0001872371-26-000004/c-197/ROW-d2620da1ab64db30 2025-12-31 Intralot Capital Luxembourg  USD->GBP paru 41,506,000 (fx status source_usd); 0001872371-26-000004/c-206/ROW-150fc93fda99522b 2025-12-31 Jeppesen Holdings, LLC GBP->USD paru 66,729,393 (fx status reference_fx); 0001872371-26-000004/c-278/ROW-9f7ef3b799817430 2025-12-31 North Star Acquisitionco, LL USD->GBP paru 1,399,000 (fx status source_usd); 0001872371-26-000004/c-281/ROW-77ef184de2626349 2025-12-31 North Star Acquisitionco, LL GBP->NOK paru 92,530,152 (fx status reference_fx); 0001872371-26-000004/c-283/ROW-d025107c87b32beb 2025-12-31 North Star Acquisitionco, LL NOK->USD paru 3,587,526 (fx status reference_fx); 0001872371-26-000004/c-284/ROW-12a414dbd89caf4d 2025-12-31 North Star Acquisitionco, LL USD->GBP paru 3,140,000 (fx status source_usd); 0001872371-26-000004/c-366/ROW-57e855f63f2c7df1 2025-12-31 Spruce Bidco I Inc. CNY->JPY paru 321,981,096 (fx status reference_fx); 0001872371-26-000004/c-73/ROW-a93b4960f1369836 2025-12-31 Bamboo US Bidco LLC USD->EUR paru 15,757,000 (fx status source_usd); 0001872371-26-000004/c-74/ROW-24f67ccf9f00a1fc 2025-12-31 Bamboo US Bidco LLC EUR->USD paru 29,721,420 (fx status reference_fx); 0001872371-26-000004/c-92/ROW-6b8762e2fac777c5 2025-12-31 Blue Bidco Ltd GBP->USD paru 4,546,431 (fx status reference_fx); 0001872371-26-000009/c-100/ROW-8243136cb2b5f03f 2026-03-31 Blue Bidco Ltd USD->GBP paru 8,475,000 (fx status source_usd); 0001872371-26-000009/c-101/ROW-054b3fdd17636123 2026-03-31 Blue Bidco Ltd GBP->EUR paru 7,373,811 (fx status reference_fx); 0001872371-26-000009/c-104/ROW-9c6c03c2076c31fc 2026-03-31 Buttercup 2023-1 LLC GBP->USD paru 40,638,362 (fx status reference_fx); 0001872371-26-000009/c-109/ROW-a3bbf8de4efcb3b7 2026-03-31 Cielo Bidco Limited GBP->EUR paru 12,084,454 (fx status reference_fx); 0001872371-26-000009/c-110/ROW-2ff1d47983e9eb4c 2026-03-31 Cielo Bidco Limited EUR->GBP paru 45,451,180 (fx status reference_fx); 0001872371-26-000009/c-147/ROW-33d2ae89ca0f354d 2026-03-31 eShipping, LLC GBP->USD paru 24,990,272 (fx status reference_fx); 0001872371-26-000009/c-148/ROW-2229e93e7c704213 2026-03-31 eShipping, LLC GBP->USD paru 295,322 (fx status reference_fx); 0001872371-26-000009/c-165/ROW-fb17179834d19174 2026-03-31 Flexera Software LLC EUR->USD paru 13,450,720 (fx status reference_fx); 0001872371-26-000009/c-195/ROW-9a590d9aef953c12 2026-03-31 Intralot Capital Luxembourg  USD->GBP paru 41,506,000 (fx status source_usd); 0001872371-26-000009/c-204/ROW-0c365aca46173996 2026-03-31 Jeppesen Holdings, LLC GBP->USD paru 65,424,282 (fx status reference_fx); 0001872371-26-000009/c-278/ROW-094e90390ddd6feb 2026-03-31 North Star Acquisitionco, LL USD->GBP paru 1,399,000 (fx status source_usd); 0001872371-26-000009/c-281/ROW-4da77c0c738e144c 2026-03-31 North Star Acquisitionco, LL GBP->NOK paru 90,720,422 (fx status reference_fx); 0001872371-26-000009/c-283/ROW-c09a46adc6088d85 2026-03-31 North Star Acquisitionco, LL NOK->USD paru 3,711,289 (fx status reference_fx); 0001872371-26-000009/c-284/ROW-67888133de47ed71 2026-03-31 North Star Acquisitionco, LL USD->GBP paru 3,140,000 (fx status source_usd); 0001872371-26-000009/c-309/ROW-55add840bc6a8f3c 2026-03-31 Poseidon Midco AB USD->EUR paru 20,514,000 (fx status source_usd); 0001872371-26-000009/c-360/ROW-c0de3974a16969ec 2026-03-31 Spruce Bidco I Inc. CNY->USD paru 848,652 (fx status reference_fx); 0001872371-26-000009/c-361/ROW-b7b766108a2dab65 2026-03-31 Spruce Bidco I Inc. USD->JPY paru 2,245,988,000 (fx status source_usd); 0001872371-26-000009/c-98/ROW-8e105b941ded0813 2026-03-31 Blue Bidco Ltd GBP->USD paru 4,849,075 (fx status reference_fx); 0001872371-26-000009/c-99/ROW-722446c66868f397 2026-03-31 Blue Bidco Ltd EUR->USD paru 1,893,559 (fx status reference_fx); 0001872371-26-000013/c-105/ROW-f7f8ea7635823b62 2026-06-30 Blue Bidco Ltd GBP->USD paru 3,591,863 (fx status reference_fx); 0001872371-26-000013/c-106/ROW-432add783b5bb5df 2026-06-30 Blue Bidco Ltd GBP->USD paru 1,304,686 (fx status reference_fx); 0001872371-26-000013/c-107/ROW-133fa199d14cd8b5 2026-06-30 Blue Bidco Ltd EUR->USD paru 1,129,141 (fx status reference_fx); 0001872371-26-000013/c-108/ROW-6369b26185a3649c 2026-06-30 Blue Bidco Ltd USD->EUR paru 3,363,000 (fx status source_usd); 0001872371-26-000013/c-112/ROW-c584aedc0a336358 2026-06-30 Buttercup 2023-1 LLC GBP->USD paru 19,812,924 (fx status reference_fx); 0001872371-26-000013/c-116/ROW-69f37d554ecab006 2026-06-30 Cielo Bidco Limited GBP->EUR paru 10,405,663 (fx status reference_fx); 0001872371-26-000013/c-117/ROW-3793419e9af37992 2026-06-30 Cielo Bidco Limited EUR->GBP paru 38,576,901 (fx status reference_fx); 0001872371-26-000013/c-139/ROW-ac060da5a9875070 2026-06-30 Draken International, LLC USD->GBP paru 10,169,000 (fx status source_usd); 0001872371-26-000013/c-145/ROW-9a3227068f0d169c 2026-06-30 Empire Bidco AB USD->SEK paru 319,308,000 (fx status source_usd); 0001872371-26-000013/c-169/ROW-1a8e4e8237bebe5c 2026-06-30 Fiber Intermediate Holdings, EUR->USD paru 91,874,882 (fx status reference_fx); 0001872371-26-000013/c-170/ROW-089dfaab87979cb3 2026-06-30 Flexera Software LLC EUR->USD paru 13,332,773 (fx status reference_fx); 0001872371-26-000013/c-171/ROW-cd2ff8960875a8ce 2026-06-30 Flexera Software LLC EUR->USD paru 46,551,676 (fx status reference_fx); 0001872371-26-000013/c-189/ROW-06b1dffd5dcf8841 2026-06-30 Hologic, Inc. EUR->USD paru 59,580,756 (fx status reference_fx); 0001872371-26-000013/c-201/ROW-caf627be87a30b93 2026-06-30 Intralot Capital Luxembourg  USD->GBP paru 41,506,000 (fx status source_usd); 0001872371-26-000013/c-210/ROW-099e6ec402e3e522 2026-06-30 Jeppesen Holdings, LLC GBP->USD paru 65,796,462 (fx status reference_fx); 0001872371-26-000013/c-216/ROW-3e2be25bcecc6eb3 2026-06-30 Kairos Intermediateco AB NOK->GBP paru 1,173,638 (fx status reference_fx); 0001872371-26-000013/c-217/ROW-cd2519c3bb1314fc 2026-06-30 Kairos Intermediateco AB GBP->NOK paru 216,694,489 (fx status reference_fx); 0001872371-26-000013/c-288/ROW-0db9dc455600acf9 2026-06-30 North Star Acquisitionco, LL GBP->USD paru 42,964,464 (fx status reference_fx); 0001872371-26-000013/c-291/ROW-6abda99491af0520 2026-06-30 North Star Acquisitionco, LL USD->GBP paru 2,813,000 (fx status source_usd); 0001872371-26-000013/c-292/ROW-675161dd99644f47 2026-06-30 North Star Acquisitionco, LL USD->GBP paru 1,254,000 (fx status source_usd); 0001872371-26-000013/c-293/ROW-e11efaae61bd0e15 2026-06-30 North Star Acquisitionco, LL USD->NOK paru 61,650,000 (fx status source_usd); 0001872371-26-000013/c-316/ROW-f019b94b9f8a4312 2026-06-30 Poseidon Midco AB USD->EUR paru 18,811,000 (fx status source_usd); 0001872371-26-000013/c-345/ROW-41ed8289828cc56c 2026-06-30 RWK Midco AB EUR->USD paru 54,776,483 (fx status reference_fx); 0001872371-26-000013/c-346/ROW-edd130770431069c 2026-06-30 RWK Midco AB USD->EUR paru 15,679,000 (fx status source_usd); 0001872371-26-000013/c-360/ROW-1c7af73e174f4ac8 2026-06-30 Sphynx UK Bidco Ltd AUD->EUR paru 2,371,154 (fx status reference_fx); 0001872371-26-000013/c-361/ROW-d6841b73a0c36907 2026-06-30 Sphynx UK Bidco Ltd EUR->GBP paru 15,796,561 (fx status reference_fx); 0001872371-26-000013/c-362/ROW-6d17f8c50cc5205a 2026-06-30 Sphynx UK Bidco Ltd GBP->AUD paru 8,215,276 (fx status reference_fx); 0001872371-26-000013/c-363/ROW-944769ca8575e731 2026-06-30 Spruce Bidco I Inc. CAD->USD paru 7,211,545 (fx status reference_fx); 0001872371-26-000013/c-365/ROW-a4bd6bbb12731001 2026-06-30 Spruce Bidco I Inc. CNY->CAD paru 3,087,943 (fx status reference_fx); 0001872371-26-000013/c-366/ROW-f833237d8fc398ce 2026-06-30 Spruce Bidco I Inc. USD->JPY paru 2,240,331,000 (fx status source_usd); 0001872371-26-000013/c-59/ROW-96690dcf62e710f7 2026-06-30 ACESO Holding 4 S.A.R.L. USD->EUR paru 35,616,000 (fx status source_usd); 0001872371-26-000013/c-60/ROW-b4cfb3ca8d41f4ec 2026-06-30 ACESO Holding 4 S.A.R.L. USD->EUR paru 30,473,000 (fx status source_usd); 0001872371-26-000013/c-78/ROW-127a50c9a0ef79fd 2026-06-30 Auctane Holdings, LLC EUR->USD paru 86,817,151 (fx status reference_fx); 0001872371-26-000013/c-89/ROW-38fb58158490e0b6 2026-06-30 Bamboo US Bidco LLC EUR->USD paru 2,077,894 (fx status reference_fx). Second gap (page-sample card C005): Spruce revolver 2025-06-30 c-350 prints '-' with no marker and SOFR+, published CNY. Cause: the build (filer unitRef cny on the dash par fact, okza already CNY), not a correction; ccy.py skips rows with par 0 or null, so the sweep never saw dash lines. 57 dash rows (54 published, 3 JV) carry a currency other than their printed index currency: 0001872371-23-000012/c-181/ROW-a4a42cc7ea6ed8d7 2023-06-30 North Star Acquisitionco pub EUR page SOFR+; 0001872371-23-000012/c-182/ROW-12cdbf5860d36cc3 2023-06-30 North Star Acquisitionco pub EUR page SOFR+; 0001872371-24-000011/c-56/ROW-7bedbe894f7a2bc7 2024-06-30 Ardonagh Midco 3 PLC pub EUR page SOFR+; 0001872371-24-000014/c-194/ROW-bfd3f1eb5ccad779 2024-09-30 Janus Bidco Limited pub USD page SONIA+; 0001872371-25-000004/c-194/ROW-89fada7206bd74b0 2024-12-31 Janus Bidco Limited pub USD page SONIA+; 0001872371-25-000004/c-254/ROW-2b2e6e526984c09f 2024-12-31 North Star Acquisitionco pub USD page SONIA+; 0001872371-25-000004/c-286/ROW-aa44f95dc4c94bff 2024-12-31 Poseidon Midco AB pub USD page E+; 0001872371-25-000004/c-357/ROW-e2794ffd4512608f 2024-12-31 Violin Finco Guernsey Li pub USD page SONIA+; 0001872371-25-000004/c-77/ROW-3963626b0bca585b 2024-12-31 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-25-000008/c-207/ROW-61dbf5437ac0a89a 2025-03-31 Janus Bidco Limited pub USD page SONIA+; 0001872371-25-000008/c-272/ROW-5f569a4cd1647893 2025-03-31 North Star Acquisitionco pub DKK page SONIA+; 0001872371-25-000008/c-83/ROW-3d3f844e11a1e243 2025-03-31 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-25-000008/c-87/ROW-66432f534721631b 2025-03-31 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-25-000014/c-103/ROW-12a321b821bdbd45 2025-06-30 Cielo Bidco Limited pub USD page E+; 0001872371-25-000014/c-104/ROW-9d1bd8804f4aedd7 2025-06-30 Cielo Bidco Limited pub USD page SONIA+; 0001872371-25-000014/c-105/ROW-a78d7be5741e3060 2025-06-30 Cielo Bidco Limited pub USD page E+; 0001872371-25-000014/c-201/ROW-86a6f2e823bcbb79 2025-06-30 Janus Bidco Limited pub USD page SONIA+; 0001872371-25-000014/c-205/ROW-0562f218b4c2ff8b 2025-06-30 Kairos Intermediateco AB pub GBP page E+; 0001872371-25-000014/c-206/ROW-6ea9c4282f4878bd 2025-06-30 Kairos Intermediateco AB pub GBP page E+; 0001872371-25-000014/c-207/ROW-09860a1c5ec966f6 2025-06-30 Kairos Intermediateco AB pub GBP page NIBOR+; 0001872371-25-000014/c-273/ROW-fb18f52f989a3e22 2025-06-30 North Star Acquisitionco pub USD page SONIA+; 0001872371-25-000014/c-350/ROW-3ace6fe5ad907b80 2025-06-30 Spruce Bidco I Inc. pub CNY page SOFR+; 0001872371-25-000014/c-387/ROW-20fcc622a12b8949 2025-06-30 Violin Finco Guernsey Li pub USD page SONIA+; 0001872371-25-000014/c-79/ROW-3096691fe1ceef9a 2025-06-30 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-25-000014/c-93/ROW-29c3baf769455c4c 2025-06-30 Blue Bidco Ltd pub USD page SONIA+; 0001872371-25-000018/c-101/ROW-ec9c998a7e6d6a4c 2025-09-30 Cielo Bidco Limited pub USD page E+; 0001872371-25-000018/c-140/ROW-df8672f22c6772d7 2025-09-30 Empire Bidco AB pub DKK page STIBOR+; 0001872371-25-000018/c-201/ROW-7332ca70073f95fc 2025-09-30 Janus Bidco Limited pub USD page SONIA+; 0001872371-25-000018/c-205/ROW-d1ab63f0e76181d5 2025-09-30 Kairos Intermediateco AB pub USD page E+; 0001872371-25-000018/c-303/ROW-f194ec62e4253d70 2025-09-30 Poseidon Midco AB pub USD page E+; 0001872371-25-000018/c-382/ROW-d9ebbd6657c760f2 2025-09-30 Violin Finco Guernsey Li pub USD page SONIA+; 0001872371-25-000018/c-74/ROW-4758d6f165096f4e 2025-09-30 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-26-000004/c-137/ROW-06e36d4411672975 2025-12-31 Empire Bidco AB pub USD page STIBOR+; 0001872371-26-000004/c-168/ROW-f4f35417c89a4a07 2025-12-31 Flexera Software LLC pub EUR page SOFR+; 0001872371-26-000004/c-204/ROW-a696facc0f19c25b 2025-12-31 Janus Bidco Limited pub USD page SONIA+; 0001872371-26-000004/c-207/ROW-b7826b3d5a575ffb 2025-12-31 Jeppesen Holdings, LLC pub GBP page SOFR+; 0001872371-26-000004/c-209/ROW-6a6a4d7c66175c59 2025-12-31 Kairos Intermediateco AB pub USD page E+; 0001872371-26-000004/c-319/ROW-a96249fe3b0f9cb7 2025-12-31 Poseidon Midco AB pub USD page E+; 0001872371-26-000004/c-398/ROW-d3482fda66ec2094 2025-12-31 Violin Finco Guernsey Li pub USD page SONIA+; 0001872371-26-000004/c-75/ROW-4ba0447d14078e35 2025-12-31 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-26-000009/c-139/ROW-7ac1ee31052eb518 2026-03-31 Empire Bidco AB pub USD page STIBOR+; 0001872371-26-000009/c-168/ROW-00a84b7466d12d56 2026-03-31 Flexera Software LLC pub EUR page SOFR+; 0001872371-26-000009/c-185/ROW-c34280f8f862ee0a 2026-03-31 Hologic, Inc. pub EUR page SOFR+; 0001872371-26-000009/c-202/ROW-03120c73eb552d60 2026-03-31 Janus Bidco Limited pub USD page SONIA+; 0001872371-26-000009/c-205/ROW-5c92b2da91ff906f 2026-03-31 Jeppesen Holdings, LLC pub GBP page SOFR+; 0001872371-26-000009/c-208/ROW-df8f541121e0c599 2026-03-31 Kairos Intermediateco AB pub USD page E+; 0001872371-26-000009/c-395/ROW-4159b1e07f37c82f 2026-03-31 Violin Finco Guernsey Li pub USD page SONIA+; 0001872371-26-000009/c-80/ROW-9250c3b81fa3ce76 2026-03-31 Bamboo US Bidco LLC pub EUR page SOFR+; 0001872371-26-000013/c-153/ROW-e4e0f5acb9270101 2026-06-30 eShipping, LLC pub GBP page SOFR+; 0001872371-26-000013/c-154/ROW-2506481cec5cb145 2026-06-30 eShipping, LLC pub GBP page SOFR+; 0001872371-26-000013/c-1556/ROW-eff19cf4e86b33ec 2026-06-30 Empire Bidco AB pub USD page STIBOR+; 0001872371-26-000013/c-1559/ROW-0ca977d5ca5347af 2026-06-30 Janus Bidco Limited pub USD page SONIA+; 0001872371-26-000013/c-1561/ROW-ee992db02898c92a 2026-06-30 Kairos Intermediateco AB pub USD page E+; 0001872371-26-000013/c-209/ROW-faa3757a00d0794d 2026-06-30 Janus Bidco Limited pub USD page SONIA+; 0001872371-26-000013/c-211/ROW-55c117e2f8f1e16d 2026-06-30 Jeppesen Holdings, LLC pub GBP page SOFR+; 0001872371-26-000013/c-214/ROW-3f9af1e2fb12129b 2026-06-30 Kairos Intermediateco AB pub USD page E+; 0001872371-26-000013/c-290/ROW-4feacd4702075c43 2026-06-30 North Star Acquisitionco pub NOK page SOFR+. The claimed detector result ('fired on 126 of 4,419 rows; 0 false alarms') therefore under-states the population. Next: correct principal_amount_usd/fx rate/status with the currency (or have the build derive them after corrections), extend the sweep to dash rows, and make the detector test the USD value.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Revolver SOFR+ 5.00 % 1/30/2032 - ( 372 ) ( 377 ) (5)(8)(9)"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 5.75 % 1/30/2032 JPY 2,245,988 14,320 13,991 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 4.50 % 8.38 % 5/3/2029 Nkr 68,811 6,194 6,822 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Intralot Capital Luxembourg S.A. Casinos & Gaming First Lien Term Loan SONIA+ 5.50 % 9.22 % 10/7/2031 GBP 41,506 54,682 54,800 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "refrate.py over all rows, every quarter: okza 46 rows (14 published, 32 JV, all 2026-06-30) publish a type other than the printed Index cell; okzd 0. Pairs now E+->EURIBOR 189, SONIA+->SONIA 132, NIBOR+ 16, STIBOR+ 10, BBSW+ 5, TONA+ 6, CORRA+ 6. Detector decision is sound.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Cielo Bidco Limited Building Products First Lien Term Loan E+ 4.75 % 6.93 % 3/31/2032 7,848 9,076 8,883 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-concept-holds-whole-coupon",
+   "outcome": "supported",
+   "rationale": "ratecols2.py: on all floating corrected rows (Pluralsight x5, Salus, Astra x2, CVAUSA c-117, iCIMs c-179, Cielo c-102, Recess c-339) the printed rate sits at the Cash Interest Rate column position used by the filing's other rows; Impel c-140/141/142 sit at the PIK position (as do the filing's spread+cash+PIK rows), so interest_rate = printed PIK, cash 0, pik = printed, kind all_in is consistent with the all-in convention; Impel warrant c-143 prints no rate, spread or PIK, so withdrawing them is right. Fixed-rate rows (Beach, BioXcel x2, Fairbridge) print one rate in the first rate slot, as the filing's cash-only fixed rows do (Delta prints '3.00 % 7.00 %' there for cash+PIK). Caveat: the filer's PaidInKind tag may reflect a real PIK election the table does not show; the page wins under the convention, pik_current_status is separate.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000014",
+     "text": "Pluralsight, LLC Application Software First Lien Term Loan SOFR+ 7.50 % 12.62 % 8/22/2029 4,976 4,976 4,976 (5)(8)"
+    },
+    {
+     "accession": "0001872371-23-000017",
+     "text": "Impel Pharmaceuticals Inc. Health Care Technology First Lien Term Loan SOFR+ 10.75 % 16.05 % 3/17/2027 286 281 286 (5)(8)"
+    },
+    {
+     "accession": "0001872371-23-000017",
+     "text": "iCIMs, Inc. Application Software First Lien Revolver SOFR+ 6.75 % 12.14 % 8/18/2028 241 221 189 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "outcome": "supported",
+   "rationale": "instr.py: okza 62 published rows whose instrument head differs from the printed instrument cell; okzd 11, all cosmetic ('First Lien Term Loan. 1' trailing period at Astra/Harrow) or cash-fund rows with no instrument. Latam bond now Fixed Rate Bond with no loan class.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "Latam Airlines Group S.A. Passenger Airlines Fixed Rate Bond 7.88 % 4/15/2030 7,775 7,775 7,881 (10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Reviewer method: every okzd/okza row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows; okzd has no issuer_name_printed/units_printed flag left. Issuer check (names.py): okzd issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: 9 differ, all Curium Bidco S.a.r.l. (U+FFFD in the published name), none in the flagged rows; okza had 109 (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+    },
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Revolver SOFR+ 7.25 % 12.34 % 5/3/2029 1,397 1,305 1,307 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "outcome": "supported",
+   "rationale": "nonacc.py / nonacc2.py: in each filing the current-period table's legend (printed after the Saratoga row and before the comparative table) defines (12) or (15) as the credit-default-swap note and (11)/(12) as non-accrual at the report date; Saratoga prints (5)(8)(10)(12) at 2025-06-30/2025-09-30 where the comparative table reuses (12) for 'non-accrual as of September 30, 2024' - the current table's (12) is the CDS note. Astra 2025-06-30 c-62/c-63 print (11) = non-accrual as of June 30, 2025. After the fix no other published row's printed non-accrual number disagrees with its status.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Saratoga Diversified Financial Services Credit Linked Note SOFR+ 5.33 % 9.86 % 12/31/2029 98,000 97,674 98,000 (5)(8)(10)(12)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "(12) This investment represents a credit default swap that functions, in substance, like a credit linked note"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Astra Acquisition Corp. Application Software First Lien Term Loan SOFR+ 6.75 % 2/25/2028 7,337 6,453 3,485 (5)(8)(11)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "(11) This investment was on non-accrual status as of June 30, 2025."
+    }
+   ]
+  },
+  {
+   "observation_key": "company-name-keyword-classes-loan-as-fund",
+   "outcome": "supported",
+   "rationale": "instr.py: okza printed-CLO-Notes rows split LOAN/SC/SC 323, FUND 14, REAL_ESTATE asset_class 1, DIRECT_LENDING 1 (Buttercup); okzd all 339 LOAN / STRUCTURED_CREDIT / STRUCTURED_CREDIT. Cross-check proposed is sound.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "OFSI Fund Ltd Multi-Sector Holdings CLO Notes SOFR+ 7.48 % 11.37 % 4/20/2034 $ 1,105 1,053 1,062 (5)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-published-on-row-whose-printed-line-has-none",
+   "outcome": "supported",
+   "rationale": "okzd CVAUSA c-116 (2024-12-31) interest_rate 11.02 while its printed line has spread only and dash par; the funded sibling c-117 prints 11.02. Immaterial, warning-level detector is appropriate.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "CVAUSA Management, LLC Health Care Services First Lien Term Loan SOFR+ 6.50 % 5/22/2029 - ( 100 ) - (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size",
+   "outcome": "rejected",
+   "rationale": "The observation says chains improve and lists only pre-existing bad links. chains.py / chains2.py (page currency per row) find wrong links that the corrections created in okzd and the report does not list: (1) Spruce CAD chain ...856d597f57 (2025-03 c-338 .. 2025-12 c-364, C$) now continues into the JPY term loan 2026-03-31 c-361 and 2026-06-30 c-366; the CAD rows c-358 / c-365 split off to new chain ...4739bdcd4a; in okza the CAD chain was CAD throughout. JPY chain ...9b9d717b5a now ends in the USD revolver 2026-06-30 c-363 (okza: c-366 JPY). (2) Kairos 2026-06-30: NOK chain ...d0c2ab3fba (c-207, c-211, c-210) continues into GBP c-216, and GBP chain ...1ade16ccb2 (c-208, c-212, c-211) into NOK c-217 - a swap. (3) CD&R Firefly GBP term-loan chain ...ba8cba7eb8 (2023-2025) still holds c-104 (now named Buttercup, CLO Notes, USD) and now also Buttercup 2026-06-30 c-112; in okza c-112 was its own chain. Count of mixed chains is not a sufficient measure; these links need fixing or listing.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan CORRA+ 4.75 % 7.00 % 1/30/2032 C$ 21,005 14,322 14,915 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 5.98 % 1/30/2032 JPY 2,240,331 14,291 13,666 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan SONIA+ 4.75 % 8.48 % 4/22/2032 GBP 11,627 15,608 15,316 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan NIBOR+ 4.75 % 9.31 % 4/22/2032 Nkr 163,432 16,078 16,392 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.12 % 9/30/2030 $ 14,943 14,980 14,950 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "CD&R Firefly Bidco Limited Other Specialty Retail First Lien Term Loan SONIA+ 4.75 % 8.48 % 4/29/2029 GBP 23,022 28,850 31,275 (5)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "rejected",
+   "rationale": "The claim that the remaining differences are punctuation or case only is false for Curium Bidco: 9 published rows carry 'Curium Bidco S.\\ufffd.r.l.' (a Unicode replacement character, lost text) against printed 'Curium Bidco S.a.r.l.' (accent stripped by normalisation): 2023-03-31 ia71567c7fd974d859b40820715938651_I20230331; 2023-03-31 i4ecddc67beb64567a3e6f94ec2d0779e_I20230331; 2023-06-30 c-96; 2023-06-30 c-97; 2023-09-30 c-88; 2023-12-31 c-97; 2024-03-31 c-117; 2024-06-30 c-120; 2024-09-30 c-115. The investigator noted it in notes.md but neither fixed nor reported it. Low value, but not cosmetic.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Curium Bidco S.a.r.l. Biotechnology First Lien Term Loan L+ 4.00 % 9.54 % 7/9/2026 $ 1,985 1,945 1,977 (5)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Recounted: 2026-06-30 underlying_schedule rows whose own printed line has a maturity date and that publish none: 47. JV rows are not published; my count uses m/d/yyyy cells only, the report says 51 (difference not material to an unpublished-row observation).",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 8.25 % 9/27/2031 EUR 890 EUR 882 EUR 882 (4)"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}

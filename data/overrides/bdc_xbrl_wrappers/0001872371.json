@@ -77,7 +77,8 @@
         "regex": "^\\s*(?:total\\s+)?(?:debt\\s+investments|equity\\s+investments|investments)\\b",
         "family": "debt"
       }
-    ]
+    ],
+    "issuer_name_strip_re": ",\\s*(?:Construction Machinery \\& Heavy Transportation Equipment|Paper \\& Plastic Packaging Products \\& Materials|Industrial Machinery \\& Supplies \\& Components|Data Processing \\& Outsourced Services|Integrated Telecommunication Services|Soft Drinks \\& Non\\-alcoholic Beverages|Environmental \\& Facilities Services|Wireless Telecommunication Services|Diversified Real Estate Activities|Internet Services \\& Infrastructure|Oil \\& Gas Exploration \\& Production|Electrical Components \\& Equipment|Metal, Glass \\& Plastic Containers|Asset Management \\& Custody Banks|Trading Companies \\& Distributors|Passenger Ground Transportation|Diversified Financial Services|Hotels, Resorts \\& Cruise Lines|IT Consulting \\& Other Services|Life Sciences Tools \\& Services|Oil \\& Gas Refining \\& Marketing|Research \\& Consulting Services|Property \\& Casualty Insurance|Specialized Consumer Services|Diversified Support Services|Interactive Media \\& Services|Diversified Metals \\& Mining|Construction \\& Engineering|Financial Exchanges \\& Data|Office Services \\& Supplies|Communications Equipment|Health Care Distributors|Air Freight \\& Logistics|Other Specialized REITs|Real Estate Development|Auto Parts \\& Equipment|Construction Materials|Health Care Facilities|Health Care Technology|Movies \\& Entertainment|Other Specialty Retail|Packaged Foods \\& Meats|Personal Care Products|Distillers \\& Vintners|Diversified Chemicals|Electronic Components|Health Care Equipment|Multi\\-Sector Holdings|Alternative Carriers|Application Software|Health Care Services|Health Care Supplies|Real Estate Services|Aerospace \\& Defense|Commodity Chemicals|Specialized Finance|Specialty Chemicals|Education Services|Leisure Facilities|Oil \\& Gas Drilling|Passenger Airlines|Building Products|Cable \\& Satellite|Food Distributors|Insurance Brokers|Casinos \\& Gaming|Consumer Finance|Leisure Products|Systems Software|Pharmaceuticals|Biotechnology|Broadcasting|Distributors|Advertising|Drug Retail|Restaurants|Footwear|Gold)$"
   },
   "archetypes": {
     "debt": {
@@ -178,7 +179,13 @@
     "strategy": "hierarchy_extract",
     "hierarchy_issuer_re": "^(.+?)[,\\s]+(?:Subordinated\\s+Debt\\s+Term\\s+Loan|Subordinated\\s+Debt\\s+Revolver|Second\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Floating\\s+Rate\\s+Bond|First\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Revolver|Fixed\\s+Rate\\s+Bond|Floating\\s+Rate\\s+Bond|Credit\\s+Linked\\s+Note|CLO\\s+Notes|Preferred\\s+Equity|Preferred\\s+Stock|Preferred\\s+Shares|Common\\s+Stock|Common\\s+Equity|Investor\\s+Shares|Warrants?)\\.?\\s*\\d*$",
     "hierarchy_instrument_re": "[,\\s]+((?:Subordinated\\s+Debt\\s+Term\\s+Loan|Subordinated\\s+Debt\\s+Revolver|Second\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Floating\\s+Rate\\s+Bond|First\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Revolver|Fixed\\s+Rate\\s+Bond|Floating\\s+Rate\\s+Bond|Credit\\s+Linked\\s+Note|CLO\\s+Notes|Preferred\\s+Equity|Preferred\\s+Stock|Preferred\\s+Shares|Common\\s+Stock|Common\\s+Equity|Investor\\s+Shares|Warrants?)\\.?\\s*\\d*)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '^[^|]+[,\\s](?:Subordinated\\s+Debt\\s+Term\\s+Loan|Subordinated\\s+Debt\\s+Revolver|Second\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Floating\\s+Rate\\s+Bond|First\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Revolver|Fixed\\s+Rate\\s+Bond|Floating\\s+Rate\\s+Bond|Credit\\s+Linked\\s+Note|CLO\\s+Notes|Preferred\\s+Equity|Preferred\\s+Stock|Preferred\\s+Shares|Common\\s+Stock|Common\\s+Equity|Investor\\s+Shares|Warrants?)\\.?\\s*\\d*$')"
+    "hierarchy_condition_extra": "regexp_matches(_clean, '^[^|]+[,\\s](?:Subordinated\\s+Debt\\s+Term\\s+Loan|Subordinated\\s+Debt\\s+Revolver|Second\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Floating\\s+Rate\\s+Bond|First\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Revolver|Fixed\\s+Rate\\s+Bond|Floating\\s+Rate\\s+Bond|Credit\\s+Linked\\s+Note|CLO\\s+Notes|Preferred\\s+Equity|Preferred\\s+Stock|Preferred\\s+Shares|Common\\s+Stock|Common\\s+Equity|Investor\\s+Shares|Warrants?)\\.?\\s*\\d*$')",
+    "pipe_field_map": {
+      "issuer_segment": 1,
+      "instrument_segments": [
+        3
+      ]
+    }
   },
   "source_encodings": {
     "investments_total_excludes": [

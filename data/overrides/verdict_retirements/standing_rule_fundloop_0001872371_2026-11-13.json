@@ -1,0 +1,308 @@
+{
+ "_note": "Oaktree Strategic Credit retirements (okz run, 2026-11-13) under the owner standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1872371-02",
+   "review_id": "RVQ_REV_50c08724a7aa",
+   "verdict_sha256": "c0ac28a6e7b19558f975275aae368247a57c03251d50067d52cbe97e39db3071",
+   "cik": "0001872371",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2023-12-31",
+   "reason": "Standing rule D-252: The verdict cites the schedule's fair value summary total (100.00 pct of investments, a percent-of-net-assets total), an aggregate and not a position. The filing carries no percent of net assets on any position: of its 148 InvestmentOwnedPercentOfNetAssets facts, 74 are valued at 2023-12-31 and none of those sits on a position (InvestmentIdentifierAxis) context, and no printed position line has a percent-of-net-assets cell; so the published position percents are empty as filed. Published fair value ties to the printed total.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2023-12-31 in sandbox okzf: 264, with pct_of_net_assets 0, sum(fair_value) 2,857,808,000 against printed 2,857,808,000"
+    },
+    {
+     "source": "query",
+     "quote": "0001872371-24-000004, XML parse of every InvestmentOwnedPercentOfNetAssets fact: 148 facts, 148 valued, 74 valued at 2023-12-31, 0 of them on typed InvestmentIdentifierAxis (position) contexts; printed position lines of the quarter with a percent-of-net-assets cell: 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-24-000004",
+     "quote": "Total $ 2,857,808 100.00 % 142.52 %",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-03",
+   "review_id": "RVQ_REV_7c138b86fba2",
+   "verdict_sha256": "0ca9830a74262ff8accb68d76659204dd3ce67b51b0ffe2e0e27fcc908ac4678",
+   "cik": "0001872371",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2024-03-31",
+   "reason": "Standing rule D-252: The verdict cites the schedule's fair value summary total (100.00 pct of investments, a percent-of-net-assets total), an aggregate and not a position. The filing carries no percent of net assets on any position: of its 156 InvestmentOwnedPercentOfNetAssets facts, 78 are valued at 2024-03-31 and none of those sits on a position (InvestmentIdentifierAxis) context, and no printed position line has a percent-of-net-assets cell; so the published position percents are empty as filed. Published fair value ties to the printed total.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2024-03-31 in sandbox okzf: 290, with pct_of_net_assets 0, sum(fair_value) 3,519,936,000 against printed 3,519,936,000"
+    },
+    {
+     "source": "query",
+     "quote": "0001872371-24-000008, XML parse of every InvestmentOwnedPercentOfNetAssets fact: 156 facts, 156 valued, 78 valued at 2024-03-31, 0 of them on typed InvestmentIdentifierAxis (position) contexts; printed position lines of the quarter with a percent-of-net-assets cell: 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-24-000008",
+     "quote": "Total $ 3,519,936 100.00 % 142.47 %",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-04",
+   "review_id": "RVQ_REV_62c38e39e999",
+   "verdict_sha256": "5bc1679d9711198638546f93646a411706d2085020f53f164795a89c49c4b497",
+   "cik": "0001872371",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict cites the schedule's fair value summary total (100.00 pct of investments, a percent-of-net-assets total), an aggregate and not a position. The filing carries no percent of net assets on any position: of its 156 InvestmentOwnedPercentOfNetAssets facts, 78 are valued at 2025-12-31 and none of those sits on a position (InvestmentIdentifierAxis) context, and no printed position line has a percent-of-net-assets cell; so the published position percents are empty as filed. Published fair value ties to the printed total.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2025-12-31 in sandbox okzf: 385, with pct_of_net_assets 0, sum(fair_value) 7,433,861,000 against printed 7,433,861,000"
+    },
+    {
+     "source": "query",
+     "quote": "0001872371-26-000004, XML parse of every InvestmentOwnedPercentOfNetAssets fact: 156 facts, 156 valued, 78 valued at 2025-12-31, 0 of them on typed InvestmentIdentifierAxis (position) contexts; printed position lines of the quarter with a percent-of-net-assets cell: 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-26-000004",
+     "quote": "Total $ 7,433,861 100.00 % 159.40 %",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-07",
+   "review_id": "RVQ_REV_ea35e398cf18",
+   "verdict_sha256": "b49bbc3e0519b44bb1b8a3b7a3b5de2afbe5bcdc6717bdb459b837886147be2d",
+   "cik": "0001872371",
+   "engine": "row_validation",
+   "rule_name": "FX01",
+   "report_date": "2024-03-31",
+   "reason": "Standing rule D-252: The verdict found non-USD par rows (Bain Capital Euro CLO 2021-2, Bamboo US Bidco LLC, Carlyle Euro CLO 2021-2, ...) without principal_amount_usd. In the published data of the quarter all 8 rows with a non-USD par currency carry principal_amount_usd, the 8 rows of the issuers the verdict names included, and each row's currency equals the printed currency marker or index currency, and the USD amount of every row with a par equals par x the FRED H.10 rate of the date (220 rows checked, 0 differ).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2024-03-31 in sandbox okzf with a non-USD principal_amount_currency and par: 8, with blank principal_amount_usd: 0, with a currency different from the printed marker/index currency: 0; rows with par whose USD amount differs from par x H.10: 0 of 220; rows of the named issuers: 8"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-08",
+   "review_id": "RVQ_REV_a894751c5054",
+   "verdict_sha256": "43fb4be6dc65ce4012c8e950c10ffe1e1baab2ad553095a3ae03989504a737ab",
+   "cik": "0001872371",
+   "engine": "row_validation",
+   "rule_name": "FX01",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found non-USD par rows (ACESO Holding 4 S.A.R.L., Aurelia Netherlands B.V., Violin Finco Guernsey Limited) without principal_amount_usd. In the published data of the quarter all 37 rows with a non-USD par currency carry principal_amount_usd, the 5 rows of the issuers the verdict names included, and each row's currency equals the printed currency marker or index currency, and the USD amount of every row with a par equals par x the FRED H.10 rate of the date (297 rows checked, 0 differ).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2025-12-31 in sandbox okzf with a non-USD principal_amount_currency and par: 37, with blank principal_amount_usd: 0, with a currency different from the printed marker/index currency: 0; rows with par whose USD amount differs from par x H.10: 0 of 297; rows of the named issuers: 5"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-09",
+   "review_id": "RVQ_BLK_07dd92308cc3",
+   "verdict_sha256": "a808ea9f0c05a52dc44bef14666c8fb2bddaf24f39a4cfdb8639622895c8c698",
+   "cik": "0001872371",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2023-03-31",
+   "reason": "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Delta Leasing SPV II LLC Subordinated Debt Term Loan 8/31/2029: printed cash 3.0 PIK 7.0; published interest_rate 10.0 cash 3.0 pik 7.000000000000001; Establishment Labs Holdings Inc. First Lien Term Loan 4/21/2027: printed cash 3.0 PIK 6.0; published interest_rate 9.0 cash 3.0 pik 6.0.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "pik_le: published rows at 2023-03-31 in sandbox okzf with pik_rate above interest_rate: 0 (none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000008",
+     "quote": "Delta Leasing SPV II LLC Specialized Finance Subordinated Debt Term Loan 3.00 % 7.00 % 8/31/2029 6,724 6,724 6,724 (8)(9)(10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000008",
+     "quote": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,719 10,592 10,237 (8)(10)",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-10",
+   "review_id": "RVQ_BLK_6498a098eaa7",
+   "verdict_sha256": "c82e6f3b4c9c308cd019e6bb6be17b9c681e4a3dd02070f42de0e759dd5c9668",
+   "cik": "0001872371",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2023-06-30",
+   "reason": "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Delta Leasing SPV II LLC Subordinated Debt Term Loan 8/31/2029: printed cash 3.0 PIK 7.0; published interest_rate 10.0 cash 3.0 pik 7.000000000000001; Establishment Labs Holdings Inc. First Lien Term Loan 4/21/2027: printed cash 3.0 PIK 6.0; published interest_rate 9.0 cash 3.0 pik 6.0.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "pik_le: published rows at 2023-06-30 in sandbox okzf with pik_rate above interest_rate: 0 (none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000012",
+     "quote": "Delta Leasing SPV II LLC Specialized Finance Subordinated Debt Term Loan 3.00 % 7.00 % 8/31/2029 10,300 10,300 10,300 (8)(9)(10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000012",
+     "quote": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,883 10,764 10,448 (8)(10)",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-11",
+   "review_id": "RVQ_BLK_2bc180881db9",
+   "verdict_sha256": "f7ce5dd6912ab0a7cede5ffd0fc6ada32a78e44b90760f006b53809ad614f2b2",
+   "cik": "0001872371",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2023-09-30",
+   "reason": "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Alto Pharmacy Holdings, Inc. First Lien Term Loan 10/14/2027: printed cash 5.0 PIK 11.99; published interest_rate 16.990000000000002 cash 5.0 pik 11.99; Delta Leasing SPV II LLC Subordinated Debt Term Loan 8/31/2029: printed cash 3.0 PIK 7.0; published interest_rate 10.0 cash 3.0 pik 7.000000000000001; Establishment Labs Holdings Inc. First Lien Term Loan 4/21/2027: printed cash 3.0 PIK 6.0; published interest_rate 9.0 cash 3.0 pik 6.0.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "pik_le: published rows at 2023-09-30 in sandbox okzf with pik_rate above interest_rate: 0 (none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000017",
+     "quote": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 5.00 % 11.99 % 10/14/2027 13,299 12,386 12,236 (5)(8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000017",
+     "quote": "Delta Leasing SPV II LLC Specialized Finance Subordinated Debt Term Loan 3.00 % 7.00 % 8/31/2029 $ 13,792 $ 13,792 $ 13,792 (8)(9)(10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-23-000017",
+     "quote": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 11,048 10,937 10,662 (8)(10)",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1872371-12",
+   "review_id": "RVQ_BLK_c81b93466a1e",
+   "verdict_sha256": "f6df1a736f72f4b869946e1a646fc461baca97f56921c9159a11143baa5a2da3",
+   "cik": "0001872371",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2024-06-30",
+   "reason": "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Alto Pharmacy Holdings, Inc. First Lien Term Loan 10/14/2027: printed cash 4.94 PIK 11.99; published interest_rate 16.93 cash 4.9399999999999995 pik 11.99.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "pik_le: published rows at 2024-06-30 in sandbox okzf with pik_rate above interest_rate: 0 (none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001872371-24-000011",
+     "quote": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 4.94 % 11.99 % 10/14/2027 14,541 13,797 13,342 (5)(8)",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001872371/retire_check.py (read-only; XML parser; sandbox okzf and data/output; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001872371/retire_check.py okzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-oscf-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

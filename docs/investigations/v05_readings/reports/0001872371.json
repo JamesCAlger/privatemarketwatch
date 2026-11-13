@@ -1,0 +1,1417 @@
+{
+ "cik": "0001872371",
+ "label": "okzf",
+ "before": "rg1b",
+ "investigator_id": "agent:fund-oscf-20261113",
+ "shared_code": false,
+ "builds_used": [
+  "okza (baseline, no change)",
+  "okzb",
+  "okzc",
+  "okzd",
+  "okze",
+  "okzf"
+ ],
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 105,
+   "why": "52 industry-in-name rows (wrapper strip), 36 pipe-format rows (wrapper pipe_field_map) and 21 row corrections to the printed company"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 51,
+   "why": "16 relabelled instruments plus 36 pipe-format rows now read from segment 3"
+  },
+  {
+   "column": "shares_held",
+   "rows": 5,
+   "why": "printed counts"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 183,
+   "why": "par currency from the printed marker / index: 126 par rows plus 57 dash/unfunded lines (JV rows included)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 126,
+   "why": "par x the build FRED H.10 rate of the date on the 126 par rows whose currency changed"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 183,
+   "why": "H.10 rate of the date (1.0 for USD) on every corrected row incl. the 57 dash lines"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 154,
+   "why": "reference_fx / source_usd to match the corrected currency"
+  },
+  {
+   "column": "asset_category",
+   "rows": 14,
+   "why": "CLO notes of vehicles named Fund"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 14,
+   "why": "same"
+  },
+  {
+   "column": "index_classification",
+   "rows": 1,
+   "why": "Buttercup CLO notes"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 14,
+   "why": "same"
+  },
+  {
+   "column": "asset_class",
+   "rows": 2,
+   "why": "CLO notes"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 18,
+   "why": "cash rate tagged as PIK now published as the rate (Impel all-in)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 1,
+   "why": "Impel warrant line prints none"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 46,
+   "why": "printed Index column"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 46,
+   "why": "printed Index column"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "Impel warrant line prints none"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 17,
+   "why": "withdrawn where the printed rate is cash; Impel pik corrected to the printed value"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 262,
+   "why": "bookkeeping of corrections"
+  },
+  {
+   "column": "nonaccrual_footnote",
+   "rows": 8,
+   "why": "printed note"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 8,
+   "why": "8 JV-schedule rows (not published) lost a wrong label (Automobile Parts, from the label-as-issuer name); no published row lost a label"
+  },
+  {
+   "column": "lien_position",
+   "rows": 3,
+   "why": "bond / CLO rows carry no lien"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 11,
+   "why": "revolver/term-loan swaps corrected from the printed instrument and bond/CLO rows with no loan class"
+  },
+  {
+   "column": "position_key",
+   "rows": 1,
+   "why": "JV row name"
+  },
+  {
+   "column": "position_id",
+   "rows": 142,
+   "why": "chains follow the corrected names, instruments and currencies (see chain report in the observations)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 18,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 18,
+   "why": "all_in set on the 18 corrected rate rows"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 3,
+   "why": "Impel PIK-only rows cash 0.0"
+  },
+  {
+   "column": "nonaccrual_status",
+   "rows": 8,
+   "why": "Saratoga x6 unknown, Astra x2 nonaccrual"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 8,
+   "why": "follows gics_sub_industry (JV rows)"
+  }
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "dispatch.issuer_name_strip_re: removes ', <printed industry>' from the end of the staged issuer name (52 rows, 24 names at 2023-06-30; dry run over all 407 distinct names changed only these, none a printed company cell).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Revolver SOFR+ 7.25 % 12.34 % 5/3/2029 1,397 1,305 1,307 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "what": "staging.pipe_field_map {issuer_segment 1, instrument_segments [3]}: 'Issuer | Industry | Instrument' members that fell to the default parser published the instrument as issuer (36 rows at 2026-03-31 and 2026-06-30).",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Janus Bidco Limited Application Software First Lien Term Loan SONIA+ 5.50 % 4/25/2031 - - - (4)(5)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections issuer_name (21 rows: Asurion/athenahealth c-65, CD&R Firefly/Buttercup c-104, Fortress XV/XIX swap, Microf Funding V LLC x3, AB BSL CLO 4 / AIMCO CLO 12 spacing, Bausch + Lomb Corporation x2, X Holdings Corp., four cash funds).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.13 % 9/30/2030 $ 30,824 30,901 30,855 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections instrument_description (16 rows, member names another instrument than the printed row; bond/CLO targets also withdraw instrument_type and lien_position; the Buttercup CLO row is classed STRUCTURED_CREDIT).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "Latam Airlines Group S.A. Passenger Airlines Fixed Rate Bond 7.88 % 4/15/2030 7,775 7,775 7,881 (10)"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 5.75 % 1/30/2032 JPY 2,245,988 14,320 13,991 (5)(8)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections principal_amount_currency, principal_amount_usd, principal_fx_rate_to_usd, principal_fx_status (126 par rows, 98 published): the filer's par unit tag disagrees with the printed currency marker or index currency (cost/par ratios agree with the printed side). Correction of the first report: okzd changed the currency only and kept the old tag's USD amount, rate and status; the USD amount is now par x the FRED H.10 rate of the date (pipeline.monetary_fx quotes, the build's own reference), rate and status set with it (126 amounts, 183 rates, 154 statuses). Every row with a par in okzf equals par x H.10 (gen_fx.py re-run: 0 differences).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Flexera Software LLC Application Software First Lien Term Loan SOFR+ 4.50 % 8.44 % 8/16/2032 11,678 11,590 11,651 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 5.75 % 1/30/2032 JPY 2,245,988 14,320 13,991 (5)(8)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections principal_amount_currency for 57 dash or unfunded lines (54 published, 3 JV rows) whose filer tag gave a currency other than the printed index currency (Bamboo, Flexera, Hologic, Jeppesen EUR/GBP on SOFR lines; Janus, Violin, Kairos, Empire USD on SONIA/E+/STIBOR lines; Spruce revolver CNY); zero par so no USD amount changes, rate and status set with the currency. JN Bidco 2025-03-31 c-210 (GBP, no page signal) left. Five North Star NOK rows stay NOK: the marker 'kr' is ambiguous, the printed index NIBOR+ and the cost/par ratio 0.09 give NOK.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Cielo Bidco Limited Building Products First Lien Term Loan E+ 4.75 % 6.93 % 3/31/2032 7,848 9,076 8,883 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "what": "data/overrides/position_match_overrides/0001872371.json, six directives: Spruce C$ term loan 2025-12-31 to 2026-03-31 c-358 (not the JPY c-361); Kairos 2026-03-31 NOK and GBP loans to 2026-06-30 c-217 and c-216 (the filer swapped the numbering). Two did not take (Spruce JPY c-366 to USD revolver c-360, CD&R c-98 to Buttercup c-104): those links are supplementary position_key edges built from the raw member text, which the overrides do not reach (parked: position_identity_contexts, follow-up build).",
+   "kind": "position_match_override",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan CORRA+ 4.75 % 7.00 % 1/30/2032 C$ 21,005 14,322 14,915 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan NIBOR+ 4.75 % 9.31 % 4/22/2032 Nkr 163,432 16,078 16,392 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections reference_rate_type and reference_rate_source (46 rows, 14 published parent rows, rest the JV's own schedule): the printed Index column (E+, SONIA+, NIBOR+, BBSW+) replaces the date inference SOFR.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Cielo Bidco Limited Building Products First Lien Term Loan E+ 4.75 % 6.93 % 3/31/2032 7,848 9,076 8,883 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Cielo Bidco Limited Building Products First Lien Term Loan SONIA+ 4.75 % 8.48 % 3/31/2032 GBP 33,789 45,343 44,398 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections interest_rate / pik_rate / interest_rate_kind / coupon_type / basis_spread (18 rows): the printed cash rate the filer tagged with the PaidInKind concept is published as the rate with the PIK withdrawn; Impel's rate, printed in the PIK column, is published all-in with cash 0; the Impel warrant line's bogus spread, PIK and Floating coupon are withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-23-000017",
+     "text": "Impel Pharmaceuticals Inc. Health Care Technology First Lien Term Loan SOFR+ 10.75 % 16.05 % 3/17/2027 286 281 286 (5)(8)"
+    },
+    {
+     "accession": "0001872371-24-000014",
+     "text": "Pluralsight, LLC Application Software First Lien Term Loan SOFR+ 7.50 % 12.62 % 8/22/2029 4,976 4,976 4,976 (5)(8)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections shares_held (5 rows): printed count replaces the derived proxy.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "PetVet Care Centers, LLC Health Care Services Preferred Equity 6,338,000 6,211 6,217 (8)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "BioXcel Therapeutics, Inc. Pharmaceuticals Warrants 138,000 74 1 (8)(10)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections nonaccrual_footnote (8 rows): Saratoga rows (6, 55-98M each) are not marked non-accrual in the printed notes; Astra 2025-06-30 (2 rows) prints the non-accrual footnote.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Saratoga Diversified Financial Services Subordinated Debt SOFR+ 5.33 % 9.86 % 12/31/2029 $ 55,168 54,806 55,819 (5)(8)(10)(12)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Astra Acquisition Corp. Application Software First Lien Term Loan SOFR+ 6.75 % 2/25/2028 7,337 6,453 3,485 (5)(8)(11)"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections asset_category / issuer_category / exposure_type / asset_class (16 CLO Notes rows named 'Fund' classed as fund interests; one CLO row classed REAL_ESTATE).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "OFSI Fund Ltd Multi-Sector Holdings CLO Notes SOFR+ 7.48 % 11.37 % 4/20/2034 $ 1,105 1,053 1,062 (5)(10)"
+    }
+   ]
+  }
+ ],
+ "verdict_retirements": [
+  "VR-FL-1872371-02 RVQ_REV_50c08724a7aa",
+  "VR-FL-1872371-03 RVQ_REV_7c138b86fba2",
+  "VR-FL-1872371-04 RVQ_REV_62c38e39e999",
+  "VR-FL-1872371-07 RVQ_REV_ea35e398cf18",
+  "VR-FL-1872371-08 RVQ_REV_a894751c5054",
+  "VR-FL-1872371-09 RVQ_BLK_07dd92308cc3",
+  "VR-FL-1872371-10 RVQ_BLK_6498a098eaa7",
+  "VR-FL-1872371-11 RVQ_BLK_2bc180881db9",
+  "VR-FL-1872371-12 RVQ_BLK_c81b93466a1e",
+  "VR-CMP-FVC-006 RVQ_BLK_9d9ec85e8097",
+  "VR-CMP-PP03-002 RVQ_REV_1df9107cb6ab",
+  "VR-CMP-PP03-007 RVQ_REV_3baac39a9700"
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "Spruce Bidco and CD&R Firefly chains (position ids)",
+   "hypotheses": [
+    "Match overrides (reject / force_pair) do not reach supplementary position_key edges: two of six directives did not take (Spruce JPY c-366 to USD revolver c-360, CD&R c-98 to Buttercup c-104).",
+    "Fund-level mechanism: wrapper source_encodings.position_identity_contexts, entries \"<accession> <context> => <key>\", makes _guarded_union refuse a union across different keys. To declare in a follow-up (needs a 7th build: follow-up run): 0001872371-26-000004 c-366, 0001872371-26-000009 c-361, 0001872371-26-000013 c-366 => spruce-jpy-term-loan-3; 0001872371-26-000009 c-360 and 0001872371-26-000013 c-363 => spruce-usd-revolver; 0001872371-25-000014 c-349 and 0001872371-25-000018 c-343 => spruce-jpy-term-loan-1; 0001872371-25-000018 c-345, 0001872371-26-000004 c-365, 0001872371-26-000009 c-359, 0001872371-26-000013 c-364, 0001872371-25-000014 c-347, 0001872371-25-000008 c-339 => spruce-usd-term-loan-116m; 0001872371-25-000008 c-338, 0001872371-25-000014 c-348 => spruce-cad-term-loan; 0001872371-26-000004 c-98 (and earlier CD&R GBP term loan contexts) => cdr-firefly-gbp-term-loan; 0001872371-26-000009 c-104 and 0001872371-26-000013 c-112 => buttercup-clo-notes.",
+    "Not done: no sixth-plus build was available (6 of 6 used); the keys above are untested."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-oscf-1",
+   "resolution": "declined: fund-level mechanism exists",
+   "why": "The supplementary position_key edges go through _guarded_union, which refuses unions that cross the keys declared in the wrapper source_encodings.position_identity_contexts (live in the 0001918712 wrapper). The chain fixes are parked below for a follow-up build; no shared change is requested."
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "126 rows (98 published, 2.07 billion fair value) whose par unit tag disagrees with the printed currency marker or index currency: SOFR loans tagged EUR (Flexera 2025-12-31 c-165), JPY par published as CNY or USD (Spruce: principal_amount_usd 2.2 billion on a 14M loan, X06), swapped GBP/EUR between rows of one issuer at 2026-06-30. Fixed by row corrections that set currency, USD amount, rate and status together (the first version set the currency only and left the old tag's USD amount: published USD par on the affected rows summed 8.41B against 2.07B fair value).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2070.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "for every row with par, the currency of the printed marker (EUR, GBP, C$, A$, Nkr, kr, JPY) or, absent it, of the printed index (E+ EUR, SONIA+ GBP, NIBOR+ NOK, STIBOR+ SEK, TONA+ JPY, BBSW+ AUD, CORRA+ CAD, SOFR+ USD) must equal principal_amount_currency; cost/par ratio as a cross-check",
+   "quote": {
+    "accession": "0001872371-26-000004",
+    "text": "Flexera Software LLC Application Software First Lien Term Loan SOFR+ 4.50 % 8.44 % 8/16/2032 11,678 11,590 11,651 (5)(8)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in the untouched build okza except X06 on the JPY rows (14 rows over 10 quarters); FX01/FX02/FX03 test blank or non-USD units, not agreement with the page.",
+    "reference": "scratch/fund_runs/0001872371/ccy.py (fired on 126 of 4,419 rows; 0 false alarms after the ambiguous kr marker is resolved by the index)"
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "what": "2026-06-30: 46 rows (14 published parent rows) publish SOFR inferred from the date where the printed Index column reads E+, SONIA+, NIBOR+, STIBOR+, BBSW+. Other quarters match the page. Fixed by row corrections.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 157.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "published reference_rate_type must equal the printed Index code of the row carrying the fair-value fact (E+ EURIBOR, L+ LIBOR, SONIA+, NIBOR+, STIBOR+, BBSW+, TONA+, CORRA+, PRIME+, SOFR+)",
+   "quote": {
+    "accession": "0001872371-26-000013",
+    "text": "Cielo Bidco Limited Building Products First Lien Term Loan E+ 4.75 % 6.93 % 3/31/2032 7,848 9,076 8,883 (5)(8)(10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these rows in okza.",
+    "reference": "scratch/fund_runs/0001872371/audit.py refcode check (fired on 46 rows, none other than these)"
+   }
+  },
+  {
+   "observation_key": "pik-concept-holds-whole-coupon",
+   "what": "18 rows tagged InvestmentInterestRatePaidInKind with the printed cash rate (Pluralsight, Astra, Salus, Beach, BioXcel, Fairbridge, Recess, plus iCIMs/CVAUSA/Cielo with no rate fact): interest_rate null and a PIK equal to the whole rate. Impel 2023-09-30 prints it in the PIK column. Fixed by row corrections. The Impel warrant line also carried a spread and PIK that the page does not print.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 238.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a published pik_rate that equals the printed rate cell with no printed PIK cell (or a null interest_rate with a printed rate) is an error",
+   "quote": {
+    "accession": "0001872371-24-000014",
+    "text": "Pluralsight, LLC Application Software First Lien Term Loan SOFR+ 7.50 % 12.62 % 8/22/2029 4,976 4,976 4,976 (5)(8)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The retired pik_le_interest_rate rule fired on these in the ledger (verdict states) but only as a stale finding; no live rule saw them in okza.",
+    "reference": "scratch/fund_runs/0001872371/pikcheck.py (fires on exactly these 15 + 3 rows)"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "what": "16 rows whose member names another instrument than the printed row (First Lien Revolver vs Term Loan at Creek Parent, SEI, Spruce, Bamboo, Oranje; Latam bond published as term loan; Delta Leasing common and warrants swapped). Fixed by row corrections.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 220.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "printed instrument cell (First Lien Term Loan / Revolver / Fixed Rate Bond / CLO Notes / Warrants / Common Stock) must equal the published instrument head",
+   "quote": {
+    "accession": "0001872371-25-000004",
+    "text": "Latam Airlines Group S.A. Passenger Airlines Fixed Rate Bond 7.88 % 4/15/2030 7,775 7,775 7,881 (10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these 16 rows in the untouched build okza; issuer_name_printed tests the company cell only. Comparing the printed instrument cell with the published instrument head fires on exactly the swapped rows plus the pipe rows the wrapper now reads, and no correct row.",
+    "reference": "scratch/fund_runs/0001872371/audit.py instr check (51 rows incl. 36 pipe rows and 16 corrected)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Members name another borrower than the printed row: Asurion/athenahealth and CD&R Firefly/Buttercup (2026-03-31), Fortress Credit BSL XV and XIX swapped (2024-09-30, not flagged by issuer_name_printed), cut 'Microf Funding V LL', 'Bausch + Lomb Corp', 'X Holdings Corp., LLC', four cash funds, and 52 rows with the industry in the name (fixed by wrapper). The nine Curium Bidco rows are correct as published: the name is S. then U+00E0 then .r.l. (bytes C3 A0), the printed S.&#224;.r.l.; the replacement-character look was a console artifact and no row changed.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 513.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "published issuer must equal the printed company cell of the row holding the fair-value fact, comparing roman numerals and digits exactly",
+   "quote": {
+    "accession": "0001872371-26-000009",
+    "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed fired on Asurion, CD&R and Microf but not on the Fortress XV/XIX swap (its near-spelling tolerance accepts XIX for XV).",
+    "reference": "scratch/fund_runs/0001872371/fullscan.py (fires on all 21 corrected rows)"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "what": "XBRL footnote arcs mark Saratoga (credit linked note, 55-98M) non-accrual at six quarters although its printed notes cite the credit-default-swap note and the filing's non-accrual investment is 0.1 pct of debt fair value; the Astra rows that print the non-accrual footnote at 2025-06-30 are published unknown. Fixed by nonaccrual_footnote corrections.",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2024-06-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 501.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "compare published non-accrual rows with the rows whose printed notes cell carries the footnote number of the current table's 'This investment was on non-accrual status as of <report date>' legend",
+   "quote": {
+    "accession": "0001872371-26-000013",
+    "text": "Saratoga Diversified Financial Services Subordinated Debt SOFR+ 5.33 % 9.86 % 12/31/2029 $ 55,168 54,806 55,819 (5)(8)(10)(12)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; nonaccrual_status is not tested against the printed notes.",
+    "reference": "scratch/fund_runs/0001872371/nonaccrual.py (fires on exactly these 8 rows)"
+   }
+  },
+  {
+   "observation_key": "company-name-keyword-classes-loan-as-fund",
+   "what": "16 CLO Notes rows of vehicles named 'OFSI Fund Ltd' and 'CVC Cordatus Loan Fund XXXI' classed FUND (asset_category, issuer_category, exposure_type); one CLO row (Kindercare) classed REAL_ESTATE from the industry words in the name. Fixed by row corrections.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 32.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a row whose printed instrument is CLO Notes must not be asset_category FUND",
+   "quote": {
+    "accession": "0001872371-26-000004",
+    "text": "OFSI Fund Ltd Multi-Sector Holdings CLO Notes SOFR+ 7.48 % 11.37 % 4/20/2034 $ 1,105 1,053 1,062 (5)(10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these 16 rows in okza; a CLO Notes instrument carrying asset_category FUND is a contradiction that a two-column cross-check (printed instrument head against asset_category) catches with no false alarm among the 337 other CLO rows.",
+    "reference": "scratch/fund_runs/0001872371/combos.py (instrument head against asset_category, 16 rows)"
+   }
+  },
+  {
+   "observation_key": "rate-published-on-row-whose-printed-line-has-none",
+   "what": "CVAUSA c-116 2024-12-31 (undrawn term loan 2, printed spread only) publishes interest_rate 11.02 from a rate fact on its own context; the printed line has no rate. Left: filed as tagged, immaterial (cost -100).",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "published rate where the printed row prints no rate percent",
+   "quote": {
+    "accession": "0001872371-25-000004",
+    "text": "CVAUSA Management, LLC Health Care Services First Lien Term Loan SOFR+ 6.50 % 5/22/2029 - ( 100 ) - (5)(8)(9)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on this row; a published rate on a row whose printed line has no percent beyond the spread flags it and only it in this fund (audit.py rate_extra, 1 of 4,419 rows), but the tag is part of the filing, so the check should be a warning, not a gate.",
+    "reference": "scratch/fund_runs/0001872371/audit.py rate_extra (1 row)"
+   }
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size",
+   "what": "Chains judged against the page by the reviewer (printed currency, instrument, maturity of every funded row; chains mixed against the page / of those currency-mixed): okza 120 / 18, okzd 120 / 21, okzf 117 / 15; my own measure (mixed.py: chains mixing currency, instrument_type or maturity in the published columns) gave 145, 129, 114. Fixed by the match overrides: Spruce C$ chain 856d597f57 now runs c-344, c-364, c-358, c-365 in C$ (okzd had it jump to JPY c-361); Kairos NOK c-207, c-211, c-210, c-217 and GBP c-208, c-212, c-211, c-216 (okzd swapped them at 2026-06-30). NEW wrong links in okzf that okzd had right, caused by my currency corrections and the overrides together: chain 84bba7038b joins the C$ term loan c-338 / c-348 (2025-03, 2025-06) into the JPY c-343 (2025-09-30); chain a5cde33948 joins JPY c-349 (2025-06-30) to the USD 116M term loan c-345 and on to c-365, c-359, c-364, splitting that USD loan from its 2025-03 / 2025-06 rows (c-339, c-347). Still wrong (also in okza): Spruce JPY c-366 (2025-12-31) to the USD revolver c-360 and c-363 (chain 9b9d717b5a); CD&R GBP term loan c-98 to Buttercup CLO Notes c-104 and c-112 (chain ba8cba7eb8). Mechanism for the unfixed ones: supplementary position_key edges built from the raw member text; a fund-level fix exists (wrapper source_encodings.position_identity_contexts, see parked) and needs a follow-up build.",
+   "field": "position_id",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "a chain must not join rows whose printed currency or instrument differs (reviewer chains.py logic)",
+   "quote": {
+    "accession": "0001872371-26-000009",
+    "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.13 % 9/30/2030 $ 30,824 30,901 30,855 (5)(8)(10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule reports chain quality for this fund; the page-based check of currency, instrument and maturity along each position_id fires on 117 chains in okzf (reviewer chains.py), and on the new links listed above.",
+    "reference": "scratch/fund_runs/0001872371/rchains_okzf.txt; scratch/fund_runs/0001872371/chains_okza_okzf.txt"
+   }
+  },
+  {
+   "observation_key": "printed-par-differs-from-neighbouring-quarters",
+   "what": "North Star Acquisitionco 2024-12-31 c-252 (NIBOR+ term loan 5/3/2029) prints 'kr 6,229' as par while cost is 6,198 and fair value 6,059, and every other quarter prints kr 69,xxx for this loan (kr 69,331 / 69,157 / 68,811); published par NOK 6,229,000 gives USD par 0.55M against 6.2M cost. Likely a filer misprint (cost-sized figure in the par column; cost 6,198 and the FV of 6.06M are consistent with par near 69M NOK). Left as printed: the page prints 6,229 and no source gives the intended figure.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 6.1,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "par whose USD value is below half of cost, or differing from the same position in the adjacent quarters by more than 5x, flags a misprint for review",
+   "quote": {
+    "accession": "0001872371-25-000004",
+    "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 5.00 % 9.45 % 5/3/2029 kr 6,229 6,198 6,059 (5)(8)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on this row; X06 tests par above 10x fair value only.",
+    "reference": "scratch/fund_runs/0001872371/q.py okzf (par USD 547,927 vs cost 6,198,000, one row of 4,419)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "180 parent rows differ from the printed company only in punctuation or case (iCIMs, Inc vs Inc.; Learfield Communications, LLC vs LLC; S.A.R.L vs S.a.r.l.). Left: cosmetic, and the entity-name step normalises them.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "none beyond the exact-token comparison above",
+   "quote": {
+    "accession": "0001872371-25-000004",
+    "text": "iCIMs, Inc. Application Software First Lien Term Loan SOFR+ 6.25 % 10.88 % 8/18/2028 2,325 2,300 2,292 (5)(8)"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Punctuation and case differences carry no identity risk and are produced by a shared normaliser.",
+    "reference": "scratch/fund_runs/0001872371/fvclass.py (180 rows)"
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "51 rows of the JV's own schedule (underlying_schedule, 2026-06-30; not published) carry no maturity although printed. Left: not a published row.",
+   "field": "maturity_date",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "printed maturity must equal published maturity on every schedule row, JV rows included",
+   "quote": {
+    "accession": "0001872371-26-000013",
+    "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 8.25 % 9/27/2031 EUR 890 EUR 882 EUR 882 (4)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on the JV schedule rows in okza; comparing printed maturity with published maturity on every schedule row, JV rows included, fires on exactly these 51 rows and none of the 4,000 published rows.",
+    "reference": "scratch/fund_runs/0001872371/audit.py maturity check (51 rows, all underlying_schedule)"
+   }
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_4f1bbe0f4f94",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-23-000012/c-63/ROW-966849ef72af8382",
+     "0001872371-23-000012/c-64/ROW-7ff91d8bbfbdeac9",
+     "0001872371-23-000012/c-101/ROW-84d83e8150778e20",
+     "0001872371-23-000012/c-98/ROW-19be91931b2eaec7",
+     "0001872371-23-000012/c-99/ROW-80d3effb1aa110a8",
+     "0001872371-23-000012/c-100/ROW-0e0859b7820975fc",
+     "0001872371-23-000012/c-120/ROW-0615d38f5188894a",
+     "0001872371-23-000012/c-119/ROW-d6bb48a64449d0e5",
+     "0001872371-23-000012/c-122/ROW-2faf2e27fb84d873",
+     "0001872371-23-000012/c-132/ROW-6ebe8b5eeb207255",
+     "0001872371-23-000012/c-131/ROW-468bc4bc8482c62e",
+     "0001872371-23-000012/c-133/ROW-f052617d4d13c856",
+     "0001872371-23-000012/c-148/ROW-07ac990902228e3a",
+     "0001872371-23-000012/c-147/ROW-52c7a6f511fbf742",
+     "0001872371-23-000012/c-145/ROW-0cfb4e48d0c1aaa0",
+     "0001872371-23-000012/c-144/ROW-143baccddf5a284f",
+     "0001872371-23-000012/c-149/ROW-1a3f9f2f51b2e958",
+     "0001872371-23-000012/c-173/ROW-38f044ce94b87b2b",
+     "0001872371-23-000012/c-172/ROW-24ecc7aa0ba04d43",
+     "0001872371-23-000012/c-174/ROW-0bf458ede38e4350",
+     "0001872371-23-000012/c-175/ROW-717a8d251b602b38",
+     "0001872371-23-000012/c-176/ROW-c6dfe4e0e185a825",
+     "0001872371-23-000012/c-177/ROW-66f49fe315a32ad4",
+     "0001872371-23-000012/c-181/ROW-a4a42cc7ea6ed8d7",
+     "0001872371-23-000012/c-180/ROW-c32992a18a552840",
+     "0001872371-23-000012/c-182/ROW-12cdbf5860d36cc3",
+     "0001872371-23-000012/c-186/ROW-33ef1f5adaf052d4",
+     "0001872371-23-000012/c-185/ROW-6e07ad1fe3e84c7a",
+     "0001872371-23-000012/c-187/ROW-bb36e5b820b309e8",
+     "0001872371-23-000012/c-190/ROW-f820cdb9313f2139",
+     "0001872371-23-000012/c-191/ROW-f8ec2853bbea2191",
+     "0001872371-23-000012/c-192/ROW-8c3083fca9bba0b8",
+     "0001872371-23-000012/c-193/ROW-d23450cb03fcde06",
+     "0001872371-23-000012/c-202/ROW-f3751ad7c07ca5f8",
+     "0001872371-23-000012/c-203/ROW-f7d27628e08320fe",
+     "0001872371-23-000012/c-214/ROW-2b12a594d9c89a3b",
+     "0001872371-23-000012/c-215/ROW-7d10b905eaf9b14f",
+     "0001872371-23-000012/c-216/ROW-437ab40a31a6f3e4",
+     "0001872371-23-000012/c-218/ROW-fbb051b4b7e8f3ac",
+     "0001872371-23-000012/c-217/ROW-c5519a5b70c88453",
+     "0001872371-23-000012/c-226/ROW-5bc4ab777096bb6e",
+     "0001872371-23-000012/c-227/ROW-e7ef35cdc9585513",
+     "0001872371-23-000012/c-224/ROW-cc920a1cf1be2cae",
+     "0001872371-23-000012/c-225/ROW-39edb0e7300f9ede",
+     "0001872371-23-000012/c-231/ROW-cd1c457ddbe8809d",
+     "0001872371-23-000012/c-230/ROW-81b4278c4310ac95",
+     "0001872371-23-000012/c-134/ROW-3dfece8b62f5fe1e",
+     "0001872371-23-000012/c-135/ROW-e03c2cc1b1dc27b1",
+     "0001872371-23-000012/c-136/ROW-7b3bfd17e1cd90f2",
+     "0001872371-23-000012/c-137/ROW-130745136a144c27"
+    ],
+    "reviewed_rows": [
+     "0001872371-23-000012/c-63/ROW-966849ef72af8382",
+     "0001872371-23-000012/c-64/ROW-7ff91d8bbfbdeac9",
+     "0001872371-23-000012/c-101/ROW-84d83e8150778e20",
+     "0001872371-23-000012/c-98/ROW-19be91931b2eaec7",
+     "0001872371-23-000012/c-99/ROW-80d3effb1aa110a8",
+     "0001872371-23-000012/c-100/ROW-0e0859b7820975fc",
+     "0001872371-23-000012/c-120/ROW-0615d38f5188894a",
+     "0001872371-23-000012/c-119/ROW-d6bb48a64449d0e5",
+     "0001872371-23-000012/c-122/ROW-2faf2e27fb84d873",
+     "0001872371-23-000012/c-132/ROW-6ebe8b5eeb207255",
+     "0001872371-23-000012/c-131/ROW-468bc4bc8482c62e",
+     "0001872371-23-000012/c-133/ROW-f052617d4d13c856",
+     "0001872371-23-000012/c-148/ROW-07ac990902228e3a",
+     "0001872371-23-000012/c-147/ROW-52c7a6f511fbf742",
+     "0001872371-23-000012/c-145/ROW-0cfb4e48d0c1aaa0",
+     "0001872371-23-000012/c-144/ROW-143baccddf5a284f",
+     "0001872371-23-000012/c-149/ROW-1a3f9f2f51b2e958",
+     "0001872371-23-000012/c-173/ROW-38f044ce94b87b2b",
+     "0001872371-23-000012/c-172/ROW-24ecc7aa0ba04d43",
+     "0001872371-23-000012/c-174/ROW-0bf458ede38e4350",
+     "0001872371-23-000012/c-175/ROW-717a8d251b602b38",
+     "0001872371-23-000012/c-176/ROW-c6dfe4e0e185a825",
+     "0001872371-23-000012/c-177/ROW-66f49fe315a32ad4",
+     "0001872371-23-000012/c-181/ROW-a4a42cc7ea6ed8d7",
+     "0001872371-23-000012/c-180/ROW-c32992a18a552840",
+     "0001872371-23-000012/c-182/ROW-12cdbf5860d36cc3",
+     "0001872371-23-000012/c-186/ROW-33ef1f5adaf052d4",
+     "0001872371-23-000012/c-185/ROW-6e07ad1fe3e84c7a",
+     "0001872371-23-000012/c-187/ROW-bb36e5b820b309e8",
+     "0001872371-23-000012/c-190/ROW-f820cdb9313f2139",
+     "0001872371-23-000012/c-191/ROW-f8ec2853bbea2191",
+     "0001872371-23-000012/c-192/ROW-8c3083fca9bba0b8",
+     "0001872371-23-000012/c-193/ROW-d23450cb03fcde06",
+     "0001872371-23-000012/c-202/ROW-f3751ad7c07ca5f8",
+     "0001872371-23-000012/c-203/ROW-f7d27628e08320fe",
+     "0001872371-23-000012/c-214/ROW-2b12a594d9c89a3b",
+     "0001872371-23-000012/c-215/ROW-7d10b905eaf9b14f",
+     "0001872371-23-000012/c-216/ROW-437ab40a31a6f3e4",
+     "0001872371-23-000012/c-218/ROW-fbb051b4b7e8f3ac",
+     "0001872371-23-000012/c-217/ROW-c5519a5b70c88453",
+     "0001872371-23-000012/c-226/ROW-5bc4ab777096bb6e",
+     "0001872371-23-000012/c-227/ROW-e7ef35cdc9585513",
+     "0001872371-23-000012/c-224/ROW-cc920a1cf1be2cae",
+     "0001872371-23-000012/c-225/ROW-39edb0e7300f9ede",
+     "0001872371-23-000012/c-231/ROW-cd1c457ddbe8809d",
+     "0001872371-23-000012/c-230/ROW-81b4278c4310ac95",
+     "0001872371-23-000012/c-134/ROW-3dfece8b62f5fe1e",
+     "0001872371-23-000012/c-135/ROW-e03c2cc1b1dc27b1",
+     "0001872371-23-000012/c-136/ROW-7b3bfd17e1cd90f2",
+     "0001872371-23-000012/c-137/ROW-130745136a144c27"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "ARES LXIV CLO Multi-Sector Holdings CLO Notes SOFR+ 3.75 % 8.74 % 4/15/2035 2,200 2,050 2,043 (5)(10)"
+    },
+    {
+     "accession": "0001872371-23-000012",
+     "text": "ARES LXVIII CLO Multi-Sector Holdings CLO Notes SOFR+ 5.75 % 10.83 % 4/25/2035 5,000 5,000 5,087 (5)(10)"
+    },
+    {
+     "accession": "0001872371-23-000012",
+     "text": "CVAUSA Management, LLC Health Care Services First Lien Revolver SOFR+ 6.50 % 5/22/2029 - ( 75 ) ( 73 ) (5)(8)(9)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Member text carries industry / instrument / cut name: confirmed on the flagged rows (see the verdict statement); every published row of the quarter was compared with the company cell of the printed row that carries its own fair-value fact (fullscan.py): residual differences only in punctuation or case.",
+    "Spacing-only kinds (AB BSL CLO4, AIMCO CLO12) are real differences from the printed name (printed with a space), corrected, not dispositioned."
+   ],
+   "next_action": "Fixed in sandbox okzf (wrapper issuer_name_strip_re and pipe_field_map; row corrections); closes when the next batch publishes it."
+  },
+  {
+   "finding_id": "RVQ_BLK_caba0761928b",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-24-000014/c-32/ROW-3ac80dac681ab202",
+     "0001872371-24-000014/c-43/ROW-81687a36d4cb4ef9",
+     "0001872371-24-000014/c-222/ROW-7a3d2e968fc952ef"
+    ],
+    "reviewed_rows": [
+     "0001872371-24-000014/c-32/ROW-3ac80dac681ab202",
+     "0001872371-24-000014/c-43/ROW-81687a36d4cb4ef9",
+     "0001872371-24-000014/c-222/ROW-7a3d2e968fc952ef"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000014",
+     "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 10.78 % 4/20/2036 3,800 3,800 3,882 (5)(10)"
+    },
+    {
+     "accession": "0001872371-24-000014",
+     "text": "AIMCO CLO 12 Multi-Sector Holdings CLO Notes SOFR+ 6.10 % 11.39 % 1/17/2032 1,400 1,392 1,405 (5)(10)"
+    },
+    {
+     "accession": "0001872371-24-000014",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 11.43 % 6/3/2027 14,239 14,086 13,952 (5)(8)(9)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Member text carries industry / instrument / cut name: confirmed on the flagged rows (see the verdict statement); every published row of the quarter was compared with the company cell of the printed row that carries its own fair-value fact (fullscan.py): residual differences only in punctuation or case.",
+    "Spacing-only kinds (AB BSL CLO4, AIMCO CLO12) are real differences from the printed name (printed with a space), corrected, not dispositioned."
+   ],
+   "next_action": "Fixed in sandbox okzf (wrapper issuer_name_strip_re and pipe_field_map; row corrections); closes when the next batch publishes it."
+  },
+  {
+   "finding_id": "RVQ_BLK_0cfa0e2fb93f",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-25-000004/c-28/ROW-211d08d6ec7b36f5",
+     "0001872371-25-000004/c-40/ROW-387beb802af7a166",
+     "0001872371-25-000004/c-225/ROW-20f2c7b4851d31ab"
+    ],
+    "reviewed_rows": [
+     "0001872371-25-000004/c-28/ROW-211d08d6ec7b36f5",
+     "0001872371-25-000004/c-40/ROW-387beb802af7a166",
+     "0001872371-25-000004/c-225/ROW-20f2c7b4851d31ab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 10.12 % 4/20/2036 3,800 3,800 3,864 (5)(10)"
+    },
+    {
+     "accession": "0001872371-25-000004",
+     "text": "AIMCO CLO 12 Multi-Sector Holdings CLO Notes SOFR+ 6.10 % 10.75 % 1/17/2032 1,400 1,392 1,406 (5)(10)"
+    },
+    {
+     "accession": "0001872371-25-000004",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 10.91 % 6/3/2027 14,239 13,986 14,319 (5)(8)(9)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Member text carries industry / instrument / cut name: confirmed on the flagged rows (see the verdict statement); every published row of the quarter was compared with the company cell of the printed row that carries its own fair-value fact (fullscan.py): residual differences only in punctuation or case.",
+    "Spacing-only kinds (AB BSL CLO4, AIMCO CLO12) are real differences from the printed name (printed with a space), corrected, not dispositioned."
+   ],
+   "next_action": "Fixed in sandbox okzf (wrapper issuer_name_strip_re and pipe_field_map; row corrections); closes when the next batch publishes it."
+  },
+  {
+   "finding_id": "RVQ_BLK_ea42a99fa392",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-25-000008/c-39/ROW-1d359327f5f2fe99",
+     "0001872371-25-000008/c-243/ROW-29f892852fb3ee0e"
+    ],
+    "reviewed_rows": [
+     "0001872371-25-000008/c-39/ROW-1d359327f5f2fe99",
+     "0001872371-25-000008/c-243/ROW-29f892852fb3ee0e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-25-000008",
+     "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 9.79 % 4/20/2036 3,800 3,800 3,805 (5)(10)"
+    },
+    {
+     "accession": "0001872371-25-000008",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 10.90 % 6/3/2027 15,825 15,586 16,056 (5)(8)(9)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Member text carries industry / instrument / cut name: confirmed on the flagged rows (see the verdict statement); every published row of the quarter was compared with the company cell of the printed row that carries its own fair-value fact (fullscan.py): residual differences only in punctuation or case.",
+    "Spacing-only kinds (AB BSL CLO4, AIMCO CLO12) are real differences from the printed name (printed with a space), corrected, not dispositioned."
+   ],
+   "next_action": "Fixed in sandbox okzf (wrapper issuer_name_strip_re and pipe_field_map; row corrections); closes when the next batch publishes it."
+  },
+  {
+   "finding_id": "RVQ_BLK_07dd8d567170",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-26-000009/c-65/ROW-420b21f5ccd54353",
+     "0001872371-26-000009/c-104/ROW-9c6c03c2076c31fc",
+     "0001872371-26-000009/c-337/ROW-0f5c42f9cc8aa6a1"
+    ],
+    "reviewed_rows": [
+     "0001872371-26-000009/c-65/ROW-420b21f5ccd54353",
+     "0001872371-26-000009/c-104/ROW-9c6c03c2076c31fc",
+     "0001872371-26-000009/c-337/ROW-0f5c42f9cc8aa6a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.13 % 9/30/2030 $ 30,824 30,901 30,855 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Rockford Tower CLO 2024-1 Multi-Sector Holdings CLO Notes SOFR+ 7.48 % 11.15 % 4/20/2037 2,500 2,479 2,432 (5)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Member text carries industry / instrument / cut name: confirmed on the flagged rows (see the verdict statement); every published row of the quarter was compared with the company cell of the printed row that carries its own fair-value fact (fullscan.py): residual differences only in punctuation or case.",
+    "Spacing-only kinds (AB BSL CLO4, AIMCO CLO12) are real differences from the printed name (printed with a space), corrected, not dispositioned."
+   ],
+   "next_action": "Fixed in sandbox okzf (wrapper issuer_name_strip_re and pipe_field_map; row corrections); closes when the next batch publishes it."
+  },
+  {
+   "finding_id": "RVQ_BLK_a4329c91e620",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-26-000013/c-405/ROW-6d53e14781f10685",
+     "0001872371-26-000013/c-174/ROW-d0593279a2ee7518",
+     "0001872371-26-000013/c-333/ROW-47a7fa97dbe0184e",
+     "0001872371-26-000013/c-334/ROW-280ed5c67dcc4dba",
+     "0001872371-26-000013/c-175/ROW-468dd0d7aa32e8c0",
+     "0001872371-26-000013/c-335/ROW-ec800e47c27f72d4",
+     "0001872371-26-000013/c-338/ROW-f7720ac81440ef69",
+     "0001872371-26-000013/c-201/ROW-caf627be87a30b93",
+     "0001872371-26-000013/c-80/ROW-7f1ab7856a1e92c6",
+     "0001872371-26-000013/c-58/ROW-a3472b535329817f",
+     "0001872371-26-000013/c-297/ROW-0d1e79bc18323919",
+     "0001872371-26-000013/c-214/ROW-3f9af1e2fb12129b",
+     "0001872371-26-000013/c-208/ROW-812f56daa85b379d",
+     "0001872371-26-000013/c-59/ROW-96690dcf62e710f7",
+     "0001872371-26-000013/c-215/ROW-0993347f231805ca",
+     "0001872371-26-000013/c-209/ROW-faa3757a00d0794d",
+     "0001872371-26-000013/c-298/ROW-776c383f66b203eb",
+     "0001872371-26-000013/c-60/ROW-b4cfb3ca8d41f4ec",
+     "0001872371-26-000013/c-216/ROW-3e2be25bcecc6eb3",
+     "0001872371-26-000013/c-217/ROW-cd2519c3bb1314fc",
+     "0001872371-26-000013/c-266/ROW-dd651ec65fbf5c02",
+     "0001872371-26-000013/c-188/ROW-f2910dc7c6043f36"
+    ],
+    "reviewed_rows": [
+     "0001872371-26-000013/c-405/ROW-6d53e14781f10685",
+     "0001872371-26-000013/c-174/ROW-d0593279a2ee7518",
+     "0001872371-26-000013/c-333/ROW-47a7fa97dbe0184e",
+     "0001872371-26-000013/c-334/ROW-280ed5c67dcc4dba",
+     "0001872371-26-000013/c-175/ROW-468dd0d7aa32e8c0",
+     "0001872371-26-000013/c-335/ROW-ec800e47c27f72d4",
+     "0001872371-26-000013/c-338/ROW-f7720ac81440ef69",
+     "0001872371-26-000013/c-201/ROW-caf627be87a30b93",
+     "0001872371-26-000013/c-80/ROW-7f1ab7856a1e92c6",
+     "0001872371-26-000013/c-58/ROW-a3472b535329817f",
+     "0001872371-26-000013/c-297/ROW-0d1e79bc18323919",
+     "0001872371-26-000013/c-214/ROW-3f9af1e2fb12129b",
+     "0001872371-26-000013/c-208/ROW-812f56daa85b379d",
+     "0001872371-26-000013/c-59/ROW-96690dcf62e710f7",
+     "0001872371-26-000013/c-215/ROW-0993347f231805ca",
+     "0001872371-26-000013/c-209/ROW-faa3757a00d0794d",
+     "0001872371-26-000013/c-298/ROW-776c383f66b203eb",
+     "0001872371-26-000013/c-60/ROW-b4cfb3ca8d41f4ec",
+     "0001872371-26-000013/c-216/ROW-3e2be25bcecc6eb3",
+     "0001872371-26-000013/c-217/ROW-cd2519c3bb1314fc",
+     "0001872371-26-000013/c-266/ROW-dd651ec65fbf5c02",
+     "0001872371-26-000013/c-188/ROW-f2910dc7c6043f36"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Woodmont 2022-9 Trust Multi-Sector Holdings CLO Notes SOFR+ 7.77 % 11.44 % 10/25/2036 9,385 9,302 9,387 (5)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Fortress Credit BSL XV Multi-Sector Holdings CLO Notes SOFR+ 4.75 % 8.43 % 10/18/2033 $ 5,000 5,000 4,979 (5)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Prosper Credit Card 2024-1 Specialized Finance CLO Notes 7.15 % 10/15/2034 5,240 5,228 5,243 (8)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Member text carries industry / instrument / cut name: confirmed on the flagged rows (see the verdict statement); every published row of the quarter was compared with the company cell of the printed row that carries its own fair-value fact (fullscan.py): residual differences only in punctuation or case.",
+    "Spacing-only kinds (AB BSL CLO4, AIMCO CLO12) are real differences from the printed name (printed with a space), corrected, not dispositioned."
+   ],
+   "next_action": "Fixed in sandbox okzf (wrapper issuer_name_strip_re and pipe_field_map; row corrections); closes when the next batch publishes it."
+  },
+  {
+   "finding_id": "RVQ_BLK_001ec129f2a8",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-24-000004/c-224/ROW-e0c4402b5d5c672f"
+    ],
+    "reviewed_rows": [
+     "0001872371-24-000004/c-224/ROW-e0c4402b5d5c672f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "PetVet Care Centers, LLC Health Care Services Preferred Equity 6,338,000 6,211 6,217 (8)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Derived proxy count instead of the printed count: confirmed (6,338 vs 6,338,000; 149,728 vs 138,000; 25 vs 139,794 / 139,677; 885 vs 142,278).",
+    "Other equity rows: all published share counts equal the printed count in every quarter (audit.py shares, 0 differences after the fix)."
+   ],
+   "next_action": "Fixed by shares_held row corrections in okzf."
+  },
+  {
+   "finding_id": "RVQ_BLK_d1e86c986cfc",
+   "coverage": {
+    "affected_rows": [
+     "0001872371-25-000014/c-87/ROW-a66c38f990a225b8",
+     "0001872371-25-000014/c-124/ROW-7287584dc121614e",
+     "0001872371-25-000014/c-123/ROW-99b9606a70211ded"
+    ],
+    "reviewed_rows": [
+     "0001872371-25-000014/c-87/ROW-a66c38f990a225b8",
+     "0001872371-25-000014/c-124/ROW-7287584dc121614e",
+     "0001872371-25-000014/c-123/ROW-99b9606a70211ded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "BioXcel Therapeutics, Inc. Pharmaceuticals Warrants 138,000 74 1 (8)(10)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Delta Leasing SPV II LLC Specialized Finance Common Stock 139,794 2 2 (8)(10)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Delta Leasing SPV II LLC Specialized Finance Preferred Equity 139,677 330 455 (8)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Derived proxy count instead of the printed count: confirmed (6,338 vs 6,338,000; 149,728 vs 138,000; 25 vs 139,794 / 139,677; 885 vs 142,278).",
+    "Other equity rows: all published share counts equal the printed count in every quarter (audit.py shares, 0 differences after the fix)."
+   ],
+   "next_action": "Fixed by shares_held row corrections in okzf."
+  },
+  {
+   "finding_id": "RVQ_BLK_9d9ec85e8097",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2025-03-31/fair_value_sum"
+    ],
+    "reviewed_rows": [
+     "0001872371/2025-03-31/fair_value_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-25-000008",
+     "text": "Investments ( 154.1 % of net assets) $ 5,812,788 $ 5,821,583 BNY Mellon Short Term Investment Fund 61,575 61,575"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found the published fair value did not sum to the filed total investments. Every one of the 358 published rows equals the fair value printed for its own context (dated 2025-03-31), and the published sum (all published rows) equals the filed total investments 5821583000 within 2000."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-CMP-FVC-006); re-run: python scripts/v05_evidence/campaign_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_campaign_fv_conservation_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (the b1112b build was used); add --plant: every plant must fail. Needs the cached filings under data/raw/filings/bdc_html."
+  },
+  {
+   "finding_id": "RVQ_REV_50c08724a7aa",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2023-12-31/pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001872371/2023-12-31/pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total $ 2,857,808 100.00 % 142.52 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict cites the schedule's fair value summary total (100.00 pct of investments, a percent-of-net-assets total), an aggregate and not a position. The filing carries no percent of net assets on any position: of its 148 InvestmentOwnedPercentOfNetAssets facts, 74 are valued at 2023-12-31 and none of those sits on a position (InvestmentIdentifierAxis) context, and no printed position line has a percent-of-net-assets cell; so the published position percents are empty as filed. Published fair value ties to the printed total."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-02); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_REV_7c138b86fba2",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2024-03-31/pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001872371/2024-03-31/pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Total $ 3,519,936 100.00 % 142.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict cites the schedule's fair value summary total (100.00 pct of investments, a percent-of-net-assets total), an aggregate and not a position. The filing carries no percent of net assets on any position: of its 156 InvestmentOwnedPercentOfNetAssets facts, 78 are valued at 2024-03-31 and none of those sits on a position (InvestmentIdentifierAxis) context, and no printed position line has a percent-of-net-assets cell; so the published position percents are empty as filed. Published fair value ties to the printed total."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-03); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_REV_62c38e39e999",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2025-12-31/pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001872371/2025-12-31/pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Total $ 7,433,861 100.00 % 159.40 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict cites the schedule's fair value summary total (100.00 pct of investments, a percent-of-net-assets total), an aggregate and not a position. The filing carries no percent of net assets on any position: of its 156 InvestmentOwnedPercentOfNetAssets facts, 78 are valued at 2025-12-31 and none of those sits on a position (InvestmentIdentifierAxis) context, and no printed position line has a percent-of-net-assets cell; so the published position percents are empty as filed. Published fair value ties to the printed total."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-04); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_REV_1df9107cb6ab",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2023-12-31/comparative_period_rows"
+    ],
+    "reviewed_rows": [
+     "0001872371/2023-12-31/comparative_period_rows"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total $ 2,857,808 100.00 % 142.52 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found earlier-period (comparative schedule) rows retained in the 2023-12-31 holdings. Every one of the 264 published rows of the quarter comes from the quarter's own filing (0001872371-24-000004), sits on a context dated 2023-12-31, and where it has a fair value equals the fair-value fact of its own context printed on its own schedule line; no comparative-period context is published."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-CMP-PP03-002); re-run: python scripts/v05_evidence/campaign_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_campaign_PP03_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (the b1112b build was used); add --plant: every plant must fail. Needs the cached filings under data/raw/filings/bdc_html."
+  },
+  {
+   "finding_id": "RVQ_REV_3baac39a9700",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2024-03-31/comparative_period_rows"
+    ],
+    "reviewed_rows": [
+     "0001872371/2024-03-31/comparative_period_rows"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 3,496,473 $ 3,519,936"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found earlier-period (comparative schedule) rows retained in the 2024-03-31 holdings. Every one of the 290 published rows of the quarter comes from the quarter's own filing (0001872371-24-000008), sits on a context dated 2024-03-31, and where it has a fair value equals the fair-value fact of its own context printed on its own schedule line; no comparative-period context is published."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-CMP-PP03-007); re-run: python scripts/v05_evidence/campaign_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_campaign_PP03_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (the b1112b build was used); add --plant: every plant must fail. Needs the cached filings under data/raw/filings/bdc_html."
+  },
+  {
+   "finding_id": "RVQ_REV_ea35e398cf18",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2024-03-31/principal_amount_usd_non_usd_par"
+    ],
+    "reviewed_rows": [
+     "0001872371/2024-03-31/principal_amount_usd_non_usd_par"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Bain Capital Euro CLO 2021-2 Multi-Sector Holdings CLO Notes E+ 3.40 % 7.33 % 7/17/2034 EUR 1,210 1,248 1,246 (5)(10)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found non-USD par rows (Bain Capital Euro CLO 2021-2, Bamboo US Bidco LLC, Carlyle Euro CLO 2021-2, ...) without principal_amount_usd. In the published data of the quarter all 8 rows with a non-USD par currency carry principal_amount_usd, the 8 rows of the issuers the verdict names included, and each row's currency equals the printed currency marker or index currency, and the USD amount of every row with a par equals par x the FRED H.10 rate of the date (220 rows checked, 0 differ)."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-07); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_REV_a894751c5054",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2025-12-31/principal_amount_usd_non_usd_par"
+    ],
+    "reviewed_rows": [
+     "0001872371/2025-12-31/principal_amount_usd_non_usd_par"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 7.87 % 9/27/2031 34,034 37,367 39,512 (5)(8)(10)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found non-USD par rows (ACESO Holding 4 S.A.R.L., Aurelia Netherlands B.V., Violin Finco Guernsey Limited) without principal_amount_usd. In the published data of the quarter all 37 rows with a non-USD par currency carry principal_amount_usd, the 5 rows of the issuers the verdict names included, and each row's currency equals the printed currency marker or index currency, and the USD amount of every row with a par equals par x the FRED H.10 rate of the date (297 rows checked, 0 differ)."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-08); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_BLK_07dd92308cc3",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2023-03-31/pik_le_interest_rate"
+    ],
+    "reviewed_rows": [
+     "0001872371/2023-03-31/pik_le_interest_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-23-000008",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,719 10,592 10,237 (8)(10)"
+    },
+    {
+     "accession": "0001872371-23-000008",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 1,717 1,689 1,639 (8)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Delta Leasing SPV II LLC Subordinated Debt Term Loan 8/31/2029: printed cash 3.0 PIK 7.0; published interest_rate 10.0 cash 3.0 pik 7.000000000000001; Establishment Labs Holdings Inc. First Lien Term Loan 4/21/2027: printed cash 3.0 PIK 6.0; published interest_rate"
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-09); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_BLK_6498a098eaa7",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2023-06-30/pik_le_interest_rate"
+    ],
+    "reviewed_rows": [
+     "0001872371/2023-06-30/pik_le_interest_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,883 10,764 10,448 (8)(10)"
+    },
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 $ 1,743 $ 1,717 $ 1,673 (8)(10)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Delta Leasing SPV II LLC Subordinated Debt Term Loan 8/31/2029: printed cash 3.0 PIK 7.0; published interest_rate 10.0 cash 3.0 pik 7.000000000000001; Establishment Labs Holdings Inc. First Lien Term Loan 4/21/2027: printed cash 3.0 PIK 6.0; published interest_rate"
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-10); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_BLK_2bc180881db9",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2023-09-30/pik_le_interest_rate"
+    ],
+    "reviewed_rows": [
+     "0001872371/2023-09-30/pik_le_interest_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-23-000017",
+     "text": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 5.00 % 11.99 % 10/14/2027 13,299 12,386 12,236 (5)(8)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Alto Pharmacy Holdings, Inc. First Lien Term Loan 10/14/2027: printed cash 5.0 PIK 11.99; published interest_rate 16.990000000000002 cash 5.0 pik 11.99; Delta Leasing SPV II LLC Subordinated Debt Term Loan 8/31/2029: printed cash 3.0 PIK 7.0; published interest_rat"
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-11); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  },
+  {
+   "finding_id": "RVQ_BLK_c81b93466a1e",
+   "coverage": {
+    "affected_rows": [
+     "0001872371/2024-06-30/pik_le_interest_rate"
+    ],
+    "reviewed_rows": [
+     "0001872371/2024-06-30/pik_le_interest_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001872371-24-000011",
+     "text": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 4.94 % 11.99 % 10/14/2027 14,541 13,797 13,342 (5)(8)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Standing rule D-252: The verdict found the cited rows published at their cash leg, below the PIK rate. Each cited row is published with interest_rate equal to the printed cash rate plus the printed PIK rate (all-in, owner convention 2026-07-12), pik_rate equal to the printed PIK and interest_rate_cash equal to the printed cash rate: Alto Pharmacy Holdings, Inc. First Lien Term Loan 10/14/2027: printed cash 4.94 PIK 11.99; published interest_rate 16.93 cash 4.9399999999999995 pik 11.99."
+   ],
+   "next_action": "Verdict retired under standing rule D-252 (VR-FL-1872371-12); re-run: python scratch/fund_runs/0001872371/retire_check.py okzf"
+  }
+ ],
+ "name_shape_exceptions": [],
+ "external_code_diff_okza_vs_rg1b": {
+  "entity_id": 1425,
+  "canonical_name": 450,
+  "note": "every difference between the untouched build okza and rg1b; no interest_rate_cash change at this fund"
+ },
+ "tests_run": [
+  "scratch/fund_runs/0001872371/retire_check.py: 12 retirements pass, each check also run on planted wrong values (assertions in the script)"
+ ],
+ "not_done": [
+  "independent review file and 20-row page sample are the orchestrator's; pytest not run (no shared code changed)",
+  "position chains of the shared matcher left (observation)",
+  "JV (underlying_schedule) rows: maturity not read, not published",
+  "the 2022 quarters have no published rows in the sandbox and were not audited",
+  "no check of fair_value_level or unrealized gain fields against the page"
+ ]
+}

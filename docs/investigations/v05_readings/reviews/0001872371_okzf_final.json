@@ -1,0 +1,505 @@
+{
+ "reviewer_id": "agent:reviewer-oscf-20261113-opus",
+ "report_digest": "201a1934d7dc43568fd9321dd62ed0e09d8d25465e713cd27740ce65997a9f65",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_4f1bbe0f4f94",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Revolver SOFR+ 7.25 % 12.34 % 5/3/2029 1,397 1,305 1,307 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_caba0761928b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000014",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 11.43 % 6/3/2027 14,239 14,086 13,952 (5)(8)(9)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0cfa0e2fb93f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 10.12 % 4/20/2036 3,800 3,800 3,864 (5)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ea42a99fa392",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000008",
+     "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 10.90 % 6/3/2027 15,825 15,586 16,056 (5)(8)(9)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_07dd8d567170",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a4329c91e620",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Woodmont 2022-9 Trust Multi-Sector Holdings CLO Notes SOFR+ 7.77 % 11.44 % 10/25/2036 9,385 9,302 9,387 (5)(10)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Janus Bidco Limited Application Software First Lien Term Loan SONIA+ 5.50 % 4/25/2031 - - - (4)(5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_001ec129f2a8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Printed Shares cell of the row's own FV line: PetVet c-224 6,338,000 (published 6,338,000; okza 6,338); BioXcel warrants c-87 138,000; Delta Leasing c-124 139,794 and c-123 139,677 (okzd = printed). Eyesouth c-156 142,278 also corrected (not in this finding).",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "PetVet Care Centers, LLC Health Care Services Preferred Equity 6,338,000 6,211 6,217 (8)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d1e86c986cfc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Printed Shares cell of the row's own FV line: PetVet c-224 6,338,000 (published 6,338,000; okza 6,338); BioXcel warrants c-87 138,000; Delta Leasing c-124 139,794 and c-123 139,677 (okzd = printed). Eyesouth c-156 142,278 also corrected (not in this finding).",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "BioXcel Therapeutics, Inc. Pharmaceuticals Warrants 138,000 74 1 (8)(10)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Delta Leasing SPV II LLC Specialized Finance Common Stock 139,794 2 2 (8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9d9ec85e8097",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Now retired by the campaign store, VR-CMP-FVC-006 (fund-loop VR-FL-01 removed). campaign_retirement_check.py verify on okzf and on b1112b: PASS (358 rows, each equal to its own context's printed FV, sum = filed 5,821,583,000); --plant: 8 planted, 8 caught, 0 escaped. Independently retire_check.py okzf also PASS: 0 cash-class or Short Term Investment Fund rows; the BNY line prints below the total.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000008",
+     "text": "Investments ( 154.1 % of net assets) $ 5,812,788 $ 5,821,583 BNY Mellon Short Term Investment Fund 61,575 61,575"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_50c08724a7aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzf: PASS. Independent page check (a07.py, a07b.py): the schedule header has no percent-of-net-assets column (Portfolio Company | Industry | Type of Investment | Index | Spread | Cash Interest Rate | PIK | Maturity Date | Shares | Principal | Cost | Fair Value | Notes); every InvestmentOwnedPercentOfNetAssets fact sits on category/total contexts (e.g. 'Total Non-Control/Non-Affiliate Investments (142.5 % of net assets)', 'Senior Secured Debt ... 93.06 % 132.64 %', EquitySecuritiesMember); 0 of the quarter's published rows has a context carrying a pct fact. So A07's sum of position pct (0) against 100 pct is not a missing extraction: no position prints or tags a percent. Weakness noted: retire_check's printed-cell test only looks for the words '% of net assets' in a cell and would miss a bare percent column; my header check covers that.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total $ 2,857,808 100.00 % 142.52 %"
+    },
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes"
+    },
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 2,831,026 $ 2,857,808"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7c138b86fba2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzf: PASS. Independent page check (a07.py, a07b.py): the schedule header has no percent-of-net-assets column (Portfolio Company | Industry | Type of Investment | Index | Spread | Cash Interest Rate | PIK | Maturity Date | Shares | Principal | Cost | Fair Value | Notes); every InvestmentOwnedPercentOfNetAssets fact sits on category/total contexts (e.g. 'Total Non-Control/Non-Affiliate Investments (142.5 % of net assets)', 'Senior Secured Debt ... 93.06 % 132.64 %', EquitySecuritiesMember); 0 of the quarter's published rows has a context carrying a pct fact. So A07's sum of position pct (0) against 100 pct is not a missing extraction: no position prints or tags a percent. Weakness noted: retire_check's printed-cell test only looks for the words '% of net assets' in a cell and would miss a bare percent column; my header check covers that.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Total $ 3,519,936 100.00 % 142.47 %"
+    },
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_62c38e39e999",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py okzf: PASS. Independent page check (a07.py, a07b.py): the schedule header has no percent-of-net-assets column (Portfolio Company | Industry | Type of Investment | Index | Spread | Cash Interest Rate | PIK | Maturity Date | Shares | Principal | Cost | Fair Value | Notes); every InvestmentOwnedPercentOfNetAssets fact sits on category/total contexts (e.g. 'Total Non-Control/Non-Affiliate Investments (142.5 % of net assets)', 'Senior Secured Debt ... 93.06 % 132.64 %', EquitySecuritiesMember); 0 of the quarter's published rows has a context carrying a pct fact. So A07's sum of position pct (0) against 100 pct is not a missing extraction: no position prints or tags a percent. Weakness noted: retire_check's printed-cell test only looks for the words '% of net assets' in a cell and would miss a bare percent column; my header check covers that.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Total $ 7,433,861 100.00 % 159.40 %"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Portfolio Company Industry Type of Investment (1)(2)(3) Index Spread Cash Interest Rate (4)(5) PIK Maturity Date Shares Principal (6) Cost Fair Value Notes"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1df9107cb6ab",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Now retired by the campaign store, VR-CMP-PP03-002 (2023-12-31) and VR-CMP-PP03-007 (2024-03-31); fund-loop VR-FL-05/06 removed. campaign_retirement_check.py verify on okzf and b1112b: PASS (264 and 290 rows, each from the quarter's own filing on a context dated the report date, FV equal to its own printed fact); --plant: 3 of 3 caught for each. Independently retire_check.py okzf PASS: published-basis sum equals the printed total of the report date alone (2,857,808 / 3,519,936), so no September 30, 2023 comparative row (1,927,237) is published.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000004",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 2,831,026 $ 2,857,808"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3baac39a9700",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Now retired by the campaign store, VR-CMP-PP03-002 (2023-12-31) and VR-CMP-PP03-007 (2024-03-31); fund-loop VR-FL-05/06 removed. campaign_retirement_check.py verify on okzf and b1112b: PASS (264 and 290 rows, each from the quarter's own filing on a context dated the report date, FV equal to its own printed fact); --plant: 3 of 3 caught for each. Independently retire_check.py okzf PASS: published-basis sum equals the printed total of the report date alone (2,857,808 / 3,519,936), so no September 30, 2023 comparative row (1,927,237) is published.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Total Non-Control/Non-Affiliate Investments ( 142.5 % of net assets) $ 3,496,473 $ 3,519,936"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ea35e398cf18",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Verdict: non-USD par rows (Bain Euro CLO 2021-2, Bamboo, Carlyle Euro CLO, CD&R Firefly, GoldenTree EUR CLO 2, Madison Park Euro XIV, Quantum) had blank principal_amount_usd. retire_check.py okzf: PASS with the new value test (blank 0, USD amount differing from par x H.10 0 of all par rows, currency off the page 0). Same script on okzd: FAIL (4 rows differ at 2024-03-31 - ADC c-42, Acquia c-41, Ardonagh c-60, Radar c-265), so the test sees the defect I reported; planted old-tag amount, blank, and wrong-currency rate all fail its assertions. Independent: ccy_sweep2.py recomputes every par row from data/reference/fx_fred (report date or latest quote within 7 days) and finds 0 differences and 0 fx-rate or status mismatches.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000008",
+     "text": "Bain Capital Euro CLO 2021-2 Multi-Sector Holdings CLO Notes E+ 3.40 % 7.33 % 7/17/2034 EUR 1,210 1,248 1,246 (5)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a894751c5054",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "My okzd rejection is resolved. The FX01 retirement check now tests the USD value: okzf PASS (37 non-USD rows, 0 blank, 0 of all par rows differing from par x H.10); okzd FAIL with 13 differing rows, i.e. it fails on the state I rejected. Independent recomputation (ccy_sweep2.py, raw FRED H.10 files) agrees row by row: Spruce c-366 JPY par 2,251,646,000 x 0.006378 = USD 14,359,987; North Star c-281 NOK par 68,811,000 x 0.099191 = USD 6,825,405; Bamboo c-73 EUR par 15,757,000 x 1.173600 = USD 18,492,415; Intralot c-197 GBP par 41,506,000 x 1.344700 = USD 55,813,118 (okzd: Spruce 321,981,096, North Star 92,530,152, Bamboo 15,757,000, Intralot 41,506,000). The cited ACESO/Aurelia/Violin rows carry the right value.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 7.87 % 9/27/2031 34,034 37,367 39,512 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 6.06 % 1/30/2032 JPY 2,251,646 14,349 14,230 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 4.50 % 8.38 % 5/3/2029 Nkr 68,811 6,194 6,822 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Bamboo US Bidco LLC Health Care Equipment First Lien Term Loan E+ 5.00 % 7.07 % 9/30/2030 EUR 15,757 16,375 18,321 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Intralot Capital Luxembourg S.A. Casinos & Gaming First Lien Term Loan SONIA+ 5.50 % 9.22 % 10/7/2031 GBP 41,506 54,682 54,800 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_07dd92308cc3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000008",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,719 10,592 10,237 (8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6498a098eaa7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Establishment Labs Holdings Inc. Health Care Technology First Lien Term Loan 3.00 % 6.00 % 4/21/2027 10,883 10,764 10,448 (8)(10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2bc180881db9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000017",
+     "text": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 5.00 % 11.99 % 10/14/2027 13,299 12,386 12,236 (5)(8)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c81b93466a1e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate was retired 2026-06-19, so the rule is silent by scope; retire_check tests the verdict's claim directly on the cited rows. Re-ran: PASS. Page columns (ratecols2.py, colspan-expanded cell positions) put Alto 5.00 in Cash Interest Rate and 11.99 in PIK (same positions as the filing's other spread+cash+PIK rows); published interest_rate 16.99 = 5.00 + 11.99 (all-in, interest_rate_kind all_in), interest_rate_cash 5.00, pik_rate 11.99; Delta Leasing 3.00 + 7.00 and Establishment Labs 3.00 + 6.00 likewise. Planted wrong values fail in the script's assertions.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000011",
+     "text": "Alto Pharmacy Holdings, Inc. Health Care Technology First Lien Term Loan SOFR+ 11.50 % 4.94 % 11.99 % 10/14/2027 14,541 13,797 13,342 (5)(8)"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Both okzd gaps are resolved. ccy_sweep2.py okzf okza (all 4,419 rows, dash lines included): every row's currency equals its own printed marker or, absent one, its printed index currency; the only non-USD row with no page signal is JN Bidco 2025-03-31 c-210 (GBP, par null, no marker, no index), left as tagged. 183 currencies changed vs okza (126 funded + 57 dash/unfunded, 54 published), 0 dash rows now off the index currency (okzd: 57, incl. Spruce revolver 2025-06-30 c-350 CNY, now USD). USD arithmetic: every one of the 4165 rows with par equals par x the FRED H.10 rate I read from data/reference/fx_fred (report date or latest within 7 days), fx rate equals that quote, status source_usd/reference_fx matches the currency; stratified sample of 30 (usd_sample.py, AUD/CAD/EUR/GBP/JPY/NOK/SEK/USD, 2023-06-30..2026-06-30) printed with cost/USD-par ratios 0.80-1.02, all OK; Spruce JPY c-361 2026-03-31 2,245,988,000 x 0.006286 = 14,118,607 (okzd 2,245,988,000). One residual worth an as-filed note, not a defect of the fix: North Star 2024-12-31 c-252 prints 'kr 6,229' against cost 6,198 and FV 6,059 (other quarters print kr 69,xxx), so NOK 6,229,000 converts to USD 547,927 while cost is 6.2M; the report's 'cost/par 0.09' justification does not hold on this row - it is a probable filer misprint, published as printed. Detection decision: the referenced ccy.py skips par-0 rows; the detector should cover dash lines (the 57 rows were fixed separately).",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Revolver SOFR+ 5.00 % 1/30/2032 - ( 372 ) ( 377 ) (5)(8)(9)"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 5.75 % 1/30/2032 JPY 2,245,988 14,320 13,991 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 4.50 % 8.38 % 5/3/2029 Nkr 68,811 6,194 6,822 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-25-000004",
+     "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 5.00 % 9.45 % 5/3/2029 kr 6,229 6,198 6,059 (5)(8)"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "refrate.py over all rows, every quarter: okza 46 rows (14 published, 32 JV, all 2026-06-30) publish a type other than the printed Index cell; okzd 0. Pairs now E+->EURIBOR 189, SONIA+->SONIA 132, NIBOR+ 16, STIBOR+ 10, BBSW+ 5, TONA+ 6, CORRA+ 6. Detector decision is sound.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Cielo Bidco Limited Building Products First Lien Term Loan E+ 4.75 % 6.93 % 3/31/2032 7,848 9,076 8,883 (5)(8)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-concept-holds-whole-coupon",
+   "outcome": "supported",
+   "rationale": "ratecols2.py: on all floating corrected rows (Pluralsight x5, Salus, Astra x2, CVAUSA c-117, iCIMs c-179, Cielo c-102, Recess c-339) the printed rate sits at the Cash Interest Rate column position used by the filing's other rows; Impel c-140/141/142 sit at the PIK position (as do the filing's spread+cash+PIK rows), so interest_rate = printed PIK, cash 0, pik = printed, kind all_in is consistent with the all-in convention; Impel warrant c-143 prints no rate, spread or PIK, so withdrawing them is right. Fixed-rate rows (Beach, BioXcel x2, Fairbridge) print one rate in the first rate slot, as the filing's cash-only fixed rows do (Delta prints '3.00 % 7.00 %' there for cash+PIK). Caveat: the filer's PaidInKind tag may reflect a real PIK election the table does not show; the page wins under the convention, pik_current_status is separate.",
+   "evidence": [
+    {
+     "accession": "0001872371-24-000014",
+     "text": "Pluralsight, LLC Application Software First Lien Term Loan SOFR+ 7.50 % 12.62 % 8/22/2029 4,976 4,976 4,976 (5)(8)"
+    },
+    {
+     "accession": "0001872371-23-000017",
+     "text": "Impel Pharmaceuticals Inc. Health Care Technology First Lien Term Loan SOFR+ 10.75 % 16.05 % 3/17/2027 286 281 286 (5)(8)"
+    },
+    {
+     "accession": "0001872371-23-000017",
+     "text": "iCIMs, Inc. Application Software First Lien Revolver SOFR+ 6.75 % 12.14 % 8/18/2028 241 221 189 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "outcome": "supported",
+   "rationale": "instr.py: okza 62 published rows whose instrument head differs from the printed instrument cell; okzd 11, all cosmetic ('First Lien Term Loan. 1' trailing period at Astra/Harrow) or cash-fund rows with no instrument. Latam bond now Fixed Rate Bond with no loan class.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "Latam Airlines Group S.A. Passenger Airlines Fixed Rate Bond 7.88 % 4/15/2030 7,775 7,775 7,881 (10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Fresh review of okzf. Reviewer method: every row matched to the printed <tr> that carries its own us-gaap:InvestmentOwnedAtFairValue fact (scratch/fund_runs/0001872371/review/ix.py, by contextRef on that fact, never by value search). Flagged populations from scratch/fund_sandbox/okza/output/shadow/page_rule_findings.csv (flagpop.py): identical row_ids and counts to affected_rows. holdings_field_diff okzf okzd: only principal_amount_currency 57, principal_amount_usd 126, principal_fx_rate_to_usd 183, principal_fx_status 154, corrected_fields 183, position_id 44 differ, so every okzd field check below carries to okzf unchanged; okzf vs okza matches the declared changes plus those. Issuer check (names.py): issuer vs printed company cell of its own FV row, case/punctuation folded, all 4,419 rows: only Curium Bidco differs, and only because my fold dropped the accent: the published bytes are U+00E0 ('S.\\u00e0.r.l.'), the raw filing has '&#224;' (curium.py), so it is correct; okza had 109 differing rows (98 published). Wrapper issuer_name_strip_re dry-run over all 407 distinct okza names: 24 names hit, 50 rows, all 2023-06-30, every stripped form equals the printed company (e.g. 'IAMGOLD Corporation, Gold' -> 'IAMGOLD Corporation'); no printed company name ends in a listed industry. Report text says 52 rows; the build and the ledger say 50 (the declared issuer_name total of 105 matches holdings_field_diff okzd okza). pipe_field_map: the 2026-06-30 flagged rows now carry the printed company. Corrections Asurion->athenahealth (c-65), CD&R->Buttercup (c-104), Fortress XV/XIX, Microf, AB BSL CLO 4 / AIMCO CLO 12 spacing match the printed company cells.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000009",
+     "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+    },
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Revolver SOFR+ 7.25 % 12.34 % 5/3/2029 1,397 1,305 1,307 (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "outcome": "supported",
+   "rationale": "nonacc.py / nonacc2.py: in each filing the current-period table's legend (printed after the Saratoga row and before the comparative table) defines (12) or (15) as the credit-default-swap note and (11)/(12) as non-accrual at the report date; Saratoga prints (5)(8)(10)(12) at 2025-06-30/2025-09-30 where the comparative table reuses (12) for 'non-accrual as of September 30, 2024' - the current table's (12) is the CDS note. Astra 2025-06-30 c-62/c-63 print (11) = non-accrual as of June 30, 2025. After the fix no other published row's printed non-accrual number disagrees with its status.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Saratoga Diversified Financial Services Credit Linked Note SOFR+ 5.33 % 9.86 % 12/31/2029 98,000 97,674 98,000 (5)(8)(10)(12)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "(12) This investment represents a credit default swap that functions, in substance, like a credit linked note"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Astra Acquisition Corp. Application Software First Lien Term Loan SOFR+ 6.75 % 2/25/2028 7,337 6,453 3,485 (5)(8)(11)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "(11) This investment was on non-accrual status as of June 30, 2025."
+    }
+   ]
+  },
+  {
+   "observation_key": "company-name-keyword-classes-loan-as-fund",
+   "outcome": "supported",
+   "rationale": "instr.py: okza printed-CLO-Notes rows split LOAN/SC/SC 323, FUND 14, REAL_ESTATE asset_class 1, DIRECT_LENDING 1 (Buttercup); okzd all 339 LOAN / STRUCTURED_CREDIT / STRUCTURED_CREDIT. Cross-check proposed is sound.",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000004",
+     "text": "OFSI Fund Ltd Multi-Sector Holdings CLO Notes SOFR+ 7.48 % 11.37 % 4/20/2034 $ 1,105 1,053 1,062 (5)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-published-on-row-whose-printed-line-has-none",
+   "outcome": "supported",
+   "rationale": "okzd CVAUSA c-116 (2024-12-31) interest_rate 11.02 while its printed line has spread only and dash par; the funded sibling c-117 prints 11.02. Immaterial, warning-level detector is appropriate.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "CVAUSA Management, LLC Health Care Services First Lien Term Loan SOFR+ 6.50 % 5/22/2029 - ( 100 ) - (5)(8)(9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size",
+   "outcome": "supported",
+   "rationale": "Final report text now matches my re-run on okzf (chains_okzf.py, chains2_okzf.py): Kairos fixed; new wrong links ...84bba7038b (C$ c-338, c-348 -> JPY c-343) and ...a5cde33948 (JPY c-349 -> USD 116M c-345, c-365, c-359, c-364) listed as caused by the corrections plus overrides; still-wrong ...9b9d717b5a (JPY c-366 -> USD revolver c-360, c-363) and ...ba8cba7eb8 (CD&R GBP -> Buttercup CLO c-104, c-112); counts 120/120/117 (18/21/15 currency-mixed) as I measured. Action left plus parked fund-level fix (position_identity_contexts) is correct. Warnings for the parked follow-up, which is untested: compatible() never joins a keyed row to an unkeyed one, so every row of each affected chain must be keyed, all quarters. As parked: (1) the one JPY loan (par 2.26B..2.24B, 2025-03 c-337 through 2026-06 c-366) is given two keys, 'term-loan-1' (c-349, c-343) and 'term-loan-3' (2025-12 c-366 onward), which would split it at 2025-09/2025-12, and 2025-03 c-337 is not keyed; (2) the C$ loan keys only c-338 and c-348, so it would split from c-344, c-364, c-358, c-365; (3) the CD&R key lists 'earlier contexts' without naming them. The follow-up build must key whole loans and be re-checked with the page-based chain check. Detector proposal is sound. Superseded rationale from my okzf review follows for record: chains_okzf.py / chains2_okzf.py (page currency per row, published rows) show the Spruce 2025 chains newly broken in okzf, links okzd had right: (a) chain ...bba7038b runs C$ 2025-03-31 c-338, C$ 2025-06-30 c-348, then JPY 2025-09-30 c-343 (CAD loan joined to the JPY loan); the C$ chain the report cites (...6d597f57) starts only at 2025-09-30 c-344. (b) chain ...cde33948 runs JPY 2025-06-30 c-349 into the USD 116M term loan c-345 (2025-09-30), c-365, c-359, c-364; the USD term loan is split from its own 2025-03/2025-06 rows (c-339 alone; c-347 sits with JPY c-337 in ...7f8c2a69). In okzd the JPY loan ran c-349, c-343, c-366 in one chain and the USD loan c-347..c-364 in one chain. So the report's 'Spruce C$ chain ... runs c-344, c-364, c-358, c-365' omits that its 2025-03/06 rows now continue into JPY, and 'Spruce USD term loan ... not caused by corrections' is false for the c-349 -> c-345 link. Still wrong as the report says: JPY 2025-12-31 c-366 -> USD revolver c-360 -> c-363 (...9b9d717b5a) and CD&R GBP c-98 -> Buttercup CLO c-104, c-112 (...ba8cba7eb8). My page-judged counts: mixed chains okza 120, okzd 120, okzf 117; currency-mixed 18, 21, 15. The diagnosis that these need a shared change is also wrong (see REQ-oscf-1): position_identity_contexts in the wrapper's source_encodings isolates and links declared contexts and its guard applies to the supplementary position_key edges.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan CORRA+ 5.00 % 7.68 % 1/30/2032 C$ 21,164 14,407 15,289 (5)(8)"
+    },
+    {
+     "accession": "0001872371-25-000018",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.25 % 6.00 % 1/30/2032 JPY 2,257,303 14,379 15,068 (5)(8)"
+    },
+    {
+     "accession": "0001872371-25-000014",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.25 % 6.02 % 1/30/2032 JPY 2,262,960 14,407 15,443 (5)(8)"
+    },
+    {
+     "accession": "0001872371-25-000018",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan SOFR+ 5.00 % 9.13 % 1/30/2032 $ 116,604 115,021 114,948 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Term Loan TONA+ 5.00 % 6.06 % 1/30/2032 JPY 2,251,646 14,349 14,230 (5)(8)"
+    },
+    {
+     "accession": "0001872371-26-000009",
+     "text": "Spruce Bidco I Inc. Health Care Equipment First Lien Revolver SOFR+ 4.75 % 8.37 % 1/30/2032 5,854 5,524 5,619 (5)(8)(9)"
+    },
+    {
+     "accession": "0001872371-26-000013",
+     "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.12 % 9/30/2030 $ 14,943 14,980 14,950 (5)(8)(10)"
+    },
+    {
+     "accession": "0001872371-26-000004",
+     "text": "CD&R Firefly Bidco Limited Other Specialty Retail First Lien Term Loan SONIA+ 4.75 % 8.48 % 4/29/2029 GBP 23,022 28,850 31,275 (5)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "I withdraw my okzd rejection: curium.py shows the published issuer_name is 'Curium Bidco S.\\u00e0.r.l.' (U+00E0) in okza, okzd and okzf, and the raw filing carries '&#224;'. The U+FFFD I reported was my console/JSON rendering, and my fold dropped the accented letter. The remaining differences are punctuation, case or accent only; not_feasible is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001872371-23-000012",
+     "text": "Curium Bidco S.a.r.l. Biotechnology First Lien Term Loan L+ 4.00 % 9.54 % 7/9/2026 $ 1,985 1,945 1,977 (5)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Recounted: 2026-06-30 underlying_schedule rows whose own printed line has a maturity date and that publish none: 47. JV rows are not published; my count uses m/d/yyyy cells only, the report says 51 (difference not material to an unpublished-row observation).",
+   "evidence": [
+    {
+     "accession": "0001872371-26-000013",
+     "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 8.25 % 9/27/2031 EUR 890 EUR 882 EUR 882 (4)"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-par-differs-from-neighbouring-quarters",
+   "outcome": "supported",
+   "rationale": "Confirmed on the page: 2024-12-31 c-252 prints 'kr 6,229' with cost 6,198 and FV 6,059, while 2024-06-30 c-248 and 2024-09-30 c-250 print kr 69,331 and kr 69,157; okzf publishes NOK 6,229,000 -> USD 547,927 at H.10 (my ccy_sweep2.py). Left as printed is right (no source gives the intended figure); the proposed check (USD par below half of cost, or >5x change vs adjacent quarters) would catch it; in my okzf sweep it is 1 of 3 non-USD rows with cost/USD-par outside 0.5-1.5, the other 2 being JV rows with no cost.",
+   "evidence": [
+    {
+     "accession": "0001872371-25-000004",
+     "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan NIBOR+ 5.00 % 9.45 % 5/3/2029 kr 6,229 6,198 6,059 (5)(8)"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}
