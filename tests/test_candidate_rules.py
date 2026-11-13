@@ -891,3 +891,115 @@ def test_issuer_investment_company_repair_still_flags_section_words():
     assert kinds == {"inv": "begins_with_section_word", "nc": "begins_with_section_word", "fl": "begins_with_section_word",
                      "bare": "begins_with_section_word", "path": "holds_category_path", "page": "not_the_printed_name"}
     assert set(kinds.values()) <= cr.FINDING_KINDS["issuer_name_differs_from_page"]
+
+
+_OTG = "OTG Concessions Management, LLC and Octa Parent Holdings, LLC"
+_AHR = "AHR Funding Holdings, Inc. and AHR Parent Holdings, LP"
+_END = "Endeavor Bidco LLC and Endeavor TopCo, Inc."
+
+
+def _ares_group_rows():
+    # Ares Capital 2024-09-30 (company | business description | investment | ...): the first line of each
+    # group prints the company; later lines leave the company (and sometimes the description) blank
+    rows = [
+        {"row_id": "otg1", "issuer_name": _OTG, "bdc_investment_identifier": f"{_OTG}, Second lien notes",
+         "printed_row": f"{_OTG} | Airport restaurant operator | Second lien notes | 10.00% PIK | 02/2024 | 02/2031 | 8.0 | 7.2 | (2)"},
+        {"row_id": "otg2", "issuer_name": _OTG, "bdc_investment_identifier": f"{_OTG}, Participation rights",
+         "printed_row": "Participation rights | 02/2024 | 02/2054 | 1 | - | - | (2)"},
+        {"row_id": "ahr1", "issuer_name": _AHR, "bdc_investment_identifier": f"{_AHR}, Series A preferred shares",
+         "printed_row": f"{_AHR} | Provider of revenue cycle management solutions to hospitals | Series A preferred shares | 12.75% PIK | 46.2"},
+        {"row_id": "ahr2", "issuer_name": _AHR, "bdc_investment_identifier": f"{_AHR}, Preferred units",
+         "printed_row": "Provider of Revenue Cycle Management solutions to hospitals | Preferred units | 8.00% PIK | 07/2022 | 9,900 | 12.2 | (2)"},
+        {"row_id": "end1", "issuer_name": _END, "bdc_investment_identifier": f"{_END}, First lien senior secured loan",
+         "printed_row": f"{_END} | Global securities finance trading platform | First lien senior secured loan | 9.38% | SOFR (Q) | 6.0"},
+        {"row_id": "end2", "issuer_name": _END, "bdc_investment_identifier": f"{_END}, Class A common units",
+         "printed_row": "Trading platform for securities finance | Class A common units | 08/2024 | 1,859 | 1.9 | 1.9"},
+    ]
+    return [{"accession_number": "a1", **r} for r in rows]
+
+
+def test_issuer_continuation_lines_are_informational():
+    # REQ-NBAR-1 (Ares) and REQ-NBAS-1 (Ares Strategic Income: company | investment | ..., member ordinal)
+    out = _run(cr.issuer_name_differs_from_page, _ares_group_rows() + [
+        {"row_id": "caif1", "issuer_name": "CAIF 1", "accession_number": "a2",
+         "bdc_investment_identifier": "CAIF 1 | Commercial mortgage-backed security 1",
+         "printed_row": "CAIF 1 | Commercial mortgage-backed security | 9.50% | SONIA (Q) | 5.75% | 08/2035 | 26,145.2 | (6)(13)"},
+        {"row_id": "caif2", "issuer_name": "CAIF 1", "accession_number": "a2",
+         "bdc_investment_identifier": "CAIF 1 | Commercial mortgage-backed security 2",
+         "printed_row": "Commercial mortgage-backed security | 10.90% | SONIA (Q) | 7.15% | 08/2035 | 13,182.1 | (6)(13)"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"otg2": "continuation_line", "ahr2": "continuation_line",
+                                                     "end2": "continuation_line", "caif2": "continuation_line"}
+    con = duckdb.connect()
+    frame = pd.DataFrame(_ares_group_rows())
+    frame["cik"], frame["report_date"], frame["accession_number"] = "0001287750", "2024-09-30", "a"
+    cr.prepare(con, frame)
+    tested, info, _ = cr.ledger_rows(con)
+    names = tested[tested["rule_name"] == "issuer_name_printed"]
+    assert names["finding"].sum() == 0 and "continuation_line" in set(info["kind"])
+
+
+def test_issuer_continuation_repair_still_flags_a_different_company():
+    rows = _ares_group_rows()
+    out = _run(cr.issuer_name_differs_from_page, rows + [
+        # a different company printed in full (company | description | instrument): same cell as the first line
+        {"row_id": "other_full", "accession_number": "a1", "issuer_name": _OTG, "bdc_investment_identifier": f"{_OTG}, Class A units",
+         "printed_row": "Wildcat Parent LP | Airport restaurant operator | Class A units | 06/2022 | 41,000 | 6.7"},
+        # a lead cell that is another issuer the fund publishes, on a short line
+        {"row_id": "other_issuer", "accession_number": "a1", "issuer_name": _OTG, "bdc_investment_identifier": f"{_OTG}, Common units",
+         "printed_row": f"{_END} | Common units | 06/2022 | 41,000 | 6.7"},
+        # no line of the filing prints the company: nothing to continue
+        {"row_id": "orphan", "accession_number": "a1", "issuer_name": "Acme Holdings LLC", "bdc_investment_identifier": "Acme Holdings LLC, Preferred units",
+         "printed_row": "Provider of widgets | Preferred units | 8.00% PIK | 9,900 | 12.2"},
+        # the group's first line is in another filing
+        {"row_id": "other_filing", "issuer_name": _OTG, "accession_number": "a9",
+         "bdc_investment_identifier": f"{_OTG}, Participation rights",
+         "printed_row": "Participation rights | 02/2024 | 02/2054 | 1 | - | - | (2)"},
+        # the member does not name the published issuer
+        {"row_id": "member", "accession_number": "a1", "issuer_name": _OTG, "bdc_investment_identifier": "Octa Parent Holdings, LLC, Participation rights",
+         "printed_row": "Participation rights | 02/2024 | 02/2054 | 1 | - | - | (2)"},
+    ])
+    kinds = dict(zip(out["row_id"], out["kind"]))
+    found = {k: v for k, v in kinds.items() if v in cr.FINDING_KINDS["issuer_name_differs_from_page"]}
+    assert found == {k: "not_the_printed_name" for k in ("other_full", "other_issuer", "orphan", "other_filing", "member")}
+    assert {kinds[k] for k in ("otg2", "ahr2", "end2")} == {"continuation_line"}
+
+
+def test_issuer_reordered_co_obligors_are_informational():
+    # REQ-NBAR-1 reorderings: Ares 2025-12-31 Mustang / Senske and Steward Partners
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "mustang",
+         "issuer_name": "Mustang Prospects Holdco, LLC, Mustang Prospects Purchaser, LLC and Senske Acquisition, Inc.",
+         "printed_row": "Mustang Prospects Purchaser, LLC, Senske Acquisition, Inc., and Mustang Prospects Holdco, LLC (13) | "
+                        "Provider of lawn care | First lien senior secured loan | 9.17% | SOFR (Q) | 0.3"},
+        {"row_id": "steward",
+         "issuer_name": "Steward Partners Global Advisory, LLC, Steward Partners Intermediate II, LLC, Steward Partners "
+                        "Investment Advisory, LLC, and Steward Partners New Holdings, LLC",
+         "printed_row": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners "
+                        "Intermediate II, LLC, and Steward Partners New Holdings, LLC (13) | Wealth management | First lien | 4.9"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"mustang": "reordered_co_obligors", "steward": "reordered_co_obligors"}
+
+
+def test_issuer_reorder_repair_still_flags_different_co_obligors():
+    out = _run(cr.issuer_name_differs_from_page, [
+        # a co-obligor dropped from the published name (Ares Steward 2025-12-31)
+        {"row_id": "dropped", "issuer_name": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC",
+         "printed_row": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners "
+                        "Intermediate II, LLC and Steward Partners New Holdings, LLC (13) | Wealth management | First lien | 6.9"},
+        # a co-obligor spelt differently (Ares Truck-Lite: 'Clarience Technologies, LLC' / 'Clarity Technologies Holdings, LP')
+        {"row_id": "spelt", "issuer_name": "Truck-Lite Co., LLC, ECCO Holdings Corp. and Clarience Technologies, LLC",
+         "printed_row": "Clarity Technologies Holdings, LP, Truck-Lite Co., LLC and ECCO Holdings Corp. (13) | "
+                        "Provider of safety products | First lien | 0.0"},
+        # words swapped between co-obligors are not a reordering
+        {"row_id": "swapped", "issuer_name": "Acme Holdings LLC and Beta Partners LLC",
+         "printed_row": "Beta Holdings LLC and Acme Partners LLC | Software | First lien | 1.0"},
+        # a single name is never a reordering
+        {"row_id": "single", "issuer_name": "Holdings Acme LLC",
+         "printed_row": "Acme Holdings LLC | Software | First lien | 1.0"},
+        # 'and' for the printed '&' in the same order is not a reordering (0001572694 2024-03-31, first measurement)
+        {"row_id": "amp", "issuer_name": "HS4 AcquisitionCo, Inc. (dba HotSchedules and Fourth)",
+         "printed_row": "HS4 AcquisitionCo, Inc. (dba HotSchedules & Fourth) | Hotels, Restaurants & Leisure | 11.18% | 3,129"},
+    ])
+    kinds = dict(zip(out["row_id"], out["kind"]))
+    assert kinds == {k: "not_the_printed_name" for k in ("dropped", "spelt", "swapped", "single", "amp")}

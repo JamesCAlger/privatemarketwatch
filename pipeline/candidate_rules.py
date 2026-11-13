@@ -115,6 +115,9 @@ _CATEGORY_WORDS = (r"(?i)(\bfirst lien (debt|loans?|senior)|\bsecond lien (debt|
 
 _LEGAL_TAIL = (r"(( (llc|l l c|inc|incorporated|ltd|limited|corp|corporation|co|company|lp|l p|llp|lllp|plc|sa|s a|"
                r"sarl|s a r l|s r l|srl|sas|gmbh|bv|b v|nv|ag|ab|pty|ulc|dac))+)$")
+# A comma before a legal form inside one entity's name ('Holdco, LLC', 'Holdings, L.P.'): not a list separator.
+_LEGAL_COMMA = (r",\s+((llc|l\.l\.c|inc|incorporated|ltd|limited|corp|corporation|co|company|lp|l\.p|llp|lllp|plc|"
+                r"s\.a|sarl|s\.a\.r\.l|gmbh|b\.v|n\.v|ag|ulc|dac)\.?)(\s|,|$)")
 # Rule 1: a fund-quarter where this share of rows has no comparable printed name is not tested on
 # the page; its page-basis flags are not raised (reviewer 2026-10-18, D-207).
 NAME_BLIND_LIMIT = 0.90
@@ -152,6 +155,18 @@ def _macros(con: duckdb.DuckDBPyConnection) -> None:
                                              t -> regexp_replace(t, '([.^$*+?()\[\]{}|\\-])', '\\\1', 'g')),
                               '[\s\x{00a0}]?')
               || '[\s\x{00a0}]*(\([^()]{1,4}\)[\s\x{00a0}]*)*')""")
+    # the co-obligors a name lists, normalised and sorted (D-263, REQ-NBAR-1): split at ', ', ' and ', ' & ' and
+    # ', and ', after the comma before a legal form is dropped ('Mustang Prospects Holdco, LLC, Senske
+    # Acquisition, Inc., and ...' -> ['mustang prospects holdco llc', 'senske acquisition inc', ...]), in printed order
+    con.execute(f"""CREATE OR REPLACE MACRO cr_parts(x) AS
+        list_filter(list_transform(
+            string_split_regex(regexp_replace(coalesce(CAST(x AS VARCHAR), ''), '{_LEGAL_COMMA}', ' \\1\\3', 'gi'),
+                               '\\s*,\\s*(and\\s+|&\\s+)?|\\s+(and|&)\\s+'),
+            p -> cr_norm(p)), p -> length(p) > 0)""")
+    # same co-obligors in another order: equal as sorted lists, different in printed order (an 'and' / '&'
+    # difference in the same order is not a reordering and still flags: 'HotSchedules & Fourth')
+    con.execute("""CREATE OR REPLACE MACRO cr_reordered(a, b) AS
+        len(cr_parts(a)) >= 2 AND list_sort(cr_parts(a)) = list_sort(cr_parts(b)) AND cr_parts(a) <> cr_parts(b)""")
     # 'name' starts 'cell' at a word boundary (a footnote digit right after the name is allowed)
     con.execute("""CREATE OR REPLACE MACRO cr_prefix(cell, name) AS
         length(name) > 0 AND starts_with(cell, name)
@@ -276,6 +291,16 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
     in a legal form ('Investment Company 24 Bidco Limited') is kind ``investment_company_name``,
     informational, instead of ``begins_with_section_word``. Other section words, 'Investments ...', and
     the industry-label and category-path shape kinds are unchanged.
+
+    Check repair (D-263, REQ-NBAR-1 / REQ-NBAS-1), both informational kinds:
+    ``continuation_line``: the member names the published issuer and then an instrument; this printed line
+    shows that instrument at an earlier cell than a line of the same filing and issuer that prints the
+    company (the group's first line), so its company cell is blank (Ares 'Participation rights | 02/2024',
+    'Provider of ... | Preferred units'; ASIF 'Commercial mortgage-backed security | 10.90%'). Not when a
+    lead cell is the name of any issuer the fund publishes, when no line of the filing prints the company,
+    or when the instrument sits at the same cell as on the first line (a different company printed in full).
+    ``reordered_co_obligors``: the printed name lists exactly the published co-obligors in another order
+    (Mustang, Steward). A co-obligor added, dropped or spelt differently still flags.
     """
     labels = industry_labels(con, table)
     own = [r[0] for r in con.execute(
@@ -318,8 +343,31 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                -- the printed name is the published one with spaces dropped (reader join; owner 2026-11-10)
                list_bool_or(list_transform(coalesce(name_cells, []), c -> cr_ws_join(c, issuer_name))) AS whitespace_ok,
                -- printed in the lead cells at all, before label and heading cells are set aside
-               coalesce(list_bool_or(list_transform(coalesce(lead_cells, []), c -> cr_prefix(cr_norm(c), nname))), false) AS lead_ok
+               coalesce(list_bool_or(list_transform(coalesce(lead_cells, []), c -> cr_prefix(cr_norm(c), nname))), false) AS lead_ok,
+               -- D-263: the position on the printed row of the instrument the member names after the published
+               -- issuer ('<issuer>, Participation rights', 'CAIF 1 | Commercial mortgage-backed security 2')
+               CASE WHEN cells IS NOT NULL AND length(nname) > 0
+                         AND starts_with(cr_norm(bdc_investment_identifier), nname || ' ')
+                         AND length(trim(substr(cr_norm(bdc_investment_identifier), length(nname) + 2))) > 0
+                    THEN coalesce(
+                        nullif(list_position(list_transform(cells, c -> cr_norm(c)),
+                                             trim(substr(cr_norm(bdc_investment_identifier), length(nname) + 2))), 0),
+                        nullif(list_position(list_transform(cells, c -> cr_norm(c)),
+                                             regexp_replace(trim(substr(cr_norm(bdc_investment_identifier), length(nname) + 2)),
+                                                            ' [0-9]+$', '')), 0)) END AS inst_pos,
+               -- D-263: the printed name lists the same co-obligors in another order
+               coalesce(list_bool_or(list_transform(coalesce(name_cells, []),
+                                                    c -> cr_reordered(issuer_name, c))), false) AS reorder_ok
         FROM r""")
+    # D-263 (REQ-NBAR-1, REQ-NBAS-1): per filing and published issuer, the position of the member's instrument
+    # on a line that prints the company (the group's first line). A later line of the group that prints that
+    # instrument earlier (its company cell, and possibly its description cell, left blank) is a continuation line.
+    con.execute("""CREATE OR REPLACE TEMP TABLE _cr_group_first AS
+        SELECT accession_number AS g_accession, issuer_name AS g_issuer, min(inst_pos) AS first_pos FROM _cr_names
+        WHERE comparable AND coalesce(direct_ok, false) AND inst_pos IS NOT NULL GROUP BY 1, 2""")
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE _cr_issuer_keys AS
+        SELECT cik AS ik_cik, list(DISTINCT cr_key(issuer_name)) AS K FROM {table}
+        WHERE length(cr_key(issuer_name)) > 0 GROUP BY 1""")
     # second chance for a name cell that starts with an industry label ('Healthcare ... Cyan Investors LP')
     con.execute("""CREATE OR REPLACE TEMP TABLE _cr_after_label AS
         SELECT DISTINCT n.row_id, n.accession_number FROM
@@ -371,10 +419,18 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                    regexp_matches(issuer_name, '{_CATEGORY_WORDS}') AS category_words,
                    (f.key IS NOT NULL AND coalesce(list_bool_or(list_transform(coalesce(n.name_cells, []),
                         c -> cr_near(cr_key(c), cr_key(n.issuer_name)))), false)) AS elsewhere_ok,
-                   coalesce(bl.page_test_suppressed, false) AS suppressed
+                   coalesce(bl.page_test_suppressed, false) AS suppressed,
+                   -- D-263: a later line of the group (fewer cells before the member's instrument than the line
+                   -- that prints the company) whose lead cells name none of the fund's published issuers
+                   (n.inst_pos IS NOT NULL AND g.first_pos IS NOT NULL AND n.inst_pos < g.first_pos
+                    AND NOT coalesce(list_bool_or(list_transform(n.cells[1:n.inst_pos - 1],
+                                                                 c -> list_contains(coalesce(ik.K, []), cr_key(c)))), false))
+                       AS continuation_ok
             FROM _cr_names n LEFT JOIN _cr_after_label a ON a.row_id = n.row_id AND a.accession_number = n.accession_number
             LEFT JOIN _cr_fund_names f ON f.cik = n.cik AND f.key = cr_key(n.issuer_name)
-            LEFT JOIN _cr_blind bl ON bl.cik = n.cik AND bl.report_date = n.report_date),
+            LEFT JOIN _cr_blind bl ON bl.cik = n.cik AND bl.report_date = n.report_date
+            LEFT JOIN _cr_group_first g ON g.g_accession = n.accession_number AND g.g_issuer = n.issuer_name
+            LEFT JOIN _cr_issuer_keys ik ON ik.ik_cik = n.cik),
         k AS (
             SELECT *, CASE
                 WHEN is_label THEN 'equals_industry_label'
@@ -383,6 +439,10 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                      THEN 'whitespace_only'
                 WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok AND coalesce(spacing_ok, false)
                      THEN 'spacing_only'
+                WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok AND continuation_ok
+                     THEN 'continuation_line'
+                WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok AND coalesce(reorder_ok, false)
+                     THEN 'reordered_co_obligors'
                 WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok THEN 'not_the_printed_name'
                 WHEN NOT comparable AND section_start AND NOT investment_company_name THEN 'begins_with_section_word'
                 WHEN NOT comparable AND own_label_start THEN 'begins_with_industry_label'
