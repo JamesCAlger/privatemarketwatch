@@ -199,6 +199,10 @@
     "misdated_contexts": [
       "0000950170-25-108839 C_6fda8701-6ac1-4aac-9f92-658b9207598a 2025-03-31 -> 2025-06-30"
     ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "P=PRIME"
+    ],
     "untagged_values": [
       "0001193125-23-277031 PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAdmiralBuyerIncSoftwareTechServicesDelayedDrawTermLoan1089S550075Floor05082028TypedMemberusgaapInvestmentIdentifierAxis fair_value 0",
       "0001193125-23-277031 PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAdmiralBuyerIncSoftwareTechServicesRevolver1089S550075Floor05082028TypedMemberusgaapInvestmentIdentifierAxis fair_value 0",

@@ -16,6 +16,19 @@ Shared by the agentA shadow engine (scripts/shadow_agent_a_engine.py) and the ag
   The exception: 'CODE - Y % PIK' / 'CODE n % Y % PIK' (a floor column, then a PIK-only margin), which
   0001902649 prints and its rate check confirms.
 Text only; the line is the row as printed, cells joined by spaces (or ' | ', which is treated as space).
+
+Legend-dependent codes (audit of the wrappers' reference_rate_codes, 2026-11-14). A short code means
+what the filing's legend says, and filers disagree:
+  B  - BBSW (0001849894 MSD, 0001572694, ...), BBSY (0001508655, 0001812554, ...), BKBM (0001803498 BCRED,
+       legend 'BKBM or B', NZD), dated BBSW -> BBSY switches (0001838126, 0001920145);
+  S  - SOFR for most filers, SONIA for 0001803498, 0001508655, 0001925309;
+  C  - CDOR or CORRA, switching on a date for several filers;
+  SA - SARON for some, SONIA for 0001812554, 0001851322, 0001869453, 0001885968, 0001930679, 0001975736.
+E, P, L, SF and SN mean one thing in every wrapper that defines them. For a legend-dependent code the
+MARGIN is read as usual, but the benchmark is resolved only from ``codes`` (the filer's wrapper
+reference_rate_codes for the report date, see ``reference_codes``); otherwise 'code_resolved' is False and
+a caller comparing the benchmark must fail closed. 'code' keeps its earlier default label for S, C and SA
+(SOFR, CDOR, SARON) -- a label only, not a reading; B has no default and reads 'LEGEND:B'.
 """
 from __future__ import annotations
 
@@ -24,28 +37,53 @@ import re
 BENCHMARK_CODES = {"S": "SOFR", "SF": "SOFR", "SOFR": "SOFR", "TSOFR": "SOFR", "L": "LIBOR", "LIBOR": "LIBOR",
                    "E": "EURIBOR", "EURIBOR": "EURIBOR", "P": "PRIME", "PRIME": "PRIME", "SONIA": "SONIA",
                    "SN": "SONIA", "SARON": "SARON", "STIBOR": "STIBOR", "CORRA": "CORRA", "BBSY": "BBSY",
-                   "BBSW": "BBSW", "CDOR": "CDOR", "NIBOR": "NIBOR", "C": "CDOR", "SA": "SARON"}
+                   "BBSW": "BBSW", "CDOR": "CDOR", "NIBOR": "NIBOR", "C": "CDOR", "SA": "SARON",
+                   "B": "LEGEND:B"}
+# codes whose benchmark the filing's legend defines (module docstring): never resolved from the table above
+LEGEND_CODES = frozenset({"B", "S", "C", "SA"})
 CODE_RE = re.compile(r"\b([A-Z]{1,7})(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|-\s|\s)(?=\s*(?:\d|-))")
-_ALT_RE = re.compile(r"\b(?:%s)(?:\s*\([A-Z0-9]{1,3}\))?\s*\+" % "|".join(sorted(BENCHMARK_CODES, key=len, reverse=True)))
+# a margin alternative 'CODE +'; a bare B counts only with a number after it (not a rating such as 'B+')
+_ALT_RE = re.compile(r"\b(?:(?:%s)(?:\s*\([A-Z0-9]{1,3}\))?\s*\+|B(?:\s*\([A-Z0-9]{1,3}\))?\s*\+(?=\s*\d))"
+                     % "|".join(sorted((c for c in BENCHMARK_CODES if c != "B"), key=len, reverse=True)))
 DATE_RE = re.compile(r"(?<![\d/])(\d{1,2})/(\d{1,2})/(\d{2}|\d{4})(?![\d/])")
 NUM_RE = re.compile(r"(?<![\w.,])(\d{1,2},\d{3}(?![\d.,])|\d{1,4}(?:\.\d+)?)\s*(%?)\s*(Floor|floor|Cash|cash|PIK|pik)?")
 
 
-def _ambiguous(bench: str, floors: list[float]) -> dict:
-    return {"code": bench, "cash": None, "pik": None, "total": None, "floors": floors}
+def resolve_code(code: str, codes: dict[str, str] | None = None) -> tuple[str | None, bool]:
+    """(benchmark, resolved) of a printed code. ``codes`` is the filer's {CODE: benchmark} for the report
+    date and wins where it defines the code. A legend-dependent code it does not define is unresolved:
+    (its default label, False). (None, False) for a code that names no benchmark."""
+    key = str(code or "").upper()
+    if key not in BENCHMARK_CODES:
+        return None, False
+    if codes and codes.get(key):
+        return str(codes[key]).upper(), True
+    return BENCHMARK_CODES[key], key not in LEGEND_CODES
 
 
-def parse_rate(line: str) -> dict | None:
-    """{'code', 'cash', 'pik', 'total', 'floors'} of the first benchmark code on the line and the margin
-    printed after it; None when no benchmark is printed; 'total' None when the margin is ambiguous."""
+def reference_codes(cik, report_date=None, encodings=None) -> dict[str, str]:
+    """The filer's legend: its wrapper reference_rate_codes on the report date ({} when it has none)."""
+    from pipeline.source_encodings import reference_rate_codes
+    return reference_rate_codes(cik, encodings, report_date)
+
+
+def _ambiguous(bench: str, floors: list[float], resolved: bool = True) -> dict:
+    return {"code": bench, "code_resolved": resolved, "cash": None, "pik": None, "total": None, "floors": floors}
+
+
+def parse_rate(line: str, codes: dict[str, str] | None = None) -> dict | None:
+    """{'code', 'code_resolved', 'cash', 'pik', 'total', 'floors'} of the first benchmark code on the line
+    and the margin printed after it; None when no benchmark is printed; 'total' None when the margin is
+    ambiguous; 'code_resolved' False when the code is legend-dependent and ``codes`` (the filer's legend,
+    ``reference_codes``) does not define it: the margin is read, the benchmark is not known."""
     line = " ".join(str(line or "").replace("|", " ").split())
     for m in CODE_RE.finditer(line):
         code, sep = m.group(1), m.group(2)
-        bench = BENCHMARK_CODES.get(code.upper())
+        bench, resolved = resolve_code(code, codes)
         if not bench or (len(code) <= 2 and sep != "+"):
             continue
         if len(_ALT_RE.findall(line)) > 1:
-            return _ambiguous(bench, [])  # two margin alternatives printed on one line
+            return _ambiguous(bench, [], resolved)  # two margin alternatives printed on one line
         seg = line[m.end():]
         d = DATE_RE.search(seg)
         seg = seg[:d.start()] if d else seg[:90]
@@ -68,7 +106,7 @@ def parse_rate(line: str) -> dict | None:
         if includes:
             rest = [(v, lab, pos) for v, lab, pos in rest if pos < includes.start()]
         if sep.startswith("-") and rest and rest[0][1] != "pik":
-            return _ambiguous(bench, floors)  # 'SOFR - 0.10 %': sign or dash placeholder
+            return _ambiguous(bench, floors, resolved)  # 'SOFR - 0.10 %': sign or dash placeholder
         cash = pik = None
         if sep == "+" and rest:
             cash = rest[0][0]
@@ -82,7 +120,8 @@ def parse_rate(line: str) -> dict | None:
                 if pk and not re.search(r";|Cash|plus|\+", seg):
                     # 'S + 2.88 % (3.38 % PIK)' / 'S + 725 (300 PIK)': filers use this both for 'plus'
                     # and for 'of which'; the line does not say which -> ambiguous
-                    return {"code": bench, "cash": cash, "pik": pk[0], "total": None, "floors": floors}
+                    return {"code": bench, "code_resolved": resolved, "cash": cash, "pik": pk[0], "total": None,
+                            "floors": floors}
                 pik = pk[0] if pk else None
         else:
             labelled = [(v, lab) for v, lab, _ in rest if lab in ("cash", "spread", "pik")]
@@ -98,13 +137,14 @@ def parse_rate(line: str) -> dict | None:
                 before_pik = [v for v, lab, pos in rest if not lab and pos < pik_pos]
                 if before_pik and seg[:pik_pos].rstrip().endswith("("):
                     # 'SOFR 2.00 % (4.60 % PIK)': cash plus PIK, or a floor? the line does not say
-                    return _ambiguous(bench, floors)
+                    return _ambiguous(bench, floors, resolved)
                 cash, pik = 0.0, labelled[0][0]
                 floors += before_pik
             elif len(unlabelled) == 1:
                 cash = unlabelled[0]
             else:
-                return _ambiguous(bench, floors)
+                return _ambiguous(bench, floors, resolved)
         total = None if cash is None else round(cash + (pik or 0.0), 6)
-        return {"code": bench, "cash": cash, "pik": pik, "total": total, "floors": floors}
+        return {"code": bench, "code_resolved": resolved, "cash": cash, "pik": pik, "total": total,
+                "floors": floors}
     return None

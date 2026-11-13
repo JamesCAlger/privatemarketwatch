@@ -111,7 +111,20 @@ def printed_dates(line: str) -> list[date]:
     return out
 
 
-def field_ok(field: str, published, line: str, *, mat_cell: str | None = None) -> tuple[bool, str]:
+@lru_cache(maxsize=None)
+def _encodings() -> dict:
+    from pipeline.source_encodings import load_encodings
+    return load_encodings()
+
+
+def filer_codes(cik: str, report_date: str | None) -> dict[str, str]:
+    """The filer's legend on the report date (wrapper reference_rate_codes); resolves 'B', 'S', 'C', 'SA'."""
+    from pipeline.printed_margin import reference_codes
+    return reference_codes(cik, report_date, _encodings())
+
+
+def field_ok(field: str, published, line: str, *, mat_cell: str | None = None,
+             codes: dict[str, str] | None = None) -> tuple[bool, str]:
     if field == "maturity_date":
         if published in (None, ""):
             return False, "no published maturity"
@@ -120,10 +133,12 @@ def field_ok(field: str, published, line: str, *, mat_cell: str | None = None) -
         pub = date.fromisoformat(str(published)[:10])
         ok = mat_cell == pub.isoformat() and pub in printed_dates(line)
         return ok, "maturity cell %s" % mat_cell
-    rate = parse_rate(line)
+    rate = parse_rate(line, codes)
     if rate is None:
         return False, "no benchmark code printed"
     if field == "reference_rate_type":
+        if not rate["code_resolved"]:  # 'B +', 'S +': the filing's legend says which benchmark; fail closed
+            return False, "printed code %s depends on the filing legend; not resolved" % rate["code"]
         return str(published or "").upper() == rate["code"], "printed code %s" % rate["code"]
     if field == "basis_spread":
         if rate["total"] is None:
@@ -158,9 +173,10 @@ def check_row(rule: str, r: dict) -> dict:
         return {"row_id": r["row_id"], "ok": False, "detail": "printed line not found", "line": None}
     mat_cell = (reader_maturity(r["cik"], r["accession_number"], r["report_date"], r["src_context_id"])
                 if "maturity_date" in FIELD[rule] else None)
+    codes = filer_codes(r["cik"], r["report_date"]) if "reference_rate_type" in FIELD[rule] else None
     details, ok = {}, True
     for field in FIELD[rule]:
-        f_ok, why = field_ok(field, r.get(field), line, mat_cell=mat_cell)
+        f_ok, why = field_ok(field, r.get(field), line, mat_cell=mat_cell, codes=codes)
         details[field] = {"published": r.get(field), "ok": f_ok, "why": why}
         ok = ok and f_ok
     return {"row_id": r["row_id"], "ok": ok, "detail": details, "line": line,

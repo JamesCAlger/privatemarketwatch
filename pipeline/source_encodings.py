@@ -205,6 +205,24 @@ def _codes_are_unambiguous(values):
     return True
 
 
+def _dated_codes(encoding,report_date):
+    day=str(report_date or '')[:10]
+    codes={}
+    for code,name,side,bound in (_CODE_RE.fullmatch(v).groups() for v in encoding.get('reference_rate_codes',[])):
+        if side is None or (day and (day<=bound if side=='to' else day>=bound)):
+            codes[code.upper()]=name
+    return codes
+
+
+def reference_rate_codes(cik,encodings=None,report_date=None):
+    """{code: benchmark} from the wrapper's ``reference_rate_codes`` on ``report_date`` (the filer's legend),
+    whether or not it names a reference-rate column; {} when the wrapper defines none. Dated codes as in
+    ``reference_rate_reading``."""
+    configured=load_encodings() if encodings is None else encodings
+    encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
+    return _dated_codes(encoding,report_date)
+
+
 def reference_rate_reading(cik,encodings=None,report_date=None):
     """The filer's own reference-rate column, or None: {'columns': header labels, 'codes': {code: benchmark}}.
 
@@ -218,11 +236,7 @@ def reference_rate_reading(cik,encodings=None,report_date=None):
     columns=frozenset(' '.join(v.lower().split()) for v in encoding.get('reference_rate_columns',[]))
     if not columns:
         return None
-    day=str(report_date or '')[:10]
-    codes={}
-    for code,name,side,bound in (_CODE_RE.fullmatch(v).groups() for v in encoding.get('reference_rate_codes',[])):
-        if side is None or (day and (day<=bound if side=='to' else day>=bound)):
-            codes[code.upper()]=name
+    codes=_dated_codes(encoding,report_date)
     # Labels the filer prints in that column that name no single benchmark (Ares 'Base Rate': "commonly
     # based on the Federal Funds Rate or the Prime Rate"). The loan floats; its benchmark is not stated.
     unspecified=frozenset(' '.join(v.lower().split()) for v in encoding.get('unspecified_reference_labels',[]))

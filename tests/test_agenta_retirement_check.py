@@ -68,3 +68,63 @@ def test_maturity_needs_the_readers_maturity_cell():
     assert not chk.field_ok("maturity_date", "2028-02-24", line, mat_cell=None)[0]   # blank / unconfirmed cell
     assert chk.field_ok("maturity_date", "2028-02-24", line, mat_cell="2028-02-24")[0]
     assert not chk.field_ok("maturity_date", "2024-03-15", line, mat_cell="2028-02-24")[0]  # acquisition date
+
+
+# Legend-dependent codes (2026-11-14). MSD 0001849894 MYOB 2026-06-30 prints 'B + 5.50 %' (wrapper B=BBSW);
+# BCRED 0001803498 FFML Holdco 2024-09-30 prints 'B+ 6.25 %' with the legend 'BKBM or B' (NZD).
+MYOB = ("MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % "
+        "(Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47")
+FFML = "FFML Holdco Ltd | First Lien Senior Secured Loan | B+ 6.25 % | 10.97 % | 11/30/2028 | NZD 1,000"
+
+
+def test_b_margin_is_read_and_its_benchmark_is_unresolved():
+    r = chk.parse_rate(MYOB)
+    assert r["total"] == pytest.approx(5.50) and r["code_resolved"] is False and r["code"] == "LEGEND:B"
+    assert chk.field_ok("basis_spread", 5.50, MYOB)[0]
+    assert not chk.field_ok("basis_spread", 5.00, MYOB)[0]          # the stale label's margin still fails
+    for bench in ("BBSY", "BBSW", "BKBM", "LEGEND:B", None):     # no legend: the reference fails closed
+        assert not chk.field_ok("reference_rate_type", bench, MYOB)[0]
+
+
+def test_b_is_resolved_only_from_the_filers_legend():
+    from pipeline.printed_margin import parse_rate, reference_codes
+    bcred = reference_codes("0001803498", "2024-09-30")
+    r = parse_rate(FFML, bcred)
+    assert r["total"] == pytest.approx(6.25) and r["code"] == "BKBM" and r["code_resolved"]
+    assert parse_rate(FFML)["code"] != "BBSY" and not parse_rate(FFML)["code_resolved"]
+    assert not chk.field_ok("reference_rate_type", "BBSY", FFML, codes=bcred)[0]
+    assert not chk.field_ok("reference_rate_type", "BBSY", FFML)[0]
+    assert chk.field_ok("reference_rate_type", "BKBM", FFML, codes=bcred)[0]
+    assert parse_rate(MYOB, reference_codes("0001849894", "2026-06-30"))["code"] == "BBSW"
+    # a dated legend: HPS B=BBSW to 2024-09-30, BBSY from 2024-12-31; no report date, no dated code
+    assert parse_rate(MYOB, reference_codes("0001838126", "2024-09-30"))["code"] == "BBSW"
+    assert parse_rate(MYOB, reference_codes("0001838126", "2024-12-31"))["code"] == "BBSY"
+    assert not parse_rate(MYOB, reference_codes("0001838126", None))["code_resolved"]
+
+
+def test_s_c_sa_are_legend_dependent_too():
+    from pipeline.printed_margin import parse_rate, reference_codes
+    line = "Acme | First Lien Term Loan | S + 5.25 % | 9.07 % | 12/17/2027"
+    assert not parse_rate(line)["code_resolved"]
+    assert not chk.field_ok("reference_rate_type", "SOFR", line)[0]            # no legend: fail closed
+    assert parse_rate(line, reference_codes("0001803498", "2025-12-31"))["code"] == "SONIA"   # BCRED S=SONIA
+    assert parse_rate(line, reference_codes("0001849894", "2025-12-31"))["code"] == "SOFR"
+    assert chk.field_ok("reference_rate_type", "SOFR", line, codes={"S": "SOFR"})[0]
+    assert not chk.field_ok("reference_rate_type", "SOFR", line, codes={"S": "SONIA"})[0]
+    assert not parse_rate("X | C + 700 | 08/2027")["code_resolved"]
+    assert not parse_rate("X | SA + 5.00 % | 08/2027")["code_resolved"]
+    assert parse_rate("X | SA + 5.00 % | 08/2027", {"SA": "SONIA"})["code"] == "SONIA"
+    # codes every wrapper reads the same way still resolve without a legend
+    for text, bench in (("X | E + 6.00 % | 1/1/2030", "EURIBOR"), ("X | SOFR + 6.00 % | 1/1/2030", "SOFR"),
+                        ("X | L + 600 | 1/1/2030", "LIBOR"), ("X | P + 1.00 % | 1/1/2030", "PRIME")):
+        assert parse_rate(text)["code"] == bench and parse_rate(text)["code_resolved"]
+
+
+def test_a_rating_b_plus_is_not_a_margin_alternative():
+    from pipeline.printed_margin import parse_rate
+    # 'B+' with no number after it is not a second benchmark expression
+    assert parse_rate("Acme (rated B+) | First Lien | S + 5.25 % | 9.07 % | 12/17/2027")["total"] == pytest.approx(5.25)
+    # a second 'B + n' expression on the line is
+    assert parse_rate("X | First Lien | S + 5.25 % / B + 5.50 % | 12/17/2027")["total"] is None
+    # 'B' needs a '+': 'Tranche B 5.00 %' is no benchmark
+    assert parse_rate("X | Term Loan Tranche B 5.00 % | 12/17/2027") is None

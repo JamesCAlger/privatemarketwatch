@@ -495,3 +495,21 @@ def test_r2_1_thousands_separator_bp_margin_in_the_engine():
     p = _pub(basis_spread=1.0, reference_rate_type="LIBOR", instrument_type=None)
     assert eng.compare_row("agentA_reference_uncorroborated", p, b) == ("mismatch", ["basis_spread"])
     assert eng.compare_row("agentA_reference_uncorroborated", dict(p, basis_spread=10.5), b) == ("equal", [])
+
+
+def test_b_line_margin_is_compared_and_a_wrong_spread_still_fires():
+    # MSD MYOB 2026-06-30 (RVQ_BLK_a672f6d8c309): 'B + 5.50 %' (BBSW per MSD's legend), published 5.50
+    line = ("MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % "
+            "(Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47")
+    b = _bridge(printed_row=line, printed_margin=None, maturity_date="2030-06-06", reference_rate_type="BBSW")
+    pub = _pub(basis_spread=5.50, maturity_date="2030-06-06", reference_rate_type="BBSW", instrument_type=None)
+    assert eng.compare_row("agentA_spread_vs_xbrl", pub, b) == ("equal", [])
+    flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [pub], _page(b))
+    assert flags == []
+    # a real error on the same line: the stale label's 5.00 published
+    wrong = dict(pub, basis_spread=5.00)
+    assert eng.compare_row("agentA_spread_vs_xbrl", wrong, b) == ("mismatch", ["basis_spread"])
+    flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [wrong], _page(b))
+    assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("mismatch", "basis_spread")]
+    # a 'B +' margin counts as a printed floating margin (reference rule, blank published spread)
+    assert eng.printed_floating_margin(b) == 5.50

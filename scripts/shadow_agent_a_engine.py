@@ -358,7 +358,7 @@ def unreadable_fields(bridge: dict | None) -> list[str]:
 _INVISIBLE = str.maketrans({"​": " ", " ": " ", "﻿": " "})
 # 'CODE + n' / 'CODE n' margin on a line; group 3 is the text right after the number
 _FLOAT_MARGIN_RE = re.compile(
-    r"\b(SOFR|SF|S|LIBOR|L|EURIBOR|E|PRIME|P|SONIA|SARON|STIBOR|CORRA|BBSY|BBSW|CDOR|C|NIBOR|SN|SA)"
+    r"\b(SOFR|SF|S|LIBOR|L|EURIBOR|E|PRIME|P|SONIA|SARON|STIBOR|CORRA|BBSY|BBSW|CDOR|C|NIBOR|SN|SA|B)"
     r"(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|(?<=[A-Z]{4})\s)\s*(\d{1,4}(?:\.\d+)?)\s*%?([^|;,)]{0,12})")
 
 
