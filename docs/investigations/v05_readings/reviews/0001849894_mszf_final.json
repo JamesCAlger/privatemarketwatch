@@ -1,0 +1,293 @@
+{
+ "reviewer_id": "agent:reviewer-msd-20261113-opus",
+ "report_digest": "acd7741c8ab7ddd160721d2b1da6dadfd54f4cc1412ed9f5ae00c8f65a777529",
+ "subject": {
+  "cik": "0001849894",
+  "label": "mszf",
+  "baseline": "msza",
+  "before": "rg2",
+  "report": "docs/investigations/v05_readings/reports/0001849894.json",
+  "investigator_id": "agent:fund-msd-20261113",
+  "round": "final, after the investigator's response to the first review (0001849894_mszf.json)"
+ },
+ "method": "Independent scripts under scratch/fund_runs/0001849894/review/ (rv_rows.py printed line = the <tr> carrying the row's own us-gaap:InvestmentOwnedAtFairValue fact by contextRef; rv_ccy.py, rv_sweep.py, rv_flagged.py, rv_retire.py, rv_other.py, rv_piddiff.py, rv_chainscan.py, rv_pids.py, rv_ctxline.py, rv_negcost.py, rv_digest.py). FX rates read directly from data/reference/fx_fred (last observation on or before the date). Outstanding findings from fund_gate.outstanding_findings('mszf'). Flagged populations rebuilt from scratch/fund_sandbox/mszf/output/row_validation_issues.parquet and oracle/check_failures.csv. Final round: re-read the changed report sections, the decisions log (DC-0001849894-6e4cb47116, -5d0b34aca3, -d10ce9107e), the proposed-disposition store, and the regenerated retirement store. Re-ran retire_check.py mszf (4/4 PASS), rv_retire.py (4/4 pass, all plants fail), dup_retirements.py (0), flagged.py mszf X11 and left.py mszf A01 (both reruns run).",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_86db71d7dea5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population rebuilt from mszf oracle/check_failures.csv: A01 2024-09-30 has exactly three failures (first lien debt, first lien debt services consumer, second lien debt), each off by 35,134,000, which is the Midwest Veterinary Partners second-lien loan. Its context's InvestmentIdentifierAxis member text in the published row reads 'Investments Investments - non-controlled/non-affiliated First Lien Debt Services: ConsumerInvestments Investments - non-controlled/non-affiliated Second Lien Debt Services: Consumer Midwest Veterinary Partners LLC ...': the filer concatenated two headings in the member, so the rollup assigns it to first lien too. The published row equals its printed line (par 35,714, cost 35,709, fv 35,134, Second Lien). The fund-quarter key covers the whole flagged population. as_filed matches the owner-accepted reason for this fund (DS-A01-1849894-5: the member the filer chose cannot be changed). Caveats: the carried_from source is the investigator's own reading, not an earlier independent review; this review is the independent one. The Metropolis preferred-equity part of the proposal statement no longer produces a failure in mszf. The proposal carries no rows, no per-member quarter on its evidence and rerun 'see report'; it needs those before the owner can accept it (D-253 bar).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "Midwest Veterinary Partners LLC S + 7.60 % 0.75 % 12.71 % 4/26/2029 35,714 35,709 35,134 1.66"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a672f6d8c309",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage is one row (ROW-af7003235b914694 on context C_1b43d218-f4f9-44fd-a7b6-855fa3faa1ac), equal to the flagged population. The published spread 5.50, rate 9.99 and PIK 3.00 equal the page and the tags (InvestmentBasisSpreadVariableRate 5.50, InvestmentInterestRate 9.99, InvestmentInterestRatePaidInKind 3.00, verified in the instance). The next action is now the right mechanism. The as_filed proposal is withdrawn: the proposed store holds only X11, A01 and C107. Check-repair request REQ-msz-3 (verification_bug, DC-0001849894-5d0b34aca3) asks for the B + (BBSY) margin to be read in pipeline/printed_margin.py, with a test that a wrong spread still fails. The verdict DC-0001849894-6e4cb47116 records it as a check misfire. mszf shadow/agent_a_flags.csv (printed_check field_not_printed) supports that mechanism. The finding stays outstanding until the repaired check runs; that is the correct state.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6c3c72490a2d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2026-06-30 flagged population rebuilt from mszf row_validation_issues: 2 rows, identical to affected_rows (S.A.F.E. Management DDTL A, ROW-299099730fa8c6fd; Sky Merger Sub DDTL, ROW-6334ae13423b9c90). Both printed lines carry a dash in the par cell with small fair values 12 and 130; no principal fact on either context. Same reason the owner accepted as_filed for nine earlier quarters of this fund (DS-X11-1849894-1). The proposal needs rows and per-member quarter tags before acceptance.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.35 % 1.50 % 10.08 % 5/28/2029 - - 130 0.00"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "S.A.F.E. Management - Delayed Draw Term Loan A (11) S + 4.75 % 2.00 % 8.48 % 11/24/2031 - 12 12 0.00"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_70911f501531",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2023-03-31: 6 flagged rows rebuilt from row_validation_issues, identical to affected_rows. Each printed line has a dash par and a parenthesised cost equal to the published negative cost (Chromalloy -172,000, Frontgrade -150,000, Faraday -40,000, Natural Partners -46,000, Wood Mackenzie -86,000, DFS -65,000). The finding is new because the 24 sign corrections were applied. The fix is right: the page prints negatives, msza published +172,000 against a fair value of -174,000, and the convention elsewhere is negative cost on undrawn lines (MSD itself from 2023-12-31; 1,927 negative-cost rows at five other rg2 funds; only these 24 MSD rows had positive cost with negative fv). C107 is a monitoring warn ('negative cost can be legitimate'). It is not misfiring: it reports a true printed negative cost. as_filed (as printed) is the right class and matches the owner-accepted DS-LARGE3-C107-1849894 for 2023-12-31 to 2025-09-30. The accepted-reason check compares with the tag, so it cannot clear the corrected quarters, so owner acceptance is needed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021707",
+     "text": "Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 11.91 % 11/23/2027 - ( 172 ) ( 174 ) ( 0.03 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_affb6f39e08a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2023-06-30: 8 flagged rows rebuilt, identical to affected_rows. Every printed cost cell is parenthesised and equals the published cost (Chromalloy -162,000, Frontgrade -143,000, Natural Partners -43,000, Momentive -113,000, Wood Mackenzie -82,000, Boasso DDTL -79,000 and revolver -173,000, DFS -60,000). msza had all eight positive. Same reasoning and class as the 2023-03-31 C107 finding.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041924",
+     "text": "Boasso Global - Revolving Credit Facility (8)(9)(12) S + 6.75 % 0.75 % 12.02 % 7/1/2026 - ( 173 ) ( 159 ) ( 0.02 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e10429d78b9c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2026-06-30: 23 flagged rows rebuilt, identical to affected_rows. Each row's printed cost cell is in parentheses and equals the published cost. Examples: Alteryx -96,000, SurveyMonkey -113,000, Solvias -351,000 CHF line, Helios -190,000. Healthco GBP DDTL -52,000 was read from the cell because the filer tags it as a USD InvestmentOwnedBalancePrincipalAmount 52 on C_685134a3-ee26-40f5-a9d3-35bc32dae12b; I verified the facts. 22 of the 23 are filer-tagged negatives. Same as_filed reason the owner accepted for other quarters of this fund.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Alteryx, Inc. - Revolving Credit Facility (11) S + 6.00 % 0.75 % 9.73 % 3/19/2031 - ( 96 ) ( 480 ) ( 0.01 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e2ce0fe3956c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2023-09-30: 9 flagged rows rebuilt, identical to affected_rows. Printed parenthesised costs equal the published costs (Accession -716,000, Chromalloy -153,000, Frontgrade -172,000, Systems Planning -43,000, Natural Partners -41,000, Momentive -108,000, Wood Mackenzie -77,000, Boasso -159,000, Beacon -42,000). Same reasoning as the other C107 quarters.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062232",
+     "text": "Accession Risk Management - Delayed Draw Term Loan (8)(9)(12) S + 6.00 % 0.75 % 11.31 % 10/30/2026 - ( 716 ) ( 726 ) ( 0.09 )"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "par-currency-published-usd-against-printed-marker",
+   "outcome": "supported",
+   "rationale": "All 39 currency corrections re-read. Every non-USD par carries usd = par x the FRED H.10 rate of the date, read directly from data/reference/fx_fred (GBP 1.2709/1.2214/1.2743/1.2637/1.3399/1.3443/1.3447; CHF 1.2598/1.2553/1.2601/1.2373). A full mszf sweep finds one printed-marker mismatch, CITGO 2024-06-30, which is intended. The CITGO override of a printed CAD marker is justified: the same par 2,121 prints with no marker in every other quarter from 2023-03-31 to 2026-03-31; cost 2,141 sits between 2,144 and 2,139; as CAD the cost would be 138 pct of par. Sheffield 2023-06/09/12 as GBP is an inference against the filer's own legend ('denominated in U.S. dollars unless noted otherwise'), but cost/par 1.237-1.238 and fv/par about 1.26 match the 2024-03-31 GBP line exactly. Accepted with that residual risk. Minor defect: Healthco DDTL 2026-06-30 keeps principal_fx_status source_usd and fx 1.0 on a GBP row with no par. The proposed marker rule is sound; CITGO would be its one known false positive.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096970",
+     "text": "CITGO Petroleum Corp. N/A N/A 6.38 % 6/15/2026 CAD 2,121 2,141 2,108 0.13"
+    },
+    {
+     "accession": "0000950170-23-041924",
+     "text": "Sheffield United F.C. UK(8)(9)(10)(11) N/A N/A 13.07 % 7/22/2026 14,704 18,190 18,579 2.66"
+    }
+   ]
+  },
+  {
+   "observation_key": "cost-sign-lost-on-undrawn-line-tagged-positive",
+   "outcome": "supported",
+   "rationale": "msza had 24 rows with positive cost and negative fair value, all on dash-par lines with parenthesised printed cost. mszf has 0 such rows; the only remaining fv<0 and cost>0 row is Ligado Backstop 2025-12-31, which prints 401 401 ( 14 ) and is as printed. Across rg2, positive cost on undrawn negative-fv rows occurs only at this fund. The proposed sign-vs-fv check on dash-par rows would have caught all 24 with no false positive in rg2.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096970",
+     "text": "DISA Holdings Corp. - Delayed Draw Term Loan (8)(9)(12) S + 5.00 % 0.01 % 10.32 % 9/9/2028 - ( 80 ) ( 80 ) ( 0.00 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "cost-tagged-as-usd-principal-on-foreign-par-row",
+   "outcome": "supported",
+   "rationale": "Verified in the 2026-06-30 instance. The EUR context carries InvestmentOwnedBalancePrincipalAmount U_EUR 23,138 and U_USD 26,623, with no InvestmentOwnedAtCost. The GBP context carries U_GBP 5,000 and U_USD 6,631. The DDTL carries only U_USD 52. The comparative contexts tag InvestmentOwnedAtCost normally. mszf publishes cost 26,623,000, 6,631,000 and -52,000 with par withdrawn on the DDTL, matching the page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Healthco Investment LTD GBP UK(9)(10) SO + 5.75 % 0.00 % 9.23 % 9/9/2032 GBP 5,000 6,631 6,514 0.19"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-printed-company",
+   "outcome": "supported",
+   "rationale": "All 18 issuer_name corrections compared with the row's own printed line; each mszf value is the printed company. The JLL page prints 'J LL'; JLL is the right reading. The field diff mszf vs msza shows exactly 18 issuer_name rows. Nit: declared_changes says USA Debusk is 5 rows; the corrections touch 4.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "USA Debusk LLC (8) S + 5.25 % 0.75 % 9.85 % 4/30/2031 16,603 16,362 16,369 0.77"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-scale-step-overwrites-printed-share-count",
+   "outcome": "supported",
+   "rationale": "Metropolis Class D 24 and Warrant 4 at 2026-06-30 match the printed cells and the filer's InvestmentOwnedBalanceShares tags (24 and 4); msza published 8,846 on both. Protective 2023-12-31 prints 31,597 and is published as printed. Residual: the other quarters print 30 to 38 for the same holding, so the published chain jumps about 1,000x at 2023-12-31. That is as printed, but it is a known discontinuity a reader will hit.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.05"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-on-wrong-position",
+   "outcome": "supported",
+   "rationale": "The FY2025 10-K defines (12) as 'Investment was on non-accrual status as of December 31, 2025'. Legends' 2025-12-31 printed line has no footnote, a mark at 98.5 of par, and accruing PIK. The other Legends lines that quarter carry (6)(11) only. The withdrawal is correct, and the proposed footnote-number check is the right detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-124538",
+     "text": "Legends Hospitality Holding Company S + 5.50 % 0.75 % 9.23 % (Incl 2.75 % PIK) 8/22/2031 65,519 64,436 64,504 1.97"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-revolver-on-funded-term-loan",
+   "outcome": "supported",
+   "rationale": "FEG 2024-09-30 prints no revolving wording on a funded 89,775 line, and the type is withdrawn. Sky Merger 2024-12-31 prints 'Delayed Draw Term Loan' and is typed so. The proposed head-wording detector is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "FEG, Inc. (8) S + 5.25 % 1.00 % 10.36 % 5/10/2030 89,775 88,046 88,095 4.15"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-joins-different-instruments",
+   "outcome": "supported",
+   "rationale": "The Alteryx sentences are now correct in the observation, the parked entry and the fixes line, and they match mszf. The two revolvers (-142,000 at 2024-03-31, -137,000 at 2024-06-30) share pid 440dfed1. The 2024-03-31 delayed draw (-445,000) is alone on 46d52e39. Only the delayed-draw force_pair to the 2024-06-30 drawn line (37,301,000, pid d97800fc) failed. The baseline wrong links are named and parked with a mechanism: DISA revolver to term loan, CoreWeave Add on to DDTL, Kite UK and Sheffield term loan to DDTL, the Ligado Roll-up/DDTL swap and DIP break, and Four Winds. The Ligado fixes (two overrides, four identity contexts) were verified in the first round. action parked is accurate. The proposed chain-consistency detector would list these links.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096970",
+     "text": "Alteryx, Inc. - Revolving Credit Facility (8)(9)(12) S + 6.50 % 0.75 % 11.82 % 3/19/2031 - ( 137 ) ( 137 ) ( 0.01 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-of-net-assets-sign-differs-from-printed",
+   "outcome": "supported",
+   "rationale": "pct_of_net_assets is not a correctable field (D-157). The calculated column carries the right sign, and the proposed sign check is concrete and cheap. Left as recorded.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "Systems Planning and Analysis, Inc. - Delayed Draw Term Loan A (8)(9)(12) S + 5.90 % 1.00 % 10.26 % 8/16/2027 7,676 7,368 7,506 0.35"
+    }
+   ]
+  },
+  {
+   "observation_key": "share-count-tagged-as-usd-principal-times-1000",
+   "outcome": "supported",
+   "rationale": "Verified in the instances. 0001193125-26-222241 tags Metropolis Class B, D and Warrant as InvestmentOwnedBalancePrincipalAmount U_USD with decimals -3 and scale 3 (8,162 / 24 / 4). 0001193125-26-352436 tags InvestmentOwnedBalanceShares U_shares with decimals 0 (8,846 / 24 / 4), plus the comparatives in the old form. The printed digits equal the shares tag. This is a convention question for the owner, so not_feasible as a rule is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Class D Preferred Stock 5/16/2034 24 778 778 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "class-d-preferred-rate-in-member-label-not-printed",
+   "outcome": "supported",
+   "rationale": "The Class D printed line has no rate cell, while Class B prints 17.50 % PIK. The withdrawal is correct. 2025-12-31 and 2026-03-31 publish no Class D rate, which is consistent.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.50 % PIK 5/16/2034 8,846 8,608 8,846 0.25"
+    }
+   ]
+  },
+  {
+   "observation_key": "agenta-printed-margin-reader-cannot-read-bbsy-benchmark",
+   "outcome": "supported",
+   "rationale": "The rewritten observation names the right mechanism. The repaired agentA rule falls back on this row because the printed-margin reader does not read a margin after 'B +'; mszf agent_a_flags.csv records printed_check field_not_printed. It routes to REQ-msz-3 rather than a disposition, as the 2026-11-04 ruling requires. existing_detector with a repair reference is acceptable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47"
+    }
+   ]
+  },
+  {
+   "observation_key": "fy2021-and-2022-quarters-not-extracted",
+   "outcome": "supported",
+   "rationale": "Corrected facts verified against the cache. 0000950170-22-009862 is the 10-Q for the quarter ended 2022-03-31 (711,196 current, 692,357 as the 2021-12-31 comparative); no FY2021 10-K is cached. The 2022 filings print full schedules: 0000950170-22-017435 shows 770,729, 0000950170-22-025054 shows 890,043, and FY2022 10-K 0000950170-23-009562 shows 981,738. None has ix facts. REQ-msz-1 is re-recorded (DC-0001849894-d10ce9107e, supersedes dd33aa129c) and tells the owner that DS-LARGE3-F28-1849894 rests on a false statement. Agreed: this is an owner decision, like BCRED REQ-bcz-2.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-017435",
+     "text": "Total Investments - non-controlled/non-affiliated $ 802,022 $ 770,729 227.15 %"
+    },
+    {
+     "accession": "0000950170-23-009562",
+     "text": "Total Investments - non-controlled/non-affiliated $ 1,031,067 $ 981,738 203.74 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-msz-3",
+   "outcome": "supported",
+   "rationale": "This is a verification bug, not an acceptance change. The published values equal the page and the tags, and the repaired agentA check fails the row only because its printed-margin reader cannot parse 'B + 5.50 %' (field_not_printed in mszf agent_a_flags.csv). The next action is specific: read the margin after a B + code, test that a wrong published spread on a B + row still fails, and rerun the agentA battery on every accepted sandbox. Nothing is loosened.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": {
+  "groups": {
+   "par_currency_39": "supported: arithmetic and H.10 rates correct on every corrected row with a par; dash/no-par lines carry the currency only; CITGO override justified; Sheffield 2023 accepted as inference. Minor: Healthco DDTL 2026-06-30 principal_fx_status source_usd / fx 1.0 on a GBP row with no par.",
+   "cost_sign_24": "supported: all 24 flip to the printed negative; cohort convention publishes negative cost on undrawn lines (5 other rg2 funds, MSD from 2023-12-31). C107 x4 as_filed is the right class (monitor rule reporting a true printed value; owner-accepted reason for this fund), not a check misfire.",
+   "healthco_2026_06_30": "supported: filer tags printed cost as U_USD InvestmentOwnedBalancePrincipalAmount; cost read from cell, par -52,000 withdrawn.",
+   "names_counts_single_rows": "supported: 18 issuer names, 7 descriptions, Metropolis 24/4, Protective 31,597, Sheffield spread 5.25 Floating, Legends non-accrual withdrawn, FEG type withdrawn, Sky Merger DDTL, Metropolis Class D rate/PIK withdrawn. Nit: Ligado 'DIP Facility - Roll-up' description vs printed 'DIP Roll-up' (member text, harmless).",
+   "retirements_VR-FL-1849894-01..04": "supported: store regenerated from mszf (evidence and rerun now cite mszf); retire_check.py mszf 4/4 PASS; my rv_retire.py 4/4 pass with every plant failing; dup_retirements.py 0 duplicates.",
+   "REQ-msz-1": "supported: re-recorded as DC-0001849894-d10ce9107e with corrected facts; the earlier entry dd33aa129c stays in the append-only log, superseded.",
+   "REQ-msz-2": "supported: instance tags verified (U_USD dec -3 scale 3 to 2026-03-31; InvestmentOwnedBalanceShares U_shares dec 0 at 2026-06-30).",
+   "field_diffs": "mszf vs msza: only MSD rows, columns match the declared corrections (issuer_name 18, cost 27, ccy 39, usd 23, fx 22, fx_status 17, shares 3, position_id 18). msza vs rg2: 219 rows added = 2026-06-30 (rg2 has 0 MSD rows at that date); entity_id 289, canonical_name 147, position_id 175, instrument_type 1, corrected_fields 1 are external shared-code effects. position_id changes in mszf vs msza reviewed one by one: no new wrong link (Alteryx revolver, Cook & Boardman, DISA revolver 2024, JLL, Ligado DIP, USA Debusk all now consistent).",
+   "not_done_by_reviewer": "20-row random page sample (orchestrator's); maturity-extension chains beyond those named above; lien/industry against printed headings.",
+   "proposals": "MYOB proposal withdrawn. X11, A01 and C107 now carry rows and a per-quarter tag on each filing quote, and their reruns run. Rows checked against mszf: X11 2 = the 2 flagged rows; C107 46 = the 6+8+9+23 flagged rows; A01 2 = Midwest Veterinary (ROW-6e5cef6619d15f16) and Metropolis Class A preferred (ROW-d034724cf1745220), both 2024-09-30. Nit: rows are bare row_id strings, not the store schema's {cik, quarter, row_id} objects; check that the acceptance tooling resolves them.",
+   "healthco_fx_status": "parked with mechanism (no published figure wrong; status and rate are the no-par USD default). Accepted as parked."
+  },
+  "round": "final, after the second response: all first-round rejections resolved."
+ }
+}

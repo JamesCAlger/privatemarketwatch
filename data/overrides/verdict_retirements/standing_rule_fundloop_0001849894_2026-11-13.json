@@ -1,0 +1,177 @@
+{
+ "_note": "MSD Investment Corp. retirements (msz run, 2026-11-13) under the owner standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1849894-01",
+   "review_id": "RVQ_REV_8b9df1e4fe96",
+   "verdict_sha256": "88cc90103b724fbf5a71e26583315a0e6731823251a6d82b44b7a9e3daaa4a11",
+   "cik": "0001849894",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found four equity rows whose printed Par Amount / Shares count was not extracted (C04 0 of 4). In the published data of the quarter every equity row whose line prints a count carries it in shares_held (4 of 4), the four cited rows included (8,162, 24, 4, 3,478).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published equity rows at 2025-12-31 in sandbox mszf with a printed Par Amount / Shares count: 4, shares_held equal to the printed count: 4; the four cited rows (Class B Preferred Stock, Class D Preferred Stock, Warrant, S.A.F.E. Management Equity) are published with 8,162, 24, 4, 3,478"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "Metropolis Technologies Inc. - Class D Preferred Stock - 24 778 778 0.02",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "S.A.F.E. Management Equity (11) 11/24/2031 3,478 3,478 3,478 0.11",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001849894/retire_check.py (read-only; printed line = the inline-XBRL table row carrying the row own fair-value fact; each check also run on planted wrong values and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001849894/joined.py mszf && python scratch/fund_runs/0001849894/retire_check.py mszf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-msd-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1849894-02",
+   "review_id": "RVQ_REV_239a5adbc76c",
+   "verdict_sha256": "07e02313525093fe20fdc923bfadb8151433cecb8ba8fe86b145717bd6f1a741",
+   "cik": "0001849894",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: The verdict found four equity rows whose printed Par Amount / Shares count was not extracted (C04 0 of 4). In the published data of the quarter every equity row whose line prints a count carries it in shares_held (4 of 4), the four cited rows included (8,162, 24, 4, 5,000).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published equity rows at 2026-03-31 in sandbox mszf with a printed Par Amount / Shares count: 4, shares_held equal to the printed count: 4; the four cited rows (Class B Preferred Stock, Class D Preferred Stock, Warrant, S.A.F.E. Management Equity) are published with 8,162, 24, 4, 5,000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "Metropolis Technologies Inc. - Class D Preferred Stock 24 778 778 0.02",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "S.A.F.E. Management Equity 11/24/2031 5,000 5,054 5,000 0.15",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001849894/retire_check.py (read-only; printed line = the inline-XBRL table row carrying the row own fair-value fact; each check also run on planted wrong values and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001849894/joined.py mszf && python scratch/fund_runs/0001849894/retire_check.py mszf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-msd-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1849894-03",
+   "review_id": "RVQ_REV_9bc8e5a94f50",
+   "verdict_sha256": "cad783c0511b2d060ecb5684ba44d1e4eb3adc81a0c0f446369ee06250a4d2b4",
+   "cik": "0001849894",
+   "engine": "row_validation",
+   "rule_name": "FX01",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found foreign-currency par (Healthco Investment LTD) published without principal_amount_usd. In the published data of the quarter all 18 rows whose line prints a non-USD marker carry that currency, and every one with a par carries principal_amount_usd = par x the FRED H.10 rate of 2025-12-31 and the same rate; no row is published in a foreign currency without a printed marker.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published rows at 2025-12-31 in sandbox mszf whose line prints a non-USD marker: 18 (of which with a par: 16); each has principal_amount_currency equal to the marker and, with a par, principal_amount_usd = par x FRED H.10 rate of the date and the same rate in principal_fx_rate_to_usd; rows published in a foreign currency without a printed marker: 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "Healthco Investment LTD EUR UK(9)(10) E + 5.75 % 0.00 % 7.85 % 9/9/2032 EUR 27,178 26,596 26,656 0.81",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "Healthco Investment LTD GBP UK(9)(10) SO + 5.75 % 0.00 % 9.72 % 9/9/2032 GBP 6,738 6,624 6,609 0.20",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001849894/retire_check.py (read-only; printed line = the inline-XBRL table row carrying the row own fair-value fact; each check also run on planted wrong values and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001849894/joined.py mszf && python scratch/fund_runs/0001849894/retire_check.py mszf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-msd-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1849894-04",
+   "review_id": "RVQ_REV_b461490d7399",
+   "verdict_sha256": "e39221000c1255e08fd49025115b37b229f645381632d3c5d50a4dab95f0cfcb",
+   "cik": "0001849894",
+   "engine": "row_validation",
+   "rule_name": "FX01",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: The verdict found foreign-currency par (Inspired Pet Nutrition) published without principal_amount_usd. In the published data of the quarter all 23 rows whose line prints a non-USD marker carry that currency, and every one with a par carries principal_amount_usd = par x the FRED H.10 rate of 2026-03-31 and the same rate; no row is published in a foreign currency without a printed marker. The verdict cites Inspired Pet Nutrition lines (EUR 49,921, GBP 104,431) that are the 2025-12-31 comparative lines printed in this filing; those rows are published correctly at 2025-12-31 (same checks, FX01 2025-12-31).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published rows at 2026-03-31 in sandbox mszf whose line prints a non-USD marker: 23 (of which with a par: 18); each has principal_amount_currency equal to the marker and, with a par, principal_amount_usd = par x FRED H.10 rate of the date and the same rate in principal_fx_rate_to_usd; rows published in a foreign currency without a printed marker: 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "Inspired Pet Nutrition - Delayed Draw Term Loan UK(9)(10)(11) SO + 5.50 % 0.75 % 9.22 % 9/2/2032 GBP 2,529 3,342 3,275 0.10",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "Inspired Pet Nutrition EUR - Delayed Draw Term Loan Add on UK(9)(10) E + 5.50 % 0.75 % 7.62 % 9/2/2032 EUR 10,000 11,571 11,392 0.35",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001849894/retire_check.py (read-only; printed line = the inline-XBRL table row carrying the row own fair-value fact; each check also run on planted wrong values and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001849894/joined.py mszf && python scratch/fund_runs/0001849894/retire_check.py mszf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-msd-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

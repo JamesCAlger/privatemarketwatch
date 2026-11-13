@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "msdxc",
+ "sandbox": "mszf",
  "dispositions": [
   {
    "disposition_id": "PD-X11-1849894-1",
@@ -11,178 +11,34 @@
     "0001849894"
    ],
    "quarters": [
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
+    "2026-06-30"
    ],
-   "statement": "Every flagged row (34 in nine quarters, fair value 1 to 162 thousand each) is an undrawn delayed-draw or revolving line. The schedule prints a dash in the Par Amount column and a small fair value, the mark on the commitment; the same figure is in the unfunded-commitments table of the notes. No principal fact is filed on any of the contexts. No fix applies: there is no par on the page to declare.",
+   "statement": "Every flagged row (34 in nine quarters, fair value 1 to 162 thousand each) is an undrawn delayed-draw or revolving line. The schedule prints a dash in the Par Amount column and a small fair value, the mark on the commitment; the same figure is in the unfunded-commitments table of the notes. No principal fact is filed on any of the contexts. No fix applies: there is no par on the page to declare. The 2026-06-30 quarter adds two such rows (Sky Merger Sub delayed draw, S.A.F.E. Management delayed draw A), both printed with a dash for par. Named rows: Sky Merger Sub, LLC 2026-06-30 (130,000); S.A.F.E. Management 2026-06-30 (12,000).",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "accession": "0000950170-24-058054",
-     "verbatim": "Momentive Global - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.33 % 5/31/2029 - ( 98 ) 45 0.00",
-     "quote": "'Momentive Global - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.33 % 5/31/2029 - ( 98 ) 45 0.00': 2024-03-31, a dash for par, cost -98, fair value 45."
+     "accession": "0001193125-26-352436",
+     "verbatim": "Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.35 % 1.50 % 10.08 % 5/28/2029 - - 130 0.00",
+     "quote": "'Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.35 % 1.50 % 10.08 % 5/28/2029 - - 130 0.00': 2026-06-30, par a dash, fair value 130,000.",
+     "quarter": "2026-06-30"
     },
     {
      "source": "filing",
-     "accession": "0000950170-24-058054",
-     "verbatim": "Sandlot Baseball Borrower Co. - Delayed Draw Term Loan (8)(9)(12) S + 5.75 % 1.00 % 11.05 % 12/27/2028 - 34 33 0.00",
-     "quote": "'Sandlot Baseball Borrower Co. - Delayed Draw Term Loan (8)(9)(12) S + 5.75 % 1.00 % 11.05 % 12/27/2028 - 34 33 0.00': 2024-03-31, the second flagged row, a dash for par."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-096970",
-     "verbatim": "PetVet Care Centers - Delayed Draw Term Loan (9)(12) S + 6.00 % 0.75 % 11.32 % 11/15/2030 - ( 57 ) 52 0.00",
-     "quote": "'PetVet Care Centers - Delayed Draw Term Loan (9)(12) S + 6.00 % 0.75 % 11.32 % 11/15/2030 - ( 57 ) 52 0.00': 2024-06-30; the Boasso incremental, Foundation Risk incremental and Sky Merger delayed-draw lines of that filing print the same shape (- ( 19 ) 10, - ( 48 ) 25, - - 5)."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-124249",
-     "verbatim": "CareVet LLC - Delayed Draw Term Loan B (8)(9)(12) S + 6.00 % 2.00 % 10.59 % 6/18/2029 - 37 38 0.00",
-     "quote": "'CareVet LLC - Delayed Draw Term Loan B (8)(9)(12) S + 6.00 % 2.00 % 10.59 % 6/18/2029 - 37 38 0.00': 2024-09-30; the other five flagged lines (Boasso, Foundation Risk, PetVet, Sky Merger, TIC Bidco) also print a dash for par."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-042155",
-     "verbatim": "CareVet LLC - Delayed Draw Term Loan B (12) S + 6.00 % 2.00 % 10.31 % 6/18/2029 - 69 71 -",
-     "quote": "'CareVet LLC - Delayed Draw Term Loan B (12) S + 6.00 % 2.00 % 10.31 % 6/18/2029 - 69 71 -': 2024-12-31; Boasso incremental, PetVet and Sky Merger delayed-draw lines the same."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.60 % 1.50 % 10.90 % 5/28/2029 - - 52 -",
-     "quote": "'Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.60 % 1.50 % 10.90 % 5/28/2029 - - 52 -': 2025-03-31; Boasso incremental (- ( 12 ) 12) and Spartan College delayed draw (- 1 1) the same."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-108316",
-     "verbatim": "Spartan College LLC - Delayed Draw Term Loan (11) S + 7.00 % 1.50 % 11.29 % 3/25/2031 - 16 18 -",
-     "quote": "'Spartan College LLC - Delayed Draw Term Loan (11) S + 7.00 % 1.50 % 11.29 % 3/25/2031 - 16 18 -': 2025-06-30; Sandlot delayed draw 2 (- 8 10) and Sky Merger (- - 68) the same."
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-25-280735",
-     "verbatim": "Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.60 % 1.50 % 10.58 % 5/28/2029 - - 84 -",
-     "quote": "'Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.60 % 1.50 % 10.58 % 5/28/2029 - - 84 -': 2025-09-30; 7Ridge (- 33 34), Sandlot delayed draw 2 (- 46 47) and Spartan College (- 32 35) the same."
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-124538",
-     "verbatim": "S.A.F.E. Management - Delayed Draw Term Loan B (11) S + 4.75 % 0.00 % 8.41 % 11/24/2031 - 3 3 -",
-     "quote": "'S.A.F.E. Management - Delayed Draw Term Loan B (11) S + 4.75 % 0.00 % 8.41 % 11/24/2031 - 3 3 -': 2025-12-31; delayed draws A and C (- 2 2) and Sky Merger (- - 99) the same."
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-222241",
-     "verbatim": "CareVet LLC - Delayed Draw Term Loan D (11) S + 6.00 % 2.00 % 9.69 % 6/18/2029 - 16 162 -",
-     "quote": "'CareVet LLC - Delayed Draw Term Loan D (11) S + 6.00 % 2.00 % 9.69 % 6/18/2029 - 16 162 -': 2026-03-31; S.A.F.E. delayed draw A (- 7 7), Sky Merger (- - 115) and Trillium FlowControl (- ( 13 ) 24) the same."
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-222241",
-     "verbatim": "Sky Merger Sub, LLC Delayed Draw 5/28/2026 12,500 115",
-     "quote": "'Sky Merger Sub, LLC Delayed Draw 5/28/2026 12,500 115': the unfunded-commitments table of the notes lists the same line as an undrawn commitment of 12,500 with the same fair value."
+     "accession": "0001193125-26-352436",
+     "verbatim": "S.A.F.E. Management - Delayed Draw Term Loan A (11) S + 4.75 % 2.00 % 8.48 % 11/24/2031 - 12 12 0.00",
+     "quote": "'S.A.F.E. Management - Delayed Draw Term Loan A (11) S + 4.75 % 2.00 % 8.48 % 11/24/2031 - 12 12 0.00': 2026-06-30, par a dash, fair value 12,000.",
+     "quarter": "2026-06-30"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "x11-undrawn-line-par-printed-as-dash"
-  },
-  {
-   "disposition_id": "PD-C04-1849894-2",
-   "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "C04",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30"
-   ],
-   "statement": "The equity rows left without a unit count are two preferred stocks, Xponential Fitness and Accession Risk Management, whose 'Par Amount / Shares' cell the filer prints as a dash and for which it files no share-count or principal fact. Every equity row whose cell prints a figure now publishes it (the column note reads 'Equity investments are recorded as number of shares owned'; 23 counts set from the page in this run). With one or two dash rows among two to six equity rows the check's 70 pct bar is missed in nine quarters. No fix applies: there is no figure on the page to publish.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0001193125-26-222241",
-     "verbatim": "Equity investments are recorded as number of shares owned.",
-     "quote": "'Equity investments are recorded as number of shares owned.': the note to the 'Par Amount / Shares' column, printed in all 13 filings; the basis for reading a printed figure on an equity row as a count."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-021707",
-     "verbatim": "Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 284 395 0.07",
-     "quote": "'Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 284 395 0.07': 2023-03-31, a dash; 1 of 2 equity rows has a count."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-041924",
-     "verbatim": "Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 281 235 0.03",
-     "quote": "'Xponential Fitness LLC - Series A Preferred Stock (8)(9)(11) 6.50 % 7/27/2031 - 281 235 0.03': 2023-06-30, a dash; 1 of 2."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-062232",
-     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 97 97 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 97 97 0.01': 2023-09-30, a dash; the Xponential line of the same filing prints '- 278 222 0.03'; 1 of 3."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-058054",
-     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 106 106 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 106 106 0.01': 2024-03-31, a dash; Xponential prints '- 272 224 0.02'; 1 of 3."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-096970",
-     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 109 110 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 109 110 0.01': 2024-06-30, a dash; Xponential prints '7.5 % PIK 7/27/2031 - 273 206 0.01'; 4 of 6."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-124249",
-     "verbatim": "Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 113 114 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock (8)(9) 13.25 % PIK - 113 114 0.01': 2024-09-30, a dash; Xponential prints '- 270 189 0.01'; 4 of 6."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-042155",
-     "verbatim": "Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 117 118 -",
-     "quote": "'Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 117 118 -': 2024-12-31, a dash; Xponential prints '- 267 189 0.01'; 4 of 6."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 121 123 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 121 123 0.01': 2025-03-31, a dash; Xponential prints '- 261 174 0.01'; 4 of 6."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-108316",
-     "verbatim": "Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 125 132 0.01",
-     "quote": "'Accession Risk Management - Preferred Stock 13.25 % PIK 8/15/2033 - 125 132 0.01': 2025-06-30, a dash; Xponential prints '- 258 174 0.01'; 3 of 5."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "c04-share-cell-printed-as-dash"
+   "rerun": "python scripts/v05_evidence/flagged.py mszf X11 0001849894 2026-06-30 30",
+   "decided_by": "PROPOSED by agent 2026-11-13 (fund loop 2026-11-13 (MSD, sandbox mszc)); not accepted by the owner",
+   "decided_on": "2026-11-13",
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "rows": [
+    "ROW-299099730fa8c6fd",
+    "ROW-6334ae13423b9c90"
+   ]
   },
   {
    "disposition_id": "PD-A01-1849894-3",
@@ -193,377 +49,189 @@
     "0001849894"
    ],
    "quarters": [
-    "2023-09-30"
-   ],
-   "statement": "In the 10-Q for 2023-09-30 the filer put three subtotal figures on the wrong members: the Wholesale subtotal (35,982) and the Transportation: Cargo subtotal (65,402) are tagged on each other's members, and the Second Lien Debt section total (219,547) is tagged on the Second Lien Debt Telecommunications member, whose one row is 97. On the page each subtotal equals its rows. No subtotal is published and the published rows equal the filed total, so there is nothing to fix in the data.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-23-062232",
-     "verbatim": "DFS Holdings Company, Inc. (8) S + 7.10 % 0.75 % 12.42 % 1/31/2029 22,043 21,442 21,759 2.69 35,348 35,982 4.45 Total First Lien Debt 1,494,350 1,491,527 184.60 %",
-     "quote": "'DFS Holdings Company, Inc. (8) S + 7.10 % 0.75 % 12.42 % 1/31/2029 22,043 21,442 21,759 2.69 35,348 35,982 4.45 Total First Lien Debt 1,494,350 1,491,527 184.60 %': 35,982 is the printed Wholesale subtotal (12,622 + 1,601 + 21,759); the check finds it on the Transportation: Cargo member."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-062232",
-     "verbatim": "Boasso Global (8) S + 6.75 % 0.75 % 12.08 % 7/3/2028 59,078 57,416 58,581 7.25 63,951 65,402 8.09 Transportation: Consumer",
-     "quote": "'Boasso Global (8) S + 6.75 % 0.75 % 12.08 % 7/3/2028 59,078 57,416 58,581 7.25 63,951 65,402 8.09 Transportation: Consumer': 65,402 is the printed Transportation: Cargo subtotal; the check finds it on the Wholesale member."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-062232",
-     "verbatim": "FirstLight Fiber - 2nd Lien Term Loan (9) S + 7.50 % 0.00 % 12.81 % 7/23/2026 100 98 97 0.01 Total Second Lien Debt 228,495 219,547 27.17 %",
-     "quote": "'FirstLight Fiber - 2nd Lien Term Loan (9) S + 7.50 % 0.00 % 12.81 % 7/23/2026 100 98 97 0.01 Total Second Lien Debt 228,495 219,547 27.17 %': the section total follows the one Telecommunications row and carries that industry's member."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "a01-subtotal-tagged-on-wrong-member"
-  },
-  {
-   "disposition_id": "PD-A01-1849894-4",
-   "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2024-06-30",
     "2024-09-30"
    ],
-   "statement": "The subtotal and its rows sit on members that spell the heading differently, so the check cannot pair them. 2024-06-30: the First Lien Services: Consumer subtotal 328,916 is on the 'Services: Consumer' member, while all its rows but one (CSC Serviceworks, 185) are on members that read 'First Lien Debt Services: FEG, Inc.' and the like, without the word Consumer. 2024-09-30: the Midwest Veterinary second lien loan (35,134) is tagged on a member that begins with the First Lien Services: Consumer heading and then repeats the Second Lien one, which moves three rollups by 35,134 and one by 45,000; and the Metropolis Class A preferred (17,868) is on 'Preferred Equity Consumer' while the subtotal 24,154 is on 'Preferred Equity SERVICES Consumer'. On the page each subtotal equals its rows; the rows are published under the printed lien and industry.",
+   "statement": "The subtotal and its rows sit on members that spell the heading differently, so the check cannot pair them. 2024-06-30: the First Lien Services: Consumer subtotal 328,916 is on the 'Services: Consumer' member, while all its rows but one (CSC Serviceworks, 185) are on members that read 'First Lien Debt Services: FEG, Inc.' and the like, without the word Consumer. 2024-09-30: the Midwest Veterinary second lien loan (35,134) is tagged on a member that begins with the First Lien Services: Consumer heading and then repeats the Second Lien one, which moves three rollups by 35,134 and one by 45,000; and the Metropolis Class A preferred (17,868) is on 'Preferred Equity Consumer' while the subtotal 24,154 is on 'Preferred Equity SERVICES Consumer'. On the page each subtotal equals its rows; the rows are published under the printed lien and industry. Named rows: Midwest Veterinary Partners LLC second lien (35,134, tagged on a First Lien Services: Consumer member) and Metropolis Technologies Inc. Class A preferred (17,868, on Preferred Equity Consumer) at 2024-09-30.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "accession": "0000950170-24-096970",
-     "verbatim": "Vision Purchaser Corp. - Incremental Term Loan (8) S + 6.40 % 1.00 % 11.73 % 6/10/2025 2,485 2,468 2,436 0.15 328,744 328,916 20.13 Sovereign & Public Finance",
-     "quote": "'Vision Purchaser Corp. - Incremental Term Loan (8) S + 6.40 % 1.00 % 11.73 % 6/10/2025 2,485 2,468 2,436 0.15 328,744 328,916 20.13 Sovereign & Public Finance': 2024-06-30, the printed First Lien Services: Consumer subtotal after its last row."
+     "accession": "0000950170-24-124249",
+     "verbatim": "Midwest Veterinary Partners LLC S + 7.60 % 0.75 % 12.71 % 4/26/2029 35,714 35,709 35,134 1.66 Southern Veterinary Partners LLC (8) S + 7.85 % 1.00 % 12.25 % 10/5/2028 45,000 44,264 45,000 2.12 79,973 80,134 3.78 Total Second Lien Debt",
+     "quote": "'Midwest Veterinary Partners LLC S + 7.60 % 0.75 % 12.71 % 4/26/2029 35,714 35,709 35,134 1.66 Southern Veterinary Partners LLC (8) S + 7.85 % 1.00 % 12.25 % 10/5/2028 45,000 44,264 45,000 2.12 79,973 80,134 3.78 Total Second Lien Debt': 2024-09-30: 35,134 + 45,000 = 80,134, the printed Services: Consumer second-lien subtotal; the Midwest row is the one tagged on the first-lien heading member.",
+     "quarter": "2024-09-30"
     },
     {
      "source": "filing",
      "accession": "0000950170-24-124249",
-     "verbatim": "Services: Consumer Midwest Veterinary Partners LLC S + 7.60 % 0.75 % 12.71 % 4/26/2029 35,714 35,709 35,134 1.66 Southern Veterinary Partners LLC (8) S + 7.85 % 1.00 % 12.25 % 10/5/2028 45,000 44,264 45,000 2.12 79,973 80,134 3.78 Total Second Lien Debt 188,782 186,913 8.81 %",
-     "quote": "'Services: Consumer Midwest Veterinary Partners LLC S + 7.60 % 0.75 % 12.71 % 4/26/2029 35,714 35,709 35,134 1.66 Southern Veterinary Partners LLC (8) S + 7.85 % 1.00 % 12.25 % 10/5/2028 45,000 44,264 45,000 2.12 79,973 80,134 3.78 Total Second Lien Debt 188,782 186,913 8.81 %': 2024-09-30, Midwest Veterinary is printed under Second Lien Debt and 35,134 + 45,000 = 80,134."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-124249",
-     "verbatim": "Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,082 6,071 0.29 Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01 24,184 24,154 1.14",
-     "quote": "'Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,082 6,071 0.29 Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01 24,184 24,154 1.14': 2024-09-30, 17,868 + 6,071 + 215 = 24,154; the check pairs only the last two rows (6,286)."
+     "verbatim": "Metropolis Technologies Inc. - Class A Preferred Stock (8)(9) 16.00 % (Incl 11.00 % PIK) 2/13/2034 18,041 17,913 17,868 0.84 Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,082 6,071 0.29 Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01 24,184 24,154 1.14 Total Preferred Equity",
+     "quote": "'Metropolis Technologies Inc. - Class A Preferred Stock (8)(9) 16.00 % (Incl 11.00 % PIK) 2/13/2034 18,041 17,913 17,868 0.84 Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,082 6,071 0.29 Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01 24,184 24,154 1.14 Total Preferred Equity': 2024-09-30: 17,868 + 6,071 + 215 = 24,154, the printed Preferred Equity Services: Consumer subtotal.",
+     "quarter": "2024-09-30"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members"
+   "rerun": "python scripts/v05_evidence/left.py mszf A01 && python scripts/v05_evidence/page_line.py 0001849894 0000950170-24-124249 \"Midwest Veterinary Partners LLC\"",
+   "decided_by": "PROPOSED by agent 2026-11-13 (fund loop 2026-11-13 (MSD, sandbox mszc)); not accepted by the owner",
+   "decided_on": "2026-11-13",
+   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
+   "rows": [
+    "ROW-6e5cef6619d15f16",
+    "ROW-d034724cf1745220"
+   ]
   },
   {
-   "disposition_id": "PD-A01-1849894-5",
+   "disposition_id": "PD-C107-1849894-12",
    "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "A01",
+   "engine": "row_validation",
+   "rule_name": "C107",
    "ciks": [
     "0001849894"
    ],
    "quarters": [
-    "2024-12-31",
-    "2025-03-31"
-   ],
-   "statement": "The 10-K for 2024-12-31 tags the 49,277 Accession Risk Management delayed-draw loan on a second Titan Purchaser member under Automotive, so the Banking, Finance, Insurance & Real Estate subtotal 308,744 finds rows of 259,467; the 10-Q for 2025-03-31 repeats those tags in its comparative schedule. The 10-K also carries the prior-year Second Lien Services: Business subtotal 50,363 on a current-period context. The published row is corrected to Accession Risk Management (row correction of D-099) and carries the Banking industry; the member the filer chose cannot be changed, so the check keeps firing.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-25-042155",
-     "verbatim": "Automotive Titan Purchaser, Inc. S + 6.00 % 1.00 % 10.32 % 3/1/2030 10,979 10,893 11,075 0.46 Banking, Finance, Insurance & Real Estate Accession Risk Management - Delayed Draw Term Loan S + 4.75 % 0.75 % 9.34 % 11/1/2029 49,277 48,703 49,277 2.05",
-     "quote": "'Automotive Titan Purchaser, Inc. S + 6.00 % 1.00 % 10.32 % 3/1/2030 10,979 10,893 11,075 0.46 Banking, Finance, Insurance & Real Estate Accession Risk Management - Delayed Draw Term Loan S + 4.75 % 0.75 % 9.34 % 11/1/2029 49,277 48,703 49,277 2.05': the printed line is under Banking; its tags sit on a Titan Purchaser member."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-042155",
-     "verbatim": "Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco",
-     "quote": "'Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco': the printed Banking subtotal; 308,744 - 259,467 = 49,277."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco",
-     "quote": "'Onbe Inc. S + 5.50 % 1.00 % 9.86 % 7/25/2031 130,000 127,478 127,560 5.31 307,309 308,744 12.85 Beverage, Food & Tobacco': the same subtotal in the 2024-12-31 comparative schedule of the 10-Q for 2025-03-31."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-042155",
-     "verbatim": "Trace3 Inc. (8) L + 7.76 % 0.50 % 13.17 % 10/8/2029 33,750 32,995 33,080 3.53 50,189 50,363 5.37 Services: Consumer",
-     "quote": "'Trace3 Inc. (8) L + 7.76 % 0.50 % 13.17 % 10/8/2029 33,750 32,995 33,080 3.53 50,189 50,363 5.37 Services: Consumer': 50,363 is printed in the December 31, 2023 schedule of the 10-K."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "a01-row-tagged-on-another-issuers-member"
-  },
-  {
-   "disposition_id": "PD-maturity_not_past-1849894-6",
-   "class": "as_filed",
-   "engine": "weak",
-   "rule_name": "maturity_not_past",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2025-03-31"
-   ],
-   "statement": "One loan, Ligado Networks LLC (fair value 1.8M to 4.7M, on non-accrual), is printed and tagged with its original maturity of 11/1/2023 in every later filing. Published is the page.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-24-035561",
-     "verbatim": "Ligado Networks LLC (9)(13) N/A N/A 15.50 % PIK 11/1/2023 12,853 11,071 2,429 0.26",
-     "quote": "'Ligado Networks LLC (9)(13) N/A N/A 15.50 % PIK 11/1/2023 12,853 11,071 2,429 0.26': 10-K for 2023-12-31."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-058054",
-     "verbatim": "Ligado Networks LLC (9)(13) N/A N/A 15.50 % PIK 11/1/2023 12,853 11,071 1,946 0.16",
-     "quote": "'Ligado Networks LLC (9)(13) N/A N/A 15.50 % PIK 11/1/2023 12,853 11,071 1,946 0.16': 10-Q for 2024-03-31."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-096970",
-     "verbatim": "Ligado Networks LLC (8)(9)(13) N/A N/A 15.50 % 11/1/2023 12,853 11,071 1,832 0.11",
-     "quote": "'Ligado Networks LLC (8)(9)(13) N/A N/A 15.50 % 11/1/2023 12,853 11,071 1,832 0.11': 10-Q for 2024-06-30 (an earlier reviewer's 'real error' verdict stands on this quarter; the page shows the date as filed)."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-124249",
-     "verbatim": "Ligado Networks LLC (8)(9)(13) N/A N/A 15.50 % 11/1/2023 12,853 11,071 2,121 0.10",
-     "quote": "'Ligado Networks LLC (8)(9)(13) N/A N/A 15.50 % 11/1/2023 12,853 11,071 2,121 0.10': 10-Q for 2024-09-30."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "Ligado Networks LLC (12) N/A N/A 15.50 % PIK 11/1/2023 14,912 9,605 4,697 0.19",
-     "quote": "'Ligado Networks LLC (12) N/A N/A 15.50 % PIK 11/1/2023 14,912 9,605 4,697 0.19': 10-Q for 2025-03-31 (the second quarter with a standing 'real error' verdict); the DIP loans printed beside it carry 6/30/2025."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-096970",
-     "verbatim": "Equinox Holdings, Inc. (9) S + 3.00 % 1.00 % 8.61 % 3/8/2024 35,976 34,994 35,111 3.74",
-     "quote": "'Equinox Holdings, Inc. (9) S + 3.00 % 1.00 % 8.61 % 3/8/2024 35,976 34,994 35,111 3.74': the row the 2024-06-30 reviewer cited; it stands in the December 31, 2023 schedule of the 10-Q for 2024-06-30."
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82",
-     "quote": "'LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82': the subtotal the 2025-03-31 reviewer cited, after the two lines it sums; excluded by rule."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "maturity-not-past-defaulted-loan-printed-with-original-maturity",
-   "addresses_verdict": {
-    "2024-06-30": "The reviewer cited 'Equinox Holdings, Inc. (9) S + 3.00 % 1.00 % 8.61 % 3/8/2024 35,976 34,994 35,111 3.74' as a prior-period row published at 2024-06-30. That line is printed in the December 31, 2023 schedule of the 10-Q, and the build publishes no Equinox row at 2024-06-30 (sandbox msdxc: Equinox appears at 2023-12-31 only, where 3/8/2024 is not past). The verdict does not describe the current build. The one row the rule flags at 2024-06-30 is Ligado Networks, maturity 11/1/2023 as printed.",
-    "2025-03-31": "The reviewer cited the unlabelled LJ Perimeter Buyer subtotal (cost 21,145, fair value 19,967, no maturity) published as a position. That was a real error and is fixed: rule exclude_2025q1_lj_perimeter_subtotal removes the row, and sandbox msdxc holds the two LJ Perimeter lines only (17,652 and 2,315, both maturing 10/31/2028). The one row the rule flags at 2025-03-31 is Ligado Networks, maturity 11/1/2023 as printed."
-   },
-   "supersedes_real_error_verdict": true
-  },
-  {
-   "disposition_id": "PD-F27-1849894-7",
-   "class": "as_filed",
-   "engine": "fund_financials",
-   "rule_name": "F27",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
+    "2023-03-31",
     "2023-06-30",
     "2023-09-30",
-    "2023-12-31"
+    "2026-06-30"
    ],
-   "statement": "The yield the check compares is the filer's ratio of net investment income to average net assets (13.88, 13.96, 13.83). The fund is levered: its investments are 225, 215 and 234 pct of net assets in these quarters, so income over net assets sits above the portfolio's weighted coupon (11.80, 11.84, 11.55) by more than the check's two points. Both sides are as filed; the rates of the largest loans were read against the page in the earlier reading.",
+   "statement": "Every flagged row (6, 8, 9 and 23 in four quarters) is an undrawn delayed-draw or revolving line whose par cell is a dash and whose cost cell prints a negative figure in parentheses (the unamortised fee against the commitment), with a fair value that is negative or a few thousand dollars; published cost equals the printed cost on every row. At 2023-03-31, 2023-06-30 and 2023-09-30 the filer tagged the cost as a positive number; this run set the sign from the printed line (24 row corrections), which is why the accepted-reason check, which compares with the tag, does not pass on them. At 2026-06-30 the filer tags the cost of the Healthco Investment LTD GBP delayed-draw line as a USD principal fact; the printed cost (52) is published as cost. No fix applies: the value is the page. Named rows by quarter: 2023-03-31 (6 rows): Chromalloy Holdings LLC; DFS Holdings Company, Inc.; Faraday Buyer, LLC; Frontgrade Technologies Inc.; Natural Partners, Inc.; Wood Mackenzie, Inc. | 2023-06-30 (8 rows): Boasso Global; Chromalloy Holdings LLC; DFS Holdings Company, Inc.; Frontgrade Technologies Inc.; Momentive Global; Natural Partners, Inc.; Wood Mackenzie, Inc. | 2023-09-30 (9 rows): Accession Risk Management; Beacon Mobility Corp.; Boasso Global; Chromalloy Holdings LLC; Frontgrade Technologies Inc.; Momentive Global; Natural Partners, Inc.; Systems Planning and Analysis, Inc.; Wood Mackenzie, Inc. | 2026-06-30 (23 rows): Alteryx, Inc.; Boasso Global; CareVet LLC; Cargotuff Buyer LLC; DISA Holdings Corp.; Elessent Clean Technologies Inc.; Four Winds Interactive LLC; Fullsteam; Healthco Investment LTD; Helios UK Bidco Limited; Highgate Hotels, L.P.; LJ Perimeter Buyer, Inc.; Learnosity; Natural Partners, Inc.; Parfums Holdings Co.; RPX Corporation; S4T Holdings Corp; Sky Merger Sub, LLC; Solvias AG; St. Croix; SurveyMonkey Global Inc.; Townsend; True Talent Advisory Borrower, LLC.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
-     "accession": "0000950170-23-041924",
-     "verbatim": "Net investment income to average net assets (5) 13.88 %",
-     "quote": "'Net investment income to average net assets (5) 13.88 %': 10-Q for 2023-06-30, the published income_yield_pct."
+     "accession": "0000950170-23-021707",
+     "verbatim": "Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 11.91 % 11/23/2027 - ( 172 ) ( 174 ) ( 0.03 )",
+     "quote": "'Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 11.91 % 11/23/2027 - ( 172 ) ( 174 ) ( 0.03 )': 2023-03-31, par a dash, printed cost -172,000, published cost -172,000.",
+     "quarter": "2023-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-021707",
+     "verbatim": "Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 11.66 % 1/9/2028 - ( 150 ) ( 154 ) ( 0.03 )",
+     "quote": "'Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 11.66 % 1/9/2028 - ( 150 ) ( 154 ) ( 0.03 )': 2023-03-31, par a dash, printed cost -150,000, published cost -150,000.",
+     "quarter": "2023-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-021707",
+     "verbatim": "Wood Mackenzie, Inc. - Revolving Credit Facility (8)(9)(12) S + 6.75 % 0.75 % 11.66 % 2/1/2028 - ( 86 ) ( 88 ) ( 0.02 )",
+     "quote": "'Wood Mackenzie, Inc. - Revolving Credit Facility (8)(9)(12) S + 6.75 % 0.75 % 11.66 % 2/1/2028 - ( 86 ) ( 88 ) ( 0.02 )': 2023-03-31, par a dash, printed cost -86,000, published cost -86,000.",
+     "quarter": "2023-03-31"
     },
     {
      "source": "filing",
      "accession": "0000950170-23-041924",
-     "verbatim": "Total Investments - non-controlled/non-affiliated $ 1,597,492 $ 1,572,769 224.97",
-     "quote": "'Total Investments - non-controlled/non-affiliated $ 1,597,492 $ 1,572,769 224.97': investments are 224.97 pct of net assets."
+     "verbatim": "Boasso Global - Revolving Credit Facility (8)(9)(12) S + 6.75 % 0.75 % 12.02 % 7/1/2026 - ( 173 ) ( 159 ) ( 0.02 )",
+     "quote": "'Boasso Global - Revolving Credit Facility (8)(9)(12) S + 6.75 % 0.75 % 12.02 % 7/1/2026 - ( 173 ) ( 159 ) ( 0.02 )': 2023-06-30, par a dash, printed cost -173,000, published cost -173,000.",
+     "quarter": "2023-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041924",
+     "verbatim": "Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 12.02 % 1/9/2028 - ( 143 ) ( 143 ) ( 0.02 )",
+     "quote": "'Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 12.02 % 1/9/2028 - ( 143 ) ( 143 ) ( 0.02 )': 2023-06-30, par a dash, printed cost -143,000, published cost -143,000.",
+     "quarter": "2023-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041924",
+     "verbatim": "Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.27 % 11/23/2027 - ( 162 ) ( 135 ) ( 0.02 )",
+     "quote": "'Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.27 % 11/23/2027 - ( 162 ) ( 135 ) ( 0.02 )': 2023-06-30, par a dash, printed cost -162,000, published cost -162,000.",
+     "quarter": "2023-06-30"
     },
     {
      "source": "filing",
      "accession": "0000950170-23-062232",
-     "verbatim": "Net investment income to average net assets (5) 13.96 %",
-     "quote": "'Net investment income to average net assets (5) 13.96 %': 10-Q for 2023-09-30."
+     "verbatim": "Accession Risk Management - Delayed Draw Term Loan (8)(9)(12) S + 6.00 % 0.75 % 11.31 % 10/30/2026 - ( 716 ) ( 726 ) ( 0.09 )",
+     "quote": "'Accession Risk Management - Delayed Draw Term Loan (8)(9)(12) S + 6.00 % 0.75 % 11.31 % 10/30/2026 - ( 716 ) ( 726 ) ( 0.09 )': 2023-09-30, par a dash, printed cost -716,000, published cost -716,000.",
+     "quarter": "2023-09-30"
     },
     {
      "source": "filing",
      "accession": "0000950170-23-062232",
-     "verbatim": "Total Investments - non-controlled/non-affiliated $ 1,753,652 $ 1,736,113 214.87",
-     "quote": "'Total Investments - non-controlled/non-affiliated $ 1,753,652 $ 1,736,113 214.87': 214.87 pct of net assets."
+     "verbatim": "Momentive Global - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.31 % 5/31/2029 - ( 108 ) ( 109 ) ( 0.01 )",
+     "quote": "'Momentive Global - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.31 % 5/31/2029 - ( 108 ) ( 109 ) ( 0.01 )': 2023-09-30, par a dash, printed cost -108,000, published cost -108,000.",
+     "quarter": "2023-09-30"
     },
     {
      "source": "filing",
-     "accession": "0000950170-24-035561",
-     "verbatim": "Net investment income to average net assets (6) 13.83 %",
-     "quote": "'Net investment income to average net assets (6) 13.83 %': 10-K for 2023-12-31."
+     "accession": "0000950170-23-062232",
+     "verbatim": "Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 12.14 % 1/9/2028 - ( 172 ) ( 80 ) ( 0.01 )",
+     "quote": "'Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 12.14 % 1/9/2028 - ( 172 ) ( 80 ) ( 0.01 )': 2023-09-30, par a dash, printed cost -172,000, published cost -172,000.",
+     "quarter": "2023-09-30"
     },
     {
      "source": "filing",
-     "accession": "0000950170-24-035561",
-     "verbatim": "Total Investments - non-controlled/non-affiliated $ 2,208,817 $ 2,197,053 234.35",
-     "quote": "'Total Investments - non-controlled/non-affiliated $ 2,208,817 $ 2,197,053 234.35': 234.35 pct of net assets."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "f27-income-over-net-assets-of-a-levered-fund"
-  },
-  {
-   "disposition_id": "PD-F16-1849894-8",
-   "class": "as_filed",
-   "engine": "fund_financials",
-   "rule_name": "F16",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2022-12-31"
-   ],
-   "statement": "The fourth-quarter 2022 distribution was a regular 0.65 and a special 0.43 a share, 1.08 against 0.57 to 0.63 in the three quarters before; annualised it is 19.83 pct of net asset value against an income ratio of 10.77. Published is the filed figure.",
-   "basis": "read",
-   "evidence": [
+     "accession": "0001193125-26-352436",
+     "verbatim": "Alteryx, Inc. - Revolving Credit Facility (11) S + 6.00 % 0.75 % 9.73 % 3/19/2031 - ( 96 ) ( 480 ) ( 0.01 )",
+     "quote": "'Alteryx, Inc. - Revolving Credit Facility (11) S + 6.00 % 0.75 % 9.73 % 3/19/2031 - ( 96 ) ( 480 ) ( 0.01 )': 2026-06-30, par a dash, printed cost -96,000, published cost -96,000.",
+     "quarter": "2026-06-30"
+    },
     {
      "source": "filing",
-     "accession": "0000950170-23-009562",
-     "verbatim": "December 29, 2022 December 29, 2022 December 30, 2022 $ 0.65 $ 0.43 $ 1.08 $ 19,800 Total distributions $ 2.88 $ 44,967",
-     "quote": "'December 29, 2022 December 29, 2022 December 30, 2022 $ 0.65 $ 0.43 $ 1.08 $ 19,800 Total distributions $ 2.88 $ 44,967': the distributions table of the 10-K for 2022, columns Regular, Special, Per Share Amount, Total Amount."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "f16-special-distribution-in-the-quarter"
-  },
-  {
-   "disposition_id": "PD-PCT01-1849894-9",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "PCT01",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2023-12-31"
-   ],
-   "statement": "The sum of percent of net assets, 234.35, is the filer's printed total; the fund borrows and its investments are 188 to 234 pct of net assets in every quarter.",
-   "basis": "read",
-   "evidence": [
+     "accession": "0001193125-26-352436",
+     "verbatim": "SurveyMonkey Global Inc. - Revolving Credit Facility (11) S + 5.75 % 1.00 % 9.48 % 5/31/2029 - ( 113 ) ( 422 ) ( 0.01 )",
+     "quote": "'SurveyMonkey Global Inc. - Revolving Credit Facility (11) S + 5.75 % 1.00 % 9.48 % 5/31/2029 - ( 113 ) ( 422 ) ( 0.01 )': 2026-06-30, par a dash, printed cost -113,000, published cost -113,000.",
+     "quarter": "2026-06-30"
+    },
     {
      "source": "filing",
-     "accession": "0000950170-24-035561",
-     "verbatim": "Total Investments - non-controlled/non-affiliated $ 2,208,817 $ 2,197,053 234.35 %",
-     "quote": "'Total Investments - non-controlled/non-affiliated $ 2,208,817 $ 2,197,053 234.35 %': 10-K for 2023-12-31."
+     "accession": "0001193125-26-352436",
+     "verbatim": "Solvias AG - Revolving Credit Facility CH(9)(10)(11) SA + 5.50 % 0.75 % 6.25 % 2/27/2030 CHF - ( 351 ) ( 408 ) ( 0.01 )",
+     "quote": "'Solvias AG - Revolving Credit Facility CH(9)(10)(11) SA + 5.50 % 0.75 % 6.25 % 2/27/2030 CHF - ( 351 ) ( 408 ) ( 0.01 )': 2026-06-30, par a dash, printed cost -351,000, published cost -351,000.",
+     "quarter": "2026-06-30"
     }
    ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "pct01-percent-sum-is-the-printed-total-of-a-levered-fund"
-  },
-  {
-   "disposition_id": "PD-SRC_BDC01-1849894-10",
-   "class": "not_applicable",
-   "engine": "row_validation",
-   "rule_name": "SRC_BDC01",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2025-03-31"
-   ],
-   "statement": "The source row reported as missing is the printed subtotal of the two LJ Perimeter Buyer lines, which the filer tagged on a member spelled like a position. Rule exclude_2025q1_lj_perimeter_subtotal removes it; both lines are published.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82",
-     "quote": "'LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82': 17,652 + 2,315 = 19,967, the figure of the flagged context (cost 21,145, percent 0.82, nothing else)."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal"
-  },
-  {
-   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1849894-11",
-   "class": "not_applicable",
-   "engine": "source_recon",
-   "rule_name": "blocking_source_position_like_parser_mismatch",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2025-03-31"
-   ],
-   "statement": "The same excluded LJ Perimeter Buyer subtotal (19,967, 2025-03-31), reported by the reconciliation's second engine.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-25-071644",
-     "verbatim": "LJ Perimeter Buyer, Inc. S + 6.65 % 1.00 % 10.94 % 10/31/2028 19,073 18,695 17,652 0.72 LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82",
-     "quote": "'LJ Perimeter Buyer, Inc. S + 6.65 % 1.00 % 10.94 % 10/31/2028 19,073 18,695 17,652 0.72 LJ Perimeter Buyer, Inc. - Delayed Draw Term Loan S + 6.65 % 1.00 % 10.95 % 10/31/2028 2,452 2,450 2,315 0.10 21,145 19,967 0.82': the two lines and the subtotal that follows them."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "src-missing-row-is-an-excluded-printed-subtotal"
-  },
-  {
-   "disposition_id": "PD-pct_of_net_assets_identity-1849894-12",
-   "class": "as_filed",
-   "engine": "identity",
-   "rule_name": "pct_of_net_assets_identity",
-   "ciks": [
-    "0001849894"
-   ],
-   "quarters": [
-    "2025-09-30"
-   ],
-   "statement": "One row at 2025-09-30 (of 152 tested): the page prints the percent as '0.1 7' across two cells and the filer tagged the first cell, 0.1. Published is the tag; fair value over net assets gives 0.17. No fix applies: percent of net assets is not a field a row correction or a declared value may set.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0001193125-25-280735",
-     "verbatim": "Confluent Holdings LLC - Delayed Draw Term Loan Add On (11) S + 7.00 % 2.00 % 11.00 % 3/28/2029 4,774 4,657 4,660 0.1 7",
-     "quote": "'Confluent Holdings LLC - Delayed Draw Term Loan Add On (11) S + 7.00 % 2.00 % 11.00 % 3/28/2029 4,774 4,657 4,660 0.1 7': the printed 0.17 is split; the context's InvestmentOwnedPercentOfNetAssets fact is 0.001."
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001849894.json",
-   "decided_by": "PROPOSED by agent 2026-10-13 (fund-clearing loop, sandbox msdxc); not accepted by the owner",
-   "decided_on": "2026-10-13",
-   "reason_key": "pct-identity-printed-percent-split-across-cells"
+   "rerun": "python scripts/v05_evidence/flagged.py mszf C107 0001849894 2023-03-31 30 && python scripts/v05_evidence/flagged.py mszf C107 0001849894 2023-06-30 30 && python scripts/v05_evidence/flagged.py mszf C107 0001849894 2023-09-30 30 && python scripts/v05_evidence/flagged.py mszf C107 0001849894 2026-06-30 30",
+   "decided_by": "PROPOSED by agent 2026-11-13 (fund loop 2026-11-13 (MSD, sandbox mszc)); not accepted by the owner",
+   "decided_on": "2026-11-13",
+   "reason_key": "c107-negative-cost-undrawn",
+   "rows": [
+    "ROW-079fce6137b68da1",
+    "ROW-0fae316605e07f4d",
+    "ROW-1753613f6413f71b",
+    "ROW-2bf74a426cdda783",
+    "ROW-2c3eb44b3e2f012e",
+    "ROW-3d289eba6afb9fc8",
+    "ROW-48ce98cb374d6193",
+    "ROW-51e0ca02f7435ada",
+    "ROW-58f8366c229bd755",
+    "ROW-6126335cfa5571f3",
+    "ROW-6152d7fb3e1cc7be",
+    "ROW-65182d8cf3922d66",
+    "ROW-6b396cd8a3830186",
+    "ROW-6be45a70dfeeabbd",
+    "ROW-6c12ac478d07b074",
+    "ROW-71302424c2c7607b",
+    "ROW-7930965f8cfe0ce0",
+    "ROW-873099816d09596b",
+    "ROW-93a97b86e58aa198",
+    "ROW-a820c0afe5428638",
+    "ROW-ad8ea92395d5e8cc",
+    "ROW-b18844f55c946e47",
+    "ROW-b868501398712f27",
+    "ROW-bbe0d2e8fec25ffe",
+    "ROW-bee0918603668443",
+    "ROW-c028dca53a998830",
+    "ROW-c13de7bb154b1088",
+    "ROW-c3d7da1f491c7f74",
+    "ROW-ca94d880b5142889",
+    "ROW-ccd47c4e4dd85989",
+    "ROW-ce6fe67285358bc5",
+    "ROW-d00bfcc23a626f39",
+    "ROW-d60e040ad9cd152a",
+    "ROW-dc0c2481700954e8",
+    "ROW-dfb21f58961c2688",
+    "ROW-e650f9d0802a7d3e",
+    "ROW-e89e67ce361e6db6",
+    "ROW-efa448dc88a8bd67",
+    "ROW-f2c939a944e9e491",
+    "ROW-f34efd70e5f4c391",
+    "ROW-f539883ff8178b37",
+    "ROW-f9008e67a78bbdeb",
+    "ROW-f93300749682ae7b",
+    "ROW-fa80a8967fe8d378",
+    "ROW-fb787e133b534f0e",
+    "ROW-fb8806fbd86448e0"
+   ]
   }
  ]
 }

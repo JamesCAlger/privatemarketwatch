@@ -86,7 +86,7 @@
     ],
     "category_marker_re": "(?i)^(?:Investments Investments|INVESTMENTS INVESTMENTS|nvestments Investments|Member Investments Investments)\\s*-\\s*(?:non[- ]?control(?:led)?(?:/non[- ]?affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED)\\s+(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Senior Secured Debt|Common Equity|Preferred Equity|Equity(?:\\s+and\\s+Other\\s+Investments)?|SECOND LIEN DEBT|FIRST LIEN DEBT)(?:\\s+(?:Aerospace & Defense|Automobile|Automotive|Banking, Finance, Insurance & Real Estate|Beverage, Food & Tobacco|Capital Equipment|Chemicals, Plastics & Rubber|Construction & Building|Consumer Goods:? (?:Durable|Non-durable)|Consumer goods:? Non-durable|Containers, Packaging & Glass|Energy: Oil & Gas|Environmental Industries|Environmental & Facilities Services|Healthcare & Pharmaceuticals|High Tech Industries|Hotel, Gaming & Leisure|Media: (?:Advertising, Printing & Publishing|Broadcasting & Subscription|Diversified & Production)|Metals & Mining|Retail|Services: (?:Business|Consumer)|Sovereign & Public Finance|Telecommunications|Transportation: (?:Cargo|Consumer)|Wholesale|Diversified Support Services|Specialized Consumer Services|Application Software|Advertising|Consumer|and Other Investments))?$",
     "canonical_strip_re": " Interest Rate Floor \\d+[\\d.]*%| Interest Rate \\d+[\\d.]*%",
-    "issuer_name_strip_re": "(?i)(?:\\s*[-\u2013\u2014\ufffd]\\s*|\\s+)(?:(?:Revolving Credit Facility(?: Term Loan)?|Delayed Draw Term Loan|DDTL [A-Z]|Term Loan Add on|Term Loan|Revolver|Add on|Second Incremental|Incremental|Equity)(?:\\s+(?:EUR|GBP))?|One|EUR|GBP)\\s*$"
+    "issuer_name_strip_re": "(?i)(?:\\s*[-–—�]\\s*|\\s+)(?:(?:Revolving Credit Facility(?: Term Loan)?|Delayed Draw Term Loan|DDTL [A-Z]|Term Loan Add on|Term Loan|Revolver|Add on|Second Incremental|Incremental|Equity)(?:\\s+(?:EUR|GBP))?|One|EUR|GBP)\\s*$"
   },
   "staging": {
     "strategy": "prefix_strip",
@@ -263,6 +263,12 @@
     "untagged_values": [
       "0000950170-23-041924 C_b41f8eea-6477-4a10-93bc-0626a3b45a3e principal_amount 1326000",
       "0000950170-23-062232 C_3d93b356-5db0-4c11-ad64-d273e2eb9302 principal_amount 1322000"
+    ],
+    "position_identity_contexts": [
+      "0001193125-26-124538 C_0b702272-b45a-4585-bceb-75579b13fa10 => ligado-dip-backstop-incremental",
+      "0001193125-26-222241 C_e747047e-2fee-4d64-8da1-6c92ccbaea10 => ligado-dip-backstop-incremental",
+      "0001193125-26-352436 C_27ccc0fe-ea46-4bfb-ac28-64541aa3cba4 => ligado-dip-backstop-incremental",
+      "0001193125-26-352436 C_eb4b3f54-ed30-4ec2-8630-b46d5cdf4117 => ligado-dip-ddtl-add-on"
     ]
   }
 }

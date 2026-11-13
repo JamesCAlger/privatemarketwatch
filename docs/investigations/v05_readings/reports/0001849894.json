@@ -1,74 +1,969 @@
 {
  "cik": "0001849894",
- "label": "msdxc",
- "before": "msdxa",
+ "label": "mszf",
+ "before": "rg2",
+ "investigator_id": "agent:fund-msd-20261113",
  "shared_code": false,
- "declared_changes": [
-  {"column": "shares_held", "rows": 23, "why": "unit counts set from the printed 'Par Amount / Shares' cell on 23 equity rows that published none (2024-03-31 x1, 2024-06-30 x4, 2025-03-31 x4, 2025-06-30 x3, 2025-09-30 x3, 2025-12-31 x4, 2026-03-31 x4)"},
-  {"column": "corrected_fields", "rows": 23, "why": "marks the corrected shares_held on the same 23 rows"}
+ "builds_used": [
+  "msza (baseline, no change)",
+  "mszb",
+  "mszc",
+  "mszd (failed at rebuild: force_pair needs replace_end_*)",
+  "msze",
+  "mszf"
  ],
- "rows_added": 0,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 11,
+   "why": "row corrections to the printed company name (18 rows: Parfums, Xponential, USA Debusk, JLL, DISA, Cook & Boardman, Ligado) plus external-code effects on 0 rows"
+  },
+  {
+   "column": "cost",
+   "rows": 24,
+   "why": "24 sign corrections (printed negative, tagged positive) and 3 Healthco 2026-06-30 costs read from the printed cell"
+  },
+  {
+   "column": "shares_held",
+   "rows": 1,
+   "why": "3 printed counts (Metropolis Class D and Warrant 2026-06-30, Protective 2023-12-31)"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 35,
+   "why": "39 printed par currencies (35 + Sheffield 2023 x3 + CITGO 2024-06-30), dash lines included"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 21,
+   "why": "par x FRED H.10 rate on the rows whose currency changed (22) and 1 withdrawn"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 21,
+   "why": "the same rows, the H.10 rate of the date"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 16,
+   "why": "the same rows, reference_fx (source_usd for CITGO)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 75,
+   "why": "row-correction audit column of the rows above"
+  },
+  {
+   "column": "nonaccrual_footnote",
+   "rows": 1,
+   "why": "1 row: Legends Hospitality 2025-12-31 (no footnote on the printed line)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 297,
+   "why": "EXTERNAL shared code in the checkout (position matching / entity ids): present in the untouched msza build; plus the issuer renames"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 153,
+   "why": "EXTERNAL shared code (canonical names): present in msza; plus the issuer renames"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 3,
+   "why": "2 rows: FEG 2024-09-30 funded loan typed Revolver; Sky Merger delayed draw 2024-12-31; plus 1 row from a row correction another agent appended after rg2 (Accession 2024-12-31)"
+  },
+  {
+   "column": "position_id",
+   "rows": 187,
+   "why": "EXTERNAL shared matcher changes present in msza, plus the chain overrides and renames of this run"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 24,
+   "why": "follows cost"
+  },
+  {
+   "column": "nonaccrual_status",
+   "rows": 1,
+   "why": "1 row: follows nonaccrual_footnote"
+  }
+ ],
+ "rows_added": 219,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Round 2. Equity unit counts the page prints and the build published empty: 23 rows in seven quarters (Protective Industrial Products Series A Preferred; Metropolis Class A, Class B and Class D Preferred and Warrant; S.A.F.E. Management Equity). The filer tagged the printed figure with the principal concept, times a thousand, and no share-count fact. Read as a count on the filer's own statement: the column is 'Par Amount / Shares', the schedule is headed '(in thousands, except shares)' and its note, printed in all 13 filings, reads 'Equity investments are recorded as number of shares owned'. One row correction of shares_held per row and quarter, each with its printed line. C04 12 to 9; the two quarters with an earlier real-error verdict (2025-12-31, 2026-03-31) now pass at 4 of 4.",
+  {
+   "what": "Par currency from the printed marker, USD par at the build's FRED H.10 rate (principal_amount_usd, principal_fx_rate_to_usd, principal_fx_status reference_fx set together): 35 rows published USD, EUR (GBP lines at 2024-09-30) or with no currency (dash and unfunded lines) at 2024-03-31 to 2026-06-30 (Sheffield United, Nottingham Forest, Southampton x2, TIC Bidco, Solvias, Healthco, Helios, Inspired Pet, Kite, Pharmalogic, Ardonagh dash lines); plus Sheffield United 2023-06-30/09-30/12-31 (GBP par printed without a marker: cost over par 1.24; the same loan prints GBP from 2024-03-31) and CITGO 2024-06-30 (a CAD marker printed on a USD loan: cost over par 1.01, USD at 2024-03-31 and 2024-09-30).",
    "kind": "row_correction",
-   "quarters": ["2024-03-31", "2024-06-30", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001193125-26-222241", "text": "Equity investments are recorded as number of shares owned."},
-    {"accession": "0000950170-24-058054", "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 33 32,519 28,247 2.36"},
-    {"accession": "0000950170-24-096970", "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 34 33,580 33,411 2.05"},
-    {"accession": "0000950170-24-096970", "text": "Metropolis Technologies Inc. - Class A Preferred Stock (8)(9) 16.00 % (Incl 11.00 % PIK) 2/13/2034 18,041 17,891 17,863 1.09 Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,072 6,064 0.37 Metropolis Technologies Inc. - Warrant (8)(9) 4 189 249 0.02"},
-    {"accession": "0000950170-25-071644", "text": "Protective Industrial Products Inc. - Series A Preferred 13.00 % PIK 38 38,236 38,362 1.57"},
-    {"accession": "0000950170-25-071644", "text": "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 19,184 19,044 19,009 0.78 Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 6,950 6,712 6,696 0.27 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 48 -"},
-    {"accession": "0000950170-25-108316", "text": "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 20,166 20,027 19,988 0.81 Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,268 0.30 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 69 -"},
-    {"accession": "0001193125-25-280735", "text": "Metropolis Technologies Inc. - Class A Preferred Stock 16.00 % (Incl 11.00 % PIK) 2/13/2034 20,166 20,027 20,050 0.72 Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 2/13/2034 7,535 7,297 7,362 0.27 Metropolis Technologies Inc. - Warrant 2/13/2034 4 189 659 0.02"},
-    {"accession": "0001193125-26-124538", "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25 Metropolis Technologies Inc. - Class D Preferred Stock - 24 778 778 0.02 Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06"},
-    {"accession": "0001193125-26-124538", "text": "S.A.F.E. Management Equity (11) 11/24/2031 3,478 3,478 3,478 0.11"},
-    {"accession": "0001193125-26-222241", "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25 Metropolis Technologies Inc. - Class D Preferred Stock 24 778 778 0.02 Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.06"},
-    {"accession": "0001193125-26-222241", "text": "S.A.F.E. Management Equity 11/24/2031 5,000 5,054 5,000 0.15"}]},
-  {"what": "Round 1 (already in msdxa, the sandbox before). Mattress Firm first lien loan had no principal: the filer tagged the printed par on a different context. Par declared from the page (untagged_values). Cleared X11 at 2023-06-30 and 2023-09-30.",
-   "kind": "untagged_value",
-   "quarters": ["2023-06-30", "2023-09-30"],
-   "quotes": [
-    {"accession": "0000950170-23-041924", "text": "Mattress Firm, Inc. (9) L + 4.25 % 0.75 % 9.95 % 9/25/2028 1,326 1,265 1,295 0.19"},
-    {"accession": "0000950170-23-062232", "text": "Mattress Firm, Inc. (9) L + 4.25 % 0.75 % 9.95 % 9/25/2028 1,322 1,263 1,310 0.16"}]},
-  {"what": "Round 1 (already in msdxa). Metropolis warrant, 2024-09-30: published unit count 6,314 was the Class B preferred row's (transform shares_held:pow10_shares); tag and page say 4. Row correction.",
+    {
+     "accession": "0001193125-26-124538",
+     "text": "Southampton FC UK(9)(10) SO + 6.00 % 0.00 % 9.98 % 9/20/2029 GBP 65,248 63,295 64,639 1.97"
+    },
+    {
+     "accession": "0000950170-24-124249",
+     "text": "Sheffield United F.C. UK(8)(9)(10)(11) N/A N/A 10.70 % 7/22/2026 GBP 10,783 13,345 14,380 0.68"
+    },
+    {
+     "accession": "0001193125-26-222241",
+     "text": "Healthco Investment LTD - Delayed Draw Term Loan GBP UK(9)(10)(11) SO + 5.75 % 0.00 % 9.62 % 9/9/2032 GBP - ( 57 ) ( 54 ) -"
+    },
+    {
+     "accession": "0000950170-23-041924",
+     "text": "Sheffield United F.C. UK(8)(9)(10)(11) N/A N/A 13.07 % 7/22/2026 14,704 18,190 18,579 2.66"
+    },
+    {
+     "accession": "0000950170-24-096970",
+     "text": "CITGO Petroleum Corp. N/A N/A 6.38 % 6/15/2026 CAD 2,121 2,141 2,108 0.13"
+    }
+   ]
+  },
+  {
+   "what": "Cost sign: 24 undrawn lines (2023-03-31, 06-30, 09-30 and DISA 2024-06-30) whose cost cell prints a negative figure in parentheses and whose tag is positive (published +172,000 where the page prints (172)).",
    "kind": "row_correction",
-   "quarters": ["2024-09-30"],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30"
+   ],
    "quotes": [
-    {"accession": "0000950170-24-124249", "text": "Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01"}]}
+    {
+     "accession": "0000950170-23-021707",
+     "text": "Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 11.91 % 11/23/2027 - ( 172 ) ( 174 ) ( 0.03 )"
+    },
+    {
+     "accession": "0000950170-23-062232",
+     "text": "Accession Risk Management - Delayed Draw Term Loan (8)(9)(12) S + 6.00 % 0.75 % 11.31 % 10/30/2026 - ( 716 ) ( 726 ) ( 0.09 )"
+    },
+    {
+     "accession": "0000950170-24-096970",
+     "text": "DISA Holdings Corp. - Delayed Draw Term Loan (8)(9)(12) S + 5.00 % 0.01 % 10.32 % 9/9/2028 - ( 80 ) ( 80 ) ( 0.00 )"
+    }
+   ]
+  },
+  {
+   "what": "Healthco Investment LTD 2026-06-30: the filer tags the printed cost of the EUR and GBP lines and of the delayed draw as a second InvestmentOwnedBalancePrincipalAmount fact in USD, so no cost was published (3 rows) and the delayed draw published par -52,000 (its cost) where the par cell is a dash. Cost read from the printed cell (cost_currency USD), par withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Healthco Investment LTD - Delayed Draw Term Loan GBP UK(9)(10)(11) SO + 5.75 % 0.00 % 9.51 % 9/9/2032 GBP - ( 52 ) ( 50 ) 0.00"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Healthco Investment LTD EUR UK(9)(10) E + 5.75 % 0.00 % 7.37 % 9/9/2032 EUR 23,138 26,623 25,960 0.74"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Healthco Investment LTD GBP UK(9)(10) SO + 5.75 % 0.00 % 9.23 % 9/9/2032 GBP 5,000 6,631 6,514 0.19"
+    }
+   ]
+  },
+  {
+   "what": "Issuer name set to the printed company on 18 rows: Parfums Holding(s) variants (5 rows), Xponential 'LLC LP', USA Debunk -> USA Debusk (5 rows), 'LL Partners' -> JLL Partners Fund VII Secondary, DISA revolver tagged on a Best Trash member (2024-12-31), and the 2026-06-30 rows whose member did not split (Cook & Boardman delayed draw typed 'First Bien Debt', Ligado x5 under a telecommunication-services heading, Parfums 'Co.Reference'); 7 instrument descriptions of 2026-06-30 split the same way.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "USA Debusk LLC (8) S + 5.25 % 0.75 % 9.85 % 4/30/2031 16,603 16,362 16,369 0.77"
+    },
+    {
+     "accession": "0000950170-25-108316",
+     "text": "J LL Partners Fund VII Secondary (10) S + 6.75 % 1.00 % 11.05 % PIK 4/29/2032 51,180 50,440 50,430 2.05"
+    },
+    {
+     "accession": "0000950170-25-042155",
+     "text": "DISA Holdings Corp. - Revolving Credit Facility (12) S + 5.00 % 0.75 % 9.31 % 9/9/2028 - ( 51 ) ( 51 ) -"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Cook & Boardman Group - Delayed Draw Term Loan (11) S + 6.00 % 1.00 % 9.73 % 3/4/2030 69,745 68,639 68,626 1.96"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Ligado Networks LLC - DIP Facility - Backstop Incremental (6)(11) N/A N/A 17.50 % PIK 12/31/2027 246 246 48 0.00"
+    }
+   ]
+  },
+  {
+   "what": "Share counts as printed: Metropolis Class D Preferred (24) and Warrant (4) at 2026-06-30 were published 8,846 (the Class B count, carried by the shared unit-scale step); Protective Industrial Series A Preferred 2023-12-31 published 31 where the page prints 31,597.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Class D Preferred Stock 5/16/2034 24 778 778 0.02"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.05"
+    },
+    {
+     "accession": "0000950170-24-035561",
+     "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31,597 31,469 27,600 2.94"
+    }
+   ]
+  },
+  {
+   "what": "Metropolis Class D Preferred 2026-06-30: interest_rate and pik_rate 17.5 withdrawn (no rate cell on the page; the filer's member label carries the rate; the count stays 24 while Class B PIK shares grow; no rate at 2025-12-31 and 2026-03-31).",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Class D Preferred Stock 5/16/2034 24 778 778 0.02"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.50 % PIK 5/16/2034 8,846 8,608 8,846 0.25"
+    }
+   ]
+  },
+  {
+   "what": "Sheffield United 2026-06-30: spread 5.25 and coupon Floating (printed SO + 5.25 %; no spread tag, so the row was published Fixed with no spread).",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Sheffield United F.C. UK(9)(10) SO + 5.25% 1.50 % 9.00 % 1/14/2030 GBP 13,592 18,105 17,866 0.51"
+    }
+   ]
+  },
+  {
+   "what": "Legends Hospitality 2025-12-31: non-accrual flag removed (the printed line carries no footnote (12); the XBRL footnote link is on the wrong position).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-124538",
+     "text": "Legends Hospitality Holding Company S + 5.50 % 0.75 % 9.23 % (Incl 2.75 % PIK) 8/22/2031 65,519 64,436 64,504 1.97"
+    }
+   ]
+  },
+  {
+   "what": "Instrument type: FEG, Inc. 2024-09-30 funded 89,775 term loan typed Revolver (withdrawn; the printed line carries no revolving facility); Sky Merger Sub delayed draw 2024-12-31 typed Delayed Draw Term Loan.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "FEG, Inc. (8) S + 5.25 % 1.00 % 10.36 % 5/10/2030 89,775 88,046 88,095 4.15"
+    },
+    {
+     "accession": "0000950170-25-042155",
+     "text": "Sky Merger Sub, LLC - Delayed Draw Term Loan (12) S + 6.60 % 1.50 % 10.91 % 5/28/2029 - - 37 -"
+    }
+   ]
+  },
+  {
+   "what": "Chains: data/overrides/position_match_overrides/0001849894.json (8 directives; the Ligado ones and the Alteryx reject and revolver pairing took, the Alteryx delayed-draw pairing did not - see the chain observation) and wrapper source_encodings.position_identity_contexts (Ligado DIP Backstop Incremental and DIP Delayed Draw Add on, four contexts).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096970",
+     "text": "Alteryx, Inc. - Revolving Credit Facility (8)(9)(12) S + 6.50 % 0.75 % 11.82 % 3/19/2031 - ( 137 ) ( 137 ) ( 0.01 )"
+    },
+    {
+     "accession": "0001193125-26-222241",
+     "text": "Ligado Networks LLC - DIP Facility - Backstop Incremental (11) N/A N/A 17.50 % PIK 12/31/2027 318 318 93 -"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Ligado Networks LLC - DIP Facility - Delayed Draw Term Loan Add on N/A N/A 17.50 % PIK 12/31/2027 460 460 414 0.01"
+    }
+   ]
+  }
+ ],
+ "verdict_retirements": [
+  "VR-FL-1849894-01 RVQ_REV_8b9df1e4fe96 (C04 2025-12-31)",
+  "VR-FL-1849894-02 RVQ_REV_239a5adbc76c (C04 2026-03-31)",
+  "VR-FL-1849894-03 RVQ_REV_9bc8e5a94f50 (FX01 2025-12-31)",
+  "VR-FL-1849894-04 RVQ_REV_b461490d7399 (FX01 2026-03-31)"
  ],
  "total_exceptions": [],
- "parked": [],
- "orchestrator_requests": [],
- "earlier_verdicts": [
-  {"finding": "oracle C04 2025-12-31", "reviewer_found": "four equity rows print a Par Amount / Shares figure (8,162, 24, 4, 3,478) and none was extracted", "outcome": "correct and fixed: the four counts are published in msdxc (row corrections); C04 passes the quarter, 4 of 4"},
-  {"finding": "oracle C04 2026-03-31", "reviewer_found": "the same four rows (8,162, 24, 4, 5,000), none extracted", "outcome": "correct and fixed: the four counts are published in msdxc; C04 passes the quarter, 4 of 4"},
-  {"finding": "weak maturity_not_past 2024-06-30", "reviewer_found": "Equinox Holdings, maturity 3/8/2024, published at 2024-06-30 as a comparative-period leak", "outcome": "does not describe the current build: the line is in the December 31, 2023 schedule of the 10-Q and msdxc has no Equinox row at 2024-06-30; the row the rule flags is Ligado (11/1/2023 as printed). Proposal carries the answer"},
-  {"finding": "weak maturity_not_past 2025-03-31", "reviewer_found": "the LJ Perimeter subtotal (21,145 / 19,967, no maturity) published as a position", "outcome": "was a real error, fixed before this run by rule exclude_2025q1_lj_perimeter_subtotal; msdxc holds the two LJ lines only; the row the rule flags is Ligado. Proposal carries the answer"}
+ "parked": [
+  {
+   "finding": "F28 2021-12-31 holdings coverage (FY2021 and 2022 quarters)",
+   "hypotheses": [
+    "2022 filings have no cached XBRL instance (bdc_xbrl starts 2023-03-31): not extractable by the XBRL path.",
+    "HTML grids of the 2022 filings exist (grids.json) but no per-CIK HTML template was built; extraction would be new work at the owner decision, outside this run."
+   ]
+  },
+  {
+   "finding": "Position chains: Alteryx delayed draw 2024-03-31 (-445k, pid 46d52e39) not paired with the drawn delayed draw 2024-06-30 (37.3M, pid d97800fc) - the force_pair did not take, the reject and the revolver pairing did; DISA revolver 2026-03-31 to term 2026-06-30; CoreWeave Add on to delayed draw; Kite UK and Sheffield term to delayed draw 2026-03-31 to 2026-06-30; Ligado DIP Roll-up / DIP delayed draw id swap 2025-03-31 to 2025-06-30 and DIP chain break 2025-12-31; Four Winds delayed draw",
+   "hypotheses": [
+    "Match overrides did not reach these links (supplementary position_key edges): force_pair needs replace_end_issuer_name and replace_end_fair_value, and the Alteryx delayed-draw force_pair still did not take.",
+    "Fund-level mechanism that took for the Ligado Backstop pair: wrapper source_encodings.position_identity_contexts, the same key on every row of a loan in every quarter (a keyed row never chains to an unkeyed one); to declare in a follow-up build for each loan above after reading its rows on the page."
+   ]
+  },
+  {
+   "finding": "Healthco Investment LTD delayed draw 2026-06-30: principal_fx_status source_usd and principal_fx_rate_to_usd 1.0 on a GBP row with no par",
+   "hypotheses": [
+    "Status and rate are left from the USD default of the no-par line; with no par the USD amount is blank, so no published figure is wrong; a correction would set reference_fx and 1.3259 for consistency (not done: no builds left)."
+   ]
+  },
+  {
+   "finding": "pct_of_net_assets sign on Systems Planning 2024-09-30 (filer tag -0.0005, page 0.05)",
+   "hypotheses": [
+    "pct_of_net_assets is not a correctable field (D-157); the calculated column carries +0.0510."
+   ]
+  },
+  {
+   "finding": "Pharmalogic delayed draw chain joins dash lines marked CAD (2025-03-31, 2025-06-30) to the USD-funded line from 2025-12-31",
+   "hypotheses": [
+    "Same facility on every date (same maturity, same spread); the printed marker on the dash line is CAD, the funded amount prints no marker (USD by cost over par 0.97): kept as printed, one currency difference inside one chain."
+   ]
+  }
  ],
- "found_without_a_rule": [
-  "CORRECTION of my round-1 report: I wrote that the 'Par Amount / Shares' figure on the PIK preferred rows is a dollar amount. The schedule note in every filing says equity is recorded as number of shares owned, so the figures are counts by the filer's statement and are now published as counts. Growth at the PIK rate (Class B 6,314 / 6,950 / 7,535 / 8,162) fits PIK paid in further shares as well as it fits an accreting amount; the page does not settle it beyond the note.",
-  "Protective Industrial Products Series A Preferred: the filer prints the count in two scales (30, 31, 31, then 31,597 at 2023-12-31, then 33, 34, 36, 37, 38; cost 29.5M to 38.2M, so the small figures are thousands of shares). Published as printed and tagged in each quarter except 2023-12-31, where the unit-scale normaliser publishes 31 for the tagged and printed 31,597 (labelled derived_proxy). The series is 1,000 times too small against the footnote's 'number of shares' in every quarter but that one; not changed, because the page prints those figures.",
-  "The unit-scale normaliser (pipeline/unified_holdings.py, shares_held:pow10_shares) compares price per unit across all rows of one issuer, so a warrant beside a preferred of the same issuer was given the preferred's count (Metropolis 2024-09-30, corrected in round 1). Shared code, not changed; other funds not measured. It runs before row corrections, so the 23 counts set in round 2 are not touched by it (checked: all 23 publish the corrected value).",
-  "Metropolis warrant: 4 units against a cost of 189 thousand and a fair value of up to 1,896 thousand; Class D preferred: 24 against 778. Published as printed; whether the filer means 4 and 24 or thousands is not on the page.",
-  "The two declared Mattress Firm pars carry principal_amount_source 'xbrl_field' although the value comes from the page (label written by the shared declared-value path).",
-  "Ligado Networks first lien loan: the 10-Qs for 2024-06-30 and 2024-09-30 print '15.50 %' without 'PIK'; published pik_rate is empty in those two quarters and 15.5 in the others. As printed.",
-  "2024-06-30: first lien Services: Consumer rows sit on members reading 'First Lien Debt Services: <issuer>'; published industry is Services: Consumer for the seven rows read."
+ "orchestrator_requests": [
+  {
+   "request_id": "REQ-msz-3",
+   "classification": "verification_bug",
+   "file": "pipeline/printed_margin.py",
+   "what": "agentA_spread_vs_xbrl fails MYOB 2026-06-30 (RVQ_BLK_a672f6d8c309) because the printed-margin reader does not read the margin after a B + (BBSY) code and falls back to the stale member label.",
+   "why": "Published spread, rate and PIK equal the page and the tags.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47"
+    }
+   ],
+   "next_action": "Repair the reader to take 5.50 from B + 5.50 %, with a test that a wrong published spread on a B + row still fails; rerun the agentA battery on every accepted sandbox."
+  }
  ],
+ "request_resolution_history": [],
+ "observations": [
+  {
+   "observation_key": "par-currency-published-usd-against-printed-marker",
+   "what": "35 par rows (foreign marker printed on the line) published USD or EUR or with no currency, USD par at the filer tag rate or none; fixed with the H.10 amounts. Cost-over-par shows 3 more GBP rows printed without a marker (Sheffield 2023) and a CAD marker misprinted on a USD loan (CITGO 2024-06-30).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 800.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Page rule: the non-USD marker printed in the par cell must equal principal_amount_currency; and a USD par whose cost over par is outside 0.9-1.1 on a funded non-discount loan is suspect.",
+   "quote": {
+    "accession": "0001193125-26-124538",
+    "text": "Southampton FC UK(9)(10) SO + 6.00 % 0.00 % 9.98 % 9/20/2029 GBP 65,248 63,295 64,639 1.97"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 did not fire on these rows in the untouched msza build (it flags only a blank USD amount); a marker-versus-currency page rule and a cost/par ratio rule would have.",
+    "reference": "proposal: page rule par_currency_printed (marker vs principal_amount_currency, dash lines included)"
+   }
+  },
+  {
+   "observation_key": "cost-sign-lost-on-undrawn-line-tagged-positive",
+   "what": "24 undrawn lines published with positive cost where the page prints a negative cost in parentheses (fair value negative); 2023-03-31 to 2023-09-30 and one 2024-06-30 row.",
+   "field": "cost",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30"
+   ],
+   "fair_value_m": 1.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Row rule: a row with a dash par and a negative fair value must not have a positive cost; compare the sign of cost with the printed cost cell.",
+   "quote": {
+    "accession": "0000950170-23-021707",
+    "text": "Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 11.91 % 11/23/2027 - ( 172 ) ( 174 ) ( 0.03 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C107 flags negative costs, not positive ones on negative fair values; none of these rows was flagged in msza.",
+    "reference": "proposal: cost_sign_vs_fair_value on dash-par rows"
+   }
+  },
+  {
+   "observation_key": "cost-tagged-as-usd-principal-on-foreign-par-row",
+   "what": "At 2026-06-30 the filer tags the printed cost of three Healthco rows as a USD InvestmentOwnedBalancePrincipalAmount fact beside the foreign par: no cost published and the delayed draw published par -52,000 (its cost).",
+   "field": "cost",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 33.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Row rule: a published cost that is null while the printed cost cell has a figure; a negative par on a row with a dash par cell.",
+   "quote": {
+    "accession": "0001193125-26-352436",
+    "text": "Healthco Investment LTD EUR UK(9)(10) E + 5.75 % 0.00 % 7.37 % 9/9/2032 EUR 23,138 26,623 25,960 0.74"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C110 (negative principal) and fmt_principal_amount fired on the delayed-draw row in msza (RVQ_REV_cca3faf598d3, RVQ_REV_c8c952728b50); the two null-cost rows were not flagged by any rule.",
+    "reference": "C110 / fmt_principal_amount (partial); proposal: cost_null_with_printed_cost"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-printed-company",
+   "what": "18 rows whose issuer name is not the printed company (typo members, a DISA revolver on a Best Trash member, rows whose member did not split at 2026-06-30). The name rule fired on 9 of them in msza; the rest sit in fund-quarters the rule does not test.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 190.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Run issuer_name_printed on every fund-quarter (name blind spots list) and add a check that a name starts the printed line.",
+   "quote": {
+    "accession": "0000950170-25-042155",
+    "text": "DISA Holdings Corp. - Revolving Credit Facility (12) S + 5.00 % 0.75 % 9.31 % 9/9/2028 - ( 51 ) ( 51 ) -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on 9 of these rows in msza (page_rule_findings.csv: USA Debunk 2024-09-30, LL Partners 2025-06-30, Parfums/Ligado/Cook 2026-06-30).",
+    "reference": "identity/issuer_name_printed (RVQ_BLK_3f48dc65ccd8, RVQ_BLK_d750eed63542, RVQ_BLK_fdd754c32ea3)"
+   }
+  },
+  {
+   "observation_key": "unit-scale-step-overwrites-printed-share-count",
+   "what": "Shared unit-scale normaliser replaced printed counts: Metropolis Class D (24) and Warrant (4) published 8,846 at 2026-06-30; Protective 31,597 published 31 at 2023-12-31 (also seen D-154).",
+   "field": "shares_held",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Unit count equal to the first cell after the maturity on the printed equity line.",
+   "quote": {
+    "accession": "0001193125-26-352436",
+    "text": "Metropolis Technologies Inc. - Warrant 5/16/2034 4 189 1,896 0.05"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed fired on all three rows in msza (RVQ_BLK_0d8407c8b9ad, RVQ_BLK_37038a93035f).",
+    "reference": "identity/units_printed"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-on-wrong-position",
+   "what": "Legends Hospitality 2025-12-31 flagged non-accrual (XBRL footnote link) with no footnote on its printed line; Ligado is the filing non-accrual loan.",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 65.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Non-accrual flag must coincide with the filing non-accrual footnote number printed on the row.",
+   "quote": {
+    "accession": "0001193125-26-124538",
+    "text": "Legends Hospitality Holding Company S + 5.50 % 0.75 % 9.23 % (Incl 2.75 % PIK) 8/22/2031 65,519 64,436 64,504 1.97"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule compares the footnote number printed on the line with the flag (checked every quarter: all other 14 flags carry the footnote).",
+    "reference": "proposal: nonaccrual_footnote_vs_printed_note"
+   }
+  },
+  {
+   "observation_key": "instrument-type-revolver-on-funded-term-loan",
+   "what": "FEG 2024-09-30: the funded 89,775 line typed Revolver (fair value 88.1M); Sky Merger delayed draw 2024-12-31 untyped.",
+   "field": "instrument_type",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 88.2,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "instrument_type Revolver on a row with par > 0 and no revolving wording in the printed head, or a head that says Delayed Draw with no type.",
+   "quote": {
+    "accession": "0000950170-24-124249",
+    "text": "FEG, Inc. (8) S + 5.25 % 1.00 % 10.36 % 5/10/2030 89,775 88,046 88,095 4.15"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule compares instrument_type with the printed head wording.",
+    "reference": "proposal: instrument_type_vs_printed_head"
+   }
+  },
+  {
+   "observation_key": "position-chain-joins-different-instruments",
+   "what": "Position ids join different loans. Checked in mszf: the Ligado DIP delayed draw versus the original loan (2025-12-31 to 2026-03-31) is fixed by two match overrides, and the Ligado DIP Backstop versus Add on (2026-03-31 to 2026-06-30, created when the 2026-06-30 names were corrected) by 4 position_identity_contexts. The Alteryx reject and revolver pairing took: in mszf the two revolvers (-142k 2024-03-31, -137k 2024-06-30) share pid 440dfed1 and the 2024-03-31 delayed draw (-445k) is alone on 46d52e39. Only the delayed-draw pairing (-445k 2024-03-31 to the drawn 37.3M delayed draw of 2024-06-30, pid d97800fc) did not take. Wrong links from the baseline, none created by this run: DISA revolver 2026-03-31 to term loan 2026-06-30; CoreWeave Add on (9/29/2030, S + 4.25) to delayed draw (8/26/2030, S + 6.00); Kite UK and Sheffield term loan 2026-03-31 to delayed draw 2026-06-30; Ligado DIP Roll-up / DIP delayed draw id swap 2025-03-31 to 2025-06-30 and the DIP chain break at 2025-12-31; Four Winds delayed draw. Parked for a follow-up build.",
+   "field": "position_id",
+   "quarters": [
+    "2024-06-30",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "A position_id must not span two instrument_type values or two spreads; list ids with more than one instrument_type or lien at each build (chains.py).",
+   "quote": {
+    "accession": "0001193125-26-352436",
+    "text": "Ligado Networks LLC - DIP Facility - Delayed Draw Term Loan Add on N/A N/A 17.50 % PIK 12/31/2027 460 460 414 0.01"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no ledger rule looks at chain consistency; scratch/fund_runs/0001849894/chains.py lists multi-attribute ids per build.",
+    "reference": "proposal: chain_instrument_consistency"
+   }
+  },
+  {
+   "observation_key": "pct-of-net-assets-sign-differs-from-printed",
+   "what": "Systems Planning and Analysis 2024-09-30: published pct_of_net_assets -0.05 (the filer tag) where the page prints 0.05 and fair value is +1,081 thousand; pct_of_net_assets_calculated is +0.0510. TIC Bidco 2024-06-30 prints 0.01 against fair value (12): as printed. pct is not a correctable field.",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 1.1,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "sign(pct_of_net_assets) must equal sign(fair_value) or the pct_of_net_assets_calculated sign.",
+   "quote": {
+    "accession": "0000950170-24-124249",
+    "text": "Systems Planning and Analysis, Inc. - Delayed Draw Term Loan A (8)(9)(12) S + 5.90 % 1.00 % 10.26 % 8/16/2027 7,676 7,368 7,506 0.35"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "the percent identity rule passes these rows by design (accepted reason R-PCT); a sign check would catch them.",
+    "reference": "proposal: pct_sign_vs_fair_value"
+   }
+  },
+  {
+   "observation_key": "share-count-tagged-as-usd-principal-times-1000",
+   "what": "Owner item C04 units, evidence only (no convention changed): until 2026-03-31 the filer tags the equity count on InvestmentOwnedBalancePrincipalAmount in USD with decimals -3 (Metropolis Class B 8,162,000, Class D 24,000, Warrant 4,000) and the page prints 8,162 / 24 / 4; at 2026-06-30 it tags InvestmentOwnedBalanceShares 8,846 / 24 (unit shares, decimals 0) and prints 8,846 / 24. The printed digits equal the shares tag in the one quarter that tags shares; the build publishes the printed digits throughout.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 11.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "None proposed: a convention decision (printed digits versus x1000 of the tag).",
+   "quote": {
+    "accession": "0001193125-26-124538",
+    "text": "Metropolis Technologies Inc. - Class B Preferred Stock 17.5 % PIK 5/16/2034 8,162 7,924 8,162 0.25"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "the question is which convention is right; both values are as filed (tag vs page), so no rule can decide it.",
+    "reference": "owner item: C04 share-count units"
+   }
+  },
+  {
+   "observation_key": "class-d-preferred-rate-in-member-label-not-printed",
+   "what": "Metropolis Class D Preferred 2026-06-30: rate 17.5 / PIK 17.5 published from the filer member label while the page prints no rate and the count is flat. Withdrawn.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A published interest_rate with no rate cell on the printed line.",
+   "quote": {
+    "accession": "0001193125-26-352436",
+    "text": "Metropolis Technologies Inc. - Class D Preferred Stock 5/16/2034 24 778 778 0.02"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "the rate fields were published from the member text; no rule compares them with the printed line for equity rows (X01 and C05 do not test this).",
+    "reference": "proposal: rate_without_printed_rate_cell"
+   }
+  },
+  {
+   "observation_key": "agenta-printed-margin-reader-cannot-read-bbsy-benchmark",
+   "what": "MYOB 2026-06-30: published spread 5.50 / rate 9.99 / PIK 3.00 equal the page (B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK)) and the tags; agentA_spread_vs_xbrl fails the row because pipeline/printed_margin.py does not read a margin after the B + (BBSY) benchmark and falls back to the stale member label (B + 5.00% / 9.83%). Supersedes the earlier reading of this as an as_filed label disagreement: it is a check misfire; REQ-msz-3 asks for the repair.",
+   "field": "basis_spread",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 51.4,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Check repair: read the margin after a B + (BBSY) code; keep a test that a wrong published spread on a B + row still fails.",
+   "quote": {
+    "accession": "0001193125-26-352436",
+    "text": "MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "agentA_spread_vs_xbrl fired on the row in msza (RVQ_BLK_a672f6d8c309); it is a misfire to be repaired, not a data error.",
+    "reference": "agentA/agentA_spread_vs_xbrl; check_repair_request REQ-msz-3"
+   }
+  },
+  {
+   "observation_key": "fy2021-and-2022-quarters-not-extracted",
+   "what": "No holdings for 2021-12-31 or the 2022 quarters. 0000950170-22-009862 is the Q1-2022 10-Q (2022-03-31 total investments 711,196 thousand; 692,357 is its 2021-12-31 comparative); the FY2021 10-K is not cached. The 2022 10-Qs and the FY2022 10-K print full schedules (2022-06-30 770,729; 2022-09-30 890,043; 2022-12-31 981,738), so the 2022 F28 findings were closed by DS-LARGE3-F28-1849894 on a false statement (no schedule in the cache). No XBRL instance is cached for the 2022 filings. Owner decision REQ-msz-1.",
+   "field": "row_coverage",
+   "quarters": [
+    "2021-12-31",
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "fair_value_m": 981.7,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "F28 fires only at 2021-12-31; add a per-quarter check that a printed schedule total exists in the cache for every quarter without holdings.",
+   "quote": {
+    "accession": "0000950170-22-009862",
+    "text": "Total Investments - non-controlled/non-affiliated $ 715,866 $ 711,196 237.55 % Cash and Cash Equivalents"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F28 fired at 2021-12-31 in msza (RVQ_REV_521050d8aad0); the 2022 quarters were closed by a disposition that a check of the cache would not have accepted.",
+    "reference": "fund_financials/F28"
+   }
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_86db71d7dea5",
+   "coverage": {
+    "affected_rows": [
+     "0001849894/2024-09-30/A01/subtotal-pairing"
+    ],
+    "reviewed_rows": [
+     "0001849894/2024-09-30/A01/subtotal-pairing"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124249",
+     "text": "Midwest Veterinary Partners LLC S + 7.60 % 0.75 % 12.71 % 4/26/2029 35,714 35,709 35,134 1.66 Southern Veterinary Partners LLC (8) S + 7.85 % 1.00 % 12.25 % 10/5/2028 45,000 44,264 45,000 2.12 79,973 80,134 3.78 Total Second Lien Debt"
+    },
+    {
+     "accession": "0000950170-24-124249",
+     "text": "Metropolis Technologies Inc. - Class A Preferred Stock (8)(9) 16.00 % (Incl 11.00 % PIK) 2/13/2034 18,041 17,913 17,868 0.84 Metropolis Technologies Inc. - Class B Preferred Stock (8)(9) 17.5 % PIK 2/13/2034 6,314 6,082 6,071 0.29 Metropolis Technologies Inc. - Warrant (8)(9) 2/13/2034 4 189 215 0.01 24,184 24,154 1.14 Total Preferred Equity"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The oracle pairs a printed subtotal with the rows of members that spell the heading the same way. At 2024-09-30 the Midwest Veterinary second-lien loan is tagged on a member beginning with the First Lien Services: Consumer heading and the Metropolis Class A preferred on Preferred Equity Consumer while the subtotal sits on Preferred Equity SERVICES Consumer; on the page each subtotal equals its rows (read in the earlier round, quotes in the proposal).",
+    "Published rows equal the filed total in the quarter (14 of 14 quarters tie); no subtotal is published."
+   ],
+   "next_action": "Proposal PD-A01 (as_filed, reason key a01-subtotal-and-rows-on-differently-spelled-members) already carries 2024-09-30.",
+   "carried_from": "docs/investigations/v05_readings/proposals/0001849894_reading.json (D-099 / D-157 reading, re-read against the 2024-09-30 filing for the rows only; no new page read of the subtotal)"
+  },
+  {
+   "finding_id": "RVQ_BLK_a672f6d8c309",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352436/C_1b43d218-f4f9-44fd-a7b6-855fa3faa1ac/ROW-af7003235b914694"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352436/C_1b43d218-f4f9-44fd-a7b6-855fa3faa1ac/ROW-af7003235b914694"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "MYOB Invest Co Pty Ltd and MYOB US Borrower LLC AUS(9)(10) B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK) 6/6/2030 AUD 77,196 49,580 51,391 1.47"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The flag compares the member label (B + 5.00% ... 9.83%) with the tags; the tags (spread 0.055, rate 0.0999, PIK 0.03, XML parser, context C_1b43d218-f4f9-44fd-a7b6-855fa3faa1ac) and the printed line (B + 5.50 % 0.75 % 9.99 % (Incl 3.00 % PIK)) agree with the published row (spread 5.50, interest_rate 9.99, pik_rate 3.00); the label is stale."
+   ],
+   "next_action": "Check repair request REQ-msz-3 (verification_bug): pipeline/printed_margin.py cannot read the B + (BBSY) benchmark; the proposal is withdrawn. A repaired check clears the finding."
+  },
+  {
+   "finding_id": "RVQ_REV_6c3c72490a2d",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352436/C_6103cbd0-f777-4d2f-a41d-933b57e0f347/ROW-6334ae13423b9c90",
+     "0001193125-26-352436/C_80142371-aa73-421d-91a0-f45710f07b58/ROW-299099730fa8c6fd"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352436/C_6103cbd0-f777-4d2f-a41d-933b57e0f347/ROW-6334ae13423b9c90",
+     "0001193125-26-352436/C_80142371-aa73-421d-91a0-f45710f07b58/ROW-299099730fa8c6fd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Sky Merger Sub, LLC - Delayed Draw Term Loan (11) S + 6.35 % 1.50 % 10.08 % 5/28/2029 - - 130 0.00"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "S.A.F.E. Management - Delayed Draw Term Loan A (11) S + 4.75 % 2.00 % 8.48 % 11/24/2031 - 12 12 0.00"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Both flagged rows read on the page: par cell a dash on an undrawn delayed-draw line, fair value 130 and 12 thousand; no principal fact filed on either context (XML parser)."
+   ],
+   "next_action": "Proposal PD-X11 (as_filed, reason key x11-undrawn-line-par-printed-as-dash)."
+  },
+  {
+   "finding_id": "RVQ_REV_70911f501531",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-021707/C_d982b9bd-c622-4484-9ea5-7570a698f4c1/ROW-2bf74a426cdda783",
+     "0000950170-23-021707/C_66b3dfb5-3b7f-4b6b-a83d-76bdad23c4e0/ROW-48ce98cb374d6193",
+     "0000950170-23-021707/C_9c9681b1-0225-4e30-ae7a-b5ccbd08d687/ROW-3d289eba6afb9fc8",
+     "0000950170-23-021707/C_3e4189d2-b2b2-4a23-8214-6df8b14a51df/ROW-ccd47c4e4dd85989",
+     "0000950170-23-021707/C_05c86974-0c48-46d1-9d2d-f75665762e7c/ROW-bee0918603668443",
+     "0000950170-23-021707/C_8807221a-6d98-4f31-9082-399d7e473c84/ROW-efa448dc88a8bd67"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-021707/C_d982b9bd-c622-4484-9ea5-7570a698f4c1/ROW-2bf74a426cdda783",
+     "0000950170-23-021707/C_66b3dfb5-3b7f-4b6b-a83d-76bdad23c4e0/ROW-48ce98cb374d6193",
+     "0000950170-23-021707/C_9c9681b1-0225-4e30-ae7a-b5ccbd08d687/ROW-3d289eba6afb9fc8",
+     "0000950170-23-021707/C_3e4189d2-b2b2-4a23-8214-6df8b14a51df/ROW-ccd47c4e4dd85989",
+     "0000950170-23-021707/C_05c86974-0c48-46d1-9d2d-f75665762e7c/ROW-bee0918603668443",
+     "0000950170-23-021707/C_8807221a-6d98-4f31-9082-399d7e473c84/ROW-efa448dc88a8bd67"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021707",
+     "text": "Chromalloy Holdings LLC - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 11.91 % 11/23/2027 - ( 172 ) ( 174 ) ( 0.03 )"
+    },
+    {
+     "accession": "0000950170-23-021707",
+     "text": "Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 11.66 % 1/9/2028 - ( 150 ) ( 154 ) ( 0.03 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row read on the page (inline-XBRL row of its own fair-value fact): par a dash, cost printed in parentheses, published cost equal to the printed cost (script spec_update.py asserts it for 6 rows).",
+    "At 2023-03-31 the filer tagged the cost positive; this run set the printed sign (24 row corrections), so the accepted-reason check (values compared with the tag) cannot clear them: proposal PD-C107 as_filed."
+   ],
+   "next_action": "Proposal PD-C107 (as_filed, reason key c107-negative-cost-undrawn); the owner or the accepted-reason check accepts it."
+  },
+  {
+   "finding_id": "RVQ_REV_affb6f39e08a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041924/C_20396c02-e613-437e-a29d-9bf8cdf0c582/ROW-93a97b86e58aa198",
+     "0000950170-23-041924/C_358cba73-83d8-49a7-acd2-68d89a642223/ROW-e650f9d0802a7d3e",
+     "0000950170-23-041924/C_6e922420-1cc1-4adc-9996-5090cdbd4ced/ROW-d60e040ad9cd152a",
+     "0000950170-23-041924/C_85311fc8-fc11-49a0-9aaf-98f601de09da/ROW-d00bfcc23a626f39",
+     "0000950170-23-041924/C_27ffbb03-a0f8-42e1-afe9-a932ff28860c/ROW-fb8806fbd86448e0",
+     "0000950170-23-041924/C_a1fbfb53-300b-426b-8bf0-16b6a659f510/ROW-6b396cd8a3830186",
+     "0000950170-23-041924/C_3bdb33c3-5c77-4ea6-9afd-653ea54ec845/ROW-f2c939a944e9e491",
+     "0000950170-23-041924/C_d22afc04-f067-4153-a94c-c3b6a16991ca/ROW-c13de7bb154b1088"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041924/C_20396c02-e613-437e-a29d-9bf8cdf0c582/ROW-93a97b86e58aa198",
+     "0000950170-23-041924/C_358cba73-83d8-49a7-acd2-68d89a642223/ROW-e650f9d0802a7d3e",
+     "0000950170-23-041924/C_6e922420-1cc1-4adc-9996-5090cdbd4ced/ROW-d60e040ad9cd152a",
+     "0000950170-23-041924/C_85311fc8-fc11-49a0-9aaf-98f601de09da/ROW-d00bfcc23a626f39",
+     "0000950170-23-041924/C_27ffbb03-a0f8-42e1-afe9-a932ff28860c/ROW-fb8806fbd86448e0",
+     "0000950170-23-041924/C_a1fbfb53-300b-426b-8bf0-16b6a659f510/ROW-6b396cd8a3830186",
+     "0000950170-23-041924/C_3bdb33c3-5c77-4ea6-9afd-653ea54ec845/ROW-f2c939a944e9e491",
+     "0000950170-23-041924/C_d22afc04-f067-4153-a94c-c3b6a16991ca/ROW-c13de7bb154b1088"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041924",
+     "text": "Boasso Global - Revolving Credit Facility (8)(9)(12) S + 6.75 % 0.75 % 12.02 % 7/1/2026 - ( 173 ) ( 159 ) ( 0.02 )"
+    },
+    {
+     "accession": "0000950170-23-041924",
+     "text": "Frontgrade Technologies Inc. - Revolving Credit Facility (8)(9)(12)(15) S + 6.75 % 0.75 % 12.02 % 1/9/2028 - ( 143 ) ( 143 ) ( 0.02 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row read on the page (inline-XBRL row of its own fair-value fact): par a dash, cost printed in parentheses, published cost equal to the printed cost (script spec_update.py asserts it for 8 rows).",
+    "At 2023-06-30 the filer tagged the cost positive; this run set the printed sign (24 row corrections), so the accepted-reason check (values compared with the tag) cannot clear them: proposal PD-C107 as_filed."
+   ],
+   "next_action": "Proposal PD-C107 (as_filed, reason key c107-negative-cost-undrawn); the owner or the accepted-reason check accepts it."
+  },
+  {
+   "finding_id": "RVQ_REV_e10429d78b9c",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352436/C_8999c3ac-761f-4011-8709-61734a548a18/ROW-c3d7da1f491c7f74",
+     "0001193125-26-352436/C_38fbfe4d-2064-4ff7-9b61-9a6449399c03/ROW-dc0c2481700954e8",
+     "0001193125-26-352436/C_481d1be2-2d83-4d36-aace-46aa71e5bc2c/ROW-079fce6137b68da1",
+     "0001193125-26-352436/C_4c5d3410-df55-4793-8123-37412e3f015a/ROW-f93300749682ae7b",
+     "0001193125-26-352436/C_e743dfa9-7d85-4b50-9aaf-f4673551c5e3/ROW-e89e67ce361e6db6",
+     "0001193125-26-352436/C_43da8643-64fa-4f3e-aebe-3e5afae1a9d9/ROW-a820c0afe5428638",
+     "0001193125-26-352436/C_d45be095-09c5-4ba6-80e0-4aa0d595deba/ROW-c028dca53a998830",
+     "0001193125-26-352436/C_2291a347-817f-4f07-a7a0-9707a599e022/ROW-58f8366c229bd755",
+     "0001193125-26-352436/C_628d5cdb-936c-4353-9f60-c6b7ca6d46c8/ROW-fa80a8967fe8d378",
+     "0001193125-26-352436/C_1336b583-9a36-478e-ae92-56eb5d8cfd4d/ROW-dfb21f58961c2688",
+     "0001193125-26-352436/C_0c4a1cfe-9447-46a7-96ae-2af95cc2e6fe/ROW-65182d8cf3922d66",
+     "0001193125-26-352436/C_685134a3-ee26-40f5-a9d3-35bc32dae12b/ROW-6152d7fb3e1cc7be",
+     "0001193125-26-352436/C_80de9642-a606-4ac0-8b57-56e92e181733/ROW-7930965f8cfe0ce0",
+     "0001193125-26-352436/C_3e23e534-6776-43b2-b16f-70375a6bb4e0/ROW-51e0ca02f7435ada",
+     "0001193125-26-352436/C_4f9718cd-ff7e-45df-8e9e-3ea10b07aca4/ROW-6c12ac478d07b074",
+     "0001193125-26-352436/C_dcb76ddb-1f28-4a27-9566-1fd599e7d8a4/ROW-0fae316605e07f4d",
+     "0001193125-26-352436/C_1b39ecea-a6c4-4918-8328-bcc40b98a2be/ROW-bbe0d2e8fec25ffe",
+     "0001193125-26-352436/C_6e1bb5d3-aab8-46c9-b018-d2854b5486ae/ROW-f34efd70e5f4c391",
+     "0001193125-26-352436/C_062efdd9-fcf9-495a-9aa1-fb1640207ab4/ROW-f539883ff8178b37",
+     "0001193125-26-352436/C_b5b8b4c6-2322-4503-827e-7a337fed6d5f/ROW-fb787e133b534f0e",
+     "0001193125-26-352436/C_e333422f-dac4-4577-9919-63a240a6e163/ROW-b868501398712f27",
+     "0001193125-26-352436/C_59d9f11d-6d3c-4371-89d8-f7ae1d94158d/ROW-1753613f6413f71b",
+     "0001193125-26-352436/C_74f03e05-0d47-4bce-8592-831e8356d9f1/ROW-b18844f55c946e47"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352436/C_8999c3ac-761f-4011-8709-61734a548a18/ROW-c3d7da1f491c7f74",
+     "0001193125-26-352436/C_38fbfe4d-2064-4ff7-9b61-9a6449399c03/ROW-dc0c2481700954e8",
+     "0001193125-26-352436/C_481d1be2-2d83-4d36-aace-46aa71e5bc2c/ROW-079fce6137b68da1",
+     "0001193125-26-352436/C_4c5d3410-df55-4793-8123-37412e3f015a/ROW-f93300749682ae7b",
+     "0001193125-26-352436/C_e743dfa9-7d85-4b50-9aaf-f4673551c5e3/ROW-e89e67ce361e6db6",
+     "0001193125-26-352436/C_43da8643-64fa-4f3e-aebe-3e5afae1a9d9/ROW-a820c0afe5428638",
+     "0001193125-26-352436/C_d45be095-09c5-4ba6-80e0-4aa0d595deba/ROW-c028dca53a998830",
+     "0001193125-26-352436/C_2291a347-817f-4f07-a7a0-9707a599e022/ROW-58f8366c229bd755",
+     "0001193125-26-352436/C_628d5cdb-936c-4353-9f60-c6b7ca6d46c8/ROW-fa80a8967fe8d378",
+     "0001193125-26-352436/C_1336b583-9a36-478e-ae92-56eb5d8cfd4d/ROW-dfb21f58961c2688",
+     "0001193125-26-352436/C_0c4a1cfe-9447-46a7-96ae-2af95cc2e6fe/ROW-65182d8cf3922d66",
+     "0001193125-26-352436/C_685134a3-ee26-40f5-a9d3-35bc32dae12b/ROW-6152d7fb3e1cc7be",
+     "0001193125-26-352436/C_80de9642-a606-4ac0-8b57-56e92e181733/ROW-7930965f8cfe0ce0",
+     "0001193125-26-352436/C_3e23e534-6776-43b2-b16f-70375a6bb4e0/ROW-51e0ca02f7435ada",
+     "0001193125-26-352436/C_4f9718cd-ff7e-45df-8e9e-3ea10b07aca4/ROW-6c12ac478d07b074",
+     "0001193125-26-352436/C_dcb76ddb-1f28-4a27-9566-1fd599e7d8a4/ROW-0fae316605e07f4d",
+     "0001193125-26-352436/C_1b39ecea-a6c4-4918-8328-bcc40b98a2be/ROW-bbe0d2e8fec25ffe",
+     "0001193125-26-352436/C_6e1bb5d3-aab8-46c9-b018-d2854b5486ae/ROW-f34efd70e5f4c391",
+     "0001193125-26-352436/C_062efdd9-fcf9-495a-9aa1-fb1640207ab4/ROW-f539883ff8178b37",
+     "0001193125-26-352436/C_b5b8b4c6-2322-4503-827e-7a337fed6d5f/ROW-fb787e133b534f0e",
+     "0001193125-26-352436/C_e333422f-dac4-4577-9919-63a240a6e163/ROW-b868501398712f27",
+     "0001193125-26-352436/C_59d9f11d-6d3c-4371-89d8-f7ae1d94158d/ROW-1753613f6413f71b",
+     "0001193125-26-352436/C_74f03e05-0d47-4bce-8592-831e8356d9f1/ROW-b18844f55c946e47"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352436",
+     "text": "Alteryx, Inc. - Revolving Credit Facility (11) S + 6.00 % 0.75 % 9.73 % 3/19/2031 - ( 96 ) ( 480 ) ( 0.01 )"
+    },
+    {
+     "accession": "0001193125-26-352436",
+     "text": "SurveyMonkey Global Inc. - Revolving Credit Facility (11) S + 5.75 % 1.00 % 9.48 % 5/31/2029 - ( 113 ) ( 422 ) ( 0.01 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row read on the page (inline-XBRL row of its own fair-value fact): par a dash, cost printed in parentheses, published cost equal to the printed cost (script spec_update.py asserts it for 23 rows).",
+    "Healthco GBP delayed draw: the filer tags the printed cost (52) as a USD principal fact; the printed cost is published as cost, par withdrawn."
+   ],
+   "next_action": "Proposal PD-C107 (as_filed, reason key c107-negative-cost-undrawn); the owner or the accepted-reason check accepts it."
+  },
+  {
+   "finding_id": "RVQ_REV_e2ce0fe3956c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-062232/C_581a4b8e-7bb0-4658-a524-a54a4b599f81/ROW-2c3eb44b3e2f012e",
+     "0000950170-23-062232/C_e6f9f8e6-f790-4903-836b-6054edf3d6e7/ROW-f9008e67a78bbdeb",
+     "0000950170-23-062232/C_bb8429a6-ea39-4eac-b75c-66b036e996f1/ROW-71302424c2c7607b",
+     "0000950170-23-062232/C_fa8539b3-8a28-423c-bda1-5f354e9b9efd/ROW-6be45a70dfeeabbd",
+     "0000950170-23-062232/C_b0fee1cc-7662-476d-b8ea-ed25addc76f8/ROW-ca94d880b5142889",
+     "0000950170-23-062232/C_eb306281-6d8b-4ba3-927b-2cfdc822f209/ROW-6126335cfa5571f3",
+     "0000950170-23-062232/C_b0d898a8-6b26-4bc6-b694-2ec4318d927f/ROW-873099816d09596b",
+     "0000950170-23-062232/C_9018f69b-3bbf-4905-9618-788ac47f6786/ROW-ad8ea92395d5e8cc",
+     "0000950170-23-062232/C_8353db51-37ee-4925-a8ae-00c6dd479906/ROW-ce6fe67285358bc5"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-062232/C_581a4b8e-7bb0-4658-a524-a54a4b599f81/ROW-2c3eb44b3e2f012e",
+     "0000950170-23-062232/C_e6f9f8e6-f790-4903-836b-6054edf3d6e7/ROW-f9008e67a78bbdeb",
+     "0000950170-23-062232/C_bb8429a6-ea39-4eac-b75c-66b036e996f1/ROW-71302424c2c7607b",
+     "0000950170-23-062232/C_fa8539b3-8a28-423c-bda1-5f354e9b9efd/ROW-6be45a70dfeeabbd",
+     "0000950170-23-062232/C_b0fee1cc-7662-476d-b8ea-ed25addc76f8/ROW-ca94d880b5142889",
+     "0000950170-23-062232/C_eb306281-6d8b-4ba3-927b-2cfdc822f209/ROW-6126335cfa5571f3",
+     "0000950170-23-062232/C_b0d898a8-6b26-4bc6-b694-2ec4318d927f/ROW-873099816d09596b",
+     "0000950170-23-062232/C_9018f69b-3bbf-4905-9618-788ac47f6786/ROW-ad8ea92395d5e8cc",
+     "0000950170-23-062232/C_8353db51-37ee-4925-a8ae-00c6dd479906/ROW-ce6fe67285358bc5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062232",
+     "text": "Accession Risk Management - Delayed Draw Term Loan (8)(9)(12) S + 6.00 % 0.75 % 11.31 % 10/30/2026 - ( 716 ) ( 726 ) ( 0.09 )"
+    },
+    {
+     "accession": "0000950170-23-062232",
+     "text": "Momentive Global - Revolving Credit Facility (8)(9)(12) S + 7.00 % 1.00 % 12.31 % 5/31/2029 - ( 108 ) ( 109 ) ( 0.01 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row read on the page (inline-XBRL row of its own fair-value fact): par a dash, cost printed in parentheses, published cost equal to the printed cost (script spec_update.py asserts it for 9 rows).",
+    "At 2023-09-30 the filer tagged the cost positive; this run set the printed sign (24 row corrections), so the accepted-reason check (values compared with the tag) cannot clear them: proposal PD-C107 as_filed."
+   ],
+   "next_action": "Proposal PD-C107 (as_filed, reason key c107-negative-cost-undrawn); the owner or the accepted-reason check accepts it."
+  }
+ ],
+ "name_shape_exceptions": [],
+ "external_code_diff_msza_vs_rg2": {
+  "corrected_fields": 1,
+  "entity_id": 289,
+  "canonical_name": 147,
+  "instrument_type": 1,
+  "position_id": 175
+ },
  "tests_run": [
-  "Round 1: tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py: 654 passed; tests/test_v05_fund_gate.py tests/test_audit_wrapper_cohort.py tests/test_unified_holdings.py -k 'correction or gate or cohort': 204 passed",
-  "Round 2: no test run (23 lines added to row_corrections.csv and their spec; no code or wrapper change). Build log: 0 unmatched row corrections for this fund.",
-  "scratch/fund_runs/0001849894/check_quotes.py on proposals and report: all quotes found"
+  "scratch/fund_runs/0001849894/retire_check.py: 4 retirements pass, each check also run on planted wrong values (assertions in the script)",
+  "no pytest: no shared code changed"
  ],
  "not_done": [
-  "Builds used: 2 of 6 by me (msdxa, msdxc).",
-  "Count or amount was decided from the column note and header, not from any document outside the filing; no share price or certificate terms were read.",
-  "The remaining C04 quarters (9) fail only on dash rows (Xponential, Accession); each dash was read on the page for each quarter.",
-  "Earlier verdicts: the reviewers' table and row indices were not opened; their quoted text was matched to the printed page and to the build.",
-  "A01: the member each subtotal is tagged on was taken from the check's output and the published identifiers, not read tag by tag (2023-09-30 confirmed by the orchestrator).",
-  "F27: the weighted coupon side was not re-read on the page in this run.",
-  "Not checked: non-accrual flags, GICS labels, position identity across quarters, cost beyond the rows quoted, the D-099 rate-code and name fixes, 2021-12-31 to 2022-12-31 (no schedule published). No 2026-06-30 filing on disk.",
-  "36 outstanding findings all have a proposal; none is accepted. 'All findings covered' is not 'data correct'."
+  "independent review file and 20-row page sample are the orchestrator's",
+  "JV / underlying-schedule rows: none at this fund",
+  "the 2021 to 2022 quarters have no rows and were not audited (F28 finding)",
+  "no check of fair_value_level, unrealized gain or pct_of_net_assets against the page beyond the sign check",
+  "lien position checked against the member label only (printed lien headings are section rows, not row cells)",
+  "industry and GICS labels not read against the printed industry sub-headings beyond blank and Accession/Titan checks",
+  "maturity-extension chains (Boasso, Natural Partners, Candle, Vision Purchaser, Inmar and others) left as the matcher builds them; amendments of the same loan, not verified one by one"
  ]
 }
