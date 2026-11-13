@@ -105,7 +105,7 @@ class OverlayImpact:
     conflict_rows: list = field(default_factory=list)
 
 
-def stage_overlay(cik: str, signature: str, parquet_path: str) -> OverlayImpact:
+def stage_overlay(cik: str, signature: str, parquet_path: str, max_conflicts: int | None = 500) -> OverlayImpact:
     import duckdb
 
     grammar = load_grammar(cik)
@@ -126,8 +126,9 @@ def stage_overlay(cik: str, signature: str, parquet_path: str) -> OverlayImpact:
         WHERE CAST(cik AS VARCHAR) = '{cik}'
           AND investment_identifier IS NOT NULL
           AND CAST(period AS VARCHAR) = CAST(report_date AS VARCHAR)
+        ORDER BY ALL
         """
-    ).fetchall()
+    ).fetchall()  # ordered: conflict_rows is capped at 500, so the kept rows must not depend on scan order
     con.close()
 
     imp = OverlayImpact(cik=cik, signature=signature)
@@ -167,7 +168,7 @@ def stage_overlay(cik: str, signature: str, parquet_path: str) -> OverlayImpact:
             else:
                 fi.conflict += 1
                 fi.conflict_fv += fv
-                if len(imp.conflict_rows) < 500:
+                if max_conflicts is None or len(imp.conflict_rows) < max_conflicts:
                     crow = {
                         "cik": cik, "report_date": rd, "field": col,
                         "production_value": prod, "agentA_value": a_val,

@@ -1,0 +1,2207 @@
+{
+ "_note": "agentA check repair REQ-APZ-1: real-error verdicts on agentA findings whose cited rows are published at their printed values (standing rule D-252, 2026-11-13).",
+ "retirements": [
+  {
+   "retirement_id": "VR-AGA-1916099-1",
+   "review_id": "RVQ_BLK_0abd14a965ac",
+   "verdict_sha256": "e9f76d38c8beb2b3f65f56a0e5a4201dbc4210f36947c95b18e8419c69032a6b",
+   "cik": "0001916099",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-ad433ad185c47386, ROW-bbf7b5ea4aa24e9e; published values ROW-bbf7b5ea4aa24e9e {'maturity_date': '2032-07-01'}; ROW-ad433ad185c47386 {'maturity_date': '2032-08-02'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104439",
+     "quote": "Grid Alliance Partners LLC (6) Term Loan 8.42 % SOFR 4.75 % 7/01/2025 7/1/2032 49,196 48,739 48,950",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104439",
+     "quote": "GarageCo Intermediate II LLC (6) Term Loan 8.10 % SOFR 4.25 % 8/01/2025 8/2/2032 16,485 16,330 16,320",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-ad433ad185c47386",
+    "ROW-bbf7b5ea4aa24e9e"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1959568-1",
+   "review_id": "RVQ_BLK_0f77212c2dee",
+   "verdict_sha256": "41230a92b6623151326db59a4460399fa3f817a7aedc36eb783fe80497aa4958",
+   "cik": "0001959568",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-1ae36bbdfdcb0362, ROW-22308ffdcb76fe0a, ROW-27c988b5aea86201, ROW-3993efed0fc01087, ROW-3d1daf4f8d56e7ee, ROW-7dd363127c4f5485, ROW-9a4f4b6eb3b45773, ROW-c59888cb15aa0910, ROW-cbd0baf3cab4fb61, ROW-d47d1b22775b5d34, ROW-ead5a62d3a2d1eab, ROW-f8b97fff8cf293c9; published values ROW-ead5a62d3a2d1eab {'maturity_date': '2033-01-10'}; ROW-27c988b5aea86201 {'maturity_date': '2032-03-24'}; ROW-cbd0baf3cab4fb61 {'maturity_date': '2032-03-24'}; ROW-d47d1b22775b5d34 {'maturity_date': '2032-03-24'}; ROW-7dd363127c4f5485 {'maturity_date': '2030-04-03'}; ROW-c59888cb15aa0910 {'maturity_date': '2030-04-03'}; ROW-9a4f4b6eb3b45773 {'maturity_date': '2032-04-12'}; ROW-3d1daf4f8d56e7ee {'maturity_date': '2031-01-30'}; ROW-1ae36bbdfdcb0362 {'maturity_date': '2031-01-30'}; ROW-22308ffdcb76fe0a {'maturity_date': '2029-09-12'}; ROW-3993efed0fc01087 {'maturity_date': '2029-09-12'}; ROW-f8b97fff8cf293c9 {'maturity_date': '2028-09-22'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "PTSH Intermediate Holdings, LLC First Lien Term Loan S + 5.00 % 1/10/2033 1,558 1,543 1,543 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Arax Midco, LLC First Lien Delayed Draw Term Loan S + 5.25 % 3/24/2032 - ( 8 ) ( 16 ) 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Arax Midco, LLC First Lien Revolver S + 5.25 % 3/24/2032 - - - 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Arax Midco, LLC First Lien Term Loan S + 5.25 % 3/24/2032 5,323 5,296 5,296 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "World Insurance Associates, LLC First Lien Delayed Draw Term Loan S + 5.00 % 4/3/2030 1,171 1,165 1,171 9,23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "World Insurance Associates, LLC First Lien Revolver S + 5.00 % 4/3/2030 - - - 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Real Chemistry Intermediate III, Inc. First Lien Term Loan S + 4.50 % 4/12/2032 5,151 5,128 5,151 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Aptean, Inc. First Lien Delayed Draw Term Loan S + 4.75 % 1/30/2031 - - - 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Aptean, Inc. First Lien Revolver S + 4.75 % 1/30/2031 47 46 47 9,23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Bluefin Holding, LLC First Lien Revolver S + 4.25 % 9/12/2029 - - ( 1 ) 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Bluefin Holding, LLC First Lien Term Loan S + 4.25 % 9/12/2029 718 716 707 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "IG Investments Holdings, LLC First Lien Term Loan S + 5.00 % 9/22/2028 $ 5,787 $ 5,726 $ 5,787 9",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-1ae36bbdfdcb0362",
+    "ROW-22308ffdcb76fe0a",
+    "ROW-27c988b5aea86201",
+    "ROW-3993efed0fc01087",
+    "ROW-3d1daf4f8d56e7ee",
+    "ROW-7dd363127c4f5485",
+    "ROW-9a4f4b6eb3b45773",
+    "ROW-c59888cb15aa0910",
+    "ROW-cbd0baf3cab4fb61",
+    "ROW-d47d1b22775b5d34",
+    "ROW-ead5a62d3a2d1eab",
+    "ROW-f8b97fff8cf293c9"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1920453-1",
+   "review_id": "RVQ_BLK_1253b8d7a8c8",
+   "verdict_sha256": "6b60331e26081d62b9a9eb83fff7537a50641b1287e84574d148c82b7118529a",
+   "cik": "0001920453",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences. This finding also clears because the fund's grammar fails the held-out gate on current data; the evidence here is the same printed-line check, not the cohort change.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-0d7618e2c8e273b0, ROW-0ea5de212e329a58, ROW-15c52a2684166618, ROW-7bd8ffaf07c53a15, ROW-acd5b07519c36149; published values ROW-acd5b07519c36149 {'basis_spread': 5.0}; ROW-0d7618e2c8e273b0 {'basis_spread': 5.25}; ROW-15c52a2684166618 {'basis_spread': 5.0}; ROW-0ea5de212e329a58 {'basis_spread': 6.0}; ROW-7bd8ffaf07c53a15 {'basis_spread': 4.75}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119488",
+     "quote": "Prism Parent Co Inc. (j)(l) Term Loan SOFR + 5.00 % 8.73 % 9/16/2028 5,029,204 4,926,262 5,029,204",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119488",
+     "quote": "Routeware, Inc (f)(i)(l) Delayed Draw Term Loan SOFR + 5.25 % 9.06 % 9/18/2031 1,109,688 1,069,970 1,104,139",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119488",
+     "quote": "Vrc Companies LLC (f)(i)(l) Delayed Draw Term Loan SOFR + 5.00 % 8.75 % 6/29/2027 6,472,896 6,389,252 6,382,990",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119488",
+     "quote": "Bron Buyer, LLC (i)(l)(q)(r) Term Loan SOFR + 6.00 % 9.94 % 1/13/2029 29,153,500 28,750,705 29,153,500",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119488",
+     "quote": "Currier Plastics Acquisition, LLC (i)(l) Delayed Draw Term Loan SOFR + 4.75 % 8.47 % 9/19/2031 9,866,320 9,743,438 9,742,991",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-0d7618e2c8e273b0",
+    "ROW-0ea5de212e329a58",
+    "ROW-15c52a2684166618",
+    "ROW-7bd8ffaf07c53a15",
+    "ROW-acd5b07519c36149"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": true
+  },
+  {
+   "retirement_id": "VR-AGA-1849894-1",
+   "review_id": "RVQ_BLK_1a92e0172194",
+   "verdict_sha256": "ee6f4ff6449003b964af32a669e9e9e90f4281dbaf833f68316b936d11f18644",
+   "cik": "0001849894",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-598b31f273ebdd3c, ROW-cb25b9c4187f258a; published values ROW-598b31f273ebdd3c {'maturity_date': '2033-01-09'}; ROW-cb25b9c4187f258a {'maturity_date': '2033-01-09'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "True Talent Advisory Borrower, LLC - Delayed Draw Term Loan (11) S + 5.25 % 1.50 % 8.94 % 1/9/2033 - ( 294 ) ( 295 ) ( 0.01 )",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-222241",
+     "quote": "True Talent Advisory Borrower, LLC S + 5.25 % 1.50 % 8.95 % 1/9/2033 67,500 66,198 66,192 2.02",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-598b31f273ebdd3c",
+    "ROW-cb25b9c4187f258a"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1885968-1",
+   "review_id": "RVQ_BLK_1ce09e264cce",
+   "verdict_sha256": "ca3013256c932c4fffd650ac7e6fd7f0778af0e292a1f9805177238eced2e100",
+   "cik": "0001885968",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-2e985d6c751fdcf6, ROW-37902dbe6db8dd01, ROW-3ef0f5a6d45eba22, ROW-429562640ddd4d35, ROW-478261d22972b39b, ROW-4b72c8bdcdbc22b6, ROW-68f5961031a9947b, ROW-729cf713d3b7412f, ROW-84c34a2a10558137, ROW-86647baf6d5c7c51, ROW-9246acf4f8740361, ROW-971bb737a052f0ab, ROW-9aacc63625b98abc, ROW-9fcdcda916123ffe, ROW-a8f4ce15bb89cd12, ROW-ab3fe22389c989f6, ROW-b6f9aefcef4849e8, ROW-f1745c51a2309286, ROW-ffdccb90e956569c; published values ROW-729cf713d3b7412f {'maturity_date': '2029-12-10'}; ROW-9aacc63625b98abc {'maturity_date': '2028-12-09'}; ROW-37902dbe6db8dd01 {'maturity_date': '2027-12-17'}; ROW-9fcdcda916123ffe {'maturity_date': '2030-06-28'}; ROW-b6f9aefcef4849e8 {'maturity_date': '2028-12-28'}; ROW-f1745c51a2309286 {'maturity_date': '2028-05-02'}; ROW-4b72c8bdcdbc22b6 {'maturity_date': '2028-06-24'}; ROW-429562640ddd4d35 {'maturity_date': '2029-07-02'}; ROW-3ef0f5a6d45eba22 {'maturity_date': '2029-07-02'}; ROW-84c34a2a10558137 {'maturity_date': '2030-09-10'}; ROW-9246acf4f8740361 {'maturity_date': '2030-09-10'}; ROW-2e985d6c751fdcf6 {'maturity_date': '2029-06-11'}; ROW-971bb737a052f0ab {'maturity_date': '2029-06-11'}; ROW-68f5961031a9947b {'maturity_date': '2028-12-07'}; ROW-ffdccb90e956569c {'maturity_date': '2028-12-07'}; ROW-86647baf6d5c7c51 {'maturity_date': '2028-12-07'}; ROW-a8f4ce15bb89cd12 {'maturity_date': '2028-11-10'}; ROW-ab3fe22389c989f6 {'maturity_date': '2028-11-10'}; ROW-478261d22972b39b {'maturity_date': '2028-11-10'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Atlas US Finco, Inc. (5) (6) (9) (14) First Lien Debt S + 4.75 % 8.61 % 12/10/2029 2,972 2,959 2,972 0.26",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Atlas US Finco, Inc. (5) (6) (14) (17) First Lien Debt S + 4.75 % 8.61 % 12/09/2028 - ( 10 ) - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "FLS Holding, Inc. (5) (6) (14) (17) First Lien Debt S + 5.25 % 9.07 % 12/17/2027 1,898 1,886 1,614 0.14",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "HSI Halo Acquisition, Inc. (5) (7) (17) First Lien Debt S + 5.00 % 8.84 % 06/28/2030 - ( 13 ) ( 7 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Surewerx Purchaser III, Inc. (5) (7) (14) (17) First Lien Debt S + 5.25 % 8.92 % 12/28/2028 - ( 3 ) - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "IQN Holding Corp. (5) (7) (17) First Lien Debt S + 5.75 % (incl. 3.13 % PIK) 9.42 % 05/02/2028 417 415 417 0.04",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "LegitScript, LLC (5) (7) (17) First Lien Debt S + 5.75 % 9.47 % 06/24/2028 1,078 1,053 1,078 0.10",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "LogRhythm, Inc. (5) (6) (11) First Lien Debt S + 7.50 % 11.34 % 07/02/2029 2,727 2,665 2,618 0.23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "LogRhythm, Inc. (5) (6) (17) First Lien Debt S + 7.50 % 11.34 % 07/02/2029 - ( 6 ) ( 11 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Nasuni Corporation (5) (7) (9) First Lien Debt S + 5.00 % 8.67 % 09/10/2030 8,276 8,173 8,276 0.74",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Nasuni Corporation (5) (7) (17) First Lien Debt S + 5.00 % 8.67 % 09/10/2030 - ( 20 ) - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Netwrix Corporation And Concept Searching, Inc. (5) (7) (9) First Lien Debt S + 4.50 % 8.32 % 06/11/2029 5,010 4,983 4,984 0.44",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Netwrix Corporation And Concept Searching, Inc. (5) (7) (17) First Lien Debt S + 4.50 % 8.32 % 06/11/2029 - ( 2 ) ( 2 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Riskonnect Parent, LLC (5) (7) (9) First Lien Debt S + 4.75 % 8.62 % 12/07/2028 6,172 6,095 6,172 0.55",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Riskonnect Parent, LLC (5) (7) (17) First Lien Debt S + 4.75 % 8.62 % 12/07/2028 4,740 4,677 4,740 0.42",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Riskonnect Parent, LLC (5) (7) (17) First Lien Debt S + 4.75 % 8.62 % 12/07/2028 168 157 168 0.01",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Saturn Borrower, Inc. (5) (6) (9) First Lien Debt S + 6.00 % 9.67 % 11/10/2028 3,249 3,211 3,223 0.29",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Saturn Borrower, Inc. (5) (6) (17) First Lien Debt S + 6.00 % 9.67 % 11/10/2028 - ( 7 ) ( 10 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085572",
+     "quote": "Saturn Borrower, Inc. (5) (6) (17) First Lien Debt S + 6.00 % 9.67 % 11/10/2028 136 130 131 0.01",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-2e985d6c751fdcf6",
+    "ROW-37902dbe6db8dd01",
+    "ROW-3ef0f5a6d45eba22",
+    "ROW-429562640ddd4d35",
+    "ROW-478261d22972b39b",
+    "ROW-4b72c8bdcdbc22b6",
+    "ROW-68f5961031a9947b",
+    "ROW-729cf713d3b7412f",
+    "ROW-84c34a2a10558137",
+    "ROW-86647baf6d5c7c51",
+    "ROW-9246acf4f8740361",
+    "ROW-971bb737a052f0ab",
+    "ROW-9aacc63625b98abc",
+    "ROW-9fcdcda916123ffe",
+    "ROW-a8f4ce15bb89cd12",
+    "ROW-ab3fe22389c989f6",
+    "ROW-b6f9aefcef4849e8",
+    "ROW-f1745c51a2309286",
+    "ROW-ffdccb90e956569c"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1849894-2",
+   "review_id": "RVQ_BLK_1eede18540d0",
+   "verdict_sha256": "934d5462d888221e2d02a67ccfa56d5f200bf3ea44321e97969c68660250fb08",
+   "cik": "0001849894",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-74937fa5f68b42e3; published values ROW-74937fa5f68b42e3 {'maturity_date': '2029-03-31'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124538",
+     "quote": "Agrofresh - Revolving Credit Facility (11) S + 5.50 % 0.00 % 9.32 % 3/31/2029 3,306 3,199 3,199 0.10",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-74937fa5f68b42e3"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1634452-1",
+   "review_id": "RVQ_BLK_27138d666f42",
+   "verdict_sha256": "6b1891e68ab91082679d4e31f4ca40f94c6cde738e9898d0d33e04a359098f57",
+   "cik": "0001634452",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences. This finding also clears because the fund's grammar fails the held-out gate on current data; the evidence here is the same printed-line check, not the cohort change.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-3d100197c251f36b, ROW-a94a88e4745164bd, ROW-ac020446ee55589f; published values ROW-ac020446ee55589f {'basis_spread': 4.5}; ROW-a94a88e4745164bd {'basis_spread': 4.5}; ROW-3d100197c251f36b {'basis_spread': 4.25}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "quote": "MedBridge Holdings, LLC Software & Tech Services Term Loan 8.16 % ( S + 4.50 %; 1.00 % Floor) 12/23/2026 755,623 753,152 755,623 (15)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "quote": "Saab Purchaser, Inc. Software & Tech Services Term Loan 8.19 % ( S + 4.50 %; 0.75 % Floor) 11/12/2031 916,717 908,160 893,799 (15)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "quote": "Wealth Enhancement Group, LLC Financials Delayed Draw Term Loan 7.90 % (S + 4.25 %; 1.00 % Floor) 10/2/2028 1,141,223 1,136,384 1,141,223 (6)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-3d100197c251f36b",
+    "ROW-a94a88e4745164bd",
+    "ROW-ac020446ee55589f"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": true
+  },
+  {
+   "retirement_id": "VR-AGA-1976336-1",
+   "review_id": "RVQ_BLK_2ff53ac5ec11",
+   "verdict_sha256": "ad3597d86dc2abe53cc71be8bd5cfce9e3f11bfe9f953fb408a13b037f6a4e12",
+   "cik": "0001976336",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-0efb02fcb2d2969f, ROW-490d5e4b4613180c; published values ROW-0efb02fcb2d2969f {'maturity_date': '2028-03-06'}; ROW-490d5e4b4613180c {'maturity_date': '2030-04-04'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221684",
+     "quote": "Process Equipment, Inc. (8)(13) First Lien Term Loan S + 5.25 % 9.19 % 3/6/2028 196 196 196 0.02",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221684",
+     "quote": "TerSera Therapeutics LLC (8)(13) First Lien Term Loan S + 5.25 % 8.92 % 4/4/2030 2,474 2,465 2,467 0.31",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-0efb02fcb2d2969f",
+    "ROW-490d5e4b4613180c"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1899996-1",
+   "review_id": "RVQ_BLK_3262d1d16a0f",
+   "verdict_sha256": "d380be1475a67379bc0d6b7822b7b85294d06ccbe0f81741ae4873aa2f369fb3",
+   "cik": "0001899996",
+   "engine": "agentA",
+   "rule_name": "agentA_reference_uncorroborated",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (reference_rate_type and basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-6716d4d703706be1; published values ROW-6716d4d703706be1 {'reference_rate_type': 'SOFR', 'basis_spread': 6.0}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214221",
+     "quote": "CareRing Health, LLC (j)(q) Delayed Draw Term Loan SOFR + 6.00% 9.67 % 5/4/2028 6,484,697 6,473,978 6,426,335",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-6716d4d703706be1"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-2011498-1",
+   "review_id": "RVQ_BLK_37bcaced574f",
+   "verdict_sha256": "cc4413f3bf28ac5dd8900760fa9443742a8ad1dde6fcafeca85b32357eb90f35",
+   "cik": "0002011498",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-3f70f09de00945e8, ROW-426287a8c7a38f17; published values ROW-426287a8c7a38f17 {'maturity_date': '2031-06-27'}; ROW-3f70f09de00945e8 {'maturity_date': '2031-10-14'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "quote": "Mountain Parent, Inc. First Lien Term Loan SOFR + 4.75 % 8.45 % 10/21/2024 6/27/2031 53,295 52,964 53,295 10.0 % *3b(6)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "quote": "Navex Global Holdings Corporation First Lien Revolving Loan SOFR + 5.00 % - 10/14/2025 10/14/2031 - ( 2 ) ( 2 ) 0.0 % *(6)(8)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-3f70f09de00945e8",
+    "ROW-426287a8c7a38f17"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1919369-1",
+   "review_id": "RVQ_BLK_401e743b3474",
+   "verdict_sha256": "5895cdc5f886347ca836850b83241a48eea89c63c9c5ace0431c72e4cc7bff91",
+   "cik": "0001919369",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-18fe15e0857bf998; published values ROW-18fe15e0857bf998 {'maturity_date': '2027-03-31'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-101986",
+     "quote": "Stateline Power, LLC (4) (7) (22) SOFR + 4.31 % 8.03 % 3/31/2027 5,217 5,217 5,217 0.6",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-18fe15e0857bf998"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1916099-2",
+   "review_id": "RVQ_BLK_4234e3f4ba7e",
+   "verdict_sha256": "a5dd7a972db1d854b063025a9969a44e37ac1501697fba65e2c2b757d224fd5a",
+   "cik": "0001916099",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-38d36ba8687a1ef9; published values ROW-38d36ba8687a1ef9 {'basis_spread': 6.5}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-216630",
+     "quote": "Dan Newlin Injury Attorneys Services Team, LLC (4)(5)(6) Revolving Line of Credit SOFR 6.50 % 3/10/2026 1/28/2031 - ( 24 ) ( 24 )",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-38d36ba8687a1ef9"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1920453-2",
+   "review_id": "RVQ_BLK_60c04034576d",
+   "verdict_sha256": "5d91bfd35f3362ac89619618d65261c87970d61e9d38e507da6b1c91aa0fa33c",
+   "cik": "0001920453",
+   "engine": "agentA",
+   "rule_name": "agentA_reference_uncorroborated",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (reference_rate_type and basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences. This finding also clears because the fund's grammar fails the held-out gate on current data; the evidence here is the same printed-line check, not the cohort change.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-6252da48957b9f59, ROW-9a466f2075c65ad5, ROW-aac7227d7a88ed66, ROW-e9d02df4dc3940bc; published values ROW-6252da48957b9f59 {'reference_rate_type': 'SOFR', 'basis_spread': 6.0}; ROW-9a466f2075c65ad5 {'reference_rate_type': 'SOFR', 'basis_spread': 4.5}; ROW-e9d02df4dc3940bc {'reference_rate_type': 'SOFR', 'basis_spread': 4.75}; ROW-aac7227d7a88ed66 {'reference_rate_type': 'SOFR', 'basis_spread': 4.11}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214226",
+     "quote": "Luminii LLC (i)(l)(q)(r) Term Loan SOFR + 6.00 % 9.70 % 3/21/2030 28,909,017 $ 28,548,507 $ 28,909,017",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214226",
+     "quote": "Knight AcquireCo, LLC (k)(l)(q)(r) Term Loan SOFR + 4.50 % 8.16 % 11/7/2032 12,559,839 $ 12,507,942 $ 12,497,040",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214226",
+     "quote": "Woven Health Collective, LLC (f)(i)(l) Revolving Credit Facility SOFR + 4.75 % 8.42 % 10/23/2028 1,391,304 $ 1,376,444 $ 1,377,391",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214226",
+     "quote": "Plains All American Pipeline LP (g)(l)(m)(u) Floating Rate Note SOFR + 4.11 % 8.02 % 7,000,000 6,988,094 6,983,689",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-6252da48957b9f59",
+    "ROW-9a466f2075c65ad5",
+    "ROW-aac7227d7a88ed66",
+    "ROW-e9d02df4dc3940bc"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": true
+  },
+  {
+   "retirement_id": "VR-AGA-1976336-2",
+   "review_id": "RVQ_BLK_652c3f40e8dd",
+   "verdict_sha256": "1e1a6dd6ccbc153944df5fcbfb752702e429540daa64fabf7078f12ccb6d4cb3",
+   "cik": "0001976336",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-702b1a5fc9aefa34, ROW-9a66e74fa0039d0a; published values ROW-9a66e74fa0039d0a {'maturity_date': '2031-09-05'}; ROW-702b1a5fc9aefa34 {'maturity_date': '2030-07-26'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115260",
+     "quote": "GTCR Everest Borrower, LLC (5)(6)(8)(16) First Lien Term Loan S + 2.75 % 6.40 % 9/5/2031 383 382 385 0.05",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115260",
+     "quote": "Artifact Bidco, Inc. (7)(12)(15) First Lien Revolver S + 4.15 % 7.80 % 7/26/2030 587 ( 3 ) - -",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-702b1a5fc9aefa34",
+    "ROW-9a66e74fa0039d0a"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1916099-3",
+   "review_id": "RVQ_BLK_6c9b18c52e00",
+   "verdict_sha256": "da8c96bd56afe7ed7d497c3e88c97454524b84c3a61d67bb516d7a5d4680150f",
+   "cik": "0001916099",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-70868a76b6be6350, ROW-d4b866c063ff6df4; published values ROW-70868a76b6be6350 {'maturity_date': '2032-07-01'}; ROW-d4b866c063ff6df4 {'maturity_date': '2031-05-02'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-216630",
+     "quote": "Grid Alliance Partners, LLC (6) Term Loan 8.45 % SOFR 4.75 % 7/1/2025 7/1/2032 61,192 60,645 60,275",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-216630",
+     "quote": "Blitz 24-34 GmbH (6)(7)(9) Term Loan 8.91 % SOFR 5.25 % 5/3/2024 5/2/2031 42,786 42,163 42,786",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-70868a76b6be6350",
+    "ROW-d4b866c063ff6df4"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1885968-2",
+   "review_id": "RVQ_BLK_6f94b7b13496",
+   "verdict_sha256": "946ced5a847ba7eb41d507c391619681069e93d63760d122fc2fafde5d318193",
+   "cik": "0001885968",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-0a734c5a3e3bda5b, ROW-0f7b98f901d90adc, ROW-1a3d4d395f4dd072, ROW-1fc0b59813430cfa, ROW-2378251265cb6cbe, ROW-33606b00329a72ef, ROW-36b6eb0f1e5ab07d, ROW-3e8d3ca43a52003a, ROW-3f23ad63baf24d59, ROW-4ca746f1acac4002, ROW-5715ca64a069806f, ROW-6be937c148db16c3, ROW-79339214096f24a7, ROW-7a73f77b6aa18a3a, ROW-7dfcec0b356127cd, ROW-90c7b8cd4fc6bc56, ROW-94cee5a6e06fb30e, ROW-9dab9028d6126490, ROW-a8b10f9af08f9d2c, ROW-b7a26cd12cfdddb6, ROW-cc3c0efb26373aeb, ROW-df4e7baa26bd7f0c, ROW-eef8781412d806a2, ROW-ef7c38d4779957e4, ROW-efe8afb241a2642a, ROW-f39656e606952a05, ROW-f6665cf2c12f4d4b, ROW-fd85057a89a0ab23; published values ROW-f6665cf2c12f4d4b {'maturity_date': '2029-11-12'}; ROW-0f7b98f901d90adc {'maturity_date': '2029-11-01'}; ROW-33606b00329a72ef {'maturity_date': '2029-11-01'}; ROW-a8b10f9af08f9d2c {'maturity_date': '2029-11-01'}; ROW-3f23ad63baf24d59 {'maturity_date': '2027-08-05'}; ROW-df4e7baa26bd7f0c {'maturity_date': '2028-08-05'}; ROW-3e8d3ca43a52003a {'maturity_date': '2028-08-05'}; ROW-cc3c0efb26373aeb {'maturity_date': '2029-01-02'}; ROW-fd85057a89a0ab23 {'maturity_date': '2029-01-02'}; ROW-4ca746f1acac4002 {'maturity_date': '2029-12-10'}; ROW-9dab9028d6126490 {'maturity_date': '2028-12-11'}; ROW-7a73f77b6aa18a3a {'maturity_date': '2031-05-12'}; ROW-2378251265cb6cbe {'maturity_date': '2031-05-12'}; ROW-efe8afb241a2642a {'maturity_date': '2031-05-12'}; ROW-b7a26cd12cfdddb6 {'maturity_date': '2028-04-07'}; ROW-79339214096f24a7 {'maturity_date': '2028-04-07'}; ROW-1a3d4d395f4dd072 {'maturity_date': '2028-04-07'}; ROW-f39656e606952a05 {'maturity_date': '2029-10-02'}; ROW-36b6eb0f1e5ab07d {'maturity_date': '2030-10-02'}; ROW-eef8781412d806a2 {'maturity_date': '2030-10-02'}; ROW-6be937c148db16c3 {'maturity_date': '2030-12-06'}; ROW-ef7c38d4779957e4 {'maturity_date': '2029-12-07'}; ROW-0a734c5a3e3bda5b {'maturity_date': '2034-03-12'}; ROW-7dfcec0b356127cd {'maturity_date': '2036-03-12'}; ROW-94cee5a6e06fb30e {'maturity_date': '2029-03-12'}; ROW-90c7b8cd4fc6bc56 {'maturity_date': '2029-03-12'}; ROW-1fc0b59813430cfa {'maturity_date': '2029-03-12'}; ROW-5715ca64a069806f {'maturity_date': '2030-04-03'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Jonathan Acquisition Company (5) (6) (9) First Lien Debt S + 4.50 % 8.20 % 11/12/2029 3,555 3,506 3,492 0.30",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Randy's Holdings, Inc. (5) (6) (9) First Lien Debt S + 5.00 % 8.67 % 11/01/2029 12,612 12,390 12,454 1.08",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Randy's Holdings, Inc. (5) (6) (17) First Lien Debt S + 5.00 % 8.67 % 11/01/2029 3,947 3,854 3,864 0.33",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Randy's Holdings, Inc. (5) (6) (17) First Lien Debt S + 5.00 % 8.67 % 11/01/2029 83 57 62 0.01",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sonny's Enterprises, LLC (5) (6) (17) First Lien Debt S + 5.50 % 9.31 % 08/05/2027 1,922 1,904 1,857 0.16",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sonny's Enterprises, LLC (5) (6) (9) First Lien Debt S + 5.50 % 9.31 % 08/05/2028 11,146 11,005 10,839 0.94",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sonny's Enterprises, LLC (5) (6) First Lien Debt S + 5.50 % 9.31 % 08/05/2028 2,659 2,630 2,586 0.22",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "V Global Holdings, LLC (5) (7) (11) First Lien Debt S + 6.25 % (incl. 3.70 % PIK) 10.05 % 01/02/2029 7,799 7,739 7,066 0.61",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "V Global Holdings, LLC (5) (7) (17) First Lien Debt S + 6.25 % (incl. 3.70 % PIK) 9.53 % 01/02/2029 400 395 298 0.03",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Atlas US Finco, Inc. (5) (6) (9) (14) First Lien Debt S + 4.75 % 8.42 % 12/10/2029 19,745 19,473 19,547 1.69",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Atlas US Finco, Inc. (5) (6) (14) (17) First Lien Debt S + 4.75 % 8.42 % 12/11/2028 - ( 9 ) ( 9 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Consor Intermediate II, LLC (5) (7) (11) First Lien Debt S + 4.50 % 8.20 % 05/12/2031 3,360 3,338 3,360 0.29",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Consor Intermediate II, LLC (5) (7) (17) First Lien Debt S + 4.50 % 8.20 % 05/12/2031 - ( 7 ) - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Consor Intermediate II, LLC (5) (7) (17) First Lien Debt S + 4.50 % 8.20 % 05/12/2031 150 146 150 0.01",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Energy Labs Holdings Corp. (5) (6) (9) First Lien Debt S + 5.00 % 8.77 % 04/07/2028 391 389 383 0.03",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Energy Labs Holdings Corp. (5) (6) First Lien Debt S + 5.00 % 8.77 % 04/07/2028 115 113 112 0.01",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Energy Labs Holdings Corp. (5) (6) (17) First Lien Debt S + 5.00 % 8.77 % 04/07/2028 43 42 41 0.00",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Iris Buyer, LLC (5) (6) (10) (14) (17) First Lien Debt S + 5.25 % 8.92 % 10/02/2029 - ( 7 ) ( 3 ) ( 0.00 )",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Iris Buyer, LLC (5) (6) (10) (14) First Lien Debt S + 5.25 % 8.92 % 10/02/2030 3,013 2,955 2,991 0.26",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Iris Buyer, LLC (5) (6) (10) (14) First Lien Debt S + 5.25 % 8.92 % 10/02/2030 277 271 275 0.02",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sherlock Buyer Corp. (5) (6) (11) First Lien Debt S + 5.75 % 9.45 % 12/06/2030 23,928 23,693 22,643 1.96",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sherlock Buyer Corp. (5) (6) (17) First Lien Debt S + 5.75 % 9.45 % 12/07/2029 - ( 20 ) ( 154 ) ( 0.01 )",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sweep Midco, LLC (5) (11) (16) Second Lien Debt 03/12/2034 580 290 372 0.03",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Sweep Midco, LLC (5) (11) (16) Second Lien Debt 03/12/2036 1,686 - - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Tamarack Intermediate, LLC (5) (7) (10) First Lien Debt S + 5.00 % 8.67 % 03/12/2029 16,957 16,796 16,872 1.46",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Tamarack Intermediate, LLC (5) (7) (17) First Lien Debt S + 5.00 % 8.67 % 03/12/2029 1,751 1,723 1,741 0.15",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "Tamarack Intermediate, LLC (5) (7) (17) First Lien Debt S + 5.00 % 8.67 % 03/12/2029 - ( 21 ) ( 13 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219405",
+     "quote": "World Insurance Associates, LLC (5) (6) (9) (10) (11) First Lien Debt S + 5.00 % 8.70 % 04/03/2030 30,876 30,598 30,784 2.66",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-0a734c5a3e3bda5b",
+    "ROW-0f7b98f901d90adc",
+    "ROW-1a3d4d395f4dd072",
+    "ROW-1fc0b59813430cfa",
+    "ROW-2378251265cb6cbe",
+    "ROW-33606b00329a72ef",
+    "ROW-36b6eb0f1e5ab07d",
+    "ROW-3e8d3ca43a52003a",
+    "ROW-3f23ad63baf24d59",
+    "ROW-4ca746f1acac4002",
+    "ROW-5715ca64a069806f",
+    "ROW-6be937c148db16c3",
+    "ROW-79339214096f24a7",
+    "ROW-7a73f77b6aa18a3a",
+    "ROW-7dfcec0b356127cd",
+    "ROW-90c7b8cd4fc6bc56",
+    "ROW-94cee5a6e06fb30e",
+    "ROW-9dab9028d6126490",
+    "ROW-a8b10f9af08f9d2c",
+    "ROW-b7a26cd12cfdddb6",
+    "ROW-cc3c0efb26373aeb",
+    "ROW-df4e7baa26bd7f0c",
+    "ROW-eef8781412d806a2",
+    "ROW-ef7c38d4779957e4",
+    "ROW-efe8afb241a2642a",
+    "ROW-f39656e606952a05",
+    "ROW-f6665cf2c12f4d4b",
+    "ROW-fd85057a89a0ab23"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1634452-2",
+   "review_id": "RVQ_BLK_8402da635abf",
+   "verdict_sha256": "c6eb86daf731c564967fb9a0335ab1a767b60c8a8ef0c01a9bb8f063f277fb76",
+   "cik": "0001634452",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences. This finding also clears because the fund's grammar fails the held-out gate on current data; the evidence here is the same printed-line check, not the cohort change.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-6d1da640febdb28d, ROW-8b0cbb5e0be93cf8; published values ROW-8b0cbb5e0be93cf8 {'basis_spread': 5.25}; ROW-6d1da640febdb28d {'basis_spread': 5.25}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Exterro, Inc. Software & Tech Services Delayed Draw Term Loan - % ( S + 5.25 %; 1.00 % Floor) 6/1/2027 - ( 5,789 ) - (6)(7)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Exterro, Inc. Software & Tech Services Revolver - % ( S + 5.25 %; 1.00 % Floor) 6/1/2027 - ( 9,322 ) - (6)(7)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-6d1da640febdb28d",
+    "ROW-8b0cbb5e0be93cf8"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": true
+  },
+  {
+   "retirement_id": "VR-AGA-1634452-3",
+   "review_id": "RVQ_BLK_85e9c57e4996",
+   "verdict_sha256": "4abc0921dc5e277f5aa592e333d5e88d323c08bdcb679d37b0d37e35852ea224",
+   "cik": "0001634452",
+   "engine": "agentA",
+   "rule_name": "agentA_reference_uncorroborated",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (reference_rate_type and basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences. This finding also clears because the fund's grammar fails the held-out gate on current data; the evidence here is the same printed-line check, not the cohort change.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-2c5d5d9cd1ce91e1, ROW-49810cd6ff0f2ff6, ROW-4c09a400f6e3058a, ROW-4f2b05932bc34a39, ROW-527b881f0968e2a7, ROW-d4b9b1195a08f748, ROW-f8b205bcd59d3e4f; published values ROW-4c09a400f6e3058a {'reference_rate_type': 'SOFR', 'basis_spread': 0.0}; ROW-527b881f0968e2a7 {'reference_rate_type': 'SOFR', 'basis_spread': 0.0}; ROW-49810cd6ff0f2ff6 {'reference_rate_type': 'SOFR', 'basis_spread': 0.0}; ROW-4f2b05932bc34a39 {'reference_rate_type': 'SOFR', 'basis_spread': 0.0}; ROW-f8b205bcd59d3e4f {'reference_rate_type': 'SOFR', 'basis_spread': 5.75}; ROW-d4b9b1195a08f748 {'reference_rate_type': 'SOFR', 'basis_spread': 4.75}; ROW-2c5d5d9cd1ce91e1 {'reference_rate_type': 'SOFR', 'basis_spread': 5.75}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 523,459 120,253 106,210 (5)(16)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 279,686 165,594 56,748 (5)(16)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 413,145 233,153 83,827 (5)(16)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "FirstDigital Communications, LLC Digital Infrastructure & Services Term Loan - % ( S + 0.00 %; 0.75 % Floor) 12/17/2026 34,453 - 33,937 (15)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Magaya Corporation Software & Tech Services Delayed Draw Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 144,290 134,338 107,403 (6)(15)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Magaya Corporation Software & Tech Services Revolver 11.5 % ( S + 0.00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 682,497 674,985 663,933 (6)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "quote": "Magaya Corporation Software & Tech Services Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,739,718 3,709,431 3,664,924 (15)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-2c5d5d9cd1ce91e1",
+    "ROW-49810cd6ff0f2ff6",
+    "ROW-4c09a400f6e3058a",
+    "ROW-4f2b05932bc34a39",
+    "ROW-527b881f0968e2a7",
+    "ROW-d4b9b1195a08f748",
+    "ROW-f8b205bcd59d3e4f"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": true
+  },
+  {
+   "retirement_id": "VR-AGA-2011498-2",
+   "review_id": "RVQ_BLK_8620dfb39f35",
+   "verdict_sha256": "dbabde1ca2482f9b4c4a283a68d70e9b360f659142e972ffe010ace88e97ec03",
+   "cik": "0002011498",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-2e6e72d183ac026e, ROW-69681a83e11cb41c, ROW-a101e49bc6fcab09, ROW-ae1edd908c7ace2e; published values ROW-2e6e72d183ac026e {'maturity_date': '2028-12-14'}; ROW-69681a83e11cb41c {'maturity_date': '2031-05-04'}; ROW-a101e49bc6fcab09 {'maturity_date': '2031-06-27'}; ROW-ae1edd908c7ace2e {'maturity_date': '2031-10-14'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-103932",
+     "quote": "CSafe Acquisition Company, Inc. First Lien Term Loan SOFR + 5.75 % 9.95 % 5/8/2025 12/14/2028 11,910 11,810 11,850 2.2 % *3c(6)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-103932",
+     "quote": "Maverick Power, LLC First Lien Term Loan SOFR + 5.00 % 8.89 % 11/4/2025 5/4/2031 65,000 63,412 64,025 12.0 % *3b(6)(8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-103932",
+     "quote": "Mountain Parent, Inc. First Lien Term Loan SOFR + 4.75 % 8.42 % 10/21/2024 6/27/2031 56,468 56,104 56,468 10.6 % *3b(6)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-103932",
+     "quote": "Navex Global Holdings Corporation First Lien Revolving Loan SOFR + 5.00 % - 10/14/2025 10/14/2031 - ( 2 ) ( 2 ) 0.0 % *(6)(8)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-2e6e72d183ac026e",
+    "ROW-69681a83e11cb41c",
+    "ROW-a101e49bc6fcab09",
+    "ROW-ae1edd908c7ace2e"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1572694-1",
+   "review_id": "RVQ_BLK_86bb381d8715",
+   "verdict_sha256": "b5748d6be9b6da4d8934e75bcde4541738424c12d86b583f61e7fc3fc6c5b83d",
+   "cik": "0001572694",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-35733423b0eda9f0, ROW-4266a44cc060a1ad, ROW-6800e10818b50d7c, ROW-7d71b294372d2474, ROW-89e89c30b38304bd, ROW-9b60d902427f7be0, ROW-c1dd061e2031174f, ROW-ca316d9d77d2c807, ROW-dd1bb36eca570e65, ROW-e1411fbaf7b8c32c, ROW-ec7d2f5f3f29dc61; published values ROW-e1411fbaf7b8c32c {'maturity_date': '2031-08-29'}; ROW-dd1bb36eca570e65 {'maturity_date': '2030-07-26'}; ROW-9b60d902427f7be0 {'maturity_date': '2030-07-26'}; ROW-7d71b294372d2474 {'maturity_date': '2031-07-14'}; ROW-ec7d2f5f3f29dc61 {'maturity_date': '2030-09-03'}; ROW-4266a44cc060a1ad {'maturity_date': '2030-08-12'}; ROW-89e89c30b38304bd {'maturity_date': '2031-10-15'}; ROW-ca316d9d77d2c807 {'maturity_date': '2031-10-15'}; ROW-c1dd061e2031174f {'maturity_date': '2030-09-26'}; ROW-35733423b0eda9f0 {'maturity_date': '2031-02-24'}; ROW-6800e10818b50d7c {'maturity_date': '2031-12-26'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus) Software S + 4.50 % 08/29/31 896 ( 7 ) ( 9 ) (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Artifact Bidco, Inc. (dba Avetta) Software S + 4.15 % 07/26/30 1,256 ( 10 ) ( 6 ) (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Artifact Bidco, Inc. (dba Avetta) Software S + 4.15 % 07/26/30 591 ( 5 ) ( 3 ) (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Aurora Acquireco, Inc. (dba AuditBoard) Software S + 4.50 % 07/14/31 114 ( 1 ) ( 1 ) (7) (8) (9) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Recorded Books Inc. (dba RBMedia) Media S + 5.75 % 09/03/30 835 ( 15 ) ( 8 ) (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Eagle Family Foods Group LLC Food Products S + 5.00 % 08/12/30 101 ( 1 ) ( 1 ) (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Geo TopCo Corporation (fka Geotechnical Merger Sub, Inc.) Construction & Engineering 8.29 % S + 4.50 % 10/15/31 245 119 119 (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Geo TopCo Corporation (fka Geotechnical Merger Sub, Inc.) Construction & Engineering 8.40 % S + 4.50 % 10/15/31 663 657 659 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Newtek Merchant Solutions, LLC (dba NewtekOne) Financial Services S + 5.50 % 09/26/30 936 ( 9 ) ( 9 ) (7) (8) (9) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Project Accelerate Parent, LLC (dba ABC Fitness) Financial Services 8.97 % S + 5.25 % 02/24/31 12,928 12,825 12,863 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Rotation Buyer, LLC (dba Rotating Machinery Services) Machinery 8.42 % S + 4.75 % 12/26/31 19,712 19,537 19,515 (7) (8)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-35733423b0eda9f0",
+    "ROW-4266a44cc060a1ad",
+    "ROW-6800e10818b50d7c",
+    "ROW-7d71b294372d2474",
+    "ROW-89e89c30b38304bd",
+    "ROW-9b60d902427f7be0",
+    "ROW-c1dd061e2031174f",
+    "ROW-ca316d9d77d2c807",
+    "ROW-dd1bb36eca570e65",
+    "ROW-e1411fbaf7b8c32c",
+    "ROW-ec7d2f5f3f29dc61"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1634452-4",
+   "review_id": "RVQ_BLK_8da5807f8bab",
+   "verdict_sha256": "d672356c5df0d699f87df1bd28775194dda2111e03dd3d99fe7b938c602d6f89",
+   "cik": "0001634452",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences. This finding also clears because the fund's grammar fails the held-out gate on current data; the evidence here is the same printed-line check, not the cohort change.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-0ad92ef42f89fd9e, ROW-8f158cc44e998fec; published values ROW-0ad92ef42f89fd9e {'maturity_date': '2030-03-11'}; ROW-8f158cc44e998fec {'maturity_date': '2026-06-30'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "quote": "Datacor, Inc. Software & Tech Services Revolver - % ( S + 4.50 %; 1.00 % Floor) 3/11/2030 - ( 24,115 ) ( 24,622 ) (6)(7)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "quote": "RCP Encore Acquisition, Inc. Healthcare Term Loan - .% ( S + 5.00 %; 1.00 % Floor) 6/30/2026 2,832,118 2,764,721 28,321 (16)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-0ad92ef42f89fd9e",
+    "ROW-8f158cc44e998fec"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": true
+  },
+  {
+   "retirement_id": "VR-AGA-1950976-1",
+   "review_id": "RVQ_BLK_966311c01267",
+   "verdict_sha256": "9214d70cda9a72318104f7da2908291ebd1959cf0f61145e6708e1d67bc1097a",
+   "cik": "0001950976",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-4c6dc393dc6d5010, ROW-a8695e64ad21b159; published values ROW-a8695e64ad21b159 {'maturity_date': '2032-12-12'}; ROW-4c6dc393dc6d5010 {'maturity_date': '2032-12-12'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "quote": "Peachtree Buyer, Inc. (3) First Lien Senior Secured Delayed Draw Term Loan Construction & Engineering SOFR + 4.500 % 12/11/2025 12/12/2032 - ( 40 ) ( 81 ) ( 0.01 )%",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "quote": "Peachtree Buyer, Inc. (3)(7) First Lien Senior Secured Revolving Loan Construction & Engineering SOFR + 4.500 % 8.172 % 12/11/2025 12/12/2032 811 759 759 0.12 %",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-4c6dc393dc6d5010",
+    "ROW-a8695e64ad21b159"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1959604-1",
+   "review_id": "RVQ_BLK_ab9516ad8b7b",
+   "verdict_sha256": "9c2073d1687726c871c050685b5b613cff5a9852f84b7bafdfff7b9499444b0b",
+   "cik": "0001959604",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-6467f5c79dcf9ded, ROW-ce59202d4315ae49; published values ROW-ce59202d4315ae49 {'maturity_date': '2029-11-15'}; ROW-6467f5c79dcf9ded {'maturity_date': '2030-11-15'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-116342",
+     "quote": "Petvet Care Centers, LLC First Lien Revolver S + 6.00 % 11/15/2029 35 30 7 8,23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-116342",
+     "quote": "Petvet Care Centers, LLC First Lien Term Loan S + 6.00 % 11/15/2030 21,818 21,478 20,073 8",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-6467f5c79dcf9ded",
+    "ROW-ce59202d4315ae49"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1572694-2",
+   "review_id": "RVQ_BLK_c2ec1bc84bf0",
+   "verdict_sha256": "abcf3f964efee2cc9e82697897e82ebdcb48c7c99620cc565265c7780b3af729",
+   "cik": "0001572694",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-087825b487e36e45, ROW-1cb5f21fff35d1e4, ROW-475a406af81622dd, ROW-48f7702dcbbfdadc, ROW-5bd0792150c58c74, ROW-5f9befbda775b71e, ROW-78599da8ff42e801, ROW-8b449abbebdb1acc, ROW-a8472a51b0b050c2, ROW-c11a5f4150bc18cc, ROW-ca459eb1811c2800, ROW-d34704c999b73329, ROW-ec88cd79fa04bb60; published values ROW-087825b487e36e45 {'maturity_date': '2032-12-17'}; ROW-a8472a51b0b050c2 {'maturity_date': '2026-10-30'}; ROW-ca459eb1811c2800 {'maturity_date': '2026-10-30'}; ROW-8b449abbebdb1acc {'maturity_date': '2026-10-30'}; ROW-78599da8ff42e801 {'maturity_date': '2031-01-17'}; ROW-ec88cd79fa04bb60 {'maturity_date': '2031-02-24'}; ROW-d34704c999b73329 {'maturity_date': '2031-02-24'}; ROW-475a406af81622dd {'maturity_date': '2032-12-17'}; ROW-c11a5f4150bc18cc {'maturity_date': '2027-07-06'}; ROW-5f9befbda775b71e {'maturity_date': '2027-07-06'}; ROW-1cb5f21fff35d1e4 {'maturity_date': '2027-07-06'}; ROW-5bd0792150c58c74 {'maturity_date': '2027-07-06'}; ROW-48f7702dcbbfdadc {'maturity_date': '2031-03-17'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "SI Swan UK Bidco Limited (dba Sapiens International) Software S + 4.75 % 12/17/32 2,619 ( 6 ) ( 20 ) (7) (8) (9) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Acquia, Inc. Software 8.80 % S + 5.00 % 10/30/26 42,164 42,020 41,110 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Acquia, Inc. Software 8.80 % S + 5.00 % 10/30/26 10,554 10,517 10,290 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Acquia, Inc. Software 8.80 % S + 5.00 % 10/30/26 3,268 3,260 3,186 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "GovDelivery Holdings, LLC (dba Granicus, Inc.) Software 9.17 % S + 5.50 % (Incl. 2.00 % PIK) 01/17/31 11,948 11,862 11,888 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Project Accelerate Parent, LLC (dba ABC Fitness) Financial Services 8.92 % S + 5.25 % 02/24/31 12,895 12,797 12,799 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Project Accelerate Parent, LLC (dba ABC Fitness) Financial Services S + 5.25 % 02/24/31 1,875 ( 13 ) ( 14 ) (7) (8) (10)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "SI Swan UK Bidco Limited (dba Sapiens International) Software 8.42 % S + 4.75 % 12/17/32 15,104 15,031 14,991 (7) (8) (9)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Southeast Mechanical, LLC Diversified Consumer Services 9.78 % S + 6.00 % 07/06/27 17,089 4,056 4,022 (7) (8) (10) (11)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Southeast Mechanical, LLC Diversified Consumer Services 9.78 % S + 6.00 % 07/06/27 10,395 10,333 10,317 (7) (8) (11)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Southeast Mechanical, LLC Diversified Consumer Services 9.78 % S + 6.00 % 07/06/27 7,289 7,239 7,234 (7) (8) (11)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Southeast Mechanical, LLC Diversified Consumer Services S + 6.00 % 07/06/27 1,900 ( 10 ) ( 14 ) (7) (8) (10) (11)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Splash Car Wash, Inc. Diversified Consumer Services S + 5.00 % 03/17/31 123 ( 1 ) ( 1 ) (7) (8) (10)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-087825b487e36e45",
+    "ROW-1cb5f21fff35d1e4",
+    "ROW-475a406af81622dd",
+    "ROW-48f7702dcbbfdadc",
+    "ROW-5bd0792150c58c74",
+    "ROW-5f9befbda775b71e",
+    "ROW-78599da8ff42e801",
+    "ROW-8b449abbebdb1acc",
+    "ROW-a8472a51b0b050c2",
+    "ROW-c11a5f4150bc18cc",
+    "ROW-ca459eb1811c2800",
+    "ROW-d34704c999b73329",
+    "ROW-ec88cd79fa04bb60"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1993402-1",
+   "review_id": "RVQ_BLK_c9303fb5e511",
+   "verdict_sha256": "08555435d1638257969099857a847e9f745c0ee992b5f32962f30a8bdc382a0a",
+   "cik": "0001993402",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-39bb5ccd0c6edd79, ROW-eb6b2eaa215f0874, ROW-ed01911e98df5c09; published values ROW-ed01911e98df5c09 {'maturity_date': '2035-12-30'}; ROW-eb6b2eaa215f0874 {'maturity_date': '2029-02-22'}; ROW-39bb5ccd0c6edd79 {'maturity_date': '2030-06-03'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115988",
+     "quote": "OEC Holdco, LLC (13)(15) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 $ 10,000 $ 9,800 $ 9,800 0.48 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115988",
+     "quote": "FL Hawk Intermediate Holdings, Inc. (7)(13)(15)(16) First Lien Revolver S + 4.50 % 8.15 % 2/22/2029 2,233 ( 3 ) - -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115988",
+     "quote": "Hydraulic Technologies USA LLC (7)(13)(15)(16) First Lien Revolver S + 5.50 % 9.15 % 6/3/2030 2,384 1,049 1,037 0.05",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-39bb5ccd0c6edd79",
+    "ROW-eb6b2eaa215f0874",
+    "ROW-ed01911e98df5c09"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1959604-2",
+   "review_id": "RVQ_BLK_dfd24f8c503a",
+   "verdict_sha256": "8d32746cd46a8438df13a8d2b284ea0ec429922959f8a3a5f14a0355755adeee",
+   "cik": "0001959604",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-3a3b48b378660301; published values ROW-3a3b48b378660301 {'maturity_date': '2029-11-15'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221855",
+     "quote": "Petvet Care Centers, LLC First Lien Revolver S + 6.00 % 11/15/2029 70 65 44 8,23",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-3a3b48b378660301"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1851322-1",
+   "review_id": "RVQ_BLK_e38948c4ff72",
+   "verdict_sha256": "5310633398a7142047b43d1ea5e3ba5144497080134f0339e8bc35b7acc782d7",
+   "cik": "0001851322",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-045570df10a041c7, ROW-1d0cd02308c804e1, ROW-2f998f685210a93d, ROW-548a5c500b14c447, ROW-6678ab9d6b3d607f, ROW-b5f5765ecd2e93f1, ROW-b863f78ba0ab620f; published values ROW-6678ab9d6b3d607f {'maturity_date': '2027-08-05'}; ROW-045570df10a041c7 {'maturity_date': '2030-10-02'}; ROW-1d0cd02308c804e1 {'maturity_date': '2029-10-24'}; ROW-2f998f685210a93d {'maturity_date': '2029-09-19'}; ROW-b5f5765ecd2e93f1 {'maturity_date': '2030-04-01'}; ROW-b863f78ba0ab620f {'maturity_date': '2030-04-01'}; ROW-548a5c500b14c447 {'maturity_date': '2028-03-09'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Sonny's Enterprises, LLC (6) (10) (18) First Lien Debt S + 5.50 % 9.31 % 08/05/2027 4,458 4,416 4,305 0.13",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Iris Buyer, LLC (6) (9) (10) (15) First Lien Debt S + 5.25 % 8.92 % 10/02/2030 20,239 19,896 20,087 0.62",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Apex Service Partners, LLC (6) (10) (18) First Lien Debt S + 5.00 % 8.67 % 10/24/2029 2,416 2,366 2,416 0.07",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Hyland Software, Inc. (6) (11) (18) First Lien Debt S + 5.00 % 8.70 % 09/19/2029 - ( 26 ) ( 3 ) 0.00",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Raptor Merger Sub Debt, LLC (6) (8) (9) (11) First Lien Debt S + 5.50 % 9.20 % 04/01/2030 45,000 44,484 45,000 1.39",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Raptor Merger Sub Debt, LLC (6) (11) (18) First Lien Debt S + 5.50 % 9.20 % 04/01/2030 814 776 814 0.03",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "Appfire Technologies, LLC (6) (10) (18) First Lien Debt S + 4.75 % 8.45 % 03/09/2028 - ( 3 ) - 0.00",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-045570df10a041c7",
+    "ROW-1d0cd02308c804e1",
+    "ROW-2f998f685210a93d",
+    "ROW-548a5c500b14c447",
+    "ROW-6678ab9d6b3d607f",
+    "ROW-b5f5765ecd2e93f1",
+    "ROW-b863f78ba0ab620f"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1902649-2",
+   "review_id": "RVQ_BLK_fab4d4ce5498",
+   "verdict_sha256": "4151f4825e355f8236ca64b9268844ef8735d2e7b5e40fff8bc97c16d9cd5bcc",
+   "cik": "0001902649",
+   "engine": "agentA",
+   "rule_name": "agentA_maturity_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (maturity_date); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-08014150f09e1454, ROW-1cd8b5c088477293, ROW-2b85597ffdbc9107, ROW-2cc5ea78c2125ae5, ROW-40be05326681b9e9, ROW-89ec629a1eff99b5, ROW-97e35f3fd652159c, ROW-aa19cbe0c0109a80, ROW-ba2525a9a65223fe, ROW-d74043daff613f44, ROW-eca7c06e81dee1f2; published values ROW-d74043daff613f44 {'maturity_date': '2032-10-10'}; ROW-1cd8b5c088477293 {'maturity_date': '2026-09-30'}; ROW-aa19cbe0c0109a80 {'maturity_date': '2032-11-08'}; ROW-2cc5ea78c2125ae5 {'maturity_date': '2030-06-28'}; ROW-97e35f3fd652159c {'maturity_date': '2030-06-28'}; ROW-eca7c06e81dee1f2 {'maturity_date': '2030-06-28'}; ROW-2b85597ffdbc9107 {'maturity_date': '2030-06-28'}; ROW-08014150f09e1454 {'maturity_date': '2030-06-28'}; ROW-89ec629a1eff99b5 {'maturity_date': '2030-06-28'}; ROW-40be05326681b9e9 {'maturity_date': '2030-06-28'}; ROW-ba2525a9a65223fe {'maturity_date': '2031-02-24'}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Orion Us Finco Inc. First Lien Term Loan SOFR(Q) - 3.50 % 7.43 % 10/10/2032 $ 442,000 439,852 444,590 0.02 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Higginbotham Insurance Agency, Inc. First Lien Delayed Draw Term Loan SOFR(M) 1.00 % 4.50 % 8.22 % 9/30/2026 $ - ( 59,373 ) - - D/E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Madison IAQ LLC First Lien Term Loan SOFR(Q) - 2.75 % 6.64 % 11/8/2032 $ 5,450,022 5,439,238 5,491,197 0.22 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 4,241,111 4,165,781 4,165,534 0.17 % E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 871,417 861,628 863,047 0.03 % E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 960,698 950,545 951,470 0.04 % E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Revolver SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ - ( 5,021 ) ( 4,296 ) - D/E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 2,114,842 2,091,101 2,094,529 0.08 % E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 737,825 730,027 730,738 0.03 % E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Cherry Bekaert Advisory, LLC First Lien Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 7,868,480 7,793,151 7,792,903 0.32 % E",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Applied Systems, Inc. First Lien Term Loan SOFR(Q) 0.50 % 2.50 % 6.17 % 2/24/2031 $ 489,434 489,433 492,774 0.02 %",
+     "verbatim": true
+    },
+    {
+     "source": "query",
+     "quote": "cited contexts not published and carrying no fair value or cost (correctly excluded): [{\"identifier\": \"Debt Investments Insurance Higginbotham Insurance Agency, Inc. Investment First Lien Delayed Draw Term Loan Ref SOFR(M) Floor 1.00% Spread 4.50% Total Coupon 8.82% Maturity Date 6/11/2031\", \"contexts\": [{\"src_context_id\": \"C_45b77234-b374-41cd-b04e-8be2c4d67fee\", \"fair_value\": 0.0, \"cost\": 0.0}], \"ok\": true}]"
+    }
+   ],
+   "cited_rows": [
+    "ROW-08014150f09e1454",
+    "ROW-1cd8b5c088477293",
+    "ROW-2b85597ffdbc9107",
+    "ROW-2cc5ea78c2125ae5",
+    "ROW-40be05326681b9e9",
+    "ROW-89ec629a1eff99b5",
+    "ROW-97e35f3fd652159c",
+    "ROW-aa19cbe0c0109a80",
+    "ROW-ba2525a9a65223fe",
+    "ROW-d74043daff613f44",
+    "ROW-eca7c06e81dee1f2"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1916099-4",
+   "review_id": "RVQ_BLK_ff4ccc7b2ca6",
+   "verdict_sha256": "84ea1f67ebfe68b7afb7c23fdcbc450babe34094b3d100edbac97e99f2493c80",
+   "cik": "0001916099",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-e903565d4d0af07e; published values ROW-e903565d4d0af07e {'basis_spread': 5.0}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104439",
+     "quote": "ASP Integrity Acquisition Co LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.00 % 3/06/2025 3/6/2027 - ( 20 ) ( 89 )",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-e903565d4d0af07e"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1572694-3",
+   "review_id": "RVQ_BLK_10bdf849349d",
+   "verdict_sha256": "a0a157a37d72e48c957de11dba1454dfaf79602c2977178cbe1bd9d78da6dcfd",
+   "cik": "0001572694",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-45e09bc6a3c552d8, ROW-527df6a7321952c2, ROW-fe70c9d26e0af951; published values ROW-45e09bc6a3c552d8 {'basis_spread': 5.5}; ROW-527df6a7321952c2 {'basis_spread': 5.0}; ROW-fe70c9d26e0af951 {'basis_spread': 5.0}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Spotless Brands, LLC Diversified Consumer Services 9.17 % S + 5.50 % 07/25/28 945 940 936 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "UFT Buyer LLC (dba United Flow Technologies) Trading Companies & Distributors 8.70 % S + 5.00 % (Incl. 2.75 % PIK) 12/06/32 10,476 10,375 10,345 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-212431",
+     "quote": "Splash Car Wash, Inc. Diversified Consumer Services 8.70 % S + 5.00 % 03/17/32 869 863 862 (7) (8)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-45e09bc6a3c552d8",
+    "ROW-527df6a7321952c2",
+    "ROW-fe70c9d26e0af951"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1899996-2",
+   "review_id": "RVQ_BLK_52d74377a478",
+   "verdict_sha256": "3f56ae9ca7711091118caedd80d8146823d09166fa43ceaa1c1f970e5990e6af",
+   "cik": "0001899996",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-f2446fa29527e2fe; published values ROW-f2446fa29527e2fe {'basis_spread': 4.75}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119504",
+     "quote": "Tex-Tech Industries Inc (f)(j)(q) Delayed Draw Term Loan SOFR + 4.75 % 8.48 % 1/13/2031 95,238 94,366 95,238",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-f2446fa29527e2fe"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1959604-3",
+   "review_id": "RVQ_BLK_72f03064aeb1",
+   "verdict_sha256": "8e0f74343a8031e8a6ff41768b018d43e01b0762a6752fc05b892927ea2e3e0b",
+   "cik": "0001959604",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-7053d92a5236977f; published values ROW-7053d92a5236977f {'basis_spread': 4.75}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221855",
+     "quote": "Barbri Holdings, Inc. First Lien Term Loan S + 4.75 % 4/30/2030 21,650 21,563 21,433 9",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-7053d92a5236977f"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1959568-2",
+   "review_id": "RVQ_BLK_79a06e982fd0",
+   "verdict_sha256": "0e346486f57e2a768e67c8155451b1b63bfa949e4560e5d63f55f067c89444e1",
+   "cik": "0001959568",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-22308ffdcb76fe0a, ROW-3993efed0fc01087, ROW-7dd363127c4f5485, ROW-9a4f4b6eb3b45773, ROW-c21eb6de9b9e32cf, ROW-c59888cb15aa0910, ROW-ead5a62d3a2d1eab, ROW-f8b97fff8cf293c9; published values ROW-22308ffdcb76fe0a {'basis_spread': 4.25}; ROW-3993efed0fc01087 {'basis_spread': 4.25}; ROW-7dd363127c4f5485 {'basis_spread': 5.0}; ROW-9a4f4b6eb3b45773 {'basis_spread': 4.5}; ROW-c21eb6de9b9e32cf {'basis_spread': 5.0}; ROW-c59888cb15aa0910 {'basis_spread': 5.0}; ROW-ead5a62d3a2d1eab {'basis_spread': 5.0}; ROW-f8b97fff8cf293c9 {'basis_spread': 5.0}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Bluefin Holding, LLC First Lien Revolver S + 4.25 % 9/12/2029 - - ( 1 ) 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Bluefin Holding, LLC First Lien Term Loan S + 4.25 % 9/12/2029 718 716 707 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "World Insurance Associates, LLC First Lien Delayed Draw Term Loan S + 5.00 % 4/3/2030 1,171 1,165 1,171 9,23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Real Chemistry Intermediate III, Inc. First Lien Term Loan S + 4.50 % 4/12/2032 5,151 5,128 5,151 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "Packaging Coordinators Midco, Inc. First Lien Revolver S + 5.00 % 10/15/2032 - ( 1 ) - 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "World Insurance Associates, LLC First Lien Revolver S + 5.00 % 4/3/2030 - - - 23",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "PTSH Intermediate Holdings, LLC First Lien Term Loan S + 5.00 % 1/10/2033 1,558 1,543 1,543 9",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "quote": "IG Investments Holdings, LLC First Lien Term Loan S + 5.00 % 9/22/2028 $ 5,787 $ 5,726 $ 5,787 9",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-22308ffdcb76fe0a",
+    "ROW-3993efed0fc01087",
+    "ROW-7dd363127c4f5485",
+    "ROW-9a4f4b6eb3b45773",
+    "ROW-c21eb6de9b9e32cf",
+    "ROW-c59888cb15aa0910",
+    "ROW-ead5a62d3a2d1eab",
+    "ROW-f8b97fff8cf293c9"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1851322-2",
+   "review_id": "RVQ_BLK_9944b4c1d6aa",
+   "verdict_sha256": "814f7d1daaeb98d1acdc9cf2c326cca9b3d4df0db95580b75181f089f881057a",
+   "cik": "0001851322",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-250fff9426fd492b; published values ROW-250fff9426fd492b {'basis_spread': 3.5000000000000004}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221623",
+     "quote": "eShipping, LLC (6) (11) (18) First Lien Debt P + 3.50 % 10.25 % 12/23/2032 34 31 28 0.00",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-250fff9426fd492b"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-1572694-4",
+   "review_id": "RVQ_BLK_b32918a1cc0f",
+   "verdict_sha256": "cb4435889ebec4340deb002d3ed2cd5736d635e937a356bca6d3091465586b3b",
+   "cik": "0001572694",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-a17cdf79d6219b10, ROW-badc2ce13d96c242; published values ROW-a17cdf79d6219b10 {'basis_spread': 6.5}; ROW-badc2ce13d96c242 {'basis_spread': 4.75}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Engage2Excel, Inc. Professional Services 10.37 % S + 6.50 % 07/01/29 910 899 887 (7) (8)",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-077458",
+     "quote": "Vamos Bidco, Inc. (dba VIP) Software 8.42 % S + 4.75 % 01/30/32 16,135 15,990 15,974 (7) (8)",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-a17cdf79d6219b10",
+    "ROW-badc2ce13d96c242"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-AGA-2012139-1",
+   "review_id": "RVQ_BLK_d8e6c68c0a04",
+   "verdict_sha256": "876d96825c48dff66c37a64b8fe7ed55ec20338072f8603aada3861f1c09f7d4",
+   "cik": "0002012139",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: every row the verdict cites is published at the margin its own printed line shows (basis_spread, read after the benchmark code, floors excluded, cash + PIK total per D-031); the verdict's error is in the filer's hidden member label (comparative-period or neighbouring-row terms), which is not published. Check repair REQ-APZ-1 with the D-031 margin reading stops raising such label-only differences.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-bb9b1b30682506cf; published values ROW-bb9b1b30682506cf {'basis_spread': 3.0}"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224353",
+     "quote": "Aretec Group, Inc. (fka RCS Capital Corporation) (7) (9) First Lien - Term Loan SOFR + 300 6.7 8/9/2030 4,974,969 4,984 4,908 0.5",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-bb9b1b30682506cf"
+   ],
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10), orchestrator decision 2026-11-13 to add these 7 spread-rule verdicts under the standing rule (the owner's 2026-11-13 \"do it\" covered the original set)",
+   "cohort_left": false
+  }
+ ]
+}

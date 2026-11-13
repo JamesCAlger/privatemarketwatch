@@ -164,6 +164,20 @@ FROM result_{name}
 """
 
 
+def run_agent_a() -> None:
+    """Regenerate <output>/shadow/agent_a_flags.csv from this build (REQ-APZ-1 condition 4).
+
+    The old file is moved to agent_a_flags.prev.csv first (the engine carries forward from it the
+    flags of a fund whose grammar left the held-out cohort, review D1), and an engine error
+    propagates: the runner (a fatal batch and quarter-pass stage) stops, so no ledger is built from
+    a stale or missing flags file."""
+    import shadow_agent_a_engine as aa
+    flags = OUTPUT_DIR / "shadow" / aa.FLAGS_NAME
+    if flags.exists():
+        flags.replace(flags.with_name(aa.PREVIOUS_NAME))
+    aa.main([])
+
+
 def main(argv: list[str] | None = None) -> int:
     ciks = cons.wrapped_ciks()
     if not ciks:
@@ -211,6 +225,12 @@ def main(argv: list[str] | None = None) -> int:
         wk.run_rule(con, r)
         parts.append(_WEAK.format(name=r.name))
     logger.info("weak: %d rules", len(wk.RULES))
+
+    # 5a. agentA flags are recomputed here, on this build's holdings and pages, before the adapter
+    #     reads them (check repair REQ-APZ-1, 2026-11-13: the file was re-read, never rebuilt, so
+    #     every batch since 2026-07-24 carried the July flags). A failure stops the runner rather
+    #     than let the adapter read a stale file.
+    run_agent_a()
 
     # 5. adapters: ingest existing pipeline check outputs (oracle, validation_rules),
     #    tier-tagged, normalized into the same ledger schema (no re-coding).
