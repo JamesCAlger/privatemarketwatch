@@ -9,7 +9,7 @@
    "engine": "oracle",
    "rule_name": "B01",
    "report_date": "2026-03-31",
-   "reason": "Standing rule D-252: The verdict found the quarter's position population polluted (comparative, structural or duplicate leaves) or short of the filed total. Every one of the 139 published rows has a fair-value fact in its own context dated 2026-03-31 and equals it, and the published sum (non-CASH rows) equals the filed total investments 1588604000 within 2000.",
+   "reason": "Standing rule D-252: The verdict found the quarter's position population polluted (comparative, structural or duplicate leaves) or short of the filed total. Every one of the 139 published rows has a fair-value fact in its own context dated 2026-03-31 and equals it, and the published sum (all published rows) equals the filed total investments 1625489000 within 2000.",
    "evidence": [
     {
      "source": "code",
@@ -17,12 +17,12 @@
     },
     {
      "source": "query",
-     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis (JV look-through rows excluded): 139 rows of 0001950976 2026-03-31 from 0001193125-26-214004; published sum all rows 1625489000, non-CASH 1588604000, CASH 36885000 (1 rows); filed total 1588604000 (context C_325e300d-5883-4c58-a1a0-777341b9087b); basis non-CASH rows; the filing carries 123 position fair-value contexts dated before 2026-03-31 (its comparative schedule), of which 0 are published"
+     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis (JV look-through rows excluded): 139 rows of 0001950976 2026-03-31 from 0001193125-26-214004; published sum all rows 1625489000, non-CASH 1588604000, CASH 36885000 (1 rows); filed total 1625489000 (context C_475b232b-2f31-49fb-90a9-497a00f3e2b0); basis all published rows; the filing carries 123 position fair-value contexts dated before 2026-03-31 (its comparative schedule), of which 0 are published"
     },
     {
      "source": "filing",
      "accession": "0001193125-26-214004",
-     "quote": "Non-controlled/non-affiliated investments at fair value (amortized cost of $ 1,598,063 and $ 1,353,079 respectively) $ 1,588,604 $ 1,352,732",
+     "quote": "Total Investments at Fair Value $ 1,634,948 $ 1,625,489 199.29 %",
      "verbatim": true
     },
     {
@@ -186,7 +186,7 @@
    "decided_on": "2026-11-10",
    "applied_by": "agent:retire-campaign-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (rule-by-rule retirement campaign on real_error_check_silent findings)",
    "cohort_left": false,
-   "filed_total_context": "C_325e300d-5883-4c58-a1a0-777341b9087b"
+   "filed_total_context": "C_475b232b-2f31-49fb-90a9-497a00f3e2b0"
   },
   {
    "retirement_id": "VR-CMP-B01-002",

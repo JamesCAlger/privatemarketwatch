@@ -37,7 +37,20 @@ PAGE = """<?xml version="1.0" encoding="utf-8"?>
  <td><ix:nonFraction name="us-gaap:CashEquivalentsAtCarryingValue" unitRef="usd" contextRef="c0" scale="3">200</ix:nonFraction></td></tr>
 <tr><td>Acme Corp (December 31, 2025)</td><td>First Lien Term Loan</td>
  <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="cp" scale="3">950</ix:nonFraction></td></tr>
+<tr><td>Total non-controlled investments</td>
+ <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="cs" scale="3">1,000</ix:nonFraction></td></tr>
+<tr><td>Gamma Holdings</td><td>Preferred</td>
+ <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c5" scale="6">16.9</ix:nonFraction></td></tr>
+</table>
+<table>
+<tr><td>Beta LLC (affiliate roll-forward)</td>
+ <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c4p" scale="3">40</ix:nonFraction></td>
+ <td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c4" scale="3">45</ix:nonFraction></td></tr>
 </table></body></html>"""
+
+SUBTOTAL_CTX = ("<xbrli:context id=\"cs\"><xbrli:entity><xbrli:identifier scheme=\"x\">1</xbrli:identifier><xbrli:segment>"
+                "<xbrldi:explicitMember dimension=\"us-gaap:InvestmentTypeAxis\">x:NonControlledMember</xbrldi:explicitMember>"
+                "</xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>%s</xbrli:instant></xbrli:period></xbrli:context>" % "2026-03-31")
 
 
 def _ctx(cid, instant, member=None):
@@ -52,7 +65,8 @@ def _ctx(cid, instant, member=None):
 @pytest.fixture
 def fl(tmp_path, monkeypatch):
     contexts = "\n".join([_ctx("c0", RD), _ctx("c1", RD, "Acme TL"), _ctx("c2", RD, "Acme CS"),
-                          _ctx("c3", RD, "MMF"), _ctx("cp", "2025-12-31", "Acme TL")])
+                          _ctx("c3", RD, "MMF"), _ctx("cp", "2025-12-31", "Acme TL"), _ctx("c4", RD, "Beta RF"),
+                          _ctx("c4p", "2025-12-31", "Beta RF"), _ctx("c5", RD, "Gamma"), SUBTOTAL_CTX])
     p = tmp_path / "f.html"
     p.write_text(PAGE.replace("{contexts}", contexts), encoding="utf-8")
     f = chk.Filing(CIK, ACC, path=p)
@@ -146,3 +160,59 @@ def test_a07_null_percent_fails(fl, rows):
 def test_a07_row_without_a_percent_fact_cannot_be_confirmed(fl, rows):
     # the money-market context carries no percent fact: not confirmable, so the quarter fails
     assert not chk.check_quarter("A07", rows, CIK, RD)["ok"]
+
+
+def test_parenthesised_unsigned_fact_reads_negative(tmp_path):
+    contexts = "\n".join([_ctx("c0", RD), _ctx("c1", RD, "Acme TL"), _ctx("c2", RD, "Acme CS"),
+                          _ctx("c3", RD, "MMF"), _ctx("cp", "2025-12-31", "Acme TL")])
+    old = ('<td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" unitRef="usd" contextRef="c1" '
+           'scale="3">1,000</ix:nonFraction></td>')
+    assert old in PAGE
+    page = PAGE.replace("{contexts}", contexts).replace(old, old.replace("<td><ix", "<td>(<ix").replace(
+        "</ix:nonFraction></td>", "</ix:nonFraction>)</td>"))
+    p = tmp_path / "g.html"
+    p.write_text(page, encoding="utf-8")
+    f = chk.Filing(CIK, ACC, path=p)
+    fact = f.fv_facts("c1")[0]
+    assert fact["paren"] and chk.printed_value(f, fact) == -1_000_000.0
+    assert not f.fv_facts("c2")[0]["paren"]   # an unparenthesised figure stays positive
+
+
+def test_rollforward_only_row_fails_pp03(fl, rows):
+    assert fl.is_rollforward_line(fl.fv_facts("c4")[0]["tr"])
+    assert fl.schedule_line("c4") is None and fl.schedule_line("c1")
+    planted = rows + [_row("RF", "c4", 45_000.0)]
+    assert not chk.check_quarter("PP03", planted, CIK, RD)["ok"]
+    assert "rollforward_only_row" in {n for n, _ in chk.plants("PP03", rows, CIK, RD)}
+
+
+def test_subtotal_stored_as_total_fails(fl, rows):
+    # rows summing to the non-controlled subtotal, with the subtotal handed in as the total
+    sub = [r for r in rows if r["row_id"] == "R1"]
+    ok, info = chk.quarter_total(sub, CIK, RD, total_ctx="cs")
+    assert not ok and "top-level" in info["why"]
+    # the true rows with the subtotal context handed in: the top-level total ties and is used instead
+    ok, info = chk.quarter_total(rows, CIK, RD, total_ctx="cs")
+    assert ok and info["total"] == 1_300_000.0
+
+
+def test_scale_fallback_only_when_the_tag_reading_does_not_tie(fl):
+    f = fl.fv_facts("c5")[0]
+    assert chk.printed_value(fl, f) == 16_900_000.0
+    assert chk.match_printed(fl, [f], 16_900_000.0, 1.0)[:2] == (True, 16_900_000.0)
+    ok, v, note = chk.match_printed(fl, [f], 16_900.0, 1.0)
+    assert ok and "scale fallback used" in note     # the digits at the schedule scale tie too, and it says so
+    assert not chk.match_printed(fl, [f], 17_000_000.0, 1.0)[0]
+
+
+def test_cash_line_rejects_loans_paying_part_cash():
+    assert chk.CASH_LINE.search("Goldman Sachs Financial Square Government Fund Institutional Shares")
+    assert chk.NOT_CASH_LINE.search("Panzura, LLC One stop N/A 4.00 % cash/ 15.00 % PIK 08/2027 54 49 - 48")
+
+
+def test_cash_rows_must_equal_filed_cash_equivalents(fl, rows):
+    # a CASH row the filer does not print as a cash equivalent: the non-CASH basis no longer holds
+    extra = rows + [_row("R4", "c3", 0.0, cat="CASH", ic="cash")]
+    bigger = [dict(r, fair_value=350_000.0) if r["row_id"] == "R3" else r for r in rows]
+    ok, info = chk.quarter_total(bigger, CIK, RD)
+    assert not ok

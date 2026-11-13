@@ -102,6 +102,52 @@
   },
   {
    "retirement_id": "VR-CMP-C04-003",
+   "review_id": "RVQ_REV_0a6b652d7d67",
+   "verdict_sha256": "e1da8c8c8e71449a22c11a1a6b9ad5235c3872ccf68f24d76893149769c895e8",
+   "cik": "0001646614",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "report_date": "2025-03-31",
+   "reason": "Standing rule D-252: The verdict found equity rows published without the share count the filing prints. Every one of the 5 published equity rows sits on a context dated 2025-03-31 and its shares_held equals the count printed on its own line.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scripts/v05_evidence/campaign_retirement_check.py (C04): every published equity row (C04 population): context dated the report date; shares_held = the count fact on its own <tr> (InvestmentOwnedBalanceShares / PrincipalAmount), or, untagged, the count printed on the line; every realistic plant fails"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis (JV look-through rows excluded): 155 rows of 0001646614 2025-03-31 from 0000950170-25-070278"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070278",
+     "quote": "Wesco Aircraft Holdings Inc(7)(26)(34) Common Equities Industrial Products & Services N/A N/A 1/31/2025 N/A 195,566 7,459,569 7,396,306 1.36",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070278",
+     "quote": "SP-CREH 19 Highline LLC(7)(26)(34) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,462,440 0.27",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-98a01a79f6225be1",
+    "ROW-aec4571d63226320",
+    "ROW-d4585a0fcc4009bc",
+    "ROW-e18a216b21a1fbb0",
+    "ROW-fb2d8b8430186a1b"
+   ],
+   "published_rows": 155,
+   "rerun": "python scripts/v05_evidence/campaign_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_campaign_C04_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (the b1112b build was used); add --plant: every plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:retire-campaign-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (rule-by-rule retirement campaign on real_error_check_silent findings)",
+   "cohort_left": false
+  },
+  {
+   "retirement_id": "VR-CMP-C04-004",
    "review_id": "RVQ_REV_44e64f67b382",
    "verdict_sha256": "883fa16cad6cf1b3157335bf327419181d51f40ad64c452bba96166ded8199c8",
    "cik": "0001603480",
@@ -157,7 +203,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-004",
+   "retirement_id": "VR-CMP-C04-005",
    "review_id": "RVQ_REV_4a0e350c5c62",
    "verdict_sha256": "dff3707365ede1508c89955e75ac91d8488947fcc3782a0f76c54469d632e264",
    "cik": "0001916099",
@@ -208,7 +254,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-005",
+   "retirement_id": "VR-CMP-C04-006",
    "review_id": "RVQ_REV_8832b52f5f08",
    "verdict_sha256": "3425a495d525cbda7f3e8932943e202d5e5ef5f6e841d9e0a21aedd200a89502",
    "cik": "0001899017",
@@ -266,7 +312,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-006",
+   "retirement_id": "VR-CMP-C04-007",
    "review_id": "RVQ_REV_a6e6320c5273",
    "verdict_sha256": "8d7e9f53ab0aedad8793cdbc2fe1a81a0a8f72c442634459d212215213cf7d3b",
    "cik": "0001899017",
@@ -343,7 +389,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-007",
+   "retirement_id": "VR-CMP-C04-008",
    "review_id": "RVQ_REV_c2f461891c66",
    "verdict_sha256": "a3bd7bcd2593e7d10f32d83e2059ce9e47e6c42a58b49d4113c577ddb1d0588d",
    "cik": "0001825265",
@@ -379,7 +425,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-008",
+   "retirement_id": "VR-CMP-C04-009",
    "review_id": "RVQ_REV_e3c579629bd4",
    "verdict_sha256": "dfcd1e37517fac73b928a6b9634ec4376583533b02ac2e77810e4e640f7ae100",
    "cik": "0001916099",
@@ -425,7 +471,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-009",
+   "retirement_id": "VR-CMP-C04-010",
    "review_id": "RVQ_REV_f27b69d3d9cc",
    "verdict_sha256": "f94668bb3500f146f669c1f488e3c8decc1b2382bfa2b0b01b6100a090265629",
    "cik": "0002031750",
@@ -468,7 +514,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-010",
+   "retirement_id": "VR-CMP-C04-011",
    "review_id": "RVQ_REV_f4b0c6c0b904",
    "verdict_sha256": "0558f8276a95f07912a9bb5f615e738c4cf4b82984598f472e0a64d15d05a473",
    "cik": "0001784700",
@@ -515,7 +561,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-011",
+   "retirement_id": "VR-CMP-C04-012",
    "review_id": "RVQ_REV_f945bc46db13",
    "verdict_sha256": "3215a2387044345e8961b607efad4101ed68ede9c3ffb3bd2096d9dc6b64d11e",
    "cik": "0001825265",
@@ -551,7 +597,7 @@
    "cohort_left": false
   },
   {
-   "retirement_id": "VR-CMP-C04-012",
+   "retirement_id": "VR-CMP-C04-013",
    "review_id": "RVQ_REV_f9d0220a0e05",
    "verdict_sha256": "d011cee316aed54a443c9e4f6968609fe55b9e5fc34ad4cddd30103d023c69eb",
    "cik": "0001825384",

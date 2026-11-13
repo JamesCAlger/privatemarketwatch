@@ -45,7 +45,33 @@ CLAIM = {
             "published equity rows sits on a context dated %(rd)s and its shares_held equals the count printed on its "
             "own line."),
 }
+CLAIM.update({
+    "FX01": ("The verdict found non-USD debt principal published without principal_amount_usd. Every one of the %(n)d "
+             "published debt rows whose own line prints a foreign currency carries that currency, the printed par and a "
+             "principal_amount_usd, one conversion rate per currency (%(fx)s)."),
+    "FX02": ("The verdict found a foreign unit in fair_value_currency (the par currency carried into the valuation). Every "
+             "one of the %(n)d published rows has a US-dollar fair_value_currency and a fair value equal to its own "
+             "context's US-dollar fair-value fact."),
+    "X07": ("The verdict found a row whose cost or fair value was not its own printed figure (or an equity row classed "
+            "non-equity). Every one of the %(n)d published rows' cost and fair value equal its own context's printed "
+            "facts (sign included)%(cls)s."),
+    "X02": ("The verdict found credit rows published with no rate or spread although the line prints one, or non-credit "
+            "lines (equity, warrants, subtotals, continuation lines) published as credit. The %(n)d rows it cites now "
+            "carry the printed margin or rate, or are not classed private credit, as the verdict requires%(pos)s."),
+    "pik_le_interest_rate": ("The verdict found interest_rate holding only the cash leg where the line prints cash and "
+                             "PIK legs. Each of the %(n)d PIK rows it cites is published with interest_rate = cash + PIK "
+                             "and pik_rate = PIK as printed on its own line (the identity rule itself was retired "
+                             "2026-06-19; this tests the verdict's claim, not the rule)."),
+    "E07": ("The verdict found the published position population wrong for the quarter. %(e07)s"),
+})
+ROUND2 = {"FX01", "FX02", "X07", "X02", "pik_le_interest_rate", "E07", "D06"}
 CODE = {
+    "FX01": "debt rows whose own line prints a foreign currency: published currency = printed, par = printed par, principal_amount_usd present, one rate per currency",
+    "FX02": "every published row: fair_value_currency USD, fair value = own context's USD fair-value fact",
+    "X07": "every published row: cost and fair value = own context's printed facts (sign from the page); cited equity rows classed PRIVATE_EQUITY",
+    "X02": "cited loans carry the printed margin (D-031 reading) or rate; cited non-credit rows not PRIVATE_CREDIT; subtotal/continuation claims: one position row per context, each equal to its own fact",
+    "pik_le_interest_rate": "cited PIK rows: interest_rate = printed cash leg + printed PIK leg (or the printed all-in rate on an 'includes PIK' line); pik_rate = printed PIK",
+    "E07": "cited row's all-in coupon, or: published rows = the filing's position members with a fair value at the report date, one row each, each equal to its own fact",
     "PP03": "every published row: own filing, context instant = report date, fair value = own context's printed fact",
     "fv_conservation": "every published row = own context's printed fair-value fact; published sum = filed total investments (undimensioned InvestmentOwnedAtFairValue fact at the report date) within two units of its rounding",
     "B01": "fv_conservation test plus every published row must carry a fair-value fact in its own context",
@@ -86,13 +112,36 @@ def main(argv=None) -> int:
         rid, rule = r["review_id"], r["rule_name"]
         vp = [Path(a.verdict_dir) / s / (rid + ".json") for s in ("review_queue", "bdc_cik_review")]
         vp = [p for p in vp if p.exists()][0]
-        rows = chk.quarter_rows(con, Path(a.holdings).as_posix(), r["cik"], r["report_date"])
-        pool = [x for x in rows if rule != "C04" or chk.is_equity(x)]
+        r2 = rule in ROUND2
+        if r2:
+            import campaign_round2_check as c2
+            rows = c2.quarter_rows(con, Path(a.holdings).as_posix(), r["cik"], r["report_date"])
+            spec = r.get("spec") or {}
+            cited = spec.get("rated", []) + spec.get("not_credit", []) + spec.get("equity", []) + spec.get("rate", [])
+            pool = [x for x in rows if any(c2.cited_match(x, c) for c in cited)] if cited else rows
+            if rule == "pik_le_interest_rate":
+                pool = [x for x in pool if c2.own_fact(x, c2.PIKR) is not None]
+            if rule == "FX01":
+                pool = [x for x in rows if (x["principal_amount_currency"] or "USD").upper() != "USD"
+                        and x["index_classification"] == "DIRECT_LENDING"]
+        else:
+            rows = chk.quarter_rows(con, Path(a.holdings).as_posix(), r["cik"], r["report_date"])
+            pool = [x for x in rows if rule != "C04" or chk.is_equity(x)]
         big = sorted(pool, key=lambda x: -abs(x["fair_value"] or 0.0))
         r["_contexts"] = [x["src_context_id"] for x in big[:6]]
         tot = r["detail"].get("total") or {}
+        d = r["detail"]
+        spec = r.get("spec") or {}
+        e07 = ("Its claim is about the cited row's coupon: each cited PIK row is published at the printed cash + PIK."
+               if spec.get("rate") else
+               "The %s published rows are exactly the filing's %s position members with a fair value at %s, one row each, "
+               "each equal to its own fact%s." % (d.get("published"), d.get("filing_positions"), r["report_date"],
+                                                  ", and their sum equals the filed total" if d.get("total", {}).get("total") else ""))
         params = {"rd": r["report_date"], "n": len(pool), "acc": r["detail"]["accessions"][0],
-                  "basis": tot.get("basis", ""), "total": tot.get("total") or 0.0, "tol": tot.get("tol") or 0.0}
+                  "basis": tot.get("basis", ""), "total": tot.get("total") or 0.0, "tol": tot.get("tol") or 0.0,
+                  "fx": d.get("fx_rates"), "cls": "; the cited equity rows are classed PRIVATE_EQUITY" if spec.get("equity") else "",
+                  "pos": "; every published row of the quarter is a position with its own fair-value fact, one row per context"
+                  if spec.get("positions") else "", "e07": e07}
         query = ("private_markets_holdings.parquet (batch b1112b build), published basis (JV look-through rows excluded): "
                  "%d rows of %s %s from %s" % (len(rows), r["cik"], r["report_date"], ", ".join(r["detail"]["accessions"])))
         if tot:
@@ -106,8 +155,11 @@ def main(argv=None) -> int:
             pub_ctx = {x["src_context_id"] for x in rows}
             query += ("; the filing carries %d position fair-value contexts dated before %s (its comparative "
                       "schedule), of which %d are published" % (len(prior), r["report_date"], len(prior & pub_ctx)))
-        ev = [{"source": "code", "quote": "scripts/v05_evidence/campaign_retirement_check.py (%s): %s; every realistic plant fails"
-               % (rule, CODE[rule])},
+        script = "campaign_round2_check.py" if r2 else "campaign_retirement_check.py"
+        if r2:
+            query += "; rows the claim is about: %d" % len(pool)
+        ev = [{"source": "code", "quote": "scripts/v05_evidence/%s (%s): %s; every realistic plant fails"
+               % (script, rule, CODE[rule])},
               {"source": "query", "quote": query}] + _lines(r)
         n = len([e for e in entries]) + 1
         e = {"retirement_id": "VR-CMP-%s-%03d" % (SHORT.get(rule, rule), n), "review_id": rid,
@@ -115,7 +167,7 @@ def main(argv=None) -> int:
              "rule_name": rule, "report_date": r["report_date"],
              "reason": "Standing rule D-252: " + CLAIM[rule] % params,
              "evidence": ev, "cited_rows": [x["row_id"] for x in pool], "published_rows": len(rows),
-             "rerun": ("python scripts/v05_evidence/campaign_retirement_check.py verify --store %s --holdings <batch output>/"
+             "rerun": ("python scripts/v05_evidence/" + script + " verify --store %s --holdings <batch output>/"
                        "private_markets_holdings.parquet (the b1112b build was used); add --plant: every plant must fail. "
                        "Needs the cached filings under data/raw/filings/bdc_html."
                        % ("data/overrides/verdict_retirements/" + Path(a.out).name)),
@@ -123,6 +175,8 @@ def main(argv=None) -> int:
              "cohort_left": False}
         if tot.get("total_context"):
             e["filed_total_context"] = tot["total_context"]
+        if r2:
+            e["check_spec"] = spec   # the verdict's cited rows / claim as the check reads them
         probs = vr.validate(e)
         if probs:
             raise SystemExit("invalid entry %s: %s" % (rid, probs))

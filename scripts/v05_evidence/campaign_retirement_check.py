@@ -81,6 +81,35 @@ def _local(tag) -> str:
     return tag.split("}", 1)[1] if isinstance(tag, str) and "}" in tag else str(tag)
 
 
+def _cells(tr) -> list[str]:
+    """The non-empty cells of a <tr>, normalised; '$', '%' and ')' alone are not cells."""
+    out = []
+    for td in tr:
+        t = normalise(" ".join(td.itertext()))
+        if t and t not in ("$", "%", ")", "(", "-"):
+            out.append(t)
+    return out
+
+
+def _printed_in_parentheses(el) -> bool:
+    """The page prints the fact inside parentheses (a negative figure) while the tag carries no sign:
+    '(' right before the element in its cell or in the cell before, ')' right after."""
+    td = el
+    while td is not None and _local(td.tag) not in ("td", "th"):
+        td = td.getparent()
+    if td is None:
+        return False
+    text = normalise(" ".join(td.itertext()))
+    shown = normalise("".join(el.itertext()))
+    if re.search(r"\(\s*\$?\s*" + re.escape(shown) + r"\s*\)?\s*$", text) and not re.search(r"[A-Za-z]", text):
+        return True
+    prev = td.getprevious()
+    nxt = td.getnext()
+    p = normalise(" ".join(prev.itertext())) if prev is not None else ""
+    n = normalise(" ".join(nxt.itertext())) if nxt is not None else ""
+    return p.endswith("(") and (n.startswith(")") or text.endswith(")")) and not re.search(r"[A-Za-z]", text)
+
+
 def _num(el) -> float | None:
     """The value of an ix:nonFraction element with its scale and sign; None if unreadable."""
     text = "".join(el.itertext()).strip()
@@ -126,6 +155,9 @@ class Filing:
         for u in tree.iter("{%s}unit" % NS_XBRLI):
             self.units[u.get("id")] = " ".join(t.strip() for t in u.itertext() if t.strip())
         self._tr_text: dict[str, str] = {}
+        self.cells_by_tr: dict[str, list[str]] = {}
+        self.prev_trs: dict[str, list[str]] = {}
+        self.tr_facts: dict[str, list[dict]] = {}
         for el in tree.iter("{%s}nonFraction" % NS_IX):
             qname = el.get("name", "")
             # us-gaap concepts by local name; a filer's own concept keeps its prefix (never confused)
@@ -136,12 +168,48 @@ class Filing:
             key = tree.getpath(tr) if tr is not None else None  # stable; id() of an lxml proxy is not
             if tr is not None and key not in self._tr_text:
                 self._tr_text[key] = normalise(" ".join(tr.itertext()))
+                # the line's cells, and the lines above it in the same table (nearest first), for
+                # readers that need a cell or a carried issuer (round-2 D06)
+                self.cells_by_tr[key] = _cells(tr)
+                prev = []
+                for sib in tr.itersiblings(preceding=True):
+                    if _local(sib.tag) != "tr":
+                        continue
+                    p = tree.getpath(sib)
+                    if p not in self.cells_by_tr:
+                        self.cells_by_tr[p] = _cells(sib)
+                    prev.append(p)
+                    if len(prev) >= 60:
+                        break
+                self.prev_trs[key] = prev
             f = {"name": name, "context": el.get("contextRef"), "value": _num(el),
                  "shown": "".join(el.itertext()).strip(), "scale": int(el.get("scale") or 0),
                  "tr": key, "line": self._tr_text.get(key) if key is not None else None,
-                 "unit": (el.get("unitRef") or "")}
+                 "unit": (el.get("unitRef") or ""), "paren": _printed_in_parentheses(el)}
             self.facts.setdefault((name, f["context"]), []).append(f)
             self.by_name.setdefault(name, []).append(f)
+            if key is not None:
+                self.tr_facts.setdefault(key, []).append(f)
+
+    def is_rollforward_line(self, tr: str) -> bool:
+        """A roll-forward (movement) table line, not a schedule line: it carries a fact on a duration
+        context (purchases, sales, income for the period) or fair values at two different dates
+        (opening and closing balances)."""
+        facts = self.tr_facts.get(tr, [])
+        flow = re.compile(r"Purchase|Sale|Proceeds|Gain|Loss|Income|Addition|Reduction|Transfer|Accretion|"
+                          r"Repayment|Realized|Dividend|Increase|Decrease|Payment", re.I)
+        if any((self.contexts.get(f["context"]) or {}).get("instant") is None and flow.search(f["name"])
+               for f in facts):
+            return True
+        dates = {(self.contexts.get(f["context"]) or {}).get("instant") for f in facts if f["name"] == FV}
+        return len(dates) > 1
+
+    def schedule_line(self, context: str) -> str | None:
+        """The first schedule (non roll-forward) line carrying the context's own fair-value fact."""
+        for f in self.facts.get((FV, context), []):
+            if f["tr"] and not self.is_rollforward_line(f["tr"]):
+                return f["line"]
+        return None
 
     def is_usd(self, f: dict) -> bool:
         return self.units.get(f.get("unit"), f.get("unit") or "").upper().endswith("USD")
@@ -181,11 +249,16 @@ class Filing:
         return (lined or cands)[0]
 
     def cash_equivalents(self, report_date: str) -> list[float]:
+        """Filed cash-equivalent figures at the date, on no dimension: any us-gaap concept naming cash
+        equivalents or money market funds (CashEquivalentsAtCarryingValue, RestrictedCashEquivalents,
+        CashAndCashEquivalentsFairValueDisclosure, ...)."""
         out = []
-        for n in CASH_EQ:
-            for f in self.by_name.get(n, []):
+        for n, fs in self.by_name.items():
+            if not re.search(r"CashEquivalent|MoneyMarket", n) or ":" in n:
+                continue
+            for f in fs:
                 c = self.contexts.get(f["context"]) or {}
-                if f["value"] is not None and c.get("instant") == report_date and not c.get("dims"):
+                if f["value"] and c.get("instant") == report_date and not c.get("dims") and self.is_usd(f):
                     out.append(f["value"])
         return sorted(set(out))
 
@@ -251,17 +324,48 @@ def row_period(r: dict) -> tuple[bool, str]:
 
 
 def printed_value(fl: "Filing", f: dict) -> float:
-    """The value the line prints, in dollars. A fact whose scale differs from the scale of the
-    filing's other fair-value facts (a filer tagging one '121' in a thousands schedule without
-    scale="3") is read at the schedule's scale: the printed figure in the schedule's unit."""
+    """The value of the fact as the page prints it, in dollars: the tag's value with its own scale,
+    negative when the page prints it in parentheses and the tag carries no sign."""
+    if f["value"] is None:
+        return None
+    sign = -1.0 if (f.get("paren") and f["value"] > 0) else 1.0
+    return sign * f["value"]
+
+
+def scale_fallback(fl: "Filing", f: dict) -> float | None:
+    """The printed digits read at the scale of the filing's other fair-value facts, for a fact whose
+    own scale differs (a filer tagging one '121' in a thousands schedule without scale="3"). Only a
+    second reading: callers use it when the tag's own reading does not tie and this one does, and
+    record that they did (a legitimately scale-6 '16.9' must stay 16.9 million)."""
     dom = fl.dominant_fv_scale()
-    if f["scale"] == dom or f["value"] is None:
-        return f["value"]
+    if f["value"] is None or f["scale"] == dom:
+        return None
     shown = _num_text(f["shown"])
     if shown is None:
-        return f["value"]
+        return None
     v = shown * 10 ** dom
-    return -v if f["value"] < 0 else v
+    v = -v if f["value"] < 0 else v
+    return -v if (f.get("paren") and v > 0) else v
+
+
+def match_printed(fl: "Filing", facts: list[dict], published, tol: float) -> tuple[bool, float | None, str]:
+    """(ok, printed value, note). The context's facts must agree under the tag's own reading (or, all
+    of them, under the schedule-scale reading); the published value must equal that reading. The
+    schedule-scale reading is used only when the own reading does not tie and it does; noted."""
+    own = {round(printed_value(fl, f), 2) for f in facts}
+    if len(own) == 1:
+        v = printed_value(fl, facts[0])
+        if _eq(published, v, tol):
+            return True, v, ""
+        fb = scale_fallback(fl, facts[0])
+        if fb is not None and _eq(published, fb, tol) and all(scale_fallback(fl, f) == fb for f in facts):
+            return True, fb, " [scale fallback used: tag %s at scale %s read at the schedule scale]" % (
+                facts[0]["value"], facts[0]["scale"])
+        return False, v, ""
+    fbs = {round(scale_fallback(fl, f) if scale_fallback(fl, f) is not None else printed_value(fl, f), 2) for f in facts}
+    if len(fbs) == 1 and _eq(published, fbs.pop(), tol):
+        return True, published, " [scale fallback used to reconcile the context's facts %s]" % sorted(own)
+    return False, None, " (the context's facts disagree %s)" % sorted(own)
 
 
 def _num_text(text: str) -> float | None:
@@ -285,13 +389,8 @@ def row_fv(r: dict, *, require_fact: bool) -> tuple[bool, str]:
         if require_fact:
             return False, "no fair-value fact in the row's context"
         return (r["fair_value"] in (None, 0.0)), "no fair-value fact; published %s" % r["fair_value"]
-    vals = {round(printed_value(fl, f), 2) for f in facts}
-    if len(vals) != 1:
-        return False, "the context's fair-value facts disagree %s" % sorted(vals)
-    v = printed_value(fl, facts[0])
-    note = "" if v == facts[0]["value"] else " (fact %s at scale %s read at the schedule scale)" % (
-        facts[0]["value"], facts[0]["scale"])
-    return _eq(r["fair_value"], v, FV_TOL), "published %s, printed %s%s" % (r["fair_value"], v, note)
+    ok, v, note = match_printed(fl, facts, r["fair_value"], FV_TOL)
+    return ok, "published %s, printed %s%s" % (r["fair_value"], v, note)
 
 
 def row_pct(r: dict) -> tuple[bool, str]:
@@ -344,17 +443,23 @@ def untagged_count(fl: "Filing", r: dict, line_tr: str) -> tuple[bool, str]:
     if sh in (None, 0.0):
         # nothing published: the line must print no count, neither '(N units)' nor a bare figure
         # that is not a tagged cost / fair value / percent (a date, footnote or percent is not a count)
-        bare = [t for t in re.findall(r"(?<![\d/.(])\d{1,3}(?:,\d{3})*(?:\.\d+)?(?![\d/%)]|\s*%)", line)
-                if t not in tagged and t not in ("0",)]
+        bare = [t for t in count_cells(fl, line_tr, tagged) if t not in ("0",)]
         return (not paren and not bare), ("nothing published; line prints counts %s / untagged figures %s: %s"
                                           % (paren, bare, line[:140]))
     txt = "{:,.0f}".format(sh) if float(sh).is_integer() else "{:,}".format(sh)
     if txt in [p.strip() for p in paren]:
         return True, "published %s printed as '(%s ...)' on the line" % (sh, txt)
-    cells = [c for c in re.split(r"\s+", line)]
-    if txt in cells and txt not in tagged:
-        return True, "published %s printed as an untagged cell on the line" % sh
-    return False, "published %s not printed on the line: %s" % (sh, line[:140])
+    if txt in count_cells(fl, line_tr, tagged):
+        return True, "published %s printed as the count cell of the line" % sh
+    return False, "published %s not printed as a count on the line: %s" % (sh, line[:140])
+
+
+def count_cells(fl: "Filing", line_tr: str, tagged: set) -> list[str]:
+    """Cells of the line that are a bare number and nothing else, not the first (issuer) cell and not a
+    tagged cost / fair value / percent: the only places an untagged count can be printed. A number
+    inside the issuer or instrument text ('SP-CREH 19 Highline LLC') is never a count."""
+    cells = fl.cells_by_tr.get(line_tr) or []
+    return [c for c in cells[1:] if re.fullmatch(r"\d{1,3}(?:,\d{3})*(?:\.\d+)?", c) and c not in tagged]
 
 
 def quarter_total(rows: list[dict], cik: str, rd: str, total_ctx: str | None = None,
@@ -397,31 +502,103 @@ def quarter_total(rows: list[dict], cik: str, rd: str, total_ctx: str | None = N
                 tot = und
     if tot is None:
         return False, dict(info, why="no filed total-investments fact confirmed by the verdict's quoted total (dated %s)" % rd)
-    info["total_context"] = tot["context"]
-    info["total_dims"] = (fl.contexts.get(tot["context"]) or {}).get("dims")
-    unit = 10 ** min(max(tot["scale"], 0), 3)   # never wider than two thousand dollars
-    tol = 2 * unit
     s_all = sum(r["fair_value"] or 0.0 for r in rows)
     cash = [r for r in rows if r["asset_category"] == "CASH"]
     s_cash = sum(r["fair_value"] or 0.0 for r in cash)
+
+    def tolof(f):
+        return 2 * 10 ** min(max(f["scale"], 0), 3)   # never wider than two thousand dollars
+
+    # The total must be the TOP-LEVEL total investments. Every larger fair-value fact dated the report
+    # date on no position must be explained: the filed investments-and-cash-equivalents total (= total +
+    # the CASH rows), another entity's schedule (a legal-entity / equity-investee / consolidated-entity
+    # axis: a JV's own portfolio), or a fair-value hierarchy total that includes derivatives or
+    # liabilities. Where the largest unexplained fact itself ties the published rows, it is used.
+    others = [f for f in fl.by_name.get(FV, []) if f["value"] is not None and fl.is_usd(f) and f["scale"] <= 3
+              and (fl.contexts.get(f["context"]) or {}).get("instant") == rd
+              and "us-gaap:InvestmentIdentifierAxis" not in (fl.contexts.get(f["context"]) or {}).get("dims", {})]
+    explained = []
+    published_ctx = {r["src_context_id"] for r in rows}
+
+    def explain(f):
+        dims = " ".join(list((fl.contexts.get(f["context"]) or {}).get("dims", {})) +
+                        list((fl.contexts.get(f["context"]) or {}).get("dims", {}).values()))
+        line = f["line"] or ""
+        is_inv_total = bool(re.search(r"total\b.*\binvestments?\b|investments?,? at fair value", line, re.I)) \
+            and not re.search(r"cash", line, re.I)
+        if cash and abs(f["value"] - tot["value"] - s_cash) <= tolof(tot) and not is_inv_total:
+            # equal to total + CASH and printed as investments-and-cash (a line that reads as plain
+            # total investments and includes the money-market rows IS the filer's total: not explained)
+            return "the filed investments-and-cash-equivalents total (total + CASH rows)"
+        if re.search(r"LegalEntityAxis|EquityMethodInvestee|ConsolidatedEntitiesAxis|ConsolidationItemsAxis|"
+                     r"JointVenture|InvesteeName", dims, re.I):
+            return "another entity's schedule (%s)" % dims[:120]
+        if re.search(r"derivative|liabilit", f["line"] or "", re.I):
+            return "a total including derivatives or liabilities: %s" % (f["line"] or "")[:80]
+        # a separate schedule: the positions carrying the fact's own dimension members sum to it, and none
+        # of them is a published row (a JV's own portfolio, published as look-through rows or not at all)
+        fdims = (fl.contexts.get(f["context"]) or {}).get("dims", {})
+        if fdims:
+            members = [cx for cx, c in fl.contexts.items() if c.get("instant") == rd
+                       and "us-gaap:InvestmentIdentifierAxis" in c["dims"]
+                       and all(c["dims"].get(a) == m for a, m in fdims.items())]
+            s = sum(fl.fv_facts(cx)[0]["value"] for cx in members if fl.fv_facts(cx))
+            if members and abs(s - f["value"]) <= max(tolof(f), 1000.0 * len(members)) and not (set(members) & published_ctx):
+                return "a separate schedule: %d positions on %s sum to it, none published" % (len(members), fdims)
+        return None
+    larger = sorted([f for f in others if f["value"] > tot["value"] + tolof(tot)], key=lambda f: -f["value"])
+    unexplained = [f for f in larger if explain(f) is None]
+    if unexplained:
+        top = unexplained[0]
+        # switch to the larger fact only when its own printed line is a total-investments line that does
+        # not include cash (an 'investments and cash equivalents' total must never become the total)
+        top_is_total = bool(re.search(r"total\b.*\binvestments?\b|investments?,? at fair value", top["line"] or "", re.I)) \
+            and not re.search(r"cash", top["line"] or "", re.I)
+        if top_is_total and (abs(s_all - top["value"]) <= tolof(top)
+                             or (cash and abs(s_all - s_cash - top["value"]) <= tolof(top))):
+            tot, larger = top, [f for f in larger if f["value"] > top["value"] + tolof(top)]
+            unexplained = [f for f in larger if explain(f) is None]
+        if unexplained:
+            return False, dict(info, total=tot["value"], total_context=tot["context"],
+                               why="a larger total fact %.0f (context %s) is not explained; the stored total %.0f "
+                                   "is not the top-level total" % (unexplained[0]["value"], unexplained[0]["context"],
+                                                                  tot["value"]))
+    explained = sorted({"%.0f: %s" % (f["value"], explain(f)) for f in larger})
+    info["total_context"] = tot["context"]
+    info["total_dims"] = (fl.contexts.get(tot["context"]) or {}).get("dims")
+    info["larger_facts_explained"] = explained
+    tol = tolof(tot)
     info.update(total=tot["value"], total_line=tot["line"], tol=tol, sum_all=round(s_all, 2),
                 sum_ex_cash=round(s_all - s_cash, 2), sum_cash=round(s_cash, 2), n_rows=len(rows), n_cash=len(cash))
     if abs(s_all - tot["value"]) <= tol:
         return True, dict(info, basis="all published rows")
     if cash and abs(s_all - s_cash - tot["value"]) <= tol:
-        # The non-CASH rows sum to the filed total, so the CASH rows sit outside it; each CASH row
-        # equals its own filed fact (row test). Recorded for the reader: the filer's cash-equivalent
-        # facts and whether a filed 'investments and cash equivalents' total equals total + CASH.
+        # The non-CASH rows sum to the filed total, so the CASH rows sit outside it. They must be the
+        # filer's cash equivalents: their sum equals a filed cash-equivalents fact, or a filed fair-value
+        # fact equals total + CASH (the investments-and-cash-equivalents total).
+        filed_cash = fl.cash_equivalents(rd)
         tot_plus = [f["value"] for f in fl.by_name.get(FV, []) if f["value"] is not None
                     and (fl.contexts.get(f["context"]) or {}).get("instant") == rd
                     and abs(f["value"] - tot["value"] - s_cash) <= tol]
-        return True, dict(info, basis="non-CASH rows", filed_cash=fl.cash_equivalents(rd),
-                          total_plus_cash_fact=bool(tot_plus))
+        # one filed cash-equivalents figure, or two or three of them together (cash equivalents plus
+        # restricted cash equivalents), equals the CASH rows
+        from itertools import combinations
+        cash_ok = bool(tot_plus) or any(abs(sum(cmb) - s_cash) <= tol for k in (1, 2, 3)
+                                        for cmb in combinations(filed_cash, k))
+        info.update(basis="non-CASH rows", filed_cash=filed_cash, total_plus_cash_fact=bool(tot_plus))
+        if not cash_ok:
+            return False, dict(info, why="CASH rows %.0f equal no filed cash-equivalents fact %s and no filed "
+                                         "investments-and-cash total" % (s_cash, filed_cash))
+        return True, info
     return False, dict(info, why="published sum %.0f (ex-CASH %.0f) vs filed total %.0f" % (
         s_all, s_all - s_cash, tot["value"]))
 
 
-CASH_LINE = re.compile(r"money market|cash|treasur|government|liquidity|fedfund|short[- ]term|t-?bill", re.I)
+CASH_LINE = re.compile(r"money market|treasur|government (money|securities|fund|obligation|portfolio|cash)|liquidity|"
+                       r"fedfund|cash management|cash equivalent|cash reserve|short[- ]term (investment|fund|bond)|"
+                       r"t-?bills?\b|institutional (shares|class)", re.I)
+# a loan line paying part in cash ('6.42 % cash/ 2.75 % PIK', 'S + 100 Cash plus 9.50 % PIK') is not cash
+NOT_CASH_LINE = re.compile(r"\bPIK\b|%\s*cash|cash\s*/|cash\s+plus|\b(S|SOFR|SF|L|E|EURIBOR|SONIA)\s*\+", re.I)
 
 
 def row_line(r: dict) -> str | None:
@@ -464,11 +641,12 @@ def check_quarter(rule: str, rows: list[dict], cik: str, rd: str, total_ctx: str
             tests.append(("shares_held",) + row_shares(r))
         if rule == "PP03":
             fl = filing(r["cik"], r["accession_number"])
-            line = fl.printed_line(r["src_context_id"])
+            line = fl.schedule_line(r["src_context_id"])
             fv_ok = bool(fl.fv_facts(r["src_context_id"]))
-            # a row with a fair value must have a printed schedule line carrying it
+            # a row with a fair value must have a schedule line carrying it; a context whose fair value is
+            # printed only in a roll-forward (movement) table is not a schedule position
             tests.append(("printed_line", (line is not None) or not fv_ok,
-                          "line found" if line else "no fair-value fact on any line"))
+                          "schedule line found" if line else "fair value printed only on roll-forward lines"))
             # the row's value is its own context's (not a comparative fact carried onto a current row)
             tests.append(("fair_value",) + row_fv(r, require_fact=False))
         for name, ok, why in tests:
@@ -490,7 +668,7 @@ def check_quarter(rule: str, rows: list[dict], cik: str, rd: str, total_ctx: str
         for r in rows:
             if r["asset_category"] == "CASH":
                 line = row_line(r)
-                if not CASH_LINE.search(line or ""):
+                if not CASH_LINE.search(line or "") or NOT_CASH_LINE.search(line or ""):
                     fails.append({"row_id": r["row_id"], "test": "cash_line",
                                   "why": "CASH row whose own line names no cash instrument: %s" % (line or "")[:100]})
         ok, info = quarter_total(rows, cik, rd, total_ctx=total_ctx, anchors=anchors)
@@ -561,6 +739,25 @@ def plants(rule: str, rows: list[dict], cik: str, rd: str, total_ctx: str | None
         out.append(("shares_x1000", swap(t, shares_held=(t["shares_held"] or 1.0) * 1000)))
         if t.get("fair_value"):
             out.append(("fair_value_as_shares", swap(t, shares_held=t["fair_value"])))
+        # a number inside the issuer / instrument text read as the count ('SP-CREH 19 Highline LLC')
+        if fl is not None and fl.ok:
+            for r in pool:
+                tr = next((f["tr"] for f in fl.facts.get((FV, r["src_context_id"]), []) if f["tr"]), None)
+                first = (fl.cells_by_tr.get(tr) or [""])[0]
+                m = re.search(r"(?<![\d(])(\d{1,6})(?![\d)])", first)
+                if m and float(m.group(1)) != (r["shares_held"] or 0):
+                    out.append(("number_in_issuer_name", swap(r, shares_held=float(m.group(1)))))
+                    break
+    if rule == "PP03" and fl is not None and fl.ok:
+        # a current-dated row whose fair value is printed only in a roll-forward table
+        for (name, ctx), facts in fl.facts.items():
+            c = fl.contexts.get(ctx) or {}
+            if (name == FV and ctx not in used and c.get("instant") == rd
+                    and "us-gaap:InvestmentIdentifierAxis" in c.get("dims", {})
+                    and all(f["tr"] and fl.is_rollforward_line(f["tr"]) for f in facts)):
+                out.append(("rollforward_only_row", rows + [dict(med, row_id="PLANT-RF", src_context_id=ctx,
+                                                                  fair_value=printed_value(fl, facts[0]))]))
+                break
     return out
 
 
