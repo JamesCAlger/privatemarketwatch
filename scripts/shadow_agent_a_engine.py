@@ -12,8 +12,33 @@ Rules emitted (rule_name):
     * agentA  -> A likely right, XBRL tag likely wrong  -> status warn (B: confirm + correct)
     * neither -> internally-inconsistent filing          -> status fail (B: investigate)
     * xbrl/both/undeterminable                            -> status warn (low prior)
+- agentA_maturity_vs_xbrl, agentA_reference_uncorroborated, agentA_subtotal_candidate:
+  see _enrichment_flags.
 
-Read-only. Writes data/output/shadow/agent_a_flags.csv.
+Check repair REQ-APZ-1 (owner ruling DC-shared-83c62c0bdb, 2026-11-13). The identifier A parses
+is the filer's hidden member label, which can be stale; the build publishes what the schedule
+prints. So a label-vs-tag disagreement (the trigger above, unchanged) becomes a FLAG only after
+the published row is compared with its own printed line:
+  1. The printed line is the inline-XBRL table row that carries the row's own fair-value fact
+     (pipeline.bdc_xbrl_html_bridge.propose_field_bridges_from_ixbrl, the build's page reader,
+     anchored on the fact's contextRef). The flag is dropped only when the rule's own field is
+     readable on that line and equal to the published value, and no other field the reader can
+     compare (maturity, reference rate, margin, instrument type) differs from it. The subtotal
+     rule's flag on a published row is dropped when that line is a position line, not 'Total ...'.
+  2. Fail closed: no printed line (no cached page, member printed on several lines, no fair-value
+     fact), the rule's field not printed there, or a field the reader could not confirm
+     ('validation_needed') -> the flag stays (printed_check says why).
+  3. A context that is not a published row (zero-value undrawn line, subtotal, header, JV
+     look-through schedule) raises no row flag. One carrying a fair value or cost is written to
+     agent_a_unpublished_coverage.csv (informational coverage output; not a ledger rule).
+  4. The shadow runner (scripts/shadow_validation_runner.py) runs this engine before it reads
+     the flags, so every batch / quarter pass / fund build recomputes them.
+  5. The identifier is stored whole (was cut at 300 characters) together with the published
+     row_id, accession and context, so a flag joins to its row.
+The ``mechanism`` strings are unchanged: the review id hashes the mechanism.
+
+Writes <output>/shadow/agent_a_flags.csv, <output>/shadow/agent_a_unpublished_coverage.csv and
+<output>/shadow/agent_a_candidates_audit.csv (every candidate's outcome, dropped ones included).
 
 Cohort (DERIVED, not hardcoded): every committed per-CIK grammar that declares a
 flattened rate-bearing dominant signature AND passes the A3 held-out (cross-quarter)
@@ -25,16 +50,25 @@ for Agent B); a non-rate / non-flattened grammar is SKIPPED. Both are logged, ne
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import logging
+import re
 import sys
+from collections import Counter
+from pathlib import Path
+from typing import Any, Callable
 
-from pipeline import config
-from pipeline.identifier_held_out import held_out_report
-from pipeline.identifier_overlay import stage_overlay
-from pipeline.identifier_rate import GRAMMAR_DIR, apply_grammar, load_grammar
-from pipeline.identifier_signature import is_aggregate_candidate, load_anchors
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from pipeline import config  # noqa: E402
+from pipeline.identifier_held_out import held_out_report  # noqa: E402
+from pipeline.identifier_overlay import stage_overlay  # noqa: E402
+from pipeline.identifier_rate import GRAMMAR_DIR, apply_grammar, load_grammar  # noqa: E402
+from pipeline.identifier_signature import is_aggregate_candidate, load_anchors  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("shadow_agent_a_engine")
@@ -49,7 +83,10 @@ SEED_TARGETS = [
     ("0001633336", "DEBT INVTYPE REFRATE RATE MAT"),
 ]
 
-OUT = config.DATA_DIR / "output" / "shadow" / "agent_a_flags.csv"
+FLAGS_NAME = "agent_a_flags.csv"
+COVERAGE_NAME = "agent_a_unpublished_coverage.csv"
+AUDIT_NAME = "agent_a_candidates_audit.csv"
+OUT = config.OUTPUT_DIR / "shadow" / FLAGS_NAME
 
 
 def candidate_grammars(grammar_dir=None):
@@ -106,16 +143,30 @@ _STATUS = {"agentA": "warn", "neither": "fail", "xbrl": "warn",
 
 _FIELDS = ["engine", "rule_name", "tier", "enforcement", "cik", "report_date", "status",
            "metric", "metric_name", "mechanism", "agentA_value_pct", "xbrl_residual",
-           "a_residual", "identifier"]
+           "a_residual", "identifier", "row_id", "accession_number", "src_context_id",
+           "printed_check", "mismatch_fields", "printed_row"]
+
+_COVERAGE_FIELDS = ["cik", "report_date", "rule_name", "identifier", "accession_number",
+                    "src_context_id", "fair_value", "cost", "reason"]
+
+# The field each rule tests. The subtotal rule tests no value: on a published row it stays.
+PRIMARY_FIELD = {"agentA_maturity_vs_xbrl": "maturity_date",
+                 "agentA_spread_vs_xbrl": "basis_spread",
+                 "agentA_reference_uncorroborated": "reference_rate_type"}
+SUBTOTAL_RULE = "agentA_subtotal_candidate"
+_SPREAD_TOL = 0.005  # percentage points
+_MONEY_FLOOR = 1.0   # dollars: an unpublished context below this carries nothing
 
 
 def _flag(rule_name, cik, rd, status, mechanism, ident, *, metric="", metric_name="",
           a_val="", xresid="", aresid="", tier="tight"):
+    # identifier kept whole (REQ-APZ-1 condition 5: the 300-character cut broke the join to the row)
     return {"engine": "agentA", "rule_name": rule_name, "tier": tier,
-            "enforcement": "advisory", "cik": cik, "report_date": rd, "status": status,
+            "enforcement": "advisory", "cik": cik, "report_date": str(rd)[:10], "status": status,
             "metric": metric, "metric_name": metric_name, "mechanism": mechanism,
             "agentA_value_pct": a_val, "xbrl_residual": xresid, "a_residual": aresid,
-            "identifier": str(ident)[:300]}
+            "identifier": str(ident), "row_id": "", "accession_number": "", "src_context_id": "",
+            "printed_check": "", "mismatch_fields": "", "printed_row": ""}
 
 
 def _spread_flags(cik, sig, parquet):
@@ -141,13 +192,14 @@ def _enrichment_flags(cik, parquet):
       - agentA_maturity_vs_xbrl : the identifier-stated maturity != the structured twin
         maturity. The disagreement is the FLAG (descriptor can be stale after an amendment;
         the twin can be a sibling/period mis-tag). B adjudicates which is authoritative per row
-        (longitudinal/source evidence); it is NOT decided here and no longer fails A's gate."""
+        (longitudinal/source evidence); it is NOT decided here and no longer fails A's gate.
+    These are candidates; resolve() keeps those the printed line does not answer."""
     import duckdb
 
     anchors, grammar = load_anchors(cik), load_grammar(cik)
     con = duckdb.connect()
     rows = con.execute(
-        f"""SELECT CAST(investment_identifier AS VARCHAR) ident, CAST(report_date AS VARCHAR) rd,
+        f"""SELECT DISTINCT CAST(investment_identifier AS VARCHAR) ident, CAST(report_date AS VARCHAR)[:10] rd,
                    CAST(reference_rate_type AS VARCHAR) xref, TRY_CAST(basis_spread AS DOUBLE) xspread,
                    CAST(maturity_date AS VARCHAR) xmat
             FROM '{parquet}' WHERE CAST(cik AS VARCHAR)='{cik}'
@@ -159,7 +211,7 @@ def _enrichment_flags(cik, parquet):
     out = []
     for ident, rd, xref, xspread, xmat in rows:
         if is_aggregate_candidate(ident, anchors):
-            out.append(_flag("agentA_subtotal_candidate", cik, rd, "warn",
+            out.append(_flag(SUBTOTAL_RULE, cik, rd, "warn",
                              "category_keyword_no_position", ident))
             continue  # subtotals are not positions -> skip the rate checks
         parsed = apply_grammar(ident, grammar)
@@ -174,11 +226,304 @@ def _enrichment_flags(cik, parquet):
             out.append(_flag("agentA_maturity_vs_xbrl", cik, rd, "warn",
                              "identifier_maturity_ne_structured", ident,
                              metric_name="parsed_vs_twin_date", a_val=a_mat, xresid=x_mat))
+    # one candidate per (rule, quarter, identifier): the DISTINCT above can still repeat an
+    # identifier whose contexts carry different structured values
+    seen, uniq = set(), []
+    for f in out:
+        key = (f["rule_name"], f["report_date"], f["identifier"])
+        if key not in seen:
+            seen.add(key)
+            uniq.append(f)
+    return uniq
+
+
+# ---------------------------------------------------------------------------------------------
+# Printed-line comparison (REQ-APZ-1)
+# ---------------------------------------------------------------------------------------------
+
+def _norm_ident(value: Any) -> str:
+    return " ".join(str(value or "").replace(" ", " ").split()).lower()
+
+
+def _blank(value: Any) -> bool:
+    return value is None or str(value).strip().lower() in ("", "none", "nan", "nat", "<na>")
+
+
+def _num(value: Any) -> float | None:
+    if _blank(value):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+_INSTRUMENT_CLASSES = (
+    ("delayed_draw", re.compile(r"(?i)delayed[\s-]*draw|\bddtl?\b")),
+    ("revolver", re.compile(r"(?i)\brevolv")),
+    ("term_loan", re.compile(r"(?i)\bterm\s+loan")),
+    ("bond", re.compile(r"(?i)\bbonds?\b")),
+)
+_PUBLISHED_CLASS = {"delayed draw term loan": "delayed_draw", "delayed draw": "delayed_draw",
+                    "revolver": "revolver", "term loan": "term_loan"}
+
+
+def printed_instrument_class(printed_row: str) -> str | None:
+    """The loan class the printed line names, first match in priority order; None if it names none.
+
+    'Delayed Draw Term Loan' is a delayed draw, not a term loan; a bond is a bond only when the line
+    names no loan class."""
+    for name, pattern in _INSTRUMENT_CLASSES:
+        if pattern.search(printed_row or ""):
+            return name
+    return None
+
+
+def _published_class(instrument_type: Any) -> str | None:
+    """'none' for an empty instrument_type; None (not comparable) for a class the page cannot name."""
+    if _blank(instrument_type):
+        return "none"
+    return _PUBLISHED_CLASS.get(str(instrument_type).strip().lower())
+
+
+def printed_values(bridge: dict | None) -> dict[str, Any]:
+    """What the row's own printed line says, per field; a field the reader could not read is absent.
+
+    reference_rate_type '' means the line prints no reference rate in a reference-rate column
+    (fixed rate); basis_spread None then means no margin is printed."""
+    out: dict[str, Any] = {}
+    if not bridge:
+        return out
+    if bridge.get("maturity_status") == "value" and not _blank(bridge.get("maturity_date")):
+        out["maturity_date"] = str(bridge["maturity_date"])[:10]
+    rstat = bridge.get("reference_rate_status")
+    if rstat == "value" and not _blank(bridge.get("reference_rate_type")):
+        out["reference_rate_type"] = str(bridge["reference_rate_type"]).strip().upper()
+        margin = _num(bridge.get("printed_margin"))
+        if margin is not None:
+            out["basis_spread"] = margin
+    elif rstat == "not_applicable":
+        out["reference_rate_type"] = ""
+        out["basis_spread"] = None
+    cls = printed_instrument_class(bridge.get("printed_row") or "")
+    if cls is not None:
+        out["instrument_type"] = cls
     return out
 
 
-def main(argv=None) -> int:
-    parquet = str(config.OUTPUT_DIR / "bdc_holdings.parquet")
+def unreadable_fields(bridge: dict | None) -> list[str]:
+    """Fields the line prints but the reader could not confirm ('validation_needed': e.g. a benchmark
+    code it does not know, SARON or STIBOR on Apollo's Yellow Castle lines). Fail closed on them."""
+    if not bridge:
+        return []
+    out = []
+    if bridge.get("maturity_status") == "validation_needed":
+        out.append("maturity_date")
+    if bridge.get("reference_rate_status") == "validation_needed":
+        out.append("reference_rate_type")
+    return out
+
+
+_TOTAL_LINE_RE = re.compile(r"(?i)^\s*(?:sub-?\s*)?total\b")
+
+
+def field_differs(field: str, published: Any, printed: Any) -> bool:
+    """True when the published value differs from the printed one (both read, so comparable)."""
+    if field == "maturity_date":
+        return _blank(published) or str(published)[:10] != printed
+    if field == "reference_rate_type":
+        return ("" if _blank(published) else str(published).strip().upper()) != printed
+    if field == "basis_spread":
+        pub = _num(published)
+        if printed is None:  # fixed rate: no margin printed
+            return pub not in (None, 0.0)
+        return pub is None or abs(pub - float(printed)) > _SPREAD_TOL
+    if field == "instrument_type":
+        pub = _published_class(published)
+        if pub is None:
+            return False  # a published class the page vocabulary cannot name (Unitranche)
+        if printed == "bond":
+            return pub != "none"  # the taxonomy has no bond class: a bond publishes no loan class
+        return pub != printed
+    raise ValueError(field)
+
+
+def compare_row(rule_name: str, published: dict, bridge: dict | None) -> tuple[str, list[str]]:
+    """(printed_check, mismatched fields) of one published row against its own printed line.
+
+    printed_check: 'equal' (flag dropped), 'mismatch', 'line_not_found', 'field_unreadable',
+    'field_not_printed', 'subtotal_line'. Everything but 'equal' keeps the flag (fail closed).
+
+    The subtotal rule tests no value: a published row whose own printed line is a position line
+    (not a 'Total ...' line) is a position, and the flag is dropped."""
+    if not bridge or _blank(bridge.get("printed_row")):
+        return "line_not_found", []
+    if rule_name == SUBTOTAL_RULE:
+        first_cell = str(bridge["printed_row"]).split("|", 1)[0]
+        return ("subtotal_line", []) if _TOTAL_LINE_RE.search(first_cell) else ("equal", [])
+    printed = printed_values(bridge)
+    diffs = [f for f in ("maturity_date", "reference_rate_type", "basis_spread", "instrument_type")
+             if f in printed and field_differs(f, published.get(f), printed[f])]
+    if diffs:
+        return "mismatch", diffs
+    unread = unreadable_fields(bridge)
+    if unread:
+        return "field_unreadable", unread
+    if PRIMARY_FIELD[rule_name] not in printed:
+        return "field_not_printed", []
+    return "equal", []
+
+
+class PageReader:
+    """The build's page reader, once per filing: {context_ref: bridge} and {member: bridge}."""
+
+    def __init__(self, reader: Callable[..., dict] | None = None):
+        if reader is None:
+            from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl as reader
+        self._reader = reader
+        self._cache: dict[tuple[str, str, str], tuple[dict, dict]] = {}
+        self.errors: Counter = Counter()
+
+    def clear(self) -> None:
+        self._cache.clear()
+
+    def lookup(self, cik: str, accession: str, report_date: str, context: str, ident: str) -> dict | None:
+        key = (cik, accession, report_date)
+        if key not in self._cache:
+            by_ctx: dict[str, dict] = {}
+            by_member: dict[str, dict] = {}
+            try:
+                res = self._reader(cik=cik, accession_number=accession, report_date=report_date)
+            except Exception as e:  # unreadable page -> fail closed for its rows
+                self.errors[type(e).__name__] += 1
+                res = {"bridges": []}
+            for b in res.get("bridges", []):
+                ctx = (b.get("match_evidence") or {}).get("context_ref")
+                if ctx:
+                    by_ctx[ctx] = b
+                by_member[_norm_ident(b.get("raw_id_lower"))] = b
+            self._cache[key] = (by_ctx, by_member)
+        by_ctx, by_member = self._cache[key]
+        return by_ctx.get(context) or by_member.get(_norm_ident(ident))
+
+
+def resolve(candidates: list[dict], contexts: list[dict], published: list[dict],
+            page: PageReader, audit: list[dict] | None = None) -> tuple[list[dict], list[dict]]:
+    """Turn label-vs-tag candidates into flags on published rows, plus coverage rows.
+
+    contexts: current-period extracted rows {identifier, report_date, accession_number,
+              src_context_id, fair_value, cost}.
+    published: published rows {row_id, identifier, report_date, accession_number, src_context_id,
+               maturity_date, basis_spread, reference_rate_type, instrument_type, record_class}.
+    audit: if given, receives one row per candidate x published row with its printed_check,
+           including dropped ones ('equal') and unpublished candidates ('unpublished').
+    """
+    def note(cand, check, p=None, bridge=None, diffs=()):
+        if audit is None:
+            return
+        a = dict(cand)
+        a.update({"row_id": (p or {}).get("row_id") or "", "accession_number": (p or {}).get("accession_number") or "",
+                  "src_context_id": (p or {}).get("src_context_id") or "", "printed_check": check,
+                  "mismatch_fields": ";".join(diffs), "printed_row": ((bridge or {}).get("printed_row") or "")[:400]})
+        audit.append(a)
+
+    ctx_by_ident: dict[tuple[str, str], list[dict]] = {}
+    for c in contexts:
+        ctx_by_ident.setdefault((str(c["report_date"])[:10], _norm_ident(c["identifier"])), []).append(c)
+    pub_by_ident: dict[tuple[str, str], list[dict]] = {}
+    pub_by_ctx: dict[tuple[str, str, str], list[dict]] = {}
+    for p in published:
+        rd = str(p["report_date"])[:10]
+        if p.get("record_class") == "underlying_schedule":
+            continue
+        pub_by_ident.setdefault((rd, _norm_ident(p["identifier"])), []).append(p)
+        pub_by_ctx.setdefault((rd, str(p.get("accession_number") or ""), str(p.get("src_context_id") or "")),
+                              []).append(p)
+    jv = {(str(p["report_date"])[:10], _norm_ident(p["identifier"])) for p in published
+          if p.get("record_class") == "underlying_schedule"}
+    jv_ctx = {(str(p["report_date"])[:10], str(p.get("accession_number") or ""), str(p.get("src_context_id") or ""))
+              for p in published if p.get("record_class") == "underlying_schedule"}
+
+    flags: list[dict] = []
+    coverage: list[dict] = []
+    for cand in candidates:
+        key = (cand["report_date"], _norm_ident(cand["identifier"]))
+        ctxs = ctx_by_ident.get(key, [])
+        rows: dict[str, dict] = {}
+        for p in pub_by_ident.get(key, []):
+            rows[p["row_id"]] = p
+        for c in ctxs:
+            for p in pub_by_ctx.get((key[0], str(c.get("accession_number") or ""),
+                                     str(c.get("src_context_id") or "")), []):
+                rows[p["row_id"]] = p
+        if not rows:
+            # not a published row: no row finding; money-bearing contexts go to coverage
+            for c in ctxs:
+                fv, cost = _num(c.get("fair_value")), _num(c.get("cost"))
+                if (fv is not None and abs(fv) >= _MONEY_FLOOR) or (cost is not None and abs(cost) >= _MONEY_FLOOR):
+                    coverage.append({"cik": cand["cik"], "report_date": key[0], "rule_name": cand["rule_name"],
+                                     "identifier": cand["identifier"],
+                                     "accession_number": c.get("accession_number") or "",
+                                     "src_context_id": c.get("src_context_id") or "",
+                                     "fair_value": "" if fv is None else fv, "cost": "" if cost is None else cost,
+                                     "reason": "underlying_schedule" if (key in jv or (
+                                         key[0], str(c.get("accession_number") or ""),
+                                         str(c.get("src_context_id") or "")) in jv_ctx) else "not_published"})
+            if not ctxs:
+                # the candidate names no extracted context: nothing to compare -> fail closed
+                f = dict(cand)
+                f["printed_check"] = "no_context"
+                flags.append(f)
+                note(cand, "no_context")
+            else:
+                note(cand, "unpublished")
+            continue
+        for row_id in sorted(rows):
+            p = rows[row_id]
+            bridge = page.lookup(cand["cik"], str(p.get("accession_number") or ""), key[0],
+                                 str(p.get("src_context_id") or ""), p["identifier"])
+            check, diffs = compare_row(cand["rule_name"], p, bridge)
+            note(cand, check, p, bridge, diffs)
+            if check == "equal":
+                continue
+            f = dict(cand)
+            f.update({"row_id": row_id, "accession_number": p.get("accession_number") or "",
+                      "src_context_id": p.get("src_context_id") or "", "printed_check": check,
+                      "mismatch_fields": ";".join(diffs),
+                      "printed_row": ((bridge or {}).get("printed_row") or "")[:400]})
+            flags.append(f)
+    return flags, coverage
+
+
+def _contexts(con, parquet: str, cik: str) -> list[dict]:
+    df = con.execute(f"""SELECT CAST(investment_identifier AS VARCHAR) AS identifier,
+            CAST(report_date AS VARCHAR)[:10] AS report_date, CAST(accession_number AS VARCHAR) AS accession_number,
+            CAST(src_context_id AS VARCHAR) AS src_context_id, TRY_CAST(fair_value AS DOUBLE) AS fair_value,
+            TRY_CAST(cost AS DOUBLE) AS cost
+        FROM read_parquet('{parquet}') WHERE CAST(cik AS VARCHAR)='{cik}' AND investment_identifier IS NOT NULL
+          AND CAST(period AS VARCHAR)=CAST(report_date AS VARCHAR)""").fetchdf()
+    return df.to_dict("records")
+
+
+def _published(con, holdings: str, cik: str) -> list[dict]:
+    src = (f"read_parquet('{holdings}')" if holdings.endswith(".parquet")
+           else f"read_csv('{holdings}', header=true, all_varchar=true, sample_size=-1)")
+    df = con.execute(f"""SELECT CAST(row_id AS VARCHAR) AS row_id, CAST(bdc_investment_identifier AS VARCHAR) AS identifier,
+            CAST(report_date AS VARCHAR)[:10] AS report_date, CAST(accession_number AS VARCHAR) AS accession_number,
+            CAST(src_context_id AS VARCHAR) AS src_context_id, CAST(maturity_date AS VARCHAR)[:10] AS maturity_date,
+            TRY_CAST(basis_spread AS DOUBLE) AS basis_spread, CAST(reference_rate_type AS VARCHAR) AS reference_rate_type,
+            CAST(instrument_type AS VARCHAR) AS instrument_type,
+            coalesce(CAST(accounting_record_class AS VARCHAR), '') AS record_class
+        FROM {src} WHERE lpad(CAST(cik AS VARCHAR), 10, '0')='{cik}' AND CAST(source AS VARCHAR)='bdc'
+          AND bdc_investment_identifier IS NOT NULL""").fetchdf()
+    return df.astype(object).where(df.notna(), None).to_dict("records")
+
+
+def run(*, bdc_holdings: Path, published: Path, out_dir: Path, ciks: list[str] | None = None,
+        page: PageReader | None = None) -> dict:
+    import duckdb
+
+    parquet, holdings = Path(bdc_holdings).as_posix(), Path(published).as_posix()
     cohort, excluded, skipped = build_cohort(parquet)
     logger.info("agentA cohort: %d held-out-PASS grammars (candidates %d, FAIL/error %d, "
                 "non-rate skipped %d)", len(cohort), len(cohort) + len(excluded),
@@ -189,21 +534,60 @@ def main(argv=None) -> int:
     if narrow:
         logger.info("  NARROW-confidence PASS (thin in-era coverage, %d): %s",
                     len(narrow), ", ".join(narrow))
-
-    rows = []
+    if ciks:
+        wanted = {str(c).zfill(10) for c in ciks}
+        cohort = [c for c in cohort if c[0] in wanted]
+    page = page or PageReader()
+    con = duckdb.connect()
+    rows, coverage, audit, checks = [], [], [], Counter()
+    n_candidates = 0
     for cik, sig, _conf in cohort:
-        rows += _spread_flags(cik, sig, parquet)
-        rows += _enrichment_flags(cik, parquet)
+        cands = _spread_flags(cik, sig, parquet) + _enrichment_flags(cik, parquet)
+        n_candidates += len(cands)
+        if not cands:
+            continue
+        flags, cov = resolve(cands, _contexts(con, parquet, cik), _published(con, holdings, cik), page, audit)
+        rows += flags
+        coverage += cov
+        checks.update(f["printed_check"] for f in flags)
+        logger.info("  %s: %d candidates -> %d flags, %d coverage rows", cik, len(cands), len(flags), len(cov))
+        page.clear()  # one fund's pages at a time in memory
+    con.close()
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUT, "w", newline="", encoding="utf-8") as f:
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    with open(out_dir / FLAGS_NAME, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=_FIELDS)
         w.writeheader()
         w.writerows(rows)
-    from collections import Counter
+    with open(out_dir / COVERAGE_NAME, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=_COVERAGE_FIELDS)
+        w.writeheader()
+        w.writerows(coverage)
+    # every candidate's outcome, including dropped ones: the audit trail of the repair
+    with open(out_dir / AUDIT_NAME, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=_FIELDS)
+        w.writeheader()
+        w.writerows(audit)
     by_rule = Counter(r["rule_name"] for r in rows)
-    logger.info("agentA engine: %d flags over %d filers -> %s", len(rows), len(cohort), OUT)
+    logger.info("agentA engine: %d candidates -> %d flags over %d filers -> %s", n_candidates, len(rows),
+                len(cohort), out_dir / FLAGS_NAME)
     logger.info("  by rule: %s", dict(by_rule))
+    logger.info("  printed_check: %s; page read errors: %s", dict(checks), dict(page.errors))
+    logger.info("  unpublished money-bearing contexts -> %s: %d", out_dir / COVERAGE_NAME, len(coverage))
+    return {"candidates": n_candidates, "flags": len(rows), "coverage": len(coverage), "checks": dict(checks)}
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--bdc-holdings", default=str(config.BDC_HOLDINGS_PARQUET_FILE))
+    ap.add_argument("--published", default=str(config.UNIFIED_HOLDINGS_PARQUET_FILE
+                                               if config.UNIFIED_HOLDINGS_PARQUET_FILE.exists()
+                                               else config.UNIFIED_HOLDINGS_FILE))
+    ap.add_argument("--out-dir", default=str(config.OUTPUT_DIR / "shadow"))
+    ap.add_argument("--ciks", nargs="*", default=None, help="limit to these cohort CIKs (measurement)")
+    a = ap.parse_args(argv)
+    run(bdc_holdings=Path(a.bdc_holdings), published=Path(a.published), out_dir=Path(a.out_dir), ciks=a.ciks)
     return 0
 
 
