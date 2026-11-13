@@ -1,0 +1,171 @@
+{
+ "reviewer_id": "agent:reviewer-gcpc-20261113-opus",
+ "report_digest": "7d70872650b789129b56ad4d1b4e5fc7410d8a7fbceddb9a1c1dbe5a2de87870",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_e873c6d12319",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "All 7 affected contexts read in 0001930087-25-000050: c-846, c-848, c-849, c-869, c-877 and c-882 are tagged InvestmentOwnedBalanceShares scale 3, decimals -3 with values 2/1/1/1/1/3, while 2025-03-31 and 2025-09-30 print 1,563 / 1,146 / 1,146 / 1,279 / 1,484 / 3,477 for the same holdings (review/units.py); they are published at those exact counts (derived_proxy). c-866 Rooster BidCo preferred is tagged InvestmentOwnedBalancePrincipalAmount 2 and published with no count; the revised hypothesis now says so (my gczd objection is resolved). source_ambiguity is the right conclusion; the decision belongs to the owner (DC-0001930087-f32c22a871 supersedes the earlier request and includes c-866).",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    },
+    {
+     "accession": "0001930087-26-000078",
+     "text": "Menlo Ridgeview Co-Invest, LLC(8) LLC units N/A N/A 05/2025 N/A 1,484 1,520 - 1,587"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "identifier-member-names-another-company-than-printed-row",
+   "outcome": "supported",
+   "rationale": "Unchanged from gczd: the field diff gcze vs gczd touches no issuer_name. All 42 name changes were read on the page against the row carrying each row FV fact; all match (Athenahealth c-564, Eliassen c-474, BrightView c-170, Blue Bidco c-669, YI c-127..129, LeadsOnline c-445..448, Telesoft c-629, LSF11 c-92, Titan c-66..68).",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553"
+    }
+   ]
+  },
+  {
+   "observation_key": "whole-pik-coupon-not-published-on-row-with-spread",
+   "outcome": "supported",
+   "rationale": "Unchanged from gczd (rates not touched in gcze). All 59 rows match the printed coupon, pik_rate equal, cash leg 0, kind all_in, the storage the baseline already used and consistent with D-031.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Pineapple German Bidco GMBH^(8)(9)(15)(18) One stop E + 7.00 % (a) 10.65 % PIK 01/2031 18,542 18,466 1.3 18,310"
+    }
+   ]
+  },
+  {
+   "observation_key": "footnote-number-tagged-as-rate-on-unfunded-line",
+   "outcome": "supported",
+   "rationale": "Camelia c-301 and Severin c-195/c-196 print N/A(6); the rate 6.0 is withdrawn and the spread kept. Correct.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000012",
+     "text": "Severin Acquisition, LLC^(5) One stop SF + 4.75 % N/A( 6 ) 10/2031 - ( 41 ) - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-note-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "All 247 Golub CLO / Structured Finance Note rows (Green Lakes Park CLO included) carry STRUCTURED_CREDIT index and asset class with category LOAN, the same as the 188 untouched siblings and a convention used by 53 funds in production. No row is internally inconsistent; whether CLO notes should be LOAN, DEBT or OTHER is a cohort-wide question, not a Golub defect.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Dryden 40 Senior Loan Fund(7)(19)(24)(25) Structured Finance Note SF + 3.10 % (h) 7.69 % 08/2031 5,500 5,498 0.2 5,476"
+    }
+   ]
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "outcome": "supported",
+   "rationale": "The 18 LP-interest rows are operating-company holdcos with loans in the same schedule. COMMON_EQUITY matches the cohort majority (3,309 vs 926 rows) and the wrapper equity_instrument_labels; Bridge Growth Partners Seasmoke stays FUND, parked.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Transform Bidco Limited(7)(9) LP interest N/A N/A 04/2025 N/A 3 3,477 0.1 3,477"
+    }
+   ]
+  },
+  {
+   "observation_key": "single-row-group-contexts-lack-industry-maturity-par",
+   "outcome": "supported",
+   "rationale": "Industry: 54 of 54 rows match the heading printed directly above (review/heads.py). Maturity: the 12 loan maturities match the page. The 13 preferred acquisition-date maturities I rejected in gczd are withdrawn in gcze (26 withdrawal records; field diff gcze vs gczd: 13 maturity_date to null). A scan of every gcze row (review/acqmat.py) finds 0 published maturities on lines printed \"mm/yyyy N/A\" (321 such lines, all null) and 7,360 loan maturities with no conflict.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Star Holding, LLC@#(8)(26) Senior secured SF + 4.50 % (h) 8.14 % 07/2031 17,079 16,939 0.4 17,104"
+    }
+   ]
+  },
+  {
+   "observation_key": "relabelled-contexts-lose-identifier-keyed-field-status",
+   "outcome": "supported",
+   "rationale": "Consistent with the builds: row corrections replaced the relabel and no industry or maturity was lost. not_feasible as a standalone rule is acceptable since holdings_field_diff surfaces it.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000012",
+     "text": "Eliassen Group, LLC* One stop SF + 5.75 % (i) 10.08 % 04/2028 4,844 4,843 0.2 4,746"
+    }
+   ]
+  },
+  {
+   "observation_key": "rounded-unit-counts-in-one-quarterly-filing",
+   "outcome": "supported",
+   "rationale": "Confirmed from the tags (scale 3, decimals -3, values 1 to 3 against 1,146 to 3,477 in adjacent quarters). units_printed is the existing detector. Rooster c-866 is now stated as published with no count.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-joins-different-maturities",
+   "outcome": "supported",
+   "rationale": "My gczd rejection is resolved. In gcze, Titan One stop 1 c-78 / c-66 / c-99 / c-114 (par 15,987 / 16,104 / 16,582 / 16,660, SF+5.26/5.38) form chain b85aea8c; the 829 / 827 One stop 3 tranche (c-101, c-116) is its own chain cf4e671e. Re-listed every chain link with a par change over 3x, a spread change over 0.5 or a maturity change (review/jumps2.py): gcze vs gczd 0 new, 1 gone (the bad Titan link); gcze vs gcza 3 new links, all same-par continuations (Athenahealth 12,669 amend-and-extend, Ascensus 26,106 to 26,105 with the maturity now filled, Blue Bidco 3,300 with the printed maturity month 06 to 05). LSF11 c-92 (7,987) still lacks its predecessor c-58 (15,007): a missing link, disclosed, not a wrong one.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000024",
+     "text": "Titan BW Borrower L.P.*^(24) One stop SF + 5.38 % (i) 6.38 % cash/ 2.88 % PIK 07/2032 16,104 15,955 0.4 16,104"
+    }
+   ]
+  },
+  {
+   "observation_key": "unsplit-instrument-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Independent dry-run of issuer_name_strip_re on gcza and rg1b names: 21 distinct names (24 rows) change, each to the printed company name, nothing else. The other 4 of the 28 rows came from row corrections. issuer_name_printed is the existing detector.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Dcert Buyer, Inc.^(19) Senior secured SF + 4.00 % (f) 9.34 % 10/2026 2,969 2,972 0.2 2,900"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "GCZ-UNITS-ROUNDED-2025-06-30",
+   "outcome": "supported",
+   "rationale": "acceptance_change is right: the printed and tagged counts are the filer rounded figures, not a verification bug. I agree with keeping the exact adjacent-filing counts (identical before and after) flagged derived_proxy. The superseding decision record DC-0001930087-f32c22a871 now covers Rooster c-866 (derive 1,601,000 from the 2025-03-31 print). The next_action text in the report request still does not name Rooster; the decision record does.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    },
+    {
+     "accession": "0001930087-26-000078",
+     "text": "Menlo Ridgeview Co-Invest, LLC(8) LLC units N/A N/A 05/2025 N/A 1,484 1,520 - 1,587"
+    }
+   ]
+  }
+ ],
+ "gczd_rejections_resolved": {
+  "preferred_acquisition_date_maturities": "resolved: 13 rows null in gcze; no other acquisition-date maturity found",
+  "titan_chain": "resolved: force_pair c-66 to c-99; no new suspicious link",
+  "x02_retirements": "resolved: replaced by VR-CMP-X02-001/007/010. Re-ran campaign_round2_check verify on gcze holdings: 3 of 3 PASS; --plant: 9 of 9 plants caught; my own wrong-value plants (review/plant_value) fail all 3, so the check tests filed values",
+  "rooster_c866": "resolved in the investigation and the superseding owner request record"
+ },
+ "retirements_checked": [
+  "campaign stores filtered to Golub (review/store_*.json), verify on gcze holdings: PP03 4/4, X02 3/3, fv_conservation 2/2, pik_le_interest_rate 1/1 PASS; --plant: all plants caught",
+  "fund-loop store: VR-FL-1930087-01 (C006) and -02 (D06, cause claim dropped) PASS on gcze, validate() clean, verdict sha256 matches",
+  "each of the 12 earlier-retired findings is now retired by exactly one entry across all stores"
+ ],
+ "notes": [
+  "The gcze findings_ledger.csv retirement_id column is stale: it names VR-FL-1930087-01..12 from the earlier 12-entry store. In the current store -01 and -02 were reused for different findings (C006, D06). States would not change on regeneration (all 12 still retired), but regenerate the ledger before foldback; reusing retirement ids for a different finding weakens the audit trail.",
+  "Production ledger (b1112b) still shows 27 outstanding for this fund; the sandbox-vs-production gap is the known tooling limit."
+ ],
+ "not_checked": [
+  "reference_rate_type, lien and non-accrual flags row by row",
+  "the process-guard bypass during builds gcza to gczd (disclosed by the investigator)"
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "schema_version": "position-match-override.v1",
+ "cik": "0001930087",
+ "overrides": [
+  {
+   "begin_report_date": "2025-12-31",
+   "end_report_date": "2026-03-31",
+   "begin_issuer_name": "Titan BW Borrower L.P.",
+   "end_issuer_name": "Titan BW Borrower L.P.",
+   "begin_fair_value": 16104000.0,
+   "end_fair_value": 816000.0,
+   "match_method": "B2_exact_name",
+   "action": "force_pair",
+   "replace_end_issuer_name": "Titan BW Borrower L.P.",
+   "replace_end_fair_value": 16391000.0,
+   "mechanism": "After the 2025-12-31 member 'Titan BW Borrower' was given its printed name 'Titan BW Borrower L.P.', the matcher paired the 2025-12-31 One stop 1 line (par 16,104, SF + 5.38) with the 2026-03-31 One stop 3 line (par 829, SF + 4.75). The end side is moved to the 2026-03-31 One stop 1 line (par 16,582, SF + 5.38), which continues it.",
+   "evidence": "Printed 2025-12-31 'Titan BW Borrower L.P. One stop SF + 5.38 % (i) 6.38 % cash/ 2.88 % PIK 07/2032 16,104 15,955 0.4 16,104'; printed 2026-03-31 One stop lines at par 16,582 (SF + 5.38) and 829 (SF + 4.75); contexts c-66, c-99, c-101 of 0001930087-26-000024 / -000060.",
+   "confidence": 0.9,
+   "residual_risk": "Natural key (name, date, FV within 1 pct or 1,000); the three Titan rows per quarter have distinct fair values. The 829 line (2026-03-31 c-101) is left without a 2025-12-31 predecessor (it was a new tranche at 4.75).",
+   "created_by": "agent:fund-gcpc-20261113",
+   "review_id": "GCZ-CHAIN-TITAN-1"
+  }
+ ]
+}

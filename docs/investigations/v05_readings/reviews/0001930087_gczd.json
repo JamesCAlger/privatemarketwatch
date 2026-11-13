@@ -1,0 +1,328 @@
+{
+ "reviewer_id": "agent:reviewer-gcpc-20261113-opus",
+ "report_digest": "8f5ba0e5a3989a938459b0be04d5836e855c41cd68cb9ee0a7cd1da170a15a6b",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_39da1120d79e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py gczd: PASS. The check parses every context of the filing and finds 0 published rows on a context dated other than the report date, which is exactly the comparative_leak the verdict claims. Planted test (review/plant_null: one row moved to comparative context c-5) makes it FAIL. The current-period cited row is published at its printed values: Azul Systems 2024-03-31 c-297 par/cost/FV 3,000, rate 9.95, spread 4.50 (the verdict current row is 9.95).",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000027",
+     "text": "Azul Systems, Inc.* Senior secured SF + 4.50"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_de3fa4d8c54f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py gczd: PASS. The check parses every context of the filing and finds 0 published rows on a context dated other than the report date, which is exactly the comparative_leak the verdict claims. Planted test (review/plant_null: one row moved to comparative context c-5) makes it FAIL. The current-period cited row is published at its printed values: Azul Systems 2024-06-30 c-404 3,000, rate 9.98 (the verdict current row is 9.98).",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Azul Systems, Inc.* Senior secured SF + 4.50"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7ca7ea3ee696",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py gczd: PASS. The check parses every context of the filing and finds 0 published rows on a context dated other than the report date, which is exactly the comparative_leak the verdict claims. Planted test (review/plant_null: one row moved to comparative context c-5) makes it FAIL. The current-period cited row is published at its printed values: Azul Systems 2024-12-31 c-496 3,000, rate 8.98.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000012",
+     "text": "Azul Systems, Inc.* Senior secured SF + 4.50"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_49da5e3bd1fe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran retire_check.py gczd: PASS. The check parses every context of the filing and finds 0 published rows on a context dated other than the report date, which is exactly the comparative_leak the verdict claims. Planted test (review/plant_null: one row moved to comparative context c-5) makes it FAIL. The current-period cited row is published at its printed values: Amberfield One stop 2026-03-31 c-550/551/552 at SF+5.50, 9.20 (current schedule); DCCM c-254/255/256 current rows.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000060",
+     "text": "Amberfield Acquisition Co."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1198b4414abf",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Retirement check does not test filed values. retire_check.py X02 passes when interest_rate OR basis_spread is non-null; with wrong values planted on the cited rows (review/plant_value: Super REGO rate 12.0, Amberfield spread 5.5, AI Titan spread 4.25, Any Hour rate 11.0) it still reports PASS 12 of 12. D-252 requires the cited rows at their filed values. I read the cited rows on the page and the published values do match (Super REGO 2024-03-31 rate 15.00 pik 15.00; Panzura rate 19.00 = 4.00 cash + 15.00 PIK, pik 15.00), so this is a check defect, not a data error: make the X02 retirement check compare each cited row with its printed rate/spread, re-run, then retire.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000027",
+     "text": "Super REGO, LLC^(17) Subordinated debt N/A 15.00 % PIK 03/2030 50 49 - 49"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9aa097bce9f3",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Retirement check does not test filed values. retire_check.py X02 passes when interest_rate OR basis_spread is non-null; with wrong values planted on the cited rows (review/plant_value: Super REGO rate 12.0, Amberfield spread 5.5, AI Titan spread 4.25, Any Hour rate 11.0) it still reports PASS 12 of 12. D-252 requires the cited rows at their filed values. I read the cited rows on the page and the published values do match (both Amberfield 2024-06-30 rows spread 5.00), so this is a check defect, not a data error: make the X02 retirement check compare each cited row with its printed rate/spread, re-run, then retire.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Amberfield Acquisition Co.^(5) One stop SF + 5.00 % N/A(6) 05/2030 - ( 10 ) - ( 10 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bdfa054ed311",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Retirement check does not test filed values. retire_check.py X02 passes when interest_rate OR basis_spread is non-null; with wrong values planted on the cited rows (review/plant_value: Super REGO rate 12.0, Amberfield spread 5.5, AI Titan spread 4.25, Any Hour rate 11.0) it still reports PASS 12 of 12. D-252 requires the cited rows at their filed values. I read the cited rows on the page and the published values do match (AI Titan x2 spread 4.75; Amberfield c-305 spread 5.00 (this cited row is not queried individually by the check, only through the quarter count); Any Hour rate 13.00), so this is a check defect, not a data error: make the X02 retirement check compare each cited row with its printed rate/spread, re-run, then retire.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000012",
+     "text": "Any Hour, LLC^(20) One stop N/A 13.00 % PIK 05/2031 5,005 4,920 0.2 4,955"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c7d08441a98f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran: PASS (0 blank accessions at 2025-12-31; the Bleriot row carries 0001930087-26-000024). The check tests exactly the verdict claim; a planted blank accession on the Bleriot row makes it FAIL.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000024",
+     "text": "Bleriot US Bidco Inc."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b4c9dad50397",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran: PASS. My own tie-out (review/totals_rv.py) gives published ex-cash 9,913,408 = printed Total investments 9,913,408. The verdict claim (73,483 of equity omitted) is aggregate and the check tests the aggregate. Planted deletion of one equity row makes it FAIL.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000024",
+     "text": "Total investments 9,839,254 221.6 9,913,408"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_025c7a932e1c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran: PASS; independent tie-out 9,928,221 = printed total. Planted deletion of one equity row makes it FAIL.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000060",
+     "text": "Total investments $ 10,050,232 218.2 % $ 9,928,221"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fbd84dabd505",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran: PASS. The check tests the value (Panzura interest_rate 19.0, pik_rate 15.0), the all-in coupon the verdict asks for and the fund convention for split cash/PIK rows already present in the untouched baseline gcza (interest_rate_kind all_in). Planted interest_rate 4.0 makes it FAIL.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Panzura, LLC^(18) One stop N/A 4.00 % cash/ 15.00 % PIK 08/2027 56 52 - 50"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5e5956147bef",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-ran: PASS (441 of 460 issuers persist by _d06_issuer_key); Acrisure is published in both quarters at its printed values. A planted name scramble for 2026-03-31 makes it FAIL. Caveat: the stated cause (unsplit names) is not shown: production and rg1b already give 439 of 461, so the 0-of-1004 reading belongs to an older build. The retirement does not depend on that cause.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000060",
+     "text": "Acrisure, LLC^#(26) Senior secured SF + 3.00 % (h) 6.67 % 11/2030 25,043 24,980 0.5 24,311"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e873c6d12319",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "The conclusion (source_ambiguity: the filer prints counts rounded to millions) is right. The 2025-06-30 facts are tagged scale 3, decimals -3, with values 1/1/1/1/2/2/3, while 2025-03-31 and 2025-09-30 print 1,146 / 1,146 / 1,279 / 1,484 / 1,563 / 1,601 / 3,477 for the same holdings (review/units.py). But the hypothesis \"published values are the exact later counts\" is wrong for 1 of the 7 rows: Rooster BidCo Preferred stock 0001930087-25-000050/c-866 is tagged InvestmentOwnedBalancePrincipalAmount (usd, 2) and is published with shares_held NULL, with no derived count. Correct the row statement and include c-866 in the owner decision.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    },
+    {
+     "accession": "0001930087-26-000078",
+     "text": "Menlo Ridgeview Co-Invest, LLC(8) LLC units N/A N/A 05/2025 N/A 1,484 1,520 - 1,587"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "identifier-member-names-another-company-than-printed-row",
+   "outcome": "supported",
+   "rationale": "All 42 issuer_name changes (gczd vs gcza) read against the printed row carrying each row FV fact (review/chg.py): every one matches. This includes Athenahealth c-564 (was Amberfield), Eliassen c-474 (was Eclipse Buyer), BrightView c-170 (was FR Vision), Blue Bidco c-669 (was Bloomerang), YI LLC c-127..129, LeadsOnline c-445..448, Telesoft c-629, LSF11 c-92 and Titan L.P. c-66..68. The proposed strict folded-equality detector is sound.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553"
+    }
+   ]
+  },
+  {
+   "observation_key": "whole-pik-coupon-not-published-on-row-with-spread",
+   "outcome": "supported",
+   "rationale": "All 59 rate rows read on the page: interest_rate = printed PIK/Non-Cash coupon, pik_rate equal, interest_rate_cash 0, kind all_in, spread unchanged at the printed margin. This is the storage the baseline already used for whole-PIK rows (Pineapple 2024-03-31 c-344 in gcza) and is consistent with D-031 and the fund setting pik_only_tag_reading coupon. The detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Pineapple German Bidco GMBH^(8)(9)(15)(18) One stop E + 7.00 % (a) 10.65 % PIK 01/2031 18,542 18,466 1.3 18,310"
+    }
+   ]
+  },
+  {
+   "observation_key": "footnote-number-tagged-as-rate-on-unfunded-line",
+   "outcome": "supported",
+   "rationale": "Camelia c-301 (2023-09-30) and Severin c-195/c-196 (2024-12-31) print N/A(6); rate 6.0 withdrawn, spread kept. Correct.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000012",
+     "text": "Severin Acquisition, LLC^(5) One stop SF + 4.75 % N/A( 6 ) 10/2031 - ( 41 ) - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-note-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "Orchestrator question answered: in gczd all 247 Golub CLO / Structured Finance Note rows (including Green Lakes Park CLO, untouched since gcza) carry index STRUCTURED_CREDIT, asset_class STRUCTURED_CREDIT, asset_category LOAN, exposure DIRECT, issuer CORPORATE. The 59 corrected rows (52 from DIRECT_LENDING, 7 from FUND) now equal the 188 untouched siblings; no row is internally inconsistent. LOAN under STRUCTURED_CREDIT is a cohort convention in production (5,442 rows, 53 funds), though DEBT and OTHER are also used (35 and 32 funds): a cohort-wide category choice, not a Golub defect.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Dryden 40 Senior Loan Fund(7)(19)(24)(25) Structured Finance Note SF + 3.10 % (h) 7.69 % 08/2031 5,500 5,498 0.2 5,476"
+    }
+   ]
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "outcome": "supported",
+   "rationale": "All 18 LP-interest rows (Denali, Creek, LogicMonitor, Transform, Rooster) are operating-company holdcos with loans in the same schedule. COMMON_EQUITY matches the cohort majority (3,309 LP/LLC interest rows COMMON_EQUITY in 33 funds vs 926 fund-class) and the fund wrapper equity_instrument_labels. Only Bridge Growth Partners Seasmoke stays FUND (parked, reasonable).",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Transform Bidco Limited(7)(9) LP interest N/A N/A 04/2025 N/A 3 3,477 0.1 3,477"
+    }
+   ]
+  },
+  {
+   "observation_key": "single-row-group-contexts-lack-industry-maturity-par",
+   "outcome": "supported",
+   "rationale": "All 54 extracted_industry rows checked: the printed row directly above each row FV row is the published heading (review/heads.py, 54 of 54). The 12 loan maturities (Ascensus, Knowlton, RealPage, Star, three quarters each), 7 CLO pars, SCP CDH and Rooster units and the Metal Supermarkets spread match the page. The 13 preferred maturities declared under maturity_date are a separate, wrong correction (see wrong_corrections).",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Star Holding, LLC@#(8)(26) Senior secured SF + 4.50 % (h) 8.14 % 07/2031 17,079 16,939 0.4 17,104"
+    }
+   ]
+  },
+  {
+   "observation_key": "relabelled-contexts-lose-identifier-keyed-field-status",
+   "outcome": "supported",
+   "rationale": "Consistent with gczd: row corrections were used instead, and the field diff gczd vs gcza shows no lost industry or maturity. not_feasible as a standalone rule is acceptable since holdings_field_diff surfaces it.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000012",
+     "text": "Eliassen Group, LLC* One stop SF + 5.75 % (i) 10.08 % 04/2028 4,844 4,843 0.2 4,746"
+    }
+   ]
+  },
+  {
+   "observation_key": "rounded-unit-counts-in-one-quarterly-filing",
+   "outcome": "supported",
+   "rationale": "Confirmed from the tags: 2025-06-30 counts are tagged scale 3, decimals -3 as 1,1,1,1,2,2,3 against 1,146 to 3,477 in adjacent quarters. units_printed is the existing detector. Rooster c-866 is published without units.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-joins-different-maturities",
+   "outcome": "rejected",
+   "rationale": "Misses a wrong link created by this run. In gczd chain cf4e671e joins Titan BW One stop 1 2025-09-30 c-78 (par 15,987, SF+5.26) and 2025-12-31 c-66 (par 16,104, SF+5.38) to One stop 3 2026-03-31 c-101 (par 829, SF+4.75) and 2026-06-30 c-116 (par 827): different loans. The real continuation, One stop 1 2026-03-31 c-99 (par 16,582, SF+5.38) and 2026-06-30 c-114, sits in chain b85aea8c. In gcza the 2025 rows were their own chain cd649e88; the name correction on c-66 created the bad link. The report says \"Titan BW 2025-09/12 one chain\" without noting it. Athenahealth (same par 12,669, 02/2029 to 02/2032) and Ascensus (26,106 to 26,105, maturity now filled 08/2028 to 11/2032) look like amend-and-extend; Eliassen and Blue Bidco links are correct.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000024",
+     "text": "Titan BW Borrower L.P.*^(24) One stop SF + 5.38 % (i) 6.38 % cash/ 2.88 % PIK 07/2032 16,104 15,955 0.4 16,104"
+    }
+   ]
+  },
+  {
+   "observation_key": "unsplit-instrument-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Independent dry-run of the wrapper issuer_name_strip_re on gcza and rg1b published names: 21 distinct names change (24 rows), each to the printed company name; no other name changes. The report says 28 rows; the other 4 (Quick Quack LLC 1/2 and similar) came from row corrections. The same pattern would change 2,503 distinct names in other Golub-family funds if it were ever shared.",
+   "evidence": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Dcert Buyer, Inc.^(19) Senior secured SF + 4.00 % (f) 9.34 % 10/2026 2,969 2,972 0.2 2,900"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "GCZ-UNITS-ROUNDED-2025-06-30",
+   "outcome": "supported",
+   "rationale": "acceptance_change is the right class: the printed and tagged counts are the filer rounded figures, not a verification bug. I agree with keeping the exact counts from adjacent filings (identical before and after), labelled derived_proxy, rather than publishing values understated about 1,000x. The owner decision must also cover Rooster c-866, published with no units at all.",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    }
+   ]
+  }
+ ],
+ "wrong_corrections": [
+  {
+   "what": "maturity_date set from the equity Acquisition Date column on preferred stock rows (13 rows): Eclipse Buyer Preferred c-683 (2024-09-30), c-654 (2024-12-31), c-758 (2025-03-31), c-870 (2025-06-30), c-1007 (2025-09-30), c-1105 (2025-12-31), c-1166 (2026-03-31), c-1190 (2026-06-30) to 2024-09-30; Modernizing Medicine Preferred c-863 (2025-06-30), c-997 (2025-09-30), c-1095 (2025-12-31), c-1155 (2026-03-31), c-1177 (2026-06-30) to 2025-04-30",
+   "why": "Equity tables print \"Acquisition Date Maturity Date\" columns; these rows print \"09/2024 N/A\" / \"04/2025 N/A\": acquisition month, then maturity N/A. The investigator scan (fullscan.py parse takes the last mm/yyyy) read the acquisition date as maturity; the correction reason \"Printed maturity/redemption month\" is wrong. Withdraw the 26 maturity_date / maturity_precision records for these contexts.",
+   "evidence": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 2,878 0.1 2,902"
+    }
+   ]
+  }
+ ],
+ "checks_run": [
+  "retire_check.py gczd re-run 12/12 PASS; planted nulls 0/12 PASS; planted wrong values 12/12 PASS (X02 tests presence only)",
+  "holdings_field_diff gczd gcza and gcza rg1b: all differences declared; gcza vs rg1b only entity_id 2450, canonical_name 949, interest_rate_cash 44",
+  "all 267 changed rows read against the printed row carrying their FV fact (review/chg.py)",
+  "random 30-row page sample seed 1113: 30/30 match (4 cash/PIK rows at the fund all-in convention)",
+  "fullscan re-run on gczd: 7,706 rows fv/cost/rate/spread/pik ok; 6 money-market rows unprinted; par/units mismatches only the 2025-06-30 rounded units and the Modernizing preferred share count",
+  "totals 11/12 tie; 2023-12-31 3,468 under = Containers subtotal 35,834 vs printed rows 32,366 (D-064) confirmed"
+ ],
+ "not_checked": [
+  "reference_rate_type, lien and non-accrual flags row by row",
+  "process-guard bypass during builds gcza to gczd (disclosed by the investigator) not re-assessed"
+ ]
+}

@@ -74,7 +74,9 @@
         "regex": "(?i)(?:money\\s+market|u\\.s\\.\\s+treasury|us\\s+treasury|treasury\\s+portfolio|morgan\\s+stanley\\s+institutional\\s+liquidity\\s+funds|jpmorgan\\s+100%\\s+u\\.s\\.\\s+treasury)",
         "family": "cash"
       }
-    ]
+    ],
+    "issuer_name_strip_re": "\\s*,?\\s+(?:One stop|Senior secured|Second lien|Subordinated debt|Structured Finance Note)(?:\\s*,?\\s*\\d{1,2})?$",
+    "issuer_name_strip_to_instrument": true
   },
   "staging": {
     "strategy": "hierarchy_extract",

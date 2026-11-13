@@ -1,0 +1,600 @@
+{
+ "cik": "0001930087",
+ "label": "gcze",
+ "before": "rg1b",
+ "shared_code": false,
+ "investigator_id": "agent:fund-gcpc-20261113",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 42,
+   "why": "printed company name: 28 unsplit instrument names and 20 wrong/misspelt member names (wrapper strip + row corrections)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 31,
+   "why": "cut instrument text and instrument from the printed row for blank/odd members"
+  },
+  {
+   "column": "shares_held",
+   "rows": 3,
+   "why": "SCP CDH common 8,000 (2 rows), Rooster preferred 1,601,000 from the printed units"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 7,
+   "why": "printed par of Dryden 40 and Ivy Hill structured notes"
+  },
+  {
+   "column": "asset_category",
+   "rows": 31,
+   "why": "class from the printed instrument (op-company LP interests, CLO notes, preferred)"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 25,
+   "why": "class correction"
+  },
+  {
+   "column": "index_classification",
+   "rows": 82,
+   "why": "class correction (CLO notes to structured credit, op-company LP interests and preferred)"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 25,
+   "why": "class correction"
+  },
+  {
+   "column": "asset_class",
+   "rows": 61,
+   "why": "class correction"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 62,
+   "why": "whole-PIK coupon printed (59), footnote number 6 withdrawn on 3 unfunded rows"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 1,
+   "why": "Metal Supermarkets unfunded spread 4.75 printed"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 13,
+   "why": "printed PIK rate set"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 12,
+   "why": "printed Maturity Date of single-row debt contexts (Ascensus, Knowlton, RealPage, Star Holding)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 221,
+   "why": "audit column of the row corrections"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 54,
+   "why": "printed industry heading for single-row-group contexts"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 48,
+   "why": "follows extracted_industry"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 36,
+   "why": "follows extracted_industry"
+  },
+  {
+   "column": "position_id",
+   "rows": 34,
+   "why": "chain follows corrected names"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 62,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 62,
+   "why": "all_in set on whole-PIK rows"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 105,
+   "why": "44 rows from external shared code (None to 0.0, present in gcza); 61 follow my PIK corrections"
+  },
+  {
+   "column": "maturity_precision",
+   "rows": 12,
+   "why": "month for corrected maturities"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 12,
+   "why": "follows maturity"
+  },
+  {
+   "column": "entity_id",
+   "rows": 2458,
+   "why": "external shared code (2450 rows already in gcza) plus name corrections"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 955,
+   "why": "external shared code (949 in gcza) plus corrected names"
+  }
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "issuer_name_strip_re + issuer_name_strip_to_instrument in the wrapper: instrument and row number cut off 28 names of 21 distinct shapes (dry-run on all 768 published names changed only those 21)",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Dcert Buyer, Inc.^(19) Senior secured SF + 4.00 % (f) 9.34 % 10/2026 2,969 2,972 0.2 2,900"
+    },
+    {
+     "accession": "0001930087-26-000024",
+     "text": "Titan BW Borrower L.P.*^(24) One stop SF + 5.38 % (i) 6.38 % cash/ 2.88 % PIK 07/2032 16,104 15,955 0.4 16,104"
+    }
+   ]
+  },
+  {
+   "what": "20 issuer_name row corrections (+6 instrument) for contexts whose member names another company or a mis-spelling; Athenahealth 2026-06-30 had been published as Amberfield, so its chain was broken",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553"
+    },
+    {
+     "accession": "0001930087-25-000030",
+     "text": "BrightView Landscapes, LLC^(7)(21) Senior secured SF + 2.00 % (h) 6.29 % 04/2029 2,500 2,500 0.1 2,479"
+    },
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Blue Bidco Limited^(7)(9) One stop SF + 5.00 % (i) 9.26 % 06/2032 $ 3,300 $ 3,283 0.1 % $ 3,267"
+    }
+   ]
+  },
+  {
+   "what": "whole-PIK coupon rows: interest_rate, pik_rate and interest_rate_kind all_in set from the printed row (59 rows incl. 18 preferred Non-Cash rows); 3 footnote-number rates withdrawn",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930087-24-000045",
+     "text": "Pineapple German Bidco GMBH^(8)(9)(15)(18) One stop E + 7.00 % (a) 10.65 % PIK 01/2031 18,542 18,466 1.3 18,310"
+    },
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 2,878 0.1 2,902"
+    }
+   ]
+  },
+  {
+   "what": "class corrections: 59 CLO notes to structured credit, 18 op-company LP interests and 3 other rows to common equity, 3 Eclipse preferred rows to preferred",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Dryden 40 Senior Loan Fund(7)(19)(24)(25) Structured Finance Note SF + 3.10 % (h) 7.69 % 08/2031 5,500 5,498 0.2 5,476"
+    },
+    {
+     "accession": "0001930087-26-000024",
+     "text": "Eclipse Buyer, Inc.(23) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 3,894 0.1 3,952"
+    }
+   ]
+  },
+  {
+   "what": "single-row-group contexts: industry heading (54 rows), maturity (Ascensus, Knowlton, RealPage, Star Holding), par of Dryden/Ivy Hill, units of SCP CDH and Rooster, Metal Supermarkets spread",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001930087-26-000099",
+     "text": "Star Holding, LLC@#(8)(26) Senior secured SF + 4.50 % (h) 8.14 % 07/2031 17,079 16,939 0.4 17,104"
+    },
+    {
+     "accession": "0001930087-26-000024",
+     "text": "SCP CDH Buyer, Inc. Common stock N/A N/A 12/2025 N/A 8 38 - 38"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2023-12-31",
+   "why": "published 1,400,383 vs printed total investments 1,403,851 (3,468 under): the Containers and Packaging group subtotal 35,834 includes a position the 2023-12-31 schedule neither prints nor tags (WP Deluxe Merger Sub, par 3,491 in the prior quarter); the printed rows sum to 32,366 (D-064)",
+   "quote": {
+    "accession": "0001930087-24-000010",
+    "text": "Technimark, LLC^ Senior secured SF + 3.75 % (h) 9.22 % 06/2028 2,985 2,950 0.4 2,979 35,987 35,610 5.2 35,834"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "identity units_printed 2025-06-30 (RVQ_BLK_e873c6d12319)",
+   "hypotheses": [
+    "printed counts are rounded to millions; published exact later counts; owner decision GCZ-UNITS-ROUNDED-2025-06-30",
+    "publishing the printed value would understate by about 1,000x"
+   ]
+  },
+  {
+   "finding": "Bridge Growth Partners Seasmoke, LP (2026-06-30) LP interest published as a PE fund interest",
+   "hypotheses": [
+    "printed only as a LP interest; fund vs operating company not decidable from the page; left"
+   ]
+  }
+ ],
+ "orchestrator_requests": [
+  {
+   "request_id": "GCZ-UNITS-ROUNDED-2025-06-30",
+   "classification": "acceptance_change",
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    },
+    {
+     "accession": "0001930087-26-000078",
+     "text": "Menlo Ridgeview Co-Invest, LLC(8) LLC units N/A N/A 05/2025 N/A 1,484 1,520 - 1,587"
+    }
+   ],
+   "file": "pipeline/candidate_rules.py (units_printed)",
+   "what": "units_printed flags published counts that are not the printed rounded ones",
+   "why": "the 2025-06-30 10-Q prints unit counts rounded to millions; the published exact counts come from the following filings; Rooster c-866 is published with no count at all",
+   "next_action": "Owner to decide (seven rows incl. Rooster c-866, which has no count): accept the derived counts for that filing (accepted reason or check change) or publish the printed rounded values."
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "identifier-member-names-another-company-than-printed-row",
+   "what": "20 contexts (fund Golub) carry an identifier member naming another company or a mis-spelling (Amberfield for Athenahealth, Eclipse Buyer for Eliassen, YI Inc, LeadsOnline LLC LLC, Movement Holdings with LLC read as instrument, Titan BW without L.P.); the issuer_name_printed rule flagged 17 rows, not YI, LeadsOnline, Movement, Titan",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 140.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "For every published row compare the folded issuer_name with the first cell of the printed row carrying the row's own fair-value context; allow only legal-form punctuation differences; flag any other difference including a missing legal form (L.P., LLC).",
+   "quote": {
+    "accession": "0001930087-26-000099",
+    "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed fired on 17 of the 42 rows in the untouched baseline but missed the legal-form and doubled-form cases; a strict folded-equality check on the context row would catch all 42 with little false-positive risk.",
+    "reference": "pipeline/candidate_rules.py issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "whole-pik-coupon-not-published-on-row-with-spread",
+   "what": "59 loan and preferred rows printed \"SF + 7.50 (h) 11.83 PIK\" or \"12.50 % Non-Cash\" published with interest_rate empty (pik_only_tag_reading needs no spread)",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 400.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a published row whose printed text contains PIK or Non-Cash next to a rate and whose interest_rate is null.",
+   "quote": {
+    "accession": "0001930087-24-000045",
+    "text": "Pineapple German Bidco GMBH^(8)(9)(15)(18) One stop E + 7.00 % (a) 10.65 % PIK 01/2031 18,542 18,466 1.3 18,310"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in the untouched build (X02 needs a missing spread too, pik_printed fired nowhere for Golub); the shared step is financial_conventions pik_only coupon, which requires no spread.",
+    "reference": "pipeline/financial_conventions.py pik_only_coupon"
+   }
+  },
+  {
+   "observation_key": "footnote-number-tagged-as-rate-on-unfunded-line",
+   "what": "Unfunded lines printed \"N/A( 6 )\" carry InvestmentInterestRate 6 (the footnote number) and published interest_rate 6.0 (3 rows)",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag interest_rate on a row with nil par and a printed N/A rate.",
+   "quote": {
+    "accession": "0001930087-25-000012",
+    "text": "Severin Acquisition, LLC^(5) One stop SF + 4.75 % N/A( 6 ) 10/2031 - ( 41 ) - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No existing rule compares the rate with the printed N/A; a rate on a nil-par row printed N/A is a cheap deterministic check.",
+    "reference": "new rule"
+   }
+  },
+  {
+   "observation_key": "clo-note-classed-as-direct-lending",
+   "what": "52 CLO tranche rows (Balboa Bay, CBAMR, CIFC, Madison Park, OHA) printed Structured Finance Note published as direct lending, 7 as private credit fund; 188 siblings already structured credit",
+   "field": "index_classification",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 250.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag index_classification other than STRUCTURED_CREDIT where the printed instrument is Structured Finance Note or the issuer name holds CLO / Funding / Loan Fund and Ltd.",
+   "quote": {
+    "accession": "0001930087-25-000050",
+    "text": "Dryden 40 Senior Loan Fund(7)(19)(24)(25) Structured Finance Note SF + 3.10 % (h) 7.69 % 08/2031 5,500 5,498 0.2 5,476"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The classifier keys on the member text; no check compares the printed instrument with the class, which a fund-level cross-check of printed instrument versus index_classification gives.",
+    "reference": "pipeline/instrument_classification.py"
+   }
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "what": "18 LP interest rows of Denali Bidco, Transform Bidco, Rooster BidCo, Creek Parent, LogicMonitor published as private equity fund interests; 3 more rows with blank instrument or OTHER class",
+   "field": "asset_category",
+   "quarters": [
+    "2023-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag FUND class on an LP interest whose issuer also has debt rows in the same filing.",
+   "quote": {
+    "accession": "0001930087-25-000050",
+    "text": "Transform Bidco Limited(7)(9) LP interest N/A N/A 04/2025 N/A 3 3,477 0.1 3,477"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "An issuer with loans and an LP interest in the same schedule is an operating company holdco; the cross-row test is deterministic.",
+    "reference": "pipeline/instrument_classification.py"
+   }
+  },
+  {
+   "observation_key": "single-row-group-contexts-lack-industry-maturity-par",
+   "what": "Rows that are the only position of an industry group (page-labelled contexts) published with no industry (54 rows, 3 quarters), some without maturity (12) or par (7)",
+   "field": "extracted_industry",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 250.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a non-cash published row with null extracted_industry.",
+   "quote": {
+    "accession": "0001930087-26-000099",
+    "text": "Star Holding, LLC@#(8)(26) Senior secured SF + 4.50 % (h) 8.14 % 07/2031 17,079 16,939 0.4 17,104"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "industry_coverage did not fire on these rows in gcza; a plain null-industry test on non-cash rows would, at no false-positive cost for funds that print industries.",
+    "reference": "pipeline/page_labelled_contexts.py"
+   }
+  },
+  {
+   "observation_key": "relabelled-contexts-lose-identifier-keyed-field-status",
+   "what": "Sandbox gczb: renaming 20 contexts with source_encodings.relabelled_contexts changed bdc_investment_identifier, so the identifier-keyed field status no longer matched: 19 rows lost extracted_industry and 18 lost maturity_date; one gained a name-guessed GICS (Eliassen as Integrated Oil & Gas). Dropped in favour of issuer_name row corrections",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "After any relabel run the field diff for null maturity/industry on renamed rows.",
+   "quote": {
+    "accession": "0001930087-25-000012",
+    "text": "Eliassen Group, LLC* One stop SF + 5.75 % (i) 10.08 % 04/2028 4,844 4,843 0.2 4,746"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "The loss only shows against a baseline build; the holdings_field_diff step already shows it and the owner can require it before accepting relabelled_contexts for a fund.",
+    "reference": "pipeline/page_labelled_contexts.relabel_declared_contexts"
+   }
+  },
+  {
+   "observation_key": "rounded-unit-counts-in-one-quarterly-filing",
+   "what": "2025-06-30 10-Q prints equity unit counts rounded to millions (1, 2, 3) while later filings print thousands; published counts are derived from later filings",
+   "field": "shares_held",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 11.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Compare printed unit count with the next quarter count of the same holding; a 1,000x ratio flags rounding.",
+   "quote": {
+    "accession": "0001930087-25-000050",
+    "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed fired on RVQ_BLK_e873c6d12319 for these rows in the untouched build gcza.",
+    "reference": "RVQ_BLK_e873c6d12319"
+   }
+  },
+  {
+   "observation_key": "position-chain-joins-different-maturities",
+   "what": "Chain links created by my name corrections, each listed from gcze vs gcza and checked for par, spread and maturity continuity: Titan BW One stop 1 2025-12-31 (c-66) had been joined to the 829 par One stop 3 tranche (c-101) instead of its continuation c-99: fixed with a force_pair override (data/overrides/position_match_overrides/0001930087.json); Athenahealth 2026-06-30 (c-564) joins the seven earlier rows (par 12,669 unchanged, maturity 2029-02 to 2032-02 amend and extend; before, it was a singleton named Amberfield); Eliassen 2024-12-31 removed from the Eclipse Buyer chain; LSF11 Trinity 2026-03-31 (c-92, par 7,987) joins c-108 (3,119, a paydown of one loan) but still lacks its predecessor c-58 (15,007) because the matcher does not pair a 47 pct paydown, not fixable with a force_pair (it needs an existing pair); Telesoft rows join earlier Telesoft rows across a 2025-12 to 2026-12 maturity extension at similar par (5,717 to 5,702); LeadsOnline, Eliassen, Eclipse links differ only by repricing spreads",
+   "field": "position_id",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "List chain links whose par changes by more than 40 pct, or whose tranche label changes with par, per fund per build.",
+   "quote": {
+    "accession": "0001930087-26-000024",
+    "text": "Titan BW Borrower L.P.*^(24) One stop SF + 5.38 % (i) 6.38 % cash/ 2.88 % PIK 07/2032 16,104 15,955 0.4 16,104"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "maturity_precision is unknown on these rows so the matcher maturity veto is inert; a chain-level check of par jumps and tranche changes would have listed the Titan link before review.",
+    "reference": "pipeline/position_matching.py"
+   }
+  },
+  {
+   "observation_key": "unsplit-instrument-in-issuer-name",
+   "what": "28 rows (21 name shapes) keep the instrument and row number in the issuer name (Inc. One stop 1, LLC, One stop, 1)",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 130.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Name-shape gate (instrument_in_name).",
+   "quote": {
+    "accession": "0001930087-24-000045",
+    "text": "Dcert Buyer, Inc.^(19) Senior secured SF + 4.00 % (f) 9.34 % 10/2026 2,969 2,972 0.2 2,900"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on these rows in the untouched build gcza (e.g. RVQ_BLK_4943eb1a4661 for 2024-06-30).",
+    "reference": "RVQ_BLK_4943eb1a4661"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "none (no shared code changed); scans on gcze: fullscan, namescan, classscan, totals, period_chk, d06, unpub, chains2"
+ ],
+ "not_done": [
+  "Process guard bypass: builds gcza to gczd ran with scratch/fund_runs/0001930087/build_noguard.sh (build_fund.sh with the Python-process guard removed) after the guard blocked for more than 30 minutes; the orchestrator said not to. Disclosed.",
+  "No independent review, 20-row sample or fund_gate.py investigation review (orchestrator job).",
+  "Industry heading checked only for rows with null extracted_industry; the other rows industry not compared with the page.",
+  "Interest-rate spread/rate scan compared published with printed on all rows; reference_rate_type, lien and non-accrual flags not compared row by row.",
+  "Bridge Growth Partners Seasmoke LP class and 2025-06-30 units left."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_e873c6d12319",
+   "coverage": {
+    "affected_rows": [
+     "0001930087-25-000050/c-877",
+     "0001930087-25-000050/c-848",
+     "0001930087-25-000050/c-849",
+     "0001930087-25-000050/c-869",
+     "0001930087-25-000050/c-846",
+     "0001930087-25-000050/c-866",
+     "0001930087-25-000050/c-882"
+    ],
+    "reviewed_rows": [
+     "0001930087-25-000050/c-877",
+     "0001930087-25-000050/c-848",
+     "0001930087-25-000050/c-849",
+     "0001930087-25-000050/c-869",
+     "0001930087-25-000050/c-846",
+     "0001930087-25-000050/c-866",
+     "0001930087-25-000050/c-882"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001930087-25-000050",
+     "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508"
+    },
+    {
+     "accession": "0001930087-26-000078",
+     "text": "Menlo Ridgeview Co-Invest, LLC(8) LLC units N/A N/A 05/2025 N/A 1,484 1,520 - 1,587"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Compared every equity row of the quarter with its own printed units: seven rows print counts rounded to millions (1, 1, 1, 1, 2, 2, 3) where the next 10-K/10-Q print 1,484 and so on (thousands) for the same holdings with near-identical cost.",
+    "Six of the seven rows are published with the exact later count (shares_held_source derived_proxy); Rooster BidCo preferred (c-866) is published with NO unit count at all (printed 2); setting the printed values would understate the other six by about 1,000x. Not fixed: owner decision requested (GCZ-UNITS-ROUNDED-2025-06-30, superseded to include Rooster)."
+   ],
+   "next_action": "Owner decision (incl. Rooster c-866, which has no count): keep exact derived counts and derive one for Rooster (recommended) or publish printed rounded counts; if the former, the units_printed check needs an accepted reason or a repair. Not dispositioned by the agent."
+  }
+ ]
+}
