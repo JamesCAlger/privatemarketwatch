@@ -617,7 +617,9 @@ def carry_forward(previous: Path | None, excluded: list[tuple[str, str, str]]) -
             prev_rows = list(csv.DictReader(f))
     carried, records = [], []
     for cik, sig, reason in excluded:
-        mine = [r for r in prev_rows if str(r.get("cik", "")).zfill(10) == cik]
+        # fund-level agentA_cohort_excluded rows are regenerated each build, never carried (review R3-1)
+        mine = [r for r in prev_rows if str(r.get("cik", "")).zfill(10) == cik
+                and r.get("rule_name") != "agentA_cohort_excluded"]
         for r in mine:
             row = {k: (r.get(k) or "") for k in _FIELDS}
             row["cik"] = cik

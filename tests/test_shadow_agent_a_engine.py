@@ -466,6 +466,28 @@ def test_r2_2_fresh_sandbox_excluded_fund_reaches_the_ledger_as_findings(tmp_pat
     assert rec["0001920453"]["carried_flags"] == "0" and rec["0001920453"]["fund_level_flags"] == "2"
 
 
+def test_r3_1_fund_level_rows_are_regenerated_not_carried(tmp_path, monkeypatch):
+    """Two consecutive builds, the second reading the first's file as previous: the fund-level
+    agentA_cohort_excluded rows stay at one per fund-quarter, and the carried row is not duplicated."""
+    import csv
+    import shutil
+    monkeypatch.setattr(eng, "build_cohort", lambda parquet: (
+        [], [("0001920453", "SIG", "2026-06-30: completeness 89.8% < 90.0%")], []))
+    monkeypatch.setattr(eng, "_quarters", lambda con, parquet, cik: ["2025-12-31", "2026-03-31"])
+    out = tmp_path / "shadow"
+    prev = out / eng.PREVIOUS_NAME
+    out.mkdir()
+    _write_flags(prev, [dict(_cand("agentA_maturity_vs_xbrl"), cik="0001920453")])
+    counts = []
+    for _ in range(3):
+        eng.run(bdc_holdings=tmp_path / "x.parquet", published=tmp_path / "y.parquet", out_dir=out,
+                page=_page(), previous=prev)
+        flags = list(csv.DictReader(open(out / eng.FLAGS_NAME, encoding="utf-8")))
+        counts.append((sum(f["rule_name"] == eng.COHORT_EXCLUDED_RULE for f in flags), len(flags)))
+        shutil.copyfile(out / eng.FLAGS_NAME, prev)  # what the shadow runner does between builds
+    assert counts == [(2, 3), (2, 3), (2, 3)]
+
+
 def test_r2_1_thousands_separator_bp_margin_in_the_engine():
     # 0001383414 PRA Events 2023-03-31: '3M L+1,050' with a published 1.0 spread is a mismatch, not equal
     b = _bridge(printed_row="PRA Events | First Lien | 3M L+1,050 | 17.00 % | 3/26/2027 | 1,234", printed_margin=None,
