@@ -72,7 +72,7 @@ def test_the_recorded_store_loads():
     standing_files = sorted(d.glob("standing_rule_*.json"))
     for path in standing_files:
         entries = json.loads(path.read_text(encoding="utf-8"))["retirements"]
-        assert entries and all("D-252" in e["owner_words"] and e["rerun"].startswith("python scratch/")
+        assert entries and all("D-252" in e["owner_words"] and e["rerun"].startswith(("python scratch/", "python scripts/v05_evidence/"))
                                for e in entries), path.name
     assert standing
     # every file in the store loads, and nothing outside them does
