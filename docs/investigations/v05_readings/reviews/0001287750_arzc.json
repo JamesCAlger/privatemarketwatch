@@ -1,0 +1,244 @@
+{
+ "reviewer_id": "agent:reviewer-ares-20261113-opus",
+ "report_digest": "a7daecf1d3aa232a93acd0d7a578dce2698321c6646a0e3d7f39baa8ace5bef0",
+ "label": "arzc",
+ "before": "nbare",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_5842e1a34f2e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population in arzc page_rule_findings for 2024-12-31 is exactly ROW-524aad83ed1c45bd (Priority warrant), ROW-4400ac80c0a97bb6 (NBLY LP interest), ROW-8704f9105506a971 (Murchison preferred units), equal to affected_rows and reviewed_rows. Each read through its own FV context in 0001287750-25-000007: the line prints only the holding entity ('Priority Technology Holdings, Inc.', 'NBLY 2021-1 and KKR Nest Co-Invest L.P.', 'Murchison Holdings, LLC'). Every other Ares filing 2024-06-30..2026-06-30 prints the group name the row publishes (checked all rows of each group via own context: Murchison 10/11, NBLY 10/11, NCWS-style one-off). Unlike the 59 corrected blocks, the filer does not adopt the shorter name in the next filing, so this is a one-filing printed variant, not a rename lag. Published name differs from this one page line but is the group name the filer prints in all other filings; an owner ruling (REQ-NBAR-2-arz) is the right route. Not a check misfire; no disposition claimed.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000007",
+     "text": "Murchison Holdings, LLC Exploration and production company Preferred units"
+    },
+    {
+     "accession": "0001287750-25-000007",
+     "text": "NBLY 2021-1 and KKR Nest Co-Invest L.P. Operator of multiple franchise concepts primarily related to home maintenance or repairs Limited partner interest"
+    },
+    {
+     "accession": "0001287750-25-000007",
+     "text": "Priority Technology Holdings, Inc. Provider of merchant acquiring and payment processing solutions Warrant to purchase shares of common stock"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_84ce425fbf99",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: flagged population 2025-06-30 = ROW-680e2a3a1d789731, equals affected/reviewed. Source: the row's own line in 0001287750-25-000038 prints 'MP Midco Holdings, LLC and MP Topco Holdings, LLC' with no '(fka H-Food Holdings, LLC)'; published issuer carries it, so the published name is wrong against the page. The page drops the former-name parenthetical from 2025-06-30 and the filer's own member follows from 2026-03-31 (member 'MP Midco Holdings, LLC and MP Topco Holdings, LLC, First lien senior secured loan' at c-1567). That is the member-lag pattern the investigator corrected whole-block for 59 rows under its own criterion ('the next filing's member matches the printed name'), so source_ambiguity is inconsistent with the run's own rule. The chain argument is untested and contradicted by the build: chains 200e4ba2 (first lien) and f010d4a2 (common units) already run from the '(fka ...)' name of 2025-03-31..2025-12-31 into the plain name of 2026-03-31/2026-06-30 without splitting, so the name difference does not drive the link. Missed in the same quarter, outside the flagged population: ROW-85c2741ddeca6e55 (MP Midco common units) publishes issuer_name 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings' and instrument_description 'LLC) Common units' (member cut at the comma inside the parenthetical). The page prints 'Common units' under the block line 'MP Midco Holdings, LLC and MP Topco Holdings, LLC'. This is the cut-at-first-comma defect the run says it swept (35 rows); it is wrong on the page and neither issuer_name_printed nor the proposed legal-form-token detector (token must be followed by '.', ',' or a space) catches it. Same defect at 2025-03-31 ROW-16530b48c6f3a478 (finding RVQ_BLK_69cff9b0d03b, cleared). Next action should be: correct ROW-680e2a3a1d789731 issuer and ROW-85c2741ddeca6e55 issuer+instrument to the printed company/'Common units', rebuild, and confirm chains 200e4ba2/f010d4a2 hold.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000038",
+     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.83 %"
+    },
+    {
+     "accession": "0001287750-25-000038",
+     "text": "Common units 03/2025 639,359 5.1 12.2"
+    },
+    {
+     "accession": "0001287750-25-000020",
+     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings, LLC) Food contract manufacturer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_90b4580dc765",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: flagged population 2025-09-30 = ROW-65a9d0038c5893d7, equals affected/reviewed. Source: own line in 0001287750-25-000046 prints 'MP Midco Holdings, LLC and MP Topco Holdings, LLC' without the fka text the row publishes. The page drops the former-name parenthetical from 2025-06-30 and the filer's own member follows from 2026-03-31 (member 'MP Midco Holdings, LLC and MP Topco Holdings, LLC, First lien senior secured loan' at c-1567). That is the member-lag pattern the investigator corrected whole-block for 59 rows under its own criterion ('the next filing's member matches the printed name'), so source_ambiguity is inconsistent with the run's own rule. The chain argument is untested and contradicted by the build: chains 200e4ba2 (first lien) and f010d4a2 (common units) already run from the '(fka ...)' name of 2025-03-31..2025-12-31 into the plain name of 2026-03-31/2026-06-30 without splitting, so the name difference does not drive the link. Missed in the same quarter, outside the flagged population: ROW-95f6b369488bcd79 (MP Midco common units) publishes issuer_name 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings' and instrument_description 'LLC) Common units' (member cut at the comma inside the parenthetical). The page prints 'Common units' under the block line 'MP Midco Holdings, LLC and MP Topco Holdings, LLC'. This is the cut-at-first-comma defect the run says it swept (35 rows); it is wrong on the page and neither issuer_name_printed nor the proposed legal-form-token detector (token must be followed by '.', ',' or a space) catches it. Same defect at 2025-03-31 ROW-16530b48c6f3a478 (finding RVQ_BLK_69cff9b0d03b, cleared). ",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000046",
+     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.81 %"
+    },
+    {
+     "accession": "0001287750-25-000046",
+     "text": "Common units 03/2025 639,359 5.1 12.9"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_025a8155c6fc",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: flagged population 2025-12-31 = ROW-11688b200b4348f6 (NCWS) and ROW-350011f5c036882a (MP Midco first lien), equals affected/reviewed. NCWS part supported: own line in 0001287750-26-000006 prints 'NCWS Holdings LP' alone, every other filing 2024-06-30..2026-06-30 prints 'NCWS Intermediate, Inc. and NCWS Holdings LP' (same one-filing shape as Murchison/NBLY/Priority; owner ruling appropriate). MP part rejected: own line prints the plain name, published carries '(fka H-Food Holdings, LLC)'. The page drops the former-name parenthetical from 2025-06-30 and the filer's own member follows from 2026-03-31 (member 'MP Midco Holdings, LLC and MP Topco Holdings, LLC, First lien senior secured loan' at c-1567). That is the member-lag pattern the investigator corrected whole-block for 59 rows under its own criterion ('the next filing's member matches the printed name'), so source_ambiguity is inconsistent with the run's own rule. The chain argument is untested and contradicted by the build: chains 200e4ba2 (first lien) and f010d4a2 (common units) already run from the '(fka ...)' name of 2025-03-31..2025-12-31 into the plain name of 2026-03-31/2026-06-30 without splitting, so the name difference does not drive the link. Missed in the same quarter, outside the flagged population: ROW-6fac43e8b303cb6c (MP Midco common units) publishes issuer_name 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings' and instrument_description 'LLC) Common units' (member cut at the comma inside the parenthetical). The page prints 'Common units' under the block line 'MP Midco Holdings, LLC and MP Topco Holdings, LLC'. This is the cut-at-first-comma defect the run says it swept (35 rows); it is wrong on the page and neither issuer_name_printed nor the proposed legal-form-token detector (token must be followed by '.', ',' or a space) catches it. Same defect at 2025-03-31 ROW-16530b48c6f3a478 (finding RVQ_BLK_69cff9b0d03b, cleared). ",
+   "evidence": [
+    {
+     "accession": "0001287750-26-000006",
+     "text": "NCWS Holdings LP Manufacturer and supplier of car wash equipment, parts and supplies to the conveyorized car wash market Class A-2 common units"
+    },
+    {
+     "accession": "0001287750-26-000006",
+     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.34 %"
+    },
+    {
+     "accession": "0001287750-26-000006",
+     "text": "Common units 03/2025 639,359 4.8 9.7"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Independently read all 94 issuer_name context corrections added for arzc (129 lines in row_corrections_by_context.csv, all author agent:fund-ares-20261113) by the printed <tr> carrying each row's own InvestmentOwnedAtFairValue fact, walking up to the block's company line: 94/94 equal the printed company (footnote markers stripped). Includes Alcami 2022-12/2023-03 (ACM Note Holdings), Pyramid-BMC 2023-03, Varsity 2023-03, Infinity 2023-12 and 2024-12, Riser Interco 2023-12, Capstone, Higginbotham, Ardonagh, Precision, Truck-Lite, ESHA, Elemica, Merit, 3 Step. field diff arzc vs nbare: issuer_name 94 rows = the 94 correction rows; no fair value, row count or quarter sum change (16/16 sums identical to nbare). Block-level detector proposal is concrete and sound.",
+   "evidence": [
+    {
+     "accession": "0001287750-23-000010",
+     "text": "Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-is-instrument-text",
+   "outcome": "supported",
+   "rationale": "Rows untouched by arzc (field diff arzc vs nbare touches no Symplr/PumpTech row); nbare review verified the page reading. Detector specific and cheap.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-050307",
+     "text": "Series C-3 preferred shares 11.00 % PIK 10/2021 16,201 27.0 17.3 (2) 421.9 276.8 Tempus AI, Inc. Provider of technology"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-glued-to-issuer-name",
+   "outcome": "supported",
+   "rationale": "No arzc change to the 22 glued rows; Zeppelin c-1832 instrument_type Revolver residual still correctly parked as shared (instrument_type not a correctable field). Detector extension to instrument_type is sound.",
+   "evidence": [
+    {
+     "accession": "0001287750-26-000006",
+     "text": "Zeppelin US Buyer Inc. and Providence Equity Partners IX-C L.P. (13)(14) Specialty logistics platform for high-stakes projects in music, sports, production, fine art, and automotive industries First lien senior secured loan 8.42 % SOFR (Q) 4.75 % 07/2025 08/2032 11.0 11.0 10.9 (2)(9) Limited partnership interest 07/2025 1,418,56"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-blank-where-member-has-company-only",
+   "outcome": "supported",
+   "rationale": "Expereo/Opal rows unchanged in names; arzc adds lien_position None -> First Lien on Expereo c-1727/c-1775/c-1809 and Opal c-1723/c-1756/c-1791 and Second Lien on Evolent c-433 (orchestrator merge f8c4f6db, present already in arza). All 7 read on the page via own FV context: the lines print 'First lien senior secured loan' (Expereo, Opal) and 'Second lien senior secured loan' (Evolent c-433). Correct.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000020",
+     "text": "Expereo USA, Inc. and Ristretto Bidco B.V. (14) Global internet managed service provider First lien senior secured loan 10.80 % ( 3.50 % PIK) SOFR (Q) 6.50 % 12/2024 12/2030 60.8 60.8 60.2 (2)(6)(10) 60.8 60.2 0.44 % See accompanying notes to consolidated fina"
+    },
+    {
+     "accession": "0001287750-25-000046",
+     "text": "Second lien senior secured loan 10.39 % SOFR (M) 6.00 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-tranche-labels-swapped-by-member",
+   "outcome": "supported",
+   "rationale": "MC Accelerate rows not changed by arzc; nbare review verified c-856 Z1 / c-857 Z2 on the page.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000046",
+     "text": "MC Accelerate Co-Invest Feeder LP and MC CIF Wealth Management (UK) Ltd. Global wealth management firm Z1 preferred shares 12.00 % PIK 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Z2 preferred shares 12.00 % ( 6.00 % PIK) 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Membership interest 08/2025 1,000 - - (2)(6) 25.6 25.6 Medlar Bidco Limit"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "rationale": "Creek chain not among arzc position_id changes (45 changed rows are Alcami, Pyramid, Infinity, Riser, ESHA, Precision, Merit only); unchanged and sound.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000046",
+     "text": "Creek Parent, Inc. and Creek Feeder, L.P. (13) Provider of delivery technologies, development, drug manufacturing, biologics, gene therapies and consumer health products First lien senior secured revolving loan 12/2024 12/2031 - - - (2)(9) First lien senior secured loan 9.14 % SOFR (M) 5.00 % 12/2024 12/2031 207.6 207.6 207.6 (2)(9) Limited partnership interest 12/2024 6,891,000 6.9 9.9 (2) 214.5 217.5 Gula Buyer Inc"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-facility-currency",
+   "outcome": "supported",
+   "rationale": "Sport Maska chains not among arzc position_id changes; still parked as shared matcher repair. Sound.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-027688",
+     "text": "Sport Maska Inc. (13) Manufacturer of hockey equipment and related accessories First lien senior secured revolving loan 8.92 % SOFR (M) 5.25 % 12/2024 12/2030 1.7 1.8 1.8 (2)(6)(9)(12) First lien senior secured revolving loan 7.52 % CORRA (M) 5.25 % 12/2024 12/2030 0.5 0.6 0.5 (2)(6)(9)(12) First lien senior secured loan 7.78 % CDOR (M) 5.50 % 12/2024 12/2030 36.0 34.9 36.0 (2)(6)(9) 37.3 38.3 St"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size",
+   "outcome": "supported",
+   "rationale": "Bellwether/Zeppelin unchanged in arzc. Note for this run: arzc adds a size/type-jump link not described anywhere in the report: Infinity 2023-12-31 c-1244 ($13.8M first lien term loan) -> 2024-03-31 c-941 ($0.9M revolver) on eb17c2bb, while the true continuation c-943 ($14.8M 'loan 1', same maturity) starts its own chain 9a08b512. This detector would catch it; the observation's own list should name it.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-027688",
+     "text": "Bellwether Buyer, L.L.C. and Bellwether Topco V Buyer, Inc. (13) Insurance program administrator First lien senior secured revolving loan 8.18 % SOFR (M) 4.50 % 04/2025 04/2032 0.8 0.8 0.8 (2)(9)(12) Benecon Midco II LLC and Benecon Holdings, LLC (13) Employee benefits provider for small and mid-size employers First lien senior"
+    },
+    {
+     "accession": "0001287750-24-000011",
+     "text": "Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured loan 12.20 % SOFR (Q) 6.75 % 12/2022 12/2028 13.8 13.8 13.8"
+    },
+    {
+     "accession": "0001287750-24-000028",
+     "text": "Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured revolving loan 14.25 % Base Rate (Q) 5.75 % 12/2022 12/2028 0.9 0.9 0.9"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-not-rejoined-after-label-fix",
+   "outcome": "supported",
+   "rationale": "MC Accelerate singleton unchanged in arzc; mechanism still unestablished and left.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000046",
+     "text": "Global wealth management firm Z1 preferred shares 12.00 % PIK 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Z2 preferred shares 12.00 % ( 6.00 % PIK) 08/2025 08/2031 12,901 12.8 12.8 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "rejected",
+   "rationale": "The arz paragraph mis-states this run's chain effect. Measured adjacency edges (consecutive quarters within a position_id) arzc vs nbare for Ares: 15 added, 5 removed; fund-wide cross-maturity edges 542 vs 541 (+1). The '7 of 13 vs 2 of 14' count compares old pids of changed rows only: ESHA (2028->2032 at 2025-12-31), Riser (2028->2029 at 2023-12-31, x2) and Precision (2026->2032 at 2025-09-30) crossed maturities already in nbare; arzc only extended those chains forward. Links this run actually created that join different loans: Alcami 2022-09-30 first lien ($29.0M, mat 2025-07-31) -> 2022-12-31 first lien ($9.5M, 2028-12-31) on 760f4400; Alcami 2022-09-30 second lien ($77.5M, 2026-07-31) -> 2022-12-31 second lien ($19.5M, 2029-06-30) on 795f0c63 (Q4-2022 restructuring: new maturities, par cut, renamed co-obligor); Pyramid 2022-12-31 first lien ($16.9M, 2023-07-31) -> 2023-03-31 Pyramid-BMC ($7.7M, 2027-01-31) on 860faa9e; Infinity 2023-12-31 c-1244 $13.8M term -> 2024-03-31 c-941 $0.9M revolver (eb17c2bb); Infinity 2024-12-31 c-1211 $0.7M revolver -> 2025-03-31 c-1031 $5.4M term. Removed wrong links: Alcami 1L(2025)->2L(2029) cross-lien, Pyramid revolver->term, Infinity $1.1M->$0.9M revolver and $1.3M->$5.4M. Correct links gained: Alcami 2022-12/2023-03 rejoin the 2028/2029 loans, Riser 2023-12->2024-03, Precision 2025-09->12, ESHA 2025-12->2026-03, Merit, Infinity class A units, Infinity $1.3M->$1.3M. Root cause is shared: maturity_precision is 'unknown' on all 19,779 Ares rows in arzc (14,560 with a maturity_date), so the matcher's maturity veto is inert. 'action: left' and 'cause: shared' are right for the matcher, but the observation must list the links this run created (Alcami x2, Infinity c-1244) rather than describe them as pre-existing.",
+   "evidence": [
+    {
+     "accession": "0001287750-23-000010",
+     "text": "Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-cut-at-first-comma-instrument-starts-with-name-tail",
+   "outcome": "rejected",
+   "rationale": "The 35 fixed rows check out: 35 issuer_name corrections equal the printed company; of the 35 instrument_description corrections 29 equal the printed instrument and 6 keep member text the page does not print (cosmetic): 'Senior subordinated loan 1' for Argenbright 2025-03-31 c-661, 2025-06-30 c-680, 2025-09-30 c-553 (page: 'Senior subordinated loan'); 'First lien senior secured Loans' for Cascade 2025-09-30 c-68 and 2025-12-31 c-69 (page: 'First lien senior secured loan'); 'Series A-2preferred shares' for Cardinal 2026-03-31 c-64 (page: 'Series A-2 preferred shares'). Rejected because the sweep and the detector claim ('35 rows of Ares match, no other Ares row does') miss 4 rows of the same defect still published in arzc: MP Midco common units ROW-16530b48c6f3a478 (2025-03-31 c-1621), ROW-85c2741ddeca6e55 (2025-06-30 c-1523), ROW-95f6b369488bcd79 (2025-09-30 c-1563), ROW-6fac43e8b303cb6c (2025-12-31 c-1552): issuer 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings', instrument 'LLC) Common units' (cut at the comma inside the parenthetical; the token is followed by ')'). The detector should also flag an instrument that starts with a legal-form token followed by ')' or an issuer_name with an unclosed '('; on arzc that adds exactly these 4 rows.",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000038",
+     "text": "Common units 03/2025 639,359 5.1 12.2"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-block-member-lags-printed-name-continuation-rows-unflagged",
+   "outcome": "supported",
+   "rationale": "Verified: the 59 block corrections sit under the printed company line (my own-context walk: 59/59 within the 94 matches). Proposal (propagate a first-line flag to rows of the same filing with the same published name) is concrete. Caveat: the investigator did not apply its own lag criterion to MP Midco 2025-06-30..2025-12-31 (see finding reviews).",
+   "evidence": [
+    {
+     "accession": "0001287750-25-000020",
+     "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of di"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "scope_checks": {
+  "check_repair_cleared": "arza (untouched, repaired check d98fa92d) clears RVQ_BLK_cab275031954, RVQ_BLK_c3c2666634a7, RVQ_BLK_d1fa4e536429, RVQ_BLK_a0182d6e8c91, RVQ_BLK_e8bc75fbdf5d; holdings_field_diff arza vs nbare: only lien_position 7 / corrected_fields 7 (orchestrator f8c4f6db), no name data change. Supported.",
+  "data_fixes": "RVQ_BLK_fc83027d0a56, RVQ_BLK_341d2ddc90a6, RVQ_BLK_c0f022200d85 (and RVQ_BLK_69cff9b0d03b, RVQ_BLK_bba6b0998b9f) not outstanding in arzb/arzc; Alcami, Pyramid, Varsity, Infinity, Riser renames equal the printed company. Supported.",
+  "corrections_read": "All 129 added correction lines read via own FV context: issuer_name 94/94 match; instrument_description 29/35 exact, 6 cosmetic member-text deviations (listed under the cut-name observation). No wrong-company correction found.",
+  "field_diff": "holdings_field_diff arzc nbare re-run: issuer_name 94, instrument_description 35, corrected_fields 101, entity_id 219, canonical_name 90, lien_position 7, position_id 45; rows 19779 both. Matches the claim. 7 lien changes correct on the page.",
+  "chains": "See observation position-chain-crosses-printed-tranche-and-maturity: new wrong links Alcami 1L and 2L 2022-09-30->2022-12-31 and Infinity c-1244->c-941; maturity_precision 'unknown' on 19,779/19,779 Ares rows (veto inert). Net cross-maturity edges +1 (542 vs 541).",
+  "rollup": "No dimension-prefix parent published alongside children in any quarter (arzc published basis); quarter sums identical to nbare for 16/16 quarters; gate fv tie 16/16; exclude_prg_rollup_2023q2 predicate matches 0 rows (inert rule; only PRG detail rows exist for 2023-06-30). Supported.",
+  "not_done": "Original 20-row random page sample not performed by this reviewer (orchestrator item)."
+ }
+}

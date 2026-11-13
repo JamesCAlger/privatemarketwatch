@@ -1,10 +1,10 @@
 {
  "cik": "0001803498",
- "label": "nbbcc",
- "before": "nvbcd",
+ "label": "bczf",
+ "before": "nbbcc",
  "shared_code": false,
- "investigator_id": "fund-agent-bcred-nbbc-20261110",
- "status": "Final nbbcc (3 of 6 builds). Wrapper fix (16 JV interest names), 43 context-keyed corrections (42 currencies, 1 printed name), 24 real-error verdicts retired under standing rule D-252. Since 2022: 1 outstanding (issuer_name_printed 2022-09-30, carried, confirmed error parked). Also open: frozen BDCSRC needs_human (REQ-NBBC-3), F28 pre-2022 x5 (REQ-NBBC-1/2, 3 parked). CLO equity class left under D-209. Independent review pending.",
+ "investigator_id": "agent:fund-bcred-20261113",
+ "status": "Round 6 (bczf final, 3 outstanding): CEP V back to SONIA, 'Fr.' currency fixed. Round 5: CEP V SARON (bcze). Final bczb (builds: bcza evidence build with a Minerva rename, bczb clean final; 2 of 6). No data change against nbbcc (holdings_field_diff bczb nbbcc: 100 of 100 columns identical, 24,672 rows each). 3 outstanding: F28 2022-03-31 and 2022-06-30 (confirmed gap: schedules are HTML-only, the template extracts them and ties to the printed totals, but no published path takes HTML rows) and issuer_name_printed 2022-09-30 (Minerva confirmed error parked on the matcher; Petco is a printed truncation). Also open outside this packet: F28 2021 quarters (same cause), frozen BDCSRC (REQ-NBBC-3). Independent review pending. Round 4: Medallia floating PIK, reference-rate token corrections (bczd). Round 3: 143 fixed-rate rows corrected (bczc). Round 2 (bczb review): Minerva mechanism corrected (inert maturity veto, not the amendment escape); REQ-bcz-1 reclassified acceptance_change; REQ-bcz-2 extended; one observation added.",
  "first_reading": {
   "label": "nbbca",
   "findings_since_2022": 75,
@@ -27,91 +27,131 @@
  },
  "declared_changes": [
   {
-   "column": "issuer_name",
-   "rows": 17,
-   "why": "16 BCRED JV LP interests 'BCRED' -> printed 'BCRED Emerald/Verdelite JV LP' (wrapper); 1 row 2024-12-31 c-1231 'RAD CLO 27 Ltd' -> printed 'RAD CLO 2024-2 WH Ltd' (context-keyed correction)"
+   "column": "coupon_type",
+   "rows": 146,
+   "why": "143 fixed-rate printed lines Floating -> Fixed (2022-12-31); 3 Medallia 2022-09-30 floating PIK loans Fixed -> Floating"
   },
   {
-   "column": "instrument_description",
-   "rows": 1,
-   "why": "2024-12-31 c-1231 blank -> printed 'Units' (RAD CLO 2024-2 WH Ltd - Units)"
+   "column": "basis_spread",
+   "rows": 146,
+   "why": "143 spreads equal to a fixed coupon withdrawn; 3 Medallia rows set to the printed 6.75 margin"
   },
   {
-   "column": "principal_amount_currency",
-   "rows": 42,
-   "why": "blank -> 'USD' on CLO notes whose par came from the share-count tag (no currency unit), 2024-09-30..2025-03-31; the printed par carries no currency code"
+   "column": "reference_rate_type",
+   "rows": 346,
+   "why": "143 guessed LIBOR/PRIME withdrawn (fixed lines); 197 SOFR-printed lines published LIBOR set to SOFR; Medallia JV row None -> LIBOR; 2 'L' lines published PRIME set to LIBOR; 'C' LIBOR -> CDOR 1; 'E' LIBOR -> EURIBOR 1; Presidio 'SORF' LIBOR -> SOFR 1 (the Presidio and SOFR rows overlap the 197 where the token is SOFR)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 346,
+   "why": "inferred_pre_libor / identifier_text / blank replaced by ixbrl_field_status (page-read) or withdrawn (fixed lines)"
   },
   {
    "column": "corrected_fields",
-   "rows": 42,
-   "why": "records the context-keyed corrections above (the RAD row is one of the 42)"
+   "rows": 350,
+   "why": "records the context-keyed corrections (143 + 202 + 3 + 2 currency)"
   },
   {
-   "column": "position_id",
-   "rows": 1,
-   "why": "the renamed RAD CLO 2024-2 WH Ltd warehouse units row leaves the RAD CLO 27 Class E chain (d7d16e81) and becomes its own position (bb0282e4); the Class E chain from 2025-03-31 is unchanged"
+   "column": "principal_amount_currency",
+   "rows": 2,
+   "why": "USD -> CHF on the two 2022-09-30 rows printing par with the 'Fr.' prefix (CEP V Investment 11 Sarl 97,449; Forterro UK Ltd. 10,674)"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 2,
+   "why": "1.0 -> 1.015744032503809, FRED H.10 CHF on 2022-09-30 by the build's own reference method (pipeline.monetary_fx principal_reference_table / convert; quote FRED-H10-2022-09-30)"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 2,
+   "why": "source_usd -> reference_fx"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 2,
+   "why": "par x rate: 97,449,000 -> 98,983,240.22; 10,674,000 -> 10,842,051.80"
   }
  ],
  "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
   {
-   "what": "Wrapper issuer_name_strip_re: holder-label alternative no longer cuts ' Emerald/Verdelite JV LP' when preceded by 'BCRED ' ((?<!BCRED )). The fund's own JV LP interests were published as issuer 'BCRED' on 16 rows (D-254 defect C, wider than the two quarters reported). Dry run over all 7,154 distinct identifier heads: exactly the two names change. Values, position ids and every other column unchanged.",
-   "kind": "wrapper",
+   "what": "143 context-keyed corrections (data/overrides/row_corrections_by_context.csv from scripts/v05_evidence/row_correction_specs/0001803498_by_context.json; 4 fields each, 572 lines): coupon_type Fixed, basis_spread, reference_rate_type and reference_rate_source withdrawn. Population: every BCRED row (all quarters, parent and JV look-through, 24,672 rows) published Floating, read by the inline-XBRL row carrying the row's own context (scratch/fund_runs/0001803498/shape4.py: 0 contexts without a page row); 144 print no '+' reference: 143 fixed-rate lines, all 2022-12-31 (2 parent: Athenahealth 6.50 % 2030 notes, Canadian Hospital Specialties 8.75 % CAD notes; 141 JV: investment-grade bonds), and 1 floating line excluded (FFML Holdco 2024-09-30 prints 'B+ 6.25 %', BKBM). interest_rate already equalled the printed coupon on all 143. One row's reference rate PRIME came from the issuer name (Prime Security Services Borrower LLC). The 18 other rows with spread equal to the rate (EURIBOR/SARON/SONIA/CDOR floating loans printing 'E + 5.75 % 5.75 %') are floating and left.",
+   "kind": "row_correction",
    "quarters": [
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
+    "2022-12-31"
    ],
    "quotes": [
     {
-     "accession": "0001803498-26-000014",
-     "text": "BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,815,000 1,678,745 3.53"
+     "accession": "0001803498-23-000008",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 3,297 3,297 2,436 0.01"
     },
     {
-     "accession": "0001803498-26-000014",
-     "text": "BCRED Verdelite JV LP - LP Interest (6)(16) 10/21/2022 117,706 113,068 0.25"
+     "accession": "0001803498-23-000008",
+     "text": "Canadian Hospital Specialties Ltd. (4)(5)(6)(8) 8.75 % 8.75 % 4/15/2029 CAD 3,800 3,005 2,587 0.01"
     },
     {
-     "accession": "0001803498-24-000062",
-     "text": "BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,815,000 1,795,374 4.93"
+     "accession": "0001803498-23-000008",
+     "text": "Prime Security Services Borrower LLC (8) 5.75 % 5.75 % 4/15/2026 2,800 2,783 2,701 0.10"
     }
    ]
   },
   {
-   "what": "42 context-keyed corrections principal_amount_currency='USD' (data/overrides/row_corrections_by_context.csv, from scripts/v05_evidence/row_correction_specs/0001803498_by_context.json). Staging moves the CLO note par from the share-count tag (src_transforms principal_amount:from_shares_tag, 41 rows); the unit-less tag leaves the currency blank. The 42nd (New Mountain CLO 6 Subordinated Notes 2, 2024-12-31) has the same shape. Each row's printed line was found once in its current schedule by name and par/cost/FV, with no currency code (scratch/fund_runs/0001803498/nbbc_ccy_rows.py). principal_amount_usd already equalled the par (source_usd); fair_value_currency USD.",
+   "what": "202 context-keyed reference-rate corrections plus 3 Medallia rows (context-keyed, row_correction_specs/0001803498_by_context.json; population by scratch/fund_runs/0001803498/tok_scan.py and rev_scan.py, every row read by the inline-XBRL row carrying its own context). (a) Reverse-direction scan: BCRED rows published not-Floating whose own line prints a '+' reference: 3 rows, all Medallia 2022-09-30 ('L + 6.75 % PIK 9.87 %', 2 published parent rows ~$960M FV and 1 JV row): coupon_type Floating, basis_spread 6.75 (margin, D-031), reference LIBOR; pik_rate stays 6.75, the filer's own PIK tag value (the margin printed as 'L + 6.75 % PIK'; the page prints no separate PIK rate) and interest_rate 9.87 as printed, the same publication as BCRED's other floating PIK lines (e.g. Inovalon 'L + 10.50 % 15.20 % (incl. 15.20 % PIK)': spread 10.5, pik 15.2). (b) Printed reference token vs published reference_rate_type over all 24,672 rows: 202 mismatches, all 2022: 197 lines printing SOFR published LIBOR (13 parent, 184 JV; source inferred_pre_libor), 2 'L' lines published PRIME from the issuer name 'Prime Security Service Borrower', 1 'C' published LIBOR (CAD), 1 'E' published LIBOR (EUR), 1 'SORF' (filer typo of SOFR, Presidio JV) published LIBOR. Tokens CA/BB mapped to CORRA/BBSY are correct and left. (c) CEP V Investment 11 Sarl 'S +' on a Swiss-franc par, 2022-09-30 and 2022-12-31 (2 published rows): the 2022 legend defines S as SOFR and SONIA and does not define SARON, but the same loan (CHF 97,449 par, maturity 2/11/2028) prints 'SA +' (SARON) from 2023-03-31 onward; tried as SARON in bcze (orchestrator decision D-207) and REVERTED in bczf (option b of REQ-bcz-3): the filing's own printed code and legend support SONIA, and the SARON correction raised two reference_rate_printed findings; the SARON evidence is kept in the observation for the owner.",
    "kind": "row_correction",
    "quarters": [
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31"
+    "2022-09-30",
+    "2022-12-31"
    ],
    "quotes": [
     {
-     "accession": "0001803498-25-000021",
-     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+     "accession": "0001803498-22-000021",
+     "text": "Medallia, Inc. (4)(10) L + 6.75 % PIK 9.87 % 10/29/2028 193,895 189,975 190,017 0.85"
     },
     {
-     "accession": "0001803498-24-000062",
-     "text": "Galaxy 34 Clo Ltd (4)(6) Estimated Yield: 16.18 % 9/26/2024 10/20/2037 20,000,000 $ 18,500 $ 18,500 0.05 %"
+     "accession": "0001803498-22-000021",
+     "text": "Brookfield WEC Holdings, Inc. (9) SOFR + 3.75 % 6.87 % 8/1/2025 4,990 4,786 4,841 0.02"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Presidio, Inc. (8) SORF + 3.50 % 7.92 % 1/22/2027 3,591 3,556 3,540 2.68"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Prime Security Service Borrower, LLC (10) L + 2.75 % 5.30 % 9/23/2026 4,975 4,833 4,830 0.19"
+    },
+    {
+     "accession": "0001803498-23-000012",
+     "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) SA + 5.75 % 6.70 % 2/11/2028 CHF 97,449 93,969 105,514 0.46"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) S + 5.75 % 5.75 % 2/11/2028 CHF 97,449 97,920 104,199 0.46"
     }
    ]
   },
   {
-   "what": "Context-keyed correction 2024-12-31 c-1231: issuer 'RAD CLO 27 Ltd' (member) -> printed 'RAD CLO 2024-2 WH Ltd', instrument 'Units'. Found while reading the currency rows. The row was chained to the RAD CLO 27 Class E debt tranche; it is now its own position. GICS label unchanged.",
+   "what": "2 context-keyed principal-currency corrections at 2022-09-30: CEP V Investment 11 Sarl and Forterro UK Ltd. (L + 5.50 % tranche) print par with the Swiss-franc prefix 'Fr.' but published USD (par unit tagged USD, rate 1.0). Currency set to CHF, principal_fx_rate_to_usd = FRED H.10 CHF 2022-09-30 (1.015744032503809), the build's own reference method (BCRED opts in to principal_usd_reference fred_h10; the same method gives the 2022-12-31 rate 1.0821339681852613 already published), status reference_fx, principal_amount_usd = par x rate. Each row's own 2022-09-30 line settles the currency ('Fr.'), and both tranches print 'CHF' with the same par on 2022-12-31. Scan of 2022-09-30, 2022-12-31 and 2023-03-31 contexts: only these 2 rows print 'Fr.'. Forterro UK's 2023-03-31 EUR/GBP question is not touched (not a 2022-09-30 row).",
    "kind": "row_correction",
    "quarters": [
-    "2024-12-31"
+    "2022-09-30"
    ],
    "quotes": [
     {
-     "accession": "0001803498-25-000021",
-     "text": "RAD CLO 2024-2 WH Ltd - Units (4)(6)(7) Estimated Yield: 15.44 % 12/11/2024 1/15/2038 14,800,600 14,801 14,801 0.04"
+     "accession": "0001803498-22-000021",
+     "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) S + 5.75 % 6.29 % 2/11/2028 Fr. 97,449 97,832 96,846 0.43"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Forterro UK Ltd. (4)(6)(8) L + 5.50 % 5.50 % 7/7/2029 Fr. 10,674 10,688 10,554 0.05"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) S + 5.75 % 5.75 % 2/11/2028 CHF 97,449 97,920 104,199 0.46"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Forterro UK Ltd. (4)(6)(8) L + 5.50 % 6.45 % 7/9/2029 CHF 10,674 $ 10,698 $ 11,192 0.05 %"
     }
    ]
   }
@@ -135,22 +175,96 @@
  "parked": [
   {
    "finding_id": "RVQ_BLK_5a7ac8ea794a",
-   "finding": "identity issuer_name_printed 2022-09-30 (Minerva Merger Sub row printed 'Athenahealth, Inc.'; Petco truncated)",
+   "finding": "identity issuer_name_printed 2022-09-30: Minerva row (confirmed error, matcher blocks the rename); Petco row printed truncated (check misfire)",
    "hypotheses": [
-    "Carried unchanged from the nvbcd report (reviewed, review_supported); flagged rows unchanged (page_rule_findings.csv: ROW-6900c35a75241a00, ROW-fb32f9352d6dcfba).",
-    "Rename blocked: nvbcc showed the rename joins the 2030 notes to the 2029 loan chain; needs a matcher repair first."
+    "Rename tested again in bcza: the 2030 notes take the 2029 loan chain by exact name (2 position ids change); reverted.",
+    "Corrected mechanism (independent review of bczb): in bcza the 2030 notes joined the loan by exact name (tier B2_exact_name, begin 'Athenahealth, Inc.' 2022-09-30 principal 7,146,000, spread NULL, maturity 2030-02-15; end 'athenahealth, Inc.' 2022-12-31 principal 36,931,000, spread 3.5, maturity 2029-02-15). The amendment escape did not fire: the principal escape needs a ratio <= 1.02 (here 5.17) and the spread escape needs spreads on both sides (begin is NULL). The veto passed on its first branch, 'either maturity unknown': every dated BCRED row has maturity_precision 'unknown' (22,361 ixbrl_field_status rows plus 9 with null source), so financial_conventions.maturity_interval_sql returns NULL bounds and the maturity veto and rank are inert for the whole fund. My earlier text blaming the amendment escape was wrong.",
+    "Petco row: printed truncation, published legal name right; tolerating it is an owner decision (REQ-bcz-1)."
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e89d777120f0 / RVQ_REV_8788b4b75ff1",
+   "finding": "F28 2022-03-31 and 2022-06-30: printed schedules not published",
+   "hypotheses": [
+    "No XBRL schedule facts (Q1 filing has no XBRL cached; Q2 xml 19,982 bytes, 0 identifier facts).",
+    "HTML template exists and its rows tie to the printed totals incl. cash, but no published path ingests HTML rows (new shared stage plus owner decision). Not a wrapper setting."
    ]
   },
   {
    "finding_id": "RVQ_REV_344f9e0b74d5 / RVQ_REV_a16361f7bb88 / RVQ_REV_80e7a710c562",
-   "finding": "F28 2021-06-30, 2021-09-30, 2021-12-31: holdings missing for quarters whose schedules are cached as HTML",
+   "finding": "F28 2021-06-30, 2021-09-30, 2021-12-31: same cause (HTML schedules cached, template exists, no publish path)",
    "hypotheses": [
-    "XBRL path cannot reach them (no schedule tagging before 2022-09-30; 22-000017 xml has 0 InvestmentIdentifierAxis facts).",
-    "Fix route is an HTML template (scripts/learn_template.py) and an owner decision to extend BCRED's history before 2022-09-30; out of the fund-loop sandbox."
+    "Same as the 2022 quarters; the 2021 schedules were not extracted in this run."
    ]
   }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "REQ-bcz-1",
+   "classification": "acceptance_change",
+   "file": "issuer_name_printed (page rule)",
+   "what": "Owner decision: let issuer_name_printed accept a filer-cut printed name. BCRED 2022-09-30 prints 'Petco Health and Wellness Comp' (cut mid-word) while the member and the comparative line carry 'Petco Health & Wellness Co, Inc.'. The check's docstring records the owner's 2026-11-10 ruling that a cut name still flags, so tolerating it is not a verification repair. Note: the printed text is not a prefix of the legal name after folding & to and ('comp' vs 'co'), so a prefix rule would need fuzzy matching.",
+   "why": "Guards if the owner accepts: the full name printed on another line with the same XBRL member, the printed cell ending mid-token, a minimum length, no digit at the cut. Tests that must still fail: Minerva vs Athenahealth, CLO 1 vs CLO 10 (a prefix that the fund also prints in full), and a shifted-neighbour member sharing a long prefix. Measure on accepted sandboxes.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899"
+    }
+   ],
+   "next_action": "Owner rules; if accepted, repair in a worktree with the guards and the must-fail tests above.",
+   "quotes": []
+  },
+  {
+   "request_id": "REQ-bcz-2",
+   "classification": "acceptance_change",
+   "file": "pipeline (HTML ingestion; no file changed)",
+   "what": "Owner decision: publish pre-2022-09-30 BDC holdings read from the per-CIK HTML templates (BCRED 2021-03-31 to 2022-06-30 first), through a new opt-in ingestion stage gated by the totals tie. Additions: drop cash equivalents printed in the schedule (the 140,579 State Street money market fund at 2022-06-30; investments-only 46,225,957 vs printed 46,225,946 once excluded); parse industry, instrument type, spread and reference rate (the extract leaves them blank); HTML anchors for the provenance re-verifier; chaining into 2022-09-30 runs through the matcher whose maturity veto is inert for BCRED; a totals tie is necessary, not sufficient: acceptance needs a row-level page sample.",
+   "why": "F28 for BCRED 2022-03-31 and 2022-06-30 is a real gap (about $39bn and $48bn printed in portfolio plus cash) that no wrapper setting can close; the template reads and ties.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total Investment Portfolio $ 37,776,621 $ 37,777,474 211.01 % Cash and Cash Equivalents Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Other Cash and Cash Equivalents 1,503,807 1,503,807 7.17 Total Portfolio Investments, Cash and Cash Equivalents $ 48,785,413 $ 47,870,332 228.27 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Total Investment Portfolio $ 47,141,027 $ 46,225,946 220.43 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "State Street Institutional U.S. Government Money Market Fund"
+    }
+   ],
+   "next_action": "Owner rules; if yes, a new design (HTML rows into bdc_holdings with anchors, then chain into 2022-09-30).",
+   "quotes": []
+  },
+  {
+   "request_id": "REQ-bcz-3",
+   "classification": "acceptance_change",
+   "file": "reference_rate_printed (scripts/shadow_identity_engine.py, printed_reference_sql)",
+   "what": "Status: reverted pending owner ruling. The two CEP V rows (2022-09-30, 2022-12-31) are published SONIA again (option b); the two reference_rate_printed findings do not fire in bczf. Option (a) stays open for the owner: accept a reference set by a recorded row correction that cites the same position's later printed code ('SA +' = SARON from 2023-03-31, CHF par), with a test that a real mismatch still fails.",
+   "why": "The filing's legend supports SOFR/SONIA for 'S'; the same CHF loan prints SA (SARON) from 2023-03-31. The two readings cannot both pass the check.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000012",
+     "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) SA + 5.75 % 6.70 % 2/11/2028 CHF 97,449 93,969 105,514 0.46"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) S + 5.75 % 5.75 % 2/11/2028 CHF 97,449 97,920 104,199 0.46"
+    }
+   ],
+   "next_action": "Orchestrator and owner decide; no check or ledger edited here.",
+   "quotes": []
+  }
+ ],
  "observations": [
   {
    "observation_key": "unit-count-rescaled-by-issuer-normaliser",
@@ -220,7 +334,7 @@
   },
   {
    "observation_key": "position-chain-follows-shifted-member",
-   "what": "Raw BDC within-filing matching case-folds investment identifiers before unified row corrections; December Athenahealth loan and notes identifiers differ only by case. Tier A has no maturity comparison. The bounded nvbcc rename-plus-maturity experiment still joined September 2030 notes to the 2029 loan chain. Rename withdrawn; final identities equal bcpf. Other historical shifted-member chain concerns are not repaired here.",
+   "what": "A rename of the 2022-09-30 Minerva row to the printed 'Athenahealth, Inc.' moves the 2030 fixed notes onto the 2029 SOFR loan chain (bcza: tier B2_exact_name, begin principal 7,146,000 spread NULL maturity 2030-02-15, end principal 36,931,000 spread 3.5 maturity 2029-02-15; the amendment escape cannot fire: principal ratio 5.17, begin spread NULL). The maturity veto is inert because BCRED maturity_precision is 'unknown' on every dated row (see maturity-precision-unknown-for-page-read-maturity). Separate side defect: Tier A within-filing matching pairs LOWER(identifier), and the 2022-12-31 loan and notes differ only by case, so A_within_filing edges for pid d9953922 (2022-12-31 into 2023 quarters) carry begin_principal 3,297,000, the notes' par. Rename withdrawn; final identities equal nbbcc.",
    "field": "position_id",
    "quarters": [
     "2022-09-30",
@@ -239,7 +353,7 @@
     "rationale": "Requiring both an issuer change and a maturity change misses the demonstrated failure: Athenahealth and athenahealth normalize identically. September printed 6.50 percent notes due 2/15/2030 were linked in nvbcc to the December SOFR + 3.50 percent loan due 2/15/2029 despite both maturities being supplied. Independently printed incompatible tranche characteristics expose that edge without relying on a name change or the published category convention. Source-cited amendments must be separate negative controls so legitimate term changes are reviewed without being declared identity errors.",
     "reference": "suggested_check; investigations[0].evidence (0001803498-22-000021 notes); matching_evidence.december_source_evidence and failed_notes_id/accepted_loan_id; nvbcc versus nvbcd position IDs"
    },
-   "carried_from": "docs/investigations/v05_readings/reports/0001803498.json (nvbcd)"
+   "carried_from": "docs/investigations/v05_readings/reports/0001803498.json (nvbcd), text corrected after the bczb review"
   },
   {
    "observation_key": "structured-credit-classed-as-direct-lending",
@@ -265,7 +379,7 @@
   },
   {
    "observation_key": "maturity-precision-unknown-for-page-read-maturity",
-   "what": "Final BCRED has 22,361 dated ixbrl_field_status rows plus nine dated rows with null source, all unknown precision/unresolved status (saved maturity_coverage SQL). Three null-source dates were filled here. financial_conventions.precision_value does not recognize ixbrl_field_status as day precision; D-209 leaves shared precision convention unchanged. No cohort counts claimed.",
+   "what": "Final BCRED has 22,361 dated ixbrl_field_status rows plus nine dated rows with null source, all unknown precision/unresolved status (saved maturity_coverage SQL). Three null-source dates were filled here. financial_conventions.precision_value does not recognize ixbrl_field_status as day precision; D-209 leaves shared precision convention unchanged. No cohort counts claimed. Consequence (bczb review): maturity_interval_sql yields NULL bounds for these rows, so the position matcher's maturity veto and maturity rank are inert for all BCRED rows; this is what lets a renamed 2030 fixed-notes row join a 2029 loan chain by exact name (position-chain-follows-shifted-member). No wrapper setting sets precision; the fix is the shared source list in precision_value, cohort re-match required.",
    "field": "maturity_status",
    "quarters": [
     "2022-09-30",
@@ -1136,30 +1250,160 @@
     "rationale": "No rule fired on these 42 rows in nbbcb (FX01 needs a non-USD marker, and principal_amount_usd was filled). The sample reader found it.",
     "reference": "suggested_check above"
    }
+  },
+  {
+   "observation_key": "html-template-schedule-not-published",
+   "what": "BCRED 2022-03-31 and 2022-06-30 schedules (and 2021 quarters) are cached as HTML, a template extracts them and ties to the printed totals, but no step publishes HTML-template rows; the fund shows no holdings for those quarters.",
+   "field": "holdings",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30"
+   ],
+   "fair_value_m": 39420.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "F28 already fires when a fund has net assets and no holdings; add the per-quarter printed-total comparison as a gap measure once HTML rows are ingested.",
+   "quote": {
+    "accession": "0001803498-22-000013",
+    "text": "Total Investment Portfolio $ 37,776,621 $ 37,777,474 211.01 % Cash and Cash Equivalents Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F28 fired on both quarters in the untouched build (ledger b1112b RVQ_REV_e89d777120f0, RVQ_REV_8788b4b75ff1).",
+    "reference": "F28"
+   }
+  },
+  {
+   "observation_key": "fixed-notes-published-floating-libor-spread-equals-coupon",
+   "what": "2022-12-31 fixed-rate lines (printed 'x.xx % x.xx %', no reference rate) published Floating with a guessed LIBOR/PRIME reference and basis_spread = coupon. Fixed in bczc: 143 rows (2 parent, 141 JV look-through) by context-keyed corrections; read every Floating row of the fund across all quarters by its own context: no other quarter has the shape. The guess comes from the inferred_pre_libor reference source on 2022-12-31 and the issuer-name 'Prime' read (identifier_text); the cause is shared (reference-rate inference when the page prints no reference) but only this fund-quarter shows it here; other funds not measured. Reverse direction scanned too (rows published Fixed whose own line prints '+'): 3 rows, all Medallia 2022-09-30, fixed in bczd. A related defect, printed reference token vs published reference_rate_type, is recorded as reference-rate-token-differs-from-printed-line.",
+   "field": "basis_spread",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "fair_value_m": 2.436,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Both directions, per context: a row whose printed line carries a '+' reference must publish coupon_type Floating with a spread and the reference named by the printed token; a printed fixed rate (no '+') must publish Fixed with no spread or reference.",
+   "quote": {
+    "accession": "0001803498-23-000008",
+    "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 3,297 3,297 2,436 0.01"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Neither direction is covered by a ledger rule; the context-anchored check above found 143 + 3 rows in this fund and has no false positive on the fund's 24k rows in either direction.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "reference-rate-token-differs-from-printed-line",
+   "what": "202 BCRED 2022 rows publish a reference_rate_type that differs from the token the row's own line prints before '+': SOFR lines as LIBOR (197, source inferred_pre_libor), L as PRIME (2, from the issuer name), C as LIBOR, E as LIBOR, SORF as LIBOR. Fixed in bczd for BCRED by context-keyed corrections. Shared cause: reference-rate inference when no reference is tagged (inferred_pre_libor) and the name-read 'Prime'; other funds not measured.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Per context, compare the printed token before '+' (legend-mapped: L LIBOR, SOFR, E EURIBOR, C CDOR, CA CORRA, BB BBSY, S per legend) with reference_rate_type; flag a mismatch, and treat source inferred_pre_libor or identifier_text as a guess to verify.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "Brookfield WEC Holdings, Inc. (9) SOFR + 3.75 % 6.87 % 8/1/2025 4,990 4,786 4,841 0.02"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule compares the printed token with the published reference; the check is concrete and context-anchored.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "chf-loan-printed-s-published-sonia",
+   "what": "CEP V Investment 11 Sarl (CHF par) prints 'S + 5.75 %' at 2022-09-30 (par 'Fr. 97,449', all-in 6.29) and 2022-12-31 (CHF 97,449, all-in 5.75) and is published SONIA, which is what those filings' printed code and legend support (legend: 'Sterling Overnight Interbank Average Rate (SONIA or S)', 'SOFR and SONIA'; SARON is not defined in either 2022 filing). Evidence for the owner that SARON is the economic reference: the same loan (CHF 97,449, 2/11/2028) prints 'SA + 5.75 %' from 2023-03-31 (SA = SARON), the par is Swiss francs, and 6.29 - 5.75 = 0.54 at 2022-09-30 fits SARON, not SONIA. A SARON correction was built (bcze) and reverted (bczf, orchestrator decision on REQ-bcz-3, option b) because it raised two reference_rate_printed findings (the page reader reads 'S' as SONIA). Open for the owner: option (a), accept a reference set by a recorded correction that cites the same position's later printed code. Unexplained and left: Forterro UK Ltd. 2023-03-31 prints 'S + 5.00 % 9.18 %' with EUR par 10,474, published SONIA (ROW-f07524804ec00dcc); the same tranche prints 'S + 4.75 %' on GBP par 8,894 from 2023-06-30, and 9.18 - 5.00 = 4.18 is a SONIA-level base; the March page labels the par EUR and later quarters GBP, which its own lines do not settle.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2022-09-30",
+    "2022-12-31"
+   ],
+   "fair_value_m": 200.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag a debt row whose currency has a known local benchmark (CHF SARON, GBP SONIA) when the published reference differs, for a decision against the legend.",
+   "quote": {
+    "accession": "0001803498-23-000012",
+    "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) SA + 5.75 % 6.70 % 2/11/2028 CHF 97,449 93,969 105,514 0.46"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The currency-versus-reference check is concrete; the existing rules do not compare them.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "published-spread-without-source-after-correction",
+   "what": "The three Medallia rows now publish basis_spread 6.75 with basis_spread_source empty (a correction sets the value, not its source label). Informational; the row correction is recorded in corrected_fields. Reviewer note (bczd): the 203 rows whose reference rate was set by a row correction (now 205 with CEP V) carry reference_rate_source 'ixbrl_field_status' although the value was set by the correction, so the label overstates the provenance; the correction is recorded in corrected_fields.",
+   "field": "basis_spread_source",
+   "quarters": [
+    "2022-09-30"
+   ],
+   "fair_value_m": 960.2,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A published basis_spread should carry a source label; a corrected field could carry 'row_correction'.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "Medallia, Inc. (4)(10) L + 6.75 % PIK 9.87 % 10/29/2028 193,895 189,975 190,017 0.85"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A null-source check over spread-bearing rows is concrete.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "principal-currency-usd-for-fr-par",
+   "what": "Two published rows printed par with the 'Fr.' prefix (Swiss franc) and published principal_amount_currency USD at 2022-09-30: CEP V Investment 11 Sarl (Fr. 97,449, FV 96.85M) and Forterro UK Ltd. (Fr. 10,674, FV 10.55M); the same tranches print 'CHF' from 2022-12-31. Fixed in bczf (currency CHF, rate FRED H.10 CHF 2022-09-30, USD amount par x rate). Scan of 2022-09-30, 2022-12-31 and 2023-03-31 found no others; other quarters not scanned for 'Fr.'.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2022-09-30"
+   ],
+   "fair_value_m": 107.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Per context, the currency prefix or code printed on the par cell (Fr., CHF, EUR, GBP) must equal principal_amount_currency; flag a USD where a non-dollar prefix is printed.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "CEP V Investment 11 Sarl (4)(6)(7)(10) S + 5.75 % 6.29 % 2/11/2028 Fr. 97,449 97,832 96,846 0.43"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule compares the printed par currency prefix with the published currency; the check is concrete and context-anchored.",
+    "reference": "suggested_check"
+   }
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "python -m pytest tests/test_bcred_jv_interest_name.py tests/test_bcred_wrapper_flat_schedule.py -q: 23 passed (new file test_bcred_jv_interest_name.py: 2 keep-name tests, 6 false-positive/behaviour tests)",
-  "python -m pytest tests/test_bdc_xbrl_wrapper.py -q -x: 557 passed",
-  "Builds: nbbca (untouched) and nbbcb (wrapper fix), cached-only, CHAIN_DONE; all stages exit 0 except ledger exit 1 (actionable findings remain)",
-  "holdings_field_diff.py nbbcb nbbca: 24,672 rows each; issuer_name 16 (BCRED), entity_id 8 and canonical_name 15 (informational); 97 of 100 columns identical; position_id unchanged",
-  "holdings_field_diff.py nbbca nvbcd: 100 of 100 columns identical",
-  "fund_ledger_trial.py --label nbbcb --from ledger after the retirement file: BCRED 46 verdict_retired, 6 open (issuer_name_printed + F28 x5), 1 needs_human",
-  "Build nbbcc (corrections): CHAIN_DONE, all stages exit 0 except ledger exit 1; 'Row correction unmatched' for BCRED: 0",
-  "holdings_field_diff.py nbbcc nbbcb: issuer_name 1, instrument_description 1, principal_amount_currency 42, corrected_fields 42, position_id 1; 95 of 100 columns identical; GICS-null row count unchanged (400)",
-  "holdings_field_diff.py nbbcc nvbcd: issuer_name 17, instrument_description 1, principal_amount_currency 42, corrected_fields 42, position_id 1, entity_id 8, canonical_name 15",
-  "row_corrections_by_context.csv vs HEAD, order-insensitive: 0 lines removed, 44 added",
-  "nbbc_retirements.py nbbcc --write: 24 entries, 0 problems; fund_ledger_trial.py --label nbbcc --from ledger: BCRED 46 verdict_retired, 6 open, 1 needs_human"
+  "Builds bcza (Minerva rename, reverted) and bczb (final, no change): cached-only, CHAIN_DONE.",
+  "holdings_field_diff.py bcza nbbcc: issuer_name 1, corrected_fields 1, position_id 2; holdings_field_diff.py bczb nbbcc: 100 of 100 columns identical, 24,672 rows each.",
+  "Row correction unmatched, BCRED: 0 in both builds.",
+  "scratch/fund_runs/0001803498/html_try.py, html_tie.py: read-only HTML template extraction and tie to printed totals.",
+  "Build bczc (build 3 of 6; bcza evidence, bczb clean, bczc fix), CHAIN_DONE: holdings_field_diff bczc nbbcc: basis_spread 143, reference_rate_type 143, reference_rate_source 143, coupon_type 143, corrected_fields 143; 95 of 100 columns identical; 24,672 rows each; position_id unchanged.",
+  "Row correction unmatched for BCRED in bczc rebuild.log: 0. Ledger unchanged: 27 findings, 3 outstanding.",
+  "Build bczd (build 4 of 6), CHAIN_DONE: holdings_field_diff bczd bczc: basis_spread 3, reference_rate_type 203, reference_rate_source 203, coupon_type 3, corrected_fields 205; 95 of 100 columns identical; 24,672 rows each.",
+  "holdings_field_diff bczd nbbcc: basis_spread 146, reference_rate_type 346, reference_rate_source 346, coupon_type 146, corrected_fields 348; position_id unchanged. Row correction unmatched, BCRED: 0.",
+  "rev_scan.py bczc (reverse direction): 3 rows; tok_scan.py bczc (token vs reference): 202 rows; both rerun logic reproduces from scratch/fund_runs/0001803498.",
+  "Build bcze (build 5 of 6), CHAIN_DONE: holdings_field_diff bcze bczd and bcze nbbcc (see report status); Row correction unmatched, BCRED: 0.",
+  "scratch/fund_runs/0001803498/cep.py (CEP V and Forterro UK lines by context), fr_scan.py ('Fr.' par scan).",
+  "fund_gate check bcze: 29 findings, 5 outstanding (the 3 earlier plus 2 reference_rate_printed raised by the CEP V SARON correction).",
+  "Build bczf (build 6 of 6), CHAIN_DONE: holdings_field_diff bczf bcze: principal_amount_currency 2, principal_amount_usd 2, principal_fx_rate_to_usd 2, principal_fx_status 2, reference_rate_type 2 (SARON -> SONIA), corrected_fields 3; bczf nbbcc: basis_spread 146, reference_rate_type 346, reference_rate_source 346, coupon_type 146, corrected_fields 350, plus the 2-row currency columns; 24,672 rows each; unmatched BCRED corrections 0; ledger 27 findings, 3 outstanding, no FX01/FX finding."
  ],
  "not_done": [
-  "Did not re-read the carried issuer_name_printed finding (owner scope change 2026-11-10: reviewed findings carried forward).",
-  "No neighbour sample beyond the cited rows and the JV interest rows; no random 20-row sample (orchestrator's step).",
-  "BCRED holdings before 2022-09-30 not extracted (HTML template work, owner decision).",
-  "Frozen BDCSRC bundle does not list its 11 rows; only sampled identifiers read.",
-  "No full pytest suite, no semantic diff of production, no re-attestation (single-fund sandbox)."
+  "No HTML ingestion built (shared code, owner decision REQ-bcz-2); no 2021 quarters worked.",
+  "No neighbour reading of 2022-03-31 / 2022-06-30 rows: none are published. 2022-09-30 neighbours were read in the nbbc run (carried observations).",
+  "Matcher defect (2030 notes vs 2029 loan chain) not repaired: shared code outside the fund brief.",
+  "No pytest run (no code or wrapper change in this run); no random 20-row sample (orchestrator step)."
  ],
- "prior_report": "scratch/fund_runs/0001803498/report_before_nbbc.json",
+ "prior_report": "nbbcc report (investigator fund-agent-bcred-nbbc-20261110), preserved in scratch/fund_runs/0001803498/report_before_bcz.json",
  "investigations": [
   {
    "finding_id": "RVQ_BLK_5a7ac8ea794a",
@@ -1193,9 +1437,12 @@
     "Petco current line truncates the name, while comparative line gives the published legal name. This supports only a partial candidate, not a disposition for the whole finding.",
     "Historical bcpb rename-only attempt joined the 2030 notes to the 2029 loan chain; verified its identities against the untouched nvbca chains.",
     "nvbcc tested printed-name correction plus three independently read December maturity fills. September notes took d9953922-8c71-535a-be36-382812d1a07a (2029 loan chain); September loan became singleton 9901d72c-936b-52df-b249-a83cfeb00230; December notes remained ab13e587-75f4-5dfe-a158-ef85d1b16cc0. Two position IDs changed: rejected.",
-    "With the unsafe rename withdrawn, nvbcd retains three source-supported maturity fills and all original position IDs. Minerva September notes remain db1df964-f5e9-5261-a169-a455a690122c."
+    "With the unsafe rename withdrawn, nvbcd retains three source-supported maturity fills and all original position IDs. Minerva September notes remain db1df964-f5e9-5261-a169-a455a690122c.",
+    "bcza (this run, build 1 of 6): context-keyed correction on i0bf60ca65f644ec79a3a1197c87a1ea0_I20220930 issuer_name -> 'Athenahealth, Inc.' with no other change. holdings_field_diff bcza nbbcc: issuer_name 1, corrected_fields 1, position_id 2 (the 2022-09-30 2030 notes took d9953922-8c71-535a-be36-382812d1a07a, the 2029 loan chain that runs to 2026-03-31; the 2022-09-30 2029 loan became a new position 9901d72c-936b-52df-b249-a83cfeb00230). Same result as nvbcc: rejected, correction reverted, bczb is the untouched final.",
+    "Petco: the printed current line is truncated to 'Petco Health and Wellness Comp' while the comparative line prints 'Petco Health & Wellness Co, Inc.' and the XBRL member is the full legal name; the published name is right, so this row is a check misfire (printed text truncated by the filer), not a data error.",
+    "Corrected mechanism (independent review of bczb): in bcza the 2030 notes joined the loan by exact name (tier B2_exact_name, begin 'Athenahealth, Inc.' 2022-09-30 principal 7,146,000, spread NULL, maturity 2030-02-15; end 'athenahealth, Inc.' 2022-12-31 principal 36,931,000, spread 3.5, maturity 2029-02-15). The amendment escape did not fire: the principal escape needs a ratio <= 1.02 (here 5.17) and the spread escape needs spreads on both sides (begin is NULL). The veto passed on its first branch, 'either maturity unknown': every dated BCRED row has maturity_precision 'unknown' (22,361 ixbrl_field_status rows plus 9 with null source), so financial_conventions.maturity_interval_sql returns NULL bounds and the maturity veto and rank are inert for the whole fund. My earlier text blaming the amendment escape was wrong."
    ],
-   "next_action": "Park confirmed Minerva issuer-name error. Before retrying the name, repair raw-name matching/remapping to preserve context-level 2030 notes versus 2029 loan identities; add a regression fixture for these exact tranches. No matching rule or gate changed in this run.",
+   "next_action": "Minerva stays parked. Candidate fixes, in order: (1) no wrapper setting exists for maturity precision: financial_conventions.precision_value derives it from maturity_precision, the raw string, or maturity_date_source in ('xbrl_field','nport','printed_page'); the only per-fund route is source_encodings.printed_rows_without_context, a printed-line declaration per context, not workable for 22k rows. (2) Shared: add 'ixbrl_field_status' to the day-precision source list (a full YYYY-MM-DD date read from the page), measured by re-matching the whole cohort with the semantic diff, since it activates the veto for every fund with page-read maturities. (3) Or a fixed-versus-floating / debt-section veto independent of precision. Keep the regression fixture (2022-09-30 notes, 2022-12-31 loan and notes). Then the correction in scratch/fund_runs/0001803498/spec_with_minerva.json can be applied. Petco: owner request REQ-bcz-1 (acceptance_change).",
    "row_conclusions": [
     {
      "row": "0001803498-22-000021/i0bf60ca65f644ec79a3a1197c87a1ea0_I20220930/ROW-6900c35a75241a00",
@@ -1207,8 +1454,57 @@
      "conclusion": "source_ambiguity",
      "why": "Current line truncates Petco; comparative line supports full legal name."
     }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e89d777120f0",
+   "coverage": {
+    "affected_rows": [
+     "0001803498/2022-03-31/fund_financials_vs_holdings_presence"
+    ],
+    "reviewed_rows": [
+     "0001803498/2022-03-31/fund_financials_vs_holdings_presence"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total Investment Portfolio $ 37,776,621 $ 37,777,474 211.01 % Cash and Cash Equivalents Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %"
+    }
    ],
-   "carried_from": "docs/investigations/v05_readings/reports/0001803498.json"
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "XBRL facts present: rejected. The 2022-03-31 10-Q (0001803498-22-000013) is indexed xbrl_download_status not_found and no XBRL file for it is cached.",
+    "Wrapper period filter or extraction cutoff: rejected. Nothing in data/overrides/bdc_xbrl_wrappers/0001803498.json limits periods; the extractor has nothing to read for these quarters. No published BDC row of any fund is dated before 2022-09-30 (private_markets_holdings.csv: source bdc starts 2022-09).",
+    "HTML-only schedule with a template: the schedule is cached (data/raw/filings/bdc_html/1803498/000180349822000013.html) and data/raw/filing_templates/1803498.json has a v3.0 template listing its tables. pipeline.html_extract.extract_filing (read-only run, scratch/fund_runs/0001803498/html_try.py, html_tie.py) returns the rows; position-like rows plus cash sum to the printed total within rounding (Q1 39,420,454 vs 39,420,455; Q2 47,870,343 vs 47,870,332, in thousands). So the data are readable and tie.",
+    "Publication path: rejected as a fund-level fix. html_extract writes html_extraction_holdings.csv (not present in data/output) and nothing in staging_bdc, unified_holdings or the finalizer reads it; the wrapper schema allows source 'bdc_xbrl' only. Publishing these rows needs a new HTML-to-bdc_holdings stage (issuer/instrument split, rate and spread parsing, industry carry, anchors for the provenance re-verifier, position chain into 2022-09-30): shared code and an owner decision, not a wrapper setting."
+   ],
+   "next_action": "Parked with evidence. Owner request REQ-bcz-2 (acceptance_change): decide whether pre-2022-09-30 HTML-template rows enter the published set; if yes, build the HTML ingestion stage opt-in per fund with the totals tie as its gate. No disposition proposed: the printed schedule exists and is not published."
+  },
+  {
+   "finding_id": "RVQ_REV_8788b4b75ff1",
+   "coverage": {
+    "affected_rows": [
+     "0001803498/2022-06-30/fund_financials_vs_holdings_presence"
+    ],
+    "reviewed_rows": [
+     "0001803498/2022-06-30/fund_financials_vs_holdings_presence"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Other Cash and Cash Equivalents 1,503,807 1,503,807 7.17 Total Portfolio Investments, Cash and Cash Equivalents $ 48,785,413 $ 47,870,332 228.27 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "XBRL facts present: rejected. bdc_xbrl 000180349822000017.xml is 19,982 bytes with 0 InvestmentIdentifierAxis facts and 0 InvestmentOwnedAtFairValue facts (only a StatementClassOfStockAxis); the same 10-Q's cached XML (0001803498-22-000017) carries no schedule tagging.",
+    "Wrapper period filter or extraction cutoff: rejected. Nothing in data/overrides/bdc_xbrl_wrappers/0001803498.json limits periods; the extractor has nothing to read for these quarters. No published BDC row of any fund is dated before 2022-09-30 (private_markets_holdings.csv: source bdc starts 2022-09).",
+    "HTML-only schedule with a template: the schedule is cached (data/raw/filings/bdc_html/1803498/000180349822000017.html) and data/raw/filing_templates/1803498.json has a v3.0 template listing its tables. pipeline.html_extract.extract_filing (read-only run, scratch/fund_runs/0001803498/html_try.py, html_tie.py) returns the rows; position-like rows plus cash sum to the printed total within rounding (Q1 39,420,454 vs 39,420,455; Q2 47,870,343 vs 47,870,332, in thousands). So the data are readable and tie.",
+    "Publication path: rejected as a fund-level fix. html_extract writes html_extraction_holdings.csv (not present in data/output) and nothing in staging_bdc, unified_holdings or the finalizer reads it; the wrapper schema allows source 'bdc_xbrl' only. Publishing these rows needs a new HTML-to-bdc_holdings stage (issuer/instrument split, rate and spread parsing, industry carry, anchors for the provenance re-verifier, position chain into 2022-09-30): shared code and an owner decision, not a wrapper setting."
+   ],
+   "next_action": "Parked with evidence. Owner request REQ-bcz-2 (acceptance_change): decide whether pre-2022-09-30 HTML-template rows enter the published set; if yes, build the HTML ingestion stage opt-in per fund with the totals tie as its gate. No disposition proposed: the printed schedule exists and is not published."
   }
  ],
  "final_measurement": {
@@ -2386,5 +2682,68 @@
     "next_action": "Orchestrator: retire the frozen finding (or let it go 'gone' when the check no longer reports it); no data change."
    }
   }
- ]
+ ],
+ "carried_fixes_nbbcc": [
+  {
+   "what": "Wrapper issuer_name_strip_re: holder-label alternative no longer cuts ' Emerald/Verdelite JV LP' when preceded by 'BCRED ' ((?<!BCRED )). The fund's own JV LP interests were published as issuer 'BCRED' on 16 rows (D-254 defect C, wider than the two quarters reported). Dry run over all 7,154 distinct identifier heads: exactly the two names change. Values, position ids and every other column unchanged.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-26-000014",
+     "text": "BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,815,000 1,678,745 3.53"
+    },
+    {
+     "accession": "0001803498-26-000014",
+     "text": "BCRED Verdelite JV LP - LP Interest (6)(16) 10/21/2022 117,706 113,068 0.25"
+    },
+    {
+     "accession": "0001803498-24-000062",
+     "text": "BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,815,000 1,795,374 4.93"
+    }
+   ]
+  },
+  {
+   "what": "42 context-keyed corrections principal_amount_currency='USD' (data/overrides/row_corrections_by_context.csv, from scripts/v05_evidence/row_correction_specs/0001803498_by_context.json). Staging moves the CLO note par from the share-count tag (src_transforms principal_amount:from_shares_tag, 41 rows); the unit-less tag leaves the currency blank. The 42nd (New Mountain CLO 6 Subordinated Notes 2, 2024-12-31) has the same shape. Each row's printed line was found once in its current schedule by name and par/cost/FV, with no currency code (scratch/fund_runs/0001803498/nbbc_ccy_rows.py). principal_amount_usd already equalled the par (source_usd); fair_value_currency USD.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    },
+    {
+     "accession": "0001803498-24-000062",
+     "text": "Galaxy 34 Clo Ltd (4)(6) Estimated Yield: 16.18 % 9/26/2024 10/20/2037 20,000,000 $ 18,500 $ 18,500 0.05 %"
+    }
+   ]
+  },
+  {
+   "what": "Context-keyed correction 2024-12-31 c-1231: issuer 'RAD CLO 27 Ltd' (member) -> printed 'RAD CLO 2024-2 WH Ltd', instrument 'Units'. Found while reading the currency rows. The row was chained to the RAD CLO 27 Class E debt tranche; it is now its own position. GICS label unchanged.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "RAD CLO 2024-2 WH Ltd - Units (4)(6)(7) Estimated Yield: 15.44 % 12/11/2024 1/15/2038 14,800,600 14,801 14,801 0.04"
+    }
+   ]
+  }
+ ],
+ "rows_added_note": "No rows added: F28 2022-03-31 and 2022-06-30 not fixable at fund level (see parked)."
 }

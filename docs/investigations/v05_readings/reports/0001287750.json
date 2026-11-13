@@ -1,34 +1,44 @@
 {
  "cik": "0001287750",
- "label": "nbare",
- "before": "nvard",
- "investigator_id": "fund-agent-0001287750-nbar-2026-11-11",
+ "label": "arzd",
+ "before": "nbare",
+ "investigator_id": "agent:fund-ares-20261113",
  "shared_code": false,
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 52,
-   "why": "22 instrument-glued names cut by the wrapper strip (Zeppelin c-1832 also by context correction); 21 wrong-company / renamed-group rows (Harvey->Generator/GSV, PCG swap x8, Bellwether, Premise, Einstein, YE Brands x2, GHX block x3, Paris block x3); Symplr, PumpTech, Dundee, CCreek x6; full row list nbare_vs_nvard_names.txt (nbar_instr_diff.py nbare nvard)"
+   "rows": 110,
+   "why": "nbare's 52 rows (instrument-glued names cut, wrong-company, renamed groups, CCreek, Symplr/PumpTech/Dundee) plus this run: 59 context corrections where the filer's member keeps an older name or co-obligor list than the printed company line (Alcami 2022-12/2023-03, Pyramid, Varsity, Infinity 2023-12 and 2024-12, Riser 2023-12, Capstone x4 quarters, Higginbotham, Ardonagh x2, Precision, Truck-Lite x2, ESHA, Elemica, Merit, 3 Step x3) and 35 rows whose member cut the company name at its first comma (Color Intermediate, Cardinal Parent, Argenbright, G702 Buyer, Cascade, Digicert, Aptean, Shout! Factory); plus arzd: 7 MP Midco rows (2025-03-31 cut-name common units; 2025-06..12 block)"
   },
   {
    "column": "instrument_description",
-   "rows": 32,
-   "why": "22 instruments recovered from glued names (Zeppelin c-1832 set to the printed term loan, MC Z1/Z2 from the printed labels); Symplr, PumpTech, Dundee, GHX c-572 Class C units and 6 Expereo/Opal blank instruments from the printed line"
+   "rows": 45,
+   "why": "nbare's 32 plus the 35 cut-name rows (tail of the company name removed from the instrument: 'Inc. Second lien senior secured loan' -> 'Second lien senior secured loan'); some overlap with nbare rows; plus arzd: 4 MP Midco common units ('LLC) Common units' -> 'Common units')"
   },
   {
    "column": "corrected_fields",
-   "rows": 39,
-   "why": "rows carrying this run's context-keyed corrections"
+   "rows": 120,
+   "why": "rows carrying context-keyed corrections; +7 rows where commit f8c4f6db (REQ-rftc-1, merged after nbare) re-derives lien after a corrected instrument"
+  },
+  {
+   "column": "lien_position",
+   "rows": 10,
+   "why": "7 rows None -> First Lien: the shared re-derivation of lien after a text correction (f8c4f6db, orchestrator 2026-11-13), seen already in the untouched arza; not this run's change"
   },
   {
    "column": "canonical_name",
-   "rows": 36,
-   "why": "follows the corrected / stripped issuer names"
+   "rows": 100,
+   "why": "follows the corrected issuer names"
+  },
+  {
+   "column": "entity_id",
+   "rows": 240,
+   "why": "follows the corrected issuer names (declaration not required)"
   },
   {
    "column": "position_id",
-   "rows": 47,
-   "why": "renamed rows rejoin their printed company's chain (Einstein, YE Brands, PCG x2, Bellwether, PumpTech, Symplr C-3, Creek loan, Dundee, MC Z1); GHX's 02/2026 loan leaves the GHX Class A units chain and Paris' 06/2026 loan leaves the 0.1 loan chain; Elemica's 59.x loan now links to its 2026 refinancing instead of Einstein's loan (left, observation); Sport Maska's SOFR revolver chain now runs into the CORRA revolver, an unsound cross-facility link this run created (parked, observation position-chain-crosses-facility-currency). nbare_vs_nvard_identity.txt lists all 47"
+   "rows": 60,
+   "why": "renamed blocks rejoin the chain of their printed company (arzb vs arza: 45 rows; arz chain files arzb_vs_arza_identity.txt, arz_chain_maturity.py). Chains that cross a maturity grew from 2 to 7 among the changed chains (Alcami 2022-09 29.0M 2025 loan into the 9.5M 2028 loan, ESHA 2025-12 2032 loan, Precision, Riser 2023-12, Pyramid): matcher links by name key across refinancings; the old build crossed maturities in the same chains (Alcami 2022-09 first lien into the 2022-12 second lien). Recorded as observation."
   }
  ],
  "rows_added": 0,
@@ -178,6 +188,99 @@
     {
      "accession": "0001628280-26-050307",
      "text": "Paris US Holdco, Inc. and Trimaster Manufacturing Inc. (13) Manufacturer of high-tolerance precision machined components and assemblies for the aerospace and defense industry First lien senior secured revolving loan 8.39 % SOFR (M) 4.75 % 12/2024 12/2031 0.3 0.3 0.3 (2)(6)(9) First lien senior secured loan 8.39 % SOFR (M) 4.75 %"
+    }
+   ]
+  },
+  {
+   "what": "59 context-keyed issuer_name corrections (data/overrides/row_corrections_by_context.csv, author agent:fund-ares-20261113): every row of a block whose published name (the filer's member) differs from the company line the page prints, set to the printed name. Each row's own FV context was matched to its printed row (scratch/fund_runs/0001287750/arz_corrections.py checks that the nearest company cell above equals the target, 59 of 59). Where the member lags a rename the next filing's member already carries the printed name (Alcami from 2023-06-30, Riser 2024-03-31, Capstone 2026-03-31, Truck-Lite 2026-03-31, ESHA 2026-03-31, Elemica 2026-06-30, Merit 2026-06-30).",
+   "kind": "row_correction",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001287750-23-000010",
+     "text": "Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.42 % SOFR (M) 7.00 % 12/2022 12/2028 9."
+    },
+    {
+     "accession": "0001287750-23-000021",
+     "text": "Pyramid-BMC IntermediateCo I, LLC and Pyramid Investors, LLC (15) Hotel operator First lien senior secured loan 12.85 % SOFR (Q) 8.00 % 01/2023 01/2027 7.7 7.7 7.5 (2)(11"
+    },
+    {
+     "accession": "0001287750-23-000021",
+     "text": "Varsity Brands Holding Co., Inc., Hercules Achievement, Inc. and BCPE Hercules Holdings, LP Leading manufacturer and distributor of textiles, apparel & luxury goods First"
+    },
+    {
+     "accession": "0001287750-24-000011",
+     "text": "Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien"
+    },
+    {
+     "accession": "0001287750-24-000011",
+     "text": "Riser Interco, LLC (15) Insurance program administrator First lien senior secured loan 11.19 % SONIA (Q) 6.00 % 10/2023 10/2029 1.1 1.0 1.1 (2)(11) First lien senior secu"
+    },
+    {
+     "accession": "0001287750-25-000020",
+     "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of di"
+    },
+    {
+     "accession": "0001287750-26-000006",
+     "text": "ESHA Intermediate, LLC (13) Provider of nutritional information and software as a services (SaaS) compliance solutions First lien senior secured loan 8.44 % SOFR (Q) 4.75"
+    },
+    {
+     "accession": "0001628280-26-027688",
+     "text": "Elemica, Inc. and EZ Elemica Holdings, Inc. (13) SaaS based supply chain management software provider focused on chemical markets First lien senior secured loan 8.45 % SO"
+    },
+    {
+     "accession": "0001628280-26-027688",
+     "text": "Merit Financial Group, LLC and CWC Fund I (MFA) LP (13) Registered investment adviser platform First lien senior secured revolving loan 8.42 % SOFR (Q) 4.75 % 08/2025 08/"
+    }
+   ]
+  },
+  {
+   "what": "35 rows (8 issuers, 2022-12-31 to 2026-03-31) whose member cut the company name at its first comma: issuer_name and instrument_description set from the printed line (arz_corrections2.py: 35 of 35 rows matched the printed company line starting with the cut name and the instrument text starting with its tail).",
+   "kind": "row_correction",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001287750-25-000046",
+     "text": "G702 Buyer, Inc. (13) Provider of standardized contracts and forms platform for the architecture, engineering, and construction industry First lien senior secured loan 8."
+    },
+    {
+     "accession": "0001287750-25-000007",
+     "text": "Cardinal Parent, Inc. and Packers Software Intermediate Holdings, Inc. (15) Provider of software and technology-enabled content and analytical solutions to insurance brok"
+    }
+   ]
+  },
+  {
+   "what": "Independent review of arzc (rejected 5 entries) led to arzd: (a) MP Midco 2025-06-30, 09-30, 12-31: issuer_name of every row of the block set to the printed company line (the page drops '(fka H-Food Holdings, LLC)' from 2025-06-30; the 2025-03-31 line still prints it); (b) 4 MP Midco common-units rows (2025-03-31, 06-30, 09-30, 12-31) whose member cut the name inside the parenthetical, so issuer_name ended '(fka H-Food Holdings' and instrument_description began 'LLC) Common units': issuer and instrument set from the printed line ('Common units'). 11 records (arz_corrections3.py). Whole-fund sweep (unclosed '(' in issuer_name, or instrument starting with a legal-form token followed by ' ', ',' or ')'): 4 rows, exactly these (0 in arzd). MP chains 200e4ba2 (first lien) and f010d4a2 (common units) are unchanged by the correction (position_id identical in arzc and arzd; 6 rows each, 2025-03-31..2026-06-30).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001287750-25-000046",
+     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.81 % SOFR (Q) 6.50 % 03/2025 03/2030 9.6 9.6 9.7 (2)(9)(16)"
     }
    ]
   }
@@ -1210,7 +1313,7 @@
   {
    "observation_key": "issuer-name-from-member-differs-from-page",
    "field": "issuer_name",
-   "what": "Members naming a different borrower than the printed line: Einstein Parent's 45.9 term loan as Elemica Parent (2026-03-31), YE Brands' two loans as Vista Higher Learning (2026-06-30), Generator Buyer and GSV Purchaser as Harvey Tool (2024-09-30), Bellwether as Benecon (2025-06-30), Premise Health's revolver as PetVet (2025-09-30), PCG-Ares Sidecar Investment L.P. and PCG-TAC-CV swapped (2025-03-31..2025-12-31). issuer_name_printed flagged 9 of these 15 rows in the untouched nbara; the 4 Sidecar II rows, YE Brands' 3.6 loan and the 2 PCG-TAC rows printed after the first line of a block were not flagged. Also (round 4) two blocks where the page prints a renamed holding group from that quarter while the member keeps the old group name: GHX 2026-03-31 (3 rows, printed 'GHX Ultimate Parent Corporation and Nexus TopCo LP'; the rule flagged 1) and Paris 2026-06-30 (3 rows, printed '... and Trimaster Manufacturing Inc.'; the rule flagged 1). 21 rows in all, fair value 266.7 M (saved query in nbar_report.py, contexts WRONG_CTX).",
+   "what": "Members naming a different borrower than the printed line: Einstein Parent's 45.9 term loan as Elemica Parent (2026-03-31), YE Brands' two loans as Vista Higher Learning (2026-06-30), Generator Buyer and GSV Purchaser as Harvey Tool (2024-09-30), Bellwether as Benecon (2025-06-30), Premise Health's revolver as PetVet (2025-09-30), PCG-Ares Sidecar Investment L.P. and PCG-TAC-CV swapped (2025-03-31..2025-12-31). issuer_name_printed flagged 9 of these 15 rows in the untouched nbara; the 4 Sidecar II rows, YE Brands' 3.6 loan and the 2 PCG-TAC rows printed after the first line of a block were not flagged. Also (round 4) two blocks where the page prints a renamed holding group from that quarter while the member keeps the old group name: GHX 2026-03-31 (3 rows, printed 'GHX Ultimate Parent Corporation and Nexus TopCo LP'; the rule flagged 1) and Paris 2026-06-30 (3 rows, printed '... and Trimaster Manufacturing Inc.'; the rule flagged 1). 21 rows in all, fair value 266.7 M (saved query in nbar_report.py, contexts WRONG_CTX). arz run: 59 more rows in 23 blocks where the member keeps the previous name or co-obligor list for one or more filings after the page renamed (or before the page dropped a co-obligor); corrected whole-block. issuer_name_printed flags only a block's first line, so the block's other rows (Capstone Class A units and two loans, Truck-Lite two loans, Merit three rows, Elemica preferred) were not flagged.",
    "quarters": [
     "2024-09-30",
     "2025-03-31",
@@ -1351,14 +1454,14 @@
   {
    "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
    "field": "position_id",
-   "what": "After Einstein's loan left the Elemica chain, the matcher links Elemica's 59.3M term loan (maturity 09/2026, to 2025-12-31) to the new 113.0M loan acquired 02/2026 maturing 02/2032 (2026-03-31, 2026-06-30). The 2025-12-31 Elemica loans are all repaid on the page; whether a refinancing continues the position is a matcher policy question. Before the fix the same chain ran into Einstein's loan, which was certainly wrong.",
+   "what": "Position chains join different loans where the matcher has no usable maturity veto: maturity_precision is 'unknown' on all 19,779 Ares rows (14,560 carry a maturity_date), so the maturity veto never fires (shared matcher; the same on BCRED). Measured adjacency edges (consecutive quarters within a position_id), arzd vs nbare, Ares: 15 added, 5 removed; fund-wide cross-maturity edges 541 -> 542 (scratch/fund_runs/0001287750/arz_edges.py). Links this run CREATED that join different loans: Alcami first lien 2022-09-30 ($29.0M, maturity 2025-07-31) -> 2022-12-31 ($9.5M, 2028-12-31) and Alcami second lien 2022-09-30 ($77.5M, 2026-07-31) -> 2022-12-31 ($19.5M, 2029-06-30) (the Q4-2022 restructuring: new maturities, par cut, renamed co-obligor); Pyramid 2022-12-31 term ($16.9M, 2023-07-31) -> 2023-03-31 Pyramid-BMC ($7.7M, 2027-01-31); Infinity 2023-12-31 c-1244 term -> 2024-03-31 c-941 revolver (while c-943 starts its own chain); Infinity 2024-12-31 c-1211 revolver -> 2025-03-31 c-1031 term. Links REMOVED (wrong): Alcami first lien (2025) -> second lien (2029), Pyramid revolver -> term, two Infinity mislinks. Correct links gained: Alcami 2022-12/2023-03 rejoin the 2028/2029 loans, Riser 2023-12 -> 2024-03, Precision 2025-09 -> 12, ESHA 2025-12 -> 2026-03, Merit, Infinity class A units. ESHA (2028 -> 2032), Riser (2028 -> 2029) and Precision (2026 -> 2032) crossed maturities already in nbare; this run only extended those chains forward. The earlier '7 of 13 vs 2 of 14' count compared old pids of changed rows and is withdrawn.",
    "quarters": [
     "2026-03-31",
     "2026-06-30"
    ],
    "fair_value_m": 110.8,
    "cause": "shared",
-   "action": "left",
+   "action": "parked",
    "suggested_check": "Flag consecutive chain links where the maturity date, the acquisition date, the reference rate (SOFR vs CORRA vs SONIA) or the principal currency changes.",
    "quote": {
     "accession": "0001628280-26-027688",
@@ -1366,8 +1469,8 @@
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "Shared position matcher linked rows of different maturity (Elemica); adding reference rate and currency to the link check also catches same-maturity cross-facility links such as Sport Maska's SOFR -> CORRA revolver (observation position-chain-crosses-facility-currency), which a maturity/acquisition-date check misses. Expected hits are refinancings and twin facilities, few per fund-quarter.",
-    "reference": "none"
+    "rationale": "A chain whose consecutive rows differ in maturity_date (both known) by more than the filer's rounding, or in lien or facility type, is a candidate wrong link; 542 such edges fund-wide would need a measured false-positive rate (refinancings and amendments are real). Root cause is the inert maturity veto (maturity_precision 'unknown'): shared matcher, not fixable at fund level.",
+    "reference": "arz_edges.py; reviewer measurement 2026-11-13 (+15/-5, 541 -> 542)"
    }
   },
   {
@@ -1439,579 +1542,135 @@
     "rationale": "Mechanism not established (durable identity registry or name-key difference 'Ltd' vs 'Ltd.'); the proposed adjacency check is deterministic and would list these rows for review.",
     "reference": "none"
    }
+  },
+  {
+   "observation_key": "issuer-name-cut-at-first-comma-instrument-starts-with-name-tail",
+   "what": "The member's text splits a company name at a comma, so issuer_name is the cut name ('G702 Buyer', 'Shout! Factory') and instrument_description starts with the tail ('Inc. First lien senior secured loan', 'L.P. Series A units'). 35 rows, 8 issuers 2022-12-31 to 2026-03-31 (found first), plus 4 MP Midco common-units rows where the comma sits inside a parenthetical ('(fka H-Food Holdings, LLC)': issuer ends '(fka H-Food Holdings', instrument begins 'LLC) Common units'), missed by the first sweep and found by the independent review. issuer_name_printed did not flag any (the cut name is a prefix of the printed one). Fixed by context corrections (arz_corrections2.py, arz_corrections3.py).",
+   "field": "issuer_name",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 1144.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published row whose instrument_description starts with a legal-form token (Inc, LLC, L.P., Ltd, Corp, Co) followed by '.', ',', ' ' or ')' and an instrument word, or whose issuer_name has an unclosed '('. On arzc this finds 39 Ares rows (35 + 4 MP Midco) and 0 on arzd; the whole-fund sweep is scratch/fund_runs/0001287750/arz_corrections3.py.",
+   "quote": {
+    "accession": "0001287750-25-000046",
+    "text": "G702 Buyer, Inc. (13) Provider of standardized contracts and forms platform for the architecture, engineering, and construction industry First lien senior secured loan 8."
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on any of these rows in the untouched arza. The proposed check matched all 39 and no other Ares row (sweep over 19,779 rows); a false-positive test: an instrument that legitimately starts 'Co-invest' or 'LP units' (token must be followed by '.', ',', ' ' or ')' and an instrument word, and not 'Limited partnership').",
+    "reference": "arz_corrections3.py sweep on arzc"
+   }
+  },
+  {
+   "observation_key": "issuer-name-block-member-lags-printed-name-continuation-rows-unflagged",
+   "what": "issuer_name_printed tests each row against its own printed line; a block's later rows print a blank company cell, so only the first line of a block is flagged. 59 corrected rows were in 23 blocks; 23 of them were first lines (flagged in arza), 36 were later rows of the same block that the rule did not flag (checked with arz_corrections.py: all 59 sit under the printed company line).",
+   "field": "issuer_name",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 1368.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "When issuer_name_printed flags a block's first line, report every other published row of the same filing with the same published name as affected rows (the ledger coverage then lists the block).",
+   "quote": {
+    "accession": "0001287750-25-000020",
+    "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of di"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The rule fired on the first line of every block (existing_detector for those) but not on the later rows; propagation by (accession, published name) is a concrete extension. False-positive risk: a block whose later rows legitimately print a different company (different group sharing the member name), which the printed-company walk in arz_corrections.py found in 0 of 59.",
+    "reference": "scratch/fund_runs/0001287750/arz_corrections.py"
+   }
   }
  ],
  "name_shape_exceptions": [],
  "grading_note": "The 6 carried quarters (2022-12-31, 2023-03-31, 2023-09-30, 2023-12-31, 2024-03-31, 2024-06-30) keep the nvard conclusions unchanged: confirmed_error for 2022-12-31, 2023-03-31 and 2023-12-31, false_alarm for the other three. This run re-read only the 8 in-scope quarters, where a quarter whose remaining rows are same-group name variants is graded source_ambiguity. The carried confirmed_error quarters hold Alcami (ACM Holdings I vs printed ACM Note Holdings), Varsity Brands and Infinity Home (co-obligor list variants), plus Pyramid (Pyramid Management Advisors vs printed Pyramid-BMC IntermediateCo I) and Riser (Riser Merger Sub vs printed Riser Interco), which may be different group entities; those two were not re-read against later quarters in this run, so no re-grade is supported. The grading differs between carried and in-scope quarters for the same row shape; the owner ruling on deferred REQ-NBAR-2 settles both.",
  "investigations": [
   {
-   "finding_id": "RVQ_BLK_fc83027d0a56",
-   "coverage": {
-    "affected_rows": [
-     "ROW-805313e54fbbe696"
-    ],
-    "reviewed_rows": [
-     "ROW-805313e54fbbe696"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-23-000010",
-     "text": "5/2021 5/2026 61.0 61.0 59.8 (2)(6)(11) A ordinary shares 5/2021 2,476,744 5.7 6.5 (2)(6) 66.7 66.3 Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.42 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.0 (2)(11) Senior subordinated loan 8.00 % PIK 12/2022 6/2029 19.5 19.5 19.5 (2) 29.0 28.5 Amryt Pharmaceutica"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "Read every direct FV context row and prior issuer header; source artifact nvara_source_read.json.",
-    "15 false-positive rows across the population:10 OTG Participation rights,4 AHR business-description continuations,1 Endeavor business-description continuation.",
-    "131 source-header corrections across related population were staged; nvarc changed92 IDs and266 chain-membership rows. Withdrew167 name/instrument fields; nvard identity exactly equals nvarb.",
-    "nbar run 2026-11-11: currently flagged rows in nbare (scratch/fund_runs/0001287750/nbar_carry_compare.py nbare) equal the carried affected_rows exactly; investigation carried unchanged."
-   ],
-   "next_action": "Park exact source-confirmed name corrections until matcher can preserve distinct tranche chains. nvarc repair attempt withdrawn; do not close real mismatches as as-filed.",
-   "confirmed_error_rows": [
-    "ROW-805313e54fbbe696"
-   ],
-   "carried_from": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)"
-  },
-  {
-   "finding_id": "RVQ_BLK_341d2ddc90a6",
-   "coverage": {
-    "affected_rows": [
-     "ROW-43f7b16bce102ebd",
-     "ROW-23784f6253722c05",
-     "ROW-9927511d0cf3b445"
-    ],
-    "reviewed_rows": [
-     "ROW-43f7b16bce102ebd",
-     "ROW-23784f6253722c05",
-     "ROW-9927511d0cf3b445"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-23-000021",
-     "text": " the pharmaceutical and biotechnology industries Ordinary A shares 05/2021 2,476,744 5.7 5.7 (2)(6) Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.91 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.1 (2)(11) Senior subordinated loan 8.00 % PIK 12/2022 06/2029 19.9 19.9 19.9 (2) 29.4 29.0 Amryt Pharmaceutic"
-    },
-    {
-     "accession": "0001287750-23-000021",
-     "text": "R (Q) 6.00 % 08/2022 08/2028 2.8 2.8 2.8 (2)(11) Class A units 08/2022 1,001 9.7 11.8 (2) 12.9 15.0 Pyramid-BMC IntermediateCo I, LLC and Pyramid Investors, LLC (15) Hotel operator First lien senior secured loan 12.85 % SOFR (Q) 8.00 % 01/2023 01/2027 7.7 7.7 7.5 (2)(11) Preferred membership units 07/2016 996,833 1.0 1.0 8.7 8.5 Redwood Services, LLC and Redwood Servic"
-    },
-    {
-     "accession": "0001287750-23-000021",
-     "text": "BOR (M) 4.00 % 12/2019 06/2024 1.6 1.6 1.6 (2)(11) Common stock 12/2019 861,000 6.0 0.3 (2) 9.8 3.8 Varsity Brands Holding Co., Inc., Hercules Achievement, Inc. and BCPE Hercules Holdings, LP Leading manufacturer and distributor of textiles, apparel & luxury goods First lien senior secured loan 9.87 % SOFR (M) 5.00 % 12/2017 12/2026 14.7 14.1 13.7 (2)(11)(18) Second lien senior secured loan 15.17 % ( 2.03 % PIK) SOFR (M) 10.25 % 07/2018 04/2027 144.1 144.1 "
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "Read every direct FV context row and prior issuer header; source artifact nvara_source_read.json.",
-    "15 false-positive rows across the population:10 OTG Participation rights,4 AHR business-description continuations,1 Endeavor business-description continuation.",
-    "131 source-header corrections across related population were staged; nvarc changed92 IDs and266 chain-membership rows. Withdrew167 name/instrument fields; nvard identity exactly equals nvarb.",
-    "nbar run 2026-11-11: currently flagged rows in nbare (scratch/fund_runs/0001287750/nbar_carry_compare.py nbare) equal the carried affected_rows exactly; investigation carried unchanged."
-   ],
-   "next_action": "Park exact source-confirmed name corrections until matcher can preserve distinct tranche chains. nvarc repair attempt withdrawn; do not close real mismatches as as-filed.",
-   "confirmed_error_rows": [
-    "ROW-43f7b16bce102ebd",
-    "ROW-23784f6253722c05",
-    "ROW-9927511d0cf3b445"
-   ],
-   "carried_from": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)"
-  },
-  {
-   "finding_id": "RVQ_BLK_cab275031954",
-   "coverage": {
-    "affected_rows": [
-     "ROW-9bdb8e5b5bca7a2f"
-    ],
-    "reviewed_rows": [
-     "ROW-9bdb8e5b5bca7a2f"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-23-000045",
-     "text": "t solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 40.6 40.6 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 10.9 12.7 (2) Class B common units 07/2022 100,000 0.1 0.1 (2) 51.6 53.4 AthenaHealth Group Inc., Minerva Holdco,"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Read every direct FV context row and prior issuer header; source artifact nvara_source_read.json.",
-    "15 false-positive rows across the population:10 OTG Participation rights,4 AHR business-description continuations,1 Endeavor business-description continuation.",
-    "131 source-header corrections across related population were staged; nvarc changed92 IDs and266 chain-membership rows. Withdrew167 name/instrument fields; nvard identity exactly equals nvarb.",
-    "nbar run 2026-11-11: currently flagged rows in nbare (scratch/fund_runs/0001287750/nbar_carry_compare.py nbare) equal the carried affected_rows exactly; investigation carried unchanged."
-   ],
-   "next_action": "Propose detector repair for business-description/participation-right continuation text; issuer header is inherited from the adjoining row.",
-   "confirmed_error_rows": [],
-   "carried_from": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)"
-  },
-  {
-   "finding_id": "RVQ_BLK_c0f022200d85",
-   "coverage": {
-    "affected_rows": [
-     "ROW-d92b14c3db5ff953",
-     "ROW-94d0cbf0b747e7fc"
-    ],
-    "reviewed_rows": [
-     "ROW-d92b14c3db5ff953",
-     "ROW-94d0cbf0b747e7fc"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-24-000011",
-     "text": " First lien senior secured loan 11.87 % SOFR (Q) 6.25 % 08/2023 03/2027 7.6 7.6 7.4 (2)(11) 7.8 7.6 Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured loan 12.20 % SOFR (Q) 6.75 % 12/2022 12/2028 13.8 13.8 13.8 (2)(6)(11) First lien senior secured loan 11.50 % CDOR (Q) 6.00 % 11/2023 12/2028 1.1 1.1 1.2 (2)(6)(11) Class"
-    },
-    {
-     "accession": "0001287750-24-000011",
-     "text": "t lien senior secured loan 11.50 % CDOR (Q) 6.00 % 09/2023 02/2028 1.0 1.0 1.0 (2)(6)(11) 70.2 68.4 Riser Interco, LLC (15) Insurance program administrator First lien senior secured loan 11.19 % SONIA (Q) 6.00 % 10/2023 10/2029 1.1 1.0 1.1 (2)(11) First lien senior secured loan 11.35 % SOFR (Q) 6.00 % 10/2023 10/2029 7.6 7.6 7.4 (2)(11) 8.6 8.5 "
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "Read every direct FV context row and prior issuer header; source artifact nvara_source_read.json.",
-    "15 false-positive rows across the population:10 OTG Participation rights,4 AHR business-description continuations,1 Endeavor business-description continuation.",
-    "131 source-header corrections across related population were staged; nvarc changed92 IDs and266 chain-membership rows. Withdrew167 name/instrument fields; nvard identity exactly equals nvarb.",
-    "nbar run 2026-11-11: currently flagged rows in nbare (scratch/fund_runs/0001287750/nbar_carry_compare.py nbare) equal the carried affected_rows exactly; investigation carried unchanged."
-   ],
-   "next_action": "Park exact source-confirmed name corrections until matcher can preserve distinct tranche chains. nvarc repair attempt withdrawn; do not close real mismatches as as-filed.",
-   "confirmed_error_rows": [
-    "ROW-d92b14c3db5ff953",
-    "ROW-94d0cbf0b747e7fc"
-   ],
-   "carried_from": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)"
-  },
-  {
-   "finding_id": "RVQ_BLK_c3c2666634a7",
-   "coverage": {
-    "affected_rows": [
-     "ROW-9db68e8a9ef6ffe7"
-    ],
-    "reviewed_rows": [
-     "ROW-9db68e8a9ef6ffe7"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-24-000028",
-     "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.0 8.0 7.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the resident"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Read every direct FV context row and prior issuer header; source artifact nvara_source_read.json.",
-    "15 false-positive rows across the population:10 OTG Participation rights,4 AHR business-description continuations,1 Endeavor business-description continuation.",
-    "131 source-header corrections across related population were staged; nvarc changed92 IDs and266 chain-membership rows. Withdrew167 name/instrument fields; nvard identity exactly equals nvarb.",
-    "nbar run 2026-11-11: currently flagged rows in nbare (scratch/fund_runs/0001287750/nbar_carry_compare.py nbare) equal the carried affected_rows exactly; investigation carried unchanged."
-   ],
-   "next_action": "Propose detector repair for business-description/participation-right continuation text; issuer header is inherited from the adjoining row.",
-   "confirmed_error_rows": [],
-   "carried_from": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)"
-  },
-  {
-   "finding_id": "RVQ_BLK_d1fa4e536429",
-   "coverage": {
-    "affected_rows": [
-     "ROW-9e915f66f980dba4",
-     "ROW-7816323a4a05ffe3"
-    ],
-    "reviewed_rows": [
-     "ROW-9e915f66f980dba4",
-     "ROW-7816323a4a05ffe3"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-24-000039",
-     "text": "t solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 44.7 44.7 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 11.5 12.2 (2) Class B common units 07/2022 100,000 0.1 0.1 (2) 56.3 57.0 Amerivet Partners Management, Inc. and A"
-    },
-    {
-     "accession": "0001287750-24-000039",
-     "text": "Holdings, LLC Airport restaurant operator Second lien notes 10.00 % 02/2024 02/2031 8.0 8.0 7.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the resident"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Read every direct FV context row and prior issuer header; source artifact nvara_source_read.json.",
-    "15 false-positive rows across the population:10 OTG Participation rights,4 AHR business-description continuations,1 Endeavor business-description continuation.",
-    "131 source-header corrections across related population were staged; nvarc changed92 IDs and266 chain-membership rows. Withdrew167 name/instrument fields; nvard identity exactly equals nvarb.",
-    "nbar run 2026-11-11: currently flagged rows in nbare (scratch/fund_runs/0001287750/nbar_carry_compare.py nbare) equal the carried affected_rows exactly; investigation carried unchanged."
-   ],
-   "next_action": "Propose detector repair for business-description/participation-right continuation text; issuer header is inherited from the adjoining row.",
-   "confirmed_error_rows": [],
-   "carried_from": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)"
-  },
-  {
-   "finding_id": "RVQ_BLK_a0182d6e8c91",
-   "coverage": {
-    "affected_rows": [
-     "ROW-4baf254a71f11451",
-     "ROW-5ad062ab8e389c12"
-    ],
-    "reviewed_rows": [
-     "ROW-4baf254a71f11451",
-     "ROW-5ad062ab8e389c12"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-24-000054",
-     "text": "Endeavor Bidco LLC and Endeavor TopCo, Inc. Global securities finance trading platform First lien senior secured loan 9.38 % SOFR (Q) 4.25 % 08/2024 08/2029 6.1 6.1 6.0 (2)(11) Trading platform for securities finance Class A common units 08/2024 1,859 1.9 1.9 8.0 7.9 Envestnet, Inc. Provider of c"
-    },
-    {
-     "accession": "0001287750-24-000054",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.0 8.0 7.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo,"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: ROW-c65e2fd90d103f09 (Generator Buyer, Inc.) and ROW-f12123258d8f85ba (GSV Purchaser, Inc.) were published as 'Harvey Tool Company, LLC': context-keyed issuer corrections",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 2 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-5ad062ab8e389c12: 'Trading platform for securities finance'; ROW-4baf254a71f11451: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
-   ],
-   "next_action": "Check repair under deferred REQ-NBAR-1 (verification_bug): the 2 flagged row(s) are continuation lines or reordered entity lists of a correctly named company block; no data change and no disposition (a misfiring check is not a disposition, owner 2026-11-04)."
-  },
-  {
    "finding_id": "RVQ_BLK_5842e1a34f2e",
    "coverage": {
     "affected_rows": [
-     "ROW-06546d42fa1089b9",
-     "ROW-4400ac80c0a97bb6",
-     "ROW-47bfb0a649b581dc",
      "ROW-524aad83ed1c45bd",
+     "ROW-4400ac80c0a97bb6",
      "ROW-8704f9105506a971"
     ],
     "reviewed_rows": [
-     "ROW-06546d42fa1089b9",
-     "ROW-4400ac80c0a97bb6",
-     "ROW-47bfb0a649b581dc",
      "ROW-524aad83ed1c45bd",
+     "ROW-4400ac80c0a97bb6",
      "ROW-8704f9105506a971"
     ]
    },
    "evidence": [
     {
      "accession": "0001287750-25-000007",
-     "text": "Infinity Home Services Holdco, Inc., D'Angelo & Sons Construction Limited and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured revolving loan 12.00 % Base Rate (Q) 4.50 % 12/2022 12/2028 0.7 0.7 0.7 (2)(6)(11) First lien senior secured loan 9.84"
+     "text": "Murchison Holdings, LLC Exploration and production company Preferred units 06/2022 41,000 - 6.7 Offen, Inc. Distributor of fuel, lubricants, diesel exhaust fluid, and pre"
+    },
+    {
+     "accession": "0001287750-24-000054",
+     "text": "Murchison Oil and Gas, LLC and Murchison Holdings, LLC Exploration and production company First lien senior secured loan 13.13 % SOFR (Q) 8.25 % 06/2022 06/2026 57.3 57.3"
     },
     {
      "accession": "0001287750-25-000007",
-     "text": "Murchison Holdings, LLC Exploration and production company Preferred units 06/2022 41,000 - 6.7 Offen, Inc. Distributor of fuel, lubricants,"
+     "text": "NBLY 2021-1 and KKR Nest Co-Invest L.P. Operator of multiple franchise concepts primarily related to home maintenance or repairs Limited partner interest 09/2021 9,725,00"
     },
     {
      "accession": "0001287750-25-000007",
-     "text": "NBLY 2021-1 and KKR Nest Co-Invest L.P. Operator of multiple franchise concepts primarily related to home maintenance or repairs Limited partner interest 09/2021 9,725,000 9.7 12.1 (2) Neptune Bidco US Inc. and Elliott Metron Co-Investor Aggregator L.P. (15) Provider of audience insights, data and analytics to entertainment indu"
-    },
-    {
-     "accession": "0001287750-25-000007",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.0 8.0 7.0 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.0 PestCo Holdings, LLC and PestCo,"
-    },
-    {
-     "accession": "0001287750-25-000007",
-     "text": "Priority Technology Holdings, Inc. Provider of merchant acquiring and payment processing solutions Warrant to purchase shares of common stock 04/2021 04/2031 527,226 4.0 6.2 (2)(6)(18) RFS Opco LLC (15) Provider of wealth management services First lien senior secured loan 9.08 % SOFR (Q) 4.75 % 04/2024 04/2031 29.5 29.5 29.5 (2)"
+     "text": "Priority Technology Holdings, Inc. Provider of merchant acquiring and payment processing solutions Warrant to purchase shares of common stock 04/2021 04/2031 527,226 4.0"
     }
    ],
    "conclusion": "source_ambiguity",
    "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: ROW-2446ae370954592c (Dundee Eros, LP) carried its business description in the name: corrected to 'Dundee Eros, LP' / 'Limited partnership interest'",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 1 row(s) publish the filer's member name for the same borrower group in another legal form or with a shorter co-obligor list than the printed company line; every row of the block carries that name and the values and terms match the printed line (ROW-06546d42fa1089b9: published 'Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P.', printed 'Infinity Home Services Holdco, Inc., D'Angelo & Sons Construction Limited and IHS Parent Holdings, L.P.'); 3 row(s) are equity lines whose page prints a shorter group name in this one filing only; the published name (the filer's member) is what the page prints in every other quarter and contains the printed entity (ROW-8704f9105506a971: published 'Murchison Oil and Gas, LLC and Murchison Holdings, LLC', printed 'Murchison Holdings, LLC'; ROW-4400ac80c0a97bb6: published 'Nest Topco Borrower Inc., KKR Nest Co-Invest L.P., and NBLY 2021-1', printed 'NBLY 2021-1 and KKR Nest Co-Invest L.P.'; ROW-524aad83ed1c45bd: published 'Priority Holdings, LLC and Priority Technology Holdings, Inc.', printed 'Priority Technology Holdings, Inc.'); 1 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-47bfb0a649b581dc: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
+    "Each flagged row's printed line was read through its own fair-value context (arz_ctxrows.py; the printed row carrying contextRef = the row's src_context_id). Published name = the filer's member for that filing. Cross-quarter reading (arz_fam2.py, arz_names_by_quarter.py): what the group prints in every filing.",
+    "Murchison: the 2024-12-31 line for the preferred units prints only the holder 'Murchison Holdings, LLC'; all 15 other filings print 'Murchison Oil and Gas, LLC and Murchison Holdings, LLC' (the group published). Priority (warrant) and NBLY (LP interest) the same: one line in one filing prints the holding entity alone while the group's other lines and filings print the group name. Published equals the group name every other quarter; a correction would break the chain at both neighbours. Not corrected.",
+    "Infinity 2024-12-31 (earlier in this finding) is a rename lag and was corrected whole-block (6 rows), cleared in arzc."
    ],
-   "next_action": "Owner decision on deferred REQ-NBAR-2 (acceptance_change) for the 4 same-group name rows (legal-form / co-obligor variants and one-filing short group names); check repair under deferred REQ-NBAR-1 (verification_bug) for the 1 continuation-line and 0 reordered-name misfires. No disposition proposed: the carried nvard review called these mismatches confirmed and asked not to close them as as-filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_69cff9b0d03b",
-   "coverage": {
-    "affected_rows": [
-     "ROW-35571ac127f4cc08",
-     "ROW-4fc45b7f582fe37a",
-     "ROW-a64ff5ddaf0633a8"
-    ],
-    "reviewed_rows": [
-     "ROW-35571ac127f4cc08",
-     "ROW-4fc45b7f582fe37a",
-     "ROW-a64ff5ddaf0633a8"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-25-000020",
-     "text": "3 Step Sports LLC (14) Provider of integrated youth sports solutions First lien senior secured loan 12.30 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 11.7 (2)(10) Aventine Intermediate LLC & Aventine Holdings II LLC Media and production company First lien senior secured loan 10.40 % ( 3.00 % PIK) SOFR (Q) 6.00 % 12"
-    },
-    {
-     "accession": "0001287750-25-000020",
-     "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(10)(12) First lien senior secured loan 8.92 % SOFR (M) 4.50 % 08/2024 11/2"
-    },
-    {
-     "accession": "0001287750-25-000020",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 7.9 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 7.9 PestCo Holdings, LLC and PestCo,"
-    }
-   ],
-   "conclusion": "source_ambiguity",
-   "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: ROW-94ba1ab18f1fc445 (PCG-TAC-CV, LP, fka PCG-Ares Sidecar Investment II) was published as 'PCG-Ares Sidecar Investment, L.P.' and the Sidecar L.P. row as 'Sidecar II' (member swap): both corrected",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 2 row(s) publish the filer's member name for the same borrower group in another legal form or with a shorter co-obligor list than the printed company line; every row of the block carries that name and the values and terms match the printed line (ROW-35571ac127f4cc08: published '3 Step Sports LLC and 3 Step Holdings, LLC', printed '3 Step Sports LLC'; ROW-a64ff5ddaf0633a8: published 'Capstone Acquisition Holdings, Inc. and Capstone Parent Holdings, LP', printed 'Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP'); 1 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-4fc45b7f582fe37a: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
-   ],
-   "next_action": "Owner decision on deferred REQ-NBAR-2 (acceptance_change) for the 2 same-group name rows (legal-form / co-obligor variants and one-filing short group names); check repair under deferred REQ-NBAR-1 (verification_bug) for the 1 continuation-line and 0 reordered-name misfires. No disposition proposed: the carried nvard review called these mismatches confirmed and asked not to close them as as-filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_84ce425fbf99",
-   "coverage": {
-    "affected_rows": [
-     "ROW-3198b4875d6d6071",
-     "ROW-4f41fc5cda306314",
-     "ROW-680e2a3a1d789731",
-     "ROW-dbabc5a83a301f2a"
-    ],
-    "reviewed_rows": [
-     "ROW-3198b4875d6d6071",
-     "ROW-4f41fc5cda306314",
-     "ROW-680e2a3a1d789731",
-     "ROW-dbabc5a83a301f2a"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-25-000038",
-     "text": "3 Step Sports LLC (14) Provider of integrated youth sports solutions First lien senior secured revolving loan 12.32 % SOFR (M) 8.00 % 10/2023 10/2028 1.3 1.3 1.2 (2)(10) First lien senior secured loan 12.30 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 11.9 (2)(10) 13.8 13.1 Aventine Intermediate LLC & Aventine Holdi"
-    },
-    {
-     "accession": "0001287750-25-000038",
-     "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(12) First lien senior secured loan 8.93 % SOFR (M) 4.50 % 08/2024 11/2029"
-    },
-    {
-     "accession": "0001287750-25-000038",
-     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.83 % SOFR (M) 6.50 % 03/2025 03/2030 9.6 9.6 9.7 (2)(10)(17) Common units 03/2025 639,359 5.1 12.2 (2)(17) 14.7 21.9 NCP-MSI Buyer, Inc. and NCP MSI Co-Invest, LP (14)(15) Manufacturing and packaging company for major b"
-    },
-    {
-     "accession": "0001287750-25-000038",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 8.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo,"
-    }
-   ],
-   "conclusion": "source_ambiguity",
-   "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: ROW-22c28c221097388e (PCG swap, as 2025-03-31) and ROW-83ecf0d7f2593766 (Bellwether Buyer published as Benecon Midco II): corrected",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 3 row(s) publish the filer's member name for the same borrower group in another legal form or with a shorter co-obligor list than the printed company line; every row of the block carries that name and the values and terms match the printed line (ROW-dbabc5a83a301f2a: published '3 Step Sports LLC and 3 Step Holdings, LLC', printed '3 Step Sports LLC'; ROW-4f41fc5cda306314: published 'Capstone Acquisition Holdings, Inc. and Capstone Parent Holdings, LP', printed 'Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP'; ROW-680e2a3a1d789731: published 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings, LLC)', printed 'MP Midco Holdings, LLC and MP Topco Holdings, LLC'); 1 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-3198b4875d6d6071: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
-   ],
-   "next_action": "Owner decision on deferred REQ-NBAR-2 (acceptance_change) for the 3 same-group name rows (legal-form / co-obligor variants and one-filing short group names); check repair under deferred REQ-NBAR-1 (verification_bug) for the 1 continuation-line and 0 reordered-name misfires. No disposition proposed: the carried nvard review called these mismatches confirmed and asked not to close them as as-filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_90b4580dc765",
-   "coverage": {
-    "affected_rows": [
-     "ROW-0b6e4a69c95d3c00",
-     "ROW-187238af91b05c14",
-     "ROW-39d129f34637a07c",
-     "ROW-65a9d0038c5893d7",
-     "ROW-8ae09a8932fbc556",
-     "ROW-9dc0aff9e061d384",
-     "ROW-c55da5d355678972",
-     "ROW-f9046893d48efd4d"
-    ],
-    "reviewed_rows": [
-     "ROW-0b6e4a69c95d3c00",
-     "ROW-187238af91b05c14",
-     "ROW-39d129f34637a07c",
-     "ROW-65a9d0038c5893d7",
-     "ROW-8ae09a8932fbc556",
-     "ROW-9dc0aff9e061d384",
-     "ROW-c55da5d355678972",
-     "ROW-f9046893d48efd4d"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001287750-25-000046",
-     "text": "3 Step Sports LLC (13) Provider of integrated youth sports solutions First lien senior secured loan 12.01 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 12.3 (2)(9) Aventine Intermediate LLC & Aventine Holdings II LLC Media and production company First lien senior secured loan 10.10 % ( 3.50 % PIK) SOFR (Q) 6.00 % 12/"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "AHR Funding Holdings, Inc. and AHR Parent Holdings, LP Provider of revenue cycle management solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 52.1 52.1 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 12.7 11.6 (2) Class B common units"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, Ardonagh Finco LLC, Ardonagh Finco B.V., and MDCP Co-Investors (Jade I), L.P. Insurance broker and underwriting servicer First lien senior secured loan 6.94 % SOFR (Q) 2.75 % 01/2025 02/2031 35.9 35.9 35.7 (2)(6)(16) Limited partnership interest 06/2025 17,510,000 24.1"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (13) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(9)(11) First lien senior secured loan 8.76 % SOFR (M) 4.50 % 08/2024 11/20"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.81 % SOFR (Q) 6.50 % 03/2025 03/2030 9.6 9.6 9.7 (2)(9)(16) Common units 03/2025 639,359 5.1 12.9 (2)(16) 14.7 22.6 NCP-MSI Buyer, Inc. and NCP MSI Co-Invest, LP (13)(14) Manufacturing and packaging company for major br"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 8.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo,"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "Precision Concepts Parent Inc., Precision Concepts International LLC, and Precision Concepts Canada Corporation (13) Manufacturer of diversified packaging solutions and plastic injection molded products First lien senior secured loan 8.95 % SOFR (Q) 4.75 % 07/2025 08/2032 18.6 18.6 18.4 (2)(6)(9) Reagent Chemical & Research, LLC"
-    },
-    {
-     "accession": "0001287750-25-000046",
-     "text": "Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP (13) Provider of global transportation safety and productivity applications First lien senior secured revolving loan 06/2025 02/2031 - - - (2)(9)(11) First lien senior secured loan 9.14 % SOFR (M) 5.00 % 06/2025 02/2032 147.4 147.4 147.4 (2)(9) Class"
-    }
-   ],
-   "conclusion": "source_ambiguity",
-   "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: 12 rows fixed: 9 with the instrument glued to the name (Doxim x2, Sport Maska x3, Zeppelin x2, Phoenix, Titan BW, plus MC Accelerate Z1/Z2 whose member labels both 'Z2') by the wrapper strip and two context corrections; PCG-TAC-CV swap (ROW-8e82d60abf73d693); Premise Health revolver published as PetVet (ROW-ba5ad5681ef87d8c); 'CCreek' typo rows (now unflagged by the rule's own repair too)",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 6 row(s) publish the filer's member name for the same borrower group in another legal form or with a shorter co-obligor list than the printed company line; every row of the block carries that name and the values and terms match the printed line (ROW-39d129f34637a07c: published '3 Step Sports LLC and 3 Step Holdings, LLC', printed '3 Step Sports LLC'; ROW-f9046893d48efd4d: published 'Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, and MDCP Co-Investors (Jade I), L.P.', printed 'Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, Ardonagh Finco LLC, Ardonagh Finco B.V., and MDCP Co-Investors (Jade I), L.P.'; ROW-9dc0aff9e061d384: published 'Capstone Acquisition Holdings, Inc. and Capstone Parent Holdings, LP', printed 'Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP'; ROW-65a9d0038c5893d7: published 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings, LLC)', printed 'MP Midco Holdings, LLC and MP Topco Holdings, LLC'; ROW-8ae09a8932fbc556: published 'Precision Concepts International LLC and Precision Concepts Canada Corporation', printed 'Precision Concepts Parent Inc., Precision Concepts International LLC, and Precision Concepts Canada Corporation'; ROW-0b6e4a69c95d3c00: published 'Truck-Lite Co., LLC, Ecco Holdings Corp. and Clarience Technologies, LLC', printed 'Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP'); 2 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-187238af91b05c14: 'Provider of Revenue Cycle Management solutions to hospitals'; ROW-c55da5d355678972: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
-   ],
-   "next_action": "Owner decision on deferred REQ-NBAR-2 (acceptance_change) for the 6 same-group name rows (legal-form / co-obligor variants and one-filing short group names); check repair under deferred REQ-NBAR-1 (verification_bug) for the 2 continuation-line and 0 reordered-name misfires. No disposition proposed: the carried nvard review called these mismatches confirmed and asked not to close them as as-filed."
+   "next_action": "Owner ruling on REQ-NBAR-2 for 3 rows of this shape (line prints the held entity only, one filing). No disposition proposed; not a check misfire."
   },
   {
    "finding_id": "RVQ_BLK_025a8155c6fc",
    "coverage": {
     "affected_rows": [
-     "ROW-11688b200b4348f6",
-     "ROW-14a12cb2fbbdc1e4",
-     "ROW-350011f5c036882a",
-     "ROW-5d42fa039f4b906c",
-     "ROW-743994c2da334caf",
-     "ROW-92387b1949aa7a57",
-     "ROW-95182b19a3967ba0",
-     "ROW-b8bd5f823ab6d669",
-     "ROW-d1f333aa71788b92",
-     "ROW-d7acc849a7e7c4fb",
-     "ROW-f67aa78083e5486b"
+     "ROW-11688b200b4348f6"
     ],
     "reviewed_rows": [
-     "ROW-11688b200b4348f6",
-     "ROW-14a12cb2fbbdc1e4",
-     "ROW-350011f5c036882a",
-     "ROW-5d42fa039f4b906c",
-     "ROW-743994c2da334caf",
-     "ROW-92387b1949aa7a57",
-     "ROW-95182b19a3967ba0",
-     "ROW-b8bd5f823ab6d669",
-     "ROW-d1f333aa71788b92",
-     "ROW-d7acc849a7e7c4fb",
-     "ROW-f67aa78083e5486b"
+     "ROW-11688b200b4348f6"
     ]
    },
    "evidence": [
     {
      "accession": "0001287750-26-000006",
-     "text": "AHR Funding Holdings, Inc. and AHR Parent Holdings, LP Provider of revenue cycle management solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 53.8 53.8 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 13.0 12.1 (2) Class B common units"
+     "text": "NCWS Holdings LP Manufacturer and supplier of car wash equipment, parts and supplies to the conveyorized car wash market Class A-2 common units 12/2020 12,296,000 12.9 2."
     },
     {
-     "accession": "0001287750-26-000006",
-     "text": "Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, Ardonagh Finco LLC, Ardonagh Finco B.V., and MDCP Co-Investors (Jade I), L.P. Insurance broker and underwriting servicer Limited partnership interest 06/2025 17,510,000 24.1 26.3 (2)(6) Bellwether Buyer, L.L.C. and Bellwether Topco V Buyer, Inc. (13) Insurance program a"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (13) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(11) First lien senior secured loan 8.32 % SOFR (M) 4.50 % 08/2024 11/2029"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "ESHA Intermediate, LLC (13) Provider of nutritional information and software as a services (SaaS) compliance solutions First lien senior secured loan 8.44 % SOFR (Q) 4.75 % 12/2025 12/2032 22.3 22.3 22.2 (2)(9) Extrahop Networks, Inc. (13) Provider of real-time wire data analytics solutions for application and infrastructure mon"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "Higginbotham Insurance Agency, Inc., HIG Operations Holdings, Inc., and HIG Intermediate, Inc. (13) Independent retail insurance broker First lien senior secured loan 8.22 % SOFR (M) 4.50 % 08/2023 06/2031 9.1 9.1 9.1 (2)(9) Series A preferred shares 10.50 % 12/2024 1,000 1.0 1.0 (2) 10.1 10.1 High Street Buyer, Inc. and High St"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.34 % SOFR (Q) 6.50 % 03/2025 03/2030 8.9 8.9 9.0 (2)(9)(16) Common units 03/2025 639,359 4.8 9.7 (2)(16) 13.7 18.7 NCP-MSI Buyer, Inc. and NCP MSI Co-Invest, LP (13)(14) Manufacturing and packaging company for major bra"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "Mustang Prospects Purchaser, LLC, Senske Acquisition, Inc., and Mustang Prospects Holdco, LLC (13) Provider of lawn care, tree care and pest control services First lien senior secured revolving loan 8.72 % SOFR (M) 5.00 % 06/2024 06/2031 0.3 0.3 0.3 (2)(9)(12) First lien senior secured loan 8.69 % SOFR (Q) 5.00 % 06/2024 06/2031"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "NCWS Holdings LP Manufacturer and supplier of car wash equipment, parts and supplies to the conveyorized car wash market Class A-2 common units 12/2020 12,296,000 12.9 2.3 (2) OPH NEP Investment, LLC (4) Provider of energy services for multi-family property owners, developers, and managers Senior subordinated loan 10.00 % ( 7.00"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 8.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo,"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC (13) Wealth management platform First lien senior secured loan 8.47 % SOFR (M) 4.75 % 12/2023 10/2028 4.9 4.8 4.9 (2)(6)(9) First lien senior secured loan 8.47 % SOFR (M)"
-    },
-    {
-     "accession": "0001287750-26-000006",
-     "text": "Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP (13) Provider of global transportation safety and productivity applications First lien senior secured revolving loan 06/2025 02/2031 - - - (2)(11) First lien senior secured loan 8.48 % SOFR (M) 4.75 % 06/2025 02/2032 149.7 149.7 149.7 (2)(9) Class A"
+     "accession": "0001287750-25-000046",
+     "text": "NCWS Intermediate, Inc. and NCWS Holdings LP Manufacturer and supplier of car wash equipment, parts and supplies to the conveyorized car wash market Class A-2 common unit"
     }
    ],
    "conclusion": "source_ambiguity",
    "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: 8 rows fixed: Doxim x2, Sport Maska x2, Zeppelin, MC Accelerate Z1 (instrument glued to name, wrapper strip); PCG-TAC-CV swap (ROW-a9711f923926885e); 'CCreek' typo (ROW-b3618e79efac3798); Zeppelin c-1832 (ROW-0e3478bdc6071267) instrument set to the printed 'First lien senior secured loan' (the strip had copied the member's wrong 'revolving' word)",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 7 row(s) publish the filer's member name for the same borrower group in another legal form or with a shorter co-obligor list than the printed company line; every row of the block carries that name and the values and terms match the printed line (ROW-92387b1949aa7a57: published 'Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, and MDCP Co-Investors (Jade I), L.P.', printed 'Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, Ardonagh Finco LLC, Ardonagh Finco B.V., and MDCP Co-Investors (Jade I), L.P.'; ROW-95182b19a3967ba0: published 'Capstone Acquisition Holdings, Inc. and Capstone Parent Holdings, LP', printed 'Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP'; ROW-d1f333aa71788b92: published 'ESHA Research, LLC and RMCF VI CIV XLVIII, L.P.', printed 'ESHA Intermediate, LLC'; ROW-14a12cb2fbbdc1e4: published 'Higginbotham Insurance Agency, Inc. and HIG Intermediate, Inc.', printed 'Higginbotham Insurance Agency, Inc., HIG Operations Holdings, Inc., and HIG Intermediate, Inc.'; ROW-350011f5c036882a: published 'MP Midco Holdings, LLC and MP Topco Holdings, LLC (fka H-Food Holdings, LLC)', printed 'MP Midco Holdings, LLC and MP Topco Holdings, LLC'; ROW-11688b200b4348f6: published 'NCWS Intermediate, Inc. and NCWS Holdings LP', printed 'NCWS Holdings LP'; ROW-d7acc849a7e7c4fb: published 'Truck-Lite Co., LLC, Ecco Holdings Corp. and Clarience Technologies, LLC', printed 'Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP'); 2 row(s) are check misfires: the published name lists the same entities as the printed line in another order (ROW-f67aa78083e5486b: published 'Mustang Prospects Holdco, LLC, Mustang Prospects Purchaser, LLC and Senske Acquisition, Inc.', printed 'Mustang Prospects Purchaser, LLC, Senske Acquisition, Inc., and Mustang Prospects Holdco, LLC'; ROW-5d42fa039f4b906c: published 'Steward Partners Global Advisory, LLC, Steward Partners Intermediate II, LLC, Steward Partners Investment Advisory, LLC, and Steward Partners New Holdings, LLC', printed 'Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC'); 2 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-743994c2da334caf: 'Provider of Revenue Cycle Management solutions to hospitals'; ROW-b8bd5f823ab6d669: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
+    "Each flagged row's printed line was read through its own fair-value context (arz_ctxrows.py; the printed row carrying contextRef = the row's src_context_id). Published name = the filer's member for that filing. Cross-quarter reading (arz_fam2.py, arz_names_by_quarter.py): what the group prints in every filing.",
+    "NCWS: the 2025-12-31 line for the Class A-2 units prints 'NCWS Holdings LP' alone; the other 15 filings print 'NCWS Intermediate, Inc. and NCWS Holdings LP'. Same shape as Murchison/Priority/NBLY. Not corrected.",
+    "MP Midco (earlier in this finding) corrected whole-block in arzd after the independent review (the page drops '(fka H-Food Holdings, LLC)' from 2025-06-30; member-lag pattern); cleared. Ardonagh, Capstone, ESHA, Higginbotham, Truck-Lite likewise cleared in arzb/arzc."
    ],
-   "next_action": "Owner decision on deferred REQ-NBAR-2 (acceptance_change) for the 7 same-group name rows (legal-form / co-obligor variants and one-filing short group names); check repair under deferred REQ-NBAR-1 (verification_bug) for the 2 continuation-line and 2 reordered-name misfires. No disposition proposed: the carried nvard review called these mismatches confirmed and asked not to close them as as-filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_bba6b0998b9f",
-   "coverage": {
-    "affected_rows": [
-     "ROW-8755243e66aca46f",
-     "ROW-908468be9ba9e5cb",
-     "ROW-e74774628443e37c"
-    ],
-    "reviewed_rows": [
-     "ROW-8755243e66aca46f",
-     "ROW-908468be9ba9e5cb",
-     "ROW-e74774628443e37c"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001628280-26-027688",
-     "text": "Elemica, Inc. and EZ Elemica Holdings, Inc. (13) SaaS based supply chain management software provider focused on chemical markets First lien senior secured loan 8.45 % SOFR (Q) 4.75 % 02/2026 02/2032 113.0 113.0 110.8 (2)(9) Preferred equity 09/2019 4,599 4.6 5.0 (2) 117.6 115.8 EP Purchaser, LLC and TPG VIII EP Co-Invest II, L."
-    },
-    {
-     "accession": "0001628280-26-027688",
-     "text": "Merit Financial Group, LLC and CWC Fund I (MFA) LP (13) Registered investment adviser platform First lien senior secured revolving loan 8.42 % SOFR (Q) 4.75 % 08/2025 08/2032 0.8 0.8 0.8 (2)(6)(9) First lien senior secured revolving loan 10.50 % Base Rate (Q) 3.75 % 08/2025 08/2032 0.5 0.5 0.5 (2)(6)(9) First lien senior secured"
-    },
-    {
-     "accession": "0001628280-26-027688",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 9.7 9.7 8.7 (2) Participation rights 02/2024 02/2054 1 - - (2) 9.7 8.7 See accompanying notes to consoli"
-    }
-   ],
-   "conclusion": "source_ambiguity",
-   "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: ROW-17c860bedf56f223: Einstein Parent's 45.0 term loan was published as 'Elemica Parent, Inc.': corrected; ROW-0c096671554c3cad: GHX block renamed from the page to 'GHX Ultimate Parent Corporation and Nexus TopCo LP' (all 3 rows, c-570..c-572; c-572 instrument Class A -> printed Class C units)",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 2 row(s) publish the filer's member name for the same borrower group in another legal form or with a shorter co-obligor list than the printed company line; every row of the block carries that name and the values and terms match the printed line (ROW-e74774628443e37c: published 'Elemica Parent, Inc. & EZ Elemica Holdings, Inc.', printed 'Elemica, Inc. and EZ Elemica Holdings, Inc.'; ROW-8755243e66aca46f: published 'Merit Financial Group, LLC and CWC Fund I Co-Invest (MFA) LP', printed 'Merit Financial Group, LLC and CWC Fund I (MFA) LP'); 1 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-908468be9ba9e5cb: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
-   ],
-   "next_action": "Owner decision on deferred REQ-NBAR-2 (acceptance_change) for the 2 same-group name rows (legal-form / co-obligor variants and one-filing short group names); check repair under deferred REQ-NBAR-1 (verification_bug) for the 1 continuation-line and 0 reordered-name misfires. No disposition proposed: the carried nvard review called these mismatches confirmed and asked not to close them as as-filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_e8bc75fbdf5d",
-   "coverage": {
-    "affected_rows": [
-     "ROW-b54027f8357f1219"
-    ],
-    "reviewed_rows": [
-     "ROW-b54027f8357f1219"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001628280-26-050307",
-     "text": "OTG Concessions Management, LLC and Octa Parent Holdings, LLC Airport restaurant operator Second lien notes 02/2024 02/2031 9.7 9.7 7.3 (2)(8) Participation rights 02/2024 02/2054 1 - - (2) 9.7 7.3 PestCo Holdings, LLC and PestCo,"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Untouched rebuild nbara flagged the same rows as the carried nvard investigation except where this run's fixes removed them: ROW-3bf372af9e5cdae7 (and its unflagged sibling ROW-67fcbc80fcf83632): YE Brands Holdings' two loans were published as 'Vista Higher Learning, LLC': corrected; ROW-7a4b13d45d7662af (Fly Wheel Acquireco, printed 'FlyWheel Acquireco') is no longer flagged by the repaired spacing check and its values match the page; ROW-24f57db18696412f: Paris block renamed from the page to 'Paris US Holdco, Inc. and Trimaster Manufacturing Inc.' (all 3 rows, c-1300..c-1302)",
-    "Every row still flagged in nbare was read on the page (scratch/fund_runs/0001287750/nbar_name_evidence.py nbare -> nbare_name_evidence.json): 1 row(s) are check misfires: the rule compares the published company with a continuation line of the same company block (ROW-b54027f8357f1219: 'Participation rights').",
-    "Wrong-company test: for each still-flagged name-variant row the printed block's other rows are published under the same member name and the printed business description, rate terms, maturity, par, cost and fair value of the row match the published row (nbar_remaining_names.py); none names a different borrower, unlike the fixed rows. Renamed-group test (independent review of nbard): GHX 2026-03-31 and Paris 2026-06-30 print a new holding entity from that quarter onward (Nexus TopCo LP, Trimaster Manufacturing Inc.), so their whole blocks were renamed from the page in nbare; Priority, Murchison and NBLY 2024-12-31 print a shorter group name in that filing only (every other quarter prints the published name), so they were not renamed (a one-quarter rename would split their chains).",
-    "Whole-block rename tested and not done: renaming only the flagged first row would split the company within the quarter (its siblings carry the member name); renaming whole blocks to each quarter's printed form changes names across quarters where the filer prints different forms (Infinity Home 2023-12-31 vs 2024-12-31), the identity churn that made the nvarc run withdraw 167 fields."
-   ],
-   "next_action": "Check repair under deferred REQ-NBAR-1 (verification_bug): the 1 flagged row(s) are continuation lines or reordered entity lists of a correctly named company block; no data change and no disposition (a misfiring check is not a disposition, owner 2026-11-04)."
+   "next_action": "Owner ruling on REQ-NBAR-2 for this row (line prints the held entity only, one filing). No disposition proposed."
   }
  ],
  "outstanding": {
@@ -2071,25 +1730,39 @@
   ]
  },
  "tests_run": [
-  "tests/test_ares_issuer_name_strip.py: 16 passed",
-  "tests/test_ares_issuer_name_strip.py tests/test_verdict_retirements.py tests/test_bdc_xbrl_wrapper.py: 1 failed, 584 passed in 50.92s (the failure is test_the_recorded_store_loads, which asserts the store holds only owner_2026-11-10.json + standing_rule_2026-11-10.json; it already failed before this run because of the unclear_v05, BCRED and Blue Owl fund-loop files: 379 != 334 without this run's 13 entries; fixture not changed)"
+  "no tests run in this run (data corrections only); nbare's tests/test_ares_issuer_name_strip.py unchanged"
  ],
  "not_done": [
-  "No disposition proposals written (see deferred REQ-NBAR-2).",
-  "Same-group name rows not renamed: 27 legal-form / co-obligor variants, 3 one-filing short group names (Priority, Murchison, NBLY 2024-12-31); 2 reordered-name and 15 continuation rows are check misfires.",
-  "Earlier quarters' name rows carried without re-reading (6 findings whose flagged rows equal the carried coverage).",
-  "No full pytest suite, cohort regression, semantic diff or quarter re-attestation; sandbox only, nothing folded back.",
-  "Sport Maska chain link not repaired (no fund-level tool).",
-  "Zeppelin 2025-12-31 c-1832 instrument_type still Revolver (shared classifier reads the filer tag before corrections; instrument_type not correctable; no shared code changed)."
+  "No disposition proposed. The 4 rows still flagged (Murchison, NBLY, Priority 2024-12-31; NCWS 2025-12-31) are not corrected: the published name is the filer's member for the group and equals what every other filing prints; the page prints the held entity alone on that one line (reviewer supported parking). They wait for the owner's ruling on REQ-NBAR-2 (now 4 rows, 1 shape).",
+  "6 cosmetic instruments (Argenbright c-661/c-680/c-553 'Senior subordinated loan 1'; Cascade c-68/c-69 'Loans'; Cardinal c-64 'Series A-2preferred shares') not changed: the correction csv is being rewritten by another session (BCRED), so no in-place edit of my records; the member's numbering/typo is left. Optional per the coordinator.",
+  "Rollup check is by dimension-prefix and group sum plus the 16 of 16 tie, not a line-by-line comparison of every issuer's printed subtotal with its components.",
+  "No full pytest suite, cohort regression, semantic diff or quarter re-attestation; sandbox only, nothing folded back. No shared code, no new tests (data corrections only).",
+  "Sport Maska chain link and Zeppelin c-1832 instrument_type remain parked (earlier run).",
+  "The 5 check-repair findings were confirmed cleared in the arza sandbox ledger; production clears them only in the next batch."
  ],
  "counts_reproduce": {
   "outstanding": "findings_ledger.csv of nbare (awk over state)",
   "flagged_name_rows": "python scratch/fund_runs/0001287750/nbar_carry_compare.py nbare",
   "field_diff": "python scripts/v05_evidence/holdings_field_diff.py nbare nvard"
  },
- "previous_run": {
-  "label": "nvard",
-  "report": "docs/investigations/v05_readings/reports/0001287750.json (nvard, git 731ea8bc; copy scratch/fund_runs/0001287750/nvard_report_archive.json)",
-  "shared_code_then": true
+ "previous_run": "nbar run 2026-11-11 (nbare, D-257); report archived at scratch/fund_runs/0001287750/nbare_report_archive.json",
+ "cleared_findings_arzc": {
+  "repaired_check_REQ-NBAR-1_NBAS-1 (cleared in untouched arza, commit d98fa92d)": [
+   "RVQ_BLK_cab275031954 (2023-09-30)",
+   "RVQ_BLK_c3c2666634a7 (2024-03-31)",
+   "RVQ_BLK_d1fa4e536429 (2024-06-30)",
+   "RVQ_BLK_a0182d6e8c91 (2024-09-30)",
+   "RVQ_BLK_e8bc75fbdf5d (2026-06-30)"
+  ],
+  "fixed_at_fund_level (cleared in arzb/arzc)": [
+   "RVQ_BLK_fc83027d0a56 (2022-12-31, Alcami)",
+   "RVQ_BLK_341d2ddc90a6 (2023-03-31, Alcami, Pyramid, Varsity)",
+   "RVQ_BLK_c0f022200d85 (2023-12-31, Infinity, Riser)",
+   "RVQ_BLK_69cff9b0d03b (2025-03-31, 3 Step, Capstone)",
+   "RVQ_BLK_bba6b0998b9f (2026-03-31, Elemica, Merit)",
+   "RVQ_BLK_84ce425fbf99 (2025-06-30, MP Midco; arzd)",
+   "RVQ_BLK_90b4580dc765 (2025-09-30, MP Midco, 3 Step, Ardonagh, Capstone, Precision, Truck-Lite; arzd)"
+  ],
+  "note": "key name kept from arzc; contents updated for arzd"
  }
 }

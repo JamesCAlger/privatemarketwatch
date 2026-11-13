@@ -1,0 +1,398 @@
+{
+ "reviewer_id": "agent:reviewer-bcred-20261113-opus",
+ "report_digest": "81ea3740e31edf9e85e2c3896dc1f7de1473da9f9c95b29fce082893d516531e",
+ "subject": {
+  "cik": "0001803498",
+  "label": "bczc",
+  "before": "nbbcc",
+  "report": "docs/investigations/v05_readings/reports/0001803498.json",
+  "ledger": "scratch/fund_sandbox/bczc/findings_ledger.csv (production reference b1112b)"
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_e89d777120f0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F28 is fund-level; ledger b1112b and sandbox bczc carry exactly one open F28 finding at 2022-03-31, matching the key 0001803498/2022-03-31/fund_financials_vs_holdings_presence. Confirmed gap. Cache search: data/raw/filings/bdc_xbrl/1803498 holds 000180349822000017.xml (19,982 bytes; only dei cover facts plus cef:InvestmentObjectivesAndPracticesTextBlock, 0 InvestmentIdentifierAxis / InvestmentOwnedAtFairValue facts) and no file for 0001803498-22-000013 (bdc_filings_index xbrl_download_status not_found). The index lists no 10-Q/A for either quarter; the cached SEC BDC data sets start at 2022q4_bdc.zip; the 2022-09-30 10-Q XML (22-000021) carries no 2022-03-31 or 2022-06-30 schedule contexts (its comparatives are 2021-12-31). Publication path: nothing in unified_holdings, holdings_finalizer or staging reads html_extraction_holdings.csv (HTML_EXTRACTION_FILE is read only by html_extract itself and interval_source_review); bdc_xbrl_html_bridge is keyed on an existing XBRL identifier and cannot create rows for a quarter with no XBRL schedule. Tie re-run independently (review/rv_html_tie.py, extract_filing with the cached v3 template): 2022-03-31 634 position-like rows, non-cash 37,777,473 vs printed 37,777,474, with cash 39,420,454 vs 39,420,455; 2022-06-30 715 rows, with cash 47,870,343 vs 47,870,332; investments only 46,225,957 vs printed 46,225,946 once the State Street money market fund row (140,579, printed as a cash equivalent) is excluded. No exact duplicate (identifier, FV) rows. 12 sampled rows (rv_html_sample.py, seed 20261113) match the printed line on par, cost, FV, rate and maturity (e.g. WHCG Purchaser III, Byjus Alpha). The extract carries no industry, investment_type, spread or reference rate (all blank), and puts a money market fund among positions: publishing needs the new stage the investigator describes. Net assets: 17,902,407 and 20,970,712 thousand printed, so ~$17.9bn and ~$21.0bn; the investigator's correction of the orchestrator's $4.9bn is right. Minor: the 2022-03-31 entry's first hypothesis names the 22-000017 XML (the Q2 file); its conclusion for Q1 (no XBRL cached) is still correct.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total Investment Portfolio $ 37,776,621 $ 37,777,474 211.01 % Cash and Cash Equivalents Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %"
+    },
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total net assets 17,902,407"
+    },
+    {
+     "accession": "0001803498-22-000013",
+     "text": "6/22/2028 104,770 102,522 103,402"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8788b4b75ff1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F28 is fund-level; ledger b1112b and sandbox bczc carry exactly one open F28 finding at 2022-06-30, matching the key 0001803498/2022-06-30/fund_financials_vs_holdings_presence. Confirmed gap. Cache search: data/raw/filings/bdc_xbrl/1803498 holds 000180349822000017.xml (19,982 bytes; only dei cover facts plus cef:InvestmentObjectivesAndPracticesTextBlock, 0 InvestmentIdentifierAxis / InvestmentOwnedAtFairValue facts) and no file for 0001803498-22-000013 (bdc_filings_index xbrl_download_status not_found). The index lists no 10-Q/A for either quarter; the cached SEC BDC data sets start at 2022q4_bdc.zip; the 2022-09-30 10-Q XML (22-000021) carries no 2022-03-31 or 2022-06-30 schedule contexts (its comparatives are 2021-12-31). Publication path: nothing in unified_holdings, holdings_finalizer or staging reads html_extraction_holdings.csv (HTML_EXTRACTION_FILE is read only by html_extract itself and interval_source_review); bdc_xbrl_html_bridge is keyed on an existing XBRL identifier and cannot create rows for a quarter with no XBRL schedule. Tie re-run independently (review/rv_html_tie.py, extract_filing with the cached v3 template): 2022-03-31 634 position-like rows, non-cash 37,777,473 vs printed 37,777,474, with cash 39,420,454 vs 39,420,455; 2022-06-30 715 rows, with cash 47,870,343 vs 47,870,332; investments only 46,225,957 vs printed 46,225,946 once the State Street money market fund row (140,579, printed as a cash equivalent) is excluded. No exact duplicate (identifier, FV) rows. 12 sampled rows (rv_html_sample.py, seed 20261113) match the printed line on par, cost, FV, rate and maturity (e.g. WHCG Purchaser III, Byjus Alpha). The extract carries no industry, investment_type, spread or reference rate (all blank), and puts a money market fund among positions: publishing needs the new stage the investigator describes. Net assets: 17,902,407 and 20,970,712 thousand printed, so ~$17.9bn and ~$21.0bn; the investigator's correction of the orchestrator's $4.9bn is right. Minor: the 2022-03-31 entry's first hypothesis names the 22-000017 XML (the Q2 file); its conclusion for Q1 (no XBRL cached) is still correct.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Other Cash and Cash Equivalents 1,503,807 1,503,807 7.17 Total Portfolio Investments, Cash and Cash Equivalents $ 48,785,413 $ 47,870,332 228.27 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Total Investment Portfolio $ 47,141,027 $ 46,225,946 220.43 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "State Street Institutional U.S. Government Money Market Fund"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Total net assets 20,970,712"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "11/5/2026 93,701 91,139 80,114"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5a7ac8ea794a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Earlier rejection (bczb) resolved. Coverage: bczc output/shadow/page_rule_findings.csv flags exactly ROW-6900c35a75241a00 (published 'Minerva Merger Sub, Inc.', the XBRL member of context i0bf60ca65f644ec79a3a1197c87a1ea0_I20220930) and ROW-fb32f9352d6dcfba (member 'Petco Health & Wellness Co, Inc.'), same as bczb; the bczc fix did not touch 2022-09-30. Published par/cost/FV/maturity match both printed lines. Minerva: confirmed error under the printed-name convention (stale pre-merger issuer name). Petco: filer truncation; its route is now owner request REQ-bcz-1 (acceptance_change). Mechanism now correct in the report and in DC-0001803498-61bbc13f5c: bcza edge B2_exact_name, PA ratio 5.17 and NULL begin spread rule out both amendment escapes, the veto passes because maturity_precision is 'unknown' on every dated BCRED row (re-checked: 22,361 ixbrl_field_status + 9 null-source). Next action names the real options (precision source list in precision_value with a cohort re-match, or a precision-independent fixed/floating veto) and keeps the regression fixture; parking is right because both are shared code. The Tier A case-folding side defect is now recorded in the chain observation.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "athenahealth, Inc. (7)(9) SOFR + 3.50 % 7.82 % 2/15/2029 36,931 36,518 33,015"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-26-000048",
+     "text": "Point Broadband Holdings, LLC - Class B Common Units (4) 10/1/2021 685,760 1,955 1,783"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Smile Doctors, LLC (4)(7)(10) L + 5.75 % 9.42 % 12/23/2028 449,679 439,765 438,872"
+    }
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Text corrected after the bczb review: names the bcza B2_exact_name edge, the inert veto and the Tier A LOWER(identifier) side defect (begin_principal 3,297,000 on d9953922 edges). Detector (printed tranche terms on every chain edge, with amendment negative controls) would flag the swap whatever tier produces it. Supported.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329"
+    }
+   ]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-precision-unknown-for-page-read-maturity",
+   "outcome": "supported",
+   "rationale": "Now states the matcher consequence (NULL bounds, inert maturity veto and rank for all BCRED rows) and that no wrapper setting exists. Re-checked counts in bczc unchanged. Per-source coverage metric is a sound, low-noise detector.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-name-year-printed-differs-from-member",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "OCP CLO 2020-22, Ltd. (4)(6)(8) L + 6.50 % 9.21 % 10/20/2034 4,250 4,069 3,587"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-series-number-cut-as-row-number",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Pikes Peak CLO 10 - Subordinated Notes"
+    }
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Chemicals Pigments LP Int (4)(6)(16) - - 0.00"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000008",
+     "text": "athenahealth, Inc. (7)(9) SOFR + 3.50 % 7.82 % 2/15/2029 36,931 36,518 33,015"
+    }
+   ]
+  },
+  {
+   "observation_key": "explicit-interest-instrument-classed-other",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Chemicals Pigments LP Int (4)(6)(16) - - 0.00"
+    }
+   ]
+  },
+  {
+   "observation_key": "partial-row-disposition-covers-whole-finding",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"
+    }
+   ]
+  },
+  {
+   "observation_key": "estimated-yield-tagged-as-coupon",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "combined-par-units-column-semantic-ambiguity",
+   "outcome": "supported",
+   "rationale": "Carried from nvbcd; supported by the nvbcd and nbbcc reviews and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows (holdings_field_diff bczc nbbcc), none in this observation's scope. Quote is in the cached filing (gate quote check); the detector is concrete and source-keyed. Not re-measured.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Added in the nbbc run; supported by the nbbcc review and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows, outside this observation. Quote is in the cached filing; propose_detector stands.",
+   "evidence": [
+    {
+     "accession": "0001803498-26-000031",
+     "text": "BCRED Emerald JV LP - LP Interest (6)(16) 1/19/2022 1,836,000 1,539,677 3.41"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "rationale": "Added in the nbbc run; supported by the nbbcc review and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows, outside this observation. Quote is in the cached filing; propose_detector stands.",
+   "evidence": [
+    {
+     "accession": "0001803498-24-000044",
+     "text": "BCRED Emerald JV LP - LP Interests (6)(16) 1,815,000 1,830,280 5.37"
+    }
+   ]
+  },
+  {
+   "observation_key": "jv-underlying-row-missing-printed-par-or-maturity",
+   "outcome": "supported",
+   "rationale": "Added in the nbbc run; supported by the nbbcc review and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows, outside this observation. Quote is in the cached filing; propose_detector stands.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Huntington Bancshares Inc (8) 4.44 % 4.44 % 8/4/2028 620 598 592 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-row-number-left",
+   "outcome": "supported",
+   "rationale": "Added in the nbbc run; supported by the nbbcc review and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows, outside this observation. Quote is in the cached filing; propose_detector stands.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Pigments Services, Inc. (4)(11)(17) SOFR + 8.25 % 12.69 % PIK 4/14/2023 4/14/2029 7,125 4,670 2,367 0.10"
+    }
+   ]
+  },
+  {
+   "observation_key": "clo-equity-tranche-has-no-asset-category",
+   "outcome": "supported",
+   "rationale": "Added in the nbbc run; supported by the nbbcc review and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows, outside this observation. Quote is in the cached filing; propose_detector stands.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000062",
+     "text": "Structured Finance Obligations - Equity Instruments - non-controlled/non-affiliated Financial Services Ballyrock CLO 20, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 13.22 % 2/24/2025 10/15/2036"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-from-share-tag-loses-currency",
+   "outcome": "supported",
+   "rationale": "Added in the nbbc run; supported by the nbbcc review and by this reviewer on bczb. bczc changed only the 143 fixed-rate rows, outside this observation. Quote is in the cached filing; propose_detector stands.",
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Rad CLO 25 Ltd - Subordinated Notes (4)(6) Estimated Yield: 14.36 % 5/16/2024 7/20/2037 5,000,000 4,317 4,269 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "html-template-schedule-not-published",
+   "outcome": "supported",
+   "rationale": "F28 fired on both quarters (RVQ_REV_e89d777120f0, RVQ_REV_8788b4b75ff1), so existing_detector F28 is right. Tie re-verified in the bczb review (Q1 37,777,473 vs 37,777,474; Q2 46,225,957 vs 46,225,946 excluding the money market fund). fair_value_m 39,420 is Q1 investments plus cash.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total Investment Portfolio $ 37,776,621 $ 37,777,474 211.01 % Cash and Cash Equivalents Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-notes-published-floating-libor-spread-equals-coupon",
+   "outcome": "supported",
+   "rationale": "Verified independently (rv_bczc_fixed.py, printed line = the <tr> holding the InvestmentOwnedAtFairValue fact for the row's src_context_id, not the investigator's any-contextRef index). All 143 changed rows: 143 specs, 143 keys, each key matched exactly one row, none unmatched; all 2022-12-31 (2 parent, 141 underlying_schedule); every printed line has no reference '+ spread', prints the published interest_rate, and before the fix was Floating with spread = coupon and LIBOR/PRIME. Both parent rows read (Athenahealth 6.50 % 2/15/2030 3,297; Canadian Hospital Specialties 8.75 % 4/15/2029 CAD 3,800) and a stratified 32-row JV sample read (AerCap, Allison, Avnet ... Taylor Morrison: all 'x % x %' IG bond lines). Exclusions: FFML 2024-09-30 prints 'B+ 6.25 % 11.53 %' NZD and the filing's legend defines 'BKBM or B', so floating; the 18 spread = rate rows all print a reference ('E +', 'S +', 'SA +', 'C +', 'L +'), floating as filed. After the fix no BCRED Floating row (22,663, parent and JV) has a printed line without a reference '+ spread'. Gap the detector misses: the inverse shape. Medallia 2022-09-30 prints 'L + 6.75 % PIK 9.87 %' but 3 rows (2 parent, FV 190.0M and 770.2M; 1 JV) publish coupon_type Fixed, basis_spread NULL and pik_rate 6.75 (the spread); pre-existing, same in nbbcc, no ledger finding. The suggested check should be symmetric: printed reference present vs coupon_type and basis_spread, both directions. Supported with that extension.",
+   "evidence": [
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 3,297 3,297 2,436 0.01"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-bcz-1",
+   "outcome": "supported",
+   "rationale": "Earlier rejection resolved: now acceptance_change (owner_request DC-0001803498-a18f1c746f), citing the owner's 2026-11-10 ruling in issuer_name_differs_from_page that a cut name still flags, noting that 'Comp' is not a prefix of 'Co, Inc.' after &/and folding, and listing the guards (same XBRL member printed in full elsewhere, cut mid-token, minimum length, no digit at the cut) and must-fail tests (Minerva vs Athenahealth, CLO 1 vs CLO 10, shifted neighbour). It does not weaken the check silently; it goes to the owner.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-bcz-2",
+   "outcome": "supported",
+   "rationale": "acceptance_change, correctly classified: a new source class (HTML-template rows) entering the published set needs a new shared stage; no wrapper route exists. Additions from the bczb review now in the request (DC-0001803498-273935940b): drop printed cash equivalents (140,579 money market fund), parse industry/type/spread/reference rate, HTML anchors, the inert maturity veto on chaining, and a row-level page sample in addition to the totals tie. Evidence re-verified: Q1 37,777,473 vs 37,777,474; Q2 46,225,957 vs 46,225,946; net assets 17.9bn / 21.0bn.",
+   "evidence": [
+    {
+     "accession": "0001803498-22-000013",
+     "text": "Total Investment Portfolio $ 37,776,621 $ 37,777,474 211.01 % Cash and Cash Equivalents Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "Total Investment Portfolio $ 47,141,027 $ 46,225,946 220.43 %"
+    },
+    {
+     "accession": "0001803498-22-000017",
+     "text": "State Street Institutional U.S. Government Money Market Fund"
+    }
+   ]
+  }
+ ],
+ "fix_verification": {
+  "fix_record": "DC-0001803498-1b3714276f",
+  "holdings_field_diff_bczc_nbbcc": "rows 24,672 each, 0 only-in either side; basis_spread, reference_rate_type, reference_rate_source, coupon_type, corrected_fields 143 rows each, all BCRED; 95 of 100 columns identical",
+  "context_anchoring": "143/143 rows pass (printed line by FV-fact context: no reference, rate = published interest_rate, Floating -> Fixed, spread and reference withdrawn); 2 parent rows and 32 stratified JV rows read",
+  "exclusions": "FFML 2024-09-30 (BKBM 'B+', legend) and 18 spread=rate rows (printed E/S/SA/C/L +) correctly left Floating",
+  "floating_without_printed_reference_after_fix": 0,
+  "ledger_bczb_vs_bczc_BCRED": "identical state counts (open 3, verdict_retired 46, dispositioned 24, false alarm 2)",
+  "new_defect_not_in_ledger": "Medallia 2022-09-30: printed 'L + 6.75 % PIK 9.87 %', published Fixed with spread NULL and pik_rate 6.75 on ROW-d2b3530b0e71e5db, ROW-8127b0d6ad9f60d1 (parent, 960.2M FV) and ROW-da96ca9c6af7bca9 (JV); pre-existing in nbbcc",
+  "side_notes": [
+   "CEP V Investment 11 Sarl 2022-12-31 prints 'S + 5.75 %' with CHF par and publishes SONIA (CHF suggests SARON; legend check needed)",
+   "Presidio JV 2022-12-31 prints 'SORF +' (SOFR typo) and carries LIBOR; unpublished"
+  ]
+ },
+ "reviewer_scripts": [
+  "scratch/fund_runs/0001803498/review/rv_bczc_fixed.py",
+  "scratch/fund_runs/0001803498/review/rv_bczc_fixed_lib.py",
+  "scratch/fund_runs/0001803498/review/rv_bczc_inverse.py",
+  "scratch/fund_runs/0001803498/review/rv_medallia.py",
+  "scratch/fund_runs/0001803498/review/rv_html_tie.py",
+  "scratch/fund_runs/0001803498/review/rv_html_sample.py",
+  "scratch/fund_runs/0001803498/review/rv_minerva_edges.py",
+  "scratch/fund_runs/0001803498/review/rv_minerva_precision.py",
+  "scratch/fund_runs/0001803498/review/rv_quote_probe.py",
+  "scratch/fund_runs/0001803498/review/rv_build_review_bczc.py"
+ ],
+ "not_done": [
+  "20-row random page sample not repeated by this reviewer (orchestrator item)",
+  "carried observations not re-measured; quotes and detector decisions re-read only",
+  "Medallia inverse defect not investigated beyond the three 2022-09-30 rows"
+ ]
+}
