@@ -104,6 +104,11 @@ _SECTION_START = (r"(?i)^(investments?\b|debt investments?|equity investments?|c
                   r"cash and cash equivalents|(senior secured )?(first|second|1st|2nd) lien\b|senior secured\b|"
                   r"unsecured debt|subordinated debt|non-controlled|controlled|affiliated|non-affiliated|"
                   r"portfolio (companies|investments))")
+# A legal name that starts 'Investment Company ...' and ends in a legal form (Apollo Debt Solutions
+# 'Investment Company 24 Bidco Limited', printed as the company heading its block; REQ-NBAP-1, D-263) is not
+# a section heading. 'Investments ...', 'Investment Company' without a legal form, and every other section
+# word still flag.
+_INVESTMENT_COMPANY_NAME = r"(?i)^investment compan(y|ies)\b"
 _CATEGORY_WORDS = (r"(?i)(\bfirst lien (debt|loans?|senior)|\bsecond lien (debt|loans?)|\bdebt investments\b|"
                    r"\bequity investments\b|\bnon-controlled\b|\bnon-affiliated\b|investments - )")
 
@@ -266,6 +271,11 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
     ``spacing_only`` keeps those the folded comparison cannot see (a lost apostrophe). A dash cell is not a
     name cell. A cash row whose name is the heading the fund prints over its cash rows ('U.S. Treasury
     Bill') is not flagged as equal to an industry label.
+
+    Check repair (D-263, REQ-NBAP-1): on the shape test, a name that starts 'Investment Company' and ends
+    in a legal form ('Investment Company 24 Bidco Limited') is kind ``investment_company_name``,
+    informational, instead of ``begins_with_section_word``. Other section words, 'Investments ...', and
+    the industry-label and category-path shape kinds are unchanged.
     """
     labels = industry_labels(con, table)
     own = [r[0] for r in con.execute(
@@ -352,6 +362,8 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                                                   WHERE ch.cik = n.cik AND ch.label = n.nname)))) AS is_label,
                    (a.row_id IS NOT NULL) AS after_label_ok,
                    regexp_matches(issuer_name, '{_SECTION_START}') AS section_start,
+                   (regexp_matches(issuer_name, '{_INVESTMENT_COMPANY_NAME}')
+                    AND cr_key(issuer_name) <> cr_norm(issuer_name)) AS investment_company_name,
                    -- the row's own industry heading at the front of its name ('Software Zendesk ...');
                    -- a company merely named after another industry word is not caught
                    (length(cr_norm(extracted_industry)) >= 4
@@ -372,9 +384,10 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                 WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok AND coalesce(spacing_ok, false)
                      THEN 'spacing_only'
                 WHEN comparable AND NOT coalesce(direct_ok, false) AND NOT after_label_ok THEN 'not_the_printed_name'
-                WHEN NOT comparable AND section_start THEN 'begins_with_section_word'
+                WHEN NOT comparable AND section_start AND NOT investment_company_name THEN 'begins_with_section_word'
                 WHEN NOT comparable AND own_label_start THEN 'begins_with_industry_label'
                 WHEN NOT comparable AND category_words THEN 'holds_category_path'
+                WHEN NOT comparable AND section_start THEN 'investment_company_name'
               END AS kind_
             FROM x)
         SELECT {_select('issuer_name_differs_from_page', 'kind_',

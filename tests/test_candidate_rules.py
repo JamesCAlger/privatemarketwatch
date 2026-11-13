@@ -848,3 +848,46 @@ def test_pik_whole_coupon_convention_false_positives():
     ], exclusions=(("0001885968", "acc-9", "c-9"),))
     assert dict(zip(out["row_id"], out["kind"])) == {k: "pik_value_mismatch" for k in (
         "not_opted", "excluded", "neither", "floor", "far", "leg")}
+
+
+# ---------------------------------------------------------------- check repairs, D-263 (2026-11-13)
+
+def test_issuer_investment_company_legal_name_is_not_a_section_word():
+    # REQ-NBAP-1, Apollo Debt Solutions 2023-03-31 .. 2026-06-30: the page prints the company
+    # 'Investment Company 24 Bidco Limited' over its block; the tranche lines start with the instrument
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "ic24", "issuer_name": "Investment Company 24 Bidco Limited",
+         "printed_row": "First Lien Secured Debt | E+575, 0.00% Floor | 7/11/2029 | EUR | 5,406 | 4,646 | 4,976 | (3)(4)"},
+        {"row_id": "ic24_dd", "issuer_name": "Investment Company 24 Bidco Limited"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"ic24": "investment_company_name", "ic24_dd": "investment_company_name"}
+    con = duckdb.connect()
+    frame = pd.DataFrame([{"row_id": "ic24", "issuer_name": "Investment Company 24 Bidco Limited",
+                           "printed_row": "First Lien Secured Debt | E+575, 0.00% Floor | 7/11/2029 | 4,976"},
+                          {"row_id": "ok", "issuer_name": "Zendesk, Inc.",
+                           "printed_row": "Zendesk, Inc. | First Lien Secured Debt | S+650 | 9,000"}])
+    frame["cik"], frame["report_date"], frame["accession_number"] = "0001837532", "2023-03-31", "a"
+    cr.prepare(con, frame)
+    tested, info, _ = cr.ledger_rows(con)
+    names = tested[tested["rule_name"] == "issuer_name_printed"]
+    assert list(names["finding"]) == [0.0, 0.0] and "investment_company_name" in set(info["kind"])
+
+
+def test_issuer_investment_company_repair_still_flags_section_words():
+    out = _run(cr.issuer_name_differs_from_page, [
+        # a section heading left in front of a company still flags
+        {"row_id": "inv", "issuer_name": "Investments Acme Holdings LLC"},
+        {"row_id": "nc", "issuer_name": "Non-Controlled Acme Holdings LLC"},
+        {"row_id": "fl", "issuer_name": "First Lien Acme Holdings LLC"},
+        # 'Investment Company' with no legal form is not a legal name
+        {"row_id": "bare", "issuer_name": "Investment Company 24 Bidco"},
+        # a category path after the words still flags as one
+        {"row_id": "path", "issuer_name": "Investment Company - Debt Investments Acme LLC"},
+        # a comparable row is still compared with the page
+        {"row_id": "page", "issuer_name": "Investment Company 24 Bidco Limited",
+         "printed_row": "Version 1 Bidco Limited | First Lien Secured Debt | E+575 | 4,976"},
+    ])
+    kinds = dict(zip(out["row_id"], out["kind"]))
+    assert kinds == {"inv": "begins_with_section_word", "nc": "begins_with_section_word", "fl": "begins_with_section_word",
+                     "bare": "begins_with_section_word", "path": "holds_category_path", "page": "not_the_printed_name"}
+    assert set(kinds.values()) <= cr.FINDING_KINDS["issuer_name_differs_from_page"]
