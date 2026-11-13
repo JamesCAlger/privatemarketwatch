@@ -1,0 +1,107 @@
+{
+ "_note": "Blue Owl Credit Income retirements (boz run, 2026-11-13, re-issued after review) under the owner's standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1812554-10",
+   "review_id": "RVQ_REV_b9e4796ca20a",
+   "verdict_sha256": "2b0ea426ea2805130615fcd29d5e06a9877b0151d29d7be08846247d0d3ac3a7",
+   "cik": "0001812554",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The cited rows are the investment-rating table total (100.0 pct of fair value) and the schedule total (181.8 pct of net assets), which are totals, not positions. The filing prints no percent of net assets on any position line (lines end at fair value; the percent is on industry subtotals and the total) and its 2025-12-31 position contexts (typed InvestmentIdentifierAxis) are filed nil, except four BOCSO footnote facts (62.0 / 62-33-5 pct of BOCSO cost and asset mix) that are not percent of net assets; so the published position percents are empty as filed. Published fair value ties to the printed total.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2025-12-31 in sandbox nbocf: 882, with pct_of_net_assets 0, sum(fair_value) 35,918,948,000 against printed 35,918,948,000"
+    },
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2025-12-31 in data/output: 882, with pct_of_net_assets 0, sum(fair_value) 35,918,948,000 against printed 35,918,948,000"
+    },
+    {
+     "source": "query",
+     "quote": "000181255426000011, XML parse of every InvestmentOwnedPercentOfNetAssets fact: 1179 facts, 544 nil, 635 valued, 77 valued at 2025-12-31; valued facts at 2025-12-31 on typed InvestmentIdentifierAxis contexts: 4 = Blue Owl Cross-Strategy Opportunities LLC 0.62; ABF - Specialty finance 0.62; ABF - Leasing 0.33; BF - Commercial Real Estate 0.05 (the BOCSO footnote facts, printed 'largest investment is ... of the total cost of BOCSO's portfolio ... asset class composition'; not percent of net assets); nil identifier-axis facts at 2025-12-31: 542; every other valued fact at 2025-12-31 is on an industry, issuer-affiliation, investment-type or total context"
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-26-000011",
+     "quote": "ABB/Con-cise Optical Group LLC(3)(4)(9) First lien senior secured loan S+ 7.50 % 2/2028 33,306 33,089 33,057",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-26-000011",
+     "quote": "Total Investments $ 35,983,158 $ 35,918,948 181.8 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-26-000011",
+     "quote": "largest investment is 62.0% of the total cost of BOCSOs portfolio",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001812554/boz_retirements.py (read-only; XML parser; sandbox nbocf and data/output)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001812554/boz_retirements.py nbocf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-blueowl-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1812554-11",
+   "review_id": "RVQ_REV_c8e64b3c3e79",
+   "verdict_sha256": "66144042816fb3f9e9a59267ca8314ab637860eb66f9a741948229746824c696",
+   "cik": "0001812554",
+   "engine": "fund_financials",
+   "rule_name": "F22",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: The cited row is the schedule total (185.4 pct). The filing prints no percent of net assets on any position line, and its only valued 2026-03-31 facts on position-type contexts (typed InvestmentIdentifierAxis) are the four BOCSO footnote facts (0.369 largest investment as a share of BOCSO cost; 0.656 / 0.320 / 0.024 asset mix), not percent of net assets. The 36.9 pct sum the verdict saw is that BOCSO footnote fact, which an earlier build attached to the BOCSO position; it is not published now (0 published rows carry a percent). Published fair value ties to the printed total.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2026-03-31 in sandbox nbocf: 863, with pct_of_net_assets 0, sum(fair_value) 35,500,450,000 against printed 35,500,450,000"
+    },
+    {
+     "source": "query",
+     "quote": "published-basis rows at 2026-03-31 in data/output: 863, with pct_of_net_assets 0, sum(fair_value) 35,500,450,000 against printed 35,500,450,000"
+    },
+    {
+     "source": "query",
+     "quote": "000181255426000027, XML parse of every InvestmentOwnedPercentOfNetAssets fact: 159 facts, 0 nil, 159 valued, 79 valued at 2026-03-31; valued facts at 2026-03-31 on typed InvestmentIdentifierAxis contexts: 4 = Blue Owl Cross-Strategy Opportunities LLC 0.369; ABF - Specialty finance 0.656; ABF - Leasing 0.32; BF - Commercial Real Estate 0.024 (the BOCSO footnote facts, printed 'largest investment is ... of the total cost of BOCSO's portfolio ... asset class composition'; not percent of net assets); nil identifier-axis facts at 2026-03-31: 0; every other valued fact at 2026-03-31 is on an industry, issuer-affiliation, investment-type or total context"
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-26-000027",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 35,490 - 35,180 34,294",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-26-000027",
+     "quote": "Total Investments $ 36,024,256 $ 35,500,450 185.4 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001812554-26-000027",
+     "quote": "largest investment is 36.9 % of the total cost of BOCSOs portfolio",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001812554/boz_retirements.py (read-only; XML parser; sandbox nbocf and data/output)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001812554/boz_retirements.py nbocf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-blueowl-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "reviewer_id": "agent:reviewer-blueowl-20261113-opus",
+ "reviewed_on": "2026-11-13",
+ "round": 2,
+ "supersedes": "docs/investigations/v05_readings/reviews/0001812554_retirements_20261113.json (round 1: both rejected for false fact counts and a blind check)",
+ "subject": "re-issued VR-FL-1812554-10 / -11 in data/overrides/verdict_retirements/standing_rule_fundloop_0001812554_2026-11-13.json; check scratch/fund_runs/0001812554/boz_retirements.py (XML parser)",
+ "summary": "Both re-issued retirements SUPPORTED. Re-run: PASS/PASS. Every count in the evidence equals my independent XML parse. The check now fails on each planted error in scratch copies of the filings (a nil position fact given a value, a new multi-line position fact, a BOCSO footnote value changed) and passes on unmodified copies. Verdict hashes match. The page quotes verify under the fund-gate normalisation. Residual limits, none blocking: the code checks only typed InvestmentIdentifierAxis contexts (this filer's position contexts; my parse finds no other position-type axis on any valued current-period fact); the evidence sentence 'every other valued fact is on an industry, issuer-affiliation, investment-type or total context' is true by my parse but is not asserted by the code; check 3 reads XBRL, and the absence of a printed per-position percent column rests on my round-1 page reads (still valid: same cached filings). A clean result does not mean the data is correct.",
+ "reviewer_scripts": [
+  "scratch/fund_runs/0001812554/review/pct_facts_xml.py (independent parse; round 1)",
+  "scratch/fund_runs/0001812554/review/fv_pct_check.py (independent FV / pct query; round 1)",
+  "scratch/fund_runs/0001812554/review/plant_test.py (writes filing copies to review/fixture, runs a path-redirected copy boz_check_redirected.py, deletes the fixture; cached filings untouched)"
+ ],
+ "plant_test_results": [
+  {"variant": "000011: nil position fact c-546 given value 0.012", "result": "A07 FAIL (idaxis 5), F22 PASS"},
+  {"variant": "000027: new multi-line valued fact 0.004 on position context c-35 (DIRECTV Financing, LLC first lien, 2026-03-31)", "result": "A07 PASS, F22 FAIL (idaxis 5)"},
+  {"variant": "000027: BOCSO fact c-1027 changed 0.369 -> 0.370", "result": "A07 PASS, F22 FAIL"},
+  {"variant": "unmodified copies (two controls)", "result": "PASS / PASS"}
+ ],
+ "retirement_reviews": [
+  {
+   "retirement_id": "VR-FL-1812554-10",
+   "review_id": "RVQ_REV_b9e4796ca20a",
+   "outcome": "supported",
+   "rationale": "Verdict sha256 2b0ea426... matches the file in data/output/review_queue/verdicts. Re-run PASS: facts 1179, nil 544, valued 635, valued at 2025-12-31 77, identifier-axis valued 4 (BOCSO footnote), nil identifier-axis 542. All of these equal my parse. Cited rows are totals at filed values: rating-table Total 35,918,948 / 100.0 % (a percent of fair value) and Total Investments 35,983,158 / 35,918,948 / 181.8 %. The page prints percent only on subtotals and totals. The 2025-12-31 position contexts are filed nil except the four BOCSO footnote facts (62.0 % of BOCSO cost; 62 / 33 / 5 % asset mix). Published-basis 2025-12-31: 882 rows, 0 with pct_of_net_assets, FV 35,918,948,000 = printed, in nbocf and data/output. The check fails when a position-level percent is planted (c-546 valued) and when the footnote values differ. This meets D-252: the cited rows are published at filed values and positions carry no percent, as filed.",
+   "evidence": [
+    {"accession": "0001812554-26-000011", "text": "Total Investments $ 35,983,158 $ 35,918,948 181.8 %"},
+    {"accession": "0001812554-26-000011", "text": "Total $ 35,918,948 100.0 % $ 26,378,894 100.0 % (investment rating table, percent of fair value)"},
+    {"accession": "0001812554-26-000011", "text": "The largest investment is 62.0% of the total cost of BOCSO's portfolio (page_line.py offset 925582; store quote 'BOCSOs' matches under gate normalisation)"},
+    {"accession": "0001812554-26-000011", "text": "reviewer XML parse: 1,179 facts, 544 nil (542 on InvestmentIdentifierAxis, all 2025-12-31), 635 valued, 77 at 2025-12-31; identifier-axis valued at 2025-12-31 = c-1552 0.62, c-1580 0.62, c-1581 0.33, c-1582 0.05"},
+    {"accession": "0001812554-26-000011", "text": "plant test: c-546 set to 0.012 -> FAIL A07 (idaxis 5)"}
+   ]
+  },
+  {
+   "retirement_id": "VR-FL-1812554-11",
+   "review_id": "RVQ_REV_c8e64b3c3e79",
+   "outcome": "supported",
+   "rationale": "Verdict sha256 66144042... matches. Re-run PASS: facts 159, nil 0, valued 159, valued at 2026-03-31 79, identifier-axis valued 4, all equal to my parse. Cited row is the total at its filed value: Total Investments 36,024,256 / 35,500,450 / 185.4 %. The four identifier-axis facts are the BOCSO footnote: c-1027 0.369 is the 'largest investment is 36.9 % of the total cost of BOCSO's portfolio', and c-1058..c-1060 are 0.656 / 0.320 / 0.024. The store now names c-1027 as the source of the 36.9 the verdict observed. The other 75 current-period facts sit only on industry, issuer-affiliation, investment-type and total contexts (my parse). The page prints no per-position percent (the AI Titan line ends at fair value 34,294). Published-basis 2026-03-31: 863 rows, 0 pct, FV 35,500,450,000 = printed, in both builds. The check fails on a planted multi-line position fact (c-35 DIRECTV, 0.004) and on an altered BOCSO value. Meets D-252.",
+   "evidence": [
+    {"accession": "0001812554-26-000027", "text": "Total Investments $ 36,024,256 $ 35,500,450 185.4 %"},
+    {"accession": "0001812554-26-000027", "text": "The largest investment is 36.9 % of the total cost of BOCSO's portfolio. As of March 31, 2026 the portfolio asset class composition was 65.6 % ABF - Specialty finance, 32.0 % ABF - Leasing, and 2.4 % ABF - Commercial Real Estate"},
+    {"accession": "0001812554-26-000027", "text": "reviewer XML parse: 159 valued facts, 0 nil, 79 at 2026-03-31; identifier-axis valued = c-1027 0.369, c-1058 0.656, c-1059 0.320, c-1060 0.024"},
+    {"accession": "0001812554-26-000027", "text": "plant tests: new multi-line fact on c-35 (DIRECTV Financing, LLC) 0.004 -> FAIL F22; c-1027 0.369 -> 0.370 -> FAIL F22"}
+   ]
+  }
+ ]
+}

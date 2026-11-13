@@ -475,6 +475,28 @@
     "rationale": "Nothing is wrong on a published row; the residual is a printed aggregate with no row to attach it to. Recorded so a cost_conservation reading of 0.04 pct is not chased again (nboc_cost_identity.txt).",
     "reference": "scratch/fund_runs/0001812554/nboc_cost_identity.txt"
    }
+  },
+  {
+   "observation_key": "footnote-percent-attached-to-position",
+   "what": "BOCSO footnote percents (largest investment share of BOCSO cost: 62.0 pct at 2025-12-31, 36.9 pct at 2026-03-31; asset mix 62/33/5 and 65.6/32.0/2.4) are tagged with the InvestmentOwnedPercentOfNetAssets concept on typed InvestmentIdentifierAxis contexts. An earlier build attached the 36.9 to the BOCSO position as pct_of_net_assets (F22 verdict sum 36.9). Not published in nbocf or data/output (0 rows with pct_of_net_assets at both quarters). No published value is wrong; left.",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A percent fact whose printed footnote or surrounding line is not percent of net assets (here 'of the total cost of BOCSO's portfolio') never attaches to a position: compare each position-context percent with the printed position line and refuse a value the line does not print.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this; the mis-attachment was only visible as F22's pct sum. A guard on percent facts whose concept does not match the printed meaning would catch recurrence; false positives are limited to position contexts that carry a valued percent absent from the printed line.",
+    "reference": "scratch/fund_runs/0001812554/boz_retirements.py criterion 3 (XML parse of typed identifier-axis facts)"
+   },
+   "quote": {
+    "accession": "0001812554-26-000027",
+    "text": "largest investment is 36.9 % of the total cost of BOCSOs portfolio"
+   }
   }
  ],
  "name_shape_exceptions": [],
