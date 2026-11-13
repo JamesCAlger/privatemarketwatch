@@ -151,8 +151,10 @@ def test_printed_line_not_found_stays_flagged():
 
 
 def test_rule_field_not_printed_stays_flagged():
+    # the line prints no 'CODE + margin' and the reader read none
     flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [_pub()],
-                           _page(_bridge(printed_margin=None)))
+                           _page(_bridge(printed_margin=None, printed_row="Vensure Employer Services, Inc. | "
+                                         "First Lien Secured Debt - Delayed Draw | 3/26/2027 | 27,011 | 27,000")))
     assert [f["printed_check"] for f in flags] == ["field_not_printed"]
 
 
@@ -318,11 +320,20 @@ def test_d3_reference_rule_keeps_flag_when_spread_missing_and_line_prints_margin
                 reference_rate_type="CDOR", printed_margin=None)
     p = _pub(reference_rate_type="CDOR", basis_spread=None, instrument_type="Term Loan")
     flags, _ = eng.resolve([_cand("agentA_reference_uncorroborated")], [_ctx()], [p], _page(b))
-    assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("spread_missing", "basis_spread")]
-    # a PIK-only or zero cash margin is legitimate under the cash-leg convention: no flag for that
-    for line in ("X | Term Loan | S + 1000 PIK | 3/26/2027", "X | Term Loan | ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) | 3/26/2027"):
+    # read as a D-031 margin (7.00 over CDOR, published blank) -> mismatch; spread_missing covers a
+    # margin the D-031 reader cannot place
+    assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("mismatch", "basis_spread")]
+    assert eng.compare_row("agentA_reference_uncorroborated", p,
+                           dict(b, printed_row="VetStrategy | Term Loan | 3M SOFR+565 | 08/2027", printed_margin=5.65,
+                                reference_rate_type="SOFR"))[0] in ("spread_missing", "mismatch")
+    # PIK-only margins: under D-031 the spread is the cash + PIK total, so a blank published spread
+    # differs from the printed total and the flag stays; the published total clears it
+    for line, total in (("X | Term Loan | S + 1000 PIK | 3/26/2027", 10.0),
+                        ("X | Term Loan | ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) | 3/26/2027", 5.75)):
         b = _bridge(printed_row=line, printed_margin=None)
         assert eng.compare_row("agentA_reference_uncorroborated", _pub(basis_spread=None, instrument_type="Term Loan"),
+                               b) == ("mismatch", ["basis_spread"])
+        assert eng.compare_row("agentA_reference_uncorroborated", _pub(basis_spread=total, instrument_type="Term Loan"),
                                b) == ("equal", [])
 
 
@@ -394,3 +405,31 @@ def test_d6_real_page_reader_on_a_fixture(tmp_path):
     flags, _ = eng.resolve([_cand("agentA_maturity_vs_xbrl", ident=ident)], [_ctx(ident=ident)],
                            [dict(pub, maturity_date="2027-03-29")], page)
     assert [f["printed_check"] for f in flags] == ["mismatch"]  # published carries the stale label's date
+
+
+# D-031 in the engine (orchestrator 2026-11-13): the published spread is the cash + PIK total
+GTY = ("GTY Technology Holdings Inc. | First Lien Delayed Draw Term Loan | SOFR(Q) | 1.00 % | 2.50 % Cash + "
+       "4.13 % PIK | 10.30 % | 7/9/2029 | $ 1,134,951 | 1,121,283 | 1,120,846")
+
+
+def test_d031_cash_only_published_where_line_prints_cash_plus_pik_still_fires():
+    # RVQ_BLK_7a79fc2cbff8 (BlackRock Private Credit 2025-12-31): GTY publishes the cash 2.50, not 6.63
+    b = _bridge(printed_row=GTY, printed_margin=None, maturity_date="2029-07-09")
+    p = _pub(maturity_date="2029-07-09", basis_spread=2.50, instrument_type="Delayed Draw Term Loan")
+    for rule in ("agentA_reference_uncorroborated", "agentA_spread_vs_xbrl"):
+        flags, _ = eng.resolve([_cand(rule)], [_ctx()], [p], _page(b))
+        assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("mismatch", "basis_spread")], rule
+    # the floor is not the margin either
+    flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [dict(p, basis_spread=1.00)], _page(b))
+    assert flags[0]["mismatch_fields"] == "basis_spread"
+    # the total clears
+    flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [dict(p, basis_spread=6.63)], _page(b))
+    assert flags == []
+
+
+def test_d031_ambiguous_margin_fails_closed():
+    line = "Madison Logic | First Lien Term Loan | SOFR(M) | 1.00 % | 4.73 % | 10.72 % | 12/29/2028 | 2,274,371"
+    b = _bridge(printed_row=line, printed_margin=4.73, maturity_date="2028-12-29")
+    p = _pub(maturity_date="2028-12-29", basis_spread=4.73, instrument_type="Term Loan")
+    flags, _ = eng.resolve([_cand("agentA_spread_vs_xbrl")], [_ctx()], [p], _page(b))
+    assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("field_unreadable", "basis_spread")]

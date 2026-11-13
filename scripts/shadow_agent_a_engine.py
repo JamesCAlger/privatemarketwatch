@@ -44,6 +44,8 @@ ordered, so identical inputs give byte-identical files (the adapter's mode(mecha
 first occurrence); the reference rule keeps its flag when the published spread is blank and the line
 prints a cash margin ('spread_missing'); every flag and audit row records line_match ('context',
 'member', 'member_ambiguous'), and a member-name match counts only when the member has one context.
+The printed margin is read the D-031 way (pipeline.printed_margin): after the benchmark code, floors
+never the margin, cash + PIK total; an ambiguous margin fails closed.
 
 Writes <output>/shadow/agent_a_flags.csv, <output>/shadow/agent_a_unpublished_coverage.csv and
 <output>/shadow/agent_a_candidates_audit.csv (every candidate's outcome, dropped ones included).
@@ -77,6 +79,7 @@ from pipeline.identifier_held_out import held_out_report  # noqa: E402
 from pipeline.identifier_overlay import stage_overlay  # noqa: E402
 from pipeline.identifier_rate import GRAMMAR_DIR, apply_grammar, load_grammar  # noqa: E402
 from pipeline.identifier_signature import is_aggregate_candidate, load_anchors  # noqa: E402
+from pipeline.printed_margin import parse_rate  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("shadow_agent_a_engine")
@@ -313,14 +316,22 @@ def printed_values(bridge: dict | None) -> dict[str, Any]:
     if bridge.get("maturity_status") == "value" and not _blank(bridge.get("maturity_date")):
         out["maturity_date"] = str(bridge["maturity_date"])[:10]
     rstat = bridge.get("reference_rate_status")
+    # the margin, read the D-031 way (pipeline.printed_margin): after the benchmark code, floors
+    # excluded, cash + PIK total; an ambiguous margin is left out here and fails closed in
+    # unreadable_fields
+    rate = parse_rate(bridge.get("printed_row") or "")
     if rstat == "value" and not _blank(bridge.get("reference_rate_type")):
         out["reference_rate_type"] = str(bridge["reference_rate_type"]).strip().upper()
+    if rstat == "not_applicable":
+        out["reference_rate_type"] = ""
+        out["basis_spread"] = None
+    elif rate is not None:
+        if rate["total"] is not None:
+            out["basis_spread"] = rate["total"]
+    elif rstat == "value":
         margin = _num(bridge.get("printed_margin"))
         if margin is not None:
             out["basis_spread"] = margin
-    elif rstat == "not_applicable":
-        out["reference_rate_type"] = ""
-        out["basis_spread"] = None
     cls = printed_instrument_class(bridge.get("printed_row") or "")
     if cls is not None:
         out["instrument_type"] = cls
@@ -337,6 +348,10 @@ def unreadable_fields(bridge: dict | None) -> list[str]:
         out.append("maturity_date")
     if bridge.get("reference_rate_status") == "validation_needed":
         out.append("reference_rate_type")
+    if bridge.get("reference_rate_status") != "not_applicable":
+        rate = parse_rate(bridge.get("printed_row") or "")
+        if rate is not None and rate["total"] is None:
+            out.append("basis_spread")  # floor and spread not told apart
     return out
 
 

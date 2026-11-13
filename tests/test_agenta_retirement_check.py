@@ -27,6 +27,15 @@ def test_parse_rate(line, code, total, floors):
     assert r["code"] == code and r["total"] == pytest.approx(total) and r["floors"] == pytest.approx(floors)
 
 
+@pytest.mark.parametrize("line", [
+    "Walnut Parent | Term Loan | SOFR | + | 2.88% (3.38% PIK) | (Q) | 10.07% | 6/2/2022 | 11/9/2029",
+    "Great Lakes Dental | Unitranche First Lien Revolver | S + 725 (300 PIK), 100 Floor | 11.10% | 06/2027",
+])
+def test_parenthetical_pik_without_includes_is_ambiguous(line):
+    # one filer means cash 2.88 plus PIK 3.38 (published 6.26), another means 7.25 of which 3.00 PIK
+    assert chk.parse_rate(line)["total"] is None
+
+
 def test_two_unlabelled_numbers_are_ambiguous():
     r = chk.parse_rate("X | First Lien | SOFR(M) 1.00 % 4.73 % 10.72 % 12/30/2027")
     assert r["total"] is None

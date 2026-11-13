@@ -59,13 +59,9 @@ from pipeline import config  # noqa: E402
 FIELD = {"agentA_maturity_vs_xbrl": ["maturity_date"],
          "agentA_spread_vs_xbrl": ["basis_spread"],
          "agentA_reference_uncorroborated": ["reference_rate_type", "basis_spread"]}
-_CODES = {"S": "SOFR", "SF": "SOFR", "SOFR": "SOFR", "TSOFR": "SOFR", "L": "LIBOR", "LIBOR": "LIBOR",
-          "E": "EURIBOR", "EURIBOR": "EURIBOR", "P": "PRIME", "PRIME": "PRIME", "SONIA": "SONIA", "SN": "SONIA",
-          "SARON": "SARON", "STIBOR": "STIBOR", "CORRA": "CORRA", "BBSY": "BBSY", "BBSW": "BBSW",
-          "CDOR": "CDOR", "NIBOR": "NIBOR", "C": "CDOR", "SA": "SARON"}
-_CODE_RE = re.compile(r"\b([A-Z]{1,6})(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|-\s|\s)(?=\s*(?:\d|-))")
-_DATE = re.compile(r"(?<![\d/])(\d{1,2})/(\d{1,2})/(\d{2}|\d{4})(?![\d/])")
-_NUM = re.compile(r"(?<![\w.])(\d{1,4}(?:\.\d+)?)\s*(%?)\s*(Floor|floor|Cash|cash|PIK|pik)?")
+# the margin reading is shared with the engine (pipeline/printed_margin.py)
+from pipeline.printed_margin import DATE_RE as _DATE  # noqa: E402
+from pipeline.printed_margin import parse_rate  # noqa: E402,F401
 
 
 @lru_cache(maxsize=8)
@@ -113,67 +109,6 @@ def printed_dates(line: str) -> list[date]:
         except ValueError:
             continue
     return out
-
-
-def parse_rate(line: str) -> dict | None:
-    """{'code', 'cash', 'pik', 'total', 'floors'} of the first benchmark code on the line and the margin
-    printed after it; None when no benchmark is printed; 'total' None when the margin is ambiguous."""
-    for m in _CODE_RE.finditer(line):
-        code, sep = m.group(1), m.group(2)
-        bench = _CODES.get(code.upper())
-        if not bench or (len(code) <= 2 and sep != "+"):
-            continue
-        seg = line[m.end():]
-        d = _DATE.search(seg)
-        seg = seg[:d.start()] if d else seg[:90]
-        includes = re.search(r"(?i)incl(?:udes|\.|uding)?\s*(\d{1,4}(?:\.\d+)?)\s*%\s*PIK", seg)
-        nums = []
-        for n in _NUM.finditer(seg):
-            before = seg[max(0, n.start() - 8):n.start()].lower()
-            label = (n.group(3) or "").lower()
-            if not label and "floor" in before:
-                label = "floor"
-            if not label and "spread" in before:
-                label = "spread"
-            value = float(n.group(1))
-            if not n.group(2) and "." not in n.group(1) and value >= 25:
-                value /= 100.0  # basis points
-            nums.append((value, label, n.start()))
-        floors = [v for v, lab, _ in nums if lab == "floor"]
-        rest = [(v, lab, pos) for v, lab, pos in nums if lab != "floor"]
-        if includes:
-            rest = [(v, lab, pos) for v, lab, pos in rest if pos < includes.start()]
-        cash = pik = None
-        if sep == "+" and rest:
-            cash = rest[0][0]
-            if rest[0][1] == "pik":
-                cash, pik = 0.0, rest[0][0]
-            elif rest[0][1] == "cash":
-                pk = [v for v, lab, _ in rest[1:] if lab == "pik"]
-                pik = pk[0] if pk else None
-            else:  # 'S + 0.00 %; 0.75 % Floor; 5.75 % PIK'
-                pk = [v for v, lab, _ in rest[1:] if lab == "pik"]
-                pik = pk[0] if pk and re.search(r";|Cash|plus|\+", seg) else None
-        else:
-            labelled = [(v, lab) for v, lab, _ in rest if lab in ("cash", "spread", "pik")]
-            unlabelled = [v for v, lab, _ in rest if not lab]
-            if any(lab in ("cash", "spread") for _, lab in labelled):
-                cash_pos = next(pos for v, lab, pos in rest if lab in ("cash", "spread"))
-                cash = next(v for v, lab in labelled if lab in ("cash", "spread"))
-                pk = [v for v, lab, pos in rest if lab == "pik" and pos > cash_pos]
-                pik = pk[0] if pk else None
-                floors += [v for v, lab, pos in rest if not lab and pos < cash_pos]  # a floor column first
-            elif labelled:  # PIK only, after an unlabelled floor column
-                cash, pik = 0.0, labelled[0][0]
-                pik_pos = next(pos for v, lab, pos in rest if lab == "pik")
-                floors += [v for v, lab, pos in rest if not lab and pos < pik_pos]
-            elif len(unlabelled) == 1:
-                cash = unlabelled[0]
-            else:
-                return {"code": bench, "cash": None, "pik": None, "total": None, "floors": floors}
-        total = None if cash is None else round(cash + (pik or 0.0), 6)
-        return {"code": bench, "cash": cash, "pik": pik, "total": total, "floors": floors}
-    return None
 
 
 def field_ok(field: str, published, line: str, *, mat_cell: str | None = None) -> tuple[bool, str]:
