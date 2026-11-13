@@ -150,8 +150,10 @@ def check(rule, spec, con, holdings, cik, rd, rows=None):
             elif rule in RATER:
                 from pipeline.printed_margin import parse_rate
                 if (rule == "X04" and r["basis_spread"] is None and not r["coupon_type"]
-                        and parse_rate(base.row_line(r) or "") is None and c2.own_fact(r, c2.RATE) is None):
-                    continue   # a named row with no rate terms printed or published (equity): not what X04 is about
+                        and parse_rate(base.row_line(r) or "") is None and c2.own_fact(r, c2.RATE) is None
+                        and r["asset_class"] != "PRIVATE_CREDIT"):
+                    continue   # a named non-credit row (equity) with no rate terms: not what X04 is about.
+                    # A credit row whose line the reader cannot parse is tested, and fails (round-4 review).
                 tests += c3.t_cited(RATER[rule], r, spec)[1:]
             elif rule in ISSR:
                 tests.append(("issuer_name",) + c2.check_issuer(r))
