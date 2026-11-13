@@ -7,24 +7,37 @@ _reference_uncorroborated) may be retired when every row it cites is published a
   1. finds the row's own printed line: the inline-XBRL <tr> that carries an
      us-gaap:InvestmentOwnedAtFairValue fact whose contextRef is the row's src_context_id
      (the Apollo reviewer's method; no value search, no member text);
-  2. reads the rule's field from that line and asserts the published value equals it:
-       maturity_date  - the published date is printed on the line and is the latest date there;
-       basis_spread   - the margin printed after the reference code ('S + 5.25 %', 'SOFR + 6.00%',
-                        'S+525' in basis points, 'SOFR 5.00 %') equals the published spread (0.005);
-       reference_rate - the code before the margin maps to the published reference rate; for the
-                        reference rule the margin is checked too.
+  2. reads the rule's fields from that line and asserts the published values equal them:
+       maturity_date  - the build's header-aware page reader (bdc_xbrl_html_bridge, keyed by the same
+                        context) reads a maturity cell with status 'value' equal to the published date,
+                        and that date is printed on the line. A blank or unconfirmed maturity cell fails.
+       basis_spread   - the margin printed after the benchmark code: 'S + 5.25 %', 'S+525' (basis
+                        points), 'SOFR 5.00 %', or the cell labelled Cash / Spread / PIK. Numbers
+                        labelled Floor are floors, never the margin. Per D-031 the published spread is
+                        the total margin: 'X % Cash + Y % PIK' (or 'X Cash plus Y % PIK') means X + Y;
+                        '(includes Y % PIK)' means X. Two or more unlabelled numbers after the code
+                        (a floor column next to a spread column) are ambiguous and fail.
+       reference_rate - the benchmark code printed ahead of the margin maps to the published code.
+     The maturity rule checks maturity_date; the spread rule basis_spread; the reference rule
+     reference_rate_type and basis_spread.
 A cited context with no published row passes only when it is correctly excluded: a JV look-through
 row (accounting_record_class 'underlying_schedule') or a context carrying no fair value and no cost.
 Anything else fails, and a failing entry is not retired.
 
-    python scripts/v05_evidence/agenta_retirement_check.py build --review-ids R1 R2 ... --out results.json
+    python scripts/v05_evidence/agenta_retirement_check.py build --review-ids R1 R2 ... --flags F --ledger L --out results.json
     python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json
-    python scripts/v05_evidence/agenta_retirement_check.py verify --store ... --plant   # must FAIL every entry
+    python scripts/v05_evidence/agenta_retirement_check.py verify --store ... --plant   # every applicable plant must FAIL
+
+Inputs: the published holdings parquet (--holdings, default <PM_OUTPUT_DIR or data/output>/
+private_markets_holdings.parquet) and the cached filings under data/raw/filings/bdc_html. ``--plant``
+plants each field separately (shifted date, +0.25 margin, other benchmark) and the realistic misreads
+(a floor read as the margin, the cash margin where the total is cash + PIK, an acquisition date read as
+the maturity); each applicable plant must make its entry fail.
 
 ``build`` takes the cited rows from the flags file the verdicts were written against (the 2026-07-24
-data/output/shadow/agent_a_flags.csv, identifiers cut at 300 characters, joined by prefix on the
-fund-quarter's published identifiers) and from the extracted contexts for unpublished ones. ``verify``
-re-checks the row ids recorded in the store. Read-only; ASCII output.
+data/output/shadow/agent_a_flags.csv, identifiers cut at 300 characters) through the extracted
+contexts to the published rows. ``verify`` re-checks the row ids recorded in the store. Read-only;
+ASCII output.
 """
 from __future__ import annotations
 
@@ -47,11 +60,12 @@ FIELD = {"agentA_maturity_vs_xbrl": ["maturity_date"],
          "agentA_spread_vs_xbrl": ["basis_spread"],
          "agentA_reference_uncorroborated": ["reference_rate_type", "basis_spread"]}
 _CODES = {"S": "SOFR", "SF": "SOFR", "SOFR": "SOFR", "TSOFR": "SOFR", "L": "LIBOR", "LIBOR": "LIBOR",
-          "E": "EURIBOR", "EURIBOR": "EURIBOR", "P": "PRIME", "PRIME": "PRIME", "SONIA": "SONIA",
+          "E": "EURIBOR", "EURIBOR": "EURIBOR", "P": "PRIME", "PRIME": "PRIME", "SONIA": "SONIA", "SN": "SONIA",
           "SARON": "SARON", "STIBOR": "STIBOR", "CORRA": "CORRA", "BBSY": "BBSY", "BBSW": "BBSW",
           "CDOR": "CDOR", "NIBOR": "NIBOR", "C": "CDOR", "SA": "SARON"}
-_MARGIN = re.compile(r"\b([A-Z]{1,6})(?:\s*\([A-Z0-9]{1,3}\))?\s*(?:\+\s*|\s+(?=\d))(\d{1,4}(?:\.\d+)?)\s*(%?)")
+_CODE_RE = re.compile(r"\b([A-Z]{1,6})(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|-\s|\s)(?=\s*(?:\d|-))")
 _DATE = re.compile(r"(?<![\d/])(\d{1,2})/(\d{1,2})/(\d{2}|\d{4})(?![\d/])")
+_NUM = re.compile(r"(?<![\w.])(\d{1,4}(?:\.\d+)?)\s*(%?)\s*(Floor|floor|Cash|cash|PIK|pik)?")
 
 
 @lru_cache(maxsize=8)
@@ -75,6 +89,21 @@ def printed_line(cik: str, accession: str, context: str) -> str | None:
     return None
 
 
+@lru_cache(maxsize=4)
+def _bridges(cik: str, accession: str, report_date: str) -> dict[str, dict]:
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    res = propose_field_bridges_from_ixbrl(cik=cik, accession_number=accession, report_date=report_date)
+    return {(b.get("match_evidence") or {}).get("context_ref"): b for b in res.get("bridges", [])}
+
+
+def reader_maturity(cik: str, accession: str, report_date: str, context: str) -> str | None:
+    """The maturity the header-aware page reader reads in the row's maturity cell, or None."""
+    b = _bridges(cik, accession, report_date).get(context)
+    if not b or b.get("maturity_status") != "value" or not b.get("maturity_date"):
+        return None
+    return str(b["maturity_date"])[:10]
+
+
 def printed_dates(line: str) -> list[date]:
     out = []
     for mo, dd, yy in _DATE.findall(line):
@@ -86,61 +115,86 @@ def printed_dates(line: str) -> list[date]:
     return out
 
 
-def printed_margin(line: str) -> tuple[str, float] | None:
-    """(benchmark, margin in pct) of the first 'CODE + n' on the line; None if there is none."""
-    for code, num, pct in _MARGIN.findall(line):
+def parse_rate(line: str) -> dict | None:
+    """{'code', 'cash', 'pik', 'total', 'floors'} of the first benchmark code on the line and the margin
+    printed after it; None when no benchmark is printed; 'total' None when the margin is ambiguous."""
+    for m in _CODE_RE.finditer(line):
+        code, sep = m.group(1), m.group(2)
         bench = _CODES.get(code.upper())
-        if not bench:
+        if not bench or (len(code) <= 2 and sep != "+"):
             continue
-        value = float(num)
-        if not pct and "." not in num and value >= 25:
-            value /= 100.0  # basis points ('S+525')
-        return bench, value
+        seg = line[m.end():]
+        d = _DATE.search(seg)
+        seg = seg[:d.start()] if d else seg[:90]
+        includes = re.search(r"(?i)incl(?:udes|\.|uding)?\s*(\d{1,4}(?:\.\d+)?)\s*%\s*PIK", seg)
+        nums = []
+        for n in _NUM.finditer(seg):
+            before = seg[max(0, n.start() - 8):n.start()].lower()
+            label = (n.group(3) or "").lower()
+            if not label and "floor" in before:
+                label = "floor"
+            if not label and "spread" in before:
+                label = "spread"
+            value = float(n.group(1))
+            if not n.group(2) and "." not in n.group(1) and value >= 25:
+                value /= 100.0  # basis points
+            nums.append((value, label, n.start()))
+        floors = [v for v, lab, _ in nums if lab == "floor"]
+        rest = [(v, lab, pos) for v, lab, pos in nums if lab != "floor"]
+        if includes:
+            rest = [(v, lab, pos) for v, lab, pos in rest if pos < includes.start()]
+        cash = pik = None
+        if sep == "+" and rest:
+            cash = rest[0][0]
+            if rest[0][1] == "pik":
+                cash, pik = 0.0, rest[0][0]
+            elif rest[0][1] == "cash":
+                pk = [v for v, lab, _ in rest[1:] if lab == "pik"]
+                pik = pk[0] if pk else None
+            else:  # 'S + 0.00 %; 0.75 % Floor; 5.75 % PIK'
+                pk = [v for v, lab, _ in rest[1:] if lab == "pik"]
+                pik = pk[0] if pk and re.search(r";|Cash|plus|\+", seg) else None
+        else:
+            labelled = [(v, lab) for v, lab, _ in rest if lab in ("cash", "spread", "pik")]
+            unlabelled = [v for v, lab, _ in rest if not lab]
+            if any(lab in ("cash", "spread") for _, lab in labelled):
+                cash_pos = next(pos for v, lab, pos in rest if lab in ("cash", "spread"))
+                cash = next(v for v, lab in labelled if lab in ("cash", "spread"))
+                pk = [v for v, lab, pos in rest if lab == "pik" and pos > cash_pos]
+                pik = pk[0] if pk else None
+                floors += [v for v, lab, pos in rest if not lab and pos < cash_pos]  # a floor column first
+            elif labelled:  # PIK only, after an unlabelled floor column
+                cash, pik = 0.0, labelled[0][0]
+                pik_pos = next(pos for v, lab, pos in rest if lab == "pik")
+                floors += [v for v, lab, pos in rest if not lab and pos < pik_pos]
+            elif len(unlabelled) == 1:
+                cash = unlabelled[0]
+            else:
+                return {"code": bench, "cash": None, "pik": None, "total": None, "floors": floors}
+        total = None if cash is None else round(cash + (pik or 0.0), 6)
+        return {"code": bench, "cash": cash, "pik": pik, "total": total, "floors": floors}
     return None
 
 
-_REF = re.compile(r"\b([A-Z]{1,6})(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|-\s|\s)\s*\d")
-
-
-def printed_reference(line: str) -> str | None:
-    """The benchmark code printed ahead of a number ('S + 5.25', 'SOFR(Q) - 6.76', 'SOFR 5.00');
-    a one- or two-letter code counts only before '+'."""
-    for code, sep in _REF.findall(line):
-        bench = _CODES.get(code.upper())
-        if bench and (len(code) > 2 or sep == "+"):
-            return bench
-    return None
-
-
-def percent_printed(line: str, value: float) -> bool:
-    """The value is printed on the line as a percent ('5.75 %') or as basis points after '+' ('+575')."""
-    for num in re.findall(r"(\d{1,3}(?:\.\d+)?)\s*%", line):
-        if abs(float(num) - value) <= 0.005:
-            return True
-    return any(abs(int(b) / 100.0 - value) <= 0.005 for b in re.findall(r"\+\s*(\d{2,4})(?![\d.%])", line))
-
-
-def field_ok(field: str, published, line: str, rule: str = "") -> tuple[bool, str]:
+def field_ok(field: str, published, line: str, *, mat_cell: str | None = None) -> tuple[bool, str]:
     if field == "maturity_date":
-        dates = printed_dates(line)
-        if published in (None, "") or not dates:
-            return False, "no published or printed date"
+        if published in (None, ""):
+            return False, "no published maturity"
+        if mat_cell is None:
+            return False, "the reader confirms no maturity cell on the line"
         pub = date.fromisoformat(str(published)[:10])
-        return (pub in dates and pub == max(dates)), "printed dates %s" % [d.isoformat() for d in dates]
+        ok = mat_cell == pub.isoformat() and pub in printed_dates(line)
+        return ok, "maturity cell %s" % mat_cell
+    rate = parse_rate(line)
+    if rate is None:
+        return False, "no benchmark code printed"
     if field == "reference_rate_type":
-        code = printed_reference(line)
-        return (code is not None and str(published or "").upper() == code), "printed code %s" % code
-    if field == "basis_spread" and rule == "agentA_reference_uncorroborated":
-        # the reference rule's verdicts are about a spread not carried: the published spread must be
-        # a percent printed on the row's own line (a separate Spread column has no 'CODE +' form)
-        ok = published is not None and percent_printed(line, float(published))
-        return ok, "published spread printed on the line: %s" % ok
+        return str(published or "").upper() == rate["code"], "printed code %s" % rate["code"]
     if field == "basis_spread":
-        margin = printed_margin(line)
-        if margin is None:
-            return False, "no 'CODE + margin' printed"
-        ok = published is not None and abs(float(published) - margin[1]) <= 0.005
-        return ok, "printed margin %s" % margin[1]
+        if rate["total"] is None:
+            return False, "margin ambiguous (floor and spread not told apart)"
+        ok = published is not None and abs(float(published) - rate["total"]) <= 0.005
+        return ok, "printed margin total %s (cash %s, PIK %s)" % (rate["total"], rate["cash"], rate["pik"])
     raise ValueError(field)
 
 
@@ -157,37 +211,56 @@ def published_rows(con, holdings: str, row_ids: list[str]) -> dict[str, dict]:
             CAST(report_date AS VARCHAR)[:10] report_date, CAST(maturity_date AS VARCHAR)[:10] maturity_date,
             TRY_CAST(basis_spread AS DOUBLE) basis_spread, CAST(reference_rate_type AS VARCHAR) reference_rate_type,
             coalesce(CAST(accounting_record_class AS VARCHAR),'') record_class
-        FROM read_parquet('{holdings}') WHERE row_id IN (SELECT unnest(?))""", [row_ids]).fetchdf()
+        FROM read_parquet('{holdings}') WHERE row_id IN (SELECT unnest(?)) ORDER BY row_id""", [row_ids]).fetchdf()
     return {r["row_id"]: r for r in df.astype(object).where(df.notna(), None).to_dict("records")}
 
 
-def check_rows(rule: str, rows: list[dict], plant: bool = False) -> list[dict]:
-    """One result per cited published row: ok, line, detail per field. ``plant`` shifts every
-    published value (a day, a quarter point, another benchmark) so a correct check must fail."""
+def check_row(rule: str, r: dict) -> dict:
+    if r.get("record_class") == "underlying_schedule":
+        return {"row_id": r["row_id"], "ok": True, "excluded": "underlying_schedule", "line": None}
+    line = printed_line(r["cik"], r["accession_number"], r["src_context_id"])
+    if line is None:
+        return {"row_id": r["row_id"], "ok": False, "detail": "printed line not found", "line": None}
+    mat_cell = (reader_maturity(r["cik"], r["accession_number"], r["report_date"], r["src_context_id"])
+                if "maturity_date" in FIELD[rule] else None)
+    details, ok = {}, True
+    for field in FIELD[rule]:
+        f_ok, why = field_ok(field, r.get(field), line, mat_cell=mat_cell)
+        details[field] = {"published": r.get(field), "ok": f_ok, "why": why}
+        ok = ok and f_ok
+    return {"row_id": r["row_id"], "ok": ok, "detail": details, "line": line,
+            "accession_number": r["accession_number"]}
+
+
+def check_rows(rule: str, rows: list[dict]) -> list[dict]:
+    return [check_row(rule, r) for r in rows]
+
+
+def plants(rule: str, r: dict) -> list[tuple[str, dict]]:
+    """(name, planted row) for every plant that applies to this row and rule."""
     out = []
-    for r in rows:
-        r = dict(r)
-        if plant:
-            if r.get("maturity_date"):
-                r["maturity_date"] = (date.fromisoformat(r["maturity_date"]) + timedelta(days=1)).isoformat()
-            r["basis_spread"] = (r.get("basis_spread") or 0.0) + 0.25
-            r["reference_rate_type"] = "LIBOR" if r.get("reference_rate_type") != "LIBOR" else "SOFR"
-            if r.get("record_class") == "underlying_schedule":
-                r["record_class"] = ""  # a planted row is not excused as a look-through row
-        if r.get("record_class") == "underlying_schedule":
-            out.append({"row_id": r["row_id"], "ok": True, "excluded": "underlying_schedule", "line": None})
-            continue
-        line = printed_line(r["cik"], r["accession_number"], r["src_context_id"])
-        if line is None:
-            out.append({"row_id": r["row_id"], "ok": False, "detail": "printed line not found", "line": None})
-            continue
-        details, ok = {}, True
-        for field in FIELD[rule]:
-            f_ok, why = field_ok(field, r.get(field), line, rule)
-            details[field] = {"published": r.get(field), "ok": f_ok, "why": why}
-            ok = ok and f_ok
-        out.append({"row_id": r["row_id"], "ok": ok, "detail": details, "line": line,
-                    "accession_number": r["accession_number"]})
+    line = printed_line(r["cik"], r["accession_number"], r["src_context_id"]) or ""
+    if "maturity_date" in FIELD[rule] and r.get("maturity_date"):
+        pub = date.fromisoformat(r["maturity_date"])
+        out.append(("maturity_shift", dict(r, maturity_date=(pub + timedelta(days=1)).isoformat())))
+        others = sorted({d for d in printed_dates(line) if d != pub})
+        if others:
+            out.append(("acquisition_date_as_maturity", dict(r, maturity_date=others[0].isoformat())))
+    if "basis_spread" in FIELD[rule]:
+        out.append(("spread_shift", dict(r, basis_spread=(r.get("basis_spread") or 0.0) + 0.25)))
+        rate = parse_rate(line) or {}
+        for fl in rate.get("floors") or []:
+            if rate.get("total") is None or abs(fl - rate["total"]) > 0.005:
+                out.append(("floor_as_spread", dict(r, basis_spread=fl)))
+                break
+        if rate.get("pik") and rate.get("cash"):
+            out.append(("cash_not_total", dict(r, basis_spread=rate["cash"])))
+    if "reference_rate_type" in FIELD[rule]:
+        out.append(("reference_swap", dict(r, reference_rate_type="LIBOR" if r.get("reference_rate_type") != "LIBOR"
+                                           else "SOFR")))
+    for name, p in out:
+        if p.get("record_class") == "underlying_schedule":
+            p["record_class"] = ""  # a planted row is not excused as a look-through row
     return out
 
 
@@ -215,7 +288,6 @@ def cited_rows(con, holdings: str, parquet: str, flags: str, cik: str, rd: str, 
 
     row_ids, unpublished = [], []
     for ident in idents:
-        # the flagged identifier's extracted contexts, then the published rows built from them
         cs = [c for c in ctx if named(c[0], ident)]
         keys = {(c[4], c[1]) for c in cs}
         hits = [rid for rid, pid, pctx, pacc in pub if (pacc, pctx) in keys or named(pid, ident)]
@@ -261,18 +333,40 @@ def verify(store: Path, holdings: str, plant: bool) -> int:
     data = json.loads(Path(store).read_text(encoding="utf-8-sig"))
     con = _con()
     passed = failed = 0
+    plant_tally: dict[str, list[int]] = {}
     for e in data["retirements"]:
         rows = list(published_rows(con, holdings, e["cited_rows"]).values())
         missing = set(e["cited_rows"]) - {r["row_id"] for r in rows}
-        checked = check_rows(e["rule_name"], rows, plant=plant)
-        ok = not missing and bool(checked) and all(c["ok"] for c in checked)
-        passed += ok
-        failed += not ok
-        print("%s %s %s: %s%s" % (e["retirement_id"], e["review_id"], e["rule_name"], "PASS" if ok else "FAIL",
-                                  " (missing rows %s)" % sorted(missing) if missing else ""))
-    print("entries %d: pass %d, fail %d%s" % (passed + failed, passed, failed, " [PLANTED]" if plant else ""))
+        if not plant:
+            checked = check_rows(e["rule_name"], rows)
+            ok = not missing and bool(checked) and all(c["ok"] for c in checked)
+            for c in checked:
+                if not c["ok"]:
+                    print("   row %s: %s" % (c["row_id"], json.dumps(c.get("detail"))[:300]))
+            passed += ok
+            failed += not ok
+            print("%s %s %s: %s%s" % (e["retirement_id"], e["review_id"], e["rule_name"], "PASS" if ok else "FAIL",
+                                      " (missing rows %s)" % sorted(missing) if missing else ""))
+            continue
+        # planted: each applicable plant, on one row at a time, must make the entry fail
+        caught = escaped = 0
+        for r in rows:
+            for name, planted in plants(e["rule_name"], r):
+                bad = check_row(e["rule_name"], planted)["ok"]
+                plant_tally.setdefault(name, [0, 0])[0 if not bad else 1] += 1
+                caught += not bad
+                escaped += bad
+                if bad:
+                    print("   ESCAPED plant %s on %s" % (name, r["row_id"]))
+        passed += escaped == 0 and caught > 0
+        failed += not (escaped == 0 and caught > 0)
+        print("%s %s: planted %d, caught %d, escaped %d" % (e["retirement_id"], e["rule_name"], caught + escaped,
+                                                           caught, escaped))
     if plant:
-        return 0 if passed == 0 else 1  # every planted entry must fail
+        print("plants by kind (caught, escaped): %s" % {k: tuple(v) for k, v in sorted(plant_tally.items())})
+        print("entries %d: every plant caught in %d, a plant escaped in %d [PLANTED]" % (passed + failed, passed, failed))
+        return 0 if failed == 0 else 1
+    print("entries %d: pass %d, fail %d" % (passed + failed, passed, failed))
     return 0 if failed == 0 else 1
 
 
@@ -289,7 +383,8 @@ def main(argv=None) -> int:
     b.add_argument("--out", required=True)
     v = sub.add_parser("verify")
     v.add_argument("--store", required=True)
-    v.add_argument("--holdings", default=str(out / "private_markets_holdings.parquet"))
+    v.add_argument("--holdings", default=str(out / "private_markets_holdings.parquet"),
+                   help="published holdings parquet (default <PM_OUTPUT_DIR or data/output>/private_markets_holdings.parquet)")
     v.add_argument("--plant", action="store_true")
     a = ap.parse_args(argv)
     if a.cmd == "build":

@@ -13,7 +13,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -36,11 +36,11 @@
     "ROW-ad433ad185c47386",
     "ROW-bbf7b5ea4aa24e9e"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -55,7 +55,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (12 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -148,11 +148,11 @@
     "ROW-ead5a62d3a2d1eab",
     "ROW-f8b97fff8cf293c9"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -167,7 +167,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published basis_spread equals the value printed there (5 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -211,11 +211,11 @@
     "ROW-7bd8ffaf07c53a15",
     "ROW-acd5b07519c36149"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": true
   },
   {
@@ -230,7 +230,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -253,11 +253,11 @@
     "ROW-598b31f273ebdd3c",
     "ROW-cb25b9c4187f258a"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -272,7 +272,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (19 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -414,11 +414,11 @@
     "ROW-f1745c51a2309286",
     "ROW-ffdccb90e956569c"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -433,7 +433,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (1 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -449,11 +449,11 @@
    "cited_rows": [
     "ROW-74937fa5f68b42e3"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -468,7 +468,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published basis_spread equals the value printed there (3 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -498,11 +498,11 @@
     "ROW-a94a88e4745164bd",
     "ROW-ac020446ee55589f"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": true
   },
   {
@@ -517,7 +517,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -540,11 +540,11 @@
     "ROW-0efb02fcb2d2969f",
     "ROW-490d5e4b4613180c"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -559,7 +559,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published reference_rate_type and basis_spread equals the value printed there (1 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -575,11 +575,11 @@
    "cited_rows": [
     "ROW-6716d4d703706be1"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -594,7 +594,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -617,11 +617,11 @@
     "ROW-3f70f09de00945e8",
     "ROW-426287a8c7a38f17"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -636,7 +636,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (1 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -652,11 +652,11 @@
    "cited_rows": [
     "ROW-18fe15e0857bf998"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -671,7 +671,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published basis_spread equals the value printed there (1 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -687,11 +687,11 @@
    "cited_rows": [
     "ROW-38d36ba8687a1ef9"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -706,7 +706,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published reference_rate_type and basis_spread equals the value printed there (4 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -743,11 +743,11 @@
     "ROW-aac7227d7a88ed66",
     "ROW-e9d02df4dc3940bc"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": true
   },
   {
@@ -762,7 +762,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -785,11 +785,11 @@
     "ROW-702b1a5fc9aefa34",
     "ROW-9a66e74fa0039d0a"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -804,7 +804,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -827,11 +827,11 @@
     "ROW-70868a76b6be6350",
     "ROW-d4b866c063ff6df4"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -846,7 +846,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (28 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1051,165 +1051,11 @@
     "ROW-f6665cf2c12f4d4b",
     "ROW-fd85057a89a0ab23"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
-   "cohort_left": false
-  },
-  {
-   "retirement_id": "VR-AGA-1902649-1",
-   "review_id": "RVQ_BLK_7a79fc2cbff8",
-   "verdict_sha256": "443d7f6d4dae53fc6034614198c406c804794cead258ede5701c543ac6b6a557",
-   "cik": "0001902649",
-   "engine": "agentA",
-   "rule_name": "agentA_reference_uncorroborated",
-   "report_date": "2025-12-31",
-   "reason": "Standing rule D-252: every row the verdict cites is published at the value its own printed line shows (reference_rate_type and basis_spread); the verdict's error is in the filer's hidden member label (the identifier the agentA rule parses), which is not published. Check repair REQ-APZ-1 stops raising such label-only differences.",
-   "evidence": [
-    {
-     "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published reference_rate_type and basis_spread equals the value printed there (18 rows checked, all pass; a planted shift of every published value fails every entry)"
-    },
-    {
-     "source": "query",
-     "quote": "private_markets_holdings.parquet (batch b1112b build): cited rows ROW-120b4a95684349cd, ROW-1ab863efc2141186, ROW-2735978a860eb2ed, ROW-28aedab2772dba86, ROW-5c00a88de302b24d, ROW-5f3f55dff3edd006, ROW-696f1e2490f81ba1, ROW-9804b685d61409d9, ROW-9adcd52478fcf9dd, ROW-9b69b919914f5781, ROW-a5704c6de109aefa, ROW-b26791bbe7c77a09, ROW-c14024ecd76143c8, ROW-c2dadcf2eab728cb, ROW-c2daebd0775e8e5c, ROW-c6697927ecd4f53c, ROW-d1b7e1d5e25cb651, ROW-d5152bbb6a0dabc3; published values ROW-a5704c6de109aefa {'reference_rate_type': 'SOFR', 'basis_spread': 5.0}; ROW-2735978a860eb2ed {'reference_rate_type': 'SOFR', 'basis_spread': 5.0}; ROW-c14024ecd76143c8 {'reference_rate_type': 'SOFR', 'basis_spread': 2.75}; ROW-1ab863efc2141186 {'reference_rate_type': 'SOFR', 'basis_spread': 4.73}; ROW-28aedab2772dba86 {'reference_rate_type': 'SOFR', 'basis_spread': 4.73}; ROW-d5152bbb6a0dabc3 {'reference_rate_type': 'SOFR', 'basis_spread': 3.25}; ROW-c6697927ecd4f53c {'reference_rate_type': 'SOFR', 'basis_spread': 3.25}; ROW-9804b685d61409d9 {'reference_rate_type': 'SOFR', 'basis_spread': 6.76}; ROW-5f3f55dff3edd006 {'reference_rate_type': 'SOFR', 'basis_spread': 6.76}; ROW-9adcd52478fcf9dd {'reference_rate_type': 'SOFR', 'basis_spread': 6.76}; ROW-696f1e2490f81ba1 {'reference_rate_type': 'SOFR', 'basis_spread': 6.76}; ROW-120b4a95684349cd {'reference_rate_type': 'SOFR', 'basis_spread': 2.5}; ROW-b26791bbe7c77a09 {'reference_rate_type': 'SOFR', 'basis_spread': 2.5}; ROW-5c00a88de302b24d {'reference_rate_type': 'SOFR', 'basis_spread': 2.5}; ROW-9b69b919914f5781 {'reference_rate_type': 'SOFR', 'basis_spread': 2.5}; ROW-d1b7e1d5e25cb651 {'reference_rate_type': 'SOFR', 'basis_spread': 2.88}; ROW-c2dadcf2eab728cb {'reference_rate_type': 'SOFR', 'basis_spread': 2.88}; ROW-c2daebd0775e8e5c {'reference_rate_type': 'SOFR', 'basis_spread': 2.63}"
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Skydio, Inc First Lien Delayed Draw Term Loan A SOFR(M) 2.50 % 5.00 % Cash 8.73 % 12/4/2029 $ 3,750,000 3,720,571 3,716,250 0.15 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Skydio, Inc First Lien Delayed Draw Term Loan B SOFR(M) 2.50 % 5.00 % Cash 8.73 % 12/4/2029 $ - ( 29,429 ) ( 33,750 ) - D/E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Skydio, Inc First Lien Term Loan SOFR(M) 2.50 % 2.75 % Cash + 2.75 % PIK 9.17 % 12/4/2029 $ 7,711,220 7,652,362 7,641,819 0.31 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Madison Logic Holdings, Inc. First Lien Revolver SOFR(M) 1.00 % 4.73 % Cash + 2.37 % PIK 10.72 % 12/30/2027 $ - ( 1,026 ) ( 11,240 ) - D/E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Madison Logic Holdings, Inc. First Lien Term Loan SOFR(M) 1.00 % 4.73 % Cash + 2.37 % PIK 10.72 % 12/29/2028 $ 2,274,371 2,241,294 1,976,428 0.08 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Gympass US, LLC First Lien Delayed Draw Term Loan SOFR(M) 1.00 % 3.25 % Cash + 3.25 % PIK 10.34 % 8/29/2029 $ 12,792,857 12,729,836 12,920,786 0.51 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Gympass US, LLC First Lien Term Loan SOFR(M) 1.00 % 3.25 % Cash + 3.25 % PIK 10.34 % 8/29/2029 $ 2,849,124 2,841,564 2,877,615 0.12 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Streamland Media Midco LLC First Lien Delayed Draw Term Loan SOFR(Q) 1.00 % 6.76 % PIK 10.43 % 3/31/2029 $ 116,958 116,958 116,958 - E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Streamland Media Midco LLC First Lien Revolver SOFR(Q) - 6.76 % PIK 10.43 % 3/31/2029 $ 206,470 206,470 206,470 0.01 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Streamland Media Midco LLC First Out Term Loan SOFR(Q) 1.00 % 6.76 % PIK 10.43 % 3/31/2029 $ 1,461,957 1,461,957 1,461,957 0.06 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Streamland Media Midco LLC Last Out Term Loan SOFR(Q) - 6.76 % PIK 10.43 % 3/31/2029 $ 1,331,823 1,263,126 969,567 0.04 % E/G",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "GTY Technology Holdings Inc. First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 2.50 % Cash + 4.13 % PIK 10.30 % 7/9/2029 $ 1,134,951 1,121,283 1,120,846 0.05 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "GTY Technology Holdings Inc. First Lien Delayed Draw Term Loan SOFR(Q) 1.00 % 2.50 % Cash + 4.13 % PIK 10.30 % 7/9/2029 $ 1,306,234 1,294,733 1,290,000 0.05 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "GTY Technology Holdings Inc. First Lien Revolver SOFR(Q) 1.00 % 2.50 % Cash + 4.13 % PIK 10.30 % 7/9/2029 $ - ( 12,269 ) ( 13,125 ) - D/E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "GTY Technology Holdings Inc. First Lien Term Loan SOFR(Q) 1.00 % 2.50 % Cash + 4.13 % PIK 10.30 % 7/9/2029 $ 3,821,002 3,781,306 3,773,515 0.15 % E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Honey Intermediate, Inc. (iLobby) (Canada) First Lien Revolver SOFR(M) 1.00 % 2.88 % Cash + 3.38 % PIK 9.97 % 9/26/2030 $ - ( 21,007 ) ( 29,958 ) - C/D/E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "Honey Intermediate, Inc. (iLobby) (Canada) First Lien Term Loan SOFR(M) 1.00 % 2.88 % Cash + 3.38 % PIK 9.97 % 9/30/2030 $ 14,656,842 14,484,145 14,422,333 0.58 % C/E",
-     "verbatim": true
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "quote": "IQN Holding Corporation (Beeline) First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 2.63 % Cash + 3.13 % PIK 9.42 % 5/2/2029 $ 38,464,385 38,145,879 38,129,745 1.56 % E",
-     "verbatim": true
-    }
-   ],
-   "cited_rows": [
-    "ROW-120b4a95684349cd",
-    "ROW-1ab863efc2141186",
-    "ROW-2735978a860eb2ed",
-    "ROW-28aedab2772dba86",
-    "ROW-5c00a88de302b24d",
-    "ROW-5f3f55dff3edd006",
-    "ROW-696f1e2490f81ba1",
-    "ROW-9804b685d61409d9",
-    "ROW-9adcd52478fcf9dd",
-    "ROW-9b69b919914f5781",
-    "ROW-a5704c6de109aefa",
-    "ROW-b26791bbe7c77a09",
-    "ROW-c14024ecd76143c8",
-    "ROW-c2dadcf2eab728cb",
-    "ROW-c2daebd0775e8e5c",
-    "ROW-c6697927ecd4f53c",
-    "ROW-d1b7e1d5e25cb651",
-    "ROW-d5152bbb6a0dabc3"
-   ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
-   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
-   "decided_by": "owner",
-   "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1224,7 +1070,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published basis_spread equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1247,11 +1093,11 @@
     "ROW-6d1da640febdb28d",
     "ROW-8b0cbb5e0be93cf8"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": true
   },
   {
@@ -1266,7 +1112,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published reference_rate_type and basis_spread equals the value printed there (7 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1324,11 +1170,11 @@
     "ROW-d4b9b1195a08f748",
     "ROW-f8b205bcd59d3e4f"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": true
   },
   {
@@ -1343,7 +1189,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (4 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1380,11 +1226,11 @@
     "ROW-a101e49bc6fcab09",
     "ROW-ae1edd908c7ace2e"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1399,7 +1245,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (11 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1485,11 +1331,11 @@
     "ROW-e1411fbaf7b8c32c",
     "ROW-ec7d2f5f3f29dc61"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1504,7 +1350,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1527,11 +1373,11 @@
     "ROW-0ad92ef42f89fd9e",
     "ROW-8f158cc44e998fec"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": true
   },
   {
@@ -1546,7 +1392,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1569,11 +1415,11 @@
     "ROW-4c6dc393dc6d5010",
     "ROW-a8695e64ad21b159"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1588,7 +1434,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (2 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1611,11 +1457,11 @@
     "ROW-6467f5c79dcf9ded",
     "ROW-ce59202d4315ae49"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1630,7 +1476,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (13 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1730,11 +1576,11 @@
     "ROW-d34704c999b73329",
     "ROW-ec88cd79fa04bb60"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1749,7 +1595,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (3 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1779,11 +1625,11 @@
     "ROW-eb6b2eaa215f0874",
     "ROW-ed01911e98df5c09"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1798,7 +1644,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (1 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1814,11 +1660,11 @@
    "cited_rows": [
     "ROW-3a3b48b378660301"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1833,7 +1679,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (7 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -1891,11 +1737,11 @@
     "ROW-b5f5765ecd2e93f1",
     "ROW-b863f78ba0ab620f"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -1910,7 +1756,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published maturity_date equals the value printed there (11 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -2000,11 +1846,11 @@
     "ROW-d74043daff613f44",
     "ROW-eca7c06e81dee1f2"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   },
   {
@@ -2019,7 +1865,7 @@
    "evidence": [
     {
      "source": "code",
-     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; the published basis_spread equals the value printed there (1 rows checked, all pass; a planted shift of every published value fails every entry)"
+     "quote": "scripts/v05_evidence/agenta_retirement_check.py: each cited row's own printed line is the <tr> carrying the us-gaap:InvestmentOwnedAtFairValue fact of the row's src_context_id; maturity must equal the header-aware reader's maturity cell (blank fails); the margin is the number after the benchmark code, floors excluded, cash + PIK total per D-031; every row passes, and every applicable plant (shifted field, floor as margin, cash not total, acquisition date as maturity, other benchmark) fails"
     },
     {
      "source": "query",
@@ -2035,11 +1881,11 @@
    "cited_rows": [
     "ROW-e903565d4d0af07e"
    ],
-   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json (and --plant, which must fail every entry)",
+   "rerun": "python scripts/v05_evidence/agenta_retirement_check.py verify --store data/overrides/verdict_retirements/standing_rule_agenta_repair_2026-11-13.json --holdings <batch output>/private_markets_holdings.parquet (default: PM_OUTPUT_DIR or data/output; the b1112b build was used); add --plant: every applicable plant must fail. Needs the cached filings under data/raw/filings/bdc_html.",
    "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
    "decided_by": "owner",
    "decided_on": "2026-11-10",
-   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner go 2026-11-13 ('do it')",
+   "applied_by": "agent:agenta-repair-20261113-opus under the standing rule (owner ruling D-252, 2026-11-10); owner 2026-11-13: \"do it\" (in reply to the plan: retire the 28 under D-252, independent code review, merge)",
    "cohort_left": false
   }
  ]

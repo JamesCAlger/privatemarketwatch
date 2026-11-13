@@ -37,6 +37,14 @@ the published row is compared with its own printed line:
      row_id, accession and context, so a flag joins to its row.
 The ``mechanism`` strings are unchanged: the review id hashes the mechanism.
 
+Code review 2026-11-13 (D1-D7): a fund whose grammar fails the held-out gate (or whose gate errors)
+keeps its previous flags (carried from agent_a_flags.prev.csv, printed_check 'cohort_excluded') and is
+listed in agent_a_cohort_excluded.csv with a WARNING; outputs are sorted and the candidate queries
+ordered, so identical inputs give byte-identical files (the adapter's mode(mechanism) breaks ties by
+first occurrence); the reference rule keeps its flag when the published spread is blank and the line
+prints a cash margin ('spread_missing'); every flag and audit row records line_match ('context',
+'member', 'member_ambiguous'), and a member-name match counts only when the member has one context.
+
 Writes <output>/shadow/agent_a_flags.csv, <output>/shadow/agent_a_unpublished_coverage.csv and
 <output>/shadow/agent_a_candidates_audit.csv (every candidate's outcome, dropped ones included).
 
@@ -86,6 +94,8 @@ SEED_TARGETS = [
 FLAGS_NAME = "agent_a_flags.csv"
 COVERAGE_NAME = "agent_a_unpublished_coverage.csv"
 AUDIT_NAME = "agent_a_candidates_audit.csv"
+EXCLUDED_NAME = "agent_a_cohort_excluded.csv"
+PREVIOUS_NAME = "agent_a_flags.prev.csv"
 OUT = config.OUTPUT_DIR / "shadow" / FLAGS_NAME
 
 
@@ -144,12 +154,15 @@ _STATUS = {"agentA": "warn", "neither": "fail", "xbrl": "warn",
 _FIELDS = ["engine", "rule_name", "tier", "enforcement", "cik", "report_date", "status",
            "metric", "metric_name", "mechanism", "agentA_value_pct", "xbrl_residual",
            "a_residual", "identifier", "row_id", "accession_number", "src_context_id",
-           "printed_check", "mismatch_fields", "printed_row"]
+           "printed_check", "mismatch_fields", "printed_row", "line_match"]
+_SORT_KEY = ("cik", "report_date", "rule_name", "identifier", "row_id", "mechanism", "printed_check")
 
 _COVERAGE_FIELDS = ["cik", "report_date", "rule_name", "identifier", "accession_number",
                     "src_context_id", "fair_value", "cost", "reason"]
+_EXCLUDED_FIELDS = ["cik", "signature", "reason", "carried_flags", "previous_file"]
 
-# The field each rule tests. The subtotal rule tests no value: on a published row it stays.
+# The field each rule tests. The subtotal rule tests no value: its flag on a published row is
+# dropped when the row's own line is a position line (compare_row).
 PRIMARY_FIELD = {"agentA_maturity_vs_xbrl": "maturity_date",
                  "agentA_spread_vs_xbrl": "basis_spread",
                  "agentA_reference_uncorroborated": "reference_rate_type"}
@@ -166,13 +179,15 @@ def _flag(rule_name, cik, rd, status, mechanism, ident, *, metric="", metric_nam
             "metric": metric, "metric_name": metric_name, "mechanism": mechanism,
             "agentA_value_pct": a_val, "xbrl_residual": xresid, "a_residual": aresid,
             "identifier": str(ident), "row_id": "", "accession_number": "", "src_context_id": "",
-            "printed_check": "", "mismatch_fields": "", "printed_row": ""}
+            "printed_check": "", "mismatch_fields": "", "printed_row": "", "line_match": ""}
 
 
 def _spread_flags(cik, sig, parquet):
     """Deterministic basis_spread vs XBRL + SOFR reconciliation (verdict = B's prior)."""
     out = []
-    for c in stage_overlay(cik, sig, parquet).conflict_rows:
+    # every conflict, not the overlay report's first 500: a cap would drop candidates (and clear their
+    # findings) depending on scan order (seen on 0001784700, 2026-11-13)
+    for c in stage_overlay(cik, sig, parquet, max_conflicts=None).conflict_rows:
         if c["field"] != "basis_spread" or "reconcile_verdict" not in c:
             continue
         v = c["reconcile_verdict"]
@@ -204,7 +219,8 @@ def _enrichment_flags(cik, parquet):
                    CAST(maturity_date AS VARCHAR) xmat
             FROM '{parquet}' WHERE CAST(cik AS VARCHAR)='{cik}'
               AND investment_identifier IS NOT NULL
-              AND CAST(period AS VARCHAR)=CAST(report_date AS VARCHAR)"""
+              AND CAST(period AS VARCHAR)=CAST(report_date AS VARCHAR)
+            ORDER BY ALL"""
     ).fetchall()
     con.close()
 
@@ -324,7 +340,40 @@ def unreadable_fields(bridge: dict | None) -> list[str]:
     return out
 
 
-_TOTAL_LINE_RE = re.compile(r"(?i)^\s*(?:sub-?\s*)?total\b")
+_INVISIBLE = str.maketrans({"​": " ", " ": " ", "﻿": " "})
+# 'CODE + n' / 'CODE n' margin on a line; group 3 is the text right after the number
+_FLOAT_MARGIN_RE = re.compile(
+    r"\b(SOFR|SF|S|LIBOR|L|EURIBOR|E|PRIME|P|SONIA|SARON|STIBOR|CORRA|BBSY|BBSW|CDOR|C|NIBOR|SN|SA)"
+    r"(?:\s*\([A-Z0-9]{1,3}\))?\s*(\+|(?<=[A-Z]{4})\s)\s*(\d{1,4}(?:\.\d+)?)\s*%?([^|;,)]{0,12})")
+
+
+def first_cell(printed_row: str) -> str:
+    """The first non-blank cell of a printed row (zero-width and no-break spaces count as blank)."""
+    for cell in str(printed_row or "").split("|"):
+        text = cell.translate(_INVISIBLE).strip()
+        if text:
+            return text
+    return ""
+
+
+def is_total_line(printed_row: str) -> bool:
+    from pipeline.bdc_xbrl_html_bridge import _SUBTOTAL_RE
+    return bool(_SUBTOTAL_RE.search(first_cell(printed_row)))
+
+
+def printed_floating_margin(bridge: dict) -> float | None:
+    """A non-zero cash margin the line prints over a benchmark (the reader's printed_margin, else the
+    first 'CODE + n' on the line that is not marked PIK); None if the line prints none."""
+    m = _num(bridge.get("printed_margin"))
+    if m:
+        return m
+    for _code, _sep, num, tail in _FLOAT_MARGIN_RE.findall(str(bridge.get("printed_row") or "")):
+        value = float(num)
+        if "." not in num and value >= 25:
+            value /= 100.0  # basis points
+        if value > 0 and "PIK" not in tail.upper():
+            return value
+    return None
 
 
 def field_differs(field: str, published: Any, printed: Any) -> bool:
@@ -351,21 +400,27 @@ def field_differs(field: str, published: Any, printed: Any) -> bool:
 def compare_row(rule_name: str, published: dict, bridge: dict | None) -> tuple[str, list[str]]:
     """(printed_check, mismatched fields) of one published row against its own printed line.
 
-    printed_check: 'equal' (flag dropped), 'mismatch', 'line_not_found', 'field_unreadable',
-    'field_not_printed', 'subtotal_line'. Everything but 'equal' keeps the flag (fail closed).
+    printed_check: 'equal' (flag dropped), 'mismatch', 'spread_missing', 'line_not_found',
+    'field_unreadable', 'field_not_printed', 'subtotal_line'. Everything but 'equal' keeps the flag
+    (fail closed).
 
     The subtotal rule tests no value: a published row whose own printed line is a position line
-    (not a 'Total ...' line) is a position, and the flag is dropped."""
+    (first non-blank cell not a total) is a position, and the flag is dropped.
+    The reference rule fires on 'reference but no structured spread': it stays when the published
+    spread is blank or zero and the line prints a non-zero cash margin (review D3, orchestrator
+    decision 2026-11-13)."""
     if not bridge or _blank(bridge.get("printed_row")):
         return "line_not_found", []
     if rule_name == SUBTOTAL_RULE:
-        first_cell = str(bridge["printed_row"]).split("|", 1)[0]
-        return ("subtotal_line", []) if _TOTAL_LINE_RE.search(first_cell) else ("equal", [])
+        return ("subtotal_line", []) if is_total_line(bridge["printed_row"]) else ("equal", [])
     printed = printed_values(bridge)
     diffs = [f for f in ("maturity_date", "reference_rate_type", "basis_spread", "instrument_type")
              if f in printed and field_differs(f, published.get(f), printed[f])]
     if diffs:
         return "mismatch", diffs
+    if (rule_name == "agentA_reference_uncorroborated" and not _num(published.get("basis_spread"))
+            and printed_floating_margin(bridge)):
+        return "spread_missing", ["basis_spread"]
     unread = unreadable_fields(bridge)
     if unread:
         return "field_unreadable", unread
@@ -388,6 +443,12 @@ class PageReader:
         self._cache.clear()
 
     def lookup(self, cik: str, accession: str, report_date: str, context: str, ident: str) -> dict | None:
+        return self.lookup_with_method(cik, accession, report_date, context, ident)[0]
+
+    def lookup_with_method(self, cik: str, accession: str, report_date: str, context: str,
+                           ident: str) -> tuple[dict | None, str]:
+        """(bridge, 'context' | 'member' | '') - by the row's own fair-value context first, else by
+        member name."""
         key = (cik, accession, report_date)
         if key not in self._cache:
             by_ctx: dict[str, dict] = {}
@@ -404,7 +465,10 @@ class PageReader:
                 by_member[_norm_ident(b.get("raw_id_lower"))] = b
             self._cache[key] = (by_ctx, by_member)
         by_ctx, by_member = self._cache[key]
-        return by_ctx.get(context) or by_member.get(_norm_ident(ident))
+        if context in by_ctx:
+            return by_ctx[context], "context"
+        b = by_member.get(_norm_ident(ident))
+        return (b, "member") if b is not None else (None, "")
 
 
 def resolve(candidates: list[dict], contexts: list[dict], published: list[dict],
@@ -418,13 +482,14 @@ def resolve(candidates: list[dict], contexts: list[dict], published: list[dict],
     audit: if given, receives one row per candidate x published row with its printed_check,
            including dropped ones ('equal') and unpublished candidates ('unpublished').
     """
-    def note(cand, check, p=None, bridge=None, diffs=()):
+    def note(cand, check, p=None, bridge=None, diffs=(), method=""):
         if audit is None:
             return
         a = dict(cand)
         a.update({"row_id": (p or {}).get("row_id") or "", "accession_number": (p or {}).get("accession_number") or "",
                   "src_context_id": (p or {}).get("src_context_id") or "", "printed_check": check,
-                  "mismatch_fields": ";".join(diffs), "printed_row": ((bridge or {}).get("printed_row") or "")[:400]})
+                  "mismatch_fields": ";".join(diffs), "printed_row": ((bridge or {}).get("printed_row") or "")[:400],
+                  "line_match": method})
         audit.append(a)
 
     ctx_by_ident: dict[tuple[str, str], list[dict]] = {}
@@ -480,17 +545,22 @@ def resolve(candidates: list[dict], contexts: list[dict], published: list[dict],
             continue
         for row_id in sorted(rows):
             p = rows[row_id]
-            bridge = page.lookup(cand["cik"], str(p.get("accession_number") or ""), key[0],
-                                 str(p.get("src_context_id") or ""), p["identifier"])
+            bridge, method = page.lookup_with_method(cand["cik"], str(p.get("accession_number") or ""), key[0],
+                                                     str(p.get("src_context_id") or ""), p["identifier"])
             check, diffs = compare_row(cand["rule_name"], p, bridge)
-            note(cand, check, p, bridge, diffs)
+            if check == "equal" and method == "member" and \
+                    len(ctx_by_ident.get((key[0], _norm_ident(p["identifier"])), [])) != 1:
+                # found by member name only, and the member has several contexts: the line may be a
+                # sibling's (review D5) -> fail closed
+                check, diffs, method = "line_not_found", [], "member_ambiguous"
+            note(cand, check, p, bridge, diffs, method)
             if check == "equal":
                 continue
             f = dict(cand)
             f.update({"row_id": row_id, "accession_number": p.get("accession_number") or "",
                       "src_context_id": p.get("src_context_id") or "", "printed_check": check,
                       "mismatch_fields": ";".join(diffs),
-                      "printed_row": ((bridge or {}).get("printed_row") or "")[:400]})
+                      "printed_row": ((bridge or {}).get("printed_row") or "")[:400], "line_match": method})
             flags.append(f)
     return flags, coverage
 
@@ -501,7 +571,8 @@ def _contexts(con, parquet: str, cik: str) -> list[dict]:
             CAST(src_context_id AS VARCHAR) AS src_context_id, TRY_CAST(fair_value AS DOUBLE) AS fair_value,
             TRY_CAST(cost AS DOUBLE) AS cost
         FROM read_parquet('{parquet}') WHERE CAST(cik AS VARCHAR)='{cik}' AND investment_identifier IS NOT NULL
-          AND CAST(period AS VARCHAR)=CAST(report_date AS VARCHAR)""").fetchdf()
+          AND CAST(period AS VARCHAR)=CAST(report_date AS VARCHAR)
+        ORDER BY report_date, identifier, accession_number, src_context_id""").fetchdf()
     return df.to_dict("records")
 
 
@@ -515,12 +586,60 @@ def _published(con, holdings: str, cik: str) -> list[dict]:
             CAST(instrument_type AS VARCHAR) AS instrument_type,
             coalesce(CAST(accounting_record_class AS VARCHAR), '') AS record_class
         FROM {src} WHERE lpad(CAST(cik AS VARCHAR), 10, '0')='{cik}' AND CAST(source AS VARCHAR)='bdc'
-          AND bdc_investment_identifier IS NOT NULL""").fetchdf()
+          AND bdc_investment_identifier IS NOT NULL
+        ORDER BY row_id""").fetchdf()
     return df.astype(object).where(df.notna(), None).to_dict("records")
 
 
+def carry_forward(previous: Path | None, excluded: list[tuple[str, str, str]]) -> tuple[list[dict], list[dict]]:
+    """Flags of funds whose grammar left the held-out cohort (or whose gate errored), carried from the
+    previous flags file unchanged except printed_check='cohort_excluded' (review D1): leaving the
+    cohort must not clear a fund's findings without notice. Returns (carried flags, one record per
+    excluded fund)."""
+    prev_rows: list[dict] = []
+    if previous is not None and Path(previous).exists():
+        with open(previous, newline="", encoding="utf-8-sig") as f:
+            prev_rows = list(csv.DictReader(f))
+    carried, records = [], []
+    for cik, sig, reason in excluded:
+        mine = [r for r in prev_rows if str(r.get("cik", "")).zfill(10) == cik]
+        for r in mine:
+            row = {k: (r.get(k) or "") for k in _FIELDS}
+            row["cik"] = cik
+            row["printed_check"] = "cohort_excluded"
+            carried.append(row)
+        records.append({"cik": cik, "signature": sig, "reason": reason, "carried_flags": len(mine),
+                        "previous_file": str(previous) if previous else ""})
+        logger.warning("  WARNING agentA cohort_excluded %s [%s]: %s -> %d previous flags carried forward%s",
+                       cik, sig, reason, len(mine),
+                       "" if prev_rows else " (NO previous flags file: its findings are not carried)")
+    return carried, records
+
+
+def _sorted(rows: list[dict], key=_SORT_KEY) -> list[dict]:
+    return sorted(rows, key=lambda r: tuple(str(r.get(k) or "") for k in key))
+
+
+def write_outputs(out_dir: Path, flags: list[dict], coverage: list[dict], audit: list[dict],
+                  excluded: list[dict]) -> None:
+    """Write the four outputs, each sorted, so identical inputs give byte-identical files (review D2:
+    the adapter's mode(mechanism) breaks ties by first occurrence, so row order reaches the review id)."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name, fields, rows, key in (
+            (FLAGS_NAME, _FIELDS, flags, _SORT_KEY),
+            (COVERAGE_NAME, _COVERAGE_FIELDS, coverage, ("cik", "report_date", "rule_name", "identifier",
+                                                         "accession_number", "src_context_id")),
+            (AUDIT_NAME, _FIELDS, audit, _SORT_KEY),
+            (EXCLUDED_NAME, _EXCLUDED_FIELDS, excluded, ("cik",))):
+        with open(out_dir / name, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(_sorted(rows, key))
+
+
 def run(*, bdc_holdings: Path, published: Path, out_dir: Path, ciks: list[str] | None = None,
-        page: PageReader | None = None) -> dict:
+        page: PageReader | None = None, previous: Path | None = None) -> dict:
     import duckdb
 
     parquet, holdings = Path(bdc_holdings).as_posix(), Path(published).as_posix()
@@ -528,8 +647,6 @@ def run(*, bdc_holdings: Path, published: Path, out_dir: Path, ciks: list[str] |
     logger.info("agentA cohort: %d held-out-PASS grammars (candidates %d, FAIL/error %d, "
                 "non-rate skipped %d)", len(cohort), len(cohort) + len(excluded),
                 len(excluded), len(skipped))
-    for cik, sig, reason in excluded:
-        logger.info("  EXCLUDED %s [%s]: %s", cik, sig, reason)
     narrow = [c for c, _, conf in cohort if conf == "narrow"]
     if narrow:
         logger.info("  NARROW-confidence PASS (thin in-era coverage, %d): %s",
@@ -537,6 +654,8 @@ def run(*, bdc_holdings: Path, published: Path, out_dir: Path, ciks: list[str] |
     if ciks:
         wanted = {str(c).zfill(10) for c in ciks}
         cohort = [c for c in cohort if c[0] in wanted]
+        excluded = [c for c in excluded if c[0] in wanted]
+    carried, excluded_records = carry_forward(previous, excluded)
     page = page or PageReader()
     con = duckdb.connect()
     rows, coverage, audit, checks = [], [], [], Counter()
@@ -554,21 +673,9 @@ def run(*, bdc_holdings: Path, published: Path, out_dir: Path, ciks: list[str] |
         page.clear()  # one fund's pages at a time in memory
     con.close()
 
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    with open(out_dir / FLAGS_NAME, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=_FIELDS)
-        w.writeheader()
-        w.writerows(rows)
-    with open(out_dir / COVERAGE_NAME, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=_COVERAGE_FIELDS)
-        w.writeheader()
-        w.writerows(coverage)
-    # every candidate's outcome, including dropped ones: the audit trail of the repair
-    with open(out_dir / AUDIT_NAME, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=_FIELDS)
-        w.writeheader()
-        w.writerows(audit)
+    rows += carried
+    checks.update(f["printed_check"] for f in carried)
+    write_outputs(Path(out_dir), rows, coverage, audit, excluded_records)
     by_rule = Counter(r["rule_name"] for r in rows)
     logger.info("agentA engine: %d candidates -> %d flags over %d filers -> %s", n_candidates, len(rows),
                 len(cohort), out_dir / FLAGS_NAME)
@@ -586,8 +693,13 @@ def main(argv=None) -> int:
                                                else config.UNIFIED_HOLDINGS_FILE))
     ap.add_argument("--out-dir", default=str(config.OUTPUT_DIR / "shadow"))
     ap.add_argument("--ciks", nargs="*", default=None, help="limit to these cohort CIKs (measurement)")
+    ap.add_argument("--previous", default=None,
+                    help="previous flags file (default <out-dir>/agent_a_flags.prev.csv, where the shadow runner "
+                         "moves the last build's file); excluded funds' flags are carried from it")
     a = ap.parse_args(argv)
-    run(bdc_holdings=Path(a.bdc_holdings), published=Path(a.published), out_dir=Path(a.out_dir), ciks=a.ciks)
+    previous = Path(a.previous) if a.previous else Path(a.out_dir) / PREVIOUS_NAME
+    run(bdc_holdings=Path(a.bdc_holdings), published=Path(a.published), out_dir=Path(a.out_dir), ciks=a.ciks,
+        previous=previous)
     return 0
 
 

@@ -167,12 +167,14 @@ FROM result_{name}
 def run_agent_a() -> None:
     """Regenerate <output>/shadow/agent_a_flags.csv from this build (REQ-APZ-1 condition 4).
 
-    The old file is removed first, and an engine error propagates: the runner (a fatal batch and
-    quarter-pass stage) stops, so no ledger is built from a stale or missing flags file."""
+    The old file is moved to agent_a_flags.prev.csv first (the engine carries forward from it the
+    flags of a fund whose grammar left the held-out cohort, review D1), and an engine error
+    propagates: the runner (a fatal batch and quarter-pass stage) stops, so no ledger is built from
+    a stale or missing flags file."""
     import shadow_agent_a_engine as aa
     flags = OUTPUT_DIR / "shadow" / aa.FLAGS_NAME
     if flags.exists():
-        flags.unlink()
+        flags.replace(flags.with_name(aa.PREVIOUS_NAME))
     aa.main([])
 
 

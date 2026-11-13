@@ -246,6 +246,7 @@ def test_shadow_runner_regenerates_flags_before_reading(tmp_path, monkeypatch):
     monkeypatch.setattr(eng, "main", lambda argv=None: calls.append(argv) or 0)
     runner.run_agent_a()
     assert calls == [[]] and not stale.exists()
+    assert (shadow / eng.PREVIOUS_NAME).read_text(encoding="utf-8") == "stale\n"  # kept for carry-forward (D1)
 
     def boom(argv=None):
         raise RuntimeError("engine failed")
@@ -254,3 +255,142 @@ def test_shadow_runner_regenerates_flags_before_reading(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError):
         runner.run_agent_a()  # an engine failure stops the runner; no stale file is left to read
     assert not stale.exists()
+
+
+# ---------------------------------------------------------------------------------------------
+# Code review D1-D7 (2026-11-13)
+# ---------------------------------------------------------------------------------------------
+
+def _write_flags(path, rows):
+    import csv
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=eng._FIELDS)
+        w.writeheader()
+        w.writerows(rows)
+
+
+def test_d1_fund_leaving_cohort_keeps_its_flags(tmp_path, monkeypatch):
+    prev = tmp_path / "prev.csv"
+    old = dict(_cand("agentA_maturity_vs_xbrl"), cik="0001920453", mechanism="identifier_maturity_ne_structured")
+    other = dict(_cand("agentA_spread_vs_xbrl"), cik="0000000099")
+    _write_flags(prev, [old, other])
+    monkeypatch.setattr(eng, "build_cohort", lambda parquet: (
+        [], [("0001920453", "AFFIL SECDEBT REFRATE RATE MAT", "2026-06-30: completeness 89.8% < 90.0%")], []))
+    out = tmp_path / "shadow"
+    eng.run(bdc_holdings=tmp_path / "x.parquet", published=tmp_path / "y.parquet", out_dir=out,
+            page=_page(), previous=prev)
+    import csv
+    flags = list(csv.DictReader(open(out / eng.FLAGS_NAME, encoding="utf-8")))
+    assert [(f["cik"], f["rule_name"], f["mechanism"], f["printed_check"]) for f in flags] == [
+        ("0001920453", "agentA_maturity_vs_xbrl", "identifier_maturity_ne_structured", "cohort_excluded")]
+    rec = list(csv.DictReader(open(out / eng.EXCLUDED_NAME, encoding="utf-8")))
+    assert rec[0]["cik"] == "0001920453" and rec[0]["carried_flags"] == "1" and "completeness" in rec[0]["reason"]
+
+
+def test_d1_gate_error_is_excluded_and_carried(tmp_path):
+    def gate(cik, sig, parquet):
+        raise RuntimeError("boom")
+    (tmp_path / "0000000007.json").write_text(
+        json.dumps({"applies_to": {"regime": "flattened", "signature": "SIG"}}), encoding="utf-8")
+    cohort, excluded, _ = eng.build_cohort("x", gate=gate, grammar_dir=tmp_path)
+    assert cohort == [] and excluded[0][0] == "0000000007" and "gate error" in excluded[0][2]
+    prev = tmp_path / "prev.csv"
+    _write_flags(prev, [dict(_cand("agentA_spread_vs_xbrl"), cik="0000000007")])
+    carried, records = eng.carry_forward(prev, excluded)
+    assert len(carried) == 1 and records[0]["carried_flags"] == 1
+
+
+def test_d2_outputs_are_byte_identical_whatever_the_input_order(tmp_path):
+    import random
+    rows = [dict(_cand(r, ident=f"{STALE} {i}"), mechanism=m)
+            for i in range(6) for r in ALL_RULES for m in ("reconcile_both", "reconcile_xbrl")]
+    shuffled = rows[:]
+    random.Random(7).shuffle(shuffled)
+    eng.write_outputs(tmp_path / "a", rows, [], rows, [])
+    eng.write_outputs(tmp_path / "b", shuffled, [], list(reversed(rows)), [])
+    for name in (eng.FLAGS_NAME, eng.AUDIT_NAME, eng.COVERAGE_NAME, eng.EXCLUDED_NAME):
+        assert (tmp_path / "a" / name).read_bytes() == (tmp_path / "b" / name).read_bytes(), name
+
+
+def test_d3_reference_rule_keeps_flag_when_spread_missing_and_line_prints_margin():
+    # VetStrategy shape: reference matches, published spread blank, line prints 'C + 700 (100 Floor)'
+    b = _bridge(printed_row="VetStrategy | Senior Secured First Lien Term Loan | C + 700 (100 Floor) | 10.59 % | 08/2027",
+                reference_rate_type="CDOR", printed_margin=None)
+    p = _pub(reference_rate_type="CDOR", basis_spread=None, instrument_type="Term Loan")
+    flags, _ = eng.resolve([_cand("agentA_reference_uncorroborated")], [_ctx()], [p], _page(b))
+    assert [(f["printed_check"], f["mismatch_fields"]) for f in flags] == [("spread_missing", "basis_spread")]
+    # a PIK-only or zero cash margin is legitimate under the cash-leg convention: no flag for that
+    for line in ("X | Term Loan | S + 1000 PIK | 3/26/2027", "X | Term Loan | ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) | 3/26/2027"):
+        b = _bridge(printed_row=line, printed_margin=None)
+        assert eng.compare_row("agentA_reference_uncorroborated", _pub(basis_spread=None, instrument_type="Term Loan"),
+                               b) == ("equal", [])
+
+
+def test_d4_zero_width_prefixed_total_line_is_a_subtotal():
+    ident = "Total First Lien Debt Leaked"
+    b = _bridge(ident=ident, printed_row="​ | ​ |   | Total First Lien Debt | 1,234 | 1,456")
+    flags, _ = eng.resolve([_cand("agentA_subtotal_candidate", ident=ident)], [_ctx(ident=ident)],
+                           [_pub(ident=ident)], _page(b))
+    assert [f["printed_check"] for f in flags] == ["subtotal_line"]
+    assert eng.first_cell("​ | ​ | Acme Corp | Term Loan") == "Acme Corp"
+
+
+def test_d5_member_fallback_needs_a_single_context():
+    b = _bridge(ctx="C_OTHER")  # the bridge is keyed to another context of the same member
+    # member has one context: fallback accepted, method recorded
+    audit = []
+    flags, _ = eng.resolve([_cand("agentA_maturity_vs_xbrl")], [_ctx()], [_pub()], _page(b), audit)
+    assert flags == [] and audit[0]["line_match"] == "member"
+    # member has two contexts (e.g. an unfunded line with an extra axis): fail closed
+    flags, _ = eng.resolve([_cand("agentA_maturity_vs_xbrl")], [_ctx(), _ctx(ctx="C_2", fv=0.0, cost=0.0)],
+                           [_pub()], _page(b))
+    assert [(f["printed_check"], f["line_match"]) for f in flags] == [("line_not_found", "member_ambiguous")]
+    # by context: recorded as such
+    audit = []
+    eng.resolve([_cand("agentA_maturity_vs_xbrl")], [_ctx()], [_pub()], _page(_bridge()), audit)
+    assert audit[0]["line_match"] == "context"
+
+
+def test_d6_runner_regenerates_before_adapters_read():
+    import inspect
+    import shadow_validation_runner as runner
+    src = inspect.getsource(runner.main)
+    assert 0 <= src.index("run_agent_a()") < src.index("adp.adapter_selects()")
+
+
+_FIXTURE = """<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
+ xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+ xmlns:us-gaap="http://fasb.org/us-gaap/2024"><body>
+<ix:header><ix:resources>
+<xbrli:context id="C_1"><xbrli:entity><xbrli:identifier scheme="http://www.sec.gov/CIK">0000000001</xbrli:identifier>
+<xbrli:segment><xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis"><x>Acme Corp First Lien Term Loan S + 525 Maturity 3/29/2027</x></xbrldi:typedMember></xbrli:segment></xbrli:entity>
+<xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period></xbrli:context>
+</ix:resources></ix:header>
+<table>
+<tr><td>Company</td><td>Investment</td><td>Reference Rate and Spread</td><td>Maturity Date</td><td>Par</td><td>Cost</td><td>Fair Value</td></tr>
+<tr><td>Acme Corp</td><td>First Lien Term Loan</td><td>S + 525</td><td>3/26/27</td><td>1,000</td>
+<td><ix:nonFraction name="us-gaap:InvestmentOwnedAtCost" contextRef="C_1" unitRef="usd" decimals="-3" scale="3">990</ix:nonFraction></td>
+<td><ix:nonFraction name="us-gaap:InvestmentOwnedAtFairValue" contextRef="C_1" unitRef="usd" decimals="-3" scale="3">995</ix:nonFraction></td></tr>
+</table></body></html>"""
+
+
+def test_d6_real_page_reader_on_a_fixture(tmp_path):
+    """The real reader (propose_field_bridges_from_ixbrl) on a small inline-XBRL page: context-keyed
+    bridge, two-digit-year maturity, basis-point margin. Stale label (3/29/2027) vs printed 3/26/27."""
+    from pipeline.bdc_xbrl_html_bridge import propose_field_bridges_from_ixbrl
+    html = tmp_path / "f.html"
+    html.write_text(_FIXTURE, encoding="utf-8")
+
+    def reader(*, cik, accession_number, report_date):
+        return propose_field_bridges_from_ixbrl(cik=cik, accession_number=accession_number,
+                                                report_date=report_date, html_path=html, encodings={})
+    ident = "Acme Corp First Lien Term Loan S + 525 Maturity 3/29/2027"
+    page = eng.PageReader(reader)
+    b, method = page.lookup_with_method("0000000001", ACC, RD, "C_1", ident)
+    assert method == "context" and b and "Acme Corp" in b["printed_row"]
+    pub = _pub(ident=ident, maturity_date="2027-03-26", instrument_type="Term Loan")
+    flags, _ = eng.resolve([_cand("agentA_maturity_vs_xbrl", ident=ident)], [_ctx(ident=ident)], [pub], page)
+    assert flags == []  # published equals the printed line
+    flags, _ = eng.resolve([_cand("agentA_maturity_vs_xbrl", ident=ident)], [_ctx(ident=ident)],
+                           [dict(pub, maturity_date="2027-03-29")], page)
+    assert [f["printed_check"] for f in flags] == ["mismatch"]  # published carries the stale label's date
