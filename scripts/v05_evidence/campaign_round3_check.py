@@ -248,6 +248,10 @@ def plants(rule: str, spec: dict, rows: list[dict]) -> list[tuple[str, list[dict
     def swap(t, **kw):
         return [dict(r, **kw) if r is t else r for r in rows]
     hit = cited_rows(rows, spec)
+    if rule == "SRC_BDC01" and spec.get("quoted_positions"):
+        # plant on a row the claim is about: one whose own line names a quoted position
+        q = spec["quoted_positions"][0]
+        hit = [r for r in rows if re.search(re.escape(q[:40]), base.row_line(r) or "", re.I)]
     t = hit[0] if hit else (rows[len(rows) // 2] if rows else None)
     if t is None:
         return out
