@@ -2216,6 +2216,10 @@ _CORRECTABLE_FIELDS = frozenset({
     # A class correction has to move the category with the index class (2026-10-06, decision D-021).
     "asset_category", "issuer_category",
     "issuer_name", "instrument_description",
+    # The instrument class and lien, where the printed line settles them and the corrected text
+    # alone does not (REQ-rftc-1 / SVC-R2, approved D-263). An explicit value wins over the
+    # re-derivation from corrected text below.
+    "instrument_type", "lien_position",
     # An exact-key correction may restore the printed industry when a filer attaches
     # another company's member to the row. The existing downstream GICS mapping
     # consumes this source label; no derived GICS label is directly overridden.
@@ -2247,6 +2251,11 @@ _CORRECTABLE_FIELDS = frozenset({
 })
 
 _CORRECTABLE_PRECISIONS = frozenset({"day", "month", "year"})
+# The classifiers' vocabularies (pipeline/instrument_classification.py, pipeline/lien_classification.py).
+_CORRECTABLE_CLASSES = {
+    "instrument_type": frozenset({"Delayed Draw Term Loan", "Revolver", "Unitranche", "Term Loan"}),
+    "lien_position": frozenset({"First Lien", "Second Lien", "Unsecured"}),
+}
 
 # The only kinds a row correction may state; anything else is skipped with a warning.
 _CORRECTABLE_RATE_KINDS = frozenset({"cash", "all_in"})
@@ -2373,6 +2382,9 @@ def _apply_row_corrections(
 
     # Build a set of keys present in the dataframe for fast membership test.
     df_keys = set(df["_corr_key"])
+    # Rows whose instrument text a correction replaced, and rows given an explicit class.
+    text_rows: set = set()
+    explicit: dict[str, set] = {"instrument_type": set(), "lien_position": set()}
 
     for key, patches in corr_by_key.items():
         if key not in df_keys:
@@ -2413,6 +2425,12 @@ def _apply_row_corrections(
                     value, key,
                 )
                 continue
+            if field in _CORRECTABLE_CLASSES and value is not None and str(value).strip() not in _CORRECTABLE_CLASSES[field]:
+                logger.warning(
+                    "Row correction skipped: %s must be one of %s, got %r key=%s",
+                    field, sorted(_CORRECTABLE_CLASSES[field]), value, key,
+                )
+                continue
             if field == "maturity_precision" and value is not None and str(value).strip() not in _CORRECTABLE_PRECISIONS:
                 logger.warning(
                     "Row correction skipped: maturity_precision must be day, month or year, got %r key=%s",
@@ -2435,6 +2453,10 @@ def _apply_row_corrections(
             if "corrected_fields" in df.columns:
                 from pipeline.agent_promoted import append_corrected_fields
                 append_corrected_fields(df, df.index[mask], [field])
+            if field == "instrument_description" and value is not None:
+                text_rows.update(df.index[mask])
+            elif field in ("instrument_type", "lien_position"):
+                explicit[field].update(df.index[mask])
             n_applied += 1
             logger.info(
                 "Row correction applied: field=%s value=%s reason=%r key=%s%s",
@@ -2442,12 +2464,70 @@ def _apply_row_corrections(
             )
 
     df.drop(columns=["_corr_key"], inplace=True)
+    _rederive_class_after_text_correction(df, text_rows, explicit)
 
     logger.info(
         "Row corrections: %d applied, %d unmatched (from %s)",
         n_applied, n_unmatched, path.name,
     )
     return df
+
+
+def _rederive_class_after_text_correction(df: pd.DataFrame, text_rows: set, explicit: dict[str, set]) -> None:
+    """Re-derive instrument_type and lien_position on rows whose instrument_description was corrected.
+
+    Both classes are derived before the correction layer, from the row text AND the filer's member
+    string (bdc_investment_identifier). A correction of the instrument text from the printed page
+    replaces the member text as evidence, so the class is re-read from the corrected issuer_name +
+    instrument_description alone (only rows whose description a correction set to non-empty text; a
+    name-only correction keeps the class, whose evidence may be the member string)
+    (REQ-rftc-1 / SVC-R2, approved D-263): a member ending 'revolving loan' on a printed term loan, or
+    'Delayed Draw' on a printed corporate bond, no longer decides the class.
+
+    instrument_type takes the text result, including None (bonds and equity carry no loan class),
+    except that a text still naming a 'loan' without a sub-type keeps the earlier class.
+    lien_position changes only when the corrected text names a lien; otherwise the earlier value
+    stays, since it can come from a reconciled overlay or a printed section heading the text omits.
+    An explicit instrument_type / lien_position correction on the row wins over both.
+    """
+    if not text_rows:
+        return
+    from pipeline.instrument_classification import classify_instrument_type
+    from pipeline.lien_classification import classify_lien
+    from pipeline.agent_promoted import append_corrected_fields
+
+    n_type = n_lien = 0
+    for idx in sorted(text_rows):  # corrected rows only: a few hundred at most
+        name = df.at[idx, "issuer_name"] if "issuer_name" in df.columns else None
+        desc = df.at[idx, "instrument_description"] if "instrument_description" in df.columns else None
+        name = None if pd.isna(name) else str(name)
+        desc = None if pd.isna(desc) else str(desc)
+        if "instrument_type" in df.columns and idx not in explicit["instrument_type"]:
+            new_type = classify_instrument_type(desc, None, name)
+            old_type = df.at[idx, "instrument_type"]
+            old_type = None if pd.isna(old_type) or str(old_type).strip() == "" else str(old_type)
+            # A loan whose printed text names no sub-type ('First lien senior secured loan') keeps the
+            # class the member gave it; only a non-loan text (bond, stock, units) clears it.
+            if new_type is None and "loan" in (desc or "").lower():
+                new_type = old_type
+            if new_type != old_type:
+                df.at[idx, "instrument_type"] = new_type
+                if "corrected_fields" in df.columns:
+                    append_corrected_fields(df, [idx], ["instrument_type"])
+                n_type += 1
+        if "lien_position" in df.columns and idx not in explicit["lien_position"]:
+            new_lien = classify_lien(name, desc, "DIRECT_LENDING", None)
+            old_lien = df.at[idx, "lien_position"]
+            old_lien = None if pd.isna(old_lien) or str(old_lien).strip() == "" else str(old_lien)
+            if new_lien is not None and new_lien != old_lien:
+                df.at[idx, "lien_position"] = new_lien
+                if "corrected_fields" in df.columns:
+                    append_corrected_fields(df, [idx], ["lien_position"])
+                n_lien += 1
+    logger.info(
+        "Row corrections: class re-derived from corrected text on %d rows (instrument_type %d, lien_position %d)",
+        len(text_rows), n_type, n_lien,
+    )
 
 
 def validate_final_holdings_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
