@@ -1,94 +1,48 @@
 {
  "cik": "0001837532",
  "fund": "Apollo Debt Solutions BDC",
- "label": "nbape",
- "before": "nvapf",
- "investigator_id": "fund-agent-0001837532-nbap-2026-11-11",
+ "label": "apzd",
+ "before": "nbape",
+ "investigator_id": "fund-apollo-20261113",
  "shared_code": false,
  "declared_changes": [
   {
-   "column": "issuer_name",
-   "rows": 908,
-   "why": "This run: 85 printed group headings cut by the wrapper issuer_name_strip_re (all rows with those exact names) and 52 rows set to the printed company by context-keyed corrections (12 spelling/no-name variants, 6 CNSI, 14 continuation lines in round 2, 20 continuation lines in round 3: Ironhorse x9, DRS Holdings III x3, Jensen Hughes x2, Novotech x2, Treace x2, PODS x2); D-252 (fund-loop-apollo-ssxf-2026-11-10, owner-approved, not this run): 70 rows named from the printed company column."
-  },
-  {
-   "column": "position_id",
-   "rows": 276,
-   "why": "Chains rejoined where a group prefix or member spelling had split one tranche (this run) and D-252's name fixes; full edge list nbap_chain_diff.py (nbapb_vs_nbapa_chains.txt, nbapc_vs_nbapb_chains.txt, nbape_vs_nbapc_chains.txt). Round 3 chain changes listed in nbape_vs_nbapd_chains.txt."
-  },
-  {
-   "column": "corrected_fields",
-   "rows": 255,
-   "why": "Rows carrying this run's 123 context-keyed correction lines (52 names, 39 instruments, 13 costs, 10 currencies (3 with fx fields)) and D-252's row corrections."
-  },
-  {
-   "column": "principal_amount_currency",
-   "rows": 77,
-   "why": "This run: 3 undrawn dollar lines 2024-06-30 EUR -> USD and 7 printed dollar pars with a blank currency -> USD (McGraw-Hill 2023-09-30, Allied Universal 2024-06-30, Ultimate Baked Goods and Navicure 2024-09-30, Janus 2025-03-31, Galway 2025-12-31, DG Investment 2026-03-31); D-252 (fund-loop-apollo-ssxf-2026-11-10, owner-approved, not this run): 67 dollar pars tagged with a foreign unit."
-  },
-  {
-   "column": "principal_fx_rate_to_usd",
-   "rows": 70,
-   "why": "Same rows as principal_amount_currency (rate 1)."
-  },
-  {
-   "column": "principal_fx_status",
-   "rows": 70,
-   "why": "Same rows as principal_amount_currency (source_usd)."
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 67,
-   "why": "D-252's 67 dollar pars now at the printed dollar amount; this run's 3 undrawn rows were already 0 (correction recorded, value unchanged)."
-  },
-  {
-   "column": "instrument_description",
-   "rows": 41,
-   "why": "This run: 39 rows flagged by the four agentA findings set to the printed instrument (the member text carried a margin or maturity the page does not print, or another company's terms on relabelled rows); D-252 (fund-loop-apollo-ssxf-2026-11-10, owner-approved, not this run): 2 rows."
-  },
-  {
-   "column": "cost",
-   "rows": 36,
-   "why": "This run: 36 undrawn-line costs printed in brackets and tagged unsigned now negative: 23 by source_encodings.bracketed_unsigned_values (2023-09-30 20, 2023-12-31 2, 2024-06-30 1) and 13 by context-keyed corrections (2025-06-30)."
-  },
-  {
-   "column": "cost_reported",
-   "rows": 36,
-   "why": "Follows cost on the same 36 rows."
-  },
-  {
-   "column": "src_facts",
-   "rows": 23,
-   "why": "The 23 printed-sign rows record the tagged value with the cik_scale_fix:x-1 event (provenance re-verifier reads it)."
-  },
-  {
-   "column": "basis_spread",
-   "rows": 10,
-   "why": "D-252 (fund-loop-apollo-ssxf-2026-11-10, commits 14d42cfb/8089cc93, sandboxes apxb->apx5; owner-approved, not this run): 10 fixed coupons that had been published as spreads withdrawn."
-  },
-  {
    "column": "reference_rate_type",
-   "rows": 10,
-   "why": "Same 10 D-252 fixed-coupon rows."
+   "rows": 37,
+   "why": "SARON (CHF) and STIBOR (SEK) rows that the build labelled SOFR or LIBOR from the report date; set from the printed index"
   },
   {
    "column": "reference_rate_source",
-   "rows": 10,
-   "why": "Same 10 D-252 fixed-coupon rows."
+   "rows": 37,
+   "why": "cleared on the same 37 rows (old source: the date inference)"
   },
   {
-   "column": "coupon_type",
-   "rows": 10,
-   "why": "Same 10 D-252 fixed-coupon rows (Floating -> Fixed)."
+   "column": "instrument_type",
+   "rows": 64,
+   "why": "published type contradicted the printed line of the row's own fair-value context (63 rows) or was a Revolver class the page does not print (Medical Solutions 2023-06-30); set to the printed instrument (none for the Olympus Water bonds)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 12,
+   "why": "net change on rows whose member sub-type was also wrong; the description is the printed instrument (Medical Solutions: no sub-type printed)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 100,
+   "why": "records the corrections above on 100 distinct rows (37 reference rows and 64 instrument rows; the sets overlap on 1 row)"
+  },
+  {
+   "column": "position_id",
+   "rows": 28,
+   "why": "chain identity follows the corrected type: 11 same-tranche links added and 1 cross-tranche link removed against apza (apzd_vs_apza_chains.txt); the same 28 rows against nbape"
   }
  ],
- "rows_added": 44,
+ "rows_added": 0,
  "rows_removed": 0,
- "rows_added_why": "D-252 (fund-loop-apollo-ssxf-2026-11-10, commits 14d42cfb/8089cc93, sandboxes apxb->apx5; owner-approved, not this run): 44 position contexts printed with '-' for fair value and no FV tag declared at 0 (SK Neptune Husky term loan 2024-12-31..2026-06-30, Material+ PIK term loan, Ishtar/Oshun co-invest stock, PPL Equity units, Alpine and Transportation Insight units). This run adds or removes no row.",
  "fixes": [
   {
-   "what": "Printed group heading glued in front of the printed company in the issuer name ('Gannett Gannett Holdings, LLC', 'Health Care Health Care Providers & Services Advarra Advarra Holdings, Inc.'): 85 exact-name alternatives added to the wrapper's dispatch.issuer_name_strip_re (lookahead-guarded, same form as the 648 already there). Dry run over all 755 distinct published names: only those 85 change. Excluded on purpose: SAVATREE CI, Mariani CI (would publish the bare name 'CI' for two borrowers), Tivity Health Health, Inc. (page misprint), CNSI CNSI Holdings, LLC (kept as a negative case by tests/test_fund_loop_dash_values_20261110.py; fixed by corrections instead). issuer_name_printed flagged rows 455 -> 51.",
-   "kind": "wrapper",
+   "what": "reference_rate_type of 37 Yellow Castle (Forterro, CHF SARON and SEK STIBOR) and Fortnox OMEGA II (SEK STIBOR) rows: the build labelled them LIBOR (4 rows, 2023-03-31 and 2023-06-30, inferred_pre_libor) or SOFR (33 rows, inferred_post_libor); the page prints SARON+ and STIBOR+. Set by 37 context-keyed corrections of reference_rate_type to the printed index and of reference_rate_source to empty (74 records, data/overrides/row_corrections_by_context.csv, script scratch/fund_runs/0001837532/apz_corrections.py). Same precedent as 0001702510 (STIBOR) and 0001920145 (SARON). Field diff apza vs nbape: only these three columns, 37 rows each, no row added or removed.",
+   "kind": "row_correction",
    "quarters": [
     "2023-03-31",
     "2023-06-30",
@@ -108,144 +62,74 @@
    "quotes": [
     {
      "accession": "0000950170-23-021206",
-     "text": "Gannett Co., Inc. Gannett Holdings, LLC First Lien Secured Debt - Corporate Bond 6.00 % 11/1/2026 16,000 12,702 13,510 (8)"
+     "text": "First Lien Secured Debt SARON+ 550 , 0.00 % Floor 7/9/2029 3,296 3,306 3,530"
+    },
+    {
+     "accession": "0000950170-23-021206",
+     "text": "First Lien Secured Debt STIBOR+ 550 , 0.00 % Floor 7/9/2029 kr 34,792 3,228 3,285"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan SARON+ 475 (Includes 5.00 % PIK) 7/7/2029 3,296 3,327 3,622"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "First Lien Secured Debt - Term Loan STIBOR + 475 , 0.00 % Floor 6/18/2032 kr 526,888 54,322 55,413"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "First Lien Secured Debt - Term Loan SARON + 475 Cash plus 5.46 % PIK, 0.00 % Floor 7/9/2029 3,353 3,404 4,201"
     },
     {
      "accession": "0001193125-26-215667",
-     "text": "Tivity Health Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/28/2029 111,010 110,127 110,455 (4)(9)(15)"
+     "text": "First Lien Secured Debt - Term Loan STIBOR + 425 , 0.00 % Floor 06/17/2032 Skr 658,611 67,840 67,485"
+    },
+    {
+     "accession": "0001193125-26-341358",
+     "text": "First Lien Secured Debt - Term Loan STIBOR + 425 , 0.00 % Floor 06/17/2032 Skr 658,611 67,851 66,599"
     }
    ]
   },
   {
-   "what": "32 issuer names set to the printed company by context-keyed corrections (data/overrides/row_corrections_by_context.csv, author fund-agent-0001837532-nbap-2026-11-11): 12 member spelling/no-name variants (Quito, Coretrust, Gainwell, MGP x2, Phoenix x2, AMCP, ACP Tara, EG Finco Ltd, CPI Buyer, All Star 'Investment, Identifier [Axis]: ...'), 6 CNSI Holdings rows (2023), and 14 continuation lines of the same printed blocks (round 2, so each block carries one name and its chain holds).",
+   "what": "instrument_type of 64 published rows (14 quarters, 63 contradicting the page plus Medical Solutions 2023-06-30). The printed line of each row is the inline-XBRL table row that carries the row's own fair-value context (not a value search); scan scratch/fund_runs/0001837532/apzd_scan.py (copied from the independent reviewer's review_apzc/fullscan.py) and apzd_classify.py. Set by context-keyed instrument_type corrections (explicit value wins) and, where the member sub-type was also wrong, instrument_description corrections, via REQ-rftc-1 (f8c4f6db, 75da81b6). ROW-PINNED: no existing wrapper setting reads the instrument from the printed cell (wrapper_v3 searched: relabelled_contexts is per context, page_labelled_contexts is for untagged groups), so these do not carry to a new quarter; the observation keeps a propose_detector decision. History: apzb (fair-value line search, 268 wrong rows) was discarded; apzc (third number after the maturity) wrote 22 wrong instrument_type and 17 wrong instrument_description records on undrawn '-' lines and twin lines with equal fair value (Poly-Wood, Radiate, Kronos), which the independent review found; they were withdrawn in apzd, the 59 right records kept. Added in apzd: Associations 2024-06-30 (Revolver published Delayed Draw), Vybond 2025-09-30, 2025-12-31 and 2026-03-31 (page prints Revolver, production None), Medical Solutions 2023-06-30 (Revolver published; the page prints no sub-type and the same position prints none in 2023-03-31, 2023-09-30, 2023-12-31, so the class is withdrawn and the description is 'First Lien Secured Debt').",
    "kind": "row_correction",
    "quarters": [
-    "2023-03-31",
     "2023-06-30",
     "2023-09-30",
-    "2024-03-31",
+    "2024-06-30",
     "2024-09-30",
     "2024-12-31",
     "2025-03-31",
     "2025-06-30",
     "2025-09-30",
+    "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001193125-26-215667",
-     "text": "ECS Group Quito First Lien Secured Debt - Term Loan E + 500 , 0.00 % Floor 01/22/2033 EUR 95,313 109,786 107,964 (3)(4)(8)(10)(22)"
+     "accession": "0000950170-24-094137",
+     "text": "First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 7/2/2028 - ( 1 ) ( 1 ) (4)(5)(11)(27)"
     },
     {
      "accession": "0000950170-24-124223",
-     "text": "All Star Healthcare All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S+ 550 , 1.00 % Floor 5/1/2030 6,939 6,807 6,904 (4)(9)(15)"
+     "text": "First Lien Secured Debt - Revolver S+ 660 , 1.00 % Floor 8/13/2027 356 330 355 (4)(9)(11)(15)(27)"
     },
     {
-     "accession": "0000950170-23-021206",
-     "text": "CNSI CNSI Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/17/2028 35,910 34,703 34,653 (4)(9)(17)"
-    }
-   ]
-  },
-  {
-   "what": "Undrawn-line costs printed in brackets but tagged without a sign were published positive. Wrapper source_encodings.bracketed_unsigned_values lists 0000950170-23-061985, 0000950170-24-031479 and 0000950170-24-094137 (existing key, pipeline/printed_sign.py): 23 published costs flip to the printed negative (20 + 2 + 1), and 28 unpublished comparative contexts likewise. Every mismatch the reader finds in these three filings is bracketed-printed / unsigned-tagged (scan nbap_sign_scan.py); the 2024-12-31 and 2025-06-30 filings are not listed because the reader misreads their December 2024 block (observation printed-sign-reader-misses-bracket-in-next-cell).",
-   "kind": "wrapper",
-   "quarters": [
-    "2023-09-30",
-    "2023-12-31",
-    "2024-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-23-061985",
-     "text": "First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 4/4/2029 1,140 ( 31 ) ( 26 ) (4)(5)(9) (11)(27)"
+     "accession": "0001193125-26-215667",
+     "text": "First Lien Secured Debt - Corporate Bond 6.75 % 08/01/2032 5,000 4,839 4,772"
     },
     {
-     "accession": "0000950170-24-094137",
-     "text": "First Lien Secured Debt - Revolver S+ 565 , 0.75 % Floor 11/1/2029 - ( 3 ) - (4)(11)(27)"
-    }
-   ]
-  },
-  {
-   "what": "13 undrawn-line costs of the 10-Q for 2025-06-30 printed in brackets and tagged unsigned set to the printed negative by context-keyed corrections (Truck-Lite x2, Ironhorse, North Haven RI, Janus, Eclipse x2, Crete PA, K Hovnanian 1,573, G&A, Runway x2, Victors).",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-25-105984",
-     "text": "First Lien Secured Debt - Delayed Draw S+ 575 , 0.75 % Floor 2/13/2032 - ( 596 ) ( 854 ) (4)(5)(12)(32)"
+     "accession": "0001193125-26-215667",
+     "text": "First Lien Secured Debt - Term Loan STIBOR + 425 , 0.00 % Floor 06/17/2032 Skr 658,611 67,840 67,485 (3)(4)(8)(10)(25)"
     },
     {
-     "accession": "0000950170-25-105984",
-     "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 6/30/2026 $ - $ ( 1,573 ) $ ( 1,925 ) (4)(5)(8)(9)(12)(32)"
-    }
-   ]
-  },
-  {
-   "what": "3 undrawn dollar lines (par '-', SOFR margin) published with principal currency EUR at a reference rate set to USD (4 fields each) by context-keyed corrections; the same shape D-252 fixed on 67 rows.",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-094137",
-     "text": "First Lien Secured Debt - Revolver S+ 525 , 0.75 % Floor 10/1/2029 - ( 107 ) ( 47 ) (4)(5)(11)(27)"
-    }
-   ]
-  },
-  {
-   "what": "Carried in this build from D-252 (fund-loop-apollo-ssxf-2026-11-10, commits 14d42cfb/8089cc93, sandboxes apxb->apx5; owner-approved, not this run): 44 dash-valued positions declared at 0 (SK Neptune Husky term loan, reopened by the owner as a missing position, now published 2024-12-31..2026-06-30), 70 printed issuer names, 67 dollar pars set to USD (incl. Cascade Parent), 10 fixed coupons no longer published as spreads. Not this run's work; listed so the declared changes against nvapf are complete.",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-26-102386",
-     "text": "SK Neptune Husky Group Sarl First Lien Secured Debt - Term Loan 10.75 % 1/3/2029 9,588 9,456 - (4)(8)(16)(30)"
+     "accession": "0001193125-26-341358",
+     "text": "First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 03/26/2032 23,612 23,308 21,494 (16)"
     },
     {
-     "accession": "0001193125-26-102386",
-     "text": "Cascade Parent Inc. First Lien Secured Debt - Term Loan S + 575 , 0.50 % Floor 9/24/2031 152,685 150,460 150,395 (4)(15)"
-    }
-   ]
-  },
-  {
-   "what": "Round 3 (independent review of nbapd): 20 continuation lines still carrying the group heading plus a member spelling set to the printed company, found by a scan of every published name in every quarter (nbap_name_scan.py / nbap_name_scan2.py: a name not printed verbatim in its own filing, or a known group heading followed by a variant of a printed company); 7 blank principal currencies on printed dollar pars set to USD (scan: currency blank, par non-zero, every quarter); 39 instrument descriptions on the agentA-flagged rows set to the printed instrument.",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-06-30",
-    "2023-09-30",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-094137",
-     "text": "Ironhorse Purchaser, LLC First Lien Secured Debt - Term Loan S+ 676 , 1.00 % Floor 9/30/2027 3,052 2,998 2,991 (4)(9)(14)"
-    },
-    {
-     "accession": "0000950170-25-068013",
-     "text": "Janus Bidco Limited First Lien Secured Debt - Term Loan S + 600 , 0.00 % Floor 4/25/2031 68,523 66,965 67,153 (4)(8)(9)(10)(17)"
-    },
-    {
-     "accession": "0001193125-26-102386",
-     "text": "Hanger, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 10/23/2031 25,499 25,409 25,615 (15)"
+     "accession": "0000950170-23-041830",
+     "text": "First Lien Secured Debt S+ 335 , 0.50 % Floor 11/1/2028 9,962 9,715 9,385 (17)"
     }
    ]
   }
@@ -277,7 +161,34 @@
    "next_action": "Shared matcher: link a chain that ends to one that starts next quarter in the same fund with the same maturity, margin and par within 2 pct (observation position-chain-breaks-at-issuer-rename)."
   }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "REQ-APZ-1",
+   "classification": "verification_bug",
+   "file": "scripts/shadow_agent_a_engine.py (agentA_maturity_vs_xbrl, agentA_spread_vs_xbrl, agentA_reference_uncorroborated, agentA_subtotal_candidate)",
+   "what": "Repair the four agentA rules so that (a) a finding is raised only for a context that becomes a published row (zero-value undrawn lines, company-block subtotals, totals, empty header contexts and prior-period comparative contexts of the same filing are not positions), and (b) a disagreement between the filer's hidden member label and the structured tag is not reported when the structured value equals the value printed in the schedule row (the printed value is what the build publishes). Conditions: (1) fail closed: when the printed line of a flagged row is not found, the rule does not report a value comparison as passed; (2) unpublished contexts that carry a fair value or a cost go to a coverage check, not to these findings; (3) regenerate data/output/shadow/agent_a_flags.csv, which dates from 2026-07-24 and is re-read, not rebuilt, by the batch shadow stage; (4) fix the 300-character cut of the identifier (the Wand Newco 3 identifier of 312 characters is cut at 300, so the flag does not join to its published row ROW-6a9dd3ea538799f3; join by prefix or store the row id). Plainly: clearing these findings removes the only flag on 5 published rows whose instrument_type contradicts their own printed line (ROW-0bfbbdc55746b348, ROW-4c37feac2590e877, ROW-97718d5ab4434021, ROW-afa45f0eaccf49d8, ROW-f190a5925f7464dd) and on the 4 Yellow Castle AB rows whose reference_rate_type was SOFR where the line prints SARON/STIBOR (ROW-1116e0693b3ac178, ROW-c2c4dcc20f645d93 2024-12-31; ROW-14edcac87b875102, ROW-94264e25f355e97b 2025-03-31); the repair must come with a published-row check of instrument_type and reference_rate_type against each row's own printed line, found by the row's own fair-value context.",
+   "why": "Of the 36 findings, 7 are confirmed_error only because a flagged published row has another wrong field (5 on instrument_type, 2 on the Yellow Castle reference_rate_type), not because of the maturity, spread or index letter the rule tests; the other 29 are false alarms on correct published data: for 194 of 227 flagged contexts (exact identifier join) the published maturity_date / basis_spread / reference_rate_type equals the printed schedule row (found by printed date plus printed fair value on one line), and the label text is not printed in the schedule; of the other 33, 3 are published rows spelled differently (Wand Newco 3 2024-09-30, SumUp 2024-06-30, Crete PA 2025-12-31, printed index and spread equal published) and 30 are unpublished contexts. Owner ruling 2026-11-04: a misfire clears only by a repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Medline Medline Borrower LP First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/23/2028 69,760 69,876 69,706"
+    },
+    {
+     "accession": "0000950170-24-031479",
+     "text": "Avenu Insights ACP Avenu Buyer, LLC First Lien Secured Debt S+ 625 , 1.00 % Floor 10/2/2029 8,929 6,048 6,041"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Total Pharmaceuticals $ 199,673 $ 199,251 See notes to consolidated financial statements"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Mitel Networks Mitel Networks Common Equity - Stock N/A N/A 733,019 Shares 3,465 5,829 (4)(8)(33) MLN US Holdco LLC First Lien Secured Debt - Term Loan S + 800"
+    }
+   ],
+   "next_action": "Orchestrator: repair in a worktree after owner approval, with a test that source-backed values pass and a test that a published row whose maturity/spread differs from the printed row still fails; measure on the accepted sandboxes and confirm no finding with a real-error verdict clears (pattern d7df345). The decision store carries the matching check_repair_request."
+  }
+ ],
  "observations": [
   {
    "observation_key": "issuer-name-differs-from-page",
@@ -397,7 +308,7 @@
   {
    "observation_key": "instrument-from-member-differs-from-printed-row",
    "field": "instrument_description",
-   "what": "instrument_description and bdc_investment_identifier published the filer's member text, which on some rows carries a margin or maturity that differs from the printed line (Hanger 'S+550' vs printed S + 350; LHS 'P+425' vs printed S + 525) and, on rows relabelled to the printed company, another company's terms (CT Technologies with MRO Parent's, SupplyHouse with Vybond's). Fixed on the 43 published rows the four agentA findings flagged (39 corrections; the Olympus Water bond already carried the printed instrument): instrument_description is the printed instrument. bdc_investment_identifier keeps the member text (the filer's key); other rows whose member text disagrees with the page were not searched.",
+   "what": "instrument_description and bdc_investment_identifier published the filer's member text, which on some rows carries a margin or maturity that differs from the printed line (Hanger 'S+550' vs printed S + 350; LHS 'P+425' vs printed S + 525) and, on rows relabelled to the printed company, another company's terms (CT Technologies with MRO Parent's, SupplyHouse with Vybond's). Fixed on the 43 published rows the four agentA findings flagged (39 corrections; the Olympus Water bond already carried the printed instrument): instrument_description is the printed instrument. bdc_investment_identifier keeps the member text (the filer's key); other rows whose member text disagrees with the page were not searched. Correction (apza round 2): the Olympus Water bond carries the printed instrument in instrument_description only; its instrument_type is 'Delayed Draw Term Loan' (see member-misnames-instrument).",
    "quarters": [
     "2025-12-31",
     "2026-03-31"
@@ -483,24 +394,548 @@
   },
   {
    "observation_key": "member-misnames-instrument",
-   "field": "instrument_description",
-   "what": "Ultimate Baked Goods 2024-09-30: the member text names a 'Term Loan' at S+660 (par 356, cost 330, FV 355) where the page prints that line as the Revolver; instrument_description and instrument_type say Term Loan. Not corrected: instrument_type is classified before row corrections and is not correctable (REQ-rftc-1), so correcting only the description would leave the two fields contradicting.",
+   "field": "instrument_type",
+   "what": "Published instrument_type contradicted the instrument printed on the row's own line. Full scan of every Apollo row in apza whose fair-value context sits in a printed table row (context-anchored: the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact; apzd_scan.py, apzd_classify.py; the earlier fair-value line searches were wrong): 63 rows contradicted the page (published->printed: None->Term Loan: 40, None->Revolver: 5, Term Loan->Revolver: 4, Delayed Draw Term Loan->Term Loan: 4, Revolver->Term Loan: 3, None->Delayed Draw: 2, Delayed Draw Term Loan->Corporate Bond: 2, Revolver->Delayed Draw: 2, Delayed Draw Term Loan->Revolver: 1) plus Medical Solutions 2023-06-30 (Revolver published, no sub-type printed). Typical shape: the Term Loan, Delayed Draw and Revolver lines of one company carry the neighbouring line's type; bonds carry a loan type (Olympus Water 2026-03-31/06-30); or no type at all (None printed Term Loan). Corrected on 64 rows in apzd by row-pinned corrections (do not carry forward; no wrapper setting exists). Residue after apzd (rescan): 9 rows, none unexplained: 4 QTS Project Ram 'Mortgage Loan (DD)' (no class in the vocabulary), 5 Athena Bidco 'Delayed Draw Note' (published Delayed Draw Term Loan; the printed facility is a delayed-draw note). Scan limits: 215 rows print a non-lien line (equity, bonds) and 52 rows have no fair-value table row (undrawn contexts without a fair-value fact); those are not compared.",
    "quarters": [
-    "2024-09-30"
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "fair_value_m": 0.4,
-   "cause": "row",
-   "action": "left",
-   "suggested_check": "Compare the printed instrument cell with instrument_description on every row the page reader joins.",
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "instrument_type of a published row equals the instrument printed in the table row that carries the row's own fair-value context (Term Loan, Delayed Draw -> Delayed Draw Term Loan, Revolver, bond -> none); the row is found by its context, or by cost and fair value together, never by fair value alone.",
    "quote": {
     "accession": "0000950170-24-124223",
     "text": "First Lien Secured Debt - Revolver S+ 660 , 1.00 % Floor 8/13/2027 356 330 355 (4)(9)(11)(15)(27)"
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "No rule compares the printed instrument cell with the published instrument.",
-    "reference": "suggested_check above"
-   }
+    "rationale": "No existing rule compares instrument_type with the printed line (agentA flags 5 of these rows for other reasons, and its repair would remove that flag). The proposed check is deterministic and context-anchored; run here on every row: 63 mismatches before the fix, 0 after (residue 9 explained). It must find each row's line by its own context or by cost and fair value together: a fair-value-only search matched sibling lines twice in this run (apzb 268 false positives; apzc 22 wrong corrections). The corrections are row-pinned, so the check is what makes a recurrence in the next quarter visible.",
+    "reference": "scratch/fund_runs/0001837532/apzd_scan.py + apzd_classify.py (apza and apzd runs: apzd_mismatch_apza.json, apzd_mismatch_apzd.json)"
+   },
+   "mismatches": [
+    {
+     "row_id": "ROW-95e993670759b32e",
+     "quarter": "2023-06-30",
+     "issuer": "Channelside AcquisitionCo, Inc.",
+     "published": null,
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 7/1/2026 2,917 ( 83 ) ( 88 ) (4)(5)(9) (11)(26)"
+    },
+    {
+     "row_id": "ROW-afa45f0eaccf49d8",
+     "quarter": "2023-09-30",
+     "issuer": "Accela, Inc.",
+     "published": null,
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S+ 600 , 0.75 % Floor 9/3/2030 1,714 ( 34 ) ( 34 ) (4)(5)(9)(11) (27)"
+    },
+    {
+     "row_id": "ROW-901d4e89fda84145",
+     "quarter": "2024-06-30",
+     "issuer": "CI (Quercus) Intermediate Holdings, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 515 , 0.75 % Floor 6/6/2031 17,365 17,177 17,018 (4)(15)"
+    },
+    {
+     "row_id": "ROW-9a9e909d0054a089",
+     "quarter": "2024-06-30",
+     "issuer": "Smith Topco, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 600 , 1.00 % Floor 11/6/2029 13,242 12,968 13,242 (4)(9)(16)"
+    },
+    {
+     "row_id": "ROW-acbf0579c7942181",
+     "quarter": "2024-06-30",
+     "issuer": "Excelligence Learning Corporation",
+     "published": "Term Loan",
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver P+ 575 , 1.00 % Floor 1/18/2030 1,671 1,419 1,400 (4)(9)(11)(23)(27)"
+    },
+    {
+     "row_id": "ROW-8c88604c5295947d",
+     "quarter": "2024-06-30",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 300 , 0.00 % Floor 6/3/2031 8,000 7,980 8,015 (8)(14)"
+    },
+    {
+     "row_id": "ROW-e45d3cdf91473741",
+     "quarter": "2024-06-30",
+     "issuer": "Violin Finco Guernsey Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan SONIA+ 550 , 0.00 % Floor 6/24/2031 GBP 79,678 100,071 99,714 (3)(4)(8)(10)(17)"
+    },
+    {
+     "row_id": "ROW-6cb6ae9cb9b9cdbc",
+     "quarter": "2024-06-30",
+     "issuer": "Evoriel",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan E+ 525, 0.00 % Floor 4/2/2031 EUR 43,574 46,013 45,732 (3)(4)(8)(10)(20)"
+    },
+    {
+     "row_id": "ROW-c0a757ff94c3b7a5",
+     "quarter": "2024-06-30",
+     "issuer": "Paisley Bidco Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan E+ 525 , 0.00 % Floor 5/7/2031 EUR 28,797 30,749 30,609 (3)(4)(8)(10)(20)"
+    },
+    {
+     "row_id": "ROW-997e4b8b5bdbdbfd",
+     "quarter": "2024-06-30",
+     "issuer": "Paisley Bidco Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan SONIA+ 525 , 0.00 % Floor 5/7/2031 GBP 83,858 104,129 105,210 (3)(4)(8)(10)(17)"
+    },
+    {
+     "row_id": "ROW-f73a3a0cc56a2d9a",
+     "quarter": "2024-06-30",
+     "issuer": "Hurricane Cleanco Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan 12.50 % (includes 6.25 % PIK) 10/31/2029 GBP 48,484 57,138 59,757 (3)(4)(8)(9)"
+    },
+    {
+     "row_id": "ROW-6c2b4a283cae223f",
+     "quarter": "2024-06-30",
+     "issuer": "Stretto, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 600 , 1.00 % Floor 10/13/2028 133,313 130,946 132,646 (4)(9)(14)"
+    },
+    {
+     "row_id": "ROW-00c7b8ac32f9e309",
+     "quarter": "2024-06-30",
+     "issuer": "VEPF VII Holdings, L.P.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 2/28/2028 19,776 19,707 19,776 (4)(8)(15)"
+    },
+    {
+     "row_id": "ROW-4c37feac2590e877",
+     "quarter": "2024-06-30",
+     "issuer": "Vensure Employer Services, Inc.",
+     "published": null,
+     "printed": "Delayed Draw",
+     "printed_line": "First Lien Secured Debt - Delayed Draw S+ 525 , 0.75 % Floor 3/26/2027 27,011 26,728 27,011 (4)(11)(15)(27)"
+    },
+    {
+     "row_id": "ROW-0bfb99c4b7eda6fd",
+     "quarter": "2024-06-30",
+     "issuer": "Engineered Machinery Holdings, Inc.",
+     "published": "Revolver",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 401 , 0.75 % Floor 5/19/2028 29,865 29,724 30,021 (15)"
+    },
+    {
+     "row_id": "ROW-6f350f95c3b45747",
+     "quarter": "2024-06-30",
+     "issuer": "Associations Inc.",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 7/2/2028 - ( 1 ) ( 1 ) (4)(5)(11)(27)"
+    },
+    {
+     "row_id": "ROW-0bfbbdc55746b348",
+     "quarter": "2024-09-30",
+     "issuer": "Ultimate Baked Goods Midco LLC",
+     "published": "Term Loan",
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S+ 660 , 1.00 % Floor 8/13/2027 356 330 355 (4)(9)(11)(15)(27)"
+    },
+    {
+     "row_id": "ROW-813a447b2a0877e9",
+     "quarter": "2024-09-30",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 300 , 0.00 % Floor 9/5/2031 8,000 7,980 7,916 (8)(15)"
+    },
+    {
+     "row_id": "ROW-cde2305691dd1686",
+     "quarter": "2024-09-30",
+     "issuer": "Violin Finco Guernsey Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan SONIA+ 550 , 0.00 % Floor 6/24/2031 GBP 79,678 100,097 105,461 (3)(4)(8)(9)(10)(17)"
+    },
+    {
+     "row_id": "ROW-16381fa3e9ff1100",
+     "quarter": "2024-09-30",
+     "issuer": "Zest Acquisition Corp.",
+     "published": "Revolver",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 551 , 0.00 % Floor 2/8/2028 30,432 30,007 30,613 (15)"
+    },
+    {
+     "row_id": "ROW-bf658de2cf49fb3a",
+     "quarter": "2024-12-31",
+     "issuer": "Ascensus Holdings, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 300 , 0.00 % Floor 8/2/2028 41,560 41,309 41,975 (14)"
+    },
+    {
+     "row_id": "ROW-39c405445a51742f",
+     "quarter": "2024-12-31",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 275 , 0.00 % Floor 9/5/2031 8,000 7,981 8,042 (15)"
+    },
+    {
+     "row_id": "ROW-d47b8d72bbca08a8",
+     "quarter": "2024-12-31",
+     "issuer": "Crete PA Holdco, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 500 , 1.00 % Floor 11/25/2030 23,256 23,141 23,140 (4)(14)"
+    },
+    {
+     "row_id": "ROW-037d118bb6d244cd",
+     "quarter": "2024-12-31",
+     "issuer": "Dechra Finance US LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 12/3/2031 9,000 8,978 9,053 (8)(14)"
+    },
+    {
+     "row_id": "ROW-941324fed05123c0",
+     "quarter": "2024-12-31",
+     "issuer": "Violin Finco Guernsey Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan SONIA+ 550 , 0.00 % Floor 6/24/2031 GBP 79,678 100,123 98,752 (3)(4)(8)(9)(17)"
+    },
+    {
+     "row_id": "ROW-35513a54798498c3",
+     "quarter": "2024-12-31",
+     "issuer": "RE Closing Buyer Corp.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 525 , 1.00 % Floor 9/27/2031 114,713 112,493 112,418 (4)(8)(9)(15)"
+    },
+    {
+     "row_id": "ROW-0e931fa9093b6f11",
+     "quarter": "2024-12-31",
+     "issuer": "NPPI Buyer, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S+ 500 , 1.00 % Floor 8/20/2029 25,725 25,362 25,339 (4)(9)(15)"
+    },
+    {
+     "row_id": "ROW-32de3eba8220a3fa",
+     "quarter": "2025-03-31",
+     "issuer": "Charter Next Generation, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.75 % Floor 11/29/2030 20,069 20,102 20,065 (15)(16)"
+    },
+    {
+     "row_id": "ROW-76d78fe8da8eed87",
+     "quarter": "2025-03-31",
+     "issuer": "Pro Mach Group, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 1.00 % Floor 8/31/2028 30,816 30,896 30,769 (15)"
+    },
+    {
+     "row_id": "ROW-55b3aa58312ffccd",
+     "quarter": "2025-03-31",
+     "issuer": "Accelerate360 Holdings, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 626 , 1.00 % Floor 2/11/2027 $ 87,046 $ 87,046 $ 86,610 (4)(9)(16)"
+    },
+    {
+     "row_id": "ROW-8378bc17aaaeb5b0",
+     "quarter": "2025-06-30",
+     "issuer": "Ascensus Holdings, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 300 , 0.50 % Floor 8/2/2028 7,294 7,268 7,317 (15)"
+    },
+    {
+     "row_id": "ROW-5b3ad36b672aff92",
+     "quarter": "2025-06-30",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 9/5/2031 7,960 7,942 7,980 (16)"
+    },
+    {
+     "row_id": "ROW-3b5c8bcebee0267f",
+     "quarter": "2025-06-30",
+     "issuer": "CFC USA 2025 LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 375 , 0.00 % Floor 5/30/2032 25,000 24,750 24,938 (8)(15)"
+    },
+    {
+     "row_id": "ROW-1198d48a813a4b8c",
+     "quarter": "2025-06-30",
+     "issuer": "WH Borrower, LLC",
+     "published": "Revolver",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 475 , 0.50 % Floor 2/20/2032 56,850 56,275 56,939 (16)"
+    },
+    {
+     "row_id": "ROW-e6fe2a2b8e36b5db",
+     "quarter": "2025-06-30",
+     "issuer": "Charter Next Generation, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.75 % Floor 11/29/2030 30,489 30,445 30,631 (15)"
+    },
+    {
+     "row_id": "ROW-5af775ac827e1465",
+     "quarter": "2025-09-30",
+     "issuer": "Vybond Buyer, LLC",
+     "published": null,
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 2/3/2032 - ( 95 ) ( 53 ) (4)(5)(12)(33)"
+    },
+    {
+     "row_id": "ROW-79e969803b30b6e3",
+     "quarter": "2025-09-30",
+     "issuer": "Ascensus Holdings, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 300 , 0.50 % Floor 8/2/2028 7,275 7,251 7,278 (15)"
+    },
+    {
+     "row_id": "ROW-bdaac1fa6f07bcee",
+     "quarter": "2025-09-30",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 9/5/2031 13,925 13,900 13,941 (16)"
+    },
+    {
+     "row_id": "ROW-f298ddb973fcfda3",
+     "quarter": "2025-09-30",
+     "issuer": "CFC USA 2025 LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 375 , 0.00 % Floor 7/1/2032 28,000 27,651 26,810 (8)(10)(16)"
+    },
+    {
+     "row_id": "ROW-83a27202827a268c",
+     "quarter": "2025-09-30",
+     "issuer": "Charter Next Generation, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.75 % Floor 11/29/2030 30,409 30,366 30,533 (15)"
+    },
+    {
+     "row_id": "ROW-89f880b9b48a8cd4",
+     "quarter": "2025-12-31",
+     "issuer": "Vybond Buyer, LLC",
+     "published": null,
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 2/3/2032 - ( 92 ) ( 53 ) (4)(5)(12)(32)"
+    },
+    {
+     "row_id": "ROW-1ca6282a31aa3e69",
+     "quarter": "2025-12-31",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 9/5/2031 13,890 13,866 13,958 (16)"
+    },
+    {
+     "row_id": "ROW-a73ad6a962d31e1c",
+     "quarter": "2025-12-31",
+     "issuer": "GC Waves Holdings, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 450, 0.75 % Floor 10/4/2030 62,893 62,827 62,592 (4)(9)(15)"
+    },
+    {
+     "row_id": "ROW-2f7f31cbd9a6a5f0",
+     "quarter": "2025-12-31",
+     "issuer": "Madonna Bidco Limited",
+     "published": null,
+     "printed": "Delayed Draw",
+     "printed_line": "First Lien Secured Debt - Delayed Draw SONIA + 525 , 0.00 % Floor 10/27/2031 GBP 248 265 236 (3)(4)(8)(9)(10)(12)(18)(32)"
+    },
+    {
+     "row_id": "ROW-9b39dbdfcca8e1a8",
+     "quarter": "2025-12-31",
+     "issuer": "RE Closing Buyer Corp.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 9/27/2031 131,825 129,499 129,188 (4)(8)(9)(16)"
+    },
+    {
+     "row_id": "ROW-97718d5ab4434021",
+     "quarter": "2026-03-31",
+     "issuer": "Olympus Water US Holding Corporation",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Corporate Bond",
+     "printed_line": "First Lien Secured Debt - Corporate Bond 6.75 % 08/01/2032 5,000 4,839 4,772"
+    },
+    {
+     "row_id": "ROW-446f0b1693e36b14",
+     "quarter": "2026-03-31",
+     "issuer": "Vybond Buyer, LLC",
+     "published": null,
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 02/03/2032 - ( 88 ) ( 123 ) (4)(5)(12)(35)"
+    },
+    {
+     "row_id": "ROW-e400626e9b02e1e4",
+     "quarter": "2026-03-31",
+     "issuer": "International Schools Partnership Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan E + 450 , 0.00 % Floor 07/06/2031 EUR 56,831 60,728 64,210 (3)(4)(8)(10)(22)"
+    },
+    {
+     "row_id": "ROW-f190a5925f7464dd",
+     "quarter": "2026-03-31",
+     "issuer": "GTCR Everest Borrower, LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 250 , 0.00 % Floor 09/05/2031 2,883 2,877 2,866 (16)"
+    },
+    {
+     "row_id": "ROW-6f14b2b6c73df343",
+     "quarter": "2026-03-31",
+     "issuer": "CFC USA 2025 LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 07/01/2032 16,633 16,222 15,967 (8)(10)(16)"
+    },
+    {
+     "row_id": "ROW-5159970f03f10faa",
+     "quarter": "2026-03-31",
+     "issuer": "GC Waves Holdings, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 10/04/2030 62,734 62,672 61,862 (4)(9)(15)"
+    },
+    {
+     "row_id": "ROW-3ec8a9fc38c0008f",
+     "quarter": "2026-03-31",
+     "issuer": "Olympus Terminals Holdco II LLC",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 525 , 0.75% Floor 12/17/2030 36,789 36,180 36,035 (4)(16)"
+    },
+    {
+     "row_id": "ROW-833e07382379e36d",
+     "quarter": "2026-03-31",
+     "issuer": "Olympus Terminals Holdco II LLC",
+     "published": "Revolver",
+     "printed": "Delayed Draw",
+     "printed_line": "First Lien Secured Debt - Delayed Draw S + 525 , 0.75 % Floor 12/17/2030 - ( 95 ) ( 246 ) (4)(5)(12)(35)"
+    },
+    {
+     "row_id": "ROW-6a8a13da7c6b90f7",
+     "quarter": "2026-03-31",
+     "issuer": "Olympus Terminals Holdco II LLC",
+     "published": "Term Loan",
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 12/17/2030 - ( 161 ) ( 205 ) (4)(5)(12)(35)"
+    },
+    {
+     "row_id": "ROW-ca560c01727af516",
+     "quarter": "2026-03-31",
+     "issuer": "OMEGA II AB",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan STIBOR + 425 , 0.00 % Floor 06/17/2032 Skr 658,611 67,840 67,485 (3)(4)(8)(10)(25)"
+    },
+    {
+     "row_id": "ROW-84944f427a1d8f0f",
+     "quarter": "2026-06-30",
+     "issuer": "Olympus Water US Holding Corporation",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Corporate Bond",
+     "printed_line": "First Lien Secured Debt - Corporate Bond 6.75 % 08/01/2032 5,000 4,843 4,888"
+    },
+    {
+     "row_id": "ROW-899f6a084363b52c",
+     "quarter": "2026-06-30",
+     "issuer": "International Schools Partnership Limited",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan E + 450 , 0.00 % Floor 07/06/2031 EUR 56,831 60,736 64,078 (3)(4)(8)(10)(23)"
+    },
+    {
+     "row_id": "ROW-800ebad74283e706",
+     "quarter": "2026-06-30",
+     "issuer": "CFC USA 2025 LLC",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 07/01/2032 15,833 15,446 14,936 (8)(10)(17)"
+    },
+    {
+     "row_id": "ROW-8b66fbbd6806827c",
+     "quarter": "2026-06-30",
+     "issuer": "GC Waves Holdings, Inc.",
+     "published": null,
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 10/04/2030 62,575 62,515 61,755 (4)(9)(16)"
+    },
+    {
+     "row_id": "ROW-1aa7d5aa8d6eb3a9",
+     "quarter": "2026-06-30",
+     "issuer": "Olympus Terminals Holdco II LLC",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 12/17/2030 36,696 36,115 36,205 (4)(17)"
+    },
+    {
+     "row_id": "ROW-c6754f12f3916147",
+     "quarter": "2026-06-30",
+     "issuer": "Olympus Terminals Holdco II LLC",
+     "published": "Revolver",
+     "printed": "Delayed Draw",
+     "printed_line": "First Lien Secured Debt - Delayed Draw S + 525 , 0.75 % Floor 12/17/2030 - ( 90 ) ( 161 ) (4)(5)(12)(34)"
+    },
+    {
+     "row_id": "ROW-99d35793e6a23102",
+     "quarter": "2026-06-30",
+     "issuer": "Olympus Terminals Holdco II LLC",
+     "published": "Term Loan",
+     "printed": "Revolver",
+     "printed_line": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 12/17/2030 - ( 153 ) ( 132 ) (4)(5)(12)(34)"
+    },
+    {
+     "row_id": "ROW-1147627ef417ec0e",
+     "quarter": "2026-06-30",
+     "issuer": "Cotiviti, Inc.",
+     "published": "Delayed Draw Term Loan",
+     "printed": "Term Loan",
+     "printed_line": "First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 03/26/2032 23,612 23,308 21,494 (16)"
+    },
+    {
+     "row_id": "ROW-46029fee24f1fe3d",
+     "quarter": "2023-06-30",
+     "issuer": "Medical Solutions Holdings, Inc.",
+     "published": "Revolver",
+     "printed": "(no sub-type)",
+     "printed_line": "First Lien Secured Debt S+ 335 , 0.50 % Floor 11/1/2028 9,962 9,715 9,385 (17)"
+    }
+   ]
   },
   {
    "observation_key": "spread-total-margin-with-pik-separate-is-convention",
@@ -523,27 +958,128 @@
     "reference": "suggested_check above; owner convention D-031"
    },
    "source": "page sample samples/0001837532-nbapd card C009 (coordinator message 2026-11-11)"
+  },
+  {
+   "observation_key": "reference-rate-type-inferred-from-date-on-saron-stibor-rows",
+   "field": "reference_rate_type",
+   "what": "The build set reference_rate_type from the report date (LIBOR before the transition, SOFR after) on Yellow Castle / Fortnox rows whose printed index is SARON or STIBOR: 37 published rows, 14 quarters, fair value from -0.6 to 71.2 million each. Fixed here by 37 context corrections. In production the same defect shows on one row of 0001925309 (rows whose identifier names SARON or STIBOR and whose reference_rate_type is SOFR or LIBOR: 0001837532 37, 0001925309 1); the inference step is shared.",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 330.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "reference_rate_type equals the index letters printed in the row (SARON, STIBOR, SONIA, CORRA, BBSW, EURIBOR, SOFR, LIBOR); fails when the identifier or printed line names another index.",
+   "quote": {
+    "accession": "0001193125-26-215667",
+    "text": "First Lien Secured Debt - Term Loan STIBOR + 425 , 0.00 % Floor 06/17/2032 Skr 658,611 67,840 67,485"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows: agentA fired only on their maturity labels, for another reason, and no check compares reference_rate_type with the printed index. The proposed check is a deterministic token comparison on the identifier text; on production it returns exactly 38 rows (37 Apollo, 1 other), so false positives are low.",
+    "reference": "scratch/fund_runs/0001837532/apz_obs.py (query over production holdings)"
+   }
+  },
+  {
+   "observation_key": "instrument-description-keeps-filer-label-rate-and-maturity",
+   "field": "instrument_description",
+   "what": "instrument_description is the filer's hidden member label and keeps its rate and maturity text. In production 79 Apollo rows (11 quarters) carry a 'Maturity Date' text different from the published maturity_date and 203 rows (13 quarters) carry a spread text different from basis_spread (includes PIK-convention cases); the numeric columns equal the printed row. Left: no rule or finding depends on the text, a cohort-wide strip is a shared change whose effect on position matching was not measured here.",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "instrument_description carries no rate or maturity text that disagrees with interest_rate, basis_spread or maturity_date of the same row.",
+   "quote": {
+    "accession": "0000950170-25-068013",
+    "text": "Medline Medline Borrower LP First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/23/2028 69,760 69,876 69,706"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "agentA reads the same label text but compares it with the structured tag, not the published column, and fires on the label as a defect of the data. A published-column check would fire on the 79 and 203 rows of this fund only if the label is kept; query in scratch/fund_runs/0001837532/apz_obs.py and apz_obs2.py.",
+    "reference": "scratch/fund_runs/0001837532/apz_obs.py"
+   }
+  },
+  {
+   "observation_key": "zero-value-undrawn-lines-with-printed-cost-unpublished",
+   "field": "fair_value",
+   "what": "255 same-period contexts of this fund (bdc_holdings) carry par, cost or a maturity but no fair value and are not published; they are undrawn commitments or delayed draws printed with '-' fair value and a negative cost (for example Zendesk revolver 2023-12-31 '14,624 ( 239 ) -', Coupa delayed draw 2025-06-30 '- ( 42 ) -'). Consistent with the owner intent recorded in DS-010 and the 2026-10-20 reading; not restored here. agentA flags 33 unpublished contexts in all (this and other kinds: subtotals, value-less header contexts).",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Count of printed schedule lines with a cost or par figure but a dash fair value, per quarter, against published rows; report the unpublished share.",
+   "quote": {
+    "accession": "0000950170-24-031479",
+    "text": "First Lien Secured Debt - Revolver S+ 625 , 0.75 % Floor 11/22/2028 14,624 ( 239 ) - (4)(9)(11)(27)"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Whether such a line is a position is the owner ruling DS-010; a detector would count lines but cannot decide inclusion.",
+    "reference": "DS-010; docs/investigations/v05_decision_log.md D-252"
+   }
   }
  ],
  "name_shape_exceptions": [],
  "canonical_note": "canonical_name and entity_id change with the names (no declaration needed).",
  "tests_run": [
-  "tests/test_apollo_fund_loop_nbap_20261111.py (new, 18 cases) + tests/test_fund_loop_dash_values_20261110.py: 57 passed (before build 2)",
-  "tests/test_apollo_fund_loop_nbap_20261111.py: 18 passed (before build 3)",
-  "tests/test_apollo_fund_loop_nbap_20261111.py tests/test_fund_loop_dash_values_20261110.py tests/test_verdict_retirements.py tests/test_printed_sign.py tests/test_source_encodings.py: 174 passed in 112.39s (after the final build and the retirement store write)",
-  "First run of tests/test_fund_loop_dash_values_20261110.py with the strip including 'CNSI CNSI Holdings, LLC': 1 failed (test_apollo_names_without_the_group_prefix_are_left_alone[CNSI CNSI Holdings, LLC]); the alternative was withdrawn and the 6 CNSI rows fixed by context corrections instead; the test file was not changed.",
-  "Round 3: tests/test_apollo_fund_loop_nbap_20261111.py (extended: instrument, currency and round-3 name assertions): 18 passed",
-  "Final (nbape): tests/test_apollo_fund_loop_nbap_20261111.py tests/test_fund_loop_dash_values_20261110.py tests/test_verdict_retirements.py tests/test_printed_sign.py tests/test_source_encodings.py: 174 passed in 116.52s"
+  "No new test: data-only context corrections. Field diffs: apzd_vs_nbape_fields.txt (instrument_type 64, instrument_description 12, reference_rate_type 37, reference_rate_source 37, corrected_fields 100, position_id 28), apzd_vs_apza_fields.txt, apzd_vs_apzc_fields.txt; chains apzd_vs_apza_chains.txt."
  ],
  "not_done": [
-  "No full pytest suite, cohort regression, semantic diff or quarter re-attestation; sandbox only, nothing folded back to data/output.",
-  "The 2024-12-31 10-K and the 2025 10-Qs' December 2024 comparative blocks were not sign-checked line by line: the printed-sign reader misreads that layout, so the scan cannot be used there (published 2024-12-31 values checked on Truck-Lite and in the cost totals only).",
-  "Cost totals reconciled to the no-value-line exclusions only for 2025-06-30..2025-12-31; other quarters' small cost gaps (0.04M-2.8M) not explained line by line.",
-  "The six rename chain breaks and the two Carvana exchange links are not repaired (no fund-level tool).",
-  "nvapf's 18 observations were not re-verified in this run (archived in scratch/fund_runs/0001837532/nvapf_report_archive.json).",
-  "Other rows whose member text (instrument_description) disagrees with the printed margin or maturity were not searched; only the 43 rows the agentA findings cite were corrected."
+  "No full pytest suite, cohort regression, semantic diff or quarter re-attestation; sandbox apza only, nothing folded back to data/output.",
+  "The 8 + 6 issuer_name_printed findings were carried, not re-read; the 6 needs_data_fix rows (SAVATREE CI, Mariani CI, Tivity Health Health, Inc. and the Investment Company 24 Bidco rows) stay parked on the owner decisions recorded in the nbape report.",
+  "agentA flags in quarters 2025-12-31 and 2026-03-31 for the reference rule (4 rows) and subtotal rule (3 rows) have no ledger review_id in the packet; they were read (printed rows match) but no verdict was written for them.",
+  "The 'hidden member label' of unpublished contexts was not matched to a printed line for the 33 unpublished contexts one by one; those with a maturity or par were matched to a printed row (af_unm_page.py), value-less header or subtotal contexts were read as 'no values'.",
+  "No re-read of the published rows on fields no finding names beyond the sampling above (spread, maturity, index letter on the 191 matched rows).",
+  "instrument_description label text of the other published rows (rate and maturity text from the member) was left (observation instrument-description-keeps-filer-label-rate-and-maturity).",
+  "instrument_description label text of the other published rows (rate and maturity text from the member) was left (observation instrument-description-keeps-filer-label-rate-and-maturity).",
+  "Instrument-type corrections are row-pinned (64 rows, 14 quarters); a new quarter needs the detector or the corrections again.",
+  "Scan limits: 215 rows print a non-lien line (not compared) and 52 undrawn contexts have no fair-value table row; 1,042 rows print no instrument suffix (the scan treats 'no sub-type' as published None and lists the one that disagrees).",
+  "Residue left on purpose: 4 QTS Project Ram Mortgage Loan (DD) rows and 5 Athena Bidco Delayed Draw Note rows (vocabulary)."
  ],
- "grading_note": "All 14 name findings were back in scope (their flagged rows differ from the nvapf coverage) and were re-read; none is carried. Quarters whose only remaining rows are Investment Company 24 Bidco Limited are graded false_alarm (check misfire, REQ-NBAP-1); quarters that also hold the parked CI / Tivity rows are confirmed_error (published name differs from the printed company).",
+ "grading_note": "Run under the findings workflow (production b1112b is the build of record). Final round (apzd): of 36 agentA findings, 7 are confirmed_error (5: a flagged published row had a wrong instrument_type; 2: Yellow Castle reference_rate_type SOFR where the line prints SARON/STIBOR) and 29 are false_alarm on correct data (REQ-APZ-1). 14 issuer_name_printed findings are carried from nbape. All findings stay outstanding until a batch builds the fixes and the check is repaired.",
  "verdict_retirements": {
   "file": "data/overrides/verdict_retirements/standing_rule_fundloop_0001837532_2026-11-11.json",
   "rerun": "python scratch/fund_runs/0001837532/nbap_retirements.py nbape",
@@ -689,7 +1225,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 1
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (14 carried, 1 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (14 carried, 1 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_a0962818f16b",
@@ -718,7 +1255,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 2
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (20 carried, 2 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (20 carried, 2 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_ddc1b455b5b5",
@@ -747,7 +1285,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 2
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (25 carried, 2 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (25 carried, 2 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_e741d2ec00c7",
@@ -776,7 +1315,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 2
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (28 carried, 2 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (28 carried, 2 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_6c8019668645",
@@ -807,7 +1347,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 3
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (36 carried, 3 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (36 carried, 3 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_f8735779a837",
@@ -838,7 +1379,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 3
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (39 carried, 3 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (39 carried, 3 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_7dfbf6db93b7",
@@ -869,7 +1411,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 3
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (42 carried, 3 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (42 carried, 3 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_da633c9b20b9",
@@ -902,7 +1445,8 @@
    "row_breakdown": {
     "Investment Company 24 Bidco Limited": 4
    },
-   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (46 carried, 4 now); every flagged row's printed block read (nbap_name_evidence.py nbape)."
+   "scope_note": "Back in scope: the flagged rows differ from the carried nvapf coverage (46 carried, 4 now); every flagged row's printed block read (nbap_name_evidence.py nbape).",
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_479b0a9e5a2a",
@@ -952,7 +1496,8 @@
    "confirmed_error_rows": [
     "ROW-358613870b167f6f",
     "ROW-75a9bae114d969fe"
-   ]
+   ],
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_f951651e820c",
@@ -1002,7 +1547,8 @@
    "confirmed_error_rows": [
     "ROW-8a85c917e370f283",
     "ROW-e7dde5dc6fda9f42"
-   ]
+   ],
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_384e01068bca",
@@ -1052,7 +1598,8 @@
    "confirmed_error_rows": [
     "ROW-08cb6aeab78e14c2",
     "ROW-233b141b50459ad5"
-   ]
+   ],
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_0cb91d765604",
@@ -1102,7 +1649,8 @@
    "confirmed_error_rows": [
     "ROW-40460d2150c91bee",
     "ROW-b3e819e264106361"
-   ]
+   ],
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_7ab0693ee9d4",
@@ -1152,7 +1700,8 @@
    "confirmed_error_rows": [
     "ROW-880070bb6b6da408",
     "ROW-8899178e7e7510f4"
-   ]
+   ],
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
   },
   {
    "finding_id": "RVQ_BLK_0d897294eebd",
@@ -1211,7 +1760,1360 @@
     "ROW-23e275712d200391",
     "ROW-2c1d007cf40d5710",
     "ROW-9f6ffedc02e0d1a2"
-   ]
+   ],
+   "carried_from": "scratch/fund_runs/0001837532/nbape_report_archive.json (the nbape report, git history of docs/investigations/v05_readings/reports/0001837532.json; independent review independent-reviewer-0001837532-nbape-2026-11-11; verdict entries in data/decisions/0001837532.jsonl)"
+  },
+  {
+   "finding_id": "RVQ_BLK_b5f3608a0136",
+   "coverage": {
+    "affected_rows": [
+     "ROW-c0b01865c8b9e3cd",
+     "ROW-f7c2f88fea1381ad",
+     "ROW-e4337613885d842a"
+    ],
+    "reviewed_rows": [
+     "ROW-c0b01865c8b9e3cd",
+     "ROW-f7c2f88fea1381ad",
+     "ROW-e4337613885d842a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "nagement & Development 3Phase Elevator Polyphase Elevator Holding Company First Lien Secured Debt S+ 550 , 1.00 % Floor 6/23/2027 $ 3,465 $ 3,465 $ 3,465 (4)(16) Pritchard Industries Pritch"
+    },
+    {
+     "accession": "0000950170-23-021206",
+     "text": "00 ( 55 ) ( 100 ) (4)(5)(11) (26) 27,935 27,673 Solera Polaris Newco, LLC First Lien Secured Debt L+ 400 , 0.50 % Floor 6/2/2028 49,818 49,881 45,569 (14) Sovos Compliance Sovos Compliance"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_d8c0647c9beb",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8a01fda71d17b073",
+     "ROW-5d61380210de1081",
+     "ROW-03773088ee6a0b05"
+    ],
+    "reviewed_rows": [
+     "ROW-8a01fda71d17b073",
+     "ROW-5d61380210de1081",
+     "ROW-03773088ee6a0b05"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "(9) (11)(16)(26) 7,463 7,009 Zest Dental Solutions Zest Acquisition Corp. First Lien Secured Debt S+ 550 , 0.00 % Floor 2/8/2028 11,970 11,411 11,551 (17) Total Health Care Equipment & Sup"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": ", 0.75 % Floor 6/21/2029 $ 146,692 $ 144,066 $ 145,958 (4)(17) First Lien Secured Debt - Revolver S+ 650 , 0.75 % Floor 6/21/2028 9,073 ( 151 ) ( 45 ) (4)(5)(11) (26) 143,915 145,913 Genesy"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_d522f64a3348",
+   "coverage": {
+    "affected_rows": [
+     "ROW-c30afe9be1296e94",
+     "ctx:C_aac82c3f-9ff7-4d2a-8535-ca9a63126703"
+    ],
+    "reviewed_rows": [
+     "ROW-c30afe9be1296e94",
+     "ctx:C_aac82c3f-9ff7-4d2a-8535-ca9a63126703"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "(9) (11)(16)(27) 7,464 7,009 Zest Dental Solutions Zest Acquisition Corp. First Lien Secured Debt S+ 550 , 0.00 % Floor 2/8/2028 11,910 11,377 11,717 (16) Total Health Care Equipment & Sup"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_4f1b5cfd7483",
+   "coverage": {
+    "affected_rows": [
+     "ROW-ea3b5ba5149ad473",
+     "ROW-4958f02c8a790ca2",
+     "ROW-a8c619f35991299a",
+     "ROW-18075476a7efbe66"
+    ],
+    "reviewed_rows": [
+     "ROW-ea3b5ba5149ad473",
+     "ROW-4958f02c8a790ca2",
+     "ROW-a8c619f35991299a",
+     "ROW-18075476a7efbe66"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": ",969 11,851 11,938 (14) 36,093 36,932 Avenu Insights ACP Avenu Buyer, LLC First Lien Secured Debt S+ 625 , 1.00 % Floor 10/2/2029 8,929 6,048 6,041 (4)(9)(11) (15)(27) First Lien Secured De"
+    },
+    {
+     "accession": "0000950170-24-031479",
+     "text": ", 1.00 % Floor 10/2/2029 8,929 6,048 6,041 (4)(9)(11) (15)(27) First Lien Secured Debt - Revolver S+ 625 , 1.00 % Floor 10/2/2029 1,071 ( 28 ) ( 29 ) (4)(5)(9) (11)(27) 6,020 6,012 BDO USA"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_8d6dae6125e4",
+   "coverage": {
+    "affected_rows": [
+     "ROW-64803441b247d554",
+     "ROW-26bfbfe3030a0a59",
+     "ROW-5f261b2fe3fc0ebe",
+     "ROW-d93dbe6f547058ec",
+     "ROW-4c1d642a4dd42415",
+     "ROW-cdcea4c4f5c0a8de",
+     "ROW-6230c7e90ce85735",
+     "ROW-4c37feac2590e877",
+     "ROW-8686f2f5e78e2832",
+     "ROW-8c6b90c7ad46ec0e",
+     "ROW-790370af4cb3a578"
+    ],
+    "reviewed_rows": [
+     "ROW-64803441b247d554",
+     "ROW-26bfbfe3030a0a59",
+     "ROW-5f261b2fe3fc0ebe",
+     "ROW-d93dbe6f547058ec",
+     "ROW-4c1d642a4dd42415",
+     "ROW-cdcea4c4f5c0a8de",
+     "ROW-6230c7e90ce85735",
+     "ROW-4c37feac2590e877",
+     "ROW-8686f2f5e78e2832",
+     "ROW-8c6b90c7ad46ec0e",
+     "ROW-790370af4cb3a578"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "$ 58,436 Building Products American Bath CP Atlas Buyer, Inc. First Lien Secured Debt - Term Loan S+ 375 , 0.50 % Floor 11/23/2027 $ 9,975 $ 9,938 $ 9,754 (15) Chamberlain Group Chariot Buye"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "0 , 0.75 % Floor 8/14/2028 49,725 48,799 48,731 (4)(9)(14) First Lien Secured Debt - Delayed Draw S+ 625 , 0.75 % Floor 8/12/2028 2,779 2,707 2,687 (4)(9)(11)(14)(27) First Lien Secured Deb"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Vensure Vensure Employer Services, Inc. First Lien Secured Debt - Delayed Draw S+ 525 , 0.75 % Floor 3/26/2027 27,011 26,728 27,011 (4)(11)(15)(27) See notes to consolida"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line.",
+    "Published instrument_type of every flagged published row against the printed instrument cell: ROW-4c37feac2590e877 Vensure Employer Services, Inc. published instrument_type None, page prints 'Delayed Draw'."
+   ],
+   "next_action": "Fixed in apzd: instrument_type correction (and instrument_description where wrong) for the flagged row(s); the apzd rescan shows no mismatch on them. Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_02f6d963edff",
+   "coverage": {
+    "affected_rows": [
+     "ROW-64c6160a27ec6ad7",
+     "ROW-c98f4355700f8e4e",
+     "ROW-243eb63f736c04ca",
+     "ROW-85ab65896be213e4",
+     "ROW-c667031e87e9ea12"
+    ],
+    "reviewed_rows": [
+     "ROW-64c6160a27ec6ad7",
+     "ROW-c98f4355700f8e4e",
+     "ROW-243eb63f736c04ca",
+     "ROW-85ab65896be213e4",
+     "ROW-c667031e87e9ea12"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "3)(4)(8)(9)(17) R.R. Donnelley R. R. Donnelley & Sons Company First Lien Secured Debt - Term Loan S+ 475 , 0.75 % Floor 8/8/2029 176,000 170,837 170,720 (4)(9)(14) Resource Innovations Nor"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": ",524 (14) Madison Safety & Flow LLC Madison Safety & Flow LLC First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 9/15/2031 5,000 4,988 5,005 (14) Total Electronic Equipment, Instrume"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_57f7f15b4cfb",
+   "coverage": {
+    "affected_rows": [
+     "ROW-cef25ae8ca1b3d5c",
+     "ROW-337c60029daeb235",
+     "ROW-72c6eca92cc8af59",
+     "ROW-80a5a0c0d20a55dc",
+     "ROW-286d20721ed0b1e2",
+     "ROW-5a80590125cfb0f1",
+     "ROW-1f4e2a3d33c59699",
+     "ROW-38d309eb122f9b9e",
+     "ROW-b2a5901ac2fe569c",
+     "ROW-c2c4dcc20f645d93",
+     "ROW-1116e0693b3ac178",
+     "ROW-d754c7d5eb0a1c81",
+     "ROW-862f691fb2a37717",
+     "ROW-9df29ebcabe45774",
+     "ctx:C_f67eae9b-aa2c-47b9-ac23-26167596e669",
+     "ctx:C_7ab42ce4-e804-4e17-b8e8-272506c8ee1a"
+    ],
+    "reviewed_rows": [
+     "ROW-cef25ae8ca1b3d5c",
+     "ROW-337c60029daeb235",
+     "ROW-72c6eca92cc8af59",
+     "ROW-80a5a0c0d20a55dc",
+     "ROW-286d20721ed0b1e2",
+     "ROW-5a80590125cfb0f1",
+     "ROW-1f4e2a3d33c59699",
+     "ROW-38d309eb122f9b9e",
+     "ROW-b2a5901ac2fe569c",
+     "ROW-c2c4dcc20f645d93",
+     "ROW-1116e0693b3ac178",
+     "ROW-d754c7d5eb0a1c81",
+     "ROW-862f691fb2a37717",
+     "ROW-9df29ebcabe45774",
+     "ctx:C_f67eae9b-aa2c-47b9-ac23-26167596e669",
+     "ctx:C_7ab42ce4-e804-4e17-b8e8-272506c8ee1a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "raw S+ 575 , 1.00 % Floor 11/19/2029 - ( 30 ) - (4)(9)(11)(28) First Lien Secured Debt - Revolver S+ 525 , 1.00 % Floor 11/17/2029 687 657 687 (4)(9)(11)(15)(28) 10,940 11,226 SAVATREE CI (Q"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "0 , 0.75 % Floor 8/14/2028 49,476 48,647 48,611 (4)(9)(14) First Lien Secured Debt - Delayed Draw S+ 635 , 0.75 % Floor 8/12/2028 4,576 4,511 4,496 (4)(9)(14) First Lien Secured Debt - Dela"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan SARON+ 475 (Includes 5.00 % PIK) 7/7/2029 3,296 3,327 3,622"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 (Inlcudes 5.00 % PIK) 7/7/2029 kr 34,792 3,245 3,137"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line.",
+    "reference_rate_type of every flagged published row against the index printed on its own line: ROW-1116e0693b3ac178, ROW-c2c4dcc20f645d93 print SARON/STIBOR, published SOFR (fixed)."
+   ],
+   "next_action": "Fixed in apza and apzd: reference_rate_type corrections for the 4 Yellow Castle rows (37 SARON/STIBOR rows in all). Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_6f4bd2243a96",
+   "coverage": {
+    "affected_rows": [
+     "ROW-3d1673104a59d633",
+     "ROW-bea265980cb11bf4",
+     "ROW-14edcac87b875102",
+     "ROW-94264e25f355e97b",
+     "ROW-8f94c982144d8bee",
+     "ROW-cd7aa0f8eb3fcfd5"
+    ],
+    "reviewed_rows": [
+     "ROW-3d1673104a59d633",
+     "ROW-bea265980cb11bf4",
+     "ROW-14edcac87b875102",
+     "ROW-94264e25f355e97b",
+     "ROW-8f94c982144d8bee",
+     "ROW-cd7aa0f8eb3fcfd5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "35,897 36,337 (15) PDC Brands Parfums Holding Company, Inc. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 6/27/2030 164,328 162,845 162,684 (4)(9)(16) First Lien Secured Debt"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "2029 8,339 8,320 8,283 (15) Forterro Yellow Castle AB First Lien Secured Debt - Term Loan E + 475 (Includes 7.47 % PIK) 7/7/2029 EUR 9,933 9,935 10,714 (3)(4)(8)(9)(21) First Lien Secured"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "First Lien Secured Debt - Term Loan SARON + 475 (Includes 5.46 % PIK) 7/7/2029 3,327 3,365 3,752"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 (Inlcudes 8.63 % PIK) 7/7/2029 kr 35,257 3,289 3,499"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line.",
+    "reference_rate_type of every flagged published row against the index printed on its own line: ROW-14edcac87b875102, ROW-94264e25f355e97b print SARON/STIBOR, published SOFR (fixed)."
+   ],
+   "next_action": "Fixed in apza and apzd: reference_rate_type corrections for the 4 Yellow Castle rows (37 SARON/STIBOR rows in all). Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_9cc39b7dea88",
+   "coverage": {
+    "affected_rows": [
+     "ROW-1ac5ce581db4071a",
+     "ROW-d0b7f62044783e40",
+     "ROW-1152528cf282a80a",
+     "ctx:C_3627b44a-07cd-4ae3-a9ee-8dd4d84177b9"
+    ],
+    "reviewed_rows": [
+     "ROW-1ac5ce581db4071a",
+     "ROW-d0b7f62044783e40",
+     "ROW-1152528cf282a80a",
+     "ctx:C_3627b44a-07cd-4ae3-a9ee-8dd4d84177b9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "N/A 733,019 Shares 3,465 5,829 (4)(8)(33) MLN US Holdco LLC First Lien Secured Debt - Term Loan S + 800 , 1.00 % Floor 6/20/2030 6,588 5,733 5,732 (4)(8)(15) 9,198 11,561 Total Communicati"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": ". Ltd./ Novotech Aus Bidco Pty Ltd/Novotech Holdings USA LLC First Lien Secured Debt - Term Loan S + 525 , 0.50 % Floor 6/7/2031 42,857 42,379 42,257 (4)(8)(9)(16)(17) First Lien Secured D"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_35c23bcb4252",
+   "coverage": {
+    "affected_rows": [
+     "ROW-6a52b1aaab624a3d",
+     "ROW-9b7db6883af215f2",
+     "ROW-04c639e733297353",
+     "ROW-35c7249d5c4f7682",
+     "ROW-ff7dcb9c176c5e48",
+     "ROW-54ae54605e5cdb87",
+     "ROW-59bde7ea2817fd18",
+     "ROW-89495567e08b19e0",
+     "ROW-9ba78100af7c1bb9",
+     "ROW-bd20e74f11fabd83",
+     "ROW-52ff2d002ab060ea",
+     "ROW-6a947bc6e366443f",
+     "ROW-609b72fdd5ac44d8",
+     "ROW-92341470b64b3652",
+     "ROW-3512695e59dbd8c7",
+     "ROW-aea62c4e21a52faa",
+     "ROW-3d6a44071d07ccd1",
+     "ROW-d70de83faf62a5ef",
+     "ROW-4de3721400823217",
+     "ctx:C_7b828084-4add-4c7f-8864-d57c57182852"
+    ],
+    "reviewed_rows": [
+     "ROW-6a52b1aaab624a3d",
+     "ROW-9b7db6883af215f2",
+     "ROW-04c639e733297353",
+     "ROW-35c7249d5c4f7682",
+     "ROW-ff7dcb9c176c5e48",
+     "ROW-54ae54605e5cdb87",
+     "ROW-59bde7ea2817fd18",
+     "ROW-89495567e08b19e0",
+     "ROW-9ba78100af7c1bb9",
+     "ROW-bd20e74f11fabd83",
+     "ROW-52ff2d002ab060ea",
+     "ROW-6a947bc6e366443f",
+     "ROW-609b72fdd5ac44d8",
+     "ROW-92341470b64b3652",
+     "ROW-3512695e59dbd8c7",
+     "ROW-aea62c4e21a52faa",
+     "ROW-3d6a44071d07ccd1",
+     "ROW-d70de83faf62a5ef",
+     "ROW-4de3721400823217",
+     "ctx:C_7b828084-4add-4c7f-8864-d57c57182852"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "45 8,225 (9)(15)(30) 41,790 16,684 USA DeBusk USA DeBusk LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 4/30/2031 13,150 12,982 13,084 (4)(9)(16) First Lien Secured Debt - D"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "9 Diversified REITs QTS Project Ram QTS Project Ram First Lien Secured Debt - Mortgage Loan (DD) S + 225 , 0.00 % Floor 5/29/2028 $ 17,756 $ 17,060 $ 17,025 (4)(12)(15)(33) Stonepeak Bayou"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_b17a5a9e4624",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e35082c5c4327db0",
+     "ROW-b16737d3ee06202a",
+     "ROW-0df161c8d6219cbc",
+     "ROW-3678bb8f33dcfad5",
+     "ROW-8c12ae301626b609",
+     "ROW-121e5345cb61d1d0",
+     "ROW-b692cb7d5e1b634a",
+     "ROW-4db878f1ba21ddfb",
+     "ROW-48673a4738dd1de7",
+     "ROW-fedc81d76b63a2bc",
+     "ROW-365063604da89705",
+     "ctx:C_028f463c-819b-4c40-b989-9c04e5e4c545"
+    ],
+    "reviewed_rows": [
+     "ROW-e35082c5c4327db0",
+     "ROW-b16737d3ee06202a",
+     "ROW-0df161c8d6219cbc",
+     "ROW-3678bb8f33dcfad5",
+     "ROW-8c12ae301626b609",
+     "ROW-121e5345cb61d1d0",
+     "ROW-b692cb7d5e1b634a",
+     "ROW-4db878f1ba21ddfb",
+     "ROW-48673a4738dd1de7",
+     "ROW-fedc81d76b63a2bc",
+     "ROW-365063604da89705",
+     "ctx:C_028f463c-819b-4c40-b989-9c04e5e4c545"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "(4)(9)(33) 50 77 PureStar AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 425 , 0.50 % Floor 6/15/2030 146,759 145,778 145,291 (9)(16) First Lien Secured Debt - D"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "s (3) Cost (34) Fair Value (1)(35) USA DeBusk USA DeBusk LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 4/30/2031 15,858 15,670 15,705 (4)(9)(15)(16) First Lien Secured Debt"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_18c9d2a2df9e",
+   "coverage": {
+    "affected_rows": [
+     "ROW-57c06415a4eac531",
+     "ROW-0556b1ddf8169259",
+     "ROW-325497b2ad6009a8",
+     "ROW-97718d5ab4434021",
+     "ROW-2ecbb039a4cb4656",
+     "ROW-bdbf6ba492a582f0",
+     "ROW-90f088cd4f516736",
+     "ctx:C_daf83bd3-0d6d-4cfe-8b40-f245d80de8d7"
+    ],
+    "reviewed_rows": [
+     "ROW-57c06415a4eac531",
+     "ROW-0556b1ddf8169259",
+     "ROW-325497b2ad6009a8",
+     "ROW-97718d5ab4434021",
+     "ROW-2ecbb039a4cb4656",
+     "ROW-bdbf6ba492a582f0",
+     "ROW-90f088cd4f516736",
+     "ctx:C_daf83bd3-0d6d-4cfe-8b40-f245d80de8d7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-215667",
+     "text": ",509 $ 602,675 Capital Markets Dragon Buyer Dragon Buyer Inc First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 09/30/2031 $ 3,206 $ 3,192 $ 3,062 (16) Edelman Financial Services The"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "ealth Care Equipment & Supplies Corpuls Heartbeat BidCo GmbH First Lien Secured Debt - Term Loan E + 650 , 0.50 % Floor 06/28/2030 EUR 20,000 $ 21,533 $ 23,001 (3)(4)(8)(9)(22) First Lien Se"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": ", 0.00 % Floor 11/03/2032 18,801 18,750 18,172 (16) First Lien Secured Debt - Corporate Bond 6.75 % 08/01/2032 5,000 4,839 4,772 Solenis Holding Limited First Lien Secure"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Label maturity vs printed maturity: printed row (maturity + fair value on one line) equals published maturity_date; the label date is a typo or stale (for example 10/2/2019 against printed 10/2/2029).",
+    "Is the published row a different tranche of the same company: ruled out by matching fair value and printed spread/index on the same line.",
+    "Published instrument_type of every flagged published row against the printed instrument cell: ROW-97718d5ab4434021 Olympus Water US Holding Corporati published instrument_type 'Delayed Draw Term Loan', page prints 'Corporate Bond'."
+   ],
+   "next_action": "Fixed in apzd: instrument_type correction (and instrument_description where wrong) for the flagged row(s); the apzd rescan shows no mismatch on them. Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_c807714985d8",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2d9feafce38328ad",
+     "ROW-c848c660480099a2"
+    ],
+    "reviewed_rows": [
+     "ROW-2d9feafce38328ad",
+     "ROW-c848c660480099a2"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "il $ 83,742 $ 83,766 Containers & Packaging BOX Partners Bp Purchaser LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 12/11/2028 $ 7,406 $ 7,406 $ 7,406 (4)(16) Tekni-Plex Trident TPI Hold"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": "/2028 GBP 22,500 6,906 7,483 (3)(4)(8) (11)(19)(26) VEPF VII VEPF VII Holdings, L.P. First Lien Secured Debt S+ 450 PIK 2/28/2028 18,361 18,275 18,322 (4)(8)(17) Total Financial Services $"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Printed index letter and spread on the schedule row equal the published reference_rate_type and basis_spread for published flagged rows.",
+    "Unpublished flagged contexts hold no fair value, par or cost, or duplicate a printed subtotal; they are not positions."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_2dd8484a15c8",
+   "coverage": {
+    "affected_rows": [
+     "ROW-c30bafb5fd6597b1",
+     "ROW-ff7d580043b58ed8",
+     "ROW-f6f897df6d8d9b89",
+     "ROW-afa45f0eaccf49d8",
+     "ROW-ff2f561a2ef82ecf",
+     "ctx:C_2ff82004-a3d0-4b06-b407-2bf33a1a056d",
+     "ctx:C_a47a1f4a-b9be-4c31-bf05-d95801cfc3a8"
+    ],
+    "reviewed_rows": [
+     "ROW-c30bafb5fd6597b1",
+     "ROW-ff7d580043b58ed8",
+     "ROW-f6f897df6d8d9b89",
+     "ROW-afa45f0eaccf49d8",
+     "ROW-ff2f561a2ef82ecf",
+     "ctx:C_2ff82004-a3d0-4b06-b407-2bf33a1a056d",
+     "ctx:C_a47a1f4a-b9be-4c31-bf05-d95801cfc3a8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "/2028 GBP 22,500 6,916 7,189 (3)(4)(8) (11)(21)(27) VEPF VII VEPF VII Holdings, L.P. First Lien Secured Debt S+ 450 PIK 2/28/2028 18,817 18,736 18,883 (4)(8)(17) Total Financial Services $"
+    },
+    {
+     "accession": "0000950170-23-061985",
+     "text": "(4)(11)(27) 144,001 147,425 Genesys Cloud Greeneden U.S. Holdings II, LLC First Lien Secured Debt S+ 411 , 0.75 % Floor 12/1/2027 11,213 11,235 11,235 (16) Peraton Peraton Corp. First Lien"
+    },
+    {
+     "accession": "0000950170-23-061985",
+     "text": "Esdec Esdec Solar Group B.V. First Lien Secured Debt E+ 600 , 0.50 % Floor 8/30/2028 EUR 65,000 $ 53,447 $ 50,510 (3)(4)(8) (9)(21)(27) Total Independent Power & Renewable Electricity Producers $ 53,447 $ 50,510"
+    },
+    {
+     "accession": "0000950170-23-061985",
+     "text": "3/2030 $ 18,286 $ 17,923 $ 17,920 (4)(9)(16) First Lien Secured Debt - Revolver S+ 600 , 0.75 % Floor 9/3/2030 1,714 ( 34 ) ( 34 ) (4)(5)(9)(11) (27) 17,889 17,886 Access"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Printed index letter and spread on the schedule row equal the published reference_rate_type and basis_spread for published flagged rows.",
+    "Unpublished flagged contexts hold no fair value, par or cost, or duplicate a printed subtotal; they are not positions.",
+    "Published instrument_type of every flagged published row against the printed instrument cell: ROW-afa45f0eaccf49d8 Accela, Inc. published instrument_type None, page prints 'Revolver'."
+   ],
+   "next_action": "Fixed in apzd: instrument_type correction (and instrument_description where wrong) for the flagged row(s); the apzd rescan shows no mismatch on them. Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_69e49a8725d1",
+   "coverage": {
+    "affected_rows": [
+     "ROW-612149eda8147bc9",
+     "ROW-7be97bdf35c2324d",
+     "ROW-eb917853be8523d4",
+     "ROW-a98b236332b3f287",
+     "ROW-6094ecffdd68927b",
+     "ROW-329b3c6ec5c0066c",
+     "ROW-a09ca49abf7cd526",
+     "ctx:C_53a69deb-75a8-4c6b-93e7-04d5e11d742c",
+     "ctx:C_e773d110-8476-4f0f-aa3f-a5adb0fd3146"
+    ],
+    "reviewed_rows": [
+     "ROW-612149eda8147bc9",
+     "ROW-7be97bdf35c2324d",
+     "ROW-eb917853be8523d4",
+     "ROW-a98b236332b3f287",
+     "ROW-6094ecffdd68927b",
+     "ROW-329b3c6ec5c0066c",
+     "ROW-a09ca49abf7cd526",
+     "ctx:C_53a69deb-75a8-4c6b-93e7-04d5e11d742c",
+     "ctx:C_e773d110-8476-4f0f-aa3f-a5adb0fd3146"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "31 117,876 Houghton Mifflin Houghton Mifflin Harcourt Company First Lien Secured Debt - Term Loan S+ 535 , 0.50 % Floor 4/9/2029 42,592 40,956 40,640 (15) SERVPRO One Silver Serve, LLC Fir"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "/2029 42,592 40,956 40,640 (15) SERVPRO One Silver Serve, LLC First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 12/18/2028 21,209 21,014 20,996 (4)(15) First Lien Secured Debt - Dela"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Printed index letter and spread on the schedule row equal the published reference_rate_type and basis_spread for published flagged rows.",
+    "Unpublished flagged contexts hold no fair value, par or cost, or duplicate a printed subtotal; they are not positions."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_3b7c8ad786ed",
+   "coverage": {
+    "affected_rows": [
+     "ROW-b0839bbbe9c5c16a",
+     "ROW-36247f9c829194b6",
+     "ROW-e1a5e4db88b5ee6b",
+     "ROW-d3bb254118c727de",
+     "ROW-0bfbbdc55746b348",
+     "ROW-f4084ba7c38f9075",
+     "ROW-6a9dd3ea538799f3"
+    ],
+    "reviewed_rows": [
+     "ROW-b0839bbbe9c5c16a",
+     "ROW-36247f9c829194b6",
+     "ROW-e1a5e4db88b5ee6b",
+     "ROW-d3bb254118c727de",
+     "ROW-0bfbbdc55746b348",
+     "ROW-f4084ba7c38f9075",
+     "ROW-6a9dd3ea538799f3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "75 , 1.00 % Floor 2/7/2028 37,004 36,134 35,894 (4)(9)(15) First Lien Secured Debt - Delayed Draw S+ 675 , 1.00 % Floor 2/7/2028 3,382 3,309 3,280 (4)(9)(15) First Lien Secured Debt - Revo"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "625 , 1.00 % Floor 8/13/2027 8,153 7,995 8,153 (4)(9)(15) First Lien Secured Debt - Delayed Draw S+ 550 , 1.00 % Floor 8/13/2027 32,181 31,968 31,586 (4)(9)(15) First Lien Secured Debt - R"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "r 8/13/2027 32,181 31,968 31,586 (4)(9)(15) First Lien Secured Debt - Revolver S+ 660 , 1.00 % Floor 8/13/2027 356 330 355 (4)(9)(11)(15)(27) 50,588 50,245 Total Consumer"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Printed index letter and spread on the schedule row equal the published reference_rate_type and basis_spread for published flagged rows.",
+    "Unpublished flagged contexts hold no fair value, par or cost, or duplicate a printed subtotal; they are not positions.",
+    "Published instrument_type of every flagged published row against the printed instrument cell: ROW-0bfbbdc55746b348 Ultimate Baked Goods Midco LLC published instrument_type 'Term Loan', page prints 'Revolver'."
+   ],
+   "next_action": "Fixed in apzd: instrument_type correction (and instrument_description where wrong) for the flagged row(s); the apzd rescan shows no mismatch on them. Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_20bba2be3df9",
+   "coverage": {
+    "affected_rows": [
+     "ctx:C_ad383919-b619-4746-9ef3-1243182b08dd"
+    ],
+    "reviewed_rows": [
+     "ctx:C_ad383919-b619-4746-9ef3-1243182b08dd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "Relativity Relativity ODA LLC First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 5/12/2027 29,262 28,659 29,116 (4)(14)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Printed index letter and spread on the schedule row equal the published reference_rate_type and basis_spread for published flagged rows.",
+    "Unpublished flagged contexts hold no fair value, par or cost, or duplicate a printed subtotal; they are not positions."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_bb8c8f7f1d50",
+   "coverage": {
+    "affected_rows": [
+     "ROW-6c1b824d12696f21",
+     "ROW-62f6090e34ab5a70"
+    ],
+    "reviewed_rows": [
+     "ROW-6c1b824d12696f21",
+     "ROW-62f6090e34ab5a70"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": ")(35) Technology Hardware, Storage & Peripherals Biamp Biamp First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 4/30/2030 $ 43,560 $ 42,792 $ 42,419 (4)(9)(15) First Lien Secured De"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "s (3) Cost (34) Fair Value (1)(35) Jagex Janus Bidco Limited First Lien Secured Debt - Term Loan S + 600 , 0.00 % Floor 4/25/2031 68,523 66,965 67,153 (4)(8)(9)(10)(17) First Lien Secured D"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Printed index letter and spread on the schedule row equal the published reference_rate_type and basis_spread for published flagged rows.",
+    "Unpublished flagged contexts hold no fair value, par or cost, or duplicate a printed subtotal; they are not positions."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_d49d5fca4105",
+   "coverage": {
+    "affected_rows": [
+     "ROW-cfd9be71c6495745"
+    ],
+    "reviewed_rows": [
+     "ROW-cfd9be71c6495745"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "(27) Fair Value (1)(28) Software Access Group Armstrong Bidco Limited First Lien Secured Debt SONIA+ 550 , 0.00 % Floor 6/28/2029 GBP 42,000 $ 46,194 $ 46,797 (3)(4)(8) (11)(19)(26) Avalara"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_add4c0ab2430",
+   "coverage": {
+    "affected_rows": [
+     "ROW-fe4bd5fcc35aa0df",
+     "ROW-ab9b7fe781d65f9f",
+     "ROW-ceb2e9e9be4f1ae8",
+     "ROW-7f5d975e83b6af76",
+     "ctx:C_89ed0aef-bcd6-4c13-ac3f-d86f23dfd66a"
+    ],
+    "reviewed_rows": [
+     "ROW-fe4bd5fcc35aa0df",
+     "ROW-ab9b7fe781d65f9f",
+     "ROW-ceb2e9e9be4f1ae8",
+     "ROW-7f5d975e83b6af76",
+     "ctx:C_89ed0aef-bcd6-4c13-ac3f-d86f23dfd66a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "en Secured Debt S+ 401 , 0.50 % Floor 11/9/2028 13,085 12,751 12,602 (17) First Lien Secured Debt S+ 460 , 0.50 % Floor 11/9/2028 11,138 10,884 10,770 (17) First Lien Secured Debt S+ 500 ,"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": "2,273 ( 45 ) ( 40 ) (4)(5)(11) (26) 15,993 15,933 Tranzonic TZ Buyer LLC First Lien Secured Debt S+ 585 , 0.75 % Floor 8/14/2028 9,283 9,058 9,051 (4)(9)(17) First Lien Secured Debt - Revo"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_73fe35c9b4ac",
+   "coverage": {
+    "affected_rows": [
+     "ROW-68a6a36171dbb0bb",
+     "ctx:C_72f2a73e-adb0-4255-a1b3-910db300513a",
+     "ctx:C_8fd13d3c-a8f6-4f5f-91a1-7e042700beca",
+     "ctx:C_2ec8bc63-6b1a-4869-b585-e91b0c698d93"
+    ],
+    "reviewed_rows": [
+     "ROW-68a6a36171dbb0bb",
+     "ctx:C_72f2a73e-adb0-4255-a1b3-910db300513a",
+     "ctx:C_8fd13d3c-a8f6-4f5f-91a1-7e042700beca",
+     "ctx:C_2ec8bc63-6b1a-4869-b585-e91b0c698d93"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "/28/2027 29,965 29,869 28,949 (8)(16)(17) Associa Associations Inc. First Lien Secured Debt S+ 426 Cash plus 2.50 % PIK 7/2/2027 16,514 16,406 16,514 (4)(17) Charter Communications CCO Hol"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_222c543c2803",
+   "coverage": {
+    "affected_rows": [
+     "ROW-86e992c3c39ad9de",
+     "ROW-582667324000c5e5",
+     "ROW-7fab84ece71a7072",
+     "ctx:C_9e7d0500-ff70-441d-9cc3-047cc0ebbc4c"
+    ],
+    "reviewed_rows": [
+     "ROW-86e992c3c39ad9de",
+     "ROW-582667324000c5e5",
+     "ROW-7fab84ece71a7072",
+     "ctx:C_9e7d0500-ff70-441d-9cc3-047cc0ebbc4c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": "9) Capital Markets Arrowhead Engineered Products Arrowhead Holdco Company First Lien Secured Debt S+ 465 , 0.75 % Floor 8/31/2028 $ 9,825 $ 9,825 $ 9,358 (4)(15) Edelman Financial Services"
+    },
+    {
+     "accession": "0000950170-24-031479",
+     "text": ", 1.00 % Floor 12/21/2027 10,927 10,684 10,763 (4)(9)(14) (15) First Lien Secured Debt - Revolver S+ 635 , 1.00 % Floor 12/21/2027 130 58 57 (4)(9)(11) (15)(27) 10,742 10,820 Total Health Ca"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_18e16c99eebd",
+   "coverage": {
+    "affected_rows": [
+     "ROW-305712042e7537cf",
+     "ROW-0e986b9040b7a9a1"
+    ],
+    "reviewed_rows": [
+     "ROW-305712042e7537cf",
+     "ROW-0e986b9040b7a9a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058684",
+     "text": "nsumable Fuels Brookfield Infrastructure Partners BIP Pipeco Holdings LLC First Lien Secured Debt S+ 325 , 0.00 % Floor 12/6/2030 $ 5,000 $ 5,019 $ 5,014 (15) Total Oil, Gas & Consumable Fu"
+    },
+    {
+     "accession": "0000950170-24-058684",
+     "text": ") Cost (29) Fair Value (1)(30) Professional Services EAB EAB Global, Inc. First Lien Secured Debt S+ 361 , 0.50 % Floor 8/16/2028 $ 19,898 $ 19,714 $ 19,933 (14) Ingenovis Health Ingenovis"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_87004a5fc35d",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e3ece92d4e0aee98",
+     "ctx:C_6a3e46eb-81b8-40bd-8c76-cbf37238723b"
+    ],
+    "reviewed_rows": [
+     "ROW-e3ece92d4e0aee98",
+     "ctx:C_6a3e46eb-81b8-40bd-8c76-cbf37238723b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "2,267 Life Sciences Tools & Services Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S+ 38 5, 0.75 % Floor 8/30/2026 $ 27,269 $ 26,063 $ 25,755 (15) Total Life Sciences Tools &"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_149eabddaa9c",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e7dfc802ee3bc93e",
+     "ROW-64c6160a27ec6ad7",
+     "ROW-bfa036e417d127f0",
+     "ROW-b2907153cdf8896e",
+     "ROW-243eb63f736c04ca",
+     "ROW-85ab65896be213e4",
+     "ROW-b3717c0e6b466425",
+     "ctx:C_57c91db9-79c7-4a10-9e04-847c65a214bb",
+     "ctx:C_90cb96c5-a974-4398-9d18-d574e4833cc3"
+    ],
+    "reviewed_rows": [
+     "ROW-e7dfc802ee3bc93e",
+     "ROW-64c6160a27ec6ad7",
+     "ROW-bfa036e417d127f0",
+     "ROW-b2907153cdf8896e",
+     "ROW-243eb63f736c04ca",
+     "ROW-85ab65896be213e4",
+     "ROW-b3717c0e6b466425",
+     "ctx:C_57c91db9-79c7-4a10-9e04-847c65a214bb",
+     "ctx:C_90cb96c5-a974-4398-9d18-d574e4833cc3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "Arrowhead Engineered Products Arrowhead Holdco Company First Lien Secured Debt - Term Loan S+ 584 (includes 2.75 % PIK) 8/31/2028 $ 10,064 $ 10,064 $ 9,460 (4)(15) Dragon Buyer Inc Dragon B"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "3)(4)(8)(9)(17) R.R. Donnelley R. R. Donnelley & Sons Company First Lien Secured Debt - Term Loan S+ 475 , 0.75 % Floor 8/8/2029 176,000 170,837 170,720 (4)(9)(14) Resource Innovations Nor"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_af18e4c7a958",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8c19245d3b21c57a",
+     "ROW-91665381c21eb653",
+     "ROW-da1b64105ecbeac6",
+     "ROW-17d50a72e617f005",
+     "ROW-273b0d80adae6770",
+     "ROW-8a86dbcb6f26c183",
+     "ctx:C_35c583ad-85a8-4a07-98ac-0e330c44e812"
+    ],
+    "reviewed_rows": [
+     "ROW-8c19245d3b21c57a",
+     "ROW-91665381c21eb653",
+     "ROW-da1b64105ecbeac6",
+     "ROW-17d50a72e617f005",
+     "ROW-273b0d80adae6770",
+     "ROW-8a86dbcb6f26c183",
+     "ctx:C_35c583ad-85a8-4a07-98ac-0e330c44e812"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "313 7,313 6,654 (4)(15) Tekni-Plex Trident TPI Holdings, Inc. First Lien Secured Debt - Term Loan S+ 375 , 0.50 % Floor 9/15/2028 42,286 42,252 42,718 (14) Total Containers & Packaging $ 13"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "wth Insurance Services Patriot Growth Insurance Services, LLC First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 10/16/2028 31,815 31,815 31,815 (4)(15) First Lien Secured Debt - Dela"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_85d213d24d1a",
+   "coverage": {
+    "affected_rows": [
+     "ROW-0e459afec10a23a0",
+     "ROW-02e75dab515fdb81",
+     "ROW-59f7ea90206e5d50",
+     "ROW-e33132779350834c",
+     "ROW-b15925d885fb043c",
+     "ROW-e94b0cf90d42aefc",
+     "ROW-2916a9bd64cbdea2",
+     "ROW-dde2624b0250184d",
+     "ROW-73afce76f45b0c60",
+     "ROW-97eb4554cf25993b",
+     "ROW-8e14a336c43c97be"
+    ],
+    "reviewed_rows": [
+     "ROW-0e459afec10a23a0",
+     "ROW-02e75dab515fdb81",
+     "ROW-59f7ea90206e5d50",
+     "ROW-e33132779350834c",
+     "ROW-b15925d885fb043c",
+     "ROW-e94b0cf90d42aefc",
+     "ROW-2916a9bd64cbdea2",
+     "ROW-dde2624b0250184d",
+     "ROW-73afce76f45b0c60",
+     "ROW-97eb4554cf25993b",
+     "ROW-8e14a336c43c97be"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "63 7,663 6,897 (4)(16) Tekni-Plex Trident TPI Holdings, Inc. First Lien Secured Debt - Term Loan S + 375 , 0.50 % Floor 9/15/2028 44,002 43,911 42,600 (16) Truvant NPPI Buyer, LLC First Lie"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": ") (4)(5)(12)(32) 17,052 16,740 SERVPRO One Silver Serve, LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 12/18/2028 21,049 20,883 20,733 (4)(15) First Lien Secured Debt - Dela"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_d05d12d1713e",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a387688dfe72998e",
+     "ROW-0460b7668830d6d7",
+     "ROW-fcf1372db9bac347",
+     "ROW-1872198ba0377a87",
+     "ROW-b243c15b509671b2",
+     "ROW-92cc7a041cce263e",
+     "ctx:C_bc324f1c-6fa5-4969-a080-0a76e833b7d3",
+     "ctx:C_f16eae5c-55d5-4bc1-a564-c21689241e12"
+    ],
+    "reviewed_rows": [
+     "ROW-a387688dfe72998e",
+     "ROW-0460b7668830d6d7",
+     "ROW-fcf1372db9bac347",
+     "ROW-1872198ba0377a87",
+     "ROW-b243c15b509671b2",
+     "ROW-92cc7a041cce263e",
+     "ctx:C_bc324f1c-6fa5-4969-a080-0a76e833b7d3",
+     "ctx:C_f16eae5c-55d5-4bc1-a564-c21689241e12"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "es 101 101 (4)(33) 193,374 191,709 Circor Cube A&D Buyer Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 10/17/2031 24,439 24,341 24,599 (9)(16) See notes to consolidated fina"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "(4)(5)(9)(12)(32) 21,995 21,987 Medline Medline Borrower LP First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/23/2028 80,058 80,103 80,240 (15) Resonetics Resonetics, LLC First"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_f59144ad213f",
+   "coverage": {
+    "affected_rows": [
+     "ROW-de8fffae35d6113f",
+     "ROW-c92da42e9d238f8c",
+     "ROW-5e4341f9a326ad42",
+     "ROW-4a197f9dfa2ac8a1",
+     "ROW-73a5a8cb01f72e2f",
+     "ROW-cad21ce819d751af",
+     "ROW-e51586230784235e",
+     "ROW-9ba78100af7c1bb9",
+     "ROW-52ff2d002ab060ea",
+     "ROW-6a947bc6e366443f",
+     "ROW-609b72fdd5ac44d8",
+     "ROW-92341470b64b3652",
+     "ROW-09ae6d8cd3956179"
+    ],
+    "reviewed_rows": [
+     "ROW-de8fffae35d6113f",
+     "ROW-c92da42e9d238f8c",
+     "ROW-5e4341f9a326ad42",
+     "ROW-4a197f9dfa2ac8a1",
+     "ROW-73a5a8cb01f72e2f",
+     "ROW-cad21ce819d751af",
+     "ROW-e51586230784235e",
+     "ROW-9ba78100af7c1bb9",
+     "ROW-52ff2d002ab060ea",
+     "ROW-6a947bc6e366443f",
+     "ROW-609b72fdd5ac44d8",
+     "ROW-92341470b64b3652",
+     "ROW-09ae6d8cd3956179"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "1,123,671 Communications Equipment CommScope Commscope, LLC First Lien Secured Debt - Term Loan S + 475 , 2.00 % Floor 12/17/2029 $ 252,954 $ 254,903 $ 256,375 (8)(15) See notes to consolid"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "178 2,063 2,157 (4)(12)(16)(33) 26,387 26,771 Nexity Evoriel First Lien Secured Debt - Term Loan E + 550 , 0.00 % Floor 4/2/2031 EUR 43,574 46,144 50,902 (3)(4)(8)(9)(10)(21) First Lien Se"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525)."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_8ff6df9082aa",
+   "coverage": {
+    "affected_rows": [
+     "ROW-53e955c90c1f4656",
+     "ROW-7a21350ea3356310",
+     "ROW-b792c22e1d11bae7",
+     "ROW-b029c5ca44ba699d",
+     "ROW-4db5b96dc50c6e63",
+     "ROW-feb33a87d0e10297",
+     "ROW-7a45c68f82aabb10",
+     "ROW-2eacf179faac752e",
+     "ROW-b692cb7d5e1b634a",
+     "ROW-3a39199b95571244",
+     "ROW-b55d55d4c06b730d",
+     "ROW-48673a4738dd1de7",
+     "ROW-1386ae7bd7fe762e",
+     "ROW-66e8a0bcaf3770fe"
+    ],
+    "reviewed_rows": [
+     "ROW-53e955c90c1f4656",
+     "ROW-7a21350ea3356310",
+     "ROW-b792c22e1d11bae7",
+     "ROW-b029c5ca44ba699d",
+     "ROW-4db5b96dc50c6e63",
+     "ROW-feb33a87d0e10297",
+     "ROW-7a45c68f82aabb10",
+     "ROW-2eacf179faac752e",
+     "ROW-b692cb7d5e1b634a",
+     "ROW-3a39199b95571244",
+     "ROW-b55d55d4c06b730d",
+     "ROW-48673a4738dd1de7",
+     "ROW-1386ae7bd7fe762e",
+     "ROW-66e8a0bcaf3770fe"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "/2032 5,985 5,971 6,030 (8)(15) NielsenIQ Indy US Holdco LLC First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/31/2030 25,890 25,855 25,962 (8)(15)(16) Profile Products Profile P"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "0,579 (4)(9)(17) SumUp SumUp Holdings Luxembourg S.a.r.l. First Lien Secured Debt - Delayed Draw E + 600 , 1.50 % Floor 5/23/2031 EUR 40,000 42,963 46,420 (3)(4)(8)(10)(21) Trugreen Trugree"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 6/9/2032 - ( 25 ) ( 22 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525).",
+    "instrument_type of every flagged published row against the printed line of its own fair-value context: MRO Parent 2025-12-31 ROW-66e8a0bcaf3770fe is the Revolver line ('- ( 25 ) ( 22 )') and is correct."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1; the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_e17a4aad5652",
+   "coverage": {
+    "affected_rows": [
+     "ROW-f8ba406470ce06c7",
+     "ROW-0b47ff01f9ad25af",
+     "ROW-49048c82bd1dba0c",
+     "ROW-d2514eb975a287ec",
+     "ROW-2293578028f77438",
+     "ROW-f190a5925f7464dd",
+     "ROW-42af328d02092369",
+     "ROW-151f84e303894e0a",
+     "ROW-835a4b549772196c",
+     "ROW-bdbf6ba492a582f0",
+     "ROW-8bd65451127acd9b"
+    ],
+    "reviewed_rows": [
+     "ROW-f8ba406470ce06c7",
+     "ROW-0b47ff01f9ad25af",
+     "ROW-49048c82bd1dba0c",
+     "ROW-d2514eb975a287ec",
+     "ROW-2293578028f77438",
+     "ROW-f190a5925f7464dd",
+     "ROW-42af328d02092369",
+     "ROW-151f84e303894e0a",
+     "ROW-835a4b549772196c",
+     "ROW-bdbf6ba492a582f0",
+     "ROW-8bd65451127acd9b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-215667",
+     "text": "525 , 0.75 % Floor 09/04/2031 249,000 245,545 245,265 (4)(15) First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 09/04/2031 5,231 4,957 4,929 (4)(11)(12)(15)(35) 250,502 250,194 Prime"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "35) 40,135 39,828 GardaWorld Garda World Security Corporation First Lien Secured Debt - Term Loan S+ 275 , 0.00 % Floor 02/01/2029 21,135 21,026 21,030 (8)(16) Heritage Environmental Service"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "16) AssetMark GTCR Everest Borrower, LLC First Lien Secured Debt - Term Loan S + 250 , 0.00 % Floor 09/05/2031 2,883 2,877 2,866 (16) Cerity Partners Cerity Partners Equi"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published basis_spread vs printed spread: equal for every published flagged row (printed bps / 100; PIK conventions per D-031).",
+    "Is the label right and the page wrong: no, the visible column is the amended rate (for example Medline S+225 against label S+525).",
+    "Published instrument_type of every flagged published row against the printed instrument cell: ROW-f190a5925f7464dd GTCR Everest Borrower, LLC published instrument_type None, page prints 'Term Loan'."
+   ],
+   "next_action": "Fixed in apzd: instrument_type correction (and instrument_description where wrong) for the flagged row(s); the apzd rescan shows no mismatch on them. Closes only when a batch builds the corrections; the label check REQ-APZ-1 is a separate repair."
+  },
+  {
+   "finding_id": "RVQ_BLK_d2cbc293b821",
+   "coverage": {
+    "affected_rows": [
+     "ctx:C_ac1951a2-20ac-4265-8ade-371657cbfaba"
+    ],
+    "reviewed_rows": [
+     "ctx:C_ac1951a2-20ac-4265-8ade-371657cbfaba"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058684",
+     "text": "900 ( 3 ) - (4)(11)(28) 50,312 50,488 Safe-Guard SG Acquisition, Inc. First Lien Secured Debt S+ 610 , 0.50 % Floor 1/27/2027"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged names are printed totals or the unlabelled company subtotal; none is in published holdings.",
+    "Mitel Networks equity is a printed position published at its printed fair value."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_1bd5d5cfc668",
+   "coverage": {
+    "affected_rows": [
+     "ctx:C_69462b87-4dd8-4701-984d-dd286f805aea"
+    ],
+    "reviewed_rows": [
+     "ctx:C_69462b87-4dd8-4701-984d-dd286f805aea"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Total Pharmaceuticals $ 199,673 $ 199,251 See notes to consolidated financial statements"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged names are printed totals or the unlabelled company subtotal; none is in published holdings.",
+    "Mitel Networks equity is a printed position published at its printed fair value."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_5e239872b90c",
+   "coverage": {
+    "affected_rows": [
+     "ctx:C_20405aec-4968-4db0-bf35-e6f161e17e37"
+    ],
+    "reviewed_rows": [
+     "ctx:C_20405aec-4968-4db0-bf35-e6f161e17e37"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Total Pharmaceuticals $ 371,909 $ 376,477 See notes to consolidated financial statements"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged names are printed totals or the unlabelled company subtotal; none is in published holdings.",
+    "Mitel Networks equity is a printed position published at its printed fair value."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_4e2157e045a1",
+   "coverage": {
+    "affected_rows": [
+     "ROW-9a519979a50c7fc5",
+     "ctx:C_242a164d-7990-40fe-b24d-1663b923cbfe"
+    ],
+    "reviewed_rows": [
+     "ROW-9a519979a50c7fc5",
+     "ctx:C_242a164d-7990-40fe-b24d-1663b923cbfe"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Mitel Networks Mitel Networks Common Equity - Stock N/A N/A 733,019 Shares 3,465 5,829 (4)(8)(33) MLN US Holdco LLC First Lien Secured Debt - Term Loan S + 800"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged names are printed totals or the unlabelled company subtotal; none is in published holdings.",
+    "Mitel Networks equity is a printed position published at its printed fair value."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
+  },
+  {
+   "finding_id": "RVQ_BLK_f3c98f153168",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e0d5020b83fa7c79",
+     "ctx:C_9c1c7b55-e9e8-44d5-a9c5-809f30999950"
+    ],
+    "reviewed_rows": [
+     "ROW-e0d5020b83fa7c79",
+     "ctx:C_9c1c7b55-e9e8-44d5-a9c5-809f30999950"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Mitel Networks Mitel Networks Common Equity - Stock N/A N/A 733,019 Shares 3,465 5,829 (4)(8)(34) MLN US Holdco LLC First Lien Secured Debt - Term Loan S + 200 Cash plus 6.00 % PIK"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged names are printed totals or the unlabelled company subtotal; none is in published holdings.",
+    "Mitel Networks equity is a printed position published at its printed fair value."
+   ],
+   "next_action": "No data change. Check repair request REQ-APZ-1 (agentA rules compare the filer's hidden member label with the tag and read unpublished contexts); the finding clears only when the check is repaired."
   }
  ],
  "request_resolution_history": [
@@ -1271,42 +3173,19 @@
   }
  ],
  "outstanding": {
-  "before_untouched_nbapa": 30,
-  "after": 14,
-  "by_quarter_before": {
-   "2023-03-31": 2,
-   "2023-06-30": 1,
-   "2023-09-30": 1,
-   "2023-12-31": 1,
-   "2024-03-31": 4,
-   "2024-06-30": 1,
-   "2024-09-30": 1,
-   "2024-12-31": 1,
-   "2025-03-31": 3,
-   "2025-06-30": 1,
-   "2025-09-30": 2,
-   "2025-12-31": 7,
-   "2026-03-31": 4,
-   "2026-06-30": 1
+  "note": "Production ledger b1112b (docs/investigations/findings_status.csv): 50 outstanding for this fund. Sandbox apza ledger: 14 issuer_name_printed (agentA is a shadow engine and is not in a sandbox ledger).",
+  "production_b1112b": {
+   "agentA_spread_vs_xbrl": 13,
+   "agentA_maturity_vs_xbrl": 12,
+   "agentA_reference_uncorroborated": 6,
+   "agentA_subtotal_candidate": 5,
+   "issuer_name_printed_needs_data_fix": 6,
+   "issuer_name_printed_needs_check_repair": 8
   },
-  "by_quarter_after": {
-   "2023-03-31": 1,
-   "2023-06-30": 1,
-   "2023-09-30": 1,
-   "2023-12-31": 1,
-   "2024-03-31": 1,
-   "2024-06-30": 1,
-   "2024-09-30": 1,
-   "2024-12-31": 1,
-   "2025-03-31": 1,
-   "2025-06-30": 1,
-   "2025-09-30": 1,
-   "2025-12-31": 1,
-   "2026-03-31": 1,
-   "2026-06-30": 1
+  "sandbox_apza": {
+   "issuer_name_printed": 14
   },
-  "carried_investigations": [],
-  "in_scope_investigations": [
+  "carried_investigations": [
    "RVQ_BLK_002974133379",
    "RVQ_BLK_a0962818f16b",
    "RVQ_BLK_ddc1b455b5b5",
@@ -1321,28 +3200,64 @@
    "RVQ_BLK_0cb91d765604",
    "RVQ_BLK_7ab0693ee9d4",
    "RVQ_BLK_0d897294eebd"
+  ],
+  "in_scope_investigations": [
+   "RVQ_BLK_b5f3608a0136",
+   "RVQ_BLK_d8c0647c9beb",
+   "RVQ_BLK_d522f64a3348",
+   "RVQ_BLK_4f1b5cfd7483",
+   "RVQ_BLK_8d6dae6125e4",
+   "RVQ_BLK_02f6d963edff",
+   "RVQ_BLK_57f7f15b4cfb",
+   "RVQ_BLK_6f4bd2243a96",
+   "RVQ_BLK_9cc39b7dea88",
+   "RVQ_BLK_35c23bcb4252",
+   "RVQ_BLK_b17a5a9e4624",
+   "RVQ_BLK_18c9d2a2df9e",
+   "RVQ_BLK_c807714985d8",
+   "RVQ_BLK_2dd8484a15c8",
+   "RVQ_BLK_69e49a8725d1",
+   "RVQ_BLK_3b7c8ad786ed",
+   "RVQ_BLK_20bba2be3df9",
+   "RVQ_BLK_bb8c8f7f1d50",
+   "RVQ_BLK_d49d5fca4105",
+   "RVQ_BLK_add4c0ab2430",
+   "RVQ_BLK_73fe35c9b4ac",
+   "RVQ_BLK_222c543c2803",
+   "RVQ_BLK_18e16c99eebd",
+   "RVQ_BLK_87004a5fc35d",
+   "RVQ_BLK_149eabddaa9c",
+   "RVQ_BLK_af18e4c7a958",
+   "RVQ_BLK_85d213d24d1a",
+   "RVQ_BLK_d05d12d1713e",
+   "RVQ_BLK_f59144ad213f",
+   "RVQ_BLK_8ff6df9082aa",
+   "RVQ_BLK_e17a4aad5652",
+   "RVQ_BLK_d2cbc293b821",
+   "RVQ_BLK_1bd5d5cfc668",
+   "RVQ_BLK_5e239872b90c",
+   "RVQ_BLK_4e2157e045a1",
+   "RVQ_BLK_f3c98f153168"
   ]
  },
  "counts_reproduce": {
   "outstanding": "python scratch/fund_runs/0001837532/nbap_carry_compare.py <label> (ledger rows, outstanding by quarter, flagged name rows vs nvapf coverage)",
   "flagged_name_rows": "python scratch/fund_runs/0001837532/nbap_name_evidence.py nbape",
-  "field_diff": "python scripts/v05_evidence/holdings_field_diff.py nbape nvapf",
+  "field_diff": "python scripts/v05_evidence/holdings_field_diff.py apza nbape (saved: scratch/fund_runs/0001837532/apza_vs_nbape_fields.txt)",
   "chain_diff": "python scratch/fund_runs/0001837532/nbap_chain_diff.py nbape nbapa",
   "sign_scan": "python scratch/fund_runs/0001837532/nbap_sign_scan.py nbapa",
   "cost_totals": "python scratch/fund_runs/0001837532/nbap_cost_totals.py nbapa nbape",
-  "retirements": "python scratch/fund_runs/0001837532/nbap_retirements.py nbape"
+  "retirements": "python scratch/fund_runs/0001837532/nbap_retirements.py nbape",
+  "agentA_flags": "python scratch/fund_runs/0001837532/af_dump.py (227 flagged identifiers for this fund in data/output/shadow/agent_a_flags.csv; 194 join to a published row, 33 do not: af_join.py, af_nomatch2.py)",
+  "printed_row_match": "python scratch/fund_runs/0001837532/af_page2.py then af_check.py (printed date + fair value on one line; printed index and spread vs published)",
+  "name_findings_carry": "python scratch/fund_runs/0001837532/af_name3.py (flagged row ids in production equal the carried affected_rows for all 14)",
+  "observation_counts": "python scratch/fund_runs/0001837532/apz_obs.py and apz_obs2.py",
+  "instrument_type_scan": "python scratch/fund_runs/0001837532/apzd_scan.py <label>; python scratch/fund_runs/0001837532/apzd_classify.py <label> (apza: 63 fix + 10 residue; apzd: 0 fix + 9 residue)"
  },
  "previous_run": {
-  "label": "nvapf",
-  "report": "scratch/fund_runs/0001837532/nvapf_report_archive.json (nvapf report, git b94770f3)",
-  "d252": "fund-loop-apollo-ssxf-2026-11-10 (apxb -> apx5), commits 14d42cfb, 8089cc93"
- },
- "independent_sample": {
-  "label": "nbapd",
-  "path": "docs/investigations/v05_readings/samples/0001837532-nbapd",
-  "cards": 20,
-  "published_errors_reported": 1,
-  "published_errors_after_reading": 0,
-  "note": "C009 is the D-031 convention (observation spread-total-margin-with-pik-separate-is-convention); no data changed. Twenty cards can miss a problem on under about 15 pct of rows."
+  "label": "nbape",
+  "report": "scratch/fund_runs/0001837532/nbape_report_archive.json",
+  "accepted": "2026-11-11 (D-258)",
+  "discarded_sandbox": "apzb (weak scan, 613 wrong records removed); apzc (22 + 17 wrong records withdrawn in apzd); apza = round 1 (SARON/STIBOR only)"
  }
 }

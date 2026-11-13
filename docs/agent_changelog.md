@@ -15515,3 +15515,27 @@ Saved unreviewed_2026-10-21/0001989817.json: 13 selected findings, 285 row-findi
 - Deviations from the spec, recorded in the plan: status is a derived ledger column, not two new detailed states; the disposition, retirement and proposal stores stay where they are and are read through adapters; a reviewed finding with no verdict file that stops firing is flagged by the batch comparison but not held outstanding.
 - Tests: 198 pass across the new files and the ledger, gate, disposition and retirement tests. Full suite not run.
 - Old skills (`v05-fund-clearing`, `quarter-pass-operator`), `outstanding_status.py` and `owner_queue.py` are unchanged until the first production batch.
+
+## 2026-11-12 - First production batch started; AGENTS.md pointer to the findings workflow
+
+- Batch `b1112a` started detached from the repo root (quarters 2026-06-30, 2026-03-31, 2025-12-31); logs `scratch/2026-11-12_owner_review/batch_b1112a.*.log`, progress `data/output/batches/b1112a/batch.json`. Owner's go given 2026-11-12 before the restart.
+- AGENTS.md (owner-requested bounded edit, uncommitted): "Outstanding ledger items" paragraph replaced with the findings-workflow pointer (`scripts/status.py`, batch id on every count, production the only build of record, batches on the owner's go, decisions via `scripts/decide.py`); "Last consolidated" line updated.
+- `v05-fund-clearing` and `quarter-pass-operator` SKILL.md: one-line pointer to `findings-workflow` added on top of the owner's uncommitted edits.
+- No code changed, no tests run.
+
+## 2026-11-13 - First production batch b1112b (current); readings
+
+- b1112a stopped before `unified` (free 13.6 GB < 14); resumed as `b1112b --from unified` at 22:30. All build stages exit 0; `batches/latest.json` -> b1112b (build 2026-11-13T01:01:55, git da8f189f). First batch: no holdings comparison, compare outcomes all 0.
+- Status (`scripts/status.py`, batch b1112b): 1,528 outstanding (agent review 596, data fix 872, check repair 36, owner ruling 24, fix awaiting build 0). v0.5 funds: Apollo 50, Ares 14, BCRED 3, Blue Owl 2, HPS 0.
+- Gate FAIL on all three quarters (7 pass, 3 fail): promoted_rule_drift 15 (scope_carryover 8, noop 7, incl. Ares `exclude_prg_rollup_2023q2` noop), unfinished_investigations (6 at 2025-12-31, 4 at 2026-06-30), outstanding_findings (v0.5: 5 / 5 / 2). Re-attestation: both signed-off quarters REGRESSED (expected under v4).
+- sandbox_parity vs registered sandboxes: holdings EQUAL for 58/61 (03-31) and 50/61 (06-30; 8 unchecked, sandbox lacks the quarter); 1,028 ids outstanding in production but not in sandbox ledgers: 659 from rules the sandbox ledger never had (mostly agentA_*), 344 from periods the sandbox did not build, 25 same rule+period with a different id (unread). Output `scratch/2026-11-12_owner_review/sandbox_parity_b1112b.md/`.
+- Goldman (0001920145): 283 corrections applied, 0 unmatched. 711 row corrections unmatched in production, all for funds outside the 61-fund cohort (Stellus 377, plus 0001988280, 0001930679, 0002037804, 0001975736, 0001278752, 0002052153 at 2026-06-30): production extracts the cohort only, so those quarters have no rows. Not a cohort regression.
+- `scripts/run_batch.py`: gate note now records the real check tally (209a92b; tests 11 pass).
+- Batch also rewrote `frontend/public/data/` locally (frontend stage). Not committed, not published.
+
+## 2026-11-13 - REQ-rftc-1 / SVC-R2 built: class re-derived after a text correction
+
+- `pipeline/unified_holdings.py` `_apply_row_corrections`: rows whose `instrument_description` a correction sets to non-empty text get `instrument_type` re-read from corrected issuer_name + instrument_description only (the member string no longer decides); a loan text with no sub-type keeps the earlier class; non-loan text clears it. `lien_position` changes only when the corrected text names a lien. Both fields are now correctable (vocabulary-checked); an explicit value wins. Commit f8c4f6db, merge 75da81b6. Approved to build under D-263.
+- Measured on production b1112b holdings (`scratch/2026-11-12_owner_review/rftc_measure.{py,csv}`): 1,755 corrected-description rows; about 200 instrument_type changes (e.g. Common Stock rows typed Revolver -> none; bonds typed Delayed Draw -> none; member-label classes replaced by the printed text) and 41 lien changes (mostly blank -> First Lien / Unsecured) across 38 funds. Not in production until the next batch; fix_record DC-shared-2fd17664bb lists the 38 CIKs as expected movers.
+- Tests: tests/test_row_correction_rederive_class.py (10, incl. false-positive guards for name-only corrections and sub-type-less loan text) + correction tests 19 pass; test_unified_holdings -k "correction or instrument or lien" 94 pass. Full suite not run.
+- Apollo fund loop (0001837532): apza fixed 37 SARON/STIBOR rows; Opus review supported 48/50, found instrument_type errors; fund agent's scan lists 353 instrument_type mismatches (scratch/fund_runs/0001837532/apz_itype_mismatches.tsv); 7 agentA findings now confirmed_error, 29 false_alarm; REQ-APZ-1 (agentA check repair, with reviewer conditions incl. stale data/output/shadow/agent_a_flags.csv from 2026-07-24) awaits the owner.

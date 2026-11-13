@@ -1,0 +1,961 @@
+{
+ "reviewer_id": "agent:reviewer-apollo-apzc-20261113-opus",
+ "report_digest": "1ab5a39922760e38b9648267a19059b4638c96b0f6e83de56bdeda3b986b8314",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_002974133379",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (1 rows: ROW-5acd447c048344ba). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 575 , 0.00 % Floor 7/11/2029 GBP 6,559 7,604 7,848 (3)(4)(8) (9)(19) First Lien Secured Debt E+ 575 , 0.00 % Floor 7/11/2029 EUR 5,406 4,646 4,976 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a0962818f16b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (2 rows: ROW-3e0cea72440d60b0, ROW-507eb739f5c227c3). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 565 , 0.00 % Floor 7/11/2029 GBP 6,559 7,626 8,080 (3)(4)(8) (9)(19) First Lien Secured Debt E+ 565 , 0.00 % Floor 7/11/2029 EUR 4,029 3,958 4,265 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ddc1b455b5b5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (2 rows: ROW-01e76f745406c6cb, ROW-2bef5312d38959f0). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 540 , 0.00 % Floor 7/11/2029 GBP 6,559 7,632 7,763 (3)(4)(8) (9)(19) First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 5,406 4,656 4,850 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e741d2ec00c7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (2 rows: ROW-6a2726c2918b3f7e, ROW-e6e8bfabe55bd20e). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 540 , 0.00 % Floor 7/11/2029 GBP 6,559 7,638 8,277 (3)(4)(8) (9)(17) First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 4,029 3,964 4,404 (3)(4)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6c8019668645",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (3 rows: ROW-0c7acb74be48a1eb, ROW-b8fe56266bb75059, ROW-d5cbe933dca59123). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058684",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt SONIA+ 540 , 0.00 % Floor 7/11/2029 GBP 6,559 7,644 8,196 (3)(4)(8)(9)(17) First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 4,029 3,967 4,304 (3)(4)("
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f8735779a837",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (3 rows: ROW-40ac1cfd66ce1e84, ROW-7f93603e25a20d6b, ROW-b270889594ad1772). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,650 8,208 (3)(4)(8)(9)(17) First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7dfbf6db93b7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (3 rows: ROW-3ea37372e3f47305, ROW-a688f40d836bd0d2, ROW-cb9841975cf1ee88). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,657 8,681 (3)(4)(8)(9)(17) First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_da633c9b20b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'false_alarm', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (4 rows: ROW-50a1cb6fb8cd11e7, ROW-df0f910abb22ad4f, ROW-efad0d214e99198c, ROW-f711870731190604). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,663 8,150 (3)(4)(8)(9)(17) First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_479b0a9e5a2a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'confirmed_error', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (5 rows: ROW-267702817311613f, ROW-358613870b167f6f, ROW-75a9bae114d969fe, ROW-ab5bb9229996146a, ROW-c50446f93693b851). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,670 8,409 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 515 , 0.00 % Floor 7/11/2029 EUR"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f951651e820c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'confirmed_error', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (5 rows: ROW-8a1f3bb27df88458, ROW-8a85c917e370f283, ROW-aa47faf9ed5c98a5, ROW-d4f094255f244162, ROW-e7dde5dc6fda9f42). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 515 , 0.00 % Floor 7/11/2029 GBP 6,559 7,677 8,958 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 515 , 0.00 % Floor 7/11/2029 EUR"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_384e01068bca",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'confirmed_error', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (5 rows: ROW-08cb6aeab78e14c2, ROW-233b141b50459ad5, ROW-316423b28277de86, ROW-9d8972da5cd29250, ROW-a82d22bda171c445). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 6,559 7,685 8,777 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0cb91d765604",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'confirmed_error', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (5 rows: ROW-03dbb9a8662a3216, ROW-0f1a5a4e141d3a65, ROW-40460d2150c91bee, ROW-7b0fe03b495b17bb, ROW-b3e819e264106361). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 6,559 7,692 8,797 (3)(4)(8)(9)(18) First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7ab0693ee9d4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'confirmed_error', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (5 rows: ROW-0c2189132e73def7, ROW-55cf86fbae422d4d, ROW-880070bb6b6da408, ROW-8899178e7e7510f4, ROW-a927dc3748337a6e). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-215667",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 465 , 0.00 % Floor 07/11/2029 GBP 6,559 7,701 8,465 (3)(4)(8)(9)(19) First Lien Secured Debt - Term Loan E + 465 , 0.00 % Floor 07/11/2029 E"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0d897294eebd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source exists: scratch/fund_runs/0001837532/nbape_report_archive.json holds this finding with identical affected_rows and conclusion 'confirmed_error', and docs/investigations/v05_readings/reviews/0001837532_nbape.json supported it. (b) The rows issuer_name_printed currently flags for this quarter in scratch/fund_sandbox/apzd/output/shadow/page_rule_findings.csv and in data/output/shadow/page_rule_findings.csv equal the carried affected_rows exactly (6 rows: ROW-23e275712d200391, ROW-2c1d007cf40d5710, ROW-30fe1f9c24b90839, ROW-51772f57ed6dc82e, ROW-66d02aa8aa212c67, ROW-9f6ffedc02e0d1a2). apzd changes no issuer_name (holdings_field_diff apzd apza and apzd nbape).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-341358",
+     "text": "Version 1 Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 465 , 0.00 % Floor 07/11/2029 GBP 6,559 7,709 8,489 (3)(4)(8)(9)(20) First Lien Secured Debt - Term Loan E + 465 , 0.00 % Floor 07/11/2029 E"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b5f3608a0136",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 3 published (ROW-c0b01865c8b9e3cd, ROW-e4337613885d842a, ROW-f7c2f88fea1381ad) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Polyphase Elevator Holding Company First Lien Secured Debt S+ 550 , 1.00 % Floor 6/23/2027 $ 3,465 $ 3,465 $ 3,465"
+    },
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Polaris Newco, LLC First Lien Secured Debt L+ 400 , 0.50 % Floor 6/2/2028 49,818 49,881 45,569"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d8c0647c9beb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 3 published (ROW-03773088ee6a0b05, ROW-5d61380210de1081, ROW-8a01fda71d17b073) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Zest Acquisition Corp. First Lien Secured Debt S+ 550 , 0.00 % Floor 2/8/2028 11,970 11,411 11,551"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": "First Lien Secured Debt - Revolver S+ 650 , 0.75 % Floor 6/21/2028 9,073 ( 151 ) ( 45 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d522f64a3348",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 1 published (ROW-c30afe9be1296e94) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "Zest Acquisition Corp. First Lien Secured Debt S+ 550 , 0.00 % Floor 2/8/2028 11,910 11,377 11,717"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4f1b5cfd7483",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 4 published (ROW-18075476a7efbe66, ROW-4958f02c8a790ca2, ROW-a8c619f35991299a, ROW-ea3b5ba5149ad473) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": "ACP Avenu Buyer, LLC First Lien Secured Debt S+ 625 , 1.00 % Floor 10/2/2029 8,929 6,048 6,041"
+    },
+    {
+     "accession": "0000950170-24-031479",
+     "text": "First Lien Secured Debt - Revolver S+ 625 , 1.00 % Floor 10/2/2029 1,071 ( 28 ) ( 29 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8d6dae6125e4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 11 published (ROW-26bfbfe3030a0a59, ROW-4c1d642a4dd42415, ROW-4c37feac2590e877, ROW-5f261b2fe3fc0ebe, ROW-6230c7e90ce85735, ROW-64803441b247d554, ROW-790370af4cb3a578, ROW-8686f2f5e78e2832, ROW-8c6b90c7ad46ec0e, ROW-cdcea4c4f5c0a8de, ROW-d93dbe6f547058ec) + 0 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-4c37feac2590e877 Vensure 2024-06-30: production None, own line prints Delayed Draw; apzd 'Delayed Draw Term Loan'. Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Vensure Employer Services, Inc. First Lien Secured Debt - Delayed Draw S+ 525 , 0.75 % Floor 3/26/2027 27,011 26,728 27,011"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "CP Atlas Buyer, Inc. First Lien Secured Debt - Term Loan S+ 375 , 0.50 % Floor 11/23/2027 $ 9,975 $ 9,938 $ 9,754"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_02f6d963edff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 5 published (ROW-243eb63f736c04ca, ROW-64c6160a27ec6ad7, ROW-85ab65896be213e4, ROW-c667031e87e9ea12, ROW-c98f4355700f8e4e) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "R. R. Donnelley & Sons Company First Lien Secured Debt - Term Loan S+ 475 , 0.75 % Floor 8/8/2029 176,000 170,837 170,720"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "Madison Safety & Flow LLC First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 9/15/2031 5,000 4,988 5,005"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_57f7f15b4cfb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 14 published (ROW-1116e0693b3ac178, ROW-1f4e2a3d33c59699, ROW-286d20721ed0b1e2, ROW-337c60029daeb235, ROW-38d309eb122f9b9e, ROW-5a80590125cfb0f1, ROW-72c6eca92cc8af59, ROW-80a5a0c0d20a55dc, ROW-862f691fb2a37717, ROW-9df29ebcabe45774, ROW-b2a5901ac2fe569c, ROW-c2c4dcc20f645d93, ROW-cef25ae8ca1b3d5c, ROW-d754c7d5eb0a1c81) + 2 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-1116e0693b3ac178 and ROW-c2c4dcc20f645d93 (Yellow Castle AB 2024-12-31) publish SOFR in production; their own lines print STIBOR+ 475 and SARON+ 475; apzd publishes STIBOR/SARON. Maturity of every flagged row equals the page. Conclusion changed from false_alarm as my apzc review required; live verdict DC-0001837532-d006ef2852. Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 (Inlcudes 5.00 % PIK) 7/7/2029 kr 34,792 3,245 3,137"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan SARON+ 475 (Includes 5.00 % PIK) 7/7/2029 3,296 3,327 3,622"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6f4bd2243a96",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 6 published (ROW-14edcac87b875102, ROW-3d1673104a59d633, ROW-8f94c982144d8bee, ROW-94264e25f355e97b, ROW-bea265980cb11bf4, ROW-cd7aa0f8eb3fcfd5) + 0 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-14edcac87b875102 and ROW-94264e25f355e97b (Yellow Castle AB 2025-03-31) publish SOFR in production; their own lines print SARON + 475 and STIBOR+ 475; apzd publishes SARON/STIBOR. Live verdict DC-0001837532-1feca5d65c. Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "First Lien Secured Debt - Term Loan SARON + 475 (Includes 5.46 % PIK) 7/7/2029 3,327 3,365 3,752"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 (Inlcudes 8.63 % PIK) 7/7/2029 kr 35,257 3,289 3,499"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9cc39b7dea88",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 3 published (ROW-1152528cf282a80a, ROW-1ac5ce581db4071a, ROW-d0b7f62044783e40) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "MLN US Holdco LLC First Lien Secured Debt - Term Loan S + 800 , 1.00 % Floor 6/20/2030 6,588 5,733 5,732"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Novotech SG Holdings Pte. Ltd./ Novotech Aus Bidco Pty Ltd/Novotech Holdings USA LLC First Lien Secured Debt - Term Loan S + 525 , 0.50 % Floor 6/7/2031 42,857 42,379 42,257"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_35c23bcb4252",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 19 published (ROW-04c639e733297353, ROW-3512695e59dbd8c7, ROW-35c7249d5c4f7682, ROW-3d6a44071d07ccd1, ROW-4de3721400823217, ROW-52ff2d002ab060ea, ROW-54ae54605e5cdb87, ROW-59bde7ea2817fd18, ROW-609b72fdd5ac44d8, ROW-6a52b1aaab624a3d, ROW-6a947bc6e366443f, ROW-89495567e08b19e0, ROW-92341470b64b3652, ROW-9b7db6883af215f2, ROW-9ba78100af7c1bb9, ROW-aea62c4e21a52faa, ROW-bd20e74f11fabd83, ROW-d70de83faf62a5ef, ROW-ff7dcb9c176c5e48) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair. QTS Project Ram ROW-9b7db6883af215f2 instrument_type None against printed 'Mortgage Loan (DD)': unclassified, not a wrong class.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "USA DeBusk LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 4/30/2031 13,150 12,982 13,084"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "QTS Project Ram First Lien Secured Debt - Mortgage Loan (DD) S + 225 , 0.00 % Floor 5/29/2028 $ 17,756 $ 17,060 $ 17,025"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b17a5a9e4624",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 11 published (ROW-0df161c8d6219cbc, ROW-121e5345cb61d1d0, ROW-365063604da89705, ROW-3678bb8f33dcfad5, ROW-48673a4738dd1de7, ROW-4db878f1ba21ddfb, ROW-8c12ae301626b609, ROW-b16737d3ee06202a, ROW-b692cb7d5e1b634a, ROW-e35082c5c4327db0, ROW-fedc81d76b63a2bc) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair. QTS Project Ram ROW-3678bb8f33dcfad5 instrument_type None against printed 'Mortgage Loan (DD)': unclassified, not a wrong class. The old real-error verdict is retired by a VR entry whose checks re-run PASS on apzd.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 425 , 0.50 % Floor 6/15/2030 146,759 145,778 145,291"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "USA DeBusk LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 4/30/2031 15,858 15,670 15,705"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_18c9d2a2df9e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 7 published (ROW-0556b1ddf8169259, ROW-2ecbb039a4cb4656, ROW-325497b2ad6009a8, ROW-57c06415a4eac531, ROW-90f088cd4f516736, ROW-97718d5ab4434021, ROW-bdbf6ba492a582f0) + 1 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-97718d5ab4434021 Olympus Water bond: production 'Delayed Draw Term Loan', own line prints Corporate Bond; apzd None, as all 171 other Apollo Corporate Bond rows. Unpublished C_daf83bd3 carries only a printed cost of (13). Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-215667",
+     "text": "First Lien Secured Debt - Corporate Bond 6.75 % 08/01/2032 5,000 4,839 4,772"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 09/30/2031 $ 3,206 $ 3,192 $ 3,062"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c807714985d8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 2 published (ROW-2d9feafce38328ad, ROW-c848c660480099a2) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Bp Purchaser LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 12/11/2028 $ 7,406 $ 7,406 $ 7,406"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": "VEPF VII Holdings, L.P. First Lien Secured Debt S+ 450 PIK 2/28/2028 18,361 18,275 18,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2dd8484a15c8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 5 published (ROW-afa45f0eaccf49d8, ROW-c30bafb5fd6597b1, ROW-f6f897df6d8d9b89, ROW-ff2f561a2ef82ecf, ROW-ff7d580043b58ed8) + 2 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-afa45f0eaccf49d8 Accela 2023-09-30: production None, own line prints Revolver; apzd Revolver. Unpublished C_2ff82004 is the printed industry subtotal (53,447 / 50,510); C_a47a1f4a carries no value fact. Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "First Lien Secured Debt - Revolver S+ 600 , 0.75 % Floor 9/3/2030 1,714 ( 34 ) ( 34 )"
+    },
+    {
+     "accession": "0000950170-23-061985",
+     "text": "VEPF VII Holdings, L.P. First Lien Secured Debt S+ 450 PIK 2/28/2028 18,817 18,736 18,883"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_69e49a8725d1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 7 published (ROW-329b3c6ec5c0066c, ROW-6094ecffdd68927b, ROW-612149eda8147bc9, ROW-7be97bdf35c2324d, ROW-a09ca49abf7cd526, ROW-a98b236332b3f287, ROW-eb917853be8523d4) + 2 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Houghton Mifflin Harcourt Company First Lien Secured Debt - Term Loan S+ 535 , 0.50 % Floor 4/9/2029 42,592 40,956 40,640"
+    },
+    {
+     "accession": "0000950170-24-094137",
+     "text": "One Silver Serve, LLC First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 12/18/2028 21,209 21,014 20,996"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3b7c8ad786ed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 7 published (ROW-0bfbbdc55746b348, ROW-36247f9c829194b6, ROW-6a9dd3ea538799f3, ROW-b0839bbbe9c5c16a, ROW-d3bb254118c727de, ROW-e1a5e4db88b5ee6b, ROW-f4084ba7c38f9075) + 0 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-0bfbbdc55746b348 Ultimate Baked Goods 2024-09-30: production 'Term Loan', own line prints Revolver; apzd Revolver. Wand Newco 3 keyed as published row ROW-6a9dd3ea538799f3. Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "First Lien Secured Debt - Revolver S+ 660 , 1.00 % Floor 8/13/2027 356 330 355"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "First Lien Secured Debt - Delayed Draw S+ 675 , 1.00 % Floor 2/7/2028 3,382 3,309 3,280"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_20bba2be3df9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 0 published () + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Total Pharmaceuticals $ 371,909 $ 376,477"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bb8c8f7f1d50",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 2 published (ROW-62f6090e34ab5a70, ROW-6c1b824d12696f21) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Biamp First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 4/30/2030 $ 43,560 $ 42,792 $ 42,419"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Janus Bidco Limited First Lien Secured Debt - Term Loan S + 600 , 0.00 % Floor 4/25/2031 68,523 66,965 67,153"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d49d5fca4105",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 1 published (ROW-cfd9be71c6495745) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Armstrong Bidco Limited First Lien Secured Debt SONIA+ 550 , 0.00 % Floor 6/28/2029 GBP 42,000 $ 46,194 $ 46,797"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_add4c0ab2430",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 4 published (ROW-7f5d975e83b6af76, ROW-ab9b7fe781d65f9f, ROW-ceb2e9e9be4f1ae8, ROW-fe4bd5fcc35aa0df) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "First Lien Secured Debt S+ 500 , 0.50 % Floor 11/9/2028 6,818 6,477 6,609"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": "TZ Buyer LLC First Lien Secured Debt S+ 585 , 0.75 % Floor 8/14/2028 9,283 9,058 9,051"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_73fe35c9b4ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 1 published (ROW-68a6a36171dbb0bb) + 3 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair. Associations Inc. ROW-68a6a36171dbb0bb publishes 6.76 against printed 'S+ 426 Cash plus 2.50 % PIK' (total-margin convention, D-031).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "Associations Inc. First Lien Secured Debt S+ 426 Cash plus 2.50 % PIK 7/2/2027 16,514 16,406 16,514"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_222c543c2803",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 3 published (ROW-582667324000c5e5, ROW-7fab84ece71a7072, ROW-86e992c3c39ad9de) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": "Arrowhead Holdco Company First Lien Secured Debt S+ 465 , 0.75 % Floor 8/31/2028 $ 9,825 $ 9,825 $ 9,358"
+    },
+    {
+     "accession": "0000950170-24-031479",
+     "text": "First Lien Secured Debt - Revolver S+ 635 , 1.00 % Floor 12/21/2027 130 58 57"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_18e16c99eebd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 2 published (ROW-0e986b9040b7a9a1, ROW-305712042e7537cf) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058684",
+     "text": "BIP Pipeco Holdings LLC First Lien Secured Debt S+ 325 , 0.00 % Floor 12/6/2030 $ 5,000 $ 5,019 $ 5,014"
+    },
+    {
+     "accession": "0000950170-24-058684",
+     "text": "EAB Global, Inc. First Lien Secured Debt S+ 361 , 0.50 % Floor 8/16/2028 $ 19,898 $ 19,714 $ 19,933"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_87004a5fc35d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 1 published (ROW-e3ece92d4e0aee98) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair. Curia Global ROW-e3ece92d4e0aee98: page prints 'S+ 38 5' (HTML split of 385); published 3.85.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "Curia Global, Inc. First Lien Secured Debt - Term Loan S+ 38 5, 0.75 % Floor 8/30/2026 $ 27,269 $ 26,063 $ 25,755"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_149eabddaa9c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 7 published (ROW-243eb63f736c04ca, ROW-64c6160a27ec6ad7, ROW-85ab65896be213e4, ROW-b2907153cdf8896e, ROW-b3717c0e6b466425, ROW-bfa036e417d127f0, ROW-e7dfc802ee3bc93e) + 2 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124223",
+     "text": "Arrowhead Holdco Company First Lien Secured Debt - Term Loan S+ 584 (includes 2.75 % PIK) 8/31/2028 $ 10,064 $ 10,064 $ 9,460"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "R. R. Donnelley & Sons Company First Lien Secured Debt - Term Loan S+ 475 , 0.75 % Floor 8/8/2029 176,000 170,837 170,720"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_af18e4c7a958",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 6 published (ROW-17d50a72e617f005, ROW-273b0d80adae6770, ROW-8a86dbcb6f26c183, ROW-8c19245d3b21c57a, ROW-91665381c21eb653, ROW-da1b64105ecbeac6) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "Trident TPI Holdings, Inc. First Lien Secured Debt - Term Loan S+ 375 , 0.50 % Floor 9/15/2028 42,286 42,252 42,718"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "Patriot Growth Insurance Services, LLC First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 10/16/2028 31,815 31,815 31,815"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_85d213d24d1a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 11 published (ROW-02e75dab515fdb81, ROW-0e459afec10a23a0, ROW-2916a9bd64cbdea2, ROW-59f7ea90206e5d50, ROW-73afce76f45b0c60, ROW-8e14a336c43c97be, ROW-97eb4554cf25993b, ROW-b15925d885fb043c, ROW-dde2624b0250184d, ROW-e33132779350834c, ROW-e94b0cf90d42aefc) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Trident TPI Holdings, Inc. First Lien Secured Debt - Term Loan S + 375 , 0.50 % Floor 9/15/2028 44,002 43,911 42,600"
+    },
+    {
+     "accession": "0000950170-25-068013",
+     "text": "One Silver Serve, LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 12/18/2028 21,049 20,883 20,733"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d05d12d1713e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 6 published (ROW-0460b7668830d6d7, ROW-1872198ba0377a87, ROW-92cc7a041cce263e, ROW-a387688dfe72998e, ROW-b243c15b509671b2, ROW-fcf1372db9bac347) + 2 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Cube A&D Buyer Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 10/17/2031 24,439 24,341 24,599"
+    },
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Medline Borrower LP First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/23/2028 80,058 80,103 80,240"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f59144ad213f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 13 published (ROW-09ae6d8cd3956179, ROW-4a197f9dfa2ac8a1, ROW-52ff2d002ab060ea, ROW-5e4341f9a326ad42, ROW-609b72fdd5ac44d8, ROW-6a947bc6e366443f, ROW-73a5a8cb01f72e2f, ROW-92341470b64b3652, ROW-9ba78100af7c1bb9, ROW-c92da42e9d238f8c, ROW-cad21ce819d751af, ROW-de8fffae35d6113f, ROW-e51586230784235e) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Commscope, LLC First Lien Secured Debt - Term Loan S + 475 , 2.00 % Floor 12/17/2029 $ 252,954 $ 254,903 $ 256,375"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Evoriel First Lien Secured Debt - Term Loan E + 550 , 0.00 % Floor 4/2/2031 EUR 43,574 46,144 50,902"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8ff6df9082aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 14 published (ROW-1386ae7bd7fe762e, ROW-2eacf179faac752e, ROW-3a39199b95571244, ROW-48673a4738dd1de7, ROW-4db5b96dc50c6e63, ROW-53e955c90c1f4656, ROW-66e8a0bcaf3770fe, ROW-7a21350ea3356310, ROW-7a45c68f82aabb10, ROW-b029c5ca44ba699d, ROW-b55d55d4c06b730d, ROW-b692cb7d5e1b634a, ROW-b792c22e1d11bae7, ROW-feb33a87d0e10297) + 0 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair. Conclusion changed to false_alarm as my apzc review required: ROW-66e8a0bcaf3770fe (MRO Parent 2025-12-31) is the Revolver line of its own context ('- ( 25 ) ( 22 )'), published Revolver in production and in apzd (the apzc correction is withdrawn). Live verdict DC-0001837532-ef58d30d0a supersedes the wrong confirmed_error records.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 6/9/2032 - ( 25 ) ( 22 )"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Indy US Holdco LLC First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/31/2030 25,890 25,855 25,962"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e17a4aad5652",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 11 published (ROW-0b47ff01f9ad25af, ROW-151f84e303894e0a, ROW-2293578028f77438, ROW-42af328d02092369, ROW-49048c82bd1dba0c, ROW-835a4b549772196c, ROW-8bd65451127acd9b, ROW-bdbf6ba492a582f0, ROW-d2514eb975a287ec, ROW-f190a5925f7464dd, ROW-f8ba406470ce06c7) + 0 unpublished keys; equals affected_rows and reviewed_rows. Conclusion confirmed_error supported: ROW-f190a5925f7464dd GTCR Everest 2026-03-31: production None, own line prints Term Loan; apzd Term Loan (OMH-Healthedge 'S +4 50' is the page's split of 450). Every other flagged row equals its printed line on the tested field.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-215667",
+     "text": "GTCR Everest Borrower, LLC First Lien Secured Debt - Term Loan S + 250 , 0.00 % Floor 09/05/2031 2,883 2,877 2,866"
+    },
+    {
+     "accession": "0001193125-26-215667",
+     "text": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 09/04/2031 5,231 4,957 4,929"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d2cbc293b821",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 0 published () + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Total Pharmaceuticals $ 371,909 $ 376,477"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1bd5d5cfc668",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 0 published () + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Total Pharmaceuticals $ 371,909 $ 376,477"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5e239872b90c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 0 published () + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Total Pharmaceuticals $ 371,909 $ 376,477"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4e2157e045a1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 1 published (ROW-9a519979a50c7fc5) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Mitel Networks Common Equity - Stock N/A N/A 733,019 Shares 3,465 5,829"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f3c98f153168",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method, re-run fresh on apzd (scratch/fund_runs/0001837532/review_apzd/recon.py, fa_check.py; unpublished-context facts from review_apzc/unpub.py, unchanged inputs): flagged population rebuilt from data/output/shadow/agent_a_flags.csv joined to production b1112b holdings on report_date + first 300 characters of bdc_investment_identifier; every published affected row read on the page through the inline-XBRL <tr> carrying the row's own InvestmentOwnedAtFairValue fact and compared for maturity_date, basis_spread, reference_rate_type and instrument_type in production and apzd. 181 published rows and 28 unpublished keys read. Rebuilt population: 1 published (ROW-e0d5020b83fa7c79) + 1 unpublished keys; equals affected_rows and reviewed_rows. Every published flagged row equals its own printed line on the field the rule tests and on instrument_type, in production and apzd; unpublished contexts carry only an undrawn line's printed cost/par, a printed subtotal, or no value fact (DS-010 / not positions). False alarm on correct data supported; clears only by the REQ-APZ-1 repair.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Mitel Networks Common Equity - Stock N/A N/A 733,019 Shares 3,465 5,829"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021206",
+     "text": "Gannett Co., Inc. Gannett Holdings, LLC First Lien Secured Debt - Corporate Bond 6.00 % 11/1/2026 16,000 12,702 13,510 (8)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "negative-cost-published-positive",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061985",
+     "text": "First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 4/4/2029 1,140 ( 31 ) ( 26 ) (4)(5)(9) (11)(27)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "printed-sign-reader-misses-bracket-in-next-cell",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Revolver S+ 575 , 0.75 % Floor 2/13/2030 - ( 309 ) ( 147 ) (4)(5)(11)(28)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277723",
+     "text": "Arcwood Environmental, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 87,320 86,246 88,193 (4)(9)(16)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105984",
+     "text": "Celsius Celsius Holdings Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 4/1/2032 $ 2,500 $ 2,488 $ 2,518 (8)(16)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Hanger, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 10/23/2031 25,499 25,409 25,615 (15)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "First Lien Secured Debt - Revolver S+ 525 , 0.75 % Floor 10/1/2029 - ( 107 ) ( 47 ) (4)(5)(11)(27)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "canonical-name-picks-member-variant",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Chemicals AOC LSF11 A5 HoldCo LLC First Lien Secured Debt S+ 435 , 0.50 % Floor 10/15/2028 $ 8,148 $ 7,942 $ 8,100 (16)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "position-chain-follows-unrelated-line",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058684",
+     "text": "First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 4,737 ( 56 ) ( 118 ) (4)(5)(11)(28) First Lien Secured Debt - Revolver S+ 675 , 0.75 % Floor 10/1/2029 4,737 ( 112 ) ( 118 ) (4)(5)(11)(28)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "member-misnames-instrument",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094137",
+     "text": "First Lien Secured Debt - Revolver S+ 675 , 1.00 % Floor 7/2/2028 - ( 1 ) ( 1 )"
+    },
+    {
+     "accession": "0001193125-25-277723",
+     "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 2/3/2032 - ( 95 ) ( 53 )"
+    },
+    {
+     "accession": "0000950170-23-041830",
+     "text": "Medical Solutions Holdings, Inc. First Lien Secured Debt S+ 335 , 0.50 % Floor 11/1/2028 9,962 9,715 9,385"
+    },
+    {
+     "accession": "0000950170-24-124223",
+     "text": "First Lien Secured Debt - Revolver S+ 575 , 1.00 % Floor 3/20/2030 - ( 474 ) ( 230 )"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "First Lien Secured Debt - Delayed Draw S + 400 , 1.00 % Floor 6/26/2029 204 204 204"
+    },
+    {
+     "accession": "0000950170-24-031479",
+     "text": "First Lien Secured Debt - Delayed Draw Note E+ 650 , 0.00 % Floor 4/18/2030 EUR 10,000 10,653 10,846"
+    }
+   ],
+   "rationale": "Independent re-run of my own scripts on apzd (review_apzd/rows.py, ixrow.py, judge.py, fullscan.py, resid.py, norow.py; not the agent's copies). (1) Field diff apzd vs apza: instrument_type 64, instrument_description 12, corrected_fields 64, position_id 28, no row added or removed; apzd vs apzc: instrument_type 24 (19 reverts of the wrong apzc rows, 3 Vybond None->Revolver instead of Delayed Draw, Associations, Medical Solutions), description 18. Override CSV: 273 Apollo records = 123 nbape + 64 instrument_type + 12 instrument_description + 74 rate-index; no withdrawn record remains, no duplicate keys. (2) All 64 instrument_type corrections checked context-anchored (the <tr> carrying each row's own fair-value fact): 64 of 64 equal the printed instrument; all 12 description changes equal the printed instrument (Medical Solutions 2023-06-30 'First Lien Secured Debt', no sub-type printed, class None). None of the 22 rows I rejected in apzc is still changed (Poly-Wood, Radiate, Kronos, CohnReznick, MRO etc. are back to production values that match their own lines). (3) Full scan of all 7,298 Apollo apzd rows: 6,789 agree; 215 print a non-lien line (equity etc.); 233 are bonds/unsecured/convertibles typed None or token-parse artefacts ('Term Loan Variable' Spirit, 'S ONIA' Actium); 52 have no fair-value fact in a table row (44 zero-value equity/term-loan rows read through every <tr> carrying their context, all consistent; 8 money-market cash equivalents, type None); residue exactly the 9 claimed. Residue judged: 4 QTS Project Ram 'Mortgage Loan (DD)' published None (unclassified, acceptable; the vocabulary has no mortgage class) and 5 Athena Bidco 'Delayed Draw Note' published 'Delayed Draw Term Loan' (a delayed-draw facility, mapping acceptable). (4) Mismatch population in apza by my scan is 63 + Medical Solutions, matching the report. (5) 28 position_id moves are all on Zest, Excelligence, Ultimate Baked Goods, WH Borrower, Olympus Terminals and Cotiviti, which follow right corrections; the 7 apzc moves on Poly-Wood/MRO/Runway are gone. The redefined suggested_check (find the row by its own context, or cost and fair value together, never fair value alone) is the right detector. Minor wording slip: the 52 rows without a fair-value table row are mostly zero-value equity and cash equivalents, not 'undrawn contexts'; I checked them and none is mistyped."
+  },
+  {
+   "observation_key": "spread-total-margin-with-pik-separate-is-convention",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0001193125-26-102386",
+     "text": "Homecare Software Solutions LLC First Lien Secured Debt - Term Loan S + 263 Cash plus 2.93 % PIK, 0.00 % Floor 6/14/2031 77,720 77,720 77,720 (4)(15)"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "reference-rate-type-inferred-from-date-on-saron-stibor-rows",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan SARON+ 475 (Includes 5.00 % PIK) 7/7/2029 3,296 3,327 3,622"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 (Inlcudes 5.00 % PIK) 7/7/2029 kr 34,792 3,245 3,137"
+    }
+   ],
+   "rationale": "apzd vs nbape: reference_rate_type and reference_rate_source differ on exactly the same 37 rows as apzc, which I verified 37/37 against the index printed on each row's own fair-value line (review_apzc/rrt.py). 74 records present. Proposed token check concrete."
+  },
+  {
+   "observation_key": "instrument-description-keeps-filer-label-rate-and-maturity",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Medline Medline Borrower LP First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/23/2028 69,760 69,876 69,706"
+    }
+   ],
+   "rationale": "Unchanged since the nbape report; supported in reviews 0001837532_nbape.json, 0001837532_apza.json and 0001837532_apzc.json. apzd changes only instrument_type, instrument_description, corrected_fields and position_id against apza (holdings_field_diff apzd apza, reproduced), so the fields this observation concerns are untouched. The quoted line was re-verified on the page. Detection decision is a concrete proposed check, accepted as a proposal."
+  },
+  {
+   "observation_key": "zero-value-undrawn-lines-with-printed-cost-unpublished",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-24-031479",
+     "text": "First Lien Secured Debt - Revolver S+ 625 , 0.75 % Floor 11/22/2028 14,624 ( 239 ) - (4)(9)(11)(27)"
+    }
+   ],
+   "rationale": "Tagged facts of all 28 unpublished agentA contexts listed (review_apzc/unpub.py; inputs unchanged): undrawn lines carry only a printed cost and/or par, subtotals carry the printed total, the rest no value fact. Inclusion is owner ruling DS-010; not_feasible is fair."
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-APZ-1",
+   "outcome": "supported",
+   "evidence": [
+    {
+     "accession": "0000950170-25-068013",
+     "text": "Medline Medline Borrower LP First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 10/23/2028 69,760 69,876 69,706"
+    },
+    {
+     "accession": "0000950170-25-038785",
+     "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 (Inlcudes 5.00 % PIK) 7/7/2029 kr 34,792 3,245 3,137"
+    },
+    {
+     "accession": "0001193125-26-102386",
+     "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 6/9/2032 - ( 25 ) ( 22 )"
+    }
+   ],
+   "rationale": "verification_bug is the right classification: on my fresh apzd read, 170 of 181 published flagged rows match their own printed line on every tested field; the other 11 are convention or HTML-split spreads (Associations 426+250, Curia 'S+ 38 5', OMH 'S +4 50'), the 5 instrument_type errors and the 4 Yellow Castle index rows, none of which is the field the rule claims to test. The corrections my apzc review required are made: tally 7 confirmed / 29 false alarms, the 5 instrument_type rows and 4 Yellow Castle rows named as the only flags the repair would remove, and the required companion check now covers instrument_type and reference_rate_type found by the row's own fair-value context. Conditions (fail closed, coverage routing for unpublished cost-bearing contexts, regenerate agent_a_flags.csv dated 2026-07-24, the 300-character join) are sound, and the next_action keeps the d7df345 measurement and owner approval. Live decision record DC-0001837532-29b48c162f supersedes 287d95a65e. Residual weakness: the 'why' still quotes 194 of 227 contexts from the older fair-value line search; the context-anchored read gives the same conclusion, so this does not change the outcome."
+  }
+ ]
+}
