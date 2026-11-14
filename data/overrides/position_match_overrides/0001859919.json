@@ -1,0 +1,70 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0001859919",
+  "overrides": [
+    {
+      "action": "reject",
+      "begin_report_date": "2023-06-30",
+      "end_report_date": "2023-09-30",
+      "begin_issuer_name": "Finexvet",
+      "end_issuer_name": "Finexvet",
+      "begin_fair_value": 5278000.0,
+      "end_fair_value": 2320000.0,
+      "match_method": "position_key",
+      "mechanism": "Two Finexvet term loans (acquired 03/22 and 05/23, par about 2.4M and 5.5M). Correcting the issuer name of the 2023-09-30 first-lien line from 'First Lien' to 'Finexvet' (printed company cell) let the name key join the 05/23 loan (par 5,500, value 5,278) to the 03/22 loan (par 2,382, value 2,320).",
+      "evidence": "0001859919-23-000040: 'Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.8 % Cash 03/22 03/29 2,454 2,391 2,388' and 'First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.8 % Cash 05/23 03/29 5,500 5,304 5,278'. 0001859919-23-000073: 'Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 5.50 %, 9.6 % Cash 03/22 03/29 2,382 2,393 2,320'.",
+      "confidence": 0.95,
+      "residual_risk": "Keyed by name and value within 1 pct; the matcher may pair the 05/23 loan with another row of the issuer by name. Acquisition dates and par separate the two loans on the page.",
+      "created_by": "agent:fund-bpcc-20261114",
+      "review_id": "bpz-chain-2026-11-14-1"
+    },
+    {
+      "action": "reject",
+      "begin_report_date": "2023-12-31",
+      "end_report_date": "2024-03-31",
+      "begin_issuer_name": "Finexvet",
+      "end_issuer_name": "Finexvet",
+      "begin_fair_value": 5390000.0,
+      "end_fair_value": 2363000.0,
+      "match_method": "position_key",
+      "mechanism": "Same two Finexvet loans: the 05/23 loan (par 5,567, value 5,390 at 2023-12-31) was joined to the 03/22 loan (par 2,430, value 2,363 at 2024-03-31).",
+      "evidence": "0001859919-24-000012: 'First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 9.9 % Cash 05/23 03/29 5,567 5,317 5,390'. 0001859919-24-000034: 'First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.9 % Cash 03/22 03/29 2,430 2,419 2,363'.",
+      "confidence": 0.9,
+      "residual_risk": "Keyed by name and value within 1 pct.",
+      "created_by": "agent:fund-bpcc-20261114",
+      "review_id": "bpz-chain-2026-11-14-2"
+    },
+    {
+      "action": "reject",
+      "begin_report_date": "2023-12-31",
+      "end_report_date": "2024-03-31",
+      "begin_issuer_name": "Perimeter Master Note Business Trust",
+      "end_issuer_name": "Perimeter Master Note Business Trust",
+      "begin_fair_value": 172000.0,
+      "end_fair_value": 174000.0,
+      "match_method": "position_key",
+      "mechanism": "Structured secured notes of one trust, classes A to E with distinct coupons (4.7, 5.4, 5.9, 8.5, 11.4 pct). Once the 2024-03-31 maturity (11/28) was published on the rows read from the continuation lines, the Class A note of 2023-12-31 (4.7 pct, value 172) was joined to the Class D note of 2024-03-31 (8.5 pct, value 174).",
+      "evidence": "0001859919-24-000012: 'Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 182 182 172'. 0001859919-24-000034: 'Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174'.",
+      "confidence": 0.95,
+      "residual_risk": "The notes are 182k each with values within 1 pct of one another, so the tolerance may also match a neighbouring class pair (B to A, 173 to 175), which is also wrong and also rejected.",
+      "created_by": "agent:fund-bpcc-20261114",
+      "review_id": "bpz-chain-2026-11-14-3"
+    },
+    {
+      "action": "reject",
+      "begin_report_date": "2023-12-31",
+      "end_report_date": "2024-03-31",
+      "begin_issuer_name": "Perimeter Master Note Business Trust",
+      "end_issuer_name": "Perimeter Master Note Business Trust",
+      "begin_fair_value": 173000.0,
+      "end_fair_value": 175000.0,
+      "match_method": "position_key",
+      "mechanism": "The Class B note of 2023-12-31 (5.4 pct, value 173) was joined to the Class A note of 2024-03-31 (4.7 pct, value 175).",
+      "evidence": "0001859919-24-000012: 'Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173'. 0001859919-24-000034: 'Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 175'.",
+      "confidence": 0.95,
+      "residual_risk": "See the previous entry: the two rejects overlap by tolerance and both pairs are wrong.",
+      "created_by": "agent:fund-bpcc-20261114",
+      "review_id": "bpz-chain-2026-11-14-4"
+    }
+  ]
+}

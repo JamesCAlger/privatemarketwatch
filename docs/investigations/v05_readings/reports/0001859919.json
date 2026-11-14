@@ -1,112 +1,1173 @@
 {
  "cik": "0001859919",
- "label": "bpxe",
- "before": "f15a",
+ "label": "bpzh",
+ "before": "rg2",
+ "investigator_id": "agent:fund-bpcc-20261114",
  "shared_code": false,
  "declared_changes": [
-  {"column": "interest_rate", "rows": 344, "why": "filed_rate_reading all_in -> cash_leg (the plain rate tag is the cash leg; all-in = cash + PIK), plus row corrections (cash coupons tagged as PIK, PIK-only coupons, margin tagged as rate, five rates printed and not tagged)"},
-  {"column": "interest_rate_kind", "rows": 344, "why": "same rows: cash under the cash_leg reading; all_in on the five rows whose rate is now set from the page"},
-  {"column": "interest_rate_cash", "rows": 336, "why": "cash is the filed rate, not filed rate minus PIK"},
-  {"column": "interest_rate_reported", "rows": 35, "why": "row corrections set the filed rate on corrected rows"},
-  {"column": "pik_rate", "rows": 37, "why": "row corrections: PIK printed and not tagged set; PIK tag on a printed cash coupon withdrawn"},
-  {"column": "basis_spread", "rows": 5, "why": "margin printed and not tagged (Dwyer, Ellkay 2023-03-31, Classic Collision x2, Parkview TL1)"},
-  {"column": "src_transforms", "rows": 354, "why": "rate events follow the new reading and the corrections"},
-  {"column": "corrected_fields", "rows": 115, "why": "every row a row correction touched"},
-  {"column": "shares_held", "rows": 53, "why": "unit count set to the printed count where the shared normaliser gave the row another row's count or none (49 rows: Amalfi Class B, Mercell Class B, Qualified Industries, Rocade Common LP, Aptus preferred, Accelerant, Credit Key warrants, Burgess Point, MNS Buyer, Listrac); withdrawn on Rocade second lien and Biolam (par tagged as shares, 4 rows)"},
-  {"column": "principal_amount", "rows": 8, "why": "par printed, none published: Rocade 2L and Biolam (tagged as shares) 2025-12-31 / 2026-03-31, F24 2023-03-31 / 06-30; withdrawn (zero) on Listrac rows reclassed to common stock"},
-  {"column": "principal_amount_usd", "rows": 8, "why": "same rows"},
-  {"column": "principal_amount_currency", "rows": 8, "why": "same rows"},
-  {"column": "instrument_description", "rows": 10, "why": "member names a loan, context carries an equity line: Listrac 'Revolver' x5 -> Common Stock, Parkview TL2 2023-12-31 -> LLC Units, GPZN TL2 x4 -> Common Stock"},
-  {"column": "asset_category", "rows": 10, "why": "same 10 rows: LOAN -> EQUITY_COMMON"},
-  {"column": "index_classification", "rows": 10, "why": "same 10 rows: DIRECT_LENDING -> COMMON_EQUITY"},
-  {"column": "asset_class", "rows": 10, "why": "same 10 rows: PRIVATE_CREDIT -> PRIVATE_EQUITY"},
-  {"column": "position_id", "rows": 5, "why": "identity follows the reclassed instrument on the Listrac and Parkview rows"}
+  {
+   "column": "issuer_name",
+   "rows": 114,
+   "why": "see fixes"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 3,
+   "why": "see fixes"
+  },
+  {
+   "column": "shares_held",
+   "rows": 2,
+   "why": "see fixes"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 5,
+   "why": "see fixes"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 4,
+   "why": "see fixes"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 5,
+   "why": "see fixes"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "see fixes"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 5,
+   "why": "see fixes"
+  },
+  {
+   "column": "asset_category",
+   "rows": 3,
+   "why": "see fixes"
+  },
+  {
+   "column": "index_classification",
+   "rows": 3,
+   "why": "see fixes"
+  },
+  {
+   "column": "asset_class",
+   "rows": 1,
+   "why": "see fixes"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 16,
+   "why": "see fixes"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 25,
+   "why": "see fixes"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 348,
+   "why": "see fixes"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 344,
+   "why": "see fixes"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 163,
+   "why": "see fixes"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 12,
+   "why": "see fixes"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 1151,
+   "why": "see fixes"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 6,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 1560,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "nonaccrual_footnote",
+   "rows": 99,
+   "why": "see fixes"
+  },
+  {
+   "column": "entity_id",
+   "rows": 1085,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 297,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 240,
+   "why": "see fixes"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 199,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "lien_position",
+   "rows": 1,
+   "why": "see fixes"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 11,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "position_id",
+   "rows": 784,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 14,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 14,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 172,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "maturity_precision",
+   "rows": 1151,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 1151,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "nonaccrual_status",
+   "rows": 99,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 191,
+   "why": "derived from a corrected field (entity key, chain, rate legs, maturity status, GICS) or from external shared-code edits already present in baseline bpza (entity_id, canonical_name, position_id, interest_rate_cash, instrument_type)"
+  }
  ],
- "rows_added": 0,
+ "rows_added": 874,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Wrapper source_encodings.filed_rate_reading all_in -> cash_leg. The page prints 'x % Cash, y % PIK' and the filer tags x with InvestmentInterestRate and y with InvestmentInterestRatePaidInKind; x is the reference rate plus the margin, so the tag is the cash leg and the all-in coupon is x + y. Under all_in the build published x as all-in and x - y as cash, and no rate where y > x (Amalfi; the 13 financial_convention_unresolved findings). 20 to 31 rows a quarter in all 13 quarters; page compare: rate differs from cash + PIK on 301 rows (bpxa) -> 20 (bpxc).",
+  {
+   "what": "Maturity printed and not published on old-layout continuation lines (2023-03-31 to 2024-09-30, plus 14 rows later): 1,151 rows set from the Maturity Date cell of the row's own printed line (month end, precision month). Three printed maturities that precede the position's own acquisition or the report date (filer typos: Net Health 12/05, Composecure 01/14, Tega MC 03/25) are left unpublished.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "First Lien Senior Secured Term Loan LIBOR + 6.75 %, 11.6 % Cash 08/21 07/27 5,165 5,054 5,045 0.5 % (3) (5) (6"
+    }
+   ]
+  },
+  {
+   "what": "Benchmark guessed from the report date on 318 old-layout rows (LIBOR/SOFR for EURIBOR, SONIA, SARON, BBSY, CDOR, BKM, STIBOR): set to the code printed in the Interest cell; fixed-coupon lines published with a benchmark and spread (EFC International, Skyvault, Eclipse, Marmoutier, JPMorgan) have both withdrawn and coupon_type Fixed; coupon_type set from the printed cell on 162 rows.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "First Lien Senior Secured Term Loan EURIBOR + 4.75 %, 7.5 % Cash 05/21 10/26 1,304 1,446 1,203 0.1 % (3) (5) ("
+    },
+    {
+     "accession": "0001859919-26-000022",
+     "text": "Skyvault Holdings LLC First Lien Senior Secured Term Loan 12.0 % Cash 11/24 11/31 $ 25,633"
+    }
+   ]
+  },
+  {
+   "what": "Industry blank on 240 continuation lines (2023-03-31 to 2024-09-30): extracted_industry set from the industry cell of the company's first printed line.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "Qualified Industries, LLC Consumer Cyclical First Lien Senio"
+    }
+   ]
+  },
+  {
+   "what": "PIK and cash legs against the printed Interest cell: cash coupons tagged with the PIK concept (Coastal Marina 2026-06-30, EMI Porta 2026-06-30 x2, Skyvault 2026-06-30, JPMorgan prime money market 4 quarters), whole-coupon PIK lines with no pik_rate (Rocade preferred x2, Mold-Rite x2, Marmoutier x2, Caprock, Woodland), the margin tagged as the rate (Canadian Orthodontic 2025-12-31 to 2026-06-30), spreads missing on 'SOFR + 6.0 % PIK' lines. 12 rows whose interest_rate my corrections had blanked were given a superseding all-in rate (24 lines, built in bpzg).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-25-000033",
+     "text": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) "
+    },
+    {
+     "accession": "0001859919-26-000068",
+     "text": "Canadian Orthodontic Partners Corp. First Lien Senior Secured Term Loan CORRA + 7.00 %, 9.3 % PIK 06/21 12/26 5,510 4,893 320 - % "
+    }
+   ]
+  },
+  {
+   "what": "Issuer names: 114 published names set from the company cell (truncated at the comma inside parentheses: Armstrong, Classic Collision, Springbrook, Command Alkon, AD Bidco; Ocelot Holdco LL; GPZN/GPNZ; Fitzmark; FineLine; Kline Hill; Zelda Luxco; 'First Lien' for Finexvet) and two lines published with the bare member word as issuer ('Common Stock' for BKF Buyer, 'Revolver' for AirX Climate Solutions, 2024-09-30).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "Armstrong Transport Group (Pele Buyer, LLC), Air Freight & Logistics, First Lien Senior Secured Term Loan 2023"
+    },
+    {
+     "accession": "0001859919-24-000075",
+     "text": "BKF Buyer, Inc. Construction and Building First Lien Senior Secured Term Loan SOFR + 5.21 %, 10.0 % Cash 08/24"
+    }
+   ]
+  },
+  {
+   "what": "Class labels: Carlson Travel 2023-06-30 preferred and common swapped between the two lines; Perforce second-lien term loan labelled 'Partnership Units ( 7,408.6 units)' in two filings (published as equity at 2024-06-30 with no par): reclassed to the loan, par set, spurious unit count removed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000040",
+     "text": "Series A Convertible Preferred ( 6,270 units) N/A 01/23 N/A 545 389 - % (5) (6) "
+    },
+    {
+     "accession": "0001859919-24-000053",
+     "text": "Perforce Software, Inc. Internet Software & Services Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % "
+    }
+   ]
+  },
+  {
+   "what": "Par printed and not published: OSP Hamilton (two tranches on one identifier, 4 rows 2023-03-31 and 2023-06-30; set by context), Biolam 2026-06-30. Unit counts 2026-06-30 (Accelerant, Aptus, Credit Key, Rocade common) set from the printed lines (the shared normaliser had given another row's count).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "First Lien Senior Secured Term Loan SOFR + 6.00 %, 10.9 % Cash 12/22 12/27 2,274 2,209 2,206 0.2 % (5) (6) (7)"
+    },
+    {
+     "accession": "0001859919-26-000068",
+     "text": "Accelerant Holdings Common Stock 07/25 279,230 3,341 2,946 0.1 % (6)(27) Aegros Holdco 2 L"
+    }
+   ]
+  },
+  {
+   "what": "Review round (bpzg): interest_rate_kind all_in on the two Marmoutier whole-PIK lines (the cash_leg reading had published 12.0); Canadian Orthodontic 2024-06-30 '3.5 % Cash, CORRA + 3.5 % PIK, 9.0 % PIK' set to rate 12.5; benchmark set to the printed code on 10 rows the first scan could not parse (SOFR typed as '%%' cells: Jones Fish, OSP Hamilton, NF Holdco; CDOR on Canadian Orthodontic; EURIBOR on Acogroup 2024-06-30); the A.T. Holdings 2026-06-30 non-accrual taken from the PIK legend (26) withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "SOFR + 5.75 %%, 10.6 % Cash 02/22 02/28 696 675 675 0.1 % (6) (7) (20) (33) Revolver LIBOR"
+    }
+   ]
+  },
+  {
+   "what": "Non-accrual footnote: the build published nonaccrual_status unknown on every row; 113 rows carry the legend footnote of their own schedule (legend numbers 32, 31, 27, 27, 27, 27, 30, 28, 28, 28, 28, 28, 26, 28 by quarter) and are set nonaccrual_footnote true.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001859919-26-000068",
+     "text": "(28) Non-accrual investment. (29) Portfo"
+    },
+    {
+     "accession": "0001859919-24-000053",
+     "text": "(27) Non-accrual investment. (28) Some o"
+    }
+   ]
+  },
+  {
+   "what": "Borrowings as a declared highlights figure (approved D-263): fund_financials.borrowings was the credit-facility line only; the balance sheet also prints the debt securitization, the notes and (2023-03-31) secured borrowings. data/overrides/fund_highlights_wrappers/0001859919.json declares the sum of the printed debt lines for 14 quarters.",
    "kind": "wrapper",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001859919-26-000041", "text": "SOFR + 6.00 %, 9.9 % Cash, 4.0 % PIK 12/21 06/26 56,477 55,971 50,829 1.7 %"},
-    {"accession": "0001859919-26-000041", "text": "Amalfi Midco Subordinated Loan Notes 2.0 % Cash, 9.0 % PIK 09/22 09/28 6,836 5,990 7,006 0.2 %"},
-    {"accession": "0001859919-26-000041", "text": "BPG Holdings IV Corp First Lien Senior Secured Term Loan SOFR + 2.00 %, 5.7 % Cash, 5.0 % PIK 03/23 07/29 24,488 23,437 19,100 0.7 %"}
-   ]},
-  {"what": "Rate and PIK row corrections (45 rows) from the printed Interest cell, generated by scratch/fund_runs/0001859919/gen_spec.py: cash coupon also tagged as PIK (Coastal Marina, Skyvault, CTI Foods, Xeinadin): PIK withdrawn; 'x % Cash, y % PIK' with no PIK tag (EFC International, UKFast, Marmoutier, Process Insights, BPG): PIK and cash rate set (stating the cash rate with the PIK removed the 5 source_unavailable findings my first version caused); whole coupon printed as PIK with no PIK tag (Xeinadin, Aquavista, Marmoutier super senior, Amalfi 2L, TA KHP); margin tagged as the rate on 'CDOR + 3.5 % PIK, 9.0 % PIK' rows (Canadian Orthodontic, Acogroup): margin withdrawn as a rate.",
-   "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-09-30", "2025-12-31", "2026-03-31"],
+    {
+     "accession": "0001859919-26-000022",
+     "text": "Borrowings under credit facilities 950,655 594,357 Debt securitization (net of deferred financing fees) 406,357 406,020 Notes payable (net of deferred financing fees) 697,226 299,602 Total l"
+    }
+   ]
+  },
+  {
+   "what": "Position chains: four position_match_overrides rejects (Finexvet: the 05/23 loan of par 5,500 was joined to the 03/22 loan of par 2,382 once the 2023-09-30 name was corrected) and wrapper source_encodings.position_identity_contexts for the 70 Perimeter Master Note Business Trust note rows (classes A to E, 14 quarters; class, coupon and printed label agree in every quarter).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2024-03-31"
+   ],
    "quotes": [
-    {"accession": "0001859919-26-000041", "text": "Skyvault Holdings LLC First Lien Senior Secured Term Loan 12.0 % Cash 11/24 11/31 $ 25,830 $ 25,830 $ 25,830 0.9 %"},
-    {"accession": "0001859919-25-000013", "text": "Coastal Marina Holdings, LLC Subordinated Term Loan 8.0 % Cash 11/21 11/31 3,831 3,661 3,635 0.2 %"},
-    {"accession": "0001859919-23-000040", "text": "EFC International Automotive Senior Unsecured Term Loan 11.0 % Cash, 2.5 % PIK 03/23 05/28 669 649 651 0.1 %"}
-   ]},
-  {"what": "X11: par printed, none published. Rocade Holdings second lien and Biolam: the filer tagged the par with InvestmentOwnedBalanceShares (c-903 14,700,000; c-905 8,001,000), so a unit count and no par was published (Rocade's count was then replaced by the preferred units' 115,000). Par set as printed (dollars, the unit of the fund's other principal facts), count withdrawn, 2025-12-31 and 2026-03-31. F24 (Stairway) first tranche 2023-03-31 / 06-30: par 398 / 400 set.",
-   "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2025-12-31", "2026-03-31"],
-   "quotes": [
-    {"accession": "0001859919-26-000041", "text": "Rocade Holdings LLC Second Lien Senior Secured Term Loan SOFR + 8.00 %, 11.7 % Cash 11/25 11/30 14,700 14,044 14,045 0.5 %"},
-    {"accession": "0001859919-26-000022", "text": "Biolam Group First Lien Senior Secured Term Loan EURIBOR + 4.50 %, 6.5 % PIK 12/22 12/29 7,679 5,805 4,577 0.2 %"},
-    {"accession": "0001859919-23-000040", "text": "First Lien Senior Secured Term Loan EURIBOR + 6.75 %, 10.1 % Cash 05/21 08/27 400 437 390 - %"}
-   ]},
-  {"what": "Rows whose member names a loan while the context carries an equity line of the same issuer, reclassed to that line: Listrac 'Revolver' (2023-03-31 to 2024-03-31) -> Common Stock 255 shares; Parkview Dental 'Term Loan 2' 2023-12-31 -> LLC Units 29,762; GPZN II 'Term Loan 2' (2023-09-30 to 2024-06-30) -> Common Stock 5,785 shares (nil value). No revolver is printed for Listrac.",
-   "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30"],
-   "quotes": [
-    {"accession": "0001859919-23-000040", "text": "Common Stock ( 255 shares) N/A 03/23 N/A 494 444 - %"},
-    {"accession": "0001859919-24-000012", "text": "LLC Units ( 29,762 units) N/A 10/23 N/A 298 298 - %"},
-    {"accession": "0001859919-24-000034", "text": "Common Stock ( 5,785 shares) N/A 10/23 N/A - - - %"}
-   ]},
-  {"what": "X02: rate and margin printed, no rate fact on the context (the rate-only sibling was not adopted in these quarters): Dwyer and Ellkay 2023-03-31, Classic Collision TL2 2023-03-31 / 06-30, Parkview TL1 2023-12-31.",
-   "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-12-31"],
-   "quotes": [
-    {"accession": "0001859919-23-000018", "text": "Dwyer Instruments, Inc. Electric First Lien Senior Secured Term Loan SOFR + 6.00 %, 11.2 % Cash 07/21 07/27 25,376 24,887 24,928"},
-    {"accession": "0001859919-24-000012", "text": "Parkview Dental Holdings LLC Healthcare First Lien Senior Secured Term Loan SOFR + 8.30 %, 13.6 % Cash 10/23 10/29 624 606 605"}
-   ]},
-  {"what": "Equity unit counts (49 rows) set to the printed count where the build published another row's count (the shared normaliser, shares_held_source derived_proxy) or none: Amalfi Class B (93,165,208 / 98,906,608; published 380,385, the warrants' count) 2023-03-31 to 2024-12-31; Mercell Class B 28,943.8 (published 114.4, Class A's); Qualified Industries common 454,545 (published 223, the preferred's); Rocade Common LP Units 30.8 (published 108,000 / 115,000, the preferred's); Aptus preferred 14 (published 49, the common's); Accelerant common 279,230; Credit Key warrants 1,198,269; Burgess Point LP Units 455; MNS Buyer 76.92 (published 76,923.1); Listrac common 255 at 2024-06-30. Generated by scratch/fund_runs/0001859919/units_vs_page.py.",
-   "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
-   "quotes": [
-    {"accession": "0001859919-23-000018", "text": "Class B Common Stock ( 93,165,208 shares) N/A 09/22 N/A 1,040 1,152"},
-    {"accession": "0001859919-26-000041", "text": "Credit Key Funding II LLC Warrants 12/25 1,198,269 - 8 - %"}
-   ]}
+    {
+     "accession": "0001859919-23-000040",
+     "text": "First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.8 % Cash 05/23 03/29 5,500 5,304 5,278 0.4 % (3) (6) ("
+    },
+    {
+     "accession": "0001859919-24-000034",
+     "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28) Stru"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "row_validation X11 2023-03-31, 2023-06-30 (OSP Hamilton)",
-   "hypotheses": ["Real: two OSP Hamilton first-lien tranches print par 2,258 / 2,274 (2023-03-31) and 2,252 / 2,268 (2023-06-30) and tag none. Both tranches share one identifier ('OSP Hamilton Purchaser, LLC, Technology, First Lien Senior Secured Term Loan') in each quarter, so a row correction (keyed by identifier) cannot tell them apart. Needs a correction keyed by context id, or the rate-only sibling contexts carrying the par. Printed: 'OSP Hamilton Purchaser, LLC Technology First Lien Senior Secured Term Loan LIBOR + 6.00 %, 11.5 % Cash 12/21 12/27 2,252 2,217 2,211 0.2 %' (0001859919-23-000040)."]},
-  {"finding": "fund_financials F26 2023-09-30, 2023-12-31, 2024-03-31, 2024-09-30, 2025-06-30, 2025-09-30, 2025-12-31",
-   "hypotheses": ["Real fund-level gap, not a heuristic false alarm: the published borrowings is the credit facilities only. 2025-12-31 balance sheet: 'Borrowings under credit facilities 950,655 ... Debt securitization (net of deferred financing fees) 406,357 ... Notes payable (net of deferred financing fees) 697,226' (0001859919-26-000022). Published borrowings 950.7M; with the securitization and notes, 2,054.2M, fund leverage 0.40 against the holdings view 0.42 (diff 0.02, passes). The other quarters show the same shape (fund leverage 0.13 to 0.21 vs 0.33 to 0.47). No wrapper setting can sum borrowing concepts (highlights figure_corrections does not accept borrowings): see orchestrator_requests.",
-                  "The earlier real-error verdict at 2025-12-31 (holdings sum 5,026.7M vs filed 4,877.0M) no longer stands: published holdings sum 4,877.0M equals the printed total in this build."]}
+  {
+   "finding": "interest_rate blank on about 133 benchmark-plus-margin PIK-only loan rows (open owner question D-092)",
+   "hypotheses": [
+    "Whether the whole PIK coupon is published as interest_rate on these lines is the owner's D-092 ruling; corr_allin_pending.csv is written and NOT appended."
+   ]
+  },
+  {
+   "finding": "Perimeter note chains and other pre-existing mixed chains (222 groups with more than one maturity in baseline bpza)",
+   "hypotheses": [
+    "Perimeter keyed by class in the wrapper; the other mixed groups are loans whose maturity was extended or repriced in the filings and were not reviewed one by one."
+   ]
+  },
+  {
+   "finding": "units_printed Xeinadin 2023-03-31 and 2023-06-30",
+   "hypotheses": [
+    "Share-count units are an open owner convention (three scales for one count in two quarters)."
+   ]
+  }
  ],
  "orchestrator_requests": [
-  {"file": "pipeline/extract_companyfacts.py (borrowings concepts) or pipeline/fund_highlights_wrapper.py (FIGURE_FIELDS)",
-   "what": "Let this fund's borrowings include the debt securitization and notes payable lines, either by summing the filer's debt concepts or by allowing 'borrowings' as a figure_corrections field (each value with its printed line).",
-   "why": "F26 x7: published borrowings is only the credit-facility line; leverage understated by about half. Not fixable by the agent without shared code.",
-   "quotes": [{"accession": "0001859919-26-000022", "text": "Borrowings under credit facilities 950,655 594,357 Debt securitization (net of deferred financing fees) 406,357 406,020 Notes payable (net of deferred financing fees) 697,226 299,602 Total liabilities"}]}
+  {
+   "request_id": "REQ-bpcc-issuer_name_printed-continuation-1",
+   "file": "pipeline/candidate_rules.py (issuer_name_differs_from_page)",
+   "what": "issuer_name_printed reads the first cell of a continuation line (an instrument cell) as the issuer name and flags Coherus Royalty Rights (2024-06-30, 2024-09-30) and REP SEKO Priority RCF (2024-06-30); it flags a company whose own name begins with Technology (Technology Service Stream BidCo Pty Ltd) as an industry label.",
+   "why": "The published names are right on all four rows; a finding raised by correct data is a check question (owner ruling 2026-11-04), not a disposition.",
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0001859919-24-000053",
+     "text": "Royalty Rights N/A 05/24 N/A 9,678 9,678 0.6 % (7) 9,977 19,362 19,356 Compass P"
+    },
+    {
+     "accession": "0001859919-24-000053",
+     "text": "Technology Service Stream BidCo Pty Ltd Technology First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 "
+    }
+   ],
+   "next_action": "Repair: take the company from the nearest line above for a line with no company cell and test the industry label against the industry cell; a test that a real error still fails (Finexvet published as First Lien, 2023-09-30) and a measurement on every accepted sandbox.",
+   "quotes": []
+  },
+  {
+   "request_id": "REQ-bpcc-X05-no-printed-margin-1",
+   "file": "pipeline/column_validation.py (X05)",
+   "what": "X05 flags a floating coupon with a blank or zero basis_spread; Marmoutier 2023-06-30 (2 rows) and 2023-09-30 print the benchmark EURIBOR with cash and PIK coupons and no margin, so a blank spread is the page.",
+   "why": "A finding raised by a correct fix (the 3.2 formerly published as a spread was the cash coupon) is a check question.",
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0001859919-23-000040",
+     "text": "EURIBOR, 3.2 % Cash, 5.8 % PIK 12/21 06/27 48 44 24 - % (3) (6) (7) (1"
+    }
+   ],
+   "next_action": "Skip X05 where the printed Interest cell has a benchmark and no margin; test that a real error (a floating loan printed with a margin and published with none) still fails.",
+   "quotes": []
+  }
  ],
  "observations": [
-  {"observation_key": "cash-rate-tag-read-as-all-in", "what": "The fund's plain rate tag is the cash leg ('9.9 % Cash, 4.0 % PIK' tagged 0.099 and 0.040), but the wrapper read it as all-in: all-in understated by the PIK and cash overstated on 20 to 31 loans a quarter, no rate where PIK > cash. D-080 set all_in without a page read of a cash-plus-PIK row.", "field": "interest_rate", "quarters": ["2023-03-31", "2026-03-31"], "fair_value_m": null, "cause": "fund", "action": "fixed", "suggested_check": "Where a fund prints 'x % Cash, y % PIK', the published all-in must equal x + y.", "quote": {"accession": "0001859919-26-000041", "text": "SOFR + 6.00 %, 9.9 % Cash, 4.0 % PIK 12/21 06/26 56,477 55,971 50,829 1.7 %"}},
-  {"observation_key": "unit-count-rescaled-by-issuer-normaliser", "what": "The shared unit normaliser (shares_held_source derived_proxy) gave 45 equity rows the count of another row of the same issuer: Amalfi Class B published the warrants' 380,385 (printed 93,165,208 / 98,906,608) in 8 quarters, Mercell Class B the Class A 114.4, Qualified Industries common the preferred's 223, Rocade Common LP Units the preferred's 108,000 / 115,000, Aptus preferred the common's 49, Accelerant 3,182.5 for 279,230, MNS Buyer x1000. Fixed by row correction. Amalfi 2025-12-31 already published 98,906,608 and 380,385 in bpxc (the coordinator's remark did not reproduce in that build).", "field": "shares_held", "quarters": ["2023-03-31", "2026-03-31"], "fair_value_m": null, "cause": "shared", "action": "fixed", "suggested_check": "Two equity rows of one issuer in one quarter publishing the same unit count while the page prints different counts.", "quote": {"accession": "0001859919-23-000018", "text": "Class B Common Stock ( 93,165,208 shares) N/A 09/22 N/A 1,040 1,152"}},
-  {"observation_key": "unit-count-tag-differs-from-printed-count", "what": "Left: Xeinadin common published 36,532,680 every quarter while the page prints 354,281 (2023-03-31) and 36,533 (2023-06-30); DataServ units tagged 96,153.8, printed 93,153.8 (cost 96 suggests the tag is right); Canadian Orthodontic Class C warrants 74,712.64 / 257,127.45 swap between quarters (nil value). Not corrected: the page itself is inconsistent.", "field": "shares_held", "quarters": ["2023-03-31", "2023-06-30", "2023-12-31"], "fair_value_m": 0.5, "cause": "row", "action": "left", "suggested_check": "", "quote": {"accession": "0001859919-23-000040", "text": "Common Stock ( 36,533 shares) N/A 05/22 N/A 452 431"}},
-  {"observation_key": "par-tagged-as-share-count", "what": "Rocade second lien and Biolam tag the par with InvestmentOwnedBalanceShares: published a unit count (Rocade's then replaced by the preferred's 115,000) and no par. Fixed.", "field": "principal_amount", "quarters": ["2025-12-31", "2026-03-31"], "fair_value_m": 14.05, "cause": "row", "action": "fixed", "suggested_check": "A loan row with a unit count and no principal.", "quote": {"accession": "0001859919-26-000041", "text": "Rocade Holdings LLC Second Lien Senior Secured Term Loan SOFR + 8.00 %, 11.7 % Cash 11/25 11/30 14,700 14,044 14,045 0.5 %"}},
-  {"observation_key": "row-tagged-on-another-issuers-member", "what": "Same issuer, wrong instrument: Listrac 'Revolver' carries the common stock (5 quarters, up to 1.07M), Parkview 'Term Loan 2' the LLC units, GPZN 'Term Loan 2' the common stock (nil). Published as loans with no rate or par. Fixed.", "field": "instrument_description", "quarters": ["2023-03-31", "2024-06-30"], "fair_value_m": 1.07, "cause": "row", "action": "fixed", "suggested_check": "A loan row with no rate, par or spread and a share-count fact.", "quote": {"accession": "0001859919-23-000040", "text": "Common Stock ( 255 shares) N/A 03/23 N/A 494 444 - %"}},
-  {"observation_key": "maturity-printed-not-published", "what": "Maturity missing on 134 to 169 rows a quarter 2023-03-31 to 2024-09-30 (1 to 6 later). The field-status reader anchors the printed row but leaves maturity 'validation_needed' on continuation rows that print no issuer name. Shared step: scripts/refresh_ixbrl_field_status.py.", "field": "maturity_date", "quarters": ["2023-03-31", "2024-09-30"], "fair_value_m": null, "cause": "shared", "action": "parked", "suggested_check": "Funded loan rows with an anchored printed row that prints a maturity and publish none.", "quote": {"accession": "0001859919-23-000040", "text": "EURIBOR + 4.75 %, 8.6 % Cash 03/22 10/26 28,017 27,700 25,860"}},
-  {"observation_key": "reference-rate-guessed-on-unvalidated-printed-row", "what": "Same cause: benchmark left as the date guess on continuation rows, 23 to 76 rows a quarter 2023-03-31 to 2024-09-30 (LIBOR / SOFR published for EURIBOR 130, SONIA 32, SARON 17, others).", "field": "reference_rate_type", "quarters": ["2023-03-31", "2024-09-30"], "fair_value_m": null, "cause": "shared", "action": "parked", "suggested_check": "Compare the published benchmark with the code printed in the anchored row's rate cell.", "quote": {"accession": "0001859919-23-000040", "text": "EURIBOR + 4.75 %, 8.6 % Cash 03/22 10/26 28,017 27,700 25,860"}},
-  {"observation_key": "pik-printed-on-the-row-and-not-tagged", "what": "25 rows print a PIK part the context does not tag (EFC International x6, Xeinadin x6, UKFast x3, Marmoutier x5, Aquavista x2, Process Insights x2, BPG, Amalfi 2L, TA KHP 25.1M). Fixed.", "field": "pik_rate", "quarters": ["2023-03-31", "2026-03-31"], "fair_value_m": null, "cause": "row", "action": "fixed", "suggested_check": "A printed 'y % PIK' with no published PIK.", "quote": {"accession": "0001859919-23-000040", "text": "EFC International Automotive Senior Unsecured Term Loan 11.0 % Cash, 2.5 % PIK 03/23 05/28 669 649 651 0.1 %"}},
-  {"observation_key": "plain-rate-tagged-as-pik-published-as-pik-only", "what": "Cash coupon tagged with the PIK concept: Coastal Marina '8.0 % Cash', Skyvault '12.0 % Cash' (25.8M), CTI Foods 2025-09-30, Xeinadin 2025-12-31. Fixed.", "field": "pik_rate", "quarters": ["2023-12-31", "2026-03-31"], "fair_value_m": 25.8, "cause": "row", "action": "fixed", "suggested_check": "A published PIK on a row whose printed cell says Cash only.", "quote": {"accession": "0001859919-26-000041", "text": "Skyvault Holdings LLC First Lien Senior Secured Term Loan 12.0 % Cash 11/24 11/31 $ 25,830 $ 25,830 $ 25,830 0.9 %"}},
-  {"observation_key": "pik-coupon-with-spread-published-without-a-rat", "what": "Loans printed 'SOFR + m %, y % PIK' publish no rate (EMI Porta 32.1M, CTI Foods x4, Aegros, Biolam, TA SL Cayman, Xeinadin, Bariacum, EZ SMBO, Canadian Orthodontic at 2026-03-31; 12 to 23 a quarter). D-092 undecided; convention not changed.", "field": "interest_rate", "quarters": ["2026-03-31"], "fair_value_m": null, "cause": "shared", "action": "left", "suggested_check": "Owner ruling D-092.", "quote": {"accession": "0001859919-26-000041", "text": "SOFR + 1.65 %, 5.3 % Cash, 4.5 % PIK 07/23 07/29 3,484 3,432 2,913"}},
-  {"observation_key": "borrowings-exclude-securitization-and-notes", "what": "fund_financials.borrowings holds the credit-facility line only; the debt securitization and notes payable are left out (2025-12-31: 950.7M published, 2,054.2M printed in all). Leverage ratios derived from it are about half the true figure. Parked; orchestrator request.", "field": "borrowings", "quarters": ["2023-09-30", "2025-12-31"], "fair_value_m": null, "cause": "shared", "action": "parked", "suggested_check": "F26 already reports it; borrowings plus other liabilities should approach total liabilities.", "quote": {"accession": "0001859919-26-000022", "text": "Borrowings under credit facilities 950,655 594,357 Debt securitization (net of deferred financing fees) 406,357 406,020 Notes payable (net of deferred financing fees) 697,226 299,602 Total liabilities"}},
-  {"observation_key": "two-pik-figures-in-one-rate-cell", "what": "Aesthetics Australia 'BBSY + 4.00 %, 7.6 % PIK, 4.1 % PIK' and Acogroup from 2025-06-30 'EURIBOR + 2.90 %, 6.4 % PIK, 4.0 % PIK': whether the coupon is 7.6 or 11.7 is not decidable from the page. Left.", "field": "interest_rate", "quarters": ["2025-12-31", "2026-03-31"], "fair_value_m": 8.94, "cause": "row", "action": "left", "suggested_check": "", "quote": {"accession": "0001859919-26-000041", "text": "BBSY + 4.00 %, 7.6 % PIK, 4.1 % PIK 05/21 03/28 758 846 427"}}
+  {
+   "observation_key": "continuation-line-fields-withheld-by-field-status-reader",
+   "what": "In the old layout (Portfolio Company | Industry | Investment Type, 2023-03-31 to 2024-09-30) a second tranche of a company has no company or industry cell, so the field-status reader reads its row against the header off by two columns: maturity blank on 1,151 rows, benchmark left as the date guess on 318, industry blank on 240 (status validation_needed). Fixed here by context corrections.",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-03-31",
+    "2024-09-30"
+   ],
+   "fair_value_m": 1500.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a published loan row whose printed line carries an MM/YY maturity cell and whose maturity_date is blank",
+   "quote": {
+    "accession": "0001859919-23-000018",
+    "text": "First Lien Senior Secured Term Loan LIBOR + 6.75 %, 11.6 % Cash 08/21 07/27 5,165 5,054 5,045 0.5 % (3) (5) (6"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule saw it: scripts and the ledger test fields only where a tag exists. The check reads each row's own printed line (the table row carrying its fair-value context) and compares maturity, benchmark and industry.",
+    "reference": "scratch/fund_runs/0001859919/scan_all.py, final_scan.sql"
+   }
+  },
+  {
+   "observation_key": "cash-rate-tag-read-as-all-in",
+   "what": "The fund's plain rate tag is the cash leg of 'x % Cash, y % PIK'; read as all-in it published a wrong rate on 20 to 31 loans a quarter (fixed earlier by filed_rate_reading cash_leg, D-161). Nine rows survived that fix and are fixed in bpzh: Canadian Orthodontic 2023-09-30 to 2024-03-31 3.5 % Cash, CDOR + 3.5 % PIK, 9.0 % PIK (rate 12.5); Acogroup 2024-06-30 x2 and 2024-09-30 4.0 % Cash, EURIBOR + 2.9 % PIK, 6.6 % PIK (rate 10.6, spread 2.9, the printed margin); Marmoutier 2023 x3 EURIBOR, 3.2 % Cash, ... (the 3.2 is the cash coupon, spread withdrawn).",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 300.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "interest_rate differs from cash + PIK as printed on the row's own line",
+   "quote": {
+    "accession": "0001859919-25-000033",
+    "text": "Amalfi Midco Subordinated Loan Notes 2.0 % Cash, 9.0 % PIK 09/22 09/28 6,125 5,415 5,819 0.3 % (3)(7)(32) Astr"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_le_interest_rate is a retired rule and cannot catch recurrence. Proposed rule: for each loan row whose own printed Interest cell prints cash and PIK figures, published interest_rate = cash + PIK, pik_rate = PIK, interest_rate_cash = cash (scan_all.py; 0 differences in all quarters after the fixes, 2 rows missed by the first version: Canadian Orthodontic 2024-06-30 and the Marmoutier whole-PIK rows).",
+    "reference": "scratch/fund_runs/0001859919/scan_all.py, final_scan.sql"
+   }
+  },
+  {
+   "observation_key": "cash-coupon-tagged-as-pik",
+   "what": "Cash coupons tagged with the PIK concept (Coastal Marina 8.0 % Cash 2026-06-30, EMI Porta 9.1 % Cash x2, Skyvault 12.0 % Cash, JPMorgan prime money market fund 3.3 to 5.4 % Cash): published pik_rate equal to the cash coupon and, for the first two, an all-in rate twice the coupon.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "pik_rate > 0 on a row whose printed Interest cell prints a Cash figure and no PIK figure",
+   "quote": {
+    "accession": "0001859919-26-000068",
+    "text": "Coastal Marina Holdings, LLC Subordinated Term Loan 8.0 % Cash 11/21 11/31 8,310 7,924 8,0"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares pik_rate with the printed cell; this one would have fired on 9 rows and no correct row.",
+    "reference": "scratch/fund_runs/0001859919/final_scan.sql (pik_extra)"
+   }
+  },
+  {
+   "observation_key": "margin-tagged-as-rate-with-pik-coupon",
+   "what": "Canadian Orthodontic 'CORRA + 7.00 %, 9.3 % PIK': the rate fact holds the margin 7.0, the PIK fact 9.3; published all-in 16.3 and no spread (3 quarters, 2025-12-31 to 2026-06-30). The whole coupon is 9.3 PIK.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "interest_rate minus pik_rate equals the printed margin on a loan printed with a margin and one PIK figure",
+   "quote": {
+    "accession": "0001859919-26-000068",
+    "text": "Canadian Orthodontic Partners Corp. First Lien Senior Secured Term Loan CORRA + 7.00 %, 9.3 % PIK 06/21 12/26 5,510 4,893 320 - % "
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_le_interest_rate did not fire (rate above PIK); the printed-line comparison does.",
+    "reference": "scratch/fund_runs/0001859919/scan_all.py"
+   }
+  },
+  {
+   "observation_key": "issuer-name-truncated-at-comma-inside-parentheses",
+   "what": "Member text cut at the first comma: 'Armstrong Transport Group (Pele Buyer' for '(Pele Buyer, LLC)' (19 rows), Classic Collision (15), Springbrook (11), Command Alkon (5), Ocelot Holdco LL (16), AD Bidco (6): 72 rows, 2023-03-31 to 2025-09-30.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2025-09-30"
+   ],
+   "fair_value_m": 700.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "issuer_name with an unbalanced parenthesis, or a published name that is a strict prefix of the printed company cell",
+   "quote": {
+    "accession": "0001859919-23-000018",
+    "text": "Armstrong Transport Group (Pele Buyer, LLC), Air Freight & Logistics, First Lien Senior Secured Term Loan 2023"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed caught 7 of 72 rows (it treats a prefix as the same name). Proposed rule: published issuer_name is a strict prefix of the printed company cell, or has an unbalanced parenthesis; a printed-line comparison gave 113 of 113 changed names equal to the company cell and no hit on a correct name.",
+    "reference": "scratch/fund_runs/0001859919/an6.sql"
+   }
+  },
+  {
+   "observation_key": "issuer-name-is-the-bare-member-instrument",
+   "what": "Two 2024-09-30 lines whose member is only 'Common Stock' / 'Revolver' were published with that word as issuer_name (BKF Buyer common stock 0.96M, AirX Climate Solutions revolver); no rule fired.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 1.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name equal to an instrument word (Common Stock, Revolver, Preferred Stock, Warrants)",
+   "quote": {
+    "accession": "0001859919-24-000075",
+    "text": "BKF Buyer, Inc. Construction and Building First Lien Senior Secured Term Loan SOFR + 5.21 %, 10.0 % Cash 08/24"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Nothing flags an instrument word as a name; the page-name rule skipped these lines (no company cell on the continuation line).",
+    "reference": "scratch/fund_runs/0001859919/an31.sql"
+   }
+  },
+  {
+   "observation_key": "non-accrual-footnote-not-carried",
+   "what": "nonaccrual_status is unknown and nonaccrual_footnote false on all 8,891 rows; the schedules mark 113 rows with the legend footnote 'Non-accrual investment' (7 to 14 a quarter from 2024-03-31). Fixed by context corrections from the legend of each schedule.",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 80.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a row whose printed footnote cell carries the number of the schedule's non-accrual legend and nonaccrual_status is not nonaccrual",
+   "quote": {
+    "accession": "0001859919-26-000068",
+    "text": "(28) Non-accrual investment. (29) Portfo"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The nonaccrual stage reads XBRL footnote links only; this filer attaches none. The legend-footnote comparison is deterministic.",
+    "reference": "scratch/fund_runs/0001859919/nonaccrual_check.py"
+   }
+  },
+  {
+   "observation_key": "borrowings-exclude-securitization-and-notes",
+   "what": "Published borrowings held the credit facility line only (950.7M of 2,054.2M at 2025-12-31); F26 failed in 8 quarters. Fixed by a highlights wrapper declaring the sum of the balance-sheet debt lines.",
+   "field": "borrowings",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "borrowings below the sum of the debt lines printed on the balance sheet",
+   "quote": {
+    "accession": "0001859919-26-000022",
+    "text": "Borrowings under credit facilities 950,655 594,357 Debt securitization (net of deferred financing fees) 406,357 406,020 Notes payable (net of deferred financing fees) 697,226 299,602 Total l"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F26 fired in 8 of 14 quarters in the baseline.",
+    "reference": "RVQ_REV_c8ff9f9dc987"
+   }
+  },
+  {
+   "observation_key": "loan-published-as-equity-after-label-slip",
+   "what": "Perforce Software second-lien term loan prints 'Partnership Units ( 7,408.6 units)' in the Investment Type cell at 2023-12-31 and 2024-06-30 (every other quarter 'Second Lien Senior Secured Term Loan', same SOFR + 8.00 %, 07/27, par 6,497); published as EQUITY_COMMON with no par at 2024-06-30, with a unit count 7,408.6 on the loan at 2023-12-31.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 6.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "an equity-class row carrying a spread, a benchmark and a maturity",
+   "quote": {
+    "accession": "0001859919-24-000053",
+    "text": "Perforce Software, Inc. Internet Software & Services Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % "
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X03/X02-type rules test equity rows with a rate only where the class is credit; a class-versus-terms check (equity with spread and maturity) is cheap and has no false positive in this fund.",
+    "reference": "scratch/fund_runs/0001859919/an12.sql"
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "what": "Correcting the first-line name of Finexvet at 2023-09-30 joined the 05/23 loan (par 5,500) to the 03/22 loan (par 2,382); fixed with four rejects. The Perimeter notes (classes A to E, 182k par each) chain across classes in the baseline too: fixed by identity keys on all 70 rows. After the last build 69 adjacent pairs were created and 46 removed against baseline bpza; read: created pairs that change spread, maturity or par are repricings or maturity extensions with the same acquisition date, removed pairs show no same-loan evidence.",
+   "field": "position_id",
+   "quarters": [
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "adjacent rows of one position chain with different acquisition dates, or different note classes",
+   "quote": {
+    "accession": "0001859919-23-000040",
+    "text": "First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.8 % Cash 05/23 03/29 5,500 5,304 5,278 0.4 % (3) (6) ("
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The chain check compares acquisition date and coupon across consecutive rows of a group; chains5.py is a first version.",
+    "reference": "scratch/fund_runs/0001859919/chains5.py"
+   }
+  },
+  {
+   "observation_key": "printed-maturity-typo-before-acquisition",
+   "what": "Three printed maturities are impossible: Net Health 12/05 (acquired 05/21), Composecure 01/14 (acquired 01/16), Tega MC Australia 03/25 (acquired 03/25, report 2026-03-31). Left unpublished; the check maturity_not_past would flag them if published.",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-03-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 4.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "a printed maturity before the printed acquisition date or before the report date on an active loan",
+   "quote": {
+    "accession": "0001859919-26-000041",
+    "text": "Composecure Holdings LLC First Lien Senior Secured Term Loan SOFR + 2.25 %, 5.9 % Cash 01/16 01/14 2"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "maturity_not_past (weak) fired on exactly these rows when the value was published in sandbox bpzb.",
+    "reference": "RVQ_REV_a902353a9fb9, RVQ_REV_001a12886d91"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "what": "On 17 rows (Argus Bidco 5 quarters, Eurofins 5, ProfitOptics 4, Amalfi, Screenvision, Team Air) the lien in the filer's member differs from the printed instrument cell (e.g. member Subordinated Term Loan, line 'First Lien Senior Secured Term Loan 10.5 % PIK'); the member is stable across quarters and the printed label moves, so the printed label looks like the swap. Left as published (member lien), not changed.",
+   "field": "lien_position",
+   "quarters": [
+    "2023-03-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 20.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "lien from the member differs from the lien word in the printed instrument cell",
+   "quote": {
+    "accession": "0001859919-23-000018",
+    "text": "Argus Bidco Limited High Tech Industries First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.5 % Cash 07/2"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Row-by-row member versus printed-cell comparison; 17 hits in this fund, all label swaps.",
+    "reference": "scratch/fund_runs/0001859919/an10.sql"
+   }
+  },
+  {
+   "observation_key": "all-in-rate-blank-on-pik-only-loans",
+   "what": "Loans printed 'EURIBOR + 4.00 %, 6.4 % PIK' (benchmark plus margin, whole coupon PIK) publish pik_rate and no interest_rate on about 133 rows in 14 quarters, as the cohort does; loans printed 'y % PIK' with no margin publish rate = pik. Whether the all-in rate belongs on the first shape is the open owner question D-092 (D-161 only set this fund to cash_leg). Not changed; corr_allin_pending.csv is NOT appended and waits for the owner.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 150.0,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "a loan row with pik_rate > 0, interest_rate blank and a printed Interest cell with no Cash figure (a list for the owner, not a failure until D-092 is ruled)",
+   "quote": {
+    "accession": "0001859919-25-000033",
+    "text": "Acogroup First Lien Senior Secured Term Loan EURIBOR + 4.00 %, 6.4 % PIK 05/21 10/26 1,435 1,570 996 - % (3)(7)(8)(11) ("
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The retired pik_le_interest_rate rule and its frozen verdict are not detectors. Proposed: the printed-cell comparison above, as an informational list once D-092 is ruled.",
+    "reference": "scratch/fund_runs/0001859919/an4.sql"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "what": "Xeinadin common stock publishes 36,532,680 units in every quarter while the page prints 354,281 (2023-03-31) and 36,533 (2023-06-30); Application Boot Camp 2025-06-30 391,000 vs printed 391; JPMorgan money market 10,198,000 vs 10,198. Share-count units are an open owner convention: not changed.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-12-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 11.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "shares_held differing from the count printed in the row's Investment Type cell by a factor of 10 or more",
+   "quote": {
+    "accession": "0001859919-23-000018",
+    "text": "Common Stock ( 354,281 shares) N/A 05/22 N/A 452 452 - % (3) (6) (31) (33) 15,19"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed (labelled_count_differs) fires on the two Xeinadin rows.",
+    "reference": "RVQ_BLK_757f60b2205c, RVQ_BLK_2e81146d2ef8"
+   }
+  },
+  {
+   "observation_key": "pct-of-net-assets-printed-not-published",
+   "what": "CPCF BPCC LLC 2023-06-30 prints 0.4 percent of net assets and the build publishes none (the row is read from a line printed with a different date layout 6/23).",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "fair_value_m": 4.5,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "pct_of_net_assets blank where the row's printed percent cell is a number",
+   "quote": {
+    "accession": "0001859919-23-000040",
+    "text": "CPCF BPCC LLC Investment Funds & Vehicles 9.1 % Member Interest N/A 6/23 N/A 4,622 4,534 0.4 % (3) (30) (32) 4"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A blank percent beside a printed number is a deterministic one-row-at-a-time check; the field is not in the correctable list, so this row is left.",
+    "reference": "scratch/fund_runs/0001859919/an29.sql"
+   }
+  }
  ],
- "page_comparison": "Rates: scratch/fund_runs/0001859919/rates_vs_page.py, every published row with cost and fair value, 13 quarters: 7,596 tried, 6,313 matched to a printed line (bpxc); compared rate, PIK, spread, benchmark, maturity month, loan par. Units: scratch/fund_runs/0001859919/units_vs_page.py, every equity / warrant row, 13 quarters: 1,500 rows, 1,232 matched; 60 differences, 49 corrected, 11 left (listed in observations or matcher errors: Perforce par, JPMorgan money market, Application Boot Camp).",
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_58d9b1728d59",
+   "coverage": {
+    "affected_rows": [
+     "ROW-17458903216d32cd",
+     "ROW-f2758096e15509b4"
+    ],
+    "reviewed_rows": [
+     "ROW-17458903216d32cd",
+     "ROW-f2758096e15509b4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-23-000040",
+     "text": "EURIBOR, 3.2 % Cash , 6.8 % PIK 12/21 12/28 2,230 2,224 1,87"
+    },
+    {
+     "accession": "0001859919-23-000040",
+     "text": "EURIBOR, 3.2 % Cash, 5.8 % PIK 12/21 06/27 48 44 24 - % (3) (6) (7) (1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Raised by the bpzh review fix: the Marmoutier lines print the benchmark EURIBOR and cash and PIK coupons but no margin (3.2 is the cash coupon, formerly published as a spread). Floating with a blank spread is what the page prints.",
+    "A margin printed elsewhere on the page for these two lines: none found; later quarters print the margin."
+   ],
+   "next_action": "check_repair_request REQ-bpcc-X05-no-printed-margin-1: X05 should not fire where the printed cell has a benchmark and no margin."
+  },
+  {
+   "finding_id": "RVQ_REV_a983608cafd7",
+   "coverage": {
+    "affected_rows": [
+     "ROW-feb13d1efb8d5776"
+    ],
+    "reviewed_rows": [
+     "ROW-feb13d1efb8d5776"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-23-000073",
+     "text": "EURIBOR, 3.2 % Cash, 5.8 % PIK 12/21 06/27 47 45 26 - % (3) (7) (8) (1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Same shape as 2023-06-30: benchmark EURIBOR, cash 3.2, PIK 5.8, no margin printed; published spread blank."
+   ],
+   "next_action": "Same check_repair_request as RVQ_REV_58d9b1728d59."
+  },
+  {
+   "finding_id": "RVQ_REV_1cbca1e6483f",
+   "coverage": {
+    "affected_rows": [
+     "ROW-02801486eb08df27",
+     "ROW-0ad72dac295b19f4",
+     "ROW-0b367bec4c16c1f3",
+     "ROW-0c98144fbd9823c1",
+     "ROW-0d244a9167fea3f6",
+     "ROW-1172a4a17b5764cd",
+     "ROW-11bfdb459f5362cc",
+     "ROW-13fcec70f6d0566b",
+     "ROW-1aded10f4b2c5573",
+     "ROW-1b2adb781300ad9c",
+     "ROW-1c7a30aa16dc6065",
+     "ROW-2380ac7925090726",
+     "ROW-26751504a4254e99",
+     "ROW-27b8f250d0647a77",
+     "ROW-2af758ac2c80f90c",
+     "ROW-315a3770362c920f",
+     "ROW-31cda53279319b70",
+     "ROW-35bbae03efdf5118",
+     "ROW-3ae10c7feda4a026",
+     "ROW-3b4dafa2de3fe878",
+     "ROW-3dd4724c67ce94ba",
+     "ROW-3e35ef7d8f9d5421",
+     "ROW-3f73ce1cf748e45a",
+     "ROW-40cbbe1f8874d25e",
+     "ROW-4107323f4d1cb9cf",
+     "ROW-41ee61595f48d0aa",
+     "ROW-42c4199e6778bf4b",
+     "ROW-450c2b9a2e488ea3",
+     "ROW-49124096d66e19d2",
+     "ROW-4fc6148b859cde77",
+     "ROW-51f90f9dd9375da6",
+     "ROW-53fb10564cc2f16a",
+     "ROW-54176997b9fc1777",
+     "ROW-59870c76e30f93b5",
+     "ROW-5bc3c15ca566eed3",
+     "ROW-5d8305e86974b0f2",
+     "ROW-649909424dc0ad60",
+     "ROW-656a7af876565a29",
+     "ROW-6b36dae015d5c76f",
+     "ROW-6e65aebf89795dd6",
+     "ROW-7359dea1e51db146",
+     "ROW-741d040023112e22",
+     "ROW-7838f41d5100986d",
+     "ROW-78f9be3d80820975",
+     "ROW-7aa5f25f992ab14b",
+     "ROW-80989b4d25fe6632",
+     "ROW-8290d85339936d89",
+     "ROW-8588aa631aca327b",
+     "ROW-85cec1b7f625a96f",
+     "ROW-85e6617f003078fb",
+     "ROW-8790ad7918cfdd7b",
+     "ROW-8b50fdd74b1befe4",
+     "ROW-93ac2ca197da734b",
+     "ROW-94ed6b68c3d79f4e",
+     "ROW-95dcbcca5c81e239",
+     "ROW-97011c7d17cac123",
+     "ROW-971bfdede124048a",
+     "ROW-978d2ef494a76938",
+     "ROW-99cfad1b5fbc801f",
+     "ROW-9bcade2472d6f1f0",
+     "ROW-a32f9561dc4280d4",
+     "ROW-a7de661286b45467",
+     "ROW-ab23b446034afb0b",
+     "ROW-b40a6b8cdb16200f",
+     "ROW-b87b5d6dbb77cec8",
+     "ROW-bd2d1f0a1e6f8082",
+     "ROW-bf3054d3ceb096e4",
+     "ROW-c0ac2deb2b0658ab",
+     "ROW-c2d17fdc6e2ca8a9",
+     "ROW-c4da007c5b53d409",
+     "ROW-cf2480d438deeee6",
+     "ROW-d748fdb1cf8dacdd",
+     "ROW-d7d992d9548e83eb",
+     "ROW-dc514b95b62d6c9b",
+     "ROW-e471dbea5c5c875e",
+     "ROW-e61bc95b7403577c",
+     "ROW-e7d0d89ce591bfac",
+     "ROW-e836baf544a57fe6",
+     "ROW-ef550cd8ea332ca3",
+     "ROW-f56adf6907c683ae",
+     "ROW-f56e5f79ca1cc13f",
+     "ROW-fa2e5bcf3145c502",
+     "ROW-fe6e27b80d65e5e9",
+     "ROW-fe8679047ae7aff4"
+    ],
+    "reviewed_rows": [
+     "ROW-02801486eb08df27",
+     "ROW-0ad72dac295b19f4",
+     "ROW-0b367bec4c16c1f3",
+     "ROW-0c98144fbd9823c1",
+     "ROW-0d244a9167fea3f6",
+     "ROW-1172a4a17b5764cd",
+     "ROW-11bfdb459f5362cc",
+     "ROW-13fcec70f6d0566b",
+     "ROW-1aded10f4b2c5573",
+     "ROW-1b2adb781300ad9c",
+     "ROW-1c7a30aa16dc6065",
+     "ROW-2380ac7925090726",
+     "ROW-26751504a4254e99",
+     "ROW-27b8f250d0647a77",
+     "ROW-2af758ac2c80f90c",
+     "ROW-315a3770362c920f",
+     "ROW-31cda53279319b70",
+     "ROW-35bbae03efdf5118",
+     "ROW-3ae10c7feda4a026",
+     "ROW-3b4dafa2de3fe878",
+     "ROW-3dd4724c67ce94ba",
+     "ROW-3e35ef7d8f9d5421",
+     "ROW-3f73ce1cf748e45a",
+     "ROW-40cbbe1f8874d25e",
+     "ROW-4107323f4d1cb9cf",
+     "ROW-41ee61595f48d0aa",
+     "ROW-42c4199e6778bf4b",
+     "ROW-450c2b9a2e488ea3",
+     "ROW-49124096d66e19d2",
+     "ROW-4fc6148b859cde77",
+     "ROW-51f90f9dd9375da6",
+     "ROW-53fb10564cc2f16a",
+     "ROW-54176997b9fc1777",
+     "ROW-59870c76e30f93b5",
+     "ROW-5bc3c15ca566eed3",
+     "ROW-5d8305e86974b0f2",
+     "ROW-649909424dc0ad60",
+     "ROW-656a7af876565a29",
+     "ROW-6b36dae015d5c76f",
+     "ROW-6e65aebf89795dd6",
+     "ROW-7359dea1e51db146",
+     "ROW-741d040023112e22",
+     "ROW-7838f41d5100986d",
+     "ROW-78f9be3d80820975",
+     "ROW-7aa5f25f992ab14b",
+     "ROW-80989b4d25fe6632",
+     "ROW-8290d85339936d89",
+     "ROW-8588aa631aca327b",
+     "ROW-85cec1b7f625a96f",
+     "ROW-85e6617f003078fb",
+     "ROW-8790ad7918cfdd7b",
+     "ROW-8b50fdd74b1befe4",
+     "ROW-93ac2ca197da734b",
+     "ROW-94ed6b68c3d79f4e",
+     "ROW-95dcbcca5c81e239",
+     "ROW-97011c7d17cac123",
+     "ROW-971bfdede124048a",
+     "ROW-978d2ef494a76938",
+     "ROW-99cfad1b5fbc801f",
+     "ROW-9bcade2472d6f1f0",
+     "ROW-a32f9561dc4280d4",
+     "ROW-a7de661286b45467",
+     "ROW-ab23b446034afb0b",
+     "ROW-b40a6b8cdb16200f",
+     "ROW-b87b5d6dbb77cec8",
+     "ROW-bd2d1f0a1e6f8082",
+     "ROW-bf3054d3ceb096e4",
+     "ROW-c0ac2deb2b0658ab",
+     "ROW-c2d17fdc6e2ca8a9",
+     "ROW-c4da007c5b53d409",
+     "ROW-cf2480d438deeee6",
+     "ROW-d748fdb1cf8dacdd",
+     "ROW-d7d992d9548e83eb",
+     "ROW-dc514b95b62d6c9b",
+     "ROW-e471dbea5c5c875e",
+     "ROW-e61bc95b7403577c",
+     "ROW-e7d0d89ce591bfac",
+     "ROW-e836baf544a57fe6",
+     "ROW-ef550cd8ea332ca3",
+     "ROW-f56adf6907c683ae",
+     "ROW-f56e5f79ca1cc13f",
+     "ROW-fa2e5bcf3145c502",
+     "ROW-fe6e27b80d65e5e9",
+     "ROW-fe8679047ae7aff4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-26-000068",
+     "text": "Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 % (6)(7)(8)(16)(30) Dwy"
+    },
+    {
+     "accession": "0001859919-26-000068",
+     "text": "ROI Solutions LLC Revolver SOFR + 5.25 %, 9.0 % Cash 10/24 10/29 - ( 36 ) ( 259 ) - % (6)(7)(8)(16)(30) RPX Co"
+    },
+    {
+     "accession": "0001859919-26-000068",
+     "text": "Prestige Brands Inc First Lien Senior Secured Term Loan SOFR + 2.00 %, 5.2 % Cash 05/26 06/33 - ( 67 ) ( 67 ) "
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Cost sign lost or flipped by the extraction: tested on all 84 flagged rows against the cost on each row's own printed line (scan_all.py and an36.sql in sandbox bpzf): 84 of 84 equal, sign included.",
+    "Negative cost on a funded loan: the two term-loan lines (Prestige Brands) print no par, so they are undrawn lines; every flagged row prints par as a dash or has no par."
+   ],
+   "next_action": "Proposal PD-C107-1859919-d253 (as_filed, reason key undrawn-line-negative-cost-from-unamortized-fees, 84 rows) awaits the owner or the check."
+  },
+  {
+   "finding_id": "RVQ_BLK_3ade60c95568",
+   "coverage": {
+    "affected_rows": [
+     "ROW-38865cc3070ae7a3",
+     "ROW-e8d87677eb896e89"
+    ],
+    "reviewed_rows": [
+     "ROW-38865cc3070ae7a3",
+     "ROW-e8d87677eb896e89"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-26-000068",
+     "text": "Canadian Orthodontic Partners Corp. First Lien Senior Secured Term Loan CORRA + 7.00 %, 9.3 % PIK 06/21 12/26 5,510 4,893 320 - % "
+    },
+    {
+     "accession": "0001859919-26-000068",
+     "text": "GPNZ II GmbH First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 571 551 14 - % (3)(6)(7)(30)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Par mis-scaled or read from the wrong column: par 5,510 / 571, cost 4,893 / 551 and fair value 320 / 14 are the printed figures on both lines.",
+    "The loans are performing: both are printed all-PIK with the non-accrual footnote (28) on Canadian Orthodontic; the markdown is the filer's."
+   ],
+   "next_action": "Proposal PD-X06-1859919-d253 (as_filed, new reason x06-marked-down-loan-keeps-printed-par) awaits the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_1887292fcd4a",
+   "coverage": {
+    "affected_rows": [
+     "ROW-3d6797aa93ae72b1",
+     "ROW-f5251f5a0c218532",
+     "ROW-e4223990fb5d94e0"
+    ],
+    "reviewed_rows": [
+     "ROW-3d6797aa93ae72b1",
+     "ROW-f5251f5a0c218532",
+     "ROW-e4223990fb5d94e0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-24-000053",
+     "text": "Royalty Rights N/A 05/24 N/A 9,678 9,678 0.6 % (7) 9,977 19,362 19,356 Compass P"
+    },
+    {
+     "accession": "0001859919-24-000053",
+     "text": "Technology Service Stream BidCo Pty Ltd Technology First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 "
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The finding was raised on 24 rows at 2024-06-30; 21 were real errors (names cut at the comma, Ocelot LL, GPZN, Fitzmark, FineLine swap: corrected by context in sandbox bpzf, rule now silent on them).",
+    "The three rows left: Coherus Royalty Rights and REP SEKO Priority RCF are continuation lines whose printed row has no company cell; the published name equals the company printed on the line above (checked in scan_all.py carried-issuer). Technology Service Stream BidCo Pty Ltd is the printed company name (also in every later quarter)."
+   ],
+   "next_action": "check_repair_request REQ-bpcc-issuer_name_printed-continuation-1 (DC-0001859919-da8501bd6b): the rule takes the instrument cell of a continuation line as the name; no disposition, the data are right."
+  },
+  {
+   "finding_id": "RVQ_BLK_6e1332b62e95",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a461bb30b48fc4b2"
+    ],
+    "reviewed_rows": [
+     "ROW-a461bb30b48fc4b2"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-24-000075",
+     "text": "Royalty Rights N/A 05/24 08/50 9,475 9,546 0.5 % (7) 9,977 19,170 19,284 14 Bari"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Raised on 31 rows at 2024-09-30; 30 were real errors fixed by context correction (including the two lines published with the bare words Common Stock and Revolver as issuer).",
+    "The row left is Coherus Royalty Rights, a continuation line under Coherus Biosciences, Inc.; the published name is the company printed above it."
+   ],
+   "next_action": "Same check_repair_request as RVQ_BLK_1887292fcd4a."
+  },
+  {
+   "finding_id": "RVQ_BLK_2b2cc08572b4",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2af758ac2c80f90c"
+    ],
+    "reviewed_rows": [
+     "ROW-2af758ac2c80f90c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-26-000068",
+     "text": "Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 % (6)(7)(8)(16)(30) Dwy"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-extracted: published 1.7 equals the printed 1.7 on the revolver line; fair value is ( 141 ) so fair value over net assets is -0.005.",
+    "The 1.7 is the term loan own percent repeated on the revolver line (same row accepted for this fund at 2025-09-30 and 2025-12-31)."
+   ],
+   "next_action": "Proposal PD-pct_of_net_assets_identity-1859919-d253 (as_filed, reason key pct-identity-percent-printed-on-wrong-row)."
+  },
+  {
+   "finding_id": "RVQ_BLK_757f60b2205c",
+   "coverage": {
+    "affected_rows": [
+     "ROW-160cb591b97af6b0"
+    ],
+    "reviewed_rows": [
+     "ROW-160cb591b97af6b0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-23-000018",
+     "text": "Common Stock ( 354,281 shares) N/A 05/22 N/A 452 452 - % (3) (6) (31) (33) 15,19"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "The count printed in the Investment Type cell (354,281) is the count: the tag (36,532,680) and the next quarter's printed 36,533 do not agree with it or with each other; three scales in two quarters.",
+    "A shared normaliser proxy (derived_proxy) gave the count: no, shares_held_source is the tag."
+   ],
+   "next_action": "Open owner convention on share-count units (not changed here); evidence recorded for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_2e81146d2ef8",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8095fd2d8b3a2e7e"
+    ],
+    "reviewed_rows": [
+     "ROW-8095fd2d8b3a2e7e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001859919-23-000040",
+     "text": "Common Stock ( 36,533 shares) N/A 05/22 N/A 452 431 - % (3) (6) (30) (32) 15,620"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Printed 36,533 is the tag 36,532,680 in thousands: consistent with the tag but not with 2023-03-31 (354,281 shares).",
+    "Cost 452 and fair value 431 are as printed; only the count scale differs."
+   ],
+   "next_action": "Same owner convention as RVQ_BLK_757f60b2205c."
+  }
+ ],
  "tests_run": [],
  "not_done": [
-  "No pytest run (no pipeline code changed; make_row_corrections.py gained a loader block only).",
-  "Rates and units not re-compared on bpxe after the round-2 corrections (bpxe vs bpxd diff checked instead: only the 9 intended rows changed).",
-  "Maturity and reference rate on old-layout continuation rows (shared field-status step) not fixed.",
-  "Totals not re-tied row by row; fair value and cost columns are unchanged against f15a (holdings_field_diff).",
-  "Industry, names and non-accrual not compared with the page."
+  "No pytest: no pipeline code changed.",
+  "The 133 all-in corrections (corr_allin_pending.csv) are not appended (owner D-092).",
+  "The Acogroup two-PIK-figure cell without a cash figure (6.4 % PIK, 4.0 % PIK) remains an open convention and is unchanged; only cells that print a cash figure were stated as cash + PIK.",
+  "Chains: the 40 removed and 69 created adjacent pairs were judged by acquisition date, maturity, spread and par, not one by one on the page.",
+  "Share-count units (Xeinadin, Application Boot Camp, JPMorgan) not changed (owner convention).",
+  "Revolver lines print no lien (about 1,300 rows): not derivable from the page.",
+  "Independent review and the 20-row page sample are the orchestrator's."
  ]
 }

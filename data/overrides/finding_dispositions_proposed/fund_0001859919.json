@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "bpxe",
+ "sandbox": "bpzf",
  "dispositions": [
   {
    "disposition_id": "PD-C110-1859919-1",
@@ -9,14 +9,21 @@
    "engine": "row_validation",
    "rule_name": "C110",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-25-000033 \"Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - %\" 1 104",
-   "ciks": ["0001859919"],
-   "quarters": ["2025-03-31"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
    "statement": "Negative principal, cost and fair value on an undrawn revolver: the page prints all three in brackets and the filer tags them so. No fix: the published figures are the printed ones.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001859919-25-000033",
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
      "verbatim": "Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - %",
-     "quote": "Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - % (par, cost and fair value all printed negative)"}
+     "quote": "Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - % (par, cost and fair value all printed negative)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxc); not accepted",
    "decided_on": "2026-10-14"
@@ -28,18 +35,31 @@
    "engine": "weak",
    "rule_name": "fmt_principal_amount",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-25-000033 \"Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - %\" 1 104 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000022 \"Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - %\" 1 143",
-   "ciks": ["0001859919"],
-   "quarters": ["2025-03-31", "2025-12-31"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
    "statement": "The same negative principal on undrawn lines, printed in brackets (Momentum Textiles 2025-03-31, Raven Acquisition 2025-12-31).",
    "basis": "read",
-   "addresses_verdict": {"2025-12-31": "The reviewer cited a repeated column header ('Portfolio Company | Investment Type ... | Principal Amount | ...') read as a row whose principal field held the text 'Principal Amount'. No such row is published: no 2025-12-31 row of this fund names 'Principal Amount' or 'Portfolio Company', and every published principal is numeric. The one value the check flags (1 of 663 rows) is Raven Acquisition's negative par of -134,000, which is the printed '( 134 )'. The verdict does not stand."},
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer cited a repeated column header ('Portfolio Company | Investment Type ... | Principal Amount | ...') read as a row whose principal field held the text 'Principal Amount'. No such row is published: no 2025-12-31 row of this fund names 'Principal Amount' or 'Portfolio Company', and every published principal is numeric. The one value the check flags (1 of 663 rows) is Raven Acquisition's negative par of -134,000, which is the printed '( 134 )'. The verdict does not stand."
+   },
    "evidence": [
-    {"source": "filing", "accession": "0001859919-25-000033",
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
      "verbatim": "Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - %",
-     "quote": "Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - % (par printed negative)"},
-    {"source": "filing", "accession": "0001859919-26-000022",
+     "quote": "Momentum Textiles, LLC Revolver SOFR + 5.50 %, 9.8 % Cash 03/25 03/30 ( 14 ) ( 27 ) ( 27 ) - % (par printed negative)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
      "verbatim": "Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - %",
-     "quote": "Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - % (par printed negative)"}
+     "quote": "Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - % (par printed negative)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxc); not accepted",
    "decided_on": "2026-10-14"
@@ -51,14 +71,22 @@
    "engine": "weak",
    "rule_name": "fmt_principal_amount_usd",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000022 \"Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - %\" 1 143",
-   "ciks": ["0001859919"],
-   "quarters": ["2025-03-31", "2025-12-31"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31"
+   ],
    "statement": "The dollar copy of the same negative principal (dollar loans; the copy equals the printed figure).",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001859919-26-000022",
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
      "verbatim": "Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - %",
-     "quote": "Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - % (a dollar loan; par printed negative)"}
+     "quote": "Raven Acquisition Holdings, LLC First Lien Senior Secured Term Loan SOFR + 3.00 %, 6.7 % Cash 04/25 11/31 ( 134 ) ( 134 ) ( 134 ) - % (a dollar loan; par printed negative)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxc); not accepted",
    "decided_on": "2026-10-14"
@@ -70,15 +98,24 @@
    "engine": "row_validation",
    "rule_name": "X01",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-24-000053 \"Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 %\" 1 107",
-   "ciks": ["0001859919"],
-   "quarters": ["2024-06-30"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
    "statement": "An equity-labelled row with a rate: the page itself labels Perforce's floating-rate instrument 'Partnership Units' and prints a margin, a cash rate and a maturity. Published as the page labels it; reclassing it would be a judgement against the filer's label.",
    "basis": "read",
-   "addresses_verdict": {"2024-06-30": "The reviewer found a PRIVATE_EQUITY row carrying debt economics (13.4 rate, maturity 07/27). The rate is printed on the row; the class follows the page's own label 'Partnership Units'. Not fixed: the filer's label and the economics disagree on the page itself."},
+   "addresses_verdict": {
+    "2024-06-30": "The reviewer found a PRIVATE_EQUITY row carrying debt economics (13.4 rate, maturity 07/27). The rate is printed on the row; the class follows the page's own label 'Partnership Units'. Not fixed: the filer's label and the economics disagree on the page itself."
+   },
    "evidence": [
-    {"source": "filing", "accession": "0001859919-24-000053",
+    {
+     "source": "filing",
+     "accession": "0001859919-24-000053",
      "verbatim": "Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 %",
-     "quote": "Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 % (Perforce Software: units label with a floating coupon)"}
+     "quote": "Partnership Units ( 7,408.6 units) SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 % (Perforce Software: units label with a floating coupon)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxc); not accepted",
    "decided_on": "2026-10-14"
@@ -90,18 +127,31 @@
    "engine": "identity",
    "rule_name": "pct_of_net_assets_identity",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-25-000087 \"Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 44,545 43,992 43,982 0.3 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 - ( 115 ) ( 117 ) 1.7 %\" 1 237 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000022 \"Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 44,545 44,008 44,055 1.6 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 - ( 111 ) ( 102 ) 1.6 %\" 1 237",
-   "ciks": ["0001859919"],
-   "quarters": ["2025-09-30", "2025-12-31"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
    "statement": "The filer prints a percent of net assets on the undrawn Durare revolver that belongs to the term loan (1.7 % against a nil value at 2025-09-30, with 0.3 % on the 44.0M loan; 1.6 % on both rows at 2025-12-31). Published is the printed and tagged percent; the calculated percent is right.",
    "basis": "read",
-   "addresses_verdict": {"2025-12-31": "The reviewer found the Durare revolver (fair value (102)) carrying 1.6 % of net assets, the term loan's figure, and said the revolver's percent should be about zero. That is right about the economics, but it is the filer's printed and tagged figure (line below), not an extraction error: the build publishes what the page prints. Not fixed by a row correction because pct_of_net_assets is not a correctable field; pct_of_net_assets_calculated (from fair value and net assets) is already right on both rows."},
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer found the Durare revolver (fair value (102)) carrying 1.6 % of net assets, the term loan's figure, and said the revolver's percent should be about zero. That is right about the economics, but it is the filer's printed and tagged figure (line below), not an extraction error: the build publishes what the page prints. Not fixed by a row correction because pct_of_net_assets is not a correctable field; pct_of_net_assets_calculated (from fair value and net assets) is already right on both rows."
+   },
    "evidence": [
-    {"source": "filing", "accession": "0001859919-25-000087",
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000087",
      "verbatim": "Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 44,545 43,992 43,982 0.3 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 - ( 115 ) ( 117 ) 1.7 %",
-     "quote": "Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 44,545 43,992 43,982 0.3 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 - ( 115 ) ( 117 ) 1.7 % (percents swapped on the page)"},
-    {"source": "filing", "accession": "0001859919-26-000022",
+     "quote": "Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 44,545 43,992 43,982 0.3 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 9.0 % Cash 08/25 08/32 - ( 115 ) ( 117 ) 1.7 % (percents swapped on the page)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
      "verbatim": "Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 44,545 44,008 44,055 1.6 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 - ( 111 ) ( 102 ) 1.6 %",
-     "quote": "Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 44,545 44,008 44,055 1.6 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 - ( 111 ) ( 102 ) 1.6 % (the revolver's nil value printed with 1.6 %)"}
+     "quote": "Durare Bidco, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 44,545 44,008 44,055 1.6 % (7)(8)(16)(30) (31) Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.6 % Cash 08/25 08/32 - ( 111 ) ( 102 ) 1.6 % (the revolver's nil value printed with 1.6 %)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxc); not accepted",
    "decided_on": "2026-10-14"
@@ -113,15 +163,24 @@
    "engine": "row_validation",
    "rule_name": "C103",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-25-000033 \"Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - %\" 1 133",
-   "ciks": ["0001859919"],
-   "quarters": ["2025-03-31"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
    "statement": "Marmoutier's term loan is printed with a positive par and cost and a negative fair value of (24). The published value is the printed one; no unfunded marker explains it, but the page decides what is filed.",
    "basis": "read",
-   "addresses_verdict": {"2025-03-31": "The reviewer found a positive-cost term loan with a negative fair value and no unfunded marker and called it a genuine value defect. The figure is the printed one (line below), so it is not an extraction error; whether the filer's mark is right is outside what the build can fix."},
+   "addresses_verdict": {
+    "2025-03-31": "The reviewer found a positive-cost term loan with a negative fair value and no unfunded marker and called it a genuine value defect. The figure is the printed one (line below), so it is not an extraction error; whether the filer's mark is right is outside what the build can fix."
+   },
    "evidence": [
-    {"source": "filing", "accession": "0001859919-25-000033",
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
      "verbatim": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - %",
-     "quote": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - % (fair value printed negative)"}
+     "quote": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - % (fair value printed negative)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxc); not accepted",
    "decided_on": "2026-10-14"
@@ -133,17 +192,27 @@
    "engine": "fund_financials",
    "rule_name": "F27",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000022 \"Ratio of net investment income to average net assets(3)(4) 11.05 % 11.\" 1 80 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000022 \"Total Investments, December 31, 2023 ( 171.6 %)* \\$ 4,898,459 \\$ 4,876,989\" 1 82",
-   "ciks": ["0001859919"],
-   "quarters": ["2025-12-31"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
    "statement": "The yield the check compares is the filer's ratio of net investment income to average net assets, 11.05 %. The fund is levered (investments 171.6 % of net assets), so income on net assets exceeds the holdings' weighted coupon; the excess is 2.01 points against a 2.00 bar, and 0.73 to 1.78 in the other twelve quarters. No figure is wrong.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001859919-26-000022",
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
      "verbatim": "Ratio of net investment income to average net assets(3)(4) 11.05 % 11.",
-     "quote": "Ratio of net investment income to average net assets(3)(4) 11.05 % 11. (the published income_yield_pct is this printed ratio)"},
-    {"source": "filing", "accession": "0001859919-26-000022",
+     "quote": "Ratio of net investment income to average net assets(3)(4) 11.05 % 11. (the published income_yield_pct is this printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
      "verbatim": "Total Investments, December 31, 2023 ( 171.6 %)* $ 4,898,459 $ 4,876,989",
-     "quote": "Total Investments, December 31, 2023 ( 171.6 %)* $ 4,898,459 $ 4,876,989 (the filer's 2025 schedule total, mislabelled 2023 on the page: investments are 171.6 % of net assets)"}
+     "quote": "Total Investments, December 31, 2023 ( 171.6 %)* $ 4,898,459 $ 4,876,989 (the filer's 2025 schedule total, mislabelled 2023 on the page: investments are 171.6 % of net assets)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxd); not accepted",
    "decided_on": "2026-10-14"
@@ -155,29 +224,595 @@
    "engine": "provenance_reverify",
    "rule_name": "merged_context_excluded",
    "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-23-000040 \"Dwyer Instruments, Inc. Electric First Lien Senior Secured Term Loan SOFR + 5.75 %, 11.1 % Cash 07/21 07/27 17,313 16,969 17,021 1.4 %\" 1 144 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-23-000073 \"Ellkay, LLC Healthcare and Pharmaceuticals First Lien Senior Secured Term Loan SOFR + 6.25 %, 11.8 % Cash 09/21 09/27 5,727 5,646 5,343 0.4 %\" 1 151 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-24-000034 \"LLC Units ( 207,921 units) N/A 03/24 N/A 208 208 - %\" 1 62 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-25-000013 \"M-Personal Protection Management GmbH (f/k/a INOS 19-090 GmbH) First Lien Senior Secured Term Loan EURIBOR + 5.38 %, 8.1 % Cash 10/24 10/29 10,355 10,624 10,096 0.5 %\" 1 176 && python scripts/v05_evidence/page_line.py 0001859919 0001859919-25-000087 \"Coastal Marina Holdings, LLC Subordinated Term Loan 8.0 % Cash 11/21 11/31 8,310 7,883 7,931 0.3 %\" 1 108",
-   "ciks": ["0001859919"],
-   "quarters": ["2023-06-30", "2023-09-30", "2024-03-31", "2024-12-31", "2025-09-30"],
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-12-31",
+    "2025-09-30"
+   ],
    "statement": "Each flagged field was filled from a sibling context of the same position (the rate-only context the filer tags beside the valued one; rate_only_contexts adopt_adjacent, D-103) and so cannot be replayed from the row's own context. Every filled value was read on the printed row and equals it: 2023-06-30 Dwyer 5.75 / 11.1, Ellkay 6.25 / 11.5, Finexvet 6.5 / 9.8, Innovad 6.5 / 8.2, SSCP Spring 5.75 / 10.2; 2023-09-30 Ellkay 6.25 / 11.8; 2024-03-31 SVI International units 207,921; 2024-12-31 M-Personal Protection 5.38 / 8.1; 2025-09-30 Coastal Marina 8.0. No fix: the values are right; the check cannot see the sibling context.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001859919-23-000040",
+    {
+     "source": "filing",
+     "accession": "0001859919-23-000040",
      "verbatim": "Dwyer Instruments, Inc. Electric First Lien Senior Secured Term Loan SOFR + 5.75 %, 11.1 % Cash 07/21 07/27 17,313 16,969 17,021 1.4 %",
-     "quote": "Dwyer Instruments, Inc. Electric First Lien Senior Secured Term Loan SOFR + 5.75 %, 11.1 % Cash 07/21 07/27 17,313 16,969 17,021 1.4 % (published spread 5.75, rate 11.1)"},
-    {"source": "filing", "accession": "0001859919-23-000073",
+     "quote": "Dwyer Instruments, Inc. Electric First Lien Senior Secured Term Loan SOFR + 5.75 %, 11.1 % Cash 07/21 07/27 17,313 16,969 17,021 1.4 % (published spread 5.75, rate 11.1)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-23-000073",
      "verbatim": "Ellkay, LLC Healthcare and Pharmaceuticals First Lien Senior Secured Term Loan SOFR + 6.25 %, 11.8 % Cash 09/21 09/27 5,727 5,646 5,343 0.4 %",
-     "quote": "Ellkay, LLC Healthcare and Pharmaceuticals First Lien Senior Secured Term Loan SOFR + 6.25 %, 11.8 % Cash 09/21 09/27 5,727 5,646 5,343 0.4 % (published 6.25 / 11.8)"},
-    {"source": "filing", "accession": "0001859919-24-000034",
+     "quote": "Ellkay, LLC Healthcare and Pharmaceuticals First Lien Senior Secured Term Loan SOFR + 6.25 %, 11.8 % Cash 09/21 09/27 5,727 5,646 5,343 0.4 % (published 6.25 / 11.8)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-24-000034",
      "verbatim": "LLC Units ( 207,921 units) N/A 03/24 N/A 208 208 - %",
-     "quote": "LLC Units ( 207,921 units) N/A 03/24 N/A 208 208 - % (SVI International; published units 207,921)"},
-    {"source": "filing", "accession": "0001859919-25-000013",
+     "quote": "LLC Units ( 207,921 units) N/A 03/24 N/A 208 208 - % (SVI International; published units 207,921)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000013",
      "verbatim": "M-Personal Protection Management GmbH (f/k/a INOS 19-090 GmbH) First Lien Senior Secured Term Loan EURIBOR + 5.38 %, 8.1 % Cash 10/24 10/29 10,355 10,624 10,096 0.5 %",
-     "quote": "M-Personal Protection Management GmbH (f/k/a INOS 19-090 GmbH) First Lien Senior Secured Term Loan EURIBOR + 5.38 %, 8.1 % Cash 10/24 10/29 10,355 10,624 10,096 0.5 % (published 5.38 / 8.1)"},
-    {"source": "filing", "accession": "0001859919-25-000087",
+     "quote": "M-Personal Protection Management GmbH (f/k/a INOS 19-090 GmbH) First Lien Senior Secured Term Loan EURIBOR + 5.38 %, 8.1 % Cash 10/24 10/29 10,355 10,624 10,096 0.5 % (published 5.38 / 8.1)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000087",
      "verbatim": "Coastal Marina Holdings, LLC Subordinated Term Loan 8.0 % Cash 11/21 11/31 8,310 7,883 7,931 0.3 %",
-     "quote": "Coastal Marina Holdings, LLC Subordinated Term Loan 8.0 % Cash 11/21 11/31 8,310 7,883 7,931 0.3 % (published rate 8.0)"}
+     "quote": "Coastal Marina Holdings, LLC Subordinated Term Loan 8.0 % Cash 11/21 11/31 8,310 7,883 7,931 0.3 % (published rate 8.0)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox bpxd); not accepted",
    "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-C107-1859919-d253",
+   "class": "as_filed",
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Cost is negative on 84 lines (undrawn revolvers and delayed draws, plus two term-loan lines with no par): the page prints the cost in brackets and the fair value beside it, and the build publishes the printed figures. Checked row by row against each row's own printed line (scratch/fund_runs/0001859919/scan_all.py and an36.sql, sandbox bpzf: the published cost of all 84 flagged rows equals the cost on the row's own printed line). No fix applies: the negative cost is the filer's.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000068",
+     "quarter": "2026-06-30",
+     "verbatim": "Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 % (6)(7)(8)(16)(30) Dwyer Instruments, Inc.",
+     "quote": "Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 % (6)(7)(8)(16)(30) Dwyer Instruments, Inc. (cost (103), fair value (141))"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000068",
+     "quarter": "2026-06-30",
+     "verbatim": "ROI Solutions LLC Revolver SOFR + 5.25 %, 9.0 % Cash 10/24 10/29 - ( 36 ) ( 259 ) - % (6)(7)(8)(16)(30) RPX Corporation First Lien",
+     "quote": "ROI Solutions LLC Revolver SOFR + 5.25 %, 9.0 % Cash 10/24 10/29 - ( 36 ) ( 259 ) - % (6)(7)(8)(16)(30) RPX Corporation First Lien (cost (36), fair value (259))"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000068",
+     "quarter": "2026-06-30",
+     "verbatim": "Prestige Brands Inc First Lien Senior Secured Term Loan SOFR + 2.00 %, 5.2 % Cash 05/26 06/33 - ( 67 ) ( 67 ) - % (3)(6)(8)(16) (3",
+     "quote": "Prestige Brands Inc First Lien Senior Secured Term Loan SOFR + 2.00 %, 5.2 % Cash 05/26 06/33 - ( 67 ) ( 67 ) - % (3)(6)(8)(16) (3 (cost (67), fair value (67))"
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-02801486eb08df27"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0ad72dac295b19f4"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0b367bec4c16c1f3"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0c98144fbd9823c1"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0d244a9167fea3f6"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1172a4a17b5764cd"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-11bfdb459f5362cc"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-13fcec70f6d0566b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1aded10f4b2c5573"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1b2adb781300ad9c"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1c7a30aa16dc6065"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2380ac7925090726"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-26751504a4254e99"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-27b8f250d0647a77"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2af758ac2c80f90c"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-315a3770362c920f"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-31cda53279319b70"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-35bbae03efdf5118"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3ae10c7feda4a026"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3b4dafa2de3fe878"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3dd4724c67ce94ba"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3e35ef7d8f9d5421"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3f73ce1cf748e45a"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-40cbbe1f8874d25e"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4107323f4d1cb9cf"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-41ee61595f48d0aa"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-42c4199e6778bf4b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-450c2b9a2e488ea3"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-49124096d66e19d2"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4fc6148b859cde77"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-51f90f9dd9375da6"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-53fb10564cc2f16a"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-54176997b9fc1777"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-59870c76e30f93b5"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5bc3c15ca566eed3"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5d8305e86974b0f2"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-649909424dc0ad60"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-656a7af876565a29"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6b36dae015d5c76f"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6e65aebf89795dd6"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7359dea1e51db146"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-741d040023112e22"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7838f41d5100986d"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-78f9be3d80820975"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7aa5f25f992ab14b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-80989b4d25fe6632"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8290d85339936d89"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8588aa631aca327b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-85cec1b7f625a96f"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-85e6617f003078fb"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8790ad7918cfdd7b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8b50fdd74b1befe4"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-93ac2ca197da734b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-94ed6b68c3d79f4e"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-95dcbcca5c81e239"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-97011c7d17cac123"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-971bfdede124048a"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-978d2ef494a76938"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-99cfad1b5fbc801f"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9bcade2472d6f1f0"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a32f9561dc4280d4"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a7de661286b45467"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ab23b446034afb0b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b40a6b8cdb16200f"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b87b5d6dbb77cec8"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bd2d1f0a1e6f8082"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bf3054d3ceb096e4"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c0ac2deb2b0658ab"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c2d17fdc6e2ca8a9"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c4da007c5b53d409"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cf2480d438deeee6"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d748fdb1cf8dacdd"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d7d992d9548e83eb"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-dc514b95b62d6c9b"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e471dbea5c5c875e"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e61bc95b7403577c"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e7d0d89ce591bfac"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e836baf544a57fe6"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ef550cd8ea332ca3"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f56adf6907c683ae"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f56e5f79ca1cc13f"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fa2e5bcf3145c502"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fe6e27b80d65e5e9"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fe8679047ae7aff4"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000068 \"ROI Solutions LLC Revolver SOFR + 5.25 %, 9.0 % Cash 10/24 10/29 - ( 36 ) ( 259 ) - %\" 1 130",
+   "decided_by": "PROPOSED by agent:fund-bpcc-20261114 (production batch b1112b packet, sandbox bpzf); not accepted",
+   "decided_on": "2026-11-14"
+  },
+  {
+   "disposition_id": "PD-X06-1859919-d253",
+   "class": "as_filed",
+   "reason_key": "x06-marked-down-loan-keeps-printed-par",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Two loans the filer has written down far below par: Canadian Orthodontic (par 5,510, cost 4,893, fair value 320, all PIK, non-accrual footnote) and GPNZ II (par 571, cost 551, fair value 14, all PIK). The page prints these figures and the build publishes them. No fix applies: principal far above fair value is the markdown.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000068",
+     "quarter": "2026-06-30",
+     "verbatim": "Canadian Orthodontic Partners Corp. First Lien Senior Secured Term Loan CORRA + 7.00 %, 9.3 % PIK 06/21 12/26 5,510 4,893 320 - % ",
+     "quote": "Canadian Orthodontic Partners Corp. First Lien Senior Secured Term Loan CORRA + 7.00 %, 9.3 % PIK 06/21 12/26 5,510 4,893 320 - %  (par 5,510 against fair value 320)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000068",
+     "quarter": "2026-06-30",
+     "verbatim": "GPNZ II GmbH First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 571 551 14 - % (3)(6)(7)(30) Grifols International Service",
+     "quote": "GPNZ II GmbH First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 571 551 14 - % (3)(6)(7)(30) Grifols International Service (par 571 against fair value 14)"
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-38865cc3070ae7a3"
+    },
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e8d87677eb896e89"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000068 \"GPNZ II GmbH First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 571 551 14 - %\" 1 130",
+   "decided_by": "PROPOSED by agent:fund-bpcc-20261114 (production batch b1112b packet, sandbox bpzf); not accepted",
+   "decided_on": "2026-11-14"
+  },
+  {
+   "disposition_id": "PD-pct_of_net_assets_identity-1859919-d253",
+   "class": "as_filed",
+   "reason_key": "pct-identity-percent-printed-on-wrong-row",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001859919"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "One row of 874 fails: the undrawn Durare Bidco revolver (fair value -141k) carries the printed percent 1.7, which is the term loan's own percent (48,868 prints 1.7) repeated on the revolver line; the same line was accepted for this fund at 2025-09-30 and 2025-12-31. The published percent is the printed one; the recomputed percent (-0.005) is in pct_of_net_assets_calculated. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000068",
+     "quarter": "2026-06-30",
+     "verbatim": "Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 % (6)(7)(8)(16)(30) Dwyer Instruments, Inc.",
+     "quote": "Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 % (6)(7)(8)(16)(30) Dwyer Instruments, Inc. (revolver line: cost (103), fair value (141), percent printed 1.7)"
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001859919",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2af758ac2c80f90c"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001859919 0001859919-26-000068 \"Durare Bidco, LLC Revolver SOFR + 4.75 %, 8.4 % Cash 08/25 08/32 - ( 103 ) ( 141 ) 1.7 %\" 1 130",
+   "decided_by": "PROPOSED by agent:fund-bpcc-20261114 (production batch b1112b packet, sandbox bpzf); not accepted",
+   "decided_on": "2026-11-14"
   }
  ]
 }

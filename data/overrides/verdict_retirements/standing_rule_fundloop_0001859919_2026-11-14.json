@@ -1,0 +1,283 @@
+{
+ "_note": "Barings Private Credit Corp retirements (fund agent bpz run, 2026-11-14) under the owner standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1859919-01",
+   "review_id": "RVQ_REV_c8ff9f9dc987",
+   "verdict_sha256": "d07bb91ae9e9a08badd8c3565d7e2df439ee10f210906b378f49201fceb28015",
+   "cik": "0001859919",
+   "engine": "fund_financials",
+   "rule_name": "F26",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found the extracted holdings total (5,026.7M) above the filed total investments (4,876.989M), so the leverage views disagreed. In sandbox bpzh the published-basis holdings of the quarter equal the printed total investments at fair value, published borrowings equal the sum of the printed debt lines (credit facilities, debt securitization, notes), and the F26 leverage views agree within 20 points.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published-basis holdings 4876989000 vs printed total investments at fair value 4876989000; borrowings 2054238000.0 vs printed debt lines 2054238000; leverage views 0.400 vs 0.417 (diff 0.017) (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
+     "quote": "Total investments at fair value 4,876,989 3,094,065 Cash (restricted cash of $ 11,146 and $ 7,932 as of December 31, 2025 and 2024, respectively) 99,041 108,470 Foreign currencies (cost of $ 23,717 and $ 23,188 as of Dec",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
+     "quote": "Borrowings under credit facilities 950,655 594,357 Debt securitization (net of deferred financing fees) 406,357 406,020 Notes payable (net of deferred financing fees) 697,226 299,602 Total liabilities 2,292,337 1,351,788",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-02",
+   "review_id": "RVQ_REV_4272e3c30bce",
+   "verdict_sha256": "94c6c0b1326e3e9444e975e7704d9b7083e5db49cfd7cb795bc8ea58496259f2",
+   "cik": "0001859919",
+   "engine": "row_validation",
+   "rule_name": "GAV_BDC02",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: The verdict found the GAV comparison denominator missing although the filing prints total investments of 5,156,571 thousand. In sandbox bpzh the reconciliation carries a comparison value equal to the printed total and to the published-basis holdings sum.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "comparison_value 5156571000.0 vs printed total investments at fair value 5156571000; published-basis holdings 5156571000; status PASS (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000041",
+     "quote": "Total investments at fair value 5,156,571 4,876,989 Cash (restricted cash of $ 21,384 and $ 11,146 as of March 31, 2026 and December 31, 2025, respectively) 148,932 99,041 Foreign currencies (cost of $ 18,634 and $ 23,71",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-03",
+   "review_id": "RVQ_REV_65e57c64427f",
+   "verdict_sha256": "82a85eadb193fd980aa8f90ea956a8cc08cd44b1a3af0a2f261e17f8f727f259",
+   "cik": "0001859919",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found the extracted income yield inconsistent with the filing (printed 11.05 percent) so F16 failed on a scale error. In sandbox bpzh the published income yield equals the printed ratio and F16 passes.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published income_yield_pct 11.05 vs printed 11.05; F16 status PASS (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-26-000022",
+     "quote": "Ratio of net investment income to average net assets(3)(4) 11.05 % 11.91 % 12.21 % 9.82 % 9.26 % Portfolio turnover ratio(4)(5) 32.94 % 25.89 % 18.02 % 12.39 % 20.69 % Total return(6) 9.48 % 11.92 % 13.30 % 8.43 % 7.03 %",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-04",
+   "review_id": "RVQ_REV_38f1998d4f0d",
+   "verdict_sha256": "5039a57ed9ef55c0a5bf286e4e3a6cd10ec8bcebc6977c7f74a583c784bcb31b",
+   "cik": "0001859919",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "report_date": "2023-09-30",
+   "reason": "Standing rule D-252: The verdict found four duplicate position keys (Omni Intermediate Holdings) and read them as an extraction gap that under-specifies the identifier. In sandbox bpzh every published row of the quarter is one row per context, equal to its own printed fair value, and the two Omni tranches are two rows with their own acquisition dates and amounts (05/21 par 19,971; 06/22 par 4,962): distinct positions on distinct printed lines, not duplicates.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "517 published rows read, 517 contexts unique=True, 0 rows whose fair value differs from their own printed line; Omni tranches [('05/21', '19971000.0'), ('06/22', '4962000.0')] (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-23-000073",
+     "quote": "Omni Intermediate Holdings, LLC Transportation First Lien Senior Secured Term Loan SOFR + 5.00 %, 10.4 % Cash 05/21 12/26 19,971 19,795 19,861 1.6 % (5) (6) (7) (8) (16) First Lien Senior Secured Term Loan SOFR + 5.00 %,",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-23-000073",
+     "quote": "First Lien Senior Secured Term Loan SOFR + 5.00 %, 10.4 % Cash 06/22 12/26 4,962 4,878 4,931 0.4 % (5) (6) (7) (16) (29) 24,933 24,673 24,792 Options Technology Ltd. Computer Services First Lien Senior Secured Term Loan ",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-05",
+   "review_id": "RVQ_REV_97983b1e6a8a",
+   "verdict_sha256": "eb7138eed33625995dab7fb21c1fa20959a59ceeace394e7d74eacc47f3ef121",
+   "cik": "0001859919",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "report_date": "2025-03-31",
+   "reason": "Standing rule D-252: The verdict found a negative fair value on a funded first-lien term loan (Marmoutier, par 2,654, cost 2,415, fair value ( 24 )) and grounded the flag in the source row. In sandbox bpzh the row is published with par, cost and fair value equal to the printed line, sign included; the negative figure is the filer's.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Marmoutier term loan: published par 2654000.0 cost 2415000.0 fair value -24000.0 vs printed 2654000.0 2415000.0 -24000.0 (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
+     "quote": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - % (3)(7)(8)(11) (28)(30)(31) Marmoutier Holding B.V. Revolver EURIBOR + 5.75 %, 6.7 % PIK 12/21 06",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-06",
+   "review_id": "RVQ_REV_25564d9f6fd3",
+   "verdict_sha256": "680bfe1162c4dda025bc2da8a96938c2b7e4de2301ae1ec635dd3161ec7e6f5e",
+   "cik": "0001859919",
+   "engine": "weak",
+   "rule_name": "fmt_pct_of_net_assets",
+   "report_date": "2024-06-30",
+   "reason": "Standing rule D-252: The verdict found the schedule total (149.5 percent of net assets) leaking into the position rows. In sandbox bpzh no published row of the quarter has a percent of net assets of 100 or more or is a total row, and each row's percent equals its own printed percent; the 149.5 percent figure is the printed total line only.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "575 published rows; 0 with a percent of net assets of 100 or more; 0 differ from their own printed percent; 0 named Total Investments (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-24-000053",
+     "quote": "Total Investments, June 30, 2024 ( 149.5 %)* $ 2,347,320 $ 2,643,030 $ 2,631,138 Derivative Instruments Interest Rate Swaps: Description Company Receives Company Pays Maturity Date Notional Amount Value Hedged Instrument",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-07",
+   "review_id": "RVQ_BLK_f22c87e78f81",
+   "verdict_sha256": "245eaf0408892a3251f92cca3334bac64f0c1fd51d13e9c91f32e5f0dbbbaccf",
+   "cik": "0001859919",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2023-03-31",
+   "reason": "Standing rule D-252: The verdict found interest_rate holding only the cash leg where the line prints cash and PIK legs (Canadian Orthodontic 3.5 + 8.5, Amalfi 7.0 + 9.0). In sandbox bpzh each cited row is published with interest_rate = cash + PIK (12.0, 16.0), pik_rate = PIK and the cash leg separately, as is every cash-plus-PIK line of the quarter.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Amalfi Midco: published rate 16.0 pik 9.0 cash 7.000000000000001 vs printed all-in 16.0 pik 9.0 cash 7.0; Canadian Orthodontic Partners Corp.: published rate 12.0 pik 8.5 cash 3.5000000000000004 vs printed all-in 12.0 pik 8.5 cash 3.5; every cash+PIK line of the quarter (13) has rate = cash + PIK and pik = PIK (0 differ) (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-23-000018",
+     "quote": "Canadian Orthodontic Partners Corp. Healthcare First Lien Senior Secured Term Loan CDOR + 7.00 %, 3.5 % Cash, 8.5 % PIK 06/21 03/26 4,119 4,572 3,703 0.3 % (3) (5) (6) (7) (26) Class A Equity ( 500,000 units) N/A 05/22 N",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-23-000018",
+     "quote": "Amalfi Midco Healthcare Subordinated Loan Notes LIBOR + 2.00 %, 7.0 % Cash, 9.0 % PIK 09/22 09/28 4,917 4,450 4,322 0.4 % (3) (6) (9) (33) Class B Common Stock ( 93,165,208 shares) N/A 09/22 N/A 1,040 1,152 0.1 % (3) (6)",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1859919-08",
+   "review_id": "RVQ_BLK_c9bbb24f4b2c",
+   "verdict_sha256": "acf506983183a7535b267635fd191a912380d7d0286d6c5ec0962c0bd3ac66d0",
+   "cik": "0001859919",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2025-03-31",
+   "reason": "Standing rule D-252: The verdict found interest_rate holding only the cash leg on the rows it cites (Acogroup 4.0 cash + 6.4 PIK, A.T. Holdings 6.7 + 7.6, Amalfi 2.0 + 9.0). In sandbox bpzh each cited row is published with interest_rate = cash + PIK (10.4, 14.3, 11.0), pik_rate = PIK and the cash leg separately. The PIK-only loans of the same finding population (rate blank) are the open D-092 question and are not what the verdict claims.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Acogroup: published rate 10.4 pik 6.4 cash 4.0 vs printed all-in 10.4 pik 6.4 cash 4.0; A.T. Holdings II LTD: published rate 14.3 pik 7.6 cash 6.7 vs printed all-in 14.3 pik 7.6 cash 6.7; Amalfi Midco: published rate 11.0 pik 9.0 cash 2.0 vs printed all-in 11.0 pik 9.0 cash 2.0 (sandbox bpzh)"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001859919/retire_check.py (read-only; each check also run on a planted wrong value and fails)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
+     "quote": "4.0 % Cash, EURIBOR + 2.9 % PIK, 6.4 % PIK 03/22 04/28 28,122 28,245 19,517 0.9 % (3)(7)(8)(11) (32) Acogroup First Lien Senior Secured Term Loan EURIBOR + 4.00 %, 6.4 % PIK 05/21 10/26 1,435 1,570 996 - % (3)(7)(8)(11) ",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
+     "quote": "A.T. Holdings II LTD First Lien Senior Secured Term Loan 6.7 % Cash, 7.6 % PIK 11/22 09/29 15,791 14,250 9,964 0.5 % (3)(7)(29)(32) Amalfi Midco Second Lien Senior Secured Term Loan 17.5 % PIK 09/22 10/28 299 301 311 - %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001859919-25-000033",
+     "quote": "Amalfi Midco Subordinated Loan Notes 2.0 % Cash, 9.0 % PIK 09/22 09/28 6,125 5,415 5,819 0.3 % (3)(7)(32) Astra Bidco Limited First Lien Senior Secured Term Loan EURIBOR + 5.75 %, 8.3 % Cash 11/21 11/28 499 493 498 - % (",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python -I scratch/fund_runs/0001859919/retire_check.py bpzh",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-bpcc-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

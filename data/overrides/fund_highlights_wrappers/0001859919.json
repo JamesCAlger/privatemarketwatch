@@ -1,0 +1,93 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001859919",
+ "entity_name": "Barings Private Credit Corp",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-03-31",
+   "field": "borrowings",
+   "value": 1220731000,
+   "evidence": "0001859919-23-000018 balance sheet liabilities: 'Borrowings under credit facilities 861,858'; 'Notes payable (net of deferred financing fees) 301,712'; 'Secured borrowings 57,161'. Borrowings are the sum (1,220,731 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "borrowings",
+   "value": 1207516000,
+   "evidence": "0001859919-23-000040 balance sheet liabilities: 'Borrowings under credit facilities 910,786'; 'Notes payable (net of deferred financing fees) 296,730'. Borrowings are the sum (1,207,516 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "borrowings",
+   "value": 1227003000,
+   "evidence": "0001859919-23-000073 balance sheet liabilities: 'Borrowings under credit facilities 530,142'; 'Debt securitization (net of deferred financing fees) 400,115'; 'Notes payable (net of deferred financing fees) 296,746'. Borrowings are the sum (1,227,003 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "borrowings",
+   "value": 1234767000,
+   "evidence": "0001859919-24-000012 balance sheet liabilities: 'Borrowings under credit facilities 535,467'; 'Debt securitization (net of deferred financing fees) 400,094'; 'Notes payable (net of deferred financing fees) 299,206'. Borrowings are the sum (1,234,767 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "borrowings",
+   "value": 1102084000,
+   "evidence": "0001859919-24-000034 balance sheet liabilities: 'Borrowings under credit facilities 406,899'; 'Debt securitization (net of deferred financing fees) 395,325'; 'Notes payable (net of deferred financing fees) 299,860'. Borrowings are the sum (1,102,084 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "borrowings",
+   "value": 1096290000,
+   "evidence": "0001859919-24-000053 balance sheet liabilities: 'Borrowings under credit facilities 456,278'; 'Debt securitization (net of deferred financing fees) 342,663'; 'Notes payable (net of deferred financing fees) 297,349'. Borrowings are the sum (1,096,290 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "borrowings",
+   "value": 1119413000,
+   "evidence": "0001859919-24-000075 balance sheet liabilities: 'Borrowings under credit facilities 409,413'; 'Debt securitization (net of deferred financing fees) 405,935'; 'Notes payable (net of deferred financing fees) 304,065'. Borrowings are the sum (1,119,413 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "borrowings",
+   "value": 1299979000,
+   "evidence": "0001859919-25-000013 balance sheet liabilities: 'Borrowings under credit facilities 594,357'; 'Debt securitization (net of deferred financing fees) 406,020'; 'Notes payable (net of deferred financing fees) 299,602'. Borrowings are the sum (1,299,979 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "borrowings",
+   "value": 1381234000,
+   "evidence": "0001859919-25-000033 balance sheet liabilities: 'Borrowings under credit facilities 671,534'; 'Debt securitization (net of deferred financing fees) 406,104'; 'Notes payable (net of deferred financing fees) 303,596'. Borrowings are the sum (1,381,234 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "borrowings",
+   "value": 1681344000,
+   "evidence": "0001859919-25-000068 balance sheet liabilities: 'Borrowings under credit facilities 579,739'; 'Debt securitization (net of deferred financing fees) 406,187'; 'Notes payable (net of deferred financing fees) 695,418'. Borrowings are the sum (1,681,344 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "borrowings",
+   "value": 1931374000,
+   "evidence": "0001859919-25-000087 balance sheet liabilities: 'Borrowings under credit facilities 826,604'; 'Debt securitization (net of deferred financing fees) 406,272'; 'Notes payable (net of deferred financing fees) 698,498'. Borrowings are the sum (1,931,374 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "borrowings",
+   "value": 2054238000,
+   "evidence": "0001859919-26-000022 balance sheet liabilities: 'Borrowings under credit facilities 950,655'; 'Debt securitization (net of deferred financing fees) 406,357'; 'Notes payable (net of deferred financing fees) 697,226'. Borrowings are the sum (2,054,238 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "borrowings",
+   "value": 2403410000,
+   "evidence": "0001859919-26-000041 balance sheet liabilities: 'Borrowings under credit facilities 957,521'; 'Debt securitization (net of deferred financing fees) 406,440'; 'Notes payable (net of deferred financing fees) 1,039,449'. Borrowings are the sum (2,403,410 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "borrowings",
+   "value": 2665801000,
+   "evidence": "0001859919-26-000068 balance sheet liabilities: 'Borrowings under credit facilities 861,309'; 'Debt securitization (net of deferred financing fees) 774,365'; 'Notes payable (net of deferred financing fees) 1,030,127'. Borrowings are the sum (2,665,801 thousand); the build published the credit facility line alone, leaving out the debt securitization, the notes and any secured borrowings."
+  }
+ ],
+ "notes": "Borrowings declared from each quarter's balance sheet (all debt lines, carrying amounts net of deferred financing fees). Written by agent:fund-bpcc-20261114 (REQ approved D-263)."
+}
