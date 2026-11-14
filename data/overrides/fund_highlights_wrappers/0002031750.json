@@ -1,0 +1,10 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002031750",
+ "entity_name": "Ares Core Infrastructure Fund",
+ "version": 1,
+ "first_income_year_ends": [
+  "2024-12-31"
+ ],
+ "notes": "Fund began operations 2024-05-07. First income year 2024: 0001628280-25-012670 (10-K, 2024-12-31) prints 'For the period from May 7, 2024 (inception) to December 31, 2024 ... Total income 12,390 ... Total expenses 10,330 ... Net investment income before income taxes 7,239', eight months; the 10-Q for 2024-09-30 (0001628280-25-001722) prints 'Total income 79 79 ... Total expenses 2,151 4,201 ... Net investment loss before income taxes ( 679 ) ( 679 )' (three months and the period to date). The fourth quarter is the period less the filed quarters (12,311 income, 6,129 expenses, 7,918 net investment income before taxes), not 3/8 of the period (4,646 income, 3,874 expenses), which published a fourth quarter on another basis than gross_investment_income (12,311) and net_expenses (4,393 = 5,151 - 758) of the same quarter (first_income_year_ends)."
+}

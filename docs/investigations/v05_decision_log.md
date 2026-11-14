@@ -5861,3 +5861,10 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Fixed (context-keyed corrections): 20 "S + m % PIK" margins published Fixed, 9 fixed coupons tagged as spreads, 5 PIK parts, 23 par currencies (C$ marker; incl. 5 USD loans tagged CAD) with H.10 USD par, 7 names, 5 instruments (H2 swap, Rose Paving, CL Services, Ever Fresh), Varsity maturity, 13 "C +" -> CDOR per legend.
 - Outstanding 9: C107 (171 rows incl. 89 JV; proposal + CR-tbz-1 skip underlying_schedule), X06, C04 (proposals), pik_printed SimiTree typo (informational), pct_identity / nonaccrual_flag (REQ-tbz-1, no D-252 mode), FX01 (fixed, awaits batch), fmt_basis_spread (OWN-tbz-1), F16 2022-12-31 (OWN-tbz-3).
 - Owner evidence for D-031 vs D-217: 424 "X + a % + b % PIK" rows publish spread = a (cash leg); the 20 "S + m % PIK" fixes publish m (total): mixed until ruled. Gate investigation COMPLETE. A clean result is not data correct.
+
+### D-279 Fund loop 2026-11-14: Ares Core Infrastructure Fund (0002031750), sandbox cizc
+
+- Packet (batch b1112b): 16 open. Sonnet fund agent `agent:fund-acif-20261114`, Opus reviewer (full then change-only), Sonnet reader (cizc 0/20). Sandbox outstanding 0.
+- Fixed: 13 issuer names (AEJV "Membership Interest", Covanta, WhiteWater, Tango, Par Petroleum, WEC, Retained Vantage, Project Ruby) and 10 instrument texts via context-keyed corrections (an earlier set blanked 13 instruments; fixed by 19 superseding lines); income_identity 2024-12-31 via highlights wrapper first_income_year_ends (first 10-K covered May 7 - Dec 31 2024; quarter = 10-K less filed quarters; incentive_fee still on the old basis, parked).
+- Retired VR-FL-2031750-01..07: A07 x5 (2025-03-31..2026-03-31: percent printed only on subtotal / total lines; the 2024 single position prints its own percent and is published), E07 (9 unpublished contexts are total / cash equivalents / footnote / roll-forward rows), GAV_BDC02. X08 x5 and C04 carried from the campaign.
+- Left: lien "Unsecured" on senior subordinated loans unsupported by the page; 15 pre-existing cross-maturity chains. Gate investigation COMPLETE. A clean result is not data correct.

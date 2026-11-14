@@ -1,0 +1,514 @@
+{
+ "reviewer_id": "agent:reviewer-acif-20261114-opus",
+ "report_digest": "b6582be951a8317933356799b71fc0171a252ef0e329267069ba850fdbe71df8",
+ "finding_reviews": [],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-correction-blanks-instrument-description",
+   "outcome": "supported",
+   "rationale": "Independently diffed cizc against ciza on all holdings columns (review/names.py): 300 rows both sides, only issuer_name (13), instrument_description (10) and corrected_fields change; no cizc row has a blank instrument_description, so the cizb blanking is repaired by the 19 superseding lines. The mechanism (corrections run before the issuer strip) matches the superseding values (member tail kept). A before/after correction diff is a sound detector.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2)"
+    },
+    {
+     "accession": "0002031750-25-000043",
+     "text": "Covanta Holding Corporation First lien senior secured loan 6.41 % SOFR (M) 2.25 % 01/2031 2,000 1,995 1,994"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "In cizc no instrument_description repeats a phrase (value list: First lien senior secured loan(s), Common/Other/Preferred equity, Class A Units, Senior subordinated loans); Cloud Software 2025-12-31 c-88 publishes 'First lien senior secured loans' once. The repeated-phrase check would catch recurrence with negligible false positives.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Cloud Software Group, Inc. 6.92 % SOFR (Q) 3.25 % 03/2031 3,985 3,974 3,988"
+    }
+   ]
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "outcome": "supported",
+   "rationale": "Verified: the 10-K period May 7 - Dec 31 2024 less the 2024-09-30 period-to-date gives TII 12,390-79=12,311; expenses 10,330-4,201=6,129; NII 7,239+679=7,918; cizc publishes exactly these. income_identity fired on ciza, so existing_detector is right. Residual incentive_fee 55,875 (3/8 basis) correctly disclosed as left; income_per_share 0.9668 and income_yield_pct are unchanged between ciza and cizc and were not re-derived by this reviewer.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Total income $ 12,390"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Total income 79 79"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Total expenses 10,330"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Total expenses 2,151 4,201"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Net investment income before income taxes 7,239"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Net investment loss before income taxes ( 679 ) ( 679 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "All 13 changed issuer names checked against the printed <tr> carrying each row's own fair-value fact (review/names.py): every cizc name equals the printed company cell (Covanta Holding Corporation, WEC US Holdings Ltd., Tango Holdings, LLC, Par Petroleum LLC/Par Petroleum Finance Corp, Retained Vantage ... L.P., Project Ruby ... Corp., AEJV SPV LP, WhiteWater ... LLC). The strict-prefix detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0002031750-25-000043",
+     "text": "Covanta Holding Corporation First lien senior secured loan 6.41 % SOFR (M) 2.25 % 01/2031 2,000 1,995 1,994"
+    },
+    {
+     "accession": "0001628280-25-039307",
+     "text": "WEC US Holdings Ltd. First lien senior secured loan 6.57 % SOFR (M) 2.25 % 01/2031 1,079 1,073 1,079"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Tango Holdings, LLC (1)(5)(6) 07/2025 511,202 514,285 557,480 (2)"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Retained Vantage Data Centers Intermediate Holdco, L.P. (5)(6) 9.50 % N/A 9.50 % 12/2031 $ 63,979 $ 60,915 $ 60,741"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-misspelled-in-member",
+   "outcome": "supported",
+   "rationale": "10 instrument_description changes read on the page: 'snior' x6 corrected to the schedule heading wording, Preffered -> Preferred equity (printed heading), and four equity rows (Denali 2024-09-30/2024-12-31 'Class A units', Meade and Redwood 2025-09-30 'Class A Units') now carry the printed instrument. A token comparison against printed text is a feasible detector.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Cloud Software Group, Inc. 6.92 % SOFR (Q) 3.25 % 03/2031 3,985 3,974 3,988"
+    },
+    {
+     "accession": "0002031750-25-000043",
+     "text": "Meade Pipeline Co LLC (1)(5)(7) Class A Units 09/2025 43 $ 202,888 $ 202,805 (2)"
+    },
+    {
+     "accession": "0002031750-26-000064",
+     "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "percent-of-net-assets-printed-only-on-subtotal-lines",
+   "outcome": "supported",
+   "rationale": "Listed every <tr> holding an InvestmentOwnedPercentOfNetAssets fact in the five 2025-03-31..2026-03-31 filings (review/pctrows.py): all are unlabeled industry subtotal rows, 'Total ...' rows or cash-equivalent totals on non-position contexts; the only position line with a percent is Denali 'Class A units ... 216.77 %', the 2024-12-31 comparative schedule (instant 2024-12-31). E.g. '7,481 7,457 0.24 %' after SCIH Salt is a separate single-position industry subtotal row (context c-32, no identifier axis). Caveat: the claim holds from 2025-03-31 only; in the 2024 filings the single position line prints its own percent (224.22 % / 216.77 %), and cizc publishes that correctly. not_feasible accepted.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "SCIH Salt Holdings Inc. 6.35 % SOFR (Q) 2.75 % 01/2029 $ 7,481 $ 7,481 $ 7,457"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "review/chains.py: position_id partitions identical in ciza and cizc (92 chains), and the 15 multi-maturity chains are the same set, so not created by this run. The proposed detector (maturity-veto audit) is concrete.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Retained Vantage Data Centers Intermediate Holdco, L.P. (5)(6) 9.50 % N/A 9.50 % 12/2031 $ 63,979 $ 60,915 $ 60,741"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-only-preferred-interest-rate-blank",
+   "outcome": "supported",
+   "rationale": "Page prints '13.00 % PIK' for Commonwealth LNG; pik_rate 13.0 with interest_rate blank follows the open D-092 convention. Evidence-only observation; not_feasible accepted.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000064",
+     "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Carried from acxb; the printed unit count (Denali 3,749 at 2025-12-31) and the x1000 scale issue were fixed by D-168 row corrections. Weakness: reference D-168 is a decision, not a detector; fmt_shares_held only fires at 2026-06-30.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "outcome": "supported",
+   "rationale": "Carried from acxb (D-168 fix of the Sophos context carrying Denali's units). Not re-measured beyond confirming the cizc rows are unchanged from ciza. Reference is a decision id, not a detector.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-025587",
+     "text": "Sophos Holdings, LLC, First lien senior secured loan 2025-03-31 0002031750 aci:RenewableEnergyMember 2025-03-31 00020317"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "outcome": "supported",
+   "rationale": "Carried; cizc publishes Commonwealth LNG with instrument 'Preferred equity' matching the printed heading. Reference is a decision id.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000064",
+     "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-ratio-between-half-and-fifty-not-scaled",
+   "outcome": "supported",
+   "rationale": "Carried. 224.22 % at 2024-09-30 is plausible: 347,854 / net assets 155,137 = 2.2422 (term-loan financed); cizc publishes 224.22. Gated wrapper key; shared-rule scope noted.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Total net assets 155,137"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-published-before-taxes",
+   "outcome": "supported",
+   "rationale": "Carried observation of the published NII basis (pre-tax); evidence-only. Not re-measured at 2026-06-30 by this reviewer.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Net investment income before income taxes 7,239"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-is-commitment-on-undrawn-lines",
+   "outcome": "supported",
+   "rationale": "Page prints 137,500 principal against 25,123 fair value for Stack SJ 2025-09-30 and the notes call it a delayed draw loan with a 137.5M commitment of which 25.1M was funded; observation accurate.",
+   "evidence": [
+    {
+     "accession": "0002031750-25-000043",
+     "text": "Stack SJ Holdings Parent A-I, LLC (5) Senior Subordinated Loan 9.25 % N/A 9.25 % 06/2030 137,500 25,136 25,123"
+    },
+    {
+     "accession": "0002031750-25-000043",
+     "text": "is a delayed drawn term loan with a total commitment of $ 137.5 million of which $ 25.1 million was funded as of Septemb"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-row-before-inception",
+   "outcome": "supported",
+   "rationale": "Fund inception May 7, 2024 is printed in the 10-K; a 2023-12-31 fund_financials row predates it. Evidence-only, carried.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-012670",
+     "text": "May 7, 2024 (inception) to December 31, 2024, we incurred $0.7 million in admini"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "production_ledger_reviews": [
+  {
+   "finding_id": "RVQ_BLK_766d82fa062d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "income_identity 2024-12-31: five figures verified against the 10-K and 10-Q (TII 12,311; expenses 6,129; NII 7,918; management fee 653-162=491; interest 4,913-758=4,155). first_income_year_ends is an existing wrapper key (pipeline/fund_highlights_wrapper.py, read by fund_financials.quarter_income_sql; 6 other wrappers use it); no shared code changed. Residual: incentive_fee 55,875 still 3/8 basis.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Total income $ 12,390"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Total income 79 79"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Total expenses 10,330"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Total expenses 2,151 4,201"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Net investment income before income taxes 7,239"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Net investment loss before income taxes ( 679 ) ( 679 )"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Management fees 653"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Interest expense 4,913"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b8233dbcd975",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E07 retirement re-run PASS. Verified the 9 unpublished current-period identifier contexts: c-91 'Total first lien senior secured loans' total line; c-113/115/117/119 cash equivalents outside Total investments; c-121 = 2,657,000,000 restricted-securities footnote; c-126/129/132 affiliate roll-forward rows whose schedule rows (Meade c-104 215,952k, Redwood c-105 37,764k, AEJV c-107 84,713k) are published at the same FV and issuer (review/e07rf.py). SCIH Salt published once at printed values.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Meade Pipeline Co LLC $ 214,956 $ - $ 1,401 $ - $ 2,397 $ 215,952 $ 5,672"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "the aggregate fair value of these securities is $ 2,657.0 million"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c6fb09bb4ca1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "issuer_name_printed: cizc publishes 'AEJV SPV LP' with instrument 'Common equity' (not blanked, not duplicated) for 2026-03-31 c-107 and 2026-06-30 c-129, matching the printed company cell.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_cda7dee751cc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "issuer_name_printed: cizc publishes 'AEJV SPV LP' with instrument 'Common equity' (not blanked, not duplicated) for 2026-03-31 c-107 and 2026-06-30 c-129, matching the printed company cell.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000064",
+     "text": "AEJV SPV LP (1)(5) 03/2026 371,232,609 370,204 369,819 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3f7ec1dcc8a1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried X08/C04 retirement (2026-11-13 campaign stores, reviewed in scratch/2026-11-13_campaign_review_round4.json / round1.json). Re-ran the carried checks on cizc holdings: X08-001..005 PASS (plants 4/4 caught each), C04-010 PASS (27 rows); flagged rows equal the carried affected_rows.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6bb10278ce2d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried X08/C04 retirement (2026-11-13 campaign stores, reviewed in scratch/2026-11-13_campaign_review_round4.json / round1.json). Re-ran the carried checks on cizc holdings: X08-001..005 PASS (plants 4/4 caught each), C04-010 PASS (27 rows); flagged rows equal the carried affected_rows.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7268cde24f35",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried X08/C04 retirement (2026-11-13 campaign stores, reviewed in scratch/2026-11-13_campaign_review_round4.json / round1.json). Re-ran the carried checks on cizc holdings: X08-001..005 PASS (plants 4/4 caught each), C04-010 PASS (27 rows); flagged rows equal the carried affected_rows.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7421c594a74f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 retirement re-run (retire.py cizc): PASS with all four plants failing. Independently, every printed row holding a percent fact in that quarter's filing is an industry subtotal/total/cash total on a non-identifier context (review/pctrows.py); no current-period position line prints a percent, so blank pct is as filed. The verdict's observed pct sum is the restricted-securities footnote fact tagged on the Denali member (2025-03-31 c-42 = 1.3373 = the verdict's observed 133.73 %), not positions. FV sum ties to the printed total.",
+   "evidence": [
+    {
+     "accession": "0001628280-25-025587",
+     "text": "Total Investments $ 772,063 $ 783,786 137.85 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "SCIH Salt Holdings Inc. 6.35 % SOFR (Q) 2.75 % 01/2029 $ 7,481 $ 7,481 $ 7,457"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_792a52843223",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 retirement re-run (retire.py cizc): PASS with all four plants failing. Independently, every printed row holding a percent fact in that quarter's filing is an industry subtotal/total/cash total on a non-identifier context (review/pctrows.py); no current-period position line prints a percent, so blank pct is as filed. The verdict's observed pct sum is the restricted-securities footnote fact tagged on the Denali member (2025-03-31 c-42 = 1.3373 = the verdict's observed 133.73 %), not positions. FV sum ties to the printed total.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "SCIH Salt Holdings Inc. 6.35 % SOFR (Q) 2.75 % 01/2029 $ 7,481 $ 7,481 $ 7,457"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_803fb2db3958",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "GAV_BDC02 retirement re-run PASS with plants failing: sandbox and data/output total_assets 4,365,604,000 = printed Total assets; the reconciliation compares investments_at_fair_value 3,466,654,000 with the published sum, ratio 1.0 PASS. The check tests the verdict's claim (missing denominator).",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total assets $ 4,365,604 $ 3,455,029"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_87303ba4774e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried X08/C04 retirement (2026-11-13 campaign stores, reviewed in scratch/2026-11-13_campaign_review_round4.json / round1.json). Re-ran the carried checks on cizc holdings: X08-001..005 PASS (plants 4/4 caught each), C04-010 PASS (27 rows); flagged rows equal the carried affected_rows.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_993b4dd8b674",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried X08/C04 retirement (2026-11-13 campaign stores, reviewed in scratch/2026-11-13_campaign_review_round4.json / round1.json). Re-ran the carried checks on cizc holdings: X08-001..005 PASS (plants 4/4 caught each), C04-010 PASS (27 rows); flagged rows equal the carried affected_rows.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_aae07ed1928e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 retirement re-run (retire.py cizc): PASS with all four plants failing. Independently, every printed row holding a percent fact in that quarter's filing is an industry subtotal/total/cash total on a non-identifier context (review/pctrows.py); no current-period position line prints a percent, so blank pct is as filed. The verdict's observed pct sum is the restricted-securities footnote fact tagged on the Denali member (2025-03-31 c-42 = 1.3373 = the verdict's observed 133.73 %), not positions. FV sum ties to the printed total.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "SCIH Salt Holdings Inc. 6.35 % SOFR (Q) 2.75 % 01/2029 $ 7,481 $ 7,481 $ 7,457"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bd74235c1d82",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 retirement re-run (retire.py cizc): PASS with all four plants failing. Independently, every printed row holding a percent fact in that quarter's filing is an industry subtotal/total/cash total on a non-identifier context (review/pctrows.py); no current-period position line prints a percent, so blank pct is as filed. The verdict's observed pct sum is the restricted-securities footnote fact tagged on the Denali member (2025-03-31 c-42 = 1.3373 = the verdict's observed 133.73 %), not positions. FV sum ties to the printed total.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "SCIH Salt Holdings Inc. 6.35 % SOFR (Q) 2.75 % 01/2029 $ 7,481 $ 7,481 $ 7,457"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f27b69d3d9cc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried X08/C04 retirement (2026-11-13 campaign stores, reviewed in scratch/2026-11-13_campaign_review_round4.json / round1.json). Re-ran the carried checks on cizc holdings: X08-001..005 PASS (plants 4/4 caught each), C04-010 PASS (27 rows); flagged rows equal the carried affected_rows.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Denali Equity Holdings LLC (1)(5) 09/2024 3,749 340,995 354,399 (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f2e046400fcf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 retirement re-run (retire.py cizc): PASS with all four plants failing. Independently, every printed row holding a percent fact in that quarter's filing is an industry subtotal/total/cash total on a non-identifier context (review/pctrows.py); no current-period position line prints a percent, so blank pct is as filed. The verdict's observed pct sum is the restricted-securities footnote fact tagged on the Denali member (2025-03-31 c-42 = 1.3373 = the verdict's observed 133.73 %), not positions. FV sum ties to the printed total.",
+   "evidence": [
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "SCIH Salt Holdings Inc. 6.35 % SOFR (Q) 2.75 % 01/2029 $ 7,481 $ 7,481 $ 7,457"
+    }
+   ]
+  }
+ ],
+ "notes": [
+  "Sandbox cizc ledger has 0 outstanding, so finding_reviews is empty; the 16 production (b1112b) outstanding findings are reviewed under production_ledger_reviews (all supported).",
+  "Lien 'Unsecured' on the 7 senior subordinated loan rows (Stack SJ, Retained Vantage) is not printed on the page; the filing prints only 'Senior Subordinated Loan' and its strategy text mentions 'subordinated secured and unsecured loans'. Pre-existing (identical in ciza); unsupported by the page, not created by this run.",
+  "Instrument descriptions 'First lien senior secured loans 1/2' and 'First lien senior secured loan 1' (24 rows) are pre-existing member artefacts, not changed by this run.",
+  "Decision lines for A07 2025-06-30..2026-03-31 repeat the same quote twice (cosmetic).",
+  "A07 retirement reason says percent is printed only on subtotal/total lines: true for 2025-03-31 onward (the retired quarters); not true of the 2024 filings, where the single Denali position line prints 224.22 % / 216.77 % and is published correctly."
+ ]
+}

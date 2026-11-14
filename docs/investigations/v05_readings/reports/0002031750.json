@@ -1,100 +1,568 @@
 {
+ "investigator_id": "agent:fund-acif-20261114",
  "cik": "0002031750",
- "label": "acxb",
- "before": "spoff3",
- "shared_code": true,
+ "label": "cizc",
+ "before": "acxb",
+ "shared_code": false,
  "declared_changes": [
-  {"column": "shares_held", "rows": 27, "why": "unit counts declared from the page: 7 rows 2025-12-31, 8 rows 2026-03-31, 11 rows 2026-06-30 (filer tagged scale=3, a thousand times the printed count); Sophos loan 2025-03-31 unit count withdrawn (Denali's units on its context)"},
-  {"column": "corrected_fields", "rows": 28, "why": "the row corrections above plus the Commonwealth LNG class correction"},
-  {"column": "pct_of_net_assets", "rows": 2, "why": "2024-09-30 and 2024-12-31: printed 224.22 and 216.77, tagged as ratios 2.2422 / 2.1677; source_encodings.pct_tagged_as_ratio"},
-  {"column": "src_transforms", "rows": 2, "why": "pct_of_net_assets:rate_x100 recorded on the two rows above"},
-  {"column": "issuer_name", "rows": 1, "why": "2026-06-30 Commonwealth LNG: ', Preffered equity' cut from the issuer name (wrapper issuer_name_strip_re)"},
-  {"column": "instrument_description", "rows": 1, "why": "the cut text kept as the instrument ('Preffered equity', the filer's spelling)"},
-  {"column": "asset_category", "rows": 1, "why": "Commonwealth LNG printed under Preferred equity: EQUITY_PREFERRED"},
-  {"column": "index_classification", "rows": 1, "why": "Commonwealth LNG: PREFERRED_EQUITY"},
-  {"column": "position_id", "rows": 32, "why": "2026-06-30 added: cross-quarter matching re-pairs earlier rows; same count with no fix (acxa vs spoff3)"}
+  {
+   "column": "issuer_name",
+   "rows": 13,
+   "why": "11 rows set to the printed company wording and 2 AEJV SPV LP rows ('Membership Interest' removed); listed in fixes 2 and 3"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 10,
+   "why": "5 'snior' and 1 'Preffered' misspellings set to the printed wording, 4 blank equity instruments filled with the printed unit class"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 23,
+   "why": "the row corrections above (the same 23 rows)"
+  }
  ],
- "rows_added": 65,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Equity unit counts published a thousand times the printed count from the 10-K for 2025-12-31 on: the filer tags InvestmentOwnedBalanceShares with scale=3 (7 of 8 share facts in the 10-K, all 15 in Q1 2026, all 18 in Q2 2026; scale 0 in every earlier filing). The printed column is in units (ET Rover 1,625,000,000 units for 1,616,034 thousand of cost). 26 rows set to the printed count by row correction.",
-   "kind": "row_correction", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"],
+  {
+   "what": "First-income-year quarterisation: fund began 2024-05-07; the first 10-K (8 months) was published as 3/8 of the period for total investment income, total expenses, net investment income, management fee and interest expense at 2024-12-31 (4,646,250 / 3,873,750 / 2,714,625 / 244,875 / 1,842,375), beside the true fourth-quarter gross income and net expenses. New highlights wrapper data/overrides/fund_highlights_wrappers/0002031750.json (first_income_year_ends 2024-12-31) -> 12,311,000 / 6,129,000 / 7,918,000 / 491,000 / 4,155,000 (period less the filed quarters).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
    "quotes": [
-    {"accession": "0002031750-26-000064", "text": "ET Rover Pipeline LLC (1)(5) 04/2026 1,625,000,000 1,616,034 1,606,429 (2)"},
-    {"accession": "0002031750-26-000064", "text": "Denali Equity Holdings LLC (1)(5) 03/2025 3,749 326,871 355,674 (2)"},
-    {"accession": "0002031750-26-000032", "text": "Tango Holdings, LLC (1)(5)(6) 07/2025 511,202 514,285 557,480 (2)"},
-    {"accession": "0002031750-26-000015", "text": "Tango Holdings LLC (1)(5)(6) 07/2025 488,168 492,623 526,684 (2)"}]},
-  {"what": "2025-03-31: the Sophos loan context carries 3,749 units, Denali's (the filer shifted unit facts one context; Aspen's on Denali was corrected under D-107). Unit count withdrawn from the loan.",
-   "kind": "row_correction", "quarters": ["2025-03-31"],
-   "quotes": [{"accession": "0001628280-25-025587", "text": "Sophos Holdings, LLC First lien senior secured loan 7.94 % SOFR (M) 3.61 % 03/2027 $ 499 501 498 (3)"}]},
-  {"what": "Commonwealth LNG Intermediate Parent (1,014.6M, 2026-06-30) printed under Preferred equity with a 13.00 % PIK dividend; member spelled 'Preffered equity': published as common equity with the instrument in the issuer name. Name split by the wrapper's issuer_name_strip_re, class by row correction.",
-   "kind": "row_correction", "quarters": ["2026-06-30"],
-   "quotes": [{"accession": "0002031750-26-000064", "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2) Total preferred equity"}]},
-  {"what": "Percent of net assets published 2.2422 / 2.1677 for a printed 224.22 % / 216.77 %: the shared row rule multiplies a tagged ratio by 100 only up to 0.50. New wrapper key source_encodings.pct_tagged_as_ratio (accessions), read in pipeline/staging_bdc.py; off for every other fund. Clears pct_of_net_assets_identity x2, F22 x2, F23 x2; raises X09 x2, fmt_pct_of_net_assets x2, pct_position_concentration x2 on the now-correct value (proposed).",
-   "kind": "shared_code", "quarters": ["2024-09-30", "2024-12-31"],
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Distribution income $ 12,072 Interest income 318 Total income 12,390 Expenses: Interest expense 4,913 Organizational expenses 1,510 Management fees 653"
+    },
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Interest income $ 79 $ 79 Total income 79 79 Expenses: Organizational expenses (Note 6) 415 2,465 Interest expense 758"
+    }
+   ]
+  },
+  {
+   "what": "AEJV SPV LP issuer name: the member text 'AEJV SPV LP Membership Interest' published 'Membership Interest' in the issuer name (issuer_name_printed x2); context-keyed corrections to 'AEJV SPV LP, Common equity' (issuer 'AEJV SPV LP', instrument 'Common equity'). Corrections run before the issuer strip, so each issuer correction carries the member's instrument tail.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001628280-25-001722", "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"},
-    {"accession": "0001628280-25-012670", "text": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 %"}]}
+    {
+     "accession": "0002031750-26-000032",
+     "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2)"
+    },
+    {
+     "accession": "0002031750-26-000064",
+     "text": "AEJV SPV LP (1)(5) 03/2026 371,232,609 370,204 369,819 (2)"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names set to the printed company wording on 11 rows: Covanta 'Holding Corporation, LLC' -> 'Holding Corporation' (2025-09-30); WhiteWater Matterhorn 'LLC.' -> 'LLC' (2025-09-30); Tango Holdings -> 'Tango Holdings, LLC' (2026-03-31, 2026-06-30); Par Petroleum 'LLC / Par' -> 'LLC/Par' (2026-03-31); lost final periods restored: WEC US Holdings Ltd. (2025-06-30, 2025-09-30), Retained Vantage ... L.P. (2025-12-31, 2026-03-31), Project Ruby ... Corp. (2025-12-31, 2026-03-31).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0002031750-25-000043",
+     "text": "Covanta Holding Corporation First lien senior secured loan 6.41 % SOFR (M) 2.25 % 01/2031 2,000 1,995 1,994"
+    },
+    {
+     "accession": "0002031750-25-000043",
+     "text": "WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.31 % SOFR (Q) 2.25 % 06/2032 3,550 3,548 3,546"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Tango Holdings, LLC (1)(5)(6) 07/2025 511,202 514,285 557,480 (2)"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Par Petroleum LLC/Par Petroleum Finance Corp 6.93 SOFR (Q) 3.25 02/2030 1,990 1,997 1,988 (3)"
+    },
+    {
+     "accession": "0001628280-25-039307",
+     "text": "WEC US Holdings Ltd. First lien senior secured loan 6.57 % SOFR (M) 2.25 % 01/2031 1,079 1,073 1,079"
+    },
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Retained Vantage Data Centers Intermediate Holdco, L.P. (5)(6) 9.50 % N/A 9.50 % 12/2031 $ 38,542 $ 35,345 $ 35,304 (2)"
+    },
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Project Ruby Ultimate Parent Corp. 6.58 % SOFR (M) 2.86 % 03/2028 6,823 6,839 6,839"
+    }
+   ]
+  },
+  {
+   "what": "Instrument wording: the member misspells 'First lien snior secured loans' on 5 rows (Cloud Software Group 2025-12-31, 2026-03-31, 2026-06-30; ConnectWise 2026-03-31, 2026-06-30) and 'Preffered equity' on Commonwealth LNG (2026-06-30), and names no instrument on 4 equity rows (Denali 2024-09-30, 2024-12-31; Meade Pipeline and Redwood Meade 2025-09-30). Set to the printed wording ('First lien senior secured loans', 'Preferred equity', 'Class A units' / 'Class A Units').",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"
+    },
+    {
+     "accession": "0002031750-25-000043",
+     "text": "Meade Pipeline Co LLC (1)(5)(7) Class A Units 09/2025 43 $ 202,888 $ 202,805 (2)"
+    },
+    {
+     "accession": "0002031750-26-000064",
+     "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts published a thousand times the printed count from the 10-K for 2025-12-31 on: the filer tags InvestmentOwnedBalanceShares with scale=3 (7 of 8 share facts in the 10-K, all 15 in Q1 2026, all 18 in Q2 2026; scale 0 in every earlier filing). The printed column is in units (ET Rover 1,625,000,000 units for 1,616,034 thousand of cost). 26 rows set to the printed count by row correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0002031750-26-000064",
+     "text": "ET Rover Pipeline LLC (1)(5) 04/2026 1,625,000,000 1,616,034 1,606,429 (2)"
+    },
+    {
+     "accession": "0002031750-26-000064",
+     "text": "Denali Equity Holdings LLC (1)(5) 03/2025 3,749 326,871 355,674 (2)"
+    },
+    {
+     "accession": "0002031750-26-000032",
+     "text": "Tango Holdings, LLC (1)(5)(6) 07/2025 511,202 514,285 557,480 (2)"
+    },
+    {
+     "accession": "0002031750-26-000015",
+     "text": "Tango Holdings LLC (1)(5)(6) 07/2025 488,168 492,623 526,684 (2)"
+    }
+   ]
+  },
+  {
+   "what": "2025-03-31: the Sophos loan context carries 3,749 units, Denali's (the filer shifted unit facts one context; Aspen's on Denali was corrected under D-107). Unit count withdrawn from the loan.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025587",
+     "text": "Sophos Holdings, LLC First lien senior secured loan 7.94 % SOFR (M) 3.61 % 03/2027 $ 499 501 498 (3)"
+    }
+   ]
+  },
+  {
+   "what": "Commonwealth LNG Intermediate Parent (1,014.6M, 2026-06-30) printed under Preferred equity with a 13.00 % PIK dividend; member spelled 'Preffered equity': published as common equity with the instrument in the issuer name. Name split by the wrapper's issuer_name_strip_re, class by row correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0002031750-26-000064",
+     "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2) Total preferred equity"
+    }
+   ]
+  },
+  {
+   "what": "Percent of net assets published 2.2422 / 2.1677 for a printed 224.22 % / 216.77 %: the shared row rule multiplies a tagged ratio by 100 only up to 0.50. New wrapper key source_encodings.pct_tagged_as_ratio (accessions), read in pipeline/staging_bdc.py; off for every other fund. Clears pct_of_net_assets_identity x2, F22 x2, F23 x2; raises X09 x2, fmt_pct_of_net_assets x2, pct_position_concentration x2 on the now-correct value (proposed).",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-001722",
+     "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"
+    },
+    {
+     "accession": "0001628280-25-012670",
+     "text": "Denali Equity Holdings LLC (2) Class A units 09/2024 3,749 $ 347,531 $ 339,136 216.77 %"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "identity income_identity 2024-12-31",
+  {
+   "finding": "incentive_fee 2024-12-31 (no ledger finding)",
    "hypotheses": [
-    "The 10-K covers May 7 to Dec 31, 2024 (8 months). fund_financials prorates it by 3/8: total_investment_income 4,646,250 = 12,390k x 3/8, total_expenses 3,873,750 = 10,330k x 3/8, NII 2,714,625 = 7,239k x 3/8; net_expenses 4,393k and gross_investment_income 12,311k are the true fourth quarter (year less Q3). The check mixes the two bases. The published quarter income is an approximation, not the printed or derived Q4 figure (12,311k). A fix belongs in the shared quarterisation of an inception-period 10-K (fund_financials), not in this fund's settings; no wrapper key expresses it.",
-    "Not a recoupment or waiver mismatch: Q4 net expenses 5,151 - 758 = 4,393 matches.",
-    "Printed: 'Total income 12,390' and 'Net expenses 5,151 Net investment income before income taxes 7,239' (10-K 0001628280-25-012670)."]}
+    "The Q3 10-Q prints no incentive line, so the shared first-income-year step has no quarter figure to subtract and keeps the 3/8 average (55,875; true fourth quarter about 901 thousand income-based plus 149 capital gains). nil_income_quarters needs a printed dash; none exists. Needs a shared-step change or an owner convention."
+   ]
+  }
  ],
- "orchestrator_requests": [
- ],
+ "orchestrator_requests": [],
  "observations": [
-  {"observation_key": "unit-count-tag-concept-and-scale-change-between-filings", "what": "Unit counts tagged with scale=3 from the 10-K for 2025-12-31 on, published x1000 (Denali 3,749,000; ET Rover 1.625 trillion units). No rule reported it except fmt_shares_held at 2026-06-30.", "field": "shares_held",
-   "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 6118.9, "cause": "fund", "action": "fixed",
+  {
+   "observation_key": "issuer-name-correction-blanks-instrument-description",
+   "what": "A row correction of issuer_name alone, run before the issuer-name strip, replaced the member text and so blanked the instrument the strip moves out of it: 13 rows lost instrument_description in build cizb (WEC, Covanta, WhiteWater, Tango, Par, Retained Vantage, Project Ruby, AEJV). Fixed by superseding lines that keep the member's instrument tail.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3000.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "After row corrections, flag a row whose instrument_description went from non-empty to empty with only issuer_name in corrected_fields.",
+   "quote": {
+    "accession": "0001628280-25-039307",
+    "text": "WEC US Holdings Ltd. First lien senior secured loan 6.57 % SOFR (M) 2.25 % 01/2031 1,079 1,073 1,079"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired: the blank instrument shows in no ledger finding. A before/after correction diff catches it.",
+    "reference": "build cizb vs cizc, scratch/fund_runs/0002031750/diffrows.py"
+   }
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "what": "An instrument_description correction on a row whose member text carries the instrument tail (strip_to_instrument fund) published 'First lien snior secured loans First lien senior secured loans' (6 rows in cizb): the strip puts the member's tail in front of a corrected description that does not contain it. Fixed by correcting the member text (issuer_name line) so the tail equals the printed wording.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag an instrument_description that contains another published instrument_description of the fund twice (one phrase repeated within the field).",
+   "quote": {
+    "accession": "0002031750-26-000032",
+    "text": "ConnectWise, LLC 7.46 SOFR (Q) 3.76 09/2028 4,961 4,970 4,568"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; a repeated-phrase check on instrument_description would.",
+    "reference": "build cizb diffrows"
+   }
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "what": "2024-12-31 income figures were 3/8 of the first 10-K period (see fix 1); incentive_fee 2024-12-31 still 55,875 = 3/8 of the capital-gains incentive fee 149 because the 10-Qs print no incentive line to subtract.",
+   "field": "total_investment_income",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "income_identity (fired) plus a check that all six income flows of a quarter are on one basis.",
+   "quote": {
+    "accession": "0001628280-25-012670",
+    "text": "Distribution income $ 12,072 Interest income 318 Total income 12,390 Expenses: Interest expense 4,913 Organizational expenses 1,510 Management fees 653"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "income_identity fired on these rows in the untouched build ciza.",
+    "reference": "RVQ_BLK_766d82fa062d"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Member text differs from the printed company on 11 rows beyond the AEJV finding: Covanta ', LLC' added, a stray period on WhiteWater, 'Tango Holdings LLC' for printed 'Tango Holdings, LLC', slash spacing on Par Petroleum, final periods lost (Ltd., L.P., Corp.). issuer_name_printed flagged only the AEJV rows; the rest were found by comparing every published name with the start of its own printed row (fullscan.py, strictname.py, dotname.py). Fixed.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 200.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Strict test: the printed row of each published row starts with the published issuer_name character for character (punctuation included).",
+   "quote": {
+    "accession": "0002031750-25-000043",
+    "text": "Covanta Holding Corporation First lien senior secured loan 6.41 % SOFR (M) 2.25 % 01/2031 2,000 1,995 1,994"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed did not fire on the punctuation and suffix variants (only 2 of 13 rows); the strict prefix test finds all 13.",
+    "reference": "scratch/fund_runs/0002031750/strictname.py"
+   }
+  },
+  {
+   "observation_key": "instrument-text-misspelled-in-member",
+   "what": "Member misspellings reached instrument_description ('First lien snior secured loans' x5, 'Preffered equity' x1) and four equity rows published a blank instrument although the printed line names it. Fixed by corrections.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1500.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare each published instrument_description with the printed section heading or row text of its own row (token match), and flag blanks on rows whose printed line holds a unit class.",
+   "quote": {
+    "accession": "0002031750-26-000064",
+    "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows; a token comparison of instrument_description with the printed row text would flag them.",
+    "reference": "scratch/fund_runs/0002031750/combos.py"
+   }
+  },
+  {
+   "observation_key": "percent-of-net-assets-printed-only-on-subtotal-lines",
+   "what": "From 2025-03-31 no position publishes pct_of_net_assets: the filer prints and tags it only on industry subtotal and total lines (15 to 39 facts per filing, none on a published row's context or printed row), so A07 skips. The figure is derivable (fair value over net assets) but not printed per position; left blank, as Ares Capital (D-257). Publishing it only for one-position industry groups would make A07 fail on partial coverage (D-002).",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 7330.1,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "None needed for correctness; a coverage note in the public data-status view that pct_of_net_assets is blank for this filer.",
+   "quote": {
+    "accession": "0002031750-26-000032",
+    "text": "Total investments $ 3,293,622 $ 3,466,654 110.76 %"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Not an error in the published values; the page does not print the figure per position.",
+    "reference": "D-002, D-257"
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "what": "Pre-existing (identical in acxb and ciza; none created or removed by this run): 15 position chains join rows of different maturity, e.g. Astoria Energy 2027-12-31 par 993k (2025-03-31) with the 2032-06-30 loan par 5,000k (2025-06-30); Lackawanna 2029-08-31 with 2032-08-31; Cornerstone, TransMontaigne, Colossus, Calpine maturity changes. Some may be genuine extensions; par, spread and maturity together are not checked by the matcher. Left (shared matcher).",
+   "field": "position_id",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 100.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a chain link where maturity differs by more than a year and principal changes by more than 3x in the same quarter step.",
+   "quote": {
+    "accession": "0001628280-25-025587",
+    "text": "Cornerstone Generation, LLC First lien senior secured loan 7.55 % SOFR (Q) 3.25 % 10/2031 1,375 1,380 1,374"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; chains were listed with scratch/fund_runs/0002031750/chains.py.",
+    "reference": "chains.py cizc"
+   }
+  },
+  {
+   "observation_key": "pik-only-preferred-interest-rate-blank",
+   "what": "Commonwealth LNG preferred (2026-06-30, 1,014.6M): the page prints '13.00 % PIK'; published pik_rate 13.0 with interest_rate blank (D-092 PIK-only convention, open owner item). Evidence only, no change.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1014.6,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "n/a (open owner convention D-092).",
+   "quote": {
+    "accession": "0002031750-26-000064",
+    "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Open owner convention, not an error to detect.",
+    "reference": "D-092"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Unit counts tagged with scale=3 from the 10-K for 2025-12-31 on, published x1000 (Denali 3,749,000; ET Rover 1.625 trillion units). No rule reported it except fmt_shares_held at 2026-06-30.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 6118.9,
+   "cause": "fund",
+   "action": "fixed",
    "suggested_check": "Flag an equity row whose unit count changes by exactly x1000 between consecutive filings while cost moves less than 10 pct.",
-   "quote": {"accession": "0002031750-26-000064", "text": "ET Rover Pipeline LLC (1)(5) 04/2026 1,625,000,000 1,616,034 1,606,429 (2)"}},
-  {"observation_key": "row-tagged-on-another-issuers-member", "what": "2025-03-31: Sophos loan context carries Denali's 3,749 units (Denali's carries Aspen's 4,900).", "field": "shares_held",
-   "quarters": ["2025-03-31"], "fair_value_m": 0.5, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0002031750-26-000064",
+    "text": "ET Rover Pipeline LLC (1)(5) 04/2026 1,625,000,000 1,616,034 1,606,429 (2)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "2025-03-31: Sophos loan context carries Denali's 3,749 units (Denali's carries Aspen's 4,900).",
+   "field": "shares_held",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "A loan row (principal, rate, spread) that also carries a share-count fact.",
-   "quote": {"accession": "0001628280-25-025587", "text": "Denali Equity Holdings LLC (1)(5) Class A units 09/2024 3,749 341,183 353,033 (2) Sophos Holdings, LLC First lien senior secured loan"}},
-  {"observation_key": "preferred-equity-published-as-common", "what": "Commonwealth LNG preferred (1,014.6M, 13.00 % PIK) published as common equity; member typo 'Preffered'.", "field": "index_classification",
-   "quarters": ["2026-06-30"], "fair_value_m": 1014.6, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0001628280-25-025587",
+    "text": "Denali Equity Holdings LLC (1)(5) Class A units 09/2024 3,749 341,183 353,033 (2) Sophos Holdings, LLC First lien senior secured loan"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "what": "Commonwealth LNG preferred (1,014.6M, 13.00 % PIK) published as common equity; member typo 'Preffered'.",
+   "field": "index_classification",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1014.6,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "An equity row with a PIK or dividend rate classed common.",
-   "quote": {"accession": "0002031750-26-000064", "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"}},
-  {"observation_key": "pct-ratio-between-half-and-fifty-not-scaled", "what": "Shared staging row rule scales a tagged percent-of-net-assets ratio only when <= 0.50 (and divides above 50); a levered position's ratio between 0.5 and 50 stays unscaled. Fixed here by a gated wrapper key; the same can happen on any fund with a position above 50 pct of net assets in a filing with fewer than 20 tagged percents.", "field": "pct_of_net_assets",
-   "quarters": ["2024-09-30", "2024-12-31"], "fair_value_m": 687.0, "cause": "shared", "action": "fixed",
+   "quote": {
+    "accession": "0002031750-26-000064",
+    "text": "Commonwealth LNG Intermediate Parent, LLC (1)(5) 13.00 % PIK 05/2026 1,000,000,000 1,014,621 1,014,621 (2)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  },
+  {
+   "observation_key": "pct-ratio-between-half-and-fifty-not-scaled",
+   "what": "Shared staging row rule scales a tagged percent-of-net-assets ratio only when <= 0.50 (and divides above 50); a levered position's ratio between 0.5 and 50 stays unscaled. Fixed here by a gated wrapper key; the same can happen on any fund with a position above 50 pct of net assets in a filing with fewer than 20 tagged percents.",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 687.0,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "Compare tagged percent with fair value / net assets per row and pick the scale (1 or 100) that matches.",
-   "quote": {"accession": "0001628280-25-001722", "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"}},
-  {"observation_key": "inception-period-annual-figures-prorated-into-a-quarter", "what": "fund_financials 2024-12-31: income, expenses and NII are the May 7 to Dec 31 figures x 3/8 (TII 4,646,250 against a derivable Q4 of 12,311k), while net_expenses and gross_investment_income are year-less-Q3. Published fund-level income for that quarter is an approximation on mixed bases.", "field": "total_investment_income",
-   "quarters": ["2024-12-31"], "fair_value_m": 0, "cause": "shared", "action": "parked",
-   "suggested_check": "For a 10-K whose period starts after the fiscal year start, derive the fourth quarter as period total less the earlier filed quarters, not by time proration.",
-   "quote": {"accession": "0001628280-25-012670", "text": "Interest income 318 Total income 12,390 Expenses: Interest expense 4,913"}},
-  {"observation_key": "net-investment-income-published-before-taxes", "what": "2026-06-30 fund_financials net_investment_income is 40,050 thousand, the printed figure before income taxes; after the 15,408 tax benefit the printed NII is 55,458. Same pattern 2025-03-31 (published -5,637; printed after tax -7,991). Not changed: which figure the field is meant to hold is a schema decision.", "field": "net_investment_income",
-   "quarters": ["2025-03-31", "2026-06-30"], "fair_value_m": 0, "cause": "shared", "action": "left",
+   "quote": {
+    "accession": "0001628280-25-001722",
+    "text": "Denali Equity Holdings LLC Class A units 09/2024 3,749 $ 347,854 $ 347,854 224.22 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-published-before-taxes",
+   "what": "2026-06-30 fund_financials net_investment_income is 40,050 thousand, the printed figure before income taxes; after the 15,408 tax benefit the printed NII is 55,458. Same pattern 2025-03-31 (published -5,637; printed after tax -7,991). Not changed: which figure the field is meant to hold is a schema decision.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0,
+   "cause": "shared",
+   "action": "left",
    "suggested_check": "Where the filer prints both, record which NII line the field holds and test it against the printed after-tax line.",
-   "quote": {"accession": "0002031750-26-000064", "text": "Net investment income/(loss) before income taxes 40,050 3,300 72,297 ( 2,337 ) Income tax benefit/(expense) 15,408"}},
-  {"observation_key": "principal-is-commitment-on-undrawn-lines", "what": "2025-09-30 Stack SJ delayed-draw loan published with principal 137.5M against fair value 25.1M: the page prints the whole commitment in the Principal column (the notes say 25.1M was funded). From 2025-12-31 footnote (6) says principal is the funded amount. Published equals the printed figure; left.", "field": "principal_amount",
-   "quarters": ["2025-09-30"], "fair_value_m": 25.1, "cause": "row", "action": "left",
+   "quote": {
+    "accession": "0002031750-26-000064",
+    "text": "Net investment income/(loss) before income taxes 40,050 3,300 72,297 ( 2,337 ) Income tax benefit/(expense) 15,408"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  },
+  {
+   "observation_key": "principal-is-commitment-on-undrawn-lines",
+   "what": "2025-09-30 Stack SJ delayed-draw loan published with principal 137.5M against fair value 25.1M: the page prints the whole commitment in the Principal column (the notes say 25.1M was funded). From 2025-12-31 footnote (6) says principal is the funded amount. Published equals the printed figure; left.",
+   "field": "principal_amount",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 25.1,
+   "cause": "row",
+   "action": "left",
    "suggested_check": "A loan whose principal exceeds 2x its cost while cost and value agree.",
-   "quote": {"accession": "0002031750-25-000043", "text": "Stack SJ Holdings Parent A-I, LLC (5) Senior Subordinated Loan 9.25 % N/A 9.25 % 06/2030 137,500 25,136 25,123"}},
-  {"observation_key": "issuer-name-differs-from-page", "what": "2025-09-30 Covanta: the member reads 'Covanta Holding Corporation, LLC', the page prints 'Covanta Holding Corporation'; published from the member. 2.0M; left.", "field": "issuer_name",
-   "quarters": ["2025-09-30"], "fair_value_m": 2.0, "cause": "row", "action": "left",
-   "suggested_check": "",
-   "quote": {"accession": "0002031750-25-000043", "text": "Covanta Holding Corporation First lien senior secured loan 6.41 % SOFR (M) 2.25 % 01/2031 2,000 1,995 1,994"}},
-  {"observation_key": "fund-row-before-inception", "what": "fund_financials has a 2023-12-31 row with nav_per_share 25.1266 (the 2024-12-31 value); the fund's inception is May 7, 2024. Not a holdings row; left.", "field": "nav_per_share",
-   "quarters": ["2023-12-31"], "fair_value_m": 0, "cause": "shared", "action": "left",
+   "quote": {
+    "accession": "0002031750-25-000043",
+    "text": "Stack SJ Holdings Parent A-I, LLC (5) Senior Subordinated Loan 9.25 % N/A 9.25 % 06/2030 137,500 25,136 25,123"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  },
+  {
+   "observation_key": "fund-row-before-inception",
+   "what": "fund_financials has a 2023-12-31 row with nav_per_share 25.1266 (the 2024-12-31 value); the fund's inception is May 7, 2024. Not a holdings row; left.",
+   "field": "nav_per_share",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "shared",
+   "action": "left",
    "suggested_check": "Reject a fund-level row dated before the fund's inception date.",
-   "quote": {"accession": "0001628280-25-012670", "text": "Total net assets 156,453 Total liabilities and net assets $ 380,607 Net asset value per share $ 25.1266"}}
+   "quote": {
+    "accession": "0001628280-25-012670",
+    "text": "Total net assets 156,453 Total liabilities and net assets $ 380,607 Net asset value per share $ 25.1266"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Carried from the acxb report; see the 2026-10-15 run (D-168).",
+    "reference": "D-168"
+   }
+  }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_unified_holdings.py -k percent_of_net_assets: 4 passed (2 new: listed filing scaled; unlisted filing and other fund untouched)",
-  "tests/test_source_encodings.py tests/test_provenance_reverify.py: 167 passed",
-  "tests/test_unified_holdings.py (whole file, -x): Windows fatal exception (access violation in DuckDB inside _prepare_bdc) at about 29 pct, in a test that passes alone. The same crash happens on an unmodified HEAD worktree (fcebeb3, at test_prefix_subtotal_keeps_child), so it predates this change; the file was not completed."
+  "no code changed (wrapper, correction lines and a highlights wrapper only); no pytest run"
  ],
  "not_done": [
-  "Shared-code change not measured on the cohort: it is gated by this fund's wrapper (expression is 'false' for every other CIK), so no other fund's SQL changes in effect; no cohort build run.",
-  "Full pytest suite not run; full tests/test_unified_holdings.py not run.",
-  "2025-06-30, 2025-09-30 schedules not re-read line by line in this run (D-107 reading covered 2026-03-31; this run read 2026-06-30 in full, plus equity lines of 2024-09-30, 2024-12-31, 2025-03-31, 2025-12-31, 2026-03-31).",
-  "Per-class NAV per share not checked. Industry labels: Commonwealth LNG and ET Rover published under the printed heading 'Independent power and renewable electricity producers' (as printed); GICS sub-industry for midstream rows (Meade Pipeline: Oil & Gas Exploration & Production) is the heading map's representative pick, not checked further.",
-  "All findings cleared is not data correct: income_identity 2024-12-31 stays outstanding (parked)."
- ]
+  "Not rebuilt after the retirement file was written: the retirements are read by the ledger stage (fund_ledger_trial --from ledger on cizc: 56 findings, 0 outstanding).",
+  "Per-class NAV per share and the GICS industry labels were not re-checked; share-count units left as D-168 published them (owner convention open).",
+  "Lien for 'Senior subordinated loans' (published Unsecured) not verified against the filing (no printed lien word).",
+  "Position chains (15 crossing maturities) recorded, not repaired (not created by this run).",
+  "All findings cleared is not data correct: percent of net assets is blank for every position from 2025-03-31 (filer prints it only on subtotals); incentive_fee 2024-12-31 still on the 3/8 basis."
+ ],
+ "investigations": []
 }
