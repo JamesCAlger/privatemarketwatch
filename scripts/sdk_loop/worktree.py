@@ -57,7 +57,7 @@ def create(cik10: str, run_id: str, base: str = "HEAD") -> tuple[Path, str]:
 
 
 def remove(path: Path, keep_branch: bool = True) -> None:
-    path = Path(path)
+    path = Path(path).resolve()                   # git runs from REPO: a relative path would miss
     for rel in LINKED:
         _unlink_junction(path / rel)
     for rel in LINKED:                            # refuse to continue if a link survived
