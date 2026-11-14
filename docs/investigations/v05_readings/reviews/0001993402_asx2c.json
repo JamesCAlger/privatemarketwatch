@@ -1,0 +1,523 @@
+{
+ "reviewer_id": "agent:reviewer-ascf-20261114-opus",
+ "report_digest": "f139169133685c7720d66c5fd9a0e986b774939ebaeaeab9d559d2e99f9766dd",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_6c0071741356",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A01 2024-06-30: gap 263 is ROW-2beaa458eaaefdb1 VPP Group Holdings common, published 263,000 = printed 263; listed in PD-A01-1993402-9 (as_filed); quote found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "VPP Group Holdings, L.P. (3)(5)(11) Common - 265 263 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bed255557a5b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A01 2024-12-31: gap 910 is ROW-ecf7a1899aa66065 WST USA Holdco DDTL, published 910,000 = printed 910; in PD-A01-1993402-9.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-040578",
+     "text": "WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910 0.07"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d0d044d89c58",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A01 2025-03-31: KWOR HoldCo ROW-741a42d3b005e924 652 (206,274-652 = printed Insurance 205,622) and AVG/VetCor ROW-4d6ca9cfef2695fb 280, ROW-de693825875bf98b 734, ROW-9793cea8acc9f40b 5, ROW-61bfba94880f425f 2 (=1,021); each published FV equals its printed line.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "205,532 205,622 14.01"
+    },
+    {
+     "accession": "0000950170-25-071531",
+     "text": "AVG Intermediate Holdings LLC (15)(17) Subordinated Unsecured Term Loan N/A 13.75 % PIK 3/16/2028 778 778 734 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7538e1af662f",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches the C04 population (equity rows of the quarter without shares_held). Rejected as parked: the investigator tested only units_tagged_as_par (136,000 / 14,000) and the owner scale ruling; the reading the build already publishes for this fund was not tested. From 2025-09-30 the same positions publish the printed count unscaled (MDC Interior 1, Quality Automotive/QAS 237, from the filer's share tags). In 2024-03-31..2025-06-30 about 203 equity rows print a count in the Par Amount / Shares column (tagged as principal x1000) and publish no shares (reviewer scan rv_units2.py on asx2c: 21/28/35/38/45/36 by quarter), e.g. MDC Interior common 2024-06-30 prints 1 (ROW-832a3baac32b1935), US Fitness common 2025-06-30 prints 3 (ROW-282b646b8aed018a) - the two published errors of the asx2c page sample (C008, C015). Publishing the printed count (tagged principal / 1000) follows the convention already published for the later quarters and does not decide the scale: AS-UNITS-1 then applies to all quarters equally. Next action: publish the printed count on these rows (wrapper or by-context corrections, tagged principal not published as par), keep AS-UNITS-1 open for the scale.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "MDC Interior Acquisition Inc (12)(13)(15) Common - - - 1 894 1,062 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1d2f90bc8ac2",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches the C04 population (equity rows of the quarter without shares_held). Rejected as parked: the investigator tested only units_tagged_as_par (136,000 / 14,000) and the owner scale ruling; the reading the build already publishes for this fund was not tested. From 2025-09-30 the same positions publish the printed count unscaled (MDC Interior 1, Quality Automotive/QAS 237, from the filer's share tags). In 2024-03-31..2025-06-30 about 203 equity rows print a count in the Par Amount / Shares column (tagged as principal x1000) and publish no shares (reviewer scan rv_units2.py on asx2c: 21/28/35/38/45/36 by quarter), e.g. MDC Interior common 2024-06-30 prints 1 (ROW-832a3baac32b1935), US Fitness common 2025-06-30 prints 3 (ROW-282b646b8aed018a) - the two published errors of the asx2c page sample (C008, C015). Publishing the printed count (tagged principal / 1000) follows the convention already published for the later quarters and does not decide the scale: AS-UNITS-1 then applies to all quarters equally. Next action: publish the printed count on these rows (wrapper or by-context corrections, tagged principal not published as par), keep AS-UNITS-1 open for the scale.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "MDC Interior Acquisition Inc (12)(13)(15) Common - - - 1 894 1,062 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e6999aac20d7",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches the C04 population (equity rows of the quarter without shares_held). Rejected as parked: the investigator tested only units_tagged_as_par (136,000 / 14,000) and the owner scale ruling; the reading the build already publishes for this fund was not tested. From 2025-09-30 the same positions publish the printed count unscaled (MDC Interior 1, Quality Automotive/QAS 237, from the filer's share tags). In 2024-03-31..2025-06-30 about 203 equity rows print a count in the Par Amount / Shares column (tagged as principal x1000) and publish no shares (reviewer scan rv_units2.py on asx2c: 21/28/35/38/45/36 by quarter), e.g. MDC Interior common 2024-06-30 prints 1 (ROW-832a3baac32b1935), US Fitness common 2025-06-30 prints 3 (ROW-282b646b8aed018a) - the two published errors of the asx2c page sample (C008, C015). Publishing the printed count (tagged principal / 1000) follows the convention already published for the later quarters and does not decide the scale: AS-UNITS-1 then applies to all quarters equally. Next action: publish the printed count on these rows (wrapper or by-context corrections, tagged principal not published as par), keep AS-UNITS-1 open for the scale.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "MDC Interior Acquisition Inc (12)(13)(15) Common - - - 1 894 1,062 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_650b38ae9298",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches the C04 population (equity rows of the quarter without shares_held). Rejected as parked: the investigator tested only units_tagged_as_par (136,000 / 14,000) and the owner scale ruling; the reading the build already publishes for this fund was not tested. From 2025-09-30 the same positions publish the printed count unscaled (MDC Interior 1, Quality Automotive/QAS 237, from the filer's share tags). In 2024-03-31..2025-06-30 about 203 equity rows print a count in the Par Amount / Shares column (tagged as principal x1000) and publish no shares (reviewer scan rv_units2.py on asx2c: 21/28/35/38/45/36 by quarter), e.g. MDC Interior common 2024-06-30 prints 1 (ROW-832a3baac32b1935), US Fitness common 2025-06-30 prints 3 (ROW-282b646b8aed018a) - the two published errors of the asx2c page sample (C008, C015). Publishing the printed count (tagged principal / 1000) follows the convention already published for the later quarters and does not decide the scale: AS-UNITS-1 then applies to all quarters equally. Next action: publish the printed count on these rows (wrapper or by-context corrections, tagged principal not published as par), keep AS-UNITS-1 open for the scale.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "MDC Interior Acquisition Inc (12)(13)(15) Common - - - 1 894 1,062 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_54721d82e156",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches the C04 population (equity rows of the quarter without shares_held). Rejected as parked: the investigator tested only units_tagged_as_par (136,000 / 14,000) and the owner scale ruling; the reading the build already publishes for this fund was not tested. From 2025-09-30 the same positions publish the printed count unscaled (MDC Interior 1, Quality Automotive/QAS 237, from the filer's share tags). In 2024-03-31..2025-06-30 about 203 equity rows print a count in the Par Amount / Shares column (tagged as principal x1000) and publish no shares (reviewer scan rv_units2.py on asx2c: 21/28/35/38/45/36 by quarter), e.g. MDC Interior common 2024-06-30 prints 1 (ROW-832a3baac32b1935), US Fitness common 2025-06-30 prints 3 (ROW-282b646b8aed018a) - the two published errors of the asx2c page sample (C008, C015). Publishing the printed count (tagged principal / 1000) follows the convention already published for the later quarters and does not decide the scale: AS-UNITS-1 then applies to all quarters equally. Next action: publish the printed count on these rows (wrapper or by-context corrections, tagged principal not published as par), keep AS-UNITS-1 open for the scale.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "MDC Interior Acquisition Inc (12)(13)(15) Common - - - 1 894 1,062 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8ccdd18a4c05",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches the C04 population (equity rows of the quarter without shares_held). Rejected as parked: the investigator tested only units_tagged_as_par (136,000 / 14,000) and the owner scale ruling; the reading the build already publishes for this fund was not tested. From 2025-09-30 the same positions publish the printed count unscaled (MDC Interior 1, Quality Automotive/QAS 237, from the filer's share tags). In 2024-03-31..2025-06-30 about 203 equity rows print a count in the Par Amount / Shares column (tagged as principal x1000) and publish no shares (reviewer scan rv_units2.py on asx2c: 21/28/35/38/45/36 by quarter), e.g. MDC Interior common 2024-06-30 prints 1 (ROW-832a3baac32b1935), US Fitness common 2025-06-30 prints 3 (ROW-282b646b8aed018a) - the two published errors of the asx2c page sample (C008, C015). Publishing the printed count (tagged principal / 1000) follows the convention already published for the later quarters and does not decide the scale: AS-UNITS-1 then applies to all quarters equally. Next action: publish the printed count on these rows (wrapper or by-context corrections, tagged principal not published as par), keep AS-UNITS-1 open for the scale.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "MDC Interior Acquisition Inc (12)(13)(15) Common - - - 1 894 1,062 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c8cbf4ce704f",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the flagged rows equal shadow/page_rule_findings.csv units_printed rows in asx2c (rows differ from the carried 2026-10-21 lists; the investigator re-read the new rows). Rejected as parked: the published shares_held on these rows is a derived_proxy that matches neither scale reading - Concord 2,667/2,670 vs printed 3, ACG Parent 2 vs printed 17, Goldeneye 54 vs printed 1, Eclipse 1 vs printed 6,018/4,157, Arrow 2 vs printed 17. The owner scale question cannot make these values right, so they are a current published error, not an open convention. The report attributes the proxy to external uncommitted shared code in asx2a; next action: blank or replace the proxy with the printed count on these rows, or raise a request against the external derived-proxy code; do not park on AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 217 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7d65bfb2a602",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the flagged rows equal shadow/page_rule_findings.csv units_printed rows in asx2c (rows differ from the carried 2026-10-21 lists; the investigator re-read the new rows). Rejected as parked: the published shares_held on these rows is a derived_proxy that matches neither scale reading - Concord 2,667/2,670 vs printed 3, ACG Parent 2 vs printed 17, Goldeneye 54 vs printed 1, Eclipse 1 vs printed 6,018/4,157, Arrow 2 vs printed 17. The owner scale question cannot make these values right, so they are a current published error, not an open convention. The report attributes the proxy to external uncommitted shared code in asx2a; next action: blank or replace the proxy with the printed count on these rows, or raise a request against the external derived-proxy code; do not park on AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 217 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_83455eb8bee8",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the flagged rows equal shadow/page_rule_findings.csv units_printed rows in asx2c (rows differ from the carried 2026-10-21 lists; the investigator re-read the new rows). Rejected as parked: the published shares_held on these rows is a derived_proxy that matches neither scale reading - Concord 2,667/2,670 vs printed 3, ACG Parent 2 vs printed 17, Goldeneye 54 vs printed 1, Eclipse 1 vs printed 6,018/4,157, Arrow 2 vs printed 17. The owner scale question cannot make these values right, so they are a current published error, not an open convention. The report attributes the proxy to external uncommitted shared code in asx2a; next action: blank or replace the proxy with the printed count on these rows, or raise a request against the external derived-proxy code; do not park on AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 217 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e61cf832f557",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the flagged rows equal shadow/page_rule_findings.csv units_printed rows in asx2c (rows differ from the carried 2026-10-21 lists; the investigator re-read the new rows). Rejected as parked: the published shares_held on these rows is a derived_proxy that matches neither scale reading - Concord 2,667/2,670 vs printed 3, ACG Parent 2 vs printed 17, Goldeneye 54 vs printed 1, Eclipse 1 vs printed 6,018/4,157, Arrow 2 vs printed 17. The owner scale question cannot make these values right, so they are a current published error, not an open convention. The report attributes the proxy to external uncommitted shared code in asx2a; next action: blank or replace the proxy with the printed count on these rows, or raise a request against the external derived-proxy code; do not park on AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 217 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_76fe1adddb02",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage verified: the flagged rows equal shadow/page_rule_findings.csv units_printed rows in asx2c (rows differ from the carried 2026-10-21 lists; the investigator re-read the new rows). Rejected as parked: the published shares_held on these rows is a derived_proxy that matches neither scale reading - Concord 2,667/2,670 vs printed 3, ACG Parent 2 vs printed 17, Goldeneye 54 vs printed 1, Eclipse 1 vs printed 6,018/4,157, Arrow 2 vs printed 17. The owner scale question cannot make these values right, so they are a current published error, not an open convention. The report attributes the proxy to external uncommitted shared code in asx2a; next action: blank or replace the proxy with the printed count on these rows, or raise a request against the external derived-proxy code; do not park on AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+    },
+    {
+     "accession": "0001193125-26-115988",
+     "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 217 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3116a7a22a51",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2026-03-31: 202 flagged rows in asx2c row_validation_issues = the 202 rows of PD-C107-1993402-10 (0 missing, 0 extra). Verdict retired by VR-FL-1993402-01: reviewer re-ran retire_check.py --plant on asx2c and on data/output/private_markets_holdings.parquet: PASS (Eagan Parent cost -6,000 / FV -72,000 = printed (6)/(72)), 6 of 6 plants fail; dup_retirements.py prints 0 duplicates.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eagan Parent, Inc. (7)(13)(15)(18) First Lien Delayed Draw Term Loan S + 4.50 % 8.17 % 9/8/2032 4,804 ( 6 ) ( 72 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7db86e1f04b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2026-06-30: 197 flagged = 197 rows in PD-C107-1993402-10; undrawn lines with bracketed printed cost; reviewer page scan of all asx2c rows shows no cost sign mismatch after the 8 sign corrections (all 8 verified on the page, e.g. Health Buyer ROW-81059fc11436ec08 -31,000).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4274d0bc35e4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F28 2026-08-13: asx2c fund_financials.csv has a companyfacts 2026q3 record dated 2026-08-13 carrying only shares_outstanding 83,198,894 (all balance-sheet fields blank); it is the 10-Q cover share count, not a quarter. Check misfire; routed as AS-F28-1. Carried source was supported by the 2026-10-21 review.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "outstanding as of August 13, 2026 was 83,198,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001993402_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_73f717bce3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 21 source-only blocking rows at 2026-06-30 in asx2c source_reconciliation_source_only_detail.csv equal the 21 row ids in the proposal; all are 'Commitment Type ... Commitment Expiration Date' lines (sum -2.04M) of the separate unfunded-commitments table; the same loans are published from the schedule (e.g. BlackHawk, DT Intermediate, EPFS revolvers/DDTLs). as_filed is an allowed class; publishing them would double count.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7b5f2541cc77",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 21 source-only blocking rows at 2026-06-30 in asx2c source_reconciliation_source_only_detail.csv equal the 21 row ids in the proposal; all are 'Commitment Type ... Commitment Expiration Date' lines (sum -2.04M) of the separate unfunded-commitments table; the same loans are published from the schedule (e.g. BlackHawk, DT Intermediate, EPFS revolvers/DDTLs). as_filed is an allowed class; publishing them would double count. SRC_BDC01 flags the same rows (flagged.py shows no holdings rows: the population is source-side).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fc28b339eb40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X05 2024-12-31: 3 flagged = 3 proposal rows (Apex ROW-edfb2a8d059956ff, DT ROW-b057f443bed7ab19, Spartan ROW-d3d13b504bfb881b). Each prints the all-in rate in the reference column, a floor, and no margin; spread now blank, rate and PIK equal print. as_filed supported; no margin invented.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-040578",
+     "text": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,930 3,922 3,900 0.31"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b0b10f135933",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ROW-288e3c0bb1b91762 (Saturn Borrower, 2026-03-31). Rejected on the reasoning, not the data: the published maturity (2028-11-13) and spread (6.00) already equal the printed line in production b1112b and in asx2a; the asx2c corrections change only issuer_name, instrument_type and instrument_description (corrected_fields). The investigation and fix record say maturity and spread were corrected, which is false. What was wrong on the row was name (Safety Borrower Holdings LLC) and type (Revolver), now fixed from the page. The agentA maturity/spread flag compared the published row with the member text (revolver S + 4.75 % 2032-12-19), the same misfire class as REQ-APZ-1. Restate: row had name/type errors (fixed); the maturity/spread flag itself was a check misfire. No data change needed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_66286f85c43d",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ROW-288e3c0bb1b91762 (Saturn Borrower, 2026-03-31). Rejected on the reasoning, not the data: the published maturity (2028-11-13) and spread (6.00) already equal the printed line in production b1112b and in asx2a; the asx2c corrections change only issuer_name, instrument_type and instrument_description (corrected_fields). The investigation and fix record say maturity and spread were corrected, which is false. What was wrong on the row was name (Safety Borrower Holdings LLC) and type (Revolver), now fixed from the page. The agentA maturity/spread flag compared the published row with the member text (revolver S + 4.75 % 2032-12-19), the same misfire class as REQ-APZ-1. Restate: row had name/type errors (fixed); the maturity/spread flag itself was a check misfire. No data change needed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7bb419f7380c",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ROW-8d52fca8897fa830 OB Hospitalist sub term loan 2024-09-30. The line prints a floor (1.00 %) and the 14.70 % PIK all-in rate in the reference column with no margin - the same shape as the X05 rows, which the investigator kept floating with a blank spread. The same loan prints 'S + 9.75 % 1.00 %' at 2024-06-30 and 2024-12-31, and the member text says 'S + 14.70% PIK'. It is a SOFR floating loan; the correction to coupon_type Fixed / reference_rate_type None is wrong. agentA reading SOFR is right, so this is not a verification bug. Fix: reference_rate_type SOFR, coupon Floating, spread blank (14.70 all-in stays in interest_rate / pik_rate).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20"
+    },
+    {
+     "accession": "0000950170-25-040578",
+     "text": "OB Hospitalist Group, Inc. (15) Subordinated Unsecured Term Loan S + 9.75 % 1.00 % 14.21 % 9/27/2028 21 21 21"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_26f39949fc4f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "dl_rate_fill 2025-03-31 retired by VR-FL-1993402-03: reviewer re-ran retire_check.py --plant (asx2c and production): 776 rows, 0 without a printed line, 0 heading/subtotal lines, 715 printed loan rows all with a rate; planted loan-without-rate and heading row both fail.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "Edgeco Buyer, Inc. (8)(13)(19) First Lien Term Loan S + 4 .50 % 8.79 % 6/1/2028 2,197 2,192 2,186 0.15"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a2978cfeab4d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "no_provenance 2026-03-31 retired by VR-FL-1993402-02: re-run PASS, context C_c98b2083-acaf-452a-ad90-02f76271fdb9 prints the BlackRock T-Fund line 49,874 = published 49,874,000; planted no-context and other-context fail.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "BlackRock Liquidity T-Fund - Institutional Shares (14) - - - - $ 49,874 $ 49,874 2.31 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "All 185 issuer_name changes asx2a->asx2c begin the printed company cell of the row's own FV line (rv_names.py, 185/185); 15 sampled by eye. issuer_name_printed is the right detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "AVE Holdings III, Corp. (8) First Lien Term Loan S + 5.25 % 0.75 % 9.99 % 2/25/2028 248 245 243 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Wrapper regex widening: no name outside the 185 changed between asx2a and asx2c, so no name was damaged; every changed name equals the printed cell.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "AVG Intermediate Holdings LLC (15)(17) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 298 298 280 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-printed",
+   "outcome": "supported",
+   "rationale": "All 7 rows checked: 6 print CAD/GBP; Onyx-Fire term loan 2024-09-30 prints no marker but C + and CAD in every later quarter. Rates equal FRED H.10 (CAD 2024-09-30 1/1.3511, 2024-12-31 1/1.44; GBP 1.2521). Residual: the Onyx-Fire DDTL and revolver at 2024-09-30 print S + and stay USD while the same commitment (4,378) prints CAD C + at 2024-12-31; left as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "Movati Athletic (Group) Inc. (6)(8)(13) First Lien Term Loan C + 5.25 % 0.00 % 9.82 % 5/29/2030 CAD 28,803 20,691 21,083 2.05"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "8 spread changes all equal the printed margin after removing the inner space (Edgeco 4.5, FL Hawk 4.5, Merlin 4.75, YLG 4.75, AMBA 5.25, Hercules 4.75, Unison 4.5, Emmes 2.75).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "Edgeco Buyer, Inc. (8)(13)(19) First Lien Term Loan S + 4 .50 % 8.79 % 6/1/2028 2,197 2,192 2,186 0.15"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-spread",
+   "outcome": "rejected",
+   "rationale": "4 of the 5 'fixed' rows are supported (VetCor x2 and Employee Health 2024-12-31 print N/A in other quarters; New ACI prints N/A 10.00 % PIK). OB Hospitalist 2024-09-30 (ROW-8d52fca8897fa830) prints a 1.00 % floor and is S + 9.75 % in the adjacent quarters: it is floating with no printed margin, like the X05 rows. The proposed detector 'reference type on a line with no reference code' would flag correct floating rows of this shape; it needs a floor/adjacent-quarter condition.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20"
+    }
+   ]
+  },
+  {
+   "observation_key": "negative-printed-cost-published-positive",
+   "outcome": "supported",
+   "rationale": "8 sign corrections each equal the bracketed printed cost (YLG, Health Buyer, WRE, Zinc x2, Hydraulic, MEI, Adelaide); COP cost 889 equals the printed cell.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "Health Buyer LLC (5)(7)(13) First Lien Delayed Draw Term Loan S + 5.50 % 0.75 % 10.97 % 4/27/2029 12,565 ( 31 ) ( 60 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-legend-number-differs-by-filing",
+   "outcome": "supported",
+   "rationale": "Legend read per filing: 20 = non-accrual in the 2025-09-30, 2025-12-31 and 2026-03-31 schedules; in the 2026-06-30 10-Q the current schedule's 20 is 'interest floor of 0.00 %' (20 = non-accrual only in the comparative schedule), and the notes say no portfolio company was on non-accrual at June 30, 2026. The 87 2026-06-30 rows carrying (20) stay unknown, correctly. Per-filing legend mapping is the right detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115988",
+     "text": "20. Position is on non-accrual status."
+    },
+    {
+     "accession": "0001193125-26-349216",
+     "text": "30, 2026, there we re no portfolio companies with loans on non-accrual status"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-from-member-differs-from-printed-line",
+   "outcome": "supported",
+   "rationale": "All 27 instrument_type changes match the printed instrument words of the row's own line; the one maturity change (AVE Holdings III 2028-02-25) matches print.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-name-typo-not-copied",
+   "outcome": "supported",
+   "rationale": "Leaving obvious one-letter print typos as the correct name is reasonable; detection not feasible without cross-quarter context.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115988",
+     "text": "COP Hometown Acquisitions, Inc. (8)(16) First Lien Term Loan S + 5.25 % 8.90 % 7/16/2027 899 889 894 0.04"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "rejected",
+   "rationale": "The observation is accurate but its 'parked' action is too broad: (a) ~203 pre-2025-09-30 equity rows print a count and publish none, fixable now in the build's existing unscaled convention; (b) the derived_proxy shares on the units_printed rows are wrong under either scale reading. Only the scale itself belongs to AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "AS-F28-1",
+   "outcome": "supported",
+   "rationale": "Verification bug: the 2026-08-13 record is a cover-date share count with no financial facts; F28 compares coverage on a non-quarter. The proposed repair plus the test that a real quarter with fund data and no holdings still fails does not weaken acceptance. A fix in the companyfacts loader (not creating a quarter row from a dei cover count) would also do.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "outstanding as of August 13, 2026 was 83,198,894"
+    }
+   ]
+  },
+  {
+   "request_id": "AS-AGA-1",
+   "outcome": "rejected",
+   "rationale": "Not a verification bug. The OB Hospitalist line prints a 1.00 % floor and the loan is S + 9.75 % in the adjacent quarters; SOFR is the right reference. agentA is correct and the asx2c correction to Fixed / no reference is wrong. Withdraw the request and fix the row (SOFR, Floating, blank spread).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-040578",
+     "text": "OB Hospitalist Group, Inc. (15) Subordinated Unsecured Term Loan S + 9.75 % 1.00 % 14.21 % 9/27/2028 21 21 21"
+    }
+   ]
+  }
+ ]
+}

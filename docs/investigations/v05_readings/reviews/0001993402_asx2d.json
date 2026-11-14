@@ -1,0 +1,331 @@
+{
+ "reviewer_id": "agent:reviewer-ascf-20261114-opus",
+ "report_digest": "fb16af7f421d24fe8cd5f0a702351c643fca893d6f89a7463df0b13e2f5192b3",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_6c0071741356",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. A01 2024-06-30: gap 263 is ROW-2beaa458eaaefdb1 VPP Group Holdings common, published 263,000 = printed 263; listed in PD-A01-1993402-9 (as_filed); quote found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "VPP Group Holdings, L.P. (3)(5)(11) Common - 265 263 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bed255557a5b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. A01 2024-12-31: gap 910 is ROW-ecf7a1899aa66065 WST USA Holdco DDTL, published 910,000 = printed 910; in PD-A01-1993402-9.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-040578",
+     "text": "WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910 0.07"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d0d044d89c58",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. A01 2025-03-31: KWOR HoldCo ROW-741a42d3b005e924 652 (206,274-652 = printed Insurance 205,622) and AVG/VetCor ROW-4d6ca9cfef2695fb 280, ROW-de693825875bf98b 734, ROW-9793cea8acc9f40b 5, ROW-61bfba94880f425f 2 (=1,021); each published FV equals its printed line.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "205,532 205,622 14.01"
+    },
+    {
+     "accession": "0000950170-25-071531",
+     "text": "AVG Intermediate Holdings LLC (15)(17) Subordinated Unsecured Term Loan N/A 13.75 % PIK 3/16/2028 778 778 734 0.05"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7db86e1f04b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. C107 2026-06-30: 197 flagged = 197 rows in PD-C107-1993402-10; undrawn lines with bracketed printed cost; reviewer page scan of all asx2c rows shows no cost sign mismatch after the 8 sign corrections (all 8 verified on the page, e.g. Health Buyer ROW-81059fc11436ec08 -31,000).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4274d0bc35e4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. F28 2026-08-13: asx2c fund_financials.csv has a companyfacts 2026q3 record dated 2026-08-13 carrying only shares_outstanding 83,198,894 (all balance-sheet fields blank); it is the 10-Q cover share count, not a quarter. Check misfire; routed as AS-F28-1. Carried source was supported by the 2026-10-21 review.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "outstanding as of August 13, 2026 was 83,198,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001993402_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_73f717bce3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. The 21 source-only blocking rows at 2026-06-30 in asx2c source_reconciliation_source_only_detail.csv equal the 21 row ids in the proposal; all are 'Commitment Type ... Commitment Expiration Date' lines (sum -2.04M) of the separate unfunded-commitments table; the same loans are published from the schedule (e.g. BlackHawk, DT Intermediate, EPFS revolvers/DDTLs). as_filed is an allowed class; publishing them would double count.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7b5f2541cc77",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. The 21 source-only blocking rows at 2026-06-30 in asx2c source_reconciliation_source_only_detail.csv equal the 21 row ids in the proposal; all are 'Commitment Type ... Commitment Expiration Date' lines (sum -2.04M) of the separate unfunded-commitments table; the same loans are published from the schedule (e.g. BlackHawk, DT Intermediate, EPFS revolvers/DDTLs). as_filed is an allowed class; publishing them would double count. SRC_BDC01 flags the same rows (flagged.py shows no holdings rows: the population is source-side).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fc28b339eb40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from the asx2c review (unchanged item). asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. X05 2024-12-31: 3 flagged = 3 proposal rows (Apex ROW-edfb2a8d059956ff, DT ROW-b057f443bed7ab19, Spartan ROW-d3d13b504bfb881b). Each prints the all-in rate in the reference column, a floor, and no margin; spread now blank, rate and PIK equal print. as_filed supported; no margin invented.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-040578",
+     "text": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,930 3,922 3,900 0.31"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7538e1af662f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. C04 2024-03-31: 22 of 36 equity rows now publish the printed count; the other 14 (exactly the 14 rows of PD-C04-1993402-15, e.g. EAH Holdco ROW-8f04ba3d1dbf6c2c, KAWP ROW-9d7634a67a9ba917, Tiger Parent ROW-28acf37b650e2700) print a dash in the Par Amount / Shares column, so 61.1 pct is the page ceiling; as_filed is right. All 221 new shares_held values equal the printed count of the row's own FV line (script check of all 221; 60 printed and read, incl. the 10 former proxies: Concord 3, ACG 17, Goldeneye 1, Eclipse 6,018 / 4,157, Arrow 17; and MDC Interior 1, US Fitness 3). Scale stays with AS-UNITS-1.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057976",
+     "text": "EAH Holdco, LLC (5)(11) Common - 136 153 0.05"
+    },
+    {
+     "accession": "0000950170-24-095485",
+     "text": "MDC Interior Acquisition Inc (5)(11)(13) Common 1 894 894 0.16"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b0b10f135933",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. Restatement accepted: the investigation now says maturity 2028-11-13 and spread 6.00 already equalled the printed line (verified in production b1112b and asx2a), only name and type of ROW-288e3c0bb1b91762 were wrong and were fixed from the page, and the flag read the member text. confirmed_error for the row stands on the name/type error.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_66286f85c43d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. Restatement accepted: the investigation now says maturity 2028-11-13 and spread 6.00 already equalled the printed line (verified in production b1112b and asx2a), only name and type of ROW-288e3c0bb1b91762 were wrong and were fixed from the page, and the flag read the member text. confirmed_error for the row stands on the name/type error.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7bb419f7380c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. ROW-8d52fca8897fa830 OB Hospitalist 2024-09-30 now SOFR / Floating / spread blank, rate and PIK 14.7 as printed; matches the floor and the S + 9.75 % lines of the adjacent quarters. PD-agentA_reference_uncorroborated-1993402-14 (as_filed, 1 row) is right in substance: SOFR comes from the filer's member and the adjacent quarters, no margin is printed. Its rerun points at flagged.py X05 rather than the agentA flag file; it shows the same row and shape, but should cite shadow/agent_a_flags.csv.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20"
+    },
+    {
+     "accession": "0000950170-25-040578",
+     "text": "OB Hospitalist Group, Inc. (15) Subordinated Unsecured Term Loan S + 9.75 % 1.00 % 14.21 % 9/27/2028 21 21 21"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b83fb4925348",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "asx2d vs asx2c (reviewer rv_diff2.py over all 8,122 rows): only shares_held on 221 rows and coupon_type / reference_rate_type on ROW-8d52fca8897fa830 changed; no row added or removed. ROW-8d52fca8897fa830 OB Hospitalist 2024-09-30 now SOFR / Floating / spread blank, rate and PIK 14.7 as printed; matches the floor and the S + 9.75 % lines of the adjacent quarters. X05 2024-09-30 flags exactly this one row (flagged.py asx2d); PD-X05-1993402-13 now lists 4 rows (3 at 2024-12-31 plus this); same no-margin shape, as_filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). All 185 issuer_name changes asx2a->asx2c begin the printed company cell of the row's own FV line (rv_names.py, 185/185); 15 sampled by eye. issuer_name_printed is the right detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "AVE Holdings III, Corp. (8) First Lien Term Loan S + 5.25 % 0.75 % 9.99 % 2/25/2028 248 245 243 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). Wrapper regex widening: no name outside the 185 changed between asx2a and asx2c, so no name was damaged; every changed name equals the printed cell.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "AVG Intermediate Holdings LLC (15)(17) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 298 298 280 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). 8 spread changes all equal the printed margin after removing the inner space (Edgeco 4.5, FL Hawk 4.5, Merlin 4.75, YLG 4.75, AMBA 5.25, Hercules 4.75, Unison 4.5, Emmes 2.75).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071531",
+     "text": "Edgeco Buyer, Inc. (8)(13)(19) First Lien Term Loan S + 4 .50 % 8.79 % 6/1/2028 2,197 2,192 2,186 0.15"
+    }
+   ]
+  },
+  {
+   "observation_key": "negative-printed-cost-published-positive",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). 8 sign corrections each equal the bracketed printed cost (YLG, Health Buyer, WRE, Zinc x2, Hydraulic, MEI, Adelaide); COP cost 889 equals the printed cell.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095485",
+     "text": "Health Buyer LLC (5)(7)(13) First Lien Delayed Draw Term Loan S + 5.50 % 0.75 % 10.97 % 4/27/2029 12,565 ( 31 ) ( 60 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-legend-number-differs-by-filing",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). Legend read per filing: 20 = non-accrual in the 2025-09-30, 2025-12-31 and 2026-03-31 schedules; in the 2026-06-30 10-Q the current schedule's 20 is 'interest floor of 0.00 %' (20 = non-accrual only in the comparative schedule), and the notes say no portfolio company was on non-accrual at June 30, 2026. The 87 2026-06-30 rows carrying (20) stay unknown, correctly. Per-filing legend mapping is the right detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115988",
+     "text": "20. Position is on non-accrual status."
+    },
+    {
+     "accession": "0001193125-26-349216",
+     "text": "30, 2026, there we re no portfolio companies with loans on non-accrual status"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-from-member-differs-from-printed-line",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). All 27 instrument_type changes match the printed instrument words of the row's own line; the one maturity change (AVE Holdings III 2028-02-25) matches print.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-name-typo-not-copied",
+   "outcome": "supported",
+   "rationale": "Carried from asx2c (unchanged). Leaving obvious one-letter print typos as the correct name is reasonable; detection not feasible without cross-quarter context.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115988",
+     "text": "COP Hometown Acquisitions, Inc. (8)(16) First Lien Term Loan S + 5.25 % 8.90 % 7/16/2027 899 889 894 0.04"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-printed",
+   "outcome": "rejected",
+   "rationale": "The 7 corrected rows stay supported. Rejected for the Onyx-Fire 2024-09-30 reasoning (report not_done): the commitment table does not show USD tranches. It prints the revolver 4,378 as $ 3,237 and the delayed draw 3,405 as 2,518, a ratio of 0.739 - the CAD rate, the same ratio as the explicitly CAD Movati lines in the same table (CAD 3,500 -> 2,588; CAD 2,625 -> 1,941). That points to CAD par on ROW-72f783b26c758a06 (revolver) and ROW-838ddc0912fcc29b (delayed draw), published USD 4,378,000 / 3,405,000. The 'S +' code and 9.35 % rate point the other way, so the filing contradicts itself: record it as source ambiguity with both readings (or convert to CAD on the commitment-table evidence), not as 'commitment table prints $: USD'.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126519",
+     "text": "Onyx-Fire Protection Services Inc. Revolver 7/31/2031 $ 3,237 $ ( 16 )"
+    },
+    {
+     "accession": "0000950170-24-126519",
+     "text": "Movati Athletic (Group) Inc. Revolver 5/29/2029 1,941 ( 19 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-spread",
+   "outcome": "supported",
+   "rationale": "Restated: OB Hospitalist removed from the fixed group; 4 fixed rows verified (VetCor x2, Employee Health print N/A in other quarters, New ACI N/A 10.00 % PIK). The detector now excludes lines with a floor or adjacent-quarter margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-040578",
+     "text": "OB Hospitalist Group, Inc. (15) Subordinated Unsecured Term Loan S + 9.75 % 1.00 % 14.21 % 9/27/2028 21 21 21"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Fixed as recommended: 221 printed counts published unscaled (all 221 equal the page by script, 60 read); scale left to AS-UNITS-1; C04/units_printed are the right detectors.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108177",
+     "text": "US Fitness Holdings, LLC (12)(13)(15) Common - - - 3 3,182 4,151 0.25"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "10 derived_proxy rows now carry the printed count (Concord 3, ACG 17, Goldeneye 1, Eclipse 6,018/4,157, Arrow 17), verified on the page. Cause correctly attributed to shared code; units_printed catches recurrence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221769",
+     "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "AS-F28-1",
+   "outcome": "supported",
+   "rationale": "Verification bug: the 2026-08-13 record is a cover-date share count with no financial facts; F28 compares coverage on a non-quarter. The proposed repair plus the test that a real quarter with fund data and no holdings still fails does not weaken acceptance. A fix in the companyfacts loader (not creating a quarter row from a dei cover count) would also do.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349216",
+     "text": "outstanding as of August 13, 2026 was 83,198,894"
+    }
+   ]
+  }
+ ]
+}

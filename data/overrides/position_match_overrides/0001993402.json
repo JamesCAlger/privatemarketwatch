@@ -1,0 +1,24 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0001993402",
+  "overrides": [
+    {
+      "action": "force_pair",
+      "begin_report_date": "2026-03-31",
+      "end_report_date": "2026-06-30",
+      "begin_issuer_name": "Mclarens Midco Inc.",
+      "end_issuer_name": "Mclarens Midco Inc.",
+      "begin_fair_value": 9971000.0,
+      "end_fair_value": 638000.0,
+      "replace_end_issuer_name": "Mclarens Midco Inc.",
+      "replace_end_fair_value": 9306000.0,
+      "match_method": "B1b_position_key",
+      "mechanism": "After the printed company names replaced the hierarchy text ('(continued) Mclarens Midco Inc.' at 2026-06-30), the 2026-03-31 first lien term loan (par 9,995, S + 4.75 %, 12/19/2027) was paired with the small 2026-06-30 term loan line (par 640, fair value 638) instead of the 2026-06-30 line of par 9,329 that continues it. The end side is moved to the par 9,329 line.",
+      "evidence": "0001193125-26-221769 (2026-03-31): 'Mclarens Midco Inc. | First Lien Term Loan | S + 4.75 % | ... | 12/19/2027 | 9,995 ...' ; 0001193125-26-349216 (2026-06-30): par 9,329 (fair value 9,306) and par 640 (fair value 638) are two separate term loan lines of the same issuer and maturity; the amortising 03-31 balance continues in the 9,329 line.",
+      "confidence": 0.85,
+      "residual_risk": "Natural key (name, date, fair value within 1 pct or 1,000): exactly one 2026-03-31 row of that name and value, and one 2026-06-30 row for each end value. The par 640 line stays a separate position (first seen 2026-06-30); the filing does not say whether it is a new tranche.",
+      "created_by": "agent:fund-ascf-20261114",
+      "review_id": "RVQ_BLK_8777d98580e3"
+    }
+  ]
+}

@@ -1,127 +1,2614 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "asxc",
+ "sandbox": "asx2d",
  "dispositions": [
   {
-   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1993402-1",
-   "class": "as_filed", "engine": "source_recon", "rule_name": "blocking_source_position_like_parser_mismatch",
-   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
-   "ciks": ["0001993402"],
-   "quarters": ["2024-03-31","2024-06-30","2024-09-30","2024-12-31","2025-03-31","2025-06-30","2025-09-30","2025-12-31","2026-03-31"],
-   "statement": "The source facts reported as unpublished are the rows of the filer's separate unfunded-commitments table (identifier 'Commitment Type ... Commitment Expiration Date'), excluded on purpose by rule exclude_commitment_table_rows. The table sits outside 'Total Investments' and repeats loans already in the schedule. No fix applies: publishing them would double count and break the tie to the filed total, which holds in all nine quarters in asxb.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0001193125-26-221769", "verbatim": "Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )", "quote": "The commitment table ends with its own total, separate from 'Total Investments at fair value'."},
-    {"source": "filing", "accession": "0001193125-26-115988", "verbatim": "Total Unfunded Commitments $ 1,143,533 $ ( 4,234 )", "quote": "Same table at 2025-12-31."}
+   "disposition_id": "PD-A01-1993402-9",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001993402"
    ],
-   "rerun": "sandbox asxb; docs/investigations/v05_readings/0001993402.md section A",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
-  },
-  {
-   "disposition_id": "PD-SRC_BDC01-1993402-2",
-   "class": "as_filed", "engine": "row_validation", "rule_name": "SRC_BDC01",
-   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
-   "ciks": ["0001993402"],
-   "quarters": ["2024-03-31","2024-06-30","2024-09-30","2024-12-31","2025-03-31","2025-06-30","2025-09-30","2025-12-31","2026-03-31"],
-   "statement": "The same commitment-table rows, reported by the row check. Excluded on purpose; they repeat value already in the schedule.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0001193125-26-221769", "verbatim": "Total Unfunded Commitments $ 1,087,013 $ ( 9,492 )", "quote": "Commitment table total, outside the investments total."}
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31"
    ],
-   "rerun": "sandbox asxb",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
-  },
-  {
-   "disposition_id": "PD-fv_conservation-1993402-3",
-   "class": "rule_problem", "engine": "conservation", "rule_name": "fv_conservation",
-   "reason_key": "conservation-anchor-adds-stale-cash-equivalents-already-in-investments",
-   "ciks": ["0001993402"],
-   "quarters": ["2025-06-30","2025-09-30","2025-12-31"],
-   "statement": "Published (including the money-market row published as cash via cash_identifiers) equals the printed 'Total investments at fair value' exactly in these quarters. The check's anchor adds a fund-level cash-equivalents figure of 62,915,000 (the 2024-12-31 value, carried forward) to an investments line that already includes the money-market fund. The anchor store belongs to the validation side; see orchestrator_requests in the report.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0000950170-25-108177", "verbatim": "58,644 - Total investments at fair value 3,160,570 2,131,829", "quote": "2025-06-30: total investments 3,160,570 includes the 58,644 short-term investment."},
-    {"source": "filing", "accession": "0001193125-25-280638", "verbatim": "42,836 - Total investments at fair value 3,582,748 2,131,829", "quote": "2025-09-30: 3,582,748 includes 42,836."},
-    {"source": "filing", "accession": "0001193125-26-115988", "verbatim": "Total Short-Term Investments 71,644 71,644 3.55 Total Investments at fair value $ 4,241,699 $ 4,246,035", "quote": "2025-12-31: 4,246,035 includes 71,644."}
-   ],
-   "rerun": "sandbox asxb",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
-  },
-  {
-   "disposition_id": "PD-F27-1993402-4",
-   "class": "not_applicable", "engine": "fund_financials", "rule_name": "F27",
-   "reason_key": "income-yield-high-while-fund-ramps",
-   "ciks": ["0001993402"],
-   "quarters": ["2024-06-30","2024-09-30","2024-12-31"],
-   "statement": "Income yield above the weighted coupon while the fund ramps: investments grew from 479.9M at 2024-03-31 to 1,565.6M at 2024-09-30 and 2,131.8M at 2024-12-31, so a period's income sits over a fast-growing base. No value is wrong.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0000950170-24-057976", "verbatim": "Total Investments - non-controlled/non-affiliated 479,312 479,854 159.13 %", "quote": "2024-03-31 investments 479.9M."},
-    {"source": "filing", "accession": "0000950170-24-126519", "verbatim": "Total Investments - non-controlled/non-affiliated 1,564,669 1,565,598 151.64 %", "quote": "2024-09-30 investments 1,565.6M."}
-   ],
-   "rerun": "sandbox asxb",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
-  },
-  {
-   "disposition_id": "PD-F33-1993402-5",
-   "class": "as_filed", "engine": "fund_financials", "rule_name": "F33",
-   "reason_key": "fund-row-before-operations-began",
-   "ciks": ["0001993402"],
-   "quarters": ["2023-12-31"],
-   "statement": "A fund-level row before operations began (net assets 25,000 seed capital). Nothing to publish or fix.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0000950170-24-126519", "verbatim": "commenced investment operations on January 19, 2024", "quote": "No investment operations at 2023-12-31."}
-   ],
-   "rerun": "sandbox asxb",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
-  },
-  {
-   "disposition_id": "PD-X01-1993402-6",
-   "class": "as_filed", "engine": "row_validation", "rule_name": "X01",
-   "reason_key": "equity-row-with-printed-pik-dividend-rate",
-   "ciks": ["0001993402"],
-   "quarters": ["2025-06-30", "2025-09-30"],
-   "statement": "Concord Global Acquisition prints a PIK rate of 8.00 % on its equity line in both quarters (2025-06-30 as Common, 2025-09-30 as Preferred, the latter now corrected to preferred); the published rate 8.0 is the printed one. The other 2025-06-30 row (Accelerate Topco, carrying the next line's 10.50 % PIK) is fixed by row correction.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0000950170-25-108177", "verbatim": "Concord Global Acquisition, LLC, (12)(13)(15) Common N/A 8.00 % PIK - 3 2,874 2,874 0.17", "quote": "2025-06-30: printed 8.00 % PIK on a common line."},
-    {"source": "filing", "accession": "0001193125-25-280638", "verbatim": "Concord Global Acquisition, LLC (12)(13)(15) Preferred N/A 8.00 % PIK - 2,670 2,930 2,930 0.15", "quote": "Printed 8.00 % PIK on the equity line, fair value 2,930."}
-   ],
-   "rerun": "sandbox asxb",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
-  },
-  {
-   "disposition_id": "PD-A01-1993402-8",
-   "class": "as_filed", "engine": "oracle", "rule_name": "A01",
    "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
-   "ciks": ["0001993402"],
-   "quarters": ["2024-06-30", "2024-12-31", "2025-03-31"],
-   "statement": "The rollup and its rows sit on members that spell the heading differently, so the check cannot pair them; published equals filed in all three quarters. Members found with fact_members.py: 2024-06-30, the 263,000 gap under 'Equity Investments Diversified Consumer Services' is VPP Group Holdings tagged on '...Equity Diversified Consumer Services VPP Group Holdings, L.P.' (the word 'Investments' missing), and the 549,000 gap under 'Secured Debt Diversified Financial Services' is Wealth Enhancement Group tagged under '...Secured Debt Healthcare Providers and Services Wealth Enhancement Group'. 2024-12-31: the 910,000 gap under 'Secured Debt Building Products' is WST USA Holdco's delayed draw, whose member carries no heading or issuer (issuer set by row correction, D-105). 2025-03-31: the unsecured-debt industry subtotals are tagged on 'Secured Debt <industry>' members (652,000 KWOR on 'Secured Debt Insurance' C_139c87ab; 1,021,000 on 'Secured Debt Diversified Consumer Services' C_711895d1), and the PointClickCare rollup 107,635,000 is the 2024-12-31 comparative fact. No published value is wrong; a fix would mean renaming filer members, which changes nothing published.",
+   "statement": "Each traced gap is a published row whose filer member is spelled differently from its heading, so the check cannot pair it with its subtotal; every published value equals its printed line. 2024-06-30: the 263 gap under 'Equity Investments Diversified Consumer Services' is the VPP Group Holdings common line (printed 263, member without 'Investments'). 2024-12-31: the 910 gap under 'Secured Debt Building Products' is the WST USA Holdco delayed draw line (printed 910; member without heading). 2025-03-31: the Insurance subtotal is printed 205,622 and the published insurance rows sum to 206,274 only because the KWOR HoldCo line (652, unsecured) is tagged on a 'Secured Debt Insurance' member (206,274 - 652 = 205,622); the 1,021 excess under 'Secured Debt Diversified Consumer Services' is four unsecured AVG and VetCor lines (280 + 734 + 5 + 2 = 1,021) tagged on 'Secured Debt' members. Other A01 amounts are not covered by this entry. No fix applies: renaming filer members changes no published value.",
    "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0000950170-24-095485", "verbatim": "VPP Group Holdings, L.P. (3)(5)(11) Common - 265 263 0.05", "quote": "2024-06-30: the 263 row, tagged on a member spelled 'Equity Diversified Consumer Services'."},
-    {"source": "filing", "accession": "0000950170-24-095485", "verbatim": "Wealth Enhancement Group, LLC (5)(8) First Lien Delayed Draw Term Loan S + 5.50 % 1.00 % 10.82 % 10/4/2027 553 537 549 0.10", "quote": "2024-06-30: the 549 row, printed under Diversified Financial Services, tagged under Healthcare Providers and Services."},
-    {"source": "filing", "accession": "0000950170-25-040578", "verbatim": "WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910 0.07", "quote": "2024-12-31: the 910 row, member without heading."},
-    {"source": "filing", "accession": "0000950170-25-071531", "verbatim": "KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured HoldCo Debt S + 3.25 % 7.54 % 2/28/2030 652 652 652 0.04 652 652 0.04", "quote": "2025-03-31: the second 652 is the unsecured Insurance subtotal, tagged on 'Secured Debt Insurance'."}
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2024-06-30",
+     "row_id": "ROW-2beaa458eaaefdb1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-12-31",
+     "row_id": "ROW-ecf7a1899aa66065"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2025-03-31",
+     "row_id": "ROW-741a42d3b005e924"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2025-03-31",
+     "row_id": "ROW-4d6ca9cfef2695fb"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2025-03-31",
+     "row_id": "ROW-de693825875bf98b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2025-03-31",
+     "row_id": "ROW-9793cea8acc9f40b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2025-03-31",
+     "row_id": "ROW-61bfba94880f425f"
+    }
    ],
-   "rerun": "sandbox asxc; python scripts/v05_evidence/fact_members.py 1993402 <accession> <value>",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095485",
+     "quarter": "2024-06-30",
+     "cik": "0001993402",
+     "verbatim": "VPP Group Holdings, L.P. (3)(5)(11) Common - 265 263 0.05",
+     "quote": "'VPP Group Holdings, L.P. (3)(5)(11) Common - 265 263 0.05': the 263 row"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-040578",
+     "quarter": "2024-12-31",
+     "cik": "0001993402",
+     "verbatim": "WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910 0.07",
+     "quote": "'WST USA Holdco, Inc. (6)(7)(15) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.56 % 3/31/2027 2,493 896 910 0.07': the 910 row"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071531",
+     "quarter": "2025-03-31",
+     "cik": "0001993402",
+     "verbatim": "KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured HoldCo Debt S + 3.25 % 7.54 % 2/28/2030 652 652 652 0.04",
+     "quote": "'KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured HoldCo Debt S + 3.25 % 7.54 % 2/28/2030 652 652 652 0.04': the 652 row on a Secured Debt Insurance member"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071531",
+     "quarter": "2025-03-31",
+     "cik": "0001993402",
+     "verbatim": "AVG Intermediate Holdings LLC (15)(17) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 298 298 280 0.02",
+     "quote": "'AVG Intermediate Holdings LLC (15)(17) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 298 298 280 0.02': one of the four unsecured lines (280) under Diversified Consumer Services"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001993402/q.py scratch/fund_runs/0001993402/a01b.sql (LBL=asx2c); oracle/check_failures.csv A01 rows of sandbox asx2c",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14"
   },
   {
-   "disposition_id": "PD-C107-1993402-7",
-   "class": "as_filed", "engine": "row_validation", "rule_name": "C107",
-   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
-   "ciks": ["0001993402"],
-   "quarters": ["2026-03-31"],
-   "statement": "The negative costs are printed on undrawn revolver and delayed-draw lines of the main schedule (footnote 7: negative cost and fair value result from unamortized fees). Eagan Parent's delayed draw publishes cost -6,000 and fair value -72,000 exactly as printed.",
-   "basis": "read",
-   "addresses_verdict": {"2026-03-31": "The reviewer found Eagan Parent's fair value of (72) stored as cost -72,000, read from the separate commitment table. Those commitment-table rows are now excluded (rule exclude_commitment_table_rows); the published Eagan row comes from the schedule with cost -6,000 and fair value -72,000, as printed. The error no longer stands."},
-   "evidence": [
-    {"source": "filing", "accession": "0001193125-26-221769", "verbatim": "Eagan Parent, Inc. (7)(13)(15)(18) First Lien Delayed Draw Term Loan S + 4.50 % 8.17 % 9/8/2032 4,804 ( 6 ) ( 72 )", "quote": "Printed cost (6), fair value (72) on the undrawn line."}
+   "disposition_id": "PD-C107-1993402-10",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001993402"
    ],
-   "rerun": "sandbox asxb",
-   "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop); not accepted by the owner", "decided_on": "2026-10-14"
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "statement": "Every flagged row (202 at 2026-03-31, 197 at 2026-06-30) is an undrawn revolver or delayed draw line whose printed cost is a negative figure (unamortised fees); the published cost equals the printed cell (sandbox asx2c scan of every row against its own table row: cost sign and size agree, the 8 rows that did not were corrected in this run). The reason R-C107-negative-cost-undrawn is accepted by its check for other funds; make_batch_dispositions.py cannot write the D-253 shape (REQ-batch-dispositions-d253-shape), so it is proposed here.",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-6f75aab233e76374"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8a3e64817ec50bb9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1551784796c491d6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-451156b348e674b9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8cffe92531c79d4e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-162c9d7edd204e8d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4ad56d3868f53349"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2c3453ba4f50c0cd"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-036fec76b853b61e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-ca9d93c3a7ec88b7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-719ab62dcc5c63af"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4282a27a6b654409"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b90a585e8e7f4d82"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b07a381e47b7d776"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1a0153a98c510b60"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-06953d2054bb6a00"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-57478c9e00470a05"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7bea7a2f13f69e1e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-3e1fa597679569d4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8d52a6c289b67770"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-735e8950c026aa20"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7093d6d332b2a275"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-57f347d4f68e80b0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d141a674bd5bcbbd"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-04d317ecdb93c1e7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7b42c1d0002cc5b0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-255499aa27e30376"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-544393d215169ea3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-311e10bb23cbf705"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-58d432d69602a00e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-29d03cef23a4f8fb"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-51f7a54b5cc7b95c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8095faa5d3e83a26"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-5fab6b5cf5bef04b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8b4d2ed86da536f2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-63eed7e0c28113f8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-5bb118dcad8d1279"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d650b322f42348d5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-76819a8004a1d05a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a21d57da1ec508c0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-ec07601f1b4127c7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-dbc4754d2ad4c858"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-09d1f7cf1bfe0ab3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a8250987874b548c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-da219b7ce72914de"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-fc72e51b12c8e7d1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2f077de38eb3214b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-38c2be0ef685f7a7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-542475cbf56dfe7d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d0bc433dc58f8b2b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-14b059c17e075346"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f281d3b6ffe4f4f7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2afd436b0cdd262e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1d8645bd99d7186d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7237f3815741c888"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8c31159f537dfd25"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8b775be5c3f739d8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a644854e6d41db82"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-21a1c7e4968bd75c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-cbe872d7cac175b0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2370070a55b5d95e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-33802c98271387e3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a7ba0f8a2413a9cc"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-98ce8ebe9f2e2154"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-12796a59e80ad02d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-0236be383e12e2c5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-bb46d8e4d66a8977"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-acf82a2c7cdcba7c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f1f815a3e1d38e1b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-efb23a885f0a8929"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-9de17e72fec64be5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2403b05ba399cbc5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-19a880345e774116"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4a16523dbb28d52d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-da5b8d12d919b4ea"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a637f8fbf5219f3f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b3d439c8a083bffb"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-757779274e101233"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-c54b4253e51e4ee6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-603a020c9293ff90"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-fbe8f69d4bed2325"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-9f9694fbba15943d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a60b359f9c1c6434"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-34f928cb692f50a3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-bfb7fc650c0223f6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2cde7031f2190b21"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-50e1cef658c0df6e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b4b32e0ee33ca8ae"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-beed5752524a1b84"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-308a67c95085493e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-60acc02f7a12b91f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b620b63ee91e3e18"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7e797b750d4b45fb"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a54c8b7e03a9751d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4a65dd252807d387"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-af996b6e39a024a6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-ce1f566f0d82c9a3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-50e96b28932243a5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a4adc2048857179d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-e4762148e969b65b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-3af26e9a007ba745"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-521578ef213feae7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-fd7a2df03114e735"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a1ff502018946d8f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2522ab9bacbc7f08"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-180d23a627bc19d5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-9ea4afbc849d0573"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1a99c095d2c40b4e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-85772de1a401b3f3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-05d8e7038ddf3d70"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-c035f5628f417dfb"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d70ef4ff811a852f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-dc1026abc00f665f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d5511ecab2a99d2f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-83baa7f72723fdce"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7ba928d4920b8cb8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-9a5d65e73af711c7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a25541ddad474ab3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-c5ef2010f9997692"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d2bcb4d7f4a795cd"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-e7f8e2d47eb68375"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4434316ba7581249"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a62c09a139899954"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-23c1f6d99cfcd7a1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-ef9cad930b50e743"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-bf81f7d8d61cd8cd"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-ab52eec7a395456b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d22b577843e3c634"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-55e1572e62a43e0f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-e4a764ed157e3c73"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-49f8daa10c871a6c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-0cd8ac5fc1c8601c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a37d642433cb954f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-db7bf567add70e5c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-5f8db780d41644d4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-61a826201614b8ef"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4decb493a451bf8e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-18379cc5d9322a2b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-cf47b113be53974f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-69f24a63cb3e50d6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-031c69d60024bc42"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-e10f5651299d6f23"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2037cac20cfe5022"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-809916b1273a99fa"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-c0557f579ffdd04e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-5ee72996de749e03"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-82de147c8686dede"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-61fc0ecd3eb1a117"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1f389d1ef8c9a9d5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-6d91cc8b87b1a139"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8b59f2bb5b2c54f8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-29cadb98407551a0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-e2096f096687d19a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-e30bfb3164198571"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-3c26762d682ba3e6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-6baaa69a197abb92"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-a6f6d2d877277c59"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-dfced44387ca8ed5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-97df3206c564756a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-9d144d81071acc0a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-d76afeb86931a467"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-be6da95e5228741c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-403f0b7c08edfd78"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-59c0b2592aca6cf8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-af00b43237d5f571"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-31db9d60cd0ee25b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-2d4a6f435e04c915"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-47be21700f381648"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-fec42d0017fb56ce"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-fdb2e8a0c41e9f56"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-7fc84ea366465e4c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-4b2b2421efd8c691"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-71f685dc6f524589"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f5d2dc7f70e0881b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1f4d27d87a9ab355"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f1b07759ae57176a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-3cee60a311bf3346"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-31a22a51975aff5e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-cb1234c5ef94d72b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-caeb58c895f006a2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-09e65f7f9b9ada53"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-6b649fb4260edd2b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-574d03651f689d08"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-fc50a82f21ad62f7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8a854707ec82b914"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-04537282067a9904"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-02ead0e9cca21274"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-1b883074296215d6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b856a5dcaf15a430"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-004727af2ab8ad32"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-c8dfc557dc7fe2bc"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-cb145fac4947e052"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-b502b50acf15074b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-59952be0532aa7a5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f8beb8fe20e99712"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f1671defd0087aaa"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-927ef5b8a865ded2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-f39973c3c7b26d1b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-ea2620a50d9d360d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-cab1d97d87dbd047"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-8b94185845b1c5f3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-03-31",
+     "row_id": "ROW-716554f77f6a4af7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2ef39dbece4d3d98"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-00e5e7ae34ea1395"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0e155d5fda120705"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a989354e3b8c1a27"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3ba9980e3fdbadd9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f1a23932c3cbb9ef"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e506bc60dc128a61"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8860f90160e46d37"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1a7548d4087f700a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c1cbc59456e3d6e6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9755253a45d35dca"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-076df73e5f4196b4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-92c4f2bd79e86184"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-90aa00b49c066c2a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-999c1b52907c061b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d90de7386b0bacaf"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ab7a0ed430b20c65"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-754dabe5b3794dc6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0e1b65554d584040"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9970d0e3b8312061"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-18a0bfb95ae25c4d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-16023b78040e3206"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-54c250ce224c99b5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-92dacfceec70cf32"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0612ad97d0fda010"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-86d0c5339af7e247"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-81b0558443c08126"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2e256f15ccfc3ab7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-24cb880f1989fe7b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-64f6e59205ef8cd4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-948fbf1068e07d34"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e0f2c5a62eef00d0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8f195a0726c88498"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2a93b110e575b63c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5d2ad725ad05e884"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a6c5690de6fe2920"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-06004f65345bde9e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9f6aa4bd387e6f8d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4aec0a7e6db27998"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bdc57c6c51529f7e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b0a0b992f1c5f578"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-035bba5b9bd4d327"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7d16178a3b2cbd57"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ce9dd21ea4c88d5c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a1ee778718885b8d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c03d9ef1ebe6fab6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-52e3083ebc61783c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5a3c664e4abf422b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-15bedecb47488214"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-999e14c6c0c0059d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-dfa75da8057aea78"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5e13ce88442c71d7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7610155e8dd964fc"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2cb97a6a43c8f397"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a4ab659689b4cf3a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-028e9f1f38d482bf"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6c6d37c1decfbd06"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-eb57883103eb515b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-20dc43bb600eac97"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ad32f3b8067bf615"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-844a6d621374d1e5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e320dc05348a9182"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b3192283d6523b0a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1a5ef4a332c43e92"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f88e70a73af12700"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-db0e8705b36fc37d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e002c72dd34e6764"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-09db6eec2990315e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f78893d3c1bd003d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ced5d0afb9f34d20"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-712dd74dd9a82c93"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d998dab568cd2dcd"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2bd8db1ca2bff3b6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6df04f7796e53a85"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bad9c18420bba36c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-34e84a12ca261340"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-eb34ead724bcfef4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7a22d87c295cece7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7a8a176b9f1d7625"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9857cabe1713bf37"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7836d68bbcb9f0c2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-128fdaa36bd5e963"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9b37380165bab814"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a93c631ddbf724fe"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9fb74aebdf291472"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-797e77a9794694f5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-966d084656f4d562"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2671cf4e729195d3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4f31d3c11b93b68f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-67b58c3f840aea60"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ad55c9451a293edb"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ba44bdd8b00dddc1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d666843ff58e8007"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-578773bda30c4699"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-13b1f739b93b30f8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-88d2f6d90b943588"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-395a5244cb774fb2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ae5fc1a8185f908d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a7e2d8d4afc41510"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-18615509457db693"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-267421dc29bd33cf"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-332923ee8204980d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bd0c486b400273ba"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c430d60bf6439fa5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-83107e4fd8e4fcfa"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-50455d0d8effd836"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3d677c8f833192b6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c55542fefb2723c6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3087152279e24ead"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5b47d735c1e15470"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2fce21da8bbab6c1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c3fc238c11e6f2ae"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2a4f5cc7e584d562"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-72009e969ce73332"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1e992f2b6f1eb7f7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a1285c048dba2bd6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1b5ae0728eba24b7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-477ec8e81e06d4b6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cfd2688a4786c6e7"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-977e6749e77d0a35"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-21e15c3b69826cd8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d9baa252ff36d8a2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b114d9e3a3034ef6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9379970e21bd3466"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fc47c532adc3e34d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8a4b87d21eba9d4e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c6e938b941454bfe"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b20b78c0c18850c2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-68c717774dc0893b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cc823d2bca7ece16"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1023f764fa1a1689"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3e11831566f47125"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-83bbc6bef2a3caa8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-67df735c24b2c2d3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4ef7c91456abde0a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-29a685d174c272e4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e6a0d9f262c804fc"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-573c2b7d8a807248"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-69bd9b04bdc69f98"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fd490bf43dc028b2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-27adad407ad46488"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e11e7e3fa05d0394"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-83186e86b5b8e313"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-70fd61de3a16f127"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-657cef9ed7a1af1d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f4865ebecb080f6b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7ec60abe763d0f21"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cdd1910389d665b8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d92ae29a83ef4aff"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a930357a2efe5972"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-daae6b43fafa30ea"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6c405e089ecc37d0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a7b7447dbf227ef4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a34ef3b2f918ed83"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5799365bc24f66c6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5b6a1aaa30eb40e9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-56d3a57ffeee9bac"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-35eddaf81d62ad01"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a457d538f11d1e9c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fbbbc1a9e02ecaf1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2b97ce4e8f3213cc"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f6535216382f2784"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-060ec8dae80caa59"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-25b3b36a95932d20"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-84cf0d532897e988"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-228d22f6470a8de9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6ce566cfc722cff9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f90d114afb5ece1d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f99640c07b3cffb3"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bae9ac73f71da2ec"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1317f76385e6e211"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0e153c277525954e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d0ff4d0d17d4f84b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f84d4d4cef89cb80"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-78104fec075a5f21"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-734f3564b3731087"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5a30cef903f64ba2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bd5bcff006b67b37"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d8334a4520479d40"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-dd03decbc8de9a41"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-459383ad9a2b5d82"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4d2ebccd4ab1921b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f7ef2482900174d9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f5e996d7bfab6a89"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f936247ac46bdfe1"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0b61cb72a776b8e6"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b766e4a199c24e70"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-95508cafbd2e57b4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-45f348bd2134e64a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c0a3e98ef3b637c0"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e9180f1c54717e16"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e7d36c4856fec6f2"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-53618fab54604fa9"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d2fee6ebf5fea6e4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5194d0c21cb53700"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-244e85956e3782bf"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6e7e5f520d821abf"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221769",
+     "quarter": "2026-03-31",
+     "cik": "0001993402",
+     "verbatim": "Eagan Parent, Inc. (7)(13)(15)(18) First Lien Delayed Draw Term Loan S + 4.50 % 8.17 % 9/8/2032 4,804 ( 6 ) ( 72 )",
+     "quote": "'Eagan Parent, Inc. (7)(13)(15)(18) First Lien Delayed Draw Term Loan S + 4.50 % 8.17 % 9/8/2032 4,804 ( 6 ) ( 72 )': printed cost (6), published -6,000; the earlier verdict's -72,000 reading does not stand (VR-FL-1993402-01)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349216",
+     "quarter": "2026-06-30",
+     "cik": "0001993402",
+     "verbatim": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )",
+     "quote": "'Total Unfunded Commitments $ 991,533 $ ( 8,573 )': undrawn lines of the fund at 2026-06-30 carry negative values"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001993402/pagecells.py asx2c; python scratch/fund_runs/0001993402/scan_fields.py asx2c",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "addresses_verdict": {
+    "2026-03-31": "RVQ_REV_3116a7a22a51 read the Eagan Parent fair value (72) as a cost of -72,000; the published cost is -6,000 as printed; verdict retired under D-252 (VR-FL-1993402-01)."
+   }
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1993402-11",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "ciks": [
+    "0001993402"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
+   "statement": "The 21 source-only rows at 2026-06-30 (sandbox asx2c source_reconciliation_source_only_detail.csv, all blocking) are lines of the filer's separate unfunded-commitments table (identifier 'Commitment Type ... Commitment Expiration Date', fair values -2.04 million in all), excluded on purpose by rule exclude_commitment_table_rows. The table sits outside 'Total Investments' and repeats loans already in the schedule; publishing it would double count. Earlier quarters: entries of 2026-10-14, replaced by this one.",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_d17b4b72-6c71-4379-b592-3e4f132b28ed"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_54741e7f-24ff-4792-ba0c-53e8c1b5bd80"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_8aa231f6-bd2c-4f9a-b592-30e0a5a1d5f5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_086369d7-1366-4f31-9fed-eee7cfb0bfc4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_ed2aa8fe-4f6c-41f8-97f5-00a9c50ec9aa"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_46775ed4-1e0f-4612-967d-cdee4cace2ef"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_8f11e86a-871a-4cf4-9754-b03a1b40c7c5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_d8bbe833-14e1-43c1-8469-4880420398ed"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_f8ff6e90-6f5e-4f4d-8d51-ae002bf73041"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_2c10d1b6-72ca-46db-9621-e6b3fd51cc07"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_75c44f0a-b061-4b4e-a814-7892a33bc708"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_95509830-716c-442d-a5c4-2347d289e2e8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_3e81139a-128e-48e2-b4db-6a9e38bd353e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_afaf0a1a-0915-406c-b662-a0031580f11f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_6ee1adee-2575-48c2-a621-e7bdb52c5292"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_f3399ac7-b063-4e18-abe7-ea93ca6a5064"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_bd942700-204d-41bf-bd03-a3e10f278c23"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_27fdcfa1-6d1d-4142-9bcf-f26e9eac4c04"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_3c6ebdde-67b3-4c72-bc0f-e9c1fbd65991"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_bf2fcce6-4984-4c50-86ba-055db4a70482"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_66cd84a8-15c6-4c67-9697-507d7814aac7"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349216",
+     "quarter": "2026-06-30",
+     "cik": "0001993402",
+     "verbatim": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )",
+     "quote": "'Total Unfunded Commitments $ 991,533 $ ( 8,573 )': the commitment table's own total, separate from Total Investments"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115988",
+     "quarter": "2025-12-31",
+     "cik": "0001993402",
+     "verbatim": "Total Unfunded Commitments $ 1,143,533 $ ( 4,234 )",
+     "quote": "'Total Unfunded Commitments $ 1,143,533 $ ( 4,234 )': same table at 2025-12-31"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001993402/q.py scratch/fund_runs/0001993402/src1.sql (LBL=asx2c)",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1993402-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "ciks": [
+    "0001993402"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "commitment-memo-table-rows-excluded-not-positions",
+   "statement": "The 21 source-only rows at 2026-06-30 (sandbox asx2c source_reconciliation_source_only_detail.csv, all blocking) are lines of the filer's separate unfunded-commitments table (identifier 'Commitment Type ... Commitment Expiration Date', fair values -2.04 million in all), excluded on purpose by rule exclude_commitment_table_rows. The table sits outside 'Total Investments' and repeats loans already in the schedule; publishing it would double count. Earlier quarters: entries of 2026-10-14, replaced by this one.",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_d17b4b72-6c71-4379-b592-3e4f132b28ed"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_54741e7f-24ff-4792-ba0c-53e8c1b5bd80"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_8aa231f6-bd2c-4f9a-b592-30e0a5a1d5f5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_086369d7-1366-4f31-9fed-eee7cfb0bfc4"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_ed2aa8fe-4f6c-41f8-97f5-00a9c50ec9aa"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_46775ed4-1e0f-4612-967d-cdee4cace2ef"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_8f11e86a-871a-4cf4-9754-b03a1b40c7c5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_d8bbe833-14e1-43c1-8469-4880420398ed"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_f8ff6e90-6f5e-4f4d-8d51-ae002bf73041"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_2c10d1b6-72ca-46db-9621-e6b3fd51cc07"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_75c44f0a-b061-4b4e-a814-7892a33bc708"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_95509830-716c-442d-a5c4-2347d289e2e8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_3e81139a-128e-48e2-b4db-6a9e38bd353e"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_afaf0a1a-0915-406c-b662-a0031580f11f"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_6ee1adee-2575-48c2-a621-e7bdb52c5292"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_f3399ac7-b063-4e18-abe7-ea93ca6a5064"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_bd942700-204d-41bf-bd03-a3e10f278c23"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_27fdcfa1-6d1d-4142-9bcf-f26e9eac4c04"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_3c6ebdde-67b3-4c72-bc0f-e9c1fbd65991"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_bf2fcce6-4984-4c50-86ba-055db4a70482"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2026-06-30",
+     "row_id": "src:0001193125-26-349216:C_66cd84a8-15c6-4c67-9697-507d7814aac7"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349216",
+     "quarter": "2026-06-30",
+     "cik": "0001993402",
+     "verbatim": "Total Unfunded Commitments $ 991,533 $ ( 8,573 )",
+     "quote": "'Total Unfunded Commitments $ 991,533 $ ( 8,573 )': the commitment table's own total, separate from Total Investments"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-115988",
+     "quarter": "2025-12-31",
+     "cik": "0001993402",
+     "verbatim": "Total Unfunded Commitments $ 1,143,533 $ ( 4,234 )",
+     "quote": "'Total Unfunded Commitments $ 1,143,533 $ ( 4,234 )': same table at 2025-12-31"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001993402/q.py scratch/fund_runs/0001993402/src1.sql (LBL=asx2c)",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14"
+  },
+  {
+   "disposition_id": "PD-X05-1993402-13",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X05",
+   "ciks": [
+    "0001993402"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "reason_key": "x05-no-margin-printed-allin-rate-in-reference-column",
+   "statement": "The four rows (OB Hospitalist 2024-09-30 and, at 2024-12-31, Apex Service Partners, DT Intermediate Holdco, Spartan Bidco term loans) print the all-in rate with its PIK part in the reference-rate column ('11.59 % (Incl. 2.00 % PIK)') and no margin at 2024-12-31; the filer's spread tag holds that same all-in rate. Run asx2a published it as the spread; asx2c publishes none, because no margin is printed. The flag is raised by that correction. No fix applies: the margin is not on the page for this quarter. OB Hospitalist (2024-09-30) prints a 1.00 % floor and the 14.70 % PIK all-in rate in the reference column and no margin; the same SOFR loan prints 'S + 9.75 % 1.00 %' in the adjacent quarters, so it stays floating with a blank spread (an earlier Fixed correction was withdrawn).",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2024-12-31",
+     "row_id": "ROW-edfb2a8d059956ff"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-12-31",
+     "row_id": "ROW-b057f443bed7ab19"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-12-31",
+     "row_id": "ROW-d3d13b504bfb881b"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-09-30",
+     "row_id": "ROW-8d52fca8897fa830"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-040578",
+     "quarter": "2024-12-31",
+     "cik": "0001993402",
+     "verbatim": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,930 3,922 3,900 0.31",
+     "quote": "'DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,930 3,922 3,900 0.31': no margin printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126519",
+     "quarter": "2024-09-30",
+     "cik": "0001993402",
+     "verbatim": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20",
+     "quote": "no margin printed (floor and all-in PIK rate only)"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py asx2c X05 0001993402 2024-12-31",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14"
+  },
+  {
+   "disposition_id": "PD-agentA_reference_uncorroborated-1993402-14",
+   "class": "as_filed",
+   "engine": "agentA",
+   "rule_name": "agentA_reference_uncorroborated",
+   "ciks": [
+    "0001993402"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "x05-no-margin-printed-allin-rate-in-reference-column",
+   "statement": "The one flagged row (OB Hospitalist subordinated term loan, 2024-09-30) is a SOFR floating loan (S + 9.75 % 1.00 % in the adjacent quarters) whose 2024-09-30 line prints no margin; published SOFR, Floating, spread blank. agentA reads SOFR from the member text and finds no structured spread: the same missing-margin shape as X05. No margin is on the page, so none is published.",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2024-09-30",
+     "row_id": "ROW-8d52fca8897fa830"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126519",
+     "quarter": "2024-09-30",
+     "cik": "0001993402",
+     "verbatim": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20",
+     "quote": "'OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20': floor and all-in PIK rate, no margin"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001993402/q.py scratch/fund_runs/0001993402/ag1.sql (LBL=asx2d): reads scratch/fund_sandbox/asx2d/output/shadow/agent_a_flags.csv, rule agentA_reference_uncorroborated, row ROW-8d52fca8897fa830",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14"
+  },
+  {
+   "disposition_id": "PD-C04-1993402-15",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "ciks": [
+    "0001993402"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "c04-equity-count-printed-as-dash",
+   "statement": "After this run's corrections 22 of the 36 equity rows of 2024-03-31 publish the printed count (61.1 pct, threshold 70 pct). The other 14 rows print a dash in the Par Amount / Shares column (cost, value and percent only), so there is no count to publish; the rule's ratio cannot reach 70 pct from the page. The count scale question (AS-UNITS-1) is separate.",
+   "basis": "read",
+   "rows": [
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-8f04ba3d1dbf6c2c"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-9d7634a67a9ba917"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-185a7ba06e022a40"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-b4ec4400ea5f1c85"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-b5a56c427bbb6303"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-62f61170768de402"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-6f5130ccb09a71b5"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-28acf37b650e2700"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-02ea51f0f7ab4054"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-8d5e9fab2d0ddaf8"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-5b798801985deb9a"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-7ea64bf06e30973d"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-3d67b2833e574792"
+    },
+    {
+     "cik": "0001993402",
+     "quarter": "2024-03-31",
+     "row_id": "ROW-2ec4fcef90ebbb43"
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057976",
+     "quarter": "2024-03-31",
+     "cik": "0001993402",
+     "verbatim": "EAH Holdco, LLC (5)(11) Common - 136 153 0.05",
+     "quote": "'EAH Holdco, LLC (5)(11) Common - 136 153 0.05': count column is a dash; 136 is the cost"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001993402/eq3.py asx2d (count dash rows)",
+   "decided_by": "PROPOSED by agent:fund-ascf-20261114 (2026-11-14); not accepted by the owner",
+   "decided_on": "2026-11-14"
   }
  ]
 }
