@@ -12,7 +12,14 @@ if [ "$1" = "--add-quarter" ]; then Q="$2"; shift; shift; fi
 C="$@"
 if [ -z "$L" ] || [ -z "$C" ]; then echo "usage: build_fund.sh <label> [--add-quarter YYYY-MM-DD] <cik> ..."; exit 2; fi
 if [ -e "scratch/fund_sandbox/$L" ]; then echo "sandbox $L exists: use a new label"; exit 2; fi
-if tasklist | grep -qi "python"; then echo "a Python process is running: not started"; exit 3; fi
+# The SDK fund loop (scripts/sdk_loop) is itself a Python process and passes its PID: only that one
+# process is ignored; any other Python process still blocks the build.
+if [ -n "$SDK_LOOP_DRIVER_PID" ]; then
+  RUNNING=$(tasklist //FO CSV //NH | grep -i "python" | grep -v "^\"[^\"]*\",\"$SDK_LOOP_DRIVER_PID\"," || true)
+else
+  RUNNING=$(tasklist | grep -i "python" || true)
+fi
+if [ -n "$RUNNING" ]; then echo "a Python process is running: not started"; exit 3; fi
 mkdir -p scratch/fund_runs
 # No model call from a sandbox build: industry labels come from the page and the cache only.
 export OPENAI_API_KEY=
