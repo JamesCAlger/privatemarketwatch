@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "tbxd",
+ "sandbox": "tbxd (older entries); tbzc (2026-06-30 entries added 2026-11-14)",
  "dispositions": [
   {
    "disposition_id": "PD-C04-1913724-1",
@@ -9,20 +9,42 @@
    "engine": "oracle",
    "rule_name": "C04",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000032 \"Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest \\$ 30,625 \\$ 33,380 6.12 %\" 1 112 && python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"Twin Brook Segregated Equity Holdings, LLC (24) (25) (26) Equity- 2.11 % membership interest 19 18 0.00 %\" 1 115 && python scripts/v05_evidence/page_line.py 0001913724 0001913724-26-000015 \"Twin Brook Segregated Equity Holdings, LLC (34) (35) (36) Equity - 2.11 % membership interest 19 16 0.00 %\" 1 116",
-   "ciks": ["0001913724"],
-   "quarters": ["2023-03-31", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2025-03-31", "2025-06-30", "2025-09-30", "2026-03-31"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
    "statement": "The one or two equity rows a quarter with no unit count are the fund's membership interests in its affiliated holding vehicles (Twin Brook Equity Holdings, Twin Brook Segregated Equity Holdings). The page prints a percentage interest, cost and fair value, and no unit count; the filer tags no share count. No fix: there is no count to publish.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000032",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000032",
      "verbatim": "Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest $ 30,625 $ 33,380 6.12 %",
-     "quote": "Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest $ 30,625 $ 33,380 6.12 % (2023-03-31: a percentage interest, cost, fair value; no unit count)"},
-    {"source": "filing", "accession": "0001913724-23-000141",
+     "quote": "Twin Brook Equity Holdings, LLC(10)(11)(12) Equity 6.03 % membership interest $ 30,625 $ 33,380 6.12 % (2023-03-31: a percentage interest, cost, fair value; no unit count)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "Twin Brook Segregated Equity Holdings, LLC (24) (25) (26) Equity- 2.11 % membership interest 19 18 0.00 %",
-     "quote": "Twin Brook Segregated Equity Holdings, LLC (24) (25) (26) Equity- 2.11 % membership interest 19 18 0.00 % (2023-09-30: second vehicle, same layout)"},
-    {"source": "filing", "accession": "0001913724-26-000015",
+     "quote": "Twin Brook Segregated Equity Holdings, LLC (24) (25) (26) Equity- 2.11 % membership interest 19 18 0.00 % (2023-09-30: second vehicle, same layout)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000015",
      "verbatim": "Twin Brook Segregated Equity Holdings, LLC (34) (35) (36) Equity - 2.11 % membership interest 19 16 0.00 %",
-     "quote": "Twin Brook Segregated Equity Holdings, LLC (34) (35) (36) Equity - 2.11 % membership interest 19 16 0.00 % (2026-03-31: same)"}
+     "quote": "Twin Brook Segregated Equity Holdings, LLC (34) (35) (36) Equity - 2.11 % membership interest 19 16 0.00 % (2026-03-31: same)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -34,17 +56,27 @@
    "engine": "oracle",
    "rule_name": "D01",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 %\" 1 112 && python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"Total investments \\$ 1,207,650 \\$ 1,212,376 171.75 %\" 1 60",
-   "ciks": ["0001913724"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "Rows 141 to 478 and fair value 984.3M to 1,212.4M between 2023-06-30 and 2023-09-30. The added rows are printed small positions (many acquired 7/28/2023), and the published sum, 1,212.376M, equals the printed total. No fix: the growth is in the filing.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000141",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 %",
-     "quote": "50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 % (one of the added small rows)"},
-    {"source": "filing", "accession": "0001913724-23-000141",
+     "quote": "50Floor, LLC First lien senior secured revolving loan S + 7.75 % 13.27 % 12/31/2025 199 197 191 0.03 % (one of the added small rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
-     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 478 rows, 1,212.376M: equal)"}
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 478 rows, 1,212.376M: equal)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -56,14 +88,21 @@
    "engine": "oracle",
    "rule_name": "D03",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"Total investments \\$ 1,207,650 \\$ 1,212,376 171.75 %\" 1 60",
-   "ciks": ["0001913724"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "The same growth of the schedule at 2023-09-30; the published sum equals the printed total.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000141",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
-     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 1,212.376M)"}
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 1,212.376M)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -75,14 +114,21 @@
    "engine": "row_validation",
    "rule_name": "CNT02",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"Total investments \\$ 1,207,650 \\$ 1,212,376 171.75 %\" 1 60",
-   "ciks": ["0001913724"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "The same growth of the schedule at 2023-09-30, reported by the row-count check; the published sum equals the printed total.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000141",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
-     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 478 rows, 1,212.376M)"}
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published 478 rows, 1,212.376M)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -94,14 +140,21 @@
    "engine": "fund_financials",
    "rule_name": "F24",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"Total investments \\$ 1,207,650 \\$ 1,212,376 171.75 %\" 1 60",
-   "ciks": ["0001913724"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "The same growth at 2023-09-30, reported at fund level; the published investments figure is the printed total.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000141",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "Total investments $ 1,207,650 $ 1,212,376 171.75 %",
-     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published investments 1,212.376M)"}
+     "quote": "Total investments $ 1,207,650 $ 1,212,376 171.75 % (published investments 1,212.376M)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -113,16 +166,25 @@
    "engine": "nonaccrual",
    "rule_name": "nonaccrual_flag",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-26-000007 \"Performing \\$ 4,269,041 99.8 % \\$ 3,078,161 99.8 % Non-accrual 8,602 0.2 % 6,458 0.2 %\" 1 94",
-   "ciks": ["0001913724"],
-   "quarters": ["2025-12-31"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
    "statement": "The 23 rows flagged non-accrual at 2025-12-31 carry footnote (8) on the page and a cost of 8.602M, the figure the filing prints for non-accrual investments; unflagged cost 4,269.04M matches 'Performing'. No fix: the flags are the filing's.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-26-000007",
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000007",
      "verbatim": "Performing $ 4,269,041 99.8 % $ 3,078,161 99.8 % Non-accrual 8,602 0.2 % 6,458 0.2 %",
-     "quote": "Performing $ 4,269,041 99.8 % $ 3,078,161 99.8 % Non-accrual 8,602 0.2 % 6,458 0.2 % (flagged rows' cost 8.602M)"}
+     "quote": "Performing $ 4,269,041 99.8 % $ 3,078,161 99.8 % Non-accrual 8,602 0.2 % 6,458 0.2 % (flagged rows' cost 8.602M)"
+    }
    ],
-   "addresses_verdict": {"2025-12-31": "The reviewer (RVQ_REV_345b5e2bcd14) found that the 23 rows with footnote (8) sum to the printed non-accrual cost of 8,602 thousand and called the non-accrual condition real. That confirms the published flags; it does not show an error in the published data, and nothing was routed to fix. In tbxa the nonaccrual_flag check flags 0 rows outside that set (flagged.py)."},
+   "addresses_verdict": {
+    "2025-12-31": "The reviewer (RVQ_REV_345b5e2bcd14) found that the 23 rows with footnote (8) sum to the printed non-accrual cost of 8,602 thousand and called the non-accrual condition real. That confirms the published flags; it does not show an error in the published data, and nothing was routed to fix. In tbxa the nonaccrual_flag check flags 0 rows outside that set (flagged.py)."
+   },
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
   },
@@ -133,17 +195,28 @@
    "engine": "fund_financials",
    "rule_name": "F33",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000092 \"There were no dividends declared for the three months ended June 30, 2022 and for the period from January 27, 2022 (Inception) to June 30, 2022.\" 1 154 && python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000141 \"There were no dividends declared for the three months ended September 30, 2022 and for the period from January 27, 2022 (Inception) to September 30, 2022.\" 1 164",
-   "ciks": ["0001913724"],
-   "quarters": ["2022-06-30", "2022-09-30"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2022-06-30",
+    "2022-09-30"
+   ],
    "statement": "Distribution rate 0 in the fund's first quarters: no distribution was declared before December 2022 (first, 0.75 a share, declared 12/19/2022). The check's lower bound (rate > 0) does not fit a fund that has not yet distributed.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000092",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000092",
      "verbatim": "There were no dividends declared for the three months ended June 30, 2022 and for the period from January 27, 2022 (Inception) to June 30, 2022.",
-     "quote": "There were no dividends declared for the three months ended June 30, 2022 and for the period from January 27, 2022 (Inception) to June 30, 2022. (2022-06-30)"},
-    {"source": "filing", "accession": "0001913724-23-000141",
+     "quote": "There were no dividends declared for the three months ended June 30, 2022 and for the period from January 27, 2022 (Inception) to June 30, 2022. (2022-06-30)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000141",
      "verbatim": "There were no dividends declared for the three months ended September 30, 2022 and for the period from January 27, 2022 (Inception) to September 30, 2022.",
-     "quote": "There were no dividends declared for the three months ended September 30, 2022 and for the period from January 27, 2022 (Inception) to September 30, 2022. (2022-09-30)"}
+     "quote": "There were no dividends declared for the three months ended September 30, 2022 and for the period from January 27, 2022 (Inception) to September 30, 2022. (2022-09-30)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -155,17 +228,27 @@
    "engine": "weak",
    "rule_name": "maturity_not_past",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-25-000015 \"Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %\" 1 146 && python scripts/v05_evidence/page_line.py 0001913724 0001913724-25-000015 \"Silver Falls MSO, LLC First lien senior secured term loan S + 4.25 % + 2.25 % PIK 11.45 % 7/28/2023 8/30/2024 1,323 1,291 1,299 0.08 %\" 1 144",
-   "ciks": ["0001913724"],
-   "quarters": ["2024-12-31"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
    "statement": "Four rows (Varsity DuvaSawko revolver and term loan, 59.8M; Silver Falls MSO revolver and term loan, 1.5M) are printed in the 10-K for 2024-12-31 with maturities of 11/27/2024 and 8/30/2024, before the report date: the loans were still held past their stated maturity. The build had published no maturity; this run sets the printed date by row correction, which the check then reports. No fix: the published date is the printed one.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-25-000015",
+    {
+     "source": "filing",
+     "accession": "0001913724-25-000015",
      "verbatim": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %",
-     "quote": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 % (maturity 11/27/2024, before 2024-12-31)"},
-    {"source": "filing", "accession": "0001913724-25-000015",
+     "quote": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 % (maturity 11/27/2024, before 2024-12-31)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-25-000015",
      "verbatim": "Silver Falls MSO, LLC First lien senior secured term loan S + 4.25 % + 2.25 % PIK 11.45 % 7/28/2023 8/30/2024 1,323 1,291 1,299 0.08 %",
-     "quote": "Silver Falls MSO, LLC First lien senior secured term loan S + 4.25 % + 2.25 % PIK 11.45 % 7/28/2023 8/30/2024 1,323 1,291 1,299 0.08 % (maturity 8/30/2024)"}
+     "quote": "Silver Falls MSO, LLC First lien senior secured term loan S + 4.25 % + 2.25 % PIK 11.45 % 7/28/2023 8/30/2024 1,323 1,291 1,299 0.08 % (maturity 8/30/2024)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
@@ -177,20 +260,364 @@
    "engine": "fund_financials",
    "rule_name": "F16",
    "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000092 \"Net investment income (loss) before taxes \\$ 12,707 \\$ ( 199 ) \\$ 23,248 \\$ ( 519 )\" 1 89 && python scripts/v05_evidence/page_line.py 0001913724 0001913724-23-000092 \"There were no dividends declared for the three months ended June 30, 2022\" 1 83",
-   "ciks": ["0001913724"],
-   "quarters": ["2022-06-30"],
+   "ciks": [
+    "0001913724"
+   ],
+   "quarters": [
+    "2022-06-30"
+   ],
    "statement": "First operating quarter: net investment loss (199 thousand) and no distribution. F16 fires because 0 exceeds 1.5 x a negative income yield; no distribution exceeds income.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001913724-23-000092",
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000092",
      "verbatim": "Net investment income (loss) before taxes $ 12,707 $ ( 199 ) $ 23,248 $ ( 519 )",
-     "quote": "Net investment income (loss) before taxes $ 12,707 $ ( 199 ) $ 23,248 $ ( 519 ) (second column: three months to 2022-06-30, a loss of 199)"},
-    {"source": "filing", "accession": "0001913724-23-000092",
+     "quote": "Net investment income (loss) before taxes $ 12,707 $ ( 199 ) $ 23,248 $ ( 519 ) (second column: three months to 2022-06-30, a loss of 199)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-23-000092",
      "verbatim": "There were no dividends declared for the three months ended June 30, 2022",
-     "quote": "There were no dividends declared for the three months ended June 30, 2022 (distribution 0)"}
+     "quote": "There were no dividends declared for the three months ended June 30, 2022 (distribution 0)"
+    }
    ],
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund-clearing loop, sandbox tbxd); not accepted",
    "decided_on": "2026-10-14"
+  },
+  {
+   "class": "as_filed",
+   "ciks": [
+    "0001913724"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-tpgtb-20261114 (fund loop 2026-11-14, sandbox tbzc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-C107-1913724-tbz-1",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "statement": "82 undrawn delayed draw and revolving lines print a negative cost in brackets (unamortised fees netted against an unfunded commitment) beside a negative or zero fair value; published cost and fair value equal the printed line (scanner ixscan.py compared cost, fair value and par of every published row of the quarter with its own printed line: no sign or amount differs). Footnote (6) of the filing reads: 'The negative fair value is a result of the unfunded commitment being valued below par as of June 30, 2026'. No fix applies. The rule also flags 89 rows of the TCAP JV's own schedule (underlying_schedule, retained and flagged, not published) whose undrawn revolvers print the same bracketed negative cost in the JV schedule of Note 11; published equals printed on those lines too. Total rows covered: 171 (82 parent + 89 JV).",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "Centennial Environmental Acquisition, LLC (6) First lien senior secured delayed draw term loan S + 5.00 % 8.64 % 6/2/2026 6/2/2031 8,006 ( 170 ) ( 170 ) ( 0.01 ) %",
+     "quote": "Centennial Environmental Acquisition, LLC (6) First lien senior secured delayed draw term loan S + 5.00 % 8.64 % 6/2/2026 6/2/2031 8,006 ( 170 ) ( 170 ) ( 0.01 ) % (par 8,006, cost ( 170 ), fair value ( 170 ); footnote (6): negative fair value is the unfunded commitment valued below par)",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "L&J Holding Company LLC (6) First lien senior secured delayed draw term loan S + 4.75 % 8.48 % 4/1/2026 4/1/2028 9,408 ( 59 ) ( 138 ) ( 0.01 ) %",
+     "quote": "L&J Holding Company LLC (6) First lien senior secured delayed draw term loan S + 4.75 % 8.48 % 4/1/2026 4/1/2028 9,408 ( 59 ) ( 138 ) ( 0.01 ) % (par 9,408, cost ( 59 ), fair value ( 138 ), published -59,000 / -138,000)",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "SupplySide BuyerCo, Inc (6) First lien senior secured delayed draw term loan S + 5.00 % 8.64 % 6/11/2026 6/11/2031 7,553 ( 112 ) ( 112 ) ( 0.01 ) %",
+     "quote": "SupplySide BuyerCo, Inc (6) First lien senior secured delayed draw term loan S + 5.00 % 8.64 % 6/11/2026 6/11/2031 7,553 ( 112 ) ( 112 ) ( 0.01 ) % (par 7,553, cost ( 112 ), fair value ( 112 ))",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "Duggal Acquisition, LLC (6) First lien senior secured revolving loan S + 5.00 % 8.73 % 6/4/2026 9/30/2030 $ 7,319 $ ( 95 ) $ ( 95 ) ( 0.25 ) %",
+     "quote": "Duggal Acquisition, LLC (6) First lien senior secured revolving loan S + 5.00 % 8.73 % 6/4/2026 9/30/2030 $ 7,319 $ ( 95 ) $ ( 95 ) ( 0.25 ) % (TCAP JV schedule, Note 11: cost ( 95 ), fair value ( 95 ))",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "Bestop, Inc (6) First lien senior secured revolving loan S + 5.50 % 9.23 % 6/4/2026 3/29/2029 7,081 ( 76 ) ( 77 ) ( 0.20 ) %",
+     "quote": "Bestop, Inc (6) First lien senior secured revolving loan S + 5.50 % 9.23 % 6/4/2026 3/29/2029 7,081 ( 76 ) ( 77 ) ( 0.20 ) % (TCAP JV schedule, Note 11)",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py tbze C107 0001913724 2026-06-30 200",
+   "rows": [
+    "ROW-00c8e0716a193160",
+    "ROW-06d4fcaf03eaea4b",
+    "ROW-08a9f1f00d210445",
+    "ROW-09ad877e1599691c",
+    "ROW-0a8f772e632e3473",
+    "ROW-0d6897d7de84c8ee",
+    "ROW-12019d35f60625a3",
+    "ROW-1738e4c924ca089a",
+    "ROW-1c5b4d9e6d288931",
+    "ROW-1c721c769685e439",
+    "ROW-1cd8472e4f0fe643",
+    "ROW-1e7fe6f4c25c7db7",
+    "ROW-2d2c6b7020da8ca9",
+    "ROW-309c8c100d05255a",
+    "ROW-30d13180d77206f9",
+    "ROW-326c6d791e5413c7",
+    "ROW-34c94e54915a7648",
+    "ROW-36c1e4743e678976",
+    "ROW-3ecb509aca4b0287",
+    "ROW-478e425d66a0a928",
+    "ROW-4c0b39f4cf700fa8",
+    "ROW-4d67f57569b734c8",
+    "ROW-51c0b25fdd077384",
+    "ROW-58b202bd133dd733",
+    "ROW-5b3f6683ca536cbc",
+    "ROW-60c594c122db3869",
+    "ROW-610ff7e634d663e9",
+    "ROW-61f6f50ab25d753d",
+    "ROW-684683c87c6d3f09",
+    "ROW-6e26b4bdfacbfd57",
+    "ROW-72c7b1c86c7f75e7",
+    "ROW-742f65ffd2d47da1",
+    "ROW-75fb556f668bdb04",
+    "ROW-787ff613b20b9199",
+    "ROW-7bdc4e6d7d2c2f41",
+    "ROW-7e273ac1d1ebbf0c",
+    "ROW-8100dbe808dbba73",
+    "ROW-825bd9f538d7facb",
+    "ROW-84accd132e76a9a9",
+    "ROW-85e696d449c6763d",
+    "ROW-872513fe8d6d5925",
+    "ROW-8d47a02305bf6e05",
+    "ROW-8ec5fd983801c5ec",
+    "ROW-93ea4b195e0044fc",
+    "ROW-9515dc95d374c2fd",
+    "ROW-958541b1c3076169",
+    "ROW-9905fa8fd8140172",
+    "ROW-9dab420ae9ca589b",
+    "ROW-a86057f20f5fa455",
+    "ROW-b1db5fdd396ee5a1",
+    "ROW-b205427baba2b376",
+    "ROW-b65bbe20ae1df2b4",
+    "ROW-b68fa91c132e6cb8",
+    "ROW-bb84c380d4875416",
+    "ROW-bd5d6f4e61277fe2",
+    "ROW-bef67e0f114e8077",
+    "ROW-c07569d642ad9d70",
+    "ROW-c3529cae58594de8",
+    "ROW-c40ec1651b737671",
+    "ROW-c644cffe87ddf429",
+    "ROW-d1385389c383f648",
+    "ROW-d2d3b15ec43dac66",
+    "ROW-d4eafe23b33e3015",
+    "ROW-d50f49e326a9a9ed",
+    "ROW-dbb1ae504c27cb3b",
+    "ROW-de2189e3a434cda0",
+    "ROW-e0febec738c05582",
+    "ROW-e10071e9ee663039",
+    "ROW-e3116130788ea9fc",
+    "ROW-e3a97e4994e2fa66",
+    "ROW-e3b5039ff8b4419f",
+    "ROW-e528810c54e4b613",
+    "ROW-eaf6b09d9580c953",
+    "ROW-ebd84bb8646f9c64",
+    "ROW-ee503dbbfdd9d623",
+    "ROW-efcec3f5a970071c",
+    "ROW-f3a86bf7c813a130",
+    "ROW-f3efc9ef56e899cb",
+    "ROW-f49d873a24c61e3f",
+    "ROW-f6b67b37a1747dd8",
+    "ROW-fa3385e22b80b314",
+    "ROW-fbd4d2368305f6ad",
+    "ROW-0bc4154e5245be0c",
+    "ROW-0e72ef0fd604460b",
+    "ROW-1245b931d15fb59c",
+    "ROW-1293b8bf11644235",
+    "ROW-16376e6cf43405ed",
+    "ROW-1d1dc939d5c76fc9",
+    "ROW-2afcf3876d0bb73e",
+    "ROW-2b29061e82fb7291",
+    "ROW-2c223acebf4f5d97",
+    "ROW-2e86ef3c5fc2e9fd",
+    "ROW-2ec7f8814f74d758",
+    "ROW-3048812f51fa93c9",
+    "ROW-350701f99eb30751",
+    "ROW-44a26030df7565e8",
+    "ROW-455d25dbaa11a556",
+    "ROW-45e0144a7541e456",
+    "ROW-4af44338a110e2b0",
+    "ROW-4cbc2bdba725562a",
+    "ROW-502ee6bf38bd9e37",
+    "ROW-514f43234b5412bc",
+    "ROW-535892972e0f662c",
+    "ROW-5562a10740643a9e",
+    "ROW-5567da081b785340",
+    "ROW-55d8ec1247b15388",
+    "ROW-56fd7e4df7ab8edf",
+    "ROW-573283e129d57417",
+    "ROW-578c1e12f699f05f",
+    "ROW-57a74e4d71e13634",
+    "ROW-5b780f4561c4e340",
+    "ROW-5d1663790e0dd2c1",
+    "ROW-5d4a04a271cbd0db",
+    "ROW-5d50ab5763f0c160",
+    "ROW-5e25f021e8dd064f",
+    "ROW-5fcf766ccee0e171",
+    "ROW-61364bed1af867c3",
+    "ROW-67b87f626e589e34",
+    "ROW-6a42c9e5ac719953",
+    "ROW-6cc96758ebd58b7b",
+    "ROW-7986ebdecac06909",
+    "ROW-7b0fefe056894c80",
+    "ROW-7be996b6c45556d2",
+    "ROW-7d050b2565d30ff1",
+    "ROW-805af5ad22e29db7",
+    "ROW-8c4158efec71d006",
+    "ROW-91b9cbf8a6f9fcc7",
+    "ROW-934fce4f6cb4ac2d",
+    "ROW-9e58a01315138b65",
+    "ROW-a00a5f776a79fc38",
+    "ROW-a0f590c2ed335453",
+    "ROW-a1086c0cec0236d8",
+    "ROW-a5dd40f473c02593",
+    "ROW-a5fcc31b8fb77d05",
+    "ROW-a86b9929065c9599",
+    "ROW-ab0432163dc44239",
+    "ROW-ac1f0dfa44f918c2",
+    "ROW-ae666e20080d2f22",
+    "ROW-af637188444997df",
+    "ROW-b08871a6896ae24a",
+    "ROW-b0c085d2cba57cef",
+    "ROW-b39824616a98ddc1",
+    "ROW-b6afc0f8aaf6a47e",
+    "ROW-b7800d934525105e",
+    "ROW-b8d54c49a0d73187",
+    "ROW-bced9cb71ecefdab",
+    "ROW-c5ac2ad99527f92a",
+    "ROW-c87cc10aa7991bbf",
+    "ROW-cd0b59c0b2ad90fa",
+    "ROW-d59719e183bf0ac8",
+    "ROW-d59f48993a4f6e92",
+    "ROW-d64d9dff2c286d19",
+    "ROW-d825e381aad232db",
+    "ROW-d9e9814d7a718742",
+    "ROW-da64ee0b85979ceb",
+    "ROW-da88924b2d961a44",
+    "ROW-dca37ec05eaace88",
+    "ROW-dd3932259a7782b0",
+    "ROW-e082ce3dbcf045cb",
+    "ROW-e1aa465fd3002be6",
+    "ROW-e1d516ebdee7c753",
+    "ROW-e28642a19f9094ae",
+    "ROW-eb1ef4a1c52727e9",
+    "ROW-f08be2dce99152cb",
+    "ROW-f1ea4adc72a3ce56",
+    "ROW-f3be6680c2b55a8b",
+    "ROW-f4882bc519f9eb08",
+    "ROW-f496cbeac98eb1c2",
+    "ROW-f667cf8f829acf2a",
+    "ROW-f76f2b8ef3cc4560",
+    "ROW-ffa4320de7188d27"
+   ]
+  },
+  {
+   "class": "as_filed",
+   "ciks": [
+    "0001913724"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-tpgtb-20261114 (fund loop 2026-11-14, sandbox tbzc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-X06-1913724-tbz-1",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "x06-par-over-10x-fair-value-written-down-non-accrual-loan",
+   "statement": "Two non-accrual loans (footnote (8) = loan on non-accrual status) print a par 10 to 27 times their fair value because the loan is written down: ASC Ortho term loan (par 517, cost 480, fair value 50) and Spectrum Solutions term loan (par 678, cost 579, fair value 25). Published par, cost and fair value equal the printed lines (schedule in thousands of dollars, no foreign-currency marker). No fix applies.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "ASC Ortho Management Company, LLC (8) First lien senior secured term loan S + 9.00 % 12.99 % 7/28/2023 12/31/2026 517 480 50 0.00 %",
+     "quote": "ASC Ortho Management Company, LLC (8) First lien senior secured term loan S + 9.00 % 12.99 % 7/28/2023 12/31/2026 517 480 50 0.00 % (par 517 / cost 480 / fair value 50, non-accrual footnote (8))",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "Spectrum Solutions, LLC (8) First lien senior secured term loan S + 6.25 % 10.24 % 7/28/2023 9/30/2026 678 579 25 0.00 %",
+     "quote": "Spectrum Solutions, LLC (8) First lien senior secured term loan S + 6.25 % 10.24 % 7/28/2023 9/30/2026 678 579 25 0.00 % (par 678 / cost 579 / fair value 25, non-accrual footnote (8))",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py tbzc X06 0001913724 2026-06-30 30",
+   "rows": [
+    "ROW-267b7d50184bd86f",
+    "ROW-5f9da3dc23a7f0a7"
+   ]
+  },
+  {
+   "class": "as_filed",
+   "ciks": [
+    "0001913724"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-tpgtb-20261114 (fund loop 2026-11-14, sandbox tbzc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-C04-1913724-tbz-1",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "c04-membership-interest-no-unit-count",
+   "statement": "The two equity rows at 2026-06-30 are the fund's membership interests in its affiliated holding vehicles (Twin Brook Equity Holdings, Twin Brook Segregated Equity Holdings). The page prints a percentage interest, cost and fair value and no unit count; the filer tags no share count (checked: no InvestmentOwnedBalanceShares or principal fact on c-769 / c-770). No fix: there is no count to publish. Same reason as the accepted earlier quarters (D-162 PD-C04-1913724-1).",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "Twin Brook Equity Holdings, LLC (14) (15) (16) Equity - 17.23 % membership interest $ 88,319 $ 103,067 3.84 %",
+     "quote": "Twin Brook Equity Holdings, LLC (14) (15) (16) Equity - 17.23 % membership interest $ 88,319 $ 103,067 3.84 % (17.23 % membership interest, cost 88,319, fair value 103,067; no unit count)",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "Twin Brook Segregated Equity Holdings, LLC (14) (15) (16) Equity - 2.11 % membership interest 19 16 0.00 %",
+     "quote": "Twin Brook Segregated Equity Holdings, LLC (14) (15) (16) Equity - 2.11 % membership interest 19 16 0.00 % (2.11 % membership interest; no unit count)",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-26-000024 \"Twin Brook Segregated Equity Holdings, LLC (14) (15) (16) Equity - 2.11 % membership interest\" 1 120 0",
+   "rows": [
+    "ROW-7a32fc52c463ce34",
+    "ROW-430b81792968a9b1"
+   ]
+  },
+  {
+   "class": "informational",
+   "ciks": [
+    "0001913724"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-tpgtb-20261114 (fund loop 2026-11-14, sandbox tbzc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-pik_printed-1913724-tbz-1",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "pik-printed-decimal-typo-filer-tags-and-prints-percent-elsewhere",
+   "statement": "SimiTree term loan prints its PIK margin as '+ 0.0175 PIK' (a decimal fraction, a typo); the same filing prints the identical loan's delayed draw as '+ 1.75 % PIK' with the same all-in rate 10.93 %, the filer's PIK tag is 1.75, and the prior quarter prints '+ 1.75 % PIK' on the term loan. Published pik_rate 1.75 is the filer's tag and agrees with the all-in rate; the page is the error. No fix applies.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001913724-26-000024",
+     "verbatim": "SimiTree Acquisition, LLC First lien senior secured term loan S + 5.25 % + 0.0175 PIK 10.93 % 7/28/2023 5/17/2027 1,244 1,238 1,226 0.05 %",
+     "quote": "SimiTree Acquisition, LLC First lien senior secured term loan S + 5.25 % + 0.0175 PIK 10.93 % 7/28/2023 5/17/2027 1,244 1,238 1,226 0.05 % (the typo line, published pik_rate 1.75)",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001913724 0001913724-26-000024 \"SimiTree Acquisition, LLC First lien senior secured\" 3 170 0",
+   "rows": [
+    "ROW-03582e901b48efe0"
+   ]
   }
  ]
 }

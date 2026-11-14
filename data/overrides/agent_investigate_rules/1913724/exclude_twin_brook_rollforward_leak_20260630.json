@@ -1,0 +1,41 @@
+{
+  "cik": "1913724",
+  "rule_id": "exclude_twin_brook_rollforward_leak_20260630",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-06-30' AND COALESCE(instrument_description, '') = '' AND bdc_dimensions_raw IN ('investmentidentifieraxis=Twin Brook Equity Holdings, LLC', 'investmentidentifieraxis=Twin Brook Segregated Equity Holdings, LLC', 'investmentidentifieraxis=TB Senior Loan Fund 1, LLC')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-06-30 the build publishes three no-instrument rows with issuer-only dimensions: Twin Brook Equity Holdings, LLC fair_value 103067000 (context c-2122), Twin Brook Segregated Equity Holdings, LLC 16000 (c-2125), TB Senior Loan Fund 1, LLC 32615000 (c-2129). Each has a detailed schedule row with the same fair value and an instrument: c-769 / c-770 (Equity interest) and c-771 (TB Senior Loan Fund 1, LLC Interest)."
+    },
+    {
+      "source": "filing",
+      "accession": "0001913724-26-000024",
+      "quote": "Twin Brook Equity Holdings, LLC $ 98,589 $ 2,337 $ ( 502 ) $ 2 $ 2,641 $ 103,067 $ 21"
+    },
+    {
+      "source": "filing",
+      "accession": "0001913724-26-000024",
+      "quote": "TB Senior Loan Fund 1, LLC $ - $ 32,550 $ - $ - $ 65 $ 32,615 $ 393"
+    },
+    {
+      "source": "filing",
+      "accession": "0001913724-26-000024",
+      "quote": "Total investments $ 4,819,844 $ 4,821,347 179.40 %"
+    }
+  ],
+  "rationale": "The affiliated-fund roll-forward table in the notes (Investment in Affiliated Funds at Fair Value) is tagged with issuer-only investment identifiers and was published as three extra positions that repeat the fair value of the real schedule rows (103,067 + 16 + 32,615 = 135,698 thousand). The schedule prints each position once and its total ties to 4,821,347 only without them. Same shape as the 2026-03-31 rule; the detailed Equity interest and LLC Interest rows are kept.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-06-30": {
+      "rows": 3,
+      "fv": 135698000.0
+    }
+  }
+}

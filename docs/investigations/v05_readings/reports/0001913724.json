@@ -1,95 +1,1254 @@
 {
  "cik": "0001913724",
- "label": "tbxd",
- "before": "in2a",
+ "label": "tbze",
+ "before": "rg2",
  "shared_code": false,
+ "investigator_id": "agent:fund-tpgtb-20261114",
  "declared_changes": [
-  {"column": "basis_spread", "rows": 83, "why": "row corrections: margin set on 46 loans printed 'S + m % PIK' (tagged as PIK only, published with no spread); spread withdrawn on 37 fixed-coupon loans the filer tagged as a spread or cash margin (Kaizen, Spectrum, Load One, ERG Buyer, Empire Equipment, Innovative FlexPak, Canadian Orthodontic, Cosmetic Solutions)"},
-  {"column": "coupon_type", "rows": 83, "why": "same 83 rows: Floating where a margin is printed, Fixed where a fixed coupon is printed"},
-  {"column": "reference_rate_type", "rows": 37, "why": "withdrawn on the 37 fixed-coupon rows (no reference rate printed)"},
-  {"column": "pik_rate", "rows": 12, "why": "2024-06-30 PIK tags on the neighbouring context (removed on Apex, Golden Bear revolvers and Southeast Primary Care; set on Apex, Golden Bear, Southern Sports term loans); PIK printed and not tagged set on BBG 2024-06-30, Canadian Orthodontic 2025-06-30, EMSAR x3 and Empire Equipment 2026-03-31"},
-  {"column": "interest_rate_cash", "rows": 12, "why": "follows pik_rate on the same 12 rows (cash = all-in minus PIK; none where there is no PIK, as on every other row of the fund)"},
-  {"column": "issuer_name", "rows": 22, "why": "names from the page: Twin Brook equity vehicles (footnote markers, ', Equity interest, Affiliated' in the member) 2024-06-30 to 2025-12-31; Ascent Lifting and NEFCO doubled member names 2023-06-30; Stax 'LLC,First lien' 2023-09-30 to 2024-03-31; VersiCare and VetEvolve footnote markers 2025-03-31"},
-  {"column": "instrument_description", "rows": 22, "why": "same rows: instrument from the page (was empty or '% membership interest')"},
-  {"column": "maturity_date", "rows": 4, "why": "printed maturity before the report date, none published: Varsity DuvaSawko x2, Silver Falls x2 at 2024-12-31"},
-  {"column": "maturity_status", "rows": 4, "why": "same 4 rows: not_disclosed -> unresolved"},
-  {"column": "corrected_fields", "rows": 118, "why": "every row a row correction of this run touched"},
-  {"column": "jv_subsidiary", "rows": 8, "why": "the 8 Twin Brook equity-vehicle rows renamed to the plain vehicle name now carry the JV flag the other quarters' rows of the same vehicles already carry; accounting_record_class unchanged (parent_schedule), totals unchanged"},
-  {"column": "gics_sector", "rows": 325, "why": "4 by this run (renamed Twin Brook vehicle rows lose 'Financials', as every other quarter of those vehicles has none); 321 inherited: already different in my first build tbxa, from changes made since in2a (not mine)"},
-  {"column": "gics_sub_industry", "rows": 370, "why": "4 by this run (as gics_sector); 366 inherited from changes since in2a, present in tbxa"},
-  {"column": "position_id", "rows": 30, "why": "identity follows the renamed issuers (22 rows) and the chains they now join"},
-  {"column": "reference_rate_source", "rows": 6792, "why": "inherited: inferred_post_libor -> ixbrl_field_status already in tbxa (rule change since in2a, not mine)"}
+  {
+   "column": "issuer_name",
+   "rows": 7,
+   "why": "6 DealerOn rows and Ever Fresh printed names"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 5,
+   "why": "instrument words from the printed line"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 21,
+   "why": "par currency from the printed marker (17 incl. 2026-06-30)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 21,
+   "why": "USD par at H.10 / par"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 21,
+   "why": "rate"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 21,
+   "why": "status"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 11,
+   "why": "margin set / fixed-coupon spread withdrawn (30 incl. 2026-06-30)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 17,
+   "why": "CDOR 13 and fixed-coupon reference withdrawn (22 incl. 2026-06-30)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 11,
+   "why": "Floating / Fixed from the printed cell"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 2,
+   "why": "PIK printed and not tagged"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 1,
+   "why": "Varsity printed maturity"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 70,
+   "why": "audit column of the corrections"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 12,
+   "why": "5 mine (printed instrument); 7 from external shared code"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 80,
+   "why": "7 mine (renamed); 69 external punctuation normalisation"
+  },
+  {
+   "column": "entity_id",
+   "rows": 900,
+   "why": "ids follow the names and instruments"
+  },
+  {
+   "column": "position_id",
+   "rows": 660,
+   "why": "ids follow the corrections and the new quarter"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 4,
+   "why": "derived from the spread / pik change"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 2,
+   "why": "derived from the maturity"
+  }
  ],
- "rows_added": 0,
+ "rows_added": 841,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Margin printed as paid in kind ('S + m % PIK'): the filer tags m with the PIK concept only, so 46 loans published no spread and coupon Fixed. Spread set to m, coupon Floating, by row correction (2023-12-31 to 2026-03-31; 3 rows printed 'S + 20.00 % PIK 20.00 %' / 'S + 15.00 % PIK 15.00 %', where the margin equals the coupon, left alone). Generated from the printed line by scratch/fund_runs/0001913724/gen_spec.py.",
-   "kind": "row_correction",
-   "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+  {
+   "what": "TCAP JV own schedule (181 rows, 98.2M) published as positions at 2026-06-30: wrapper source_encodings.reporting_entity_suffixes ['TCAP JV'] flags them underlying_schedule (retain-and-flag).",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 7.25 % PIK 11.21 % 7/28/2023 8/12/2029 1,899 1,848 1,251 0.05 %"},
-    {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 8.00 % PIK 11.93 % 7/28/2023 2/23/2027 755 744 735 0.03 %"}
-   ]},
-  {"what": "Fixed coupons tagged as a spread (or cash margin): 37 loans published a floating spread equal to the coupon over SOFR. Spread and reference withdrawn, coupon Fixed. Clears C115 and fmt_basis_spread at 2025-06-30 and 2025-09-30 (Spectrum Solutions delayed draw 4, 18.00 %).",
-   "kind": "row_correction",
-   "quarters": ["2024-03-31", "2024-06-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"],
+    {
+     "accession": "0001913724-26-000024",
+     "text": "VIT Nyckel Acquisition AB (6) First lien senior secured revolving loan S + 4.50 % 8.15 % 6/4/2026 12/18/2031 2,719 1,334 1,334 3.51 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Non-controlled/non-affiliated investments at fair value (amortized cost of $ 98,126 ) $ 98,199 Restricted cash 17,647"
+    }
+   ]
+  },
+  {
+   "what": "Three affiliate roll-forward rows (135.7M) removed by rule exclude_twin_brook_rollforward_leak_20260630 (schedule rows c-769, c-770, c-771 stay); published = filed 4,821,347K.",
+   "kind": "exclusion",
+   "quarters": [
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001913724-25-000088", "text": "First lien senior secured delayed draw term loan 18.00 % 18.00 % 4/10/2025 3/5/2026 128 127 128 0.01 %"},
-    {"accession": "0001913724-26-000015", "text": "Kaizen Auto Care, LLC First lien senior secured term loan 5.00 % 5.00 % 7/28/2023 12/22/2027 1,359 1,353 898 0.04 %"}
-   ]},
-  {"what": "10-Q 2024-06-30: for three issuers the filer put a PIK loan's cash and PIK tags on the context of the line printed before it (Apex Dental, Golden Bear revolvers carry the term loan's 1.00 PIK; Southeast Primary Care carries Southern Sports Medicine's 4.00/4.00). PIK removed from the three lines that print none; PIK, cash margin and Floating set on the three term loans. Also PIK printed and not tagged: BBG 2024-06-30 (tagged as cash), Canadian Orthodontic 2025-06-30, EMSAR x3 and Empire Equipment 2026-03-31.",
+    {
+     "accession": "0001913724-26-000024",
+     "text": "TB Senior Loan Fund 1, LLC $ - $ 32,550 $ - $ - $ 65 $ 32,615 $ 393"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Total investments $ 4,819,844 $ 4,821,347 179.40 %"
+    }
+   ]
+  },
+  {
+   "what": "'S + m % PIK' margin published fixed with no spread (20 rows) and 'S + m %' spread missing (1 row): basis_spread, coupon Floating set by context-keyed correction.",
    "kind": "row_correction",
-   "quarters": ["2024-06-30", "2025-06-30", "2026-03-31"],
+   "quarters": [
+    "2023-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001913724-24-000076", "text": "First lien senior secured term loan S + 5.50 % + 1.00 % PIK 12.09 % 11/23/2025 618 616 615 0.05 %"},
-    {"accession": "0001913724-24-000076", "text": "BBG, Inc First lien senior secured term loan S + 6.75 % PIK 12.21 % 1/8/2026 1,930 1,826 1,785 0.14 %"},
-    {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 6.50 % PIK 10.46 % 7/28/2023 9/30/2027 1,117 1,115 1,023 0.04 %"}
-   ]},
-  {"what": "Issuer and instrument from the page on 22 rows whose member text the issuer split did not cut: Twin Brook equity vehicles (2024-06-30, 2024-09-30, 2024-12-31, 2025-09-30, 2025-12-31; 96.7M to 103.7M), Ascent Lifting / NEFCO doubled names 2023-06-30 (7 rows, 38M), Stax 'LLC,First lien' (3 quarters), VersiCare and VetEvolve '(32) (33)' 2025-03-31.",
+    {
+     "accession": "0001913724-26-000024",
+     "text": "EMSAR Acquisition LLC First lien senior secured term loan S + 6.50 % PIK 10.49 % 7/28/2023 9/30/2027 1,147 1,141 1,012 0.04 %"
+    }
+   ]
+  },
+  {
+   "what": "Fixed coupon tagged as a spread (9 rows): spread and reference withdrawn, coupon Fixed.",
    "kind": "row_correction",
-   "quarters": ["2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-09-30", "2025-12-31"],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001913724-26-000007", "text": "Twin Brook Segregated Equity Holdings, LLC (35) (36) (37) Equity - 2.11 % membership interest 19 15 0.00 %"},
-    {"accession": "0001913724-23-000092", "text": "NEFCO Holding Company, LLC First lien senior secured term loan S + 6.50 % 11.78 % 8/5/2028 14,360 14,097 14,134 2.37 %"}
-   ]},
-  {"what": "Maturity printed before the report date and not published (the page reader leaves it out; no maturity tag): Varsity DuvaSawko revolver and term loan (59.8M) and Silver Falls MSO at 2024-12-31. Set as printed; the maturity_not_past check then fires and is proposed.",
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Kaizen Auto Care, LLC First lien senior secured term loan 5.00 % 5.00 % 7/28/2023 12/22/2027 1,359 1,354 845 0.03 %"
+    }
+   ]
+  },
+  {
+   "what": "PIK printed and not published (5 rows): pik_rate set.",
    "kind": "row_correction",
-   "quarters": ["2024-12-31"],
+   "quarters": [
+    "2025-06-30",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001913724-25-000015", "text": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %"}
-   ]}
+    {
+     "accession": "0001913724-25-000072",
+     "text": "Canadian Orthodontic Partners Corp (7) First lien senior secured delayed draw term loan T + 7.00 % PIK 10.07 % 7/28/2023 3/19/2026 C$ 353 254 120 0.01 %"
+    }
+   ]
+  },
+  {
+   "what": "Par currency from the printed marker, both directions (23 rows incl. 6 found in review), USD par at the build's H.10 rate.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001913724-26-000007",
+     "text": "Canadian Orthodontic Partners Corp (7)(8) First lien senior secured delayed draw term loan T + 9.00 % PIK 11.62 % 7/28/2023 3/19/2026 C$ 372 258 73 0.00 %"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names (7), instruments (5), maturity (1) from the printed line.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001913724-24-000076",
+     "text": "Ever Fresh Fruit Company, LLC (6) First lien senior secured delayed draw term loan S + 6.25 % 11.69 % 11/17/2028 2,513 ( 49 ) ( 49 ) 0.00 %"
+    }
+   ]
+  },
+  {
+   "what": "C + = 3M CDOR where the filing's legend lists the 3M CDOR (13 rows).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001913724-24-000076",
+     "text": "the reference rates for the floating rate loans were the Term SOFR of 5.40%, the Prime Rate of 8.50%, and the 3M CDOR of 4.97%"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "fund_financials F16 2022-12-31, 2023-06-30, 2023-09-30",
+  {
+   "finding": "fund_financials F16 2022-12-31",
    "hypotheses": [
-    "The published income_yield_pct (2.4, 2.1, 2.8) is not any ratio the page prints: the 10-Q for 2023-09-30 prints 'Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %' (nine months, not annualised), the 10-Q for 2023-06-30 '4.0 % ( 0.5 )%' (six months). The 2023-09-30 instance has no InvestmentCompanyInvestmentIncomeLossRatio fact, so the published figure comes from companyfacts on a context I did not trace. distribution_rate is annualised from monthly 0.18 / 0.19 distributions (8.4, 8.8 pct), so F16 compares an annualised rate with what looks like a single-quarter ratio; annualised (x4) the ratio would pass the check in all three quarters.",
-    "2022-12-31: the only distribution of the year, 0.75 declared 12/19/2022, is annualised as a quarterly figure (11.9 pct); the fund operated only from mid-2022 ('The Company did not commence operations as of December 31, 2022' refers to the Company before the merger with the Private BDC).",
-    "Fix would be highlights figure_corrections for income_yield_pct with the printed ratio (as Monroe), but the printed ratio is year-to-date and not annualised, so it is not comparable either; I did not choose a basis. Also: distribution_rate and income_yield_pct are empty from 2023-12-31 on (coverage gap, no finding)."
-   ]}
+    "distribution_rate = 0.75 x 4 / NAV double-annualises a figure that is already annual (0.1875 quarterly)",
+    "row is the predecessor's comparatives, not the registrant's 10-K"
+   ]
+  },
+  {
+   "finding": "fmt_basis_spread 2025-12-31",
+   "hypotheses": [
+    "total margin 7.00 vs cash margin 5.25: open owner convention D-031 vs D-217; sibling revolver supports the total"
+   ]
+  }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "CR-tbz-1",
+   "file": "pipeline/column_validation.py (C107)",
+   "what": "C107 should skip accounting_record_class = underlying_schedule rows (89 TCAP JV rows flagged at 2026-06-30 besides the 82 fund rows).",
+   "why": "JV look-through rows are retained and not published (owner ruling 2026-09-30); a published-row rule should not count them.",
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Duggal Acquisition, LLC (6) First lien senior secured revolving loan S + 5.00 % 8.73 % 6/4/2026 9/30/2030 $ 7,319 $ ( 95 ) $ ( 95 ) ( 0.25 ) %"
+    }
+   ],
+   "next_action": "Repair with a test that a parent_schedule negative cost still flags; measure on every accepted sandbox.",
+   "quotes": []
+  },
+  {
+   "request_id": "REQ-tbz-1",
+   "file": "scripts/v05_evidence/campaign_retirement_check.py",
+   "what": "Add D-252 modes for pct_of_net_assets_identity (subtotal leak: published sum equals filed total and no published row carries the cited subtotal) and nonaccrual_flag (footnote-(8) cost equals the printed non-accrual table).",
+   "why": "RVQ_BLK_10fb514599dd and RVQ_REV_345b5e2bcd14 are at filed values; no mode can retire their real-error verdicts.",
+   "classification": "acceptance_change",
+   "evidence": [
+    {
+     "accession": "0001913724-26-000015",
+     "text": "Total investments $ 4,479,699 $ 4,481,018 175.76 %"
+    },
+    {
+     "accession": "0001913724-26-000007",
+     "text": "Non-accrual 8,602 0.2 % 6,458 0.2 % Total $ 4,277,643 100.0 % $ 3,084,619 100.0 %"
+    }
+   ],
+   "next_action": "Owner decides whether to extend the retirement tooling or retire these two by hand under D-252.",
+   "quotes": []
+  }
+ ],
  "observations": [
-  {"observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread", "what": "46 loan rows (2023-12-31 to 2026-03-31) printed 'S + m % PIK' carried the margin in a PIK tag only and published no spread, coupon Fixed. Fixed by row correction. The wrapper's rate_tag_reading does not cover this shape on rows with a plain rate tag.", "field": "basis_spread", "quarters": ["2023-12-31", "2026-03-31"], "fair_value_m": null, "cause": "fund", "action": "fixed", "suggested_check": "A loan with a published reference rate and PIK rate and no spread.", "quote": {"accession": "0001913724-26-000015", "text": "First lien senior secured term loan S + 7.25 % PIK 11.21 % 7/28/2023 8/12/2029 1,899 1,848 1,251 0.05 %"}},
-  {"observation_key": "fixed-coupon-tagged-as-spread-published-floating", "what": "37 rows printed with a fixed coupon and no reference rate ('5.00 % 5.00 %', '18.00 % 18.00 %', '6.00 % Cash + 4.50 % PIK 10.50 %') published a spread over SOFR. Only 4 of them were flagged (C115, fmt_basis_spread). Fixed.", "field": "basis_spread", "quarters": ["2024-03-31", "2026-03-31"], "fair_value_m": null, "cause": "row", "action": "fixed", "suggested_check": "A published spread equal to the published rate.", "quote": {"accession": "0001913724-26-000015", "text": "Kaizen Auto Care, LLC First lien senior secured term loan 5.00 % 5.00 % 7/28/2023 12/22/2027 1,359 1,353 898 0.04 %"}},
-  {"observation_key": "rate-tags-on-the-neighbouring-rows-context", "what": "10-Q 2024-06-30: three PIK loans' cash and PIK tags sit on the context of the line printed before them (one across issuers: Southern Sports Medicine's PIK on Southeast Primary Care). Published PIK on lines that print none, and no PIK or spread on the PIK loans. Fixed (6 rows).", "field": "pik_rate", "quarters": ["2024-06-30"], "fair_value_m": 2.73, "cause": "row", "action": "fixed", "suggested_check": "A revolver with a PIK rate whose sibling term loan of the same issuer and same all-in rate has none.", "quote": {"accession": "0001913724-24-000076", "text": "First lien senior secured term loan S + 5.50 % + 1.00 % PIK 12.09 % 11/23/2025 618 616 615 0.05 %"}},
-  {"observation_key": "pik-printed-on-the-row-and-not-tagged", "what": "6 rows print a PIK part with no PIK fact (BBG tagged as cash 2024-06-30; Canadian Orthodontic 2025-06-30; EMSAR x3 and Empire Equipment 2026-03-31). Fixed.", "field": "pik_rate", "quarters": ["2024-06-30", "2026-03-31"], "fair_value_m": 3.1, "cause": "row", "action": "fixed", "suggested_check": "A printed 'PIK' in the rate cell with no published PIK.", "quote": {"accession": "0001913724-24-000076", "text": "BBG, Inc First lien senior secured term loan S + 6.75 % PIK 12.21 % 1/8/2026 1,930 1,826 1,785 0.14 %"}},
-  {"observation_key": "issuer-name-differs-from-page", "what": "22 rows published an issuer name carrying member noise (footnote markers, ', Equity interest, Affiliated', a doubled name with a sequence number, 'LLC,First lien') and no instrument. Fixed by row correction; the wrapper's hierarchy regexes would need '\\s*,\\s*' and the ', Affiliated' tail to do it generally.", "field": "issuer_name", "quarters": ["2023-06-30", "2025-12-31"], "fair_value_m": 141.0, "cause": "fund", "action": "fixed", "suggested_check": "An issuer name containing '(nn)' footnote markers, a trailing sequence number or an instrument word.", "quote": {"accession": "0001913724-26-000007", "text": "Twin Brook Segregated Equity Holdings, LLC (35) (36) (37) Equity - 2.11 % membership interest 19 15 0.00 %"}},
-  {"observation_key": "maturity-printed-not-published", "what": "Loans held past their printed maturity published no maturity (page reader drops it; no maturity tag): Varsity DuvaSawko 59.8M and Silver Falls 1.5M at 2024-12-31. Fixed for these 4; other quarters not searched beyond the matched rows.", "field": "maturity_date", "quarters": ["2024-12-31"], "fair_value_m": 61.3, "cause": "shared", "action": "fixed", "suggested_check": "A funded loan whose anchored printed row prints a maturity and publishes none.", "quote": {"accession": "0001913724-25-000015", "text": "Varsity DuvaSawko Operating Corp First lien senior secured term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 58,822 58,451 58,150 3.77 %"}},
-  {"observation_key": "reference-rate-code-not-in-legend", "what": "Canadian-dollar loans printed 'C + m %' (Canadian Orthodontic, Bio Agri Mix; 23 rows 2024-03-31 to 2025-03-31) publish SOFR or CORRA. The legends list only S, T (Term CORRA) and P; 2024-09-30 mentions '3M CDOR'. CDOR ceased in June 2024, so 'C' in 2025 cannot be read with confidence; a C$ loan is not SOFR. Left: no page states what C means. Also one 'F + 6.25 %' (Empire Equipment revolver 2024-03-31).", "field": "reference_rate_type", "quarters": ["2024-03-31", "2025-03-31"], "fair_value_m": 0.5, "cause": "fund", "action": "left", "suggested_check": "A loan whose principal currency is CAD publishing a USD benchmark.", "quote": {"accession": "0001913724-25-000043", "text": "First lien senior secured delayed draw term loan - C$ C + 7.00 % 10.09 % 7/28/2023 3/19/2026 344 249 112 0.01 %"}},
-  {"observation_key": "printed-margin-typo-differs-from-tag", "what": "The page prints 'S + 0.05' (Walker Sands 2026-03-31, 8.7M) and 'S + 0.06' (American Family Care 2025-03-31, 11.6M); the tags carry 0.05 / 0.06 as decimals (5.00 / 6.00 pct), which is what is published and fits the all-in rate. Left: the page is the error.", "field": "basis_spread", "quarters": ["2025-03-31", "2026-03-31"], "fair_value_m": 20.3, "cause": "row", "action": "left", "suggested_check": "", "quote": {"accession": "0001913724-26-000015", "text": "Walker Sands, LLC First lien senior secured term loan S + 0.05 8.70 % 10/1/2025 10/1/2030 8,819 8,700 8,715 0.34 %"}},
-  {"observation_key": "fund-income-ratio-published-is-not-the-printed-ratio", "what": "income_yield_pct 2.4 / 2.1 / 2.8 at 2022-12-31, 2023-06-30, 2023-09-30 matches no printed ratio (six months 4.0 %, nine months 6.8 %); empty from 2023-12-31 on, as is distribution_rate. Parked (F16).", "field": "income_yield_pct", "quarters": ["2022-12-31", "2023-09-30"], "fair_value_m": null, "cause": "shared", "action": "parked", "suggested_check": "income_yield_pct against net investment income over average net assets from the fund's own figures.", "quote": {"accession": "0001913724-23-000141", "text": "Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %"}}
+  {
+   "observation_key": "jv-note-schedule-published-as-positions",
+   "what": "181 rows of the TCAP JV's own schedule of investments (Note 11, 98.2M, percentages of the JV's net assets) were published as fund positions at 2026-06-30 (member suffix '| TCAP JV'); published was 233.9M above the filed total with the 3 roll-forward duplicates. Fixed: wrapper reporting_entity_suffixes marks them underlying_schedule (retain-and-flag, 181 rows).",
+   "field": "accounting_record_class",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 98.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A published row whose member ends in a joint-venture name the fund also lists as an affiliated fund line.",
+   "quote": {
+    "accession": "0001913724-26-000024",
+    "text": "VIT Nyckel Acquisition AB (6) First lien senior secured revolving loan S + 4.50 % 8.15 % 6/4/2026 12/18/2031 2,719 1,334 1,334 3.51 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation (RVQ_BLK_c624c759acde) and the pct/GAV rules fired on these rows in the untouched build tbza",
+    "reference": "RVQ_BLK_c624c759acde"
+   }
+  },
+  {
+   "observation_key": "affiliate-rollforward-note-rows-published",
+   "what": "Three issuer-only no-instrument rows at 2026-06-30 (Twin Brook Equity Holdings 103.1M, Segregated 16K, TB Senior Loan Fund 1 32.6M = 135.7M) repeat the schedule lines; excluded by rule (the schedule rows stay).",
+   "field": "fair_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 135.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "No-instrument row whose fair value equals a schedule row of the same issuer.",
+   "quote": {
+    "accession": "0001913724-26-000024",
+    "text": "TB Senior Loan Fund 1, LLC $ - $ 32,550 $ - $ - $ 65 $ 32,615 $ 393"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation fired at 2026-06-30 on the 233.9M excess",
+    "reference": "RVQ_BLK_c624c759acde"
+   }
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "what": "20 loan rows (2025-09-30 to 2026-06-30; 14 of them at 2026-06-30: 50Floor, EMSAR, COP, RQM, Trademark, CR Services) print 'S + m % PIK' and were published coupon Fixed with no spread; plus Kaizen 2023-09-30 'S + 6.00 %' (spread missing). Spread and Floating set (pik_rate stays the margin).",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Coupon Fixed or empty spread where the printed rate cell starts with a benchmark code.",
+   "quote": {
+    "accession": "0001913724-26-000024",
+    "text": "EMSAR Acquisition LLC First lien senior secured term loan S + 6.50 % PIK 10.49 % 7/28/2023 9/30/2027 1,147 1,141 1,012 0.04 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule fired on these rows in tbza (X02 etc. silent); the check compares the printed cell (code present) with coupon_type and basis_spread",
+    "reference": "scratch/fund_runs/0001913724/ixscan.py"
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-spread",
+   "what": "9 rows with a fixed coupon and no benchmark ('5.00 % 5.00 %', '12.00 % 12.00 %', '17.00 % 17.00 %': Kaizen x4, Load One at 2026-06-30; COP 2025-06-30 to 2026-03-31) published a floating spread equal to the coupon and a SOFR reference. Spread and reference withdrawn, coupon Fixed.",
+   "field": "basis_spread",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Published basis_spread equal to interest_rate with no benchmark code on the printed cell.",
+   "quote": {
+    "accession": "0001913724-26-000024",
+    "text": "Kaizen Auto Care, LLC First lien senior secured term loan 5.00 % 5.00 % 7/28/2023 12/22/2027 1,359 1,354 845 0.03 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C115 and fmt_basis_spread flagged only 4 of these rows in earlier quarters; none at 2026-06-30 in tbza",
+    "reference": "scratch/fund_runs/0001913724/ixscan.py"
+   }
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "what": "PIK part printed and not published: RQM revolver and term loan (S + 7.25 % PIK) and Empire sponsor note (12.50 % + 7.00 % PIK) at 2026-06-30 (3 rows; pik_printed RVQ_BLK_22c992cab868 fired), COP delayed draw and revolver at 2025-06-30 (2 rows; pik_printed RVQ_BLK_25b2ed84879d fired). pik_rate set.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A printed 'PIK' figure in the rate cell with no published pik_rate (candidate_rules.pik_printed_not_published).",
+   "quote": {
+    "accession": "0001913724-26-000024",
+    "text": "RQM Buyer, Inc First lien senior secured revolving loan S + 7.25 % PIK 11.24 % 7/28/2023 8/12/2029 142 136 86 0.00 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed fired at 2025-06-30 but not on the 3 rows at 2026-06-30 (its page_figs read '7.25' only with the benchmark form on a different cell layout); extend or review the rule on 'CODE + m % PIK' cells",
+    "reference": "RVQ_BLK_25b2ed84879d"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Par currency opposite to the printed marker on 23 rows: 8 lines printed C$ and tagged usd (COP x7, CR Services) and 5 printed in dollars and tagged cad at 2025-12-31, Brightview x2 (2024-06-30), CR Services c-601 and ERG c-602 (2026-06-30), plus 6 COP and Bio Agri loans at 2023-12-31 and 2024-06-30 whose investment column prints '- C$' (with a 'C +' rate) and were published USD (found in review; the table has no commitment column and in the 2024-06-30 filing '$' precedes C$ pars). USD par at the build's H.10 rate for CAD rows.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Currency marker (C$, EUR, GBP) anywhere in the investment column versus principal_amount_currency, both directions (curscan2.py; undrawn '$ 30' lines without a C$ stay USD).",
+   "quote": {
+    "accession": "0001913724-26-000024",
+    "text": "CR Services Intermediate, LLC (7) First lien senior secured term loan S + 7.00 % PIK 10.99 % 7/28/2023 7/28/2028 C$ 255 248 233 0.01 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 fired at 2025-12-31 on the 5 COP rows only; not on the reverse direction (CAD published for dollar loans, 5 rows, 58.5M par) nor on the 6 earlier rows with '- C$' in the investment column, nor at 2024-06-30 / 2026-06-30",
+    "reference": "RVQ_REV_9737b6bab7ad"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "what": "Instrument words differ from the row's own line: H2 Holdco 2024-03-31 revolver and term loan swapped (c-333 / c-334), Rose Paving 2024-12-31 term loan published as revolver (c-144, par 17,251), CL Services 2023-06-30 delayed draw published 'term loan' (c-67), Ever Fresh 2024-06-30 published as Engelman Baking term loan (c-216). Fixed; chains repaired (H2 term loan continues, CL Services chain continues, Engelman no longer jumps 704 -> 2,513).",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-06-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Words 'revolving', 'delayed draw', 'term loan' in the printed line versus instrument_description / instrument_type.",
+   "quote": {
+    "accession": "0001913724-24-000043",
+    "text": "H2 Holdco, Inc (16) First lien senior secured revolving loan S + 5.25 % + 2.25 % PIK 13.25 % 5/5/2028 2,544 102 104 0.01 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "only the Ever Fresh row was flagged (issuer_name_printed RVQ_BLK_9f1f8621cb02); the other four rows raised no rule",
+    "reference": "scratch/fund_runs/0001913724/ixscan.py"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "DealerOn rows named 'DealerOn Inc.' while the line prints 'DealerOn Holdco, Inc' (6 rows, 2023-12-31, 2024-03-31, 2024-12-31); set to the printed name. 43 further rows differ only in punctuation (trailing period, comma, hyphen: 'Helpware, Inc.' for 'Helpware, Inc'), left.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Normalised alphanumeric issuer name versus the printed company cell.",
+   "quote": {
+    "accession": "0001913724-24-000043",
+    "text": "DealerOn Holdco, Inc First lien senior secured term loan S + 6.00 % 11.44 % 11/19/2025 8,043 7,986 7,959 0.76 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed did not fire on these rows",
+    "reference": "scratch/fund_runs/0001913724/namecat.py"
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "Varsity DuvaSawko delayed draw at 2024-12-31 prints 11/27/2024 and published no maturity (other past-maturity lines of the quarter were fixed in an earlier run); maturity set.",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A funded loan row whose printed line holds a maturity date and maturity_date is empty.",
+   "quote": {
+    "accession": "0001913724-25-000015",
+    "text": "Varsity DuvaSawko Operating Corp First lien senior secured delayed draw term loan S + 6.00 % 10.85 % 7/28/2023 11/27/2024 63 63 63 - %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule flagged it; the same check would also have found the three earlier rows",
+    "reference": "scratch/fund_runs/0001913724/ixscan.py"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "what": "'C +' (Canadian) loans: the 2024-03-31 and 2024-06-30 legends list the 3M CDOR, so 13 rows were set CDOR (published SOFR; 14.30 = 5.30 + 9.00 checks). Left: 2023-09-30 / 2023-12-31 (legend lists none, 12 rows) and 2024-12-31 / 2025-03-31 (legend lists CORRA only, 10 rows, rates 0.3 above CORRA + margin), published SOFR; Empire 'F + 6.25 %' (2024-03-31) unread.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Printed benchmark code absent from the filing's legend.",
+   "quote": {
+    "accession": "0001913724-24-000076",
+    "text": "the reference rates for the floating rate loans were the Term SOFR of 5.40%, the Prime Rate of 8.50%, and the 3M CDOR of 4.97%"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule flags a benchmark code that the legend does not define",
+    "reference": "scratch/fund_runs/0001913724/ixscan.py"
+   }
+  },
+  {
+   "observation_key": "printed-margin-typo-differs-from-tag",
+   "what": "Page typos: 'S + 0.06' (American Family Care, 3 rows 2025-03-31, 11.6M), 'S + 0.05' (Walker Sands 2026-03-31, 8.7M), '+ 0.0175 PIK' (SimiTree 2026-06-30); the tags (6.00, 5.00, 1.75) are what is published and fit the all-in rates. Left; pik_printed fired on the SimiTree row.",
+   "field": "basis_spread",
+   "quarters": [
+    "2025-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Printed margin below 0.1 on a loan whose all-in rate is above 7.",
+   "quote": {
+    "accession": "0001913724-25-000043",
+    "text": "American Family Care, LLC First lien senior secured term loan S + 0.06 10.40 % 2/29/2024 2/28/2029 11,487 11,250 11,268 0.65 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "pik_printed fired on the SimiTree row (RVQ_BLK_22c992cab868); the two margin cases are not detected and are proposed under the same check family",
+    "reference": "RVQ_BLK_22c992cab868"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "what": "The filer's non-accrual table (amortized cost) differs from the cost of the rows printing footnote (8): 2025-09-30 filed 5,328K vs 4,932K (5 rows), 2026-03-31 filed 5,491K vs 9,121K (25 rows). No subset of issuers reproduces either; published equals the footnote as printed. Left (filer-internal).",
+   "field": "nonaccrual_footnote",
+   "quarters": [
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Cost sum of footnote-(8) rows versus the filed non-accrual table, per quarter.",
+   "quote": {
+    "accession": "0001913724-26-000015",
+    "text": "Non-accrual 5,491 0.1 % 8,602 0.2 % Total $ 4,393,198 100.0 % $ 4,277,643 100.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "nonaccrual_flag is advisory and counts positions only; add the cost reconciliation",
+    "reference": "scratch/fund_runs/0001913724/nasub.py"
+   }
+  },
+  {
+   "observation_key": "printed-all-in-rate-omits-pik-part",
+   "what": "Empire sponsor note at 2025-12-31 prints '12.50 % + 7.00 % PIK 12.50 %' (all-in rate omits the PIK part; other quarters print 19.50 %); published 12.5 as printed, pik_rate 7. Left.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Printed all-in rate below cash rate plus PIK part.",
+   "quote": {
+    "accession": "0001913724-26-000007",
+    "text": "Empire Equipment Company, LLC Sponsor subordinated note 12.50 % + 7.00 % PIK 12.50 % 7/28/2023 7/17/2026 $ 19 $ 17 $ 16 0.00 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "cash + PIK differs from the printed all-in rate",
+    "reference": "scratch/fund_runs/0001913724/ixscan.py"
+   }
+  },
+  {
+   "observation_key": "fund-quarter-from-predecessor-comparatives",
+   "what": "The 2022-12-31 fund_financials row (no holdings) carries the predecessor private BDC's figures (net assets 528.9M) while the registrant's 10-K for the date prints a shell (net assets $(645,870)). F16 fails on it.",
+   "field": "net_assets",
+   "quarters": [
+    "2022-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Fund-financials quarter with no holdings and a net-asset figure far from the filing for the same accession.",
+   "quote": {
+    "accession": "0001913724-23-000019",
+    "text": "Total net assets $ (645,870) Total liabilities and net assets $ 2,329,787"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F16 fired but for the wrong reason (distribution annualisation); a fund-quarter source check would name the cause",
+    "reference": "RVQ_REV_02d27ad8c161"
+   }
+  }
  ],
- "page_comparison": "scratch/fund_runs/0001913724/rates_vs_page.py (gen_spec.py adds the spec): every published row with cost and fair value, 13 quarters 2023-03-31 to 2026-03-31, matched to its printed line by 'maturity par cost fair-value pct' with the issuer within 350 to 3,000 chars: 8,399 rows tried, 7,072 matched (tbxa; same counts on tbxc). Compared rate, PIK, spread, reference code, maturity, loan par. Differences 172 (tbxa) -> 67 (tbxc): 26 rate (sampled Brightview, Qin's Buffalo, Millennia: matcher picked the comparative-period line, published is right), 23 reference code 'C' (left), 4 'margin equals coupon' rows, 4 small spread rows, 3 par (undrawn lines, matcher), 3 Empire Equipment cells with no total, 4 maturity (fixed in tbxd).",
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_ce505542c224",
+   "coverage": {
+    "affected_rows": [
+     "ROW-00c8e0716a193160",
+     "ROW-06d4fcaf03eaea4b",
+     "ROW-08a9f1f00d210445",
+     "ROW-09ad877e1599691c",
+     "ROW-0a8f772e632e3473",
+     "ROW-0d6897d7de84c8ee",
+     "ROW-12019d35f60625a3",
+     "ROW-1738e4c924ca089a",
+     "ROW-1c5b4d9e6d288931",
+     "ROW-1c721c769685e439",
+     "ROW-1cd8472e4f0fe643",
+     "ROW-1e7fe6f4c25c7db7",
+     "ROW-2d2c6b7020da8ca9",
+     "ROW-309c8c100d05255a",
+     "ROW-30d13180d77206f9",
+     "ROW-326c6d791e5413c7",
+     "ROW-34c94e54915a7648",
+     "ROW-36c1e4743e678976",
+     "ROW-3ecb509aca4b0287",
+     "ROW-478e425d66a0a928",
+     "ROW-4c0b39f4cf700fa8",
+     "ROW-4d67f57569b734c8",
+     "ROW-51c0b25fdd077384",
+     "ROW-58b202bd133dd733",
+     "ROW-5b3f6683ca536cbc",
+     "ROW-60c594c122db3869",
+     "ROW-610ff7e634d663e9",
+     "ROW-61f6f50ab25d753d",
+     "ROW-684683c87c6d3f09",
+     "ROW-6e26b4bdfacbfd57",
+     "ROW-72c7b1c86c7f75e7",
+     "ROW-742f65ffd2d47da1",
+     "ROW-75fb556f668bdb04",
+     "ROW-787ff613b20b9199",
+     "ROW-7bdc4e6d7d2c2f41",
+     "ROW-7e273ac1d1ebbf0c",
+     "ROW-8100dbe808dbba73",
+     "ROW-825bd9f538d7facb",
+     "ROW-84accd132e76a9a9",
+     "ROW-85e696d449c6763d",
+     "ROW-872513fe8d6d5925",
+     "ROW-8d47a02305bf6e05",
+     "ROW-8ec5fd983801c5ec",
+     "ROW-93ea4b195e0044fc",
+     "ROW-9515dc95d374c2fd",
+     "ROW-958541b1c3076169",
+     "ROW-9905fa8fd8140172",
+     "ROW-9dab420ae9ca589b",
+     "ROW-a86057f20f5fa455",
+     "ROW-b1db5fdd396ee5a1",
+     "ROW-b205427baba2b376",
+     "ROW-b65bbe20ae1df2b4",
+     "ROW-b68fa91c132e6cb8",
+     "ROW-bb84c380d4875416",
+     "ROW-bd5d6f4e61277fe2",
+     "ROW-bef67e0f114e8077",
+     "ROW-c07569d642ad9d70",
+     "ROW-c3529cae58594de8",
+     "ROW-c40ec1651b737671",
+     "ROW-c644cffe87ddf429",
+     "ROW-d1385389c383f648",
+     "ROW-d2d3b15ec43dac66",
+     "ROW-d4eafe23b33e3015",
+     "ROW-d50f49e326a9a9ed",
+     "ROW-dbb1ae504c27cb3b",
+     "ROW-de2189e3a434cda0",
+     "ROW-e0febec738c05582",
+     "ROW-e10071e9ee663039",
+     "ROW-e3116130788ea9fc",
+     "ROW-e3a97e4994e2fa66",
+     "ROW-e3b5039ff8b4419f",
+     "ROW-e528810c54e4b613",
+     "ROW-eaf6b09d9580c953",
+     "ROW-ebd84bb8646f9c64",
+     "ROW-ee503dbbfdd9d623",
+     "ROW-efcec3f5a970071c",
+     "ROW-f3a86bf7c813a130",
+     "ROW-f3efc9ef56e899cb",
+     "ROW-f49d873a24c61e3f",
+     "ROW-f6b67b37a1747dd8",
+     "ROW-fa3385e22b80b314",
+     "ROW-fbd4d2368305f6ad",
+     "ROW-0bc4154e5245be0c",
+     "ROW-0e72ef0fd604460b",
+     "ROW-1245b931d15fb59c",
+     "ROW-1293b8bf11644235",
+     "ROW-16376e6cf43405ed",
+     "ROW-1d1dc939d5c76fc9",
+     "ROW-2afcf3876d0bb73e",
+     "ROW-2b29061e82fb7291",
+     "ROW-2c223acebf4f5d97",
+     "ROW-2e86ef3c5fc2e9fd",
+     "ROW-2ec7f8814f74d758",
+     "ROW-3048812f51fa93c9",
+     "ROW-350701f99eb30751",
+     "ROW-44a26030df7565e8",
+     "ROW-455d25dbaa11a556",
+     "ROW-45e0144a7541e456",
+     "ROW-4af44338a110e2b0",
+     "ROW-4cbc2bdba725562a",
+     "ROW-502ee6bf38bd9e37",
+     "ROW-514f43234b5412bc",
+     "ROW-535892972e0f662c",
+     "ROW-5562a10740643a9e",
+     "ROW-5567da081b785340",
+     "ROW-55d8ec1247b15388",
+     "ROW-56fd7e4df7ab8edf",
+     "ROW-573283e129d57417",
+     "ROW-578c1e12f699f05f",
+     "ROW-57a74e4d71e13634",
+     "ROW-5b780f4561c4e340",
+     "ROW-5d1663790e0dd2c1",
+     "ROW-5d4a04a271cbd0db",
+     "ROW-5d50ab5763f0c160",
+     "ROW-5e25f021e8dd064f",
+     "ROW-5fcf766ccee0e171",
+     "ROW-61364bed1af867c3",
+     "ROW-67b87f626e589e34",
+     "ROW-6a42c9e5ac719953",
+     "ROW-6cc96758ebd58b7b",
+     "ROW-7986ebdecac06909",
+     "ROW-7b0fefe056894c80",
+     "ROW-7be996b6c45556d2",
+     "ROW-7d050b2565d30ff1",
+     "ROW-805af5ad22e29db7",
+     "ROW-8c4158efec71d006",
+     "ROW-91b9cbf8a6f9fcc7",
+     "ROW-934fce4f6cb4ac2d",
+     "ROW-9e58a01315138b65",
+     "ROW-a00a5f776a79fc38",
+     "ROW-a0f590c2ed335453",
+     "ROW-a1086c0cec0236d8",
+     "ROW-a5dd40f473c02593",
+     "ROW-a5fcc31b8fb77d05",
+     "ROW-a86b9929065c9599",
+     "ROW-ab0432163dc44239",
+     "ROW-ac1f0dfa44f918c2",
+     "ROW-ae666e20080d2f22",
+     "ROW-af637188444997df",
+     "ROW-b08871a6896ae24a",
+     "ROW-b0c085d2cba57cef",
+     "ROW-b39824616a98ddc1",
+     "ROW-b6afc0f8aaf6a47e",
+     "ROW-b7800d934525105e",
+     "ROW-b8d54c49a0d73187",
+     "ROW-bced9cb71ecefdab",
+     "ROW-c5ac2ad99527f92a",
+     "ROW-c87cc10aa7991bbf",
+     "ROW-cd0b59c0b2ad90fa",
+     "ROW-d59719e183bf0ac8",
+     "ROW-d59f48993a4f6e92",
+     "ROW-d64d9dff2c286d19",
+     "ROW-d825e381aad232db",
+     "ROW-d9e9814d7a718742",
+     "ROW-da64ee0b85979ceb",
+     "ROW-da88924b2d961a44",
+     "ROW-dca37ec05eaace88",
+     "ROW-dd3932259a7782b0",
+     "ROW-e082ce3dbcf045cb",
+     "ROW-e1aa465fd3002be6",
+     "ROW-e1d516ebdee7c753",
+     "ROW-e28642a19f9094ae",
+     "ROW-eb1ef4a1c52727e9",
+     "ROW-f08be2dce99152cb",
+     "ROW-f1ea4adc72a3ce56",
+     "ROW-f3be6680c2b55a8b",
+     "ROW-f4882bc519f9eb08",
+     "ROW-f496cbeac98eb1c2",
+     "ROW-f667cf8f829acf2a",
+     "ROW-f76f2b8ef3cc4560",
+     "ROW-ffa4320de7188d27"
+    ],
+    "reviewed_rows": [
+     "ROW-00c8e0716a193160",
+     "ROW-06d4fcaf03eaea4b",
+     "ROW-08a9f1f00d210445",
+     "ROW-09ad877e1599691c",
+     "ROW-0a8f772e632e3473",
+     "ROW-0d6897d7de84c8ee",
+     "ROW-12019d35f60625a3",
+     "ROW-1738e4c924ca089a",
+     "ROW-1c5b4d9e6d288931",
+     "ROW-1c721c769685e439",
+     "ROW-1cd8472e4f0fe643",
+     "ROW-1e7fe6f4c25c7db7",
+     "ROW-2d2c6b7020da8ca9",
+     "ROW-309c8c100d05255a",
+     "ROW-30d13180d77206f9",
+     "ROW-326c6d791e5413c7",
+     "ROW-34c94e54915a7648",
+     "ROW-36c1e4743e678976",
+     "ROW-3ecb509aca4b0287",
+     "ROW-478e425d66a0a928",
+     "ROW-4c0b39f4cf700fa8",
+     "ROW-4d67f57569b734c8",
+     "ROW-51c0b25fdd077384",
+     "ROW-58b202bd133dd733",
+     "ROW-5b3f6683ca536cbc",
+     "ROW-60c594c122db3869",
+     "ROW-610ff7e634d663e9",
+     "ROW-61f6f50ab25d753d",
+     "ROW-684683c87c6d3f09",
+     "ROW-6e26b4bdfacbfd57",
+     "ROW-72c7b1c86c7f75e7",
+     "ROW-742f65ffd2d47da1",
+     "ROW-75fb556f668bdb04",
+     "ROW-787ff613b20b9199",
+     "ROW-7bdc4e6d7d2c2f41",
+     "ROW-7e273ac1d1ebbf0c",
+     "ROW-8100dbe808dbba73",
+     "ROW-825bd9f538d7facb",
+     "ROW-84accd132e76a9a9",
+     "ROW-85e696d449c6763d",
+     "ROW-872513fe8d6d5925",
+     "ROW-8d47a02305bf6e05",
+     "ROW-8ec5fd983801c5ec",
+     "ROW-93ea4b195e0044fc",
+     "ROW-9515dc95d374c2fd",
+     "ROW-958541b1c3076169",
+     "ROW-9905fa8fd8140172",
+     "ROW-9dab420ae9ca589b",
+     "ROW-a86057f20f5fa455",
+     "ROW-b1db5fdd396ee5a1",
+     "ROW-b205427baba2b376",
+     "ROW-b65bbe20ae1df2b4",
+     "ROW-b68fa91c132e6cb8",
+     "ROW-bb84c380d4875416",
+     "ROW-bd5d6f4e61277fe2",
+     "ROW-bef67e0f114e8077",
+     "ROW-c07569d642ad9d70",
+     "ROW-c3529cae58594de8",
+     "ROW-c40ec1651b737671",
+     "ROW-c644cffe87ddf429",
+     "ROW-d1385389c383f648",
+     "ROW-d2d3b15ec43dac66",
+     "ROW-d4eafe23b33e3015",
+     "ROW-d50f49e326a9a9ed",
+     "ROW-dbb1ae504c27cb3b",
+     "ROW-de2189e3a434cda0",
+     "ROW-e0febec738c05582",
+     "ROW-e10071e9ee663039",
+     "ROW-e3116130788ea9fc",
+     "ROW-e3a97e4994e2fa66",
+     "ROW-e3b5039ff8b4419f",
+     "ROW-e528810c54e4b613",
+     "ROW-eaf6b09d9580c953",
+     "ROW-ebd84bb8646f9c64",
+     "ROW-ee503dbbfdd9d623",
+     "ROW-efcec3f5a970071c",
+     "ROW-f3a86bf7c813a130",
+     "ROW-f3efc9ef56e899cb",
+     "ROW-f49d873a24c61e3f",
+     "ROW-f6b67b37a1747dd8",
+     "ROW-fa3385e22b80b314",
+     "ROW-fbd4d2368305f6ad",
+     "ROW-0bc4154e5245be0c",
+     "ROW-0e72ef0fd604460b",
+     "ROW-1245b931d15fb59c",
+     "ROW-1293b8bf11644235",
+     "ROW-16376e6cf43405ed",
+     "ROW-1d1dc939d5c76fc9",
+     "ROW-2afcf3876d0bb73e",
+     "ROW-2b29061e82fb7291",
+     "ROW-2c223acebf4f5d97",
+     "ROW-2e86ef3c5fc2e9fd",
+     "ROW-2ec7f8814f74d758",
+     "ROW-3048812f51fa93c9",
+     "ROW-350701f99eb30751",
+     "ROW-44a26030df7565e8",
+     "ROW-455d25dbaa11a556",
+     "ROW-45e0144a7541e456",
+     "ROW-4af44338a110e2b0",
+     "ROW-4cbc2bdba725562a",
+     "ROW-502ee6bf38bd9e37",
+     "ROW-514f43234b5412bc",
+     "ROW-535892972e0f662c",
+     "ROW-5562a10740643a9e",
+     "ROW-5567da081b785340",
+     "ROW-55d8ec1247b15388",
+     "ROW-56fd7e4df7ab8edf",
+     "ROW-573283e129d57417",
+     "ROW-578c1e12f699f05f",
+     "ROW-57a74e4d71e13634",
+     "ROW-5b780f4561c4e340",
+     "ROW-5d1663790e0dd2c1",
+     "ROW-5d4a04a271cbd0db",
+     "ROW-5d50ab5763f0c160",
+     "ROW-5e25f021e8dd064f",
+     "ROW-5fcf766ccee0e171",
+     "ROW-61364bed1af867c3",
+     "ROW-67b87f626e589e34",
+     "ROW-6a42c9e5ac719953",
+     "ROW-6cc96758ebd58b7b",
+     "ROW-7986ebdecac06909",
+     "ROW-7b0fefe056894c80",
+     "ROW-7be996b6c45556d2",
+     "ROW-7d050b2565d30ff1",
+     "ROW-805af5ad22e29db7",
+     "ROW-8c4158efec71d006",
+     "ROW-91b9cbf8a6f9fcc7",
+     "ROW-934fce4f6cb4ac2d",
+     "ROW-9e58a01315138b65",
+     "ROW-a00a5f776a79fc38",
+     "ROW-a0f590c2ed335453",
+     "ROW-a1086c0cec0236d8",
+     "ROW-a5dd40f473c02593",
+     "ROW-a5fcc31b8fb77d05",
+     "ROW-a86b9929065c9599",
+     "ROW-ab0432163dc44239",
+     "ROW-ac1f0dfa44f918c2",
+     "ROW-ae666e20080d2f22",
+     "ROW-af637188444997df",
+     "ROW-b08871a6896ae24a",
+     "ROW-b0c085d2cba57cef",
+     "ROW-b39824616a98ddc1",
+     "ROW-b6afc0f8aaf6a47e",
+     "ROW-b7800d934525105e",
+     "ROW-b8d54c49a0d73187",
+     "ROW-bced9cb71ecefdab",
+     "ROW-c5ac2ad99527f92a",
+     "ROW-c87cc10aa7991bbf",
+     "ROW-cd0b59c0b2ad90fa",
+     "ROW-d59719e183bf0ac8",
+     "ROW-d59f48993a4f6e92",
+     "ROW-d64d9dff2c286d19",
+     "ROW-d825e381aad232db",
+     "ROW-d9e9814d7a718742",
+     "ROW-da64ee0b85979ceb",
+     "ROW-da88924b2d961a44",
+     "ROW-dca37ec05eaace88",
+     "ROW-dd3932259a7782b0",
+     "ROW-e082ce3dbcf045cb",
+     "ROW-e1aa465fd3002be6",
+     "ROW-e1d516ebdee7c753",
+     "ROW-e28642a19f9094ae",
+     "ROW-eb1ef4a1c52727e9",
+     "ROW-f08be2dce99152cb",
+     "ROW-f1ea4adc72a3ce56",
+     "ROW-f3be6680c2b55a8b",
+     "ROW-f4882bc519f9eb08",
+     "ROW-f496cbeac98eb1c2",
+     "ROW-f667cf8f829acf2a",
+     "ROW-f76f2b8ef3cc4560",
+     "ROW-ffa4320de7188d27"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Centennial Environmental Acquisition, LLC (6) First lien senior secured delayed draw term loan S + 5.00 % 8.64 % 6/2/2026 6/2/2031 8,006 ( 170 ) ( 170 ) ( 0.01 ) %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "L&J Holding Company LLC (6) First lien senior secured delayed draw term loan S + 4.75 % 8.48 % 4/1/2026 4/1/2028 9,408 ( 59 ) ( 138 ) ( 0.01 ) %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "cost sign or amount differs from the printed line: ixscan.py compared cost, fair value and par of every published row with its own printed line (the table row carrying its own fair-value fact): 0 differences in the 82 parent rows",
+    "population: the rule flags 171 rows (finding_rows reads row_validation_issues with no record-class filter): 82 parent_schedule and 89 TCAP JV underlying_schedule rows; the JV rows were first left out (reviewer rejection) and are now covered: the JV schedule prints the same bracketed negative costs (Duggal, Bestop lines in the proposal)",
+    "negative cost is a rounding or sign defect: the same lines print cost in brackets and footnote (6) says the negative fair value is the unfunded commitment valued below par"
+   ],
+   "next_action": "Disposition PD-C107-1913724-tbz-1 (as_filed, 171 rows: 82 parent + 89 JV) proposed; check_repair_request CR-tbz-1 asks that C107 skip underlying_schedule rows."
+  },
+  {
+   "finding_id": "RVQ_BLK_cff249677254",
+   "coverage": {
+    "affected_rows": [
+     "ROW-267b7d50184bd86f",
+     "ROW-5f9da3dc23a7f0a7"
+    ],
+    "reviewed_rows": [
+     "ROW-267b7d50184bd86f",
+     "ROW-5f9da3dc23a7f0a7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000024",
+     "text": "ASC Ortho Management Company, LLC (8) First lien senior secured term loan S + 9.00 % 12.99 % 7/28/2023 12/31/2026 517 480 50 0.00 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Spectrum Solutions, LLC (8) First lien senior secured term loan S + 6.25 % 10.24 % 7/28/2023 9/30/2026 678 579 25 0.00 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "par scale or currency wrong: schedule in thousands, no foreign marker, published par equals printed par on both rows",
+    "loans not written down: both carry footnote (8) = non-accrual status and a fair value of 50 / 25 against cost 480 / 579"
+   ],
+   "next_action": "Disposition PD-X06-1913724-tbz-1 (as_filed) proposed."
+  },
+  {
+   "finding_id": "RVQ_REV_92f009a9f882",
+   "coverage": {
+    "affected_rows": [
+     "ROW-7a32fc52c463ce34",
+     "ROW-430b81792968a9b1"
+    ],
+    "reviewed_rows": [
+     "ROW-7a32fc52c463ce34",
+     "ROW-430b81792968a9b1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Twin Brook Equity Holdings, LLC (14) (15) (16) Equity - 17.23 % membership interest $ 88,319 $ 103,067 3.84 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Twin Brook Segregated Equity Holdings, LLC (14) (15) (16) Equity - 2.11 % membership interest 19 16 0.00 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a unit count is printed or tagged: the two contexts (c-769, c-770) carry only ownership percentage, cost, fair value and percent of net assets (fact listing ixf.py); no count to publish",
+    "the third non-loan row (TB Senior Loan Fund 1, LLC Interest, c-771) is an equity row: it is a FUND-class LLC interest with cost and fair value only, not in the C04 population (2 of 2 equity rows)"
+   ],
+   "next_action": "Disposition PD-C04-1913724-tbz-1 (as_filed, reason c04-membership-interest-no-unit-count) proposed."
+  },
+  {
+   "finding_id": "RVQ_BLK_22c992cab868",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a33fc5ce26d3abaa",
+     "ROW-31ded741c4d0a420",
+     "ROW-31e6180d84a699f9",
+     "ROW-03582e901b48efe0"
+    ],
+    "reviewed_rows": [
+     "ROW-a33fc5ce26d3abaa",
+     "ROW-31ded741c4d0a420",
+     "ROW-31e6180d84a699f9",
+     "ROW-03582e901b48efe0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000024",
+     "text": "RQM Buyer, Inc First lien senior secured revolving loan S + 7.25 % PIK 11.24 % 7/28/2023 8/12/2029 142 136 86 0.00 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "Empire Equipment Company, LLC Sponsor subordinated note 12.50 % + 7.00 % PIK 19.50 % 7/28/2023 12/17/2026 $ 21 $ 19 $ 20 0.00 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "SimiTree Acquisition, LLC First lien senior secured term loan S + 5.25 % + 0.0175 PIK 10.93 % 7/28/2023 5/17/2027 1,244 1,238 1,226 0.05 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "SimiTree Acquisition, LLC First lien senior secured delayed draw term loan S + 5.25 % + 1.75 % PIK 10.93 % 7/28/2023 5/17/2027 894 891 881 0.03 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "flagged population in tbza (page_rule_findings.csv): RQM revolver c-460 and term loan c-461 (printed 'S + 7.25 % PIK', pik_rate empty), Empire sponsor note c-766 (printed '12.50 % + 7.00 % PIK', pik_rate empty), SimiTree term loan c-476 (pik_value_mismatch); 4 rows, all read against their own line",
+    "RQM and Empire: PIK printed and not published, a real error: pik_rate 7.25 / 7 set by context-keyed correction (the same shape fixed on COP 2025-06-30); no longer flagged in tbzc",
+    "SimiTree c-476: published pik_rate 1.75 wrong? No: the filer's PIK tag is 1.75, the delayed draw of the same loan prints 1.75 % PIK at the same all-in rate 10.93, the prior quarter's term loan prints '+ 1.75 % PIK'; the page's '0.0175' is a typo"
+   ],
+   "next_action": "3 rows fixed (fix_record names the finding); the SimiTree row is covered by disposition PD-pik_printed-1913724-tbz-1 (informational: filer typo, rows = [ROW-03582e901b48efe0])."
+  },
+  {
+   "finding_id": "RVQ_BLK_10fb514599dd",
+   "coverage": {
+    "affected_rows": [
+     "0001913724|2026-03-31|pct_of_net_assets_identity"
+    ],
+    "reviewed_rows": [
+     "0001913724|2026-03-31|pct_of_net_assets_identity"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000015",
+     "text": "Total investments $ 4,479,699 $ 4,481,018 175.76 %"
+    },
+    {
+     "accession": "0001913724-26-000015",
+     "text": "Twin Brook Equity Holdings, LLC (34) (35) (36) Equity - 16.73 % membership interest $ 86,482 $ 98,589 3.87 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "the roll-forward subtotal rows (98,589K + 16K) still published: not in tbze (rule exclude_twin_brook_rollforward_leak_20260331 removes the no-instrument rows; 789 rows, FV 4,481,018K = filed total)",
+    "retirement by a deterministic check: campaign_retirement_check.py has no pct_of_net_assets_identity mode (asserts rule == mode); check_verdicts.py returned UNCLEAR (cites a subtotal, no position row)"
+   ],
+   "next_action": "Data are at filed values (existing rule); left outstanding for a D-252 retirement mode or an owner retirement (OWN-tbz-2)."
+  },
+  {
+   "finding_id": "RVQ_REV_9737b6bab7ad",
+   "coverage": {
+    "affected_rows": [
+     "ROW-fdc840bd8160c90e",
+     "ROW-693cb2d79389d52e",
+     "ROW-c39091d673750f38",
+     "ROW-9b4e5c56d7f54555",
+     "ROW-0db142c79bc89830",
+     "ROW-bfb36e41e6c9d036",
+     "ROW-6029b0c0de57444f",
+     "ROW-fd87051f4cbe952f",
+     "ROW-af25ff4e94c67efb",
+     "ROW-5e169bc6cf60cf2f",
+     "ROW-3ada3adf99d7b58e",
+     "ROW-c03a1a2b168e81ab",
+     "ROW-f7caaffffeae7732"
+    ],
+    "reviewed_rows": [
+     "ROW-fdc840bd8160c90e",
+     "ROW-693cb2d79389d52e",
+     "ROW-c39091d673750f38",
+     "ROW-9b4e5c56d7f54555",
+     "ROW-0db142c79bc89830",
+     "ROW-bfb36e41e6c9d036",
+     "ROW-6029b0c0de57444f",
+     "ROW-fd87051f4cbe952f",
+     "ROW-af25ff4e94c67efb",
+     "ROW-5e169bc6cf60cf2f",
+     "ROW-3ada3adf99d7b58e",
+     "ROW-c03a1a2b168e81ab",
+     "ROW-f7caaffffeae7732"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000007",
+     "text": "Canadian Orthodontic Partners Corp (7)(8) First lien senior secured delayed draw term loan T + 9.00 % PIK 11.62 % 7/28/2023 3/19/2026 C$ 372 258 73 0.00 %"
+    },
+    {
+     "accession": "0001913724-26-000007",
+     "text": "First Steps Recovery Acquisition, LLC First lien senior secured term loan S + 4.75 % 8.62 % 11/18/2025 11/18/2030 15,240 15,054 15,052 0.63 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "only the five rows the reviewer cited: the scan of every published row's printed marker against principal_amount_currency found 13 rows at 2025-12-31 (8 printed C$ and tagged usd, 5 printed in dollars and tagged cad), fixed all 13",
+    "same shape in other quarters: 2024-06-30 Brightview x2, 2026-06-30 CR Services c-601 and ERG c-602, and (found in review) 6 COP and Bio Agri rows (2023-12-31 c-278/c-279/c-492/c-493, 2024-06-30 c-322/c-323) with '- C$' in the investment column; the widened scan (curscan2.py: C$ anywhere in the line versus currency, both directions) finds only 4 Bio Agri undrawn '$ 30' revolver lines (par printed '$ 30', no C$, unit tag usd, same revolver USD at 2024-09-30), which are left USD in tbze"
+   ],
+   "next_action": "Fixed by context-keyed corrections in tbze; fix_record names it; the batch will close it."
+  },
+  {
+   "finding_id": "RVQ_REV_23bb7bec3a4b",
+   "coverage": {
+    "affected_rows": [
+     "ROW-9efb8bc8e8493569",
+     "ROW-97416f5f232d6c20",
+     "ROW-8c85bf79bc04aae8"
+    ],
+    "reviewed_rows": [
+     "ROW-9efb8bc8e8493569",
+     "ROW-97416f5f232d6c20",
+     "ROW-8c85bf79bc04aae8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000007",
+     "text": "SimiTree Acquisition, LLC First lien senior secured term loan S + 5.25 % + 1.75 PIK 11.10 % 2/26/2025 5/17/2026 1,239 1,236 1,232 0.05 %"
+    },
+    {
+     "accession": "0001913724-26-000024",
+     "text": "SimiTree Acquisition, LLC First lien senior secured revolving loan S + 7.00 % 10.93 % 7/28/2023 5/17/2027 178 49 47 0.00 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "the printed '1.75 PIK' (no percent sign) is a different quantity: the same loan prints '1.75 % PIK' in other quarters; reading unchanged",
+    "spread should be the total margin 7.00 (D-031): supported by the sibling revolver 'S + 7.00 % 10.93 %' with the same all-in rate as the term loan 'S + 5.25 % + 1.75 % PIK 10.93 %' at 2026-06-30, but the owner convention is open (D-031 vs D-217), so values are unchanged"
+   ],
+   "next_action": "Owner request OWN-tbz-1 (evidence only); fix follows the ruling."
+  },
+  {
+   "finding_id": "RVQ_REV_345b5e2bcd14",
+   "coverage": {
+    "affected_rows": [
+     "0001913724|2025-12-31|nonaccrual_flag"
+    ],
+    "reviewed_rows": [
+     "0001913724|2025-12-31|nonaccrual_flag"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-26-000007",
+     "text": "Non-accrual 8,602 0.2 % 6,458 0.2 % Total $ 4,277,643 100.0 % $ 3,084,619 100.0 %"
+    },
+    {
+     "accession": "0001913724-26-000007",
+     "text": "(8) Indicates loan was on non-accrual status as of December 31, 2025."
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "published flags still differ from the filing: 23 rows carry footnote (8) and nonaccrual_footnote True, cost 8,602K = filed table; footnote (8) is the non-accrual legend in every filing from 2024-06-30; no row prints (8) without a flag (ixscan, all quarters)",
+    "other quarters: filed table equals published at 2024-06, 2024-09, 2024-12, 2025-03, 2025-06, 2025-12 and 2026-06; differs at 2025-09-30 (4,932K vs 5,328K) and 2026-03-31 (9,121K vs 5,491K), which neither the footnote rows nor a subset of issuers reproduces: filer-internal, recorded as an observation"
+   ],
+   "next_action": "Published value equals the filing; left outstanding for retirement (no non-accrual mode in the D-252 tooling): OWN-tbz-2."
+  },
+  {
+   "finding_id": "RVQ_REV_02d27ad8c161",
+   "coverage": {
+    "affected_rows": [
+     "0001913724|2022-12-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001913724|2022-12-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001913724-23-000019",
+     "text": "Total net assets $ (645,870) Total liabilities and net assets $ 2,329,787"
+    },
+    {
+     "accession": "0001913724-23-000032",
+     "text": "As of March 31, 2023 and December 31, 2022 , the asset coverage ratio was 242.4 % and 263.6 %, respectively."
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "distribution_rate 11.88 = 0.75 x 4 / 25.25 where 0.75 is already an annual or period figure (dividends_declared_per_share is 0.1875): consistent with the numbers, not proven (the quarter's distribution table was not found in the cached filings)",
+    "the 2022-12-31 row is the registrant's own 10-K figures: no, the 10-K prints a shell with net assets $(645,870), while the published row (net assets 528.9M, total assets 877.5M) matches the 2023 10-Q comparative column"
+   ],
+   "missing_evidence": "the printed per-share distributions of the quarter ended 2022-12-31 and the owner's ruling on which source defines this fund-quarter",
+   "next_action": "Owner request OWN-tbz-3."
+  }
+ ],
+ "page_comparison": {
+  "method": "scratch/fund_runs/0001913724/ixscan.py: every published row of 14 quarters (8,059 non-JV rows) compared with the table row carrying its own fair-value fact: name, instrument words, maturity, currency marker, par, cost, fair value, pct, rate / spread / PIK / benchmark code, coupon type, non-accrual footnote, lien, blank industry",
+  "after_fixes": "tbzd residual flags: cosmetic name punctuation 43, equity / numbered-suffix text 43 (false), page typos 4, 'C +' / 'F +' codes not in legend (left)"
+ },
  "tests_run": [],
  "not_done": [
-  "No pytest: no pipeline code changed; scripts/v05_evidence/make_row_corrections.py gained a loader block only.",
-  "The 26 remaining rate differences were not all read: three sampled were matcher errors.",
-  "Unit counts: the fund has no equity row with a count (two membership-interest vehicles only); nothing to compare.",
-  "Industry not compared with the page; GICS changes inherited since in2a (321/366 rows) not reviewed.",
-  "Non-accrual flags read only at 2025-12-31 (cost ties to the printed 8,602).",
-  "2022-12-31 schedule (printed, no tags; comparative period of the 2023-03-31 10-Q) still unpublished: no finding, left as in D-104.",
-  "Principal on revolvers and delayed draws is the commitment (as filed, D-104 B6), not re-read.",
-  "Kaizen Auto Care term loan 1 at 2023-09-30 (27K) publishes no spread for a printed 'S + 6.00 %'; not corrected."
+  "No pytest (no code changed).",
+  "2022-12-31 has no holdings; F16 there not resolved (owner request).",
+  "Industry headings were checked for blank only, not against the printed heading.",
+  "2023-09-30 .. 2023-12-31 and 2024-12-31 .. 2025-03-31 'C +' loans left at SOFR (legend does not define C).",
+  "43 punctuation-only name differences left.",
+  "Independent review and 20-row page sample are the orchestrator's; not run.",
+  "Pre-existing chain breaks not touched: maturity extensions (Rose Paving term loan 2028 to 2029, Geriatric revolver, US Foot and Ankle), AFC-Dell tranche merge. No chain was force-rejected: AFC-Dell 2026-03-31 delayed draw 1 (6,426) links to 2026-06-30 delayed draw 2 (17,843) (two tranches merged; matcher choice) recorded only."
  ]
 }
