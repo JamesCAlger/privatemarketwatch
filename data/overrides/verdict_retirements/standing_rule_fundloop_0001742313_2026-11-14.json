@@ -1,0 +1,102 @@
+{
+ "_note": "Monroe Capital Income Plus retirements (mcz run, 2026-11-14) under the owner standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1742313-01",
+   "review_id": "RVQ_BLK_3945a9f9bd14",
+   "verdict_sha256": "04e1df68ac2391465b05227fd133bb2cc8b86d4b94faec8758930771cee39f4e",
+   "cik": "0001742313",
+   "engine": "oracle",
+   "rule_name": "E07",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: the verdict claims the extracted fair value (6,127,925K) includes the 308,170K subtotal 'Total Non-Controlled/Affiliate Company Investments'. In sandbox mczc the 924 published rows of 2025-12-31 each equal the fair value of their own printed line, none is a Total line, and they sum to 5,819,755K = the filed total.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000013",
+     "quote": "Total Non-Controlled/Affiliate Company Investments $ 343,639 $ 308,170 10.9 % TOTAL INVESTMENTS $ 5,913,363 $ 5,819,755 205.6 %",
+     "verbatim": true
+    },
+    {
+     "source": "query",
+     "quote": "sandbox mczc private_markets_holdings, 2025-12-31: 924 rows, sum fair_value 5,819,755K; retire_check.py E07: every row's own printed line carries its fair value, no Total line published"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001742313/retire_check.py (read-only; plants: an extra subtotal row and +5M on one row both fail)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001742313/joined.py mczc && python scratch/fund_runs/0001742313/retire_check.py mczc --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-mcip-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1742313-02",
+   "review_id": "RVQ_REV_c4d28659b300",
+   "verdict_sha256": "b44a4f1983ec38aed4c6212369d7121e02784a2d15c286d70a76d511a49529c2",
+   "cik": "0001742313",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "report_date": "2025-03-31",
+   "reason": "Standing rule D-252: the verdict claims all-PIK rows (Thrasio, Arcserve Cayman Opco delayed draw, Witkoff/Monroe 700 JV) are published with blank rate and spread. In sandbox mczc each cited row publishes the printed PIK as pik_rate and the printed spread (Thrasio 10.26, Arcserve 8.11) or, with no spread, the printed 13.25 as rate and PIK.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "quote": "Thrasio, LLC (21) SF 10.26 % 14.55 % PIK 6/18/2024 6/18/2029 574 574 502 0.0 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000039",
+     "quote": "Witkoff/Monroe 700 JV LLC (12) n/a n/a 13.25 % PIK 3/18/2025 10/1/2026 1,646 1,647 1,646 0.1 %",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001742313/retire_check.py X02-pik (read-only; plants: a wrong PIK and a dropped spread both fail)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001742313/joined.py mczc && python scratch/fund_runs/0001742313/retire_check.py mczc --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-mcip-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1742313-03",
+   "review_id": "RVQ_REV_ad1a2660ff45",
+   "verdict_sha256": "12cec006a189d97253c007140108ba0e2b82bf108ceec250dc33db85009bb05b",
+   "cik": "0001742313",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "report_date": "2025-06-30",
+   "reason": "Standing rule D-252: the verdict claims rows with n/a index, spread and rate lack a rate. The cited lines (Adept AG 3 and 6, Arcserve Cayman Opco 1, Vice Acquisition Holdco 1-4) print n/a n/a n/a and the rows publish no rate, spread or PIK: published equals filed.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000064",
+     "quote": "Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 477 477 - 0.0 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-25-000064",
+     "quote": "Adept AG Holdings, LLC (21) n/a n/a n/a 3/31/2025 8/11/2027 68 68 - 0.0 %",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001742313/retire_check.py X02-na (read-only; plant: a rate on one cited row fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001742313/joined.py mczc && python scratch/fund_runs/0001742313/retire_check.py mczc --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-mcip-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "moxe",
+ "sandbox": "mczc (new entries); older entries from sandbox moxe",
  "dispositions": [
   {
    "disposition_id": "PD-pct_of_net_assets_identity-1742313-1",
@@ -502,6 +502,130 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001742313.json",
    "decided_by": "PROPOSED by agent 2026-10-14 (fund-clearing loop, sandbox moxe); not accepted by the owner",
    "decided_on": "2026-10-14"
+  },
+  {
+   "class": "as_filed",
+   "ciks": [
+    "0001742313"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-mcip-20261114 (fund loop 2026-11-14, sandbox mczc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-pct_of_net_assets_identity-1742313-mcz-1",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "pct-identity-printed-percent-is-the-filers-own-figure",
+   "statement": "Three rows print 0.1 percent of net assets for a fair value of 753K, 640K and 902K (implied 0.03 on net assets of 2,710M); the published pct_of_net_assets is the printed figure and no fix applies (the page prints no other figure). Every other 2026-06-30 row with a percent ties. Named rows: Arcserve Cayman Opco LP 3 (753K), StormTrap Class A preferred units (640K), Streamland Media MidCo LLC 1 (902K).",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000046",
+     "verbatim": "Streamland Media MidCo LLC (21) SF 5.76 % 9.49 % 6/30/2025 3/30/2029 916 907 902 0.1 %",
+     "quote": "'Streamland Media MidCo LLC (21) SF 5.76 % 9.49 % 6/30/2025 3/30/2029 916 907 902 0.1 %': fair value 902, percent 0.1 as printed",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000046",
+     "verbatim": "StormTrap, LLC ( 640,000 Class A preferred units) (17) n/a n/a 8.00 % PIK 3/25/2022 n/a - 640 640 0.1 %",
+     "quote": "'StormTrap, LLC ( 640,000 Class A preferred units) (17) n/a n/a 8.00 % PIK 3/25/2022 n/a - 640 640 0.1 %': fair value 640, percent 0.1 as printed",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/ident_left.py mczc",
+   "rows": [
+    "ROW-dbf465dda3726f83",
+    "ROW-ab47146fd245e74b",
+    "ROW-adf090c474ab895b"
+   ]
+  },
+  {
+   "class": "as_filed",
+   "ciks": [
+    "0001742313"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-mcip-20261114 (fund loop 2026-11-14, sandbox mczc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-X02-1742313-mcz-1",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "x02-rate-columns-printed-n-a",
+   "statement": "The remaining X02 rows at 2026-06-30 are non-accrual junior loans written down to nil whose line prints n/a for index, spread and rate; the rows publish no rate or spread, as printed. No fix applies. Named rows: Adept AG Holdings 3 (par 84) and 7 (par 68), Arcserve Cayman Opco LP 1 (par 1,358), Vice Acquisition Holdco 1-4 (par 1,114, 350, 133, 214).",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000046",
+     "verbatim": "Adept AG Holdings, LLC (21) n/a n/a n/a 3/31/2025 8/11/2027 68 68 - 0.0 %",
+     "quote": "'Adept AG Holdings, LLC (21) n/a n/a n/a 3/31/2025 8/11/2027 68 68 - 0.0 %': index, spread and rate n/a, fair value nil",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000046",
+     "verbatim": "Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 1,114 477 - 0.0 %",
+     "quote": "'Vice Acquisition Holdco, LLC (21)(28) n/a n/a n/a 5/2/2019 n/a 1,114 477 - 0.0 %': index, spread and rate n/a, fair value nil",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py mczc X02 0001742313 2026-06-30 30",
+   "rows": [
+    "ROW-0bdf7aef7b22caa9",
+    "ROW-c958e4c92f6747c4",
+    "ROW-d0452b4a1383a1d2",
+    "ROW-77915aee8394db48",
+    "ROW-489761122987e369",
+    "ROW-6b59acdd28416b29",
+    "ROW-e31ec81f0b3de891"
+   ]
+  },
+  {
+   "class": "as_filed",
+   "ciks": [
+    "0001742313"
+   ],
+   "basis": "read",
+   "decided_by": "PROPOSED by agent:fund-mcip-20261114 (fund loop 2026-11-14, sandbox mczc); not accepted by the owner",
+   "decided_on": "2026-11-14",
+   "disposition_id": "PD-X06-1742313-mcz-1",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "x06-par-over-10x-fair-value-written-down-non-accrual-loan",
+   "statement": "Six non-accrual loans print a par 100 to 900 times their fair value because the loan is written down: First Brands Group 1-3 (par 11,749 / 34,751 / 14,436 against fair value 13 / 39 / 16) and Vice Acquisition Holdco 5-7 (par 1,173 / 355 / 618 against 34 / 10 / 18). Published par, cost and fair value equal the printed line; the schedule is in thousands of dollars (the filing header reads in thousands, so par 11,749 is 11.7M; fair value 13 is 13 thousand) with no foreign-currency marker. No fix applies.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000046",
+     "verbatim": "First Brands Group, LLC (21) P 6.00 % 12.75 % PIK 10/2/2025 n/a 11,749 10,547 13 0.0 %",
+     "quote": "'First Brands Group, LLC (21) P 6.00 % 12.75 % PIK 10/2/2025 n/a 11,749 10,547 13 0.0 %': par 11,749, fair value 13, non-accrual note (21)",
+     "quarter": "2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001742313-26-000046",
+     "verbatim": "Vice Acquisition Holdco, LLC (21) SF 8.26 % 11.93 % PIK 7/31/2023 1/31/2028 1,173 513 34 0.0 %",
+     "quote": "'Vice Acquisition Holdco, LLC (21) SF 8.26 % 11.93 % PIK 7/31/2023 1/31/2028 1,173 513 34 0.0 %': par 1,173, fair value 34, non-accrual note (21)",
+     "quarter": "2026-06-30"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py mczc X06 0001742313 2026-06-30 30",
+   "rows": [
+    "ROW-3dd599660218b255",
+    "ROW-3791d796d106983d",
+    "ROW-987af85e96dd4ee7",
+    "ROW-cc4fb0fd865cf201",
+    "ROW-d71b9d879f2ffe86",
+    "ROW-036803aae1bc6a57"
+   ]
   }
  ]
 }

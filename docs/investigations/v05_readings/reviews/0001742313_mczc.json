@@ -1,0 +1,224 @@
+{
+ "reviewer_id": "agent:reviewer-mcip-20261114-opus",
+ "report_digest": "9da03b9054ee4e872266d74e5abf80dabd8d291cf0eea746e47b2228e1279e6b",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_2d0aef4184fd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population (shadow/page_rule_findings.csv, mczc) is exactly 9 rows, 3 per quarter: American Broadband DD and revolver + Inversiones DP6 DD (2023-03-31 ROW-e27cb15cf0a25174, ROW-6c648234c3db9559, ROW-8e39fd244b478f50; 2023-06-30 ROW-47839c3d2a31accb, ROW-ac7f5cb73f4d5612, ROW-203b0279a4ae195c; 2023-09-30 ROW-fa611432e8849316, ROW-b24b4e2a5e4091b2, ROW-0b2724ee9ecc2b06), equal to affected_rows. Reading the td cells: the company cell is split over two trs, 'American Broadband and Telecommunications' in the tr that also holds the '18.00 % Cash/' leg and 'Company LLC (Delayed Draw)' in the row's own tr; Inversiones prints 'Inversiones DP6 (BVI) Numero Dos, Ltd. (Delayed' / 'Draw) ...'. The rule compares the published full name with the fragment in the row's own tr ('Company LLC (Revolver)', 'Draw) (<)'). Published names are the printed company: false alarm, check misfire, REQ-mcip-1 is the correct route (no disposition).",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "American Broadband and Telecommunications 18.00 % Cash/ Company LLC (Delayed Draw) (~) (*) (**) P 12.00 % 2.00 % PIK 6/10/2022 6/10/2025 3,065 2,768 2,849 0.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f719c2bd8903",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population (shadow/page_rule_findings.csv, mczc) is exactly 9 rows, 3 per quarter: American Broadband DD and revolver + Inversiones DP6 DD (2023-03-31 ROW-e27cb15cf0a25174, ROW-6c648234c3db9559, ROW-8e39fd244b478f50; 2023-06-30 ROW-47839c3d2a31accb, ROW-ac7f5cb73f4d5612, ROW-203b0279a4ae195c; 2023-09-30 ROW-fa611432e8849316, ROW-b24b4e2a5e4091b2, ROW-0b2724ee9ecc2b06), equal to affected_rows. Reading the td cells: the company cell is split over two trs, 'American Broadband and Telecommunications' in the tr that also holds the '18.00 % Cash/' leg and 'Company LLC (Delayed Draw)' in the row's own tr; Inversiones prints 'Inversiones DP6 (BVI) Numero Dos, Ltd. (Delayed' / 'Draw) ...'. The rule compares the published full name with the fragment in the row's own tr ('Company LLC (Revolver)', 'Draw) (<)'). Published names are the printed company: false alarm, check misfire, REQ-mcip-1 is the correct route (no disposition).",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "American Broadband and Telecommunications 18.00 % Cash/ Company LLC (Delayed Draw) (~) (*) (**) P 12.00 % 2.00 % PIK 6/10/2022 6/10/2025 3,065 2,768 2,849 0.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b82325228371",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population (shadow/page_rule_findings.csv, mczc) is exactly 9 rows, 3 per quarter: American Broadband DD and revolver + Inversiones DP6 DD (2023-03-31 ROW-e27cb15cf0a25174, ROW-6c648234c3db9559, ROW-8e39fd244b478f50; 2023-06-30 ROW-47839c3d2a31accb, ROW-ac7f5cb73f4d5612, ROW-203b0279a4ae195c; 2023-09-30 ROW-fa611432e8849316, ROW-b24b4e2a5e4091b2, ROW-0b2724ee9ecc2b06), equal to affected_rows. Reading the td cells: the company cell is split over two trs, 'American Broadband and Telecommunications' in the tr that also holds the '18.00 % Cash/' leg and 'Company LLC (Delayed Draw)' in the row's own tr; Inversiones prints 'Inversiones DP6 (BVI) Numero Dos, Ltd. (Delayed' / 'Draw) ...'. The rule compares the published full name with the fragment in the row's own tr ('Company LLC (Revolver)', 'Draw) (<)'). Published names are the printed company: false alarm, check misfire, REQ-mcip-1 is the correct route (no disposition).",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "American Broadband and Telecommunications 18.00 % Cash/ Company LLC (Delayed Draw) (~) (*) (**) P 12.00 % 2.00 % PIK 6/10/2022 6/10/2025 3,065 2,768 2,849 0.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4ce3f5ddc77f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "row_validation_issues.csv (mczc) X06 2026-06-30 flags exactly the six rows in affected_rows (ROW-3dd599660218b255, ROW-3791d796d106983d, ROW-987af85e96dd4ee7 First Brands; ROW-cc4fb0fd865cf201, ROW-d71b9d879f2ffe86, ROW-036803aae1bc6a57 Vice Acquisition). For each, the tr carrying the row's own fair-value fact prints par, cost and fair value equal to the published values (e.g. 11,749 / 10,547 / 13), note (21) = non-accrual. Written-down non-accrual loans, as filed; PD-X06-1742313-mcz-1 rerun (flagged.py mczc X06) reproduces the 6 rows. Minor: the proposal says 'par is in dollars'; the page prints thousands and the build scales x1000 consistently, so no scale issue.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000046",
+     "text": "First Brands Group, LLC (21) P 6.00 % 12.75 % PIK 10/2/2025 n/a 11,749 10,547 13 0.0 %"
+    },
+    {
+     "accession": "0001742313-26-000046",
+     "text": "Vice Acquisition Holdco, LLC (21) SF 8.26 % 11.93 % PIK 7/31/2023 1/31/2028 1,173 513 34 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5e7c60fde0a0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Three rows (ROW-dbf465dda3726f83 Arcserve 3, ROW-ab47146fd245e74b StormTrap preferred, ROW-adf090c474ab895b Streamland 1) print 0.1 % for fair values 753 / 640 / 902 against net assets ~2,710M (implied 0.03); published pct equals the printed figure on the row's own fair-value tr. Rows match the proposal rows list; rerun ident_left.py mczc runs. as_filed is an allowed class.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000046",
+     "text": "Arcserve Cayman Opco LP (21) n/a n/a 9.00 % PIK 7/14/2023 1/2/2028 605 603 753 0.1 %"
+    },
+    {
+     "accession": "0001742313-26-000046",
+     "text": "StormTrap, LLC ( 640,000 Class A preferred units) (17) n/a n/a 8.00 % PIK 3/25/2022 n/a - 640 640 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3bb59bff4da4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-06-30 flags exactly the seven rows in affected_rows (Adept 3 ROW-0bdf7aef7b22caa9, Adept 7 ROW-c958e4c92f6747c4, Arcserve 1 ROW-d0452b4a1383a1d2, Vice 1-4 ROW-77915aee8394db48, ROW-489761122987e369, ROW-6b59acdd28416b29, ROW-e31ec81f0b3de891). Each own fair-value tr prints n/a n/a n/a with fair value dash; published no rate, spread or PIK. Adept 3 still carries a paid-in-cash 6.13 fact from the neighbour line in src_facts; it is correctly not published. as_filed proposal with rows list and real rerun.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000046",
+     "text": "Arcserve Cayman Opco LP (21) n/a n/a n/a 3/16/2021 3/16/2027 1,358 968 - 0.0 %"
+    },
+    {
+     "accession": "0001742313-26-000046",
+     "text": "Adept AG Holdings, LLC (12)(21)(22) n/a n/a n/a 3/31/2025 8/11/2027 84 84 - 0.0 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "lien-blank-on-10q-section-heading",
+   "outcome": "supported",
+   "rationale": "Independent heading walk (lien23.py): of the 142 lien-corrected 2023 rows, 141 sit under the printed 'Senior Secured Loans' section and are First Lien; 1 (Arcstor ROW-3d1e02ab6e784827, 2023-09-30) sits under 'Junior Secured Loans' and is Second Lien, so the report's '142 to First Lien' is loose wording but every value is right. The filer prints separate Senior / Unitranche / Junior Secured Loans sections and the build already maps 290+ 'Senior Secured' rows per quarter to First Lien, so the heading implies first lien for this filer; no second-lien row sits under the Senior heading. Proposed null-lien detector is cheap and sound.",
+   "evidence": [
+    {
+     "accession": "0001410578-23-002414",
+     "text": "Arcstor Midco, LLC (~) (***) SF 7.85 % 13.17 % PIK 3/16/2021 3/16/2027 12,192 11,950 6,450 0.6 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-blank-on-10q-heading-layout",
+   "outcome": "supported",
+   "rationale": "Independent check (ind23.py): for all 1,087 2023 Q1-Q3 rows with a fair-value fact the nearest preceding printed industry heading equals the published extracted_industry on 1,084; a 45-row random sample across the three quarters agrees. GICS: 1,078 of 1,081 rows whose issuer also appears at 2023-12-31 get the same gics_sector and gics_sub_industry as that quarter. The 3 exceptions are Lifted Trucks Class A shares (ROW-1b19b6bed0a75061, ROW-1fe334bd552b4c50, ROW-1b29e773b91e524a) still published with extracted_industry 'Class A shares' and no GICS (pre-existing in mcza, left; page heading 'Automotive'). Residual defect, not a wrong correction. Existing industry_coverage detector is the right reference.",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Exiger LLC (Revolver) (*) SF 8.00 % 2.00 % PIK 9/30/2021 9/30/2027 1,400 - - 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "affiliate-rollforward-note-published-as-positions",
+   "outcome": "supported",
+   "rationale": "rf2606.py: all 83 rows the predicate selects in mcza at 2026-06-30 (c-3004..c-3335, 441,298K) have their fair-value fact in a roll-forward note tr (opening, additions, reductions, ..., closing; no percent column) and none in a schedule tr; 78 have a same-issuer same-value schedule twin in mczc, the other 5 are SFR Holdco reclassification lines closing at nil. mczc 2026-06-30 = 934 rows = 5,956,417K = filed TOTAL INVESTMENTS. F20, GAV_BDC03 and gav_reconciliation derive from one ratio: 1.0741 in mcza (residual exactly 441,298K) and 1.0 / PASS in mczc (holdings_gav_reconciliation.csv, fund_financials_validation_current.csv): re-derived. Exclusion rather than retain-and-flag is consistent with the cohort: these are duplicate note values, not JV look-through rows, and several funds exclude roll-forward leaks by per-CIK rules (1508655, 1812554, 1715933, this fund's earlier quarters). Recurrence: rule is quarter-listed; conservation catches a new quarter.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000046",
+     "text": "SheerTrans Solutions, LLC ( 3,042,264 Class A preferred interests) 4,747 - - - - - - 273 5,020"
+    },
+    {
+     "accession": "0001742313-26-000046",
+     "text": "TOTAL INVESTMENTS $ 6,047,458 $ 5,956,417 219.8 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "quarter-pinned-corrections-recur-in-new-quarter",
+   "outcome": "supported",
+   "rationale": "All 12 equity-commitment rows at 2026-06-30 (Bench Walk, Innovative Artists, J2 BWA III, KL Moon, MC Asset Mgmt, MC Aviation, MC Voyager, Polyventive, SFR Holdco x2, SingleStore, Triad) are EQUITY_COMMON/COMMON_EQUITY/PRIVATE_EQUITY, identical to the same issuers at 2026-03-31. Coupons: every Cpex, PVHC, Bandas, Adept, Whistler, Sundy, Witkoff and Rampart loan row equals its printed line under the fund's existing conventions (cash/PIK rows: rate = cash + PIK, PIK separate, e.g. Cpex 9.74+0.50=10.24, Bandas 4.00+13.75=17.75, as in earlier quarters; PIK with a spread: rate withdrawn, PIK set, D-092; PIK with n/a spread: rate = PIK 13.25; plain rows unchanged). Consistent with D-031 and the AGENTS.md interest_rate note (no one-sided migration). Chess.com/Streamland: c-929's fair value 379 / cost 258 / 7 units sit on the Chess line and c-928's 1,205 / dash / 8,812 on the Streamland line, so the swapped names and units follow each row's own fair-value fact. Class detector proposal is sound.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000046",
+     "text": "Bandas Law Firm, P.C. SF 13.75 % 4.00 % Cash/ 13.75 % PIK 2/17/2026 2/17/2030 4,689 4,627 4,689 0.2 %"
+    },
+    {
+     "accession": "0001742313-26-000046",
+     "text": "Chess.com, LLC ( 7 Class A units) (17) - - - 12/31/2021 n/a - 258 379 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-not-on-page",
+   "outcome": "supported",
+   "rationale": "In 0001742313-26-000013 note (21) reads 'This position was on non-accrual status as of December 31, 2025'; the three SFR Holdco junior lines (ROW-06c246710ade75c0, ROW-149dfd463e61474d, ROW-cc41c7ee979e225a) print only (12), fixed 8.00 %, fair value at or above par. mcza published them non-accrual from the XBRL footnote link; mczc sets false/unknown. Printed line over a conflicting footnote link is the right call; the flag-vs-note detector is deterministic.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000013",
+     "text": "SFR Holdco, LLC (12) n/a n/a 8.00 % 3/1/2022 8/11/2028 4,387 4,387 4,839 0.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-code-differs-from-printed-index",
+   "outcome": "supported",
+   "rationale": "MYOB 2025-09-30 ROW-021edc34121c7164 now BBSW, matching the printed index and the same position's BBSW at 2025-06-30, 2025-12-31, 2026-03-31 and 2026-06-30. Legend-code detector proposal is sound.",
+   "evidence": [
+    {
+     "accession": "0001742313-25-000080",
+     "text": "MYOB US Borrower, LLC (fka ETA Australia Holdings III Pty Ltd and MYOB US Borrower LLC) (12)(25)(35) BBSW 5.75 % 9.33 % 6/6/2025 5/29/2030 26,656 25,791 26,123 1.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "schedule-row-excluded-note-row-published",
+   "outcome": "supported",
+   "rationale": "rg2 -> mczc at 2023-06-30 removes exactly the two note rows (ROW-e3475bd68d8c2a1f Nastel units 4,328K, ROW-0e68ee73decaf77d SheerTrans preferred 8,643K, no cost or pct) and adds the two schedule rows on the ...Equity Securities members (Nastel 4,328 / cost 3,408 / 0.5 %, 3,408 units; SheerTrans 8,643 / 8,643 / 0.9 %). Quarter total unchanged at 1,764,774K; each position appears once; the five remaining generic-duplicate exclusions are untouched. Minor: their instrument_description is now just 'Equity Securities'.",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001769",
+     "text": "Nastel Technologies, LLC ( 3,408 Class A units) (####) - - - (###) 9/21/2022 - - 3,408 4,328 0.5 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-joins-equity-to-loan",
+   "outcome": "rejected",
+   "rationale": "The defect is real (mczc pid 2882aa5f joins 2024-09-30 loan c-764, par 9,423, with equity c-767, c-828 and c-859; the same par-9,423 junior loan is split over four pids: 5f6657e1 c-760, 2882aa5f c-764, c6269179 c-819, 92b7d243 c-850). But the stated reason for leaving it, that no override can separate the rows because the natural key name/date/value is ambiguous, is wrong: wrapper source_encodings.position_identity_contexts (pipeline/reviewed_position_identity.py) keys exact 'ACCESSION CONTEXT => KEY' pairs, needs no name/date/value key, and a reviewed key never chains to an unreviewed row. Declaring 0001742313-24-000046 c-760, 0001742313-24-000084 c-764, 0001742313-25-000012 c-819, 0001742313-25-000039 c-850 => one junior-loan key and the equity contexts (24-000046 c-767, 24-000084 c-771, 25-000012 c-828, 25-000039 c-859) => one Class A key would separate the chain and rejoin the loan (mechanism already used for 0001918712, 0001869453, 0001849894). hypotheses_tested omit it; action 'left' is unsupported. The detector proposal itself is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001742313-26-000046",
+     "text": "BTR Opco LLC ( 863 Class A common units) - - - - - - - - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-printed-cell-wraps-two-lines",
+   "outcome": "supported",
+   "rationale": "Same 9 flagged rows as the three issuer_name_printed findings; td cells confirm the company cell is split over two trs (first half in the cash-leg tr). Correct names, check misfire; REQ-mcip-1 is the right action and not_feasible for a new detector is acceptable since the action is a repair of the existing one.",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "American Broadband and Telecommunications 18.00 % Cash/ Company LLC (Delayed Draw) (~) (*) (**) P 12.00 % 2.00 % PIK 6/10/2022 6/10/2025 3,065 2,768 2,849 0.3 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-mcip-1",
+   "outcome": "supported",
+   "rationale": "verification_bug is the right classification: the rule reads only the row's own tr, while this filer splits the company cell over the preceding tr (which also holds the cash-rate leg on the same context). 9 rows over 3 quarters, all correct names. The repair should join the preceding tr's leading name cell only when that tr carries no fair-value fact of its own, with a test that a wrong name on a wrapped row still fails and a measurement on every accepted sandbox.",
+   "evidence": [
+    {
+     "accession": "0001410578-23-001083",
+     "text": "American Broadband and Telecommunications 18.00 % Cash/ Company LLC (Delayed Draw) (~) (*) (**) P 12.00 % 2.00 % PIK 6/10/2022 6/10/2025 3,065 2,768 2,849 0.3 %"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": {
+  "page_sample_cards": "C019 (Vice DD 2023-03-31, published 17.16) and C020 (Exiger DD 2023-06-30, published 13.26) are NOT errors: in these 10-Qs the 'X % Cash/' leg is a separate tr printed ABOVE its row and carries that row's context (Exiger Q2: 11.26 above the DD row on the DD context, 11.16 above the revolver on the revolver context; Vice Q1: 5.16 above the DD row on the DD context). Direction proof: in the Q1 Exiger block the first cash line follows Avalara revolver, a plain 12.15 % loan that cannot own a Cash/ leg, and no cash line follows the last PIK-split row of any block. C016 (Relevate Class X preferred, 12.00 % PIK, no interest_rate) follows the fund's convention: 129 PIK preferred rows publish pik_rate with null interest_rate; a convention question, not a row error.",
+  "cash_leg_tag_shift": "The shape exists, but elsewhere: standalone 'Cash/' trs whose context is the row ABOVE (filer tag shifted by one): 2023-03-31 24 of 53 (16 current schedule, 8 unpublished 2022-12-31 comparative), 2023-06-30 0 of 48, 2023-09-30 1 of 55, none from 2023-12-31 (single-line layout). The investigator fixed the owners it saw (Aras, Arcstor, INH, NTM, Premier Roofing, Caravel revolver, TigerConnect). Still WRONG in mczc: 2023-03-31 Caravel term ROW-5e6165f9acd5bd9b 12.33 (page 10.60 Cash/1.00 PIK -> 11.60); Caravel DD ROW-69d681c35d578e57 11.60 (page 11.33/1.00 -> 12.33); Amelia revolver ROW-1906ab7a7f6bec83 9.66 (Arcstor's 8.66+1; page 14.16/1.00 -> 15.16); Exiger revolver ROW-bc5b0ed752f01397 null/unresolved (page 10.67/2.00 -> 12.67); 2023-09-30 Witkoff DD ROW-4547891e4c307064 4.0 all_in (page 8.00 Cash/4.00 PIK -> 12.0). Tag-holder rows with their own InvestmentInterestRate (Avalara, Brickell, Golden State, Acquia, North Haven USHC, Aperture) are unaffected; Exiger term rows and Amelia term/DD receive equal values. Fix by context-keyed corrections; sweep rule: the owner of a standalone Cash/ tr is the next tr. Scripts: scratch/fund_runs/0001742313/review/cashline.py, cashshift.py.",
+  "other_residuals": "Lifted Trucks equity 2023 Q1-Q3 extracted_industry 'Class A shares' (3 rows). 2024-09-30 BTR loan instrument text 'Equity Securities (fka Born to Run, LLC)' left. Retirements VR-FL-1742313-01..03: retire_check.py rerun PASS with all five plants failing; cited rows read on page and equal to published; dup_retirements.py prints 0 duplicates.",
+  "field_diffs": "mcza vs rg2: only entity_id 1011, canonical_name 107, gics_sub_industry 57, gics_sector 40, position_id 541, interest_rate_cash 96 (external code) plus 1,017 added 2026-06-30 rows. mczc vs mcza: issuer_name 176, instrument_description 79, extracted_industry 1340, gics_sub_industry 1214, gics_sector 1087, lien_position 142, corrected_fields 1402, interest_rate 13, pik_rate 11, class columns 12, nonaccrual 3, reference_rate_type 1, shares_held 2, position_id 133. rg2 -> mczc: +936 (934 at 2026-06-30, 2 schedule rows at 2023-06-30), -2 (2023-06-30 note rows ROW-e3475bd68d8c2a1f Nastel units, ROW-0e68ee73decaf77d SheerTrans preferred)."
+ }
+}
