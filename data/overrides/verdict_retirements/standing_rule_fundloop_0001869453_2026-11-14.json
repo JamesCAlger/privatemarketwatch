@@ -1,0 +1,181 @@
+{
+ "_note": "Blue Owl Technology Income (fund loop 2026-11-14, batch b1112b packet) retirements under the owner's standing rule D-252, for verdicts whose cited rows already equal the printed rows in the published data (data/output).",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1869453-01",
+   "review_id": "RVQ_REV_4f4b987a4e0e",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "report_date": "2026-03-31",
+   "reason": "The verdict reads three funded rows of the 10-Q for 2026-03-31 (AI Titan Parent, Accommodations Plus Technologies, Acrisure) as published without their printed rate. The published rows of those three contexts (c-41, c-39, c-171) carry SOFR with margins 4.50 and 5.25 and a fixed 8.50 rate, equal to their own printed lines, with maturity month, cost and fair value also equal. The other rows X02 still flags in that quarter are lines of the unfunded-commitments table, which print no rate (disposition DS-X02-1869453-2).",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001869453/retire_check.py (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fair-value fact (scratch/fund_runs/0001869453/ixrow2.py), reads the PUBLISHED row of that context from data/output/private_markets_holdings.parquet and compares reference rate, margin or fixed rate, maturity month, cost and fair value (RATE), or the issuer against the printed company cell, instrument words in any issuer of the quarter and the quarter-to-quarter issuer continuity D06 measures (ISSUER)"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis, 0001869453 2026-03-31 from 0001869453-26-000033: published SOFR/4.5, SOFR/5.25 and interest_rate 8.5 on c-41, c-39, c-171"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py <holdings> --plant): spread, reference rate, rate removed, maturity, cost, fair value, issuer name, issuer with instrument text and a row from another filing are each planted on the first cited row; every plant fails the check (7 of 7 for X02 and C01, 3 of 3 per quarter for D06)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000033",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 28,787 - 28,535 27,817",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000033",
+     "quote": "Accommodations Plus Technologies LLC(3)(4)(9) First lien senior secured loan S+ 5.25 % 5/2032 8,806 - 8,726 8,520",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000033",
+     "quote": "Acrisure, LLC(3)(4)(6)(31) Unsecured notes N/A 8.50 % 6/2029 3,000 - 3,000 2,966",
+     "verbatim": true
+    }
+   ],
+   "cik": "0001869453",
+   "verdict_sha256": "99d218b9b0d9616f06f99cff4daa6bdc60c0f3e80a2b96f0ea6d2ab517f7db83",
+   "rerun": "python scratch/fund_runs/0001869453/retire_check.py data/output/private_markets_holdings.parquet [--plant]",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-botic-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1869453-02",
+   "review_id": "RVQ_REV_a841badd24c7",
+   "engine": "oracle",
+   "rule_name": "C01",
+   "report_date": "2025-09-30",
+   "reason": "The verdict cites AI Titan Parent as printed 'S+ 4.75% Maturity 08/2031 Fair Value 27,272' with a blank published rate. That line is the comparative table of the 10-Q for 2025-09-30 (the 2024-12-31 schedule, footnote (7), cost 27,281). The current-period line of the same filing, context c-53, prints S+ 4.50 % 8/2031 27,547 27,306 27,272 and is published with SOFR and margin 4.50, maturity, cost and fair value equal to it. The comparative line is the 2024-12-31 quarter's row c-203, published SOFR 4.75.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001869453/retire_check.py (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fair-value fact (scratch/fund_runs/0001869453/ixrow2.py), reads the PUBLISHED row of that context from data/output/private_markets_holdings.parquet and compares reference rate, margin or fixed rate, maturity month, cost and fair value (RATE), or the issuer against the printed company cell, instrument words in any issuer of the quarter and the quarter-to-quarter issuer continuity D06 measures (ISSUER)"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis, 0001869453 2025-09-30 from 0001869453-25-000061: c-53 published SOFR/4.5, cost 27,306, fair value 27,272"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py <holdings> --plant): spread, reference rate, rate removed, maturity, cost, fair value, issuer name, issuer with instrument text and a row from another filing are each planted on the first cited row; every plant fails the check (7 of 7 for X02 and C01, 3 of 3 per quarter for D06)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000061",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8) First lien senior secured loan S+ 4.50 % 8/2031 27,547 27,306 27,272",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000011",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus Group)(7) First lien senior secured loan S+ 4.75 % 08/2031 27,547 27,281 27,272 0.9 %",
+     "verbatim": true
+    }
+   ],
+   "cik": "0001869453",
+   "verdict_sha256": "301a55dfa78433663c3fe03a394fa091da93ad2c15b518d20e1cad28d325ce39",
+   "rerun": "python scratch/fund_runs/0001869453/retire_check.py data/output/private_markets_holdings.parquet [--plant]",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-botic-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1869453-03",
+   "review_id": "RVQ_REV_a992ab550001",
+   "engine": "oracle",
+   "rule_name": "D06",
+   "report_date": "2025-12-31",
+   "reason": "The verdict reads a continuity failure (63 of 413 issuers) caused by instrument text in published issuer names, citing AI Titan Parent and AlphaSense in the 10-K for 2025-12-31 and in its 2024-12-31 comparative table. The published issuers of those four contexts (c-195, c-196 at 2025-12-31; c-203, c-204 at 2024-12-31) equal the printed company cells; no published issuer of either quarter carries instrument words; the continuity D06 measures is 0.878 at 2025-12-31 and 0.919 at 2024-12-31 (threshold 0.5). One review id holds one retirement: both quarters are checked by the same script.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001869453/retire_check.py (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fair-value fact (scratch/fund_runs/0001869453/ixrow2.py), reads the PUBLISHED row of that context from data/output/private_markets_holdings.parquet and compares reference rate, margin or fixed rate, maturity month, cost and fair value (RATE), or the issuer against the printed company cell, instrument words in any issuer of the quarter and the quarter-to-quarter issuer continuity D06 measures (ISSUER)"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis: 2025-12-31 from 0001869453-26-000017 and 2024-12-31 from 0001869453-25-000011; issuer continuity 0.878 and 0.919"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py <holdings> --plant): spread, reference rate, rate removed, maturity, cost, fair value, issuer name, issuer with instrument text and a row from another filing are each planted on the first cited row; every plant fails the check (7 of 7 for X02 and C01, 3 of 3 per quarter for D06)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 28,787 28,525 28,478",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "quote": "AlphaSense, Inc.(3)(4)(9) First lien senior secured loan S+ 6.25 % 6/2029 20,052 19,902 20,002",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-25-000011",
+     "quote": "AlphaSense, Inc.(8) First lien senior secured loan S+ 6.25 % 06/2029 20,052 19,867 19,851 0.7 %",
+     "verbatim": true
+    }
+   ],
+   "cik": "0001869453",
+   "verdict_sha256": "1f660f83e21e5756d96917a351bf51e201916b9ce46cc52a78853cd9e7dedac8",
+   "rerun": "python scratch/fund_runs/0001869453/retire_check.py data/output/private_markets_holdings.parquet [--plant]",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-botic-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1869453-04",
+   "review_id": "RVQ_REV_91a45112223e",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2025-12-31",
+   "reason": "The verdict reads the 0.0 percent sum of published positions as an extraction gap because the schedule total prints 173.4 %. The page prints no percent of net assets on any position line of the 10-K for 2025-12-31 (percents sit on industry subtotals and the total only): 440 published rows were each read against their own printed line, none ends with a percent and none publishes one. The cited total row ('Total Investments ... 173.4 %') is not published as a position (no row carries its fair value of 6,207,136 thousand). This is the filed state the owner accepted for the same fund's field_coverage_drop at 2025-03-31 and for A07 at 2025-12-31 (reason coverage-percent-of-net-assets-no-longer-printed).",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001869453/retire_check.py (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fair-value fact (scratch/fund_runs/0001869453/ixrow2.py), reads the PUBLISHED row of that context from data/output/private_markets_holdings.parquet and compares reference rate, margin or fixed rate, maturity month, cost and fair value (RATE), the percent of net assets against the percent each line ends with (PCT), or the issuer against the printed company cell, instrument words in any issuer of the quarter and the quarter-to-quarter issuer continuity D06 measures (ISSUER)"
+    },
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet (batch b1112b build), published basis, 0001869453 2025-12-31 from 0001869453-26-000017: 440 rows tested, 0 lines print a trailing percent, 0 rows publish pct_of_net_assets"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py <holdings> --plant): a percent published on a row, a percent printed on a line and not published, and the filed total published as a position each fail the check (3 of 3)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "quote": "Total Investments $ 6,206,603 $ 6,207,136 173.4 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001869453-26-000017",
+     "quote": "AI Titan Parent, Inc. (dba Prometheus Group)(3)(4)(8)(22) First lien senior secured loan S+ 4.50 % 8/2031 28,787 28,525 28,478",
+     "verbatim": true
+    }
+   ],
+   "cik": "0001869453",
+   "verdict_sha256": "fcc6636a6f304809fd0b5a0cdbb274585205cd56873b074be6cf7c649c1263a3",
+   "rerun": "python scratch/fund_runs/0001869453/retire_check.py data/output/private_markets_holdings.parquet [--plant]",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-botic-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

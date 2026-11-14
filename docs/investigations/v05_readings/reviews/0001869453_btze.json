@@ -1,0 +1,361 @@
+{
+ "reviewer_id": "agent:reviewer-botic-20261114-opus",
+ "report_digest": "9fbc9e3b3e901249e27fcb23ae346e38abcfe6677e7e018f7f73533668eef970",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_419cea873ca0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry checked: source DC-0001869453-ced38b5d09 exists in data/decisions/0001869453.jsonl with review_outcome supported (unreviewed_2026-10-21/reviews/0001869453.json). Current flagged rows in btzd shadow/page_rule_findings.csv for issuer_name_printed 2023-03-31 are exactly ROW-844403be49e2e80f and ROW-3a7516a3a49d5af9, equal to the carried affected_rows. Re-read on the page: the units row prints 'Zoro TopCo, Inc.' for 671,414 units and publishes 'Zoro TopCo, L.P. (dba Zendesk)'; the preferred publishes the dba suffix. Values equal the printed lines. Source ambiguity awaiting owner ruling is the right state; no data change made.",
+   "evidence": [
+    {
+     "accession": "0001869453-23-000010",
+     "text": "Zoro TopCo, Inc.(18)(22) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.6 %"
+    },
+    {
+     "accession": "0001869453-23-000010",
+     "text": "Zoro TopCo, Inc.(14)(22) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,142 8,209 0.7 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e817fb0f2ad4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry checked: DC-0001869453-210da65ea0 exists with review_outcome supported. Current flagged rows (page_rule_findings, btzd) are ROW-c296b97992f23dd6, ROW-5aa1c6734671b50f, ROW-1d0d6dad4f78588d, equal to the carried affected_rows. Re-read: CVET Midco 2, L.P. published for printed 'Covetrus Inc.' (par 25,000, cost 24,517, FV 24,188 equal); Zoro rows carry the member's dba suffix. Evidence only, owner ruling pending; correct to leave.",
+   "evidence": [
+    {
+     "accession": "0001869453-23-000017",
+     "text": "Covetrus Inc.(11) Second lien senior secured loan S + 9.25 % 10/2030 25,000 24,517 24,188 1.8 %"
+    },
+    {
+     "accession": "0001869453-23-000017",
+     "text": "Zoro TopCo, L.P.(20)(24) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.5 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6bf86ef2e58c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population rebuilt independently with pipeline.finding_rows.FlaggedRows on btzd: 158 row_ids, identical to the report's affected_rows, reviewed_rows and the 158 rows of proposal PD-X02-1869453-3. Each row's printed line (the <tr> carrying its own fair-value fact) was read: none has a cost, a principal, a positive fair value or any rate/spread token; fair values sum to -5,096,000, equal to the printed 'Total Portfolio Company Commitments ( 5,096 )'. The one funded row previously flagged (Sensor revolver c-244) now publishes S+ 6.50 from c-243. Proposal under the accepted reason R-X02-no-rate-in-source is supported; it is a proposal, not an acceptance.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Themis Solutions Inc. (dba Clio) First lien senior secured delayed draw term loan 10/2027 - 15,308 ( 306 )"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Total Portfolio Company Commitments $ 133,880 $ 622,745 $ ( 5,096 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_94a0095fac8b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Recomputed C04 on btze 2026-06-30 (unchanged from btzd: principal publication does not touch shares_held): 39 equity rows (index_classification COMMON/PREFERRED_EQUITY), 27 with shares_held = 0.692. The 12 without a count read on their printed lines: 11 print the figure under Par with '-' under Unit and tag it InvestmentOwnedBalancePrincipalAmount (Credit SLF c-349, Cross-Strategy c-341, Leasing c-350, Elliott c-333, LSI 1 DAC c-343, LSI LLC c-344, Hotel California c-336, Stripe c-347, VCI c-293, VEPF c-338, WP Silver c-301); c-518 is a commitments-table line. No count exists on the page, so withdrawing the three par-as-count figures is correct and the drop below 0.70 is a check misfire, correctly routed as a check_repair_request (not a disposition). Residual the report does not state: these interests' printed and tagged par is published nowhere (principal_amount null in btzd, now published as principal in btze (WP Silver c-301 113,000)).",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 113 - 113 113"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Blue Owl Credit SLF LLC(3)(5)(26)(30)(31) LLC interest N/A N/A 16,161 - 16,162 14,572"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ece7b2f21ff3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The ten verdict rows read against their printed lines in btze and in the published b1112b build: all ten carry the printed currency in btze with principal_amount_usd = par x the H.10 rate (EUR 1.1736, GBP 1.3447 at 2025-12-31, the rate the build uses on uncorrected rows); in b1112b four (ROW-2b6a9cf6abb408b9 Diamond EUR, ROW-79a3d18622819cde RL Datix, ROW-35b1c2b71d93df18 and ROW-d8438932374551d7 Sensor) are still USD at rate 1.0. FX01 flags no row in btze. Confirmed error, fixed in the sandbox, outstanding until publication: correct state and next action.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000017",
+     "text": "RL Datix Holdings (USA), Inc.(3)(4)(19) First lien senior secured GBP term loan SA+ 5.00 % 4/2031 GBP 13,808 18,634 18,572"
+    },
+    {
+     "accession": "0001869453-26-000017",
+     "text": "Sensor Technology Topco, Inc. (dba Humanetics)(3)(4)(14) First lien senior secured EUR term loan E+ 6.75 % 5/2028 EUR 4,305 4,673 5,056"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "All 31 currency corrections (15 to EUR/GBP, 15 to USD, Sensor c-244) checked: the printed marker on the row's own FV line equals the corrected currency in every case; rates equal the build's H.10 rate for that currency/date or the admitted FRED quote (2023-06-30 EUR 1.0920, 2023-09-29 EUR 1.0584 in data/reference/monetary_conversion/fred_h10_usd_per_unit.csv); principal_amount_usd = par x rate. The 15 USD rows print SOFR margins, no marker and cost close to par. Sensor 2023-06-30 c-149 'EUR 23,308' with S + 6.50 and cost 23,139 / FV 23,133: a EUR par would be about 25,450 USD against a 23,139 cost, so leaving USD is the better reading (filer typo). Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001869453-25-000011",
+     "text": "Hub International(7)(14) First lien senior secured loan S+ 2.75 % 06/2030 12,382 12,382 12,444 0.4 %"
+    },
+    {
+     "accession": "0001869453-23-000017",
+     "text": "Sensor Technology Topco, Inc. (dba Humanetics)(11) First lien senior secured loan S + 6.50 % 5/2026 EUR 23,308 23,139 23,133 1.7 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-facility-currency",
+   "outcome": "supported",
+   "rationale": "Chain edges btzd vs btza: 9 new, 3 removed. Sitecore: all 33 keyed contexts published, one position_id per key (EUR 3fe87ab6, USD 359bac51, small USD 150c83cd), no unkeyed row shares a keyed pid; par accretes continuously per loan (small 4,478 to 5,123; large 26,996 to 30,886; EUR 26,308 to 29,548) across the 2024-06-30 to 2024-09-30 issuer-name swap, where a name-based chain would cross the loans. Other new edges join equal par and maturity (Resonetics, Securonix, Asurion c-210 to c-212, Fullsteam loan 963 to 963, AlphaSense DDTL); Fullsteam DDTL 60 to 260 to 322 is draws on one 11/2029 facility. The removed edges were wrong cross-loan links (Securonix 19,774 to Sitecore 27,960; Fullsteam loan to DDTL; Asurion 10,770 to 9,948).",
+   "evidence": [
+    {
+     "accession": "0001869453-24-000036",
+     "text": "Sitecore Holding III A/S(13) First lien senior secured EUR term loan E + 7.75 % ( 4.25 % PIK) 03/2029 EUR 27,144 28,442 29,092 1.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "c-539 carries only InvestmentOwnedAtCost/AtFairValue at scale 9 inside footnote (34), the narrative of BOCSO's own five-investment portfolio; the fund's own interest is c-341 on a different member (FV 47,144). Dry run of the wrapper change on all 1,391 raw identifiers of the fund (bdc_holdings, every context, every filing): only 'Blue Owl Cross-Strategy Opportunities LLC (BOCSO)' changes class (15 raw rows, all note figures: costs 500m/24.8m/304.4m/1.0bn/1.25bn, none published in btza or btzd); 'BOCSO' alone and the fund's real interest members keep their class. Aggregate markers match as lowercased substrings, and no other identifier contains '(bocso)'. Consistent with the JV rule (look-through not published). Detector reference fired in btza (BDCSRC blocking, SRC_BDC01 RVQ_BLK_ef65d54fffbb).",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "the portfolio consists of five investments totaling $ 1.25 billion and $ 1.24 billion at cost and at fair value, respectively"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(26)(30)(31)(34) Specialty finance equity investment N/A N/A 47,267 - 47,267 47,144"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-facts-split-across-two-contexts",
+   "outcome": "supported",
+   "rationale": "c-243 tags par 188, cost 184 and spread 6.50; c-244 tags only FV 181; both facts sit on the same printed row. btzd publishes c-244 with 188/184/181, S+6.50, USD, maturity 2028-05; c-243 is not published separately (no double count). X11 and X02 fired on it in btza (RVQ_REV_cb1b513ab08d).",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Sensor Technology Topco, Inc. (dba Humanetics)(3)(4)(8)(22) First lien senior secured revolving loan S+ 6.50 % 5/2028 188 - 184 181"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-of-fund-interest-published-as-unit-count",
+   "outcome": "supported",
+   "rationale": "btze: all 45 rows whose principal_amount changed (btzd -> btze) were read on their own FV line and tags, not a sample: each publishes the figure printed under Par (2026 filings, '-' under Unit) or the '$'-marked figure in the combined column (2025 filings), equal to the filer's InvestmentOwnedBalancePrincipalAmount (usd, scale 3); currency USD, principal_amount_usd = par, source_usd, shares_held empty. Includes Credit SLF c-349, Leasing c-350, Stripe c-347 and WP Silver c-301 / GT Silver c-299 (113). The proposed detector (dash under Unit -> no shares_held and principal = printed Par) is concrete. Gap on 6 unmarked combined-column rows is raised under REQ-par-of-fund-interests-as-principal-amount.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 113 - 113 113"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Stripe Blue Owl Holdings LLC(3)(5)(29)(30)(31) LLC Interest N/A N/A 15,549 - 15,551 16,968"
+    },
+    {
+     "accession": "0001869453-25-000061",
+     "text": "Chrome Investors LP(3)(4)(22)(29)(30)(31) LP Interest N/A N/A $ 8,754 8,757 8,754"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Rome c-304 prints 3,127,449 (published 3,127,449, was 3,127), Halo E c-335 prints 16,825 (was 10,000). Credit SLF 2025-12-31 c-508 is tagged InvestmentOwnedBalanceShares 14,293 and published 14,293 (equals rg2); it is the same par-in-thousands figure the 2026 filings print under Par, so it falls under the owner's open share-unit convention (evidence only, as the report says). units_printed fired on these rows in btza.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Rome Topco Holdings, LLC (dba SimpliSafe)(3)(4)(29)(30) Class B Units N/A N/A - 3,127,449 - 270"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Halo Purchaser, LLC(3)(4)(29)(30) Class E Warrant Units N/A N/A - 16,825 422 1"
+    },
+    {
+     "accession": "0001869453-26-000017",
+     "text": "Blue Owl Credit SLF LLC(3)(5)(24)(26)(30)(31) LLC Interest N/A N/A 14,293 14,295 14,104"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-row-number-left",
+   "outcome": "supported",
+   "rationale": "Aerosmith c-130/c-131: issuer, instrument text, type and lien now equal the printed lines; issuer_name_printed fired on both rows in btza (RVQ_BLK_2ae01861ef42).",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Aerosmith Bidco 1 Limited (dba Audiotonix)(3)(4)(9)(31) First lien senior secured loan S+ 5.25 % 7/2031 41,481 - 41,063 41,481"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Aerosmith Bidco 1 Limited (dba Audiotonix)(3)(4)(10)(31) First lien senior secured delayed draw term loan S+ 5.25 % 7/2031 8,835 - 8,732 8,835"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Names equal the printed company cells (Resonetics c-166, Cloud c-328/c-329, Community Brands c-63/c-64, trailing stops Boxer c-74, Qlik c-263, Romulus c-283). The btzd defect is repaired in btze: diff btzd vs btze shows instrument_description restored on exactly the 5 blanked rows (ROW-1edfeb4326928d9e, ROW-82d3294bf406c5c7, ROW-3da63cf23e4f7988, ROW-3c4175f344aeede7, ROW-5dc9299578e11f07) to the printed 'First lien senior secured loan' / '... revolving loan'. issuer_name_printed fired on these rows in btza.",
+   "evidence": [
+    {
+     "accession": "0001869453-24-000036",
+     "text": "Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 %"
+    },
+    {
+     "accession": "0001869453-24-000012",
+     "text": "Project Alpha Intermediate Holding, Inc. (dba Qlik)(7)(15) First lien senior secured loan S + 4.75 % 10/2030 45,000 44,118 45,149 2.4 %"
+    },
+    {
+     "accession": "0001869453-24-000012",
+     "text": "Boxer Parent Company Inc. (f/k/a BMC)(7)(15) First lien senior secured loan S + 4.25 % 12/2028 15,000 14,850 15,087 0.8 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-not-rederived-after-instrument-correction",
+   "outcome": "supported",
+   "rationale": "PCF c-201, Qlik c-343, Storable c-159, Bracket c-206, Dawn c-206: printed lines say 'First lien senior secured loan' with funded par; type now Term Loan. AlphaSense c-49 prints delayed draw (Delayed Draw Term Loan), Avalara c-60 prints revolving (Revolver). Proposed detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001869453-24-000036",
+     "text": "Storable, Inc.(7)(14) First lien senior secured loan S + 3.50 % 04/2028 49,872 49,522 49,882 1.9 %"
+    },
+    {
+     "accession": "0001869453-24-000036",
+     "text": "AlphaSense, Inc.(16)(17)(18) First lien senior secured delayed draw term loan S + 6.25 % 12/2025 - ( 40 ) ( 40 ) - %"
+    }
+   ]
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "outcome": "supported",
+   "rationale": "Corrections right (Knockout c-320 'S+ 10.75 %', Zoro c-294 'S+ 9.50 %', tagged only InvestmentInterestRatePaidInKind; basis_spread 10.75 / 9.5). Detection decision now propose_detector, matching the fact that spread_printed fired on no row of this fund in btza; the suggested check (printed 'S+ x %' -> basis_spread x) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Knockout Intermediate Holdings I Inc. (dba Kaseya Inc.)(3)(4)(10)(30) Perpetual Preferred Stock S+ 10.75 % N/A - 31,500 46,746 27,086"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Zoro TopCo, Inc.(3)(4)(9)(30) Series A Preferred Equity S+ 9.50 % N/A - 1,939 2,998 2,965"
+    }
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "supported",
+   "rationale": "Maturities right (Securonix c-348 04/2028 -> 2028-04-30, Sitecore USA c-352 03/2029, OneOncology c-154 6/2030) and context keying avoids the shared-identifier collision. The Securonix row's blank instrument text (btzd, ROW-5dc9299578e11f07) is restored in btze to the printed 'First lien senior secured loan'. Detector proposal (printed vs published maturity month on funded rows) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001869453-24-000036",
+     "text": "Securonix, Inc.(8) First lien senior secured loan S + 7.00 % 04/2028 19,774 19,636 17,404 0.7 %"
+    },
+    {
+     "accession": "0001869453-25-000040",
+     "text": "OneOncology, LLC(8) First lien senior secured delayed draw term loan S+ 5.00 % 6/2030 24,897 24,733 24,897"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-keeps-member-words",
+   "outcome": "supported",
+   "rationale": "Ordinals and member wording kept on undrawn and multi-tranche rows; class, lien and type unaffected. A rule against ordinals would flag every multi-tranche issuer. Note the Cloud c-328/c-329 corrections themselves write 'First lien senior secured loan 1/2' where the page prints no ordinal: same convention, accepted.",
+   "evidence": [
+    {
+     "accession": "0001869453-25-000061",
+     "text": "AI Titan Parent, Inc. (dba Prometheus Group) First lien senior secured delayed draw term loan 9/2026 - 5,509 ( 28 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "commitment-table-amounts-not-published",
+   "outcome": "supported",
+   "rationale": "Commitments table prints type, expiration, funded and unfunded commitment and FV; no rate; the X02 population (158 rows) is entirely this table. Owner-accepted reasons cover it; not_feasible is reasonable for v1.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Total Portfolio Company Commitments $ 133,880 $ 622,745 $ ( 5,096 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "22 funded rows with no extracted_industry (Storable under a REIT heading, JV interests under 'Joint Ventures') plus commitments-table lines; left. Detection decision now propose_detector, consistent with industry_coverage not firing in btza; the suggested check (funded row publishes the heading printed above it) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001869453-25-000061",
+     "text": "Storable Intermediate Holdings, LLC(3)(4)(9) First lien senior secured loan S+ 6.00 % 4/2032 47,028 46,809 47,028"
+    }
+   ]
+  },
+  {
+   "observation_key": "oracle-c04-counts-par-only-interests-as-missing-unit-count",
+   "outcome": "supported",
+   "rationale": "C04 recomputed (27/39 = 0.692 btzd; 30/39 btza): the 12 non-count rows print no count (11 dash under Unit, 1 commitments line). Misfire caused by a correct fix; the check is the detector and the repair request is recorded.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Elliott Alto Co-Investor Aggregator L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 7,836 - 7,887 17,925"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-C04-equity-interests-with-par-and-no-unit",
+   "outcome": "supported",
+   "rationale": "Verification bug, not an acceptance change: C04 (pipeline/oracle_checks.py check_C04_equity_has_shares) requires 70 pct of equity rows to have shares_held, and fund interests that print a par with '-' under Unit have no count to publish. The oracle reads holdings only, so 'dash under Unit' needs a holdings-side proxy: exclude rows whose source tags InvestmentOwnedBalancePrincipalAmount and no InvestmentOwnedBalanceShares. That keeps a common-stock or unit row whose count was dropped (no principal tag) in the denominator, so a real missing count still fails. It must not be a label exclusion ('LP Interest', 'LLC Interest'): Snowbird c-300 'LP Interest' prints 393,246 under Unit, and a label rule would let a dropped count through. Required with the repair: that real-error test and the per-sandbox measurement per the contract.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Snowbird Manager LP(3)(5)(29)(30)(31) LP Interest N/A N/A - 393,246 2,113 2,172"
+    },
+    {
+     "accession": "0001869453-26-000053",
+     "text": "LSI Financing LLC(3)(5)(22)(26)(30)(31) Specialty finance equity investment N/A N/A 43,653 - 43,653 47,999"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-par-of-fund-interests-as-principal-amount",
+   "outcome": "rejected",
+   "rationale": "Classification (acceptance_change for the owner) is right and the 45 published pars are right. The convention as written is too narrow. The '$' marker is good evidence that the combined-column figure is a dollar par, but it is not the only evidence. Six unmarked combined-column rows carry the filer's own InvestmentOwnedBalancePrincipalAmount tag (usd) and are left publishing neither principal nor shares: ROW-3ee74270a19be270 2024-09-30 c-422 Credit SLF 2,188; ROW-24d2c7475e38d311 2025-09-30 c-350 LSI Financing 1 DAC 2,658; ROW-4c8c8d5fe387785f 2025-09-30 c-351 LSI Financing LLC 61,631; ROW-55e7f38588169ca5 2025-12-31 c-486 Baypine 904; ROW-ca255b9d189538b9 2025-12-31 c-504 LSI 1 DAC 2,658; ROW-d59207f58e25cd4d 2025-12-31 c-505 LSI LLC 58,262. The same figures print under Par with '-' under Unit the next quarter (LSI 1 DAC 26-000033 c-324 '2,658 -', Baypine c-305 '904 -'), and the 45-row convention publishes them there. Leaving them blank is inconsistent within the same position chain. The rule should be: filer tags the figure as principal (usd) on a fund interest -> principal_amount, '$' or not. Rows the filer tags as Shares stay under the owner's open share-unit question.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000017",
+     "text": "Baypine Commander Co-Invest, LP(3)(4)(29)(30)(31) LP Interest N/A N/A 904 909 990"
+    },
+    {
+     "accession": "0001869453-26-000017",
+     "text": "LSI Financing 1 DAC(3)(4)(24)(30)(31) Specialty finance equity investment N/A N/A 2,658 2,690 2,623"
+    },
+    {
+     "accession": "0001869453-26-000033",
+     "text": "LSI Financing 1 DAC(3)(4)(24)(30)(31) Specialty finance equity investment N/A N/A 2,658 - 2,690 2,662"
+    },
+    {
+     "accession": "0001869453-26-000033",
+     "text": "Baypine Commander Co-Invest, LP(3)(4)(29)(30)(31) LP Interest N/A N/A 904 - 909 990"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-batch-dispositions-d253-shape",
+   "outcome": "supported",
+   "rationale": "make_batch_dispositions.py emits entries with only a 'query' evidence item and no rows list (about lines 66-80), while pipeline.finding_dispositions._validate_bar (lines 205-209) requires a quarter-scoped filing quote per member and a rows list since D-253. The assertion the agent reports follows from that. The hand-written PD-X02-1869453-3 carries 158 rows equal to the flagged population. Tool bug, correctly classified.",
+   "evidence": [
+    {
+     "accession": "0001869453-26-000053",
+     "text": "Themis Solutions Inc. (dba Clio) First lien senior secured delayed draw term loan 10/2027 - 15,308 ( 306 )"
+    }
+   ]
+  }
+ ],
+ "wrong_corrections": "None found in btze. The 5 btzd blanks (ROW-1edfeb4326928d9e, ROW-82d3294bf406c5c7, ROW-3da63cf23e4f7988, ROW-3c4175f344aeede7, ROW-5dc9299578e11f07) are restored. btzd -> btze diff: instrument_description 5, principal_amount / principal_amount_usd / principal_fx_status 45, corrected_fields 50; nothing else; ledger outstanding set identical; 407 corrections all applied.",
+ "retirements_checked": "VR-FL-1869453-01..04 re-run (retire_check.py on data/output and on b1112b with --plant: 23 of 23 plants caught); verdict sha256 match the verdict files; cited rows read on the page: X02 2026-03-31 c-41/c-39/c-171 rates equal; C01 cited line is the comparative c-534 of 25-000061 (the 2024-12-31 row c-203, published SOFR 4.75), current c-53 S+4.50 published; D06 issuers equal, continuity 0.878/0.919; A07 26-000017: 0 of 440 published rows print or publish a percent, all 60 percent-ending FV lines at 2025-12-31 are subtotals or totals, none published. dup_retirements.py: 0 duplicates. All four supported.",
+ "coordinator_item_c006": "Resolved in btze: WP Silver c-301 publishes principal 113,000 USD (source_usd), shares empty. All 45 changed rows checked on the page (not a sample). Open: 6 unmarked, principal-tagged combined-column rows (see REQ-par review).",
+ "not_checked": "20-row page sample (coordinator); GICS labels; rows outside the corrected and flagged populations beyond the chain-edge diff."
+}

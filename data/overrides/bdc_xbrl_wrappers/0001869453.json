@@ -53,7 +53,8 @@
       "total non-controlled/affiliated - equity commitments",
       "abf - commercial real estate",
       "abf - leasing",
-      "abf - specialty finance"
+      "abf - specialty finance",
+      "(bocso)"
     ],
     "non_private_markers": [
       "money market",
@@ -76,7 +77,7 @@
         "family": "warrant"
       },
       {
-        "regex": "(?i)^(?:abf\\s+-\\s+|total\\s+(?:portfolio\\s+company\\s+commitments|non-controlled/(?:non-affiliated|affiliated)\\s+-\\s+(?:debt|equity)\\s+commitments|investments))",
+        "regex": "(?i)^(?:abf\\s+-\\s+|total\\s+(?:portfolio\\s+company\\s+commitments|non-controlled/(?:non-affiliated|affiliated)\\s+-\\s+(?:debt|equity)\\s+commitments|investments))|\\(bocso\\)\\s*$",
         "family": "mixed"
       }
     ],
@@ -233,6 +234,41 @@
     ],
     "equity_instrument_labels": [
       "LLC Interest"
+    ],
+    "position_identity_contexts": [
+      "0001869453-24-000012 c-270 => sitecore-eur-term-loan-2029",
+      "0001869453-24-000023 c-286 => sitecore-eur-term-loan-2029",
+      "0001869453-24-000036 c-350 => sitecore-eur-term-loan-2029",
+      "0001869453-24-000053 c-379 => sitecore-eur-term-loan-2029",
+      "0001869453-25-000011 c-421 => sitecore-eur-term-loan-2029",
+      "0001869453-25-000021 c-266 => sitecore-eur-term-loan-2029",
+      "0001869453-25-000040 c-303 => sitecore-eur-term-loan-2029",
+      "0001869453-25-000061 c-299 => sitecore-eur-term-loan-2029",
+      "0001869453-26-000017 c-440 => sitecore-eur-term-loan-2029",
+      "0001869453-26-000033 c-259 => sitecore-eur-term-loan-2029",
+      "0001869453-26-000053 c-275 => sitecore-eur-term-loan-2029",
+      "0001869453-24-000012 c-271 => sitecore-usd-term-loan-2029",
+      "0001869453-24-000023 c-287 => sitecore-usd-term-loan-2029",
+      "0001869453-24-000036 c-351 => sitecore-usd-term-loan-2029",
+      "0001869453-24-000053 c-380 => sitecore-usd-term-loan-2029",
+      "0001869453-25-000011 c-420 => sitecore-usd-term-loan-2029",
+      "0001869453-25-000021 c-267 => sitecore-usd-term-loan-2029",
+      "0001869453-25-000040 c-304 => sitecore-usd-term-loan-2029",
+      "0001869453-25-000061 c-300 => sitecore-usd-term-loan-2029",
+      "0001869453-26-000017 c-441 => sitecore-usd-term-loan-2029",
+      "0001869453-26-000033 c-260 => sitecore-usd-term-loan-2029",
+      "0001869453-26-000053 c-276 => sitecore-usd-term-loan-2029",
+      "0001869453-24-000012 c-272 => sitecore-usd-small-term-loan-2029",
+      "0001869453-24-000023 c-288 => sitecore-usd-small-term-loan-2029",
+      "0001869453-24-000036 c-352 => sitecore-usd-small-term-loan-2029",
+      "0001869453-24-000053 c-381 => sitecore-usd-small-term-loan-2029",
+      "0001869453-25-000011 c-419 => sitecore-usd-small-term-loan-2029",
+      "0001869453-25-000021 c-265 => sitecore-usd-small-term-loan-2029",
+      "0001869453-25-000040 c-302 => sitecore-usd-small-term-loan-2029",
+      "0001869453-25-000061 c-298 => sitecore-usd-small-term-loan-2029",
+      "0001869453-26-000017 c-439 => sitecore-usd-small-term-loan-2029",
+      "0001869453-26-000033 c-258 => sitecore-usd-small-term-loan-2029",
+      "0001869453-26-000053 c-274 => sitecore-usd-small-term-loan-2029"
     ]
   }
 }
