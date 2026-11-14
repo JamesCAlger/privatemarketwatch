@@ -1,0 +1,751 @@
+{
+ "reviewer_id": "agent:reviewer-tslx-20261114-opus",
+ "report_digest": "c2cb92057c8596c880ee88b38713c90d1c4c9c3b69b9788560a5917c1b5ba775",
+ "sandbox": "tsze",
+ "cik": "0001508655",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_07285d6452e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_spread_vs_xbrl, affected rows ROW-9eaaa8b7f8a08494 match the check's cited rows (8/1/2/2/2). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Mitnick Corporate Purchaser, Inc. (3)(9) First-lien loan ($ 328 par, due 5/2029 ) 5/2/2022 SOFR + 4.50 % 9.93 % 328 302 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_171ad24849c0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Copper Bidco 996,958 trust certificates, row ROW-518fb96ffb55a907. Read on the page: the fair-value line is a continuation line with no company cell ('Trust Certificates ( 996,958 Certificates) ...'); the line directly above prints 'Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates)' (checked in all four quarters 2023-03-31..2023-12-31). The published issuer Copper Bidco, LLC is the group's company; the earlier confirmed_error compared the name with a line that prints none. Overturning it is correct; the fix is the check (request tslx-page-rule-continuation-issuer).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,089 0.6 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 731 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_22ccf15928fb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated ROW-2da78fa16a1732e7, 4 affected rows equal to the agentA check's cited published rows for this review id (132/138/6/1/1/4 across the six). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) Structured Credit ($ 1,500 par, due 7/2034 ) 8/17/2022 SOFR + 6.76 % 12.08 % 1,488 1,441 0.1 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_38c088b09ff7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Copper Bidco 996,958 trust certificates, row ROW-64f3291f00e0ef7a. Read on the page: the fair-value line is a continuation line with no company cell ('Trust Certificates ( 996,958 Certificates) ...'); the line directly above prints 'Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates)' (checked in all four quarters 2023-03-31..2023-12-31). The published issuer Copper Bidco, LLC is the group's company; the earlier confirmed_error compared the name with a line that prints none. Overturning it is correct; the fix is the check (request tslx-page-rule-continuation-issuer).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,836 10,468 0.8 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 731 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_40281363c48d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated ROW-0b33987b6f5ed757, 1 affected rows equal to the agentA check's cited published rows for this review id (132/138/6/1/1/4 across the six). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Price Fx Inc. (3)(4) First-lien loan (EUR 910 par, due 10/2029 ) 10/27/2023 E + 7.00 % 10.94 % 962 983 (EUR 890 ) 0.1 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_461ecee1e562",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Copper Bidco 996,958 trust certificates, row ROW-070deb39c82c0913. Read on the page: the fair-value line is a continuation line with no company cell ('Trust Certificates ( 996,958 Certificates) ...'); the line directly above prints 'Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates)' (checked in all four quarters 2023-03-31..2023-12-31). The published issuer Copper Bidco, LLC is the group's company; the earlier confirmed_error compared the name with a line that prints none. Overturning it is correct; the fix is the check (request tslx-page-rule-continuation-issuer).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,735 10,468 0.7 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 731 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_489e9263edf5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_spread_vs_xbrl, affected rows ROW-0dacbe5f372a65dd, ROW-392c35fb7b2072b7, ROW-7ec4bc49251df114 match the check's cited rows (8/1/2/2/2). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 15,419 par, due 5/2028 ) 5/28/2021 SOFR + 8.40 % 13.82 % PIK 15,196 15,342 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_72f3632fb67c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A01 2024-06-30: carried from the earlier fund loop with an existing proposal/check_repair (the rule reads the comparative prior-year schedule). Independently: the quarter's published rows tie to the printed total (gate totals 14/14), and my full scan of the quarter's rows against their own printed lines finds no par, currency, maturity or benchmark difference. Fund-quarter key matches the ledger row.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Total Investments $ 3,304,563 $ 3,317,069 207.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a6a6ddb28a51",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_spread_vs_xbrl, affected rows ROW-025351b91d89ff0c, ROW-c3f2d5d7e556b7f7 match the check's cited rows (8/1/2/2/2). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-100204",
+     "text": "EDB Parent, LLC (3)(5) First-lien loan ($ 74,047 par, due 7/2028) 7/7/2022 SOFR + 7.00 % 11.33 % 73,099 74,047 4.6 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c5db5e39b060",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated ROW-7586738d85a6278b, 6 affected rows equal to the agentA check's cited published rows for this review id (132/138/6/1/1/4 across the six). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien loan (EUR 4,851 par, due 2/2029 ) 9/7/2023 E + 6.25 % 10.08 % 5,051 5,021 (EUR 4,742 ) 0.3 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c93615c9cd2d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Copper Bidco 996,958 trust certificates, row ROW-942bec5e665a5e9d. Read on the page: the fair-value line is a continuation line with no company cell ('Trust Certificates ( 996,958 Certificates) ...'); the line directly above prints 'Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates)' (checked in all four quarters 2023-03-31..2023-12-31). The published issuer Copper Bidco, LLC is the group's company; the earlier confirmed_error compared the name with a line that prints none. Overturning it is correct; the fix is the check (request tslx-page-rule-continuation-issuer).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,727 0.7 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 731 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d020768792db",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ROW-e8e49d10bd99edc5 ReliaQuest Series A Preferred 2024-06-30 prints 'SOFR + 12.00 % 17.30 % PIK'; tsze publishes interest 17.30, spread 12.00, pik_rate empty. Whole-PIK coupon handling is the open owner convention D-092, so source_ambiguity routed to the owner is right. Note the investigator's own finding that other whole-PIK rows of the fund publish pik_rate = coupon: the fund is internally inconsistent until D-092 is ruled.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Series A Preferred Stock ( 1,824 units) (3)(12) 12/20/2023 SOFR + 12.00 % 17.30 % PIK 1,659 1,773 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d5095524fbbd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated ROW-e05863e8ed439226, 1 affected rows equal to the agentA check's cited published rows for this review id (132/138/6/1/1/4 across the six). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-051235",
+     "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 14,410 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 10.83 % 14,120 14,195 0.9 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d9fda68c20ec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated ROW-00726d5e7f5bfb0d, 138 affected rows equal to the agentA check's cited published rows for this review id (132/138/6/1/1/4 across the six). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "99 Cents Only Stores LLC (3) ABL FILO term loan ($ 25,000 par, due 5/2025 ) 9/6/2017 SOFR + 8.65 % 13.89 % 24,824 25,000 1.7 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e0cdaf8595ab",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated ROW-01758ccf9f89feb8, 132 affected rows equal to the agentA check's cited published rows for this review id (132/138/6/1/1/4 across the six). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Lucidworks, Inc. (3)(5) First-lien loan ($ 8,474 par, due 2/2027 ) 2/11/2022 SOFR + 7.50 % 12.31 % (incl. 3.50 % PIK) 8,474 8,381 0.6 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ed7fd89aed80",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_spread_vs_xbrl, affected rows ROW-81e4f4ad177c1551, ROW-e838e6cbc6940d74 match the check's cited rows (8/1/2/2/2). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-061008",
+     "text": "ASG II, LLC (3)(5) First-lien loan ($ 65,000 par, due 5/2028 ) 5/25/2022 SOFR + 6.40 % 10.69 % 64,047 64,350 4.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fd066486b0b3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_spread_vs_xbrl, affected rows ROW-9ea7373457d48c13, ROW-c9f7f84a3c8316ac match the check's cited rows (8/1/2/2/2). Independently re-ran scripts/v05_evidence/agenta_retirement_check.py build on tsze for all 11 agentA findings (results scratch/fund_runs/0001508655/review/agenta_fa.json): 296 cited published rows, 286 pass the printed-line test outright; the 10 that fail do so only because the checker cannot split a whole-PIK cell ('L + 8.25 % 13.20 % PIK', 'SOFR + 10.70 % 15.35 % PIK', 'L + 1.00 % 5.76 % PIK'), and on all 10 the published spread and benchmark equal the number and code printed after the benchmark (fa_spread.py: 10/10). Unpublished cited contexts are the filer's split cost-only or EUR-unit fair-value contexts (e.g. Price fx C_a1bb7e31 is the U_EUR fair-value fact behind '(EUR 890 )'); quarter totals tie 14/14 so no position is missing. My own full scan of 2,782 rows (fullscan_r.py) finds every printed GBP 'S +' row published SONIA and every AUD 'B +' row BBSY in all years; the only code differences are 13 CAD 'C +' rows published CDOR, which is the 2023-24 legend meaning. Published = printed on every flagged row, so this is a check misfire.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Kryptona BidCo US, LLC (3) First-lien loan ($ 20,762 par, due 12/2031 ) 12/18/2024 SOFR + 5.75 % 9.44 % (incl. 3.13 % PIK) 20,392 20,532 1.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_26d8ebaaa6ba",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Non-accrual 2025-12-31. Re-checked with nagrep.py: tsze footnote-flagged rows (Astra 2L cost 39,489 FV 0; ASP Unifrax 2L note 1,559/223; American Achievement 1L 25,848/19,665, 1,327/100, sub note 545/59) sum to cost 68.8M and FV 20.0M, exactly the printed summary table (Non-accrual 20.0 FV, 68.8 cost); tsza had 9 rows, 117.1/63.1. 2023-12-31 re-checked too: three AA rows sum to cost 28.1M / FV 20.7M = the printed 'Non-accrual (1) 20.7' and '28.1' (tsza had 0 flagged). The (14) legend in the 2023 10-K reads 'as of December 31, 2022' (filer typo); the summary table settles it. Fix staged; closes only after a production batch.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Performing $ 3,327.3 99.4 % $ 3,469.4 98.6 % Non-accrual (1) 20.0 0.6 49.0 1.4"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Performing $ 3,254.5 97.9 % $ 3,410.1 96.4 % Non-accrual (1) 68.8 2.1"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "American Achievement, Corp. (3)(14) First-lien loan ($ 26,664 par, due 9/2026 ) 9/30/2015 SOFR + 7.35 % 11.22 % (incl. 10.72 % PIK) 25,848 19,665 1.2"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3049f7519633",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2026-03-31: carried from the earlier fund loop with an existing proposal/check_repair (the rule reads the comparative prior-year schedule). Independently: the quarter's published rows tie to the printed total (gate totals 14/14), and my full scan of the quarter's rows against their own printed lines finds no par, currency, maturity or benchmark difference. Fund-quarter key matches the ledger row.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Total Investments $ 3,324,332 $ 3,313,441 214.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4723f5b210c4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "html_carry 2022-06-30: confirmed 0000950170-22-013859 carries 0 ix facts (plain HTML) and the fund publishes no position rows before 2023-03-31. Publishing 2022 needs the HTML template lane with a page check: an owner scope decision, so insufficient_evidence is the honest state (still investigation-incomplete by contract).",
+   "evidence": [
+    {
+     "accession": "0000950170-22-013859",
+     "text": "Total Investments $ 2,511,333 $ 2,536,390 204.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_537b87d920b2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Tango revolver ROW-78277c9a93970ea2: the page prints cost in brackets ('( 45 )' / '( 56 )'), the XBRL cost fact (e.g. F_1e7c8fc3 on C_9814effb) carries no sign='-' while the fair-value fact does. Publishing the printed negative cost is right; the accepted-reason check compares with the unsigned tag and so fails. Check misfire, request tslx-c107-values-as-filed-sign.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien revolving loan ($ 9 par, due 12/2027 ) 12/1/2021 P + 6.85 % 15.25 % ( 56 ) ( 29 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_888248a71726",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2023-09-30: carried from the earlier fund loop with an existing proposal/check_repair (the rule reads the comparative prior-year schedule). Independently: the quarter's published rows tie to the printed total (gate totals 14/14), and my full scan of the quarter's rows against their own printed lines finds no par, currency, maturity or benchmark difference. Fund-quarter key matches the ledger row.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Total Investments $ 3,085,378 $ 3,113,277 209.5 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8dcf3c42e70a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B02 Madison Park ROW-e7d59403093da0b2, ROW-f01ca94c3b742efa: re-ran retire_check.py on tsze: B02 still FAILS ('Madison Park rows share a position key'). The two rows are distinct, correctly published positions (Series 2025-65A par 4,400; 2025-72A par 4,500; distinct position_id), but position_key drops the series suffix. A row correction cannot set position_key and the marker_re trial (tszd) changed nothing, so leaving it outstanding for a shared key-builder fix is correct; not retiring it is correct.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) Structured Credit ($ 4,400 par, due 7/2038 ) 8/19/2025 SOFR + 5.00 % 9.32 % 4,407 4,407 0.2 %"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-72A (3)(4)(9) Structured Credit ($ 4,500 par, due 7/2038 ) 8/18/2025 SOFR + 5.25 % 9.37 % 4,547 4,535 0.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c2f792c02734",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Tango revolver ROW-2764f1afd10e06f7: the page prints cost in brackets ('( 45 )' / '( 56 )'), the XBRL cost fact (e.g. F_1e7c8fc3 on C_9814effb) carries no sign='-' while the fair-value fact does. Publishing the printed negative cost is right; the accepted-reason check compares with the unsigned tag and so fails. Check misfire, request tslx-c107-values-as-filed-sign.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f21192c63e62",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": false,
+   "rationale": "html_carry 2022-03-31: the investigation (carried) states 'the cache holds no 2022-03-31 10-Q' and its missing_evidence says the filing is not cached and downloading needs the owner's go. That is false: the Q1-2022 10-Q is cached at data/raw/filings/bdc_html/1508655/000156459022017420.html (accession 0001564590-22-017420, 'For the quarterly period ended March 31, 2022', printed 'Total Investments $ 2,366,030 $ 2,451,859 191.0 %'; 0 ix facts). The evidence quoted is the June 10-Q, not the quarter's filing. The insufficient_evidence state may well remain (same HTML-lane scope question as 2022-06-30), but the stated missing evidence and next action rest on a wrong premise and the carried earlier verdict (source_unavailable) was not re-checked against the cache. Redo: read the cached Q1-2022 schedule, measure the HTML-lane carry against 2,451,859, and route to the same owner scope decision.",
+   "evidence": [
+    {
+     "accession": "0001564590-22-017420",
+     "text": "Total Investments $ 2,366,030 $ 2,451,859 191.0 %"
+    },
+    {
+     "accession": "0001564590-22-017420",
+     "text": "For the quarterly period ended March 31, 2022"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fb8ff5d3621a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B02 Madison Park ROW-0659ec0918a94043, ROW-fa9f25961b5072ad: re-ran retire_check.py on tsze: B02 still FAILS ('Madison Park rows share a position key'). The two rows are distinct, correctly published positions (Series 2025-65A par 4,400; 2025-72A par 4,500; distinct position_id), but position_key drops the series suffix. A row correction cannot set position_key and the marker_re trial (tszd) changed nothing, so leaving it outstanding for a shared key-builder fix is correct; not retiring it is correct.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) Structured Credit ($ 4,400 par, due 7/2038 ) 8/19/2025 SOFR + 5.00 % 9.32 % 4,407 4,407 0.2 %"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-72A (3)(4)(9) Structured Credit ($ 4,500 par, due 7/2038 ) 8/18/2025 SOFR + 5.25 % 9.37 % 4,547 4,535 0.3 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "outcome": "supported",
+   "rationale": "Fixed coupons (e.g. Equinox 2L '16.00 % 16.00 % PIK') carry no benchmark code on the line; detector 'spread equals rate and no code printed' would catch recurrence with low false positives. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-121434",
+     "text": "$ 31,838 par, due 8/2031 ) 8/7/2024 15.00 % 15.00 % 31,530 31,838 2.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Raptor/IRGSE/Copper share counts now equal printed counts in my sample; comparing to the member/printed count is precise. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Class A Units ( 33,790,171 units) 12/21/2018 21,842 17,993 1.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "outcome": "supported",
+   "rationale": "Dash fair-value rows (67 published rows have no FV fact, e.g. IntelePeer, TherapeuticsMD) exist; the proposed check on cost/percent tags with no FV is concrete. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Astra Acquisition Corp. (3)(14) Second-lien loan ($ 40,084 par, due 10/2029 ) 10/22/2021 P + 9.88 % 16.63 % 39,489 - 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-tagged-with-minus-sign",
+   "outcome": "supported",
+   "rationale": "Negative par with positive FV/cost is an unambiguous detector; my full scan finds 0 par differences in tsze. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "$ 71,379 par, due 5/2027 ) 5/3/2019 SOFR + 6.35 % 11.74 % 70,985 71,379 4.8 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "one-position-tagged-across-two-members",
+   "outcome": "supported",
+   "rationale": "Split cost-only contexts are visible in the agentA cited contexts (Tango C_03e8 cost 50,464, TIBCO C_5a19 cost 5,051); detector is concrete. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 51,233 par, due 12/2027 ) 12/1/2021 SOFR + 6.85 % 12.02 % 50,464 50,336 3.4 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Member text differs from the printed line in several rows (Marcura revolver member says 12/2028, page 8/2029); comparing with the printed line is the right detector. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Project P Intermediate 2, LLC (3) ABL FILO term loan ($ 72,188 par, due 5/2026 ) 11/8/2021 SOFR + 8.10 % 13.20 % 71,195 73,270 5.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-cut-at-series-dash",
+   "outcome": "supported",
+   "rationale": "Concrete pattern check; my issuer-vs-member scan finds no remaining cut names. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-264618",
+     "text": "CIFC Funding Ltd, Series 2020-4A (3)(4)(9) Structured Credit ($ 4,000 par, due 1/2040 ) 7/29/2025 SOFR + 4.90 % 9.22 % 4,027 4,021 0.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "Section-based classing check is concrete and low-noise. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) Structured Product ($ 1,500 par, due 7/2034 ) 8/17/2022 L + 6.50 % 11.29 % 1,428 1,334 0.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "proxy-statement-facts-dated-a-year-late",
+   "outcome": "supported",
+   "rationale": "DEF 14A facts as fund rows is a clear, low-noise detector. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-051235",
+     "text": "Net Asset Value Per Share $ 17.17 $ 17.04"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-concept-holds-issuance-per-share",
+   "outcome": "supported",
+   "rationale": "Ratio threshold is a heuristic flag, acceptable as a flag not a gate. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-020830",
+     "text": "Dividends declared from net investment income (2) ( 1.39 ) ( 2.61 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-published-only-by-quarter-pinned-row-add",
+   "outcome": "supported",
+   "rationale": "Pinned row_add reappearing later is a concrete check. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-332725",
+     "text": "Joint Venture Investments Structured Credit Partners JV, LLC (4)(6)(11) Partnership Interest ( 25.00 % ownership) 12/23/2025 51,391 53,832 3.5 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Concrete; note the ReliaQuest whole-PIK case (D-092) would also hit it until the convention is ruled. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Series A Preferred Stock ( 1,824 units) (3)(12) 12/20/2023 SOFR + 12.00 % 17.30 % PIK 1,659 1,773 0.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "My scan finds 0 maturity differences on 2,782 tsze rows (17 in tsza); detector 'due M/YYYY with no maturity' is concrete. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Eaton CLO Ltd, Series 2015-1A (3)(4)(9) Structured Credit ($ 2,500 par, due 1/2030 ) 6/23/2022 SOFR + 2.76 % 8.09 % 2,252 2,394 0.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "outcome": "supported",
+   "rationale": "GBP S -> SONIA and AUD B -> BBSY hold in every year (sb_rows.py); the filer's XBRL tags SterlingOvernightIndexAverageRateSONIAMember and the legend reads 'Bank Bill Swap Bid Rate (BBSY or B)'. Detector via wrapper codes is concrete. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-061008",
+     "text": "First-lien loan (GBP 22,186 par, due 9/2030 ) 9/7/2023 S + 5.66 % 10.12 % 27,058 28,995 (GBP 22,463 ) 1.8 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Confirmed on page for Murchison/Mach 2023-12-31, Marcura revolver 2023-09-30, HireVue, Raptor class lines. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Murchison Oil and Gas, LLC (3) First-lien loan ($ 27,849 par, due 6/2026 ) 6/30/2022 SOFR + 8.65 % 14.00 % 27,453 28,267 1.9 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-differs-from-printed-line",
+   "outcome": "supported",
+   "rationale": "Concrete; tsza had 17 such rows, tsze 0. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Disco Parent, Inc. (3) First-lien loan ($ 4,545 par, due 3/2029 ) 3/30/2023 SOFR + 7.50 % 12.39 % 4,421 4,433 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "currency-in-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "tsza had 25 currency mismatches, tsze 0; FX rates are one per quarter-currency and par x rate = USD on every row. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien loan (GBP 16,640 par, due 12/2025 ) 9/7/2023 S + 6.25 % 11.44 % 20,194 19,852 (GBP 16,265 ) 1.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Summary-table reconciliation re-checked for 2023-12-31 and 2025-12-31; a strong, source-anchored detector. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "American Achievement, Corp. (3)(14) First-lien loan ($ 26,664 par, due 9/2026 ) 9/30/2015 SOFR + 7.35 % 11.22 % (incl. 10.72 % PIK) 25,848 19,665 1.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "negative-cost-published-positive",
+   "outcome": "supported",
+   "rationale": "Tango cost brackets confirmed; bracket-vs-sign check is precise. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "outcome": "supported",
+   "rationale": "Detector is right. Residual the investigator left: Marcura term-loan rows 2025-03-31..2026-06-30 still publish instrument_description 'First-lien revolving loan' (member text) though instrument_type is now Term Loan and the page prints 'First-lien loan'; the proposed check on the printed words would catch it. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-061008",
+     "text": "Marcura Equities LTD (3)(4) First-lien loan ($ 33,874 par, due 8/2029 ) 8/11/2023 SOFR + 7.00 % 11.30 % 33,092 34,280 2.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-concept-holds-whole-coupon",
+   "outcome": "supported",
+   "rationale": "Varinem 2025-12-31 prints 'E + 5.50 % 7.57 %' with no PIK; pik_rate removed correctly. Detector is precise. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Varinem German BidCo GMBH (3)(4) First-lien loan (EUR 12,696 par, due 7/2031 ) 7/11/2024 E + 5.50 % 7.57 % 13,699 15,097 (EUR 12,855 ) 0.9 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "Elysium and Lucidworks now EQUITY_PREFERRED; the identity preferred_printed rule is an existing detector. Detection decision (existing_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-019845",
+     "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "Chain audit confirmed: IRGSE TL/revolver now two clean 14-quarter chains; ASP unsecured note -> second-lien note join is supported by the same 8/31/2023 acquisition date and 9/2029 maturity. A pre-existing ASP first-lien chain still joins the 12/2025 loan (acq 8/25/2023) to the 9/2029 loan (acq 9/30/2024), not in the investigator's list; this detector would catch it. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-121434",
+     "text": "First-lien revolving loan ($ 35,332 par, due 6/2025 ) 12/21/2018 SOFR + 9.65 % 14.65 % 35,332 35,062 2.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-facility-currency",
+   "outcome": "supported",
+   "rationale": "PageUp USD/AUD and Erling EUR/GBP/NOK swaps confirmed present in tsza with identical chain ids: pre-existing. Currency check is concrete. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-key-repeats-for-two-series-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "B02 findings exist for exactly this pair; key uniqueness among valued rows is the right test. Detection decision (existing_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) Structured Credit ($ 4,400 par, due 7/2038 ) 8/19/2025 SOFR + 5.00 % 9.32 % 4,407 4,407 0.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "Concrete printed-word check. Detection decision (propose_detector) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-019845",
+     "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "tslx-page-rule-continuation-issuer",
+   "outcome": "supported",
+   "rationale": "Verification bug: Copper Bidco continuation line prints no company cell; published name equals the group company. Repair with a plant that a wrong continuation name still fails.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,836 10,468 0.8 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 731 0.1 %"
+    }
+   ]
+  },
+  {
+   "request_id": "tslx-agenta-printed-rate-field-unreadable",
+   "outcome": "supported",
+   "rationale": "Verification bug: 286/296 cited rows pass a printed-line reading and the remaining 10 equal the printed margin; the agentA reference check flags whole quarters (132, 138 rows) regardless of value. Repair, not an acceptance change.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Ibis US Blocker Co. (3) First-lien loan ($ 14,411 par, due 5/2028 ) 5/28/2021 L + 8.25 % 13.20 % PIK 14,173 14,194 1.0 %"
+    }
+   ]
+  },
+  {
+   "request_id": "tslx-agenta-spread-own-reading",
+   "outcome": "supported",
+   "rationale": "Verification bug: Kryptona prints 'SOFR + 5.75 %'; published 5.75; Agent A stored 6.00. The finding reflects Agent A's own read, not published data.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Kryptona BidCo US, LLC (3) First-lien loan ($ 20,762 par, due 12/2031 ) 12/18/2024 SOFR + 5.75 % 9.44 % (incl. 3.13 % PIK)"
+    }
+   ]
+  },
+  {
+   "request_id": "tslx-c107-values-as-filed-sign",
+   "outcome": "supported",
+   "rationale": "Verification bug: the cost fact lacks sign='-' while the page prints brackets; published negative equals the page. Repair must keep a positive cost on a bracketed line failing.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien revolving loan ($ 9 par, due 12/2027 ) 12/1/2021 P + 6.85 % 15.25 % ( 56 ) ( 29 ) 0.0 %"
+    }
+   ]
+  }
+ ],
+ "retirement_reviews": "All 8 entries re-run on tsze: retire_check.py C206 x3 PASS (201/186/196 rows tested, 2/2 plants caught each), X10 PASS (150, 1/1), E07 PASS (222, 8/8); campaign_round4_check verify --plant: pct identity 3/3, PP01 2/2 caught, pass without plants; agenta_retirement_check verify (agentA entry only) PASS, plants 2/2. dup_retirements.py: 0. Durability defect: entries 04-08 carry no check_spec and their rerun is scratch/fund_runs/0001508655/retire_check.py (label tszc); campaign_round4_check verify reports them FAIL 'no published row the verdict names'. Scratch is disposable per AGENTS.md, so the re-run evidence for 5 retirements is not durable.",
+ "wrong_corrections": [],
+ "notes": "337 correction lines checked: all field groups sampled on the page; full scan of 2,782 rows: tsza rt 46 / mat 17 / cur 25 / par 2 differences -> tsze 0/0/0/0 (CDOR legend rows excluded). No instrument_description blanked. 20-row random sample (seed 20261114): 20/20 match."
+}

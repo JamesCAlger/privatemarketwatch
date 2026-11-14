@@ -1,167 +1,149 @@
 {
  "cik": "0001508655",
- "label": "ssxf",
- "before": "spoff3",
- "shared_code": true,
+ "label": "tszf",
+ "before": "ssxf",
+ "shared_code": false,
+ "investigator_id": "agent:fund-tslx-20261114",
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 125,
-   "why": "row corrections: structured-credit rows cut at 'Series 2020 -4A' with the section heading left in the name (about 100 rows, 2023-03-31 Octagon and 2025-09-30 to 2026-06-30), 17 members naming no issuer (Skylark, ASP Unifrax, Marcura, American Achievement, Equinox) and Madcap (byte-order mark), Rapid Data, Mach Natural Resources LP; also D-166 issuer split: none of this fund's rows changed for that reason alone beyond these"
+   "rows": 48,
+   "why": "row corrections of the printed company cell"
   },
   {
    "column": "instrument_description",
-   "rows": 130,
-   "why": "the same renamed rows get the printed instrument (CLO 'Series 2020-4A Structured Credit (...)'), split-row and stale-member rows (Tango, Project P, PDI TA, TRP, Bed Bath x2, Rapid Data) get the printed par text, the JV gets 'Partnership Interest (25.00% ownership)'"
+   "rows": 27,
+   "why": "instrument text restored or due month corrected"
   },
   {
    "column": "cost",
-   "rows": 6,
-   "why": "split rows: cost tagged on a twin member with no fair value (Tango x2, Laramie, Project P, Rapid Data, Skylark EUR 2023-09-30)"
+   "rows": 2,
+   "why": "Tango sign"
   },
   {
    "column": "cost_reported",
-   "rows": 6,
-   "why": "follows cost on the same 6 rows"
+   "rows": 2,
+   "why": "follows cost"
   },
   {
    "column": "shares_held",
-   "rows": 17,
-   "why": "unit counts replaced by the shared share-count proxy (D-111) set to the printed count: IRGSE Class A x3, Copper Bidco, ReliaQuest x6 (2024-06-30 printed 1,824, member 824), SMA Class B x7"
-  },
-  {
-   "column": "shares_held_source",
    "rows": 2,
-   "why": "Passport Labs warrants 2026-03-31 no longer derived_proxy (same value 17,534; issuer grouping changed with the renames)"
-  },
-  {
-   "column": "src_transforms",
-   "rows": 2,
-   "why": "the same Passport Labs row: the shares proxy transform is gone"
+   "why": "printed counts"
   },
   {
    "column": "principal_amount",
-   "rows": 70,
-   "why": "40 pars tagged with a minus sign (2023) set positive; 26 pars printed and not tagged (Dryden CLO x13, LeanTaaS, TRP x2, Murchison, 99 Cents, AA, Bed Bath x2, Mach, Sediver 2026-03-31) and split rows (Tango x2, PDI TA, Rapid Data)"
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 70,
-   "why": "follows principal_amount on the same rows"
+   "rows": 2,
+   "why": "Mach/Murchison par, Tango par"
   },
   {
    "column": "principal_amount_currency",
-   "rows": 2,
-   "why": "Rapid Data 2023-09-30 EUR (par set from the page); Sediver 2026-03-31 USD"
+   "rows": 25,
+   "why": "currency from the printed marker; blank USD filled"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 14,
+   "why": "converted at the H.10 rate"
   },
   {
    "column": "principal_fx_rate_to_usd",
-   "rows": 1,
-   "why": "Rapid Data 2023-09-30: 1.0584, the build's EUR rate for the fund's other euro pars that day"
+   "rows": 25,
+   "why": "rate"
   },
   {
    "column": "principal_fx_status",
-   "rows": 1,
-   "why": "Rapid Data 2023-09-30 reference_fx"
+   "rows": 24,
+   "why": "status"
   },
   {
    "column": "asset_category",
-   "rows": 40,
-   "why": "TRP Assets / RMCF partnership interests OTHER -> EQUITY_COMMON (20), Tango x2 and PDI TA OTHER -> LOAN, Dryden CLO FUND -> LOAN (13), JV OTHER -> FUND (new rows not counted)"
-  },
-  {
-   "column": "issuer_category",
-   "rows": 15,
-   "why": "Dryden CLO tranches FUND -> CORPORATE (13) to match the fund's other structured credit rows; split rows"
+   "rows": 9,
+   "why": "preferred"
   },
   {
    "column": "index_classification",
-   "rows": 110,
-   "why": "structured-credit rows classed DIRECT_LENDING / PRIVATE_CREDIT_FUND -> STRUCTURED_CREDIT; American Achievement subordinated note STRUCTURED_CREDIT -> DIRECT_LENDING (14); partnership interests UNCLASSIFIED -> COMMON_EQUITY (20); Tango x2 and PDI TA UNCLASSIFIED -> DIRECT_LENDING"
-  },
-  {
-   "column": "exposure_type",
-   "rows": 15,
-   "why": "Dryden CLO tranches FUND -> DIRECT; split rows"
-  },
-  {
-   "column": "asset_class",
-   "rows": 110,
-   "why": "follows index_classification on the same rows"
-  },
-  {
-   "column": "interest_rate",
-   "rows": 6,
-   "why": "rate read from stale member text corrected to the printed rate (Tango x2, PDI TA, AA first lien and subordinated note 2023-09-30)"
-  },
-  {
-   "column": "interest_rate_reported",
-   "rows": 6,
-   "why": "follows interest_rate"
-  },
-  {
-   "column": "interest_rate_cash",
-   "rows": 3,
-   "why": "derived cash leg of the American Achievement rows whose rate changed"
-  },
-  {
-   "column": "basis_spread",
-   "rows": 40,
-   "why": "33 fixed coupons whose coupon was published as the spread: spread withdrawn; stale member spreads set to the printed margin (Tango x2, PDI TA, Neuintel, Project P 2023-06-30, Marcura 2023-09-30)"
+   "rows": 9,
+   "why": "preferred"
   },
   {
    "column": "reference_rate_type",
-   "rows": 34,
-   "why": "33 fixed coupons: the SOFR guess withdrawn (page prints no reference rate); Astra 2025-12-31 PRIME (new row)"
+   "rows": 33,
+   "why": "S=SONIA, B=BBSY"
   },
   {
    "column": "reference_rate_source",
-   "rows": 34,
-   "why": "follows reference_rate_type"
+   "rows": 3,
+   "why": "identifier_text"
   },
   {
-   "column": "coupon_type",
-   "rows": 33,
-   "why": "the 33 fixed coupons Floating -> Fixed"
+   "column": "pik_rate",
+   "rows": 2,
+   "why": "Varinem"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 2,
+   "why": "follows pik_rate"
   },
   {
    "column": "maturity_date",
-   "rows": 115,
-   "why": "112 loan rows (103 CLO tranches, 9 other loans) whose member writes the maturity unspaced ('($2,500par,due1/2030)') now read it (wrapper staging.maturity_text_unspaced, 2023-03-31 to 2024-03-31); Bed Bath DIP loans 2023-09-30 (member 8/2023, page 9/2024); Rapid Data 2023-09-30"
+   "rows": 17,
+   "why": "printed due dates"
   },
   {
-   "column": "maturity_date_source",
-   "rows": 112,
-   "why": "identifier_text on the 112 rows whose unspaced maturity is now read"
+   "column": "maturity_precision",
+   "rows": 17,
+   "why": "month"
   },
   {
    "column": "maturity_status",
-   "rows": 113,
-   "why": "the same 112 rows plus Rapid Data: not_disclosed -> unresolved, the status every other text-read maturity of this fund carries"
+   "rows": 17,
+   "why": "follows maturity correction"
   },
   {
    "column": "corrected_fields",
-   "rows": 290,
-   "why": "the audit column of the corrected rows"
+   "rows": 171,
+   "why": "provenance of the corrections"
   },
   {
-   "column": "gics_sector",
-   "rows": 37,
-   "why": "not aimed at: CLO rows renamed to the issuer ('CIFC Funding Ltd') now resolve to Financials in the GICS cache; no row lost a GICS label"
+   "column": "nonaccrual_footnote",
+   "rows": 21,
+   "why": "page"
   },
   {
-   "column": "gics_sub_industry",
-   "rows": 37,
-   "why": "same rows: Asset Management & Custody Banks"
+   "column": "nonaccrual_status",
+   "rows": 21,
+   "why": "follows footnote"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 16,
+   "why": "printed instrument"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 8,
+   "why": "follows issuer_name"
+  },
+  {
+   "column": "entity_id",
+   "rows": 65,
+   "why": "follows issuer_name (61 rows) plus external-code differences present in baseline tsza (4)"
   },
   {
    "column": "position_id",
-   "rows": 305,
-   "why": "not aimed at, a consequence of matching: renamed issuers (CLO, issuerless rows, Mach) and the reclassed rows join different chains; no value other than the declared ones changes on these rows"
+   "rows": 70,
+   "why": "identity contexts and corrected names"
+  },
+  {
+   "column": "lien_position",
+   "rows": 4,
+   "why": "EXTERNAL: present in baseline tsza (shared code edited by another agent), not a correction of mine"
   }
  ],
- "rows_added": 212,
- "rows_removed": 1,
+ "rows_added": 66,
+ "rows_removed": 0,
+ "rows_added_note": "66 rows with fair value 0 (printed with a dash: IntelePeer, TherapeuticsMD and Passport warrants, SMA, Astra 2L, Murchison preferred) are published by the baseline code (present in tsza, built from the unchanged checkout with another agent's shared-code edits); none comes from my corrections.",
  "fixes": [
   {
    "what": "Totals: the Structured Credit Partners JV row (dropped by the staging bare-name filter; published at 2026-03-31 only by two duplicate row_add rules pinned to that quarter, with no accession, class or instrument) is now published from its own context in both quarters: wrapper dispatch.bare_entity_rows = positions; JV cost declared from the page (untagged_values); class FUND / PRIVATE_CREDIT_FUND and instrument by row correction; both pinned row_add rules removed. 2026-06-30 was 53.8M short of the filed total, now ties.",
@@ -470,27 +452,381 @@
      "text": "Gulf Stream Meridian, Series 2021-4A (3)(4)(9) Structured Credit ($ 1,015 par, due 7/2034 ) 6/3/2022 SOFR + 6.61 % 11.93 % 943 985 0.1 %"
     }
    ]
+  },
+  {
+   "what": "issuer_name set to the printed company cell on 48 rows: Raptor US Buyer II Corp. (30 rows, member ran the share count into the name), Rapid Data (truncated at 35 characters), Photo Holdings (member kept \"and Consumer\"), Marcura \", Inc\", HireVue, Aledade, Fullsteam, RMCF, Bed Bath DIP rows (member names the instrument only)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Raptor US Buyer II Corp. (11)(12) 1,364 Ordinary Shares 3/24/2023 136 136 0.0 %"
+    },
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.42 % 4,697 4,818 (EUR 4,495 ) 0.3 %"
+    },
+    {
+     "accession": "0001193125-26-332725",
+     "text": "Photo Holdings, LLC (3) First-lien loan ($ 50,000 par, due 6/2031 ) 6/22/2026 SOFR + 7.00 % 10.68 % 47,585 48,625 3.1 %"
+    },
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Roll Up DIP term loan ($ 24,446 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.24 % PIK 24,446 22,490 1.4 %"
+    }
+   ]
+  },
+  {
+   "what": "Mach/Murchison 2023-12-31: the member names the Mach loan, the context carries the Murchison line; issuer, instrument text, par, currency, maturity set from the printed line (the real Mach loan is its own row)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Murchison Oil and Gas, LLC (3) First-lien loan ($ 27,849 par, due 6/2026 ) 6/30/2022 SOFR + 8.65 % 14.00 % 27,453 28,267 1.9 %"
+    }
+   ]
+  },
+  {
+   "what": "BTRS/Marcura 2023-09-30: the member names the BTRS revolver, the context carries the Marcura revolving loan (par 1,667, due 8/2029); issuer, instrument, maturity, industry set from the printed line; 2023-12-31 Marcura term loan printed as First-lien loan, not revolving",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien revolving loan ($ 1,667 par, due 8/2029 ) 8/11/2023 SOFR + 7.00 % 12.39 % 1,585 1,625 0.1 %"
+    },
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Marcura Equities LTD (3)(4) First-lien loan ($ 32,007 par, due 8/2029 ) 8/11/2023 SOFR + 7.00 % 12.18 % 31,020 31,482 2.1 %"
+    }
+   ]
+  },
+  {
+   "what": "Reference rate: the filer's legend gives S = SONIA and B = BBSY; the build defaulted these codes to SOFR from 2025-03-31 (33 rows: Skylark, Erling, Cirrus, Marcura GBP lines, Elements Finco, Employment Hero AUD)",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-061008",
+     "text": "First-lien loan (GBP 22,186 par, due 9/2030 ) 9/7/2023 S + 5.66 % 10.12 % 27,058 28,995 (GBP 22,463 ) 1.8 %"
+    },
+    {
+     "accession": "0000950170-25-061008",
+     "text": "Employment Hero Holdings Pty Ltd. (3)(4) First-lien loan (AUD 60,001 par, due 12/2026 ) 12/6/2021 B + 6.25 % 10.41 % 41,452 37,487 (AUD 60,158 ) 2.3 %"
+    }
+   ]
+  },
+  {
+   "what": "maturity_date (and the due month in instrument_description) set from the printed due date on 16 rows where the member text carried another date (Raptor, Disco, Kyriba, PrimeRevenue, IRGSE x2, Sky Bidco, Heritage, Apidos x2, Neuberger, Ranger x3) and Galileo 2024-12-31 (blank)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Disco Parent, Inc. (3) First-lien loan ($ 4,545 par, due 3/2029 ) 3/30/2023 SOFR + 7.50 % 12.39 % 4,421 4,433 0.3 %"
+    },
+    {
+     "accession": "0000950170-24-088524",
+     "text": "IRGSE Holding Corp. (3)(6) First-lien loan ($ 30,261 par, due 6/2025 ) 12/21/2018 SOFR + 9.65 % 14.98 % 28,593 30,034 1.9 %"
+    }
+   ]
+  },
+  {
+   "what": "Principal currency: 12 foreign-currency par published as USD (Skylark EUR/GBP, ASP Unifrax EUR, Erling GBP/NOK, Rapid Data EUR) and Coupa printed in dollars published as EUR; currency, principal_amount_usd, fx rate and status set at the build FRED H.10 rate; 14 dollar rows with a missing currency filled (USD, rate 1)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien loan (GBP 16,640 par, due 12/2025 ) 9/7/2023 S + 6.25 % 11.44 % 20,194 19,852 (GBP 16,265 ) 1.3 %"
+    },
+    {
+     "accession": "0001193125-26-332725",
+     "text": "First-lien revolving loan ($ 1,969 par, due 2/2029 ) 2/27/2023 SOFR + 5.25 % 8.90 % 1,936 1,895 0.1 %"
+    }
+   ]
+  },
+  {
+   "what": "Tango undrawn revolver: cost printed in parentheses published positive (2023-03-31, 2023-09-30) and par $ 9 not published (2023-09-30)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien revolving loan ($ 9 par, due 12/2027 ) 12/1/2021 P + 6.85 % 15.25 % ( 56 ) ( 29 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "shares_held declared from the printed count: Sprinklr 315,005 shares and Warrior TopCo 423,728 units (2023-09-30)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Sprinklr, Inc. (10)(11) Common Shares ( 315,005 shares) 6/24/2021 2,716 4,360 0.3 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Warrior TopCo LP (11)(12) Class A Units ( 423,728 units) 7/7/2023 424 424 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Preferred shares classed as common: Elysium BidCo convertible preference shares (7 quarters) and Lucidworks Series F preferred (2025-06-30, 2025-09-30; the member also named Bigtincan units, instrument text restored)",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-019845",
+     "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+    },
+    {
+     "accession": "0000950170-25-100204",
+     "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 650 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "pik_rate withdrawn on the two Varinem lines of 2025-12-31 (the filer tagged the PIK concept on a cash rate; the printed line has no PIK)",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Varinem German BidCo GMBH (3)(4) First-lien loan (EUR 12,696 par, due 7/2031 ) 7/11/2024 E + 5.50 % 7.57 % 13,699 15,097 (EUR 12,855 ) 0.9 %"
+    }
+   ]
+  },
+  {
+   "what": "instrument_type: revolving lines with no type published (7 rows) and Marcura/Project44/Erling term loans published as Revolver / Delayed Draw (9 rows) set from the printed instrument; Marcura term-loan instrument text \"revolving\" corrected on 7 rows",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-061008",
+     "text": "Marcura Equities LTD (3)(4) First-lien loan ($ 33,874 par, due 8/2029 ) 8/11/2023 SOFR + 7.00 % 11.30 % 33,092 34,280 2.1 %"
+    },
+    {
+     "accession": "0000950170-24-015845",
+     "text": "First-lien revolving loan ($ 1,205 par, due 12/2028 ) 12/16/2022 SOFR + 7.25 % 12.63 % 1,085 1,217 0.1 %"
+    }
+   ]
+  },
+  {
+   "what": "Non-accrual: nonaccrual_footnote set from the page for 21 rows (the filer's XBRL footnote links attach the wrong note); printed marked sum equals the summary table Non-accrual (1) line in all 14 quarters",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "American Achievement, Corp. (3)(14) First-lien loan ($ 26,664 par, due 9/2026 ) 9/30/2015 SOFR + 7.35 % 11.22 % (incl. 10.72 % PIK) 25,848 19,665 1.2 %"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Bed Bath and Beyond Inc. (3)(15) ABL FILO term loan ($ 5,910 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.62 % 5,851 4,758 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "Position identity: wrapper source_encodings.position_identity_contexts (67 contexts) keeps IRGSE first-lien loan and revolver, the Marcura revolver, the ASP Unifrax unsecured note (to its second-lien form) and secured note each in one chain, and the two ASP Unifrax first-lien loans apart (the name key had crossed them)",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-121434",
+     "text": "IRGSE Holding Corp. (3)(6) First-lien loan ($ 30,261 par, due 6/2025 ) 12/21/2018 SOFR + 9.65 % 14.26 % 28,594 30,034 1.9 %"
+    },
+    {
+     "accession": "0000950170-24-121434",
+     "text": "First-lien revolving loan ($ 35,332 par, due 6/2025 ) 12/21/2018 SOFR + 9.65 % 14.65 % 35,332 35,062 2.2 %"
+    }
+   ]
   }
  ],
  "total_exceptions": [],
  "parked": [
   {
-   "finding": "nonaccrual nonaccrual_flag 2025-12-31",
+   "finding": "oracle B02 2025-12-31 and 2026-03-31 (Madison Park position_key)",
    "hypotheses": [
-    "Flags follow the filer's XBRL footnote links. The non-accrual footnote ('Investment is on non-accrual status as of December 31, 2025') is linked to the facts of Bed Bath and Beyond (3 rows, 28.0M) and Varinem German BidCo (15.1M), which the page marks (15) make-whole and (3)(4): 4 false flags, 43.1M. Read with scratch/fund_runs/0001508655/fnlinks.py.",
-    "Astra Acquisition (the largest true non-accrual) was missing because its row was dropped; it is now published at fair value 0 and flagged.",
-    "Page: non-accrual fair value 20.0M, cost 68.8M = Astra 39.5 + ASP Unifrax note 1.6 + American Achievement x3 27.8. Published after the fix: 8+1 rows. No wrapper setting or correctable field covers nonaccrual_status; a fix needs a per-fund footnote-link override in shared code (not attempted this run)."
+    "wrapper marker_re change did not move the key (sandbox tszd identical)",
+    "row correction cannot set position_key (not a correctable field)",
+    "key built in shared code"
    ]
   },
   {
-   "finding": "html_extract html_carry 2022-03-31, 2022-06-30",
+   "finding": "html_carry 2022-03-31 / 2022-06-30",
    "hypotheses": [
-    "The 2022 filings carry no position tags (InvestmentIdentifierAxis count 0), so no 2022 quarter is published; the HTML lane extracts 139 rows (3.43B) at 2022-03-31 and 76 rows (2.47B) at 2022-06-30 against a printed total of 2,536.4M at 2022-06-30, and its cross-quarter carry fails.",
-    "This is a gap (a printed schedule not published), not as-filed; fixing it needs per-CIK HTML template work for the 2017_8col_split_rate variant, outside this run."
+    "2022 10-Qs are not inline XBRL; published positions start 2023-03-31",
+    "needs the HTML template lane with a printed-line check; 2022-03-31 10-Q not in cache"
+   ]
+  },
+  {
+   "finding": "pre-existing chain misjoins (PageUp, Erling, Kyriba, Dye & Durham, Sports Alliance)",
+   "hypotheses": [
+    "each needs a reviewed identity key per tranche across 14 quarters; the chain audit lists them",
+    "not created by my corrections (present in tsza)"
+   ]
+  },
+  {
+   "finding": "identity pik_printed 2024-06-30 ReliaQuest (D-092)",
+   "hypotheses": [
+    "whole-PIK coupon convention is open; no change made"
    ]
   }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "tslx-page-rule-continuation-issuer",
+   "file": "pipeline/candidate_rules.py (issuer_name_differs_from_page)",
+   "what": "The page rule compares a published issuer with the company cell of the printed line; a continuation line (no company cell, the company is on the group line above) is flagged although the published name is the group company.",
+   "why": "Four findings (RVQ_BLK_38c088b09ff7, 461ecee1e562, c93615c9cd2d, 171ad24849c0): Copper Bidco 996,958 trust certificates, the second line of the group.",
+   "quotes": [],
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,836 10,468 0.8 %"
+    }
+   ],
+   "next_action": "Repair: for a printed line with no company cell take the company cell of the nearest line above; test that a continuation line with a wrong published name still fails and that a line with its own wrong company still fails; measure on all accepted sandboxes. Clears the four findings only if no real-error verdict is cleared."
+  },
+  {
+   "request_id": "tslx-agenta-printed-rate-field-unreadable",
+   "file": "scripts/shadow_adapter.py / agentA_reference_uncorroborated",
+   "what": "agentA_reference_uncorroborated fires on every row of a fund-quarter whose XBRL has no structured spread (printed_check field_unreadable); the printed benchmark code agrees with the published reference_rate_type on every flagged row.",
+   "why": "Six findings 2023-03-31 to 2024-06-30: published equals printed in all of them (scan of 2,782 rows).",
+   "quotes": [],
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Carlstar Group, LLC (3) First-lien loan ($ 33,150 par, due 7/2027 ) 7/8/2022 SOFR + 6.60 % 11.34 % $ 32,353 $ 32,734 2.4 %"
+    }
+   ],
+   "next_action": "Repair so the check reads the printed rate column of this filer (or stays silent when it cannot); test that a wrong published benchmark still fails; measure on every accepted sandbox."
+  },
+  {
+   "request_id": "tslx-agenta-spread-own-reading",
+   "file": "scripts/shadow_adapter.py / agentA_spread_vs_xbrl",
+   "what": "agentA_spread_vs_xbrl flags rows where Agent A's own reading of the member differs from the XBRL spread; the published spread equals the printed margin on all flagged rows of the fund.",
+   "why": "Findings RVQ_BLK_489e9263edf5, 07285d6452e3, ed7fd89aed80, a6a6ddb28a51 (production id 6d3668c2eaf7), fd066486b0b3 and the retired d63136cad080.",
+   "quotes": [],
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Mitnick Corporate Purchaser, Inc. (3)(9) First-lien loan ($ 330 par, due 5/2029 ) 5/2/2022 SOFR + 4.60 % 9.97 % 330 317 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Astra Acquisition Corp. (3) Second-lien loan ($ 43,479 par, due 10/2029 ) 10/25/2021 SOFR + 8.99 % 14.53 % 42,796 34,566 2.3 %"
+    }
+   ],
+   "next_action": "Repair: when Agent A and the XBRL residual disagree but the printed line equals the published spread, no finding; test that a wrong published spread still fails; measure on all accepted sandboxes."
+  },
+  {
+   "request_id": "tslx-c107-values-as-filed-sign",
+   "file": "pipeline/disposition_validity.py (values_as_filed, reason R-C107-negative-cost-undrawn)",
+   "what": "The by-check acceptance of negative cost on undrawn revolvers compares the published cost with the XBRL fact; where the filer tagged the wrong sign the published value (negative, as printed in parentheses) differs from the tag and the check fails.",
+   "why": "C107 2023-03-31 (RVQ_REV_c2f792c02734) and 2023-09-30 (RVQ_REV_537b87d920b2) were raised by my correct sign fix (Tango revolver); the two other Tango quarters, tagged negative, clear by the check.",
+   "quotes": [],
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien revolving loan ($ 9 par, due 12/2027 ) 12/1/2021 P + 6.85 % 15.25 % ( 56 ) ( 29 ) 0.0 %"
+    }
+   ],
+   "next_action": "Repair the check to accept a published value equal to the printed bracketed value; test that a positive cost on a bracketed line still fails; measure on all sandboxes."
+  }
+ ],
  "observations": [
   {
    "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
@@ -511,6 +847,11 @@
    "quote": {
     "accession": "0000950170-24-121434",
     "text": "$ 31,838 par, due 8/2031 ) 8/7/2024 15.00 % 15.00 % 31,530 31,838 2.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -540,6 +881,11 @@
    "quote": {
     "accession": "0000950170-23-018777",
     "text": "Class A Units ( 33,790,171 units) 12/21/2018 21,842 17,993 1.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -569,6 +915,11 @@
    "quote": {
     "accession": "0001193125-26-048664",
     "text": "Astra Acquisition Corp. (3)(14) Second-lien loan ($ 40,084 par, due 10/2029 ) 10/22/2021 P + 9.88 % 16.63 % 39,489 - 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -587,6 +938,11 @@
    "quote": {
     "accession": "0000950170-23-058321",
     "text": "$ 71,379 par, due 5/2027 ) 5/3/2019 SOFR + 6.35 % 11.74 % 70,985 71,379 4.8 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -605,6 +961,11 @@
    "quote": {
     "accession": "0000950170-23-038066",
     "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 51,233 par, due 12/2027 ) 12/1/2021 SOFR + 6.85 % 12.02 % 50,464 50,336 3.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -622,6 +983,11 @@
    "quote": {
     "accession": "0000950170-23-038066",
     "text": "Project P Intermediate 2, LLC (3) ABL FILO term loan ($ 72,188 par, due 5/2026 ) 11/8/2021 SOFR + 8.10 % 13.20 % 71,195 73,270 5.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -642,6 +1008,11 @@
    "quote": {
     "accession": "0001193125-25-264618",
     "text": "CIFC Funding Ltd, Series 2020-4A (3)(4)(9) Structured Credit ($ 4,000 par, due 1/2040 ) 7/29/2025 SOFR + 4.90 % 9.22 % 4,027 4,021 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -671,6 +1042,11 @@
    "quote": {
     "accession": "0000950170-23-018777",
     "text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) Structured Product ($ 1,500 par, due 7/2034 ) 8/17/2022 L + 6.50 % 11.29 % 1,428 1,334 0.1 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -693,6 +1069,11 @@
    "quote": {
     "accession": "0000950170-24-051235",
     "text": "Net Asset Value Per Share $ 17.17 $ 17.04"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -715,24 +1096,11 @@
    "quote": {
     "accession": "0000950170-22-020830",
     "text": "Dividends declared from net investment income (2) ( 1.39 ) ( 2.61 )"
-   }
-  },
-  {
-   "observation_key": "nonaccrual-footnote-link-differs-from-page",
-   "what": "The filer's XBRL footnote links put the non-accrual footnote on Bed Bath and Beyond (3 rows) and Varinem, which the page marks (15) and (3)(4); published non-accrual 63.1M at 2025-12-31 against printed 20.0M. Same flags at 2026-03-31 and 2026-06-30.",
-   "field": "nonaccrual_status",
-   "quarters": [
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "fair_value_m": 43.1,
-   "cause": "fund",
-   "action": "parked",
-   "suggested_check": "non-accrual rows whose printed footnote marks do not include the non-accrual footnote number",
-   "quote": {
-    "accession": "0001193125-26-048664",
-    "text": "Bed Bath and Beyond Inc. (3)(15) ABL FILO term loan ($ 5,910 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.62 % 5,851 4,758 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -750,22 +1118,11 @@
    "quote": {
     "accession": "0001193125-26-332725",
     "text": "Joint Venture Investments Structured Credit Partners JV, LLC (4)(6)(11) Partnership Interest ( 25.00 % ownership) 12/23/2025 51,391 53,832 3.5 %"
-   }
-  },
-  {
-   "observation_key": "currency-in-member-differs-from-page",
-   "what": "Sediver second note: member writes 'EUR 14,085 par', page prints '$ 14,085 par' (SOFR); no par published at 2026-03-31; set to USD 14,085,000.",
-   "field": "principal_amount",
-   "quarters": [
-    "2026-03-31"
-   ],
-   "fair_value_m": 14.0,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "a principal currency in the member that differs from the fact's unit",
-   "quote": {
-    "accession": "0001193125-26-206313",
-    "text": "First-lien note ($ 14,085 par, due 10/2031 ) 10/29/2024 SOFR + 5.00 % 8.70 % 13,866 14,049 0.9 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -782,6 +1139,11 @@
    "quote": {
     "accession": "0000950170-24-088524",
     "text": "Series A Preferred Stock ( 1,824 units) (3)(12) 12/20/2023 SOFR + 12.00 % 17.30 % PIK 1,659 1,773 0.1 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
    }
   },
   {
@@ -803,28 +1165,1634 @@
    "quote": {
     "accession": "0000950170-23-058321",
     "text": "Eaton CLO Ltd, Series 2015-1A (3)(4)(9) Structured Credit ($ 2,500 par, due 1/2030 ) 6/23/2022 SOFR + 2.76 % 8.09 % 2,252 2,394 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Carried from the earlier run of this fund (sandbox ssxf, report of 2026-10-12): the suggested_check is the proposed detector; no rule fired on these rows in the build of that run.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "what": "Legend-dependent codes S (SONIA) and B (BBSY) published as SOFR from 2025-03-31 (33 rows, about 2.6 pct of loan rows of the fund).",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "For every loan row compare reference_rate_type with the benchmark the filer's wrapper reference_rate_codes gives the printed code (S, B, C, SA) on the printed line; a row whose code resolves differently fails.",
+   "quote": {
+    "accession": "0000950170-25-061008",
+    "text": "First-lien loan (GBP 22,186 par, due 9/2030 ) 9/7/2023 S + 5.66 % 10.12 % 27,058 28,995 (GBP 22,463 ) 1.8 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in the untouched build (tsza): agentA_reference_uncorroborated flags only 2023-24 rows and none of the 33. A page check of the printed code against the wrapper legend would have caught all 33 with no false positive in the scan (0 other mismatches in 2,782 rows).",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Three contexts carry the line of another row under a member that names a different row: Mach/Murchison 2023-12-31 (28.3M), BTRS/Marcura revolver 2023-09-30 (1.6M), Lucidworks/Bigtincan 2025-06-30 and 2025-09-30 (0.6M).",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 30.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare the par, due date and spread printed on the fair-value line of a context with those in its member text; a difference of more than a rounding names another row.",
+   "quote": {
+    "accession": "0000950170-24-015845",
+    "text": "Murchison Oil and Gas, LLC (3) First-lien loan ($ 27,849 par, due 6/2026 ) 6/30/2022 SOFR + 8.65 % 14.00 % 27,453 28,267 1.9 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed fired on Mach and (through preferred_printed) on Lucidworks, but not on BTRS/Marcura (name differs only by a revolver of similar size). A member-versus-printed-line comparison of par and due date would catch all three; false positives would be members that carry a stale par (a known Sixth Street pattern), so it should be a flag.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "maturity-differs-from-printed-line",
+   "what": "Member text carried a due date different from the printed due date on 16 loan rows (e.g. Disco due 10/2025 printed 3/2029; IRGSE 6/2024 printed 6/2025; Ranger 1/2030 printed 10/2031).",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 330.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "For every loan row compare the month and year of maturity_date with \"due M/YYYY\" printed on the fair-value line; a difference fails.",
+   "quote": {
+    "accession": "0000950170-23-018777",
+    "text": "Disco Parent, Inc. (3) First-lien loan ($ 4,545 par, due 3/2029 ) 3/30/2023 SOFR + 7.50 % 12.39 % 4,421 4,433 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "agentA_maturity_vs_xbrl compares with XBRL members and did not fire on these rows in the untouched build; the check proposed reads the printed line itself and gave 0 mismatches on the other 2,766 rows of the fund, so it is precise.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "currency-in-member-differs-from-page",
+   "what": "Twelve foreign-currency par published as USD (EUR/GBP/NOK rows of Skylark, ASP Unifrax, Erling, Rapid Data) with principal_amount_usd equal to the local-currency amount, and Coupa printed in dollars published as EUR.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 70.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "For every loan row compare the currency marker in \"(EUR 4,851 par\" with principal_amount_currency, and require principal_amount_usd to equal par times the reference rate for a non-USD marker.",
+   "quote": {
+    "accession": "0000950170-23-058321",
+    "text": "First-lien loan (GBP 16,640 par, due 12/2025 ) 9/7/2023 S + 6.25 % 11.44 % 20,194 19,852 (GBP 16,265 ) 1.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 (non-USD principal published without a USD amount) did not fire: these rows carry a USD amount (equal to the local par). A marker-versus-currency comparison fires only on a real disagreement; 0 false positives in the scan.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-link-differs-from-page",
+   "what": "The filer's XBRL footnote links attach the non-accrual note to the wrong rows in 8 quarters (21 rows), so published non-accrual FV differed from the printed total (63.1M against 20.0M at 2025-12-31; 0 against 20.7M at 2023-12-31).",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 63.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Each quarter compare the sum of fair value of rows published as non-accrual with the printed Non-accrual line of the summary table (to one decimal in millions).",
+   "quote": {
+    "accession": "0001193125-26-048664",
+    "text": "American Achievement, Corp. (3)(14) First-lien loan ($ 26,664 par, due 9/2026 ) 9/30/2015 SOFR + 7.35 % 11.22 % (incl. 10.72 % PIK) 25,848 19,665 1.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "nonaccrual_flag fired for 2025-12-31 only (existing detector for that quarter) and not for the other 7 quarters; a quarterly sum-versus-summary-table comparison is exact (printed marked sums equal the table in 14 of 14 quarters after the fix) and has no false positive in the scan.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "negative-cost-published-positive",
+   "what": "Tango undrawn revolver cost printed in parentheses published positive in two quarters (45 and 56 thousand).",
+   "field": "cost",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A cost whose printed cell is in parentheses must publish negative; compare the sign with the bracket on the fair-value line.",
+   "quote": {
+    "accession": "0000950170-23-018777",
+    "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C107 flags negative cost, the opposite direction, and fired on the two other Tango quarters; no rule flags a bracketed cost published positive. 7 bracketed tokens exist in the fund, all signed correctly after the fix.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "what": "Instrument type published from member wording that differs from the printed instrument: Marcura term loans printed \"First-lien loan\" published as Revolver and with instrument text \"First-lien revolving loan\" (7 quarters; text fixed on 2025-03-31 to 2026-06-30 as well), Project44 and Erling NOK loan, and 7 revolving lines with no type.",
+   "field": "instrument_type",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 250.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare instrument_type with the words \"revolving\" / \"delayed draw\" on the printed fair-value line; a published Revolver on a line without the word, or a line with the word and no Revolver, fails.",
+   "quote": {
+    "accession": "0000950170-25-061008",
+    "text": "Marcura Equities LTD (3)(4) First-lien loan ($ 33,874 par, due 8/2029 ) 8/11/2023 SOFR + 7.00 % 11.30 % 33,092 34,280 2.1 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in the untouched build; the printed-wording test had 0 false positives in the scan of 2,782 rows (16 true rows).",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "pik-concept-holds-whole-coupon",
+   "what": "Varinem 2025-12-31: the filer tagged the PIK concept with the whole cash rate (7.57, 6.82); the printed lines have no PIK.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 20.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A published pik_rate with no \"PIK\" on the printed fair-value line fails.",
+   "quote": {
+    "accession": "0001193125-26-048664",
+    "text": "Varinem German BidCo GMBH (3)(4) First-lien loan (EUR 12,696 par, due 7/2031 ) 7/11/2024 E + 5.50 % 7.57 % 13,699 15,097 (EUR 12,855 ) 0.9 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_le_interest_rate passes (pik equals the rate) and no other rule fired on the two rows; the printed-wording test found only these two rows in the fund.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "preferred-published-as-common-equity",
+   "what": "Preferred shares classed as common equity: Elysium BidCo convertible preference shares (7 quarters, 6.3 to 7.6M) and Lucidworks Series F preferred (2 quarters).",
+   "field": "asset_category",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 7.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row whose printed instrument says preferred or preference must be classed preferred equity.",
+   "quote": {
+    "accession": "0000950170-25-019845",
+    "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "preferred_printed (identity engine) fired on all nine rows in the untouched build tsza (ledger findings RVQ_BLK_470e792fe3fe and six more); the fix is the row correction.",
+    "reference": "identity/preferred_printed findings of tsza"
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "what": "Name-key matching crossed the IRGSE first-lien loan and revolver (10-member chain), the ASP Unifrax unsecured and secured notes (swapped between quarters) the BTRS revolver into the Marcura revolver after the row was relabelled, and (pre-existing) the ASP Unifrax first-lien loan acquired 8/25/2023 due 12/2025 joined to the one acquired 9/30/2024 due 9/2029; fixed with 67 identity contexts.",
+   "field": "position_id",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 65.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Consecutive members of one position chain must share the printed instrument word (revolving or not), the currency marker and a par within 3x; list chains that break it.",
+   "quote": {
+    "accession": "0000950170-24-121434",
+    "text": "First-lien revolving loan ($ 35,332 par, due 6/2025 ) 12/21/2018 SOFR + 9.65 % 14.65 % 35,332 35,062 2.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the chains in the untouched build; a chain audit by currency, instrument word and maturity (chains3.py) lists 15 chains in the final build, 8 of them true misjoins left unfixed (see parked), so it flags real defects.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-facility-currency",
+   "what": "Left, pre-existing: chains that join loans of different currency or tranche under one issuer: PageUp People (USD loan and AUD loan swap at 2024-03-31), Erling Lux Bidco (EUR/GBP/NOK loans of one acquisition date), Kyriba (USD revolver then EUR term loan), Dye & Durham (CAD loan then USD loan), Sports Alliance, Merative rename.",
+   "field": "position_id",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 250.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Same chain audit as above: members of one chain share principal_amount_currency.",
+   "quote": {
+    "accession": "0000950170-23-018777",
+    "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The chain audit (currency, instrument word, maturity) lists these chains and none of the correct ones in the final build; they are left because each needs a reviewed identity key per tranche.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "position-key-repeats-for-two-series-of-one-issuer",
+   "what": "Madison Park Funding Series 2025-65A and 2025-72A publish the same position_key (\"madison park funding ltd series 2025\"); position_id and the rows are distinct and right.",
+   "field": "position_key",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 8.9,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Position keys must be unique among valued rows of a fund-quarter (B02 compares terms and stays silent when terms differ).",
+   "quote": {
+    "accession": "0001193125-26-048664",
+    "text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) Structured Credit ($ 4,400 par, due 7/2038 ) 8/19/2025 SOFR + 5.00 % 9.32 % 4,407 4,407 0.2 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Oracle B02 fired on this pair in the earlier build (findings RVQ_REV_fb8ff5d3621a, RVQ_REV_8dcf3c42e70a) and is silent now only because the terms differ; the key itself is still repeated.",
+    "reference": "oracle/B02 findings RVQ_REV_fb8ff5d3621a and RVQ_REV_8dcf3c42e70a"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "66 rows printed with a dash for fair value (IntelePeer, TherapeuticsMD, Passport warrants; SMA, Astra 2L membership, Murchison preferred) are published by the baseline code at fair value 0; warrants are classed common equity.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A row whose printed instrument is \"Warrants\" must be classed as a warrant, not common equity.",
+   "quote": {
+    "accession": "0000950170-25-019845",
+    "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule flags the class of a zero-value warrant row; the printed word \"Warrants\" is exact and the fund has 45 such rows, all published as common equity.",
+    "reference": ""
    }
   }
  ],
  "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_e0cdaf8595ab",
+   "coverage": {
+    "affected_rows": [
+     "ROW-01758ccf9f89feb8",
+     "ROW-033cd477929e1814",
+     "ROW-04996fc046c9056d",
+     "ROW-07d24c2509426479",
+     "ROW-0ae06698ce70cf39",
+     "ROW-0cb33079fa0c3256",
+     "ROW-0dd1f775ed501ccc",
+     "ROW-12a0bf6ee3e0d677",
+     "ROW-146a8be41a1f4278",
+     "ROW-14ed93c95ac57b4b",
+     "ROW-15c779dde2c75bb6",
+     "ROW-16702e12c3e6e022",
+     "ROW-16876718c5c6acaa",
+     "ROW-1710822052683051",
+     "ROW-17524bb838068a43",
+     "ROW-183988efa17a8d5d",
+     "ROW-18a9056b6de1e1da",
+     "ROW-1a0a71817dd5e479",
+     "ROW-1a377cd40ebc1b42",
+     "ROW-1b6df409865c5e53",
+     "ROW-1bf408fe22763459",
+     "ROW-1d1b07aa71a48ab0",
+     "ROW-2084b959c2ee28a2",
+     "ROW-20d99d865929f774",
+     "ROW-221a157eee87b1de",
+     "ROW-223cc7a8b2734f1f",
+     "ROW-22f8ff7c66f0e393",
+     "ROW-234711fbf94942bb",
+     "ROW-23915448d5f6ddd9",
+     "ROW-27217cea4c26656e",
+     "ROW-2b5544d1b268c01f",
+     "ROW-2be0a7511c778f9b",
+     "ROW-2c1e8629f0b61ace",
+     "ROW-2e9545e537acd139",
+     "ROW-2f4cbcc16f529c84",
+     "ROW-3003a50f15f044fa",
+     "ROW-313722d821701030",
+     "ROW-371467c7de700ade",
+     "ROW-3a318a09b6ffd3e2",
+     "ROW-3b1e9f7a9904e451",
+     "ROW-3b726aaf04571eca",
+     "ROW-3bb988370c480e43",
+     "ROW-3daa84fe46b2191b",
+     "ROW-3f18beec2c97fbdb",
+     "ROW-4047aa34cf04f8a3",
+     "ROW-4760e35bb17c9657",
+     "ROW-4808e32d5666f4d1",
+     "ROW-49a84c6d4f4455e1",
+     "ROW-4b046c4fe779ae5f",
+     "ROW-4fcf1496ddc939f0",
+     "ROW-54b5a722b4ca93a8",
+     "ROW-552aee20c1bfa427",
+     "ROW-55f6db334e7d1c8d",
+     "ROW-582306f6505d9b9c",
+     "ROW-5921bec71d2a8acf",
+     "ROW-5a42fbae5b890c4a",
+     "ROW-5a63880a182a8468",
+     "ROW-5d267b96e2daada0",
+     "ROW-5e82954cbabd0c35",
+     "ROW-619cc9a904a5ee43",
+     "ROW-61ba57ad9ec94f1f",
+     "ROW-6506fb6eabdd13f0",
+     "ROW-7317366a037ab5da",
+     "ROW-739f3df3bea8e796",
+     "ROW-75e2f840219eb302",
+     "ROW-7610d089b3233f13",
+     "ROW-775d5cb82754e307",
+     "ROW-787fe673857cad0d",
+     "ROW-7b079f7c43a7d9c5",
+     "ROW-7b5147051af03278",
+     "ROW-7cb767645ac9159a",
+     "ROW-7cd5bf8e79d40932",
+     "ROW-7f2575afb9c7871c",
+     "ROW-7fc6d18c99803efa",
+     "ROW-81a0b38738438e96",
+     "ROW-8274c9a3c73d1746",
+     "ROW-855e66c536a2b03c",
+     "ROW-89057f90733c1d17",
+     "ROW-8b0eb23c8cbcac80",
+     "ROW-8bb2b9ca51165857",
+     "ROW-8bc4422dceba1ead",
+     "ROW-8c54d02a7bbdf72c",
+     "ROW-8c8f7873ff212688",
+     "ROW-9777a0cc1b7786bf",
+     "ROW-98c4a00d884dfa6d",
+     "ROW-9a721559ca6245c6",
+     "ROW-9d67a74a27ff61c8",
+     "ROW-9f1de464e3276751",
+     "ROW-a1eb08b034e52170",
+     "ROW-a3d98956bde81e70",
+     "ROW-a69259df5768b60d",
+     "ROW-a94cb0ef568fb6d1",
+     "ROW-aa5b85ca25444596",
+     "ROW-afae0cd6bac44f78",
+     "ROW-b2ea1ae9645a0ad9",
+     "ROW-b3a1b592958c85ee",
+     "ROW-b3a649768fc3d2e8",
+     "ROW-b3ead073b52e597b",
+     "ROW-b6aaf70fc0250575",
+     "ROW-b77b1518841c7740",
+     "ROW-bb0722bcade89ba5",
+     "ROW-bb936f274b6af716",
+     "ROW-bbef9fb1bdfe0f86",
+     "ROW-bd4d2a50c49e851c",
+     "ROW-bdcdb5c8b7db2a4c",
+     "ROW-c12864a34fef8ef3",
+     "ROW-c2e3e6c375bd63cc",
+     "ROW-c414e766d12766f2",
+     "ROW-c4be3956c5b6d2c3",
+     "ROW-c5953211c709f648",
+     "ROW-c89f199bd23443b9",
+     "ROW-ccdac983350741ac",
+     "ROW-ce03bb10875014c8",
+     "ROW-d097a207a16eb7ce",
+     "ROW-d4eee58c87f77dd3",
+     "ROW-d9d09ec91c44fe98",
+     "ROW-dac8aa6a9af9f2b8",
+     "ROW-e43f54e5ed3f8726",
+     "ROW-e4fed3e65133e3a1",
+     "ROW-e5ea72c1ee8e193b",
+     "ROW-e6b4e16889165367",
+     "ROW-e76dfa324beefce8",
+     "ROW-e77183fa15b694f1",
+     "ROW-e9cbaa1c19263d1c",
+     "ROW-e9f19f7cd86b02a6",
+     "ROW-eb21768bc87adf04",
+     "ROW-f28d346818949d92",
+     "ROW-f59c6289b88c1c3b",
+     "ROW-f7cb11aea8bbf8e7",
+     "ROW-fc6b524bf7e98f51",
+     "ROW-fcb03f6739a54a51",
+     "ROW-fe0ee53141627832"
+    ],
+    "reviewed_rows": [
+     "ROW-01758ccf9f89feb8",
+     "ROW-033cd477929e1814",
+     "ROW-04996fc046c9056d",
+     "ROW-07d24c2509426479",
+     "ROW-0ae06698ce70cf39",
+     "ROW-0cb33079fa0c3256",
+     "ROW-0dd1f775ed501ccc",
+     "ROW-12a0bf6ee3e0d677",
+     "ROW-146a8be41a1f4278",
+     "ROW-14ed93c95ac57b4b",
+     "ROW-15c779dde2c75bb6",
+     "ROW-16702e12c3e6e022",
+     "ROW-16876718c5c6acaa",
+     "ROW-1710822052683051",
+     "ROW-17524bb838068a43",
+     "ROW-183988efa17a8d5d",
+     "ROW-18a9056b6de1e1da",
+     "ROW-1a0a71817dd5e479",
+     "ROW-1a377cd40ebc1b42",
+     "ROW-1b6df409865c5e53",
+     "ROW-1bf408fe22763459",
+     "ROW-1d1b07aa71a48ab0",
+     "ROW-2084b959c2ee28a2",
+     "ROW-20d99d865929f774",
+     "ROW-221a157eee87b1de",
+     "ROW-223cc7a8b2734f1f",
+     "ROW-22f8ff7c66f0e393",
+     "ROW-234711fbf94942bb",
+     "ROW-23915448d5f6ddd9",
+     "ROW-27217cea4c26656e",
+     "ROW-2b5544d1b268c01f",
+     "ROW-2be0a7511c778f9b",
+     "ROW-2c1e8629f0b61ace",
+     "ROW-2e9545e537acd139",
+     "ROW-2f4cbcc16f529c84",
+     "ROW-3003a50f15f044fa",
+     "ROW-313722d821701030",
+     "ROW-371467c7de700ade",
+     "ROW-3a318a09b6ffd3e2",
+     "ROW-3b1e9f7a9904e451",
+     "ROW-3b726aaf04571eca",
+     "ROW-3bb988370c480e43",
+     "ROW-3daa84fe46b2191b",
+     "ROW-3f18beec2c97fbdb",
+     "ROW-4047aa34cf04f8a3",
+     "ROW-4760e35bb17c9657",
+     "ROW-4808e32d5666f4d1",
+     "ROW-49a84c6d4f4455e1",
+     "ROW-4b046c4fe779ae5f",
+     "ROW-4fcf1496ddc939f0",
+     "ROW-54b5a722b4ca93a8",
+     "ROW-552aee20c1bfa427",
+     "ROW-55f6db334e7d1c8d",
+     "ROW-582306f6505d9b9c",
+     "ROW-5921bec71d2a8acf",
+     "ROW-5a42fbae5b890c4a",
+     "ROW-5a63880a182a8468",
+     "ROW-5d267b96e2daada0",
+     "ROW-5e82954cbabd0c35",
+     "ROW-619cc9a904a5ee43",
+     "ROW-61ba57ad9ec94f1f",
+     "ROW-6506fb6eabdd13f0",
+     "ROW-7317366a037ab5da",
+     "ROW-739f3df3bea8e796",
+     "ROW-75e2f840219eb302",
+     "ROW-7610d089b3233f13",
+     "ROW-775d5cb82754e307",
+     "ROW-787fe673857cad0d",
+     "ROW-7b079f7c43a7d9c5",
+     "ROW-7b5147051af03278",
+     "ROW-7cb767645ac9159a",
+     "ROW-7cd5bf8e79d40932",
+     "ROW-7f2575afb9c7871c",
+     "ROW-7fc6d18c99803efa",
+     "ROW-81a0b38738438e96",
+     "ROW-8274c9a3c73d1746",
+     "ROW-855e66c536a2b03c",
+     "ROW-89057f90733c1d17",
+     "ROW-8b0eb23c8cbcac80",
+     "ROW-8bb2b9ca51165857",
+     "ROW-8bc4422dceba1ead",
+     "ROW-8c54d02a7bbdf72c",
+     "ROW-8c8f7873ff212688",
+     "ROW-9777a0cc1b7786bf",
+     "ROW-98c4a00d884dfa6d",
+     "ROW-9a721559ca6245c6",
+     "ROW-9d67a74a27ff61c8",
+     "ROW-9f1de464e3276751",
+     "ROW-a1eb08b034e52170",
+     "ROW-a3d98956bde81e70",
+     "ROW-a69259df5768b60d",
+     "ROW-a94cb0ef568fb6d1",
+     "ROW-aa5b85ca25444596",
+     "ROW-afae0cd6bac44f78",
+     "ROW-b2ea1ae9645a0ad9",
+     "ROW-b3a1b592958c85ee",
+     "ROW-b3a649768fc3d2e8",
+     "ROW-b3ead073b52e597b",
+     "ROW-b6aaf70fc0250575",
+     "ROW-b77b1518841c7740",
+     "ROW-bb0722bcade89ba5",
+     "ROW-bb936f274b6af716",
+     "ROW-bbef9fb1bdfe0f86",
+     "ROW-bd4d2a50c49e851c",
+     "ROW-bdcdb5c8b7db2a4c",
+     "ROW-c12864a34fef8ef3",
+     "ROW-c2e3e6c375bd63cc",
+     "ROW-c414e766d12766f2",
+     "ROW-c4be3956c5b6d2c3",
+     "ROW-c5953211c709f648",
+     "ROW-c89f199bd23443b9",
+     "ROW-ccdac983350741ac",
+     "ROW-ce03bb10875014c8",
+     "ROW-d097a207a16eb7ce",
+     "ROW-d4eee58c87f77dd3",
+     "ROW-d9d09ec91c44fe98",
+     "ROW-dac8aa6a9af9f2b8",
+     "ROW-e43f54e5ed3f8726",
+     "ROW-e4fed3e65133e3a1",
+     "ROW-e5ea72c1ee8e193b",
+     "ROW-e6b4e16889165367",
+     "ROW-e76dfa324beefce8",
+     "ROW-e77183fa15b694f1",
+     "ROW-e9cbaa1c19263d1c",
+     "ROW-e9f19f7cd86b02a6",
+     "ROW-eb21768bc87adf04",
+     "ROW-f28d346818949d92",
+     "ROW-f59c6289b88c1c3b",
+     "ROW-f7cb11aea8bbf8e7",
+     "ROW-fc6b524bf7e98f51",
+     "ROW-fcb03f6739a54a51",
+     "ROW-fe0ee53141627832"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Carlstar Group, LLC (3) First-lien loan ($ 33,150 par, due 7/2027 ) 7/8/2022 SOFR + 6.60 % 11.34 % $ 32,353 $ 32,734 2.4 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Alpha Midco, Inc. (3)(5) First-lien loan ($ 68,751 par, due 8/2025 ) 8/15/2019 SOFR + 7.63 % 12.52 % 67,932 69,621 5.1 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "ExtraHop Networks, Inc. (3)(5) First-lien loan ($ 60,200 par, due 7/2027 ) 7/22/2021 SOFR + 7.60 % 12.41 % 59,093 59,147 4.4 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "132 flagged rows of 2023-03-31 (mechanism ref_<benchmark>_no_structured_spread, printed_check field_unreadable): for each the published reference_rate_type equals the benchmark code printed on its own line (L, SOFR, E); no mismatch in the full scan",
+    "The flag says the XBRL tags carry no structured spread for the row, so the benchmark cannot be corroborated from tags; the printed column is readable and agrees. Agent A could not read the printed field (printed_check field_unreadable), which is a limit of the check, not a data difference.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published values equal the page; the check cannot read this filer's printed rate column. Raised as check_repair_request tslx-agenta-printed-rate-field-unreadable (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d9fda68c20ec",
+   "coverage": {
+    "affected_rows": [
+     "ROW-00726d5e7f5bfb0d",
+     "ROW-00a7f87ef894b998",
+     "ROW-062a7ed4e2b41276",
+     "ROW-06b2e849c8e899ca",
+     "ROW-09ee99a0eab7f0e5",
+     "ROW-0b3582974f78d9b6",
+     "ROW-0d4797fc0caaf288",
+     "ROW-0f6cd5ef15f4a141",
+     "ROW-0f8f6566c335c674",
+     "ROW-121ed16d416036c6",
+     "ROW-1346185b38181e9e",
+     "ROW-155c6eb4d05da2f7",
+     "ROW-17581c1a7136506d",
+     "ROW-1b592f3f45a387db",
+     "ROW-1e65edff3054e9ac",
+     "ROW-1fe8a4b7dc691f8c",
+     "ROW-20f5339a1ea100ad",
+     "ROW-2174eb5a06cf75b3",
+     "ROW-22594834abd735a8",
+     "ROW-2430439ce2de664c",
+     "ROW-24af2565c514691f",
+     "ROW-2a06d81098e7f570",
+     "ROW-2b502827f073828a",
+     "ROW-30239ec2a971265a",
+     "ROW-32833e4fed1abf7b",
+     "ROW-3634537803c2563e",
+     "ROW-3cc547a87628d7d6",
+     "ROW-3cff00cf30bfa2d1",
+     "ROW-3f8564e1414ca49e",
+     "ROW-4129604eb9a1eddb",
+     "ROW-4261cacd7f16da14",
+     "ROW-42db1571479ca952",
+     "ROW-43bad1d3fe8bd8ae",
+     "ROW-44b1aabc46ba6462",
+     "ROW-453d94b72c9a1961",
+     "ROW-46bb4555b733f567",
+     "ROW-46cd05688e61a6c3",
+     "ROW-47dcaa314cdcb4dd",
+     "ROW-484eb3d3e12c00da",
+     "ROW-4a7b5ffc3cd58ecb",
+     "ROW-4ac732c26b47cf65",
+     "ROW-4d7123776994b4ed",
+     "ROW-4fea0a720cd7a0d6",
+     "ROW-50dd59faf405db49",
+     "ROW-53afe4fdfed4d502",
+     "ROW-543be55fd87044f4",
+     "ROW-54ea922107a5cd8e",
+     "ROW-551bcbacc3a26b10",
+     "ROW-5bb1ce16f5ea07ad",
+     "ROW-5bfeb44b35cb3147",
+     "ROW-5cd7f5239a90e60c",
+     "ROW-5f93ea52d6151830",
+     "ROW-609c4b78355aab34",
+     "ROW-620e96f9de08855c",
+     "ROW-62600ffcf8012124",
+     "ROW-68f0215a751eb216",
+     "ROW-69b652c2f3b21d0e",
+     "ROW-6aed02612017a1a4",
+     "ROW-6b666a672cc0100f",
+     "ROW-6e62492ea986de53",
+     "ROW-6e6eb68aa686475a",
+     "ROW-710f366c2eb7ea92",
+     "ROW-73196ba65fd03b10",
+     "ROW-75d8a3b1e05347a4",
+     "ROW-7734173ca4d426d1",
+     "ROW-77ae88c044751c53",
+     "ROW-79040deeb1c52e22",
+     "ROW-7d22ca3c432730c2",
+     "ROW-8106487700ddc80b",
+     "ROW-82277247413646a6",
+     "ROW-8604ae27e00548bf",
+     "ROW-869772cb3a72627d",
+     "ROW-87c3825002447014",
+     "ROW-8a885dae5356702a",
+     "ROW-8bd4668d68eb7015",
+     "ROW-8c26bafd28694a77",
+     "ROW-8ce44f796cd132f1",
+     "ROW-8cec0b6e422a1bcc",
+     "ROW-8ed0f8feb4892170",
+     "ROW-8f673738fb41c8af",
+     "ROW-9272a1e0e12038a1",
+     "ROW-9279b60d23a06af9",
+     "ROW-9345d96075a9672a",
+     "ROW-95713439190994bf",
+     "ROW-95cc97cd50feafbb",
+     "ROW-9815ebe02f264510",
+     "ROW-9926035968bfe85f",
+     "ROW-994e8173a7cd40c8",
+     "ROW-99a53f6fbdebb416",
+     "ROW-9ab1c3c792688469",
+     "ROW-9b0e5a07cbcd7b19",
+     "ROW-9d87eb32649973c0",
+     "ROW-a37a20e1201a60a8",
+     "ROW-a5667606560f5eb0",
+     "ROW-ab31640840c65f60",
+     "ROW-abdf123712a42584",
+     "ROW-ad7f7db0d79068a6",
+     "ROW-afe287b84c10423c",
+     "ROW-afed7adad8d7351d",
+     "ROW-b3bf245a96b0b19b",
+     "ROW-c1c971a530a14098",
+     "ROW-c32cd509b1e740b7",
+     "ROW-c362af6d75189069",
+     "ROW-c62b9e179b07ca45",
+     "ROW-c75eaed35ade4893",
+     "ROW-c7cc242bdde0a469",
+     "ROW-ca7e3473750c8c33",
+     "ROW-cc01a55d2e6c4c58",
+     "ROW-d081eccc75b79339",
+     "ROW-d6a4f5f67ff98097",
+     "ROW-db1a4b825845e986",
+     "ROW-db5731c1dbfeeae8",
+     "ROW-dc4ba7aed507e33e",
+     "ROW-de4d56ddac497d90",
+     "ROW-df131588e9b8f637",
+     "ROW-e145936e4c7f25a1",
+     "ROW-e23f10da2cb0cc5d",
+     "ROW-e53efd50f809b171",
+     "ROW-e5cf055500c654e5",
+     "ROW-e5f83ad686f23b39",
+     "ROW-e6c806a573771371",
+     "ROW-e8c3428f89dd7681",
+     "ROW-e90f77d7bc74c580",
+     "ROW-eaefb3a3f31987f3",
+     "ROW-ec3847776a9489cc",
+     "ROW-ec873114e4d23c68",
+     "ROW-ed07af2ca8718f3c",
+     "ROW-ef2a476df7bd57af",
+     "ROW-f0be01f7c648bdbb",
+     "ROW-f1087720f489148e",
+     "ROW-f13711ddd02fb6a4",
+     "ROW-f6b2c9d040153f4b",
+     "ROW-f92fa44ff566c170",
+     "ROW-f9fbec82a7ccdcb7",
+     "ROW-fb85c146a410a1b4",
+     "ROW-fdb9b539da998998",
+     "ROW-fe19b32b9fdc6df4",
+     "ROW-fecd8e3586a50708"
+    ],
+    "reviewed_rows": [
+     "ROW-00726d5e7f5bfb0d",
+     "ROW-00a7f87ef894b998",
+     "ROW-062a7ed4e2b41276",
+     "ROW-06b2e849c8e899ca",
+     "ROW-09ee99a0eab7f0e5",
+     "ROW-0b3582974f78d9b6",
+     "ROW-0d4797fc0caaf288",
+     "ROW-0f6cd5ef15f4a141",
+     "ROW-0f8f6566c335c674",
+     "ROW-121ed16d416036c6",
+     "ROW-1346185b38181e9e",
+     "ROW-155c6eb4d05da2f7",
+     "ROW-17581c1a7136506d",
+     "ROW-1b592f3f45a387db",
+     "ROW-1e65edff3054e9ac",
+     "ROW-1fe8a4b7dc691f8c",
+     "ROW-20f5339a1ea100ad",
+     "ROW-2174eb5a06cf75b3",
+     "ROW-22594834abd735a8",
+     "ROW-2430439ce2de664c",
+     "ROW-24af2565c514691f",
+     "ROW-2a06d81098e7f570",
+     "ROW-2b502827f073828a",
+     "ROW-30239ec2a971265a",
+     "ROW-32833e4fed1abf7b",
+     "ROW-3634537803c2563e",
+     "ROW-3cc547a87628d7d6",
+     "ROW-3cff00cf30bfa2d1",
+     "ROW-3f8564e1414ca49e",
+     "ROW-4129604eb9a1eddb",
+     "ROW-4261cacd7f16da14",
+     "ROW-42db1571479ca952",
+     "ROW-43bad1d3fe8bd8ae",
+     "ROW-44b1aabc46ba6462",
+     "ROW-453d94b72c9a1961",
+     "ROW-46bb4555b733f567",
+     "ROW-46cd05688e61a6c3",
+     "ROW-47dcaa314cdcb4dd",
+     "ROW-484eb3d3e12c00da",
+     "ROW-4a7b5ffc3cd58ecb",
+     "ROW-4ac732c26b47cf65",
+     "ROW-4d7123776994b4ed",
+     "ROW-4fea0a720cd7a0d6",
+     "ROW-50dd59faf405db49",
+     "ROW-53afe4fdfed4d502",
+     "ROW-543be55fd87044f4",
+     "ROW-54ea922107a5cd8e",
+     "ROW-551bcbacc3a26b10",
+     "ROW-5bb1ce16f5ea07ad",
+     "ROW-5bfeb44b35cb3147",
+     "ROW-5cd7f5239a90e60c",
+     "ROW-5f93ea52d6151830",
+     "ROW-609c4b78355aab34",
+     "ROW-620e96f9de08855c",
+     "ROW-62600ffcf8012124",
+     "ROW-68f0215a751eb216",
+     "ROW-69b652c2f3b21d0e",
+     "ROW-6aed02612017a1a4",
+     "ROW-6b666a672cc0100f",
+     "ROW-6e62492ea986de53",
+     "ROW-6e6eb68aa686475a",
+     "ROW-710f366c2eb7ea92",
+     "ROW-73196ba65fd03b10",
+     "ROW-75d8a3b1e05347a4",
+     "ROW-7734173ca4d426d1",
+     "ROW-77ae88c044751c53",
+     "ROW-79040deeb1c52e22",
+     "ROW-7d22ca3c432730c2",
+     "ROW-8106487700ddc80b",
+     "ROW-82277247413646a6",
+     "ROW-8604ae27e00548bf",
+     "ROW-869772cb3a72627d",
+     "ROW-87c3825002447014",
+     "ROW-8a885dae5356702a",
+     "ROW-8bd4668d68eb7015",
+     "ROW-8c26bafd28694a77",
+     "ROW-8ce44f796cd132f1",
+     "ROW-8cec0b6e422a1bcc",
+     "ROW-8ed0f8feb4892170",
+     "ROW-8f673738fb41c8af",
+     "ROW-9272a1e0e12038a1",
+     "ROW-9279b60d23a06af9",
+     "ROW-9345d96075a9672a",
+     "ROW-95713439190994bf",
+     "ROW-95cc97cd50feafbb",
+     "ROW-9815ebe02f264510",
+     "ROW-9926035968bfe85f",
+     "ROW-994e8173a7cd40c8",
+     "ROW-99a53f6fbdebb416",
+     "ROW-9ab1c3c792688469",
+     "ROW-9b0e5a07cbcd7b19",
+     "ROW-9d87eb32649973c0",
+     "ROW-a37a20e1201a60a8",
+     "ROW-a5667606560f5eb0",
+     "ROW-ab31640840c65f60",
+     "ROW-abdf123712a42584",
+     "ROW-ad7f7db0d79068a6",
+     "ROW-afe287b84c10423c",
+     "ROW-afed7adad8d7351d",
+     "ROW-b3bf245a96b0b19b",
+     "ROW-c1c971a530a14098",
+     "ROW-c32cd509b1e740b7",
+     "ROW-c362af6d75189069",
+     "ROW-c62b9e179b07ca45",
+     "ROW-c75eaed35ade4893",
+     "ROW-c7cc242bdde0a469",
+     "ROW-ca7e3473750c8c33",
+     "ROW-cc01a55d2e6c4c58",
+     "ROW-d081eccc75b79339",
+     "ROW-d6a4f5f67ff98097",
+     "ROW-db1a4b825845e986",
+     "ROW-db5731c1dbfeeae8",
+     "ROW-dc4ba7aed507e33e",
+     "ROW-de4d56ddac497d90",
+     "ROW-df131588e9b8f637",
+     "ROW-e145936e4c7f25a1",
+     "ROW-e23f10da2cb0cc5d",
+     "ROW-e53efd50f809b171",
+     "ROW-e5cf055500c654e5",
+     "ROW-e5f83ad686f23b39",
+     "ROW-e6c806a573771371",
+     "ROW-e8c3428f89dd7681",
+     "ROW-e90f77d7bc74c580",
+     "ROW-eaefb3a3f31987f3",
+     "ROW-ec3847776a9489cc",
+     "ROW-ec873114e4d23c68",
+     "ROW-ed07af2ca8718f3c",
+     "ROW-ef2a476df7bd57af",
+     "ROW-f0be01f7c648bdbb",
+     "ROW-f1087720f489148e",
+     "ROW-f13711ddd02fb6a4",
+     "ROW-f6b2c9d040153f4b",
+     "ROW-f92fa44ff566c170",
+     "ROW-f9fbec82a7ccdcb7",
+     "ROW-fb85c146a410a1b4",
+     "ROW-fdb9b539da998998",
+     "ROW-fe19b32b9fdc6df4",
+     "ROW-fecd8e3586a50708"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Bestpass, Inc. (3)(5) First-lien loan ($ 40,000 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 10.85 % $ 38,859 $ 39,000 2.7 %"
+    },
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Carlstar Group, LLC (3) First-lien loan ($ 32,725 par, due 7/2027 ) 7/8/2022 SOFR + 6.60 % 11.69 % 31,966 32,622 2.2 %"
+    },
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Alpha Midco, Inc. (3)(5) First-lien loan ($ 68,802 par, due 8/2025 ) 8/15/2019 SOFR + 7.65 % 12.99 % 68,053 69,671 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "138 flagged rows of 2023-06-30 (mechanism ref_<benchmark>_no_structured_spread, printed_check field_unreadable): for each the published reference_rate_type equals the benchmark code printed on its own line (L, SOFR, E); no mismatch in the full scan",
+    "The flag says the XBRL tags carry no structured spread for the row, so the benchmark cannot be corroborated from tags; the printed column is readable and agrees. Agent A could not read the printed field (printed_check field_unreadable), which is a limit of the check, not a data difference.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published values equal the page; the check cannot read this filer's printed rate column. Raised as check_repair_request tslx-agenta-printed-rate-field-unreadable (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_c5db5e39b060",
+   "coverage": {
+    "affected_rows": [
+     "ROW-7586738d85a6278b",
+     "ROW-881c6d0b84f1a000",
+     "ROW-a42e39b3abaf5027",
+     "ROW-a7e527cd0eb374e8",
+     "ROW-daf24a05afa84d0a",
+     "ROW-fa940d4a6e7a43d4"
+    ],
+    "reviewed_rows": [
+     "ROW-7586738d85a6278b",
+     "ROW-881c6d0b84f1a000",
+     "ROW-a42e39b3abaf5027",
+     "ROW-a7e527cd0eb374e8",
+     "ROW-daf24a05afa84d0a",
+     "ROW-fa940d4a6e7a43d4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Laramie Energy, LLC (3) First-lien loan ($ 27,317 par, due 2/2027 ) 2/21/2023 SOFR + 7.10 % 12.42 % 26,724 27,055 1.8 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Murchison Oil and Gas, LLC (3) First-lien loan ($ 29,478 par, due 6/2026 ) 6/30/2022 SOFR + 8.65 % 14.04 % 28,986 29,887 2.0 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Super-Priority DIP term loan ($ 4,946 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.22 % 4,946 4,835 0.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "6 flagged rows of 2023-09-30 (mechanism ref_<benchmark>_no_structured_spread, printed_check field_unreadable): for each the published reference_rate_type equals the benchmark code printed on its own line (L, SOFR, E); no mismatch in the full scan",
+    "The flag says the XBRL tags carry no structured spread for the row, so the benchmark cannot be corroborated from tags; the printed column is readable and agrees. Agent A could not read the printed field (printed_check field_unreadable), which is a limit of the check, not a data difference.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published values equal the page; the check cannot read this filer's printed rate column. Raised as check_repair_request tslx-agenta-printed-rate-field-unreadable (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_40281363c48d",
+   "coverage": {
+    "affected_rows": [
+     "ROW-0b33987b6f5ed757"
+    ],
+    "reviewed_rows": [
+     "ROW-0b33987b6f5ed757"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Price Fx Inc. (3)(4) First-lien loan (EUR 910 par, due 10/2029 ) 10/27/2023 E + 7.00 % 10.94 % 962 983 (EUR 890 ) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "1 flagged rows of 2023-12-31 (mechanism ref_<benchmark>_no_structured_spread, printed_check field_unreadable): for each the published reference_rate_type equals the benchmark code printed on its own line (L, SOFR, E); no mismatch in the full scan",
+    "The flag says the XBRL tags carry no structured spread for the row, so the benchmark cannot be corroborated from tags; the printed column is readable and agrees. Agent A could not read the printed field (printed_check field_unreadable), which is a limit of the check, not a data difference.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published values equal the page; the check cannot read this filer's printed rate column. Raised as check_repair_request tslx-agenta-printed-rate-field-unreadable (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d5095524fbbd",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e05863e8ed439226"
+    ],
+    "reviewed_rows": [
+     "ROW-e05863e8ed439226"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-051235",
+     "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 14,410 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 10.83 % 14,120 14,195 0.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "1 flagged rows of 2024-03-31 (mechanism ref_<benchmark>_no_structured_spread, printed_check field_unreadable): for each the published reference_rate_type equals the benchmark code printed on its own line (L, SOFR, E); no mismatch in the full scan",
+    "The flag says the XBRL tags carry no structured spread for the row, so the benchmark cannot be corroborated from tags; the printed column is readable and agrees. Agent A could not read the printed field (printed_check field_unreadable), which is a limit of the check, not a data difference.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published values equal the page; the check cannot read this filer's printed rate column. Raised as check_repair_request tslx-agenta-printed-rate-field-unreadable (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_22ccf15928fb",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2da78fa16a1732e7",
+     "ROW-cb6cb034f8d88a6f",
+     "ROW-d9b3f5da383a90fc",
+     "ROW-eacd2fd13a4e4584"
+    ],
+    "reviewed_rows": [
+     "ROW-2da78fa16a1732e7",
+     "ROW-cb6cb034f8d88a6f",
+     "ROW-d9b3f5da383a90fc",
+     "ROW-eacd2fd13a4e4584"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Cedar Funding CLO Ltd, Series 2018-7A (3)(4)(9) Structured Credit ($ 1,000 par, due 1/2031 ) 7/21/2022 SOFR + 4.81 % 10.14 % 880 981 0.1 %"
+    },
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Dryden Senior Loan Fund, Series 2020-86A (3)(4)(9) Structured Credit ($ 1,500 par, due 7/2034 ) 8/17/2022 SOFR + 6.76 % 12.08 % 1,488 1,441 0.1 %"
+    },
+    {
+     "accession": "0000950170-24-088524",
+     "text": "MidOcean Credit CLO Ltd, Series 2018-9A (3)(4)(9) Structured Credit ($ 1,100 par, due 7/2031 ) 6/1/2022 SOFR + 6.31 % 11.64 % 975 1,089 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "4 flagged rows of 2024-06-30 (mechanism ref_<benchmark>_no_structured_spread, printed_check field_unreadable): for each the published reference_rate_type equals the benchmark code printed on its own line (L, SOFR, E); no mismatch in the full scan",
+    "The flag says the XBRL tags carry no structured spread for the row, so the benchmark cannot be corroborated from tags; the printed column is readable and agrees. Agent A could not read the printed field (printed_check field_unreadable), which is a limit of the check, not a data difference.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published values equal the page; the check cannot read this filer's printed rate column. Raised as check_repair_request tslx-agenta-printed-rate-field-unreadable (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_489e9263edf5",
+   "coverage": {
+    "affected_rows": [
+     "ROW-0dacbe5f372a65dd",
+     "ROW-392c35fb7b2072b7",
+     "ROW-7ec4bc49251df114",
+     "ROW-b82403757df72997",
+     "ROW-ce43a4ab4df04c91",
+     "ROW-ee20eeebba8fbac5",
+     "ROW-f6ad518d98d497f1",
+     "ROW-f6cae4d5040a876a"
+    ],
+    "reviewed_rows": [
+     "ROW-0dacbe5f372a65dd",
+     "ROW-392c35fb7b2072b7",
+     "ROW-7ec4bc49251df114",
+     "ROW-b82403757df72997",
+     "ROW-ce43a4ab4df04c91",
+     "ROW-ee20eeebba8fbac5",
+     "ROW-f6ad518d98d497f1",
+     "ROW-f6cae4d5040a876a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Mitnick Corporate Purchaser, Inc. (3)(9) First-lien loan ($ 330 par, due 5/2029 ) 5/2/2022 SOFR + 4.60 % 9.97 % 330 317 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Astra Acquisition Corp. (3) Second-lien loan ($ 43,479 par, due 10/2029 ) 10/25/2021 SOFR + 8.99 % 14.53 % 42,796 34,566 2.3 %"
+    },
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Ibis Intermediate Co. (3)(5) First-lien loan ($ 1,514 par, due 5/2027 ) 5/28/2021 SOFR + 4.65 % 10.07 % 1,359 1,593 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "2023-09-30 Mitnick Corporate Purchaser,: published basis_spread 4.6, printed margin 4.60",
+    "2023-09-30 Astra Acquisition Corp.: published basis_spread 8.99, printed margin 8.99",
+    "2023-09-30 Ibis Intermediate Co.: published basis_spread 4.65, printed margin 4.65",
+    "2023-09-30 Ibis US Blocker Co.: published basis_spread 8.4, printed margin 8.40",
+    "2023-09-30 PrimeRevenue, Inc.: published basis_spread 7.1499999999999995, printed margin 7.15",
+    "2023-09-30 PageUp People, Ltd.: published basis_spread 5.35, printed margin 5.35",
+    "2023-09-30 PageUp People, Ltd.: published basis_spread 5.28, printed margin 5.28",
+    "2023-09-30 PayScale Holdings, Inc.: published basis_spread 6.35, printed margin 6.35"
+   ],
+   "next_action": "Published spreads equal the printed margins on every flagged row (the reading error is Agent A's). Raised as check_repair_request tslx-agenta-spread-own-reading (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_07285d6452e3",
+   "coverage": {
+    "affected_rows": [
+     "ROW-9eaaa8b7f8a08494"
+    ],
+    "reviewed_rows": [
+     "ROW-9eaaa8b7f8a08494"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Mitnick Corporate Purchaser, Inc. (3)(9) First-lien loan ($ 328 par, due 5/2029 ) 5/2/2022 SOFR + 4.50 % 9.93 % 328 302 0.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "2024-06-30 Mitnick Corporate Purchaser,: published basis_spread 4.5, printed margin 4.50",
+    "Agent A's own reading (agentA_value_pct) differs from the printed margin on these rows; the XBRL residual and Agent A residual both disagree with each other, not with the page. Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published spreads equal the printed margins on every flagged row (the reading error is Agent A's). Raised as check_repair_request tslx-agenta-spread-own-reading (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_ed7fd89aed80",
+   "coverage": {
+    "affected_rows": [
+     "ROW-81e4f4ad177c1551",
+     "ROW-e838e6cbc6940d74"
+    ],
+    "reviewed_rows": [
+     "ROW-81e4f4ad177c1551",
+     "ROW-e838e6cbc6940d74"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-061008",
+     "text": "Astra Acquisition Corp. (3)(14) Second-lien loan ($ 40,302 par, due 10/2029 ) 10/22/2021 SOFR + 10.14 % 14.44 % 39,703 3,023 0.2 %"
+    },
+    {
+     "accession": "0000950170-25-061008",
+     "text": "ASG II, LLC (3)(5) First-lien loan ($ 65,000 par, due 5/2028 ) 5/25/2022 SOFR + 6.40 % 10.69 % 64,047 64,350 4.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "2025-03-31 Astra Acquisition Corp.: published basis_spread 10.14, printed margin 10.14",
+    "2025-03-31 ASG II, LLC: published basis_spread 6.4, printed margin 6.40",
+    "Agent A's own reading (agentA_value_pct) differs from the printed margin on these rows; the XBRL residual and Agent A residual both disagree with each other, not with the page. Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published spreads equal the printed margins on every flagged row (the reading error is Agent A's). Raised as check_repair_request tslx-agenta-spread-own-reading (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_a6a6ddb28a51",
+   "coverage": {
+    "affected_rows": [
+     "ROW-025351b91d89ff0c",
+     "ROW-c3f2d5d7e556b7f7"
+    ],
+    "reviewed_rows": [
+     "ROW-025351b91d89ff0c",
+     "ROW-c3f2d5d7e556b7f7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-100204",
+     "text": "EDB Parent, LLC (3)(5) First-lien loan ($ 74,047 par, due 7/2028) 7/7/2022 SOFR + 7.00 % 11.33 % 73,099 74,047 4.6 %"
+    },
+    {
+     "accession": "0000950170-25-100204",
+     "text": "First-lien loan (EUR 2,515 par, due 2/2031 ) 2/20/2024 E + 6.50 % 8.98 % (incl. 3.50 % PIK) 2,686 2,966 (EUR 2,527 ) 0.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "2025-06-30 EDB Parent, LLC: published basis_spread 7.000000000000001, printed margin 7.00",
+    "2025-06-30 Hippo XPA Bidco AB: published basis_spread 6.5, printed margin 6.50",
+    "Agent A's own reading (agentA_value_pct) differs from the printed margin on these rows; the XBRL residual and Agent A residual both disagree with each other, not with the page. Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published spreads equal the printed margins on every flagged row (the reading error is Agent A's). Raised as check_repair_request tslx-agenta-spread-own-reading (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_fd066486b0b3",
+   "coverage": {
+    "affected_rows": [
+     "ROW-9ea7373457d48c13",
+     "ROW-c9f7f84a3c8316ac"
+    ],
+    "reviewed_rows": [
+     "ROW-9ea7373457d48c13",
+     "ROW-c9f7f84a3c8316ac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Elysian Finco Ltd. (3)(4)(5) First-lien loan ($ 21,668 par, due 1/2028 ) 1/31/2021 SOFR + 5.65 % 9.35 % 21,494 21,072 1.4 %"
+    },
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Kryptona BidCo US, LLC (3) First-lien loan ($ 20,762 par, due 12/2031 ) 12/18/2024 SOFR + 5.75 % 9.44 % (incl. 3.13 % PIK) 20,392 20,532 1.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "2026-03-31 Elysian Finco Ltd.: published basis_spread 5.65, printed margin 5.65",
+    "2026-03-31 Kryptona BidCo US, LLC: published basis_spread 5.75, printed margin 5.75",
+    "Agent A's own reading (agentA_value_pct) differs from the printed margin on these rows; the XBRL residual and Agent A residual both disagree with each other, not with the page. Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Published spreads equal the printed margins on every flagged row (the reading error is Agent A's). Raised as check_repair_request tslx-agenta-spread-own-reading (orchestrator)."
+  },
+  {
+   "finding_id": "RVQ_BLK_38c088b09ff7",
+   "coverage": {
+    "affected_rows": [
+     "ROW-64f3291f00e0ef7a"
+    ],
+    "reviewed_rows": [
+     "ROW-64f3291f00e0ef7a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 731 0.1 %"
+    },
+    {
+     "accession": "0000950170-23-018777",
+     "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,836 10,468 0.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The flagged row is the second Copper Bidco line (996,958 trust certificates): the filer prints the company once, on the line above (Copper Bidco, LLC (9) Trust Certificates (132,928)), and the continuation line has no company cell; published issuer Copper Bidco, LLC equals the company of the group",
+    "The earlier reviewer verdict (confirmed_error) compared the continuation line with a name it does not print; it does not stand. The other rows this rule flagged in 2023-03-31 (Raptor, Mach/Murchison) were real and are fixed by row corrections.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Raised as check_repair_request tslx-page-rule-continuation-issuer: the page rule must take the company cell of the group above for a line without one."
+  },
+  {
+   "finding_id": "RVQ_BLK_461ecee1e562",
+   "coverage": {
+    "affected_rows": [
+     "ROW-070deb39c82c0913"
+    ],
+    "reviewed_rows": [
+     "ROW-070deb39c82c0913"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Copper Bidco, LLC (9) Trust Certificates ( 132,928 Certificates) 12/7/2020 - 271 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-038066",
+     "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,735 10,468 0.7 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The flagged row is the second Copper Bidco line (996,958 trust certificates): the filer prints the company once, on the line above (Copper Bidco, LLC (9) Trust Certificates (132,928)), and the continuation line has no company cell; published issuer Copper Bidco, LLC equals the company of the group",
+    "The earlier reviewer verdict (confirmed_error) compared the continuation line with a name it does not print; it does not stand. The other rows this rule flagged in 2023-06-30 (Raptor, Mach/Murchison) were real and are fixed by row corrections.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Raised as check_repair_request tslx-page-rule-continuation-issuer: the page rule must take the company cell of the group above for a line without one."
+  },
+  {
+   "finding_id": "RVQ_BLK_c93615c9cd2d",
+   "coverage": {
+    "affected_rows": [
+     "ROW-942bec5e665a5e9d"
+    ],
+    "reviewed_rows": [
+     "ROW-942bec5e665a5e9d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,727 0.7 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The flagged row is the second Copper Bidco line (996,958 trust certificates): the filer prints the company once, on the line above (Copper Bidco, LLC (9) Trust Certificates (132,928)), and the continuation line has no company cell; published issuer Copper Bidco, LLC equals the company of the group",
+    "The earlier reviewer verdict (confirmed_error) compared the continuation line with a name it does not print; it does not stand. The other rows this rule flagged in 2023-09-30 (Raptor, Mach/Murchison) were real and are fixed by row corrections.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Raised as check_repair_request tslx-page-rule-continuation-issuer: the page rule must take the company cell of the group above for a line without one."
+  },
+  {
+   "finding_id": "RVQ_BLK_171ad24849c0",
+   "coverage": {
+    "affected_rows": [
+     "ROW-518fb96ffb55a907"
+    ],
+    "reviewed_rows": [
+     "ROW-518fb96ffb55a907"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-015845",
+     "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,089 0.6 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The flagged row is the second Copper Bidco line (996,958 trust certificates): the filer prints the company once, on the line above (Copper Bidco, LLC (9) Trust Certificates (132,928)), and the continuation line has no company cell; published issuer Copper Bidco, LLC equals the company of the group",
+    "The earlier reviewer verdict (confirmed_error) compared the continuation line with a name it does not print; it does not stand. The other rows this rule flagged in 2023-12-31 (Raptor, Mach/Murchison) were real and are fixed by row corrections.",
+    "Full scan of all 2,782 published rows that carry a fair-value line (14 quarters), each compared on its own printed line (the table row whose fair-value fact is the row context): issuer, benchmark code, spread, all-in rate, PIK, maturity, par and currency marker, shares, lien, instrument type, preferred wording, non-accrual footnote (scratch/fund_runs/0001508655/fullscan.py, nascan2.py)."
+   ],
+   "next_action": "Raised as check_repair_request tslx-page-rule-continuation-issuer: the page rule must take the company cell of the group above for a line without one."
+  },
+  {
+   "finding_id": "RVQ_BLK_d020768792db",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e8e49d10bd99edc5"
+    ],
+    "reviewed_rows": [
+     "ROW-e8e49d10bd99edc5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "Series A Preferred Stock ( 1,824 units) (3)(12) 12/20/2023 SOFR + 12.00 % 17.30 % PIK 1,659 1,773 0.1 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "The row prints \"SOFR + 12.00 % | 17.30 % PIK\": a whole-coupon PIK line; published interest_rate 17.30, basis_spread 12.00, pik_rate empty",
+    "Open owner convention D-092 (PIK-only interest_rate): whether a whole-PIK coupon is published as pik_rate 17.30 with interest_rate carried separately is not decided; no change made",
+    "Searched the same shape in the fund: 2023-09-30 Volante (16.50 % PIK), Equinox, Rail Acquisitions, IntelePeer, Ibis US Blocker print \"x % PIK\" whole coupons and publish pik_rate = x (so the fund is internally inconsistent on this convention)"
+   ],
+   "next_action": "Owner decision D-092 (evidence only). Recorded as owner_request tslx-d092-whole-pik-coupon-reliaquest."
+  },
+  {
+   "finding_id": "RVQ_REV_26d8ebaaa6ba",
+   "coverage": {
+    "affected_rows": [
+     "ROW-1fdfed6394d1bd29",
+     "ROW-7f7abd3d720c7b6d",
+     "ROW-8ac2372f775a8703",
+     "ROW-a2d18843ccd214d7"
+    ],
+    "reviewed_rows": [
+     "ROW-1fdfed6394d1bd29",
+     "ROW-7f7abd3d720c7b6d",
+     "ROW-8ac2372f775a8703",
+     "ROW-a2d18843ccd214d7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "(14) Investment is on non-accrual status as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Non-accrual (1) 20.0 0.6 49.0 1.4"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Varinem German BidCo GMBH (3)(4) First-lien loan (EUR 12,696 par, due 7/2031 ) 7/11/2024 E + 5.50 % 7.57 % 13,699 15,097 (EUR 12,855 ) 0.9 %"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Bed Bath and Beyond Inc. (3)(15) ABL FILO term loan ($ 5,910 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.62 % 5,851 4,758 0.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Printed non-accrual marker of the filing: (14) = non-accrual as of December 31, 2025, carried by the company line (continuation lines inherit it); the summary table prints Non-accrual 20.0 (0.6 pct)",
+    "Marked lines (ASP Unifrax 223 + American Achievement 19,665 + 100 + 59) sum to 20.05M = the printed 20.0; the published set included Varinem and Bed Bath (footnotes (4)/(15), not (14)) = 63.1M",
+    "Same test on all 14 quarters: printed marked sum equals the summary table in every quarter; 21 rows differ from the filer's XBRL footnote link (2023-03-31, 2023-12-31, 2024-03-31 missing; 2025-12-31, 2026-03-31, 2026-06-30, 2023 Merative/equity rows over-flagged); all corrected from the page (nonaccrual_footnote)"
+   ],
+   "next_action": "Fixed in sandbox tszf by 21 nonaccrual_footnote row corrections; the finding closes only after a production batch rebuilds it (fix_record)."
+  },
+  {
+   "finding_id": "RVQ_REV_4723f5b210c4",
+   "coverage": {
+    "affected_rows": [
+     "FUNDQ:0001508655:2022-06-30:html_carry"
+    ],
+    "reviewed_rows": [
+     "FUNDQ:0001508655:2022-06-30:html_carry"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-013859",
+     "text": "Total Investments $ 2,511,333 $ 2,536,390 204.2 %"
+    }
+   ],
+   "conclusion": "insufficient_evidence",
+   "hypotheses_tested": [
+    "The 10-Q for 2022-06-30 (0000950170-22-013859) is not inline XBRL (0 ix facts); the fund has no published position rows before 2023-03-31 (published start of position-level tags), so html_carry tests the unpublished HTML lane (76 HTML rows, FV sum 2,467.7M against the printed total investments 2,536.4M, carry rate 0.36)",
+    "Option tested: publish the HTML-lane rows. Not done: the 2022 schedule would need the per-CIK HTML template reading and a row-by-row page check, which is beyond this run"
+   ],
+   "next_action": "Owner scope decision: extend published coverage to 2022-03-31/06-30 through the HTML template lane or record the fund as starting 2023-03-31.",
+   "missing_evidence": "A position-level reading of the 2022-06-30 and 2022-03-31 schedules (HTML template extraction with a printed-line check) and the 2022-03-31 10-Q, which is not in the cache (no_accession_resolved)."
+  },
+  {
+   "finding_id": "RVQ_REV_f21192c63e62",
+   "coverage": {
+    "affected_rows": [
+     "FUNDQ:0001508655:2022-03-31:html_carry"
+    ],
+    "reviewed_rows": [
+     "FUNDQ:0001508655:2022-03-31:html_carry"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001564590-22-017420",
+     "text": "Total Investments $ 2,366,030 $ 2,451,859 191.0 %"
+    }
+   ],
+   "conclusion": "insufficient_evidence",
+   "hypotheses_tested": [
+    "The 10-Q for 2022-03-31 (0001564590-22-017420, cached) is plain HTML: 0 inline XBRL facts, so no position-level tags; the fund has no published position rows before 2023-03-31",
+    "The HTML lane read 139 rows with FV sum 3,431.8M against the printed total investments 2,451.9M (carry rate 0.68, FAIL): it counts more rows than the schedule prints (comparative year-end table read with the current one), so it cannot be published as is",
+    "Option tested: publish the HTML-lane rows; rejected, the sum overshoots the filed total by 40 pct and no printed-line check exists for the template"
+   ],
+   "next_action": "Owner scope decision as for 2022-06-30: extend published coverage to 2022 through the HTML template lane (with a total tie-out) or record the fund as starting 2023-03-31.",
+   "missing_evidence": "A position-level reading of the 2022-03-31 schedule that ties to the printed total investments 2,451,859 (HTML template extraction with a printed-line check); the lane output overshoots by about 980M."
+  },
+  {
+   "finding_id": "RVQ_BLK_72f3632fb67c",
+   "coverage": {
+    "affected_rows": [
+     "FUNDQ:0001508655:2024-06-30:A01"
+    ],
+    "reviewed_rows": [
+     "FUNDQ:0001508655:2024-06-30:A01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-088524",
+     "text": "bswift, LLC (3)(5) First-lien loan ($ 44,134 par, due 11/2028 ) 11/7/2022 SOFR + 6.38 % 11.67 % 43,132 44,796 2.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Carried from the earlier fund-loop investigation (proposal A01): the rule compares a subtotal or leaf count with the comparative (prior year-end) schedule the filing prints after the current one; the published rows tie to the filed total in all 14 quarters (gate totals)",
+    "The finding stays with its check_repair request; the published rows were re-read in this run for names, rates, maturities and currency"
+   ],
+   "next_action": "Stays with the check-repair request already raised for A01 (orchestrator, owner approval); evidence only.",
+   "carried_from": "data/overrides/finding_dispositions_proposed/fund_0001508655.json"
+  },
+  {
+   "finding_id": "RVQ_REV_888248a71726",
+   "coverage": {
+    "affected_rows": [
+     "FUNDQ:0001508655:2023-09-30:B01"
+    ],
+    "reviewed_rows": [
+     "FUNDQ:0001508655:2023-09-30:B01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "Total Investments $ 3,085,378 $ 3,113,277 209.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Carried from the earlier fund-loop investigation (proposal B01): the rule compares a subtotal or leaf count with the comparative (prior year-end) schedule the filing prints after the current one; the published rows tie to the filed total in all 14 quarters (gate totals)",
+    "The finding stays with its check_repair request; the published rows were re-read in this run for names, rates, maturities and currency"
+   ],
+   "next_action": "Stays with the check-repair request already raised for B01 (orchestrator, owner approval); evidence only.",
+   "carried_from": "data/overrides/finding_dispositions_proposed/fund_0001508655.json"
+  },
+  {
+   "finding_id": "RVQ_REV_3049f7519633",
+   "coverage": {
+    "affected_rows": [
+     "FUNDQ:0001508655:2026-03-31:B01"
+    ],
+    "reviewed_rows": [
+     "FUNDQ:0001508655:2026-03-31:B01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Total Investments $ 3,324,332 $ 3,313,441 214.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Carried from the earlier fund-loop investigation (proposal B01): the rule compares a subtotal or leaf count with the comparative (prior year-end) schedule the filing prints after the current one; the published rows tie to the filed total in all 14 quarters (gate totals)",
+    "The finding stays with its check_repair request; the published rows were re-read in this run for names, rates, maturities and currency"
+   ],
+   "next_action": "Stays with the check-repair request already raised for B01 (orchestrator, owner approval); evidence only.",
+   "carried_from": "data/overrides/finding_dispositions_proposed/fund_0001508655.json"
+  },
+  {
+   "finding_id": "RVQ_REV_fb8ff5d3621a",
+   "coverage": {
+    "affected_rows": [
+     "ROW-0659ec0918a94043",
+     "ROW-fa9f25961b5072ad"
+    ],
+    "reviewed_rows": [
+     "ROW-0659ec0918a94043",
+     "ROW-fa9f25961b5072ad"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(9) Structured Credit ($ 4,400 par, due 7/2038 ) 8/19/2025 SOFR + 5.00 % 9.32 % 4,407 4,407 0.2 %"
+    },
+    {
+     "accession": "0001193125-26-048664",
+     "text": "Madison Park Funding Ltd, Series 2025-72A (3)(4)(9) Structured Credit ($ 4,500 par, due 7/2038 ) 8/18/2025 SOFR + 5.25 % 9.37 % 4,547 4,535 0.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The two rows are distinct positions (Series 2025-65A par 4,400 and 2025-72A par 4,500; own cost, fair value, spread, position_id) and both are published correctly; the check B02 is silent because their terms differ",
+    "What stays wrong: position_key is \"... madison park funding ltd series 2025\" on both rows (the key drops \"-65A\"/\"-72A\"); a wrapper marker_re change (series 20dd followed by -NNx) did not change the key (sandbox tszd identical), so the key is built elsewhere (shared code) and no row correction can set it",
+    "Searched the fund: the only repeated key among valued rows of the quarter is this pair"
+   ],
+   "next_action": "Fix needs the shared position_key builder (keep the series suffix); left for the orchestrator. Rows and position_id are correct."
+  },
+  {
+   "finding_id": "RVQ_REV_8dcf3c42e70a",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e7d59403093da0b2",
+     "ROW-f01ca94c3b742efa"
+    ],
+    "reviewed_rows": [
+     "ROW-e7d59403093da0b2",
+     "ROW-f01ca94c3b742efa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Madison Park Funding Ltd, Series 2025-65A (3)(4)(13) Structured Credit ($ 4,400 par, due 7/2038 ) 8/19/2025 SOFR + 5.00 % 8.67 % 4,408 4,219 0.3 %"
+    },
+    {
+     "accession": "0001193125-26-206313",
+     "text": "Madison Park Funding Ltd, Series 2025-72A (3)(4)(13) Structured Credit ($ 4,500 par, due 7/2038 ) 8/18/2025 SOFR + 5.25 % 8.92 % 4,550 4,359 0.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The two rows are distinct positions (Series 2025-65A par 4,400 and 2025-72A par 4,500; own cost, fair value, spread, position_id) and both are published correctly; the check B02 is silent because their terms differ",
+    "What stays wrong: position_key is \"... madison park funding ltd series 2025\" on both rows (the key drops \"-65A\"/\"-72A\"); a wrapper marker_re change (series 20dd followed by -NNx) did not change the key (sandbox tszd identical), so the key is built elsewhere (shared code) and no row correction can set it",
+    "Searched the fund: the only repeated key among valued rows of the quarter is this pair"
+   ],
+   "next_action": "Fix needs the shared position_key builder (keep the series suffix); left for the orchestrator. Rows and position_id are correct."
+  },
+  {
+   "finding_id": "RVQ_REV_c2f792c02734",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2764f1afd10e06f7"
+    ],
+    "reviewed_rows": [
+     "ROW-2764f1afd10e06f7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-018777",
+     "text": "First-lien revolving loan ($ 28 par, due 12/2027 ) 12/1/2021 P + 6.75 % 14.75 % ( 45 ) ( 56 ) 0.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Raised by my own correct fix: Tango Management Consulting revolver cost printed in parentheses (negative: \"( 45 )\" / \"( 56 )\") was published positive from a sign error in the filer tag; now published negative as printed",
+    "The accepted reason R-C107-negative-cost-undrawn (negative cost on undrawn revolvers) covers it, but its check values_as_filed compares with the XBRL fact, which has the wrong sign, so the by-check disposition fails; 2023-06-30 and 2024-03-31 (tagged negative) clear by that check"
+   ],
+   "next_action": "Raised as check_repair_request tslx-c107-values-as-filed-sign: the accepted-reason check should read the printed parentheses, not only the tag."
+  },
+  {
+   "finding_id": "RVQ_REV_537b87d920b2",
+   "coverage": {
+    "affected_rows": [
+     "ROW-78277c9a93970ea2"
+    ],
+    "reviewed_rows": [
+     "ROW-78277c9a93970ea2"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058321",
+     "text": "First-lien revolving loan ($ 9 par, due 12/2027 ) 12/1/2021 P + 6.85 % 15.25 % ( 56 ) ( 29 ) 0.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Raised by my own correct fix: Tango Management Consulting revolver cost printed in parentheses (negative: \"( 45 )\" / \"( 56 )\") was published positive from a sign error in the filer tag; now published negative as printed",
+    "The accepted reason R-C107-negative-cost-undrawn (negative cost on undrawn revolvers) covers it, but its check values_as_filed compares with the XBRL fact, which has the wrong sign, so the by-check disposition fails; 2023-06-30 and 2024-03-31 (tagged negative) clear by that check"
+   ],
+   "next_action": "Raised as check_repair_request tslx-c107-values-as-filed-sign: the accepted-reason check should read the printed parentheses, not only the tag."
+  }
+ ],
  "tests_run": [
-  "tests/test_fund_highlights_wrapper.py: 26 passed (2 new)",
-  "tests/test_source_encodings.py: 97 passed",
-  "tests/test_fourth_quarter_income.py, tests/test_income_ratio_duration.py, tests/test_fund_financials.py: 143 passed",
-  "both wrappers validated against their JSON schemas (scratch/fund_runs/0001508655/validate_wrappers.py)",
-  "tests/test_refactor_staging.py: 6 passed (3 new: switch on, false positive for a fund without the setting, live wrapper scope)",
-  "tests/test_source_encodings.py re-run after the schema change: 97 passed"
+  "none: no shared code changed; wrapper validated against schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json (0 errors)"
  ],
  "not_done": [
-  "Full pytest suite not run; tests of staging (bare_entity_rows path) not run beyond the builds.",
-  "Effect of companyfacts_ignore_accessions on other funds: off unless listed; not measured on the cohort (no other wrapper lists it).",
-  "Dash-fair-value rows other than Astra 2L (4 to 6 a quarter, warrants and a membership interest) not restored.",
-  "Non-accrual flags (parked); 2022 schedule (no tagged positions, HTML lane not published).",
-  "A01 gaps at 2023-09-30 (1.4M) and 2024-12-31 (6.0M) not traced to the row.",
-  "Tango revolver 2023-03-31 to 2023-09-30 (under 0.1M): sign of cost and stale spread/par not corrected.",
-  "Member text checked against the page for spread and rate on every loan (1,950 rows, about 60 unmatched); unit counts, maturities, PIK and industries only on samples.",
-  "Process: three stray 'python -' processes were started by mistake during the run (empty heredocs) and each killed by its PID (16520, 23376, 22868); nothing else was affected.",
-  "Galileo Parent revolver 2024-12-31 maturity (member truncated) not corrected: the build budget (six builds) is used.",
-  "InvestmentDueDate on duration contexts is not read by the position reader for any fund; not changed (this fund's text now carries the date)."
+  "B02 position_key (shared key builder)",
+  "2022-03-31 / 2022-06-30 positions (HTML lane)",
+  "pre-existing chain misjoins (PageUp, Erling, Kyriba, Dye & Durham, Sports Alliance)",
+  "ReliaQuest whole-PIK coupon (open convention D-092)",
+  "page sample of 20 rows (orchestrator)",
+  "no test suite run",
+  "rows printed with a dash for fair value were not re-read beyond class and name"
  ]
 }
