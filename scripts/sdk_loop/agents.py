@@ -142,7 +142,8 @@ class SdkRunner:
                  "SDK_LOOP_DRIVER_PID": str(os.getpid())},
         )
         result = None
-        started = time.time()
+        turns = duration_ms = 0          # a session can end in several result messages (e.g. after a
+        started = time.time()            # background task finishes); cost is cumulative, turns are not
         with open(spec.out_dir / ("%s_transcript.jsonl" % spec.role), "a", encoding="utf-8") as log:
             try:
                 async for msg in query(prompt=spec.task, options=options):
@@ -150,12 +151,14 @@ class SdkRunner:
                     log.flush()
                     if isinstance(msg, ResultMessage):
                         result = msg
+                        turns += msg.num_turns or 0
+                        duration_ms += msg.duration_ms or 0
             except Exception as exc:  # the SDK raises on CLI failure; the driver counts it as an error
                 log.write(json.dumps({"kind": "driver_error", "error": repr(exc)[:2000]}) + "\n")
                 return AgentResult(ok=False, exit="error", summary=repr(exc)[:500], duration_s=int(time.time() - started))
         if result is None:
             return AgentResult(ok=False, exit="no_result", duration_s=int(time.time() - started))
-        return AgentResult(ok=not result.is_error, cost_usd=result.total_cost_usd or 0.0, turns=result.num_turns,
-                           duration_s=round(result.duration_ms / 1000), exit=result.subtype,
+        return AgentResult(ok=not result.is_error, cost_usd=result.total_cost_usd or 0.0, turns=turns,
+                           duration_s=round(duration_ms / 1000), exit=result.subtype,
                            summary=(result.result or "")[:4000], structured=getattr(result, "structured_output", None),
                            usage=result.usage or {})
