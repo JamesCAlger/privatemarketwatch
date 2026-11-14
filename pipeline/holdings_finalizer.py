@@ -114,6 +114,13 @@ def write_final_identity(holdings: pd.DataFrame, matches: pd.DataFrame, *,
     return holdings, matches, metadata
 
 
+def _identity_input_fingerprint(holdings, inputs):
+    """Bind reviewed identity declarations even when prepared values are unchanged."""
+    from pipeline.programme.core import digest
+    from pipeline.reviewed_position_identity import scoped_declarations
+    return digest({**inputs, "reviewed_context_declarations": scoped_declarations(holdings)})
+
+
 def _finish_identity(working: Path, destination: Path, *, rebuild_entities: bool,
                      bdc_raw_df=None, use_registry=False, registry_path=None,
                      retirements_path=None):
@@ -190,7 +197,7 @@ def _finish_identity(working: Path, destination: Path, *, rebuild_entities: bool
             logging.getLogger(__name__).warning(
                 "Identity continuity is suspended: allocating fresh identities, prior registry not pinned")
         prior_registry=None
-    input_fingerprint=digest(dict(working_sha256=sha(working),
+    input_fingerprint=_identity_input_fingerprint(holdings, dict(working_sha256=sha(working),
         raw_matching_sha256=(digest(dict(columns=list(bdc_raw_df.columns),dtypes=[str(t) for t in bdc_raw_df.dtypes],
             values=hashlib.sha256(pd.util.hash_pandas_object(bdc_raw_df,index=True).values.tobytes()).hexdigest()))
             if bdc_raw_df is not None else sha(config.BDC_HOLDINGS_FILE) if config.BDC_HOLDINGS_FILE.is_file() else None),
@@ -199,7 +206,9 @@ def _finish_identity(working: Path, destination: Path, *, rebuild_entities: bool
         implementation={name:sha(Path(__file__).parent/name) for name in (
             'holdings_finalizer.py','financial_conventions.py','financial_context.py','monetary_fx.py',
             'financial_finalization.py','identity_finalization.py','durable_identity.py',
-            'matching_contract.py','position_matching.py','sector_enrichment.py')},
+            'matching_contract.py','position_matching.py','sector_enrichment.py',
+            'reviewed_position_identity.py','source_encodings.py','position_match_overrides.py',
+            'entity_resolution.py')},
         fx_reference_sha256=sha(Path(__file__).parents[1]/'scripts/programme_closeout/fx.py'),
         # Which companyfacts snapshots fed NAV/financials (pipeline.companyfacts_store).
         companyfacts_pin_sha256=read_json(working.parent/'financial_contract.json').get('companyfacts_pin_sha256')

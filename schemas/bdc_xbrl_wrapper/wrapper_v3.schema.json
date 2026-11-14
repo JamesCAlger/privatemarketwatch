@@ -790,6 +790,13 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*$"},
           "description": "Position contexts a filing leaves without an identifier member, each as 'ACCESSION CONTEXT => IDENTIFIER', the identifier written as the filer writes it in its other filings (NexPoint Capital, 10-Qs for 2025-06-30 and 2025-09-30: ten of the printed rows sit on industry, affiliation and type members only). A context that already names a position is never renamed. Evidence required: the printed row whose fair-value tag uses the context."
         },
+        "position_identity_contexts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*$"},
+          "description": "Reviewed position-level tranche identity for exact source contexts, each as 'ACCESSION CONTEXT => TRANCHE KEY'. Equal keys may link only unique rows in adjacent quarters and the same accounting scope. Different keys, or a reviewed key against an unreviewed row, cannot form a position chain or assigned match. No source label or published field is changed. Every affected tranche and quarter must be reviewed against the printed filing; use separate keys for different benchmarks, margins, facilities, instruments or refinancing where continuity is not evidenced. Duplicate same-quarter keys do not authorize a link. Off for every unlisted fund/context."
+        },
         "relabelled_contexts": {
           "type": "array",
           "minItems": 1,

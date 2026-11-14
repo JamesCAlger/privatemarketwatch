@@ -113,6 +113,7 @@ _OPAQUE_NUMERIC_ID_RE = re.compile(r"^\d{5,}\.\w{1,4}\.\w{2,4}$")
 
 # Trailing number/parenthetical: " 1", " 2", " (1)", " (2)"
 _TRAILING_NUMBER_RE = re.compile(r"\s+(?:\d+|\(\d+\))\s*$")
+_TRUST_SERIES_RE = re.compile(r"\btrust\s+(?:no\.?\s*|number\s+)([0-9]+)\b", re.IGNORECASE)
 
 # Garbage entity names: subtotal/category headers that leak into variant table
 _GARBAGE_ENTITY_NAMES_RE = re.compile(
@@ -168,6 +169,52 @@ def _numeric_suffix_guard(name_a: str, name_b: str, threshold: int) -> int:
     if stripped_a == stripped_b and name_a != name_b:
         return max(threshold, _NUMERIC_SUFFIX_THRESHOLD)
     return threshold
+
+
+def _trust_series_metadata(variants):
+    """Parse explicit trust series once, with a vectorized SQL scan."""
+    with duckdb.connect() as con:
+        con.register("variants", variants[["normalized_name"]])
+        return con.execute(r"""WITH names AS (SELECT DISTINCT normalized_name FROM variants),
+            parsed AS (SELECT normalized_name,
+                regexp_extract(normalized_name, '(?i)\btrust\s+(?:no\.?\s*|number\s+)([0-9]+)\b', 1) AS series
+                FROM names)
+            SELECT normalized_name, coalesce(CAST(TRY_CAST(series AS BIGINT) AS VARCHAR),series) AS series
+            FROM parsed WHERE series<>''""").fetchdf()
+
+
+class _TrustSeriesUnionFind(UnionFind):
+    """Automatic similarity/IDs cannot merge conflicting known trust series.
+
+    Sparse component metadata also prevents an unnumbered name from bridging
+    numbered trusts. Explicit owner-authored merge overrides use plain UF.
+    """
+    def __init__(self, variants, metadata=None):
+        super().__init__()
+        metadata = _trust_series_metadata(variants) if metadata is None else metadata
+        self._series = {}
+        if not metadata.empty:
+            with duckdb.connect() as con:
+                con.register("variants", variants[["entity_num", "normalized_name"]])
+                con.register("metadata", metadata)
+                rows = con.execute("""SELECT entity_num, list(DISTINCT series)
+                    FROM variants JOIN metadata USING(normalized_name) GROUP BY entity_num""").fetchall()
+            # Only sparse explicitly numbered trust entities enter Python.
+            self._series = {number: set(series) for number, series in rows}
+            if any(len(series) > 1 for series in self._series.values()):
+                raise ValueError("An input entity contains conflicting explicit trust series")
+
+    def union(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+        series = self._series.get(root_a, set()) | self._series.get(root_b, set())
+        if len(series) > 1:
+            return False
+        super().union(a, b)
+        self._series.pop(root_a, None)
+        self._series.pop(root_b, None)
+        if series:
+            self._series[self.find(a)] = series
+        return True
 
 
 def extract_company_name(issuer_name: str, source: str = "bdc") -> str:
@@ -293,6 +340,9 @@ def _extract_bdc_name(name: str) -> str:
 
 def _strip_trailing_number(name: str) -> str:
     """Strip trailing ` 1`, ` 2`, ` (1)` etc. from extracted names."""
+    series = _TRUST_SERIES_RE.search(name) if "trust" in name.lower() else None
+    if series and series.end() == len(name.rstrip()):
+        return name.strip()
     return _TRAILING_NUMBER_RE.sub("", name).strip()
 
 
@@ -335,6 +385,9 @@ def normalise_entity_name(name: str) -> str:
         return ""
 
     n = name.lower().strip()
+    # Normalize spelling only for an explicit numbered trust, once per variant.
+    if "trust" in n:
+        n = _TRUST_SERIES_RE.sub(lambda m: "trust no" + str(int(m.group(1))), n)
     # Remove parenthetical content
     n = _PARENTHETICAL_RE.sub("", n)
     # Strip legal suffixes (iterate in order, longest first handled by list)
@@ -575,6 +628,7 @@ def _fuzzy_cluster(
     variants: pd.DataFrame,
     threshold: int = 85,
     max_block_size: int = 500,
+    trust_series_metadata=None,
 ) -> pd.DataFrame:
     """Merge entities with similar normalised names using fuzzy matching.
 
@@ -603,7 +657,7 @@ def _fuzzy_cluster(
     if len(entity_df) <= 1:
         return variants
 
-    uf = UnionFind()
+    uf = _TrustSeriesUnionFind(variants, trust_series_metadata)
     total_comparisons = 0
     total_merges = 0
     numeric_blocked = 0
@@ -628,8 +682,7 @@ def _fuzzy_cluster(
                 total_comparisons += 1
                 score = fuzz.token_sort_ratio(names[a], names[b])
                 effective = _numeric_suffix_guard(names[a], names[b], threshold)
-                if score >= effective and compatible_names(names[a], names[b]):
-                    uf.union(a, b)
+                if score >= effective and compatible_names(names[a], names[b]) and uf.union(a, b):
                     total_merges += 1
                 elif effective > threshold:
                     numeric_blocked += 1
@@ -673,8 +726,7 @@ def _fuzzy_cluster(
                     total_comparisons += 1
                     score = fuzz.token_sort_ratio(names[a], names[b])
                     effective = _numeric_suffix_guard(names[a], names[b], pass2_threshold)
-                    if score >= effective and compatible_names(names[a], names[b]):
-                        uf.union(a, b)
+                    if score >= effective and compatible_names(names[a], names[b]) and uf.union(a, b):
                         total_merges += 1
                     elif effective > pass2_threshold:
                         numeric_blocked += 1
@@ -727,6 +779,7 @@ def _cross_source_link(
     variants: pd.DataFrame,
     threshold: int = 80,
     max_block_size: int = 500,
+    trust_series_metadata=None,
 ) -> pd.DataFrame:
     """Link entities across BDC and N-PORT sources.
 
@@ -754,7 +807,7 @@ def _cross_source_link(
     if bdc_only.empty or nport_only.empty:
         return variants
 
-    uf = UnionFind()
+    uf = _TrustSeriesUnionFind(variants, trust_series_metadata)
     merges = 0
 
     entity_names = dict(zip(entity_df["entity_num"], entity_df["normalized_name"]))
@@ -771,12 +824,12 @@ def _cross_source_link(
 
     for _, row in bdc_only.iterrows():
         if (pd.notna(row["cusip"]) and row["cusip"] and row["cusip"] in cusip_to_nport
-                and compatible_names(row["normalized_name"], entity_names[cusip_to_nport[row["cusip"]]])):
-            uf.union(row["entity_num"], cusip_to_nport[row["cusip"]])
+                and compatible_names(row["normalized_name"], entity_names[cusip_to_nport[row["cusip"]]])
+                and uf.union(row["entity_num"], cusip_to_nport[row["cusip"]])):
             merges += 1
         if (pd.notna(row["lei"]) and row["lei"] and row["lei"] in lei_to_nport
-                and compatible_names(row["normalized_name"], entity_names[lei_to_nport[row["lei"]]])):
-            uf.union(row["entity_num"], lei_to_nport[row["lei"]])
+                and compatible_names(row["normalized_name"], entity_names[lei_to_nport[row["lei"]]])
+                and uf.union(row["entity_num"], lei_to_nport[row["lei"]])):
             merges += 1
 
     # Phase 2: Fuzzy name matching (blocked by first 4 chars)
@@ -804,8 +857,8 @@ def _cross_source_link(
             score = fuzz.token_sort_ratio(
                 bdc_row["normalized_name"], nport_name
             )
-            if score >= threshold and compatible_names(bdc_row["normalized_name"], nport_name):
-                uf.union(bdc_row["entity_num"], nport_num)
+            if (score >= threshold and compatible_names(bdc_row["normalized_name"], nport_name)
+                    and uf.union(bdc_row["entity_num"], nport_num)):
                 merges += 1
 
     if merges == 0:
@@ -1128,7 +1181,8 @@ def build_entity_lookup(
     logger.info("")
     logger.info("Step 4: Fuzzy clustering (threshold=%d)...", fuzzy_threshold)
     t3 = time.time()
-    variants = _fuzzy_cluster(variants, threshold=fuzzy_threshold)
+    trust_series_metadata = _trust_series_metadata(variants)
+    variants = _fuzzy_cluster(variants, threshold=fuzzy_threshold, trust_series_metadata=trust_series_metadata)
     entity_count_fuzzy = variants["entity_num"].nunique()
     logger.info(
         "  %d entities after fuzzy merge (%d merged) in %.1f s",
@@ -1141,7 +1195,7 @@ def build_entity_lookup(
     logger.info("")
     logger.info("Step 5: Cross-source linking (threshold=%d)...", cross_source_threshold)
     t4 = time.time()
-    variants = _cross_source_link(variants, threshold=cross_source_threshold)
+    variants = _cross_source_link(variants, threshold=cross_source_threshold, trust_series_metadata=trust_series_metadata)
     entity_count_xsource = variants["entity_num"].nunique()
     logger.info(
         "  %d entities after cross-source linking (%d merged) in %.1f s",
