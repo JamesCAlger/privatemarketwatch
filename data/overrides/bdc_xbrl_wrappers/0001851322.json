@@ -271,6 +271,10 @@
       "F=FEDFUNDS",
       "C=CORRA",
       "SA=SONIA"
+    ],
+    "position_identity_contexts": [
+      "0001193125-26-342549 C_fd79b0c0-a930-4db1-a1fa-b951b8ba7b43 => pound-bidco-2029-term",
+      "0001193125-26-342549 C_46da34e2-aba5-4a5b-b4af-1edc4c1b7f1c => pound-bidco-2029-undrawn"
     ]
   }
 }

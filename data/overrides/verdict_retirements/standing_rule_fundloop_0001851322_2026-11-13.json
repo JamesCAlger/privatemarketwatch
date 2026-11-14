@@ -1,0 +1,245 @@
+{
+ "_note": "North Haven Private Income Fund retirements (nhz run, 2026-11-13) under the owner standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1851322-01",
+   "review_id": "RVQ_REV_478e4ae0008b",
+   "verdict_sha256": "a52ef4d13c41667418783f2d1338827afaa5158ef00ea5d029434e09a10f680e",
+   "cik": "0001851322",
+   "engine": "row_validation",
+   "rule_name": "C206",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found the issuer_name of four rows (Any Hour, Familia, Fetch, KWOR) carrying sector, investment type, PIK terms, rate and maturity. In sandbox nhzf each cited row is published with the issuer equal to the first printed cell, and so is every published row of the quarter (quarter: 687 published rows read, 0 differ from the printed company cell). ",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Any Hour, LLC -> published 'Any Hour, LLC' equal; Familia Intermediate -> published 'Familia Intermediate Holdings I Corp. (Teasdale Latin Foods)' equal; Fetch Insurance Services, LLC -> published 'Fetch Insurance Services, LLC' equal; KWOR Acquisition, Inc\\. -> published 'KWOR Acquisition, Inc.' equal; quarter: 687 published rows read, 0 differ from the printed company cell"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) (6) (14) Other Debt 16.25 % PIK 16.25 % 06/18/2028 500 352 - 0.00",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Fetch Insurance Services, LLC (6) (10) Other Debt 12.75 % (incl. 3.75 % PIK) 12.75 % 10/31/2027 3,223 3,184 3,223 0.10",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "KWOR Acquisition, Inc. (6) (19) Other Debt S + 8.00 % PIK 12.20 % 02/28/2030 4,897 4,897 4,897 0.14",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001851322/retire_check.py (read-only; sandbox nhzf; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/retire_check.py nhzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-nhpi-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1851322-02",
+   "review_id": "RVQ_REV_66d716470596",
+   "verdict_sha256": "fe7bc57ea7099b84cc8325c4b5b5a5c77e3233a0368ff6d82657f641f419580f",
+   "cik": "0001851322",
+   "engine": "row_validation",
+   "rule_name": "FX01",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found non-USD par (Hercules C$ 2,993, Excelitas EUR 5,560) without a USD principal. In sandbox nhzf every published debt row of the quarter whose line prints a non-USD marker or index carries that currency, a USD amount equal to par x the FRED H.10 rate of 2025-12-31 and status reference_fx (row corrections of the Excelitas and Optimizely rows that the filer's unit tag had left as USD).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "646 published debt rows read; 5 with a non-USD printed marker or index; mismatches: none"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Hercules Borrower, LLC (6) (11) First Lien Debt C + 4.75 % 7.01 % 12/15/2028 C$ 2,993 2,083 2,161 0.06",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Excelitas Technologies Corp. (6) (11) First Lien Debt E + 5.25 % 7.15 % 08/13/2029 EUR 5,560 5,687 6,497 0.19",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001851322/retire_check.py (read-only; sandbox nhzf; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/retire_check.py nhzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-nhpi-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1851322-03",
+   "review_id": "RVQ_REV_d18a99586446",
+   "verdict_sha256": "d2278d61376befa5df1f3f5ea74570946590c51e55a24f3b8318c8738caad4f3",
+   "cik": "0001851322",
+   "engine": "row_validation",
+   "rule_name": "FX02",
+   "report_date": "2024-09-30",
+   "reason": "Standing rule D-252: The verdict found fair_value_currency published as CAD while the fair value column is dollars. In sandbox nhzf all 592 published rows of the quarter carry fair_value_currency USD; the filing states that par is in dollars unless a currency is marked, and the CAD rows (FLS Holding, Ground Penetrating Radar) print no currency marker, a USD-sized cost and a SOFR or Prime index, so their par is USD as well (row corrections set principal_amount_currency USD).",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "592 published rows; 0 with a fair_value_currency other than USD"
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-24-000148",
+     "quote": "Par amount is denominated in U.S. Dollars",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001851322/retire_check.py (read-only; sandbox nhzf; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/retire_check.py nhzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-nhpi-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1851322-04",
+   "review_id": "RVQ_BLK_0e5ab7765aeb",
+   "verdict_sha256": "012f6f89bfca41b47272f6516a18ac601fcffeea6fc32b1ba920823aa2645172",
+   "cik": "0001851322",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict found the extracted income at 647.5M against the schedule total 657.565M (two Other income lines missing). In sandbox nhzf the fund income table's twelve-month 2025 row stores total_investment_income 164,391,250, which is 657,565,000 / 4 as the table is built, equal to the printed total; the 12 months printed are 657,565 thousand, so the extracted total is not short. The remaining gap of the identity against net investment income (16,500 thousand in the fourth quarter) is the waivers and expense support the filing prints (40,260 for the year less 23,760 in the first three quarters), not missing income.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "bdc_fund_income 2025q4 total_investment_income x 4 = 657565000 against printed 657,565,000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088367",
+     "quote": "Total investment income 657,565 552,328",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001851322/retire_check.py (read-only; sandbox nhzf; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/retire_check.py nhzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-nhpi-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1851322-05",
+   "review_id": "RVQ_REV_4686b85afb16",
+   "verdict_sha256": "ee0d4e68eda78189a499921fef476fed9b5636424d0b748aa41ca2ae0d7916b9",
+   "cik": "0001851322",
+   "engine": "nonaccrual",
+   "rule_name": "nonaccrual_flag",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict confirmed that the nine flagged debt rows have amortized cost of 121,125 thousand, the filing's non-accrual aggregate. In sandbox nhzf the published non-accrual rows of 2025-12-31 are exactly the nine cited printed rows (each carries the legend footnote 'Investment was on non-accrual status as of December 31, 2025') and their cost sums to 121,125,000. The verdict names no error in the published flags.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "published non-accrual rows 9, cost 121125000 against printed 121,125,000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Investment was on non-accrual status as of December 31, 2025",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "Continental Battery Company (6) (7) (8) (10) (13) (14) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 5,480 0.16",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "48Forty Solutions, LLC (6) (8) (14) First Lien Debt S + 6.00 % 10.48 % 11/30/2029 47,378 46,014 19,425 0.57",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-096532",
+     "quote": "48Forty Solutions, LLC (6) (14) (18) First Lien Debt S + 6.00 % 10.48 % 11/30/2029 5,684 5,380 1,484 0.04",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001851322/retire_check.py (read-only; sandbox nhzf; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/retire_check.py nhzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-nhpi-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1851322-06",
+   "review_id": "RVQ_REV_8faac2c1740e",
+   "verdict_sha256": "11837a1431df282373352f32bc6b93c87e9e3275335e8aa32749732b0e5e3323",
+   "cik": "0001851322",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "report_date": "2024-12-31",
+   "reason": "Standing rule D-252: The verdict found the negative marks of Helios Service Partners (-1) and Tidi Legacy Products (-4) correct as filed in the unfunded-commitments table and asked for an unfunded-commitment classification of the holding rows; it names no wrong value and the holdings schema has no such column. In sandbox nhzf the two cited schedule rows are published at the printed values (fair value -1,000 and -4,000, cost -59,000 and -35,000), equal to the printed lines and to the commitments-table marks. The flagged rows of the rule (Pound Bidco, Zarya Intermediate) are covered by proposal PD-C103-1851322-11.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Helios Service Partners published fair value -1000 cost -59000 against printed -1000 and -59000; Tidi Legacy Products published fair value -4000 cost -35000 against printed -4000 and -35000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "quote": "Helios Service Partners, LLC (6) (10) (19) First Lien Debt S + 5.00 % 9.59 % 03/19/2027 - ( 59 ) ( 1 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "quote": "Tidi Legacy Products, Inc. (6) (10) (19) First Lien Debt S + 5.25 % 9.61 % 12/19/2029 - ( 35 ) ( 4 ) -",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001851322-25-000023",
+     "quote": "Helios Service Partners, LLC Revolver 03/19/2027 $ 4,053 $ ( 1 )",
+     "verbatim": true
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001851322/retire_check.py (read-only; sandbox nhzf; each check also run on a planted wrong value and fails)"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/retire_check.py nhzf",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-nhpi-20261114 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

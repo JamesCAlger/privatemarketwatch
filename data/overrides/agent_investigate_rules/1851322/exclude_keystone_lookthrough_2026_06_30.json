@@ -1,0 +1,38 @@
+{
+  "cik": "1851322",
+  "rule_id": "exclude_keystone_lookthrough_2026_06_30",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-06-30' AND ((bdc_dimensions_raw LIKE '%Debt Investments%' AND bdc_dimensions_raw NOT LIKE '%Interest Rate%' AND bdc_dimensions_raw NOT LIKE '%Sweep Midco, LLC%') OR bdc_dimensions_raw LIKE '%Equity Investments Financial Services GTCR ABC Holdings, LLC Investment%')",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0001193125-26-342549",
+      "quote": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+      "source": "filing",
+      "accession": "0001193125-26-342549",
+      "quote": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+      "source": "query",
+      "quote": "For 2026-06-30 the 140 selected rows (138 debt rows without an Interest Rate segment and 2 GTCR ABC Holdings equity rows of the joint venture) sum to fair value $337,321,000 and cost $339,769,000, the JV schedule's total; the published quarter total before the rule is $6,317,953,000 = 5,980,632,000 + 337,321,000. Document position check: all 140 contexts lie in the NH Keystone note schedule, none of the 678 other rows does."
+    }
+  ],
+  "rationale": "Same defect as the 2025-12-31 and 2026-03-31 quarters (exclude_keystone_lookthrough): the extractor merged the positions of the separately presented North Haven Keystone, LLC schedule (cost 339,769 / fair value 337,321 thousand, percentages of the joint venture's net assets such as 11.75) into consolidated holdings, which already carry the fund's equity investment in North Haven Keystone (85,276 thousand at 2025-12-31). Counting the vehicle's underlying positions again overstates investments by exactly the JV total. The two Sweep Midco second lien rows also lack an Interest Rate segment but are consolidated-schedule rows and are retained. The JV's GTCR ABC Holdings equity rows are told apart from the fund's own by the 'Financial Services' industry segment (the fund's rows read 'Interactive Financial Services').",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-06-30": {
+      "rows": 140,
+      "fv": 337321000.0,
+      "residual_before": 337321000.0,
+      "residual_after": 0.0
+    }
+  }
+}

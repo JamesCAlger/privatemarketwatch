@@ -1,299 +1,284 @@
 {
  "cik": "0001851322",
- "label": "nhxb",
- "before": "f15a",
- "shared_code": true,
+ "label": "nhzf",
+ "before": "rg2",
+ "investigator_id": "agent:fund-nhpi-20261114",
+ "shared_code": false,
  "declared_changes": [
   {
-   "column": "basis_spread",
-   "rows": 29,
-   "why": "margin printed on the row and not tagged as a spread: 24 loans (Applitools, Sweep Purchaser, Abracon, Magneto, Atlas, BP Purchaser, KWOR other debt, Continental Battery) and 2 KWOR Intermediate preferred rows set from the page; RSK and Revalize preferred at 2023-06-30 moved from the rate to the spread; Fetch 2023-06-30 spread withdrawn (it is a fixed coupon)"
+   "column": "issuer_name",
+   "rows": 23,
+   "why": "issuer names set to the printed company (row corrections; 30 rows over all quarters, 23 of them in quarters rg2 has)"
   },
   {
-   "column": "coupon_type",
-   "rows": 29,
-   "why": "the same 29 rows: Floating where the page prints 'S + x %', Fixed for Fetch 2023-06-30"
+   "column": "principal_amount_currency",
+   "rows": 27,
+   "why": "par currency from the printed marker / index"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 25,
+   "why": "par x FRED H.10 rate of the report date"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 27,
+   "why": "H.10 rate"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 27,
+   "why": "reference_fx / source_usd"
+  },
+  {
+   "column": "asset_category",
+   "rows": 14,
+   "why": "preferred / common class from the printed instrument"
+  },
+  {
+   "column": "index_classification",
+   "rows": 14,
+   "why": "same"
+  },
+  {
+   "column": "lien_position",
+   "rows": 16,
+   "why": "lien from the printed line"
   },
   {
    "column": "interest_rate",
-   "rows": 10,
-   "why": "rate printed and not tagged, 7 rows (Applitools 2023-03-31 x2, Ascend Learning 2024-09-30, Astra 2025-06-30 x2, Continental Battery and Familia 2025-06-30); Fetch 2023-06-30 coupon moved from the spread; RSK and Revalize 2023-06-30 rate withdrawn (it is a margin)"
+   "rows": 7,
+   "why": "preferred fixed rates printed, not published"
   },
   {
    "column": "interest_rate_reported",
-   "rows": 10,
-   "why": "follows interest_rate on the same 10 rows"
+   "rows": 7,
+   "why": "follows interest_rate"
   },
   {
    "column": "interest_rate_kind",
-   "rows": 10,
-   "why": "follows interest_rate on the same 10 rows (unresolved to all_in, or back)"
+   "rows": 7,
+   "why": "all_in for those rates"
   },
   {
-   "column": "interest_rate_cash",
-   "rows": 10,
-   "why": "derived cash leg of the same 10 rows"
-  },
-  {
-   "column": "pik_rate",
-   "rows": 5,
-   "why": "PIK printed and not tagged: Any Hour 2024-06-30, Familia 2024-12-31, Sweep Purchaser 2024-06-30 and 2024-09-30, Atlas Purchaser 2025-03-31"
+   "column": "basis_spread",
+   "rows": 4,
+   "why": "RSK and Revalize 10.5 / 10.0 (2025-09-30), Firebird 5.0, Any Hour and Heartland withdrawn"
   },
   {
    "column": "reference_rate_type",
    "rows": 1,
-   "why": "Fetch 2023-06-30: a fixed coupon, the LIBOR guessed from the date is withdrawn"
+   "why": "Any Hour index withdrawn"
   },
   {
    "column": "reference_rate_source",
    "rows": 1,
-   "why": "Fetch 2023-06-30, with the reference rate"
+   "why": "same"
   },
   {
-   "column": "asset_category",
-   "rows": 2,
-   "why": "KWOR Intermediate I preferred equity at 2025-03-31 and 2025-06-30 was published as common"
+   "column": "coupon_type",
+   "rows": 10,
+   "why": "Fixed / Floating from the printed line"
   },
   {
-   "column": "index_classification",
-   "rows": 2,
-   "why": "the same two KWOR Intermediate I rows"
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "FMG Suite preferred 8.00 % PIK"
   },
   {
-   "column": "issuer_name",
+   "column": "maturity_date",
    "rows": 2,
-   "why": "two Spectrum Automotive rows at 2025-09-30 whose member names no instrument type had the whole member as issuer"
+   "why": "FORTIS 2024-09-30 and Inszone 2024-12-31 maturities"
   },
   {
-   "column": "instrument_description",
+   "column": "maturity_precision",
    "rows": 2,
-   "why": "the same two Spectrum Automotive rows"
+   "why": "day"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 2,
+   "why": "dated"
+  },
+  {
+   "column": "shares_held",
+   "rows": 2,
+   "why": "LUV Car Wash 1,383 (mine); KWOR Intermediate 2,978,848 -> 2,785 is external code (present in baseline nhza)"
   },
   {
    "column": "corrected_fields",
-   "rows": 41,
-   "why": "the audit column of the 41 corrected rows"
+   "rows": 90,
+   "why": "audit column of the corrections"
   },
   {
    "column": "position_id",
-   "rows": 16,
-   "why": "not aimed at, a consequence of matching: the two Spectrum rows now join the issuer's chain (3 rows change id); the Sweep Purchaser rows whose spread was added re-link (13 rows: the 2023 rows now chain to the 2024-2025 'Sweep Purchaser, LLC 1' rows). No value changes on these rows other than the declared ones"
+   "rows": 503,
+   "why": "chain ids follow corrected names, lien, class; plus external identity code (476 of them already in nhza)"
+  },
+  {
+   "column": "fair_value",
+   "rows": 3,
+   "why": "EXTERNAL: 0.0 -> -0.0 sign of zero (already in nhza)"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 3,
+   "why": "EXTERNAL: -0.0 (already in nhza)"
+  },
+  {
+   "column": "src_facts",
+   "rows": 3,
+   "why": "EXTERNAL (already in nhza)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 1,
+   "why": "EXTERNAL (already in nhza)"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 1,
+   "why": "EXTERNAL (already in nhza)"
   }
  ],
- "rows_added": 0,
+ "rows_added": 678,
  "rows_removed": 0,
  "fixes": [
   {
-   "what": "X02 2025-06-30 (2 of 4 flagged rows): Continental Battery and Familia print a rate the filer did not tag; rate and margin set from the page. X02 stays outstanding in all 8 quarters for the Sweep Midco lines, which print no rate (proposal).",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001851322-25-000070",
-     "text": "Continental Battery Company (6) (7) (8) (14) First Lien Debt S + 7.00 % PIK 11.29% 7/20/2028 12,945 11,731 4,249 0.12"
-    },
-    {
-     "accession": "0001851322-25-000070",
-     "text": "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) (6) (14) Other Debt 16.25 % PIK 6/18/2028 500 328 28 -"
-    }
-   ]
-  },
-  {
-   "what": "C206 2025-09-30 cleared: two Spectrum Automotive rows whose member has no instrument type get the issuer name and the printed instrument.",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-25-274423",
-     "text": "Spectrum Automotive Holdings Corp. (6) (11) (18) First Lien Debt S + 5.25 % 9.41 % 06/29/2028 3,225 3,181 3,225 0.09"
-    },
-    {
-     "accession": "0001193125-25-274423",
-     "text": "Spectrum Automotive Holdings Corp. (6) (11) (18) First Lien Debt S + 5.25 % 9.41 % 06/29/2027 - ( 2 ) - -"
-    }
-   ]
-  },
-  {
-   "what": "No rule flagged these. Margin printed as 'S + x % PIK' or 'S + x % (incl. y % PIK)' and tagged with the PIK concept only: spread set and coupon Floating on 23 loan rows (they were published Fixed with no spread).",
+   "what": "30 issuer names set to the printed company cell (members naming another company, industry/instrument text, typos)",
    "kind": "row_correction",
    "quarters": [
     "2023-06-30",
-    "2023-09-30",
     "2023-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Appfire Technologies, LLC (6) (9) (10) First Lien Debt S + 4.75 % 8.45 % 03/09/2028 13,481 13,457 13,481 0.42"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "DCA Buyer, LLC (6) (8) (19) First Lien Debt S + 6.50 % (incl. 2.25 % PIK) 10.25 % 06/02/2031 32,679 32,637 32,637 1.06"
+    }
+   ]
+  },
+  {
+   "what": "par currency of 27 rows from the printed marker or index, USD amount at the FRED H.10 rate of the report date (rate, status), 19 Excelitas/Optimizely/Surewerx/Hercules/Victors rows to the foreign currency and 8 FLS/GPR/HSI/Tempo rows to USD",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
     "2024-03-31",
     "2024-06-30",
     "2024-09-30",
     "2024-12-31",
     "2025-03-31",
-    "2025-06-30"
+    "2025-06-30",
+    "2025-12-31"
    ],
    "quotes": [
     {
-     "accession": "0001851322-23-000070",
-     "text": "Applitools, Inc. (5) (8) (10) S + 6.25 % PIK 11.35 % PIK 5/25/2029 10,925 10,751 10,457 0.64"
-    },
-    {
-     "accession": "0001851322-23-000097",
-     "text": "Applitools, Inc. (5) (9) (11) S + 6.25 % PIK 11.35 % 05/25/2029 11,246 11,077 10,912 0.57"
+     "accession": "0001193125-26-096532",
+     "text": "Optimizely North America, Inc. (6) (11) (15) First Lien Debt SA + 5.50 % 9.22 % 10/30/2031 GBP 2,204 2,843 2,906 0.09"
     },
     {
      "accession": "0001851322-25-000023",
-     "text": "Abracon Group Holdings, LLC (6) (7) (8) (11) First Lien Debt S + 6.60 % (incl. 4.60 % PIK) 11.30 % 07/06/2028 28,077 27,329 20,825 0.64"
-    },
-    {
-     "accession": "0001851322-25-000023",
-     "text": "Magneto Components Buyco, LLC (6) (7) (8) (9) (11) First Lien Debt S + 6.00 % (incl. 1.50 % PIK) 10.33 % 12/05/2030 48,174 47,401 47,846 1.46"
-    },
-    {
-     "accession": "0001851322-25-000023",
-     "text": "Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S + 5.75 % PIK 10.24 % 06/30/2027 3,986 3,986 3,986 0.12"
-    },
-    {
-     "accession": "0001851322-25-000044",
-     "text": "BP Purchaser, LLC (6) (7) (8) (11) First Lien Debt S + 5.50 % PIK 10.06 % 12/11/2028 34,285 32,916 30,191 0.89"
-    },
-    {
-     "accession": "0001851322-25-000044",
-     "text": "KWOR Acquisition, Inc. (6) (10) (20) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 4,468 4,468 4,468 0.1"
-    },
-    {
-     "accession": "0001851322-25-000044",
-     "text": "Atlas Purchaser, Inc. (6) (7) First Lien Debt S + 7.50% (incl. 6.50% PIK) 11.94 % 5/5/2028 2,524 1,674 1,287 0.04"
-    },
-    {
-     "accession": "0001851322-25-000070",
-     "text": "KWOR Acquisition, Inc. (6) (10) (20) Other Debt S + 8.00 % PIK 12.30 % 2/28/2030 4,604 4,604 4,604 0.13"
+     "text": "Victors Purchaser, LLC (6) (12) (19) First Lien Debt S + 4.75 % 9.08 % 08/15/2031 C$ 322 217 224 0.01"
     }
    ]
   },
   {
-   "what": "No rule flagged these. Rate printed and not tagged, set from the page: Applitools 2023-03-31 (2 rows, tagged as PIK only), Ascend Learning 2024-09-30, Astra Acquisition 2025-06-30 (2 rows). Fetch Insurance 2023-06-30: a fixed 12.75 coupon tagged as a spread and published as floating over LIBOR, now a fixed rate.",
+   "what": "16 rows of preferred equity published as common (and 2 the other way: LUV Car Wash, FMG Suite) corrected in asset_category and index_classification",
    "kind": "row_correction",
    "quarters": [
-    "2023-03-31",
-    "2023-06-30",
+    "2024-03-31",
+    "2024-06-30",
     "2024-09-30",
-    "2025-06-30"
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001851322-23-000045",
-     "text": "Applitools, Inc. (5) (8) (10) S + 6.25 % PIK 11.06 % PIK 05/25/2029 10,621 10,442 10,100 0.72"
-    },
-    {
-     "accession": "0001851322-24-000148",
-     "text": "Ascend Learning, LLC (12) First Lien Debt S + 3.50 % 8.44% 12/11/2028 4,869 4,862 4,844 0.15"
-    },
-    {
-     "accession": "0001851322-25-000070",
-     "text": "Astra Acquisition Corp. (14) First Lien Debt S + 5.25 % 9.55% 2/25/2028 844 759 206 0.01"
-    },
-    {
-     "accession": "0001851322-23-000070",
-     "text": "Fetch Insurance Services, LLC (5) 12.75 % (incl. 3.75 % PIK) 10/31/2027 2,513 $ 2,447 $ 2,438 0.15 %"
+     "accession": "0001851322-24-000115",
+     "text": "Vardiman Black Holdings, LLC (6) (14) Preferred Equity 6.00 % PIK 3/29/2024 5,298,893 3,456 3,375 0.11"
     }
    ]
   },
   {
-   "what": "No rule flagged these. PIK printed and not tagged, set from the page (5 rows).",
+   "what": "17 lien_position values where the line prints First / Second Lien (incl. Sweep Midco 2026-03-31 First -> Second)",
    "kind": "row_correction",
    "quarters": [
     "2024-06-30",
     "2024-09-30",
     "2024-12-31",
-    "2025-03-31"
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001851322-24-000115",
-     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 5/23/2031 2,982 2,924 2,924 0.10"
-    },
-    {
-     "accession": "0001851322-24-000115",
-     "text": "Sweep Purchaser, LLC (6) (9) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 1,850 1,850 1,850 0.06"
-    },
-    {
-     "accession": "0001851322-24-000148",
-     "text": "Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S + 5.75 % PIK 10.80 % 6/30/2027 3,892 3,892 3,892 0.12"
-    },
-    {
-     "accession": "0001851322-25-000023",
-     "text": "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) (6) (17) Other Debt 16.25 % PIK 16.25 % 06/18/2026 500 277 295 0.01"
+     "accession": "0001193125-26-221623",
+     "text": "Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02"
     }
    ]
   },
   {
-   "what": "No rule flagged these. Preferred equity: RSK and Revalize at 2023-06-30 had their floating margin published as a fixed rate (it is the spread in every other quarter); KWOR Intermediate I preferred at 2025-03-31 and 2025-06-30 was published as common equity with no margin.",
+   "what": "preferred rates (7 fixed-rate lines, 4 S + lines), PIK 8.00 (FMG), Any Hour and Heartland fixed coupons with the index withdrawn, Firebird spread, FORTIS and Inszone maturities, LUV units, Optimizely non-accrual footnote",
    "kind": "row_correction",
    "quarters": [
-    "2023-06-30",
-    "2025-03-31",
-    "2025-06-30"
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001851322-23-000070",
-     "text": "RSK Holdings, Inc. (Riskonnect) (5) (8) (11) S + 10.50 % 7/7/2022 10,358,600 10,774 11,705 0.72"
-    },
-    {
-     "accession": "0001851322-23-000070",
-     "text": "Revalize, Inc. (5) (7) (11) S + 10.00 % 4/14/2022 1,164 1,302 1,327 0.08"
-    },
-    {
-     "accession": "0001851322-25-000044",
-     "text": "KWOR Intermediate I, Inc. (6) (18) (20) Preferred Equity S + 8.00 % PIK 2/28/2025 2,978,848 2,979 2,979 0.09"
-    },
-    {
-     "accession": "0001851322-25-000070",
-     "text": "KWOR Intermediate I, Inc. (6) (16) (20) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
-    }
-   ]
-  },
-  {
-   "what": "F16 and F33 at 2023-12-31 and 2024-12-31 cleared (fund level, not a holdings column). The filer tagged the year's distribution per unit (1.77, 1.81) on a three-month context as well as on the year, so the year's figure was published for the quarter and annualised to 37 and 38 pct. The quarter's figure is the sum of the three monthly amounts the 10-K prints: 0.4524 and 0.4485. Shared code: pipeline/fund_highlights_wrapper.py FIGURE_FIELDS gains distribution_per_share, income_yield_pct and net_expenses (applied only where a fund's highlights wrapper lists a correction; schema enum extended; two tests).",
-   "kind": "shared_code",
-   "quarters": [
-    "2023-12-31",
-    "2024-12-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0001851322-24-000048",
-     "text": "October 27, 2023 October 31, 2023 November 03, 2023 0.1510 15,903 November 28, 2023 November 30, 2023 December 05, 2023 0.1502 16,848 December 27, 2023 December 31, 2023 January 4, 2024 0.1512 18,455 Total Distributions $ 1.7666 $ 161,416"
+     "accession": "0001193125-25-274423",
+     "text": "Verdantas, LLC (6) (16) Preferred Equity 10.00 % 05/03/2024 875,952 1,009 1,165 0.03"
     },
     {
      "accession": "0001851322-25-000023",
-     "text": "October 25, 2024 October 31, 2024 November 05, 2024 0.1498 25,240 November 27, 2024 November 29, 2024 December 04, 2024 0.1495 25,681 December 26, 2024 December 31, 2024 January 06, 2025 0.1492 26,178 Total Distributions $ 1.8067 $ 282,812"
+     "text": "Inszone Mid, LLC (6) (7) (9) (10) First Lien Debt S + 5.25 % 9.50 % 11/302029 13,838 13,601 13,838 0.42"
     }
    ]
   },
   {
-   "what": "F16 2022-09-30 cleared (fund level). The filed income ratio for the nine months is 6.39 pct, annualised; the year-to-date split read it as a running total and published 1.45 (6.39 less 4.94). Set to the printed 6.39 in the highlights wrapper (same shared-code change).",
-   "kind": "shared_code",
+   "what": "wrapper source_encodings.position_identity_contexts: the two 2026-06-30 Pound Bidco lines (term C_fd79b0c0, undrawn C_46da34e2) keyed as their own tranches so the refinanced 2029 loans no longer chain to the 2027 undrawn line",
+   "kind": "wrapper",
    "quarters": [
-    "2022-09-30"
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001851322-22-000075",
-     "text": "Ratio of net investment income to average Members Capital (5) 6.39 %"
+     "accession": "0001193125-26-342549",
+     "text": "Pound Bidco, Inc. (6) (7) (15) (18) First Lien Debt S + 5.25 % 8.89 % 05/01/2029 263 262 258 0.01"
     }
    ]
   },
   {
-   "what": "income_identity 2022-03-31 cleared (fund level). Net expenses of the quarter, 1,608, are printed and not tagged (the first net-expenses fact is for the second quarter of 2022), so income less gross expenses was compared with net investment income. Net expenses set from the page in the highlights wrapper (same shared-code change).",
-   "kind": "shared_code",
+   "what": "new quarter-scoped exclusion rule for the NH Keystone JV schedule at 2026-06-30 (140 rows, FV 337,321 thousand); published FV 5,980,632 = filed total",
+   "kind": "exclusion",
    "quarters": [
-    "2022-03-31"
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001851322-23-000045",
-     "text": "Total expenses 26,616 3,244 Expense support (Note 3) - ( 535 ) Management fees waiver (Note 3) - ( 1,101 ) Net expenses 26,616 1,608 Net investment income (loss) 30,486 3,758"
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
     }
    ]
   }
@@ -301,280 +286,978 @@
  "total_exceptions": [],
  "parked": [
   {
-   "finding": "source_recon blocking_source_pct_leaf_parser_mismatch and row_validation SRC_BDC01, 2025-12-31 and 2026-03-31 (proposed, not fixed)",
+   "finding": "JV schedule retained and flagged instead of dropped (all three quarters 2025-12-31, 2026-03-31, 2026-06-30)",
    "hypotheses": [
-    "The missing source rows are all rows of the joint venture North Haven Keystone's own schedule (60 rows 249.6M, 76 rows 289.2M; read in source_reconciliation_source_only_detail.csv, none is anything else). They are removed by the dated rule exclude_keystone_lookthrough, where the standing treatment is to keep them flagged as an underlying schedule.",
-    "detached_schedule_labels does not fit: it orders contexts by a trailing number and this filer's contexts are UUIDs. legal_entity_members and reporting_entity_suffixes do not fit: the contexts carry the investment-identifier member only (checked with fact_members.py on value 9681000).",
-    "A new setting (label pattern: debt member with 'Reference Rate and Spread' and no 'Interest Rate') would be shared code in staging and the accounting scope; not attempted. The existing rule is pinned to two quarters and hand-excepts Sweep Midco, so the rows will leak again in the next quarter."
+    "wrapper detached_schedule_labels: needs ordinal contexts, this filer's contexts are UUIDs; reporting_entity_suffixes: no JV member on the rows",
+    "a dimension-pattern key (debt rows without an Interest Rate segment, excluding Sweep Midco) would need shared code: outside this run's limits"
    ]
   },
   {
-   "finding": "no rule: Sweep Midco, LLC 2026-03-31 (0.695M) published lien First Lien; the page prints Second Lien Debt",
+   "finding": "Victors Purchaser 2024-12-31 CAD draw chained to USD draws",
    "hypotheses": [
-    "The filer's member says 'First Lien Debt Maturity Date 03/12/2034'; the page says 'Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02'. lien_position is derived before row corrections and is not a correctable field, so a row correction cannot set it; correcting the description alone would leave the two columns disagreeing. Needs lien_position added to the correctable fields (shared code)."
+    "force_pair/reject cannot say whether the C$ 322 line and the 582 USD line are one facility (same maturity and spread, different currency and cost)",
+    "left as recorded observation"
    ]
   },
   {
-   "finding": "no rule: preferred equity dividend rates from 2025-09-30 (9 to 12 rows a quarter) are not published as a rate",
+   "finding": "Continental Battery 2025-09-30 page omits 'S +'; reference SOFR published from the member text",
    "hypotheses": [
-    "The member reads 'Preferred Equity Reference Rate and Spread 12.25% Acquisition Date ...'; nothing is published at 2025-09-30 and 2025-12-31, and at 2026-03-31 only pik_rate where the member says PIK. In the quarters to 2025-06-30 the fixed preferred rates are published (D-100). FMG Suite Holdings preferred at 2025-12-31: the member says 10.50% and the page prints 'Preferred Equity 8.00 % PIK'. RSK and Revalize at 2025-09-30 carry a SOFR reference and no margin. Not read row by row; needs a member-pattern for equity rates or about 30 row corrections."
+    "same loan prints S + 7.00 % PIK in 2025-06-30 and 2025-12-31",
+    "page-printed evidence absent for this quarter: left as published"
    ]
   },
   {
-   "finding": "no rule: Sweep Midco, LLC second line at 2024-09-30 is printed with a par and no value cells, and is not published",
+   "finding": "open owner conventions: S + X % PIK spread (D-031 total vs D-217) and share-count units (printed digits vs x1000 tag); Leaf Home 600 vs 600,000",
    "hypotheses": [
-    "Printed 'Sweep Midco, LLC (6) (7) (10) (15) Second Lien Debt 3/12/2036 3,156' with nothing after the par; no fair-value fact, so no row. In every other quarter the line prints '3,156 - - -' and is published at zero. Adding it would be a row with no printed value; left."
+    "not changed, per instruction"
    ]
   }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "REQ-nhpi-1",
+   "classification": "verification_bug",
+   "file": "scripts/shadow_agent_a_engine.py",
+   "what": "agentA_reference_uncorroborated: (a) keeps preferred equity rows through mismatch_fields = maturity_date because the page reader takes the acquisition date printed on an equity line as a maturity (the 'maturity unreadable' path on equity rows); (b) cannot read a reference on a percent cell with no index code ('13.00 % PIK 13.00 %', '14.50 % (incl. 7.00 % PIK) 14.50 %') and so flags a correctly empty published reference (Any Hour 2025-12-31, Heartland 2026-06-30 x2)",
+   "why": "In agent_a_flags.csv the preferred rows (KWOR Intermediate, Knockout, RSK, Revalize) carry mismatch_fields = maturity_date while their reference already compares equal. Their lines print an acquisition date (06/25/2022, 07/07/2022, 02/28/2025) where debt lines print a maturity; equity rows have no maturity concept. Published values equal the page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (17) Preferred Equity S + 10.75 % 06/25/2022 5,482 7,719 7,934 0.23"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    },
+    {
+     "accession": "0001193125-25-274423",
+     "text": "KWOR Intermediate I, Inc. (6) (16) (19) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    }
+   ],
+   "quotes": [],
+   "next_action": "(a) Skip the maturity comparison, and the unreadable-maturity path, for equity rows (asset_category EQUITY_*), with a test that a debt line whose printed maturity differs from the published one still fails. (b) Read a percent cell with no index code as 'no reference' (agree with an empty published reference), with a test that a printed index differing from the published one (S + printed, EURIBOR published) still fails and that a published reference on a no-index line still flags. Measure on the accepted sandboxes. The findings stay outstanding (check misfire, not dispositioned) until the check is repaired."
+  },
+  {
+   "request_id": "OWN-nhpi-1",
+   "classification": "acceptance_change",
+   "file": "pipeline/source_encodings.py (wrapper schema key)",
+   "what": "Owner decision: retain-and-flag treatment for the North Haven Keystone JV schedule rows (2025-12-31, 2026-03-31, 2026-06-30) instead of three quarter-pinned exclusion rules",
+   "why": "The contract keeps JV rows in holdings as underlying_schedule (not published). This filer's JV rows carry UUID contexts and no JV member, so no wrapper key can tag them and a dated rule deletes them (97, 120 and 140 rows). The deletion is why E07 (770 vs 678) and the source-only findings fire. Recommended: a wrapper-switched key tagging debt rows without an Interest Rate segment (excluding Sweep Midco) as a detached schedule; E07 then ties as it did in nhza (818). Caution from the independent review: the debt-rows-without-an-Interest-Rate-segment pattern also matches two real consolidated rows at 2025-09-30, so an explicit context list or a document-position rule (the rows after the JV note) is safer than the pattern.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ],
+   "quotes": [],
+   "next_action": "Owner approves or declines the shared-code mechanism; the Keystone exclusion rules stay until then."
+  }
+ ],
  "observations": [
   {
-   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
-   "what": "24 loan rows in nine quarters (Applitools, Sweep Purchaser, Abracon, Magneto, BP Purchaser, KWOR other debt, Atlas Purchaser, Continental Battery): the page prints 'S + x % PIK' or 'S + x % (incl. y % PIK)', the filer tags the margin with the PIK concept and no spread fact, and the row was published with no spread and coupon Fixed. Spread set from the page, coupon Floating.",
-   "field": "basis_spread",
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "30 published issuer names differed from the printed company cell in 8 quarters: members naming another company (2026-03-31 Anaplan for Appfire Technologies, Polaris Newco for Pound Bidco, FORTIS for LUV Car Wash; 2026-06-30 Securonix for DCA Buyer, Fetch Insurance Services for Fetch, Inc.), industry/instrument text in the member (Software Corp., Interactive Financial Services GTCR, Leaf Home Investment Warrants), Project Madison, Kaseya Inc3, Frisbee Holding.",
+   "field": "issuer_name",
    "quarters": [
     "2023-06-30",
-    "2023-09-30",
     "2023-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 140.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (exists): published issuer equals the printed company cell, comparing every row, not a sample.",
+   "quote": {
+    "accession": "0001193125-26-221623",
+    "text": "Appfire Technologies, LLC (6) (9) (10) First Lien Debt S + 4.75 % 8.45 % 03/09/2028 13,481 13,457 13,481 0.42"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on 29 of the 30 rows in the untouched baseline build nhza (page_rule_findings.csv); the 30th (Frisbee Holding 2023-06-30, one letter) is a near spelling.",
+    "reference": "pipeline/candidate_rules.py issuer_name_printed; findings RVQ_BLK_7200236d6eac, RVQ_BLK_01de8d22799b, RVQ_BLK_6d64aa908228, RVQ_BLK_acd5bfebcacd"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "27 rows (12 quarters) carried the filer's unit tag as par currency: Excelitas EUR (7 quarters; 2023-03-31, 2023-06-30 and 2024-03-31 on old-format lines with no instrument cell), Optimizely EUR and GBP, Surewerx and Hercules CAD and Victors C$ published USD; four USD loans (FLS Holding, Ground Penetrating Radar, HSI Halo, Tempo; par in dollars, cost/par 0.90 to 1.0) published CAD, so their USD amount was par x 0.69 to 0.74 (Tempo 3,987 par shown as 2,769 USD).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
     "2024-03-31",
     "2024-06-30",
     "2024-09-30",
     "2024-12-31",
     "2025-03-31",
-    "2025-06-30"
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
    ],
+   "fair_value_m": 210.0,
    "cause": "fund",
    "action": "fixed",
-   "suggested_check": "A loan published with a reference rate and a PIK rate, no spread and coupon Fixed, on a fund whose wrapper names its reference-rate column.",
+   "suggested_check": "For every LOAN row (not only rows with an instrument-type cell) compare principal_amount_currency with the printed currency marker, else with the currency of the printed index (E+ EUR, SA+ GBP, C+ CAD), else USD; flag any difference (saved: ccy2.py).",
    "quote": {
     "accession": "0001851322-25-000023",
-    "text": "Magneto Components Buyco, LLC (6) (7) (8) (9) (11) First Lien Debt S + 6.00 % (incl. 1.50 % PIK) 10.33 % 12/05/2030 48,174 47,401 47,846 1.46"
+    "text": "Victors Purchaser, LLC (6) (12) (19) First Lien Debt S + 4.75 % 9.08 % 08/15/2031 C$ 322 217 224 0.01"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 and FX02 fired on only 2 of the 27 rows (the cited Excelitas and Hercules lines, and the 2024-09-30 FX02), so no existing rule covers the shape. ccy.py (needs an instrument cell) found 24; the independent review found 3 more on lines without one; ccy2.py, keyed on asset_category LOAN, finds all 27 with no false positive in 7,305 agreeing rows.",
+    "reference": "scratch/fund_runs/0001851322/ccy2.py"
    }
   },
   {
-   "observation_key": "rate-printed-on-the-row-and-not-tagged",
-   "what": "7 loan rows: the page prints an interest rate and the context has no rate fact (Applitools 2023-03-31 x2, tagged as PIK only; Ascend Learning 2024-09-30; Astra Acquisition 2025-06-30 x2, Continental Battery and Familia 2025-06-30, on non-accrual). Rate set from the page. X02 saw only the two that also lacked a spread.",
-   "field": "interest_rate",
+   "observation_key": "preferred-section-rows-published-as-common",
+   "what": "16 rows of printed Preferred Equity were published as common equity (Vardiman 2024-03-31 to 2025-06-30, Eclipse Topco, Cohesity Global, GTCR ABC) and two rows the other way (LUV Car Wash published preferred; FMG Suite common published preferred). Vardiman 2024-03-31 sits in an old-format quarter with no instrument cell: only the section heading and the 'Total Preferred Equity' row say preferred.",
+   "field": "asset_category",
    "quarters": [
-    "2023-03-31",
-    "2024-09-30",
-    "2025-06-30"
-   ],
-   "fair_value_m": 15.1,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "A loan with a spread and no interest rate whose printed row holds a second percent figure after the margin.",
-   "quote": {
-    "accession": "0001851322-24-000148",
-    "text": "Ascend Learning, LLC (12) First Lien Debt S + 3.50 % 8.44% 12/11/2028 4,869 4,862 4,844 0.15"
-   }
-  },
-  {
-   "observation_key": "pik-printed-on-the-row-and-not-tagged",
-   "what": "5 loan rows: the page prints a PIK figure and the context has no PIK fact (Any Hour 2024-06-30, Familia 2024-12-31, Sweep Purchaser 2024-06-30 and 2024-09-30, Atlas Purchaser 2025-03-31). PIK rate set from the page.",
-   "field": "pik_rate",
-   "quarters": [
+    "2024-03-31",
     "2024-06-30",
     "2024-09-30",
     "2024-12-31",
-    "2025-03-31"
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "fair_value_m": 10.2,
-   "cause": "row",
+   "fair_value_m": 20.0,
+   "cause": "fund",
    "action": "fixed",
-   "suggested_check": "A loan with no PIK rate whose printed row contains the word PIK.",
+   "suggested_check": "preferred_printed extended to read the section heading above the row when the line has no instrument cell, and the reverse (common printed, published preferred).",
    "quote": {
     "accession": "0001851322-24-000115",
-    "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 5/23/2031 2,982 2,924 2,924 0.10"
-   }
-  },
-  {
-   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
-   "what": "1 row, Fetch Insurance Services 2023-06-30: the fixed 12.75 coupon is tagged with the spread concept and no rate fact, so it was published as a spread of 12.75 over LIBOR (guessed from the date) with no rate. Now a fixed rate of 12.75. The same row is published correctly in the other quarters.",
-   "field": "basis_spread",
-   "quarters": [
-    "2023-06-30"
-   ],
-   "fair_value_m": 2.4,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "A spread above 12 with no interest rate, or a row whose printed reference-rate cell holds no code and whose published coupon is Floating.",
-   "quote": {
-    "accession": "0001851322-23-000070",
-    "text": "Fetch Insurance Services, LLC (5) 12.75 % (incl. 3.75 % PIK) 10/31/2027 2,513 $ 2,447 $ 2,438 0.15 %"
-   }
-  },
-  {
-   "observation_key": "preferred-floating-margin-tagged-as-rate-in-one-filing",
-   "what": "2 rows, RSK Holdings and Revalize preferred equity at 2023-06-30: the margin printed 'S + 10.50 %' / 'S + 10.00 %' is tagged with the rate concept in this filing and with the spread concept in every other, so it was published as a fixed rate. Moved to the spread.",
-   "field": "interest_rate",
-   "quarters": [
-    "2023-06-30"
-   ],
-   "fair_value_m": 13.0,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "A position whose value moves from basis_spread to interest_rate and back between consecutive quarters.",
-   "quote": {
-    "accession": "0001851322-23-000070",
-    "text": "RSK Holdings, Inc. (Riskonnect) (5) (8) (11) S + 10.50 % 7/7/2022 10,358,600 10,774 11,705 0.72"
-   }
-  },
-  {
-   "observation_key": "preferred-equity-published-as-common",
-   "what": "2 rows, KWOR Intermediate I preferred equity at 2025-03-31 and 2025-06-30: printed 'Preferred Equity S + 8.00 % PIK' with a bare-issuer member, published as common equity with a PIK rate and no margin. Class and spread set from the page.",
-   "field": "asset_category",
-   "quarters": [
-    "2025-03-31",
-    "2025-06-30"
-   ],
-   "fair_value_m": 3.0,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "A common equity row that carries a rate, spread or PIK fact.",
-   "quote": {
-    "accession": "0001851322-25-000070",
-    "text": "KWOR Intermediate I, Inc. (6) (16) (20) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    "text": "Vardiman Black Holdings, LLC (6) (14) Preferred Equity 6.00 % PIK 3/29/2024 5,298,893 3,456 3,375 0.11"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "preferred_printed fired on 13 of the 16 rows; it missed Vardiman 2024-03-31 (no instrument cell in old-format quarters) and does not test the reverse direction (3 rows: LUV, FMG, FORTIS member).",
+    "reference": "scratch/fund_runs/0001851322/headscan.py"
    }
   },
   {
    "observation_key": "joint-venture-schedule-dropped-by-quarter-pinned-rule",
-   "what": "97 rows (249.7M) at 2025-12-31 and 120 rows (295.0M) at 2026-03-31 of the joint venture North Haven Keystone's own schedule are tagged on the plain identifier axis and removed by a row-exclusion rule pinned to those two quarters, with one issuer hand-excepted. The standing treatment is to keep such rows flagged as underlying_schedule; no wrapper setting can mark them (contexts are UUIDs, no joint-venture member). Left as is: needs a new setting in staging and the accounting scope. The rows will leak into the next quarter.",
+   "what": "At 2026-06-30 the build published 140 rows of the North Haven Keystone, LLC schedule (FV 337,321 thousand; 5.6 pct above the filed total) as the fund's positions. Fixed with a third quarter-scoped exclusion rule; the rows are dropped, not retained as underlying_schedule (no wrapper key can mark them for this filer: contexts are UUIDs without a JV member), which makes E07 and the source reconciliation list them as missing.",
    "field": "accounting_record_class",
    "quarters": [
-    "2025-12-31",
-    "2026-03-31"
+    "2026-06-30"
    ],
-   "fair_value_m": 295.0,
+   "fair_value_m": 337.3,
    "cause": "fund",
-   "action": "parked",
-   "suggested_check": "A row-exclusion rule whose scope lists quarters while its cause (a second schedule in the notes) recurs in every later filing.",
+   "action": "fixed",
+   "suggested_check": "A wrapper key that tags rows by a dimension pattern (here: debt rows with no Interest Rate segment) as a detached schedule, so they are retained and flagged; and a check that a new quarter of a fund with a JV rule is tested for the same pattern.",
    "quote": {
-    "accession": "0001193125-26-221623",
-    "text": "Total First Lien Debt $ 296,441 $ 294,975 258.51 % Total Portfolio Investments $ 296,441 $ 294,975 258.51 %"
+    "accession": "0001193125-26-342549",
+    "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation, cost_conservation, GAV_BDC03, PCT01, A04, F20 and pct_of_net_assets_identity all fired at 2026-06-30 in the untouched baseline nhza on this overshoot (findings RVQ_BLK_60a23056d670, RVQ_BLK_7536d96b8320, RVQ_BLK_339b933ca4e5, RVQ_REV_5dcbbe39527e and others).",
+    "reference": "pipeline/oracle_checks.py and conservation checks; RVQ_BLK_60a23056d670"
    }
   },
   {
-   "observation_key": "lien-tier-in-member-differs-from-page",
-   "what": "1 row, Sweep Midco, LLC at 2026-03-31: the filer's member says 'First Lien Debt', the page prints Second Lien Debt, and First Lien is published. Not corrected: lien_position is derived before row corrections and is not a correctable field.",
-   "field": "lien_position",
+   "observation_key": "fixed-coupon-published-as-floating-with-guessed-benchmark",
+   "what": "Any Hour 2025-12-31 (printed 13.00 % PIK 13.00 %, no index) and Heartland Veterinary 2026-06-30 (14.50 % incl. 7.00 % PIK, no index; Fixed in 2026-03-31) were published Floating, SOFR, spread 13.0 / 14.5. Index and spread withdrawn, coupon Fixed.",
+   "field": "coupon_type",
    "quarters": [
-    "2026-03-31"
+    "2025-12-31",
+    "2026-06-30"
    ],
-   "fair_value_m": 0.7,
+   "fair_value_m": 4.6,
    "cause": "row",
-   "action": "parked",
-   "suggested_check": "A position whose lien tier changes between consecutive quarters with the same maturity and par.",
+   "action": "fixed",
+   "suggested_check": "A published reference_rate_type on a line whose printed cells show no index code and a single percent cell with PIK wording.",
    "quote": {
-    "accession": "0001193125-26-221623",
-    "text": "Sweep Midco, LLC (6) (9) (10) (16) Second Lien Debt 03/12/2034 1,086 543 695 0.02"
+    "accession": "0001193125-26-342549",
+    "text": "Heartland Veterinary Partners, LLC (6) (7) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 842 839 842 0.03"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "agentA_reference_uncorroborated fired on both lines in the baseline (RVQ_BLK_1c3db9f62761 and RVQ_BLK_e324e5a76349 are the findings that still list them).",
+    "reference": "scripts/shadow_agent_a_engine.py agentA_reference_uncorroborated"
    }
   },
   {
    "observation_key": "preferred-dividend-rate-in-member-not-published",
-   "what": "9 to 12 preferred equity rows a quarter from 2025-09-30: the member reads 'Preferred Equity Reference Rate and Spread 12.25% Acquisition Date ...' and no rate is published (only pik_rate where the member says PIK, at 2026-03-31); to 2025-06-30 the same positions publish their rate. FMG Suite Holdings preferred at 2025-12-31: the member says 10.50%, the page prints 8.00 % PIK. Not read row by row and not corrected: needs a member pattern for equity rates or about 30 row corrections.",
+   "what": "Preferred equity lines printed with a fixed percent (FORTIS 12.25, Integrity Marketing 10.50, Verdantas 10.00, Knockout 11.75) and with 'S + x %' (RSK, Revalize) published no rate (7 rows 2025-09-30 / 2025-12-31) or no spread and coupon type (2 rows 2025-09-30).",
    "field": "interest_rate",
    "quarters": [
     "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "cause": "fund",
-   "action": "parked",
-   "suggested_check": "A preferred equity position that published a rate in the previous quarter and publishes none now (field coverage by asset category).",
-   "quote": {
-    "accession": "0001193125-26-096532",
-    "text": "FMG Suite Holdings, LLC (6) (17) Preferred Equity 8.00 % PIK 09/09/2025 500 513 513 0.02"
-   }
-  },
-  {
-   "observation_key": "row-printed-with-par-only-not-published",
-   "what": "1 row, the Sweep Midco, LLC second lien line maturing 2036 at 2024-09-30: printed with par 3,156 and no cost, value or percent cells, no fair-value fact, so not published. In every other quarter the line prints '3,156 - - -' and is published at zero. Left: adding it would be a row with no printed value.",
-   "field": "fair_value",
-   "quarters": [
-    "2024-09-30"
-   ],
-   "fair_value_m": 0.0,
-   "cause": "row",
-   "action": "parked",
-   "suggested_check": "A position present in the quarter before and the quarter after and absent in between.",
-   "quote": {
-    "accession": "0001851322-24-000148",
-    "text": "Sweep Midco, LLC (6) (7) (10) (15) Second Lien Debt 3/12/2036 3,156 Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S"
-   }
-  },
-  {
-   "observation_key": "year-figure-tagged-on-a-three-month-context",
-   "what": "The 10-K for 2024 tags year figures on contexts dated to the fourth quarter (2023-10-01 to 2023-12-31, 2024-10-01 to 2024-12-31). The distribution per unit was corrected in this run (fixes). Left: bdc_fund_income.csv holds only an incentive fee for those two quarters (24,782 and 35,798 thousand, year-sized) and fund_financials has no net or total investment income there; the 2022-12-31 and 2025-12-31 income rows are the year divided by four. Shared step: the annual-to-quarter split in pipeline/bdc_fund_income.py and pipeline/extract_companyfacts.py takes a three-month fact at a year end at face value. Not touched: income fields are not correctable figures and the split is shared code.",
-   "field": "net_investment_income",
-   "quarters": [
-    "2022-12-31",
-    "2023-12-31",
-    "2024-12-31",
     "2025-12-31"
    ],
-   "cause": "shared",
-   "action": "left",
-   "suggested_check": "A three-month fact at a fiscal year end equal to the twelve-month fact of the same concept while the nine-month figure is not zero.",
-   "quote": {
-    "accession": "0001851322-24-000048",
-    "text": "Total investment income 302,770 103,428 - Expenses: Interest expense and other financing expenses 75,673 19,516 -"
-   }
-  },
-  {
-   "observation_key": "position-chain-links-rows-of-different-size",
-   "what": "Sweep Purchaser, LLC: the loan published 1.8M to 4.1M from 2024-03-31 to 2025-03-31 is chained to a 94 thousand row from 2025-06-30 on, and the 4,171 thousand row of 2025-06-30 sits on another chain. Shared step: position matching in the unified build (the bare-identifier ordinal changes between filings). Present before this run; my spread corrections re-linked 13 rows of the chain without curing it. Not investigated.",
-   "field": "position_id",
-   "quarters": [
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "fair_value_m": 4.2,
-   "cause": "shared",
-   "action": "left",
-   "suggested_check": "A position id whose par changes by more than ten times between consecutive quarters while another row of the issuer carries the old par.",
-   "quote": {
-    "accession": "0001851322-25-000070",
-    "text": "Sweep Purchaser, LLC (6) (7) (10) First Lien Debt S + 5.75 % PIK 10.17 % 6/30/2027 4,171 4,171 4,171 0.12"
-   }
-  },
-  {
-   "observation_key": "cash-and-money-market-rows-not-published",
-   "what": "No cash or money-market row is published for this fund in any quarter (rule exclude_cash_equivalent_money_market to 2025-06-30, the wrapper's non-private markers after); the schedule prints them below 'Total Portfolio Investments'. Consistent with the filed total, but other funds keep such rows as CASH. Left: an owner policy point, not a page error.",
-   "field": "index_classification",
-   "quarters": [
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31"
-   ],
+   "fair_value_m": 40.0,
    "cause": "fund",
-   "action": "left",
-   "suggested_check": "A fund whose schedule prints a cash-equivalents section and that publishes no CASH row.",
+   "action": "fixed",
+   "suggested_check": "A preferred or common equity row whose printed line has a percent cell while interest_rate, pik_rate and basis_spread are all empty (saved: fullscan.py rate check).",
+   "quote": {
+    "accession": "0001193125-25-274423",
+    "text": "Verdantas, LLC (6) (16) Preferred Equity 10.00 % 05/03/2024 875,952 1,009 1,165 0.03"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows (pik_printed tests only PIK wording); fullscan.py found the 9 rows with no false positive over 5,758 rows.",
+    "reference": "scratch/fund_runs/0001851322/fullscan.py"
+   }
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "LUV Car Wash common equity 2026-03-31 published 4,000,000 units (the FORTIS preferred count, derived_proxy) against the printed 1,383; set to 1,383 as in the other quarters.",
+   "field": "shares_held",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.9,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "units_printed (exists).",
    "quote": {
     "accession": "0001193125-26-096532",
-    "text": "Total Portfolio Investments, Cash and Cash Equivalents and S"
+    "text": "LUV Car Wash (6) (16) (17) Common Equity 12/06/2022 1,383 1,330 973 0.03"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed (kind proxy_count_not_on_row) flagged the row in the baseline build.",
+    "reference": "RVQ_BLK_a19c21b80a56"
+   }
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "what": "Two loan rows had no maturity: FORTIS first lien 2024-09-30 (printed 10/13/2028) and Inszone Mid 2024-12-31 (printed '11/302029', a lost slash; the loan's other lines print 11/30/2029). Set from the printed date.",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 34.9,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A debt row with maturity_date empty where the printed line has a date-like token in the maturity position.",
+   "quote": {
+    "accession": "0001851322-25-000023",
+    "text": "Inszone Mid, LLC (6) (7) (9) (10) First Lien Debt S + 5.25 % 9.50 % 11/302029 13,838 13,601 13,838 0.42"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the two rows (2 of 7,796 loan rows); the check is one query on cells (ixrow.py) and returns exactly these two in nhza.",
+    "reference": "scratch/fund_runs/0001851322/q.py (loan rows with null maturity)"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-linked-to-wrong-line",
+   "what": "Optimizely North America undrawn line 2026-06-30 (fair value -76 thousand) was published non-accrual through a filer footnote link; its own footnotes are (6)(8)(15)(18) and the non-accrual legend is (14). Footnote withdrawn. All other quarters agree (checks2.py compared every row's footnotes with the legend of its report date: 0 other differences).",
+   "field": "nonaccrual_footnote",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": -0.08,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Published non-accrual rows whose printed footnote numbers do not include the legend number for the report date.",
+   "quote": {
+    "accession": "0001193125-26-342549",
+    "text": "Optimizely North America, Inc. (6) (8) (15) (18) First Lien Debt S + 5.50 % (incl. 3.00 % PIK) 9.14 % 10/30/2031 - ( 15 ) ( 76 ) 0.00"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "nonaccrual_flag compares totals, not footnotes, and did not fire; the footnote comparison in checks2.py is deterministic and has no false positive on 13 other quarters.",
+    "reference": "scratch/fund_runs/0001851322/checks2.py"
+   }
+  },
+  {
+   "observation_key": "income-identity-compares-gross-expenses-with-net-income",
+   "what": "The income identity at 2025-12-31 leaves a gap of 16,500 thousand in the fourth quarter because total_expenses is gross and NII is after waivers and expense support (40,260 for the year printed; 23,760 in the first three quarters). Left: no published value is wrong; the ledger finding is retired as not a missing-income error.",
+   "field": "total_expenses",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Use net expenses (total less waivers and expense support) in the identity wherever the filing prints waivers.",
+   "quote": {
+    "accession": "0001193125-26-096532",
+    "text": "Net expenses 336,549 273,848 140,836"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "income_identity is silent on this quarter in nhzd and fired only in an older build; the proposed net-expense variant would have explained the gap (16,500 = 40,260 - 23,760).",
+    "reference": "scratch/fund_runs/0001851322/ident_left output (scripts/v05_evidence/ident_left.py)"
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "what": "Pound Bidco: row corrections gave the 2026-03-31 Polaris Newco rows their printed name Pound Bidco, Inc.; the matcher then chained the 2026-06-30 258 line (S + 5.25 %, 05/01/2029, refinanced) to the 2027 undrawn line (S + 6.00 %, 02/01/2027, position 56255d6a), and the 3,717 term loan broke to a new id. In nhza that 2026-06-30 row had its own id (73211222). Fixed with wrapper source_encodings.position_identity_contexts: the two 2026-06-30 Pound Bidco lines (C_fd79b0c0 term, C_46da34e2 undrawn) get their own tranche keys, the 2027 lines stay unkeyed (every row of each loan is keyed or none); in nhzf the 258 row has id 73211222 again and the 2027 chains (997c16e4, b3cf24dd, 56255d6a) end at 2026-03-31. A position_match_overrides reject was tried first (it removed one pair and the matcher re-paired with the twin 260 line) and is removed. Victors Purchaser delayed draw 2024-12-31 prints 'C$ 322' (cost 217, fair value 224) and is chained (position_id 4181a5b8) to the USD draws before (undrawn -15) and after (582 USD): a CAD tranche joined to USD ones, same maturity and spread; left, recorded.",
+   "field": "position_id",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A position_id group whose rows differ in principal_amount_currency, or whose margin and maturity both change (chains.py).",
+   "quote": {
+    "accession": "0001193125-26-342549",
+    "text": "Pound Bidco, Inc. (6) (7) (15) (18) First Lien Debt S + 5.25 % 8.89 % 05/01/2029 263 262 258 0.01"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads currency or margin-and-maturity changes inside a position chain; chains.py compares maturity, class and currency per position_id and listed the Pound Bidco and Victors groups as new after the corrections (Pound Bidco gone in nhzf).",
+    "reference": "scratch/fund_runs/0001851322/chains.py"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "what": "Leaf Home, LLC preferred (14.00 % PIK, 09/05/2025, cost 651, fair value 796) 2026-06-30: printed 600 units, published 600,000 (derived_proxy from the tag scale). Share-count units convention (printed digits vs x1000 tag) is an open owner convention: recorded, not changed.",
+   "field": "shares_held",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "units_scale_unclear kind of units_printed routed to the ledger once the owner rules.",
+   "quote": {
+    "accession": "0001193125-26-342549",
+    "text": "Leaf Home, LLC (6) (16) Preferred Equity 14.00 % PIK 09/05/2025 600 651 796 0.03"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "units_printed reports this kind only as informational (page_rules_informational.csv), not a ledger finding; unitscan.py finds it as the only such row of 47 equity rows in the quarter.",
+    "reference": "scratch/fund_runs/0001851322/unitscan.py"
    }
   }
  ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "BDCSRC_0001851322_2026-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_b0cf5fb3ad",
+   "coverage": {
+    "affected_rows": [
+     "0001851322/2026-06-30/source_only_joint_venture_rows_325.6M_pct_leaf"
+    ],
+    "reviewed_rows": [
+     "0001851322/2026-06-30/source_only_joint_venture_rows_325.6M_pct_leaf"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Source-only rows are the NH Keystone schedule: 140 contexts of the filing lie after the JV note (document position), 0 of the other 678; their fair value 337,321 and cost 339,769 equal the JV's printed total, and published 6,317,953 - 337,321 = the filed 5,980,632.",
+    "Fund's own stake in the JV is published as one line (equity, North Haven Keystone, LLC LLC Interest): no fund position is missing.",
+    "Same finding accepted as_filed for 2025-12-31 and 2026-03-31 (DS-SRC_BDC01-1851322-4, DS-blocking_source_pct_leaf_parser_mismatch-1851322-5)."
+   ],
+   "next_action": "Proposal PD-blocking_source_pct_leaf_parser_mismatch-1851322-23 (as_filed, reason src-missing-rows-are-a-joint-ventures-own-schedule, same as the accepted 2025-12-31 and 2026-03-31 dispositions) awaits the owner or a check; the rows are dropped by a quarter-scoped exclusion rule because no wrapper setting can mark them underlying_schedule for this filer (parked: dimension-based detached-schedule label)."
+  },
+  {
+   "finding_id": "RVQ_BLK_e0e4318392ee",
+   "coverage": {
+    "affected_rows": [
+     "0001851322/2026-06-30/source_only_joint_venture_rows_325.6M_pct_leaf"
+    ],
+    "reviewed_rows": [
+     "0001851322/2026-06-30/source_only_joint_venture_rows_325.6M_pct_leaf"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Source-only rows are the NH Keystone schedule: 140 contexts of the filing lie after the JV note (document position), 0 of the other 678; their fair value 337,321 and cost 339,769 equal the JV's printed total, and published 6,317,953 - 337,321 = the filed 5,980,632.",
+    "Fund's own stake in the JV is published as one line (equity, North Haven Keystone, LLC LLC Interest): no fund position is missing.",
+    "Same finding accepted as_filed for 2025-12-31 and 2026-03-31 (DS-SRC_BDC01-1851322-4, DS-blocking_source_pct_leaf_parser_mismatch-1851322-5)."
+   ],
+   "next_action": "Proposal PD-SRC_BDC01-1851322-22 (as_filed, reason src-missing-rows-are-a-joint-ventures-own-schedule, same as the accepted 2025-12-31 and 2026-03-31 dispositions) awaits the owner or a check; the rows are dropped by a quarter-scoped exclusion rule because no wrapper setting can mark them underlying_schedule for this filer (parked: dimension-based detached-schedule label)."
+  },
+  {
+   "finding_id": "BDCSRC_0001851322_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_f990815b80",
+   "coverage": {
+    "affected_rows": [
+     "0001851322/2026-06-30/source_only_joint_venture_gtcr_preferred_0.61M"
+    ],
+    "reviewed_rows": [
+     "0001851322/2026-06-30/source_only_joint_venture_gtcr_preferred_0.61M"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "GTCR ABC Holdings, LLC Preferred Equity 8.00 % PIK 599 610 610 0.49"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 0.61M source row is the JV schedule's GTCR ABC Holdings preferred line (599 units, cost 610, fair value 610 thousand, 0.49 pct of the JV's net assets), not the fund's own GTCR preferred (102, published).",
+    "Its dimension text carries 'Financial Services GTCR ABC Holdings' while the fund's rows read 'Interactive Financial Services ...': the rule predicate separates them (2 of 2 JV equity rows excluded, 2 own rows kept)."
+   ],
+   "next_action": "Proposal PD-blocking_source_position_like_parser_mismatch-1851322-24 (as_filed, reason src-missing-rows-are-a-joint-ventures-own-schedule, same as the accepted 2025-12-31 and 2026-03-31 dispositions) awaits the owner or a check; the rows are dropped by a quarter-scoped exclusion rule because no wrapper setting can mark them underlying_schedule for this filer (parked: dimension-based detached-schedule label)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d3091f3f87d9",
+   "coverage": {
+    "affected_rows": [
+     "0001851322/2026-06-30/E07_source_770_vs_output_678"
+    ],
+    "reviewed_rows": [
+     "0001851322/2026-06-30/E07_source_770_vs_output_678"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "E07 source count 770 vs output 678 (11.9 pct) at 2026-06-30; the same exclusion at 2026-03-31 gives 755 vs 679 (10.1 pct); quarters without the JV rule 0.0 to 0.1 pct.",
+    "Without the 2026-06-30 exclusion rule (nhza) the count tied exactly (818 rows, 140 JV rows published) but fair value overshot the filed total by 337,321. The check reports a real departure: the contract keeps JV rows in holdings as underlying_schedule (not published); this run's rule deletes them. An exemption for rule-removed rows would weaken E07 (REQ-nhpi-2 withdrawn)."
+   ],
+   "next_action": "Owner request OWN-nhpi-1: approve a retain-and-flag mechanism for this filer's JV rows (shared code switched on by the wrapper, tagging debt rows without an Interest Rate segment as a detached schedule so they are retained as underlying_schedule); until then the finding stays confirmed and open."
+  },
+  {
+   "finding_id": "RVQ_BLK_0da9a638c79e",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-342549/C_eefbe6cf-fc68-48c1-8491-d1e486c7fe29"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-342549/C_eefbe6cf-fc68-48c1-8491-d1e486c7fe29"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Abracon Borrower, LLC (6) (18) (19) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 46 1 1 0.00"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Abracon Borrower prints par 46, cost 1, fair value 1 thousand on a partly drawn commitment; published principal 46,000, cost 1,000, fair value 1,000 equal the line.",
+    "No second row flagged."
+   ],
+   "next_action": "Proposal PD-X06-1851322-21 (as_filed, reason x06-partly-drawn-line-printed-par-is-total-commitment) awaits acceptance."
+  },
+  {
+   "finding_id": "RVQ_REV_94383f671c40",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-342549/C_563c5e1f-e5a4-4e3b-ac25-d01ebf23339f",
+     "0001193125-26-342549/C_dc5d54d9-f687-4099-a347-facf1f84a4ea"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-342549/C_563c5e1f-e5a4-4e3b-ac25-d01ebf23339f",
+     "0001193125-26-342549/C_dc5d54d9-f687-4099-a347-facf1f84a4ea"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Sweep Midco, LLC (6) (11) (17) Second Lien Debt 03/12/2036 1,086 542 382 0.01"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Sweep Midco, LLC (6) (11) (17) Second Lien Debt 03/12/2034 3,156 - - 0.00"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Both Sweep Midco, LLC second lien lines print no reference rate, spread or interest-rate cell (maturity 03/12/2036 fair value 382 thousand; 03/12/2034 with dashes); no rate fact is tagged.",
+    "The other two rows flagged here at 2025-06-30 printed a rate and were corrected in the earlier run; at 2026-06-30 nothing is printed to declare."
+   ],
+   "next_action": "Proposal PD-X02-1851322-17 (as_filed, x02-no-rate-printed-on-the-row; same lines accepted for 2024-03-31..2026-03-31 in DS-X02-1851322-1)."
+  },
+  {
+   "finding_id": "RVQ_REV_903f0b833d49",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-342549/C_29dd2ff6-0588-434b-a4e2-cd677b981421",
+     "0001193125-26-342549/C_59687105-6dab-4d45-b440-41d468bc3514",
+     "0001193125-26-342549/C_f4f21fd9-b47e-4f9a-839f-1fb264a4a5ba"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-342549/C_29dd2ff6-0588-434b-a4e2-cd677b981421",
+     "0001193125-26-342549/C_59687105-6dab-4d45-b440-41d468bc3514",
+     "0001193125-26-342549/C_f4f21fd9-b47e-4f9a-839f-1fb264a4a5ba"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Apollo Acquisition, Inc. (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 12/30/2031 67 27 ( 122 ) 0.00"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "High Street Buyer, Inc. (6) (8) (18) First Lien Debt S + 4.25 % 7.98 % 04/14/2028 - - ( 7 ) 0.00"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "VRC Companies, LLC (6) (7) (18) First Lien Debt S + 5.50 % 9.26 % 06/29/2027 - - ( 1 ) 0.00"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Three negative marks: Apollo Acquisition (par 67, cost 27, fair value (122)), High Street Buyer (dash, dash, (7)), VRC Companies (dash, dash, (1)). Published fair value and cost equal the printed numbers on all three.",
+    "Checked whether any funded loan prints a negative value: the other C103-type rows of the quarter were the JV schedule's (excluded)."
+   ],
+   "next_action": "Proposals PD-C103-1851322-18 (zero-cost undrawn marks) and -19 (netted mark) await acceptance."
+  },
+  {
+   "finding_id": "RVQ_REV_893827587a89",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-342549/C_0247ca2e-533e-4b01-9b56-a721a2693d73",
+     "0001193125-26-342549/C_02b902d8-aa50-4d48-8a2b-7ee3ec6be51f",
+     "0001193125-26-342549/C_03161e88-c2e8-4806-b8f3-361c9ca07f2f",
+     "0001193125-26-342549/C_04474040-ca85-4042-854e-b599d5ea9b2d",
+     "0001193125-26-342549/C_09617ec9-1589-45f2-9fb0-dd8ae9c4194b",
+     "0001193125-26-342549/C_0a49b267-e6ec-4ea9-a080-a1dcf1991075",
+     "0001193125-26-342549/C_0a5294f4-b302-4dc2-8403-736523b8c8ea",
+     "0001193125-26-342549/C_0a79612a-208f-4ea9-8293-c27e49a39038",
+     "0001193125-26-342549/C_0bb1b4d0-f536-4988-989c-cdebfd12fc61",
+     "0001193125-26-342549/C_0c055635-93f9-4afe-b3cc-7f131f63bd28",
+     "0001193125-26-342549/C_0cacbe2d-b2a8-4300-99d1-da4121eed71b",
+     "0001193125-26-342549/C_0f5163c8-2136-4cfe-8aba-2c642ef85148",
+     "0001193125-26-342549/C_0fae0ea1-1c1e-4a93-818e-513c1c0966de",
+     "0001193125-26-342549/C_10c92dd0-5f2d-4fee-b6e5-28d9b6bdd122",
+     "0001193125-26-342549/C_13c5bb2d-2ea5-4510-a6f7-557beb1a80d8",
+     "0001193125-26-342549/C_1b1e0bec-a881-4646-aeb5-b03e1259461a",
+     "0001193125-26-342549/C_1b35e948-6638-4251-85ee-e6197f780bb3",
+     "0001193125-26-342549/C_1ba1d11b-ca5a-4106-bd39-43cbd5ce7016",
+     "0001193125-26-342549/C_1c5c49b6-1db9-4ec7-91bd-a35848843ae4",
+     "0001193125-26-342549/C_21800d38-9da3-4f60-a58b-f761aadd8112",
+     "0001193125-26-342549/C_21cc6d0e-c7f6-459b-b9c0-5cb4a295ebbe",
+     "0001193125-26-342549/C_22ea1832-cde4-4a6d-bd00-329dd5dd5277",
+     "0001193125-26-342549/C_22f4fb5c-7c79-4530-9f1b-e0200bfb6122",
+     "0001193125-26-342549/C_2747f452-0d05-4b13-a4f5-c7df159bd9b1",
+     "0001193125-26-342549/C_2a9e08d4-b6fa-4188-98e4-44ff8ba7189e",
+     "0001193125-26-342549/C_2aaaf992-efd1-4eb2-903a-cb4333769ce7",
+     "0001193125-26-342549/C_2c9175c1-f088-4f8b-bbf2-b0836ff3b332",
+     "0001193125-26-342549/C_2ca9d07d-32f6-48b3-a2a1-96ecfa8b7c6f",
+     "0001193125-26-342549/C_2d66a264-a707-40ee-bad3-68fca5a061a6",
+     "0001193125-26-342549/C_33c905af-f3e5-4661-9a38-bc301f1537c9",
+     "0001193125-26-342549/C_3405ebe2-287d-4bfb-b472-a85cb8369706",
+     "0001193125-26-342549/C_373e4ea0-52d6-495f-ab6b-9a534d37f5a4",
+     "0001193125-26-342549/C_37c4e6f8-a3b4-4321-aca6-95bf822ec9df",
+     "0001193125-26-342549/C_3898e9f3-9bee-486a-a312-cdf082a0a6ce",
+     "0001193125-26-342549/C_39b7dfa6-af8f-4b9a-8673-da1a7f4a3010",
+     "0001193125-26-342549/C_3b5fa80d-c210-4416-9d17-d0bb9709b174",
+     "0001193125-26-342549/C_3be8e9a5-2883-4e50-902c-2bcf82f12b26",
+     "0001193125-26-342549/C_3f1a416f-d282-4610-9ed4-872c5a90ad06",
+     "0001193125-26-342549/C_416f04fe-1373-46c3-a1c7-314f425cfe3a",
+     "0001193125-26-342549/C_4186fae3-fa92-4fca-a572-9da514c67c51",
+     "0001193125-26-342549/C_42051b5a-6dc1-4293-8826-2ffe733de515",
+     "0001193125-26-342549/C_45033fa8-bcf5-4750-a5e6-9509b4cd3049",
+     "0001193125-26-342549/C_499864b2-bbbe-418d-b70f-9861db0deae9",
+     "0001193125-26-342549/C_4b923a36-64f8-4b88-81cc-4cffba66ed8e",
+     "0001193125-26-342549/C_4bf65278-6e94-4fc3-96a8-1eb11a80fcff",
+     "0001193125-26-342549/C_4ccd22f0-035e-492d-916e-07d1fbb3b0f6",
+     "0001193125-26-342549/C_4d374a1c-4957-4dbf-a3f6-407711815c30",
+     "0001193125-26-342549/C_4eba07c8-3ad5-49c4-b73d-c4eec031eaba",
+     "0001193125-26-342549/C_50286796-5c59-42a3-97ab-96c07e6d2486",
+     "0001193125-26-342549/C_505d2118-ce85-4d48-a990-0bb13e2b38c2",
+     "0001193125-26-342549/C_52d07153-b5b5-470d-8fec-6a562142e02b",
+     "0001193125-26-342549/C_52d18298-13e5-4503-96c7-19d97e043134",
+     "0001193125-26-342549/C_53981221-e918-416d-a488-975e99550988",
+     "0001193125-26-342549/C_5423897b-5e66-4df5-be98-5980d8d85987",
+     "0001193125-26-342549/C_549ea7a8-758d-468d-bfd4-d0ecc79f2c7a",
+     "0001193125-26-342549/C_5881d9af-21af-4da2-a1e9-8702447d29d3",
+     "0001193125-26-342549/C_5c788573-9c5a-4e39-86f2-8977bde39bc8",
+     "0001193125-26-342549/C_606fe93f-f393-4b92-a095-f2af0a874840",
+     "0001193125-26-342549/C_61df976f-95c6-4308-a045-8fb7d6d50ec7",
+     "0001193125-26-342549/C_62c2a648-95f2-4ce4-965d-185aa7aef866",
+     "0001193125-26-342549/C_6477f8d8-c503-4fe1-9fe4-9945401b9ed5",
+     "0001193125-26-342549/C_66d4f11e-0573-4d93-b676-79e7dda50e3c",
+     "0001193125-26-342549/C_67122289-22cb-43a1-b5d8-dbb1438ecd90",
+     "0001193125-26-342549/C_67acdf5b-eb77-40f7-a2e9-32f1ebf2f08e",
+     "0001193125-26-342549/C_67d8051c-9790-4876-819c-abb271e1a55f",
+     "0001193125-26-342549/C_6c897f3e-8021-4b55-b770-00660ee14d0c",
+     "0001193125-26-342549/C_6cd2aad8-04c7-4d69-a7c1-40661de1c6ca",
+     "0001193125-26-342549/C_6eb33fe7-7564-407c-bf08-4760c20c4d50",
+     "0001193125-26-342549/C_7054a0fb-beb0-43a5-a17d-7c6bdebe07bf",
+     "0001193125-26-342549/C_7177c523-f109-47c7-8294-e072d86a5856",
+     "0001193125-26-342549/C_744f5ac0-092c-4b54-ab74-08eb80975751",
+     "0001193125-26-342549/C_7474d2eb-8ccb-4afc-94ab-b874a187f2a7",
+     "0001193125-26-342549/C_776796af-0438-49ef-958a-49c67cbb29a4",
+     "0001193125-26-342549/C_789b5c5b-79b8-4bad-8f39-6bcdc99e8248",
+     "0001193125-26-342549/C_7a788b7e-0182-463f-b272-64bc4d4f22d2",
+     "0001193125-26-342549/C_7a89f18d-5874-48bc-8b76-7ca77d5b5c49",
+     "0001193125-26-342549/C_7c5a4d2f-b705-4692-aa29-151fca410027",
+     "0001193125-26-342549/C_7ec4c4bc-22b0-478c-968d-ed302d13bd74",
+     "0001193125-26-342549/C_7f069cf0-22bd-4d1a-9d45-526829f0faf5",
+     "0001193125-26-342549/C_8025bfb5-3e63-405f-afb5-c3ae785be45c",
+     "0001193125-26-342549/C_88b68cc6-da0a-4986-9e9c-c98cec2d7c3f",
+     "0001193125-26-342549/C_8a22d111-ef0a-45b7-976a-78159d3e9844",
+     "0001193125-26-342549/C_8a329037-5c2a-45ea-86f9-5069d38a6ad9",
+     "0001193125-26-342549/C_8e73658e-b545-439f-89be-115e592aa96c",
+     "0001193125-26-342549/C_8e9af030-d0ef-4f9d-85da-dd3ed710fea9",
+     "0001193125-26-342549/C_8efd4e94-7bec-4c83-927f-54132f881c52",
+     "0001193125-26-342549/C_93a165c5-e828-4623-b7b0-c096705d4e97",
+     "0001193125-26-342549/C_957ab10f-ba74-4310-9d0d-62844d109c95",
+     "0001193125-26-342549/C_9709a7be-5e31-484c-827b-08a57cffb79b",
+     "0001193125-26-342549/C_990f3bdd-b0f8-4d18-b6e3-293bfe80beff",
+     "0001193125-26-342549/C_993dae84-1ce4-4cef-b13a-f2689d21abd0",
+     "0001193125-26-342549/C_99a86880-3015-4b8b-baaf-65ba0899d71a",
+     "0001193125-26-342549/C_9a7b3a51-52d8-4fa3-aea4-ee2c5bedcc8d",
+     "0001193125-26-342549/C_9e415810-a835-43ff-93cc-ad35d75f1a18",
+     "0001193125-26-342549/C_9e866728-9eb2-4a1d-aa5d-db0f4860acf9",
+     "0001193125-26-342549/C_9f2f796f-73d3-4ca9-8f34-abce2461232d",
+     "0001193125-26-342549/C_a23429f7-8fde-4db1-84dd-203fa8874c51",
+     "0001193125-26-342549/C_a412c369-5901-4438-b5b0-4552981bd282",
+     "0001193125-26-342549/C_a4e10736-761a-4db9-b03a-097ca47fa8eb",
+     "0001193125-26-342549/C_a62a9631-2653-4068-bcc7-97fa2f1ec643",
+     "0001193125-26-342549/C_a84dd26d-a708-45bd-a722-dcd7f8dceff5",
+     "0001193125-26-342549/C_a9c902aa-ebab-4cd4-9c19-64dd07a25d53",
+     "0001193125-26-342549/C_a9f36dc5-9b53-4dba-8bd6-e49bff91bf31",
+     "0001193125-26-342549/C_aae74a4d-d1a7-40d8-b3f0-63bfec5c3905",
+     "0001193125-26-342549/C_abf4c5f0-31d4-41a9-b642-05ff8f771006",
+     "0001193125-26-342549/C_ac810bac-7d62-4ab7-b76e-3cda5edce42f",
+     "0001193125-26-342549/C_afa2c12c-149a-4729-aa91-540c76344b1b",
+     "0001193125-26-342549/C_b0b54721-677a-456e-8c9e-a63e98d3a89b",
+     "0001193125-26-342549/C_b0d7a290-712f-4ce9-b5d6-4c71e94ab1ce",
+     "0001193125-26-342549/C_b4a669dd-a704-4181-98ab-4bad78f6ef87",
+     "0001193125-26-342549/C_b606470a-2010-4d2f-8f0e-e1aea5047444",
+     "0001193125-26-342549/C_b75cfc81-05c1-4596-a77d-07b6da4284aa",
+     "0001193125-26-342549/C_b935e191-3a1b-45c5-9d88-f93a2c91daf3",
+     "0001193125-26-342549/C_b9724119-8f18-4860-bbb9-25ea7fa9b87d",
+     "0001193125-26-342549/C_bcaf7ed7-bffe-497e-8269-73e4251c433d",
+     "0001193125-26-342549/C_be1639be-1be0-4cf4-8eec-a90cacea7169",
+     "0001193125-26-342549/C_be56ef54-8b8a-440c-90a0-564f05800dd2",
+     "0001193125-26-342549/C_bf2ce846-d2a1-48fb-aefc-d41924311d1c",
+     "0001193125-26-342549/C_bf6caa64-32e0-4b0b-932b-93c805fea13a",
+     "0001193125-26-342549/C_c7432696-f06c-4916-8eb9-61cbce27ba71",
+     "0001193125-26-342549/C_ca697463-6837-4ef6-b366-9d59e60f7dab",
+     "0001193125-26-342549/C_cc5158af-6805-4da7-952d-ce1fe8fb7a71",
+     "0001193125-26-342549/C_ceff4604-9a8e-4bf7-8442-bceb2d865537",
+     "0001193125-26-342549/C_d227c977-2a87-4e9b-97c5-8c8fa7077447",
+     "0001193125-26-342549/C_d38ae0b7-8489-4fc0-995b-48239dd472c3",
+     "0001193125-26-342549/C_d62e9d27-e2bf-47ce-af2b-f179c6568acf",
+     "0001193125-26-342549/C_d692875e-4aba-4510-8a9f-f6fe44a1e3da",
+     "0001193125-26-342549/C_e036f1c5-d3cb-4643-b1ae-a91850427b3e",
+     "0001193125-26-342549/C_e2544336-8849-43d1-8910-53b0e4bc1c81",
+     "0001193125-26-342549/C_e2e0cb1b-15a1-4d08-9c70-c5b4e2f50b3e",
+     "0001193125-26-342549/C_e2f332a1-68e1-422b-913e-d66615dc71b5",
+     "0001193125-26-342549/C_e4714fdd-e86e-4a38-893b-d979f08b8e2d",
+     "0001193125-26-342549/C_e56b58d9-2f11-4103-96d5-75eb0f9dbda5",
+     "0001193125-26-342549/C_e9c68c6f-8c1a-4008-a1d6-a0b2ea24be46",
+     "0001193125-26-342549/C_e9f576de-5b22-4836-92f1-a5653d3585ca",
+     "0001193125-26-342549/C_ea35104b-b8ed-4353-960c-0dbc1d0838a1",
+     "0001193125-26-342549/C_ef740b89-8ead-499c-b723-b1e5510445cc",
+     "0001193125-26-342549/C_f0052a07-8946-4300-a754-5f700a1eedec",
+     "0001193125-26-342549/C_f0426fdf-ce07-451f-a774-cfd5386ca24d",
+     "0001193125-26-342549/C_fbf82b9b-7dc9-4b9a-b8b3-05e9ee6e4947",
+     "0001193125-26-342549/C_fd5a8e2b-a707-4263-9507-87aa3a2a9bd8"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-342549/C_0247ca2e-533e-4b01-9b56-a721a2693d73",
+     "0001193125-26-342549/C_02b902d8-aa50-4d48-8a2b-7ee3ec6be51f",
+     "0001193125-26-342549/C_03161e88-c2e8-4806-b8f3-361c9ca07f2f",
+     "0001193125-26-342549/C_04474040-ca85-4042-854e-b599d5ea9b2d",
+     "0001193125-26-342549/C_09617ec9-1589-45f2-9fb0-dd8ae9c4194b",
+     "0001193125-26-342549/C_0a49b267-e6ec-4ea9-a080-a1dcf1991075",
+     "0001193125-26-342549/C_0a5294f4-b302-4dc2-8403-736523b8c8ea",
+     "0001193125-26-342549/C_0a79612a-208f-4ea9-8293-c27e49a39038",
+     "0001193125-26-342549/C_0bb1b4d0-f536-4988-989c-cdebfd12fc61",
+     "0001193125-26-342549/C_0c055635-93f9-4afe-b3cc-7f131f63bd28",
+     "0001193125-26-342549/C_0cacbe2d-b2a8-4300-99d1-da4121eed71b",
+     "0001193125-26-342549/C_0f5163c8-2136-4cfe-8aba-2c642ef85148",
+     "0001193125-26-342549/C_0fae0ea1-1c1e-4a93-818e-513c1c0966de",
+     "0001193125-26-342549/C_10c92dd0-5f2d-4fee-b6e5-28d9b6bdd122",
+     "0001193125-26-342549/C_13c5bb2d-2ea5-4510-a6f7-557beb1a80d8",
+     "0001193125-26-342549/C_1b1e0bec-a881-4646-aeb5-b03e1259461a",
+     "0001193125-26-342549/C_1b35e948-6638-4251-85ee-e6197f780bb3",
+     "0001193125-26-342549/C_1ba1d11b-ca5a-4106-bd39-43cbd5ce7016",
+     "0001193125-26-342549/C_1c5c49b6-1db9-4ec7-91bd-a35848843ae4",
+     "0001193125-26-342549/C_21800d38-9da3-4f60-a58b-f761aadd8112",
+     "0001193125-26-342549/C_21cc6d0e-c7f6-459b-b9c0-5cb4a295ebbe",
+     "0001193125-26-342549/C_22ea1832-cde4-4a6d-bd00-329dd5dd5277",
+     "0001193125-26-342549/C_22f4fb5c-7c79-4530-9f1b-e0200bfb6122",
+     "0001193125-26-342549/C_2747f452-0d05-4b13-a4f5-c7df159bd9b1",
+     "0001193125-26-342549/C_2a9e08d4-b6fa-4188-98e4-44ff8ba7189e",
+     "0001193125-26-342549/C_2aaaf992-efd1-4eb2-903a-cb4333769ce7",
+     "0001193125-26-342549/C_2c9175c1-f088-4f8b-bbf2-b0836ff3b332",
+     "0001193125-26-342549/C_2ca9d07d-32f6-48b3-a2a1-96ecfa8b7c6f",
+     "0001193125-26-342549/C_2d66a264-a707-40ee-bad3-68fca5a061a6",
+     "0001193125-26-342549/C_33c905af-f3e5-4661-9a38-bc301f1537c9",
+     "0001193125-26-342549/C_3405ebe2-287d-4bfb-b472-a85cb8369706",
+     "0001193125-26-342549/C_373e4ea0-52d6-495f-ab6b-9a534d37f5a4",
+     "0001193125-26-342549/C_37c4e6f8-a3b4-4321-aca6-95bf822ec9df",
+     "0001193125-26-342549/C_3898e9f3-9bee-486a-a312-cdf082a0a6ce",
+     "0001193125-26-342549/C_39b7dfa6-af8f-4b9a-8673-da1a7f4a3010",
+     "0001193125-26-342549/C_3b5fa80d-c210-4416-9d17-d0bb9709b174",
+     "0001193125-26-342549/C_3be8e9a5-2883-4e50-902c-2bcf82f12b26",
+     "0001193125-26-342549/C_3f1a416f-d282-4610-9ed4-872c5a90ad06",
+     "0001193125-26-342549/C_416f04fe-1373-46c3-a1c7-314f425cfe3a",
+     "0001193125-26-342549/C_4186fae3-fa92-4fca-a572-9da514c67c51",
+     "0001193125-26-342549/C_42051b5a-6dc1-4293-8826-2ffe733de515",
+     "0001193125-26-342549/C_45033fa8-bcf5-4750-a5e6-9509b4cd3049",
+     "0001193125-26-342549/C_499864b2-bbbe-418d-b70f-9861db0deae9",
+     "0001193125-26-342549/C_4b923a36-64f8-4b88-81cc-4cffba66ed8e",
+     "0001193125-26-342549/C_4bf65278-6e94-4fc3-96a8-1eb11a80fcff",
+     "0001193125-26-342549/C_4ccd22f0-035e-492d-916e-07d1fbb3b0f6",
+     "0001193125-26-342549/C_4d374a1c-4957-4dbf-a3f6-407711815c30",
+     "0001193125-26-342549/C_4eba07c8-3ad5-49c4-b73d-c4eec031eaba",
+     "0001193125-26-342549/C_50286796-5c59-42a3-97ab-96c07e6d2486",
+     "0001193125-26-342549/C_505d2118-ce85-4d48-a990-0bb13e2b38c2",
+     "0001193125-26-342549/C_52d07153-b5b5-470d-8fec-6a562142e02b",
+     "0001193125-26-342549/C_52d18298-13e5-4503-96c7-19d97e043134",
+     "0001193125-26-342549/C_53981221-e918-416d-a488-975e99550988",
+     "0001193125-26-342549/C_5423897b-5e66-4df5-be98-5980d8d85987",
+     "0001193125-26-342549/C_549ea7a8-758d-468d-bfd4-d0ecc79f2c7a",
+     "0001193125-26-342549/C_5881d9af-21af-4da2-a1e9-8702447d29d3",
+     "0001193125-26-342549/C_5c788573-9c5a-4e39-86f2-8977bde39bc8",
+     "0001193125-26-342549/C_606fe93f-f393-4b92-a095-f2af0a874840",
+     "0001193125-26-342549/C_61df976f-95c6-4308-a045-8fb7d6d50ec7",
+     "0001193125-26-342549/C_62c2a648-95f2-4ce4-965d-185aa7aef866",
+     "0001193125-26-342549/C_6477f8d8-c503-4fe1-9fe4-9945401b9ed5",
+     "0001193125-26-342549/C_66d4f11e-0573-4d93-b676-79e7dda50e3c",
+     "0001193125-26-342549/C_67122289-22cb-43a1-b5d8-dbb1438ecd90",
+     "0001193125-26-342549/C_67acdf5b-eb77-40f7-a2e9-32f1ebf2f08e",
+     "0001193125-26-342549/C_67d8051c-9790-4876-819c-abb271e1a55f",
+     "0001193125-26-342549/C_6c897f3e-8021-4b55-b770-00660ee14d0c",
+     "0001193125-26-342549/C_6cd2aad8-04c7-4d69-a7c1-40661de1c6ca",
+     "0001193125-26-342549/C_6eb33fe7-7564-407c-bf08-4760c20c4d50",
+     "0001193125-26-342549/C_7054a0fb-beb0-43a5-a17d-7c6bdebe07bf",
+     "0001193125-26-342549/C_7177c523-f109-47c7-8294-e072d86a5856",
+     "0001193125-26-342549/C_744f5ac0-092c-4b54-ab74-08eb80975751",
+     "0001193125-26-342549/C_7474d2eb-8ccb-4afc-94ab-b874a187f2a7",
+     "0001193125-26-342549/C_776796af-0438-49ef-958a-49c67cbb29a4",
+     "0001193125-26-342549/C_789b5c5b-79b8-4bad-8f39-6bcdc99e8248",
+     "0001193125-26-342549/C_7a788b7e-0182-463f-b272-64bc4d4f22d2",
+     "0001193125-26-342549/C_7a89f18d-5874-48bc-8b76-7ca77d5b5c49",
+     "0001193125-26-342549/C_7c5a4d2f-b705-4692-aa29-151fca410027",
+     "0001193125-26-342549/C_7ec4c4bc-22b0-478c-968d-ed302d13bd74",
+     "0001193125-26-342549/C_7f069cf0-22bd-4d1a-9d45-526829f0faf5",
+     "0001193125-26-342549/C_8025bfb5-3e63-405f-afb5-c3ae785be45c",
+     "0001193125-26-342549/C_88b68cc6-da0a-4986-9e9c-c98cec2d7c3f",
+     "0001193125-26-342549/C_8a22d111-ef0a-45b7-976a-78159d3e9844",
+     "0001193125-26-342549/C_8a329037-5c2a-45ea-86f9-5069d38a6ad9",
+     "0001193125-26-342549/C_8e73658e-b545-439f-89be-115e592aa96c",
+     "0001193125-26-342549/C_8e9af030-d0ef-4f9d-85da-dd3ed710fea9",
+     "0001193125-26-342549/C_8efd4e94-7bec-4c83-927f-54132f881c52",
+     "0001193125-26-342549/C_93a165c5-e828-4623-b7b0-c096705d4e97",
+     "0001193125-26-342549/C_957ab10f-ba74-4310-9d0d-62844d109c95",
+     "0001193125-26-342549/C_9709a7be-5e31-484c-827b-08a57cffb79b",
+     "0001193125-26-342549/C_990f3bdd-b0f8-4d18-b6e3-293bfe80beff",
+     "0001193125-26-342549/C_993dae84-1ce4-4cef-b13a-f2689d21abd0",
+     "0001193125-26-342549/C_99a86880-3015-4b8b-baaf-65ba0899d71a",
+     "0001193125-26-342549/C_9a7b3a51-52d8-4fa3-aea4-ee2c5bedcc8d",
+     "0001193125-26-342549/C_9e415810-a835-43ff-93cc-ad35d75f1a18",
+     "0001193125-26-342549/C_9e866728-9eb2-4a1d-aa5d-db0f4860acf9",
+     "0001193125-26-342549/C_9f2f796f-73d3-4ca9-8f34-abce2461232d",
+     "0001193125-26-342549/C_a23429f7-8fde-4db1-84dd-203fa8874c51",
+     "0001193125-26-342549/C_a412c369-5901-4438-b5b0-4552981bd282",
+     "0001193125-26-342549/C_a4e10736-761a-4db9-b03a-097ca47fa8eb",
+     "0001193125-26-342549/C_a62a9631-2653-4068-bcc7-97fa2f1ec643",
+     "0001193125-26-342549/C_a84dd26d-a708-45bd-a722-dcd7f8dceff5",
+     "0001193125-26-342549/C_a9c902aa-ebab-4cd4-9c19-64dd07a25d53",
+     "0001193125-26-342549/C_a9f36dc5-9b53-4dba-8bd6-e49bff91bf31",
+     "0001193125-26-342549/C_aae74a4d-d1a7-40d8-b3f0-63bfec5c3905",
+     "0001193125-26-342549/C_abf4c5f0-31d4-41a9-b642-05ff8f771006",
+     "0001193125-26-342549/C_ac810bac-7d62-4ab7-b76e-3cda5edce42f",
+     "0001193125-26-342549/C_afa2c12c-149a-4729-aa91-540c76344b1b",
+     "0001193125-26-342549/C_b0b54721-677a-456e-8c9e-a63e98d3a89b",
+     "0001193125-26-342549/C_b0d7a290-712f-4ce9-b5d6-4c71e94ab1ce",
+     "0001193125-26-342549/C_b4a669dd-a704-4181-98ab-4bad78f6ef87",
+     "0001193125-26-342549/C_b606470a-2010-4d2f-8f0e-e1aea5047444",
+     "0001193125-26-342549/C_b75cfc81-05c1-4596-a77d-07b6da4284aa",
+     "0001193125-26-342549/C_b935e191-3a1b-45c5-9d88-f93a2c91daf3",
+     "0001193125-26-342549/C_b9724119-8f18-4860-bbb9-25ea7fa9b87d",
+     "0001193125-26-342549/C_bcaf7ed7-bffe-497e-8269-73e4251c433d",
+     "0001193125-26-342549/C_be1639be-1be0-4cf4-8eec-a90cacea7169",
+     "0001193125-26-342549/C_be56ef54-8b8a-440c-90a0-564f05800dd2",
+     "0001193125-26-342549/C_bf2ce846-d2a1-48fb-aefc-d41924311d1c",
+     "0001193125-26-342549/C_bf6caa64-32e0-4b0b-932b-93c805fea13a",
+     "0001193125-26-342549/C_c7432696-f06c-4916-8eb9-61cbce27ba71",
+     "0001193125-26-342549/C_ca697463-6837-4ef6-b366-9d59e60f7dab",
+     "0001193125-26-342549/C_cc5158af-6805-4da7-952d-ce1fe8fb7a71",
+     "0001193125-26-342549/C_ceff4604-9a8e-4bf7-8442-bceb2d865537",
+     "0001193125-26-342549/C_d227c977-2a87-4e9b-97c5-8c8fa7077447",
+     "0001193125-26-342549/C_d38ae0b7-8489-4fc0-995b-48239dd472c3",
+     "0001193125-26-342549/C_d62e9d27-e2bf-47ce-af2b-f179c6568acf",
+     "0001193125-26-342549/C_d692875e-4aba-4510-8a9f-f6fe44a1e3da",
+     "0001193125-26-342549/C_e036f1c5-d3cb-4643-b1ae-a91850427b3e",
+     "0001193125-26-342549/C_e2544336-8849-43d1-8910-53b0e4bc1c81",
+     "0001193125-26-342549/C_e2e0cb1b-15a1-4d08-9c70-c5b4e2f50b3e",
+     "0001193125-26-342549/C_e2f332a1-68e1-422b-913e-d66615dc71b5",
+     "0001193125-26-342549/C_e4714fdd-e86e-4a38-893b-d979f08b8e2d",
+     "0001193125-26-342549/C_e56b58d9-2f11-4103-96d5-75eb0f9dbda5",
+     "0001193125-26-342549/C_e9c68c6f-8c1a-4008-a1d6-a0b2ea24be46",
+     "0001193125-26-342549/C_e9f576de-5b22-4836-92f1-a5653d3585ca",
+     "0001193125-26-342549/C_ea35104b-b8ed-4353-960c-0dbc1d0838a1",
+     "0001193125-26-342549/C_ef740b89-8ead-499c-b723-b1e5510445cc",
+     "0001193125-26-342549/C_f0052a07-8946-4300-a754-5f700a1eedec",
+     "0001193125-26-342549/C_f0426fdf-ce07-451f-a774-cfd5386ca24d",
+     "0001193125-26-342549/C_fbf82b9b-7dc9-4b9a-b8b3-05e9ee6e4947",
+     "0001193125-26-342549/C_fd5a8e2b-a707-4263-9507-87aa3a2a9bd8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Fullsteam Operations, LLC (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 08/08/2031 - ( 44 ) ( 293 ) - 0.01"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Arcoro Holdings Corp. (6) (7) (18) First Lien Debt S + 5.50 % 9.23 % 03/28/2030 - ( 107 ) ( 267 ) - 0.01"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "All 141 flagged rows were read against their own printed line (saved query c107_check.py): par is a dash and cost a negative figure on each, and the published cost equals the printed cost (9 rows only fail my regex on a dash fair-value cell and were read by eye).",
+    "The same rows were 185 in the baseline build because the JV schedule's negative-cost lines were published; 44 of them were JV rows and are gone."
+   ],
+   "next_action": "Proposal PD-C107-1851322-20 (as_filed, c107-negative-cost-undrawn) awaits acceptance."
+  },
+  {
+   "finding_id": "RVQ_BLK_b1b03b095ee4",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-274423/C_11b3fe44-dd7b-4e1b-b7f7-a487aca2962d",
+     "0001193125-25-274423/C_f6e03ab5-f901-49df-a8ff-e17241b1ef5b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-274423/C_11b3fe44-dd7b-4e1b-b7f7-a487aca2962d",
+     "0001193125-25-274423/C_f6e03ab5-f901-49df-a8ff-e17241b1ef5b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "KWOR Intermediate I, Inc. (6) (16) (19) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    },
+    {
+     "accession": "0001193125-25-274423",
+     "text": "Continental Battery Company (6) (7) (8) (13) (14) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 3,984 0.11"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Two flags. KWOR Intermediate preferred prints 'S + 8.00 % PIK 02/28/2025 2,978,848'; its reference compares equal and the row survives on mismatch_fields = maturity_date (agent A's page reader takes the acquisition date on an equity line as a maturity; see REQ-nhpi-1).",
+    "Continental Battery prints '7.00 % PIK | 11.29' with no index; the published SOFR and spread 7.0 come from the member text and from S + 7.00 % PIK in 2025-06-30 and 2025-12-31. The check's statement (not corroborated by this page) is literally true: source ambiguity."
+   ],
+   "next_action": "Continental: left as published (member text and neighbouring quarters). KWOR: see REQ-nhpi-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_1c3db9f62761",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-096532/C_0e60fa5c-4725-4613-b009-f7de7bd04b4b",
+     "0001193125-26-096532/C_540ec894-382a-481d-8133-738788454404",
+     "0001193125-26-096532/C_68fcfc9f-52a1-4e96-9126-a0fd4a820c3b",
+     "0001193125-26-096532/C_cf67e799-75c5-4b04-8165-13aa741c1582",
+     "0001193125-26-096532/C_e33eea77-a623-4ea3-84b4-fb00e6cfefc3"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-096532/C_0e60fa5c-4725-4613-b009-f7de7bd04b4b",
+     "0001193125-26-096532/C_540ec894-382a-481d-8133-738788454404",
+     "0001193125-26-096532/C_68fcfc9f-52a1-4e96-9126-a0fd4a820c3b",
+     "0001193125-26-096532/C_cf67e799-75c5-4b04-8165-13aa741c1582",
+     "0001193125-26-096532/C_e33eea77-a623-4ea3-84b4-fb00e6cfefc3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Five flags, published values equal the page on all five: Knockout, RSK, Revalize and KWOR Intermediate preferred print 'S +' and carry mismatch_fields = maturity_date in agent_a_flags.csv (acquisition date read as maturity); Any Hour prints no index and is published Fixed with no reference (row correction), where agent A's own SOFR assignment disagrees.",
+    "Tested whether counting the printed index as corroboration would clear them: no, the preferred rows' reference already compares equal."
+   ],
+   "next_action": "check_repair_request REQ-nhpi-1 (re-filed on the maturity read on equity lines)."
+  },
+  {
+   "finding_id": "RVQ_BLK_e324e5a76349",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-342549/C_06fecb9d-eb1c-4caf-bf59-0400343e587a",
+     "0001193125-26-342549/C_56b3bb12-6d90-4ff3-a1e5-778348b41e7d",
+     "0001193125-26-342549/C_592415e4-4c91-422d-9635-9739d5812302",
+     "0001193125-26-342549/C_ac1afede-93b1-48fa-add2-6cfe2e55d8d9",
+     "0001193125-26-342549/C_bbb2892e-383b-4772-8d80-3632babf0635"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-342549/C_06fecb9d-eb1c-4caf-bf59-0400343e587a",
+     "0001193125-26-342549/C_56b3bb12-6d90-4ff3-a1e5-778348b41e7d",
+     "0001193125-26-342549/C_592415e4-4c91-422d-9635-9739d5812302",
+     "0001193125-26-342549/C_ac1afede-93b1-48fa-add2-6cfe2e55d8d9",
+     "0001193125-26-342549/C_bbb2892e-383b-4772-8d80-3632babf0635"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Heartland Veterinary Partners, LLC (6) (7) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 842 839 842 0.03"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (16) Preferred Equity S+ 10.75 % PIK 06/25/2022 5,482 11,784 10,206 0.33"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Five flags, published values equal the page: Heartland (two lines) print no index and are published Fixed; Knockout, RSK and Revalize preferred print 'S+' and survive on mismatch_fields = maturity_date.",
+    "Same defect as the 2025-12-31 finding."
+   ],
+   "next_action": "check_repair_request REQ-nhpi-1 (re-filed on the maturity read on equity lines)."
+  }
+ ],
  "tests_run": [
-  "tests/test_fund_highlights_wrapper.py: 23 passed, 1 failed. The failure, TestFigureCorrections::test_the_live_wrappers_load_with_their_corrections, asserts two corrections in the Sixth Street wrapper 0001925309, which holds three (2024-03-31 added by an earlier commit); it fails without my change and I did not edit that test or that wrapper.",
-  "Two tests added: test_a_quarter_figure_is_corrected_only_for_the_fund_that_lists_it (with a second fund left untouched) and test_an_income_statement_total_is_still_not_a_correctable_figure (false positive)."
+  "none: no code changed (data corrections, one exclusion rule file, proposals); scripts in scratch/fund_runs/0001851322 carry planted-value self-tests for the retirements"
  ],
  "not_done": [
-  "First build nhxa equals f15a for this fund (same 30 outstanding, no column differs but entity_id and canonical_name): the PP03 and field_coverage_drop repairs changed nothing here.",
-  "The shared-code change was not measured on any other fund: it acts only where a highlights wrapper lists one of the three new fields, and no other wrapper does (not verified by a cohort build). The full pytest suite was not run.",
-  "Totals: published equals filed in all 13 quarters with holdings (2023-03-31 to 2026-03-31) by the gate's check; 2022 quarters have no holdings and are not checked.",
-  "The 41 corrected rows were found by joining published rows to the inline page reader's printed row on the exact identifier; that join covers the quarters to 2025-06-30 only. For 2025-09-30 to 2026-03-31 I read only the flagged rows, the preferred equity members and the lines quoted; loans in those quarters were not compared with the page row by row.",
-  "Old-format quarters: rows that have both a rate and a spread were not compared with the page (the identity rules spread_printed and reference_rate_printed pass there). Percent of net assets, cost, maturity and industry labels were not read.",
-  "X02 proposal: the second Sweep Midco line (maturity 2036) was read in the filings for 2024-03-31, 2024-12-31 and 2026-03-31 only; the quotes are of the 2034 line in each quarter.",
-  "No ruling asked on whether a joint venture's schedule should be retained as underlying_schedule for this fund (parked above).",
-  "A stray 'python -' process I started by mistake (id 21424) was stopped by its id before the second build; nothing else was running."
+  "Independent reviewer and the 20-row page sample are the orchestrator's; not run here.",
+  "Builds: nhza (baseline), nhzb, nhzc, nhzd, nhze, nhzf; nhzf is final (six of six). Gate run without a snapshot (files check not evaluated).",
+  "The 2022 quarters have no holdings (fund-level only). Old-format quarters 2023-03-31..2024-03-31 were checked for class by section heading, fv/cost/pct/units by printed numbers, issuer by printed cell; rate/spread/reference of those quarters were compared where a printed cell exists (fullscan.py), not against a second source.",
+  "Fund-level fields (nav, distributions, F-series) of quarters before 2026-06-30 were not re-read; 2026-06-30 F20/F22/F23 cleared with the JV exclusion and were not read separately.",
+  "F28 2021-03-03 / 2021-12-31 and F33 2021-12-31 (pre-first-schedule, outside the packet) were not touched.",
+  "Chains: Pound Bidco fixed with wrapper position_identity_contexts (nhzf); Victors Purchaser C$ draw joined to USD draws left and recorded."
  ]
 }

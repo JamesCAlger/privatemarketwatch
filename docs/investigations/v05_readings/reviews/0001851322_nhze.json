@@ -1,0 +1,399 @@
+{
+ "reviewer_id": "agent:reviewer-nhpi-20261114-opus",
+ "report_digest": "f9f96fddc2939cd50e339b85f7c9c396b1e013688d101c40419c2aa4ccead50f",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001851322_2026-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_b0cf5fb3ad",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. Rerun now real: python scratch/fund_runs/0001851322/jvctx.py nhza 0001193125-26-342549 30053493 prints 140 rows, FV 337.321M, cost 339.769M, all after the JV start (30.11M-32.19M) and 678 rows before (max 15.55M); equals the printed JV total. Treatment is now routed to the owner (OWN-nhpi-1) and the E07 finding is held confirmed, which resolves the nhzd objection; the as_filed proposal reuses the owner-accepted reason of the two earlier quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e0e4318392ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. Rerun now real: python scratch/fund_runs/0001851322/jvctx.py nhza 0001193125-26-342549 30053493 prints 140 rows, FV 337.321M, cost 339.769M, all after the JV start (30.11M-32.19M) and 678 rows before (max 15.55M); equals the printed JV total. Same as the pct_leaf finding.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001851322_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_f990815b80",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. JV GTCR ABC Holdings preferred now stated correctly (599 units, cost 610, FV 610; nhza context C_8ce906bf...). Fund's own GTCR rows kept. Rerun now real: python scratch/fund_runs/0001851322/jvctx.py nhza 0001193125-26-342549 30053493 prints 140 rows, FV 337.321M, cost 339.769M, all after the JV start (30.11M-32.19M) and 678 rows before (max 15.55M); equals the printed JV total. ",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "GTCR ABC Holdings, LLC Preferred Equity 8.00 % PIK 599 610 610 0.49"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d3091f3f87d9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Resolved: conclusion now confirmed_error, REQ-nhpi-2 withdrawn, and OWN-nhpi-1 (acceptance_change) asks the owner for a wrapper-switched retain-and-flag mechanism. E07 770 vs 678 is the 140 deleted JV positions; nhza (rows retained) tied at 818. The finding correctly stays open until the owner rules.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0da9a638c79e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Population rebuilt on nhze: 1 row, equal to affected; published equals printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Abracon Borrower, LLC (6) (18) (19) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 46 1 1 0.00"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_94383f671c40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Population rebuilt on nhze: 2 Sweep Midco rows, equal to affected; no rate printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Sweep Midco, LLC (6) (11) (17) Second Lien Debt 03/12/2036 1,086 542 382 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_903f0b833d49",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Population rebuilt on nhze: 3 rows equal to affected; values equal the printed lines.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Apollo Acquisition, Inc. (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 12/30/2031 67 27 ( 122 ) 0.00"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_893827587a89",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Population rebuilt on nhze: 141 rows equal to affected/reviewed; all 141 have par 0 and published cost equal to the printed bracketed cost (0 exceptions).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Fullsteam Operations, LLC (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 08/08/2031 - ( 44 ) ( 293 ) - 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b1b03b095ee4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. In nhze shadow/agent_a_flags.csv every kept preferred row has printed_check = field_unreadable with mismatch_fields = maturity_date (the reader cannot read a maturity where the equity line prints an acquisition date and fails closed), and Any Hour / Heartland have printed_check = field_unreadable with mismatch_fields = reference_rate_type (the '13.00% PIK' / '14.50% (incl. 7.00% PIK)' cell in the reference-and-spread column is not read as 'no reference'). Resolved: conclusion now source_ambiguity. Continental Battery 2025-09-30 prints no index (SOFR from member and adjacent quarters), and the KWOR preferred row is the equity-maturity misfire covered by REQ-nhpi-1. Population 2 flags equals affected.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "Continental Battery Company (6) (7) (8) (13) (14) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 3,984 0.11"
+    },
+    {
+     "accession": "0001193125-25-274423",
+     "text": "KWOR Intermediate I, Inc. (6) (16) (19) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1c3db9f62761",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. In nhze shadow/agent_a_flags.csv every kept preferred row has printed_check = field_unreadable with mismatch_fields = maturity_date (the reader cannot read a maturity where the equity line prints an acquisition date and fails closed), and Any Hour / Heartland have printed_check = field_unreadable with mismatch_fields = reference_rate_type (the '13.00% PIK' / '14.50% (incl. 7.00% PIK)' cell in the reference-and-spread column is not read as 'no reference'). Values are right on all five rows, and the preferred-row mechanism is now fixed. But the next action (REQ-nhpi-1, maturity skipped for equity rows) leaves the Any Hour flag in place: it fails on reference_rate_type unreadable, and the report itself says these rows are 'unaffected'. So a check misfire on Any Hour has no repair route and the finding cannot clear. A false alarm caused by the check is not a disposition. Extend REQ-nhpi-1, or file a second request, so that a reference-and-spread cell with a percent and no index code reads as no reference (not_applicable), with a test that a printed index differing from the published one still fails.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (17) Preferred Equity S + 10.75 % 06/25/2022 5,482 7,719 7,934 0.23"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e324e5a76349",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. In nhze shadow/agent_a_flags.csv every kept preferred row has printed_check = field_unreadable with mismatch_fields = maturity_date (the reader cannot read a maturity where the equity line prints an acquisition date and fails closed), and Any Hour / Heartland have printed_check = field_unreadable with mismatch_fields = reference_rate_type (the '13.00% PIK' / '14.50% (incl. 7.00% PIK)' cell in the reference-and-spread column is not read as 'no reference'). Same gap as RVQ_BLK_1c3db9f62761: the two Heartland rows (field_unreadable reference_rate_type) are untouched by REQ-nhpi-1, so the finding has no route to clear.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Heartland Veterinary Partners, LLC (6) (7) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 842 839 842 0.03"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (16) Preferred Equity S+ 10.75 % PIK 06/25/2022 5,482 11,784 10,206 0.33"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged since nhzd; all 30 names equal the printed company cell.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Appfire Technologies, LLC (6) (9) (10) First Lien Debt S + 4.75 % 8.45 % 03/09/2028 13,481 13,457 13,481 0.42"
+    },
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Anaplan, Inc. (6) (7) (9) (11) First Lien Debt S + 4.50 % 8.17 % 06/21/2029 79,767 79,097 79,169 2.45"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "DCA Buyer, LLC (6) (8) (19) First Lien Debt S + 6.50 % (incl. 2.25 % PIK) 10.25 % 06/02/2031 32,679 32,637 32,637 1.06"
+    },
+    {
+     "accession": "0001193125-26-221623",
+     "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Resolved. The three Excelitas EUR term loans are now EUR in nhze (2023-03-31 5,732 at 1.0872; 2023-06-30 5,703 at 1.0920; 2024-03-31 5,660 at 1.0791 = the 2024-03-29 quote, the latest within seven days). Each rate equals data/reference/monetary_conversion/quotes.json, and USD = par x rate. An independent scan of all 7,308 nhze rows with par (reviewer ccyscan.py, not limited to LOAN or typed lines) finds 0 currency disagreements, consistent with ccy2.py. Minor: the quarters list omits 2025-09-30 (Hercules), which the text includes.",
+   "evidence": [
+    {
+     "accession": "0001851322-23-000045",
+     "text": "Excelitas Technologies Corp. (5) (8) E + 5.75 % 8.36 % 08/13/2029 EUR 5,732 5,820 5,991 0.43"
+    },
+    {
+     "accession": "0001851322-24-000076",
+     "text": "Excelitas Technologies Corp. (5) (9) E + 5.75 % 9.65 % 08/13/2029 5,660 5,761 6,087 0.23"
+    },
+    {
+     "accession": "0001851322-25-000023",
+     "text": "Victors Purchaser, LLC (6) (12) (19) First Lien Debt S + 4.75 % 9.08 % 08/15/2031 C$ 322 217 224 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-section-rows-published-as-common",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged; typed lines all agree.",
+   "evidence": [
+    {
+     "accession": "0001851322-24-000115",
+     "text": "Vardiman Black Holdings, LLC (6) (14) Preferred Equity 6.00 % PIK 3/29/2024 5,298,893 3,456 3,375 0.11"
+    },
+    {
+     "accession": "0001193125-26-221623",
+     "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "joint-venture-schedule-dropped-by-quarter-pinned-rule",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. Now routed to the owner as OWN-nhpi-1.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-with-guessed-benchmark",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Published values right. Note that the agentA rule still keeps these two rows (reference unreadable); see RVQ_BLK_1c3db9f62761.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Heartland Veterinary Partners, LLC (6) (7) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 842 839 842 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-dividend-rate-in-member-not-published",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "Verdantas, LLC (6) (16) Preferred Equity 10.00 % 05/03/2024 875,952 1,009 1,165 0.03"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged.",
+   "evidence": [
+    {
+     "accession": "0001851322-25-000023",
+     "text": "Inszone Mid, LLC (6) (7) (9) (10) First Lien Debt S + 5.25 % 9.50 % 11/302029 13,838 13,601 13,838 0.42"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-linked-to-wrong-line",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "(14) Investment was on non-accrual status as of June 30, 2026."
+    }
+   ]
+  },
+  {
+   "observation_key": "income-identity-compares-gross-expenses-with-net-income",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Unchanged.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Net expenses 336,549 273,848 140,836"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "rejected",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. The facts are now right: different margin and maturity, and the link was created by the rename. In nhze, 56255d6a joins 263 par at 2026-03-31 (S + 6.00 % 02/01/2027, FV 260) to 263 par at 2026-06-30 (S + 5.25 % 05/01/2029, FV 258), so the cross-margin link the override set out to remove is still present. The claim 'no override key distinguishes the two identical 260 lines' is wrong. The wrapper key position_identity_contexts ('ACCESSION CONTEXT => TRANCHE KEY', pipeline/source_encodings.py, read by pipeline/reviewed_position_identity.py, already used in the 0001849894 and 0001918712 wrappers) gives exact, context-keyed tranche identities and isolates mapped rows from unmapped ones. Mapping the 2026-06-30 line (0001193125-26-342549 C_46da34e2...) and/or the two 2026-03-31 lines (C_0c8a4c6a..., C_3d1bd62e...) to distinct keys separates them deterministically. The natural-key reject override (name, date, FV +/- 1%) cannot. Apply it, or record why it was not used.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Pound Bidco, Inc. (6) (10) (15) (18) First Lien Debt S + 6.00 % 10.17 % 02/01/2027 262 262 260 0.01"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pound Bidco, Inc. (6) (7) (15) (18) First Lien Debt S + 5.25 % 8.89 % 05/01/2029 263 262 258 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Resolved: the quote is now the Leaf Home preferred line (600 units).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Leaf Home, LLC (6) (16) Preferred Equity 14.00 % PIK 09/05/2025 600 651 796 0.03"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-nhpi-1",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. In nhze shadow/agent_a_flags.csv every kept preferred row has printed_check = field_unreadable with mismatch_fields = maturity_date (the reader cannot read a maturity where the equity line prints an acquisition date and fails closed), and Any Hour / Heartland have printed_check = field_unreadable with mismatch_fields = reference_rate_type (the '13.00% PIK' / '14.50% (incl. 7.00% PIK)' cell in the reference-and-spread column is not read as 'no reference'). The re-filed request names the right field and gives a test that a debt line still fails. One precision point: in nhze the equity rows fail as field_unreadable, not as a mismatch, so the fix must skip maturity_date in unreadable_fields as well as in the comparison. Its scope does not cover the Any Hour / Heartland reference rows (see RVQ_BLK_1c3db9f62761).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "KWOR Intermediate I, Inc. (6) (16) (19) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (17) Preferred Equity S + 10.75 % 06/25/2022 5,482 7,719 7,934 0.23"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    }
+   ]
+  },
+  {
+   "request_id": "OWN-nhpi-1",
+   "outcome": "supported",
+   "rationale": "Fresh review of nhze (5th build) after the nhzd review. Ledger re-read: 11 outstanding; the six verdict-retired/dispositioned findings of nhzd are now verdict_retired (VR-FL-1851322-01..04) or dispositioned (-05, -06) in the nhze ledger. Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. This is correctly classified as an acceptance_change for the owner. The Keystone exclusions stay until the owner rules, and E07 stays confirmed. A pattern key ('debt rows without an Interest Rate segment, excluding Sweep Midco') is fragile: an earlier run found the same predicate matched two real rows at 2025-09-30. A document-position or explicit-context declaration would be safer and should be offered as the alternative.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ]
+  }
+ ]
+}

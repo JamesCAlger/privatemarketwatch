@@ -1,0 +1,501 @@
+{
+ "reviewer_id": "agent:reviewer-nhpi-20261114-opus",
+ "report_digest": "990f7b95cb2cb104c37f3b6df455d5fcdd41b989c784ae4f2385e6bc69277589",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001851322_2026-06-30_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_b0cf5fb3ad",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. The source-only rows are the JV's own schedule (Pareto 11.75 pct is of the JV's net assets). Treatment: the drop departs from AGENTS.md ('JV look-through rows are retained but NOT published'; conservation is retain-and-flag). It is per-CIK and quarter-pinned, not a global drop, and the published basis is identical either way, so the published numbers are right; what is lost is the retained look-through and a rule that carries forward (a new pinned file every quarter, and E07/source recon must be dispositioned each quarter). Recommendation: accept the 2026-06-30 rule as an interim only, and ask the owner for a shared-code change that lets a wrapper mark rows as a detached schedule by a dimension/predicate pattern (or by document position), so the three Keystone rules become one retained-and-flagged underlying_schedule treatment. Proposal PD-...-23 is fine in class and reason (same reason the owner accepted for 2025-12-31/2026-03-31) but its rerun (mk_props2.py nhzd) is not a check: it now fails with AssertionError (proposal already present) and never recomputes the 337,321 total.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e0e4318392ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. SRC_BDC01 reports the same JV rows; conclusion correct as to what the rows are. Treatment: the drop departs from AGENTS.md ('JV look-through rows are retained but NOT published'; conservation is retain-and-flag). It is per-CIK and quarter-pinned, not a global drop, and the published basis is identical either way, so the published numbers are right; what is lost is the retained look-through and a rule that carries forward (a new pinned file every quarter, and E07/source recon must be dispositioned each quarter). Recommendation: accept the 2026-06-30 rule as an interim only, and ask the owner for a shared-code change that lets a wrapper mark rows as a detached schedule by a dimension/predicate pattern (or by document position), so the three Keystone rules become one retained-and-flagged underlying_schedule treatment. PD-SRC_BDC01-1851322-22 rerun has the same defect as PD-23 (mk_props2.py fails, tests nothing).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001851322_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_f990815b80",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 0.61M source row is the JV schedule's GTCR ABC Holdings preferred (context C_8ce906bf..., in nhza: units 599, cost 610,000, FV 610,000), inside the JV block and selected by the 'Equity Investments Financial Services GTCR ABC Holdings' clause; the fund's own GTCR rows ('Interactive Financial Services', 102k preferred and 99,900-unit common) are kept. Correction to the investigator's and PD-24's text: 599 is the unit count; cost is 610 (not 599). Conclusion unaffected. Same treatment caveat and PD-24 rerun defect as the other JV findings.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "GTCR ABC Holdings, LLC Preferred Equity 8.00 % PIK 599 610 610 0.49"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d3091f3f87d9",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E07 2026-06-30 source 770 vs output 678 is not a false alarm. check_E07 counts source positions with status matched/mismatch/missing_from_pipeline and its docstring keeps underlying_schedule rows to compare like with like; the 140 JV positions are missing because exclude_keystone_lookthrough_2026_06_30 deletes them. Under the AGENTS.md contract they would be retained (not published) and E07 would tie, as it did in nhza (818). The check is reporting the real departure (dropped instead of retained). Correct conclusion: confirmed deviation pending the owner's treatment ruling; REQ-nhpi-2 should not exempt rule-removed rows from E07 (that would weaken the check).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0da9a638c79e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population rebuilt from nhzd row_validation_issues: 1 row, equal to affected_rows. Published par 46,000, cost 1,000, FV 1,000 equal the printed line.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Abracon Borrower, LLC (6) (18) (19) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 46 1 1 0.00"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_94383f671c40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 population rebuilt: 2 rows (C_563c5e1f, C_dc5d54d9), equal to affected. Both Sweep Midco second lien lines print no rate/spread cell; no rate fact tagged. Same lines accepted for earlier quarters (DS-X02-1851322-1).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Sweep Midco, LLC (6) (11) (17) Second Lien Debt 03/12/2036 1,086 542 382 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_903f0b833d49",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C103 population rebuilt: 3 rows (Apollo Acquisition, High Street Buyer, VRC Companies), equal to affected; published FV/cost equal the printed numbers on each.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Apollo Acquisition, Inc. (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 12/30/2031 67 27 ( 122 ) 0.00"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_893827587a89",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 population rebuilt: 141 rows, equal to affected and reviewed. Reviewer pop.py read every flagged context's own FV-fact table row: all 141 have published par 0 and a published cost equal to the first bracketed printed number (0 exceptions).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Fullsteam Operations, LLC (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 08/08/2031 - ( 44 ) ( 293 ) - 0.01"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b1b03b095ee4",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population equal (2 flags: KWOR Intermediate preferred, Continental Battery). (1) Continental Battery 2025-09-30 prints '7.00 % PIK | 11.29' with no index; published SOFR and spread 7.0 come from the member and other quarters. The check's statement (reference not corroborated by this page) is literally true; this is source_ambiguity, not false_alarm. (2) The mechanism is misdiagnosed: shadow_agent_a_engine.compare_row keeps the preferred rows because mismatch_fields = maturity_date (the page reader takes the acquisition date printed on an equity line as a maturity), not because the printed index is ignored; the reference already compares equal. The next action (REQ-nhpi-1) would therefore clear neither row of this finding.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "Continental Battery Company (6) (7) (8) (13) (14) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 3,984 0.11"
+    },
+    {
+     "accession": "0001193125-25-274423",
+     "text": "KWOR Intermediate I, Inc. (6) (16) (19) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1c3db9f62761",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population equal (5 flags). Published values equal the page on all five (Knockout, RSK, Revalize, KWOR Intermediate preferred print 'S +'; Any Hour prints no index and is published Fixed with no reference). But the stated mechanism and next action are wrong: in agent_a_flags.csv the four preferred rows carry mismatch_fields = maturity_date (acquisition date read as maturity), and only Any Hour carries reference_rate_type. REQ-nhpi-1's fix (count the printed index as corroboration) does not address the maturity misread, so the finding would not clear. Re-diagnose and re-file the request.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e324e5a76349",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population equal (5 flags: Heartland x2, Knockout, RSK, Revalize). Published values equal the page; Heartland prints no index and is published Fixed. Same defect as RVQ_BLK_1c3db9f62761: three preferred rows survive on mismatch_fields = maturity_date, which REQ-nhpi-1 does not fix.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Heartland Veterinary Partners, LLC (6) (7) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 842 839 842 0.03"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (16) Preferred Equity S+ 10.75 % PIK 06/25/2022 5,482 11,784 10,206 0.33"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_66d716470596",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Retirement VR-FL-1851322-02 re-run (retire_check.py nhzd): PASS, 646 debt rows, 5 non-USD, no mismatch; planted EUR->USD fails. Reviewer fx.py: all 24 currency corrections use the reference H.10 quote of the report date (2024-06-30 uses 2024-06-28, the latest within seven days) and USD = par x rate. Independent ccyscan.py over 7,308 nhzd rows: 2025-12-31 clean. Outside this finding: 3 rows remain wrong in old quarters (Excelitas EUR term loan published USD at 2023-03-31 5,732; 2023-06-30 5,703; 2024-03-31 5,660), missed by the investigator's ccy.py, which skips lines without an instrument-type cell.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Excelitas Technologies Corp. (6) (11) First Lien Debt E + 5.25 % 7.15 % 08/13/2029 EUR 5,560 5,687 6,497 0.19"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Hercules Borrower, LLC (6) (11) First Lien Debt C + 4.75 % 7.01 % 12/15/2028 C$ 2,993 2,083 2,161 0.06"
+    },
+    {
+     "accession": "0001851322-23-000045",
+     "text": "Excelitas Technologies Corp. (5) (8) E + 5.75 % 8.36 % 08/13/2029 EUR 5,732 5,820 5,991 0.43"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_478e4ae0008b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Retirement VR-FL-1851322-01 re-run: PASS (four cited rows equal the printed company cell; 687 rows, 0 differ); planted wrong name fails. Flagged population now empty.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Familia Intermediate Holdings I Corp. (Teasdale Latin Foods) (6) (14) Other Debt 16.25 % PIK 16.25 % 06/18/2028 500 352 - 0.00"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d18a99586446",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Retirement VR-FL-1851322-03 re-run: PASS (592 rows, all fair_value_currency USD). The CAD in the earlier build was the par currency of FLS Holding and Ground Penetrating Radar; their lines print no marker, an S+/P+ index and cost/par 0.90-0.99, so USD par is right (CAD would give cost/par about 1.2-1.4).",
+   "evidence": [
+    {
+     "accession": "0001851322-24-000148",
+     "text": "Par amount is denominated in U.S. Dollars"
+    },
+    {
+     "accession": "0001851322-24-000148",
+     "text": "FLS Holding, Inc. (6) (10) (13) (18) First Lien Debt S + 5.25 % 10.31 % 12/17/2027 1,138 1,028 956 0.03"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8faac2c1740e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Retirement VR-FL-1851322-06 re-run: PASS (Helios -1,000/-59,000, Tidi -4,000/-35,000 equal printed); planted value fails. Current flagged rows are c-628 Pound Bidco and c-539 Zarya, both inside affected_rows; the verdict asks for a classification column the schema lacks, no wrong value.",
+   "evidence": [
+    {
+     "accession": "0001851322-25-000023",
+     "text": "Helios Service Partners, LLC (6) (10) (19) First Lien Debt S + 5.00 % 9.59 % 03/19/2027 - ( 59 ) ( 1 ) -"
+    },
+    {
+     "accession": "0001851322-25-000023",
+     "text": "Tidi Legacy Products, Inc. (6) (10) (19) First Lien Debt S + 5.25 % 9.61 % 12/19/2029 - ( 35 ) ( 4 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0e5ab7765aeb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Retirement VR-FL-1851322-04 re-run: PASS. Independent check of the mechanism: the 10-K row in bdc_fund_income stores annual/4 (income 164,391,250; total_expenses 94,202,250; NII 80,254,000); income - gross expenses - NII = -10,065k = 40,260k waivers / 4, i.e. the verdict's 10.065M residual is expense support, not missing Other income (the printed 657,565 already includes it).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088367",
+     "text": "Total investment income 657,565 552,328"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Net expenses 336,549 273,848 140,836"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4686b85afb16",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Retirement VR-FL-1851322-05 re-run: PASS (9 published non-accrual rows, cost 121,125,000). Optimizely 2026-06-30 footnote fix checked: its line carries (6)(8)(15)(18); the legend is (14).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Investment was on non-accrual status as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "48Forty Solutions, LLC (6) (8) (14) First Lien Debt S + 6.00 % 10.48 % 11/30/2029 47,378 46,014 19,425 0.57"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "All 30 name corrections read on the row's own FV-fact table row (names.py, sib.py): each new name equals the printed company cell. Where the member names another company that company has its own published line (Anaplan 79,169; Securonix 25,646/760; Polaris Newco 5,067; FORTIS preferred 3,994), so no position is lost or doubled. issuer_name_printed is a sound existing detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Appfire Technologies, LLC (6) (9) (10) First Lien Debt S + 4.75 % 8.45 % 03/09/2028 13,481 13,457 13,481 0.42"
+    },
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Anaplan, Inc. (6) (7) (9) (11) First Lien Debt S + 4.50 % 8.17 % 06/21/2029 79,767 79,097 79,169 2.45"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "DCA Buyer, LLC (6) (8) (19) First Lien Debt S + 6.50 % (incl. 2.25 % PIK) 10.25 % 06/02/2031 32,679 32,637 32,637 1.06"
+    },
+    {
+     "accession": "0001193125-26-221623",
+     "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "rejected",
+   "rationale": "The 24 corrections are right, but the coverage claim ('ccy.py finds all 24 and no false positive') is not: an independent scan finds 3 more Excelitas EUR rows published USD (2023-03-31, 2023-06-30, 2024-03-31) because ccy.py ignores lines without an instrument-type cell. The proposed detector must not depend on that cell; fix the 3 rows.",
+   "evidence": [
+    {
+     "accession": "0001851322-23-000045",
+     "text": "Excelitas Technologies Corp. (5) (8) E + 5.75 % 8.36 % 08/13/2029 EUR 5,732 5,820 5,991 0.43"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-section-rows-published-as-common",
+   "outcome": "supported",
+   "rationale": "typescan.py: every typed line in nhzd now agrees (95 Preferred Equity -> PREFERRED_EQUITY, 193 Common Equity -> COMMON_EQUITY, 0 exceptions); LUV and FMG reverse cases correct. Section-heading detector proposal is reasonable for untyped old-format quarters.",
+   "evidence": [
+    {
+     "accession": "0001851322-24-000115",
+     "text": "Vardiman Black Holdings, LLC (6) (14) Preferred Equity 6.00 % PIK 3/29/2024 5,298,893 3,456 3,375 0.11"
+    },
+    {
+     "accession": "0001193125-26-221623",
+     "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "joint-venture-schedule-dropped-by-quarter-pinned-rule",
+   "outcome": "supported",
+   "rationale": "Reviewer re-derived the 2026-06-30 JV population independently (jvrows.py, jvpos.py): the rule predicate selects 140 rows in nhza summing to FV 337,321k / cost 339,769k (= the JV schedule total); the FV-fact table rows of all 140 contexts lie at document offsets 30.11M-32.19M, all 678 kept rows at 5.75M-15.55M, and no other position row in the JV block is left in holdings (24 non-excluded FV-fact rows there are subtotal lines, none in nhza or nhzd holdings). nhzd 2026-06-30 sums to 5,980,632k = filed total. accounting_record_class is parent_schedule on all 140 rows in nhza: the filer tags them 'Investments-non-controlled/non-affiliated' with no JV member, so neither the reporting_entity_suffixes / legal_entity_members key (needs a later bare segment; these have one investmentidentifieraxis segment) nor detached_schedule_labels (needs numeric trailing context ordinals; these are C_<uuid>) can mark them, and is_subsidiary is not a row-correctable field (pipeline/unified_holdings.py _CORRECTABLE_FIELDS). The investigator's 'no non-code mechanism' claim holds. Treatment: the drop departs from AGENTS.md ('JV look-through rows are retained but NOT published'; conservation is retain-and-flag). It is per-CIK and quarter-pinned, not a global drop, and the published basis is identical either way, so the published numbers are right; what is lost is the retained look-through and a rule that carries forward (a new pinned file every quarter, and E07/source recon must be dispositioned each quarter). Recommendation: accept the 2026-06-30 rule as an interim only, and ask the owner for a shared-code change that lets a wrapper mark rows as a detached schedule by a dimension/predicate pattern (or by document position), so the three Keystone rules become one retained-and-flagged underlying_schedule treatment. ",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-with-guessed-benchmark",
+   "outcome": "supported",
+   "rationale": "Any Hour 2025-12-31 and Heartland 2026-06-30 print no index; nhzd publishes Fixed, no reference, rate 13.0 / 14.5. Detector reference is right, although the agentA rule keeps these rows for a different reason (see RVQ_BLK_1c3db9f62761).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Any Hour, LLC (6) Other Debt 13.00 % PIK 13.00 % 05/23/2031 3,627 3,577 3,444 0.10"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Heartland Veterinary Partners, LLC (6) (7) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 842 839 842 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-dividend-rate-in-member-not-published",
+   "outcome": "supported",
+   "rationale": "7 fixed-rate and 2 'S +' preferred corrections equal the printed cells; typescan.py finds no preferred line with a printed percent and all rate fields empty in any quarter.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "Verdantas, LLC (6) (16) Preferred Equity 10.00 % 05/03/2024 875,952 1,009 1,165 0.03"
+    },
+    {
+     "accession": "0001193125-26-096532",
+     "text": "RSK Holdings, Inc. (Riskonnect) (6) (17) Preferred Equity S + 10.50 % 07/07/2022 10,679,200 17,455 17,754 0.53"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "LUV Car Wash 2026-03-31 prints 1,383 units; nhza had 4,000,000 (the FORTIS preferred count) with issuer FORTIS; nhzd 1,383 with issuer LUV Car Wash.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "FORTIS 2024-09-30 prints 10/13/2028 and Inszone 2024-12-31 prints '11/302029'; both published dates match.",
+   "evidence": [
+    {
+     "accession": "0001851322-25-000023",
+     "text": "Inszone Mid, LLC (6) (7) (9) (10) First Lien Debt S + 5.25 % 9.50 % 11/302029 13,838 13,601 13,838 0.42"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-linked-to-wrong-line",
+   "outcome": "supported",
+   "rationale": "Legend (14) is non-accrual at 2026-06-30; the Optimizely undrawn line's own footnotes exclude it; nhzd nonaccrual_status no longer nonaccrual.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "(14) Investment was on non-accrual status as of June 30, 2026."
+    }
+   ]
+  },
+  {
+   "observation_key": "income-identity-compares-gross-expenses-with-net-income",
+   "outcome": "supported",
+   "rationale": "Confirmed independently: the identity residual (10,065k on the stored annual/4 row) equals the year's printed waivers and expense support / 4. Net-expense variant is a sound detector proposal.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096532",
+     "text": "Net expenses 336,549 273,848 140,836"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "rejected",
+   "rationale": "Victors part is accurate (position 4181a5b8: undrawn USD -15 -> C$ 322 -> USD 582). The Pound Bidco part is wrong on two points: the spread is not the same (S + 6.00 % 02/01/2027 vs S + 5.25 % 05/01/2029), and the link was created by this run's Polaris->Pound Bidco rename: in nhza the 2026-06-30 263 row had its own position_id (73211222); in nhzd it joins b3cf24dd (262 at 2026-03-31) across a maturity and spread change while the 3,743 term loan breaks to a new id (814e9cb6). Record it as a new link to review, not as pre-existing.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221623",
+     "text": "Pound Bidco, Inc. (6) (10) (15) (18) First Lien Debt S + 6.00 % 10.17 % 02/01/2027 262 262 260 0.01"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Pound Bidco, Inc. (6) (7) (15) (18) First Lien Debt S + 5.25 % 8.89 % 05/01/2029 263 262 258 0.01"
+    },
+    {
+     "accession": "0001851322-25-000023",
+     "text": "Victors Purchaser, LLC (6) (12) (19) First Lien Debt S + 4.75 % 9.08 % 08/15/2031 C$ 322 217 224 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "outcome": "rejected",
+   "rationale": "The claim (Leaf Home preferred printed 600 units, published 600,000 derived_proxy) is right, but the quoted evidence is the warrants line (2 units), which does not support it. Requote the preferred line.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Leaf Home, LLC (6) (16) Preferred Equity 14.00 % PIK 09/05/2025 600 651 796 0.03"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Leaf Home, LLC (6) (16) (17) Warrants 09/05/2025 2 - - -"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-nhpi-1",
+   "outcome": "rejected",
+   "rationale": "There is a verification bug, but not the one described. In nhzd agent_a_flags.csv the preferred rows (KWOR, Knockout, RSK, Revalize) survive compare_row with mismatch_fields = maturity_date: the page reader takes the acquisition date on equity lines as a maturity. Their reference already compares equal, so counting the printed index as corroboration changes nothing. Continental Battery 2025-09-30 prints no index, and its SOFR is not page-corroborated, which is a source ambiguity, not a misfire. The claim that the fix 'clears the 3 findings here' is false. Re-file the request against the maturity read on equity lines (no maturity concept on preferred/common), with a test that a debt line whose maturity differs still fails.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-274423",
+     "text": "KWOR Intermediate I, Inc. (6) (16) (19) Preferred Equity S + 8.00 % PIK 02/28/2025 2,978,848 2,979 2,979 0.09"
+    },
+    {
+     "accession": "0001193125-25-274423",
+     "text": "Continental Battery Company (6) (7) (8) (13) (14) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 12,945 11,731 3,984 0.11"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Knockout Intermediate Holdings I, Inc. (6) (16) Preferred Equity S+ 10.75 % PIK 06/25/2022 5,482 11,784 10,206 0.33"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-nhpi-2",
+   "outcome": "rejected",
+   "rationale": "This is not a verification bug. E07 correctly counts the 140 JV source positions as missing: the exclusion rule deletes them, and the contract keeps underlying_schedule rows in holdings. Exempting rule-removed rows from E07 would be an acceptance change, and it would hide every future exclusion that drops real positions. The fix is to the treatment: an owner-approved shared-code change so this filer's JV rows are retained as underlying_schedule. E07 then ties (it tied at 818 in nhza).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %"
+    },
+    {
+     "accession": "0001193125-26-342549",
+     "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+    }
+   ]
+  }
+ ]
+}

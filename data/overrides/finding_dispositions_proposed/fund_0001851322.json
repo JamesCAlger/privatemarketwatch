@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "nhxb",
+ "sandbox": "nhze",
  "dispositions": [
   {
    "disposition_id": "PD-X02-1851322-1",
@@ -513,6 +513,1044 @@
    "rerun": "python scripts/v05_evidence/sandbox_sql.py nhxb scratch/fund_runs/0001851322/na.sql",
    "decided_by": "PROPOSED by fund agent 2026-10-14 (fund loop, sandbox nhxb); not accepted by the owner",
    "decided_on": "2026-10-14"
+  },
+  {
+   "disposition_id": "PD-X02-1851322-17",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Both flagged rows are Sweep Midco, LLC second lien lines (fair value 382 thousand and a dash). The page prints no reference rate, spread or interest rate on either and the filer tags none; the two rows are the same lines flagged and accepted for this fund at 2024-03-31 to 2026-03-31 (DS-X02-1851322-1). No rate is printed to declare.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Sweep Midco, LLC (6) (11) (17) Second Lien Debt 03/12/2036 1,086 542 382 0.01",
+     "quote": "2026-06-30, Sweep Midco second lien, fair value 382: no rate cells."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Sweep Midco, LLC (6) (11) (17) Second Lien Debt 03/12/2034 3,156 - - 0.00",
+     "quote": "2026-06-30, Sweep Midco second lien, dashes: no rate cells."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-182e84b83694c879"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ca484b145123c73e"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py nhze X02 0001851322 2026-06-30",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-C103-1851322-18",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "reason_key": "c103-negative-mark-on-undrawn-line-printed-at-zero-cost",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "High Street Buyer (-7 thousand) and VRC Companies (-1 thousand) are undrawn lines printed with a dash for par and cost and a negative mark; published as printed. Same reason as the 2024-12-31 proposal PD-C103-1851322-11 and the accepted DS-LARGE3-C103-1851322 for the other quarters. No real-error verdict stands on these rows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "High Street Buyer, Inc. (6) (8) (18) First Lien Debt S + 4.25 % 7.98 % 04/14/2028 - - ( 7 ) 0.00",
+     "quote": "2026-06-30, High Street Buyer undrawn line: dash, dash, (7)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "VRC Companies, LLC (6) (7) (18) First Lien Debt S + 5.50 % 9.26 % 06/29/2027 - - ( 1 ) 0.00",
+     "quote": "2026-06-30, VRC Companies undrawn line: dash, dash, (1)."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6531147d11d731a1"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-92a61afb74d29328"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py nhze C103 0001851322 2026-06-30",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-C103-1851322-19",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "reason_key": "c103-netted-undrawn-commitment-mark-below-zero",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Apollo Acquisition, Inc. first lien (par 67, cost 27 thousand) is printed with a fair value of (122) thousand: a partly funded commitment whose mark on the undrawn part is below the funded value. Published equals the page (fair value -122,000, cost 27,000).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Apollo Acquisition, Inc. (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 12/30/2031 67 27 ( 122 ) 0.00",
+     "quote": "2026-06-30, the Apollo Acquisition row: par 67, cost 27, fair value (122)."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-df5cc557effce503"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py nhze C103 0001851322 2026-06-30",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-C107-1851322-20",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "reason_key": "c107-negative-cost-undrawn",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "All 141 flagged rows are undrawn commitments printed with a dash for par and a negative cost (unamortized fees netted on the commitment) and a negative mark; each row's published cost equals its printed cost (read against the printed line of every flagged context). Two lines are quoted.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Fullsteam Operations, LLC (6) (8) (18) First Lien Debt S + 5.25 % 8.90 % 08/08/2031 - ( 44 ) ( 293 ) - 0.01",
+     "quote": "2026-06-30, Fullsteam Operations undrawn line: par dash, cost (44), fair value (293)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Arcoro Holdings Corp. (6) (7) (18) First Lien Debt S + 5.50 % 9.23 % 03/28/2030 - ( 107 ) ( 267 ) - 0.01",
+     "quote": "2026-06-30, Arcoro Holdings undrawn line: par dash, cost (107), fair value (267)."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0102763bbfd0c0de"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-019de3be26b2cfc8"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-01d216b8e1584816"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-02ef09f34e34c628"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0560762956f6dc88"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-06746a276d2888bf"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-08b4e18d25088876"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-08e9781471ee5519"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0a08e17964fb73f6"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0ad80b573a745c37"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0f06bf902746324c"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-0fbd1bef355a6096"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1141a3d1dc772d65"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1617d629c9ea1a3b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-163b808f1593d9b2"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-195f22995a15a26e"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-19d2394346de0669"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1a55699b556c9783"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1ad01c260ab15a06"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-1bc322777f6db3dd"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-20fe41add2c355e5"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-225bbf7b2c3c54b5"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-25320eee1b506f73"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-25e67aa14de11234"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-28fa2a628c513bab"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2d01cc2832389a90"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2d54d1a4d8822c7d"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-2fda3144851a7096"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-30042052706bfafb"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-30a0e0a0de9f4687"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3378bf0aa0bc8575"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-369b4dff491bfbce"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-3c8fc2ae1f228a3f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-40eda9bb731014c9"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-421f10a0f17cad5c"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4373c85c3602e87c"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4564d5fab3df5674"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-471a4812712f972b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4978c8ae12b3a2ad"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4a8a1ffba7160e16"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4dde4d0826c5c343"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4e2d91a1b63c4da9"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-4eb0ba0dc1edb148"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-503672bb537d94fe"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-518c554cd6ac98fd"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-53230a01ed7c4e1b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-55431465b9eed2e3"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5818baeb662ebac6"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-587bf95da1f4158a"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-58aa01fdb52064a5"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5ab83db717863471"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5ad2a3cb43b5248e"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5c8a28907e47addc"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5d613ee54aab90f7"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-5dc0cc822a46a923"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-60f19e461e83e40b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-61089ca63abaa3f9"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-61997edc83e4169f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-62dd1c522b335294"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-631aaffbdcfb4dec"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-638848cd65e992aa"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-664bea0ba230a1be"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-679a94617044eecc"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6887ab0cb1f63962"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-68e56927c990b348"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-69cb4bd9d12f7f9d"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6aa2a258114041c0"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6ab66efceaba684f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-6d67e3ae728e5cbd"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-725c5f8b1e968bb1"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-775206b061d7d7c6"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-77c9edd839a93d26"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-796296d4a3c4ca3e"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-79a8f96b3a9f6514"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7ad6115721948473"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-7b011739c52af19d"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8449c86d1ae5a069"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-882b508268b3b3a9"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-892a8f84fa3c8005"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-89cad47f41f82bef"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8b17328a5ed8bc40"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-8f4a7f287e544b68"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-916927776c642b65"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9656e2bffd9083fa"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-970684fa562e77e7"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9738fe555ee802cd"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-980e2d9b3e51eb89"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-98254e3f2af79e9f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9c635e5bbf78e9a6"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-9ff9915f03b966c7"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a40c39a4f3079c18"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a5261384aad95a24"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a6b9f2f033dc5fae"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a6e70bfa90164681"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a8882020b9825cb4"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-a8d0c32a7606d1ed"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ac33306f294fe68f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ac51c01a379df8ac"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ad4cc3172f6f9ea9"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ad6055152a4f2436"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-af04755b342c29bd"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b009708b5b95d702"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b196de28b01c06e5"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b4c2f26d44882136"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b60777fc6f73b955"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b6582d0b721a7b6f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b90ed66731dbf9f7"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-b9c68af25625b5e3"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bac77ab5053bee11"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bb71af388e6d90d3"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-bf00562e7ce00017"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c185f5e22487f310"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c3575ddbebd04930"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c3718a64dfe559eb"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c3fa94f4bf2d59bd"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c4f42d198b230f70"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-c563e537dc1efa12"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cf0fb16ca4f42135"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cf186bf2e27ab040"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-cf477d000a80455b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d2894310c5c17e4b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d325b3f5a30bafe8"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d3cd352c65abcae8"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d5283eb50c698ca2"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d52c4181b6e9d34d"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-d7309097e8556260"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e13227ea276ab6a0"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e2d36b1fad04f0ff"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e53f50910709df9f"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-e8f3154d90534d96"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ec7b1aed5c6806a5"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-ee5c7e70c9af7122"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f1c8363742b222f6"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f2f2c58a2e1cc52b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f679d728eb6bb798"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f6cd75e8bdac8a73"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f79a27c0b4ec0334"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-f803ef1494b2c97b"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fa4d4e2e86f532a0"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-faa71e741e5e54b8"
+    },
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-fba2cda7caf5a3af"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py nhze C107 0001851322 2026-06-30 200",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-X06-1851322-21",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "reason_key": "x06-partly-drawn-line-printed-par-is-total-commitment",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Abracon Borrower, LLC (one row): principal 46 thousand against cost 1 and fair value 1 thousand; a partly drawn commitment whose par column prints the 46. Published equals the page.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Abracon Borrower, LLC (6) (18) (19) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 46 1 1 0.00",
+     "quote": "2026-06-30, the Abracon Borrower row: par 46, cost 1, fair value 1."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "row_id": "ROW-87d212e6ce15d304"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py nhze X06 0001851322 2026-06-30",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1851322-22",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-rows-are-a-joint-ventures-own-schedule",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The source rows reported as missing at 2026-06-30 are rows of the schedule of the joint venture North Haven Keystone, LLC printed in the notes (140 rows, fair value 337,321 thousand, cost 339,769, percentages of the JV's net assets), tagged on the plain investment-identifier axis with no joint-venture member. Rule exclude_keystone_lookthrough_2026_06_30 removes them and the fund's published fair value equals the filed 5,980,632 thousand; the fund's stake is published as one line. Same reason and same treatment as DS-SRC_BDC01-1851322-4 and DS-blocking_source_pct_leaf_parser_mismatch-1851322-5 for 2025-12-31 and 2026-03-31. Not fixed here: the repository's standing treatment is to keep such rows flagged as an underlying schedule; no wrapper setting can mark them for this filer, so the rows are dropped by a quarter-scoped rule (parked in the report).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %",
+     "quote": "2026-06-30, the total of the joint venture's own schedule in the notes."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %",
+     "quote": "the fund's own consolidated total at 2026-06-30; published rows sum to it without the JV rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75",
+     "quote": "a JV schedule row: 11.75 pct of the JV's net assets, no interest-rate cell."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "fund_level": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/jvctx.py nhza 0001193125-26-342549 30053493",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-blocking_source_pct_leaf_parser_mismatch-1851322-23",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_pct_leaf_parser_mismatch",
+   "reason_key": "src-missing-rows-are-a-joint-ventures-own-schedule",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The source rows reported as missing at 2026-06-30 are rows of the schedule of the joint venture North Haven Keystone, LLC printed in the notes (140 rows, fair value 337,321 thousand, cost 339,769, percentages of the JV's net assets), tagged on the plain investment-identifier axis with no joint-venture member. Rule exclude_keystone_lookthrough_2026_06_30 removes them and the fund's published fair value equals the filed 5,980,632 thousand; the fund's stake is published as one line. Same reason and same treatment as DS-SRC_BDC01-1851322-4 and DS-blocking_source_pct_leaf_parser_mismatch-1851322-5 for 2025-12-31 and 2026-03-31. Not fixed here: the repository's standing treatment is to keep such rows flagged as an underlying schedule; no wrapper setting can mark them for this filer, so the rows are dropped by a quarter-scoped rule (parked in the report).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %",
+     "quote": "2026-06-30, the total of the joint venture's own schedule in the notes."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %",
+     "quote": "the fund's own consolidated total at 2026-06-30; published rows sum to it without the JV rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Pareto Health Intermediate Holdings, Inc. (2) (5) First Lien Debt S + 5.00 % 6/3/2030 14,789 14,706 14,641 11.75",
+     "quote": "a JV schedule row: 11.75 pct of the JV's net assets, no interest-rate cell."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "fund_level": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/jvctx.py nhza 0001193125-26-342549 30053493",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1851322-24",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-rows-are-a-joint-ventures-own-schedule",
+   "ciks": [
+    "0001851322"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The one source row reported as missing (0.61M at 2026-06-30) is the GTCR ABC Holdings, LLC preferred equity line of the joint venture's own schedule (599 units, cost 610, fair value 610 thousand, 0.49 pct of the JV's net assets), removed with the rest of that schedule by rule exclude_keystone_lookthrough_2026_06_30. The fund's own GTCR ABC preferred line (102) is published. Same reason as the other JV findings of this quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "GTCR ABC Holdings, LLC Preferred Equity 8.00 % PIK 599 610 610 0.49",
+     "quote": "the JV schedule's GTCR preferred line: 599 units, cost 610, fair value 610, 0.49 pct of the JV's net assets."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-342549",
+     "quarter": "2026-06-30",
+     "verbatim": "Total Portfolio Investments $ 339,769 $ 337,321 270.67 %",
+     "quote": "the JV schedule's total."
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001851322",
+     "quarter": "2026-06-30",
+     "fund_level": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001851322/jvctx.py nhza 0001193125-26-342549 30053493",
+   "decided_by": "PROPOSED by fund agent agent:fund-nhpi-20261114 (fund loop 2026-11-13, sandbox nhze); not accepted by the owner",
+   "decided_on": "2026-11-13"
   }
  ]
 }
