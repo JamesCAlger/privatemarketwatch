@@ -1,0 +1,1025 @@
+{
+ "reviewer_id": "agent:reviewer-sslp-20261113-opus",
+ "report_digest": "3d2683b7dadf02879b63c2c51db35bdc06874731d64d13956cf3b0473fe03dc9",
+ "scope_note": "Reviewed the 48 non-agentA outstanding findings of the production ledger data/output/batches/b1112b/findings_ledger.csv (agentA excluded by instruction). fund_gate.outstanding_findings('slzf') returns 10 sandbox ids (9 of them reviewed here plus agentA RVQ_BLK_ac5763fec6ec); the gate's orphan/missing messages from that production-vs-sandbox gap are a known tooling limit. The contract's 20-row random page sample was not drawn by the investigator; the reviewer's independent full-fund FV-anchored sweeps (1,236 rows) cover more than that sample but the orchestrator should record the deviation. Final review of slzf after the force_pair 4-5 removal (supersedes 0001925309_slzd.json and 0001925309_slzf.json).",
+ "group_verdicts": {
+  "earlier_rejection_VR08_b6b283ae9e19": "resolved (retirement withdrawn; texts rebuilt; awaits batch)",
+  "earlier_rejection_instrument_text": "resolved (46 rebuilds; 0 contradictions in reviewer sweep; 24/24 sample correct)",
+  "earlier_rejection_bedbath_chains": "resolved: 3 force_pairs correct; pairs 4-5 removed, those links revert to slzd's par/PIK-correct matcher pairing (untested in a build; confirm after next build); 2023-06-30 Super-Priority orphan disclosed",
+  "verdict_retirements": "VR-FL-02, -07, -09 supported; campaign VR-CMP-B01-002, -FX02-009, -PP03-004, -PP03-020 supported on independent checks",
+  "not_retired_12": "supported: fail on PROD, pass on slzf",
+  "field_diffs_slzf_vs_slzd": "supported: instrument_description 46, corrected_fields 46, position_id 19 (all Bed Bath); nothing else",
+  "maturity_precision_pins": "explanation accepted as a disclosed stopgap"
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_c5fb6c1487d6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 4 rows listed (ROW-2a4d1cbb36bcb3c6, ROW-1ad17815acde49ed, ROW-c8c3de567e8de76f, ROW-d227ee7945e0528b) for issuer_name_printed 2023-03-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+    },
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_86be7e8b4be1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 3 rows listed (ROW-7bae9be066147555, ROW-9aae3f2c3f4621e3, ROW-6b707617e92fd05a) for issuer_name_printed 2023-06-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-038548",
+     "text": "SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %"
+    },
+    {
+     "accession": "0000950170-23-038548",
+     "text": "Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f9781614ff73",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 3 rows listed (ROW-d4bc57172a534605, ROW-dd605117803ea75e, ROW-0ea4e43625ae2b1d) for issuer_name_printed 2023-09-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-058792",
+     "text": "Commercehub, Inc. (3) First-lien loan ($ 148,875 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.62 % 139,820 148,875 13.4 %"
+    },
+    {
+     "accession": "0000950170-23-058792",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.15 % 4,666 4,625 (EUR 4,368 ) 0.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2add4d4a3cde",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 3 rows listed (ROW-82dc374ba2a3cb2c, ROW-8a1962885223c13a, ROW-646a378bd7cec57c) for issuer_name_printed 2023-12-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 25,574 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.26 % 25,040 24,487 1.3 %"
+    },
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Commercehub, Inc. (3) First-lien loan ($ 148,500 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.79 % 139,880 145,530 8.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e89d85f07ce7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 4 rows listed (ROW-e9a4bc9af02850e4, ROW-c2fede73811904d9, ROW-c42752c0fd988dd9, ROW-969026ba2852b32b) for issuer_name_printed 2024-03-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.43 % 4,686 4,827 (EUR 4,470 ) 0.2 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 129,690 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 10.83 % 127,081 127,755 5.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_de50341a26ae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 5 rows listed (ROW-7752c92f5cb62411, ROW-06363e0172a2ea6c, ROW-bd00300ba2a68cce, ROW-d790f077639db072, ROW-a1b35706693bca0e) for issuer_name_printed 2024-06-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-089930",
+     "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 130,183 par, due 2/2031 ) 2/1/2024 SOFR + 5.25 % 10.58 % 127,840 129,749 4.7 %"
+    },
+    {
+     "accession": "0000950170-24-089930",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.42 % 4,696 4,818 (EUR 4,495 ) 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_da7c14089ed1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 7 rows listed (ROW-77bf0f599542f282, ROW-b5a362c47d8a2a5e, ROW-b1d63b45774fbbd4, ROW-a7429f0c4147271e, ROW-f89724445f60ad40, ROW-b076097e063924f7, ROW-91b3d88598225b5e) for issuer_name_printed 2024-09-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Acosta (3)(12) First-lien loan ($ 182,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.73 % 178,376 178,360 5.8 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Belk, Inc. (3) First-lien loan ($ 195,000 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 12.28 % 192,010 192,563 6.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a0c0a3b6bd01",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 7 rows listed (ROW-be6336d9eb29f05f, ROW-1d584760e5f8b7b1, ROW-adc5fb57f2f5074d, ROW-4cd73286da7efe29, ROW-17b5059212f0abb3, ROW-192617b20ebc7531, ROW-1cf6104a34c29c25) for issuer_name_printed 2024-12-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Scorpio Bidco (3)(4) First-lien loan (EUR 75,326 par, due 4/2031 ) 4/4/2024 E + 5.75 % 8.43 % 80,131 77,534 (EUR 74,876 ) 1.9 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Belk, Inc. (3) First-lien loan ($ 192,563 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 11.51 % 189,683 191,118 4.7 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d5738c94b590",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 6 rows listed (ROW-80957fbafcc9033b, ROW-105782acc18b6681, ROW-7b0229c42cae666d, ROW-e6978b9f6e64f148, ROW-e51368b86868f840, ROW-53603f9ba8967f14) for issuer_name_printed 2025-03-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,435 par, due 7/2029 ) 7/11/2023 E + 6.75 % 9.54 % (incl. 3.00 % PIK) 7,952 8,079 (EUR 7,479 ) 0.2 %"
+    },
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_cc9ecf47923a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 9 rows listed (ROW-d0f74e54925d40f3, ROW-cada6c062fd923e8, ROW-4bd42a0f43effec7, ROW-ac7daa028ad9620b, ROW-1d1e3f11313bbe18, ROW-3e4ad5da88f0d3f8, ROW-5ad1619ee998438a, ROW-5885a522afd1d21e, ROW-f546cf18ff10fe3b) for issuer_name_printed 2025-06-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-101397",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,491 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.77 % (incl. 3.00 % PIK) 8,027 8,846 (EUR 7,535 ) 0.2 %"
+    },
+    {
+     "accession": "0000950170-25-101397",
+     "text": "First-lien loan ($ 29,710 par, due 10/2029 ) 5/6/2025 9.50 % 9.50 % 28,975 28,865 0.7 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3505e77a51ba",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 8 rows listed (ROW-90d6b9bd01cd4d94, ROW-d1383a30a809c1a3, ROW-820e986625d8506e, ROW-61a3b1a538cc4702, ROW-37c6562c9c16f277, ROW-29eea379ab97bdab, ROW-67335a50fda5f482, ROW-d42ab18d82ee0a59) for issuer_name_printed 2025-09-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %"
+    },
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 10,746 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.06 % 10,629 8,973 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3215f8d8f2ae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 8 rows listed (ROW-697f963a11df0476, ROW-523121dd8eaedfa5, ROW-9a8c4c825b642779, ROW-008cb0632e8a0072, ROW-4b12811e62f961b3, ROW-24dbb182f55cb50a, ROW-67ac239286e37d0b, ROW-beb4efc55b174d22) for issuer_name_printed 2025-12-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+    },
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 10,746 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.62 % 10,645 8,651 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f8ecbf985e58",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 10 rows listed (ROW-98b669deb4d95862, ROW-b641c889d50c15e7, ROW-948419de60f0e970, ROW-74fd7e8a92291237, ROW-567e54e69da981d9, ROW-8efe90773943e4a0, ROW-cb00706d3d56125b, ROW-28504fedc444a456, ROW-f22f03136798c7f0, ROW-3369d2810bcb4b54) for issuer_name_printed 2026-03-31 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Bed Bath and Beyond Inc. (3)(11)(13) ABL FILO term loan ($ 10,746 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.57 % 10,645 8,516 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3c6f16805f6e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 11 rows listed (ROW-e577c74d0bcf384e, ROW-79bbd2688f4905b7, ROW-0045137b3ae2a742, ROW-b7220108d41dc6d1, ROW-3e366de7e416bb38, ROW-d1c229cd7e1c854e, ROW-e6d44def42d8fb0b, ROW-18e41d335fc49ce4, ROW-b56c5d198f389267, ROW-09af18c6d96f6e88, ROW-2847a8061a854197) for issuer_name_printed 2026-06-30 (rv_pop.py: EQUAL); the slzf build flags none. Every flagged row's slzf issuer equals the company cell of its own FV-anchored printed line (rv_issuer.py: 1,227 exact, 9 rows differ only by accent folding (Boreal/Boreal, value is U+00E9), a rate-only continuation line (Galileo 2023-06-30, issuer on the line above) or my parser treating the JV row as a heading; all 88 issuer corrections equal the printed cell, rv_isscorr.py). Wrong-company fixes read on the page: C_c5069335 (2023-03-31) carries its FV on the 'Raptor US Buyer II Corp.' line, the Edge Bidco line above it carries its own context C_f26b1de8; C_95fb1fa3 carries its FV on the 'Coupa Holdings, LLC' line. Both rows now chain to the following quarters' Raptor (481e4270) and Coupa (573b8ea6) loans. Conclusion confirmed_error and the fix are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($ 32,385 par, due 7/2028 ) 6/12/2025 SOFR + 8.15 % 11.79 % 31,837 31,732 0.7 %"
+    },
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Bed Bath and Beyond Inc. (3)(11)(13) ABL FILO term loan ($ 7,084 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.54 % 7,017 5,437 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5bd93e0affdb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-2707aca2183018e6) for pik_printed 2023-12-31 (rv_pop.py: EQUAL); the slzf build flags none. Volante 2023-12-31 prints '16.50 % PIK' on its own FV line; slzf pik_rate 16.5 (rv_fields.py PIK presence: 0 mismatches). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Volante Technologies, Inc. First-lien loan ($ 2,604 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,578 2,598 0.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a21cf71c377e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-dcc480b724fd81e9) for preferred_printed 2024-12-31 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 49,063 (GBP 39,175) 1.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_83d01f9d5242",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-60943afe61f5e425) for preferred_printed 2025-03-31 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 49,697 (GBP 38,502 ) 1.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ea737619de4f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-97ac226012226f9e) for preferred_printed 2025-06-30 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-101397",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 52,763 (GBP 38,503 ) 1.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3878a3427ed8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-8d94cb6a1f97ae46) for preferred_printed 2025-09-30 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 57,277 (GBP 42,546 ) 1.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ccd9775f5118",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-bb113de91bae4aa5) for preferred_printed 2025-12-31 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Elysium BidCo Limited (4)(8) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 58,651 (GBP 43,605 ) 1.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8d1957ed2197",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-809a6dda56e3654b) for preferred_printed 2026-03-31 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,313 (GBP 40,428 ) 1.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ba98ca4ee38c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-80f9a016c647aea7) for preferred_printed 2026-06-30 (rv_pop.py: EQUAL); the slzf build flags none. Elysium 'Convertible Preference Shares' row is EQUITY_PREFERRED / PREFERRED_EQUITY in slzf; 2024-12-31 has no FV tag, the row was read by its own context's cost and shares facts (rv_anyctx.py). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,403 (GBP 40,236 ) 1.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_30c49850a416",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-8cb5aa97a5a22f9e) for units_printed 2024-12-31 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d3bfc417bf31",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-bdbf1cbfe6d47a10) for units_printed 2025-03-31 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 19 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f93914897f14",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-041c48f226ce376b) for units_printed 2025-06-30 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-101397",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 17 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f69a3eccee19",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-f687c81d0ab79803) for units_printed 2025-09-30 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e9b92b7f66b0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-f3e0e5f524fc78d7) for units_printed 2025-12-31 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_157a3e5bc23c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-5add467cdab9ea52) for units_printed 2026-03-31 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1d208d31e4ff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the production page_rule_findings.csv flags exactly the 1 rows listed (ROW-d42d6bc96c794b67) for units_printed 2026-06-30 (rv_pop.py: EQUAL); the slzf build flags none. slzf shares_held 173,048 on the SMA Class B Units row equals the printed '( 173,048 units)' of the row's own FV line (rv_fields.py units: 0 mismatches over 117 unit rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 16 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_77f8aea76e0f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. B01 2025-09-30, now retired by campaign entry VR-CMP-B01-002 (the agent removed its duplicate VR-FL-01). Reviewer re-run on PROD: all 113 rows on 2025-09-30 contexts, FV sum 7,724,072 = printed current Total Investments; 7,244,282 is the comparative column. Claim answered. Aggregate key appropriate.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Total Investments $ 7,440,176 $ 7,724,072 179.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_62a61fed0516",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. D06 2026-03-31, VR-FL-1925309-02 kept. Both cited Truck-Lite lines (303,162 / 303,927 par) equal their PROD rows on issuer, par, maturity, spread, cost, FV and now instrument text; every field plant fails it. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Truck-Lite Co., LLC (3) First-lien loan ($ 303,162 par, due 2/2032 ) 2/13/2024 SOFR + 4.75 % 8.42 % $ 300,603 $ 300,658 7.2 %"
+    },
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Truck-Lite Co., LLC (3) First-lien loan ($ 303,927 par, due 2/2032 ) 2/13/2024 SOFR + 4.75 % 8.48 % $ 301,240 $ 304,775 7.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e1757ad83eea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. FX02 2023-03-31, campaign VR-CMP-FX02-009. PROD: all 31 rows on 2023-03-31 contexts, FV sum 1,262,452 = printed total; no U_EUR anywhere; Erling EUR row C_249e9f5a publishes 7,594 = printed dollar FV. Note for the campaign owner: its reason says all 31 rows carry a USD fair_value_currency, but one zero-value SMA row (C_e97f816c) has it null; the verdict's claim (a foreign unit) is still answered.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Total Investments $ 1,248,920 $ 1,262,452 155.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_938dfa1ef9c4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. PP03 2023-06-30, campaign VR-CMP-PP03-020. PROD: all 40 rows on 2023-06-30 contexts, sum 1,758,911 = printed total; current bswift Class A-1 C_3a0ef432 is published on its own context. affected_rows lists only the SMA row though the verdict counted two; the period check covers all 40 rows, conclusion holds.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-038548",
+     "text": "SMA Technologies Holdings, LLC (8)(10) Class A Units ( 200 units) 11/21/2022 200 200 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_26a83f23f436",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. PP03 2025-03-31, campaign VR-CMP-PP03-004. PROD: 114 rows on 2025-03-31 contexts, sum 7,356,032 = printed total; current Clarience row C_09d08757 published. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Total Investments $ 7,172,247 $ 7,356,032 178.9 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_642cd4c95946",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. fmt_basis_spread 2024-03-31, VR-FL-1925309-07 kept. Cited Bestpass / Truck-Lite rows equal the printed lines on all value fields and on the text components the extended check now compares (spacing 'SOFR +5.75%' is ignored, a format-only difference in the filer's member text). Fails the text plant. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Bestpass, Inc. (3)(5) First-lien loan ($ 59,800 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 11.08 % $ 57,695 $ 59,501 2.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Truck-Lite Co., LLC (3) First-lien loan ($ 323,497 par, due 2/2031 ) 2/13/2024 SOFR + 5.75 % 11.06 % 319,961 320,809 13.5 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f584a5697db9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reviewer method (scratch/fund_runs/0001925309/review/): rv_rows.py locates every row's printed line by the <tr> that carries the row's own us-gaap:InvestmentOwnedAtFairValue fact (context = src_context_id; 1,236 of 1,245 rows, 9 untagged-FV rows read by any fact of their context with rv_anyctx.py); rv_issuer.py / rv_fields.py / rv_nums.py / rv_instr.py compare every published row of slzf with that line (issuer exact, par, par currency, due month, PIK, units, revolver class, fair value, cost, spread, reference code, all-in rate, instrument text). slzf: 0 mismatches on issuer, par, currency, maturity, PIK, units, revolver, FV, cost, spread, reference code, rate. The agent's ixmap.json / ixmap_any.json were regenerated independently (rc_ixmap.py) and are identical; retire_check.py was re-run from reviewer copies (rc2_retire_check.py) on PROD (data/output/batches/b1112b, identical to data/output for this CIK) and slzf, with planted mismatches per field (all, issuer, spread, fv, par, maturity, pik, and a reviewer-added instrument-text plant). Flagged populations of the identity rules rebuilt from data/output/shadow/page_rule_findings.csv; slzf's page_rule_findings has 0 rows for this CIK. Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. fv_conservation 2024-12-31, VR-FL-1925309-09 kept. PROD FV sum 7,244,282 thousand = printed Total Investments; overshoot gone; FV plant fails it. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Total Investments $ 7,079,994 $ 7,244,282 179.5 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_08627923c804",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. C206 2024-03-31. PROD: Newark 'L.P' vs printed 'L.P.'; slzf passes; my sweep: all 5 cited rows equal the printed company cells. Real (minor), fixed in slzf, waits for the batch.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "ASP Unifrax Holdings, Inc. (12) First-lien loan ($ 1,127 par, due 12/2025 ) (3) 8/25/2023 SOFR + 3.90 % 9.20 % 1,061 1,082 0.0 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Secured note ($ 1,226 par, due 9/2028 ) 12/19/2023 5.25 % 5.25 % 841 800 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f4a92273ba41",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. C206 2025-12-31. PROD: Newark 'L.P' and Elysium EQUITY_COMMON; slzf fixes both. Agree.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Newark FP Co-Invest, L.P. (8) Partnership ( 8,555,356 units) 11/8/2023 8,572 8,122 0.2 %"
+    },
+    {
+     "accession": "0001193125-26-051289",
+     "text": "AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 15,881 0.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_878c67158458",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. C206 2026-03-31. PROD: Elysium EQUITY_COMMON; slzf EQUITY_PREFERRED. Agree.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Newark FP Co-Invest, L.P. (9) Partnership ( 8,555,356 units) 11/8/2023 8,572 6,064 0.1 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "AF Eagle Parent, L.P. (9) Partnership Units ( 337,024 units) 11/27/2023 11,364 10,597 0.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2cf79e4b1df4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. PP01 2023-03-31. PROD: C_c5069335 published 'EdgeEdge Bidco B.V' on the printed Raptor line; slzf names it Raptor and chains it to 481e4270. Agree.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 %"
+    },
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Edge Bidco B.V (3)(4) First-lien loan (EUR 3,423 par, due 2/2029 ) 2/24/2023 E + 7.00 % 10.02 % (incl. 3.25 % PIK) 3,473 3,579"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6586a10cdf58",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. PP01 2024-03-31. PROD differs by Newark 'L.P'; fixed in slzf. The reworded hypothesis now states that the identifier-heading claim is the filer's member text and that a later retirement must rest on published values and text. Earlier caveat resolved.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Kangaroo Bidco AS (3)(4) First-lien loan ($ 157,500 par, due 11/2030 ) 11/2/2023 SOFR + 7.50 % 12.90 % 152,736 154,349 6.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Alaska Bidco Oy (3)(4) First-lien loan (EUR 727 par, due 5/2030 ) 5/30/2023 E + 6.25 % 10.15 % 756 785 (EUR 727 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_27cf666928c5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. PP01 2024-09-30. PROD GreenShoot spacing; fixed in slzf; member-text caveat now stated in the report. Agree.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Lynx BidCo (3)(4) First-lien loan ($ 39,406 par, due 7/2031 ) 7/5/2024 SOFR + 7.11 % 12.42 % (incl. 5.61 % PIK) 38,345 38,278 1.2 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Artisan Topco LP (8)(10) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,602 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b5555872a46c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. PP01 2025-09-30. Same; agree.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Lynx BidCo (3)(4) First-lien loan ($ 42,240 par, due 7/2031 ) 7/5/2024 SOFR + 6.50 % 10.50 % 41,213 42,423 1.0 %"
+    },
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Artisan Topco LP (8) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,622 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2489f3388f36",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. fmt_basis_spread 2024-12-31. PROD: Elements GBP par published as USD; slzf GBP at the build's own 1.2521 and instrument text rebuilt ('S + 5.25%'). Agree; member-text caveat stated.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (GBP 115,946 par, due 4/2031 ) 4/29/2024 S + 5.25 % 9.95 % (incl. 2.25 % PIK) 144,105 145,210 (GBP 115,946 ) 3.6 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Artisan Bidco, Inc. (3) First-lien loan ($ 114,848 par, due 11/2029 ) 11/7/2023 SOFR + 7.00 % 11.39 % 112,663 114,848 2.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e97713bb5034",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. fmt_cost 2025-09-30. PROD: 'FGI Acquisition Corp' and text '89,755 par'; slzf fixes both. Agree.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "FGI Acquisition Corp. (3)(4) First-lien loan ($ 89,775 par, due 6/2032 ) 6/4/2025 SOFR + 5.50 % 9.66 % 88,039 88,428 2.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f933394e675c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. X10 2024-12-31, no longer retired (VR-FL-06 withdrawn). PROD maturity_date is already 2029-10-31, but ROW-cf723b6dd6e20ba8's instrument text still reads 'due 10/2024' / acquisition 12/29/2024 (printed 10/2029, 12/19/2024); the extended check fails on that in PROD and passes in slzf, where the text is rebuilt. Agree it waits for the batch.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (EUR 910 par, due 10/2029 ) 12/19/2024 E + 6.25 % 9.12 % 921 919 (EUR 887 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Price Fx Inc. (3)(4) First-lien loan (EUR 910 par, due 10/2029 ) 10/27/2023 E + 7.00 % 10.06 % 966 947 (EUR 915 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0a965c0fa818",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. maturity_not_past 2024-12-31: same row and reasoning as X10. Agree.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (EUR 910 par, due 10/2029 ) 12/19/2024 E + 6.25 % 9.12 % 921 919 (EUR 887 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b6b283ae9e19",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the rows located from the verdict's cited quotes (rv_cov19.py: SAME). Plants (rc2_retire_check.py --plant, fields all/issuer/spread/fv/par/maturity/pik plus a reviewer-added instrument-text rate plant) on PROD and slzf: every verdict that cites position rows fails under each field plant that touches a cited field; only the total/period verdicts (B01, FX02, PP03 x2, fv_conservation) survive non-FV plants, as expected, and fail the FV plant. fmt_basis_spread 2024-09-30: my slzd rejection is resolved. VR-FL-1925309-08 is withdrawn and the finding is now confirmed_error awaiting the batch. In slzf Merit C_c6d5c198 text is the single printed label (12.42 %) and Wrangler C_0570f61d reads 'Interest Rate 10.92%' = printed; PROD still carries 12.84 % / 12.05 %, and the extended check fails there.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Merit Software Finance Holdings, LLC (3) First-lien loan ($ 10,714 par, due 6/2029 ) 6/20/2024 SOFR + 7.50 % 12.42 % 10,363 10,414 0.3 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Wrangler TopCo, LLC (3) First-lien loan ($ 124,248 par, due 9/2029 ) 7/7/2023 SOFR + 6.00 % 10.92 % 121,553 125,815 4.1 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "industry-heading-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Wrapper dry-run (rv_wrapper_dryrun.py) over all 1,203 distinct raw identifiers: the new type_industry_prefix_re changes 118, removing only 'Debt Investments Retail and Consumer Products ' (117) and 'Joint Venture Investments ' (1); every remainder starts with the company. Staging uses the per-CIK SQL path (issuer_trailing_strip_re set), so the pattern cannot touch another fund. Existing issuer_name_printed detector fired on these rows. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Acosta (3)(12) First-lien loan ($ 182,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.73 % 178,376 178,360 5.8 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Raptor and Coupa wrong-company fixes read on the page by the FV fact's own row (Edge Bidco's line carries its own context C_f26b1de8); Scorpio, Aurelia, Galileo, X Holdings equal the printed cell in slzf. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-punctuation-differs-from-page",
+   "outcome": "supported",
+   "rationale": "All 88 issuer corrections equal the printed company cell (rv_isscorr.py). The page rule's alphanumeric comparison is blind to punctuation/case; an exact-text pass is a sound proposal, though it will raise many cosmetic hits cohort-wide and should be informational. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Eventus Buyer, LLC (3) First-lien loan ($ 53,648 par, due 11/2030 ) 11/1/2024 SOFR + 5.50 % 9.17 % 53,035 53,481 1.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "issuer_name_strip_re dry-run on every distinct issuer name of rg1b, slza, slzf and production: it alters exactly the 4 Bed Bath tranche names and 4 stray full stops (Eventus 'LLC .', Ingenovis, HMP Omnimedia 'LLC.', Sport Alliance 'GmbH.'); nothing else. Supported (see the chain observation for the side effect).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "Bed Bath 2024-03-31/06-30/09-30 Super-Priority rows: slzf text starts 'Super-Priority DIP term loan' as printed. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "Resolved. data/overrides/position_match_overrides/0001925309.json now holds 3 force_pairs, each checked against the published fair values: (1) 2023-06-30 ABL FILO FV 45,885 -> end moved from Super-Priority 46,056 to ABL FILO 27,325 (par 46,941 -> 27,954, both due 8/2027); (2) 2026-03-31 ABL FILO FV 8,516 (par 10,746) -> ABL FILO 5,437 (par 7,084); (3) 2026-03-31 Super-Priority FV 5,151 (par 6,500) -> Super-Priority 4,471 (par 5,826). All three follow tranche, par and maturity; slzf (which also had pairs 4-5) shows ABL FILO as one 14-row chain 5d654f6f. Pairs 4-5 are removed and the misquoted 'due 8/2023' is gone from the override and report. The removed links revert to the matcher's own pairing, which in slzd was par/PIK-correct: 2023-12-31 Roll Up 8,617 (cash) -> 2024-03-31 Super-Priority 8,272 (cash) on 47869795, and 2023-12-31 Super-Priority 47,147 (PIK) -> 2024-03-31 Roll Up 46,777 (PIK) on 673f38a7 (rv_bbchain.py and direct query). The 2023-12-31 -> 2024-03-31 step is independent of pairs 1-3 (different quarter step), so the untested 3-entry state should reproduce slzd there; it is untested in a build, as the report and fix record DC-0001925309-0f516ce662 say, and should be confirmed by chain listing after the next build. Residual, disclosed: Super-Priority DIP 2023-06-30 (51,533 par) stays orphaned because an override cannot add a pair. Narrowed detector (label/maturity change on one position_id unless par and PIK continue; plus missing pair where the same tranche exists in both quarters) would not flag the correct 2024-03-31 link and would flag the 2023-06-30 orphan. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+    },
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Roll Up DIP term loan ($ 8,617 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.26 % 8,617 8,250 0.5 %"
+    },
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Super-Priority DIP term loan ($ 47,147 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.26 % (incl. 13.26 % PIK) 47,147 45,143 2.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Roll Up DIP term loan ($ 46,777 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % PIK 46,777 44,088 1.9 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "tranche-labels-swapped-between-quarters",
+   "outcome": "supported",
+   "rationale": "Confirmed on the page: 2023-12-31 Roll Up DIP 8,617 par cash and Super-Priority DIP 47,147 par PIK; 2024-03-31 Roll Up DIP 46,777 par PIK and Super-Priority DIP 8,272 par cash (all due 9/2024). Par, PIK and fair value continue across the label change, so the matcher's par/PIK pairing is right and leaving it is correct. The cited quote (ABL FILO 2023-03-31) does not show the swap itself; the four DIP lines in this review's evidence do. Detector (label change on a pair whose par and PIK continue) is concrete and low false-positive. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+    },
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Roll Up DIP term loan ($ 8,617 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.26 % 8,617 8,250 0.5 %"
+    },
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Super-Priority DIP term loan ($ 47,147 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.26 % (incl. 13.26 % PIK) 47,147 45,143 2.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Roll Up DIP term loan ($ 46,777 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % PIK 46,777 44,088 1.9 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "173,048 printed on all 7 rows; slzf matches. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "outcome": "supported",
+   "rationale": "7 Elysium rows preferred in slzf; 2024-12-31 read by its own context's cost/shares facts (no FV tag). Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,403 (GBP 40,236 ) 1.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "all-pik-loan-publishes-no-pik-rate",
+   "outcome": "supported",
+   "rationale": "Volante 2023-12-31 '16.50 % PIK' printed; slzf 16.5. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Volante Technologies, Inc. First-lien loan ($ 2,604 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,578 2,598 0.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Super-Priority DIP 2024-03-31 and 2024-06-30 print 'SOFR + 7.90 % | 13.23 | %' with no PIK, while the Roll Up line prints '13.23 % PIK'; withdrawing pik_rate is source-backed; interest_rate_cash goes null, consistent with the fund's convention (cash leg only where PIK exists, 894 rows). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "All 7 currency fixes match the printed marker; fx rates 1.2521 GBP / 1.0351 EUR (2024-12-31) and 1.1736 EUR (2025-12-31) equal the rates the build itself applies through fx_reference (FRED H.10) to the other rows of the same currency and date; fx_rates.csv is header-only. Full sweep: 0 currency mismatches in slzf. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (GBP 115,946 par, due 4/2031 ) 4/29/2024 S + 5.25 % 9.95 % (incl. 2.25 % PIK) 144,105 145,210 (GBP 115,946 ) 3.6 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-tag-wraps-part-of-printed-number",
+   "outcome": "supported",
+   "rationale": "Printed '$ 15,90 0 par' with cost 15,681 and FV 14,310; 15,900,000 is right. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-report-date",
+   "outcome": "supported",
+   "rationale": "Hippo 2024-03-31 has no FV tag; its context's facts sit on the printed 'STIBOR + 6.50 %' line. rv_nums.py: 0 reference-code mismatches over 1,007 floating rows. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Hippo XPA Bidco AB (3)(4) First-lien loan (SEK 78,125 par, due 2/2031 ) 2/20/2024 STIBOR + 6.50 % 10.58 % (incl. 3.50 % PIK) 7,281 7,102 (SEK 75,938) 0.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Footnote (11) 'Investment is on non-accrual status as of June 30, 2026' is on the ASP Unifrax cell; slzf non-accrual FV at 2026-06-30 = 1,595+10+5,437+33,169+4,471 = 44,682 thousand, matching the agent's 44.7M. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "ASP Unifrax Holdings, Inc. (11)(12) First-lien loan ($ 3,676 par, due 9/2029 ) (3) 9/30/2024 SOFR + 7.75 % 11.41 % (incl. 4.75 % PIK) 3,585 1,595 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-par-stale-in-member-label",
+   "outcome": "supported",
+   "rationale": "Resolved. The widened sweep's 46 additional rebuilds: rv_instr.py on slzf finds 0 rate, par, garbled-label or due-month contradictions with the FV-anchored printed line over 1,236 rows (only Laramie '02/2027' vs '2/2027', a zero-padding format difference, remains). Seeded sample of 24 of the 46 (rv_rebuild46.py, seed 20261113) read context-anchored, all equal to the printed line: Wrangler 10.92, Cordance due 7/2028, Lynx SOFR + 6.25 (x2) and E + 6.25, EDB SOFR + 5.75, Disco SOFR + 7.50, Truck-Lite SOFR + 5.00 / 9.14, Artisan 10.05, Galileo 11.87, Severin acquisition 10/1/2024, X Holdings acquisition 2/5/2025 and '$29,710', Symplr x2 and Rail and Arcwood reference added, Flight fixed 11.50, Cirrus 'S + 6.25' with 'incl.' PIK, Cast & Crew '$$' removed, Bed Bath 2023-06-30 x3 (15.16 / 12.99) and 2023-12-31 '$ +' -> 'SOFR +'. Structured basis_spread and interest_rate were already right (rv_nums.py 0 mismatches). The suggested check now covers rate, spread, due month and acquisition date. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Wrangler TopCo, LLC (3) First-lien loan ($ 124,248 par, due 9/2029 ) 7/7/2023 SOFR + 6.00 % 10.92 % 121,553 125,815 4.1 %"
+    },
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Banyan Software Holdings, LLC (3)(4) First-lien loan ($ 39,900 par, due 10/2026 ) 1/27/2023 SOFR + 7.35 % 12.16 % 37,579 38,302 4.7 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-blank-where-page-prints-revolving",
+   "outcome": "supported",
+   "rationale": "rv_fields.py: in slzf every lien row whose printed line says 'revolving' is Revolver and no other is (0 mismatches); ASP 2024-09-30 prints 'Second-lien note'. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "First-lien revolving loan ($ 1,988 par, due 12/2028 ) 12/16/2022 SOFR + 7.25 % 12.06 % 1,575 1,663 0.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-in-member-differs-from-printed",
+   "outcome": "supported",
+   "rationale": "rv_fields.py: 0 due-month mismatches in slzf over 1,051 rows printing a due month. Supported (the member text of these rows still shows the old due date; see the instrument-text observation).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-precision-unknown-for-page-read-maturity",
+   "outcome": "supported",
+   "rationale": "Accurate: 1,025 identifier_text rows stay 'unknown'; the 27 month pins are now explained (3 belong to maturity corrections, 24 Bed Bath pins were a failed attempt to arm the matcher veto and are kept only as a true statement of printed precision, append-only CSV). Acceptable as a disclosed stopgap; the shared derivation fix is the right route. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "acquisition-date-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Plausible and correctly left; not a correctable field by row correction. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Hornetsecurity Holding GmbH (3)(4) First-lien loan (EUR 3,150 par, due 11/2029 ) 11/14/2022 E + 6.50 % 9.15 % $ 3,143 $ 3,312 (EUR 3,049 ) 0.4 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "joint-venture-interest-published-unclassified",
+   "outcome": "supported",
+   "rationale": "Shared classification; correctly left with a detector proposal. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "fair-value-currency-blank-on-declared-untagged-value",
+   "outcome": "supported",
+   "rationale": "9 null fair_value_currency rows confirmed in PROD (SMA zero rows, Hippo 2024-03-31, Elysium 2024-12-31). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Hippo XPA Bidco AB (3)(4) First-lien loan (SEK 78,125 par, due 2/2031 ) 2/20/2024 STIBOR + 6.50 % 10.58 % (incl. 3.50 % PIK) 7,281 7,102 (SEK 75,938) 0.3 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}

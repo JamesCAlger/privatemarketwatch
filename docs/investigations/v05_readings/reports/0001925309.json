@@ -1,0 +1,2382 @@
+{
+ "cik": "0001925309",
+ "label": "slzf",
+ "before": "rg1b",
+ "shared_code": false,
+ "investigator_id": "agent:fund-sslp-20261113",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 211,
+   "why": "wrapper prefix and strip (123 rows) and 88 context-keyed corrections to the printed company cell"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 116,
+   "why": "tranche words moved from the issuer (39 rows) and 86 rebuilt from the printed row (overlap)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 7,
+   "why": "SMA unit count"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 1,
+   "why": "Bed Bath par"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 7,
+   "why": "par currency"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 7,
+   "why": "dollar par"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 6,
+   "why": "fx rate"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 6,
+   "why": "fx status"
+  },
+  {
+   "column": "asset_category",
+   "rows": 7,
+   "why": "Elysium preferred"
+  },
+  {
+   "column": "index_classification",
+   "rows": 7,
+   "why": "Elysium preferred"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 1,
+   "why": "Hippo STIBOR"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 1,
+   "why": "Hippo STIBOR"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 3,
+   "why": "Volante 1, Bed Bath 2"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 3,
+   "why": "printed maturity"
+  },
+  {
+   "column": "maturity_precision",
+   "rows": 27,
+   "why": "month on 3 corrected and 24 Bed Bath rows"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 27,
+   "why": "follows maturity_precision"
+  },
+  {
+   "column": "nonaccrual_footnote",
+   "rows": 1,
+   "why": "ASP 2026-06-30"
+  },
+  {
+   "column": "nonaccrual_status",
+   "rows": 1,
+   "why": "follows the footnote"
+  },
+  {
+   "column": "lien_position",
+   "rows": 1,
+   "why": "ASP 2024-09-30"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 13,
+   "why": "revolver class"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 196,
+   "why": "names the corrected columns"
+  },
+  {
+   "column": "position_key",
+   "rows": 2,
+   "why": "JV row name"
+  },
+  {
+   "column": "position_id",
+   "rows": 23,
+   "why": "chain changes from the corrected names (see observations)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 3,
+   "why": "follows pik_rate"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 6,
+   "why": "EXTERNAL: present in slza before any change of mine (entity/GICS code under edit by another agent)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 6,
+   "why": "EXTERNAL: same 6 rows as gics_sub_industry"
+  },
+  {
+   "column": "entity_id",
+   "rows": 358,
+   "why": "EXTERNAL and corrected names"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 316,
+   "why": "EXTERNAL and corrected names"
+  }
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Wrapper leaf_guard.type_industry_prefix_re reads the heading 'Retail and Consumer Products' and the section 'Joint Venture Investments' (114 rows incl. continuation lines)",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Acosta (3)(12) First-lien loan ($ 182,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.73 % 178,376 178,360 5.8 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+    }
+   ]
+  },
+  {
+   "what": "dispatch.issuer_name_strip_re (+ issuer_name_strip_to_instrument): tranche words ABL FILO / Roll Up DIP / Super-Priority DIP leave the issuer for the instrument (40 rows), and a stray full stop after LLC / GmbH (8 rows)",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 25,574 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.26 % 25,040 24,487 1.3 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Eventus Buyer, LLC (3) First-lien loan ($ 53,648 par, due 11/2030 ) 11/1/2024 SOFR + 5.50 % 9.17 % 53,035 53,481 1.3 %"
+    }
+   ]
+  },
+  {
+   "what": "88 context-keyed issuer_name corrections to the printed company cell (typos, older names, punctuation, case, glued text)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 %"
+    },
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Coupa Holdings, LLC (3) First-lien loan ($ 129,573 par, due 2/2030 ) 2/27/2023 SOFR + 7.50 % 12.29 % 126,014 126,948 15.6 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Scorpio Bidco (3)(4) First-lien loan (EUR 75,326 par, due 4/2031 ) 4/4/2024 E + 5.75 % 8.43 % 80,131 77,534 (EUR 74,876 ) 1.9 %"
+    }
+   ]
+  },
+  {
+   "what": "shares_held 173,048 on the 7 SMA Class B Unit rows",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "pik_rate: Volante 2023-12-31 16.5 added; Bed Bath Super-Priority DIP 2024-03-31 and 2024-06-30 withdrawn",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Volante Technologies, Inc. First-lien loan ($ 2,604 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,578 2,598 0.1 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "asset_category EQUITY_PREFERRED and index_classification PREFERRED_EQUITY on the 7 Elysium Convertible Preference Shares rows",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,403 (GBP 40,236 ) 1.2 %"
+    }
+   ]
+  },
+  {
+   "what": "par currency, dollar par, rate and status on 7 rows whose currency differs from the printed marker",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (GBP 115,946 par, due 4/2031 ) 4/29/2024 S + 5.25 % 9.95 % (incl. 2.25 % PIK) 144,105 145,210 (GBP 115,946 ) 3.6 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Eventus Buyer, LLC (3) First-lien loan ($ 48,470 par, due 11/2030 ) 11/1/2024 SOFR + 5.50 % 9.86 % 47,668 47,854 1.2 %"
+    }
+   ]
+  },
+  {
+   "what": "maturity_date and precision on 3 rows (Cordance 2025-12-31, Hippo 2026-03-31 and 2026-06-30) and maturity_precision month on 24 Bed Bath rows",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "First-lien loan (EUR 2,594 par, due 2/2031 ) 2/20/2024 E + 6.75 % 8.88 % (incl. 3.63 % PIK) 2,785 2,967 (EUR 2,575 ) 0.1 %"
+    }
+   ]
+  },
+  {
+   "what": "reference_rate_type STIBOR (source withdrawn) on Hippo XPA Bidco 2024-03-31",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Hippo XPA Bidco AB (3)(4) First-lien loan (SEK 78,125 par, due 2/2031 ) 2/20/2024 STIBOR + 6.50 % 10.58 % (incl. 3.50 % PIK) 7,281 7,102 (SEK 75,938) 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "instrument_description rebuilt from the printed row on 40 rows; instrument_type on 13 rows; lien_position on 1 row",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Banyan Software Holdings, LLC (3)(4) First-lien loan ($ 39,900 par, due 10/2026 ) 1/27/2023 SOFR + 7.35 % 12.16 % 37,579 38,302 4.7 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Second-lien note ($ 1,993 par, due 9/2029 ) 8/31/2023 7.10 % 7.10 % (incl. 1.25 % PIK) 1,488 1,355 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-335004",
+     "text": "BCTO Ace Purchaser, Inc. (3)(5) First-lien loan ($ 90,000 par, due 6/2031 ) 6/4/2026 SOFR + 6.00 % 9.66 % 88,407 88,136 1.9 %"
+    }
+   ]
+  },
+  {
+   "what": "46 further instrument_description rebuilds from the printed row (stale rates, spreads, due months, acquisition dates; widened sweep after review)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "data/overrides/position_match_overrides/0001925309.json: 3 force_pair entries restoring the Bed Bath ABL FILO chain (2023-06-30 to 2023-09-30, two at 2026-03-31 to 2026-06-30); the two 2023-12-31 to 2024-03-31 entries were removed after review (untested in a sandbox build)",
+   "kind": "position_override",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "Bed Bath ABL FILO 2025-03-31 par 15,900,000 (tag wraps '15,90')",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "nonaccrual_footnote true on ASP Unifrax first-lien loan 2026-06-30",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "ASP Unifrax Holdings, Inc. (11)(12) First-lien loan ($ 3,676 par, due 9/2029 ) (3) 9/30/2024 SOFR + 7.75 % 11.41 % (incl. 4.75 % PIK) 3,585 1,595 0.0 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "industry-heading-left-in-issuer-name",
+   "what": "114 rows (13 issuers: Acosta, Belk, Bed Bath and Beyond (4 tranches), Blazing Star, Commercehub, Cordance, PDI TA, Photo Holdings, Rapid Data, Tango, and the 2 Joint Venture rows) published an issuer that begins with the industry heading 'and Consumer Products' (the heading is 'Retail and Consumer Products'; the wrapper's leaf-guard list lacked it) or 'Joint Venture Investments'. Fixed in the wrapper (type_industry_prefix_re).",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 8121.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "published issuer name equals the company cell of the row's own printed line (exact text)",
+   "quote": {
+    "accession": "0000950170-24-122238",
+    "text": "Acosta (3)(12) First-lien loan ($ 182,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.73 % 178,376 178,360 5.8 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "the rule compares the published name with the printed company cell and fired on 92 of the 103 flagged rows (114 rows carry the shape; the rule flags the first row of each filing line it reads)",
+    "reference": "identity/issuer_name_printed fired on these rows in the untouched baseline build slza (scratch/fund_sandbox/slza/output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "The filer's member names a different company or spelling than the printed cell: Edge Bidco (member 'EdgeEdge Bidco B.V', printed Raptor US Buyer II Corp., 83.6M, 2023-03-31), SMA Technologies member on a Coupa Holdings loan (126.9M, 2023-03-31), 'Scropio Bidco' (printed Scorpio Bidco, 3 rows), Aurelia Netherlands Midco 2 (printed Aurelia Netherlands B.V., 2 rows), Galileo and X Holdings continuation lines with glued text (2 rows). Fixed by context-keyed issuer_name corrections; the first three joined the right chains.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 220.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "published issuer name equals the printed company cell of the row's own table row",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fired on every one of these rows (not_the_printed_name / begins_with_section_word)",
+    "reference": "identity/issuer_name_printed fired on these rows in the untouched baseline build slza (scratch/fund_sandbox/slza/output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-punctuation-differs-from-page",
+   "what": "86 rows published a name that differs from the printed cell only in punctuation, case or spacing (Aledade Inc. / 'Aledade, Inc.', 'Disco Parent, Inc' / 'Inc.', 'Newark FP Co-Invest, L.P' / 'L.P.', 'FGI Acquisition Corp' / 'Corp.', 'bswift, LLC' printed in lower case, 'Eventus Buyer, LLC .' with a stray full stop, 'Green Shoot BidCo' / printed 'GreenShoot BidCo'). The page rule strips punctuation and spaces before comparing, so it was silent. Fixed (context-keyed corrections and an issuer_name_strip_re for the stray full stop).",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 53.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "exact (case, punctuation and spacing kept) comparison of the published issuer with the printed company cell, listed separately from the alphanumeric comparison",
+   "quote": {
+    "accession": "0001193125-26-208894",
+    "text": "Eventus Buyer, LLC (3) First-lien loan ($ 53,648 par, due 11/2030 ) 11/1/2024 SOFR + 5.50 % 9.17 % 53,035 53,481 1.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The existing rule compares alphanumerics only; an exact second comparison would have listed these 86 rows and has no false positives here because the page prints one spelling per row.",
+    "reference": "identity/issuer_name_printed: add an exact-text pass (kind punctuation_differs)"
+   }
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "what": "Bed Bath and Beyond's tranches were published with the tranche in the issuer ('Bed Bath and Beyond Inc. ABL FILO', '... Roll Up DIP', '... Super-Priority DIP', 40 rows, 14 quarters, fair value 969.4M summed over quarters); the page prints the company 'Bed Bath and Beyond Inc.' and the tranche in the instrument cell. Fixed: issuer_name_strip_re moves the words to the instrument description.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 969.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "published issuer must not contain a tranche word that the printed instrument cell holds",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "the 40 Bed Bath rows were flagged not_the_printed_name",
+    "reference": "identity/issuer_name_printed fired on these rows in the untouched baseline build slza (scratch/fund_sandbox/slza/output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "what": "On 3 Bed Bath rows (2024-03-31, 2024-06-30, 2024-09-30) the filer's member names a different DIP tranche (Roll Up / Super-Priority Up) than the printed line (Super-Priority DIP). With the strip on, the corrected instrument text came out 'Roll Up DIP Super-Priority DIP term loan'. Fixed with an explicit issuer_name correction on those rows so the strip removes nothing.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 7.8,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "instrument_description that starts with two tranche phrases (Roll Up DIP Super-Priority DIP)",
+   "quote": {
+    "accession": "0000950170-24-052859",
+    "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A published text that begins with two different tranche phrases is a defect of the strip-to-instrument step; a regex on the first 40 characters finds it with no false positive in this fund.",
+    "reference": "dispatch.issuer_name_strip_to_instrument step in pipeline/unified_holdings.py (_strip_issuer_names): skip when the corrected text already names a tranche"
+   }
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "what": "After the issuer names were cleaned to the printed 'Bed Bath and Beyond Inc.' the matcher chained different tranches (slzd: ABL FILO 2023-03-31 and 2023-06-30 joined the Super-Priority DIP chain, the 2023-06-30 DIP row was orphaned, ABL FILO and DIP swapped at 2026-06-30). Fixed per fund with data/overrides/position_match_overrides/0001925309.json: 3 force_pair entries (2023-06-30 to 2023-09-30, two at 2026-03-31 to 2026-06-30), tested in slzf. Two further entries (2023-12-31 to 2024-03-31) were built and REMOVED after review: the filer swapped the labels at 2024-03-31, not the loans (2023-12-31 Roll Up 8,617 cash and Super-Priority 47,147 PIK; 2024-03-31 Roll Up 46,777 PIK and Super-Priority 8,272 cash), so following the labels jumped par 8,617 to 46,777. Those two links revert to the matcher's own pairing as in slzd and rg1b, which links them by par and PIK and is correct. The final override file (3 entries) is untested in a sandbox build for the removal of those two pairs; slzf (5 entries) and slzd (none for those pairs) bracket it. slzf chains: ABL FILO 14 rows on one position_id; Roll Up and Super-Priority follow the matcher at 2023-12-31 to 2024-03-31; the Super-Priority 2023-06-30 row stays orphaned (an override cannot add a pair). Lists: chains_slza_slzf.txt, chains_slzd_slzf.txt.",
+   "field": "position_id",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "fair_value_m": 45.9,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "two rows on one position_id whose printed instrument head or maturity month differ, unless par and PIK continue across the pair; a missing pair where the same printed tranche exists in both quarters",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A chain check on printed instrument head and month-precision maturity flags the ABL FILO to DIP links; par and PIK continuity must override a label change (the filer swapped the Roll Up and Super-Priority labels at 2024-03-31), so a label-only mismatch is not an error.",
+    "reference": "position matcher (pipeline/position_matching.py): use the printed instrument head as part of the name key when one issuer has several tranches, with par and PIK continuity overriding a changed label"
+   }
+  },
+  {
+   "observation_key": "tranche-labels-swapped-between-quarters",
+   "what": "Bed Bath and Beyond, 2023-12-31 to 2024-03-31: the filer swapped the Roll Up DIP and Super-Priority DIP labels between the two schedules while the loans continue by par and PIK (2023-12-31 Roll Up 8,617 cash, Super-Priority 47,147 PIK; 2024-03-31 Roll Up 46,777 PIK, Super-Priority 8,272 cash). Printed labels therefore cannot define the chain here; the matcher's par and PIK pairing is right. Left as the matcher builds it.",
+   "field": "position_id",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 22.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "label change between consecutive quarters on a pair whose par and PIK continue",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a tranche label change only when par or PIK also break.",
+    "reference": "position matcher continuity check"
+   }
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "SMA Technologies Holdings Class B Units: published shares_held 244 (derived_proxy) from 2024-12-31 against the printed and tagged 173,048 units (7 quarters, 0.1M to 0.9M). Fixed by context-keyed shares_held corrections.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "published unit count equals the count printed in the instrument cell",
+   "quote": {
+    "accession": "0000950170-25-021144",
+    "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fired on each of the 7 rows (labelled_count_differs)",
+    "reference": "identity/units_printed fired on these rows in the untouched baseline build slza (scratch/fund_sandbox/slza/output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "what": "Elysium BidCo Limited 'Convertible Preference Shares ( 38,503,125 units)' published EQUITY_COMMON / COMMON_EQUITY in 7 quarters (49.1M to 58.7M). Fixed (EQUITY_PREFERRED / PREFERRED_EQUITY).",
+   "field": "asset_category",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2160.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "printed instrument cell says preferred or preference and class is common",
+   "quote": {
+    "accession": "0001193125-26-335004",
+    "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,403 (GBP 40,236 ) 1.2 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fired on each of the 7 rows (text_says_preferred)",
+    "reference": "identity/preferred_printed fired on these rows in the untouched baseline build slza (scratch/fund_sandbox/slza/output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "all-pik-loan-publishes-no-pik-rate",
+   "what": "Volante Technologies 2023-12-31 prints '16.50 % PIK' and published pik_rate null (2.6M); the other quarters carry 16.5. Fixed (pik_rate 16.5).",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 2.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "printed PIK figure present and pik_rate empty",
+   "quote": {
+    "accession": "0000950170-24-016336",
+    "text": "Volante Technologies, Inc. First-lien loan ($ 2,604 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,578 2,598 0.1 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fired on this row (pik_printed_not_published)",
+    "reference": "identity/pik_printed fired on these rows in the untouched baseline build slza (scratch/fund_sandbox/slza/output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Two Bed Bath Super-Priority DIP rows (2024-03-31, 2024-06-30) published pik_rate 13.23 / 13.24 from the hidden member text of the sibling Roll Up DIP line ('Interest Rate 13.23% PIK'); the page prints the Super-Priority line with a cash coupon and no PIK. Fixed (pik_rate withdrawn; interest_rate_cash follows).",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 14.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "pik_rate published on a row whose printed line carries no PIK figure",
+   "quote": {
+    "accession": "0000950170-24-052859",
+    "text": "Super-Priority DIP term loan ($ 8,272 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.23 % 8,272 7,797 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A PIK on a row whose printed line has none was only found by the printed-line sweep; the existing pik_printed rule tests the opposite direction.",
+    "reference": "identity/pik_printed: add kind pik_published_not_printed"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "7 rows published a par currency that differs from the printed marker: GBP/EUR par labelled USD (Elements Finco 2024-12-31 145.2M, Lynx 2024-12-31 17.2M, LIHA 2025-12-31) so the dollar par equalled the local par, and USD par labelled EUR (Eventus 2024-12-31, Artisan Bidco 2025-03-31, Coupa 2026-06-30). Fixed (currency, dollar par at the build's own H.10 rate, rate, status).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 210.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "currency marker in the printed instrument cell ($, EUR, GBP ...) against principal_amount_currency",
+   "quote": {
+    "accession": "0000950170-25-021144",
+    "text": "First-lien loan (GBP 115,946 par, due 4/2031 ) 4/29/2024 S + 5.25 % 9.95 % (incl. 2.25 % PIK) 144,105 145,210 (GBP 115,946 ) 3.6 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The printed instrument cell carries the currency of every par; a compare with principal_amount_currency would have flagged all 7 and has no false positive on the 1,238 other rows.",
+    "reference": "new page rule par_currency_printed in pipeline/candidate_rules.py (identity engine)"
+   }
+  },
+  {
+   "observation_key": "par-tag-wraps-part-of-printed-number",
+   "what": "Bed Bath ABL FILO 2025-03-31: the filer's ix tag wraps '15,90' and leaves the final 0 outside it, so principal_amount was 1,590,000 against the printed $15,900 thousand (cost 15,681 and fair value 14,310 agree with the printed figure). Fixed (principal_amount and principal_amount_usd 15,900,000).",
+   "field": "principal_amount",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 14.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "loan par that is less than a tenth of cost on a row with a positive fair value",
+   "quote": {
+    "accession": "0000950170-25-062722",
+    "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "cost 15.68M against par 1.59M is a price of 986; the check cost/par outside 0.2 to 1.5 for a loan finds it (rows with par printed as a dash are excluded).",
+    "reference": "oracle/row check par_vs_cost"
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-report-date",
+   "what": "Hippo XPA Bidco AB 2024-03-31 (SEK loan, 7.1M) published reference_rate_type SOFR (inferred_post_libor) while the page prints STIBOR + 6.50 %; the same loan is STIBOR in the other 13 quarters. Swept: every floating row's printed code against reference_rate_type (1,006 rows): this is the only mismatch. Fixed (STIBOR, source withdrawn).",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 7.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "printed reference code in the rate cell against reference_rate_type",
+   "quote": {
+    "accession": "0000950170-24-052859",
+    "text": "Hippo XPA Bidco AB (3)(4) First-lien loan (SEK 78,125 par, due 2/2031 ) 2/20/2024 STIBOR + 6.50 % 10.58 % (incl. 3.50 % PIK) 7,281 7,102 (SEK 75,938) 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The printed code (SOFR, E, S, N, C, STIBOR, SARON, P) maps 1 to 1 to the published type; a row where the map disagrees is an error.",
+    "reference": "identity page rule reference_printed"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-printed-not-published",
+   "what": "ASP Unifrax first-lien loan at 2026-06-30 (1.6M): the issuer cell carries footnote (11) 'on non-accrual status as of June 30, 2026' and the row was published nonaccrual_status unknown; the filing's non-accrual fair value 44.7M equals the published non-accrual rows (43.1M) plus this row. Fixed (nonaccrual_footnote true). Swept: every non-accrual footnote of the 17 filings against published rows; all other rows agree, and the totals tie at 2025-12-31 (0.2M) and 2026-03-31 (50.2M).",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "published non-accrual fair value against the non-accrual table total printed in the filing, per quarter",
+   "quote": {
+    "accession": "0001193125-26-335004",
+    "text": "ASP Unifrax Holdings, Inc. (11)(12) First-lien loan ($ 3,676 par, due 9/2029 ) (3) 9/30/2024 SOFR + 7.75 % 11.41 % (incl. 4.75 % PIK) 3,585 1,595 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The filing prints performing and non-accrual fair value totals; the published non-accrual sum must equal them within rounding.",
+    "reference": "fund-level check nonaccrual_total_vs_printed"
+   }
+  },
+  {
+   "observation_key": "instrument-text-par-stale-in-member-label",
+   "what": "86 instrument_description texts (the filer's hidden label) contradicted the printed row: 40 in slzd (stale par: Banyan 39,000 for 39,900, Mach 135,000 for 121,875, FGI 89,755 for 89,775 ...; 'loan' for 'revolving loan' 8 rows; 'Roll Up DIP' for 'Super-Priority DIP' 3 rows; 7 rows of 2024-09-30 with two labels glued) and 46 more found by the widened sweep (scan_text.py compares par, currency, due month, acquisition date, reference code and spread, fixed reference, interest rate and PIK of the text with the printed row on all 1,245 rows): stale rates (Wrangler 12.05 for 10.92, Commercehub, Galileo, Alaska Bidco, Equinox, Artisan Bidco, Cast & Crew, Truck-Lite, 3 Bed Bath 2023-06-30 rows, Azurite, Lynx, Symplr), stale spreads (Elements, Cirrus, Flight, Hippo ...), stale due months (Price Fx 10/2024 for 10/2029, Cordance 6/2027 for 7/2028, Hippo 12/2031 for 2/2031) and acquisition dates. principal_amount, maturity_date and interest_rate fields were right on all of them except the 3 maturities and 1 par fixed separately. Fixed: text rebuilt from the printed row; after slzf the sweep finds 0 contradictions.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 38.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "every component of instrument_description (par, currency, due month, acquisition date, reference code, spread, interest rate, PIK) against the printed instrument, date, rate and spread cells",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Banyan Software Holdings, LLC (3)(4) First-lien loan ($ 39,900 par, due 10/2026 ) 1/27/2023 SOFR + 7.35 % 12.16 % 37,579 38,302 4.7 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Every component of the published text must equal the printed row; the widened compare found 86 rows where the first version (par digits only) found 15.",
+    "reference": "oracle/row check instrument_text (components par, due, acquisition date, reference, spread, rate, PIK); the retirement check retire_check.py now carries it"
+   }
+  },
+  {
+   "observation_key": "instrument-type-blank-where-page-prints-revolving",
+   "what": "8 rows printed 'First-lien revolving loan' and published instrument_type blank (BTRS 2023-03-31, 2023-06-30, USA DeBusk, Galileo x3, LIHA, HireVue x2, Artisan, Coupa, Kaseware) and BCTO Ace Purchaser 2026-06-30 printed 'First-lien loan ($ 90,000 par' and published Revolver (88.1M). ASP Unifrax 2024-09-30 prints 'Second-lien note' and published First Lien. Fixed (instrument_type, lien_position).",
+   "field": "instrument_type",
+   "quarters": [
+    "2023-03-31",
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 91.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "words revolving / delayed draw / first-lien / second-lien in the printed instrument cell against instrument_type and lien_position",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "First-lien revolving loan ($ 1,988 par, due 12/2028 ) 12/16/2022 SOFR + 7.25 % 12.06 % 1,575 1,663 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The printed instrument cell states the class and the lien; a compare finds all 14 rows.",
+    "reference": "identity page rule instrument_class_printed"
+   }
+  },
+  {
+   "observation_key": "maturity-in-member-differs-from-printed",
+   "what": "3 rows published a maturity other than the printed 'due m/yyyy': Cordance 2025-12-31 (2027-06-30 for 7/2028) and Hippo 2026-03-31 and 2026-06-30 (2031-12-31 for 2/2031). Fixed (maturity_date, precision month). Swept: every row printing a due month against the published month: these were the only 3 of 1,052 rows that print a due month.",
+   "field": "maturity_date",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 7.7,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "published maturity month and year against the 'due m/yyyy' in the printed instrument cell",
+   "quote": {
+    "accession": "0001193125-26-051289",
+    "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Exact compare of month and year; no false positive in this fund.",
+    "reference": "identity page rule maturity_printed"
+   }
+  },
+  {
+   "observation_key": "maturity-precision-unknown-for-page-read-maturity",
+   "what": "Why 27 rows were pinned: the month precision on the 3 corrected maturities is part of those corrections, and the 24 Bed Bath rows were pinned as an attempt to switch on the matcher veto between ABL FILO (8/2027) and the DIP tranches; it did not stop the links (the per-fund position overrides did), so the pins are only a true statement of the printed precision and are not relied on (they cannot be withdrawn from the append-only CSV). 1,050 of 1,245 rows have maturity_precision unknown and maturity_status unresolved although the maturity is read from the printed 'due m/yyyy' in the member text (month precision). The matcher's maturity veto is inert on them. Left (shared derivation, all funds); 27 Bed Bath and corrected rows were set to month.",
+   "field": "maturity_precision",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 8600.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "maturity_precision unknown while maturity_date_source is identifier_text and the text has a month and year",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Derive precision month when the source text is month and year.",
+    "reference": "pipeline/financial_conventions.py maturity_precision derivation"
+   }
+  },
+  {
+   "observation_key": "acquisition-date-printed-not-published",
+   "what": "71 rows (3,021M summed) of the 2023-03-31 and 2023-06-30 filings (the filer's member writes 'Acquisition Date', no tag) publish bdc_acquisition_date null while the page prints the date (e.g. 11/14/2022). Left: the field is not correctable by a row correction or an untagged value.",
+   "field": "bdc_acquisition_date",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 3021.4,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "printed acquisition date present and bdc_acquisition_date null",
+   "quote": {
+    "accession": "0000950170-23-021762",
+    "text": "Hornetsecurity Holding GmbH (3)(4) First-lien loan (EUR 3,150 par, due 11/2029 ) 11/14/2022 E + 6.50 % 9.15 % $ 3,143 $ 3,312 (EUR 3,049 ) 0.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Printed date cell against bdc_acquisition_date.",
+    "reference": "identity page rule acquisition_printed"
+   }
+  },
+  {
+   "observation_key": "joint-venture-interest-published-unclassified",
+   "what": "Structured Credit Partners JV, LLC '(25.00% ownership)' partnership interest (2 rows, 2026-03-31 and 2026-06-30, 7.3M and 25.7M) is published OTHER / UNCLASSIFIED with extracted_industry 'Joint Venture Investments' and no GICS; 103 rows across the cohort share this shape. Left: shared classification.",
+   "field": "index_classification",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 7.3,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "partnership interest with '% ownership' and class UNCLASSIFIED",
+   "quote": {
+    "accession": "0001193125-26-208894",
+    "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A JV interest should carry an equity or fund class.",
+    "reference": "pipeline/instrument_classification.py JV rule"
+   }
+  },
+  {
+   "observation_key": "fair-value-currency-blank-on-declared-untagged-value",
+   "what": "9 rows whose fair value the wrapper declares from the printed row (SMA zero rows, Hippo 2024-03-31, Elysium 2024-12-31) publish fair_value_currency null (cost_currency USD on 2 of them). Left: not a correctable field.",
+   "field": "fair_value_currency",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 7.1,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "fair_value_currency null on a row with fair_value",
+   "quote": {
+    "accession": "0000950170-24-052859",
+    "text": "Hippo XPA Bidco AB (3)(4) First-lien loan (SEK 78,125 par, due 2/2031 ) 2/20/2024 STIBOR + 6.50 % 10.58 % (incl. 3.50 % PIK) 7,281 7,102 (SEK 75,938) 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Non-null currency whenever fair_value is non-null.",
+    "reference": "oracle/row check fv_currency_present"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_77f8aea76e0f",
+   "rule_name": "B01",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "0001925309|2025-09-30|published_fair_value_sum_and_context_periods"
+    ],
+    "reviewed_rows": [
+     "0001925309|2025-09-30|published_fair_value_sum_and_context_periods"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Total Investments $ 7,440,176 $ 7,724,072 179.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 4 checked lines).",
+    "Every published row of the quarter sits on an XBRL context whose instant is the report date (XML parse) and the published fair value sum 7,724,072 thousand equals the printed current Total Investments; the cited comparative lines are not published at this quarter."
+   ],
+   "next_action": "Verdict retired (VR-CMP-B01-002, campaign entry of 60d765b0 stands): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_REV_08627923c804",
+   "rule_name": "C206",
+   "report_date": "2024-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-5e445ca49155cd78",
+     "ROW-338f19e13ebb7832",
+     "ROW-ca726916ca480d97",
+     "ROW-1f4eacaed21cf6fb",
+     "ROW-483367d8fa2e590f"
+    ],
+    "reviewed_rows": [
+     "ROW-5e445ca49155cd78",
+     "ROW-338f19e13ebb7832",
+     "ROW-ca726916ca480d97",
+     "ROW-1f4eacaed21cf6fb",
+     "ROW-483367d8fa2e590f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "ASP Unifrax Holdings, Inc. (12) First-lien loan ($ 1,127 par, due 12/2025 ) (3) 8/25/2023 SOFR + 3.90 % 9.20 % 1,061 1,082 0.0 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Secured note ($ 1,226 par, due 9/2028 ) 12/19/2023 5.25 % 5.25 % 841 800 0.0 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Unsecured note ($ 1,059 par, due 9/2029 ) 8/31/2023 7.50 % 7.50 % 581 582 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'Newark FP Co-Invest, L.P' vs printed 'Newark FP Co-Invest, L.P.'. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_f4a92273ba41",
+   "rule_name": "C206",
+   "report_date": "2025-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-afa04ae9c3ce3951",
+     "ROW-088493f2cd0308eb",
+     "ROW-bb113de91bae4aa5",
+     "ROW-b35a22d12b979839"
+    ],
+    "reviewed_rows": [
+     "ROW-afa04ae9c3ce3951",
+     "ROW-088493f2cd0308eb",
+     "ROW-bb113de91bae4aa5",
+     "ROW-b35a22d12b979839"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Newark FP Co-Invest, L.P. (8) Partnership ( 8,555,356 units) 11/8/2023 8,572 8,122 0.2 %"
+    },
+    {
+     "accession": "0001193125-26-051289",
+     "text": "AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 15,881 0.4 %"
+    },
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Elysium BidCo Limited (4)(8) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 58,651 (GBP 43,605 ) 1.4 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'Newark FP Co-Invest, L.P' vs printed 'Newark FP Co-Invest, L.P.'; MISMATCH preferred class EQUITY_COMMON. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_878c67158458",
+   "rule_name": "C206",
+   "report_date": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-81db0988533488c3",
+     "ROW-0192c848cd149142",
+     "ROW-809a6dda56e3654b",
+     "ROW-9316fb77caf3aa90"
+    ],
+    "reviewed_rows": [
+     "ROW-81db0988533488c3",
+     "ROW-0192c848cd149142",
+     "ROW-809a6dda56e3654b",
+     "ROW-9316fb77caf3aa90"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Newark FP Co-Invest, L.P. (9) Partnership ( 8,555,356 units) 11/8/2023 8,572 6,064 0.1 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "AF Eagle Parent, L.P. (9) Partnership Units ( 337,024 units) 11/27/2023 11,364 10,597 0.3 %"
+    },
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,313 (GBP 40,428 ) 1.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH preferred class EQUITY_COMMON. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_62a61fed0516",
+   "rule_name": "D06",
+   "report_date": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-01c53998918c7422",
+     "ROW-4e11870a69960615"
+    ],
+    "reviewed_rows": [
+     "ROW-01c53998918c7422",
+     "ROW-4e11870a69960615"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Truck-Lite Co., LLC (3) First-lien loan ($ 303,162 par, due 2/2032 ) 2/13/2024 SOFR + 4.75 % 8.42 % $ 300,603 $ 300,658 7.2 %"
+    },
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Truck-Lite Co., LLC (3) First-lien loan ($ 303,927 par, due 2/2032 ) 2/13/2024 SOFR + 4.75 % 8.48 % $ 301,240 $ 304,775 7.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 2 checked lines)."
+   ],
+   "next_action": "Verdict retired (VR-FL-1925309-02, standing rule D-252, my file standing_rule_fundloop_0001925309_2026-11-13.json): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_REV_e1757ad83eea",
+   "rule_name": "FX02",
+   "report_date": "2023-03-31",
+   "coverage": {
+    "affected_rows": [
+     "0001925309|2023-03-31|published_fair_value_sum_and_context_periods"
+    ],
+    "reviewed_rows": [
+     "0001925309|2023-03-31|published_fair_value_sum_and_context_periods"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Total Investments $ 1,248,920 $ 1,262,452 155.4 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 3 checked lines).",
+    "Every published row of the quarter sits on an XBRL context whose instant is the report date (XML parse) and the published fair value sum 1,262,452 thousand equals the printed current Total Investments; the cited comparative lines are not published at this quarter."
+   ],
+   "next_action": "Verdict retired (VR-CMP-FX02-009, campaign entry of 60d765b0 stands): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_REV_2cf79e4b1df4",
+   "rule_name": "PP01",
+   "report_date": "2023-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d227ee7945e0528b",
+     "ROW-df3826e5f2c90313",
+     "ROW-36dcb7fe68f6cb0d"
+    ],
+    "reviewed_rows": [
+     "ROW-d227ee7945e0528b",
+     "ROW-df3826e5f2c90313",
+     "ROW-36dcb7fe68f6cb0d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 %"
+    },
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 %"
+    },
+    {
+     "accession": "0000950170-23-021762",
+     "text": "8,636 Class A 3/24/2023 864 864 0.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'EdgeEdge Bidco B.V' vs printed 'Raptor US Buyer II Corp.'. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_6586a10cdf58",
+   "rule_name": "PP01",
+   "report_date": "2024-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-704b203909e7baf4",
+     "ROW-504f9a2b022e8f64",
+     "ROW-9e91b6224c6a3ad6",
+     "ROW-627eaa6b6387aedc",
+     "ROW-fb57562593d9942c",
+     "ROW-1f4eacaed21cf6fb",
+     "ROW-a15392e73f16ee83"
+    ],
+    "reviewed_rows": [
+     "ROW-704b203909e7baf4",
+     "ROW-504f9a2b022e8f64",
+     "ROW-9e91b6224c6a3ad6",
+     "ROW-627eaa6b6387aedc",
+     "ROW-fb57562593d9942c",
+     "ROW-1f4eacaed21cf6fb",
+     "ROW-a15392e73f16ee83"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Kangaroo Bidco AS (3)(4) First-lien loan ($ 157,500 par, due 11/2030 ) 11/2/2023 SOFR + 7.50 % 12.90 % 152,736 154,349 6.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Alaska Bidco Oy (3)(4) First-lien loan (EUR 727 par, due 5/2030 ) 5/30/2023 E + 6.25 % 10.15 % 756 785 (EUR 727 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Edge Bidco B.V (3)(4)(5) First-lien loan (EUR 5,811 par, due 2/2029 ) 2/24/2023 E + 7.00 % 10.93 % (incl. 3.25 % PIK) 6,042 6,313 (EUR 5,845 ) 0.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'Newark FP Co-Invest, L.P' vs printed 'Newark FP Co-Invest, L.P.'. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_27cf666928c5",
+   "rule_name": "PP01",
+   "report_date": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-0651e512a071a59d",
+     "ROW-f56aec95278f84e3",
+     "ROW-0be71f133280eedd"
+    ],
+    "reviewed_rows": [
+     "ROW-0651e512a071a59d",
+     "ROW-f56aec95278f84e3",
+     "ROW-0be71f133280eedd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Lynx BidCo (3)(4) First-lien loan ($ 39,406 par, due 7/2031 ) 7/5/2024 SOFR + 7.11 % 12.42 % (incl. 5.61 % PIK) 38,345 38,278 1.2 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Artisan Topco LP (8)(10) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,602 0.2 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 9.27 % 5,409 5,623 (EUR 5,038 ) 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'Green Shoot BidCo B.V.' vs printed 'GreenShoot BidCo B.V.'; instrument text differs from the printed row in dups. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_b5555872a46c",
+   "rule_name": "PP01",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-22ac0f053de8d49f",
+     "ROW-caa83c4ae9b81223",
+     "ROW-980c866da0f457c7"
+    ],
+    "reviewed_rows": [
+     "ROW-22ac0f053de8d49f",
+     "ROW-caa83c4ae9b81223",
+     "ROW-980c866da0f457c7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Lynx BidCo (3)(4) First-lien loan ($ 42,240 par, due 7/2031 ) 7/5/2024 SOFR + 6.50 % 10.50 % 41,213 42,423 1.0 %"
+    },
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Artisan Topco LP (8) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,622 0.2 %"
+    },
+    {
+     "accession": "0001193125-25-266848",
+     "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 7.78 % 5,426 5,936 (EUR 5,052 ) 0.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'Green Shoot BidCo B.V.' vs printed 'GreenShoot BidCo B.V.'. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_938dfa1ef9c4",
+   "rule_name": "PP03",
+   "report_date": "2023-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d3e6f336bcf6b9fd"
+    ],
+    "reviewed_rows": [
+     "ROW-d3e6f336bcf6b9fd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-038548",
+     "text": "SMA Technologies Holdings, LLC (8)(10) Class A Units ( 200 units) 11/21/2022 200 200 0.0 %"
+    },
+    {
+     "accession": "0000950170-23-038548",
+     "text": "Total Investments $ 1,744,507 $ 1,758,911 194.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 5 checked lines).",
+    "Every published row of the quarter sits on an XBRL context whose instant is the report date (XML parse) and the published fair value sum 1,758,911 thousand equals the printed current Total Investments; the cited comparative lines are not published at this quarter."
+   ],
+   "next_action": "Verdict retired (VR-CMP-PP03-020, campaign entry of 60d765b0 stands): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_REV_26a83f23f436",
+   "rule_name": "PP03",
+   "report_date": "2025-03-31",
+   "coverage": {
+    "affected_rows": [
+     "0001925309|2025-03-31|published_fair_value_sum_and_context_periods"
+    ],
+    "reviewed_rows": [
+     "0001925309|2025-03-31|published_fair_value_sum_and_context_periods"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Total Investments $ 7,172,247 $ 7,356,032 178.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 5 checked lines).",
+    "Every published row of the quarter sits on an XBRL context whose instant is the report date (XML parse) and the published fair value sum 7,356,032 thousand equals the printed current Total Investments; the cited comparative lines are not published at this quarter."
+   ],
+   "next_action": "Verdict retired (VR-CMP-PP03-004, campaign entry of 60d765b0 stands): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_REV_f933394e675c",
+   "rule_name": "X10",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-cf723b6dd6e20ba8",
+     "ROW-57daa2f08dc4bbbd"
+    ],
+    "reviewed_rows": [
+     "ROW-cf723b6dd6e20ba8",
+     "ROW-57daa2f08dc4bbbd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (EUR 910 par, due 10/2029 ) 12/19/2024 E + 6.25 % 9.12 % 921 919 (EUR 887 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Price Fx Inc. (3)(4) First-lien loan (EUR 910 par, due 10/2029 ) 10/27/2023 E + 7.00 % 10.06 % 966 947 (EUR 915 ) 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH instrument text differs from the printed row in due,acq. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_642cd4c95946",
+   "rule_name": "fmt_basis_spread",
+   "report_date": "2024-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-f559d3b1601e983d",
+     "ROW-780a07dad35d0656",
+     "ROW-623efb6208bcfc16"
+    ],
+    "reviewed_rows": [
+     "ROW-f559d3b1601e983d",
+     "ROW-780a07dad35d0656",
+     "ROW-623efb6208bcfc16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Bestpass, Inc. (3)(5) First-lien loan ($ 59,800 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 11.08 % $ 57,695 $ 59,501 2.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Truck-Lite Co., LLC (3) First-lien loan ($ 323,497 par, due 2/2031 ) 2/13/2024 SOFR + 5.75 % 11.06 % 319,961 320,809 13.5 %"
+    },
+    {
+     "accession": "0000950170-24-052859",
+     "text": "First-lien revolving loan ($ 1,166 par, due 2/2030 ) 2/13/2024 SOFR + 5.75 % 11.06 % 824 903 0.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 3 checked lines)."
+   ],
+   "next_action": "Verdict retired (VR-FL-1925309-07, standing rule D-252, my file standing_rule_fundloop_0001925309_2026-11-13.json): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_REV_b6b283ae9e19",
+   "rule_name": "fmt_basis_spread",
+   "report_date": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-382217c9df6eb23a",
+     "ROW-e91f27d44f59fc01"
+    ],
+    "reviewed_rows": [
+     "ROW-382217c9df6eb23a",
+     "ROW-e91f27d44f59fc01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Merit Software Finance Holdings, LLC (3) First-lien loan ($ 10,714 par, due 6/2029 ) 6/20/2024 SOFR + 7.50 % 12.42 % 10,363 10,414 0.3 %"
+    },
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Wrangler TopCo, LLC (3) First-lien loan ($ 124,248 par, due 9/2029 ) 7/7/2023 SOFR + 6.00 % 10.92 % 121,553 125,815 4.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH instrument text differs from the printed row in dups; MISMATCH instrument text differs from the printed row in rate. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_2489f3388f36",
+   "rule_name": "fmt_basis_spread",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a5470cd8af772361",
+     "ROW-4b3123ed45d9fe05"
+    ],
+    "reviewed_rows": [
+     "ROW-a5470cd8af772361",
+     "ROW-4b3123ed45d9fe05"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Artisan Bidco, Inc. (3) First-lien loan ($ 114,848 par, due 11/2029 ) 11/7/2023 SOFR + 7.00 % 11.39 % 112,663 114,848 2.8 %"
+    },
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (GBP 115,946 par, due 4/2031 ) 4/29/2024 S + 5.25 % 9.95 % (incl. 2.25 % PIK) 144,105 145,210 (GBP 115,946 ) 3.6 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH par currency USD vs GBP; instrument text differs from the printed row in spread. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_REV_e97713bb5034",
+   "rule_name": "fmt_cost",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8412d6fcb93380b4"
+    ],
+    "reviewed_rows": [
+     "ROW-8412d6fcb93380b4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "FGI Acquisition Corp. (3)(4) First-lien loan ($ 89,775 par, due 6/2032 ) 6/4/2025 SOFR + 5.50 % 9.66 % 88,039 88,428 2.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH issuer 'FGI Acquisition Corp' vs printed 'FGI Acquisition Corp.'; instrument text differs from the printed row in par. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_BLK_f584a5697db9",
+   "rule_name": "fv_conservation",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "0001925309|2024-12-31|published_fair_value_sum_and_context_periods"
+    ],
+    "reviewed_rows": [
+     "0001925309|2024-12-31|published_fair_value_sum_and_context_periods"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Total Investments $ 7,079,994 $ 7,244,282 179.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The cited printed rows were located by their own inline-XBRL table rows and their published rows read from data/output/private_markets_holdings.parquet: issuer, par and currency, maturity, reference rate, spread, rate, PIK, cost, fair value, units and class all equal the printed values (retire_check.py PROD, 3 checked lines)."
+   ],
+   "next_action": "Verdict retired (VR-FL-1925309-09, standing rule D-252, my file standing_rule_fundloop_0001925309_2026-11-13.json): deterministic check (retire_check.py PROD, extended to instrument text components) passes on the published data and fails on a planted mismatch."
+  },
+  {
+   "finding_id": "RVQ_BLK_c5fb6c1487d6",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2023-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2a4d1cbb36bcb3c6",
+     "ROW-1ad17815acde49ed",
+     "ROW-c8c3de567e8de76f",
+     "ROW-d227ee7945e0528b"
+    ],
+    "reviewed_rows": [
+     "ROW-2a4d1cbb36bcb3c6",
+     "ROW-1ad17815acde49ed",
+     "ROW-c8c3de567e8de76f",
+     "ROW-d227ee7945e0528b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021762",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "2 of 4 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "2 row(s) where the filer's member names a different spelling or company than the printed cell (EdgeEdge Bidco B.V -> Raptor US Buyer II Corp.; SMA Technologies Holdings, L -> Coupa Holdings, LLC). Printed cell read from the row's own inline-XBRL table row; context-keyed issuer_name corrections to the printed name.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_86be7e8b4be1",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2023-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-7bae9be066147555",
+     "ROW-9aae3f2c3f4621e3",
+     "ROW-6b707617e92fd05a"
+    ],
+    "reviewed_rows": [
+     "ROW-7bae9be066147555",
+     "ROW-9aae3f2c3f4621e3",
+     "ROW-6b707617e92fd05a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-038548",
+     "text": "SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "2 of 3 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) have a hidden member that glues section/industry/rate text to the name (Galileo continuation line, X Holdings 'Investment, Identifier [Axis]'); the printed company cell is the carried issuer of the line above. Confirmed; context-keyed issuer_name correction to the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_f9781614ff73",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2023-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d4bc57172a534605",
+     "ROW-dd605117803ea75e",
+     "ROW-0ea4e43625ae2b1d"
+    ],
+    "reviewed_rows": [
+     "ROW-d4bc57172a534605",
+     "ROW-dd605117803ea75e",
+     "ROW-0ea4e43625ae2b1d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058792",
+     "text": "Commercehub, Inc. (3) First-lien loan ($ 148,875 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.62 % 139,820 148,875 13.4 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "3 of 3 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_2add4d4a3cde",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2023-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-82dc374ba2a3cb2c",
+     "ROW-8a1962885223c13a",
+     "ROW-646a378bd7cec57c"
+    ],
+    "reviewed_rows": [
+     "ROW-82dc374ba2a3cb2c",
+     "ROW-8a1962885223c13a",
+     "ROW-646a378bd7cec57c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 25,574 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.26 % 25,040 24,487 1.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "3 of 3 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_e89d85f07ce7",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2024-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e9a4bc9af02850e4",
+     "ROW-c2fede73811904d9",
+     "ROW-c42752c0fd988dd9",
+     "ROW-969026ba2852b32b"
+    ],
+    "reviewed_rows": [
+     "ROW-e9a4bc9af02850e4",
+     "ROW-c2fede73811904d9",
+     "ROW-c42752c0fd988dd9",
+     "ROW-969026ba2852b32b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052859",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.43 % 4,686 4,827 (EUR 4,470 ) 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "4 of 4 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_de50341a26ae",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2024-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-7752c92f5cb62411",
+     "ROW-06363e0172a2ea6c",
+     "ROW-bd00300ba2a68cce",
+     "ROW-d790f077639db072",
+     "ROW-a1b35706693bca0e"
+    ],
+    "reviewed_rows": [
+     "ROW-7752c92f5cb62411",
+     "ROW-06363e0172a2ea6c",
+     "ROW-bd00300ba2a68cce",
+     "ROW-d790f077639db072",
+     "ROW-a1b35706693bca0e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-089930",
+     "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 130,183 par, due 2/2031 ) 2/1/2024 SOFR + 5.25 % 10.58 % 127,840 129,749 4.7 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "4 of 5 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) where the filer's member names a different spelling or company than the printed cell (Scropio Bidco -> Scorpio Bidco). Printed cell read from the row's own inline-XBRL table row; context-keyed issuer_name corrections to the printed name.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_da7c14089ed1",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-77bf0f599542f282",
+     "ROW-b5a362c47d8a2a5e",
+     "ROW-b1d63b45774fbbd4",
+     "ROW-a7429f0c4147271e",
+     "ROW-f89724445f60ad40",
+     "ROW-b076097e063924f7",
+     "ROW-91b3d88598225b5e"
+    ],
+    "reviewed_rows": [
+     "ROW-77bf0f599542f282",
+     "ROW-b5a362c47d8a2a5e",
+     "ROW-b1d63b45774fbbd4",
+     "ROW-a7429f0c4147271e",
+     "ROW-f89724445f60ad40",
+     "ROW-b076097e063924f7",
+     "ROW-91b3d88598225b5e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-122238",
+     "text": "Acosta (3)(12) First-lien loan ($ 182,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.73 % 178,376 178,360 5.8 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "6 of 7 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) where the filer's member names a different spelling or company than the printed cell (Scropio Bidco -> Scorpio Bidco). Printed cell read from the row's own inline-XBRL table row; context-keyed issuer_name corrections to the printed name.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_a0c0a3b6bd01",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-be6336d9eb29f05f",
+     "ROW-1d584760e5f8b7b1",
+     "ROW-adc5fb57f2f5074d",
+     "ROW-4cd73286da7efe29",
+     "ROW-17b5059212f0abb3",
+     "ROW-192617b20ebc7531",
+     "ROW-1cf6104a34c29c25"
+    ],
+    "reviewed_rows": [
+     "ROW-be6336d9eb29f05f",
+     "ROW-1d584760e5f8b7b1",
+     "ROW-adc5fb57f2f5074d",
+     "ROW-4cd73286da7efe29",
+     "ROW-17b5059212f0abb3",
+     "ROW-192617b20ebc7531",
+     "ROW-1cf6104a34c29c25"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Scorpio Bidco (3)(4) First-lien loan (EUR 75,326 par, due 4/2031 ) 4/4/2024 E + 5.75 % 8.43 % 80,131 77,534 (EUR 74,876 ) 1.9 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "6 of 7 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) where the filer's member names a different spelling or company than the printed cell (Scropio Bidco -> Scorpio Bidco). Printed cell read from the row's own inline-XBRL table row; context-keyed issuer_name corrections to the printed name.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_d5738c94b590",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2025-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-80957fbafcc9033b",
+     "ROW-105782acc18b6681",
+     "ROW-7b0229c42cae666d",
+     "ROW-e6978b9f6e64f148",
+     "ROW-e51368b86868f840",
+     "ROW-53603f9ba8967f14"
+    ],
+    "reviewed_rows": [
+     "ROW-80957fbafcc9033b",
+     "ROW-105782acc18b6681",
+     "ROW-7b0229c42cae666d",
+     "ROW-e6978b9f6e64f148",
+     "ROW-e51368b86868f840",
+     "ROW-53603f9ba8967f14"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,435 par, due 7/2029 ) 7/11/2023 E + 6.75 % 9.54 % (incl. 3.00 % PIK) 7,952 8,079 (EUR 7,479 ) 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "6 of 6 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_cc9ecf47923a",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d0f74e54925d40f3",
+     "ROW-cada6c062fd923e8",
+     "ROW-4bd42a0f43effec7",
+     "ROW-ac7daa028ad9620b",
+     "ROW-1d1e3f11313bbe18",
+     "ROW-3e4ad5da88f0d3f8",
+     "ROW-5ad1619ee998438a",
+     "ROW-5885a522afd1d21e",
+     "ROW-f546cf18ff10fe3b"
+    ],
+    "reviewed_rows": [
+     "ROW-d0f74e54925d40f3",
+     "ROW-cada6c062fd923e8",
+     "ROW-4bd42a0f43effec7",
+     "ROW-ac7daa028ad9620b",
+     "ROW-1d1e3f11313bbe18",
+     "ROW-3e4ad5da88f0d3f8",
+     "ROW-5ad1619ee998438a",
+     "ROW-5885a522afd1d21e",
+     "ROW-f546cf18ff10fe3b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-101397",
+     "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,491 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.77 % (incl. 3.00 % PIK) 8,027 8,846 (EUR 7,535 ) 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "8 of 9 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) have a hidden member that glues section/industry/rate text to the name (Galileo continuation line, X Holdings 'Investment, Identifier [Axis]'); the printed company cell is the carried issuer of the line above. Confirmed; context-keyed issuer_name correction to the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_3505e77a51ba",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-90d6b9bd01cd4d94",
+     "ROW-d1383a30a809c1a3",
+     "ROW-820e986625d8506e",
+     "ROW-61a3b1a538cc4702",
+     "ROW-37c6562c9c16f277",
+     "ROW-29eea379ab97bdab",
+     "ROW-67335a50fda5f482",
+     "ROW-d42ab18d82ee0a59"
+    ],
+    "reviewed_rows": [
+     "ROW-90d6b9bd01cd4d94",
+     "ROW-d1383a30a809c1a3",
+     "ROW-820e986625d8506e",
+     "ROW-61a3b1a538cc4702",
+     "ROW-37c6562c9c16f277",
+     "ROW-29eea379ab97bdab",
+     "ROW-67335a50fda5f482",
+     "ROW-d42ab18d82ee0a59"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "8 of 8 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_3215f8d8f2ae",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2025-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-697f963a11df0476",
+     "ROW-523121dd8eaedfa5",
+     "ROW-9a8c4c825b642779",
+     "ROW-008cb0632e8a0072",
+     "ROW-4b12811e62f961b3",
+     "ROW-24dbb182f55cb50a",
+     "ROW-67ac239286e37d0b",
+     "ROW-beb4efc55b174d22"
+    ],
+    "reviewed_rows": [
+     "ROW-697f963a11df0476",
+     "ROW-523121dd8eaedfa5",
+     "ROW-9a8c4c825b642779",
+     "ROW-008cb0632e8a0072",
+     "ROW-4b12811e62f961b3",
+     "ROW-24dbb182f55cb50a",
+     "ROW-67ac239286e37d0b",
+     "ROW-beb4efc55b174d22"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "8 of 8 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_f8ecbf985e58",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-98b669deb4d95862",
+     "ROW-b641c889d50c15e7",
+     "ROW-948419de60f0e970",
+     "ROW-74fd7e8a92291237",
+     "ROW-567e54e69da981d9",
+     "ROW-8efe90773943e4a0",
+     "ROW-cb00706d3d56125b",
+     "ROW-28504fedc444a456",
+     "ROW-f22f03136798c7f0",
+     "ROW-3369d2810bcb4b54"
+    ],
+    "reviewed_rows": [
+     "ROW-98b669deb4d95862",
+     "ROW-b641c889d50c15e7",
+     "ROW-948419de60f0e970",
+     "ROW-74fd7e8a92291237",
+     "ROW-567e54e69da981d9",
+     "ROW-8efe90773943e4a0",
+     "ROW-cb00706d3d56125b",
+     "ROW-28504fedc444a456",
+     "ROW-f22f03136798c7f0",
+     "ROW-3369d2810bcb4b54"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "8 of 10 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) start with the section label 'Joint Venture Investments' (Structured Credit Partners JV, LLC); the wrapper prefix did not read that section. Confirmed; prefix added.",
+    "1 row(s) where the filer's member names a different spelling or company than the printed cell (Aurelia Netherlands Midco 2  -> Aurelia Netherlands B.V.). Printed cell read from the row's own inline-XBRL table row; context-keyed issuer_name corrections to the printed name.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_BLK_3c6f16805f6e",
+   "rule_name": "issuer_name_printed",
+   "report_date": "2026-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e577c74d0bcf384e",
+     "ROW-79bbd2688f4905b7",
+     "ROW-0045137b3ae2a742",
+     "ROW-b7220108d41dc6d1",
+     "ROW-3e366de7e416bb38",
+     "ROW-d1c229cd7e1c854e",
+     "ROW-e6d44def42d8fb0b",
+     "ROW-18e41d335fc49ce4",
+     "ROW-b56c5d198f389267",
+     "ROW-09af18c6d96f6e88",
+     "ROW-2847a8061a854197"
+    ],
+    "reviewed_rows": [
+     "ROW-e577c74d0bcf384e",
+     "ROW-79bbd2688f4905b7",
+     "ROW-0045137b3ae2a742",
+     "ROW-b7220108d41dc6d1",
+     "ROW-3e366de7e416bb38",
+     "ROW-d1c229cd7e1c854e",
+     "ROW-e6d44def42d8fb0b",
+     "ROW-18e41d335fc49ce4",
+     "ROW-b56c5d198f389267",
+     "ROW-09af18c6d96f6e88",
+     "ROW-2847a8061a854197"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Cordance Operations, LLC (3) First-lien loan ($ 32,385 par, due 7/2028 ) 6/12/2025 SOFR + 8.15 % 11.79 % 31,837 31,732 0.7 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "9 of 11 flagged rows keep 'and Consumer Products' in front of the printed issuer (the leaf-guard prefix list of the wrapper lacked the industry heading 'Retail and Consumer Products'; 1 of them also carry the tranche words ABL FILO / Roll Up DIP / Super-Priority DIP of Bed Bath and Beyond Inc.). Confirmed on each row's own printed line; wrapper prefix and issuer_name_strip_re changed, published names then equal the printed cell.",
+    "1 row(s) start with the section label 'Joint Venture Investments' (Structured Credit Partners JV, LLC); the wrapper prefix did not read that section. Confirmed; prefix added.",
+    "1 row(s) where the filer's member names a different spelling or company than the printed cell (Aurelia Netherlands Midco 2  -> Aurelia Netherlands B.V.). Printed cell read from the row's own inline-XBRL table row; context-keyed issuer_name corrections to the printed name.",
+    "Sweep: all 1245 published rows (17 filings) compared with the printed company cell of their own table row (continuation lines take the issuer of the line above), exact text (scan_issuer2.py, scan_issuer_exact.py): in the baseline slza 211 rows differed (123 by the wrapper-handled shapes, 88 corrected by context-keyed corrections incl. punctuation, case and Green Shoot / GreenShoot); in slzd 0 rows differ (the 6 Boreal Bidco rows differ only in the accent that the comparison strips)."
+   ],
+   "next_action": "Fixed in sandbox slzd (wrapper type_industry_prefix_re, dispatch.issuer_name_strip_re, 88 context-keyed issuer_name corrections); the published data changes at the next batch."
+  },
+  {
+   "finding_id": "RVQ_REV_0a965c0fa818",
+   "rule_name": "maturity_not_past",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-cf723b6dd6e20ba8"
+    ],
+    "reviewed_rows": [
+     "ROW-cf723b6dd6e20ba8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "First-lien loan (EUR 910 par, due 10/2029 ) 12/19/2024 E + 6.25 % 9.12 % 921 919 (EUR 887 ) 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The published row (data/output, batch b1112b) still differs from the printed line: MISMATCH instrument text differs from the printed row in due,acq. The check is silent because the sandbox/production rule no longer fires on these rows, not because the data is right.",
+    "The same rows are correct in slzf (retire_check.py slzf passes, now also comparing the instrument text): fixed there by wrapper settings and context-keyed corrections. The claim concerns the filer's member text where it names hidden-label strings; slzf does not change that text, so a later retirement must rest on the published values and instrument text, not on the member string."
+   ],
+   "next_action": "Fixed in sandbox slzd; not retired because the published data still carries the error. After the next batch re-run `python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD` and retire on a pass."
+  },
+  {
+   "finding_id": "RVQ_BLK_5bd93e0affdb",
+   "rule_name": "pik_printed",
+   "report_date": "2023-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2707aca2183018e6"
+    ],
+    "reviewed_rows": [
+     "ROW-2707aca2183018e6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-016336",
+     "text": "Volante Technologies, Inc. First-lien loan ($ 2,604 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,578 2,598 0.1 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Volante Technologies prints '16.50 % PIK' on the 2023-12-31 row and the build published pik_rate null; the same loan has pik_rate 16.5 in the other quarters. Confirmed.",
+    "Sweep: all rows whose printed line carries a PIK figure (176 rows) were compared with pik_rate; 1 row printed PIK and published none (this one); 2 further rows (Bed Bath Super-Priority DIP, 2024-03-31 and 2024-06-30) published a PIK the page does not print and were corrected."
+   ],
+   "next_action": "Fixed in slzd (pik_rate 16.5 correction)."
+  },
+  {
+   "finding_id": "RVQ_BLK_a21cf71c377e",
+   "rule_name": "preferred_printed",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-dcc480b724fd81e9"
+    ],
+    "reviewed_rows": [
+     "ROW-dcc480b724fd81e9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 49,063 (GBP 39,175) 1.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_83d01f9d5242",
+   "rule_name": "preferred_printed",
+   "report_date": "2025-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-60943afe61f5e425"
+    ],
+    "reviewed_rows": [
+     "ROW-60943afe61f5e425"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 49,697 (GBP 38,502 ) 1.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_ea737619de4f",
+   "rule_name": "preferred_printed",
+   "report_date": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-97ac226012226f9e"
+    ],
+    "reviewed_rows": [
+     "ROW-97ac226012226f9e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-101397",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 52,763 (GBP 38,503 ) 1.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_3878a3427ed8",
+   "rule_name": "preferred_printed",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8d94cb6a1f97ae46"
+    ],
+    "reviewed_rows": [
+     "ROW-8d94cb6a1f97ae46"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 57,277 (GBP 42,546 ) 1.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_ccd9775f5118",
+   "rule_name": "preferred_printed",
+   "report_date": "2025-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-bb113de91bae4aa5"
+    ],
+    "reviewed_rows": [
+     "ROW-bb113de91bae4aa5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Elysium BidCo Limited (4)(8) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 58,651 (GBP 43,605 ) 1.4 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_8d1957ed2197",
+   "rule_name": "preferred_printed",
+   "report_date": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-809a6dda56e3654b"
+    ],
+    "reviewed_rows": [
+     "ROW-809a6dda56e3654b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,313 (GBP 40,428 ) 1.3 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_ba98ca4ee38c",
+   "rule_name": "preferred_printed",
+   "report_date": "2026-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-80f9a016c647aea7"
+    ],
+    "reviewed_rows": [
+     "ROW-80f9a016c647aea7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,403 (GBP 40,236 ) 1.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The Elysium BidCo Limited row prints 'Convertible Preference Shares ( 38,503,125 units)'; published asset_category EQUITY_COMMON / index_classification COMMON_EQUITY. Confirmed.",
+    "Sweep of every row whose printed instrument cell says preferred or preference (count_pref.py): 21 rows (Artisan Topco Class A Preferred Units 11 and Ranger Parent Series A-1 Preferred Shares 3 were already preferred, Elysium 7 were common); only the 7 Elysium rows were wrong."
+   ],
+   "next_action": "Fixed in slzd (asset_category EQUITY_PREFERRED, index_classification PREFERRED_EQUITY) for 7 quarters."
+  },
+  {
+   "finding_id": "RVQ_BLK_30c49850a416",
+   "rule_name": "units_printed",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8cb5aa97a5a22f9e"
+    ],
+    "reviewed_rows": [
+     "ROW-8cb5aa97a5a22f9e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-021144",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  },
+  {
+   "finding_id": "RVQ_BLK_d3bfc417bf31",
+   "rule_name": "units_printed",
+   "report_date": "2025-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-bdbf1cbfe6d47a10"
+    ],
+    "reviewed_rows": [
+     "ROW-bdbf1cbfe6d47a10"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-062722",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 19 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  },
+  {
+   "finding_id": "RVQ_BLK_f93914897f14",
+   "rule_name": "units_printed",
+   "report_date": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-041c48f226ce376b"
+    ],
+    "reviewed_rows": [
+     "ROW-041c48f226ce376b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-101397",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 17 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  },
+  {
+   "finding_id": "RVQ_BLK_f69a3eccee19",
+   "rule_name": "units_printed",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-f687c81d0ab79803"
+    ],
+    "reviewed_rows": [
+     "ROW-f687c81d0ab79803"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-266848",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  },
+  {
+   "finding_id": "RVQ_BLK_e9b92b7f66b0",
+   "rule_name": "units_printed",
+   "report_date": "2025-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-f3e0e5f524fc78d7"
+    ],
+    "reviewed_rows": [
+     "ROW-f3e0e5f524fc78d7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-051289",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  },
+  {
+   "finding_id": "RVQ_BLK_157a3e5bc23c",
+   "rule_name": "units_printed",
+   "report_date": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-5add467cdab9ea52"
+    ],
+    "reviewed_rows": [
+     "ROW-5add467cdab9ea52"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-208894",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  },
+  {
+   "finding_id": "RVQ_BLK_1d208d31e4ff",
+   "rule_name": "units_printed",
+   "report_date": "2026-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d42d6bc96c794b67"
+    ],
+    "reviewed_rows": [
+     "ROW-d42d6bc96c794b67"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-335004",
+     "text": "Class B Units ( 173,048 units) 11/21/2022 10 16 0.0 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Published shares_held 244 (shares_held_source derived_proxy) against the printed '173,048 units' on the SMA Technologies Holdings Class B Units row; the XBRL fact carries 173,048 too. The share-count proxy replaced the filed count. Confirmed.",
+    "Not a thousands presentation: the same row prints 142,038 units in 2023-2024 and the count is published correctly there."
+   ],
+   "next_action": "Fixed in slzd by a context-keyed shares_held correction (173,048) for the 7 quarters 2024-12-31 to 2026-06-30."
+  }
+ ],
+ "tests_run": [
+  "none: no shared code changed (wrapper and context-keyed corrections only)",
+  "scratch/fund_runs/0001925309/retire_check.py: 19 verdicts pass on slzf and fail on a planted mismatch; on the published data 7 pass (retired: B01, FX02, PP03 x2 by campaign entries VR-CMP-*, D06, fmt_basis_spread 2024-03-31, fv_conservation by VR-FL-1925309-02/-07/-09) and 12 fail (fixed in slzf, awaiting a batch); the check now also compares instrument text components, which removed the earlier retirements of fmt_basis_spread 2024-09-30, X10 and maturity_not_past"
+ ],
+ "not_done": [
+  "agentA_* findings (10 in the packet, 1 in the sandbox ledger) excluded by instruction",
+  "12 real-error verdicts (C206 x3, PP01 x4, X10, maturity_not_past, fmt_basis_spread 2024-09-30 and 2024-12-31, fmt_cost 2025-09-30) are fixed in slzf but cannot be retired until the published data carries the fixes; PP01 x3 and fmt_basis_spread 2024-12-31 also concern the filer's member text, which my fixes do not change, so a later retirement must rest on published values: re-run retire_check.py PROD after the next batch",
+  "Bed Bath position overrides: the final 3-entry file is untested in a sandbox build for the removal of the two 2023-12-31 to 2024-03-31 pairs; Super-Priority DIP 2023-06-30 stays orphaned (an override cannot add a pair)",
+  "bdc_acquisition_date null in 2023-03-31 and 2023-06-30 (not correctable), fair_value_currency null on 9 declared rows, JV interest class UNCLASSIFIED: left",
+  "extracted_industry and GICS labels compared across quarters but not row by row against the printed headings",
+  "the contract's 20-row random page sample was not drawn by me: my full sweeps (1,245 rows, every field above) replaced it; the reviewer then read a separate 20-row sample (0 of 20 errors); ",
+  "previous: no 20-row page sample drawn by me; my sweeps read all 1,245 rows for issuer, par, currency, maturity, reference code, spread, rate, PIK, cost, fair value, units, class and instrument text against the printed row"
+ ]
+}

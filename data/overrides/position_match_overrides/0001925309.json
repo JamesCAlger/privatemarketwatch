@@ -1,0 +1,60 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0001925309",
+  "overrides": [
+    {
+      "action": "force_pair",
+      "begin_report_date": "2023-06-30",
+      "end_report_date": "2023-09-30",
+      "begin_issuer_name": "Bed Bath and Beyond Inc.",
+      "end_issuer_name": "Bed Bath and Beyond Inc.",
+      "begin_fair_value": 45885000.0,
+      "end_fair_value": 46056000.0,
+      "match_method": "B2_exact_name",
+      "replace_end_issuer_name": "Bed Bath and Beyond Inc.",
+      "replace_end_fair_value": 27325000.0,
+      "mechanism": "Once the issuer is the printed 'Bed Bath and Beyond Inc.' for all of the issuer's tranches (ABL FILO, Roll Up DIP, Super-Priority DIP), the matcher pairs rows of different tranches. The end side is moved to the row of the same printed tranche (instrument cell) at the end date.",
+      "evidence": "Printed ABL FILO 2023-06-30 'ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 %' and 2023-09-30 'ABL FILO term loan ($ 27,954 par, due 8/2027 )'; Super-Priority DIP 2026-03-31 '($ 6,500 par)' and 2026-06-30 '($ 5,826 par)'; ABL FILO 2026-03-31 '($ 10,746 par, due 8/2027 )' and 2026-06-30 '($ 7,084 par, due 8/2027 )'.",
+      "confidence": 0.9,
+      "residual_risk": "Super-Priority DIP 2023-06-30 (fair value 50.4M) has no pair to the 2023-09-30 Super-Priority DIP row: an override can move the end of an existing pair but cannot add a pair, so that chain stays broken at this step.",
+      "created_by": "agent:fund-sslp-20261113",
+      "review_id": "fund-sslp-20261113-bedbath"
+    },
+    {
+      "action": "force_pair",
+      "begin_report_date": "2026-03-31",
+      "end_report_date": "2026-06-30",
+      "begin_issuer_name": "Bed Bath and Beyond Inc.",
+      "end_issuer_name": "Bed Bath and Beyond Inc.",
+      "begin_fair_value": 8516000.0,
+      "end_fair_value": 4471000.0,
+      "match_method": "C_normalized_name",
+      "replace_end_issuer_name": "Bed Bath and Beyond Inc.",
+      "replace_end_fair_value": 5437000.0,
+      "mechanism": "Once the issuer is the printed 'Bed Bath and Beyond Inc.' for all of the issuer's tranches (ABL FILO, Roll Up DIP, Super-Priority DIP), the matcher pairs rows of different tranches. The end side is moved to the row of the same printed tranche (instrument cell) at the end date.",
+      "evidence": "Printed ABL FILO 2023-06-30 'ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 %' and 2023-09-30 'ABL FILO term loan ($ 27,954 par, due 8/2027 )'; Super-Priority DIP 2026-03-31 '($ 6,500 par)' and 2026-06-30 '($ 5,826 par)'; ABL FILO 2026-03-31 '($ 10,746 par, due 8/2027 )' and 2026-06-30 '($ 7,084 par, due 8/2027 )'.",
+      "confidence": 0.9,
+      "residual_risk": "Super-Priority DIP 2023-06-30 (fair value 50.4M) has no pair to the 2023-09-30 Super-Priority DIP row: an override can move the end of an existing pair but cannot add a pair, so that chain stays broken at this step.",
+      "created_by": "agent:fund-sslp-20261113",
+      "review_id": "fund-sslp-20261113-bedbath"
+    },
+    {
+      "action": "force_pair",
+      "begin_report_date": "2026-03-31",
+      "end_report_date": "2026-06-30",
+      "begin_issuer_name": "Bed Bath and Beyond Inc.",
+      "end_issuer_name": "Bed Bath and Beyond Inc.",
+      "begin_fair_value": 5151000.0,
+      "end_fair_value": 5437000.0,
+      "match_method": "B2_exact_name",
+      "replace_end_issuer_name": "Bed Bath and Beyond Inc.",
+      "replace_end_fair_value": 4471000.0,
+      "mechanism": "Once the issuer is the printed 'Bed Bath and Beyond Inc.' for all of the issuer's tranches (ABL FILO, Roll Up DIP, Super-Priority DIP), the matcher pairs rows of different tranches. The end side is moved to the row of the same printed tranche (instrument cell) at the end date.",
+      "evidence": "Printed ABL FILO 2023-06-30 'ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 %' and 2023-09-30 'ABL FILO term loan ($ 27,954 par, due 8/2027 )'; Super-Priority DIP 2026-03-31 '($ 6,500 par)' and 2026-06-30 '($ 5,826 par)'; ABL FILO 2026-03-31 '($ 10,746 par, due 8/2027 )' and 2026-06-30 '($ 7,084 par, due 8/2027 )'.",
+      "confidence": 0.9,
+      "residual_risk": "Super-Priority DIP 2023-06-30 (fair value 50.4M) has no pair to the 2023-09-30 Super-Priority DIP row: an override can move the end of an existing pair but cannot add a pair, so that chain stays broken at this step.",
+      "created_by": "agent:fund-sslp-20261113",
+      "review_id": "fund-sslp-20261113-bedbath"
+    }
+  ]
+}

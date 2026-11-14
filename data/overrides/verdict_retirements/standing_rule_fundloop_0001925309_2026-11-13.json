@@ -1,0 +1,92 @@
+{
+ "_note": "Sixth Street Lending Partners retirements (slz run, 2026-11-13) under the owner's standing rule D-252, for verdicts whose cited rows already equal the printed rows in the published data (data/output). The verdicts whose cited rows are still wrong in the published data are not retired: their fixes wait for the next batch.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1925309-02",
+   "review_id": "RVQ_REV_62a61fed0516",
+   "verdict_sha256": "3f5f5199fb0360ec7fa4adad2fe6883d9ede903e3bb06625012c3927d807c14e",
+   "cik": "0001925309",
+   "engine": "oracle",
+   "rule_name": "D06",
+   "report_date": "2026-03-31",
+   "reason": "The verdict reads a continuity failure caused by 'Investment' text in the issuer name (Truck-Lite Co., LLC Investment). The cited Truck-Lite rows are published with the printed company cell 'Truck-Lite Co., LLC' at 2026-03-31 and at 2025-12-31, with par, maturity, reference rate, spread, cost and fair value equal to the printed rows.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001925309/retire_check.py PROD (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fact, reads the published row of that context from data/output/private_markets_holdings.parquet and compares issuer, par and currency, maturity month, reference rate, spread, all-in rate, PIK, cost, fair value, units and preferred class; totals against the printed Total Investments; context periods by XML parse"
+    },
+    {
+     "source": "query",
+     "quote": "ROW: Truck-Lite Co., LLC (3) | First-lien loan ($ 303,162 par, due 2/2032)  -> OK; ROW: Truck-Lite Co., LLC (3) | First-lien loan ($ 303,927 par, due 2/2032)  -> OK"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py PROD --plant, all fields changed on the quarter's published rows): this verdict FAILS the check (scratch/fund_runs/0001925309/retire_results_PROD_plant_all.json); single-field plants (issuer, fair value, spread) fail every verdict that cites a row with that field"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-sslp-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1925309-07",
+   "review_id": "RVQ_REV_642cd4c95946",
+   "verdict_sha256": "2347f5c3df60576421ee14b28c9b3e8b817b2a18cd7a4a47cee1101e987dad31",
+   "cik": "0001925309",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "report_date": "2024-03-31",
+   "reason": "The verdict reads a malformed spread string in the filer's hidden member text. The cited rows are published with the reference rate and spread equal to the printed cells, and with par, maturity, rate, cost, fair value and issuer equal to the printed rows.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001925309/retire_check.py PROD (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fact, reads the published row of that context from data/output/private_markets_holdings.parquet and compares issuer, par and currency, maturity month, reference rate, spread, all-in rate, PIK, cost, fair value, units and preferred class; totals against the printed Total Investments; context periods by XML parse"
+    },
+    {
+     "source": "query",
+     "quote": "ROW: Bestpass, Inc. (3)(5) | First-lien loan ($ 59,800 par, due 5/2029 ) |  -> OK; ROW: Truck-Lite Co., LLC (3) | First-lien loan ($ 323,497 par, due 2/2031 ) -> OK; ROW: First-lien revolving loan ($ 1,166 par, due 2/2030 ) | 2/13/2024 | SOF -> OK"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py PROD --plant, all fields changed on the quarter's published rows): this verdict FAILS the check (scratch/fund_runs/0001925309/retire_results_PROD_plant_all.json); single-field plants (issuer, fair value, spread) fail every verdict that cites a row with that field"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-sslp-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1925309-09",
+   "review_id": "RVQ_BLK_f584a5697db9",
+   "verdict_sha256": "edd083702b2bd722a934b5cb1ad5f5ebd5b9b0c5777c20cc02452e08846d29bc",
+   "cik": "0001925309",
+   "engine": "conservation",
+   "rule_name": "fv_conservation",
+   "report_date": "2024-12-31",
+   "reason": "The verdict reads a 79.2 million overshoot of the published fair value sum against the filed total. The published sum of the 103 rows at 2024-12-31 equals the filed Total Investments (7,244,282 thousand) exactly.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001925309/retire_check.py PROD (read-only): locates each cited printed row by the inline-XBRL table row carrying the row's own fact, reads the published row of that context from data/output/private_markets_holdings.parquet and compares issuer, par and currency, maturity month, reference rate, spread, all-in rate, PIK, cost, fair value, units and preferred class; totals against the printed Total Investments; context periods by XML parse"
+    },
+    {
+     "source": "query",
+     "quote": "TOTAL: Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | % -> published sum 7244282 thousand in printed [7079994, 7244282]; TOTAL: Non-controlled, non-affiliated investments (amortized cost of $ 7,079, -> published sum 7244282 thousand in printed [7079994, 3037826, 7244282, 3099151]; PAGE_TOTAL: Total Investments on the filing -> published sum 7244282 thousand is in printed totals [3037, 3099, 7080, 7244, 61325, 164288]"
+    },
+    {
+     "source": "measurement",
+     "quote": "planted mismatch run (retire_check.py PROD --plant, all fields changed on the quarter's published rows): this verdict FAILS the check (scratch/fund_runs/0001925309/retire_results_PROD_plant_all.json); single-field plants (issuer, fair value, spread) fail every verdict that cites a row with that field"
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001925309/join.py PROD && python scratch/fund_runs/0001925309/retire_check.py PROD",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-sslp-20261113 under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

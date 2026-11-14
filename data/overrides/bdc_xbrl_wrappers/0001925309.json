@@ -6,6 +6,8 @@
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "SIXTH_STREET_LENDING_PARTNERS",
+    "issuer_name_strip_re": "(?:\\s+(?:Roll\\s+Up\\s+DIP|Super-Priority(?:\\s+Up)?\\s+DIP|ABL\\s+FILO)|(?<=LLC)\\s*\\.|(?<=GmbH)\\.)$",
+    "issuer_name_strip_to_instrument": true,
     "prefix_rules": {
       "Debt Investments": "debt",
       "Equity and Other Investments": "equity",
@@ -21,7 +23,7 @@
   "staging": {
     "strategy": "hierarchy_leaf_guard",
     "leaf_guard": {
-      "type_industry_prefix_re": "(?i)^(?:Deb)?(?:(?:Debt\\s+Investments|Equity\\s+and\\s+Other\\s+Investments|Equity\\s+Investments)\\s+)+(?:Busines+\\s+Services?|Communications|Hotel,\\s+Gaming,?\\s+and\\s+Leisure|Human\\s+Resource\\s+Support\\s+Services|Internet\\s+Services|Manufacturing|Automative|Other|(?:MSD_INDUSTRY_LABELS))\\s+",
+      "type_industry_prefix_re": "(?i)^(?:Joint\\s+Venture\\s+Investments\\s+|(?:Deb)?(?:(?:Debt\\s+Investments|Equity\\s+and\\s+Other\\s+Investments|Equity\\s+Investments)\\s+)+(?:Retail\\s+and\\s+Consumer\\s+Products|Busines+\\s+Services?|Communications|Hotel,\\s+Gaming,?\\s+and\\s+Leisure|Human\\s+Resource\\s+Support\\s+Services|Internet\\s+Services|Manufacturing|Automative|Other|(?:MSD_INDUSTRY_LABELS))\\s+)",
       "marker_re": "(?:first[-\\s]lien|unsecured\\s+notes?|secured\\s+notes?|convertible\\s+preference\\s+shares|series\\s+[a-z0-9-]+\\s+preferred\\s+shares|preferred\\s+shares|partnership\\s+units|partnership\\s+\\(|second[-\\s]lien|unitranche|term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:term\\s+loan|delayed\\s+draw\\s+term\\s+loan|revolving\\s+credit\\s+facility)|class\\s+[a-z0-9-]+|preferred\\s+units|partnership\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|structured\\s+product|warrants?)",
       "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b",
       "issuer_trailing_strip_re": "\\s+(?:Investment|\\d{1,3}(?:,\\d{3})+)$"
