@@ -1,0 +1,219 @@
+{
+ "reviewer_id": "agent:review-stzb-opus",
+ "report_digest": "193e5808035ae9f0a8343444a21622a68e2eb95763fc40717f51a62e69f1b412",
+ "sandbox": "stzb",
+ "before": "stxf",
+ "cik": "0001825384",
+ "reviewed_on": "2026-11-15",
+ "summary": "Outstanding in stzb: 4 (FX01 x2, issuer_name_printed x2 Two Ten). FX01 x2 supported. Two Ten x2 rejected: the run renamed the identical 'Two Ten Holdco, Inc' -> '2-10 Holdco, Inc.' rendering as a data error in 2023-09-30..2024-09-30 while carrying a false_alarm / no-data-repair verdict for 2023-03-31 and 2023-06-30. 20 of 24 observations lack detection_decision (contract fail). Unflagged errors found: (1) 41 renamed rows (646.1M FV, 10 quarters) lost instrument_description (set NULL) as a side effect of the issuer_name corrections; (2) 20 published rows printed 'ABR + x %' are published reference_rate_type SOFR (19) or LIBOR (1); (3) Giving Home 2024-12-31 instrument_description published as 'Second Lien Term Loan, Due 2/18/2028 First Lien Term Loan, Due 4/26/2029'; (4) B01 dash-as-zero declared only in the 4 failing quarters, 70 same-kind dash lines in 9 other quarters left unpublished; (5) the added 2024-12-31 MB2 row is the printed revolver line published as a delayed draw term loan; (6) 2026-06-30 GS Acquisitionco revolver renamed to 'GS ACQUISITIONCO, INC.' (printed 'GS Acquisitionco, Inc.') by the shared name step after the 2025-03-31 B01 row was added; (7) Project K BuyerCo first lien term loan (75.7M to 76.3M, 2023-03-31..2024-03-31) and Harbor Purchaser (11.7M to 12.4M, 2023-03-31..2024-09-30) keep name-cache GICS (Semiconductors; Diversified Financial Services) against printed headings Capital Markets and Diversified Consumer Services.",
+ "checks": {
+  "industry_corrections": "All 1,373 extracted_industry corrections pass an independent page test (scratch/fund_runs/0001825384/review/verify_ind.py): for each row the first 'Total ' after the printed line is 'Total <heading>' and <heading> is printed between the previous Total line and the row; 1,373 of 1,373 also equal the published stzb value. 48 rows read with context (first and last rows of blocks, two random per quarter, all 8 quarters). Per-industry printed 'Total X' fair values sum exactly to published totals in every 2023-03-31..2024-12-31 schedule (review/foot.py); positive per-industry residuals (14,550; 89,063; 56,248 etc.) are negative-value rows left without industry. The 79 unresolved rows are mostly single-row blocks (the Total line repeats the row's figures, so two candidates) and first schedule rows printed with '$' between figures (Project K BuyerCo), not genuinely ambiguous headings. extracted coverage after fix 91-96 pct of rows; industry_coverage cleared on all 8 quarters.",
+  "gics": "Each heading maps to exactly one GICS sub-industry, the same mapping already used on 2025-03-31 onward rows; 969 sub-industry / 774 sector changes are the intended consequence. Plausible but coarser than some name-cache values (13 rows 789M 'Insurance Brokers' -> 'Property & Casualty Insurance'); several name-cache errors corrected (7 rows 598.7M 'Regional Banks' -> IT Services). 7 rows without a corrected industry also moved (MB2 Dental Health Care Services -> Health Care Equipment x4; Accuserve/Kwol to null x3): side effect, small FV.",
+  "names": "Read on the page for 22 of 46 contexts covering every renamed issuer group (Edelman, OneDigital, Covetrus, WEG Sub, Freedom Funding Center, Auctane, Ministry Brands Holdings, Amerilife Holdings, Archer, Harrington, Accordion, AmeriLife Group, OneDigital Borrower, Minotaur, 2-10 Holdco): all printed names match the new values. But 41 of the renamed rows lost instrument_description (stxf had e.g. 'First Lien Term Loan, Due 3/26/2026'; stzb NULL).",
+  "kwol_giving_home": "Kwol term loan and revolver 2024-12-31 correct (2,403/2,397/2,395 and -/(1)/(1), 12/12/2029) and chain to the same position_id as adjacent quarters. Giving Home first lien term loan lien and values correct, but instrument_description is the member text concatenated with the correction value.",
+  "flexera_fx": "EUR at FRED DEXUSEU quarter-end: 1.1735 (2025-09-30), 1.1736 (2025-12-31), 1.1518 (2026-03-31), 1.1417 (2026-06-30); USD = 2,836,000 x rate in all four rows. Report text quotes 3,328,329.6 at 1.1736 (2025-12-31) correctly; the declared-change example 3,328,046 is 2025-09-30.",
+  "b01": "57 contexts are real current-schedule lines printed with fair value '-' (undrawn revolvers/DDTLs with negative cost; New Mountain Guardian IV Rated Feeder III notes print '- - -'; PAS Parent 2025-03-31 prints par 9). Report claim 'every one prints ... with negative cost' is wrong for the 3 New Mountain notes and 3 2025-09-30 rows (no cost). Treatment is selective: only the 4 B01-failing quarters were declared; 70 same-kind dash lines in 2023-06-30..2024-06-30, 2025-06-30, 2025-12-31, 2026-03-31, 2026-06-30 stay unpublished, so the same commitment appears and disappears by quarter. TA/WEG 2024-12-31 exclusion correct (Five published once at 14,255/14,006/14,025). Added rows carry no extracted_industry; MB2 2024-12-31 added row (member 'Delayed Draw Term Loan Three Due 1/29/2027') holds the revolver line '(9) SOFR + 5.50 %, 0.75 % Floor 9.86 % 2/13/2031 - ( 20 ) -' and is published as a delayed draw term loan.",
+  "field_diff": "holdings_field_diff stzb stxf: issuer_name 47, instrument_description 47, principal_amount_currency/usd/fx_rate/fx_status 4 each, corrected_fields 1,385, entity_id 18, canonical_name 31, extracted_industry 1,373, gics_sub_industry 969, lien_position 1, instrument_type 3, position_id 52, gics_sector 774; rows added 57, removed 0. Every count is within the declared upper bounds. The declared 'why' for instrument_description omits the 41 rows wiped to NULL.",
+  "totals_strict_500": "Exact or within 500 dollars: 11 of 14 quarters. 2023-06-30 -115,947: the schedule's industry totals sum to 1,850,959,185 = published; the filed 'Total Investments $ 1,879,454,502 $ 1,851,075,132' differs from its own industry totals (filer footing). 2026-03-31 -112,000: 'Derivative Instruments ... 112' inside the filed 2,943,879; 2,934,363 + 9,404 = published. 2026-06-30 +2,124,000: 'Derivative Instruments ( 2,124 )' inside the filed 2,960,692; declared exception supported. 2022-12-31 filed 1,688.5M with no published rows.",
+  "reference_rates": "Filer prints benchmark names (no letter legend). Non-SOFR/LIBOR benchmarks on current-schedule lines: 4 EURIBOR (Flexera, published EURIBOR, ok) and 22 ABR lines, of which 20 are published rows labelled SOFR (19) or LIBOR (1: Stepping Stones revolver 2023-03-31) with the ABR spread; the other 2 are unpublished dash lines. Script: review/rr_check.py. Not flagged by the report."
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_36d6a4f11c10",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Frozen FX01 state; the earlier real-error verdict (data/decisions/verdict_files/review_queue/RVQ_REV_36d6a4f11c10.json) cites exactly the Flexera EURIBOR term loan line, which equals the report's affected row (context C_3dc96a23-615b-420f-bf6d-a4b62e152a26). Page line read: EURIBOR benchmark, par 2,836 against cost 3,312 (ratio 1.168, a euro loan bought near EURUSD 1.17). stzb publishes EUR, rate 1.1518 = FRED DEXUSEU 2026-03-31, principal_amount_usd 3,266,504.8 = 2,836,000 x 1.1518, status reference_fx. The same fix covers 2025-09-30 (1.1735) and 2026-06-30 (1.1417), checked against data/reference/fx_fred/DEXUSEU.csv. Conclusion and next action (state resolves in the production batch) supported.",
+   "evidence": [
+    {"accession": "0001193125-26-224294", "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 %, 0.50 % Floor 6.45 % 8/16/2032 2,836 3,312 3,201 0.2 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e014f62910b5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Frozen remediation_pulled FX01 state on the same Flexera EURIBOR line at 2025-12-31 (context C_d4342799-6c60-42bb-a088-c51e38de1a80), the only non-USD position in the quarter (rr_check found one EURIBOR line). Page line read: par 2,836, cost 3,311. stzb publishes EUR at 1.1736 (FRED DEXUSEU 2025-12-31), USD 3,328,329.6. Supported.",
+   "evidence": [
+    {"accession": "0001193125-26-096955", "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 % 6.43 % 8/16/2032 2,836 3,311 3,319 0.2 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_389476a6b5a8",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry fails both tests. (a) The carried source DC-0001825384-c813c125ac (reviewed, supported) concludes false_alarm, but the report labels this finding source_ambiguity, so the carry does not reproduce its source. (b) affected_rows is a free-text description, not row keys; the rule's current flagged rows are ROW-0559f58dbdd28c51 (revolver, -55,835) and ROW-1b22231b43acd84a (term loan, 48,015,079), which cannot be shown equal to the carried coverage. Substantively, the carry no longer holds: in this same run the investigator treated the identical 'Two Ten Holdco, Inc' vs printed '2-10 Holdco, Inc.' rendering as a confirmed error and renamed it by row correction in 2023-09-30, 2023-12-31, 2024-03-31, 2024-06-30 and 2024-09-30 (term loan), while carrying a 'no data identity repair' verdict here. Result: the same position_id c1ad442f... is published as 'Two Ten Holdco, Inc' in 2023-03/06 and '2-10 Holdco, Inc.' later, and in 2024-09-30 the added revolver row is 'Two Ten Holdco, Inc' beside the renamed term loan. The owner ruling DC-shared-e67718e0e3 puts these renderings in scope of the issuer_name_printed check repair, which argues against the later renames, not for them. One treatment must be chosen for all quarters (either rename 2023-03/06 too, or drop the 2023-09..2024-09 renames and rely on the check repair).",
+   "evidence": [
+    {"accession": "0001410578-23-001135", "text": "2-10 Holdco, Inc. First Lien Term Loan SOFR + 6.00 %, 0.75 % Floor 12 10.91 % 3/26/2026 49,000,000 48,478,916 48,015,079 5.7 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1c7c8c3f31b2",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Carried source DC-0001825384-b0a2ab0bda exists and was reviewed (supported, false_alarm), and its evidence covers both flagged lines (ROW-4e0c01421969d262 revolver -44,216; ROW-5d8aef548ac73f61 term loan 47,597,902). But affected_rows is the free text '2023-06-30 Two Ten Holdco rows', not row keys, so equality with the flagged population is not demonstrated. The carry is also contradicted by the run's own renames of the same rendering in the five following quarters (see RVQ_BLK_389476a6b5a8): the verdict says no data repair is established, the run applied one elsewhere, leaving the position's published name split across quarters. Rejected until one consistent treatment is applied.",
+   "evidence": [
+    {"accession": "0001410578-23-001766", "text": "2-10 Holdco, Inc. First Lien Term Loan SOFR + 6.00 %, 0.75 % Floor 12 11.20 % 3/26/2026 48,367,813 47,882,610 47,597,902 5.5 %"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "member-holds-another-rows-values",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). The suggested check (per-unit price move >100x versus neighbouring quarters) is concrete and would have caught the Spirit RR / Giving Home swap; record it as propose_detector.",
+   "evidence": [{"accession": "0001410578-24-001310", "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,585,975 3,635,318 4,745,751 0.4 %"}]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Same shared issuer-partition step also produced an unflagged error in this run: the 2026-06-30 GS Acquisitionco revolver now publishes 'GS ACQUISITIONCO, INC.' (printed 'GS Acquisitionco, Inc.') after the 2025-03-31 B01 row was added.",
+   "evidence": [{"accession": "0001410578-24-000282", "text": "Giving Home Health Care Warrants N/A 8/19/2022 2,917 29 1,069,999 0.1 %"}]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required), and stale: it says 'parked' and 'extracted_industry is empty on every row', but stzb fills 1,373 rows by correction (observation industry-heading-not-read-from-total-line-layout). Duplicate; merge or close.",
+   "evidence": [{"accession": "0001410578-24-001310", "text": "Debt Investments - 185.3 % Capital Markets Cliffwater, LLC First Lien Term Loan (10) SOFR + 4.50 %"}]
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required) and the claim is marked 'Not verified' by the investigator. Separately, rows still without a printed heading keep name-cache GICS that contradicts the page: Project K BuyerCo first lien term loan 'Semiconductors' (printed under Capital Markets, ~76M, 5 quarters) and Harbor Purchaser 'Diversified Financial Services' (printed under Diversified Consumer Services).",
+   "evidence": [{"accession": "0000950170-25-071476", "text": "Resolute Investment Managers, Inc. Equity N/A 12/29/2023 58 1,249 1,353 0.1 %"}]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Suggested check (section totals by class against printed 'Total Common Equity' lines) is concrete; record propose_detector.",
+   "evidence": [{"accession": "0001193125-26-352549", "text": "SPV CA IX, LLC Equity (10)(12)(14)(15) N/A 7/18/2025 10,882 10,590 11,394 0.8 %"}]
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Check exists in pipeline/candidate_rules.py (preferred_published_as_common); state existing_detector or propose a change.",
+   "evidence": [{"accession": "0001410578-24-001310", "text": "GT Polaris Holdings, Inc Equity 12.50 % 6/6/2022 10,618,747 10,474,768 10,219,483 0.8 %"}]
+  },
+  {
+   "observation_key": "preferred-dividend-rate-on-period-context-not-joined",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Shared-reader gap affecting other filers; suggested check is concrete.",
+   "evidence": [{"accession": "0001193125-25-277785", "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 13.50 % 8/12/2025 2,500 2,475 2,475 0.2 %"}]
+  },
+  {
+   "observation_key": "plain-rate-tagged-as-pik-published-as-pik-only",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001193125-26-096955", "text": "AP Highlands Holdings, L.P. Unsecured Note N/A 9.75 % 10/16/2028 5,207 5,172 5,207 0.4 %"}]
+  },
+  {
+   "observation_key": "pik-coupon-with-spread-published-without-a-rate",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001193125-26-096955", "text": "GT Polaris Holdings, Inc Preferred Equity 12.5 % PIK 6/6/2022 12,802 12,682 12,619 0.9 %"}]
+  },
+  {
+   "observation_key": "one-position-tagged-across-two-members",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required); the text names X11 as the catching rule, so existing_detector with reference X11 would fit. Verified: TA/WEG Five published once at 14,255/14,006/14,025 in stzb and correctly excluded from the B01 untagged list.",
+   "evidence": [{"accession": "0001410578-25-000437", "text": "TA/WEG Intermediate Holdings, LLC First Lien Delayed Draw Term Loan (9)(10) SOFR + 5.00 %, 1.00 % Floor 9.50 % 10/4/2027 14,255 14,006 14,025 1.1 %"}]
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001193125-26-352549", "text": "Ares Global Structured Solutions Rated Notes Feeder LLC Preferred Equity (10)(13) N/A 5/22/2026 610 610 610 0.0 %"}]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001193125-26-224294", "text": "Winterfell Co-Invest SCSP Equity (14) N/A 9/19/2022 3,586 3,635 7,208 0.5 %"}]
+  },
+  {
+   "observation_key": "equity-holding-printed-under-another-section-in-one-quarter",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001410578-24-001310", "text": "ACC Ultimate Holdings, L.P. Equity N/A 5/8/2024 3,750,000 3,750,000 3,750,000 0.3 %"}]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Convention conflict with D-168 needs an owner ruling, not just an observation.",
+   "evidence": [{"accession": "0000950170-25-071476", "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,586 3,635 5,672 0.5 %"}]
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001104659-23-039118", "text": "Ratio of net investment income (loss) to average net assets 9.36 % 6.34 %"}]
+  },
+  {
+   "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Understates the instrument_description problem: in stzb 41 rows renamed by issuer_name correction (646.1M FV, 10 quarters) now publish instrument_description NULL (stxf had e.g. 'First Lien Term Loan, Due 3/26/2026'), and Giving Home 2024-12-31 publishes 'Second Lien Term Loan, Due 2/18/2028 First Lien Term Loan, Due 4/26/2029'. Not cosmetic once the text is lost.",
+   "evidence": [{"accession": "0001410578-25-000437", "text": "Foundation Risk Partners, Corp. First Lien Term Loan (10) SOFR + 5.25 %, 0.75 % Floor 9.58 % 10/29/2030 4,569 4,569 4,526 0.4 %"}]
+  },
+  {
+   "observation_key": "schedule-not-tagged-quarter-not-published",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required), and the claim '2022 10-Qs not cached' is false: data/raw/filings/bdc_html/1825384/ holds 000110465922060152 (March 31, 2022), 000110465922089917 (June 30, 2022) and 000110465922117221 (September 30, 2022) with .grids.json files. The parked hypothesis should say the quarters are cached as HTML without schedule XBRL and need the HTML template lane.",
+   "evidence": [{"accession": "0001410578-23-001766", "text": "Total Investments $ 1,879,454,502 $ 1,851,075,132 100.0 % $ 1,717,895,936 $ 1,688,521,222 100.0 %"}]
+  },
+  {
+   "observation_key": "preferred-units-column-is-a-face-amount",
+   "outcome": "rejected",
+   "rationale": "No detection_decision (required). Owner convention question; record it in the owner queue.",
+   "evidence": [{"accession": "0001193125-25-277785", "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 12.00 % 8/12/2025 2,500 2,475 2,475 0.2 %"}]
+  },
+  {
+   "observation_key": "unit-count-rounded-by-thousands-schedule",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001410578-24-001886", "text": "Giving Home Health Care Equity N/A 8/19/2022 1,667 17 976,21"}]
+  },
+  {
+   "observation_key": "fund-interest-units-equal-contributed-capital",
+   "outcome": "rejected",
+   "rationale": "No detection_decision, which the contract requires for every observation; the printed line is as quoted, but recurrence handling (propose_detector, existing_detector or not_feasible with reason) is not stated, so the entry cannot be supported.",
+   "evidence": [{"accession": "0001410578-23-002425", "text": "THL Fund IX Investors (Plymouth), L.P. (14) Equity N/A N/A 9/1/2023 4,000,000 4,000,000 4,000,000 0.4 %"}]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-total-line-layout",
+   "outcome": "supported",
+   "rationale": "industry_coverage fired on all eight 2023-03-31..2024-12-31 quarters in stza (RVQ_BLK_d5b1b823111b ... RVQ_BLK_2a04f4954d59) and clears in stzb, so existing_detector is right. Independently verified all 1,373 corrections: each row's first following 'Total ' is 'Total <heading>' and the heading is printed above the row inside the block; printed per-industry totals sum to published totals in every quarter. Caveat for the record: the rule measures GICS coverage at 80 pct, so the ~79 unresolved rows (single-row blocks whose Total line repeats the row, '$'-separated first rows) would not re-fire it; they are resolvable from the page.",
+   "evidence": [{"accession": "0001410578-23-001135", "text": "Total Capital Markets 93,305,908 93,379,681 11.1 % Diversified Consumer Services Harbor Purchaser Inc. Second Lien Term Loan SOFR + 8.50 %, 1.00 % Floor 12 11.53 % 4/8/2030 12,500,000 12,271,546 12,365,000 1.5 % Total Diversified Consumer Services 12,271,546 12,365,000 1.5 %"}]
+  },
+  {
+   "observation_key": "member-carries-another-lines-name-and-stale-instrument",
+   "outcome": "rejected",
+   "rationale": "Detector proposal (published lien_position vs printed lien words) is concrete and sound. But 'action: fixed' is not supported: stzb publishes the Giving Home 2024-12-31 term loan with instrument_description 'Second Lien Term Loan, Due 2/18/2028 First Lien Term Loan, Due 4/26/2029' (member text concatenated with the correction value), so the stale second-lien text is still published. Lien, values and maturity are correct; Kwol rows are correct.",
+   "evidence": [{"accession": "0001410578-25-000437", "text": "Giving Home Health Care First Lien Term Loan (10) SOFR + 6.00 %, 1.00 % Floor 10.62 % 4/26/2029 48,125 48,036 47,778 3.8 %"}]
+  },
+  {
+   "observation_key": "euro-par-published-as-usd",
+   "outcome": "supported",
+   "rationale": "Verified on the page and in stzb for all four quarters (FRED DEXUSEU quarter-end rates applied exactly). FX01 cannot see a row whose currency already says USD, so a benchmark-versus-currency detector (EURIBOR/SONIA/CORRA text with USD currency) is a real gap and low false-positive: in this fund the only non-USD benchmark lines are the 4 Flexera EURIBOR lines. Note ABR lines must be excluded from that detector (USD benchmark).",
+   "evidence": [{"accession": "0001193125-26-224294", "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 %, 0.50 % Floor 6.45 % 8/16/2032 2,836 3,312 3,201 0.2 %"}]
+  },
+  {
+   "observation_key": "minotaur-ddtl-one-two-identical-values-2024-06-30",
+   "outcome": "rejected",
+   "rationale": "'Not read this run' is not a not_feasible rationale. Read here: the 2024-06-30 schedule prints two Minotaur delayed draw lines with identical figures, 5/11/2026 and 5/12/2025, both '- ( 33,610 ) ( 68,023 )', so the published rows are as filed. The entry should be closed as as-filed with the page quote; no detector needed beyond the existing duplicate-value checks.",
+   "evidence": [{"accession": "0001410578-24-001310", "text": "Minotaur Acquisition, Inc. First Lien Delayed Draw Term Loan (9) SOFR + 5.00 %, 1.00 % Floor 10.35 % 5/12/2025 - ( 33,610 ) ( 68,023 ) 0.0 %"}]
+  }
+ ],
+ "request_reviews": [],
+ "unflagged_errors": [
+  {"what": "instrument_description set NULL on 41 rows whose issuer_name was corrected (646.1M FV, 10 quarters); stxf carried the instrument text", "fix": "carry instrument_description in the same correction lines or fix the correction step so an issuer_name override does not re-derive the instrument from the member"},
+  {"what": "20 published rows printed 'ABR + x %' carry reference_rate_type SOFR (19) or LIBOR (1); quarters 2023-03-31, 2024-06-30, 2025-03-31..2026-06-30; issuers Stepping Stones, MB2, GovDelivery, TST, Ministry Brands, Arden, Payscape (revolvers)", "fix": "reference_rate_type ABR by wrapper rule or correction; check spread analytics"},
+  {"what": "Giving Home 2024-12-31 instrument_description concatenates member text and correction value", "fix": "replace, not append"},
+  {"what": "B01 dash lines declared in 4 quarters only; 70 same-kind lines unpublished in 9 quarters", "fix": "one rule for all quarters (declare all or none); owner decision on publishing zero-value undrawn lines"},
+  {"what": "MB2 2024-12-31 added row is the revolver line published as Delayed Draw Term Loan", "fix": "instrument_type Revolver and instrument text from the printed line"},
+  {"what": "GS Acquisitionco 2026-06-30 revolver published 'GS ACQUISITIONCO, INC.'; printed 'GS Acquisitionco, Inc.'", "fix": "name correction or stop the issuer partition step propagating the added 2025-03-31 member's case"},
+  {"what": "Project K BuyerCo first lien term loan (2023-03-31..2024-03-31) and Harbor Purchaser (2023-03-31..2024-09-30) keep name-cache GICS contradicting printed headings Capital Markets / Diversified Consumer Services", "fix": "resolve single-row blocks and '$'-separated first rows in the heading parser"},
+  {"what": "Two Ten Holdco published under two names for one position (2023-03/06 and the 2024-09-30 added revolver vs renamed rows)", "fix": "one treatment for all quarters"}
+ ]
+}

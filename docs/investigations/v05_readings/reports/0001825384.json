@@ -1,136 +1,91 @@
 {
  "cik": "0001825384",
- "label": "stxf",
- "before": "spoff3",
+ "label": "stze",
+ "before": "stxf",
  "shared_code": false,
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 40,
-   "why": "34 rows: '<issuer>, Equity, Acquisition Date ...' members (2025-03-31 on) now cut at ', Equity, Acquisition Date' by the wrapper's issuer_name_strip_re (26 rows plus the THL and Winterfell fund rows); 2024-06-30 Spirit RR / Giving Home names swapped back by row correction (values were tagged on each other's member); 2026-03-31 Winterfell named from the page (tagged on the stale Spirit RR member); 4 rows from the shared splitter (D-166: 'Ivy Hill ... LTD' to 'Ltd')."
+   "rows": 51,
+   "why": "printed company name set by context (46 finding rows, Kwol/Giving Home 2024-12-31, Two Ten 2023-03-31/06-30 and the two added 2024 revolvers, GS Acquisitionco 2026-06-30, MB2 2024-12-31 revolver)"
   },
   {
    "column": "instrument_description",
-   "rows": 50,
-   "why": "the text cut from the issuer goes to the instrument ('Equity, Acquisition Date 5/8/2024'); 'Preferred Equity' set on the bare RSC Topco rows; 'Equity Investment' / 'Equity' on the 2024-06-30 swapped rows; 11 rows from the shared splitter (D-166: 'First Lien term Loan' to 'First Lien Term Loan', ALKU)."
+   "rows": 6,
+   "why": "Minotaur revolvers (3), Kwol and Giving Home 2024-12-31 (3); the 41 renamed rows keep their instrument text (restored by explicit corrections), net no change"
   },
   {
-   "column": "cost",
-   "rows": 1,
-   "why": "TA/WEG delayed draw 'Five' 2024-12-31: printed cost 14,006 was tagged on another member; set by row correction from the printed line."
-  },
-  {
-   "column": "shares_held",
-   "rows": 125,
-   "why": "equity unit counts the filer tags with the principal concept (Par Amount / Units column) published as the unit count: wrapper units_tagged_as_par for the 14 filings (equity and preferred rows already classed equity), and row corrections for the 26 '<issuer>, Equity, Acquisition Date' rows, the bare RSC Topco rows, the 2024-06-30 swap (Giving Home 1,667) and the Giving Home warrants 2023-03-31 to 2024-03-31 (printed 2,917; the shared share-count step had given them Spirit RR's 3,585,975). Units at the filer's tagged scale (thousands schedule from 2024-12-31; the dollar schedules of 2024 print the same holdings as 3,585,975 and 48,483 units). Round 2: 15 fund-interest rows (THL Fund IX 2023-09-30 to 2026-06-30, Winterfell 2025-12-31 to 2026-06-30) given the tagged Par Amount / Units figure by row correction; the FUND class had withdrawn it and units_tagged_as_par covers equity classes only."
-  },
-  {
-   "column": "principal_amount",
-   "rows": 30,
-   "why": "unit counts withdrawn from par on the 26 equity rows previously published as loans and on the bare RSC Topco preferred rows (equity publishes no par); TA/WEG 'Five' 2024-12-31 par 14,255,000 set from the printed line."
+   "column": "principal_amount_currency",
+   "rows": 4,
+   "why": "Flexera euro term loan, four quarters"
   },
   {
    "column": "principal_amount_usd",
-   "rows": 30,
-   "why": "follows principal_amount on the same rows."
+   "rows": 4,
+   "why": "Flexera euro term loan at FRED H.10 EURUSD"
   },
   {
-   "column": "asset_category",
-   "rows": 50,
-   "why": "26 '<issuer>, Equity, Acquisition Date' rows LOAN to EQUITY_COMMON; preferred interests filed as 'Equity Investment' or a bare name (GT Polaris, Galway, Imagine, RSC Topco; 2023-03-31 to 2024-12-31) to EQUITY_PREFERRED; Winterfell 2026-03-31 to FUND."
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "Flexera euro term loan"
   },
   {
-   "column": "index_classification",
-   "rows": 50,
-   "why": "follows asset_category on the same rows (DIRECT_LENDING / COMMON_EQUITY to COMMON_EQUITY / PREFERRED_EQUITY / PRIVATE_EQUITY_FUND)."
+   "column": "principal_fx_status",
+   "rows": 4,
+   "why": "Flexera euro term loan, reference_fx"
   },
   {
-   "column": "asset_class",
-   "rows": 30,
-   "why": "PRIVATE_CREDIT to PRIVATE_EQUITY on the rows reclassed from LOAN."
+   "column": "reference_rate_type",
+   "rows": 18,
+   "why": "printed 'ABR + x %' rows published as SOFR/LIBOR now PRIME (the 2 further ABR rows are among the 127 added rows)"
   },
   {
-   "column": "issuer_category",
-   "rows": 2,
-   "why": "Winterfell 2026-03-31 set to FUND, as its other quarters."
-  },
-  {
-   "column": "exposure_type",
-   "rows": 2,
-   "why": "Winterfell 2026-03-31 set to FUND, as its other quarters."
-  },
-  {
-   "column": "interest_rate",
-   "rows": 45,
-   "why": "PIK-only fixed notes ('N/A 13.00 % PIK') publish the PIK coupon as the rate (wrapper pik_only_tag_reading); preferred fixed rates printed and not tagged (2024-12-31 to 2025-09-30) and preferred 'x % PIK' coupons (2025-12-31 on) set by row correction; AP Highlands 2025-12-31 9.75 (plain rate the filing tags as PIK). Round 2: MC CIF 2025-09-30 12.0 and 13.5 from each member's own PreferredStockDividendRatePercentage fact. The preferred rates of 2024-12-31 to 2025-09-30 are tagged with that concept on the member's year-to-date period context (not untagged, as round 1 said); the position reader does not join it to the value context."
-  },
-  {
-   "column": "coupon_type",
-   "rows": 30,
-   "why": "Fixed on the preferred and AP Highlands rows given a rate."
-  },
-  {
-   "column": "pik_rate",
-   "rows": 10,
-   "why": "AP Highlands 2025-12-31 PIK withdrawn (printed 'N/A 9.75 %' with no PIK); preferred PIK rates re-set to the rounded tagged figure (14.000000000000002 to 14.0)."
-  },
-  {
-   "column": "src_transforms",
-   "rows": 100,
-   "why": "records the pik_only, units-from-principal and row-correction transforms on the rows above."
-  },
-  {
-   "column": "shares_held_source",
-   "rows": 8,
-   "why": "the shared share-count step marks the six Giving Home / Spirit RR rows derived_proxy (its donor was the 2024-06-30 swapped row); the unit counts on those rows are then set from the page by row correction, but the source label is not a correctable field and stays derived_proxy."
-  },
-  {
-   "column": "src_facts",
-   "rows": 3,
-   "why": "the three D-117 rows of 2025-12-31: the raw fair-value string is now '8182000' for '8182000.0' (no value change; shared formatting)."
-  },
-  {
-   "column": "corrected_fields",
-   "rows": 95,
-   "why": "lists the fields set by this run's row corrections."
+   "column": "extracted_industry",
+   "rows": 1385,
+   "why": "printed industry heading: 1,373 from the closing 'Total <industry>' line plus 12 Project K BuyerCo / Harbor Purchaser rows"
   },
   {
    "column": "gics_sub_industry",
-   "rows": 25,
-   "why": "17 rows lose a label because canonical_name is resolved within this one-fund sandbox (spoff3 resolved 'Assured Partners, Inc' and 'Resolute Investment Managers' to other funds' spellings with cache hits); the 2024-06-30 swap moves Health Care Services from the Spirit RR row to the Giving Home row; renamed rows re-keyed."
+   "rows": 981,
+   "why": "mapped from the printed heading by the existing GICS mapping"
   },
   {
    "column": "gics_sector",
-   "rows": 25,
-   "why": "follows gics_sub_industry."
+   "rows": 786,
+   "why": "same mapping"
+  },
+  {
+   "column": "lien_position",
+   "rows": 1,
+   "why": "Giving Home 2024-12-31 term loan printed first lien, published second lien"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 3,
+   "why": "Minotaur revolvers (the MB2 revolver is an added row)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 57,
+   "why": "follows issuer_name"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 83,
+   "why": "follows issuer_name"
   },
   {
    "column": "position_id",
-   "rows": 330,
-   "why": "positions re-paired after the issuer names changed (cut equity names, swap fixed) and the 2026-06-30 quarter was added."
+   "rows": 57,
+   "why": "follows entity names"
   },
   {
-   "column": "cost_reported",
-   "rows": 1,
-   "why": "follows cost (TA/WEG 2024-12-31)."
-  },
-  {
-   "column": "interest_rate_reported",
-   "rows": 35,
-   "why": "follows interest_rate."
-  },
-  {
-   "column": "interest_rate_kind",
-   "rows": 45,
-   "why": "all_in on the rows given a rate (wrapper filed_rate_reading all_in)."
-  },
-  {
-   "column": "interest_rate_cash",
-   "rows": 15,
-   "why": "cash leg of the PIK preferred coupons: 0 for all-PIK, 6.0 for MC CIF '12.00 % (incl 6.00 % PIK)'."
+   "column": "corrected_fields",
+   "rows": 1414,
+   "why": "audit column of the corrections"
   }
  ],
- "rows_added": 359,
+ "rows_added": 127,
  "rows_removed": 0,
  "fixes": [
   {
@@ -382,6 +337,185 @@
      "text": "Winterfell Co-Invest SCSP Equity (14) N/A 9/19/2022 3,586 3,635 8,068 0.6 %"
     }
    ]
+  },
+  {
+   "what": "issuer_name set to the printed name by context (row_corrections_by_context.csv, 46 rows plus the Minotaur instrument)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277785",
+     "text": "Freedom Funding Center LLC Unsecured Note (9)(11) N/A 12.00 % 10/1/2037 15,000 15,000 16,087 1.2 %"
+    }
+   ]
+  },
+  {
+   "what": "printed industry heading set as extracted_industry for 1,373 rows of 2023-03-31 to 2024-12-31 (parser validated on 1,732 of 1,732 rows from 2025-03-31 where the heading is already published)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-24-001310",
+     "text": "Total Software 250,700,767 249,289,405 20.4 %"
+    }
+   ]
+  },
+  {
+   "what": "Kwol Acquisition lines tagged on Giving Home members (2024-12-31) and the Giving Home first lien term loan published as second lien",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-25-000437",
+     "text": "Kwol Acquisition Inc First Lien Term Loan (10) SOFR + 4.75 %, 0.75 % Floor 9.08 % 12/12/2029 2,403 2,397 2,395 0.2 %"
+    },
+    {
+     "accession": "0001410578-25-000437",
+     "text": "Giving Home Health Care First Lien Term Loan (10) SOFR + 6.00 %, 1.00 % Floor 10.62 % 4/26/2029 48,125 48,036 47,778 3.8 %"
+    }
+   ]
+  },
+  {
+   "what": "Flexera euro term loan: currency EUR and USD amount at FRED H.10 EURUSD, four quarters",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-224294",
+     "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 %, 0.50 % Floor 6.45 % 8/16/2032 2,836 3,312 3,201 0.2 %"
+    }
+   ]
+  },
+  {
+   "what": "Rows printed 'ABR + x %' (Alternate Base Rate, prime-based) given reference_rate_type PRIME, the closest existing value (22 rows, 2023-03-31, 2024-06-30, 2025-03-31 to 2026-06-30)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001135",
+     "text": "Stepping Stones Healthcare Services, LLC First Lien Revolving Loan"
+    }
+   ]
+  },
+  {
+   "what": "instrument text restored on the 41 renamed rows (the issuer_name correction had removed the member name that the strip step moves into the instrument); Giving Home 2024-12-31 and MB2 2024-12-31 revolver set from the printed line",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-25-000437",
+     "text": "MB2 Dental Solutions, LLC First Lien Revolving Loan (9) SOFR + 5.50 %, 0.75 % Floor 9.86 % 2/13/2031 - ( 20 ) - 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Two Ten Holdco published as the printed '2-10 Holdco, Inc.' in every quarter (2023-03-31 to 2024-09-30 rows and the added revolvers); GS Acquisitionco 2026-06-30 set to the printed case",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001135",
+     "text": "2-10 Holdco, Inc. First Lien Term Loan SOFR + 6.00 %, 0.75 % Floor 12 10.91 % 3/26/2026 49,000,000 48,478,916 48,015,079 5.7 %"
+    }
+   ]
+  },
+  {
+   "what": "Project K BuyerCo first lien term loan (2023-03-31 to 2024-03-31) and Harbor Purchaser (2023-03-31 to 2024-09-30) given the printed industry heading (Capital Markets; Diversified Consumer Services)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-23-001135",
+     "text": "Diversified Consumer Services Harbor Purchaser Inc. Second Lien Term Loan SOFR + 8.50 %, 1.00 % Floor 12 11.53 % 4/8/2030 12,500,000 12,271,546 12,365,000 1.5 %"
+    }
+   ]
+  },
+  {
+   "what": "dash-as-zero applied to every printed dash line with an XBRL context in all quarters: 127 contexts (57 in the four failing quarters, 70 in nine others) declared fair_value 0 (wrapper untagged_values); 127 rows added",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001410578-24-001886",
+     "text": "Cliffwater, LLC First Lien Revolving Loan (9) SOFR + 4.50 %, 0.75 % Floor 9.35 % 10/7/2030 - ( 49,069 ) - 0.0 %"
+    }
+   ]
   }
  ],
  "total_exceptions": [
@@ -391,6 +525,22 @@
    "quote": {
     "accession": "0001193125-26-352549",
     "text": "Derivative Instruments ( 2,124 ) - Total Investments, at fair value"
+   }
+  },
+  {
+   "quarter": "2023-06-30",
+   "why": "The filer's own 'Total Investments $ 1,879,454,502 $ 1,851,075,132' differs from the sum of its industry totals (1,850,959,185 = published); filer footing gap of 115,947 dollars.",
+   "quote": {
+    "accession": "0001410578-23-001766",
+    "text": "Total Investments $ 1,879,454,502 $ 1,851,075,132 100.0 % $ 1,717,895,936 $ 1,688,521,222 100.0 %"
+   }
+  },
+  {
+   "quarter": "2026-03-31",
+   "why": "The filed 'Total Investments, at fair value' 2,943,879 includes 'Derivative Instruments 112' (swaps on the fund's own notes); published 2,934,363 + 9,404 equals the filed total less 112 thousand.",
+   "quote": {
+    "accession": "0001193125-26-224294",
+    "text": "Derivative Instruments (amortized cost of $ 0 and $ 0 , respectively) 112 - Total Investments, at fair value"
    }
   }
  ],
@@ -402,9 +552,15 @@
    ]
   },
   {
-   "finding": "2022 quarters (no rule; filed total 1,688.5M at 2022-12-31)",
+   "finding": "industry rows with no resolved heading (about 60 rows: single-row blocks whose Total line repeats the row, rows printed with '$' between figures); Project K BuyerCo and Harbor Purchaser term loans were fixed by name",
    "hypotheses": [
-    "The 10-K for 2022-12-31 tags no schedule (no InvestmentIdentifierAxis, no InvestmentOwnedAtFairValue facts); the 2022 10-Qs are not in the cache. Needs HTML template work."
+    "Resolvable from the page (the reviewer confirmed); extend the parser to single-row blocks. industry_coverage cleared on all eight quarters."
+   ]
+  },
+  {
+   "finding": "2022 quarters",
+   "hypotheses": [
+    "Three 2022 10-Qs are cached as HTML (0001104659-22-060152, -089917, -117221) without schedule XBRL: HTML template lane not run."
    ]
   }
  ],
@@ -424,6 +580,11 @@
    "quote": {
     "accession": "0001410578-24-001310",
     "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,585,975 3,635,318 4,745,751 0.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a fund-quarter row whose per-unit price moves more than 100x against the same position in the adjacent quarters (would have caught the Spirit RR / Giving Home swap).",
+    "reference": "check: per-unit price ratio vs adjacent quarters"
    }
   },
   {
@@ -445,6 +606,11 @@
    "quote": {
     "accession": "0001410578-24-000282",
     "text": "Giving Home Health Care Warrants N/A 8/19/2022 2,917 29 1,069,999 0.1 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare published shares_held with the printed unit count of the row's line; the shared share-count step partitions on issuer name and moved the count (Giving Home warrants). The same shared name step published 'GS ACQUISITIONCO, INC.' for 2026-06-30 (printed 'GS Acquisitionco, Inc.') after a 2025-03-31 member was added: it copies the case of one cluster member to the others. Fixed here by correction.",
+    "reference": "check: unit count vs printed units; issuer_name case vs printed"
    }
   },
   {
@@ -468,6 +634,11 @@
    "quote": {
     "accession": "0001410578-24-001310",
     "text": "Debt Investments - 185.3 % Capital Markets Cliffwater, LLC First Lien Term Loan (10) SOFR + 4.50 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Duplicate of industry-heading-not-read-from-total-line-layout, fixed in stzd; industry_coverage fired on all eight quarters in the untouched stza build.",
+    "reference": "pipeline/candidate_rules.py industry_coverage"
    }
   },
   {
@@ -491,6 +662,11 @@
    "quote": {
     "accession": "0000950170-25-071476",
     "text": "Resolute Investment Managers, Inc. Equity N/A 12/29/2023 58 1,249 1,353 0.1 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare gics_sub_industry with the GICS mapping of the row's printed heading where a heading is known (found Project K BuyerCo Semiconductors against Capital Markets and Harbor Purchaser; both fixed by printed headings).",
+    "reference": "check: gics vs mapped printed heading"
    }
   },
   {
@@ -512,6 +688,11 @@
    "quote": {
     "accession": "0001193125-26-352549",
     "text": "SPV CA IX, LLC Equity (10)(12)(14)(15) N/A 7/18/2025 10,882 10,590 11,394 0.8 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Sum fair value by class per printed section and compare with the printed 'Total Common Equity' / 'Total Preferred Equity' lines.",
+    "reference": "check: section totals by class"
    }
   },
   {
@@ -534,6 +715,11 @@
    "quote": {
     "accession": "0001410578-24-001310",
     "text": "GT Polaris Holdings, Inc Equity 12.50 % 6/6/2022 10,618,747 10,474,768 10,219,483 0.8 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "preferred_published_as_common exists but did not fire on member names that carry no class word ('Equity Investment', bare names); extend it to a published fixed rate on a row classed common.",
+    "reference": "pipeline/candidate_rules.py preferred_published_as_common"
    }
   },
   {
@@ -553,6 +739,11 @@
    "quote": {
     "accession": "0001193125-25-277785",
     "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 13.50 % 8/12/2025 2,500 2,475 2,475 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Shared reader gap: a preferred row with a printed rate and no published rate should be flagged (rate printed, none published).",
+    "reference": "check: printed rate on preferred row, no published rate"
    }
   },
   {
@@ -569,6 +760,11 @@
    "quote": {
     "accession": "0001193125-26-096955",
     "text": "AP Highlands Holdings, L.P. Unsecured Note N/A 9.75 % 10/16/2028 5,207 5,172 5,207 0.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare the printed line ('N/A 9.75 %', no PIK word) with pik_rate: a PIK-only publication of a rate printed without PIK.",
+    "reference": "check: pik_rate set where the printed line has no PIK word"
    }
   },
   {
@@ -587,6 +783,11 @@
    "quote": {
     "accession": "0001193125-26-096955",
     "text": "GT Polaris Holdings, Inc Preferred Equity 12.5 % PIK 6/6/2022 12,802 12,682 12,619 0.9 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A printed 'x % PIK' coupon with no published rate; the pik_printed rule is the natural home.",
+    "reference": "pipeline/candidate_rules.py pik_printed"
    }
   },
   {
@@ -603,6 +804,11 @@
    "quote": {
     "accession": "0001410578-25-000437",
     "text": "TA/WEG Intermediate Holdings, LLC First Lien Delayed Draw Term Loan (9)(10) SOFR + 5.00 %, 1.00 % Floor 9.50 % 10/4/2027 14,255 14,006 14,025 1.1 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "X11 reported the TA/WEG delayed draw 'Five' 2024-12-31 in the untouched stxa build (par on another member).",
+    "reference": "X11"
    }
   },
   {
@@ -619,6 +825,11 @@
    "quote": {
     "accession": "0001193125-26-352549",
     "text": "Ares Global Structured Solutions Rated Notes Feeder LLC Preferred Equity (10)(13) N/A 5/22/2026 610 610 610 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a published maturity_date that equals the printed acquisition date column on a preferred or equity row.",
+    "reference": "check: maturity equals acquisition date"
    }
   },
   {
@@ -635,6 +846,11 @@
    "quote": {
     "accession": "0001193125-26-224294",
     "text": "Winterfell Co-Invest SCSP Equity (14) N/A 9/19/2022 3,586 3,635 7,208 0.5 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired for the Giving Home / Kwol rows in the untouched stza build; not tested on the Winterfell row.",
+    "reference": "pipeline/candidate_rules.py issuer_name_printed"
    }
   },
   {
@@ -651,6 +867,11 @@
    "quote": {
     "accession": "0001410578-24-001310",
     "text": "ACC Ultimate Holdings, L.P. Equity N/A 5/8/2024 3,750,000 3,750,000 3,750,000 0.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare a holding's section heading with its class in adjacent quarters (ACC Ultimate printed under Preferred in one quarter).",
+    "reference": "check: class by section vs adjacent quarters"
    }
   },
   {
@@ -673,6 +894,11 @@
    "quote": {
     "accession": "0000950170-25-071476",
     "text": "Spirit RR Holdings, Inc. Equity N/A 9/19/2022 3,586 3,635 5,672 0.5 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Unit count per position changing by about 1000x between adjacent quarters (same check as member-holds-another-rows-values); convention conflict with D-168 needs an owner ruling.",
+    "reference": "check: per-unit price ratio vs adjacent quarters"
    }
   },
   {
@@ -689,6 +915,11 @@
    "quote": {
     "accession": "0001104659-23-039118",
     "text": "Ratio of net investment income (loss) to average net assets 9.36 % 6.34 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare income_yield_pct published with the printed ratio of net investment income to average net assets.",
+    "reference": "check: published ratio vs printed ratio"
    }
   },
   {
@@ -705,11 +936,16 @@
    "quote": {
     "accession": "0001410578-25-000437",
     "text": "Foundation Risk Partners, Corp. First Lien Term Loan (10) SOFR + 5.25 %, 0.75 % Floor 9.58 % 10/29/2030 4,569 4,569 4,526 0.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag instrument_description whose 'Due <date>' differs from published maturity_date (Giving Home '8/19/207', Kwol member text). Cosmetic except where the text is lost or joined, which the stzb review found and stzd fixed.",
+    "reference": "check: instrument text date vs maturity_date"
    }
   },
   {
    "observation_key": "schedule-not-tagged-quarter-not-published",
-   "what": "2022-12-31 has a filed investments total (1,688.5M) and no published rows: the 10-K for 2022 tags no schedule facts; 2022 10-Qs not cached. The gate's totals check does not see a quarter with no rows.",
+   "what": "2022-12-31 has a filed investments total (1,688.5M) and no published rows: the 10-K for 2022 tags no schedule. Correction: the three 2022 10-Qs are cached (0001104659-22-060152, -089917, -117221, data/raw/filings/bdc_html/1825384, with .grids.json); they are cached as HTML without schedule XBRL and need the HTML template lane.",
    "field": "fair_value",
    "quarters": [
     "2022-12-31"
@@ -721,6 +957,11 @@
    "quote": {
     "accession": "0001104659-23-039118",
     "text": "Total Investments $ 1,717,895,936 $ 1,688,521,222 100.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A fund-quarter with a filed investments total and no published rows is not listed by the totals check (2022-12-31 is not); add that listing.",
+    "reference": "check: filed total with no published rows"
    }
   },
   {
@@ -741,6 +982,11 @@
    "quote": {
     "accession": "0001193125-25-277785",
     "text": "MC CIF Wealth Management (UK) Ltd. Preferred Equity (13) 12.00 % 8/12/2025 2,500 2,475 2,475 0.2 %"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Owner convention question (is the unit column a count or a face amount for preferred rows); no pattern a check can decide. Recorded for the owner queue.",
+    "reference": "none"
    }
   },
   {
@@ -763,6 +1009,11 @@
    "quote": {
     "accession": "0001410578-24-001886",
     "text": "Giving Home Health Care Equity N/A 8/19/2022 1,667 17 976,21"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A unit count printed in thousands under a dollar-tagged concept: compare the tagged count with the printed one at the schedule's scale.",
+    "reference": "check: unit count vs printed units"
    }
   },
   {
@@ -780,6 +1031,186 @@
    "quote": {
     "accession": "0001410578-23-002425",
     "text": "THL Fund IX Investors (Plymouth), L.P. (14) Equity N/A N/A 9/1/2023 4,000,000 4,000,000 4,000,000 0.4 %"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "The filer prints contributed capital in the units column for fund interests; the rows are published as filed and no count exists to compare with. Owner convention, not a detectable error.",
+    "reference": "none"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-total-line-layout",
+   "what": "The iXBRL field-status reader read no industry (2023-03..2024-09 10-Qs) or the page footer 'Page' (10-Ks) for this filer, so extracted_industry was empty on all 1,143 funded rows of eight quarters.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 2506.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "industry_coverage (fired)",
+   "quote": {
+    "accession": "0001410578-24-001310",
+    "text": "Total Software 250,700,767 249,289,405 20.4 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "industry_coverage fired on all eight quarters in the untouched stza build.",
+    "reference": "pipeline/candidate_rules.py industry_coverage"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-lines-name-and-stale-instrument",
+   "what": "The 2024-12-31 10-K tags the Giving Home first lien term loan with the member 'Second Lien Term Loan Due 2/18/2028' (published second lien) and the Kwol lines on Giving Home members. Only the Kwol names were flagged. Round 2: the Giving Home instrument text was concatenated (member text moved by the strip step plus the correction); fixed by setting the issuer name clean and the printed instrument.",
+   "field": "lien_position",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 47.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "published lien_position against the lien words on the printed line of the same row",
+   "quote": {
+    "accession": "0001410578-25-000437",
+    "text": "Giving Home Health Care First Lien Term Loan (10) SOFR + 6.00 %, 1.00 % Floor 10.62 % 4/26/2029 48,125 48,036 47,778 3.8 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the lien error; compare published lien_position with the lien words on the printed row.",
+    "reference": "lien_position vs printed row"
+   }
+  },
+  {
+   "observation_key": "euro-par-published-as-usd",
+   "what": "Euro par (EURIBOR line, par below dollar cost) published with currency USD; FX01 stayed silent once the currency was set and fired in 2 of 4 quarters.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "non-USD benchmark (EURIBOR, SONIA) in the rate text with currency USD",
+   "quote": {
+    "accession": "0001193125-26-224294",
+    "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 %, 0.50 % Floor 6.45 % 8/16/2032 2,836 3,312 3,201 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 is silent when currency says USD; a benchmark-vs-currency check would catch it.",
+    "reference": "non-USD reference rate with USD currency"
+   }
+  },
+  {
+   "observation_key": "minotaur-ddtl-one-two-identical-values-2024-06-30",
+   "what": "2024-06-30 Minotaur delayed-draw rows 'One' (5/11/2026) and 'Two' (5/12/2025) publish identical values (-68,023 / -33,610). The schedule prints two lines with identical figures, so the rows are as filed.",
+   "field": "fair_value",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": -0.07,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "two rows of one fund-quarter with identical value tuples and different member text",
+   "quote": {
+    "accession": "0001410578-24-001310",
+    "text": "Minotaur Acquisition, Inc. First Lien Delayed Draw Term Loan (9) SOFR + 5.00 %, 1.00 % Floor 10.35 % 5/12/2025 - ( 33,610 ) ( 68,023 ) 0.0 %"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "As filed: two identical printed lines; no error to detect.",
+    "reference": "none"
+   }
+  },
+  {
+   "observation_key": "issuer-rename-blanks-instrument-text",
+   "what": "An issuer_name row correction replaces the member name that dispatch.issuer_name_strip_to_instrument moves into the instrument text, so the instrument_description went blank on 41 renamed rows (646.1M, 10 quarters) in stzb; it also joined text on Giving Home 2024-12-31. Cause: corrections run before _strip_issuer_names, so the corrected name leaves nothing to move. Fixed by explicit instrument_description corrections on every renamed row.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 646.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "published instrument_description blank where the member text names an instrument",
+   "quote": {
+    "accession": "0001410578-24-000757",
+    "text": "2-10 Holdco, Inc. First Lien Term Loan SOFR + 6.00 %, 0.75 % Floor 10 11.43 % 3/26/2026 46,978,924 46,618,486 46,978,924 4.4 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A blank-instrument count by fund-quarter against the previous build (47 vs 0 here) would have shown it; shared step: _apply_row_corrections before _strip_issuer_names in pipeline/unified_holdings.py.",
+    "reference": "check: blank instrument_description count vs previous build"
+   }
+  },
+  {
+   "observation_key": "abr-benchmark-published-as-sofr",
+   "what": "22 rows printed 'ABR + x %' were published as reference_rate_type SOFR (19) or LIBOR (1) with the ABR spread, and 2 were unpublished dash lines. The page prints 'ABR' (Alternate Base Rate, prime-based); the shared vocabulary has no ABR value, so PRIME is the closest existing value and the mapping is lossy (ABR is not strictly prime). Fixed by correction to PRIME.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 8.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "benchmark word on the printed line against reference_rate_type",
+   "quote": {
+    "accession": "0001410578-23-001135",
+    "text": "Stepping Stones Healthcare Services, LLC First Lien Revolving Loan"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare the benchmark word printed with the spread (ABR, Prime, EURIBOR, SONIA) with reference_rate_type; none fired on these rows.",
+    "reference": "check: printed benchmark vs reference_rate_type"
+   }
+  },
+  {
+   "observation_key": "dash-fair-value-lines-unpublished-by-quarter",
+   "what": "Schedule lines printed with a dash for fair value (undrawn lines) were published in some quarters and not in others (127 contexts in 13 quarters); now all declared at 0 from the page.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "flag any current-quarter printed line with no fair value and no untagged_values declaration",
+   "quote": {
+    "accession": "0001410578-24-001886",
+    "text": "Cliffwater, LLC First Lien Revolving Loan (9) SOFR + 4.50 %, 0.75 % Floor 9.35 % 10/7/2030 - ( 49,069 ) - 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "flag any current-quarter printed line with no fair value and no untagged_values declaration. B01's 95% threshold missed 70 such lines in the untouched stza build, and context-id declarations will not cover next quarter's new dash lines.",
+    "reference": "check: printed line without fair value and without a declaration"
    }
   }
  ],
@@ -789,14 +1220,65 @@
   "No tests run (no shared code changed).",
   "Page sample of 12 random rows of stxd read against the printed lines (rates, spreads, maturities, par, cost, value): no published error seen; not the orchestrator's 20-row sample.",
   "Floors, non-accrual flags, percent of net assets and acquisition dates not compared beyond the sample.",
-  "GICS for the 2023-2024 rows not restored (shared reader).",
   "The 2023-06-30 footing gap (-115.9 thousand, inside tolerance) not re-read.",
-  "Round 2: the preferred face-amount convention (shares_held vs principal) not changed; owner decision."
+  "Round 2: the preferred face-amount convention (shares_held vs principal) not changed; owner decision.",
+  "FX01 ledger states are frozen and not cleared; the data is fixed in stzb.",
+  "FX01 ledger states are frozen and not cleared; the data is fixed.",
+  "Winterfell Co-Invest 2026-03-31 has a blank instrument_description in stxf as well (not changed).",
+  "Variant spellings in the 127 added rows (Trinity Partners Holdings Llc / ', LLC', Anaplan, Inc / Inc., Captive Resources Midco) are left per owner ruling DC-shared-e67718e0e3.",
+  "No random 20-row sample read by me; no independent review of round 2."
  ],
  "unit_scale_evidence": {
   "dollar_schedules": "10-Qs and 10-K from 2023-03-31 to 2024-09-30 (0001410578-23-001135 to 0001410578-24-001886) print values and units in whole dollars; unit tags are decimals 0 and equal the printed figure (Spirit RR '3,585,975 3,635,318 4,745,751', Resolute 48,483, Giving Home 1,667).",
   "thousands_schedules": "From the 10-K for 2024-12-31 (0001410578-25-000437) on, the schedule is '(in thousands)' and units are tagged at decimals -3 as printed x 1,000 (Spirit RR '3,586 3,635 5,672', tagged 3,586,000). The same holdings' dollar-schedule counts (3,585,975; 48,483 then 55 and 58 thousand) confirm x 1,000 is the count's scale.",
   "C017_MC_CIF": "2,500 printed (thousands) against cost 2,475: a face amount of 2.5M dollars, not 2.5M units; observation preferred-units-column-is-a-face-amount. Left in shares_held, owner convention.",
   "C020_New_Giving": "2 printed (thousands), 2,000 published: the scale is right; the filer rounded 1,667 units to 2 thousand; observation unit-count-rounded-by-thousands-schedule."
- }
+ },
+ "investigator_id": "agent:fund-stz-sonnet",
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_36d6a4f11c10",
+   "coverage": {
+    "affected_rows": [
+     "2026-03-31 Flexera EURIBOR term loan (context C_3dc96a23-615b-420f-bf6d-a4b6)"
+    ],
+    "reviewed_rows": [
+     "2026-03-31 Flexera EURIBOR term loan (context C_3dc96a23-615b-420f-bf6d-a4b6)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-224294",
+     "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 %, 0.50 % Floor 6.45 % 8/16/2032 2,836 3,312 3,201 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Par 2,836 below dollar cost 3,312 and EURIBOR reference: euro par published as USD (currency USD, status source_usd). Fixed in stzb: EUR, 1.1518, 3,266,504.8, reference_fx."
+   ],
+   "next_action": "Data fixed in stzb; the ledger state real_error_check_silent is frozen and resolves in the production batch."
+  },
+  {
+   "finding_id": "RVQ_REV_e014f62910b5",
+   "coverage": {
+    "affected_rows": [
+     "2025-12-31 Flexera EURIBOR term loan (context C_d4342799-6c60-42bb-a088-c51e)"
+    ],
+    "reviewed_rows": [
+     "2025-12-31 Flexera EURIBOR term loan (context C_d4342799-6c60-42bb-a088-c51e)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-096955",
+     "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.50 % 6.43 % 8/16/2032 2,836 3,311 3,319 0.2 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Same mechanism as 2026-03-31. Fixed in stzb: EUR, 1.1736, 3,328,329.6; also 2025-09-30 and 2026-06-30."
+   ],
+   "next_action": "Data fixed in stzb; remediation_pulled state is frozen and resolves in the production batch."
+  }
+ ]
 }

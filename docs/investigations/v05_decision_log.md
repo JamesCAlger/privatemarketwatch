@@ -5934,3 +5934,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Retired under D-252 (10): A07 x3, B01 x2, X04, FX01, dl_rate_fill, agentA reference, F26.
 - Requests: REQ-FPZ-1920453-1 verification_bug (agentA date grammar: coerce unambiguous day-first; opt-in per-context dmy list for 68 contexts, pinned to one filing); REQ-FPZ-1920453-2 make_batch_dispositions assertion.
 - A clean result is not data correct.
+
+### D-288 Fund loop 2026-11-15: Stone Point Credit Corporation (0001825384), sandbox stze
+
+- Filtered packet: 24 findings (18 supported_fix: issuer_name_printed 10, industry_coverage 8; 6 unreviewed: B01 4, FX01 2); none closed at HEAD. Sonnet fund agent `agent:fund-stz-sonnet`, Opus reviewer `agent:review-stzb-opus` (full on stzb, change-only on stze; investigation COMPLETE), Sonnet readers (stzb 0/20, stze 0/20). Builds stza..stze; totals tie 13/14 (2023-06-30 filer footing gap; 2026-03-31/06-30 swaps inside the filed total). Outstanding 2: FX01 x2 (frozen states, data fixed: Flexera EUR par at FRED quarter-end rates).
+- Fixed (1,536 context-keyed corrections, wrapper untagged_values): 51 printed issuer names incl. Two Ten as "2-10 Holdco, Inc." in all quarters; industry from the "Total <industry>" block lines for 1,385 rows 2023-03-31..2024-12-31 (GICS follows; reviewer: printed industry totals sum exactly to published totals); 127 dash fair-value lines in 13 quarters declared 0 (real printed lines; totals unchanged); unflagged: 41 instrument texts restored after renames, 22 "ABR +" rows published SOFR/LIBOR now PRIME (lossy; no ABR value in the vocabulary, orchestrator call), Giving Home lien and text, Kwol names, MB2 revolver, GS Acquisitionco casing, Project K and Harbor industries.
+- Shared defect (observation): row corrections run before _strip_issuer_names (pipeline/unified_holdings.py ~1532 vs ~1569), so a corrected issuer name blanks the instrument tail; patched here by explicit corrections only.
+- Proposed detectors: dash line with no value and no declaration; published lien vs printed lien; non-USD benchmark with USD currency.
+- A clean result is not data correct.
