@@ -1,86 +1,1790 @@
 {
  "cik": "0001902649",
- "label": "bpxh",
- "before": "spoff2",
+ "label": "bkze",
+ "before": "bpxh",
  "shared_code": false,
  "declared_changes": [
-  {"column": "issuer_name", "rows": 31, "why": "hierarchy regex now stops at '.First Lien', '.Instrument', 'Instrument Last Out', 'Instrument DIP Facility' (12 identifiers); ordinals One/Two cut from 16 names (issuer_name_strip_re); row corrections for Sotheby's (on a PointClickCare member), Bad Boy Mowers (member names no issuer), 48forty x2, Les Schwab"},
-  {"column": "instrument_description", "rows": 18, "why": "instrument now carries the lien words cut from the name (Alera, Alliant), 'Last Out Term Loan', 'DIP Facility'; row corrections for PointClickCare, Polaris, Opal Bidco (member names no instrument), Bad Boy, 48forty, Streamland Common Units x2, MRO delayed draw"},
-  {"column": "fair_value", "rows": 1, "why": "Sumo Logic revolver 2023-06-30: tagged +7,379, printed ( 7,379 )"},
-  {"column": "cost", "rows": 44, "why": "undrawn-line costs tagged positive where the page prints brackets (row corrections), NFP 2023-09-30 cost from the page, dash costs set to 0"},
-  {"column": "cost_reported", "rows": 44, "why": "follows cost"},
-  {"column": "shares_held", "rows": 9, "why": "units_tagged_as_par for the four filings 2024-09-30 to 2025-06-30: equity unit counts tagged with the principal concept"},
-  {"column": "src_transforms", "rows": 9, "why": "shares_held:from_principal_tag on the same 9 rows"},
-  {"column": "principal_amount", "rows": 1, "why": "Zelis 2025-09-30: par on a second context, set from the page"},
-  {"column": "interest_rate", "rows": 2, "why": "Zelis 2025-09-30 6.91 and CrewLine revolver 2023-12-31 12.10, printed, no rate fact on the row's context"},
-  {"column": "interest_rate_reported", "rows": 2, "why": "follows interest_rate"},
-  {"column": "interest_rate_kind", "rows": 2, "why": "follows interest_rate"},
-  {"column": "basis_spread", "rows": 20, "why": "PIK-margin SOFR loans (Streamland) given the printed PIK margin as spread (16 rows in common quarters), Zelis 2.75, Magenta fixed rows spread withdrawn (6), Anthracite 2026-06-30 4.50"},
-  {"column": "reference_rate_type", "rows": 21, "why": "reference_rate_columns ['Ref']: CORRA and EURIBOR read from the printed column (were date-guessed SOFR or blank), Vortex 2024-12-31 Prime as printed; Magenta 'Ref Fixed' rows withdrawn (6); Zelis SOFR"},
-  {"column": "reference_rate_source", "rows": 21, "why": "follows reference_rate_type"},
-  {"column": "coupon_type", "rows": 20, "why": "Streamland PIK-margin SOFR loans Fixed -> Floating; Magenta Fixed -> Fixed coupon (6); Zelis"},
-  {"column": "pik_rate", "rows": 1, "why": "Anthracite 2026-06-30: the cash margin was tagged as PIK"},
-  {"column": "interest_rate_cash", "rows": 1, "why": "follows the Anthracite PIK withdrawal"},
-  {"column": "src_facts", "rows": 2, "why": "provenance of the corrected Sumo Logic value"},
-  {"column": "corrected_fields", "rows": 80, "why": "rows carrying row corrections"},
-  {"column": "pct_of_net_assets_calculated", "rows": 2, "why": "follows the Sumo Logic value sign"},
-  {"column": "position_id", "rows": 400, "why": "the 2026-06-30 quarter added (chains re-paired) and renamed issuers"},
-  {"column": "cost_currency", "rows": 3, "why": "As1 Sports 2026-06-30: value facts tagged EUR but printed in dollars (foreign_unit_values)"}
+  {
+   "column": "issuer_name",
+   "rows": 67,
+   "why": "industry labels no longer left in names, CoreLogic '(fka First American Corporation)' kept whole, 23 issuer_name row corrections for member names that differ from the page"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 29,
+   "why": "15 member-text tranche errors and 6 member typos set from the printed line, 8 CoreLogic rows whose instrument no longer starts with the issuer's tail"
+  },
+  {
+   "column": "cost",
+   "rows": 3,
+   "why": "sign dropped by the filer's tags: AmeriLife DDTL 2023-12-31, EBS revolver and Beekeeper 2025-06-30 (row corrections); the Integrity and Zendesk revolvers are new rows"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 3,
+   "why": "follows cost"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 1,
+   "why": "AmeriLife DDTL 2023-12-31 par printed ( 1 )"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 1,
+   "why": "ABC Technologies 2025-12-31: EUR par published as USD"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 1,
+   "why": "ABC 2025-12-31: 17,275,741 EUR at 1.1736"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 1,
+   "why": "ABC 2025-12-31: 1.1736 (DEXUSEU)"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 1,
+   "why": "ABC 2025-12-31: reference_fx"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 62,
+   "why": "industry read from the member text for rows printed after a page break (dispatch.industry_from_identifier_re)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 29,
+   "why": "follows extracted_industry on rows that had a name-guessed sector"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 39,
+   "why": "follows extracted_industry"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 18,
+   "why": "follows the corrected instrument_description (14 tranche corrections and the 4 earlier PointClickCare, Polaris, Opal, MRO descriptions)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 52,
+   "why": "rows carrying the new row corrections"
+  },
+  {
+   "column": "position_id",
+   "rows": 96,
+   "why": "follows renamed issuers, corrected instruments and the 11 added rows"
+  }
  ],
- "rows_added": 480,
+ "rows_added": 11,
  "rows_removed": 0,
  "fixes": [
-  {"what": "2026-06-30 As1 Sports Bidco (3 rows): fair value and cost tagged with unit EUR but printed in dollars; the build converted the value (45.07M against 39.47M printed) and dropped the cost. Published was 5.6M over the filed total; now ties. Earlier filings tag values in USD only.",
-   "kind": "wrapper", "quarters": ["2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-338073", "text": "As1 Sports Bidco Ltd (United Kingdom) First Lien Term Loan EURIBOR(Q ) 0.50 % 5.50 % 7.67 % 4/9/2033 EUR 34,875,000 40,362,799 39,473,862 1.50 %"}]},
-  {"what": "Equity unit counts tagged with the principal concept in the four filings before the share concept appears (2025-09-30): units_tagged_as_par. Clears C04 x4.",
-   "kind": "wrapper", "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30"],
-   "quotes": [{"accession": "0000950170-25-067060", "text": "Equity Securities IT Services New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 539,842 0.04 %"}]},
-  {"what": "Reference rate read from the printed 'Ref' column (reference_rate_columns): CORRA (Shackleton, Aryeh) and EURIBOR (ABC Technologies, As1, Avalon) were a date-guessed SOFR or blank; Vortex 2024-12-31 delayed draw Prime as printed.",
-   "kind": "wrapper", "quarters": ["2024-12-31", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0000950170-25-030170", "text": "Vortex Companies, LLC First Lien Delayed Draw Term Loan Prime 1.00 % 5.00 % 12.50 % 9/4/2029 $ 3,527,190 3,361,890 3,415,570 0.32 %"}]},
-  {"what": "Issuer names: hierarchy regex stops at a lien word or 'Instrument' glued to the name and knows 'Last Out' and 'DIP' (dry run on all 4,618 identifiers: 12 change, all intended); ordinals One/Two cut from names (16 identifiers).",
-   "kind": "wrapper", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"],
-   "quotes": [{"accession": "0000950170-25-067060", "text": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.25 % 9.57 % 6/30/2028 $ 857,716 844,401 846,297 0.06 %"}]},
-  {"what": "Undrawn-line costs tagged positive where the page prints brackets (44 rows, 2023-03-31 to 2025-09-30); cost gaps to the printed totals close.",
-   "kind": "row_correction", "quarters": ["2023-03-31", "2023-09-30", "2023-12-31", "2024-09-30", "2025-06-30", "2025-09-30"],
-   "quotes": [{"accession": "0000950170-23-058175", "text": "Bluefin Holding, LLC (Allvue) First Lien Revolver SOFR(S) 1.00 % 7.25 % 12.72 % 9/12/2030 $ - ( 29,522 ) ( 29,767 )"}]},
-  {"what": "Sumo Logic revolver 2023-06-30 value tagged +7,379, printed in brackets.",
-   "kind": "row_correction", "quarters": ["2023-06-30"],
-   "quotes": [{"accession": "0000950170-23-038004", "text": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )"}]},
-  {"what": "Zelis 2025-09-30: the line is split over two contexts (values on one, par and rates on the other); par, rate, spread and reference set from the page. Clears X02 2025-09-30 and X11 2025-09-30.",
-   "kind": "row_correction", "quarters": ["2025-09-30"],
-   "quotes": [{"accession": "0001193125-25-271826", "text": "Zelis Healthcare Corp First Lien Term Loan SOFR(M) - 2.75 % 6.91 % 9/15/2029 $ 1,131,385 1,126,243 1,130,090 0.05 %"}]},
-  {"what": "Rows on the wrong or an empty member: Sotheby's on a PointClickCare member (2023-12-31), Bad Boy Mowers on a member with no issuer (7.2M), PointClickCare/Polaris/Opal with no instrument, MRO delayed draw values on a revolver member (2025-12-31), 48forty names, Les Schwab name.",
-   "kind": "row_correction", "quarters": ["2023-12-31", "2024-09-30", "2024-12-31", "2025-03-31", "2025-12-31", "2026-03-31"],
-   "quotes": [{"accession": "0000950170-24-024153", "text": "Household Durables Bad Boy Mowers JV Acquisition, LLC First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 11.37 % 11/9/2029 $ 7,510,059 7,325,923 7,209,657 1.71 %"},
-              {"accession": "0001193125-26-085372", "text": "MRO Parent Corporation First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/9/2032 $ - ( 20,844 ) ( 18,136 )"}]},
-  {"what": "Rates: CrewLine revolver 2023-12-31 rate printed and not tagged; Anthracite 2026-06-30 cash margin tagged as PIK; Streamland SOFR loans whose whole margin is PIK published Fixed with no spread (16 rows, now Floating with the printed PIK margin as spread); Magenta 'Ref Fixed' 12.00 % published floating over a guessed LIBOR/SOFR (6 rows, now fixed).",
-   "kind": "row_correction", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-12-31", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-338073", "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"},
-              {"accession": "0000950170-23-017976", "text": "Magenta Buyer, LLC (McAfee) First Lien Incremental Term Loan Fixed - 12.00 % 12.00 % 7/27/2028 $ 845,744 769,624 756,941 0.30 %"}]}
+  {
+   "what": "Issuer names: fund-local industry labels in staging.hierarchy_issuer_re (Healthcare Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental Maintenance and Security Services, Airlines, Multiline Retail, Semiconductors and Semiconductor Equipment, Consumer Finance and Packaging); 23 issuer_name row corrections. Clears all 14 issuer_name_printed findings.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "American Airlines Inc. (American Airlines Group Inc.) First Lien Term Loan SOFR(M) - 3.00 % 6.67 % 5/20/2033 $ 431,000 426,726 426,421 0.02 %"
+    },
+    {
+     "accession": "0000950170-24-024153",
+     "text": "NFP Corp. First Lien Term Loan SOFR(M) - 3.36 % 8.72 % 2/13/2027 $ 983,024 951,550 989,247 0.23 %"
+    }
+   ]
+  },
+  {
+   "what": "ABC Technologies 2025-12-31 EUR par published as USD (FX01): currency EUR, USD amount at the 1.1736 reference rate.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E"
+    }
+   ]
+  },
+  {
+   "what": "2026-06-30 As1 Sports Bidco (3 rows): fair value and cost tagged with unit EUR but printed in dollars; the build converted the value (45.07M against 39.47M printed) and dropped the cost. Published was 5.6M over the filed total; now ties. Earlier filings tag values in USD only.",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "As1 Sports Bidco Ltd (United Kingdom) First Lien Term Loan EURIBOR(Q ) 0.50 % 5.50 % 7.67 % 4/9/2033 EUR 34,875,000 40,362,799 39,473,862 1.50 %"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts tagged with the principal concept in the four filings before the share concept appears (2025-09-30): units_tagged_as_par. Clears C04 x4.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-067060",
+     "text": "Equity Securities IT Services New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 539,842 0.04 %"
+    }
+   ]
+  },
+  {
+   "what": "Reference rate read from the printed 'Ref' column (reference_rate_columns): CORRA (Shackleton, Aryeh) and EURIBOR (ABC Technologies, As1, Avalon) were a date-guessed SOFR or blank; Vortex 2024-12-31 delayed draw Prime as printed.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-030170",
+     "text": "Vortex Companies, LLC First Lien Delayed Draw Term Loan Prime 1.00 % 5.00 % 12.50 % 9/4/2029 $ 3,527,190 3,361,890 3,415,570 0.32 %"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names: hierarchy regex stops at a lien word or 'Instrument' glued to the name and knows 'Last Out' and 'DIP' (dry run on all 4,618 identifiers: 12 change, all intended); ordinals One/Two cut from names (16 identifiers).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-067060",
+     "text": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.25 % 9.57 % 6/30/2028 $ 857,716 844,401 846,297 0.06 %"
+    }
+   ]
+  },
+  {
+   "what": "Undrawn-line costs tagged positive where the page prints brackets (44 rows, 2023-03-31 to 2025-09-30); cost gaps to the printed totals close.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-058175",
+     "text": "Bluefin Holding, LLC (Allvue) First Lien Revolver SOFR(S) 1.00 % 7.25 % 12.72 % 9/12/2030 $ - ( 29,522 ) ( 29,767 )"
+    }
+   ]
+  },
+  {
+   "what": "Sumo Logic revolver 2023-06-30 value tagged +7,379, printed in brackets.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-038004",
+     "text": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )"
+    }
+   ]
+  },
+  {
+   "what": "Zelis 2025-09-30: the line is split over two contexts (values on one, par and rates on the other); par, rate, spread and reference set from the page. Clears X02 2025-09-30 and X11 2025-09-30.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-271826",
+     "text": "Zelis Healthcare Corp First Lien Term Loan SOFR(M) - 2.75 % 6.91 % 9/15/2029 $ 1,131,385 1,126,243 1,130,090 0.05 %"
+    }
+   ]
+  },
+  {
+   "what": "Rows on the wrong or an empty member: Sotheby's on a PointClickCare member (2023-12-31), Bad Boy Mowers on a member with no issuer (7.2M), PointClickCare/Polaris/Opal with no instrument, MRO delayed draw values on a revolver member (2025-12-31), 48forty names, Les Schwab name.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Household Durables Bad Boy Mowers JV Acquisition, LLC First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 11.37 % 11/9/2029 $ 7,510,059 7,325,923 7,209,657 1.71 %"
+    },
+    {
+     "accession": "0001193125-26-085372",
+     "text": "MRO Parent Corporation First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/9/2032 $ - ( 20,844 ) ( 18,136 )"
+    }
+   ]
+  },
+  {
+   "what": "Rates: CrewLine revolver 2023-12-31 rate printed and not tagged; Anthracite 2026-06-30 cash margin tagged as PIK; Streamland SOFR loans whose whole margin is PIK published Fixed with no spread (16 rows, now Floating with the printed PIK margin as spread); Magenta 'Ref Fixed' 12.00 % published floating over a guessed LIBOR/SOFR (6 rows, now fixed).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"
+    },
+    {
+     "accession": "0000950170-23-017976",
+     "text": "Magenta Buyer, LLC (McAfee) First Lien Incremental Term Loan Fixed - 12.00 % 12.00 % 7/27/2028 $ 845,744 769,624 756,941 0.30 %"
+    }
+   ]
+  },
+  {
+   "what": "Round 2: (1) blank industries after page breaks, 62 rows 2023: dispatch.industry_from_identifier_re (clears A01 2023-03-31); (2) CoreLogic issuer and instrument regexes; (3) 15 instrument corrections where the member names another tranche; (4) cost sign for AmeriLife (par and cost), EBS, Beekeeper, Integrity and Zendesk revolvers; (5) 11 undrawn cost-only lines declared with untagged_values fair_value 0; (6) 6 instrument typos.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E"
+    },
+    {
+     "accession": "0000950170-23-058175",
+     "text": "Integrity Marketing Acquisition, LLC First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.08 % 8/31/2030"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "no finding (seen on the page): MRO Parent revolver 2025-12-31 not published",
-   "hypotheses": ["The filer tags the revolver (cost -41,687, value -18,136) on C_ebb719a3 and the delayed draw (cost -20,844, value -18,136) on C_03e762e0, both members naming the revolver with the same maturity. Staging Phase B dedup drops one as a twin (4,495 -> 4,494 rows). No wrapper setting separates two members that differ only in the coupon text; canonical_strip_re would change position keys fund-wide. The kept row is relabelled the delayed draw (its values). Published fair value is 18,136 above and cost 41,687 above the printed figures at 2025-12-31 (inside the totals tolerance)."]}
+  {
+   "finding": "no finding (seen on the page): MRO Parent revolver 2025-12-31 not published",
+   "hypotheses": [
+    "The filer tags the revolver (cost -41,687, value -18,136) on C_ebb719a3 and the delayed draw (cost -20,844, value -18,136) on C_03e762e0, both members naming the revolver with the same maturity. Staging Phase B dedup drops one as a twin (4,495 -> 4,494 rows). No wrapper setting separates two members that differ only in the coupon text; canonical_strip_re would change position keys fund-wide. The kept row is relabelled the delayed draw (its values). Published fair value is 18,136 above and cost 41,687 above the printed figures at 2025-12-31 (inside the totals tolerance)."
+   ]
+  },
+  {
+   "finding": "agentA_spread_vs_xbrl 2026-03-31 and the D-031 cash-plus-PIK spread on 220 rows (14 quarters)",
+   "hypotheses": [
+    "printed_margin_reading cash_plus_pik was tried in bkzb (key removed): no row changed; the bridge's printed_margin reads one figure per cell or two figures in two cells, not 'A % Cash + B % PIK' in one cell.",
+    "220 row corrections not written: a shared-code reading, opt-in by the same key, is the mechanism; it reaches seven other funds and is unmeasured on the cohort (owner request BKZ-R2)."
+   ]
+  },
+  {
+   "finding": "instrument_description tranche letters and ordinals the member adds (B, One, Two, Three): 53 rows",
+   "hypotheses": [
+    "The member text carries 'Term Loan B' or 'Term Loan One' where the page prints 'Term Loan'; the tranche type is right, only a suffix differs. Not corrected row by row; an instrument_description_strip_re would also touch printed letters (Nephron 'B-1', Sophia 'B') and was not measured."
+   ]
+  }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "BKZ-R1",
+   "classification": "verification_bug",
+   "file": "scripts/shadow_agent_a_engine.py",
+   "what": "agentA maturity and spread rules flag member-text values the page does not print",
+   "why": "published equals the printed cell on 67 of 67 maturity flags and 21 of 22 spread flags; the exception is the cash-plus-PIK convention row (BKZ-R2), which the repair must keep flagging",
+   "quotes": [],
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Fertitta Entertainment, LLC First Lien Term Loan SOFR(M) 0.50 % 4.00 % 9.36 % 1/27/2029 $ 1,171,387 1,133,099 1,173,402 0.28 %"
+    }
+   ],
+   "next_action": "do not flag where the row's own printed line carries the published value; where the printed spread cell reads 'A % Cash + B % PIK' compare the published spread with the TOTAL margin A + B (a row published at A only, as Onward 2026-03-31, 2.38 against 5.06, must still flag); tests: source-backed value passes, a wrong value fails, an Onward-type row still flags; measure on the accepted sandboxes (what it clears and adds, no finding with a real-error verdict cleared) before it ships (decision supersedes DC-0001902649-485853256c)"
+  },
+  {
+   "request_id": "BKZ-R2",
+   "classification": "acceptance_change",
+   "file": "pipeline/bdc_xbrl_html_bridge.py",
+   "what": "read 'A % Cash + B % PIK' in one spread cell as A + B under printed_margin_reading (D-031)",
+   "why": "220 published rows (independent page scan; about $540M absolute fair value is a lower bound from 184 member-text rows) carry the cash leg only",
+   "quotes": [],
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+    }
+   ],
+   "next_action": "owner decision, measure the seven funds that set the key (decision DC-0001902649-2397051da1)"
+  }
+ ],
  "observations": [
-  {"observation_key": "value-unit-tag-follows-loan-currency", "what": "10-Q 2026-06-30 tags cost and fair value of the three As1 Sports EUR lines with unit EUR although the schedule prints them in dollars; the build converted the value and dropped the cost (5.6M over the filed total). Fixed for the fund with foreign_unit_values.", "field": "fair_value", "quarters": ["2026-06-30"], "fair_value_m": 39.4, "cause": "fund", "action": "fixed", "suggested_check": "A fair value converted from a foreign unit whose unconverted sum ties the filed total is a dollar figure.", "quote": {"accession": "0001193125-26-338073", "text": "As1 Sports Bidco Ltd (United Kingdom) First Lien Term Loan EURIBOR(Q ) 0.50 % 5.50 % 7.67 % 4/9/2033 EUR 34,875,000 40,362,799 39,473,862 1.50 %"}},
-  {"observation_key": "undrawn-line-cost-sign-dropped-by-filer", "what": "44 undrawn lines over 7 quarters tagged a positive cost where the page prints it in brackets; no rule reported most of them (X11 caught the few with a positive value). Fixed by row correction.", "field": "cost", "quarters": ["2023-03-31", "2023-09-30", "2023-12-31", "2024-09-30", "2025-06-30", "2025-09-30"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed", "suggested_check": "On a row with par 0 or blank and fair value at or below 0, a positive cost against a printed bracketed cell is a sign error.", "quote": {"accession": "0000950170-23-058175", "text": "Bluefin Holding, LLC (Allvue) First Lien Revolver SOFR(S) 1.00 % 7.25 % 12.72 % 9/12/2030 $ - ( 29,522 ) ( 29,767 )"}},
-  {"observation_key": "row-tagged-on-another-issuers-member", "what": "Sotheby's 2023-12-31 line tagged on a PointClickCare member: name fixed by row correction, but extracted industry still Health Care Technology (printed under Diversified Consumer Services); industry is not a row-correction field.", "field": "extracted_industry", "quarters": ["2023-12-31"], "fair_value_m": 0.9, "cause": "row", "action": "left", "suggested_check": "A row whose value is printed under heading X and whose member names heading Y.", "quote": {"accession": "0000950170-24-024153", "text": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 %"}},
-  {"observation_key": "pik-margin-loan-read-as-fixed", "what": "SOFR loans whose whole margin is paid in kind are tagged with the total coupon and the PIK margin only; the financial step published them Fixed with no spread (Streamland, 16 rows 2024-12-31 to 2026-06-30). Fixed by row correction; the shared step would do the same on any filer with this tagging.", "field": "coupon_type", "quarters": ["2024-12-31", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 3.9, "cause": "shared", "action": "fixed", "suggested_check": "A loan whose member or printed line names a floating benchmark is not Fixed.", "quote": {"accession": "0001193125-26-211710", "text": "Streamland Media Midco LLC First Lien Revolver SOFR(Q) - 5.76 % PIK 9.46 % 3/31/2029 $ 210,824 210,824 210,824 0.01 %"}},
-  {"observation_key": "twin-members-dropped-by-staging-dedup", "what": "MRO Parent 2025-12-31: two members differing only in coupon text, same value; staging dedup keeps one (see parked).", "field": "fair_value", "quarters": ["2025-12-31"], "fair_value_m": 0.02, "cause": "shared", "action": "parked", "suggested_check": "Staging dedup should not drop a context whose cost differs from the kept one.", "quote": {"accession": "0001193125-26-085372", "text": "MRO Parent Corporation First Lien Revolver SOFR(M) 0.75 % 4.50 % 8.22 % 6/9/2032 $ - ( 41,687 ) ( 18,136 )"}},
-  {"observation_key": "cash-plus-pik-spread-is-cash-leg-only", "what": "Loans printed 'x % Cash + y % PIK' publish basis_spread = the cash margin (Zendesk 2023-09-30: 3.50 cash + 3.50 PIK, spread 3.5, PIK 3.5). Whether the spread should be the total margin is a convention question; not changed.", "field": "basis_spread", "quarters": ["2023-09-30"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "", "quote": {"accession": "0000950170-23-058175", "text": "Zendesk Inc. First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 3.50 % Cash + 3.50 % PIK 12.15 % 11/22/2028 $ - ( 5,240 ) 5,498"}},
-  {"observation_key": "issuer-name-from-member-differs-from-page", "what": "Some member names differ from the printed issuer ('Sothebys' for Sotheby's, 'Barracuda Parent LLC.' trailing dot, 'Serrano Parent, LLC (Sumo Logic).'); 156 debt rows could not be matched to a printed line by name for that reason and were not compared value by value.", "field": "issuer_name", "quarters": ["2023-03-31"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "", "quote": {"accession": "0000950170-23-017976", "text": "Magenta Buyer, LLC (McAfee) First Lien Incremental Term Loan Fixed - 12.00 % 12.00 % 7/27/2028 $ 845,744 769,624 756,941 0.30 %"}}
+  {
+   "observation_key": "value-unit-tag-follows-loan-currency",
+   "what": "10-Q 2026-06-30 tags cost and fair value of the three As1 Sports EUR lines with unit EUR although the schedule prints them in dollars; the build converted the value and dropped the cost (5.6M over the filed total). Fixed for the fund with foreign_unit_values.",
+   "field": "fair_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 39.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A fair value converted from a foreign unit whose unconverted sum ties the filed total is a dollar figure.",
+   "quote": {
+    "accession": "0001193125-26-338073",
+    "text": "As1 Sports Bidco Ltd (United Kingdom) First Lien Term Loan EURIBOR(Q ) 0.50 % 5.50 % 7.67 % 4/9/2033 EUR 34,875,000 40,362,799 39,473,862 1.50 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A fair value converted from a foreign unit whose unconverted sum ties the filed total is a dollar figure.",
+    "reference": "A fair value converted from a foreign unit whose unconverted sum ties the filed total is a dollar figure."
+   }
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "what": "Undrawn lines tag a positive cost where the page prints brackets: 44 rows in the first run plus AmeriLife DDTL 2023-12-31 (par and cost), EBS revolver and Beekeeper 2025-06-30, and Integrity and Zendesk revolvers 2023-09-30 (found in this round, fixed by row correction). A second mechanism: 11 undrawn lines tagged with cost and no fair-value fact were not published (2023-09-30 4 rows 190,451; 2024-03-31 4 rows 17,472; 2025-12-31 Griffon x2 and Stonebridge 99,557); declared with untagged_values fair_value 0. Parked: MRO revolver 2025-12-31 (cost 41,687, value 18,136; dropped by staging dedup). Strict cost totals tie in 13 of 14 quarters in bkze; 2025-12-31 is MRO.",
+   "field": "cost",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Strict (500 dollar) cost and fair value total against the filed total per quarter; a mismatch names the quarter, and the printed rows without a published row or with a bracketed cell published positive explain it.",
+   "quote": {
+    "accession": "0000950170-23-058175",
+    "text": "Bluefin Holding, LLC (Allvue) First Lien Revolver SOFR(S) 1.00 % 7.25 % 12.72 % 9/12/2030 $ - ( 29,522 ) ( 29,767 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no named rule fired on the sign errors or the unpublished lines; the strict per-quarter total check found every gap",
+    "reference": "Strict (500 dollar) cost and fair value total against the filed total per quarter; a mismatch names the quarter, and the printed rows without a published row or with a bracketed cell published positive explain it."
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "Sotheby's 2023-12-31 line tagged on a PointClickCare member: name fixed by row correction, but extracted industry still Health Care Technology (printed under Diversified Consumer Services); industry is not a row-correction field.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.9,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A row whose value is printed under heading X and whose member names heading Y.",
+   "quote": {
+    "accession": "0000950170-24-024153",
+    "text": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A row whose value is printed under heading X and whose member names heading Y.",
+    "reference": "A row whose value is printed under heading X and whose member names heading Y."
+   }
+  },
+  {
+   "observation_key": "pik-margin-loan-read-as-fixed",
+   "what": "SOFR loans whose whole margin is paid in kind are tagged with the total coupon and the PIK margin only; the financial step published them Fixed with no spread (Streamland, 16 rows 2024-12-31 to 2026-06-30). Fixed by row correction; the shared step would do the same on any filer with this tagging.",
+   "field": "coupon_type",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.9,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A loan whose member or printed line names a floating benchmark is not Fixed.",
+   "quote": {
+    "accession": "0001193125-26-211710",
+    "text": "Streamland Media Midco LLC First Lien Revolver SOFR(Q) - 5.76 % PIK 9.46 % 3/31/2029 $ 210,824 210,824 210,824 0.01 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A loan whose member or printed line names a floating benchmark is not Fixed.",
+    "reference": "A loan whose member or printed line names a floating benchmark is not Fixed."
+   }
+  },
+  {
+   "observation_key": "twin-members-dropped-by-staging-dedup",
+   "what": "MRO Parent 2025-12-31: two members differing only in coupon text, same value; staging dedup keeps one (see parked).",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.02,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Staging dedup should not drop a context whose cost differs from the kept one.",
+   "quote": {
+    "accession": "0001193125-26-085372",
+    "text": "MRO Parent Corporation First Lien Revolver SOFR(M) 0.75 % 4.50 % 8.22 % 6/9/2032 $ - ( 41,687 ) ( 18,136 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Staging dedup should not drop a context whose cost differs from the kept one.",
+    "reference": "Staging dedup should not drop a context whose cost differs from the kept one."
+   }
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "what": "Loans printed 'A % Cash + B % PIK' publish basis_spread = A (the cash leg) in all 14 quarters, 220 rows by the independent review's page scan (8 to 25 per quarter; my member-text query finds 184 rows, about 539M absolute fair value, e.g. Skydio 7.6M, Gympass 2.9M). D-031 says A + B. The wrapper key printed_margin_reading does not read the one-cell form; the fix needs shared code reading it (owner request BKZ-R2).",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 539.3,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "A loan whose printed spread cell reads 'A % Cash + B % PIK' and whose basis_spread equals A with pik_rate B.",
+   "quote": {
+    "accession": "0001193125-26-211710",
+    "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A loan whose printed spread cell reads 'A % Cash + B % PIK' and whose basis_spread equals A with pik_rate B.",
+    "reference": "A loan whose printed spread cell reads 'A % Cash + B % PIK' and whose basis_spread equals A with pik_rate B."
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Member names differ from the printed issuer on 59 rows (22 corrected here); a shadow page rule (issuer_name_printed) reported them, which is how they were found.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (existing)",
+   "quote": {
+    "accession": "0001193125-26-338073",
+    "text": "American Airlines Inc. (American Airlines Group Inc.) First Lien Term Loan SOFR(M) - 3.00 % 6.67 % 5/20/2033 $ 431,000 426,726 426,421 0.02 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on these rows in bkza",
+    "reference": "issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "usi-printed-zero-coupon",
+   "what": "USI Inc. 2026-06-30 prints a 0.00 % total coupon on a funded term loan (spread 2.25 %); published interest_rate 0.0 as printed. Not an economic rate.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.86,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A funded floating loan with a printed total coupon of 0.00 % and a positive spread.",
+   "quote": {
+    "accession": "0001193125-26-338073",
+    "text": "USI Inc. First Lien Term Loan SOFR(Q) - 2.25 % 0.00 % 11/29/2030 $ 1,865,506 1,864,565 1,860,376 0.07 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A funded floating loan with a printed total coupon of 0.00 % and a positive spread.",
+    "reference": "A funded floating loan with a printed total coupon of 0.00 % and a positive spread."
+   }
+  },
+  {
+   "observation_key": "blank-industry-after-page-break",
+   "what": "62 rows printed after a page break ('Debt Investments - Continued') published with a blank industry (2023-03-31 14, 2023-06-30 18, 2023-09-30 24, 2023-12-31 6); the lone continued label was read as a heading. Fixed with dispatch.industry_from_identifier_re; it also gave 29 rows the right GICS sector (they had a name-guessed one).",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 33.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A published row with no industry whose neighbours in the same filing have one; or a 'Continued' label row not recognised as a section label.",
+   "quote": {
+    "accession": "0000950170-23-017976",
+    "text": "Zendesk, Inc. First Lien Revolver SOFR(Q) 0.75 % 6.50 % 11.38 % 11/22/2028 $ - ( 4,730 ) ( 5,031 ) - D/E 44,315,441 44,441,492 17.80 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "oracle A01 (industry rollup arithmetic) fired on 2023-03-31 in bkza",
+    "reference": "A01"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-names-another-tranche",
+   "what": "14 rows whose member text names a different tranche from the printed line (Dragos term loan published as delayed draw and two undrawn delayed draws as term loans; Douglas x3; Brown & Settle, Clever Devices, Raven, Corinthia, Citrin, HSI Halo, Peter C. Foy, Modigent; Streamland 'Last Out' printed 'First Out'). Fixed by 15 context-keyed row corrections; instrument_type follows. A scan of every published row against its printed instrument cell, all quarters, found no other tranche-type mismatch; 53 rows still differ by a tranche letter or ordinal the member adds (B, One, Two) or an unrelated typo.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 31.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "The published instrument type differs from the instrument cell of the row's own printed line (instr_scan.py).",
+   "quote": {
+    "accession": "0001193125-25-271826",
+    "text": "Dragos, Inc. First Lien Term Loan SOFR(Q) 1.00 % 5.25 % 9.42 % 6/30/2030 $ 29,886,213 29,602,573 29,587,351 1.39 % E"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule fired; the per-row comparison with the printed instrument cell found them",
+    "reference": "instrument_type differs from the printed instrument cell"
+   }
+  },
+  {
+   "observation_key": "issuer-name-truncated-at-fka-clause",
+   "what": "CoreLogic, Inc. (fka First American Corporation) was cut at 'First' by the hierarchy regex (issuer 'CoreLogic, Inc. (fka', instrument text starting 'First American Corporation)') on 8 identifiers, 2024-09-30 to 2026-06-30. Fixed in the fund's hierarchy regexes.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 40.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (existing)",
+   "quote": {
+    "accession": "0000950170-24-122470",
+    "text": "CoreLogic, Inc. (fka First American Corporation) First Lien Term Loan SOFR(M)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed reports a published issuer that is not the printed one",
+    "reference": "issuer_name_printed"
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["none: no shared code changed; wrapper validated against schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json"],
+ "tests_run": [
+  "none: no shared code changed; bkze built to CHAIN_DONE; tests/test_verdict_retirements.py 11 passed, 1 failed on another fund's retirement file (0001859919)"
+ ],
  "not_done": [
-  "156 debt rows (of 4,471) not matched to a printed line by scratch/fund_runs/0001902649/page_compare.py and so not compared on value or rate",
-  "A01 2023-03-31 Software subtotal 44,441,492 against 39.1M of rows whose member names Software: the 5.3M gap was not traced; 2024-03-31 0.74M of the Software gap not traced",
-  "equity rows, pct_of_net_assets (null by design: the page prints % of cash and investments), non-accrual flags and industries were not read row by row",
-  "fund-level figures (fund_financials) for 2026-06-30 not read against the page"
+  "FX01 verdict RVQ_REV_a56d3b92dcd8 not retired: the check passes on bkze and fails on production data/output, where ABC is still published USD; retire it after fold-back",
+  "BKZ-R1 repair is a request: the measurement on the accepted sandboxes is the orchestrator's",
+  "MRO revolver 2025-12-31 (cost 41,687, value 18,136): the twin context dropped by staging dedup; strict fair value and cost totals fail only there",
+  "Higginbotham 2025-12-31 delayed draw with all-dash cells (par, cost, value) not published; zero value",
+  "oracle A01 2025-03-31 (electrical equipment) fails in bkze check_results and is not a ledger finding; not worked",
+  "equity rows, non-accrual flags and fund-level figures for 2026-06-30 not read row by row",
+  "fund_gate check and the 20-row page sample not done by the investigator; the second independent review is the orchestrator's"
+ ],
+ "investigator_id": "agent:fund-bkz-sonnet",
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_f29b2724f768",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-024153/C_10919fc0-c96e-431c-98ab-a38dca606019",
+     "0000950170-24-024153/C_21cfc18c-2c3f-4205-b3b6-31459d90fe7e",
+     "0000950170-24-024153/C_899618de-75f6-41d1-b0c0-89e2475b50a9",
+     "0000950170-24-024153/C_be21aa04-dbe5-424c-86db-d7a1ffe377ff",
+     "0000950170-24-024153/C_e19a8dfb-709d-46ef-a2a7-4989e42f7afe",
+     "0000950170-24-024153/C_f066bc4f-62ae-4a25-b15e-d2a5d88276b3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-024153/C_10919fc0-c96e-431c-98ab-a38dca606019",
+     "0000950170-24-024153/C_21cfc18c-2c3f-4205-b3b6-31459d90fe7e",
+     "0000950170-24-024153/C_899618de-75f6-41d1-b0c0-89e2475b50a9",
+     "0000950170-24-024153/C_be21aa04-dbe5-424c-86db-d7a1ffe377ff",
+     "0000950170-24-024153/C_e19a8dfb-709d-46ef-a2a7-4989e42f7afe",
+     "0000950170-24-024153/C_f066bc4f-62ae-4a25-b15e-d2a5d88276b3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Fertitta Entertainment, LLC First Lien Term Loan SOFR(M) 0.50 % 4.00 % 9.36 % 1/27/2029 $ 1,171,387 1,133,099 1,173,402 0.28 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_8efe85148428",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-052326/C_1285eef4-a161-4ce7-9617-f1a23d8825c3",
+     "0000950170-24-052326/C_70f4a43f-0157-482e-8a53-debcb5b3fbf1",
+     "0000950170-24-052326/C_a2e75d9f-47a9-438b-94d2-4fbc59c7fc62"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-052326/C_1285eef4-a161-4ce7-9617-f1a23d8825c3",
+     "0000950170-24-052326/C_70f4a43f-0157-482e-8a53-debcb5b3fbf1",
+     "0000950170-24-052326/C_a2e75d9f-47a9-438b-94d2-4fbc59c7fc62"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052326",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 11.05 % 1/18/2030 $ 7,324,992 7,183,207 7,179,225 1.50 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_8fa2d5c11e21",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094751/C_67656e59-532e-4c0a-8d00-c92061dc6d56",
+     "0000950170-24-094751/C_f13d702f-0837-4fdc-8875-730604e56c15"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094751/C_67656e59-532e-4c0a-8d00-c92061dc6d56",
+     "0000950170-24-094751/C_f13d702f-0837-4fdc-8875-730604e56c15"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 11.08 % 1/18/2030 $ 7,306,679 7,171,430 7,160,545 1.37 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_ade3c75055cd",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-122470/C_0186ae48-96d3-4155-b65f-d764f25210db",
+     "0000950170-24-122470/C_10ffddde-ebbe-4488-9c34-68f37a4963f4",
+     "0000950170-24-122470/C_2b4726ca-56e1-4998-ae94-5db465057427",
+     "0000950170-24-122470/C_e3273a3a-fed4-43ba-a409-3173aa5f6869"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-122470/C_0186ae48-96d3-4155-b65f-d764f25210db",
+     "0000950170-24-122470/C_10ffddde-ebbe-4488-9c34-68f37a4963f4",
+     "0000950170-24-122470/C_2b4726ca-56e1-4998-ae94-5db465057427",
+     "0000950170-24-122470/C_e3273a3a-fed4-43ba-a409-3173aa5f6869"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-122470",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 10.35 % 1/18/2030 $ 7,324,992 7,195,735 7,173,475 0.90 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_7bbf1a280794",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-067060/C_03d7797f-8325-4e65-80a8-022aa7454b22",
+     "0000950170-25-067060/C_1121febc-6f0b-4b4e-9887-28a65577d2ac",
+     "0000950170-25-067060/C_14f41db1-fee6-46a9-95c2-746c1ce1cce6",
+     "0000950170-25-067060/C_1891327d-c74e-4892-aa4b-97a077d554b1",
+     "0000950170-25-067060/C_1e0d08bd-fdfb-4b2c-ba94-e79c065f8612",
+     "0000950170-25-067060/C_4ada51d7-719b-40c8-af3d-b27199fb47d8",
+     "0000950170-25-067060/C_4ffe7d9d-dfa9-411c-8e4b-54184e0e95e8",
+     "0000950170-25-067060/C_5289e0f0-24c6-40b4-945a-a0c7ff9f8c37",
+     "0000950170-25-067060/C_54c42c0b-7666-4155-bc6d-9a7c747a6f3c",
+     "0000950170-25-067060/C_58b9ce65-763d-4b58-b5bb-01df71bb325c",
+     "0000950170-25-067060/C_5972420e-1a11-4b01-ae30-f29aee0af089",
+     "0000950170-25-067060/C_5a9ea737-7b43-41c9-aba3-d404bcff1c93",
+     "0000950170-25-067060/C_6e774320-603d-4104-9799-6bcf54be9337",
+     "0000950170-25-067060/C_729665f0-4a6e-41e7-900e-4782b013cf1b",
+     "0000950170-25-067060/C_80bbf0d3-88aa-43be-909b-fe131a22f568",
+     "0000950170-25-067060/C_81f9ee1e-fadd-4e88-8e1e-f60b5cce47d3",
+     "0000950170-25-067060/C_89c7f0cc-8805-45ef-b172-30a3d6d101e7",
+     "0000950170-25-067060/C_8c029925-a10c-4e07-bc4a-154df211fb36",
+     "0000950170-25-067060/C_9af40c6d-37cb-4f5b-80e1-9c50322bc070",
+     "0000950170-25-067060/C_a4d9e76e-db39-4507-88a7-cda35f7b6885",
+     "0000950170-25-067060/C_a57659fd-a516-4797-9bc8-83a2621055d8",
+     "0000950170-25-067060/C_a9cf8ad3-ffc5-4cbe-a656-02f027fff5a4",
+     "0000950170-25-067060/C_abfb19fe-85f7-4613-bdc7-4d78cfecef39",
+     "0000950170-25-067060/C_bce6889f-f947-4f4f-9688-8bd919f97b81",
+     "0000950170-25-067060/C_c7958681-e1f7-4f41-b2ab-7cbd875eb9af",
+     "0000950170-25-067060/C_c807f6bf-f866-4f27-8c1e-9b4045a7aa02",
+     "0000950170-25-067060/C_ce12876e-ffac-4f4f-9648-9ae397aee8c6",
+     "0000950170-25-067060/C_d140328e-1ab3-4174-a46a-b125514bc352",
+     "0000950170-25-067060/C_d18a88b3-40bd-4760-8b88-2cf5699ed8c6",
+     "0000950170-25-067060/C_d198eb8f-86d6-41e8-8f43-e466dd2bb7a8",
+     "0000950170-25-067060/C_d726555d-3e94-4bbf-9f03-774df623e192",
+     "0000950170-25-067060/C_dae93570-c469-4268-93ae-72945b228c5e",
+     "0000950170-25-067060/C_de291b26-ff90-43f9-95fe-4fdbb9bf6aa9",
+     "0000950170-25-067060/C_dfb1147d-b527-49ad-92e7-0f254ac28b39",
+     "0000950170-25-067060/C_e231d1af-67b1-4020-b514-de56327bdf6a",
+     "0000950170-25-067060/C_e8f81b12-3435-4306-af72-849168e23b45",
+     "0000950170-25-067060/C_ed1925e3-3998-4145-837c-878d113906c1",
+     "0000950170-25-067060/C_eef8885e-5d6f-4a95-9380-6d00959f52ab",
+     "0000950170-25-067060/C_f4741147-7cf1-4d66-92f4-57b684da41e2",
+     "0000950170-25-067060/C_fd17071d-3cac-4c73-8381-0010fedf3b08"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-067060/C_03d7797f-8325-4e65-80a8-022aa7454b22",
+     "0000950170-25-067060/C_1121febc-6f0b-4b4e-9887-28a65577d2ac",
+     "0000950170-25-067060/C_14f41db1-fee6-46a9-95c2-746c1ce1cce6",
+     "0000950170-25-067060/C_1891327d-c74e-4892-aa4b-97a077d554b1",
+     "0000950170-25-067060/C_1e0d08bd-fdfb-4b2c-ba94-e79c065f8612",
+     "0000950170-25-067060/C_4ada51d7-719b-40c8-af3d-b27199fb47d8",
+     "0000950170-25-067060/C_4ffe7d9d-dfa9-411c-8e4b-54184e0e95e8",
+     "0000950170-25-067060/C_5289e0f0-24c6-40b4-945a-a0c7ff9f8c37",
+     "0000950170-25-067060/C_54c42c0b-7666-4155-bc6d-9a7c747a6f3c",
+     "0000950170-25-067060/C_58b9ce65-763d-4b58-b5bb-01df71bb325c",
+     "0000950170-25-067060/C_5972420e-1a11-4b01-ae30-f29aee0af089",
+     "0000950170-25-067060/C_5a9ea737-7b43-41c9-aba3-d404bcff1c93",
+     "0000950170-25-067060/C_6e774320-603d-4104-9799-6bcf54be9337",
+     "0000950170-25-067060/C_729665f0-4a6e-41e7-900e-4782b013cf1b",
+     "0000950170-25-067060/C_80bbf0d3-88aa-43be-909b-fe131a22f568",
+     "0000950170-25-067060/C_81f9ee1e-fadd-4e88-8e1e-f60b5cce47d3",
+     "0000950170-25-067060/C_89c7f0cc-8805-45ef-b172-30a3d6d101e7",
+     "0000950170-25-067060/C_8c029925-a10c-4e07-bc4a-154df211fb36",
+     "0000950170-25-067060/C_9af40c6d-37cb-4f5b-80e1-9c50322bc070",
+     "0000950170-25-067060/C_a4d9e76e-db39-4507-88a7-cda35f7b6885",
+     "0000950170-25-067060/C_a57659fd-a516-4797-9bc8-83a2621055d8",
+     "0000950170-25-067060/C_a9cf8ad3-ffc5-4cbe-a656-02f027fff5a4",
+     "0000950170-25-067060/C_abfb19fe-85f7-4613-bdc7-4d78cfecef39",
+     "0000950170-25-067060/C_bce6889f-f947-4f4f-9688-8bd919f97b81",
+     "0000950170-25-067060/C_c7958681-e1f7-4f41-b2ab-7cbd875eb9af",
+     "0000950170-25-067060/C_c807f6bf-f866-4f27-8c1e-9b4045a7aa02",
+     "0000950170-25-067060/C_ce12876e-ffac-4f4f-9648-9ae397aee8c6",
+     "0000950170-25-067060/C_d140328e-1ab3-4174-a46a-b125514bc352",
+     "0000950170-25-067060/C_d18a88b3-40bd-4760-8b88-2cf5699ed8c6",
+     "0000950170-25-067060/C_d198eb8f-86d6-41e8-8f43-e466dd2bb7a8",
+     "0000950170-25-067060/C_d726555d-3e94-4bbf-9f03-774df623e192",
+     "0000950170-25-067060/C_dae93570-c469-4268-93ae-72945b228c5e",
+     "0000950170-25-067060/C_de291b26-ff90-43f9-95fe-4fdbb9bf6aa9",
+     "0000950170-25-067060/C_dfb1147d-b527-49ad-92e7-0f254ac28b39",
+     "0000950170-25-067060/C_e231d1af-67b1-4020-b514-de56327bdf6a",
+     "0000950170-25-067060/C_e8f81b12-3435-4306-af72-849168e23b45",
+     "0000950170-25-067060/C_ed1925e3-3998-4145-837c-878d113906c1",
+     "0000950170-25-067060/C_eef8885e-5d6f-4a95-9380-6d00959f52ab",
+     "0000950170-25-067060/C_f4741147-7cf1-4d66-92f4-57b684da41e2",
+     "0000950170-25-067060/C_fd17071d-3cac-4c73-8381-0010fedf3b08"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-067060",
+     "text": "Intercept Bidco, Inc. First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 10.32 % 6/3/2030 $ 11,229,177 11,035,549 11,038,281 0.79 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_fab4d4ce5498",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085372/C_34ba9202-97b7-43be-ab04-8a11292f45f3",
+     "0001193125-26-085372/C_3fcc4f3d-7882-4e0e-9955-0823d74f53ea",
+     "0001193125-26-085372/C_78d7604a-d58e-48a4-b1e2-b100a52bf3ba",
+     "0001193125-26-085372/C_7b408b92-20e4-41de-b86c-299f342a39d5",
+     "0001193125-26-085372/C_9515a9cc-ff05-4c41-8134-d6fc957f478a",
+     "0001193125-26-085372/C_b0cdce85-6dc6-4df4-add5-10bb16b002ce",
+     "0001193125-26-085372/C_bb604cdd-b657-43fd-bfb2-9a7b03d3265e",
+     "0001193125-26-085372/C_be3a0167-5537-44fc-ab27-8964c7b67f74",
+     "0001193125-26-085372/C_c4296e90-7a01-47a1-8c8d-d0fd1dc9bb84"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085372/C_34ba9202-97b7-43be-ab04-8a11292f45f3",
+     "0001193125-26-085372/C_3fcc4f3d-7882-4e0e-9955-0823d74f53ea",
+     "0001193125-26-085372/C_78d7604a-d58e-48a4-b1e2-b100a52bf3ba",
+     "0001193125-26-085372/C_7b408b92-20e4-41de-b86c-299f342a39d5",
+     "0001193125-26-085372/C_9515a9cc-ff05-4c41-8134-d6fc957f478a",
+     "0001193125-26-085372/C_b0cdce85-6dc6-4df4-add5-10bb16b002ce",
+     "0001193125-26-085372/C_bb604cdd-b657-43fd-bfb2-9a7b03d3265e",
+     "0001193125-26-085372/C_be3a0167-5537-44fc-ab27-8964c7b67f74",
+     "0001193125-26-085372/C_c4296e90-7a01-47a1-8c8d-d0fd1dc9bb84"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_3b6c1fce5a69",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-338073/C_2bd8ec6b-9ca4-4025-9ae4-a89d0d6ad42a",
+     "0001193125-26-338073/C_c57ab235-5ec6-420e-a2e1-843cbb7d1447"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-338073/C_2bd8ec6b-9ca4-4025-9ae4-a89d0d6ad42a",
+     "0001193125-26-338073/C_c57ab235-5ec6-420e-a2e1-843cbb7d1447"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published maturity_date compared with the first date of each flagged row's printed line (mat_check.py bkzc): equal on every flagged row of all quarters (67 of 67).",
+    "Member text maturity differs from the XBRL date by a day/month swap or typo (e.g. CINC 1/8/2030 against printed 1/18/2030); the structured date and the page agree."
+   ],
+   "next_action": "check_repair_request BKZ-R1 (agentA maturity rule reads the member text); no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_597f6474c10b",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-211710/C_28fe0f1f-7158-47bc-b2b2-8b578ce8e7bd"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-211710/C_28fe0f1f-7158-47bc-b2b2-8b578ce8e7bd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.17 % 6/28/2030 $ 7,848,809 7,777,794 7,709,555 0.29 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The flagged row is the Cherry Bekaert delayed draw whose member reads 'Maturity 6/30/2030 Two'; the row's own printed line reads 6/28/2030 and the published maturity is 2030-06-28.",
+    "The filer also prints a Term Loan line with maturity 6/30/2030 and the same par, cost and value; the delayed draw line is the flagged context, so the member text is the misfire (BKZ-R1)."
+   ],
+   "next_action": "check repair BKZ-R1; no data change. Verdict recorded through decide.py (false_alarm); the needs_human state needs no owner decision"
+  },
+  {
+   "finding_id": "RVQ_BLK_fb8bfa87b60f",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-024153/C_2f0e62eb-a438-4c62-8660-975d9502c3f7",
+     "0000950170-24-024153/C_76adbbcc-fdcc-4c9e-8772-1f68bedd2362",
+     "0000950170-24-024153/C_ad22e590-aeef-481c-83da-b2c7fda83c64",
+     "0000950170-24-024153/C_c5d939a1-6b38-45d7-8655-e04395de7af8"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-024153/C_2f0e62eb-a438-4c62-8660-975d9502c3f7",
+     "0000950170-24-024153/C_76adbbcc-fdcc-4c9e-8772-1f68bedd2362",
+     "0000950170-24-024153/C_ad22e590-aeef-481c-83da-b2c7fda83c64",
+     "0000950170-24-024153/C_c5d939a1-6b38-45d7-8655-e04395de7af8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Parexel International, Inc. First Lien Term Loan SOFR(M) 0.50 % 3.36 % 8.72 % 11/15/2028 $ 164,920 157,502 166,095 0.04 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread of each flagged row equals the spread cell of its printed line (agenta_flags.py bkzc): e.g. Parexel 3.36, GI Consilio 4.50, VS Buyer 3.25, Shackleton 4.50.",
+    "The rule's value comes from the member text (stale spread or total coupon, e.g. Shackleton 6.76); no flagged row in this quarter prints a PIK leg.",
+    "2026-06-30: USI Inc is published coupon 0.0 as the page prints 0.00 %; the spread 2.25 is as printed (observation usi-printed-zero-coupon)."
+   ],
+   "next_action": "check_repair_request BKZ-R1; no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_125068a12763",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-052326/C_82bca74c-aae3-4693-b4ef-75938104761f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-052326/C_82bca74c-aae3-4693-b4ef-75938104761f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052326",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 11.05 % 1/18/2030 $ 7,324,992 7,183,207 7,179,225 1.50 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread of each flagged row equals the spread cell of its printed line (agenta_flags.py bkzc): e.g. Parexel 3.36, GI Consilio 4.50, VS Buyer 3.25, Shackleton 4.50.",
+    "The rule's value comes from the member text (stale spread or total coupon, e.g. Shackleton 6.76); no flagged row in this quarter prints a PIK leg.",
+    "2026-06-30: USI Inc is published coupon 0.0 as the page prints 0.00 %; the spread 2.25 is as printed (observation usi-printed-zero-coupon)."
+   ],
+   "next_action": "check_repair_request BKZ-R1; no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_d11f64a62828",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094751/C_b9cec68b-69f6-4250-82a2-cc7eeeea777a",
+     "0000950170-24-094751/C_c43cf289-f370-4cac-a8cc-2937a2863398",
+     "0000950170-24-094751/C_cd45e78e-e8a7-4206-8e3b-8b7c80c323f1"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094751/C_b9cec68b-69f6-4250-82a2-cc7eeeea777a",
+     "0000950170-24-094751/C_c43cf289-f370-4cac-a8cc-2937a2863398",
+     "0000950170-24-094751/C_cd45e78e-e8a7-4206-8e3b-8b7c80c323f1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "GI Consilio Parent, LLC First Lien Term Loan SOFR(M) 0.50 % 4.50 % 9.96 % 5/14/2029 $ 10,945,000 10,763,376 10,945,000 2.09 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread of each flagged row equals the spread cell of its printed line (agenta_flags.py bkzc): e.g. Parexel 3.36, GI Consilio 4.50, VS Buyer 3.25, Shackleton 4.50.",
+    "The rule's value comes from the member text (stale spread or total coupon, e.g. Shackleton 6.76); no flagged row in this quarter prints a PIK leg.",
+    "2026-06-30: USI Inc is published coupon 0.0 as the page prints 0.00 %; the spread 2.25 is as printed (observation usi-printed-zero-coupon)."
+   ],
+   "next_action": "check_repair_request BKZ-R1; no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_9f5304470497",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-122470/C_512729fd-8823-4253-943b-5a1d5f39d054"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-122470/C_512729fd-8823-4253-943b-5a1d5f39d054"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-122470",
+     "text": "VS Buyer, LLC First Lien Term Loan SOFR(M) - 3.25 % 8.35 % 4/12/2031 $ 1,496,250 1,503,500 1,500,612 0.19 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread of each flagged row equals the spread cell of its printed line (agenta_flags.py bkzc): e.g. Parexel 3.36, GI Consilio 4.50, VS Buyer 3.25, Shackleton 4.50.",
+    "The rule's value comes from the member text (stale spread or total coupon, e.g. Shackleton 6.76); no flagged row in this quarter prints a PIK leg.",
+    "2026-06-30: USI Inc is published coupon 0.0 as the page prints 0.00 %; the spread 2.25 is as printed (observation usi-printed-zero-coupon)."
+   ],
+   "next_action": "check_repair_request BKZ-R1; no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_8dc079cd3dea",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085372/C_03e762e0-6916-486f-8ea6-9964e03f2c26",
+     "0001193125-26-085372/C_817f34ab-c9f0-4808-b26e-fa0741f811b5",
+     "0001193125-26-085372/C_963ee387-9588-4259-be89-a2a989234335",
+     "0001193125-26-085372/C_a4dae914-c925-4562-b1c1-e1d8dc82104a",
+     "0001193125-26-085372/C_b96fcb59-10f0-441e-a4cd-16c8a4944fcf",
+     "0001193125-26-085372/C_ef2a640e-f86d-4141-b870-f027df984027"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085372/C_03e762e0-6916-486f-8ea6-9964e03f2c26",
+     "0001193125-26-085372/C_817f34ab-c9f0-4808-b26e-fa0741f811b5",
+     "0001193125-26-085372/C_963ee387-9588-4259-be89-a2a989234335",
+     "0001193125-26-085372/C_a4dae914-c925-4562-b1c1-e1d8dc82104a",
+     "0001193125-26-085372/C_b96fcb59-10f0-441e-a4cd-16c8a4944fcf",
+     "0001193125-26-085372/C_ef2a640e-f86d-4141-b870-f027df984027"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Shackleton Bidco Inc. (Payworks) (Canada) First Lien Revolver CORRA (Q) 0.75 % 4.50 % 6.76 % 11/5/2032 CAD$ - ( 37,370 ) ( 37,370 ) - C/D/E"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread of each flagged row equals the spread cell of its printed line (agenta_flags.py bkzc): e.g. Parexel 3.36, GI Consilio 4.50, VS Buyer 3.25, Shackleton 4.50.",
+    "The rule's value comes from the member text (stale spread or total coupon, e.g. Shackleton 6.76); no flagged row in this quarter prints a PIK leg.",
+    "2026-06-30: USI Inc is published coupon 0.0 as the page prints 0.00 %; the spread 2.25 is as printed (observation usi-printed-zero-coupon)."
+   ],
+   "next_action": "check_repair_request BKZ-R1; no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_9c8a1a6a3bc0",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-338073/C_19cd6e77-7c25-4bf2-a746-7297457f5b6e",
+     "0001193125-26-338073/C_4bb6b198-c902-4e11-8c2b-7e3f2858f936",
+     "0001193125-26-338073/C_79ed6d68-df38-4146-a762-3011de41833a",
+     "0001193125-26-338073/C_fa067d38-978c-432a-8033-1a8de017df5d"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-338073/C_19cd6e77-7c25-4bf2-a746-7297457f5b6e",
+     "0001193125-26-338073/C_4bb6b198-c902-4e11-8c2b-7e3f2858f936",
+     "0001193125-26-338073/C_79ed6d68-df38-4146-a762-3011de41833a",
+     "0001193125-26-338073/C_fa067d38-978c-432a-8033-1a8de017df5d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published basis_spread of each flagged row equals the spread cell of its printed line (agenta_flags.py bkzc): e.g. Parexel 3.36, GI Consilio 4.50, VS Buyer 3.25, Shackleton 4.50.",
+    "The rule's value comes from the member text (stale spread or total coupon, e.g. Shackleton 6.76); no flagged row in this quarter prints a PIK leg.",
+    "2026-06-30: USI Inc is published coupon 0.0 as the page prints 0.00 %; the spread 2.25 is as printed (observation usi-printed-zero-coupon)."
+   ],
+   "next_action": "check_repair_request BKZ-R1; no data change"
+  },
+  {
+   "finding_id": "RVQ_BLK_b0a9dde005d3",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-211710/C_010e2c03-2e71-4113-b279-b35d3742fe5d",
+     "0001193125-26-211710/C_0dd82307-7804-46da-a162-a5f9b11e6e4e",
+     "0001193125-26-211710/C_4ccf0e63-99bd-4ff1-b6b7-a0f96cb8b69b"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-211710/C_010e2c03-2e71-4113-b279-b35d3742fe5d",
+     "0001193125-26-211710/C_0dd82307-7804-46da-a162-a5f9b11e6e4e",
+     "0001193125-26-211710/C_4ccf0e63-99bd-4ff1-b6b7-a0f96cb8b69b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+    },
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 4.26 % 7.93 % 6/2/2028 $ 2,913,059 2,913,621 2,571,692 0.10 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Opella (published 3.0) and Polaris (4.26) equal their printed spreads: the earlier verdict does not stand for them.",
+    "Onward delayed draw prints '2.38 % Cash + 2.68 % PIK'; published basis_spread 2.38, pik_rate 2.68 (D-031 total would be 5.06).",
+    "printed_margin_reading cash_plus_pik tried in bkzb (key since removed): no row changed (the key reads one figure per cell or two cells, not 'A % Cash + B % PIK' in one cell). 217 such rows in 14 quarters."
+   ],
+   "next_action": "owner_request BKZ-R2 (shared-code reading of the one-cell form); parked"
+  },
+  {
+   "finding_id": "RVQ_BLK_06197d3ddf6b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094751/C_ebd572bf-3d5c-46cc-bac7-d8b44264d3e4"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094751/C_ebd572bf-3d5c-46cc-bac7-d8b44264d3e4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "Nephron Pharmaceuticals Corp. et al First Lien Term Loan B-1 Fixed - 20.0 % PIK 20.00 % 9/11/2026 $ 503,766 503,766 557,165 0.11 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Nephron term loan prints reference 'Fixed' and '20.0% PIK'; published coupon_type Fixed, pik_rate 20.0, no reference rate."
+   ],
+   "next_action": "none; check misfires on a printed fixed coupon (BKZ-R1 family)"
+  },
+  {
+   "finding_id": "RVQ_BLK_7b41348cccee",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-338073/C_fe45e2e4-7e7b-4486-a3ce-e568e98b29df"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-338073/C_fe45e2e4-7e7b-4486-a3ce-e568e98b29df"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Anthracite published SOFR, spread 4.5, rate 8.18, equal to the printed Ref, spread and coupon cells (row correction of the earlier run)."
+   ],
+   "next_action": "no data change; clears when the reference_uncorroborated rule accepts a printed Ref cell (BKZ-R1 family)"
+  },
+  {
+   "finding_id": "RVQ_BLK_7a79fc2cbff8",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085372/C_fce3a756-6716-4416-b778-6b36bb2e6373",
+     "0001193125-26-085372/C_6b781153-41c3-45fc-be79-9a853e602701",
+     "0001193125-26-085372/C_6c694a57-14c9-40f6-a11e-7c99b9d66388",
+     "0001193125-26-085372/C_0b13be31-db72-466a-b2a5-394a43e85183",
+     "0001193125-26-085372/C_2e5c9df6-bb20-49e7-b981-c168f55b9638",
+     "0001193125-26-085372/C_4d8f10d4-b1dc-474e-8105-969e0481c704",
+     "0001193125-26-085372/C_8d502c21-01cb-499b-88e7-241a5b46e391",
+     "0001193125-26-085372/C_19888468-278f-4481-95b7-ce48f22846c5",
+     "0001193125-26-085372/C_44c2aa02-6a5e-4420-a210-444a469c44ec",
+     "0001193125-26-085372/C_8c2a33a6-acdb-4e9b-a799-e4e59649da3c",
+     "0001193125-26-085372/C_60822c30-5d76-41e8-9fc3-1833f87a125e"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085372/C_fce3a756-6716-4416-b778-6b36bb2e6373",
+     "0001193125-26-085372/C_6b781153-41c3-45fc-be79-9a853e602701",
+     "0001193125-26-085372/C_6c694a57-14c9-40f6-a11e-7c99b9d66388",
+     "0001193125-26-085372/C_0b13be31-db72-466a-b2a5-394a43e85183",
+     "0001193125-26-085372/C_2e5c9df6-bb20-49e7-b981-c168f55b9638",
+     "0001193125-26-085372/C_4d8f10d4-b1dc-474e-8105-969e0481c704",
+     "0001193125-26-085372/C_8d502c21-01cb-499b-88e7-241a5b46e391",
+     "0001193125-26-085372/C_19888468-278f-4481-95b7-ce48f22846c5",
+     "0001193125-26-085372/C_44c2aa02-6a5e-4420-a210-444a469c44ec",
+     "0001193125-26-085372/C_8c2a33a6-acdb-4e9b-a799-e4e59649da3c",
+     "0001193125-26-085372/C_60822c30-5d76-41e8-9fc3-1833f87a125e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Skydio, Inc First Lien Term Loan SOFR(M) 2.50 % 2.75 % Cash + 2.75 % PIK 9.17 % 12/4/2029 $ 7,711,220 7,652,362 7,641,819 0.31 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "11 published rows of Skydio (3), Gympass (2), Madison Logic (2) and Streamland (4) read against their printed lines. The reference rate is SOFR on all of them, so the reference part of the earlier verdict does not stand.",
+    "Skydio term loan (2.75 Cash + 2.75 PIK), Gympass x2 (3.25 + 3.25) and Madison Logic x2 (4.73 + 2.37) publish the cash leg as basis_spread: the D-031 gap (BKZ-R2). Streamland (whole margin PIK) is published Floating with spread 6.76 as printed: right."
+   ],
+   "next_action": "owner request BKZ-R2 (parked): the cash-plus-PIK spread needs a shared-code reading"
+  },
+  {
+   "finding_id": "RVQ_REV_a56d3b92dcd8",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085372/C_18373a11-01a3-4a89-a440-a31114492c2b"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085372/C_18373a11-01a3-4a89-a440-a31114492c2b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Scanned the 10-K for printed non-USD markers: ABC (EUR) is the only row published as USD; Shackleton CAD$ rows are published CAD with a converted amount.",
+    "Fixed in bkzb by four row corrections: currency EUR, USD 20,274,809.6 at 1.1736, fx rate, reference_fx. 1.1736 is the DEXUSEU value of 2025-12-31 in data/reference/fx_fred (the table the build uses)."
+   ],
+   "next_action": "fixed in bkzc (fix_record); the FX01 verdict is not retired until fold-back (check fails on production)"
+  },
+  {
+   "finding_id": "RVQ_REV_fd108ab55c73",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-024153/C_27c86a28-2afb-42f0-9270-5616874fcc2c"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-024153/C_27c86a28-2afb-42f0-9270-5616874fcc2c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "New in bkzd: the AmeriLife delayed draw printed par '( 1 )', cost '( 230,566 )', fair value '( 119,352 )'. The filer tagged par +1 and cost +230,566; a row correction (this run) publishes them as printed, so the negative par the rule reads is the printed one.",
+    "Same printed shape as the accepted reason negative-par-on-undrawn-line-as-printed (Renaissance 2025-03-31, Cohnreznick 2025-12-31)."
+   ],
+   "next_action": "proposal as_filed under reason_key negative-par-on-undrawn-line-as-printed (data/overrides/finding_dispositions_proposed/fund_0001902649.json); no data change"
+  },
+  {
+   "finding_id": "RVQ_REV_9163cc216e90",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-024153/C_27c86a28-2afb-42f0-9270-5616874fcc2c"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-024153/C_27c86a28-2afb-42f0-9270-5616874fcc2c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "New in bkzd: the AmeriLife delayed draw printed par '( 1 )', cost '( 230,566 )', fair value '( 119,352 )'. The filer tagged par +1 and cost +230,566; a row correction (this run) publishes them as printed, so the negative par the rule reads is the printed one.",
+    "Same printed shape as the accepted reason negative-par-on-undrawn-line-as-printed (Renaissance 2025-03-31, Cohnreznick 2025-12-31)."
+   ],
+   "next_action": "proposal as_filed under reason_key negative-par-on-undrawn-line-as-printed (data/overrides/finding_dispositions_proposed/fund_0001902649.json); no data change"
+  }
+ ],
+ "retired_in_run": [
+  {
+   "finding_id": "RVQ_BLK_76c474c34cf2",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-017976/ROW-051200552e7abbc2",
+     "0000950170-23-017976/ROW-d62e6b1448b53689",
+     "0000950170-23-017976/ROW-f623dd84313ea736",
+     "0000950170-23-017976/ROW-fea96b0d4b2af2d6"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-017976/ROW-051200552e7abbc2",
+     "0000950170-23-017976/ROW-d62e6b1448b53689",
+     "0000950170-23-017976/ROW-f623dd84313ea736",
+     "0000950170-23-017976/ROW-fea96b0d4b2af2d6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-017976",
+     "text": "Bynder Bidco, Inc. (Netherlands) First Lien Revolver A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ — (4,978 ) (1,382 ) — C/D/E"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_35ccff6cd1f4",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-038004/ROW-03bec2bb82026f01",
+     "0000950170-23-038004/ROW-3d52f144e1aaf6b8",
+     "0000950170-23-038004/ROW-565aa0d9fd3ac655",
+     "0000950170-23-038004/ROW-c0dd78795f31a00e"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-038004/ROW-03bec2bb82026f01",
+     "0000950170-23-038004/ROW-3d52f144e1aaf6b8",
+     "0000950170-23-038004/ROW-565aa0d9fd3ac655",
+     "0000950170-23-038004/ROW-c0dd78795f31a00e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-038004",
+     "text": "KKR Apple Bidco, LLC First Lien Term Loan SOFR(M) 0.50 % 2.75 % 7.97 % 9/23/2028 $ 1,478,167 1,440,468 1,467,872 0.56 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_0c0d9df4a032",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-058175/ROW-0cf057fc7245b54c",
+     "0000950170-23-058175/ROW-86340eb488c2908a",
+     "0000950170-23-058175/ROW-8cf8ee8833f526dd"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-058175/ROW-0cf057fc7245b54c",
+     "0000950170-23-058175/ROW-86340eb488c2908a",
+     "0000950170-23-058175/ROW-8cf8ee8833f526dd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-058175",
+     "text": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 9.07 % 10/19/2027 $ 829,558 797,643 828,990 0.24 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_a397d0b6853f",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-024153/ROW-1f5c7ec45c43d175",
+     "0000950170-24-024153/ROW-388cfd591581a97d",
+     "0000950170-24-024153/ROW-50916c92201109ff",
+     "0000950170-24-024153/ROW-d2e6c0d16bb72900",
+     "0000950170-24-024153/ROW-f28e300bcde40bc5"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-024153/ROW-1f5c7ec45c43d175",
+     "0000950170-24-024153/ROW-388cfd591581a97d",
+     "0000950170-24-024153/ROW-50916c92201109ff",
+     "0000950170-24-024153/ROW-d2e6c0d16bb72900",
+     "0000950170-24-024153/ROW-f28e300bcde40bc5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "NFP Corp. First Lien Term Loan SOFR(M) — 3.36 % 8.72 % 2/13/2027 $ 983,024 951,550 989,247 0.23 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_1e0a5725c3c8",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-052326/ROW-033cf18fb62606aa",
+     "0000950170-24-052326/ROW-0d3cece729c3bd00",
+     "0000950170-24-052326/ROW-527b2f3eacfa39a9",
+     "0000950170-24-052326/ROW-6555e93d24e2edac",
+     "0000950170-24-052326/ROW-fb9270dfa560544f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-052326/ROW-033cf18fb62606aa",
+     "0000950170-24-052326/ROW-0d3cece729c3bd00",
+     "0000950170-24-052326/ROW-527b2f3eacfa39a9",
+     "0000950170-24-052326/ROW-6555e93d24e2edac",
+     "0000950170-24-052326/ROW-fb9270dfa560544f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-052326",
+     "text": "Pug LLC First Lien Term Loan SOFR(M) — 4.75 % 10.08 % 3/15/2030 $ 736,195 715,251 738,186 0.15 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_6c82c275f670",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094751/ROW-88daef6708087c1a",
+     "0000950170-24-094751/ROW-de7cda51741be702",
+     "0000950170-24-094751/ROW-e96db61bc16b2d46"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094751/ROW-88daef6708087c1a",
+     "0000950170-24-094751/ROW-de7cda51741be702",
+     "0000950170-24-094751/ROW-e96db61bc16b2d46"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "Pug LLC First Lien Term Loan SOFR(M) — 4.75 % 10.09 % 3/15/2030 $ 725,296 705,534 726,431 0.14 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_9f765cef32d3",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-122470/ROW-4c9b07a68b316475",
+     "0000950170-24-122470/ROW-c3e8d0feb3fe42ba",
+     "0000950170-24-122470/ROW-e0820c1a1f080c81"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-122470/ROW-4c9b07a68b316475",
+     "0000950170-24-122470/ROW-c3e8d0feb3fe42ba",
+     "0000950170-24-122470/ROW-e0820c1a1f080c81"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-122470",
+     "text": "Pug LLC First Lien Term Loan SOFR(M) — 4.75 % 9.60 % 3/15/2030 $ 2,289,737 2,275,971 2,291,637 0.29 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_a51c333ec53a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-030170/ROW-34274b33ba174380",
+     "0000950170-25-030170/ROW-46980ebba93501e8",
+     "0000950170-25-030170/ROW-722c4cf20bbe997a",
+     "0000950170-25-030170/ROW-acc76c9aa311dcb0",
+     "0000950170-25-030170/ROW-ad287d863791d427",
+     "0000950170-25-030170/ROW-b5ee0702f074c531",
+     "0000950170-25-030170/ROW-d0cbf7a0511e219d",
+     "0000950170-25-030170/ROW-d0dd444668c8d628",
+     "0000950170-25-030170/ROW-e5ac220138fa36b6"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-030170/ROW-34274b33ba174380",
+     "0000950170-25-030170/ROW-46980ebba93501e8",
+     "0000950170-25-030170/ROW-722c4cf20bbe997a",
+     "0000950170-25-030170/ROW-acc76c9aa311dcb0",
+     "0000950170-25-030170/ROW-ad287d863791d427",
+     "0000950170-25-030170/ROW-b5ee0702f074c531",
+     "0000950170-25-030170/ROW-d0cbf7a0511e219d",
+     "0000950170-25-030170/ROW-d0dd444668c8d628",
+     "0000950170-25-030170/ROW-e5ac220138fa36b6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-030170",
+     "text": "Press Ganey Holdings Inc First Lien Term Loan SOFR(M) — 3.25 % 7.61 % 4/24/2031 $ 498,750 499,057 500,777 0.05 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_8564f32e1d0d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-067060/ROW-72e3270d1e37427c",
+     "0000950170-25-067060/ROW-744dee2efd050a4c",
+     "0000950170-25-067060/ROW-9b692fd16b269080",
+     "0000950170-25-067060/ROW-da24c22f4369cece"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-067060/ROW-72e3270d1e37427c",
+     "0000950170-25-067060/ROW-744dee2efd050a4c",
+     "0000950170-25-067060/ROW-9b692fd16b269080",
+     "0000950170-25-067060/ROW-da24c22f4369cece"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-067060",
+     "text": "New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 539,842 0.04 % I, J"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_9061ba5609a3",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-106036/ROW-14a431e019a8a4a5",
+     "0000950170-25-106036/ROW-65130dcfc514199c",
+     "0000950170-25-106036/ROW-9fa141ef13e12d6d",
+     "0000950170-25-106036/ROW-b984ba8bad61b077"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-106036/ROW-14a431e019a8a4a5",
+     "0000950170-25-106036/ROW-65130dcfc514199c",
+     "0000950170-25-106036/ROW-9fa141ef13e12d6d",
+     "0000950170-25-106036/ROW-b984ba8bad61b077"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-106036",
+     "text": "Pug LLC First Lien Term Loan SOFR(M) — 4.75 % 9.08 % 3/15/2030 $ 5,628,605 5,614,125 5,478,490 0.31 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_cd1e4db5e3ce",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-271826/ROW-4905faaa03104929",
+     "0001193125-25-271826/ROW-ee9b1b118d9c0597"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-271826/ROW-4905faaa03104929",
+     "0001193125-25-271826/ROW-ee9b1b118d9c0597"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-271826",
+     "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.70 % 10/21/2028 $ 981,316 985,816 983,769 0.05 % E"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_b7390e6e6d1b",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085372/ROW-3759765264e852e2",
+     "0001193125-26-085372/ROW-76faf54b4a861311",
+     "0001193125-26-085372/ROW-b587f4b7fe41b0f8",
+     "0001193125-26-085372/ROW-f12dcc2df1cc3221"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085372/ROW-3759765264e852e2",
+     "0001193125-26-085372/ROW-76faf54b4a861311",
+     "0001193125-26-085372/ROW-b587f4b7fe41b0f8",
+     "0001193125-26-085372/ROW-f12dcc2df1cc3221"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 3.75 % 7.85 % 6/2/2028 $ 2,920,685 2,921,313 2,823,222 0.11 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_e33c37d86cbd",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-211710/ROW-123ba93409f1b94e",
+     "0001193125-26-211710/ROW-80aa4414970ea734",
+     "0001193125-26-211710/ROW-a03fcd51645f60d0"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-211710/ROW-123ba93409f1b94e",
+     "0001193125-26-211710/ROW-80aa4414970ea734",
+     "0001193125-26-211710/ROW-a03fcd51645f60d0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "TEGA MC US Inc (Grinding Media Inc) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.17 % 10/21/2028 $ 976,360 980,101 978,191 0.04 % E"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_a7254d334131",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-338073/ROW-19d319fe3b966031",
+     "0001193125-26-338073/ROW-a2e9c0ff61b19d39",
+     "0001193125-26-338073/ROW-a3c3fab849be3be6",
+     "0001193125-26-338073/ROW-baa8c036acf7e511",
+     "0001193125-26-338073/ROW-e7417a7363f1b208",
+     "0001193125-26-338073/ROW-e97e44ecf73134bc"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-338073/ROW-19d319fe3b966031",
+     "0001193125-26-338073/ROW-a2e9c0ff61b19d39",
+     "0001193125-26-338073/ROW-a3c3fab849be3be6",
+     "0001193125-26-338073/ROW-baa8c036acf7e511",
+     "0001193125-26-338073/ROW-e7417a7363f1b208",
+     "0001193125-26-338073/ROW-e97e44ecf73134bc"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Gryphon Debt Merger Sub Inc. (Altera Corporation LLC) First Lien Term Loan SOFR(Q) — 2.75 % 6.41 % 8/17/2028 $ 837,900 834,047 839,995 0.03 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Read each flagged row's printed line (page_rule_findings from bkza): causes are an industry label left in the name (Technology, Metals and Mining, Internet and Direct Marketing Retail, Environmental..., Airlines, Multiline Retail, Semiconductors..., and Packaging) or a member name that differs from the page (Numerix suffix, Bynder A, NFP, footnote digit, Peraton, Dynata, WHP, Creative Artists, GB AIT, Sotheby's, American Airlines).",
+    "Fixed: fund-local labels in hierarchy_issuer_re (dry run 37 identifiers, all intended, instruments unchanged) and 23 issuer_name row corrections; bkzc has no issuer_name_printed finding in any quarter."
+   ],
+   "next_action": "fixed (fix_record DC-0001902649-efda3c91cf)"
+  },
+  {
+   "finding_id": "RVQ_BLK_54df2cfc9887",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-017976/Software subtotal 44,441,492"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-017976/Software subtotal 44,441,492"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-017976",
+     "text": "Zendesk, Inc. First Lien Revolver SOFR(Q) 0.75 % 6.50 % 11.38 % 11/22/2028 $ - ( 4,730 ) ( 5,031 ) - D/E 44,315,441 44,441,492 17.80 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Printed Software subtotal 44,441,492 = 32,352,208 (rows with extracted_industry Software) + 12,089,284 from rows printed after a page break (Proofpoint, RealPage, Sophia, Sovos, Tessian, TIBCO, UKG, Zendesk x3), published with a blank industry (independent review; confirmed: 62 rows blank in 2023-03-31 14, 2023-06-30 18, 2023-09-30 24, 2023-12-31 6).",
+    "The page break repeats 'Debt Investments - Continued' as a lone label row; the bridge read it as the industry heading, which is not an industry, so the rows kept no heading. The member text carries the industry ('Debt Investments Software Proofpoint, Inc. Instrument ...').",
+    "Fixed with the existing wrapper key dispatch.industry_from_identifier_re (fills only rows with no industry; 62 of 62 blank rows captured in a dry run, labels Software 46, Insurance 6, Machinery 6, Diversified Financial Services 3, Paper and Forest Products 1). bkzd and bkze: no blank industry on any row; gics_sector follows on 29 rows, gics_sub_industry on 39 (a name-guessed Real Estate/Industrials/Materials label on rows such as UKG, Sophia, White Cap became the printed industry's)."
+   ],
+   "next_action": "fixed (fix_record); A01 2023-03-31 no longer raised"
+  },
+  {
+   "finding_id": "RVQ_REV_fff9810ebdea",
+   "coverage": {
+    "affected_rows": [
+     "0001902649/2025-12-31/pct_of_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001902649/2025-12-31/pct_of_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pct_of_net_assets is empty for every row of the fund: the last printed column is a percent of total cash and investments (ABC 0.80 %).",
+    "bkzc oracle A07: skip for all 14 quarters (D-002)."
+   ],
+   "next_action": "verdict retired under D-252 (VR-FL-1902649-04); check passes on production data/output and bkzc"
+  },
+  {
+   "finding_id": "RVQ_REV_ff0dd72cd5a3",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-024153/C_3cfb44d8-fd98-4c14-8352-1431a4a08ab1"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-024153/C_3cfb44d8-fd98-4c14-8352-1431a4a08ab1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Household Durables Bad Boy Mowers JV Acquisition, LLC First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 11.37 % 11/9/2029 $ 7,510,059 7,325,923 7,209,657 1.71 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "The member names no issuer; the issuer was fixed by an earlier row correction (Bad Boy Mowers JV Acquisition, LLC, published as printed in bpxh/bkzc).",
+    "PP01 position purity candidates in the issue file carry no row id; none is a printed subtotal on a re-read of 2023-12-31."
+   ],
+   "next_action": "fixed in bkzc and in production (fix_record); verdict retired VR-FL-1902649-03"
+  }
  ]
 }

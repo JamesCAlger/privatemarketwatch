@@ -1,409 +1,461 @@
 {
- "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "bpxh",
- "dispositions": [
-  {
-   "disposition_id": "PD-A01-1902649-1",
-   "class": "false_alarm",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31"
-   ],
-   "reason_key": "a01-printed-subtotals-equal-published-rows",
-   "statement": "In each flagged quarter the current-period industry subtotal the check reads equals the sum of the published rows printed under that heading (2023-03-31 Entertainment 3,999,004 = 614,574 + 1,403,976 + 1,980,454; Media 9,198,672; 2023-06-30 Software 48,671,553; 2024-12-31 Software 162,036,192; 2025-03-31 Software 230,900,173; read with scratch/fund_runs/0001902649/a01_check.py, rows marked CURRENT). The check gathers children by a word of the identifier and so adds rows of other headings (Fertitta Entertainment, printed under Hotels, Restaurants & Leisure). Published fair value equals the filed investments total in all 14 quarters. No fix applies: nothing is wrong in the data; the check's child set is.",
-   "basis": "read",
-   "evidence": [
+  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+  "sandbox": "bpxh",
+  "dispositions": [
     {
-     "source": "filing",
-     "accession": "0000950170-23-017976",
-     "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 9.23 % 3/30/2029 $ 1,985,000 1,942,226 1,980,454 0.79 % 3,965,509 3,999,004 1.60 %",
-     "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 9.23 % 3/30/2029 $ 1,985,000 1,942,226 1,980,454 0.79 % 3,965,509 3,999,004 1.60 % - the Entertainment subtotal 3,999,004 printed after its three rows, which are published at these values"
-    }
-   ],
-   "rerun": "python scratch/fund_runs/0001902649/a01_check.py bpxh",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-A01-1902649-2",
-   "class": "false_alarm",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31"
-   ],
-   "reason_key": "a01-subtotal-of-the-comparative-schedule",
-   "statement": "The second subtotal flagged in each quarter is the prior year-end comparative schedule's (2022-12-31: Entertainment 3,912,623, Media 7,671,904, Software 34,782,379; 2023-12-31: Media 9,276,724, Software 66,985,334, Paper and Forest Products 6,258,362; 2024-12-31: Software 162,036,192, Media 26,396,728, Aerospace & Defense 52,957,835, Commercial Services 46,256,931), the same figure in every quarter of the following year. The check compares it with the current quarter's rows. No fix applies: the comparative rows are correctly not published for the current quarter.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-23-017976",
-     "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 8.72 % 3/30/2029 $ 1,990,000 1,940,250 1,918,360 0.86 % 3,964,961 3,912,623 1.74 %",
-     "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 8.72 % 3/30/2029 $ 1,990,000 1,940,250 1,918,360 0.86 % 3,964,961 3,912,623 1.74 % - the December 31, 2022 schedule in the 10-Q for 2023-03-31: Entertainment subtotal 3,912,623, the figure the check flags in every 2023 quarter"
-    }
-   ],
-   "rerun": "python scratch/fund_runs/0001902649/a01_check.py bpxh",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-A01-1902649-3",
-   "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2025-03-31"
-   ],
-   "reason_key": "a01-subtotal-tagged-on-wrong-member",
-   "statement": "2025-03-31: the subtotal 151,169,360 the check assigns to Electrical Equipment is printed at the end of the section before the Electrical Equipment heading (Diversified Financial Services: GC Champion, Payroc, Rialto, SitusAMC, Wealth Enhancement, White Cap). No fix applies: the rows are published at their printed values; the subtotal sits on the next heading's member.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-25-067060",
-     "verbatim": "White Cap Supply Holdings, LLC First Lien Tranche B Term Loan SOFR(M) - 3.25 % 7.57 % 10/19/2029 $ 6,679,861 6,642,847 6,492,591 0.47 % 151,138,792 151,169,360 10.87 % Electrical Equipment",
-     "quote": "White Cap Supply Holdings, LLC First Lien Tranche B Term Loan SOFR(M) - 3.25 % 7.57 % 10/19/2029 $ 6,679,861 6,642,847 6,492,591 0.47 % 151,138,792 151,169,360 10.87 % Electrical Equipment - the subtotal closes the section above the Electrical Equipment heading"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-25-067060 \"151,169,360\" 1 50 2600",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-A01-1902649-4",
-   "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2023-12-31"
-   ],
-   "reason_key": "a01-row-tagged-on-another-issuers-member",
-   "statement": "2023-12-31: the Sotheby's line printed under Diversified Consumer Services (899,649) is tagged on a PointClickCare member under Health Care Technology, so the check's Diversified Consumer Services children are 899,649 short and its Health Care Technology children 899,649 over (7,429,583 against 6,529,934; 6,997,327 against 7,896,976). The row is now published as Sotheby's by row correction; its industry still follows the member (observation). No further fix applies through the row-correction fields. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-24-024153",
-     "verbatim": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 % 7,339,829 7,429,583 1.76 %",
-     "quote": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 % 7,339,829 7,429,583 1.76 % - Sotheby's closes the Diversified Consumer Services section; its values are on context C_ad22e590 whose member names PointClickCare"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-24-024153 \"Sotheby\" 4 150 40",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15",
-   "class_proposed": "false_alarm"
-  },
-  {
-   "disposition_id": "PD-A01-1902649-5",
-   "class": "false_alarm",
-   "engine": "oracle",
-   "rule_name": "A01",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2024-03-31",
-    "2024-09-30"
-   ],
-   "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
-   "statement": "Rows printed under a heading whose member omits or misspells the industry: 2024-09-30 Les Schwab (1,248,826) on 'Debt Investments Specialty Les Schwab ...' (the word Retail missing), which makes Specialty Retail 4,726,173 against 3,477,347; 2024-03-31 the three Zendesk lines (2,523,001) on members with no industry at all ('Debt Investments Zendesk Inc. ...'), part of Software 67,804,194 against 64,546,956. The remaining 0.74M of the 2024-03-31 Software gap was not traced. No fix applies: the rows are published at their printed values.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-24-122470",
-     "verbatim": "Woof Holdings, Inc. First Lien Term Loan SOFR(Q) 0.75 % 3.49 % 8.09 % 12/21/2027 $ 937,337 917,836 633,480 0.08 % 5,010,375 4,726,173 0.59 %",
-     "quote": "Woof Holdings, Inc. First Lien Term Loan SOFR(Q) 0.75 % 3.49 % 8.09 % 12/21/2027 $ 937,337 917,836 633,480 0.08 % 5,010,375 4,726,173 0.59 % - the Specialty Retail subtotal, which includes the Les Schwab line (1,248,826)"
+      "disposition_id": "PD-A01-1902649-1",
+      "class": "false_alarm",
+      "engine": "oracle",
+      "rule_name": "A01",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "reason_key": "a01-printed-subtotals-equal-published-rows",
+      "statement": "In each flagged quarter the current-period industry subtotal the check reads equals the sum of the published rows printed under that heading (2023-03-31 Entertainment 3,999,004 = 614,574 + 1,403,976 + 1,980,454; Media 9,198,672; 2023-06-30 Software 48,671,553; 2024-12-31 Software 162,036,192; 2025-03-31 Software 230,900,173; read with scratch/fund_runs/0001902649/a01_check.py, rows marked CURRENT). The check gathers children by a word of the identifier and so adds rows of other headings (Fertitta Entertainment, printed under Hotels, Restaurants & Leisure). Published fair value equals the filed investments total in all 14 quarters. No fix applies: nothing is wrong in the data; the check's child set is.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-23-017976",
+          "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 9.23 % 3/30/2029 $ 1,985,000 1,942,226 1,980,454 0.79 % 3,965,509 3,999,004 1.60 %",
+          "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 9.23 % 3/30/2029 $ 1,985,000 1,942,226 1,980,454 0.79 % 3,965,509 3,999,004 1.60 % - the Entertainment subtotal 3,999,004 printed after its three rows, which are published at these values"
+        }
+      ],
+      "rerun": "python scratch/fund_runs/0001902649/a01_check.py bpxh",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
     },
     {
-     "source": "filing",
-     "accession": "0000950170-24-052326",
-     "verbatim": "Zendesk Inc. First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.25 % 11.57 % 11/22/2028 $ - ( 4,735 ) 3,055 - D/E 66,830,026 67,804,194 14.15 %",
-     "quote": "Zendesk Inc. First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.25 % 11.57 % 11/22/2028 $ - ( 4,735 ) 3,055 - D/E 66,830,026 67,804,194 14.15 % - Zendesk closes the Software section; its members name no industry"
-    }
-   ],
-   "rerun": "python scratch/fund_runs/0001902649/a01_check.py bpxh",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-X11-1902649-6",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "X11",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2023-09-30",
-    "2024-03-31",
-    "2025-12-31"
-   ],
-   "reason_key": "x11-undrawn-line-par-printed-as-dash",
-   "statement": "The flagged rows are delayed-draw lines whose par is printed as a dash while a small positive fair value is printed (2023-09-30 Accordion 43,004, Zendesk 5,498, OMNIA 60; 2024-03-31 PCF 68,630, Allied Benefit 29,216, Gympass 14,145, RSC 12,200; 2025-12-31 Stonebridge 7,171, Raven 602). Published par is blank and value and cost are the printed ones (costs corrected to the printed brackets where the filer tagged them positive). No fix applies: the page prints no par for these rows.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-23-058175",
-     "verbatim": "Accordion Partners LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.50 % 11.89 % 8/29/2029 $ - - 43,004",
-     "quote": "Accordion Partners LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.50 % 11.89 % 8/29/2029 $ - - 43,004 - par and cost printed as dashes, value 43,004"
+      "disposition_id": "PD-A01-1902649-2",
+      "class": "false_alarm",
+      "engine": "oracle",
+      "rule_name": "A01",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-03-31",
+        "2023-06-30",
+        "2023-09-30",
+        "2023-12-31",
+        "2024-03-31",
+        "2024-06-30",
+        "2024-09-30",
+        "2024-12-31",
+        "2025-03-31"
+      ],
+      "reason_key": "a01-subtotal-of-the-comparative-schedule",
+      "statement": "The second subtotal flagged in each quarter is the prior year-end comparative schedule's (2022-12-31: Entertainment 3,912,623, Media 7,671,904, Software 34,782,379; 2023-12-31: Media 9,276,724, Software 66,985,334, Paper and Forest Products 6,258,362; 2024-12-31: Software 162,036,192, Media 26,396,728, Aerospace & Defense 52,957,835, Commercial Services 46,256,931), the same figure in every quarter of the following year. The check compares it with the current quarter's rows. No fix applies: the comparative rows are correctly not published for the current quarter.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-23-017976",
+          "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 8.72 % 3/30/2029 $ 1,990,000 1,940,250 1,918,360 0.86 % 3,964,961 3,912,623 1.74 %",
+          "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(M) 0.50 % 4.50 % 8.72 % 3/30/2029 $ 1,990,000 1,940,250 1,918,360 0.86 % 3,964,961 3,912,623 1.74 % - the December 31, 2022 schedule in the 10-Q for 2023-03-31: Entertainment subtotal 3,912,623, the figure the check flags in every 2023 quarter"
+        }
+      ],
+      "rerun": "python scratch/fund_runs/0001902649/a01_check.py bpxh",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
     },
     {
-     "source": "filing",
-     "accession": "0000950170-24-052326",
-     "verbatim": "Peter C. Foy & Associates Insurance Services, LLC (PCF Insurance) First Lien Delayed Draw Term Loan D SOFR(M) 0.75 % 6.11 % 11.83 % 7/19/2030 $ - ( 29,804 ) 68,630",
-     "quote": "Peter C. Foy & Associates Insurance Services, LLC (PCF Insurance) First Lien Delayed Draw Term Loan D SOFR(M) 0.75 % 6.11 % 11.83 % 7/19/2030 $ - ( 29,804 ) 68,630 - par a dash"
+      "disposition_id": "PD-A01-1902649-3",
+      "class": "as_filed",
+      "engine": "oracle",
+      "rule_name": "A01",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2025-03-31"
+      ],
+      "reason_key": "a01-subtotal-tagged-on-wrong-member",
+      "statement": "2025-03-31: the subtotal 151,169,360 the check assigns to Electrical Equipment is printed at the end of the section before the Electrical Equipment heading (Diversified Financial Services: GC Champion, Payroc, Rialto, SitusAMC, Wealth Enhancement, White Cap). No fix applies: the rows are published at their printed values; the subtotal sits on the next heading's member.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-067060",
+          "verbatim": "White Cap Supply Holdings, LLC First Lien Tranche B Term Loan SOFR(M) - 3.25 % 7.57 % 10/19/2029 $ 6,679,861 6,642,847 6,492,591 0.47 % 151,138,792 151,169,360 10.87 % Electrical Equipment",
+          "quote": "White Cap Supply Holdings, LLC First Lien Tranche B Term Loan SOFR(M) - 3.25 % 7.57 % 10/19/2029 $ 6,679,861 6,642,847 6,492,591 0.47 % 151,138,792 151,169,360 10.87 % Electrical Equipment - the subtotal closes the section above the Electrical Equipment heading"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-25-067060 \"151,169,360\" 1 50 2600",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
     },
     {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "verbatim": "Stonebridge Companies, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.00 % 8.72 % 5/16/2031 $ - ( 12,034 ) 7,171",
-     "quote": "Stonebridge Companies, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.00 % 8.72 % 5/16/2031 $ - ( 12,034 ) 7,171 - par a dash"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/flagged.py bpxh X11 1902649 2024-03-31 6",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-C110-1902649-7",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "C110",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2025-03-31",
-    "2025-12-31"
-   ],
-   "reason_key": "negative-par-on-undrawn-line-as-printed",
-   "statement": "The negative par is printed: Renaissance Holding 2025-03-31 '( 2,449 )', Cohnreznick Advisory delayed draw 2025-12-31 '( 3,144 )'. Published par, cost and value equal the printed line. No fix applies: the page prints the par below zero.",
-   "basis": "read",
-   "addresses_verdict": {
-    "2025-12-31": "The reviewer said the flagged row was Skydio's delayed draw term loan B with a blank printed par and a published par of -3,144. Skydio's row publishes par 0, cost -29,429 and value -33,750, as printed; the -3,144 par belongs to the Cohnreznick Advisory delayed-draw line, where the page prints '( 3,144 )'. The verdict does not stand."
-   },
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-25-067060",
-     "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 )",
-     "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 ) - par printed (2,449)"
+      "disposition_id": "PD-A01-1902649-4",
+      "class": "as_filed",
+      "engine": "oracle",
+      "rule_name": "A01",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-12-31"
+      ],
+      "reason_key": "a01-row-tagged-on-another-issuers-member",
+      "statement": "2023-12-31: the Sotheby's line printed under Diversified Consumer Services (899,649) is tagged on a PointClickCare member under Health Care Technology, so the check's Diversified Consumer Services children are 899,649 short and its Health Care Technology children 899,649 over (7,429,583 against 6,529,934; 6,997,327 against 7,896,976). The row is now published as Sotheby's by row correction; its industry still follows the member (observation). No further fix applies through the row-correction fields. [Reclassified as_filed by owner ruling 2026-11-10 ('do as recommended'): the filer printed or tagged it this way.]",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-24-024153",
+          "verbatim": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 % 7,339,829 7,429,583 1.76 %",
+          "quote": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 % 7,339,829 7,429,583 1.76 % - Sotheby's closes the Diversified Consumer Services section; its values are on context C_ad22e590 whose member names PointClickCare"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-24-024153 \"Sotheby\" 4 150 40",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15",
+      "class_proposed": "false_alarm"
     },
     {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "verbatim": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937",
-     "quote": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937 - par printed (3,144); the row the C110 finding cites"
+      "disposition_id": "PD-A01-1902649-5",
+      "class": "false_alarm",
+      "engine": "oracle",
+      "rule_name": "A01",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2024-03-31",
+        "2024-09-30"
+      ],
+      "reason_key": "a01-subtotal-and-rows-on-differently-spelled-members",
+      "statement": "Rows printed under a heading whose member omits or misspells the industry: 2024-09-30 Les Schwab (1,248,826) on 'Debt Investments Specialty Les Schwab ...' (the word Retail missing), which makes Specialty Retail 4,726,173 against 3,477,347; 2024-03-31 the three Zendesk lines (2,523,001) on members with no industry at all ('Debt Investments Zendesk Inc. ...'), part of Software 67,804,194 against 64,546,956. The remaining 0.74M of the 2024-03-31 Software gap was not traced. No fix applies: the rows are published at their printed values.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-24-122470",
+          "verbatim": "Woof Holdings, Inc. First Lien Term Loan SOFR(Q) 0.75 % 3.49 % 8.09 % 12/21/2027 $ 937,337 917,836 633,480 0.08 % 5,010,375 4,726,173 0.59 %",
+          "quote": "Woof Holdings, Inc. First Lien Term Loan SOFR(Q) 0.75 % 3.49 % 8.09 % 12/21/2027 $ 937,337 917,836 633,480 0.08 % 5,010,375 4,726,173 0.59 % - the Specialty Retail subtotal, which includes the Les Schwab line (1,248,826)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-24-052326",
+          "verbatim": "Zendesk Inc. First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.25 % 11.57 % 11/22/2028 $ - ( 4,735 ) 3,055 - D/E 66,830,026 67,804,194 14.15 %",
+          "quote": "Zendesk Inc. First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.25 % 11.57 % 11/22/2028 $ - ( 4,735 ) 3,055 - D/E 66,830,026 67,804,194 14.15 % - Zendesk closes the Software section; its members name no industry"
+        }
+      ],
+      "rerun": "python scratch/fund_runs/0001902649/a01_check.py bpxh",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
     },
     {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "verbatim": "Skydio, Inc First Lien Delayed Draw Term Loan B SOFR(M) 2.50 % 5.00 % Cash 8.73 % 12/4/2029 $ - ( 29,429 ) ( 33,750 )",
-     "quote": "Skydio, Inc First Lien Delayed Draw Term Loan B SOFR(M) 2.50 % 5.00 % Cash 8.73 % 12/4/2029 $ - ( 29,429 ) ( 33,750 ) - the row the earlier reviewer cited; published par 0, cost -29,429, value -33,750"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/flagged.py bpxh C110 1902649 2025-12-31 4",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-fmt_principal_amount-1902649-8",
-   "class": "as_filed",
-   "engine": "weak",
-   "rule_name": "fmt_principal_amount",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2025-03-31",
-    "2025-12-31"
-   ],
-   "reason_key": "negative-par-on-undrawn-line-as-printed",
-   "statement": "The rule fires on a par below zero; the two rows are the same printed negative pars as the C110 entry (Renaissance 2025-03-31 '( 2,449 )', Cohnreznick 2025-12-31 '( 3,144 )'). No fix applies: the page prints them.",
-   "basis": "read",
-   "addresses_verdict": {
-    "2025-12-31": "The reviewer read the metric 0.24 as a principal taken from the percent column of the Kaman Corporation term loan. Kaman's term loan publishes par 5,772,929, cost 5,754,549 and value 5,803,266, as printed; the rule fires on the Cohnreznick negative par, which is printed. The verdict does not stand."
-   },
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "verbatim": "Kaman Corporation First Lien Term Loan SOFR(Q) - 2.50 % 6.32 % 1/30/2032 $ 5,772,929 5,754,549 5,803,266 0.24 %",
-     "quote": "Kaman Corporation First Lien Term Loan SOFR(Q) - 2.50 % 6.32 % 1/30/2032 $ 5,772,929 5,754,549 5,803,266 0.24 % - published par 5,772,929"
+      "disposition_id": "PD-X11-1902649-6",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "X11",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-09-30",
+        "2024-03-31",
+        "2025-12-31"
+      ],
+      "reason_key": "x11-undrawn-line-par-printed-as-dash",
+      "statement": "The flagged rows are delayed-draw lines whose par is printed as a dash while a small positive fair value is printed (2023-09-30 Accordion 43,004, Zendesk 5,498, OMNIA 60; 2024-03-31 PCF 68,630, Allied Benefit 29,216, Gympass 14,145, RSC 12,200; 2025-12-31 Stonebridge 7,171, Raven 602). Published par is blank and value and cost are the printed ones (costs corrected to the printed brackets where the filer tagged them positive). No fix applies: the page prints no par for these rows.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-23-058175",
+          "verbatim": "Accordion Partners LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.50 % 11.89 % 8/29/2029 $ - - 43,004",
+          "quote": "Accordion Partners LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.50 % 11.89 % 8/29/2029 $ - - 43,004 - par and cost printed as dashes, value 43,004"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-24-052326",
+          "verbatim": "Peter C. Foy & Associates Insurance Services, LLC (PCF Insurance) First Lien Delayed Draw Term Loan D SOFR(M) 0.75 % 6.11 % 11.83 % 7/19/2030 $ - ( 29,804 ) 68,630",
+          "quote": "Peter C. Foy & Associates Insurance Services, LLC (PCF Insurance) First Lien Delayed Draw Term Loan D SOFR(M) 0.75 % 6.11 % 11.83 % 7/19/2030 $ - ( 29,804 ) 68,630 - par a dash"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-085372",
+          "verbatim": "Stonebridge Companies, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.00 % 8.72 % 5/16/2031 $ - ( 12,034 ) 7,171",
+          "quote": "Stonebridge Companies, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.00 % 8.72 % 5/16/2031 $ - ( 12,034 ) 7,171 - par a dash"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/flagged.py bpxh X11 1902649 2024-03-31 6",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
     },
     {
-     "source": "filing",
-     "accession": "0001193125-26-085372",
-     "verbatim": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937",
-     "quote": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937 - the negative par the rule reads"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/flagged.py bpxh C110 1902649 2025-03-31 4",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-fmt_principal_amount_usd-1902649-9",
-   "class": "as_filed",
-   "engine": "weak",
-   "rule_name": "fmt_principal_amount_usd",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2025-03-31",
-    "2025-12-31"
-   ],
-   "reason_key": "negative-par-on-undrawn-line-as-printed",
-   "statement": "The dollar par of the same two printed negative pars (Renaissance 2025-03-31, Cohnreznick 2025-12-31). No fix applies.",
-   "basis": "read",
-   "evidence": [
+      "disposition_id": "PD-C110-1902649-7",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "C110",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2025-03-31",
+        "2025-12-31"
+      ],
+      "reason_key": "negative-par-on-undrawn-line-as-printed",
+      "statement": "The negative par is printed: Renaissance Holding 2025-03-31 '( 2,449 )', Cohnreznick Advisory delayed draw 2025-12-31 '( 3,144 )'. Published par, cost and value equal the printed line. No fix applies: the page prints the par below zero.",
+      "basis": "read",
+      "addresses_verdict": {
+        "2025-12-31": "The reviewer said the flagged row was Skydio's delayed draw term loan B with a blank printed par and a published par of -3,144. Skydio's row publishes par 0, cost -29,429 and value -33,750, as printed; the -3,144 par belongs to the Cohnreznick Advisory delayed-draw line, where the page prints '( 3,144 )'. The verdict does not stand."
+      },
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-067060",
+          "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 )",
+          "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 ) - par printed (2,449)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-085372",
+          "verbatim": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937",
+          "quote": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937 - par printed (3,144); the row the C110 finding cites"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-085372",
+          "verbatim": "Skydio, Inc First Lien Delayed Draw Term Loan B SOFR(M) 2.50 % 5.00 % Cash 8.73 % 12/4/2029 $ - ( 29,429 ) ( 33,750 )",
+          "quote": "Skydio, Inc First Lien Delayed Draw Term Loan B SOFR(M) 2.50 % 5.00 % Cash 8.73 % 12/4/2029 $ - ( 29,429 ) ( 33,750 ) - the row the earlier reviewer cited; published par 0, cost -29,429, value -33,750"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/flagged.py bpxh C110 1902649 2025-12-31 4",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
     {
-     "source": "filing",
-     "accession": "0000950170-25-067060",
-     "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 )",
-     "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 ) - dollar par printed (2,449)"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/flagged.py bpxh C110 1902649 2025-03-31 4",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-B02-1902649-10",
-   "class": "as_filed",
-   "engine": "oracle",
-   "rule_name": "B02",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2024-12-31"
-   ],
-   "reason_key": "b02-twin-funded-lines-printed-separately",
-   "statement": "The two repeated keys are two Streamland Media Midco first lien term loan lines printed one after the other with the same terms and values (204,289 each), on two members ('... One', '... Two'). Both are positions. No fix applies.",
-   "basis": "read",
-   "evidence": [
+      "disposition_id": "PD-fmt_principal_amount-1902649-8",
+      "class": "as_filed",
+      "engine": "weak",
+      "rule_name": "fmt_principal_amount",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2025-03-31",
+        "2025-12-31"
+      ],
+      "reason_key": "negative-par-on-undrawn-line-as-printed",
+      "statement": "The rule fires on a par below zero; the two rows are the same printed negative pars as the C110 entry (Renaissance 2025-03-31 '( 2,449 )', Cohnreznick 2025-12-31 '( 3,144 )'). No fix applies: the page prints them.",
+      "basis": "read",
+      "addresses_verdict": {
+        "2025-12-31": "The reviewer read the metric 0.24 as a principal taken from the percent column of the Kaman Corporation term loan. Kaman's term loan publishes par 5,772,929, cost 5,754,549 and value 5,803,266, as printed; the rule fires on the Cohnreznick negative par, which is printed. The verdict does not stand."
+      },
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-085372",
+          "verbatim": "Kaman Corporation First Lien Term Loan SOFR(Q) - 2.50 % 6.32 % 1/30/2032 $ 5,772,929 5,754,549 5,803,266 0.24 %",
+          "quote": "Kaman Corporation First Lien Term Loan SOFR(Q) - 2.50 % 6.32 % 1/30/2032 $ 5,772,929 5,754,549 5,803,266 0.24 % - published par 5,772,929"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-085372",
+          "verbatim": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937",
+          "quote": "Cohnreznick Advisory LLC First Lien Delayed Draw Term Loan SOFR(Q) - 3.50 % 7.17 % 3/31/2032 $ ( 3,144 ) ( 14,726 ) 19,937 - the negative par the rule reads"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/flagged.py bpxh C110 1902649 2025-03-31 4",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
     {
-     "source": "filing",
-     "accession": "0000950170-25-030170",
-     "verbatim": "Streamland Media Midco LLC First Lien Term Loan SOFR(Q) 1.00 % 9.76 % PIK 14.09 % 3/31/2025 $ 204,289 204,289 204,289 0.02 %",
-     "quote": "Streamland Media Midco LLC First Lien Term Loan SOFR(Q) 1.00 % 9.76 % PIK 14.09 % 3/31/2025 $ 204,289 204,289 204,289 0.02 % - printed twice in a row"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-25-030170 \"Streamland Media Midco\" 6 220 5",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-F33-1902649-11",
-   "class": "not_applicable",
-   "engine": "fund_financials",
-   "rule_name": "F33",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2022-06-30"
-   ],
-   "reason_key": "start-up-quarter-no-distribution-declared",
-   "statement": "2022-06-30 is the fund's first quarter of operations (inception 2022-03-18; net assets 46,972,811). The statement of changes in net assets shows no distribution; the distribution rate of 0 is the filed fact. No fix applies.",
-   "basis": "read",
-   "evidence": [
+      "disposition_id": "PD-fmt_principal_amount_usd-1902649-9",
+      "class": "as_filed",
+      "engine": "weak",
+      "rule_name": "fmt_principal_amount_usd",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2025-03-31",
+        "2025-12-31"
+      ],
+      "reason_key": "negative-par-on-undrawn-line-as-printed",
+      "statement": "The dollar par of the same two printed negative pars (Renaissance 2025-03-31, Cohnreznick 2025-12-31). No fix applies.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-067060",
+          "verbatim": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 )",
+          "quote": "Renaissance Holding Corp. First Lien Term Loan SOFR(Q) - 3.25 % 7.60 % 4/5/2030 $ ( 2,449 ) ( 24,219 ) ( 18,772 ) - dollar par printed (2,449)"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/flagged.py bpxh C110 1902649 2025-03-31 4",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
     {
-     "source": "filing",
-     "accession": "0001564590-22-029354",
-     "verbatim": "Balance at March 31, 2022 4,000 $ 4 $ 99,996 $ - $ 100,000 Issuance of common stock 1,996,000 1,996 49,898,004 - 49,900,000 Net investment income - - - 25,957 25,957",
-     "quote": "Balance at March 31, 2022 4,000 $ 4 $ 99,996 $ - $ 100,000 Issuance of common stock 1,996,000 1,996 49,898,004 - 49,900,000 Net investment income - - - 25,957 25,957 - no distribution line in the quarter"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/page_line.py 1902649 0001564590-22-029354 \"Balance at June 30, 2022\" 2 120 700",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-SRC_BDC03-1902649-12",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "SRC_BDC03",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2023-06-30"
-   ],
-   "reason_key": "fv-sign-corrected-from-page-where-tag-drops-brackets",
-   "statement": "The Sumo Logic revolver's fair value is tagged +7,379; the page prints ( 7,379 ). The published row holds the printed -7,379 (row correction). With it published fair value equals the filed investments total (it was 14,758 = 2 x 7,379 over). The tagged fact is the wrong one. untagged_values cannot express it (it fills only a missing value).",
-   "basis": "read",
-   "evidence": [
+      "disposition_id": "PD-B02-1902649-10",
+      "class": "as_filed",
+      "engine": "oracle",
+      "rule_name": "B02",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2024-12-31"
+      ],
+      "reason_key": "b02-twin-funded-lines-printed-separately",
+      "statement": "The two repeated keys are two Streamland Media Midco first lien term loan lines printed one after the other with the same terms and values (204,289 each), on two members ('... One', '... Two'). Both are positions. No fix applies.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-030170",
+          "verbatim": "Streamland Media Midco LLC First Lien Term Loan SOFR(Q) 1.00 % 9.76 % PIK 14.09 % 3/31/2025 $ 204,289 204,289 204,289 0.02 %",
+          "quote": "Streamland Media Midco LLC First Lien Term Loan SOFR(Q) 1.00 % 9.76 % PIK 14.09 % 3/31/2025 $ 204,289 204,289 204,289 0.02 % - printed twice in a row"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 1902649 0000950170-25-030170 \"Streamland Media Midco\" 6 220 5",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
     {
-     "source": "filing",
-     "accession": "0000950170-23-038004",
-     "verbatim": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )",
-     "quote": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 ) - value printed in brackets; tagged +7,379 on C_9911f711"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/filing_grep.py 1902649 000095017023038004 xml C_9911f711-fe4a-4d96-ae02-13be7b350623",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
-   "disposition_id": "PD-blocking_fair_value_disagreement-1902649-13",
-   "class": "as_filed",
-   "engine": "source_recon",
-   "rule_name": "blocking_fair_value_disagreement",
-   "ciks": [
-    "0001902649"
-   ],
-   "quarters": [
-    "2023-06-30"
-   ],
-   "reason_key": "fv-sign-corrected-from-page-where-tag-drops-brackets",
-   "statement": "Same row as the SRC_BDC03 entry: Sumo Logic revolver tagged +7,379, printed ( 7,379 ), published -7,379. No fix applies to the tag.",
-   "basis": "read",
-   "evidence": [
+      "disposition_id": "PD-F33-1902649-11",
+      "class": "not_applicable",
+      "engine": "fund_financials",
+      "rule_name": "F33",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2022-06-30"
+      ],
+      "reason_key": "start-up-quarter-no-distribution-declared",
+      "statement": "2022-06-30 is the fund's first quarter of operations (inception 2022-03-18; net assets 46,972,811). The statement of changes in net assets shows no distribution; the distribution rate of 0 is the filed fact. No fix applies.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001564590-22-029354",
+          "verbatim": "Balance at March 31, 2022 4,000 $ 4 $ 99,996 $ - $ 100,000 Issuance of common stock 1,996,000 1,996 49,898,004 - 49,900,000 Net investment income - - - 25,957 25,957",
+          "quote": "Balance at March 31, 2022 4,000 $ 4 $ 99,996 $ - $ 100,000 Issuance of common stock 1,996,000 1,996 49,898,004 - 49,900,000 Net investment income - - - 25,957 25,957 - no distribution line in the quarter"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 1902649 0001564590-22-029354 \"Balance at June 30, 2022\" 2 120 700",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
     {
-     "source": "filing",
-     "accession": "0000950170-23-038004",
-     "verbatim": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )",
-     "quote": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 ) - value printed in brackets"
+      "disposition_id": "PD-SRC_BDC03-1902649-12",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "SRC_BDC03",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-06-30"
+      ],
+      "reason_key": "fv-sign-corrected-from-page-where-tag-drops-brackets",
+      "statement": "The Sumo Logic revolver's fair value is tagged +7,379; the page prints ( 7,379 ). The published row holds the printed -7,379 (row correction). With it published fair value equals the filed investments total (it was 14,758 = 2 x 7,379 over). The tagged fact is the wrong one. untagged_values cannot express it (it fills only a missing value).",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-23-038004",
+          "verbatim": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )",
+          "quote": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 ) - value printed in brackets; tagged +7,379 on C_9911f711"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/filing_grep.py 1902649 000095017023038004 xml C_9911f711-fe4a-4d96-ae02-13be7b350623",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
+    {
+      "disposition_id": "PD-blocking_fair_value_disagreement-1902649-13",
+      "class": "as_filed",
+      "engine": "source_recon",
+      "rule_name": "blocking_fair_value_disagreement",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-06-30"
+      ],
+      "reason_key": "fv-sign-corrected-from-page-where-tag-drops-brackets",
+      "statement": "Same row as the SRC_BDC03 entry: Sumo Logic revolver tagged +7,379, printed ( 7,379 ), published -7,379. No fix applies to the tag.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-23-038004",
+          "verbatim": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 )",
+          "quote": "Serrano Parent, LLC (Sumo Logic) First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.60 % 5/13/2030 $ - ( 10,048 ) ( 7,379 ) - value printed in brackets"
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/filing_grep.py 1902649 000095017023038004 xml C_9911f711-fe4a-4d96-ae02-13be7b350623",
+      "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
+      "decided_on": "2026-10-15"
+    },
+    {
+      "disposition_id": "PD-C110-1902649-bkz-2023-12-31",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "C110",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-12-31"
+      ],
+      "reason_key": "negative-par-on-undrawn-line-as-printed",
+      "statement": "AmeriLife delayed draw: par '( 1 )', cost '( 230,566 )' and value '( 119,352 )' are printed in brackets; the filer tagged par and cost positive and a row correction (bkzd) publishes them as printed. The rule reads the printed negative par. No fix applies: the page prints it.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-24-024153",
+          "verbatim": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E",
+          "quote": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E - par printed (1)"
+        }
+      ],
+      "rerun": "python scratch/fund_runs/0001902649/rows_for.py bkze 2023-12-31 AmeriLife",
+      "decided_by": "PROPOSED by agent:fund-bkz-sonnet 2026-11-15; not accepted by the owner",
+      "decided_on": "2026-11-15"
+    },
+    {
+      "disposition_id": "PD-fmt_principal_amount-1902649-bkz-2023-12-31",
+      "class": "as_filed",
+      "engine": "weak",
+      "rule_name": "fmt_principal_amount",
+      "ciks": [
+        "0001902649"
+      ],
+      "quarters": [
+        "2023-12-31"
+      ],
+      "reason_key": "negative-par-on-undrawn-line-as-printed",
+      "statement": "AmeriLife delayed draw: par '( 1 )', cost '( 230,566 )' and value '( 119,352 )' are printed in brackets; the filer tagged par and cost positive and a row correction (bkzd) publishes them as printed. The rule reads the printed negative par. No fix applies: the page prints it.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-24-024153",
+          "verbatim": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E",
+          "quote": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E - par printed (1)"
+        }
+      ],
+      "rerun": "python scratch/fund_runs/0001902649/rows_for.py bkze 2023-12-31 AmeriLife",
+      "decided_by": "PROPOSED by agent:fund-bkz-sonnet 2026-11-15; not accepted by the owner",
+      "decided_on": "2026-11-15"
     }
-   ],
-   "rerun": "python scripts/v05_evidence/filing_grep.py 1902649 000095017023038004 xml C_9911f711-fe4a-4d96-ae02-13be7b350623",
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing loop bpx); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  }
- ]
+  ]
 }

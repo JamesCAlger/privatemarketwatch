@@ -103,12 +103,13 @@
       }
     ],
     "canonical_strip_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s+|\\s+Ref\\s+.*$|\\s+Reference\\s+Rate\\s+.*$|\\s+Interest\\s+Rate\\s+\\d+\\.?\\d*%|\\s+Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b",
-    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$"
+    "issuer_name_strip_re": "\\s+(?:One|Two|Three|Four)$",
+    "industry_from_identifier_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s+(Environmental,\\s+Maintenance\\s+(?:and|&)\\s+Security\\s+Services|Electronic\\s+Equipment,\\s+Instruments\\s+(?:and|&)\\s+Components|Environmental,\\s+Maintenance\\s+(?:and|&)\\s+Security\\s+Service|Technology\\s+Hardware,\\s+Storage\\s+(?:and|&)\\s+Peripherals|Semiconductors\\s+(?:and|&)\\s+Semiconductor\\s+Equipment|Diversified\\s+Telecommunication\\s+Services|Real\\s+Estate\\s+Management\\s+(?:and|&)\\s+Development|Real\\s+Estate\\s+Management\\s+(?:and|&)\\s+Development|Internet\\s+(?:and|&)\\s+Direct\\s+Marketing\\s+Retail|Wireless\\s+Telecommunication\\s+Services|Internet\\s+(?:and|&)\\s+Direct\\s+Marketing\\s+Retail|Trading\\s+Companies\\s+(?:and|&)\\s+Distributors|Textiles,\\s+Apparel\\s+(?:and|&)\\s+Luxury\\s+Goods|Health\\s+Care\\s+Equipment\\s+(?:and|&)\\s+Supplies|Healthcare\\s+Providers\\s+(?:and|&)\\s+Services|Health\\s+Care\\s+Providers\\s+(?:and|&)\\s+Services|Health\\s+Care\\s+Equipment\\s+(?:and|&)\\s+Supplies|Life\\s+Sciences\\s+Tools\\s+(?:and|&)\\s+Services|Commercial\\s+Services\\s+(?:and|&)\\s+Supplies|Trading\\s+Companies\\s+(?:and|&)\\s+Distributors|Hotels,\\s+Restaurants\\s+(?:and|&)\\s+Leisure|Consumer\\s+Finance\\s+(?:and|&)\\s+Packaging|Internet\\s+Software\\s+(?:and|&)\\s+Services|Life\\s+Sciences\\s+Tools\\s+(?:and|&)\\s+Services|Diversified\\s+Financial\\s+Services|Commercial\\s+Services\\s+(?:and|&)\\s+Supplies|Oil,\\s+Gas\\s+(?:and|&)\\s+Consumable\\s+Fuels|Energy\\s+Equipment\\s+(?:and|&)\\s+Services|Diversified\\s+Consumer\\s+Services|Hotels,\\s+Restaurants\\s+(?:and|&)\\s+Leisure|Transportation\\s+Infrastructure|Construction\\s+(?:and|&)\\s+Engineering|Internet\\s+Software\\s+(?:and|&)\\s+Services|Internet\\s+(?:and|&)\\s+Catalog\\s+Retail|Energy\\s+Equipment\\s+(?:and|&)\\s+Services|Construction\\s+(?:and|&)\\s+Engineering|Air\\s+Freight\\s+(?:and|&)\\s+Logistics|Paper\\s+(?:and|&)\\s+Forest\\s+Products|Internet\\s+(?:and|&)\\s+Catalog\\s+Retail|Industrial\\s+Conglomerates|Communications\\s+Equipment|Containers\\s+(?:and|&)\\s+Packaging|Paper\\s+(?:and|&)\\s+Forest\\s+Products|Health\\s+Care\\s+Technology|Containers\\s+(?:and|&)\\s+Packaging|Construction\\s+Materials|Aerospace\\s+(?:and|&)\\s+Defense|Professional\\s+Services|Healthcare\\s+Technology|Electrical\\s+Equipment|Aerospace\\s+(?:and|&)\\s+Defense|Household\\s+Durables|Metals\\s+(?:and|&)\\s+Mining|Building\\s+Products|Specialty\\s+Retail|Consumer\\s+Finance|Multiline\\s+Retail|Capital\\s+Markets|Auto\\s+Components|Pharmaceuticals|Food\\s+Products|Road\\s+(?:and|&)\\s+Rail|Entertainment|Distributors|Automobiles|IT\\s+Services|Healthcare|Specialty|Insurance|Beverages|Chemicals|Machinery|Software|Airlines|Media)\\s+\\S"
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s*(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)(?:\\s+|\\b)(?:(?:Instrument|Investment|Instument)\\s+)?(?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref|Last\\s+Out|DIP)\\b",
-    "hierarchy_instrument_re": "(?i)(?:\\s+|\\b)(?:(?:Instrument|Investment|Instument)\\s+)?((?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref|Last\\s+Out|DIP)\\b.+?)(?:\\s+(?:Ref|Reference\\s+Rate|Interest\\s+Rate|SOFR|LIBOR|EURIBOR|Prime|Floor|Spread|Total\\s+Coupon|Maturity(?:\\s+Date)?)\\b|$)",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s*(?:(?:Healthcare\\s+Technology|Metals\\s+(?:and|&)\\s+Mining|Internet\\s+(?:and|&)\\s+Direct\\s+Marketing\\s+Retail|Environmental,\\s+Maintenance\\s+(?:and|&)\\s+Security\\s+Services?|Airlines|Multiline\\s+Retail|Semiconductors\\s+(?:and|&)\\s+Semiconductor\\s+Equipment|Consumer\\s+Finance\\s+(?:and|&)\\s+Packaging|(?:MSD_INDUSTRY_LABELS))\\s+)?(.+?\\(fka\\s+First\\s+American\\s+Corporation\\)|.+?)(?:\\s+|\\b)(?:(?:Instrument|Investment|Instument)\\s+)?(?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref|Last\\s+Out|DIP)\\b",
+    "hierarchy_instrument_re": "(?i)(?:^.*?\\(fka\\s+First\\s+American\\s+Corporation\\)\\s+)?(?:\\s+|\\b)(?:(?:Instrument|Investment|Instument)\\s+)?((?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref|Last\\s+Out|DIP)\\b.+?)(?:\\s+(?:Ref|Reference\\s+Rate|Interest\\s+Rate|SOFR|LIBOR|EURIBOR|Prime|Floor|Spread|Total\\s+Coupon|Maturity(?:\\s+Date)?)\\b|$)",
     "hierarchy_trailing_re": "(?i)\\s+(Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b(?:\\s+(?:One|Two|Three|Four))?)",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt\\s+Investments\\b|Equity\\s+Securities\\s*|Equity\\s+Investments\\b)') AND (regexp_matches(_clean, '(?i)\\b(?:Instrument|Investment|Instument)\\b') OR (regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\d?|Corp\\.?|Corporation|L\\.L\\.C\\.|L\\.P\\.|Ltd\\.?|Limited|Holdings?|Group|Bidco|Buyer|Parent|Borrower|SAS|B\\.V\\.|SE\\b|LP\\b)') AND regexp_matches(_clean, '(?i)\\b(?:First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|[A-Z]\\s+Ref)\\b')))",
     "extra_industry_labels": [
@@ -256,6 +257,19 @@
     ],
     "reference_rate_columns": [
       "Ref"
+    ],
+    "untagged_values": [
+      "0000950170-23-058175 C_af5442b7-bf9e-4dea-95ab-e3f4295867f6 fair_value 0",
+      "0000950170-23-058175 C_45cd1cd7-4097-4669-b6f3-445102ef4b1a fair_value 0",
+      "0000950170-23-058175 C_d89a7a75-4210-4752-9944-a36622ff1586 fair_value 0",
+      "0000950170-23-058175 C_7f33541e-31ea-4e4e-b69c-d4ae8c2d643e fair_value 0",
+      "0000950170-24-052326 C_c679ccf6-1e36-4dda-9df4-66fdc1f33fa7 fair_value 0",
+      "0000950170-24-052326 C_b8048722-7b8d-4dc1-bb4e-52ad52bbcafc fair_value 0",
+      "0000950170-24-052326 C_0f47a03b-ce71-4fe2-a3ff-be93ca3b306d fair_value 0",
+      "0000950170-24-052326 C_5a233a03-e3f9-474a-a8b5-551bd3303785 fair_value 0",
+      "0001193125-26-085372 C_6cf5da3b-5128-488d-a2ad-976b65e7ae74 fair_value 0",
+      "0001193125-26-085372 C_e7b4825b-660c-4a80-94bf-c7eabda52110 fair_value 0",
+      "0001193125-26-085372 C_c5b74cf1-be4e-4175-91f2-c50bc0da8e0c fair_value 0"
     ]
   }
 }

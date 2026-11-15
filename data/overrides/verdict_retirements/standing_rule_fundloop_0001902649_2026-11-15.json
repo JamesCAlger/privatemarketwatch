@@ -1,0 +1,135 @@
+{
+ "_note": "BlackRock Private Credit Fund (fund loop 2026-11-15, agent:fund-bkz-sonnet): retirements under the owner's standing rule D-252. FX01 RVQ_REV_a56d3b92dcd8 not retired until fold-back.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1902649-01",
+   "review_id": "RVQ_BLK_8dc079cd3dea",
+   "cik": "0001902649",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2025-12-31",
+   "reason": "The verdict says the Shackleton (Payworks) revolver and delayed draw carry spread 6.76 where the source spread is 4.50. 6.76 is the printed total coupon; both published rows carry basis_spread 4.5 and reference CORRA, each equal to its own printed cells.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001902649/retire_check.py (read-only): the printed line of a published row is the inline-XBRL table row carrying the row's own context, so comparative-period rows are never read. Passes on data/output/private_markets_holdings.parquet (file of 2026-11-13) and on sandbox bkzc; the five planted errors for these four verdicts fail on both (Shackleton spread 6.76, Opal 0.0, Polaris 4.01, Bad Boy issuer = industry header, a populated pct_of_net_assets); the two ABC currency plants fail on bkzc only, because production still publishes ABC as USD, so the FX01 verdict is not retired"
+    },
+    {
+     "source": "query",
+     "quote": "data/output/private_markets_holdings.parquet and sandbox bkzc 0001902649 2025-12-31 Shackleton Bidco Inc. (Payworks) (Canada), maturity 2032-11-05, revolver and delayed draw term loan: basis_spread 4.5, reference_rate_type CORRA"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "Shackleton Bidco Inc. (Payworks) (Canada) First Lien Revolver CORRA (Q) 0.75 % 4.50 % 6.76 % 11/5/2032 CAD$ - ( 37,370 ) ( 37,370 ) - C/D/E",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001902649/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "verdict_sha256": "bda51fa9fff74932007673c0c59004762d0c781e31bb93fbdb5b5c654a1c355c",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-bkz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1902649-02",
+   "review_id": "RVQ_BLK_b0a9dde005d3",
+   "cik": "0001902649",
+   "engine": "agentA",
+   "rule_name": "agentA_spread_vs_xbrl",
+   "report_date": "2026-03-31",
+   "reason": "The verdict says the Opella spread was extracted as 0.00 where the page prints 3.00 and the Polaris spread as 4.01 where it prints 4.26. The published rows carry 3.0 and 4.26, each equal to its printed cell. (The Onward cash-plus-PIK row of the same finding is a separate confirmed error, owner request BKZ-R2.)",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001902649/retire_check.py (read-only): the printed line of a published row is the inline-XBRL table row carrying the row's own context, so comparative-period rows are never read. Passes on data/output/private_markets_holdings.parquet (file of 2026-11-13) and on sandbox bkzc; the five planted errors for these four verdicts fail on both (Shackleton spread 6.76, Opal 0.0, Polaris 4.01, Bad Boy issuer = industry header, a populated pct_of_net_assets); the two ABC currency plants fail on bkzc only, because production still publishes ABC as USD, so the FX01 verdict is not retired"
+    },
+    {
+     "source": "query",
+     "quote": "data/output/private_markets_holdings.parquet and sandbox bkzc 0001902649 2026-03-31: Opal Bidco SAS (Opella) basis_spread 3.0; Polaris Newco, LLC basis_spread 4.26"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-211710",
+     "quote": "Opal Bidco SAS (Opella) (France) First Lien Term Loan SOFR(Q) - 3.00 % 6.70 % 4/23/2032 $ 6,487,400 6,511,231 6,491,455 0.25 % C",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-211710",
+     "quote": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 4.26 % 7.93 % 6/2/2028 $ 2,913,059 2,913,621 2,571,692 0.10 %",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001902649/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "verdict_sha256": "ad8086d282ccda439cca5848681a1bd0248af1113c6fe9d32915b172907a3bc3",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-bkz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1902649-03",
+   "review_id": "RVQ_REV_ff0dd72cd5a3",
+   "cik": "0001902649",
+   "engine": "row_validation",
+   "rule_name": "PP01",
+   "report_date": "2023-12-31",
+   "reason": "The verdict says the Bad Boy Mowers position identifier used the industry header Household Durables and omitted the issuer. The published row carries issuer Bad Boy Mowers JV Acquisition, LLC, equal to the first cell of its printed line, with fair value 7,209,657 as printed.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001902649/retire_check.py (read-only): the printed line of a published row is the inline-XBRL table row carrying the row's own context, so comparative-period rows are never read. Passes on data/output/private_markets_holdings.parquet (file of 2026-11-13) and on sandbox bkzc; the five planted errors for these four verdicts fail on both (Shackleton spread 6.76, Opal 0.0, Polaris 4.01, Bad Boy issuer = industry header, a populated pct_of_net_assets); the two ABC currency plants fail on bkzc only, because production still publishes ABC as USD, so the FX01 verdict is not retired"
+    },
+    {
+     "source": "query",
+     "quote": "data/output/private_markets_holdings.parquet and sandbox bkzc 0001902649 2023-12-31 Bad Boy Mowers JV Acquisition, LLC: issuer_name equals the printed first cell, fair_value 7209657.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-024153",
+     "quote": "Household Durables Bad Boy Mowers JV Acquisition, LLC First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 11.37 % 11/9/2029 $ 7,510,059 7,325,923 7,209,657 1.71 %",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001902649/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "verdict_sha256": "58b57429aeaa234866c0e4da4ae86f59b78d9a5c385bd53ef9c1230a1443027b",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-bkz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1902649-04",
+   "review_id": "RVQ_REV_fff9810ebdea",
+   "cik": "0001902649",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2025-12-31",
+   "reason": "The verdict says A07 saw a percent sum of 0.0 where the schedule gives a 100.00 percent anchor. That anchor is the percent of total cash and investments; the percent printed on all 336 position lines of the quarter equals fair value over total cash and investments (2,465,923,369), not net assets, so pct_of_net_assets is empty by design and the A07 check skips every quarter of this fund (D-002).",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001902649/retire_check.py (read-only): the printed line of a published row is the inline-XBRL table row carrying the row's own context, so comparative-period rows are never read. Passes on data/output/private_markets_holdings.parquet (file of 2026-11-13) and on sandbox bkzc; the five planted errors for these four verdicts fail on both (Shackleton spread 6.76, Opal 0.0, Polaris 4.01, Bad Boy issuer = industry header, a populated pct_of_net_assets); the two ABC currency plants fail on bkzc only, because production still publishes ABC as USD, so the FX01 verdict is not retired"
+    },
+    {
+     "source": "query",
+     "quote": "data/output/private_markets_holdings.parquet and sandbox bkzc 0001902649 2025-12-31: 0 rows with pct_of_net_assets; printed percent = fair value / 2,465,923,369 within 0.02 on 336 of 336 lines"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-085372",
+     "quote": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001902649/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "verdict_sha256": "0b465c1c620b8b2469e38792ee1e2768a8fe5e5fcfd3169dd528500c4324c231",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-bkz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

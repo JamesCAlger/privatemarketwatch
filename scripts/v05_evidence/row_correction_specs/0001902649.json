@@ -680,5 +680,435 @@
    "issuer_name": "Les Schwab Tire Centers (LS Group)"
   },
   "reason": "member reads 'Debt Investments Specialty Les Schwab ...' (industry 'Specialty Retail' cut short); the page prints the issuer as 'Les Schwab Tire Centers (LS Group)' (0000950170-24-122470, context C_184fdcd8-5327-4fc9-ab00-cf9bd1999580)"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Investments Diversified Financial Services White Cap Supply Holdings, LLC (Numerix) Instrument First Lien Term Loan Ref SOFR(M) Floor 0.50% Spread 3.75% Total Coupon 8.85%",
+  "fields": {
+   "issuer_name": "White Cap Supply Holdings, LLC"
+  },
+  "reason": "member appends '(Numerix)' (the previous line's sponsor tag); the page prints no suffix (published 'White Cap Supply Holdings, LLC (Numerix)'). Printed (0000950170-23-038004): 'White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 8.85 % 10/19/2027 $ 831,663 797,721 826,062' (context C_e35fc17f-b2f0-4949-ba91-5eda2246a7b9)"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Investments Diversified Financial Services White Cap Supply Holdings, LLC (Numerix) Instrument First Lien Term Loan Ref SOFR(M) Floor 0.50% Spread 3.75% Total Coupon 9.07%",
+  "fields": {
+   "issuer_name": "White Cap Supply Holdings, LLC"
+  },
+  "reason": "member appends '(Numerix)'; the page prints no suffix (published 'White Cap Supply Holdings, LLC (Numerix)'). Printed (0000950170-23-058175): 'White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 9.07 % 10/19/2027 $ 829,558 797,643 828,990' (context C_8f56fc19-ca99-40c8-88c2-0e2e15d6f76e)"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Diversified Financial Services White Cap Supply Holdings, LLC (Numerix) Instrument First Lien Term Loan Ref SOFR(M) Floor 0.50% Spread 3.75% Total Coupon 9.11% Maturity 10/19/2027",
+  "fields": {
+   "issuer_name": "White Cap Supply Holdings, LLC"
+  },
+  "reason": "member appends '(Numerix)'; the page prints no suffix (published 'White Cap Supply Holdings, LLC (Numerix)'). Printed (0000950170-24-024153): 'White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 %' (context C_e4a4830d-f5b9-41c5-8ae3-e73611b3f741)"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Investments Diversified Financial Services KKR Apple Bidco, LLC (Numerix) Instrument First Lien Term Loan Ref SOFR(M) Floor 0.50% Spread 2.75% Total Coupon 7.97%",
+  "fields": {
+   "issuer_name": "KKR Apple Bidco, LLC"
+  },
+  "reason": "member appends '(Numerix)'; the page prints no suffix (published 'KKR Apple Bidco, LLC (Numerix)'). Printed (0000950170-23-038004): 'KKR Apple Bidco, LLC First Lien Term Loan SOFR(M) 0.50 % 2.75 % 7.97 % 9/23/2028' (context C_c317843a-bb99-4c8d-a944-395fafcc56dc)"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Investments Internet Software & Services Bynder Bidco B.V. (Netherlands) Instrument First Lien Revolver A Ref SOFR(S) Floor 1.00% Spread 7.25% Total Coupon 12.05%",
+  "fields": {
+   "issuer_name": "Bynder Bidco, Inc. (Netherlands)"
+  },
+  "reason": "member says B.V. for the A tranche; the page prints Bynder Bidco, Inc. for the A tranches (B.V. for the B tranches) (published 'Bynder Bidco B.V. (Netherlands)'). Printed (0000950170-23-017976): 'Bynder Bidco, Inc. (Netherlands) First Lien Revolver A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ - ( 4,978 ) ( 1,382 ) - C/D/E' (context C_27a209c0-846b-4b69-9676-4ca1691c3261)"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Investments Internet Software & Services Bynder Bidco B.V. (Netherlands) Instrument First Lien Term Loan A Ref SOFR(S) Floor 1.00% Spread 7.25% Total Coupon 12.05%",
+  "fields": {
+   "issuer_name": "Bynder Bidco, Inc. (Netherlands)"
+  },
+  "reason": "member says B.V. for the A tranche; the page prints Bynder Bidco, Inc. for the A tranches (published 'Bynder Bidco B.V. (Netherlands)'). Printed (0000950170-23-017976): 'Bynder Bidco, Inc. (Netherlands) First Lien Term Loan A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ 582,226 565,292 565,167 0.23 %' (context C_a1cbd36f-8cae-42e9-ad05-0d3f2ad1a74f)"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Investments Internet Software and Services Bynder Bidco B.V. (Netherlands) Instrument First Lien Revolver A Ref SOFR(Q) Floor 1.00% Spread 7.25% Total Coupon 12.57% Maturity 1/26/2029",
+  "fields": {
+   "issuer_name": "Bynder Bidco, Inc. (Netherlands)"
+  },
+  "reason": "member says B.V. for the A tranche; the page prints Bynder Bidco, Inc. for the A tranches (published 'Bynder Bidco B.V. (Netherlands)'). Printed (0000950170-24-052326): 'Bynder Bidco, Inc. (Netherlands) First Lien Revolver A' (context C_d969a208-5687-4d85-b44e-fa99ac0cc6e6)"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Investments Internet Software and Services Bynder Bidco B.V. (Netherlands) Instrument First Lien Term Loan A Ref SOFR(Q) Floor 1.00% Spread 7.25% Total Coupon 12.57% Maturity 1/26/2029",
+  "fields": {
+   "issuer_name": "Bynder Bidco, Inc. (Netherlands)"
+  },
+  "reason": "member says B.V. for the A tranche; the page prints Bynder Bidco, Inc. for the A tranches (published 'Bynder Bidco B.V. (Netherlands)'). Printed (0000950170-24-052326): 'Bynder Bidco, Inc. (Netherlands) First Lien Term Loan A' (context C_33deee57-baa1-4ec1-9e66-80a80d5ab7a9)"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Insurance Integrity Marketing Acquisition, LLC First Lien Term Loan Ref SOFR(Q) Spread 3.36% Total Coupon 8.72% Maturity 2/13/2027",
+  "fields": {
+   "issuer_name": "NFP Corp."
+  },
+  "reason": "member names Integrity Marketing Acquisition, LLC; the values are the NFP Corp. line (fair value 989,247) (published 'Integrity Marketing Acquisition, LLC'). Printed (0000950170-24-024153): 'NFP Corp. First Lien Term Loan SOFR(M) - 3.36 % 8.72 % 2/13/2027 $ 983,024 951,550 989,247 0.23 %' (context C_00cf3784-daf2-4099-a932-970cec3a702f)"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Insurance Integrity Marketing Acquisition, LLC1 First Lien Delayed Draw Term Loan B Ref SOFR(Q) Floor 0.75% Spread 6.00% Total Coupon 11.39% Maturity 8/27/2026",
+  "fields": {
+   "issuer_name": "Integrity Marketing Acquisition, LLC"
+  },
+  "reason": "footnote digit '1' fused to the name in the member; the page prints no digit (published 'Integrity Marketing Acquisition, LLC1'). Printed (0000950170-24-024153): 'Integrity Marketing Acquisition, LLC First Lien Delayed Draw Term Loan' (context C_aa6b413f-71e3-42dc-97ae-6d315fc5ee3d)"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Construction & Engineering Vortex Companies, LLC1 Instrument First Lien Term Loan Ref SOFR(M) Floor 1.00% Spread 6.00% Total Coupon 11.36% Maturity 9/4/2029",
+  "fields": {
+   "issuer_name": "Vortex Companies, LLC"
+  },
+  "reason": "footnote digit '1' fused to the name in the member; the page prints no digit (published 'Vortex Companies, LLC1'). Printed (0000950170-24-024153): 'Vortex Companies, LLC First Lien Term Loan SOFR(M) 1.00 % 6.00 % 11.36 % 9/4/2029 $ 962,993 941,724 943,733 0.22 % E' (context C_79c9bbd8-2140-4bd2-8240-2e30f0a475ec)"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Investments Aerospace & Defense Peraton Corp.Peraton Corp. Instrument First Lien Term Loan Ref SOFR(M) Floor 0.75% Spread 3.75% Total Coupon 8.70% Maturity 2/1/2028",
+  "fields": {
+   "issuer_name": "Peraton Corp."
+  },
+  "reason": "member repeats the name ('Peraton Corp.Peraton Corp.'); the page prints it once (published 'Peraton Corp.Peraton Corp.'). Printed (0000950170-24-122470): 'Peraton Corp. First Lien Term Loan SOFR(M) 0.75 % 3.75 % 8.70 % 2/1/2028 $ 1,355,964 1,334,149 1,307,800 0.16 %' (context C_a9a04409-8cce-4ed5-b149-25c5321b8d68)"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Equity Securities IT Services New Insight Holdings, Inc. (Dyanata) Instrument Common Stock",
+  "fields": {
+   "issuer_name": "New Insight Holdings, Inc. (Dynata)"
+  },
+  "reason": "member misspells Dynata ('Dyanata'); the page prints Dynata (published 'New Insight Holdings, Inc. (Dyanata)'). Printed (0000950170-25-030170): 'New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 407,753 0.04 % E, I, J' (context C_1ae8a161-e216-4923-a2a1-15f188a6bf3f)"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Equity Securities IT Services New Insight Holdings, Inc. (Dyanata) Instrument Common Stock",
+  "fields": {
+   "issuer_name": "New Insight Holdings, Inc. (Dynata)"
+  },
+  "reason": "member misspells Dynata ('Dyanata'); the page prints Dynata (published 'New Insight Holdings, Inc. (Dyanata)'). Printed (0000950170-25-067060): 'New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 539,842 0.04 %' (context C_b58f4fda-5076-4a75-94ae-66d872c58bd5)"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Investments Textiles, Apparel and Luxury Goods WH Borrower, LLC (WHP Instrument First Lien Term Loan Ref SOFR(Q) Floor 0.50% Spread 4.75% Total Coupon 9.09% Maturity 02/20/2032",
+  "fields": {
+   "issuer_name": "WH Borrower, LLC (WHP)"
+  },
+  "reason": "member drops the closing bracket of '(WHP)'; the page prints it (published 'WH Borrower, LLC (WHP'). Printed (0000950170-25-106036): 'WH Borrower, LLC (WHP) First Lien Term Loan SOFR(Q) 0.50 % 4.75 % 9.09 % 2/20/2032 $ 26,782,542 26,655,242 26,824,323 1.51 %' (context C_8b86c7b1-4da3-43a7-b4df-7572893a7a87)"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Investments Entertainment Discovery Global Holdings Inc. Instrument First Lien Term Loan Ref SOFR(M) Spread 2.50% Total Coupon 6.14% Maturity 10/01/2031",
+  "fields": {
+   "issuer_name": "Creative Artists Agency, LLC."
+  },
+  "reason": "member names Discovery Global Holdings; the values (fair value 4,110,037, maturity 10/1/2031) are the Creative Artists Agency line (published 'Discovery Global Holdings Inc.'). Printed (0001193125-26-338073): 'Creative Artists Agency, LLC. First Lien Term Loan SOFR(M) - 2.50 % 6.14 % 10/1/2031 $ 4,105,849 4,107,457 4,110,037 0.16 %' (context C_44848e2a-eef1-42e7-b2da-63362976a8ce)"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Investments Air Freight and Logistics GB ALt Buyer Inc. Instrument First Lien Term Loan Ref SOFR(Q) Floor \u2014% Spread 4.25% Total Coupon 7.91% Maturity 4/22/2033",
+  "fields": {
+   "issuer_name": "GB AIT Buyer, Inc."
+  },
+  "reason": "member spells 'GB ALt Buyer Inc.'; the page prints 'GB AIT Buyer, Inc.' (published 'GB ALt Buyer Inc.'). Printed (0001193125-26-338073): 'GB AIT Buyer, Inc. First Lien Term Loan SOFR(Q) - 4.25 % 7.91 % 4/22/2033 $ 441,000 436,689 441,732 0.02 %' (context C_03d03270-5a22-42eb-bad9-be7568c651f7)"
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Investments Diversified Consumer Services Sothebys Instrument First Lien Term Loan Ref LIBOR(Q) Floor 0.50% Spread 4.50% Total Coupon 9.33%",
+  "fields": {
+   "issuer_name": "Sotheby's"
+  },
+  "reason": "member drops the apostrophe ('Sothebys'); the page prints Sotheby's (published 'Sothebys'). Printed (0000950170-23-017976): 'Sotheby's First Lien Term Loan LIBOR(Q) 0.50 % 4.50 % 9.33 % 1/15/2027 $ 914,938 899,471 912,367 0.37 %' (context C_11edc717-6c7c-455e-a9c1-d06d7cac20ac)"
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Investments Diversified Consumer Services Sothebys Instrument First Lien Term Loan Ref LIBOR(Q) Floor 0.50% Spread 4.50% Total Coupon 9.76%",
+  "fields": {
+   "issuer_name": "Sotheby's"
+  },
+  "reason": "member drops the apostrophe ('Sothebys'); the page prints Sotheby's (published 'Sothebys'). Printed (0000950170-23-038004): 'Sotheby's First Lien Term Loan LIBOR(Q) 0.50 % 4.50 % 9.76 %' (context C_9c7f83e6-b1f2-46f0-a080-6a911edf908f)"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Investments Diversified Consumer Services Sothebys Instrument First Lien Term Loan Ref SOFR(Q) Floor 0.50% Spread 4.76% Total Coupon 10.07%",
+  "fields": {
+   "issuer_name": "Sotheby's"
+  },
+  "reason": "member drops the apostrophe ('Sothebys'); the page prints Sotheby's (published 'Sothebys'). Printed (0000950170-23-058175): 'Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.07 %' (context C_e3bf017e-543e-4506-abd4-5a7d710b9a13)"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Investments Diversified Consumer Services Sothebys Instrument First Lien Term Loan Ref SOFR(Q) Floor 0.50% Spread 4.76% Total Coupon 10.08% Maturity 1/15/2027",
+  "fields": {
+   "issuer_name": "Sotheby's"
+  },
+  "reason": "member drops the apostrophe ('Sothebys'); the page prints Sotheby's (published 'Sothebys'). Printed (0000950170-24-052326): 'Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.08 %' (context C_9b1b55f0-f724-430f-ac34-4640e14e4cc5)"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Investments Diversified Consumer Services Sothebys Instrument First Lien Term Loan Ref SOFR(Q) Floor 0.50% Spread 4.76% Total Coupon 10.09% Maturity 1/15/2027",
+  "fields": {
+   "issuer_name": "Sotheby's"
+  },
+  "reason": "member drops the apostrophe ('Sothebys'); the page prints Sotheby's (published 'Sothebys'). Printed (0000950170-24-094751): 'Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.09 %' (context C_bcefd4bb-3acf-4439-804e-f809e513d3ad)"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Investments Automobiles ABC Technologies Inc. (TI Automotive) (Canada) Investment First Lien Term Loan Ref EURIBOR(M) Floor 0.75% Spread 5.88% Total Coupon 7.78% Maturity Date 8/22/2031",
+  "fields": {
+   "principal_amount_currency": "EUR",
+   "principal_amount_usd": "20274809.6",
+   "principal_fx_rate_to_usd": "1.1736",
+   "principal_fx_status": "reference_fx"
+  },
+  "reason": "par printed in EUR and tagged in the USD unit, so it was published as 17,275,741 USD (FX01). Page prints 'ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E' (0001193125-26-085372, context C_18373a11-01a3-4a89-a440-a31114492c2b). Dollar amount at 1.1736, the H.10 euro rate the build applies to other euro pars on 2025-12-31 (reference conversion, not a filed value)"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Investments Airlines American Airlines Group Inc Instrument First Lien Term Loan Ref SOFR(M) Floor \u2014% Spread 3.00% Total Coupon 6.67% Maturity 5/20/2033",
+  "fields": {
+   "issuer_name": "American Airlines Inc. (American Airlines Group Inc.)"
+  },
+  "reason": "member names the parent only ('Airlines American Airlines Group Inc'); the page prints the borrower and the parent in brackets (published 'American Airlines Group Inc'). Printed (0001193125-26-338073): 'American Airlines Inc. (American Airlines Group Inc.) First Lien Term Loan SOFR(M) - 3.00 % 6.67 % 5/20/2033 $ 431,000 426,726 426,421 0.02 % L' (context C_eb473ad5-6cf3-43d3-8599-00bb7f36479c)"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Insurance Peter C. Foy & Associates Insurance Services, LLC (PCF Insurance First Lien Delayed B Ref SOFR(M) Floor 0.75% Spread 6.11% Total Coupon 11.47% Maturity 7/19/2030",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan D - Maturity 7/19/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Delayed B - Maturity 7/19/2030'); the row's own printed line (context C_69e4b22c-0f7b-4b61-bae6-b0019fe81efe) reads: 'Peter C. Foy & Associates Insurance Services, LLC (PCF Insurance) First Lien Delayed Draw Term Loan D SOFR(M) 0.75 % 6.11 % 11.47 % 7/19/2030 $ \u2014 ( 31,367 ) 34,315 0.01 % D/E'",
+  "correction_context": "C_69e4b22c-0f7b-4b61-bae6-b0019fe81efe"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Investments Commercial Services & Supplies Modigent, LLC (fka Pueblo Mechanical and Controls, LLC) Instrument First Lien Delayed Ref PRIME Floor 0.75% Spread 5.25% Total Coupon 14.00% Maturity 8/23/2027",
+  "fields": {
+   "instrument_description": "First Lien Revolver - Maturity 8/23/2027"
+  },
+  "reason": "member text names another tranche ('First Lien Delayed - Maturity 8/23/2027'); the row's own printed line (context C_870005da-6995-4a56-b436-89bda508e759) reads: 'Modigent, LLC (fka Pueblo Mechanical and Controls, LLC) First Lien Revolver PRIME 0.75 % 5.25 % 14.00 % 8/23/2027 $ 493,721 472,669 479,216 0.10 % E'",
+  "correction_context": "C_870005da-6995-4a56-b436-89bda508e759"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Investments Construction and Engineering Brown & Settle, Inc. Instrument First Lien Term Loan Ref SOFR(M) Floor 1.00% Spread 6.50% Total Coupon 10.82% Maturity 5/16/2030",
+  "fields": {
+   "instrument_description": "First Lien Revolver - Maturity 5/16/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Term Loan - Maturity 5/16/2030'); the row's own printed line (context C_040a317d-0dc0-4ef4-85a9-3bd8cad69b51) reads: 'Brown & Settle, Inc. First Lien Revolver SOFR(M) 1.00 % 6.50 % 10.82 % 5/16/2030 $ 1,176,855 1,117,105 1,105,753 0.06 % E'",
+  "correction_context": "C_040a317d-0dc0-4ef4-85a9-3bd8cad69b51"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Professional Services Citrin Cooperman Advisors LLC Instrument First Lien Delayed Term Loan Ref SOFR(Q) Spread 3.00% Total Coupon 7.35% Maturity 3/6/2032",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 3/6/2032"
+  },
+  "reason": "member text names another tranche ('First Lien Delayed Term Loan - Maturity 3/6/2032'); the row's own printed line (context C_d3a35120-7474-4b49-a85c-812417fa4b39) reads: 'Citrin Cooperman Advisors LLC First Lien Delayed Draw Term Loan SOFR(Q) \u2014 3.00 % 7.35 % 3/6/2032 $ \u2014 ( 392 ) ( 713 ) \u2014 D'",
+  "correction_context": "C_d3a35120-7474-4b49-a85c-812417fa4b39"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Clever Devices Ltd. Instrument First Lien Term Loan Ref SOFR(M) Floor 1.00% Spread 6.00% Total Coupon 10.16% Maturity 6/12/2030 One",
+  "fields": {
+   "instrument_description": "First Lien Revolver - Maturity 6/12/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Term Loan - Maturity 6/12/2030 One'); the row's own printed line (context C_67d0e485-436d-4956-87a2-c22bb515d4fa) reads: 'Clever Devices Ltd. First Lien Revolver SOFR(M) 1.00 % 6.00 % 10.16 % 6/12/2030 $ 123,683 105,531 123,683 0.01 % E'",
+  "correction_context": "C_67d0e485-436d-4956-87a2-c22bb515d4fa"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Douglas Holdings, Inc (Docupace) Instrument First Lien Delayed Term Loan Ref SOFR(Q) Floor 1.00% Spread 6.13% Total Coupon 10.13% Maturity 08/27/2030 One",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan B - Maturity 8/27/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Delayed Term Loan - Maturity 08/27/2030 One'); the row's own printed line (context C_b03e97e4-4723-4866-8e20-324a5b75f29f) reads: 'Douglas Holdings, Inc (Docupace) First Lien Delayed Draw Term Loan B SOFR(Q) 1.00 % 6.13 % 10.13 % 8/27/2030 $ 223,063 210,299 197,039 0.01 % E'",
+  "correction_context": "C_b03e97e4-4723-4866-8e20-324a5b75f29f"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Douglas Holdings, Inc (Docupace) Instrument First Lien PIK Delayed Draw Term Loan Ref SOFR(Q) Floor 1.00% Spread 6.13% Total Coupon 10.42% Maturity 08/27/2030",
+  "fields": {
+   "instrument_description": "First Lien Revolver - Maturity 8/27/2030"
+  },
+  "reason": "member text names another tranche ('First Lien PIK Delayed Draw Term Loan - Maturity 08/27/2030'); the row's own printed line (context C_5f6f777c-23e5-4fa7-b794-4207e0e1a471) reads: 'Douglas Holdings, Inc (Docupace) First Lien Revolver SOFR(Q) 1.00 % 6.13 % 10.13 % 8/27/2030 $ \u2014 ( 9,117 ) ( 10,410 ) \u2014 D/E'",
+  "correction_context": "C_5f6f777c-23e5-4fa7-b794-4207e0e1a471"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Douglas Holdings, Inc (Docupace) Instrument First Lien Term Loan Ref SOFR(Q) Floor 1.00% Spread 6.13% Floor Total Coupon 10.13% Maturity 08/27/2030 Two",
+  "fields": {
+   "instrument_description": "First Lien PIK Delayed Draw Term Loan - Maturity 8/27/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Term Loan - Maturity 08/27/2030 Two'); the row's own printed line (context C_524513a9-65fc-4074-951b-c3bc81ea38a0) reads: 'Douglas Holdings, Inc (Docupace) First Lien PIK Delayed Draw Term Loan SOFR(Q) 1.00 % 6.13 % 10.13 % 8/27/2030 $ 527,272 527,272 512,490 0.02 % E'",
+  "correction_context": "C_524513a9-65fc-4074-951b-c3bc81ea38a0"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Dragos, Inc. Instrument First Lien Delayed Draw Term Loan Ref SOFR(Q) Floor 1.00% Spread 5.25% Total Coupon 9.42% Maturity 06/30/2030",
+  "fields": {
+   "instrument_description": "First Lien Term Loan - Maturity 6/30/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Delayed Draw Term Loan - Maturity 06/30/2030'); the row's own printed line (context C_af95da58-3a39-4b43-b37d-80295bfe28f9) reads: 'Dragos, Inc. First Lien Term Loan SOFR(Q) 1.00 % 5.25 % 9.42 % 6/30/2030 $ 29,886,213 29,602,573 29,587,351 1.39 % E'",
+  "correction_context": "C_af95da58-3a39-4b43-b37d-80295bfe28f9"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Dragos, Inc. Instrument First Lien Term Loan Ref SOFR(S) Floor 1.00% Spread 5.25% Total Coupon 9.42% Maturity 06/30/2030",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 6/30/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Term Loan - Maturity 06/30/2030'); the row's own printed line (context C_2dd0ac8a-b41a-43e2-96ca-a927935a82f8) reads: 'Dragos, Inc. First Lien Delayed Draw Term Loan SOFR(S) 1.00 % 5.25 % 9.42 % 6/30/2030 $ \u2014 ( 189,094 ) ( 199,241 ) ( 0.01 )% D/E'",
+  "correction_context": "C_2dd0ac8a-b41a-43e2-96ca-a927935a82f8"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Software Dragos, Inc. Instrument First Lien Term Loan Ref SOFR(S) Floor 1.00% Spread 5.25% Total Coupon 9.42% Maturity 06/30/2030 One",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 6/30/2030"
+  },
+  "reason": "member text names another tranche ('First Lien Term Loan - Maturity 06/30/2030 One'); the row's own printed line (context C_cfd05dc3-e6d3-4703-9aa3-5fae1ff61549) reads: 'Dragos, Inc. First Lien Delayed Draw Term Loan SOFR(S) 1.00 % 5.25 % 9.42 % 6/30/2030 $ \u2014 \u2014 ( 73,152 ) \u2014 D/E'",
+  "correction_context": "C_cfd05dc3-e6d3-4703-9aa3-5fae1ff61549"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Professional Services HSI Halo Acquisitions, Inc. Instrument First Lien Delayed Term Loan Ref SOFR(M) Floor 0.75% Spread 5.00% Total Coupon 9.16% Maturity 6/28/2031",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 6/28/2031"
+  },
+  "reason": "member text names another tranche ('First Lien Delayed Term Loan - Maturity 6/28/2031'); the row's own printed line (context C_ad35247f-ab00-47c9-9238-40e262e27560) reads: 'HSI Halo Acquisitions, Inc. First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 5.00 % 9.16 % 6/28/2031 $ 550,434 550,434 559,252 0.03 % E'",
+  "correction_context": "C_ad35247f-ab00-47c9-9238-40e262e27560"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Investments Healthcare Providers and Services Raven Acquisition Holdings LLC (R1 RCM) Instrument First Lien Term Loan Ref SOFR(M) Spread 3.00% Total Coupon 6.77% Maturity 11/19/2031",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 11/19/2031"
+  },
+  "reason": "member text names another tranche ('First Lien Term Loan - Maturity 11/19/2031'); the row's own printed line (context C_4a53245b-bf5f-4c97-b5f6-4ce2a174fd3c) reads: 'Raven Acquisition Holdings LLC (R1 RCM) First Lien Delayed Draw Term Loan SOFR(M) \u2014 3.00 % 6.72 % 11/19/2031 $ \u2014 235 602 \u2014'",
+  "correction_context": "C_4a53245b-bf5f-4c97-b5f6-4ce2a174fd3c"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Investments Professional Services Corinthia Bidco Limited (Walkers Professional Services) (Cayman Islands) Instrument First Lien Revolver Ref SOFR(Q) Floor 0.50% Spread 4.00% Total Coupon 7.66% Maturity 6/2/2033",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 6/2/2033"
+  },
+  "reason": "member text names another tranche ('First Lien Revolver - Maturity 6/2/2033'); the row's own printed line (context C_15b23bea-6ac7-4687-ac02-beecaadb465a) reads: 'Corinthia Bidco Limited (Walkers Professional Services) (Cayman Islands) First Lien Delayed Draw Term Loan SOFR(Q) 0.50 % 4.00 % 7.66 % 6/2/2033 $ \u2014 ( 93,428 ) ( 94,500 ) \u2014 C/D/E'",
+  "correction_context": "C_15b23bea-6ac7-4687-ac02-beecaadb465a"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Investments Media Streamland Media Midco LLC Instrument Last Out Term Loan Ref SOFR(Q) Floor Spread 1.00% Cash + 4.50% PIK Total Coupon 9.76% Maturity 3/31/2029",
+  "fields": {
+   "instrument_description": "First Out Term Loan - Maturity 3/31/2029"
+  },
+  "reason": "member text names another tranche ('Last Out Term Loan - Maturity 3/31/2029'); the row's own printed line (context C_8b8ceef0-f961-4825-83e8-b700e10065ff) reads: 'Streamland Media Midco LLC First Out Term Loan SOFR(Q) 1.00 % 1.00 % Cash + 4.50 % PIK 9.76 % 3/31/2029 $ 1,429,934 $ 1,429,934 $ 1,429,934 0.07 % E'",
+  "correction_context": "C_8b8ceef0-f961-4825-83e8-b700e10065ff"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Insurance AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan B Ref SOFR(Q) Floor 0.75% Spread 5.75% Total Coupon 11.14% Maturity 8/31/2029 One",
+  "fields": {
+   "principal_amount": "-1",
+   "cost": "-230566"
+  },
+  "reason": "sign dropped by the filer's tags: the row's own printed line (context C_27c86a28-2afb-42f0-9270-5616874fcc2c) prints the cell in brackets: 'AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E'",
+  "correction_context": "C_27c86a28-2afb-42f0-9270-5616874fcc2c"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Investments Diversified Financial Services Beekeeper Buyer Inc. (Archway) Instrument First Lien Term Loan One Ref SOFR(Q) Floor 0.75% Spread 5.25% Total Coupon 9.55% Maturity 6/30/2031",
+  "fields": {
+   "cost": "-14516"
+  },
+  "reason": "sign dropped by the filer's tags: the row's own printed line (context C_28a22389-f7ec-411f-ba01-df55d8171eae) prints the cell in brackets: 'Beekeeper Buyer Inc. (Archway) First Lien Term Loan SOFR(Q) 0.75 % 5.25 % 9.55 % 6/30/2031 $ \u2014 ( 14,516 ) ( 14,523 ) \u2014 D/E'",
+  "correction_context": "C_28a22389-f7ec-411f-ba01-df55d8171eae"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Investments Insurance EBS Parent Holdings Inc. (TDC Acquisition Sub Inc.) (The Difference Card) Instrument First Lien Revolver Ref SOFR(Q) Floor 0.75% Spread 5.00% Total Coupon 9.34% Maturity 7/1/2032",
+  "fields": {
+   "cost": "-12138"
+  },
+  "reason": "sign dropped by the filer's tags: the row's own printed line (context C_701564a2-ac6e-44bc-9763-bbf7dcb7d93b) prints the cell in brackets: 'EBS Parent Holdings Inc. (TDC Acquisition Sub Inc.) (The Difference Card) First Lien Revolver SOFR(Q) 0.75 % 5.00 % 9.34 % 7/1/2032 $ \u2014 $ ( 12,138 ) $ ( 12,138 ) \u2014 D/E'",
+  "correction_context": "C_701564a2-ac6e-44bc-9763-bbf7dcb7d93b"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Investments Insurance Integrity Marketing Acquisition, LLC Instrument First Lien Revolver Ref SOFR(Q) Floor 1.00% Spread 6.50% Total Coupon 11.08%",
+  "fields": {
+   "cost": "-180342"
+  },
+  "reason": "undrawn revolver published in bkzd from a declared fair value of 0 (cost-only tags); the cost is tagged positive where the page prints it in brackets (context C_d89a7a75-4210-4752-9944-a36622ff1586): 'Integrity Marketing Acquisition, LLC First Lien Revolver SOFR(Q) 1.00 % 6.50 % 11.08 % 8/31/2030 $ \u2014 ( 180,342 ) \u2014 \u2014 D/E'",
+  "correction_context": "C_d89a7a75-4210-4752-9944-a36622ff1586"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Investments Software Zendesk Inc. Instrument First Lien Revolver Ref SOFR(Q) Floor 0.75% Spread 6.50% Total Coupon 12.15%",
+  "fields": {
+   "cost": "-4309"
+  },
+  "reason": "undrawn revolver published in bkzd from a declared fair value of 0 (cost-only tags); the cost is tagged positive where the page prints it in brackets (context C_7f33541e-31ea-4e4e-b69c-d4ae8c2d643e): 'Zendesk Inc. First Lien Revolver SOFR(Q) 0.75 % 6.50 % 12.15 % 11/22/2028 $ \u2014 ( 4,309 ) \u2014 \u2014 D/E'",
+  "correction_context": "C_7f33541e-31ea-4e4e-b69c-d4ae8c2d643e"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Investments Software Flexera Software, LLC Instrument First LienTerm Loan Ref SOFR(M) Floor 0.75% Spread 3.75% Total Coupon 9.18%",
+  "fields": {
+   "instrument_description": "First Lien Term Loan - Maturity 3/3/2028"
+  },
+  "reason": "member text misspells the instrument ('First LienTerm Loan'); the row's own printed line (context C_fe422762-4dc5-4ada-b0cb-3a27487d97db) reads: 'Flexera Software, LLC First Lien Term Loan SOFR(M) 0.75 % 3.75 % 9.18 % 3/3/2028 $ 735,556 717,799 731,154 0.21 %'",
+  "correction_context": "C_fe422762-4dc5-4ada-b0cb-3a27487d97db"
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Investments Software Flexera Software, LLC Instrument First LienTerm Loan Ref SOFR(M) Floor 0.75% Spread 3.75% Total Coupon 9.22% Maturity 3/3/2028",
+  "fields": {
+   "instrument_description": "First Lien Term Loan - Maturity 3/3/2028"
+  },
+  "reason": "member text misspells the instrument ('First LienTerm Loan - Maturity 3/3/2028'); the row's own printed line (context C_28b17179-7e0f-4f54-b147-adefbf09c68a) reads: 'Flexera Software, LLC First Lien Term Loan SOFR(M) 0.75 % 3.75 % 9.22 % 3/3/2028 $ 733,651 716,948 734,168 0.17 %'",
+  "correction_context": "C_28b17179-7e0f-4f54-b147-adefbf09c68a"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Investments Flexera Software, LLC Instrument First Lein Term Loan Ref SOFR(M) Floor 0.75% Spread 3.75% Total Coupon 9.19% Maturity 3/3/2028",
+  "fields": {
+   "instrument_description": "First Lien Term Loan - Maturity 3/3/2028"
+  },
+  "reason": "member text misspells the instrument ('First Lein Term Loan - Maturity 3/3/2028'); the row's own printed line (context C_87331149-680c-4c25-b684-28189790ebac) reads: 'Flexera Software, LLC First Lien Term Loan SOFR(M) 0.75 % 3.75 % 9.19 % 3/3/2028 $ 731,745 716,042 734,237 0.15 %'",
+  "correction_context": "C_87331149-680c-4c25-b684-28189790ebac"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Investments Diversified Financial Services Wealth Enhancement Group, LLC Instrument First Lien Delayed Draw Term Loan Loan Ref SOFR(Q) Floor 1.00% Spread 5.00% Total Coupon 9.50% Maturity 10/4/2028 One",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 10/4/2028"
+  },
+  "reason": "member text misspells the instrument ('First Lien Delayed Draw Term Loan Loan - Maturity 10/4/2028 One'); the row's own printed line (context C_4eb12c50-9c16-4617-b9b5-e177da8fb1b0) reads: 'Wealth Enhancement Group, LLC First Lien Delayed Draw Term Loan SOFR(Q) 1.00 % 5.00 % 9.50 % 10/4/2028 $ 1,094,115 1,094,115 1,085,712 0.10 % E'",
+  "correction_context": "C_4eb12c50-9c16-4617-b9b5-e177da8fb1b0"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Investments Diversified Financial Services Wealth Enhancement Group, LLC Instrument First Lien Delayed Draw Term Loan Loan Ref SOFR(Q) Floor 1.00% Spread 5.00% Total Coupon 9.50% Maturity 10/4/2028",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 10/4/2028"
+  },
+  "reason": "member text misspells the instrument ('First Lien Delayed Draw Term Loan Loan - Maturity 10/4/2028'); the row's own printed line (context C_21f6a338-393e-4562-ae29-d1d6aa760c49) reads: 'Wealth Enhancement Group, LLC First Lien Delayed Draw Term Loan SOFR(Q) 1.00 % 5.00 % 9.50 % 10/4/2028 $ 14,104,849 14,104,849 13,996,524 1.29 % E'",
+  "correction_context": "C_21f6a338-393e-4562-ae29-d1d6aa760c49"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Investments Technology Hardware, Storage and Peripherals SumUp Holdings Luxembourg S.A.R.L. (Luxembourg) Instrument First Lien Delayed Draw Term Loa Ref SOFR(Q) Floor 1.00% Spread 6.50% Total Coupon 10.83% Maturity 04/25/2031",
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan - Maturity 4/25/2031"
+  },
+  "reason": "member text misspells the instrument ('First Lien Delayed Draw Term Loa - Maturity 04/25/2031'); the row's own printed line (context C_c53bc5ab-bd9a-49d4-98d4-39c690bc6da4) reads: 'SumUp Holdings Luxembourg S.A.R.L. (Luxembourg) First Lien Delayed Draw Term Loan SOFR(Q) 1.00 % 6.50 % 10.83 % 4/25/2031 $ 12,800,000 12,702,285 12,928,000 0.73 % C/E'",
+  "correction_context": "C_c53bc5ab-bd9a-49d4-98d4-39c690bc6da4"
  }
 ]

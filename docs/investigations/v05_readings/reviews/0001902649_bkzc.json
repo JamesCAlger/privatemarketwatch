@@ -1,0 +1,450 @@
+{
+ "reviewer_id": "agent:review-bkzc-opus",
+ "report_digest": "125b8243a8c314f98891e3d569e504da08d597af5783deb6c8d5525f3be39c3a",
+ "label": "bkzc",
+ "cik": "0001902649",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_f29b2724f768",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 6 flagged rows of 2023-12-31 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. ",
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Fertitta Entertainment, LLC First Lien Term Loan SOFR(M) 0.50 % 4.00 % 9.36 % 1/27/2029 $ 1,171,387 1,133,099 1,173,402 0.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8efe85148428",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 3 flagged rows of 2024-03-31 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. ",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052326",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 11.05 % 1/18/2030 $ 7,324,992 7,183,207 7,179,225 1.50 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8fa2d5c11e21",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 2 flagged rows of 2024-06-30 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. ",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 11.08 % 1/18/2030 $ 7,306,679 7,171,430 7,160,545 1.37 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ade3c75055cd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 4 flagged rows of 2024-09-30 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. ",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122470",
+     "text": "Community Merger Sub Debt LLC (CINC Systems) First Lien Term Loan SOFR(Q) 0.75 % 5.75 % 10.35 % 1/18/2030 $ 7,324,992 7,195,735 7,173,475 0.90 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7bbf1a280794",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 40 flagged rows of 2025-03-31 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. Sample read in full: Peter C. Foy DDTL 11/1/2028, Palmdale 10/2/2029, Clever Devices 6/12/2030, GTY 7/9/2029, all printed = published.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067060",
+     "text": "Intercept Bidco, Inc. First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 10.32 % 6/3/2030 $ 11,229,177 11,035,549 11,038,281 0.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fab4d4ce5498",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 9 flagged rows of 2025-12-31 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. Includes Cherry Bekaert DDTL (member 6/30/2028, printed and published 6/28/2030) and Applied Systems (member 9/19/2026, printed and published 2/24/2031).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.22 % 6/28/2030 $ 4,241,111 4,165,781 4,165,534 0.17 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3b6c1fce5a69",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (scratch/fund_runs/0001902649/review/agenta_review.py bkzc): for every agentA_maturity_vs_xbrl flag of the fund I read the inline-XBRL <tr> that carries the flagged row's own src_context_id in the cached filing and compared its printed maturity with the published maturity_date: equal on 67 of 67 flags across 8 quarters; the agentA value comes from the member text (e.g. Fertitta member 1/17/2029, printed and published 1/27/2029; CINC member 1/8/2030, printed and published 1/18/2030). This is a check misfire (BKZ-R1 family), not a data error; it clears only by check repair, not by disposition. Coverage: the 2 flagged rows of 2026-06-30 in output/shadow/agent_a_flags.csv equal the report's affected_rows exactly (accession/context keys); every one read. ",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_597f6474c10b",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Coverage is right (one flag, context C_28fe0f1f, Cherry Bekaert DDTL 'Maturity 6/30/2030 Two' in the member), but the conclusion is not. The published maturity 2030-06-28 equals the printed 6/28/2030 on the row's own line, so this is the same member-text misfire as the other seven maturity findings (false_alarm, BKZ-R1), not a source_ambiguity: the page is unambiguous. The report's only evidence quote is the Polaris Newco line, which is not the flagged row. The entry is marked carried from a ledger state (needs_human) and data/decisions has no decision or earlier independent review for this finding, so the carried basis fails. Re-state as false_alarm with the Cherry Bekaert line (note the filer also prints a Term Loan 6/30/2030 line with identical par/cost/value) and route to BKZ-R1 or the owner.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Cherry Bekaert Advisory, LLC First Lien Delayed Draw Term Loan SOFR(M) 0.75 % 4.50 % 8.17 % 6/28/2030 $ 7,848,809 7,777,794 7,709,555 0.29 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fb8bfa87b60f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (agenta_review.py bkzc): published basis_spread equals the printed spread cell of the row's own <tr> on all 22 agentA_spread_vs_xbrl flags; the agentA value is the stale member-text spread or the total coupon. Coverage: 4 flagged rows in 2023-12-31 equal affected_rows exactly; rows read: Sotheby's 4.76, Oranje 7.50, Parexel 3.36, AI Aqua 3.75.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Parexel International, Inc. First Lien Term Loan SOFR(M) 0.50 % 3.36 % 8.72 % 11/15/2028 $ 164,920 157,502 166,095 0.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_125068a12763",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (agenta_review.py bkzc): published basis_spread equals the printed spread cell of the row's own <tr> on all 22 agentA_spread_vs_xbrl flags; the agentA value is the stale member-text spread or the total coupon. The single flagged row (C_82bca74c) is the Higginbotham undrawn delayed draw: printed spread 5.00 %, published 5.0; agentA read 5.6 from the member. Note the report quotes the CINC line here, which is a maturity-flag row, not this finding's row; the conclusion stands on the correct row.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-052326",
+     "text": "Higginbotham Insurance Agency, Inc. First Lien Delayed Draw Term Loan SOFR(M) 1.00 % 5.00 % 12.93 % 11/25/2026 $ - ( 12,925 ) ( 12,925 ) - D/E"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d11f64a62828",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (agenta_review.py bkzc): published basis_spread equals the printed spread cell of the row's own <tr> on all 22 agentA_spread_vs_xbrl flags; the agentA value is the stale member-text spread or the total coupon. Coverage: 3 flagged rows in 2024-06-30 equal affected_rows exactly; rows read: GI Consilio 4.50, Bluefin revolver 7.25, UKG 3.25.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "GI Consilio Parent, LLC First Lien Term Loan SOFR(M) 0.50 % 4.50 % 9.96 % 5/14/2029 $ 10,945,000 10,763,376 10,945,000 2.09 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9f5304470497",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (agenta_review.py bkzc): published basis_spread equals the printed spread cell of the row's own <tr> on all 22 agentA_spread_vs_xbrl flags; the agentA value is the stale member-text spread or the total coupon. Coverage: 1 flagged rows in 2024-09-30 equal affected_rows exactly; rows read: VS Buyer 3.25.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-122470",
+     "text": "VS Buyer, LLC First Lien Term Loan SOFR(M) - 3.25 % 8.35 % 4/12/2031 $ 1,496,250 1,503,500 1,500,612 0.19 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8dc079cd3dea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (agenta_review.py bkzc): published basis_spread equals the printed spread cell of the row's own <tr> on all 22 agentA_spread_vs_xbrl flags; the agentA value is the stale member-text spread or the total coupon. 6 flags = 6 affected rows: Wealth Enhancement revolver 4.50, MRO delayed draw 4.50, Polaris 3.75, FSK Pallet 6.75, Shackleton revolver and delayed draw 4.50 (agentA 6.76 = printed total coupon). Verdict retirement VR-FL-1902649-01 re-run: retire_check.py passes on bkzc and on data/output (Shackleton 4.5 = printed 4.50), and the planted 6.76 fails on both.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Shackleton Bidco Inc. (Payworks) (Canada) First Lien Revolver CORRA (Q) 0.75 % 4.50 % 6.76 % 11/5/2032 CAD$ - ( 37,370 ) ( 37,370 ) - C/D/E"
+    },
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Wealth Enhancement Group, LLC First Lien Revolver SOFR(Q) 1.00 % 4.50 % 8.17 % 10/4/2028 $ - ( 612 ) ( 5,948 ) - D/E"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9c8a1a6a3bc0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent check (agenta_review.py bkzc): published basis_spread equals the printed spread cell of the row's own <tr> on all 22 agentA_spread_vs_xbrl flags; the agentA value is the stale member-text spread or the total coupon. Coverage: 4 flagged rows in 2026-06-30 equal affected_rows exactly; rows read: Tecta 2.50, Ardonagh 3.00, Bella Holding 3.25, USI 2.25 (USI prints a 0.00 % total coupon; published interest_rate 0.0 as printed). The report's quote for this finding is the Anthracite line, which is not one of the four flagged rows.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Tecta America Corp. First Lien Term Loan SOFR(M) 1.00 % 2.50 % 6.14 % 2/18/2032 $ 1,865,663 1,870,875 1,869,497 0.07 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b0a9dde005d3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "3 flags = 3 affected rows. Opella published 3.0 = printed 3.00 and Polaris 4.26 = printed 4.26 (the verdict's cited rows are at filed values; VR-FL-1902649-02 re-run passes on bkzc and data/output, plants 0.0 and 4.01 fail). Onward delayed draw prints '2.38 % Cash + 2.68 % PIK' and publishes basis_spread 2.38, pik_rate 2.68: under D-031 (spread = total margin) that is a confirmed error, correctly parked under BKZ-R2. I confirmed no wrapper key reaches it: pipeline/bdc_xbrl_html_bridge.printed_margin reads cells between the named Ref column and the next non-Cash/PIK/Spread header, which for this filer is Floor, and it rejects two figures in one cell, so printed_margin_reading cannot fire. The finding stays outstanding after the retirement because Onward is still flagged.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+    },
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Opal Bidco SAS (Opella) (France) First Lien Term Loan SOFR(Q) - 3.00 % 6.70 % 4/23/2032 $ 6,487,400 6,511,231 6,491,455 0.25 % C"
+    },
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 4.26 % 7.93 % 6/2/2028 $ 2,913,059 2,913,621 2,571,692 0.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_06197d3ddf6b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One flag = one affected row (Nephron term loan B-1 2024-06-30). Page prints 'Fixed' and '20.0 % PIK'; published coupon_type Fixed, pik_rate 20.0, no reference rate. The rule misfires on a printed fixed coupon; no data change.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094751",
+     "text": "Nephron Pharmaceuticals Corp. et al First Lien Term Loan B-1 Fixed - 20.0 % PIK 20.00 % 9/11/2026 $ 503,766 503,766 557,165 0.11 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7b41348cccee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One flag = one affected row (Anthracite term loan 2026-06-30). Published reference SOFR, spread 4.5, coupon 8.18 equal the printed Ref, spread and coupon cells of the row's own line. Rule misfire.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "Anthracite Buyer, Inc. (Coalfire) First Lien Term Loan SOFR(Q) 0.75 % 4.50 % 8.18 % 12/3/2032 $ 17,151,957 17,073,240 16,808,918 0.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7a79fc2cbff8",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": false,
+   "rationale": "Coverage keys are issuer names ('0001193125-26-085372/Skydio' etc.), not row keys; the cited issuers carry 11 published rows at 2025-12-31 (Skydio 3, Gympass 2, Madison Logic 2, Streamland 4), and the report does not say which rows the verdict covers. The conclusion false_alarm contradicts its own next_action: the reference rate is now SOFR on all of them, but Skydio term loan (2.75 Cash + 2.75 PIK), Gympass x2 (3.25 + 3.25) and Madison Logic x2 (4.73 + 2.37) publish the cash leg as basis_spread, which under D-031 is the BKZ-R2 confirmed error. Streamland (whole margin PIK) is published Floating, spread 6.76 = printed, which is right. Re-state as confirmed_error for the spread leg (parked under BKZ-R2) with row-level coverage.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Skydio, Inc First Lien Term Loan SOFR(M) 2.50 % 2.75 % Cash + 2.75 % PIK 9.17 % 12/4/2029 $ 7,711,220 7,652,362 7,641,819 0.31 %"
+    },
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Gympass US, LLC First Lien Term Loan SOFR(M) 1.00 % 3.25 % Cash + 3.25 % PIK 10.34 % 8/29/2029 $ 2,849,124 2,841,564 2,877,615 0.12 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a56d3b92dcd8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ABC Technologies 2025-12-31 prints EUR 17,275,741. bkzc publishes currency EUR, principal_amount_usd 20,274,809.6, fx 1.1736, reference_fx; data/reference/fx_fred/DEXUSEU.csv 2025-12-31 = 1.1736 and 17,275,741 x 1.1736 = 20,274,809.6. holdings_field_diff bkzc vs bpxh shows exactly these 4 columns on 1 row. retire_check.py: FX passes on bkzc, fails on data/output (still USD 17,275,741), so leaving the FX01 verdict unretired until fold-back is correct; I agree.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ff0dd72cd5a3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Bad Boy Mowers 2023-12-31: published issuer 'Bad Boy Mowers JV Acquisition, LLC' and fair value 7,209,657 equal the printed line (the 'Household Durables' text is the industry heading in the preceding row). VR-FL-1902649-03 re-run passes on bkzc and data/output; the plant fails, though only because the planted issuer no longer matches the script's issuer filter (weak but effective plant). applied_by names agent:fund-bkz-sonnet under D-252, same convention as other fund-loop retirements.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Household Durables Bad Boy Mowers JV Acquisition, LLC First Lien Term Loan SOFR(Q) 1.00 % 6.00 % 11.37 % 11/9/2029 $ 7,510,059 7,325,923 7,209,657 1.71 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fff9810ebdea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level key 0001902649/2025-12-31/pct_of_net_assets. The last printed column is percent of total cash and investments (ABC 19,604,164 / 2,465,923,369 = 0.80 %); retire_check.py finds 336 of 336 lines on that denominator and no row with pct_of_net_assets on bkzc or data/output; the populated-pct plant fails. VR-FL-1902649-04 stands.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "ABC Technologies Inc. (TI Automotive) (Canada) First Lien Term Loan EURIBOR(M) 0.75 % 5.88 % 7.78 % 8/22/2031 EUR 17,275,741 19,439,337 19,604,164 0.80 % C/E"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_54df2cfc9887",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": false,
+   "rationale": "Carried and not re-read, and no earlier independent review exists for this fund (reviews/ had none; the bpxh proposal PD-A01-1902649-1 is unaccepted and its 2023-03-31 statement covers Entertainment and Media, not Software). The 5.3M gap traces in one step: the printed Software subtotal 44,441,492 = 32,352,208 (rows with extracted_industry Software) + 12,089,284 from rows printed after the page break under 'Debt Investments - Continued' (Proofpoint, RealPage, Sophia, Sovos, Tessian, TIBCO, UKG, Zendesk x3), which bkzc publishes with a blank extracted_industry. Blank extracted_industry affects 14 rows at 2023-03-31, 18 at 2023-06-30, 24 at 2023-09-30 and 6 at 2023-12-31. This is a confirmed data error (industry not carried across the page break), not a source ambiguity.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017976",
+     "text": "Proofpoint, Inc. First Lien Term Loan LIBOR(M) 0.50 % 3.25 % 8.09 % 8/31/2028 $ 1,630,856 $ 1,581,017 $ 1,597,782 0.64 %"
+    },
+    {
+     "accession": "0000950170-23-017976",
+     "text": "Zendesk, Inc. First Lien Revolver SOFR(Q) 0.75 % 6.50 % 11.38 % 11/22/2028 $ - ( 4,730 ) ( 5,031 ) - D/E 44,315,441 44,441,492 17.80 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "value-unit-tag-follows-loan-currency",
+   "outcome": "supported",
+   "rationale": "Printed values of the As1 lines are dollars (39,473,862 fair value), tagged EUR; foreign_unit_values is a fund-local fix and strict fair-value totals tie at 2026-06-30 in bkzc (0 dollars). The proposed detector is concrete and would catch recurrence; the existing totals check already caught this one.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "As1 Sports Bidco Ltd (United Kingdom) First Lien Term Loan EURIBOR(Q ) 0.50 % 5.50 % 7.67 % 4/9/2033 EUR 34,875,000 40,362,799 39,473,862 1.50 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "outcome": "rejected",
+   "rationale": "The fix is incomplete and the claim 'cost gaps to the printed totals close' does not hold. Strict cost totals at 500 dollars (review/strict_totals.py bkzc) fail in 5 quarters. Sign errors remain: AmeriLife DDTL 2023-12-31 (printed par (1), cost (230,566); published +1 and +230,566), EBS revolver 2025-06-30 (printed (12,138), published +12,138), Beekeeper 2025-06-30 (printed (14,516), published +14,516). A second mechanism is missed entirely: undrawn lines tagged with cost and no fair-value fact are not published (2023-09-30 Accordion, Opco, Integrity, Zendesk revolvers = 190,451, the exact gap; 2024-03-31 LJ Avalon, Oranje, Avalara, Alcami = 17,472; 2025-12-31 Griffon x2 and Stonebridge = 99,557 plus the parked MRO 41,687). A strict cost-total tie per quarter is the detector that would have caught all of these.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "AmeriLife Holdings, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 5.75 % 11.14 % 8/31/2029 $ ( 1 ) ( 230,566 ) ( 119,352 ) ( 0.03 )% D/E"
+    },
+    {
+     "accession": "0000950170-25-106036",
+     "text": "EBS Parent Holdings Inc. (TDC Acquisition Sub Inc.) (The Difference Card) First Lien Revolver SOFR(Q) 0.75 % 5.00 % 9.34 % 7/1/2032 $ - $ ( 12,138 ) $ ( 12,138 ) - D/E"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "outcome": "supported",
+   "rationale": "Sotheby's 2023-12-31 line is printed under Diversified Consumer Services; name fixed, industry left. Detector (heading vs member industry) is concrete. The same mechanism also drives the 14 unflagged instrument-type errors I found (member names a different tranche than the printed line, e.g. Dragos 2025-09-30), which a parallel instrument check would catch.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.16 % 1/15/2027 $ 907,971 895,639 899,649 0.21 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-margin-loan-read-as-fixed",
+   "outcome": "supported",
+   "rationale": "Streamland lines print SOFR with the whole margin PIK; bkzc publishes them Floating with spread = printed PIK margin (2025-12-31: spread 6.76 = printed 6.76 % PIK). 'Floating benchmark printed but coupon_type Fixed' is a concrete, low-false-positive detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Streamland Media Midco LLC First Lien Revolver SOFR(Q) - 5.76 % PIK 9.46 % 3/31/2029 $ 210,824 210,824 210,824 0.01 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-members-dropped-by-staging-dedup",
+   "outcome": "supported",
+   "rationale": "Confirmed independently: the MRO revolver line (context C_ebb719a3, cost (41,687), value (18,136)) is not published at 2025-12-31; it explains 18,136 of the fair-value gap and 41,687 of the cost gap. Detector proposal is concrete. Not the only drop mechanism: cost-only undrawn lines are also unpublished (see the undrawn-cost observation).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085372",
+     "text": "MRO Parent Corporation First Lien Revolver SOFR(M) 0.75 % 4.50 % 8.22 % 6/9/2032 $ - ( 41,687 ) ( 18,136 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "outcome": "rejected",
+   "rationale": "Mechanism and detector are right, scope is not. My scan of every published row against its own printed line (review/scans.py bkzc) finds 220 rows whose spread cell reads 'A % Cash + B % PIK' and whose basis_spread equals A, across all 14 quarters (8 to 25 per quarter), not 217; the observation lists one quarter, fair_value_m 0.0 (these rows carry material value, e.g. Skydio 7.6M, Gympass 2.9M, GTY, Zendesk) and cause 'fund' although the fix needs shared code. Correct the count, quarters, value and cause.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+    },
+    {
+     "accession": "0001193125-26-085372",
+     "text": "Skydio, Inc First Lien Term Loan SOFR(M) 2.50 % 2.75 % Cash + 2.75 % PIK 9.17 % 12/4/2029 $ 7,711,220 7,652,362 7,641,819 0.31 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "issuer_name differs on 59 rows bkzc vs bpxh = 36 from the hierarchy regex + 23 row corrections (American Airlines touched by both). I read every printed line behind the 23 corrections: all match. The observation says 22 corrected; the CSV has 23. Existing detector issuer_name_printed is the right reference.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "American Airlines Inc. (American Airlines Group Inc.) First Lien Term Loan SOFR(M) - 3.00 % 6.67 % 5/20/2033 $ 431,000 426,726 426,421 0.02 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "usi-printed-zero-coupon",
+   "outcome": "rejected",
+   "rationale": "The substance is true (USI Inc. 2026-06-30 prints 0.00 % with spread 2.25 %, published interest_rate 0.0), but the observation's quote is the Anthracite line, not USI. Replace the quote; the detector itself is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338073",
+     "text": "USI Inc. First Lien Term Loan SOFR(Q) - 2.25 % 0.00 % 11/29/2030 $ 1,865,506 1,864,565 1,860,376 0.07 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "BKZ-R1",
+   "outcome": "rejected",
+   "rationale": "The diagnosis is right: 67/67 maturity and 22/22 spread flags have published = printed on the row's own line, and agentA reads member text. The proposed repair is unsafe as written: 'do not flag where published equals the printed cell' would clear the Onward row, whose published 2.38 equals the printed cash figure while D-031 requires the total 5.06, i.e. it would clear a finding carrying a real-error verdict. Amend: compare against the printed total margin where the cell reads 'A % Cash + B % PIK', and add a test that Onward-type rows still flag, plus the measurement on accepted sandboxes the contract requires.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-024153",
+     "text": "Fertitta Entertainment, LLC First Lien Term Loan SOFR(M) 0.50 % 4.00 % 9.36 % 1/27/2029 $ 1,171,387 1,133,099 1,173,402 0.28 %"
+    },
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+    }
+   ]
+  },
+  {
+   "request_id": "BKZ-R2",
+   "outcome": "supported",
+   "rationale": "No existing wrapper key does this: printed_margin() reads one figure, 'A% (B% PIK)', two figures in two cells, or a bps form, and only in cells between the Ref column and the next non-Cash/PIK/Spread header (Floor, for this filer). So a shared-code change is needed and it reaches every fund that sets printed_margin_reading; owner decision is the right route. Count is 220 rows on my scan, not 217.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-211710",
+     "text": "Onward Acquireco Inc (Onestream Inc) First Lien Delayed Draw Term Loan SOFR(M) - 2.38 % Cash + 2.68 % PIK 8.71 % 3/30/2033 $ - $ ( 20,679 ) $ ( 41,391 ) - D/E"
+    }
+   ]
+  }
+ ],
+ "unflagged_errors": [
+  "Instrument type/description from member text that names another tranche (14 rows): Dragos 2025-09-30 (29.6M term loan published DDTL, two undrawn DDTLs published Term Loan), Douglas Holdings 2025-09-30 x3, Brown & Settle revolver 2025-06-30 (1.1M published Term Loan), Clever Devices revolver 2025-09-30, Raven DDTL 2025-12-31, Corinthia DDTL 2026-06-30 published Revolver; 'Delayed Term Loan' typed Term Loan (Citrin, HSI Halo 2025-09-30); Peter C. Foy 2023-12-31 and Modigent 2024-03-31 type blank.",
+  "Cost sign: AmeriLife DDTL 2023-12-31 (par and cost), EBS revolver and Beekeeper 2025-06-30.",
+  "Undrawn lines tagged with cost only are not published: 4 at 2023-09-30 (190,451), 4 at 2024-03-31 (17,472), 3 at 2025-12-31 (99,557) besides MRO.",
+  "Blank extracted_industry on rows printed after a page break: 62 rows, 2023-03-31 to 2023-12-31 (explains A01 2023-03-31).",
+  "Cash-plus-PIK cash-leg spread: 220 rows (report says 217).",
+  "declared_changes over-declared: position_id 60 declared, 57 changed; corrected_fields 30 declared, 28 changed (gate passes, not exact)."
+ ],
+ "scans_clean": "Printed reference name vs published reference_rate_type: no mismatch (2 rows print 'SOFRQ)', published SOFR). Printed lien vs lien_position: none. Footnote markers published as rates: no published rate absent from the printed % cells. Par: only AmeriLife (1). Strict fair-value totals tie in 13 of 14 quarters; 2025-12-31 +18,136 is the parked MRO revolver.",
+ "not_done": "20-row random page sample not done by investigator or reviewer. A clean scan is not proof the data is correct."
+}

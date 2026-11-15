@@ -5950,3 +5950,12 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Retired under D-252: pik_le_interest_rate 2024-03-31 (published = printed), C103 2025-06-30 (cited row at filed values).
 - Parked with request NCZ-R1 (shared extractor change, routed to the owner as acceptance_change): 2,836 loan rows print a lien or tranche but publish no instrument text and 612 delayed-draw/revolver rows have no instrument_type, 2023-03-31..2025-09-30; needs an opt-in wrapper key that reads the printed tranche cell.
 - A clean result is not data correct.
+
+### D-290 Fund loop 2026-11-15: BlackRock Private Credit Fund (0001902649), sandbox bkze
+
+- Filtered packet: 28 findings (14 supported_fix issuer_name_printed; 14 unreviewed: agentA spread 6, maturity 5, A07, FX01, PP01); none closed at HEAD. Sonnet fund agent `agent:fund-bkz-sonnet`, Opus reviewer `agent:review-bkzc-opus` (full on bkzc, change-only on bkze; investigation COMPLETE), Sonnet readers (bkzc 0/20, bkze 0/20). Builds bkza..bkze; fair value and cost tie at 500 dollars 13/14 (2025-12-31 off by the parked MRO revolver, twin context dropped by staging dedup).
+- Fixed: industry labels leaked into names (fund-local hierarchy_issuer_re, 37 identifiers) and 23 printed names; CoreLogic "(fka" cut; ABC Technologies EUR par published as USD (EUR at DEXUSEU 1.1736; FX01 not retired until production carries it); unflagged: 62 rows in 2023 with no industry after a page-break "Continued" label (existing key industry_from_identifier_re), 15 instrument types from another tranche's member text (e.g. Dragos 29.6M term loan as delayed draw), 6 instrument typos, cost signs (AmeriLife, EBS, Beekeeper, two revolvers), 11 undrawn cost-only lines declared.
+- Retired under D-252: Shackleton, Opella/Polaris spread, PP01, A07.
+- agentA maturity 67/67 and spread 22/22 published = printed except the cash+PIK legs: BKZ-R1 check_repair_request (compare total A+B margin; Onward-type rows must still flag). Owner request BKZ-R2: 220 rows in 14 quarters print "A % Cash + B % PIK" in one cell and publish the cash leg only (D-031 spread = cash + PIK); needs a shared margin reader change.
+- New at rebuild: C110 and fmt_principal_amount 2023-12-31 (AmeriLife par -1 as printed): as_filed proposals under the accepted reason negative-par-on-undrawn-line-as-printed, which has no registered check (owner: accept the quarter or register the check).
+- A clean result is not data correct.
