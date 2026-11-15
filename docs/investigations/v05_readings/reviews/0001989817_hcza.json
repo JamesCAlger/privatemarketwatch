@@ -1,0 +1,492 @@
+{
+ "reviewer_id": "agent:review-hcza-opus",
+ "report_digest": "bd06cfde2a69246cb4be08724ade8130635f3a2560ab8b72398011b216e96b5a",
+ "sandbox": "hcza",
+ "cik": "0001989817",
+ "ledger_note": "hcza findings_ledger.csv (16:12) predated the retirement store (16:23); regenerated with 'python scripts/fund_ledger_trial.py --label hcza --from ledger' before the digest. After regeneration: 59 findings, 1 outstanding (F27 2024-06-30, open, needs_check_repair). A07 x4, E07, income_identity: verdict_retired. C107 x2 and X02 2026-03-31: dispositioned_as_filed through the already accepted DS-FUNDLOOP-C107-1989817 / DS-FUNDLOOP-X02-1989817 (fundloop_accepted_by_check.json, D-073) once their real-error verdicts were retired. Pre-regeneration copy: scratch/fund_runs/0001989817/review/findings_ledger_hcza_pre.csv.",
+ "retirement_rerun": "python scratch/fund_runs/0001989817/retire_check.py <parquet> [--plant] on scratch/fund_sandbox/hcza/output and data/output: all 9 PASS on both; with --plant all 9 FAIL on both (no plant escaped). All 9 entries carry applied_by 'agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)' and rerun 'python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant'. Weaknesses noted, none failing: the A07 and E07/income checks hardcode filed figures and the A07 2024 evidence quotes are cut at 70 characters ('... $ 509,065 12').",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_9f37182a6178",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Values check out: income_yield_pct 14.7 = printed ratio, TII 19,712 = printed. The mechanism is wrong. (1) The like-for-like basis the request asks for already exists (D-253, 2026-11-10: TII x4 / average investments). It still fails here: 19,712 x 4 / 503,227 = 15.67 pct against holdings WAC 11.86 (+3.81pp; no 2024-03-31 investments to average). (2) 'Levered fund' is not the cause. Asset coverage is 1,203.5 pct, so borrowings are minimal. The 124 pct investments-to-net-assets ratio comes from payables, not debt. (3) The filing gives the actual driver: launch-quarter income includes income on assets held under the Warehousing Transactions with the Financing Providers (warehouse interest expense 7,195 in the same quarter). The next action should be an owner question (acceptance change), not a verification_bug repair. See request review.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "For the six months ended June 30, 2024, total investment income was $19.7 million driven by our deployment of capital and income earned on the investments funded by the Financing Providers under the Warehousing Transactions."
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Ratio of net investment income to average net assets (5) 14.70 % Portfolio turnover rate 2.48 % Supplemental Data: Net assets, end of period $ 404,976 Asset coverage ratio 1,203.5 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "outcome": "supported",
+   "rationale": "Text identical to HEAD; supported in the rfhcg review. Re-checked with my own name scan on hcza and production (printed first cell vs issuer_name, all 2,159 rows): the renamed rows now match. Only remaining differences are legal-form suffixes (Mood Media Borrower, White Cap Buyer), which are listed under unflagged findings. existing_detector reference stands.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "outcome": "supported",
+   "rationale": "Unchanged; the name scan on hcza finds no row carrying another company's name. existing_detector is appropriate.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799"
+    }
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Unchanged. The scan finds no published name ending in class text. The proposed detector (name ending 'Class X'/'Subordinated Note' with blank instrument) is narrow and low on false alarms.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Unchanged. The rate scan finds no published pik/interest/spread outside the printed percents of the row's line. The context-join extension of pik_printed is the right fix for the repeated-identifier gap.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "Unchanged. 2025-12-31 equity read: A-2 warrants 11,911 units published 11,911, ONE preferred 1,000. Detector proposal is specific.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "The ONE Group Hospitality, Inc. (21) - A-2 Warrants 11,911 61 21"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Unchanged since the rfhcg review. A cross-quarter 1,000x jump at unchanged cost is a precise signal.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "The ONE Group Hospitality, Inc. - Warrants (4) 7 - - The ONE Group Hospitality, Inc. - Warrants (4) 12 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "combined-par-units-column-semantic-ambiguity",
+   "outcome": "supported",
+   "rationale": "Unchanged; 2025-12-31 read: AP Himalaya prints 20,006 in Par Amount/Units with cost 20,087. Ambiguity is real and correctly left for the owner.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "AP Himalaya Co-Invest, L.P. (4)(21) - LP Interest 20,006 20,087 21,745"
+    }
+   ]
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Unchanged; New Era 2025-09-30 c-423 published LOAN with par 4,314,000 (but lien blank: see unflagged findings). Detector (equity row with printed rate) is sound.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000085",
+     "text": "New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "The section scan on hcza finds no Preferred/Other Equity row published as LOAN, so the fixes hold. The proposed detector is too narrow: it is one direction only. My scan found the reverse case, unflagged: NG Energy Fund 1 LLC is printed under First Lien Debt with SF + 7.50 % and published FUND/PRIVATE_CREDIT_FUND at 2025-12-31, 2026-03-31 and 2026-06-30. Build it as printed section heading vs asset_category in both directions.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Re-verified: my currency-symbol scan (printed symbol or code after maturity vs principal_amount_currency, decoded page) matches on 2,010 of 2,010 loan rows in hcza. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "Unchanged and still parked (Equinox c-195). I did not re-trace the parked row. The detector would need the context join described.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Equinox Holdings, Inc. (4)(7) 16.00 % PIK 6/30/2027 1,421 1,393 1,393"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "Unchanged; supported in the rfhcg review. The heading-vs-industry detector is sound.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+    }
+   ]
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "outcome": "supported",
+   "rationale": "Unchanged; hcza has no data change vs rfhcg (0 of 100 columns differ), so the D-232 counts carry.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-differs-from-filers-own-later-heading",
+   "outcome": "supported",
+   "rationale": "Unchanged; the industry-level comparison avoids sub-industry false alarms. Not re-measured by me.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ]
+  },
+  {
+   "observation_key": "quarterly-income-from-first-annual-period-divided-evenly",
+   "outcome": "supported",
+   "rationale": "Consistent with my income check: 2024-Q4 TII 22,872 / NII 18,523 published, and 2025-Q4 equals the year less nine months to the dollar.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000007",
+     "text": "Total expenses $ 391,674 Reimbursable expenses (Note 3) ( 391,674 ) Net expenses $ - Net increase (decrease) in net assets resulting from operations $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Constellation note rows are published with the printed name at every quarter. They still carry no lien although printed under Unsecured Debt (listed under unflagged findings, FV 0).",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "page-rules-skip-rows-with-repeated-identifier",
+   "outcome": "supported",
+   "rationale": "Corroborated: most lien blanks I found sit on repeated-identifier or hand-corrected rows (Equinox, ICP, IDF 8, Corza/Constellation). So did the missing IDF 8 Topco Series B-2 line. A context-keyed join plus a printed-line census would catch them.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+    }
+   ]
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "Unchanged; matcher behaviour, not re-measured. Detector is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Equinox Holdings, Inc. (4) 16.00 % 6/30/2027 $ 1,313 $ 1,279 $ 1,286"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-published-as-representative-sub-industry",
+   "outcome": "supported",
+   "rationale": "Unchanged; schema gap correctly left. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "1.18 % Software Alegeus Technologies Holdings Corp (4)(10)(24) SF + 6.50 % 10.34 % 11/5/2029 34,475 33,813 34,580"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "hcz-c107-bracketed-cost-undrawn-line",
+   "outcome": "rejected",
+   "rationale": "Facts hold: 9+9 rows publish the printed bracketed cost. Two problems. (1) The must-fail test misses the known real-error class. pipeline/column_validation.py says C107 real errors are 'source dash extracted as negative', and this fund's own retired verdict was exactly that (American Academy '160 - -' stored as -3,000). The repair must include a test that a printed dash published as a negative cost still fails, next to the positive-to-negative test. (2) C107 is a monitor ('negative cost can be legitimate but should be monitored'). Narrowing it to 'differs from the printed line' changes what it compares, so the owner should see it as an acceptance change; the code comment also forbids row-local cuts without new evidence. Not needed for clearance: the accepted DS-FUNDLOOP-C107-1989817 already closes both findings.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -"
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "WorkWave Intermediate II, LLC (4)(6)(9) 6/29/2027 10,847 ( 156 ) ( 62 )"
+    }
+   ]
+  },
+  {
+   "request_id": "hcz-x02-undrawn-line-no-rate-printed",
+   "outcome": "rejected",
+   "rationale": "The 41 rows are correctly read. The AVSC must-fail test (rate printed and dropped) is right but not enough. The investigator's own observation equity-section-rows-published-as-loans says X02 caught the LC8 class error (a Preferred Equity row published as a loan, no printed rate). It also warns that a no-rate-printed exemption would clear such a row. The repair needs a second must-fail test: a row printed under an equity heading (or with no debt line) and published as a LOAN with no rate still fails. Otherwise move the class signal to the proposed section-heading check first. Without that, the repair weakens detection. The accepted DS-FUNDLOOP-X02-1989817 already closes the finding.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-035294",
+     "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"
+    },
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
+    }
+   ]
+  },
+  {
+   "request_id": "hcz-f27-income-over-net-assets-levered-fund",
+   "outcome": "rejected",
+   "rationale": "Not a verification_bug. 'Compare on one base' was already done by the owner under D-253 (TII x4 / average investments), and the quarter fails that basis too (15.67 pct vs WAC 11.86). 'Stay silent when investments exceed net assets' would silence F27 for almost every BDC. That changes what the check accepts, so it is an acceptance change for the owner. The stated cause is also wrong: asset coverage is 1,203.5 pct, and the filing attributes launch-quarter income to Warehousing Transactions. Re-file as acceptance_change with the warehousing evidence, e.g. skip a fund's first investing quarter when no prior investments exist to average, or route it to the owner. The must-fail test 'wrongly scaled printed ratio still fails' does not test the proposed change.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "For the six months ended June 30, 2024, total investment income was $19.7 million driven by our deployment of capital and income earned on the investments funded by the Financing Providers under the Warehousing Transactions."
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Ratio of net investment income to average net assets (5) 14.70 % Portfolio turnover rate 2.48 % Supplemental Data: Net assets, end of period $ 404,976 Asset coverage ratio 1,203.5 %"
+    }
+   ]
+  }
+ ],
+ "proposal_withdrawal_check": "Confirmed: the working-tree data/overrides/finding_dispositions_proposed/fund_0001989817.json no longer holds PD-F27-1989817-1, PD-C107-1989817-1 or PD-X02-1989817-1 (git diff: 167 deletions). PD-PP02-1989817-1 and PD-maturity_not_past-1989817-1 remain. Uncommitted.",
+ "unflagged_published_errors": [
+  {
+   "what": "NG Energy Fund 1 LLC published FUND / PRIVATE_CREDIT_FUND with no lien, though printed under First Lien Debt as a SOFR loan",
+   "rows": "2025-12-31 c-239, 2026-03-31 c-236, 2026-06-30 c-255 (par 7,060,000; FV 7.0M each)",
+   "fix": "asset_category LOAN, index_classification DIRECT_LENDING, lien First Lien",
+   "evidence": {
+    "accession": "0001628280-26-020820",
+    "text": "NG Energy Fund 1 LLC (4)(11)(24) SF + 7.50 % 11.19 % 3/22/2028 7,060 6,919 7,025"
+   }
+  },
+  {
+   "what": "IDF 8 Topco, LLC Series B-2 Units line printed and not published (one context for two printed lines); cost total short by 230,000 in both quarters (strict 500-dollar test fails on cost; fair value ties because the line is valued at nil)",
+   "rows": "2025-12-31, 2026-03-31 (230,248 units, cost 230, FV -)",
+   "fix": "add the B-2 row, or flag it as a printed line with no own context",
+   "evidence": {
+    "accession": "0001628280-26-020820",
+    "text": "IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 - 460 - - %"
+   }
+  },
+  {
+   "what": "Mediaworks reference rate: printed BB (= BKBM in that filing's legend), published SOFR",
+   "rows": "2025-12-31 c-275 (NZD par 3,223,000; FV 1.84M)",
+   "fix": "reference_rate_type BKBM",
+   "evidence": {
+    "accession": "0001628280-26-020820",
+    "text": "Mediaworks Holdings Limited (4)(5)(9)(30) BB + 6.00 % 8.54 % 10/17/2028 NZD 3,223 1,836 1,841"
+   }
+  },
+  {
+   "what": "HB AcquisitionCo reference rate: printed B, which the legend of these filings defines as BBSW ('Bank Bill Swap Rate (\"BBSW\" or \"B\")'); published BBSY (the legend changes to BBSY only from the 2025-06-30 filing)",
+   "rows": "2024-12-31 c-183, c-184; 2025-03-31 c-239, c-240 (FV about 2.3M)",
+   "fix": "reference_rate_type BBSW",
+   "evidence": {
+    "accession": "0001989817-25-000023",
+    "text": "HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.97 % 8/7/2029 A$ 3,789 2,494 2,249"
+   }
+  },
+  {
+   "what": "Lien blank on loans printed under a lien heading",
+   "rows": "Freedom Funding Center 2025-12-31 c-391 (Unsecured, FV 28.2M); Corza Medical 2025-12-31 c-393 (Unsecured, 19.95M); Equinox 2024-12-31 c-181 (First) and c-195 (Second); International Construction Products 2025-03-31 c-171 (First), c-253 (Second), 2025-06-30 c-217 (First), c-314 (Second); New Era 2025-09-30 c-423 (First); Constellation note c-377, c-389, c-371, c-382 (Unsecured, FV 0)",
+   "fix": "lien_position from the printed section heading",
+   "evidence": {
+    "accession": "0001628280-26-020820",
+    "text": "Freedom Funding Center LLC (4)(7) 12.00 % 12.00 % 9/30/2032 27,876 27,876 28,161 27,876 28,161 2.26 % Health Care Equipment & Supplies Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950 19,164 19,950 1.60 % Total Unsecured Debt"
+   }
+  },
+  {
+   "what": "Minor: legal-form suffix dropped from issuer name",
+   "rows": "Mood Media Borrower (9 rows 2024-09-30 to 2025-03-31), White Cap Buyer (2024-09-30 c-119, 2025-03-31 c-190); printed with ', LLC'",
+   "fix": "optional; cosmetic",
+   "evidence": {
+    "accession": "0001989817-24-000032",
+    "text": "Mood Media Borrower, LLC (4)(10) SF+ 6.75 % 12.23 % 12/31/2025 20,095 20,050 20,095"
+   }
+  }
+ ],
+ "scans_clean": "Scans with no published error found, all 2,159 rows of hcza and production (identical results): printed par, cost and fair value vs published (loans; the 45 symbol-currency lines checked by eye); cost sign on undrawn lines (every bracketed printed cost published negative, every dash published 0); footnote markers or unprinted figures as rates (no published interest_rate, spread or pik_rate outside the row's printed percents); currency (2,010 of 2,010); fair value strict totals (9 of 9 quarters tie to 0 dollars). Not testable: instrument type (delayed draw / term / revolver). instrument_type is blank on every row and the schedule prints no instrument column, so nothing is published that could be wrong. Scripts: scratch/fund_runs/0001989817/review/scans.py, symbol_cur.py, strict_totals.py, heading_before.py, cost_gap.py.",
+ "reviewer_slip": "One bare 'python -' with an empty heredoc was sent by mistake while patching a scan script; it was stopped with TaskStop, and a process check showed no leftover python process of mine.",
+ "closed_finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_731401ab263c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-quarter key 0001989817|2024-06-30|pct_of_net_assets_sum. Page read: position lines end at fair value with no percent (American Academy line below); percent printed only on subtotal/total lines. retire_check pct_check: 95 published contexts, 37 percent facts, none on a published context, 0 published pct values; plant fails. Oracle A07 now skips ('no pct_of_net_assets reported'). Retirement VR-FL-1989817-01 meets the D-252 bar.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Total Investment Portfolio and Cash Equivalents $ 507,365 $ 509,065 125.70 %"
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ffafe123de07",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Same mechanism at 2024-09-30: 120 published contexts, 50 percent facts all on subtotal/total contexts, 0 published pct values; plant fails. Position lines print no percent (American Academy line below). VR-FL-1989817-02 meets the bar.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Total Investment Portfolio and Cash Equivalents $ 712,272 $ 716,303 127.65 %"
+    },
+    {
+     "accession": "0001989817-24-000055",
+     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7047e9f49957",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2025-12-31: header prints a Percentage of Net Assets column but the Lasko position line ends at fair value; 327 published contexts, 157 percent facts, none on a published context. Plant fails. VR-FL-1989817-03 meets the bar.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Lasko Operation Holdings, LLC (4)(10)(19)(24) SF + 6.50 % 10.59 % 6/4/2030 $ 1,768 $ 1,701 $ 1,768"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Total Investment Portfolio $ 2,138,204 $ 2,177,821 174.51 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b0d02abceed3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2026-03-31: position line without percent, subtotal with percent directly after it; 323 published contexts, 195 percent facts, none on a published context. Plant fails. VR-FL-1989817-04 meets the bar.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-035294",
+     "text": "Lasko Operation Holdings, LLC (4)(10)(18)(23) SF + 6.50 % 10.30 % 6/4/2030 $ 1,768 $ 1,705 $ 1,768 Total Household Durables 1,705 1,768 0.13 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fc121eedb33a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Key 0001989817|2025-12-31|position_count. The verdict (written 2026-07-25) cites only the Total Investment Portfolio line; its 488 is the pre-repair E07 source count. check_E07 docstring: counting every wrapper leaf (prior-period comparatives, second dimension paths, rollups) 'made the rule fail in every fund-quarter (repaired 2026-10-06, decision D-001)'. 327 current + 164 prior-year positions (E07 2024-12-31 source=164) = 491, consistent with a both-columns count, not proven. Not reproducing 488 exactly does not weaken the retirement: the D-252 bar is that every cited row is at filed values, and the cited total ties to the dollar (published 2,177,821,000 vs filed 2,177,821 thousand), every one of the 330 filing position contexts is published or is one of 3 affiliated roll-forward lines of published companies, and E07 today reads source=327 vs output=327 on hcza and production. Plant (3 rows dropped) fails. VR-FL-1989817-05 meets the bar.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Total Investment Portfolio $ 2,138,204 $ 2,177,821 174.51 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_797b1b24c9ae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Published Q4-2025 (fund_financials.csv, hcza and production): TII 52,139,000, net expenses 26,782,000, NII before excise 25,357,000. Read both filings: 167,461-115,322=52,139; 66,501-39,719=26,782; 100,960-75,603=25,357. NII = TII - net expenses exactly. Plant (+4,205,000) fails. VR-FL-1989817-06 meets the bar.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Year Ended December 31, 2025 2024 Total investment income $ 167,461 $ 61,475 Net expenses 66,501 13,370 Net investment income before excise tax 100,960 48,105"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "Total investment income $ 45,187 $ 18,891 $ 115,322 $ 38,605 Net expenses 23,685 1,455 39,719 9,021 Net investment income before excise tax 21,502 17,436 75,603 29,584"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_76f22d14da84",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2024-06-30 flagged population on hcza row_validation_issues = 9 rows = affected_rows (0 missing, 0 extra). Each read on its own printed <tr>: bracketed cost published equal (e.g. WorkWave cost -156,000 fv -62,000; CC WDW -58,000/-113,000; MBS Services -1,000/0 from '110 ( 1 ) -'). Verdict row American Academy now cost 0 fv 0 as printed; VR-FL-1989817-07 meets the bar. Closure is through the accepted as_filed DS-FUNDLOOP-C107-1989817, not through the check repair request (which I reject separately).",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "WorkWave Intermediate II, LLC (4)(6)(9) 6/29/2027 10,847 ( 156 ) ( 62 )"
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "MBS Services Holdings, LLC (4)(6)(10) 2/26/2026 110 ( 1 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c72b2b8f1437",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2024-09-30: 9 flagged = 9 affected. All 9 published at the printed bracketed cost (e.g. NTH Degree -68,000/-68,000, Palmetto -65,000/-65,000). American Academy cost 0, fv -3,000 as printed; VR-FL-1989817-08 meets the bar.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 )"
+    },
+    {
+     "accession": "0001989817-24-000055",
+     "text": "NTH Degree Purchaser, Inc (4)(6)(10) 9/10/2030 3,422 ( 68 ) ( 68 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5ff52445ac17",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-03-31: 41 flagged = 41 affected. Each read: no rate or spread printed (undrawn lines, plus the Constellation unsecured note, which is not an undrawn line as the report says, but also prints no rate). AVSC revolver now 8.67 / 5.00 / SOFR as printed; VR-FL-1989817-09 meets the bar. Note: AVSC par 962 is the commitment (unfunded 789 in the commitments table, 962-789=173 drawn); published as printed.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-035294",
+     "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"
+    },
+    {
+     "accession": "0001628280-26-035294",
+     "text": "Femur Buyer Inc (4)(6)(10) 10/23/2030 340 - ( 7 )"
+    }
+   ]
+  }
+ ],
+ "closed_note": "After the ledger was regenerated, these 9 findings are closed (verdict_retired, or dispositioned_as_filed through accepted DS entries). They were reviewed in full and moved here so finding_reviews matches the outstanding set exactly. The report still carries their investigations, which the gate now counts as orphans: the investigator has to remove them or carry them as closed."
+}

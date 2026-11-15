@@ -1,0 +1,284 @@
+{
+ "_note": "HPS Corporate Capital Solutions Fund (fund loop 2026-11-15, agent:fund-hcz-sonnet): retirements under the owner's standing rule D-252.",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1989817-01",
+   "review_id": "RVQ_REV_731401ab263c",
+   "verdict_sha256": "2393495f9e09275f075a89d0eb09d263e876fcd39924ea0bb564decdeb2a4f94",
+   "cik": "0001989817",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2024-06-30",
+   "reason": "Standing rule D-252: The verdict reads the zero published percent-of-net-assets sum as an extraction gap against the printed Total percent. The filer prints and tags a percent only on industry-subtotal and total lines; no published position's own context carries a percent fact and no position line prints one, so every position's percent is blank on the page and is published blank.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): published contexts 95, percent facts in filing 37 (all on subtotal/total contexts), on published contexts 0, published pct values 0"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001989817-24-000032",
+     "quote": "Total Investment Portfolio and Cash Equivalents $ 507,365 $ 509,065 12",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-02",
+   "review_id": "RVQ_REV_ffafe123de07",
+   "verdict_sha256": "716e0a2f57fbac44b581b671325e3746d4ea8c96bce0200a0957902f38e9243a",
+   "cik": "0001989817",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2024-09-30",
+   "reason": "Standing rule D-252: The verdict reads the zero published percent-of-net-assets sum as an extraction gap against the printed Total percent. The filer prints and tags a percent only on industry-subtotal and total lines; no published position's own context carries a percent fact and no position line prints one, so every position's percent is blank on the page and is published blank.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): published contexts 120, percent facts in filing 50 (all on subtotal/total contexts), on published contexts 0, published pct values 0"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001989817-24-000055",
+     "quote": "Total Investment Portfolio and Cash Equivalents $ 712,272 $ 716,303 12",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-03",
+   "review_id": "RVQ_REV_7047e9f49957",
+   "verdict_sha256": "184e8f12cb1aab4232af67b1083589806302cb2b112192825085260e40c02e31",
+   "cik": "0001989817",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict reads the zero published percent-of-net-assets sum as an extraction gap against the printed Total percent. The filer prints and tags a percent only on industry-subtotal and total lines; no published position's own context carries a percent fact and no position line prints one, so every position's percent is blank on the page and is published blank.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): published contexts 327, percent facts in filing 157 (all on subtotal/total contexts), on published contexts 0, published pct values 0"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-020820",
+     "quote": "Lasko Operation Holdings, LLC (4)(10)(19)(24) SF + 6.50 % 10.59 % 6/4/2030 $ 1,768 $ 1,701 $ 1,768 113 HPS Corporate Cap",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-04",
+   "review_id": "RVQ_REV_b0d02abceed3",
+   "verdict_sha256": "5d986427f0302196b6703117cb0a2b1ec415e409fc18786b0164353be0af9695",
+   "cik": "0001989817",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: The verdict reads the zero published percent-of-net-assets sum as an extraction gap against the printed Total percent. The filer prints and tags a percent only on industry-subtotal and total lines; no published position's own context carries a percent fact and no position line prints one, so every position's percent is blank on the page and is published blank.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): published contexts 323, percent facts in filing 195 (all on subtotal/total contexts), on published contexts 0, published pct values 0"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-035294",
+     "quote": "Lasko Operation Holdings, LLC (4)(10)(18)(23) SF + 6.50 % 10.30 % 6/4/2030 $ 1,768 $ 1,705 $ 1,768 Total Household Durab",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-05",
+   "review_id": "RVQ_BLK_fc121eedb33a",
+   "verdict_sha256": "df09049a01e502f019aed2bacce015d5e7ff72c4d23192a7b0e6a0c141c297cc",
+   "cik": "0001989817",
+   "engine": "oracle",
+   "rule_name": "E07",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict reads 329 published rows against 488 source positions as 159 unrepresented positions. Every context of the filing with a fair value on a position member at the report date is published, or is the affiliated-investments roll-forward line of a published company (Lasko = its loan 1,768 + common 287, New Era, NE SPV), and the published sum equals the filed Total Investment Portfolio to the dollar; the check E07 itself now reads source 327 = output 327.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): filing position contexts 330, published rows 327, roll-forward repeats of published positions ['Lasko Operation Holdings, LLC', 'New Era Technology Inc', 'NE SPV Holdco, LLC'], published sum 2177821000 vs filed 2,177,821 thousand"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-020820",
+     "quote": "Total Investment Portfolio $ 2,138,204 $ 2,177,821 174.51 % Cash and C",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-06",
+   "review_id": "RVQ_BLK_797b1b24c9ae",
+   "verdict_sha256": "79750544a71abc1d35097a5cc6b36b88677506be91b2e42ebc7e44197f12e908",
+   "cik": "0001989817",
+   "engine": "identity",
+   "rule_name": "income_identity",
+   "report_date": "2025-12-31",
+   "reason": "Standing rule D-252: The verdict reads a 4,205,000 income identity residual for the quarter. The published fourth quarter is the filed year less the nine months: total income, net expenses and net investment income before excise tax each equal that difference to the dollar, and NII = income - net expenses exactly.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): Q4 total income 52139000 (year 167,461 less nine months 115,322 = 52139000), net expenses 26782000 (26782000), NII before excise 25357000 (25357000); NII - (income - net expenses) = 0"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-020820",
+     "quote": "Year Ended December 31, 2025 2024 Total investment income $ 167,461 $ 61,475 Net expenses 66,501 13,370 Net investment income before excise tax 100,960 48,105 E",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-07",
+   "review_id": "RVQ_REV_76f22d14da84",
+   "verdict_sha256": "61fd7680d8abb0e8d58165d48d58e0e404e1f3089a81e2c3b59992c2f138a6a7",
+   "cik": "0001989817",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "report_date": "2024-06-30",
+   "reason": "Standing rule D-252: The verdict says the American Academy revolver cost is stored as -3,000 where the page prints a dash. The row now carries cost 0 and fair value 0, as printed. (The other flagged rows are undrawn lines printing a bracketed negative cost, published as printed; that is a check misfire recorded as a check repair request.)",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): American Academy revolver (par 160,000): [(0.0, 0.0)]; printed cost '-' and fair value '-'"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001989817-24-000032",
+     "quote": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-08",
+   "review_id": "RVQ_REV_c72b2b8f1437",
+   "verdict_sha256": "8e5a749f6ff1f2945195970470c1deca072d8ce71fd5dd11d063c019ebc77849",
+   "cik": "0001989817",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "report_date": "2024-09-30",
+   "reason": "Standing rule D-252: The verdict says the American Academy revolver cost is stored as -3,000 where the page prints a dash and fair value (3). The row now carries cost 0 and fair value -3,000, as printed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): American Academy revolver (par 160,000): [(0.0, -3000.0)]; printed cost '-' and fair value '( 3 )'"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001989817-24-000055",
+     "quote": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 ) Asurio",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1989817-09",
+   "review_id": "RVQ_REV_5ff52445ac17",
+   "verdict_sha256": "6c81f95f182b6fbdb4012fe0819222834c8a767630e02f8e4c99a31587325964",
+   "cik": "0001989817",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "report_date": "2026-03-31",
+   "reason": "Standing rule D-252: The verdict says the AVSC Holding Corp. revolver has a blank interest rate where the page prints 8.67 %. The row now carries 8.67, spread 5.00, SOFR. (The other flagged rows are undrawn lines that print no rate; a check misfire recorded as a check repair request.)",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "private_markets_holdings.parquet / fund_financials.csv in data/output (published basis, JV look-through excluded): AVSC Holding Corp. revolver (par 962,000) 2029-12-05: (interest_rate, spread, reference) [(8.67, 5.0, 'SOFR')]; printed 'SF + 5.00 % 8.67 %'"
+    },
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001989817/retire_check.py (read-only); every plant fails"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-035294",
+     "quote": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173 Axiom",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001989817/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "run as recommended (standing rule D-252): an agent may retire a real-error verdict when a deterministic check shows every row the verdict cites is published at its filed (printed) values in today's published data, or is correctly excluded",
+   "decided_by": "owner",
+   "decided_on": "2026-11-10",
+   "applied_by": "agent:fund-hcz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

@@ -44,7 +44,10 @@ REQUIRED_FIELDS = ("accession", "quarter", "issuer", "instrument", "fair_value",
 # them as fractions, as a tagged fact would be, so staging reads them exactly as it reads tagged ones.
 PERCENT_FIELDS = ("interest_rate", "basis_spread", "interest_rate_floor", "pct_of_net_assets")
 TERM_FIELDS = PERCENT_FIELDS + ("reference_rate_type", "maturity_date")
-OPTIONAL_FIELDS = ("industry",) + TERM_FIELDS
+# printed_scale (HPS Corporate Capital Solutions, 2026-11-15): a schedule printed in thousands. The declared
+# dollars are the printed figures times the scale; the loader looks for each figure as printed (230,000 -> 230).
+SCALES = (1000, 1000000)
+OPTIONAL_FIELDS = ("industry", "printed_scale", "tagged_twin") + TERM_FIELDS
 
 _ACCESSION_RE = re.compile(r"[0-9]{10}-[0-9]{2}-[0-9]{6}")
 _DATE_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
@@ -117,6 +120,11 @@ def entry_errors(entry: Any) -> list[str]:
         value = entry[key]
         if isinstance(value, bool) or not isinstance(value, (int, float)) or float(value) != int(float(value)):
             errors.append(key + " must be a whole-dollar number")
+    if "tagged_twin" in entry and entry["tagged_twin"] is not True:
+        errors.append("tagged_twin must be true when given")
+    scale = entry.get("printed_scale", 1)
+    if "printed_scale" in entry and (isinstance(scale, bool) or scale not in SCALES):
+        errors.append("printed_scale must be one of %s" % (SCALES,))
     if errors:
         return errors
     line = _squash(entry["printed_line"])
@@ -124,8 +132,9 @@ def entry_errors(entry: Any) -> list[str]:
         if _squash(entry[key]) not in line:
             errors.append(key + " is not in the printed line")
     for key in ("fair_value", "cost", "principal_amount"):
-        if _printed_number(entry[key]) not in line:
-            errors.append(key + " " + _printed_number(entry[key]) + " is not in the printed line")
+        shown = _printed_number(float(entry[key]) / scale)
+        if float(entry[key]) % scale or shown not in line:
+            errors.append(key + " " + shown + " is not in the printed line")
     # every declared term must be printed in the line (OVR-T8Z-R2): a value not on the page is refused
     for key in PERCENT_FIELDS:
         if key in entry and not _percent_in_line(line, float(entry[key])):
@@ -184,6 +193,8 @@ def _already_tagged(entry: dict, records: list[dict[str, Any]]) -> dict[str, Any
                 r"(?<![a-z0-9])" + re.escape(instrument) + r"(?![a-z0-9]|\s+[a-z0-9](?![a-z0-9]))", text):
             return rec
         fv, cost = rec.get("fair_value"), rec.get("cost")
+        if entry.get("tagged_twin") is True:
+            continue    # printed twin of a tagged row (same values, another instrument line): only the name test applies
         if (isinstance(fv, (int, float)) and isinstance(cost, (int, float))
                 and abs(float(fv) - float(entry["fair_value"])) < 0.5
                 and abs(float(cost) - float(entry["cost"])) < 0.5):

@@ -1,0 +1,321 @@
+{
+ "reviewer_id": "agent:review-hcza-opus",
+ "report_digest": "a8e9c2ace130e6b2f70d6339e15ce69451a4320cbe06ebb3752f5e04efc41161",
+ "sandbox": "hczf",
+ "cik": "0001989817",
+ "ledger_note": "hczf findings_ledger.csv written 17:15, after the retirement store (16:23) and the last row_corrections.csv write (17:11); not regenerated. 59 findings, 1 outstanding: RVQ_REV_9f37182a6178 (F27 2024-06-30).",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_9f37182a6178",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review of my hcza rejection: every point is now addressed. Published 14.70 equals the printed ratio and TII 19,712 equals the printed figure. The D-253 basis fails as well (19,712 x 4 / 503,227 = 15.67 pct against WAC 11.86; no prior quarter's investments to average). The leverage explanation is withdrawn on the evidence of 1,203.5 pct asset coverage, and the filing's warehousing sentence is cited. source_ambiguity is the right conclusion: values are filed, and whether the check should fire in a launch quarter is a rule question for the owner. All four quotes read on the page. Still unverified: 'began investing in April 2024'. That is consistent with the nil 2024-03-31 quarter and the 8 April 2024 facility, not cited verbatim.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "For the six months ended June 30, 2024, total investment income was $19.7 million driven by our deployment of capital and income earned on the investments funded by the Financing Providers under the Warehousing Transactions."
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "As of June 30, 2024, the Companys asset coverage was 1,203.5 %."
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Text identical to HEAD; supported in the rfhcg review. Re-checked with my own name scan on hcza and production (printed first cell vs issuer_name, all 2,159 rows): the renamed rows now match. Only remaining differences are legal-form suffixes (Mood Media Borrower, White Cap Buyer), which are listed under unflagged findings. existing_detector reference stands.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; the name scan on hcza finds no row carrying another company's name. existing_detector is appropriate.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799"
+    }
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged. The scan finds no published name ending in class text. The proposed detector (name ending 'Class X'/'Subordinated Note' with blank instrument) is narrow and low on false alarms.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged. The rate scan finds no published pik/interest/spread outside the printed percents of the row's line. The context-join extension of pik_printed is the right fix for the repeated-identifier gap.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged. 2025-12-31 equity read: A-2 warrants 11,911 units published 11,911, ONE preferred 1,000. Detector proposal is specific.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "The ONE Group Hospitality, Inc. (21) - A-2 Warrants 11,911 61 21"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged since the rfhcg review. A cross-quarter 1,000x jump at unchanged cost is a precise signal.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "The ONE Group Hospitality, Inc. - Warrants (4) 7 - - The ONE Group Hospitality, Inc. - Warrants (4) 12 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "combined-par-units-column-semantic-ambiguity",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; 2025-12-31 read: AP Himalaya prints 20,006 in Par Amount/Units with cost 20,087. Ambiguity is real and correctly left for the owner.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "AP Himalaya Co-Invest, L.P. (4)(21) - LP Interest 20,006 20,087 21,745"
+    }
+   ]
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; New Era 2025-09-30 c-423 published LOAN with par 4,314,000 (but lien blank: see unflagged findings). Detector (equity row with printed rate) is sound.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000085",
+     "text": "New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "hczf section scan: no equity-section row is published as a LOAN, and NG Energy (3 rows) is now LOAN / DIRECT_LENDING / First Lien at par 7,060,000 with SOFR 7.50. The detector now runs both ways, as I asked. Residual, small: Constellation Wealth Capital Fund-A-Blocker 'Class Z Units', printed under Preferred Equity, is still published FUND / UNCLASSIFIED with no instrument text (2025-09-30 c-398, 2025-12-31 c-414, 2026-03-31 c-394, 2026-06-30 c-408; about 0.12M each). The comparable CB Lido 'Class Z Units' row is EQUITY_PREFERRED. This is the same name-driven 'Fund' class rule that hit NG Energy; the two-way detector should catch it.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "NG Energy Fund 1 LLC (4)(11)(24) SF + 7.50 % 11.19 % 3/22/2028 7,060 6,919 7,025"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Re-verified: my currency-symbol scan (printed symbol or code after maturity vs principal_amount_currency, decoded page) matches on 2,010 of 2,010 loan rows in hcza. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "Equinox 2024-12-31 c-195 now publishes 2027-06-30 as printed, with lien Second Lien. One correction to the text: maturity_status 'unresolved' is not specific to this row. On hczf every one of the fund's 2,021 rows with a maturity reads 'unresolved' (140 without one read not_disclosed). It is fund-wide behaviour, not something a maturity_precision correction on c-195 alone would settle. The parked item 'Equinox c-195 maturity' in the report's parked list is now stale and should be removed.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Equinox Holdings, Inc. (4)(7) 16.00 % PIK 6/30/2027 1,421 1,393 1,393"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; supported in the rfhcg review. The heading-vs-industry detector is sound.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+    }
+   ]
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; hcza has no data change vs rfhcg (0 of 100 columns differ), so the D-232 counts carry.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-differs-from-filers-own-later-heading",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; the industry-level comparison avoids sub-industry false alarms. Not re-measured by me.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ]
+  },
+  {
+   "observation_key": "quarterly-income-from-first-annual-period-divided-evenly",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Consistent with my income check: 2024-Q4 TII 22,872 / NII 18,523 published, and 2025-Q4 equals the year less nine months to the dollar.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000007",
+     "text": "Total expenses $ 391,674 Reimbursable expenses (Note 3) ( 391,674 ) Net expenses $ - Net increase (decrease) in net assets resulting from operations $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Constellation note rows are published with the printed name at every quarter. They still carry no lien although printed under Unsecured Debt (listed under unflagged findings, FV 0).",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "page-rules-skip-rows-with-repeated-identifier",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Corroborated: most lien blanks I found sit on repeated-identifier or hand-corrected rows (Equinox, ICP, IDF 8, Corza/Constellation). So did the missing IDF 8 Topco Series B-2 line. A context-keyed join plus a printed-line census would catch them.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+    }
+   ]
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; matcher behaviour, not re-measured. Detector is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Equinox Holdings, Inc. (4) 16.00 % 6/30/2027 $ 1,313 $ 1,279 $ 1,286"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-published-as-representative-sub-industry",
+   "outcome": "supported",
+   "rationale": "Carried from my hcza review (text unchanged since). Unchanged; schema gap correctly left. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "1.18 % Software Alegeus Technologies Holdings Corp (4)(10)(24) SF + 6.50 % 10.34 % 11/5/2029 34,475 33,813 34,580"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-letter-resolved-by-wrong-dated-legend",
+   "outcome": "supported",
+   "rationale": "Legend read in every cached filing (my legend.py): B = BBSW through 0001989817-25-000043, BBSY from 0001989817-25-000065; BB = BKBM only in 0001628280-26-020820. The wrapper now says B=BBSW to 2025-03-31, B=BBSY from 2025-06-30, BB=BKBM. My hczf scan finds 0 reference-code mismatches against the dated legend (was 5). The detector reads the legend sentence itself, independently of the wrapper, which is the right independence.",
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Bank Bill Swap Rate (\"BBSW\" or \"B\") which reset daily, monthly, quarterly, semiannually or annually."
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Mediaworks Holdings Limited (4)(5)(9)(30) BB + 6.00 % 8.54 % 10/17/2028 NZD 3,223 1,836 1,841"
+    }
+   ]
+  },
+  {
+   "observation_key": "blank-lien-on-loan-printed-under-a-lien-heading",
+   "outcome": "supported",
+   "rationale": "hczf: 0 loan rows under a First/Second Lien or Unsecured heading have a blank or different lien (my heading scan; it was 16 on hcza). The field diff shows lien_position on 16 rows only. Effective values are right, including c-195/c-253/c-314 = Second Lien. But the uncommitted row_corrections.csv lines 31, 33, 35 (First Lien on c-195, c-253, c-314) and line 30 (Unsecured on c-389, with a reason citing c-393) are wrong. They are shadowed only by file order: see request/tooling note. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Freedom Funding Center LLC (4)(7) 12.00 % 12.00 % 9/30/2032 27,876 27,876 28,161 27,876 28,161 2.26 % Health Care Equipment & Supplies Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950 19,164 19,950 1.60 % Total Unsecured Debt"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-line-without-own-context-same-values-as-tagged-twin",
+   "outcome": "supported",
+   "rationale": "hczf publishes IDF 8 Topco Series B-2 Units (printed_page context, cost 230,000, fv 0, 230,248 units) next to the tagged Series B-1 row in both quarters. Strict cost totals now tie to 0 dollars at 2025-12-31 (2,138,204,000) and 2026-03-31 (2,182,115,000). Fair value ties in all 9 quarters. Oracle E07 counts it apart (printed_page_declared=1). The cost-total detector is the right check.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-035294",
+     "text": "IDF 8 Topco, LLC (4)(19)(20) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(19)(20) - Series B-2 Units 230,248 230 - Total Electric Utilities 460 - - %"
+    }
+   ]
+  },
+  {
+   "observation_key": "legal-form-dropped-from-issuer-name",
+   "outcome": "supported",
+   "rationale": "hczf name scan: 0 differences between the printed first cell and issuer_name (was 11). Side effect checked: White Cap Buyer 2024-09-30/2025-03-31 now carry the filer's later heading (Specialty Retail, published Specialty Stores) like its other quarters, and the chain is one position_id across 2024-09-30 to 2026-03-31 (it was split). Consistent with D-232.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "White Cap Buyer, LLC (7)(14) SF + 3.25 % 8.10 % 10/19/2029 2,000 1,990 1,988"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-preferred-par-figure-published-as-shares",
+   "outcome": "supported",
+   "rationale": "Confirmed on hczf. All six LC8 rows have principal_amount blank and shares_held = the printed figure without scale (3,800; 1,532; 1,575; 1,620; 1,667; 1,714). The page prints a rate, PIK, maturity 2/8/2029, and a figure close to cost that grows with accrual: it is par in thousands. Cost and fair value are right, so totals are unaffected. The error is limited to principal/units (about 10M fair value across six quarters, 1.7M at 2025-12-31). The same error is in production today (hcza had identical values), so committing hczf does not make it worse. Parking is correct given no build is left; the detector proposal is specific.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "LC8 Cirrostratus L.P. (4)(5)(10)(21)(24) - Class A Units SF + 7.00 % PIK 10.69 % 2/8/2029 1,714 1,692 1,702"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "hcz-f27-launch-quarter-warehousing-income",
+   "outcome": "supported",
+   "rationale": "Correctly reclassified as acceptance_change. Either option, accept it as fired or skip the first investing quarter when no prior investments exist to average, changes what F27 accepts, so it goes to the owner and no check is weakened in the meantime. If the skip option is chosen, the repair needs a must-fail test: a later quarter of the same fund with a wrongly scaled income figure still fails. The C107 and X02 requests are withdrawn, and those findings close through the accepted DS-FUNDLOOP-C107/X02-1989817 dispositions, so my earlier objections to them are moot.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Ratio of net investment income to average net assets (5) 14.70 %"
+    }
+   ]
+  }
+ ],
+ "rechecked_since_hcza": {
+  "field_diff": "holdings_field_diff.py hczf hcza: 2 rows added (IDF 8 B-2 x2). Columns changed: issuer_name 11, instrument_description 2, asset_category 3, issuer_category 3, index_classification 3, exposure_type 3, reference_rate_type 5, reference_rate_source 5, maturity_date 1, lien_position 16, position_id 3, maturity_status 1, gics_sub_industry 2, gics_sector 2, canonical_name 12, corrected_fields 34. 84 of 100 columns unchanged. All match the declared changes. position_id: the declared reason ('NG Energy class change moves the identity') is not what the data shows. The 3 changed ids are White Cap Buyer 2024-09-30/2024-12-31/2025-03-31 joining the 2025-06-30+ chain (2329461a-...), an improvement, but the declaration should say so.",
+  "strict_totals": "hczf, published basis ex cash: fair value and cost tie to 0 dollars in all 9 quarters (2024-06-30 to 2026-06-30).",
+  "scans": "hczf, all 2,161 rows: reference code vs dated legend 0 mismatches; name vs printed first cell 0; lien vs heading 0; par/cost/fv vs printed 0; cost sign 0; rate not printed 0; currency 2,013 of 2,013. Remaining: the Constellation Class Z Units class (4 rows, about 0.12M each), see the equity-section observation review.",
+  "retirements": "retire_check.py on hczf: 8 PASS, 1 FAIL (E07 VR-FL-1989817-05), all plants fail. The E07 check counts the new printed_page row as 'published contexts that are not filing position contexts' (328 rows vs 327). The oracle E07 itself passes (source=327 vs output=327; printed_page_declared=1 not counted). The data is fine, but the retirement's rerun will FAIL once hczf reaches production. Before commit, retire_check.py e07_check must leave out printed_page: contexts, as E07 does, and its plant must still fail.",
+  "shared_code_printed_rows": "pipeline/printed_rows.py: off unless set. Default printed_scale=1 gives int(round(x/1)), identical to the old _printed_number(x); x % 1 == 0 for the whole-dollar values already validated. tagged_twin skips only the value-equality refusal, and only when true. Dry run (printed_rows_dryrun.py): the only other user, 0001825265 (TCW DL VIII, 3 entries), returns identical entry_errors under HEAD and working-tree code; only the two HPS entries differ (HEAD refuses the new keys). Tests: tests/test_printed_rows.py 42 passed (run by me), including false-positive tests (a figure not printed at the scale is refused, a non-multiple of the scale is refused, a thousands line without printed_scale is still refused, a tagged_twin entry the filing names is still refused, the same values without tagged_twin are refused). One cosmetic issue: a test calls the admitted list 'refused'. Measurement needed before merge: the batch build's cohort semantic diff (python scripts/diff_outputs.py --semantic) showing no change outside 0001989817, plus TCW 0001825265 2023-09-30 still publishing its 3 printed rows unchanged. The dry run is necessary but does not replace the build diff.",
+  "make_row_corrections_fix": "Effect on other funds: the lookup first tries (cik, quarter, phrase, field items, reason), then field items, then field names. Only the HPS hook writes the new keys, so other funds fall back to the old key unchanged (the diff adds only 61 HPS lines). Two weaknesses. (1) The key still holds content, not context: two specs with the same fields, values and reason on different contexts still collide. The fix works here only because each reason quotes its context. Keying on spec_context(spec), or carrying the context in the SPECS tuple, would be robust. (2) tuple(sorted(fields.items())) raises TypeError on any spec whose field value is a list or dict. That fails loudly, not silently, and only for CIKs being regenerated.",
+  "shadowed_correction_lines": "Loader (_apply_row_corrections): row_corrections.csv then by_context are concatenated in file order and applied in that order per key, so the last line wins. Today the wrong lines are shadowed: 31 (First Lien c-195) by 32, 33 (c-253) by 34, 35 (c-314) by 36, 30 (Unsecured on c-389, reason cites c-393) by 39 (same value). The effective output is correct, and corrected_fields dedups. But this is order-dependent: any sort, dedupe or first-wins change to the file or loader would silently publish First Lien on three Second Lien loans. The audit log also records the wrong values as 'applied'. The lines are uncommitted, so removing lines 30, 31, 33, 35 does not touch committed history, and the effective output is the same. Remove them before commit."
+ },
+ "commit_recommendation": "Acceptable to commit hczf with LC8 parked (identical in production; principal vs units only). The three pre-commit items are done and verified. Still open: do not merge pipeline/printed_rows.py without the batch build's cohort semantic diff (no change outside 0001989817; TCW 0001825265 2023-09-30 printed rows unchanged).",
+ "reviewer_slip": "In the hcza round, one bare 'python -' with an empty heredoc was sent by mistake and stopped with TaskStop; none in this round.",
+ "precommit_fixes_verified": "row_corrections.csv: git diff 57 added, 0 deleted; the wrong lines (First Lien on c-195/c-253/c-314, Unsecured on c-389 citing c-393) are gone; remaining c-195/c-253/c-314 lines are Second Lien, c-389 line cites c-389, c-393 Unsecured kept. Output-neutral by last-wins (the build hczf stands). retire_check.py e07_check now drops printed_page: rows (line 59): all 9 PASS on hczf and on data/output, all plants fail on both. Report: Equinox c-195 parked item removed; position_id declaration now names White Cap Buyer (3 rows), not NG Energy."
+}

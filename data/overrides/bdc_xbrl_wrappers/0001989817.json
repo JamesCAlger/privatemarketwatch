@@ -227,6 +227,34 @@
     }
   },
   "source_encodings": {
+    "printed_rows_without_context": [
+      {
+        "accession": "0001628280-26-020820",
+        "quarter": "2025-12-31",
+        "issuer": "IDF 8 Topco, LLC",
+        "instrument": "Series B-2 Units",
+        "industry": "Electric Utilities",
+        "fair_value": 0,
+        "cost": 230000,
+        "principal_amount": 0,
+        "printed_scale": 1000,
+        "tagged_twin": true,
+        "printed_line": "IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -"
+      },
+      {
+        "accession": "0001628280-26-035294",
+        "quarter": "2026-03-31",
+        "issuer": "IDF 8 Topco, LLC",
+        "instrument": "Series B-2 Units",
+        "industry": "Electric Utilities",
+        "fair_value": 0,
+        "cost": 230000,
+        "principal_amount": 0,
+        "printed_scale": 1000,
+        "tagged_twin": true,
+        "printed_line": "IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -"
+      }
+    ],
     "filed_rate_reading": [
       "all_in"
     ],
@@ -291,8 +319,9 @@
       "SN=SONIA",
       "C=CDOR to 2025-03-31",
       "C=CORRA from 2025-06-30",
-      "B=BBSW to 2024-09-30",
-      "B=BBSY from 2024-12-31",
+      "B=BBSW to 2025-03-31",
+      "B=BBSY from 2025-06-30",
+      "BB=BKBM",
       "ST=STIBOR",
       "N=NIBOR",
       "TN=TONA",

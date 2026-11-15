@@ -2741,5 +2741,321 @@
    "issuer_name": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC"
   },
   "reason": "The member is 'Constellation Wealth Capital Fund-A-Blocker | Non-Affiliated Issuer' (no legal form, so the row was dropped as an aggregate until this run, then published as a fund interest from the word Fund); the unsecured note printed under Unsecured Debt. Printed (0001628280-26-056793, context c-382): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4)(7) 2/1/2038 $ 50 $ - $ - Total Capital Markets - -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "NG Energy Fund 1 LLC",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE",
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under First Lien Debt as an SF + 7.50 % loan with par, cost and value; published as a credit fund interest from the word Fund in the name. Printed (0001628280-26-020820, context c-239): 'NG Energy Fund 1 LLC (4)(11)(24) SF + 7.50 % 11.19 % 3/22/2028 7,060 6,919 7,025 NRD Construction, LLC (4)(14)'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "NG Energy Fund 1 LLC",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE",
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under First Lien Debt as an SF + 7.50 % loan with par, cost and value; published as a credit fund interest from the word Fund in the name. Printed (0001628280-26-035294, context c-236): 'NG Energy Fund 1 LLC (4)(11)(23) SF + 7.50 % 11.20 % 3/22/2028 7,060 6,935 7,060 13 Table of Contents HPS Corp'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "NG Energy Fund 1 LLC",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE",
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under First Lien Debt as an SF + 7.50 % loan with par, cost and value; published as a credit fund interest from the word Fund in the name. Printed (0001628280-26-056793, context c-255): 'NG Energy Fund 1 LLC (4)(11)(24) SF + 7.50 % 11.23 % 3/22/2028 7,060 6,950 7,060 NRD Construction, LLC (4)(14)'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Mediaworks Holdings Limited",
+  "fields": {
+   "reference_rate_type": "BKBM",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The filing's own legend defines the printed code 'BB' as BKBM (New Zealand bank bill rate); published as SOFR. Printed (0001628280-26-020820, context c-275): 'Mediaworks Holdings Limited (4)(5)(9)(30) BB + 6.00 % 8.54 % 10/17/2028 NZD 3,223 1,836 1,841 Shelley Bidco Pt'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "HB AcquisitionCo PTY LTD 1",
+  "fields": {
+   "reference_rate_type": "BBSW",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The filing's own legend defines the printed code 'B' as BBSW (Bank Bill Swap Rate, 'BBSW' or 'B'); published as BBSY, which this filing's legend does not use until 2025-06-30. Printed (0001989817-25-000023, context c-183): 'HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.97 % 8/7/2029 A$ 3,789 2,494 2,249 HB ACQUISITIONCO PTY LTD ('"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "HB AcquisitionCo PTY LTD  2",
+  "fields": {
+   "reference_rate_type": "BBSW",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The filing's own legend defines the printed code 'B' as BBSW (Bank Bill Swap Rate, 'BBSW' or 'B'); published as BBSY, which this filing's legend does not use until 2025-06-30. Printed (0001989817-25-000023, context c-184): 'HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.97 % 8/7/2029 A$ 3,789 2,494 2,249 HB ACQUISITIONCO PTY LTD ('"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "HB ACQUISITIONCO PTY LTD 1",
+  "fields": {
+   "reference_rate_type": "BBSW",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The filing's own legend defines the printed code 'B' as BBSW (Bank Bill Swap Rate, 'BBSW' or 'B'); published as BBSY, which this filing's legend does not use until 2025-06-30. Printed (0001989817-25-000043, context c-239): 'HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.76 % 8/7/2029 A$ 3,789 2,498 2,320 HB ACQUISITIONCO PTY LTD ('"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "HB ACQUISITIONCO PTY LTD 2",
+  "fields": {
+   "reference_rate_type": "BBSW",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "The filing's own legend defines the printed code 'B' as BBSW (Bank Bill Swap Rate, 'BBSW' or 'B'); published as BBSY, which this filing's legend does not use until 2025-06-30. Printed (0001989817-25-000043, context c-240): 'HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.76 % 8/7/2029 A$ 3,789 2,498 2,320 HB ACQUISITIONCO PTY LTD ('"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Freedom Funding Center LLC",
+  "fields": {
+   "lien_position": "Unsecured"
+  },
+  "reason": "Printed under the Unsecured Debt heading (the block ends 'Total Unsecured Debt'); the row published with a blank lien. Printed (0001628280-26-020820, context c-391): 'Freedom Funding Center LLC (4)(7) 12.00 % 12.00 % 9/30/2032 27,876 27,876 28,161 27,876 28,161 2.26 % Health C'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Corza Medical Srl",
+  "fields": {
+   "lien_position": "Unsecured"
+  },
+  "reason": "Printed under the Unsecured Debt heading (the block ends 'Total Unsecured Debt'); the row published with a blank lien. Printed (0001628280-26-020820, context c-393): 'Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950 19,164 19,950 1.60 % Total Unse'",
+  "correction_context": "c-393"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Equinox Holdings, Inc.",
+  "fields": {
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under the First Lien Debt heading (the block ends 'Total First Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000023, context c-181): 'Equinox Holdings, Inc. (4)(10) SF + 8.25 % (incl. 4.13 % PIK) 12.58 % 3/8/2029 10,046 9,843 9,879 Fertitta Ent'",
+  "correction_context": "c-181"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Equinox Holdings, Inc.",
+  "fields": {
+   "lien_position": "Second Lien"
+  },
+  "reason": "Printed under the Second Lien Debt heading (the block ends 'Total Second Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000023, context c-195): 'Equinox Holdings, Inc. (4)(7) 16.00 % PIK 6/30/2027 1,421 1,393 1,393 1,393 1,393 0.21 % Total Second Lien Deb'",
+  "correction_context": "c-195"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "International Construction Products, LLC",
+  "fields": {
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under the First Lien Debt heading (the block ends 'Total First Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000043, context c-171): 'International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075 Kowalski Tru'",
+  "correction_context": "c-171"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "International Construction Products, LLC",
+  "fields": {
+   "lien_position": "Second Lien"
+  },
+  "reason": "Printed under the Second Lien Debt heading (the block ends 'Total Second Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000043, context c-253): 'International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 $ 2,861 $ 2,861 $ 2,861 2,861'",
+  "correction_context": "c-253"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "International Construction Products, LLC",
+  "fields": {
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under the First Lien Debt heading (the block ends 'Total First Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000065, context c-217): 'International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075 Kowalski Tru'",
+  "correction_context": "c-217"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "International Construction Products, LLC",
+  "fields": {
+   "lien_position": "Second Lien"
+  },
+  "reason": "Printed under the Second Lien Debt heading (the block ends 'Total Second Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000065, context c-314): 'International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 $ 2,861 $ 2,861 $ 2,861 2,861'",
+  "correction_context": "c-314"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "New Era Technology Inc",
+  "fields": {
+   "lien_position": "First Lien"
+  },
+  "reason": "Printed under the First Lien Debt heading (the block ends 'Total First Lien Debt'); the row published with a blank lien. Printed (0001989817-25-000085, context c-423): 'New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314 4,314 4,314 0.39 % Total Fi'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Constellation Wealth Capital Fund-A-Blocker (Lido), LLC",
+  "fields": {
+   "lien_position": "Unsecured"
+  },
+  "reason": "Printed under the Unsecured Debt heading (the block ends 'Total Unsecured Debt'); the row published with a blank lien. Printed (0001989817-25-000085, context c-377): 'Constellation Wealth Capital Fund-A-Blocker (Lido), LLC (4) 2/1/2038 46 46 46 46 46 - % Total Unsecured Debt $'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Corza Medical Srl",
+  "fields": {
+   "lien_position": "Unsecured"
+  },
+  "reason": "Printed under the Unsecured Debt heading (the block ends 'Total Unsecured Debt'); the row published with a blank lien. Printed (0001628280-26-020820, context c-389): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ - - - - % Financial Services F'",
+  "correction_context": "c-389"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Constellation Wealth Capital Fund-A-Blocker",
+  "fields": {
+   "lien_position": "Unsecured"
+  },
+  "reason": "Printed under the Unsecured Debt heading (the block ends 'Total Unsecured Debt'); the row published with a blank lien. Printed (0001628280-26-035294, context c-371): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 48 $ - $ - Total Capital Markets - - -'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Constellation Wealth Capital Fund-A-Blocker",
+  "fields": {
+   "lien_position": "Unsecured"
+  },
+  "reason": "Printed under the Unsecured Debt heading (the block ends 'Total Unsecured Debt'); the row published with a blank lien. Printed (0001628280-26-056793, context c-382): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4)(7) 2/1/2038 $ 50 $ - $ - Total Capital Markets - -'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Mood Media Borrower  2",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-24-000055, context c-100): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.50 % 12/31/2025 20,043 20,005 20,043 Mood Media Borrower, LLC'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Mood Media Borrower  3",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-24-000055, context c-101): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.50 % 12/31/2025 701 701 701 Mood Media Borrower, LLC (4)(6)(10'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "White Cap Buyer",
+  "fields": {
+   "issuer_name": "White Cap Buyer, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-24-000055, context c-119): 'White Cap Buyer, LLC (7)(14) SF + 3.25 % 8.10 % 10/19/2029 2,000 1,990 1,988 45,168 44,947 8.01 % Software and'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Mood Media Borrower  1",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-24-000055, context c-99): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.50 % 12/31/2025 20,043 20,005 20,043 Mood Media Borrower, LLC'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Mood Media Borrower  1",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000023, context c-128): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.23 % 12/31/2025 19,991 19,961 19,991 Mood Media Borrower, LLC'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Mood Media Borrower  2",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000023, context c-129): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.23 % 12/31/2025 19,991 19,961 19,991 Mood Media Borrower, LLC'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Mood Media Borrower  3",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000023, context c-130): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.23 % 12/31/2025 700 700 700 Mood Media Borrower, LLC (4)(6)(10'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Mood Media Borrower  1",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000043, context c-155): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.20 % 12/31/2025 19,939 19,916 19,939 Mood Media Borrower, LLC'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Mood Media Borrower  2",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000043, context c-156): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.20 % 12/31/2025 19,939 19,916 19,939 Mood Media Borrower, LLC'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Mood Media Borrower  3",
+  "fields": {
+   "issuer_name": "Mood Media Borrower, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000043, context c-157): 'Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.20 % 12/31/2025 698 698 698 Mood Media Borrower, LLC (4)(6)(10'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "White Cap Buyer",
+  "fields": {
+   "issuer_name": "White Cap Buyer, LLC"
+  },
+  "reason": "The printed name carries the legal form ', LLC'; the member text is cut before it. Printed (0001989817-25-000043, context c-190): 'White Cap Buyer, LLC (7) SF + 3.25 % 7.57 % 10/19/2029 1,995 1,986 1,939 55,968 54,982 6.78 % Software and Com'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "IDF 8 Topco, LLC",
+  "fields": {
+   "instrument_description": "Series B-1 Units"
+  },
+  "reason": "The filer tags one context for the two printed Series B lines; this row is the first line, Series B-1 Units. Printed (0001628280-26-020820): 'IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "IDF 8 Topco, LLC | Series B-2 Units",
+  "fields": {
+   "shares_held": "230248"
+  },
+  "reason": "The second printed line, Series B-2 Units, has no tagged context and is declared from the page (printed_rows_without_context); its unit count is printed. Printed (0001628280-26-020820): 'IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "IDF 8 Topco, LLC",
+  "fields": {
+   "instrument_description": "Series B-1 Units"
+  },
+  "reason": "The filer tags one context for the two printed Series B lines; this row is the first line, Series B-1 Units. Printed (0001628280-26-035294): 'IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "IDF 8 Topco, LLC | Series B-2 Units",
+  "fields": {
+   "shares_held": "230248"
+  },
+  "reason": "The second printed line, Series B-2 Units, has no tagged context and is declared from the page (printed_rows_without_context); its unit count is printed. Printed (0001628280-26-035294): 'IDF 8 Topco, LLC (4)(20)(21) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -'"
  }
 ]

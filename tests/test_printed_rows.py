@@ -273,3 +273,55 @@ def test_printed_terms_in_another_spelling_are_admitted():
                    principal_amount=37883211, printed_line=line, interest_rate=14.31, basis_spread=8.75,
                    interest_rate_floor=1, reference_rate_type="SOFR", maturity_date="2027-07-08", pct_of_net_assets=8.5)
     assert entry_errors(entry) == []
+
+
+THOUSANDS_LINE = "IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 - 460 - - %"
+
+
+def _thousands(**changes):
+    entry = {"accession": ACC, "quarter": "2023-09-30", "issuer": "IDF 8 Topco, LLC", "instrument": "Series B-2 Units",
+             "fair_value": 0, "cost": 230000, "principal_amount": 0, "printed_line": THOUSANDS_LINE, "printed_scale": 1000}
+    entry.update(changes)
+    return entry
+
+
+def test_printed_scale_reads_a_thousands_schedule_as_printed():
+    assert entry_errors(_thousands()) == []
+
+
+def test_printed_scale_refuses_a_figure_not_printed_at_that_scale():
+    assert any("cost 231 is not in the printed line" in e for e in entry_errors(_thousands(cost=231000)))
+    assert any("must be one of" in e for e in entry_errors(_thousands(printed_scale=10)))
+    # a dollar figure that is not a whole multiple of the scale cannot be a printed thousand
+    assert entry_errors(_thousands(cost=230500))
+
+
+def test_without_printed_scale_a_thousands_line_is_still_refused():
+    entry = _thousands()
+    del entry["printed_scale"]
+    assert any("cost 230,000 is not in the printed line" in e for e in entry_errors(entry))
+
+
+def _tagged_twin_records(instrument_text):
+    return [{"_context_id": "c-434", "period": "2023-09-30", "investment_identifier": instrument_text,
+             "fair_value": 28434971.0, "cost": 27883696.0, "principal_amount": 1.0}]
+
+
+def test_tagged_twin_publishes_a_line_with_the_values_of_a_tagged_row():
+    entry = _entry(tagged_twin=True, instrument="Term Loan A")
+    refused = printed_row_records(_tagged_twin_records("Harvey Gulf Holdings, LLC"), META, encodings=_encodings_in_memory(entry))
+    assert len(refused) == 1
+
+
+def test_without_tagged_twin_the_same_values_are_refused():
+    entry = _entry(instrument="Term Loan A")
+    assert printed_row_records(_tagged_twin_records("Harvey Gulf Holdings, LLC"), META, encodings=_encodings_in_memory(entry)) == []
+
+
+def test_tagged_twin_still_refuses_a_row_the_filing_names():
+    entry = _entry(tagged_twin=True, instrument="Term Loan A")
+    assert printed_row_records(_tagged_twin_records("Harvey Gulf Holdings, LLC Term Loan A"), META, encodings=_encodings_in_memory(entry)) == []
+
+
+def _encodings_in_memory(entry):
+    return {CIK: {"printed_rows_without_context": [entry]}}

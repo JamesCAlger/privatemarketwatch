@@ -1,287 +1,152 @@
 {
  "cik": "0001989817",
- "label": "rfhcg",
- "before": "rfhcf",
+ "label": "hczf",
+ "before": "rfhcg",
  "shared_code": true,
- "investigator_id": "fund-agent-rfhc-0001989817 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
+ "investigator_id": "agent:fund-hcz-sonnet",
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 34,
-   "why": "printed names (8 rows, plus Constellation c-389 named Corza) and tranche text cut from 25 structured-finance names (wrapper)"
+   "rows": 11,
+   "why": "', LLC' restored on Mood Media Borrower (9 rows) and White Cap Buyer (2 rows): the printed name carries it, the member text is cut before it"
   },
   {
    "column": "instrument_description",
-   "rows": 30,
-   "why": "tranche text moved from the name (25), warrant classes (4), IDF 9 Series B Units (1)"
-  },
-  {
-   "column": "shares_held",
-   "rows": 13,
-   "why": "unit counts from the page: ONE Group preferred/warrants, NE SPV, LC8, IDF 9; New Era withdrawn (a loan)"
-  },
-  {
-   "column": "principal_amount",
-   "rows": 3,
-   "why": "New Era par 4,314; LC8 and IDF 9 par withdrawn (equity)"
-  },
-  {
-   "column": "principal_amount_currency",
-   "rows": 10,
-   "why": "printed currency (7 loans) and equity/loan class changes (3)"
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 10,
-   "why": "same rows, USD at the build's FRED rate"
-  },
-  {
-   "column": "principal_fx_rate_to_usd",
-   "rows": 10,
-   "why": "same rows"
-  },
-  {
-   "column": "principal_fx_status",
-   "rows": 10,
-   "why": "same rows"
+   "rows": 2,
+   "why": "IDF 8 Topco Series B-1 Units label on the first of two printed lines (2025-12-31, 2026-03-31)"
   },
   {
    "column": "asset_category",
-   "rows": 4,
-   "why": "New Era loan; LC8 and IDF 9 preferred; Constellation note 2025-09-30 fund interest to loan"
-  },
-  {
-   "column": "index_classification",
-   "rows": 4,
-   "why": "same rows"
-  },
-  {
-   "column": "asset_class",
-   "rows": 4,
-   "why": "same rows"
+   "rows": 3,
+   "why": "NG Energy Fund 1 LLC printed under First Lien Debt as an SF + 7.50 % loan, was published as a credit fund interest (3 rows)"
   },
   {
    "column": "issuer_category",
-   "rows": 1,
-   "why": "Constellation note 2025-09-30: FUND to CORPORATE"
+   "rows": 3,
+   "why": "NG Energy Fund 1 LLC as a corporate borrower (same 3 rows)"
+  },
+  {
+   "column": "index_classification",
+   "rows": 3,
+   "why": "NG Energy Fund 1 LLC as DIRECT_LENDING (same 3 rows)"
   },
   {
    "column": "exposure_type",
-   "rows": 1,
-   "why": "Constellation note 2025-09-30: FUND to DIRECT"
+   "rows": 3,
+   "why": "NG Energy Fund 1 LLC as DIRECT (same 3 rows)"
   },
   {
-   "column": "basis_spread",
-   "rows": 1,
-   "why": "New Era printed margin 6.25"
+   "column": "reference_rate_type",
+   "rows": 5,
+   "why": "Mediaworks BB = BKBM (1 row) and HB AcquisitionCo B = BBSW per the filing's dated legend (4 rows); wrapper legend dates corrected"
   },
   {
    "column": "reference_rate_source",
-   "rows": 1,
-   "why": "New Era printed SOFR"
-  },
-  {
-   "column": "coupon_type",
-   "rows": 1,
-   "why": "New Era floating"
-  },
-  {
-   "column": "pik_rate",
-   "rows": 8,
-   "why": "printed PIK figures not tagged"
-  },
-  {
-   "column": "interest_rate_cash",
-   "rows": 8,
-   "why": "derived from interest_rate less pik_rate on the 8 PIK rows"
+   "rows": 5,
+   "why": "same 5 rows now read from the printed schedule"
   },
   {
    "column": "maturity_date",
-   "rows": 5,
-   "why": "printed maturities restored (Constellation c-389, Equinox c-181, IDF 9 c-359, Corza c-393, Distributed Solar c-252)"
-  },
-  {
-   "column": "maturity_status",
-   "rows": 5,
-   "why": "follows the restored maturities"
-  },
-  {
-   "column": "extracted_industry",
-   "rows": 816,
-   "why": "printed ICB headings kept (printed_industry_labels) and 41 rows corrected to the printed heading"
-  },
-  {
-   "column": "gics_sub_industry",
-   "rows": 563,
-   "why": "vs rgA4: Structured Finance and Corza heading rows (31) and the D-232 carry-back (532 rows vs rfhcf: the filer's later printed GICS industry carried to its ICB-era quarters per company; sub-industries inside that industry kept)"
-  },
-  {
-   "column": "gics_sector",
-   "rows": 412,
-   "why": "follows gics_sub_industry (derived from it by the shared taxonomy step); 381 rows vs rfhcf"
-  },
-  {
-   "column": "position_id",
-   "rows": 10,
-   "why": "chains rejoined after the name and class fixes (TTF/Soliant, Team, IDF 9 Series B)"
+   "rows": 1,
+   "why": "Equinox Holdings 2024-12-31 c-195 (1.4M): the maturity correction logged earlier but absent from the output now applies once the context-keyed lines are right; printed 6/30/2027"
   },
   {
    "column": "corrected_fields",
-   "rows": 83,
-   "why": "rows touched by this run's row corrections"
+   "rows": 34,
+   "why": "bookkeeping of the row corrections above"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 2,
+   "why": "White Cap Buyer 2024-09-30 and 2025-03-31: the corrected name now matches the filer's own later GICS heading (Specialty Stores), as the other White Cap quarters"
+  },
+  {
+   "column": "lien_position",
+   "rows": 16,
+   "why": "lien from the printed section heading on loans published with none (NG Energy 3, Equinox 2, International Construction Products 4, Freedom, Corza, New Era, Constellation note 4)"
+  },
+  {
+   "column": "position_id",
+   "rows": 3,
+   "why": "White Cap Buyer 2024-09-30, 2024-12-31 or 2025-03-31 (3 rows): the restored name ', LLC' joins the rows to their later position chain; not NG Energy"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 1,
+   "why": "Equinox 2024-12-31 c-195: the maturity is now published (printed 6/30/2027) so the status is computed; maturity_status reads unresolved on all 2,021 dated rows of the fund, so this is not specific to the row"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 2,
+   "why": "same 2 White Cap Buyer rows (Consumer Discretionary)"
   }
  ],
  "rows_added": 2,
  "rows_removed": 0,
  "fixes": [
   {
-   "what": "printed issuer names on 8 rows (member kept an old or another company's name; 'Kendra Scott Design In.' misspelling)",
+   "what": "NG Energy Fund 1 LLC published as the printed first-lien loan (LOAN / DIRECT_LENDING / corporate / First Lien), 2025-12-31 c-239, 2026-03-31 c-236, 2026-06-30 c-255, about 7.0M each (row corrections)",
    "kind": "row_correction",
    "quarters": [
-    "2024-12-31",
-    "2025-03-31",
     "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
    "quotes": [
-    {
-     "accession": "0001989817-25-000023",
-     "text": "TTF Lower Intermediate LLC (7) SF + 3.75 % 8.11 % 7/18/2031 2,750 2,724 2,736"
-    },
-    {
-     "accession": "0001989817-25-000043",
-     "text": "Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799"
-    },
-    {
-     "accession": "0001628280-26-035294",
-     "text": "Global Service GmbH (4)(5)(7)(27) E + 6.75 % 8.85 % 2/1/2030 EUR 7,753 8,842 9,051"
-    },
-    {
-     "accession": "0001628280-26-035294",
-     "text": "White Cap Supply Holdings LLC (7)(22) SF + 3.25 % 6.92 % 10/19/2029 1,809 1,803 1,745"
-    },
-    {
-     "accession": "0001628280-26-056793",
-     "text": "Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778"
-    },
     {
      "accession": "0001628280-26-020820",
-     "text": "Kendra Scott Design Inc (4)(21) - Preferred Stock 2,316,836 24,270 33,117"
+     "text": "NG Energy Fund 1 LLC (4)(11)(24) SF + 7.50 % 11.19 % 3/22/2028 7,060 6,919 7,025"
     }
    ]
   },
   {
-   "what": "tranche text cut from 9 structured-finance issuer names into the instrument (issuer_name_strip_re alternative plus issuer_name_strip_to_instrument)",
-   "kind": "wrapper",
+   "what": "IDF 8 Topco Series B-2 Units declared from the page (2025-12-31, 2026-03-31; cost 230,000, value nil, 230,248 units): the filer tags one context for the two printed Series B lines. Shared code, opt-in: printed_rows_without_context printed_scale 1000 and tagged_twin true; the cost total now ties to the printed total, 2,138,204 and 2,182,115 thousand. Series B-1 label and B-2 unit count by row correction",
+   "kind": "shared_code",
    "quarters": [
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001628280-26-056793",
-     "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
-    }
-   ]
-  },
-  {
-   "what": "printed ICB industry headings kept in extracted_industry (printed_industry_labels, 36 labels); no GICS supplied",
-   "kind": "wrapper",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001989817-25-000043",
-     "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
-    }
-   ]
-  },
-  {
-   "what": "'Structured Finance' heading on 39 rows and Corza 2025-12-31 heading (extracted_industry)",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001989817-25-000065",
-     "text": "Structured Finance Structured Finance Investments Ares Secondaries PBN Finance Co IV LLC (4)(5)(6)(7) SF + 2.90 % 7.23 % 4/14/2039 $ 1,000 $ 10 $ 10"
-    }
-   ]
-  },
-  {
-   "what": "PIK figures printed and not tagged (8 rows)",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-03-31",
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001989817-25-000043",
-     "text": "Kowalski Trust (4)(5)(7) 16.00 % PIK 16.00 % 5/31/2034 18,030 17,722 18,030"
-    },
-    {
-     "accession": "0001989817-25-000043",
-     "text": "Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 11,052 10,861 10,871"
-    },
-    {
-     "accession": "0001989817-25-000043",
-     "text": "Flatiron Energy Holdco LLC (4)(13) SF + 7.50 % PIK 11.80 % 10/1/2029 5,094 4,986 4,991"
-    },
-    {
-     "accession": "0001989817-25-000043",
-     "text": "LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556"
-    },
-    {
-     "accession": "0001989817-25-000043",
-     "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
-    }
-   ]
-  },
-  {
-   "what": "unit counts from the page (13 rows: proxy overwrites, x1000 tags, class changes)",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-09-30",
     "2025-12-31",
     "2026-03-31"
    ],
    "quotes": [
     {
-     "accession": "0001989817-24-000032",
-     "text": "The ONE Group Hospitality, Inc. - Preferred Shares (4) 8/2/2029 $ 1,000 $ 950 $ 972"
-    },
-    {
-     "accession": "0001628280-26-035294",
-     "text": "The ONE Group Hospitality, Inc. (20) - A-2 Warrants 11,911 61 21"
-    },
-    {
-     "accession": "0001989817-25-000085",
-     "text": "NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 3,018"
+     "accession": "0001628280-26-020820",
+     "text": "IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -"
     }
    ]
   },
   {
-   "what": "Constellation Wealth Capital Fund-A-Blocker (LIDO) unsecured note: 2025-12-31 c-389 tagged with Corza's member (name and maturity, context-keyed); 2025-09-30 published as a fund interest (loan); 2026-03-31 and 2026-06-30 dropped as aggregates, now published (wrapper debt leaf marker 'blocker', 1 identifier of 989 changes) with the printed name and loan class. 2 rows added, all values nil",
+   "what": "Reference-rate letters resolved by the filing's dated legend: wrapper reference_rate_codes B=BBSW to 2025-03-31, B=BBSY from 2025-06-30, BB=BKBM (the wrapper had copied the HPS Corporate Lending dates); Mediaworks 2025-12-31 c-275 BKBM and HB AcquisitionCo 2024-12-31 c-183/c-184, 2025-03-31 c-239/c-240 BBSW by row correction. BKBM and BBSW exist as values: no loss",
    "kind": "wrapper",
    "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Bank Bill Swap Rate (\"BBSW\" or \"B\") which reset daily, monthly, quarterly, semiannually or annually."
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Bank Bill Benchmark Rate (BKBM or BB)"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Mediaworks Holdings Limited (4)(5)(9)(30) BB + 6.00 % 8.54 % 10/17/2028 NZD 3,223 1,836 1,841"
+    },
+    {
+     "accession": "0001989817-25-000023",
+     "text": "HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.97 % 8/7/2029 A$ 3,789 2,494 2,249"
+    }
+   ]
+  },
+  {
+   "what": "Blank lien filled from the printed section heading on 16 loan rows (Freedom Funding and Corza Unsecured 2025-12-31; Equinox 2024-12-31 c-181 First, c-195 Second; International Construction Products 2025-03-31 c-171/c-253 and 2025-06-30 c-217/c-314; New Era 2025-09-30 c-423 First; the Constellation unsecured note x4; NG Energy x3 above). Row corrections (the heading before each printed line was checked by gen_specs_r6.py)",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
     "2025-09-30",
     "2025-12-31",
     "2026-03-31",
@@ -290,148 +155,32 @@
    "quotes": [
     {
      "accession": "0001628280-26-020820",
-     "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -"
-    },
-    {
-     "accession": "0001628280-26-035294",
-     "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 48 $ - $ -"
-    },
-    {
-     "accession": "0001989817-25-000085",
-     "text": "Constellation Wealth Capital Fund-A-Blocker (Lido), LLC (4) 2/1/2038 46 46 46"
+     "text": "Freedom Funding Center LLC (4)(7) 12.00 % 12.00 % 9/30/2032 27,876 27,876 28,161 27,876 28,161 2.26 % Health Care Equipment & Supplies Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950 19,164 19,950 1.60 % Total Unsecured Debt"
     }
    ]
   },
   {
-   "what": "class: New Era 2025-09-30 to a loan (par tagged as units); LC8 2024-09-30 and IDF 9 Series B 2025-09-30 to preferred equity (IDF 9 context-keyed)",
+   "what": "', LLC' restored on Mood Media Borrower (9 rows, 2024-09-30 to 2025-03-31) and White Cap Buyer (2 rows) by row correction; the 2 White Cap rows also take the filer's later GICS heading by the D-232 carry-back",
    "kind": "row_correction",
    "quarters": [
     "2024-09-30",
-    "2025-09-30"
+    "2024-12-31",
+    "2025-03-31"
    ],
    "quotes": [
     {
-     "accession": "0001989817-25-000085",
-     "text": "New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314"
+     "accession": "0001989817-24-000055",
+     "text": "Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.50 % 12/31/2025 20,043 20,005 20,043"
     },
     {
      "accession": "0001989817-24-000055",
-     "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
-    },
-    {
-     "accession": "0001989817-25-000085",
-     "text": "IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041"
-    }
-   ]
-  },
-  {
-   "what": "par currency from the printed line (7 loans), USD at the build's FRED H.10 rate",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-06-30",
-    "2024-12-31",
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0001989817-24-000032",
-     "text": "Travelex Issuerco 2 PLC (4)(5)(12) SN+ 8.00 % 13.21 % 9/22/2028 GBP 1,770 2,093 2,241"
-    },
-    {
-     "accession": "0001989817-25-000023",
-     "text": "Fertitta Entertainment LLC/NV (8) SF + 3.50 % 7.86 % 1/27/2029 4,974 4,998 4,999"
-    },
-    {
-     "accession": "0001989817-25-000023",
-     "text": "Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744"
-    },
-    {
-     "accession": "0001628280-26-020820",
-     "text": "Neon Maple US Debt Mergersub Inc (5)(7)(23) SF + 2.50 % 6.22 % 11/17/2031 3,970 3,962 3,980"
-    }
-   ]
-  },
-  {
-   "what": "printed maturities restored (4 rows)",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-12-31",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001989817-25-000023",
-     "text": "Equinox Holdings, Inc. (4)(10) SF + 8.25 % (incl. 4.13 % PIK) 12.58 % 3/8/2029 10,046 9,843 9,879"
-    },
-    {
-     "accession": "0001989817-25-000085",
-     "text": "IDF 9 Financeco, LLC (4)(6)(15) SF + 8.50 % 12.50 % 3/28/2031 2,518 2,299 2,306"
-    },
-    {
-     "accession": "0001628280-26-020820",
-     "text": "Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950"
-    },
-    {
-     "accession": "0001628280-26-056793",
-     "text": "Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366"
-    }
-   ]
-  },
-  {
-   "what": "2024-03-31 declared a nil income quarter (new highlights wrapper): 2024-Q4 income is the year less three quarters (22,872 / NII 18,523), clears income_identity",
-   "kind": "wrapper",
-   "quarters": [
-    "2024-12-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0001989817-24-000007",
-     "text": "Total expenses $ 391,674 Reimbursable expenses (Note 3) ( 391,674 ) Net expenses $ - Net increase (decrease) in net assets resulting from operations $ -"
-    },
-    {
-     "accession": "0001989817-25-000023",
-     "text": "Year Ended December 31, 2024 Total investment income $ 61,475 Net expenses 13,370 Net investment income before excise tax 48,105"
-    }
-   ]
-  },
-  {
-   "what": "D-232 (owner ruling on REQ-rfhc-1, option b): new opt-in wrapper key source_encodings.gics_industry_carry_back ['through 2025-09-30'] and step pipeline/unified_holdings.py _carry_back_gics_industry. For each company (published issuer_name without case, punctuation or spacing; no legal-form or fuzzy matching) the filer's printed GICS industry heading after 2025-09-30 (one heading only, a GICS industry in data/reference/gics_hierarchy.json) is carried to its ICB-era rows: a published sub-industry inside that industry is kept (339 funded rows); otherwise gics_sub_industry takes the label the build publishes for the same printed heading on the company's later rows (466 funded rows; 92 where the industry has a single sub-industry, 374 where it is the shared map's representative sub-industry of the heading). extracted_industry (the ICB heading printed in the row's own quarter) is unchanged. Per-company evidence (heading, filing, context, printed row): scratch/fund_runs/0001989817/r2/carry_evidence_rfhcg.csv (177 companies). All six industry_coverage findings clear (coverage 88 to 98 pct, 2024-06-30 at warning level).",
-   "kind": "shared_code",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001628280-26-020820",
-     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
-    },
-    {
-     "accession": "0001628280-26-020820",
-     "text": "1.18 % Software Alegeus Technologies Holdings Corp (4)(10)(24) SF + 6.50 % 10.34 % 11/5/2029 34,475 33,813 34,580"
-    },
-    {
-     "accession": "0001989817-24-000032",
-     "text": "10.65 % Software and Computer Services Cotiviti Inc (7)(14) SF+ 3.25 % 8.58 % 5/1/2031 5,000 5,038 4,988"
+     "text": "White Cap Buyer, LLC (7)(14) SF + 3.25 % 8.10 % 10/19/2029 2,000 1,990 1,988"
     }
    ]
   }
  ],
  "total_exceptions": [],
  "parked": [
-  {
-   "finding": "Equinox Holdings 2024-12-31 c-195 maturity (not a ledger finding)",
-   "hypotheses": [
-    "Row correction logged as applied (context c-195) but the published row has no maturity and empty corrected_fields: a later step replaces the row (likely a duplicate-identifier collapse); not traced within the build budget."
-   ]
-  },
   {
    "finding": "AP Himalaya and Creek Feeder LP-interest unit scale (not a ledger finding)",
    "hypotheses": [
@@ -443,9 +192,39 @@
    "hypotheses": [
     "Left uncovered or with their earlier label because the matching rule is the printed name without case, punctuation or spacing: AMR GP Limited, Corza Medical S.A R.L. (later Srl), Fertitta Entertainment LLC/NV, Madonna Bidco Limited, Matrix Renewables (Devco) USA LLC, Orthrus Limited, Patriot Acquisition Topco S.A R.L. (later Sarl), RBP Global Holdings Limited, The One Group, LLC (later ONE Group, LLC), White Cap Buyer (later White Cap Supply Holdings): 60 funded rows, 7 of them without GICS (scratch/fund_runs/0001989817/r2/carry_buckets_rfhcg.txt). A legal-form or rename match would need an owner rule or a per-company declaration."
    ]
+  },
+  {
+   "finding": "LC8 Cirrostratus L.P. par published as shares, 2024-09-30 to 2025-12-31 (6 rows: 2024-09-30 c-165 (ROW-e8f139cbaebd4d8e); 2024-12-31 c-207 (ROW-f58b5fb18512094e); 2025-03-31 c-270 (ROW-492a30c2d95a4a42); 2025-06-30 c-336 (ROW-833956a2e6178409); 2025-09-30 c-393 (ROW-513bef8b96587fb2); 2025-12-31 c-409 (ROW-457cb2640125f15b))",
+   "hypotheses": [
+    "needs a build: move the figure back to principal_amount and blank shares_held (row corrections for the six rows; the earlier shares corrections for LC8 are in row_corrections.csv and must be superseded by later lines)",
+    "Read on the page in every quarter: rate and maturity printed, figure near cost and rising with PIK accrual, so par and not units. Not tested: no build left and no untested correction lines added."
+   ]
   }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "hcz-f27-launch-quarter-warehousing-income",
+   "classification": "acceptance_change",
+   "file": "fund_financials F27",
+   "what": "Owner decision: a fund's first investing quarter, whose income includes income on assets warehoused before capital was raised, fires F27 on a value equal to the printed ratio. Accept it as filed, or skip F27 when no prior investments exist to average.",
+   "why": "D-253's like-for-like basis fails too (15.67 % against coupon 11.86 %); published = printed.",
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Ratio of net investment income to average net assets (5) 14.70 %"
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "income was $19.7 million driven by our deployment of capital and income earned on the investments funded by the Financing Providers under the Warehousing Transactions."
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "As of June 30, 2024, the Companys asset coverage was 1,203.5 %."
+    }
+   ],
+   "next_action": "Owner ruling; no data change. Replaces hcz-f27-income-over-net-assets-levered-fund (wrong cause) and withdraws the C107 and X02 requests, which close through accepted dispositions."
+  }
+ ],
  "observations": [
   {
    "observation_key": "member-keeps-prior-company-name-after-rename",
@@ -629,23 +408,26 @@
   },
   {
    "observation_key": "equity-section-rows-published-as-loans",
-   "what": "Two rows printed under Preferred Equity were published as loans: LC8 Cirrostratus 2024-09-30 (3.7M) and IDF 9 Financeco Series B Units 2025-09-30 (1.0M, identifier shared with the IDF 9 loan). Fixed by row corrections (IDF 9 context-keyed).",
+   "what": "Two rows printed under Preferred Equity were published as loans: LC8 Cirrostratus 2024-09-30 (3.7M) and IDF 9 Financeco Series B Units 2025-09-30 (1.0M, identifier shared with the IDF 9 loan). Fixed by row corrections (IDF 9 context-keyed). Reverse direction found by the reviewer: NG Energy Fund 1 LLC, printed under First Lien Debt as an SF + 7.50 % loan, was published FUND / PRIVATE_CREDIT_FUND with no lien at 2025-12-31, 2026-03-31, 2026-06-30 (about 21M); fixed by row correction.",
    "field": "asset_category",
    "quarters": [
     "2024-09-30",
-    "2025-09-30"
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
    ],
-   "fair_value_m": 4.8,
+   "fair_value_m": 25.9,
    "cause": "fund",
    "action": "fixed",
-   "suggested_check": "A loan row with no rate and no spread whose printed line sits under an equity section heading.",
+   "suggested_check": "Compare the printed section heading with asset_category in both directions: an equity-section row published as a loan with no rate, and a debt-section row (rate and maturity printed under a lien heading) published as a fund or equity.",
    "quote": {
     "accession": "0001989817-24-000055",
     "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "No rule caught these as class errors: X02 counts loans with no rate, but its 2024-09-30 finding (RVQ_REV_3cb132fea40e) was recorded a false alarm with LC8 in it, and the pending reason x02-no-rate-printed-on-the-row would clear such a row by check. A class check tied to the printed section heading is needed.",
+    "rationale": "No rule caught these as class errors: X02 counts loans with no rate, but its 2024-09-30 finding (RVQ_REV_3cb132fea40e) was recorded a false alarm with LC8 in it, and the pending reason x02-no-rate-printed-on-the-row would clear such a row by check. A class check tied to the printed section heading is needed. The detector must run both ways: NG Energy shows a debt-section loan published as a fund interest from the word 'Fund' in its name.",
     "reference": "scratch/fund_runs/0001989817/r2/sweep.py; reviewer note on RVQ_REV_3cb132fea40e"
    }
   },
@@ -675,7 +457,7 @@
   },
   {
    "observation_key": "printed-maturity-missing-from-published-row",
-   "what": "Maturity was blank on loans whose identifier repeats in the quarter (Equinox x2 2024-12-31, IDF 9 2025-09-30, Corza 2025-12-31) and on Distributed Solar 2026-06-30 (printed 5/30/2026, before the report date). Fixed by row corrections on four; Equinox c-195 (2024-12-31) is logged 'Row correction applied' but the published row still has no maturity: parked.",
+   "what": "Maturity was blank on loans whose identifier repeats in the quarter (Equinox x2 2024-12-31, IDF 9 2025-09-30, Corza 2025-12-31) and on Distributed Solar 2026-06-30 (printed 5/30/2026, before the report date). Fixed by row corrections on four; Equinox c-195 (2024-12-31) is logged 'Row correction applied' but the published row still has no maturity: parked. 2026-11-15: Equinox 2024-12-31 c-195 now publishes 2027-06-30 (cause: the HPS_CCS hook in make_row_corrections.py gave two same-field specs one context; fixed).",
    "field": "maturity_date",
    "quarters": [
     "2024-12-31",
@@ -685,7 +467,7 @@
    ],
    "fair_value_m": 35.5,
    "cause": "shared",
-   "action": "parked",
+   "action": "fixed",
    "suggested_check": "A loan with a printed maturity on its row and no published maturity.",
    "quote": {
     "accession": "0001989817-25-000023",
@@ -899,498 +681,180 @@
     "rationale": "No rule distinguishes a printed sub-industry from a representative one; industry_coverage counts any non-empty gics_sub_industry.",
     "reference": "scratch/fund_runs/0001989817/r2/carry_buckets.py; latemap.sql"
    }
+  },
+  {
+   "observation_key": "reference-rate-letter-resolved-by-wrong-dated-legend",
+   "what": "The wrapper's reference_rate_codes had B = BBSY from 2024-12-31 (copied from HPS Corporate Lending); this filer's legend reads 'Bank Bill Swap Rate (\"BBSW\" or \"B\")' through the 2025-03-31 filing and BBSY from 2025-06-30. HB AcquisitionCo 2024-12-31 (2 rows) and 2025-03-31 (2 rows) published BBSY. Mediaworks 2025-12-31 printed 'BB' (BKBM in that legend) and was published SOFR. The rule reference_rate_printed agreed with the wrong wrapper reading, so it was silent until the dates were corrected.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 6.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "For each short reference-rate code, read the filing's own legend text (the sentence defining the code) and compare it with the wrapper's code for that report date; fail a wrapper date that the legend text contradicts.",
+   "quote": {
+    "accession": "0001989817-25-000043",
+    "text": "Bank Bill Swap Rate (\"BBSW\" or \"B\") which reset daily, monthly, quarterly, semiannually or annually."
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "reference_rate_printed compares against the wrapper's own reading, so a wrong wrapper date is invisible to it; a check against the legend sentence in the filing is independent.",
+    "reference": "scratch/fund_runs/0001989817/r4_wrapper2.py; hczb ledger: reference_rate_printed fired on HB after the correction"
+   }
+  },
+  {
+   "observation_key": "blank-lien-on-loan-printed-under-a-lien-heading",
+   "what": "16 loan rows printed under First Lien Debt, Second Lien Debt or Unsecured Debt were published with a blank lien (repeated-identifier rows, hand-corrected rows, a fund-named loan). Fixed by row corrections after reading the heading before each printed line.",
+   "field": "lien_position",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 92.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A DIRECT_LENDING row with a blank lien whose printed line's nearest preceding section heading names a lien (First Lien Debt, Second Lien Debt, Unsecured Debt).",
+   "quote": {
+    "accession": "0001628280-26-020820",
+    "text": "Freedom Funding Center LLC (4)(7) 12.00 % 12.00 % 9/30/2032 27,876 27,876 28,161 27,876 28,161 2.26 % Health Care Equipment & Supplies Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950 19,164 19,950 1.60 % Total Unsecured Debt"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fires on a blank lien of a loan; the heading is on the page and the check is deterministic.",
+    "reference": "scratch/fund_runs/0001989817/r2/gen_specs_r6.py (heading test)"
+   }
+  },
+  {
+   "observation_key": "printed-line-without-own-context-same-values-as-tagged-twin",
+   "what": "IDF 8 Topco, LLC prints Series B-1 Units and Series B-2 Units (230,248 units, cost 230, value nil each); the filer tags one context for both at 2025-12-31 and 2026-03-31, so the cost total was short by 230,000 (fair value ties because the line is valued at nil). Declared from the page (shared code, opt-in printed_scale and tagged_twin).",
+   "field": "cost",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Strict 500-dollar published cost total per quarter against the printed Total cost, and a printed-line census against published rows per context.",
+   "quote": {
+    "accession": "0001628280-26-020820",
+    "text": "IDF 8 Topco, LLC (4)(20)(21) - Series B-2 Units 230,248 230 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The fair-value totals tie, so no existing rule fired; the cost total against the printed schedule total catches it.",
+    "reference": "hczb cost totals 2,137,974 and 2,181,885 thousand vs printed 2,138,204 and 2,182,115"
+   }
+  },
+  {
+   "observation_key": "legal-form-dropped-from-issuer-name",
+   "what": "', LLC' dropped from Mood Media Borrower (9 rows) and White Cap Buyer (2 rows): the member text is cut before the legal form. Fixed by row corrections.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 69.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Published issuer_name against the first cell of the row's printed line, not insensitive to the legal-form suffix.",
+   "quote": {
+    "accession": "0001989817-24-000055",
+    "text": "Mood Media Borrower, LLC (4)(10) SF + 6.75 % 11.50 % 12/31/2025 20,043 20,005 20,043"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The name check D06 ignores legal-form punctuation by design (repaired 2026-11-10), so it cannot see the drop; a strict printed-first-cell comparison can.",
+    "reference": "reviewer name scan (printed first cell vs issuer_name, 2,159 rows)"
+   }
+  },
+  {
+   "observation_key": "pik-preferred-par-figure-published-as-shares",
+   "what": "LC8 Cirrostratus L.P. (preferred units paying 'SF + 7.00 % PIK', maturity 2/8/2029) prints its Par Amount/Units figure near cost and growing each quarter by PIK accrual (1,532, 1,575, 1,620, 1,667, 1,714; at 2024-09-30 '$ 3,800' with cost 3,725). That is par of a debt-like instrument, not a unit count (units do not grow). Earlier corrections moved it from principal_amount to shares_held, so every published LC8 row has principal_amount blank and the par published as shares. Affected rows (quarter, context, row_id): 2024-09-30 c-165 (ROW-e8f139cbaebd4d8e); 2024-12-31 c-207 (ROW-f58b5fb18512094e); 2025-03-31 c-270 (ROW-492a30c2d95a4a42); 2025-06-30 c-336 (ROW-833956a2e6178409); 2025-09-30 c-393 (ROW-513bef8b96587fb2); 2025-12-31 c-409 (ROW-457cb2640125f15b). Quarters 2026-03-31 and 2026-06-30 hold no LC8 row. Page sample errors C017 2025-09-30 and C018 2025-03-31 are two of these six rows. Not fixed: no build remains.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 10.1,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "A row classed as preferred whose printed line carries a rate and maturity and whose par/units figure is within 10 percent of cost: the figure is par; shares_held must be blank and principal_amount must hold it.",
+   "quote": {
+    "accession": "0001989817-25-000043",
+    "text": "LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows; the printed rate, maturity and the figure near cost identify par on the page, and the shares/principal pair on the published row is checkable.",
+    "reference": "scratch/fund_runs/0001989817/r5_lc8.py"
+   }
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
   "tests/test_gics_industry_carry_back.py: 6 passed (focused: carry, keep inside, false positives: no later heading, non-GICS later heading, legal-form name difference, two later headings, fund without key unchanged)",
-  "tests/test_gics_industry_carry_back.py tests/test_bdc_xbrl_wrapper.py tests/test_source_encodings.py tests/test_wrapper_content_signatures.py tests/test_fund_highlights_wrapper.py: 732 passed"
+  "tests/test_gics_industry_carry_back.py tests/test_bdc_xbrl_wrapper.py tests/test_source_encodings.py tests/test_wrapper_content_signatures.py tests/test_fund_highlights_wrapper.py: 732 passed",
+  "2026-11-15 (hcz): tests/test_verdict_retirements.py: 12 passed (with the new store)",
+  "2026-11-15 (hcz round 2): tests/test_printed_rows.py 42 passed (6 new: printed_scale, tagged_twin); with tests/test_bdc_xbrl_wrapper.py and tests/test_verdict_retirements.py: 611 passed"
  ],
  "not_done": [
-  "No independent page sample drawn by me (the orchestrator's sample on rfhcd: 0 published errors of 20).",
-  "Rows with no name cell on the printed page cannot be checked by the page rules: up to 31 rows at 2026-06-30 (13 pct of that quarter's FV), 2 to 25 rows in other quarters (page_rules_name_blind_spots.csv in rfhcf, n_no_name_cell); those names were not checked against the page.",
-  "Rows whose identifier repeats in a quarter (14 rows) are not reached by the page-reader printed-row join; each was read by hand (Equinox, ICP, IDF 9, Corza, ONE Group warrants).",
-  "Equinox c-195 maturity cause not traced (parked).",
-  "LP-interest unit scale (AP Himalaya, Creek Feeder) and the 2024-06-30 warrant counts printed in thousands left as published.",
-  "ICP 2025-09-30 c-352 heading 'Non-Life Insurance' (capital L) not published: the encoding check refuses both casings in one list.",
-  "'All findings cleared' would not be 'data correct': no rule tests GICS correctness, cross-quarter unit consistency, or maturity against the page.",
-  "tests/test_unified_holdings.py not completed: a run (also with -k 'industry or gics') exceeded the 15-minute timeout and was stopped; not run to the end.",
-  "No other fund rebuilt for the new step: it is off unless a wrapper declares gics_industry_carry_back, and only 0001989817 does.",
-  "The six industry_coverage findings are gone from the ledger, so their investigations are removed from this report (an investigation of a finding that is no longer outstanding is an orphan); their history is in the D-230 report version and in request_resolution_history.",
-  "Companies matched only through entity_id (name differs) were not carried (parked list)."
+  "Round 2 scope: the coordinator's items 1 to 8. Independent re-review of hczf and the 20-row page sample not run by this agent.",
+  "make_row_corrections.py (HPS_CCS hook) keyed context by (quarter, identifier, field names): the first Equinox/ICP/Corza lien lines were written with the later spec's context. Fixed in the script (key now includes values and reason) and the correct lines appended; the wrong First Lien lines on c-195, c-253, c-314 and the duplicate Unsecured on c-389 remain in row_corrections.csv (append-only) and are shadowed by the later lines for the same key.",
+  "Not found: where the E07 verdict's 488 source positions came from."
  ],
  "investigations": [
   {
-   "finding_id": "RVQ_REV_e372b59541c5",
+   "finding_id": "RVQ_REV_9f37182a6178",
    "rule_name": "F27",
-   "report_date": "2024-09-30",
-   "coverage": {
-    "affected_rows": [
-     "0001989817|2024-09-30|income_yield_pct",
-     "0001989817|2024-09-30|weighted_average_coupon"
-    ],
-    "reviewed_rows": [
-     "0001989817|2024-09-30|income_yield_pct",
-     "0001989817|2024-09-30|weighted_average_coupon"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001989817-24-000055",
-     "text": "Ratio of net investment income to average net assets (5) 13.77 %"
-    },
-    {
-     "accession": "0001989817-24-000055",
-     "text": "Total Investments - Non-Controlled/Non-Affiliated $ 703,871 $ 707,902 126.15 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Published income yield differs from the page: rejected; income_yield_pct equals the printed ratio of net investment income to average net assets (13.77, 12.83, 12.57).",
-    "Holdings coupon understated: not supported; the fund holds 126 to 169 pct of net assets in investments (printed totals), so income over net assets exceeds the asset coupon plus 200bp by leverage alone.",
-    "Annualisation or period mismatch: the printed ratio is the filer's annualised ratio; no published value differs from it."
-   ],
-   "next_action": "Proposal PD-F27-1989817-1 (reason f27-income-over-net-assets-of-a-levered-fund, same reason already proposed for other funds) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_ce0a1c1d85bc",
-   "rule_name": "F27",
-   "report_date": "2024-12-31",
-   "coverage": {
-    "affected_rows": [
-     "0001989817|2024-12-31|income_yield_pct",
-     "0001989817|2024-12-31|weighted_average_coupon"
-    ],
-    "reviewed_rows": [
-     "0001989817|2024-12-31|income_yield_pct",
-     "0001989817|2024-12-31|weighted_average_coupon"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001989817-25-000023",
-     "text": "Ratio of net investment income to average net assets (5) 12.83 %"
-    },
-    {
-     "accession": "0001989817-25-000023",
-     "text": "Total Investments - Non-Controlled/Non-Affiliated $ 982,565 $ 984,954 151.10 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Published income yield differs from the page: rejected; income_yield_pct equals the printed ratio of net investment income to average net assets (13.77, 12.83, 12.57).",
-    "Holdings coupon understated: not supported; the fund holds 126 to 169 pct of net assets in investments (printed totals), so income over net assets exceeds the asset coupon plus 200bp by leverage alone.",
-    "Annualisation or period mismatch: the printed ratio is the filer's annualised ratio; no published value differs from it."
-   ],
-   "next_action": "Proposal PD-F27-1989817-1 (reason f27-income-over-net-assets-of-a-levered-fund, same reason already proposed for other funds) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_c472f5c765f6",
-   "rule_name": "F27",
-   "report_date": "2025-06-30",
-   "coverage": {
-    "affected_rows": [
-     "0001989817|2025-06-30|income_yield_pct",
-     "0001989817|2025-06-30|weighted_average_coupon"
-    ],
-    "reviewed_rows": [
-     "0001989817|2025-06-30|income_yield_pct",
-     "0001989817|2025-06-30|weighted_average_coupon"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001989817-25-000065",
-     "text": "Ratio of net investment income to average net assets (5) 12.57 %"
-    },
-    {
-     "accession": "0001989817-25-000065",
-     "text": "Total Investment Portfolio $ 1,632,151 $ 1,646,959 169.34 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Published income yield differs from the page: rejected; income_yield_pct equals the printed ratio of net investment income to average net assets (13.77, 12.83, 12.57).",
-    "Holdings coupon understated: not supported; the fund holds 126 to 169 pct of net assets in investments (printed totals), so income over net assets exceeds the asset coupon plus 200bp by leverage alone.",
-    "Annualisation or period mismatch: the printed ratio is the filer's annualised ratio; no published value differs from it."
-   ],
-   "next_action": "Proposal PD-F27-1989817-1 (reason f27-income-over-net-assets-of-a-levered-fund, same reason already proposed for other funds) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_76f22d14da84",
-   "rule_name": "C107",
    "report_date": "2024-06-30",
    "coverage": {
     "affected_rows": [
-     "ROW-1d359150d51eba41",
-     "ROW-2c0b44ef87bf831f",
-     "ROW-3f922b2fdde6eaff",
-     "ROW-6381f29ddb1a5f75",
-     "ROW-7bfba7c31c3d17e4",
-     "ROW-7c72590c0f7b7bee",
-     "ROW-88c5d12286bf986e",
-     "ROW-b3ad341c4412c2b1",
-     "ROW-ffc3489b35cc5781"
+     "0001989817|2024-06-30|income_yield_pct"
     ],
     "reviewed_rows": [
-     "ROW-1d359150d51eba41",
-     "ROW-2c0b44ef87bf831f",
-     "ROW-3f922b2fdde6eaff",
-     "ROW-6381f29ddb1a5f75",
-     "ROW-7bfba7c31c3d17e4",
-     "ROW-7c72590c0f7b7bee",
-     "ROW-88c5d12286bf986e",
-     "ROW-b3ad341c4412c2b1",
-     "ROW-ffc3489b35cc5781"
+     "0001989817|2024-06-30|income_yield_pct"
     ]
    },
    "evidence": [
     {
      "accession": "0001989817-24-000032",
-     "text": "WorkWave Intermediate II, LLC (4)(6)(9) 6/29/2027 10,847 ( 156 ) ( 62 )"
+     "text": "Ratio of net investment income to average net assets (5) 14.70 %"
     },
     {
      "accession": "0001989817-24-000032",
-     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Earlier verdict (American Academy revolver cost -3,000 against a printed dash): rechecked; the row now publishes cost 0 (printed '-'), and is no longer flagged.",
-    "Each of the 9 flagged rows read against its printed line (scratch/fund_runs/0001989817/r2/flag_C107_2024-06-30.txt): all are undrawn delayed-draw or revolving lines whose printed amortized cost is a bracketed negative figure, published equal to the page.",
-    "Sign lost or cost taken from fair value: rejected on every row (cost and value printed separately and published separately)."
-   ],
-   "next_action": "Proposal PD-C107-1989817-1 (reason undrawn-line-negative-cost-from-unamortized-fees, addresses the verdict) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_c72b2b8f1437",
-   "rule_name": "C107",
-   "report_date": "2024-09-30",
-   "coverage": {
-    "affected_rows": [
-     "ROW-2fed13d18e8d6d91",
-     "ROW-3139ec2b901e8711",
-     "ROW-6bc1feb3040f9ffe",
-     "ROW-87dcb069fcc9eb36",
-     "ROW-93cde8ed2febe7ec",
-     "ROW-998d92f535e3c41d",
-     "ROW-d878798b5635f624",
-     "ROW-e96f7ae172239cdb",
-     "ROW-f28f05ff2dc5b33f"
-    ],
-    "reviewed_rows": [
-     "ROW-2fed13d18e8d6d91",
-     "ROW-3139ec2b901e8711",
-     "ROW-6bc1feb3040f9ffe",
-     "ROW-87dcb069fcc9eb36",
-     "ROW-93cde8ed2febe7ec",
-     "ROW-998d92f535e3c41d",
-     "ROW-d878798b5635f624",
-     "ROW-e96f7ae172239cdb",
-     "ROW-f28f05ff2dc5b33f"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001989817-24-000055",
-     "text": "NTH Degree Purchaser, Inc (4)(6)(10) 9/10/2030 3,422 ( 68 ) ( 68 )"
+     "text": "income was $19.7 million driven by our deployment of capital and income earned on the investments funded by the Financing Providers under the Warehousing Transactions."
     },
     {
-     "accession": "0001989817-24-000055",
-     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 )"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Earlier verdict (American Academy revolver cost -3,000 against a printed dash): rechecked; the row now publishes cost 0 (printed '-'), and is no longer flagged.",
-    "Each of the 9 flagged rows read against its printed line (scratch/fund_runs/0001989817/r2/flag_C107_2024-09-30.txt): all are undrawn delayed-draw or revolving lines whose printed amortized cost is a bracketed negative figure, published equal to the page.",
-    "Sign lost or cost taken from fair value: rejected on every row (cost and value printed separately and published separately)."
-   ],
-   "next_action": "Proposal PD-C107-1989817-1 (reason undrawn-line-negative-cost-from-unamortized-fees, addresses the verdict) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_9385fe8e3aa6",
-   "rule_name": "X02",
-   "report_date": "2025-09-30",
-   "coverage": {
-    "affected_rows": [
-     "ROW-19f118e61d1b0842",
-     "ROW-1eec05853ade9ad0",
-     "ROW-2435ee879b12f94f",
-     "ROW-292e8ced6acd6dbd",
-     "ROW-2d973d96e53ec416",
-     "ROW-31eb89cdc4a05227",
-     "ROW-32a196ec09d11bfe",
-     "ROW-3601dc5fa7ceae47",
-     "ROW-37153233eb75311b",
-     "ROW-38842855bcf79dff",
-     "ROW-3aebd6e0f37b096b",
-     "ROW-54a7253d636bf5bf",
-     "ROW-5877a0a19411509b",
-     "ROW-59b5edada79fb5d2",
-     "ROW-5c52254809983c33",
-     "ROW-5c8a2c93560ad5f1",
-     "ROW-61d4a76b93b9ba73",
-     "ROW-67d2cad33d5f31fb",
-     "ROW-6df141472127f6db",
-     "ROW-7073eaafd1f2b823",
-     "ROW-731da23fef0c743a",
-     "ROW-78d3a72bb9be90ee",
-     "ROW-79688c55123e8a40",
-     "ROW-7c6405935b168d15",
-     "ROW-7f900fd4c000a7d3",
-     "ROW-91a2fc5016aace9d",
-     "ROW-a658a583b979e0af",
-     "ROW-a8ef4a1de38bd5e9",
-     "ROW-ab8f5acd8ba593c8",
-     "ROW-abd6d8f5f64f3c69",
-     "ROW-ac0eff0c979038a5",
-     "ROW-ad87e8895cd9ba64",
-     "ROW-b02c547d390b03af",
-     "ROW-b2debad4b70dabbe",
-     "ROW-b52fd0990efb8ee5",
-     "ROW-bbf1fe189af4320f",
-     "ROW-c907b3ac6ef42c58",
-     "ROW-d4384f17002b1976",
-     "ROW-d74a40d3124c9927",
-     "ROW-ddc88e1b554876cf",
-     "ROW-e16bf81c5c18fa87",
-     "ROW-eb364dfa9f69cf8b",
-     "ROW-ef959650b980cdd1",
-     "ROW-f2e90750e88da035"
-    ],
-    "reviewed_rows": [
-     "ROW-19f118e61d1b0842",
-     "ROW-1eec05853ade9ad0",
-     "ROW-2435ee879b12f94f",
-     "ROW-292e8ced6acd6dbd",
-     "ROW-2d973d96e53ec416",
-     "ROW-31eb89cdc4a05227",
-     "ROW-32a196ec09d11bfe",
-     "ROW-3601dc5fa7ceae47",
-     "ROW-37153233eb75311b",
-     "ROW-38842855bcf79dff",
-     "ROW-3aebd6e0f37b096b",
-     "ROW-54a7253d636bf5bf",
-     "ROW-5877a0a19411509b",
-     "ROW-59b5edada79fb5d2",
-     "ROW-5c52254809983c33",
-     "ROW-5c8a2c93560ad5f1",
-     "ROW-61d4a76b93b9ba73",
-     "ROW-67d2cad33d5f31fb",
-     "ROW-6df141472127f6db",
-     "ROW-7073eaafd1f2b823",
-     "ROW-731da23fef0c743a",
-     "ROW-78d3a72bb9be90ee",
-     "ROW-79688c55123e8a40",
-     "ROW-7c6405935b168d15",
-     "ROW-7f900fd4c000a7d3",
-     "ROW-91a2fc5016aace9d",
-     "ROW-a658a583b979e0af",
-     "ROW-a8ef4a1de38bd5e9",
-     "ROW-ab8f5acd8ba593c8",
-     "ROW-abd6d8f5f64f3c69",
-     "ROW-ac0eff0c979038a5",
-     "ROW-ad87e8895cd9ba64",
-     "ROW-b02c547d390b03af",
-     "ROW-b2debad4b70dabbe",
-     "ROW-b52fd0990efb8ee5",
-     "ROW-bbf1fe189af4320f",
-     "ROW-c907b3ac6ef42c58",
-     "ROW-d4384f17002b1976",
-     "ROW-d74a40d3124c9927",
-     "ROW-ddc88e1b554876cf",
-     "ROW-e16bf81c5c18fa87",
-     "ROW-eb364dfa9f69cf8b",
-     "ROW-ef959650b980cdd1",
-     "ROW-f2e90750e88da035"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001989817-25-000085",
-     "text": "Alp CFO 2025, L.P. (4)(5)(19) - Subordinated Note 7/15/2037 4,000 4,000 4,000"
+     "accession": "0001989817-24-000032",
+     "text": "As of June 30, 2024, the Companys asset coverage was 1,203.5 %."
     },
     {
-     "accession": "0001989817-25-000085",
-     "text": "Saga Mid Co Limited (4)(5)(6)(10) 2/27/2031 GBP 8,364 ( 250 ) 22"
-    },
-    {
-     "accession": "0001989817-25-000085",
-     "text": "IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041"
+     "accession": "0001989817-24-000032",
+     "text": "As of June 30, 2024, the size of our investment portfolio at fair value was $503.2 million and our weighted average yield on debt and income producing securities at fair value was 12.5%."
     }
    ],
-   "conclusion": "false_alarm",
+   "conclusion": "source_ambiguity",
    "hypotheses_tested": [
-    "Every flagged row read against its printed row (scratch/fund_runs/0001989817/r2/flag_X02_2025-09-30.txt, 44 rows): undrawn lines printing maturity, par, cost and value only, plus the Alp CFO 2025 subordinated note, printed with no coupon.",
-    "Equity row published as a loan: found and fixed; IDF 9 Financeco Series B Units (context c-395) shared its identifier with the IDF 9 loan, now corrected by a context-keyed row correction to preferred equity and no longer flagged.",
-    "New Era Technology 2025-09-30 (published as common equity before this run, printed 'SF + 6.25 % PIK' with no all-in rate) is now a loan with spread 6.25 and is not flagged.",
-    "Gate round 2: the Constellation Wealth Capital Fund-A-Blocker (LIDO) unsecured note is now published as a loan in this quarter (c-377, printed '... (4) 2/1/2038 46 46 46') and joins the flagged rows; its printed line has maturity, par, cost and value and no coupon, so it is the same no-rate-printed case."
+    "Published income_yield_pct 14.70 is the printed ratio and total investment income 19,712 is the printed figure: no value is wrong.",
+    "Like-for-like basis (D-253, total investment income x4 / average investments) already exists and the quarter fails it as well: 19,712 x 4 / 503,227 = 15.67 % against the holdings' coupon 11.86 % (+3.81 pp); there is no 2024-03-31 investment balance to average (the fund began investing in April 2024). My earlier request for a 'like-for-like basis' was wrong: that basis is in the check.",
+    "Leverage as the cause: rejected. Asset coverage is 1,203.5 %, borrowings are minimal; investments at 124 % of net assets come from payables, not debt. My earlier 'levered fund' wording was wrong.",
+    "The filing's own account of the launch quarter: income includes income earned on investments funded by the Financing Providers under the Warehousing Transactions (assets held before the fund's capital, with the warehouse interest expense shown separately). That makes the launch-quarter ratio exceed the coupon without an extraction error. Later quarters pass F27 or skip."
    ],
-   "next_action": "Proposal PD-X02-1989817-1 (reason x02-no-rate-printed-on-the-row) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_5ff52445ac17",
-   "rule_name": "X02",
-   "report_date": "2026-03-31",
-   "coverage": {
-    "affected_rows": [
-     "ROW-017c1135bdfffa76",
-     "ROW-0963bd571555000a",
-     "ROW-0ce11658e2be66a5",
-     "ROW-128165083790f0ef",
-     "ROW-1fa0cd1928c530e5",
-     "ROW-3270006edcb2fe4f",
-     "ROW-387e6f9fc7a22c56",
-     "ROW-3caf468861f89d98",
-     "ROW-4ac2b8eefb260f1f",
-     "ROW-5596457908c3181a",
-     "ROW-5ed296a675e41979",
-     "ROW-60b77e73cae92511",
-     "ROW-63622d39c8613582",
-     "ROW-6bf10d2d2971074f",
-     "ROW-6c743a2273d2d43a",
-     "ROW-72dff1b46f6d8e5a",
-     "ROW-7998cc4391c3b615",
-     "ROW-79f868eb71b9e82e",
-     "ROW-80bbdca5972dd7bf",
-     "ROW-8a8117b5b20f704a",
-     "ROW-9e01cacf53cadf7b",
-     "ROW-a106fc307368853b",
-     "ROW-a2225ff99a788d57",
-     "ROW-a823c96b00dc86ae",
-     "ROW-bee15f6719a64843",
-     "ROW-c29b5ca475c1cf68",
-     "ROW-c39eaa47a4c189ef",
-     "ROW-c5c8021e2fe19220",
-     "ROW-cf72a7c88894b3de",
-     "ROW-d2ffd622f9ed4be7",
-     "ROW-d752d64113995396",
-     "ROW-df50858059853a34",
-     "ROW-e01691b077025065",
-     "ROW-e03f132dd9fa5ed5",
-     "ROW-e2f1cda59b310844",
-     "ROW-ed945baab9ed72ff",
-     "ROW-eef291c20bd19098",
-     "ROW-ef273910290537f9",
-     "ROW-f28184865acc17c9",
-     "ROW-f9315850cc1a0b4e",
-     "ROW-fd1b2636b8c4b7ab"
-    ],
-    "reviewed_rows": [
-     "ROW-017c1135bdfffa76",
-     "ROW-0963bd571555000a",
-     "ROW-0ce11658e2be66a5",
-     "ROW-128165083790f0ef",
-     "ROW-1fa0cd1928c530e5",
-     "ROW-3270006edcb2fe4f",
-     "ROW-387e6f9fc7a22c56",
-     "ROW-3caf468861f89d98",
-     "ROW-4ac2b8eefb260f1f",
-     "ROW-5596457908c3181a",
-     "ROW-5ed296a675e41979",
-     "ROW-60b77e73cae92511",
-     "ROW-63622d39c8613582",
-     "ROW-6bf10d2d2971074f",
-     "ROW-6c743a2273d2d43a",
-     "ROW-72dff1b46f6d8e5a",
-     "ROW-7998cc4391c3b615",
-     "ROW-79f868eb71b9e82e",
-     "ROW-80bbdca5972dd7bf",
-     "ROW-8a8117b5b20f704a",
-     "ROW-9e01cacf53cadf7b",
-     "ROW-a106fc307368853b",
-     "ROW-a2225ff99a788d57",
-     "ROW-a823c96b00dc86ae",
-     "ROW-bee15f6719a64843",
-     "ROW-c29b5ca475c1cf68",
-     "ROW-c39eaa47a4c189ef",
-     "ROW-c5c8021e2fe19220",
-     "ROW-cf72a7c88894b3de",
-     "ROW-d2ffd622f9ed4be7",
-     "ROW-d752d64113995396",
-     "ROW-df50858059853a34",
-     "ROW-e01691b077025065",
-     "ROW-e03f132dd9fa5ed5",
-     "ROW-e2f1cda59b310844",
-     "ROW-ed945baab9ed72ff",
-     "ROW-eef291c20bd19098",
-     "ROW-ef273910290537f9",
-     "ROW-f28184865acc17c9",
-     "ROW-f9315850cc1a0b4e",
-     "ROW-fd1b2636b8c4b7ab"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001628280-26-035294",
-     "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"
-    },
-    {
-     "accession": "0001628280-26-035294",
-     "text": "Axiom Buyer, LLC (4)(6)(10) 1/14/2030 1,905 ( 40 ) ( 27 )"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Every flagged row read against its printed row (scratch/fund_runs/0001989817/r2/flag_X02_2026-03-31.txt, 41 rows): undrawn lines printing maturity, par, cost and value only.",
-    "Earlier verdict (AVSC Holding Corp. revolver c-75 with no rate, printed 8.67 pct): fixed in the 2026-10-15 run by a row correction; published 8.67 / 5.00 / SOFR, no longer flagged.",
-    "New Era Technology 2025-09-30 (published as common equity before this run, printed 'SF + 6.25 % PIK' with no all-in rate) is now a loan with spread 6.25 and is not flagged.",
-    "Gate round 2: the Constellation Wealth Capital Fund-A-Blocker (LIDO) unsecured note is now published as a loan in this quarter (c-371, printed '... (4) 2/1/2038 $ 48 $ - $ -') and joins the flagged rows; its printed line has maturity, par, cost and value and no coupon, so it is the same no-rate-printed case."
-   ],
-   "next_action": "Proposal PD-X02-1989817-1 (reason x02-no-rate-printed-on-the-row) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_e38e8b45dbbb",
-   "rule_name": "PP02",
-   "report_date": "2026-06-30",
-   "coverage": {
-    "affected_rows": [
-     "ROW-153222d046a2e288",
-     "ROW-f253313ba3cfb1b8"
-    ],
-    "reviewed_rows": [
-     "ROW-153222d046a2e288",
-     "ROW-f253313ba3cfb1b8"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001628280-26-056793",
-     "text": "Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Total Software 412 412 0.03 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Duplicate dimension path: rejected; the page prints two identical Class V lines and the subtotal 412 counts both.",
-    "One line is the comparative or a note figure: rejected; both sit in the current schedule above 'Total Software'."
-   ],
-   "next_action": "Proposal PD-PP02-1989817-1 (reason pp02-twin-lines-printed-separately) awaits the owner; no data change."
-  },
-  {
-   "finding_id": "RVQ_REV_94b972980829",
-   "rule_name": "maturity_not_past",
-   "report_date": "2026-06-30",
-   "coverage": {
-    "affected_rows": [
-     "ROW-ae8aa544c1712b5f"
-    ],
-    "reviewed_rows": [
-     "ROW-ae8aa544c1712b5f"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001628280-26-056793",
-     "text": "Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "New in this run: the build had dropped the printed maturity on this row; a row correction restores 2026-05-30 from the printed line, which raised the check (1 of 287 rows; query scratch/fund_runs/0001989817/r2/past.sql lists every published row with a maturity before its report date: only this one).",
-    "Maturity misread (another tranche's date): rejected; the other Distributed Solar line prints 9/19/2027 and is published so."
-   ],
-   "next_action": "Proposal PD-maturity_not_past-1989817-1 (reason maturity-not-past-loan-held-past-printed-maturity) awaits the owner."
+   "next_action": "No data change. Acceptance change for the owner (request hcz-f27-launch-quarter-warehousing-income): accept F27 as fired for a fund's first investing quarter when the filing attributes income to warehoused assets, or skip the first investing quarter when no prior investments exist to average."
   }
  ],
  "request_resolution_history": [
@@ -1428,6 +892,34 @@
      "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
     }
    ]
+  }
+ ],
+ "retired_in_run": [
+  "RVQ_REV_731401ab263c",
+  "RVQ_REV_ffafe123de07",
+  "RVQ_REV_7047e9f49957",
+  "RVQ_REV_b0d02abceed3",
+  "RVQ_BLK_fc121eedb33a",
+  "RVQ_BLK_797b1b24c9ae"
+ ],
+ "closed_findings": [
+  {
+   "finding_id": "RVQ_REV_76f22d14da84",
+   "rule_name": "C107",
+   "report_date": "2024-06-30",
+   "closed_by": "accepted disposition DS-FUNDLOOP-C107-1989817 (as filed) after the real-error verdict was retired (VR-FL-1989817-07)"
+  },
+  {
+   "finding_id": "RVQ_REV_c72b2b8f1437",
+   "rule_name": "C107",
+   "report_date": "2024-09-30",
+   "closed_by": "accepted disposition DS-FUNDLOOP-C107-1989817 (as filed) after the real-error verdict was retired (VR-FL-1989817-08)"
+  },
+  {
+   "finding_id": "RVQ_REV_5ff52445ac17",
+   "rule_name": "X02",
+   "report_date": "2026-03-31",
+   "closed_by": "accepted disposition DS-FUNDLOOP-X02-1989817 (as filed) after the real-error verdict was retired (VR-FL-1989817-09)"
   }
  ]
 }
