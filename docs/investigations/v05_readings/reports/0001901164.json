@@ -1,81 +1,572 @@
 {
  "cik": "0001901164",
- "label": "trxd",
- "before": "spoff3",
+ "label": "trze",
+ "before": "trxd",
  "shared_code": false,
  "declared_changes": [
-  {"column": "index_classification", "rows": 50, "why": "44 rows printed under 'Preferred Equity', 'Common Stocks', 'Equity Investments' (2024-09-30 to 2026-03-31) and 'Asset Backed Securities' (Vertical Bridge 2026-03-31) were published DIRECT_LENDING / UNCLASSIFIED; set from the printed section by row correction. Section totals now equal the printed totals in every quarter (e.g. 2026-03-31 preferred 42,986, common 7,347, ABS 16,033)."},
-  {"column": "asset_category", "rows": 50, "why": "follows index_classification on the same rows (LOAN/OTHER -> EQUITY_PREFERRED / EQUITY_COMMON; ABS stays LOAN)"},
-  {"column": "asset_class", "rows": 50, "why": "follows index_classification (PRIVATE_CREDIT/OTHER -> PRIVATE_EQUITY; ABS -> STRUCTURED_CREDIT)"},
-  {"column": "instrument_description", "rows": 50, "why": "the printed section heading ('Preferred Equity', 'Common Stocks', 'Asset Backed Securities') set on the 44 reclassed rows; null before (the member names no instrument)"},
-  {"column": "shares_held", "rows": 50, "why": "equity unit counts tagged with the principal concept (x1000, e.g. printed '4' tagged 4,000) published as unit count, 43 rows by row correction from the printed 'Par Amount/ Units' cell"},
-  {"column": "principal_amount", "rows": 40, "why": "the same unit counts withdrawn from principal on the equity rows (37 rows); equity publishes no par"},
-  {"column": "principal_amount_usd", "rows": 60, "why": "follows principal_amount on the equity rows (37 withdrawn); 16 dollar pars the filer tagged with unitRef cad now publish the par itself instead of a CAD conversion (see principal_amount_currency)"},
-  {"column": "principal_amount_currency", "rows": 20, "why": "16 dollar pars tagged with unitRef cad (2023-12-31 to 2026-03-31: D&D Buyer x2, Follett x3, Granicus x3, New Look x4, TC Signature x2, Wesco, Ascend) CAD -> USD by row correction; the printed line has no currency cell"},
-  {"column": "principal_fx_rate_to_usd", "rows": 24, "why": "the 16 CAD-tagged dollar pars set to 1.0; Kymora Ltd. preferred (a euro unit count, 2025-06-30 to 2026-03-31): with par withdrawn the FX rate left behind is blanked by row correction"},
-  {"column": "principal_fx_status", "rows": 24, "why": "the 16 CAD-tagged dollar pars reference_fx -> source_usd; the 4 Kymora rows reference_fx -> blank"},
-  {"column": "corrected_fields", "rows": 70, "why": "audit column of the 66 corrected rows"},
-  {"column": "position_id", "rows": 480, "why": "not aimed at, explained: the 16 currency corrections re-pair the New Look Vision Group, D&D Buyer and TC Signature chains (31 rows against trxc; New Look chains mixed par sizes before and after, existing observation position-chain-links-rows-of-different-size); 2026-06-30 added (390 new rows, new member format 'Section | Industry | Issuer n') re-pairs chains; with the class corrections the Iconic Purchaser preferred rows now chain as one position (were chained with a loan), Eclipse Buyer preferred 2026-06-30 joins its 2024-09-30 chain, and the zero-value Oakswift Holdings common row (fair value 0, par withdrawn) splits into one position per quarter (observation zero-value-equity-chain-fragmented). 421 rows differ against spoff3."},
-  {"column": "src_transforms", "rows": 15, "why": "2026-06-30 equity rows: shares_held:from_principal_tag (wrapper units_tagged_as_par for 0001901164-26-000022)"}
+  {
+   "column": "issuer_name",
+   "rows": 11,
+   "why": "member names with a footnote digit glued to the legal form (8 rows: 'Higginbotham Insurance Agency, Inc.2', 'Kaseya, Inc.4', 'MRI Software LLC4', 'BCPE HIPH Parent, Inc.2'), a stray leading v ('vAllied Universal Holdco LLC') and 'Coding Solution' for the printed 'Coding Solutions' (3 rows, 2024-09-30), cut to the printed company"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 8,
+   "why": "PIK margin printed as '( 2.25 % PIK)' etc.: the filer tags it negative on 7 rows at 2025-09-30 (the build nulls negatives) and omits it on one unfunded Granicus line at 2024-12-31; published from the printed cell"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 8,
+   "why": "derived by the build as the all-in rate minus pik_rate on the same 8 rows"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 19,
+   "why": "records the row corrections above"
+  },
+  {
+   "column": "position_id",
+   "rows": 9,
+   "why": "identity chain re-paired after the issuer name changed: Higginbotham Insurance Agency (6 rows) and Kaseya (3 rows); no row added or removed"
+  }
  ],
- "rows_added": 390,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Page sample round 2 (C018, TC Signature 2024-03-31): dollar pars published in CAD. Every non-USD principal of the fund (159 rows) was read against its printed line (scratch/fund_runs/0001901164/ccy_check.py): 16 rows print no currency cell, i.e. dollars, and each is tagged unitRef=\"cad\" in the instance (checked context by context); the build converted them at the CAD rate. 16 row corrections set currency USD, dollar amount = par, rate 1.0, status source_usd. After the fix 142 of 142 non-USD rows found on the page print their currency; 1 (Speed Midco EUR undrawn, par printed '-') has no par to check.",
+  {
+   "what": "Page sample round 2 (C018, TC Signature 2024-03-31): dollar pars published in CAD. Every non-USD principal of the fund (159 rows) was read against its printed line (scratch/fund_runs/0001901164/ccy_check.py): 16 rows print no currency cell, i.e. dollars, and each is tagged unitRef=\"cad\" in the instance (checked context by context); the build converted them at the CAD rate. 16 row corrections set currency USD, dollar amount = par, rate 1.0, status source_usd. After the fix 142 of 142 non-USD rows found on the page print their currency; 1 (Speed Midco EUR undrawn, par printed '-') has no par to check.",
    "kind": "row_correction",
-   "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2025-09-30", "2026-03-31"],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
    "quotes": [
-    {"accession": "0001901164-24-000009", "text": "TC Signature Holdings LLC (4) (5) (6) S + 5.50 % ( 3.00 % PIK) 15.10 % 3/31/2025 1,552 ( 10 ) ( 31 ) ( 0.01 )"},
-    {"accession": "0001901164-24-000009", "text": "TC Signature Holdings LLC (4) (5) S + 5.50 % ( 3.00 % PIK) 15.10 % 5/4/2028 13,498 13,376 13,228 1.58"},
-    {"accession": "0001901164-24-000006", "text": "Follett Corporation (4) (5) S + 7.00 % 13.21 % 2/1/2027 9,950"}
-   ]},
-  {"what": "Equity and asset-backed rows published as loans: 51 row corrections (352 field values) set class, instrument (the printed section) and unit count from the printed line; specs scripts/v05_evidence/row_correction_specs/0001901164.json. Clears X02 x6, C04 2025-06-30 and 2025-09-30, X11 2025-03-31.",
+    {
+     "accession": "0001901164-24-000009",
+     "text": "TC Signature Holdings LLC (4) (5) (6) S + 5.50 % ( 3.00 % PIK) 15.10 % 3/31/2025 1,552 ( 10 ) ( 31 ) ( 0.01 )"
+    },
+    {
+     "accession": "0001901164-24-000009",
+     "text": "TC Signature Holdings LLC (4) (5) S + 5.50 % ( 3.00 % PIK) 15.10 % 5/4/2028 13,498 13,376 13,228 1.58"
+    },
+    {
+     "accession": "0001901164-24-000006",
+     "text": "Follett Corporation (4) (5) S + 7.00 % 13.21 % 2/1/2027 9,950"
+    }
+   ]
+  },
+  {
+   "what": "Equity and asset-backed rows published as loans: 51 row corrections (352 field values) set class, instrument (the printed section) and unit count from the printed line; specs scripts/v05_evidence/row_correction_specs/0001901164.json. Clears X02 x6, C04 2025-06-30 and 2025-09-30, X11 2025-03-31.",
    "kind": "row_correction",
-   "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001901164-24-000012", "text": "Equity Investments Services: Business Eclipse Buyer Inc. (5) 6,061 5,940 5,940 0.55"},
-    {"accession": "0001901164-26-000013", "text": "Asset Backed Securities Telecommunications Vertical Bridge, LLC (4) (10) 8.87 % 3/15/2056 16,100 16,100 16,033 0.98"},
-    {"accession": "0001901164-26-000013", "text": "Preferred Equity Automobile FleetPride, Inc. (5) ( 14.50 % PIK) 14.50 % 4 3,136 3,126 0.19"},
-    {"accession": "0001901164-26-000013", "text": "Common Stocks Aerospace and Defense Oakswift Holdings Ltd. (5) (9) 4,854 4,854 4,854 0.30"},
-    {"accession": "0001901164-25-000016", "text": "Healthcare, Education and Childcare National Resilience LLC (4) (5) 8.00 % 7/23/2035 5,556 5,556 5,556 0.37"}
-   ]},
-  {"what": "2026-06-30: the filer tags every equity unit count with the principal concept (no share-count fact in the filing: 0 InvestmentOwnedBalanceShares, 1,534 principal facts); wrapper source_encodings.units_tagged_as_par ['0001901164-26-000022'] publishes them as unit counts. Clears C04 2026-06-30 (11 equity rows).",
+    {
+     "accession": "0001901164-24-000012",
+     "text": "Equity Investments Services: Business Eclipse Buyer Inc. (5) 6,061 5,940 5,940 0.55"
+    },
+    {
+     "accession": "0001901164-26-000013",
+     "text": "Asset Backed Securities Telecommunications Vertical Bridge, LLC (4) (10) 8.87 % 3/15/2056 16,100 16,100 16,033 0.98"
+    },
+    {
+     "accession": "0001901164-26-000013",
+     "text": "Preferred Equity Automobile FleetPride, Inc. (5) ( 14.50 % PIK) 14.50 % 4 3,136 3,126 0.19"
+    },
+    {
+     "accession": "0001901164-26-000013",
+     "text": "Common Stocks Aerospace and Defense Oakswift Holdings Ltd. (5) (9) 4,854 4,854 4,854 0.30"
+    },
+    {
+     "accession": "0001901164-25-000016",
+     "text": "Healthcare, Education and Childcare National Resilience LLC (4) (5) 8.00 % 7/23/2035 5,556 5,556 5,556 0.37"
+    }
+   ]
+  },
+  {
+   "what": "2026-06-30: the filer tags every equity unit count with the principal concept (no share-count fact in the filing: 0 InvestmentOwnedBalanceShares, 1,534 principal facts); wrapper source_encodings.units_tagged_as_par ['0001901164-26-000022'] publishes them as unit counts. Clears C04 2026-06-30 (11 equity rows).",
    "kind": "wrapper",
-   "quarters": ["2026-06-30"],
+   "quarters": [
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001901164-26-000022", "text": "Common Stocks Aerospace and Defense Oakswift Holdings Ltd. (5) (9) 4,854 4,854 4,854 0.29"}
-   ]},
-  {"what": "2026-06-30: the member is now 'Section | Industry | Issuer n', so the instrument read 'First Lien Debt, Services: Business'; wrapper dispatch.instrument_description_strip_re cuts the industry after the section (dry run on all 390 rows: 5 values, First Lien Debt 360, Second Lien Debt 18, Preferred Equity 6, Common Stocks 5, Asset Backed Securities 1). The industry stays in extracted_industry.",
+    {
+     "accession": "0001901164-26-000022",
+     "text": "Common Stocks Aerospace and Defense Oakswift Holdings Ltd. (5) (9) 4,854 4,854 4,854 0.29"
+    }
+   ]
+  },
+  {
+   "what": "2026-06-30: the member is now 'Section | Industry | Issuer n', so the instrument read 'First Lien Debt, Services: Business'; wrapper dispatch.instrument_description_strip_re cuts the industry after the section (dry run on all 390 rows: 5 values, First Lien Debt 360, Second Lien Debt 18, Preferred Equity 6, Common Stocks 5, Asset Backed Securities 1). The industry stays in extracted_industry.",
    "kind": "wrapper",
-   "quarters": ["2026-06-30"],
+   "quarters": [
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001901164-26-000022", "text": "Asset Backed Securities Telecommunications Vertical Bridge, LLC (4) (10) 8.87 % 3/15/2056 16,100 16,100 16,054 0.98"}
-   ]}
+    {
+     "accession": "0001901164-26-000022",
+     "text": "Asset Backed Securities Telecommunications Vertical Bridge, LLC (4) (10) 8.87 % 3/15/2056 16,100 16,100 16,054 0.98"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_printed (7 packet findings' name part: 2023-09-30, 2024-03-31, 2024-06-30, 2024-09-30, 2025-06-30): 11 row corrections cut the glued footnote digit, the leading v and the dropped s. A wrapper issuer_name_strip_re was tried first (build trzb) and rejected: it also switched off the default number strip and left 13 row-number findings. Dry run of the pattern on all 216 distinct names showed exactly these 8 digit/v names; the 3 Coding Solution rows were found from the rule's own list. 2024-12-31 and 2025-03-31 print 'Acquistion' and are published as printed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901164-24-000011",
+     "text": "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.94 % 11/24/2028 16,291 16,197 16,291 1.63"
+    },
+    {
+     "accession": "0001901164-24-000012",
+     "text": "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 992 238 238 0.02"
+    },
+    {
+     "accession": "0001901164-25-000008",
+     "text": "Allied Universal Holdco LLC (4) S + 3.75 % 8.18 % 5/12/2028 14,961 14,961 15,049 1.08"
+    }
+   ]
+  },
+  {
+   "what": "pik_printed (2024-12-31, 2025-09-30): 8 row corrections set pik_rate from the printed cell (Granicus x3, Deerfield Dakota, Iconic Purchaser, Pave America x2, Cheval Blanc). Source facts hold the PIK margin with a negative sign on 7 rows (bdc_holdings pik_rate -0.0225, -0.0275, -0.065, -0.0288, -0.145) and the build nulls negatives. Searched every quarter of bdc_holdings for pik_rate < 0: only these 7 rows exist (2025-09-30 only). The 2023-06-30 Kaseya rows are source_ambiguity (owner's) and untouched.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901164-25-000016",
+     "text": "Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65"
+    },
+    {
+     "accession": "0001901164-25-000002",
+     "text": "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.84 % 1/17/2031 4,469 - ( 23 ) -"
+    },
+    {
+     "accession": "0001901164-25-000016",
+     "text": "Pave America LLC (4) (5) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 21,617 21,510 21,509 1.43"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "no finding: lien_position blank on 17 loans (126.5M) at 2025-09-30",
-   "hypotheses": ["The page-read bridge reads 'Second Lien' for these rows but with status validation_needed: the tier rollup fails (rows found 200,474 against the printed 'Total Second Lien Debt $ 224,439 $ 218,003') because Crash Champions' two loans (contexts c-326 first lien 4,495 and c-382 second lien 17,529) share one member, so the bridge cannot key the 17,529 row.",
-                  "lien_position is not a row-correctable field and the member carries no lien text (lien_from_identifier cannot express it).",
-                  "A fix needs shared code (bridge keyed by member and fair value, or lien_position made correctable); not attempted."]}
+  {
+   "finding": "no finding: lien_position blank on 17 loans (126.5M) at 2025-09-30",
+   "hypotheses": [
+    "The page-read bridge reads 'Second Lien' for these rows but with status validation_needed: the tier rollup fails (rows found 200,474 against the printed 'Total Second Lien Debt $ 224,439 $ 218,003') because Crash Champions' two loans (contexts c-326 first lien 4,495 and c-382 second lien 17,529) share one member, so the bridge cannot key the 17,529 row.",
+    "lien_position is not a row-correctable field and the member carries no lien text (lien_from_identifier cannot express it).",
+    "A fix needs shared code (bridge keyed by member and fair value, or lien_position made correctable); not attempted."
+   ]
+  },
+  {
+   "finding": "pik_printed 2023-06-30 (RVQ_BLK_9377d454bc7c), outside the packet: Kaseya 'S + 6.25% PIK' with no separate cash margin",
+   "hypotheses": [
+    "Owner-waiting source_ambiguity verdict DC-0001901164-7b5274e465 stands; carried, not re-read (scope guard)."
+   ]
+  }
  ],
  "orchestrator_requests": [],
  "observations": [
-  {"observation_key": "principal-currency-from-unit-tag-not-checked-against-page", "what": "16 dollar pars (2023-12-31 to 2026-03-31, fair value 61.2M in all, 13.6M the largest) were published in CAD and converted at the CAD rate. Cause found: not a carry-over inside the pipeline. The filer tagged these principal facts with unitRef=\"cad\" (e.g. 0001901164-24-000009 c-188 and c-189, TC Signature, the two lines right after New Look Vision Group's CAD line), so its own tagging carried the unit of the foreign line above. The shared step that lets it through: the principal currency is taken from the principal fact's unit in staging (pipeline/monetary_units.resolve_bdc_units -> _financial_units.principal_amount) and converted by pipeline/monetary_fx.principal_reference_table, with no check against the printed currency cell that the page-read bridge already holds (bdc_ixbrl_field_status.printed_row). Fixed here by row correction.", "field": "principal_amount_currency", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2025-09-30", "2026-03-31"], "fair_value_m": 61.2, "cause": "shared", "action": "fixed", "suggested_check": "For each row with a non-USD principal unit, the printed row (bdc_ixbrl_field_status.printed_row) must carry that currency code before the par; a dollar line tagged in a foreign unit is a finding.", "quote": {"accession": "0001901164-24-000009", "text": "TC Signature Holdings LLC (4) (5) (6) S + 5.50 % ( 3.00 % PIK) 15.10 % 3/31/2025 1,552 ( 10 ) ( 31 ) ( 0.01 )"}},
-  {"observation_key": "equity-section-rows-published-as-loans", "what": "Rows printed under 'Preferred Equity', 'Common Stocks', 'Equity Investments' and 'Asset Backed Securities' were published as direct-lending loans (1 to 12 rows a quarter, up to 66.4M at 2026-03-31) because the member names no class; their unit counts were published as par. Fixed by row correction for this fund.", "field": "index_classification", "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 66.4, "cause": "shared", "action": "fixed", "suggested_check": "Per fund-quarter, published fair value by class against the printed section totals (the page-read bridge already walks the section headings).", "quote": {"accession": "0001901164-26-000013", "text": "Total Preferred Equity $ 41,768 $ 42,986 2.62 %"}},
-  {"observation_key": "lien-tier-withheld-when-two-contexts-share-a-member", "what": "2025-09-30: 17 loans (126.5M) publish no lien; the bridge withholds the whole Second Lien tier because Crash Champions' two loans share one member and the 17,529 second-lien row cannot be keyed, so the tier does not roll up to its printed total. Other quarters carry lien on every loan.", "field": "lien_position", "quarters": ["2025-09-30"], "fair_value_m": 126.5, "cause": "shared", "action": "parked", "suggested_check": "Count loans with blank lien per fund-quarter against neighbouring quarters; a jump from 0 to many is a withheld tier.", "quote": {"accession": "0001901164-25-000016", "text": "Crash Champions, LLC 8.75 % 2/15/2029 18,150 16,318 17,529 1.17"}},
-  {"observation_key": "maturity-printed-not-published", "what": "2025-09-30: both Crash Champions loans (4,495 first lien 2/23/2029, 17,529 second lien 2/15/2029) publish no maturity; same cause as the lien gap (one member, two contexts). A row correction cannot address one of two rows with the same identifier. The first-lien row's SOFR is right but labelled inferred_post_libor.", "field": "maturity_date", "quarters": ["2025-09-30"], "fair_value_m": 22.0, "cause": "shared", "action": "left", "suggested_check": "Loan rows with a printed maturity and a blank published maturity, keyed on fair value where the member repeats.", "quote": {"accession": "0001901164-25-000016", "text": "Crash Champions, LLC (4) (8) S + 4.75 % 8.95 % 2/23/2029 4,785 4,308 4,495 0.30"}},
-  {"observation_key": "maturity-printed-typo-past-date", "what": "Vertical Bridge second lien prints maturity 5/15/2024 at 2024-12-31 and 2025-03-31 (5/15/2054 in the neighbouring quarters); the build withholds the past date and publishes none. Left: correcting it would publish a value the page does not print.", "field": "maturity_date", "quarters": ["2024-12-31", "2025-03-31"], "fair_value_m": 3.0, "cause": "row", "action": "left", "suggested_check": "", "quote": {"accession": "0001901164-25-000002", "text": "Vertical Bridge, LLC (4) 8.87 % 5/15/2024 2,900 2,900 3,022 0.25"}},
-  {"observation_key": "equity-holding-printed-under-another-section-in-one-filing", "what": "The filer moves holdings between sections: at 2025-03-31 CSAT, the second Iconic Purchaser line and Cheval Blanc are printed under 'Preferred Equity' (no Common Stocks section that quarter), common from 2025-06-30; National Resilience's 8.00 % note (7/23/2035) is under 'Preferred Equity' at 2025-09-30 only and in first lien before and after. Published as printed, so these positions change class between quarters.", "field": "index_classification", "quarters": ["2025-03-31", "2025-09-30"], "fair_value_m": 8.0, "cause": "row", "action": "left", "suggested_check": "Positions whose class changes between quarters with no change in rate, maturity or units.", "quote": {"accession": "0001901164-25-000016", "text": "Total Preferred Equity $ 42,022 $ 42,845 2.86 %"}},
-  {"observation_key": "zero-value-equity-chain-fragmented", "what": "The Oakswift Holdings common line printed '2,582 - - -' (fair value 0) chained as one position while its unit count was published as par; with par withdrawn (equity) the matcher has no size to pair it and gives it a new position each quarter (2025-06-30, 2025-09-30, 2026-03-31).", "field": "position_id", "quarters": ["2025-06-30", "2025-09-30", "2026-03-31"], "fair_value_m": 0.0, "cause": "shared", "action": "left", "suggested_check": "Equity rows with fair value 0 whose unit count is unchanged between quarters should chain on the unit count.", "quote": {"accession": "0001901164-26-000013", "text": "Oakswift Holdings Ltd. (5) (9) 2,582 - - - 4,854 4,854 0.30"}},
-  {"observation_key": "distribution-per-share-missing-after-share-classes", "what": "fund_financials distribution_per_share and distribution_rate are empty from 2024-06-30 (the filer reports per class from then on), and nav_per_share is net assets over all shares (26.146 at 2026-03-31 against Class I 26.15 printed). Which class to publish is an owner question; not changed.", "field": "distribution_per_share", "quarters": ["2024-06-30", "2026-06-30"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "Fund-quarters with net assets and no distribution per share after a quarter that had one.", "quote": {"accession": "0001901164-24-000006", "text": "Distributions declared ( 1.49 ) - Impact of issuance of common stock - Class I shares - 25.00"}}
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "16 dollar pars (2023-12-31 to 2026-03-31, fair value 61.2M in all, 13.6M the largest) were published in CAD and converted at the CAD rate. Cause found: not a carry-over inside the pipeline. The filer tagged these principal facts with unitRef=\"cad\" (e.g. 0001901164-24-000009 c-188 and c-189, TC Signature, the two lines right after New Look Vision Group's CAD line), so its own tagging carried the unit of the foreign line above. The shared step that lets it through: the principal currency is taken from the principal fact's unit in staging (pipeline/monetary_units.resolve_bdc_units -> _financial_units.principal_amount) and converted by pipeline/monetary_fx.principal_reference_table, with no check against the printed currency cell that the page-read bridge already holds (bdc_ixbrl_field_status.printed_row). Fixed here by row correction.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 61.2,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "For each row with a non-USD principal unit, the printed row (bdc_ixbrl_field_status.printed_row) must carry that currency code before the par; a dollar line tagged in a foreign unit is a finding.",
+   "quote": {
+    "accession": "0001901164-24-000009",
+    "text": "TC Signature Holdings LLC (4) (5) (6) S + 5.50 % ( 3.00 % PIK) 15.10 % 3/31/2025 1,552 ( 10 ) ( 31 ) ( 0.01 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Not covered by a rule that fired in these builds; the check below is concrete.",
+    "reference": "For each row with a non-USD principal unit, the printed row (bdc_ixbrl_field_status.printed_row) must carry that currency code before the par; a dollar line tagged in a foreign unit is a finding."
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "Rows printed under 'Preferred Equity', 'Common Stocks', 'Equity Investments' and 'Asset Backed Securities' were published as direct-lending loans (1 to 12 rows a quarter, up to 66.4M at 2026-03-31) because the member names no class; their unit counts were published as par. Fixed by row correction for this fund.",
+   "field": "index_classification",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 66.4,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Per fund-quarter, published fair value by class against the printed section totals (the page-read bridge already walks the section headings).",
+   "quote": {
+    "accession": "0001901164-26-000013",
+    "text": "Total Preferred Equity $ 41,768 $ 42,986 2.62 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in the untouched build; the section-total comparison is concrete.",
+    "reference": "Per fund-quarter, published fair value by class against the printed section totals (the page-read bridge already walks the section headings)."
+   }
+  },
+  {
+   "observation_key": "lien-tier-withheld-when-two-contexts-share-a-member",
+   "what": "2025-09-30: 17 loans (126.5M) publish no lien; the bridge withholds the whole Second Lien tier because Crash Champions' two loans share one member and the 17,529 second-lien row cannot be keyed, so the tier does not roll up to its printed total. Other quarters carry lien on every loan.",
+   "field": "lien_position",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 126.5,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Count loans with blank lien per fund-quarter against neighbouring quarters; a jump from 0 to many is a withheld tier.",
+   "quote": {
+    "accession": "0001901164-25-000016",
+    "text": "Crash Champions, LLC 8.75 % 2/15/2029 18,150 16,318 17,529 1.17"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired (the 17 rows had no finding); blank-lien count against neighbouring quarters would.",
+    "reference": "Count loans with blank lien per fund-quarter against neighbouring quarters; a jump from 0 to many is a withheld tier."
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "2025-09-30: both Crash Champions loans (4,495 first lien 2/23/2029, 17,529 second lien 2/15/2029) publish no maturity; same cause as the lien gap (one member, two contexts). A row correction cannot address one of two rows with the same identifier. The first-lien row's SOFR is right but labelled inferred_post_libor.",
+   "field": "maturity_date",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 22.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Loan rows with a printed maturity and a blank published maturity, keyed on fair value where the member repeats.",
+   "quote": {
+    "accession": "0001901164-25-000016",
+    "text": "Crash Champions, LLC (4) (8) S + 4.75 % 8.95 % 2/23/2029 4,785 4,308 4,495 0.30"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; printed-maturity versus blank-published check is concrete.",
+    "reference": "Loan rows with a printed maturity and a blank published maturity, keyed on fair value where the member repeats."
+   }
+  },
+  {
+   "observation_key": "maturity-printed-typo-past-date",
+   "what": "Vertical Bridge second lien prints maturity 5/15/2024 at 2024-12-31 and 2025-03-31 (5/15/2054 in the neighbouring quarters); the build withholds the past date and publishes none. Left: correcting it would publish a value the page does not print.",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 3.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001901164-25-000002",
+    "text": "Vertical Bridge, LLC (4) 8.87 % 5/15/2024 2,900 2,900 3,022 0.25"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "The page itself prints 5/15/2024 for a 2054 maturity; a check cannot tell a typo from a real near maturity without outside evidence.",
+    "reference": "page itself prints the typo"
+   }
+  },
+  {
+   "observation_key": "equity-holding-printed-under-another-section-in-one-filing",
+   "what": "The filer moves holdings between sections: at 2025-03-31 CSAT, the second Iconic Purchaser line and Cheval Blanc are printed under 'Preferred Equity' (no Common Stocks section that quarter), common from 2025-06-30; National Resilience's 8.00 % note (7/23/2035) is under 'Preferred Equity' at 2025-09-30 only and in first lien before and after. Published as printed, so these positions change class between quarters.",
+   "field": "index_classification",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "fair_value_m": 8.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Positions whose class changes between quarters with no change in rate, maturity or units.",
+   "quote": {
+    "accession": "0001901164-25-000016",
+    "text": "Total Preferred Equity $ 42,022 $ 42,845 2.86 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; class change without rate, maturity or unit change is concrete.",
+    "reference": "Positions whose class changes between quarters with no change in rate, maturity or units."
+   }
+  },
+  {
+   "observation_key": "zero-value-equity-chain-fragmented",
+   "what": "The Oakswift Holdings common line printed '2,582 - - -' (fair value 0) chained as one position while its unit count was published as par; with par withdrawn (equity) the matcher has no size to pair it and gives it a new position_id in each of the five quarters from 2025-06-30 (2025-06-30, 2025-09-30, 2025-12-31, 2026-03-31, 2026-06-30).",
+   "field": "position_id",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Equity rows with fair value 0 whose unit count is unchanged between quarters should chain on the unit count.",
+   "quote": {
+    "accession": "0001901164-26-000013",
+    "text": "Oakswift Holdings Ltd. (5) (9) 2,582 - - - 4,854 4,854 0.30"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; chaining zero-value equity rows on unchanged unit count is concrete.",
+    "reference": "Equity rows with fair value 0 whose unit count is unchanged between quarters should chain on the unit count."
+   }
+  },
+  {
+   "observation_key": "distribution-per-share-missing-after-share-classes",
+   "what": "fund_financials distribution_per_share and distribution_rate are empty from 2024-06-30 (the filer reports per class from then on), and nav_per_share is net assets over all shares (26.146 at 2026-03-31 against Class I 26.15 printed). Which class to publish is an owner question; not changed.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Fund-quarters with net assets and no distribution per share after a quarter that had one.",
+   "quote": {
+    "accession": "0001901164-24-000006",
+    "text": "Distributions declared ( 1.49 ) - Impact of issuance of common stock - Class I shares - 25.00"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; fund-quarters with net assets and no distribution per share after one that had it is concrete.",
+    "reference": "Fund-quarters with net assets and no distribution per share after a quarter that had one."
+   }
+  },
+  {
+   "observation_key": "negative-signed-pik-tag-nulled-by-build",
+   "what": "The filer tags the PIK margin of 7 rows at 2025-09-30 with a negative sign; the staging step (pik_rate:neg_null) drops negatives, so pik_rate was blank while the page prints '( 2.25 % PIK)'. Fixed on the 7 rows by row correction. Any fund that signs PIK margins negative loses them the same way.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 82.86,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A row whose pik_rate source fact is negative and whose printed row shows a PIK figure: the page rule pik_printed_not_published.",
+   "quote": {
+    "accession": "0001901164-25-000016",
+    "text": "Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "pik_printed_not_published fired on exactly these rows in the untouched build trza (7 rows plus the Granicus 2024-12-31 line).",
+    "reference": "pipeline/candidate_rules.py pik_printed_not_published (ledger rule pik_printed)"
+   }
+  },
+  {
+   "observation_key": "member-footnote-digit-glued-to-issuer-name",
+   "what": "Members print a footnote or row digit directly after the legal form ('Inc.2', 'LLC4') or a stray leading letter ('vAllied'); the default number strip, which handles ' 1', does not catch these. 8 rows, fixed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-06-30"
+   ],
+   "fair_value_m": 61.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Published issuer name differs from the printed company name: the page rule issuer_name_printed.",
+   "quote": {
+    "accession": "0001901164-24-000011",
+    "text": "MRI Software LLC (4) (5) (6) S + 5.50 % 10.93 % 2/10/2027 1,864 ( 16 ) ( 16 ) -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on these rows in trza (8 digit/v rows, 3 Coding Solution rows).",
+    "reference": "pipeline/candidate_rules.py issuer_name_differs_from_page (ledger rule issuer_name_printed)"
+   }
+  },
+  {
+   "observation_key": "wrapper-issuer-name-strip-disables-default-number-strip",
+   "what": "Adding dispatch.issuer_name_strip_re to this fund's wrapper (build trzb) made published issuer names carry their row numbers and, on some rows, the whole identifier ('Investment, Unaffiliated Issuer, Granicus, Inc. 3'); issuer_name_printed findings rose from 5 to 13. I did not find which step is skipped. Reverted; names fixed by row correction instead.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Fund gate shapes() already reports row_number_in_name; run it on any wrapper that adds issuer_name_strip_re.",
+   "quote": {
+    "accession": "0001901164-25-000016",
+    "text": "Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired 13 times on trzb and the fund gate's name-shape count would also report it.",
+    "reference": "scratch/fund_sandbox/trzb/output/shadow/page_rule_findings.csv (13 issuer_name_printed rows)"
+   }
+  },
+  {
+   "observation_key": "derived-cash-rate-float-residue-on-all-pik-coupon",
+   "what": "Cheval Blanc Holdings Company 2025-09-30 (all-PIK 14.50 pct coupon): interest_rate is 14.499999999999998 (from the filer's 0.145 tag times 100) and pik_rate is 14.5 (row correction), so the derived interest_rate_cash is -1.78e-15 instead of 0. A row correction on interest_rate_cash was tried in build trze: it is not applied (the field is derived after corrections; field diff trze vs trzd is empty), so I removed it. Other quarters of this loan and other all-PIK rows give exactly 0.0 because both sides carry the same float.",
+   "field": "interest_rate_cash",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 9.844,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "interest_rate_cash with absolute value below 1e-9 but not 0 should be rounded to 0 in the derivation (round the cash leg to the rate's 6 decimals).",
+   "quote": {
+    "accession": "0001901164-25-000016",
+    "text": "Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this row; a one-line check on abs(interest_rate_cash) < 1e-9 and <> 0 would, with no false positives in this fund (1 row of 3,672 cohort rows in the field diff).",
+    "reference": "interest_rate_cash derivation in the unified build (shared step), not edited"
+   },
+   "shared_code_change": "none (proposal only)"
+  },
+  {
+   "observation_key": "cdor-printed-for-cad-loans-after-cdor-ended",
+   "what": "Page sample card C002: a CAD loan maturing 8/2029 prints 'C +' and is published reference_rate_type CDOR. The reader judged CORRA (CDOR ended in 2024). The legend of every filing from 2025-06-30 to 2026-06-30 reads 'CDOR (C)'; only the fund's own credit facility says Term CORRA. So CDOR is as filed; no change. Left as the filer's own label.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A CDOR reference on a report date after 2024-06-28 (CDOR ended) should be listed for a legend read; the legend decides.",
+   "quote": {
+    "accession": "0001901164-25-000008",
+    "text": "SONIA (SN), CDOR (C), EURIBOR (E), or alternate base rate (commonly based on the U.S. Prime Rate (P), unless otherwise noted)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; the date check above would list these rows for a legend read without changing values.",
+    "reference": "suggested_check"
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": [],
+ "tests_run": [
+  "no shared code changed; scratch/fund_runs/0001901164/check_quotes.py: 86 specs, 0 quotes not found",
+  "check_d06.py trzd: all cited rows ok; retire.py trzd: PASS with a failing plant"
+ ],
  "not_done": [
-  "No pytest run: no shared code changed (wrapper keys used already exist in the schema; wrapper validated against wrapper_v3.schema.json).",
-  "distribution_per_share / nav_per_share by share class from 2024-06-30 (observation).",
-  "Non-accrual flags, fair value level and acquisition dates not compared with the page.",
-  "Page sample (mine): 13 published rows at 2024-06-30 and 2026-06-30 read against the printed line (rate, spread, PIK, maturity, par, cost, fair value, reference rate): all equal."
+  "Scope guard: packet findings 8 of 8 were outstanding in trza; none dropped as closed at HEAD.",
+  "No page sample of unrelated rows this run (change-only pass); the 2026-10-15 13-row sample stands for the other fields.",
+  "pik_printed 2023-06-30 is the owner's (source_ambiguity); carried.",
+  "Items still left from the 2026-10-15 report: distribution_per_share/nav by class, non-accrual flags, level and acquisition dates not compared with the page."
+ ],
+ "investigator_id": "agent:fund-trz-sonnet",
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_9377d454bc7c",
+   "carried_from": "docs/investigations/v05_readings/unreviewed_2026-10-21/0001901164.json (decision DC-0001901164-7b5274e465, supported by /root/remaining_trowe_check_sol)",
+   "coverage": {
+    "affected_rows": [
+     "ROW-64a45a3abbbeae96",
+     "ROW-8d3934bd5d3bc366"
+    ],
+    "reviewed_rows": [
+     "ROW-64a45a3abbbeae96",
+     "ROW-8d3934bd5d3bc366"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-23-028716",
+     "text": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 71 69 0.02"
+    },
+    {
+     "accession": "0001628280-23-028716",
+     "text": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 434 432 0.14"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Carried unchanged; the flagged rows in trzd are the same two Kaseya rows (page_rule_findings.csv), so the carry stands.",
+    "Owner-waiting verdict: whether '6.25 % PIK' is a PIK-only margin or the total spread is not stated in the filing."
+   ],
+   "next_action": "Owner ruling on the source_ambiguity verdict; not re-read."
+  }
+ ],
+ "retired_in_run": [
+  {
+   "finding_id": "RVQ_REV_1d258b6b97b9",
+   "coverage": {
+    "affected_rows": [
+     "0001901164|2025-12-31|D06"
+    ],
+    "reviewed_rows": [
+     "0001901164|2025-12-31|D06"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001901164-26-000008",
+     "text": "123Dentist Inc. (4) (5) (8) (9) C + 5.00 % 7.27 % 8/10/2029 CAD 5,953 4,337 4,343 0.27"
+    },
+    {
+     "accession": "0001901164-26-000008",
+     "text": "AI Titan Parent Inc. (4) (5) (6) S + 4.50 % 8.32 % 8/29/2031 5,726 1,283 1,274 0.08"
+    },
+    {
+     "accession": "0001901164-26-000008",
+     "text": "AI Titan Parent Inc. (4) (5) (6) S + 4.75 % 9.11 % 8/29/2031 5,726 - ( 29 ) -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Fund-quarter metric finding (continuity), so coverage is the one key. Rows read for the verdict's citations: 123Dentist Inc. 8/10/2029 (4,343), AI Titan Parent Inc. 8/29/2031 (1,274), Evergreen IX Borrower 2023 LLC 9/30/2030 (5,728) and the comparative-table rows of the same names (123Dentist 10.50 pct, AI Titan 9.11 pct, Evergreen IX 9.08 pct).",
+    "Low continuity from 2025-09-30: check_D06 on trzd gives 96.0 pct (120 of 125 names persist); a plant (quarter's names replaced) fails.",
+    "Cited current rows published wrongly: 123Dentist 4,343 / 7.27 pct / 8/10/2029, AI Titan 1,274 / 8.32 pct, Evergreen IX 5,728 / 8.42 pct each published once at the printed values (check_d06.py).",
+    "Cited comparative rows leaked into 2025-12-31: AI Titan 9.11 pct and Evergreen IX 9.08 pct and 123Dentist 10.50 pct are the 12/31/2024 table; published x0 at 2025-12-31 and present in 2024-12-31 (x3, x3, x1).",
+    "Quarter ties: 2025-12-31 published rows 377 and fair value 2,893.6M match the filed total (13 of 13 quarters tie)."
+   ],
+   "next_action": "Verdict retirement written under standing rule D-252 (data/overrides/verdict_retirements/standing_rule_fundloop_0001901164_2026-11-15.json); decision DC-0001901164-97ea424b45.",
+   "retirement": "VR-FL-1901164-01 (data/overrides/verdict_retirements/standing_rule_fundloop_0001901164_2026-11-15.json)"
+  }
  ]
 }

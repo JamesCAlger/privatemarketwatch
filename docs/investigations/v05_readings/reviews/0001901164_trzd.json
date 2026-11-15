@@ -1,0 +1,117 @@
+{
+ "reviewer_id": "agent:review-trzd-opus",
+ "report_digest": "2bbf6bfaad33b83d4d088fe69521e7080a2f6bf1d72a6fb899d965562ca79625",
+ "scope": "Change-only review of sandbox trzd (HEAD build trza, accepted before trxd). Packet of 8: the 7 issuer_name_printed / pik_printed findings are fixed in trzd (absent from the trzd ledger; they have no finding_reviews entry because the gate takes only outstanding findings) and are assessed under the observation reviews and in packet_fixed_findings below; the 2 outstanding findings (D06 2025-12-31, carried pik_printed 2023-06-30) are reviewed in finding_reviews. All 11 observations are reviewed because none had an independent detection-decision review before (prior review unreviewed_2026-10-21/reviews/0001901164.json has observation_reviews []). Helper scripts: scratch/fund_runs/0001901164/review/{pid,check_lines,rows,d06,obs,digest}.py.",
+ "packet_fixed_findings": [
+  {"finding_id": "RVQ_BLK_f055ffe85a0d", "rule": "issuer_name_printed 2023-09-30", "outcome": "supported", "rationale": "trza flagged ROW-424001c6008ad138, ROW-7e5f169a262d2f12 (Higginbotham Inc.1 / Inc.2), ROW-8e127d6d01cb8c5c (BCPE HIPH Parent, Inc.2). Three row corrections; each printed line read on 0001628280-23-037892 and matches by size (16,400 undrawn, 7,292, 6,287). Absent from trzd ledger."},
+  {"finding_id": "RVQ_BLK_849ad834f993", "rule": "issuer_name_printed 2024-03-31", "outcome": "supported", "rationale": "trza flagged ROW-cfe69d8a9159ea05 (Higginbotham Inc.2, 7,255) and ROW-fb7882c9bf0fd4da (Kaseya, Inc.4, 32,123). Printed lines on 0001901164-24-000009 carry no digit. Absent from trzd ledger."},
+  {"finding_id": "RVQ_BLK_1be54a445be7", "rule": "issuer_name_printed 2024-06-30", "outcome": "supported", "rationale": "trza flagged ROW-33455c9a5cfccd36 (MRI Software LLC4, 1,864 undrawn) and ROW-0456b8c3033ec65f (Higginbotham Inc.2, 16,291). Same rows as the prior supported review; printed lines on 0001901164-24-000011 read. Absent from trzd ledger."},
+  {"finding_id": "RVQ_BLK_7733dc06dfac", "rule": "issuer_name_printed 2024-09-30", "outcome": "supported", "rationale": "trza flagged the 3 Coding Solution rows (10,172 / 1,836 / 992). On 0001901164-24-000012 'Coding Solution Acquisition' occurs only in the hidden member header block (3 hits); the schedule prints 'Coding Solutions Acquisition Inc.' on all three lines. Absent from trzd ledger."},
+  {"finding_id": "RVQ_BLK_f0a23ec9e4ad", "rule": "issuer_name_printed 2025-06-30", "outcome": "supported", "rationale": "trza flagged ROW-41bd64998398ddfb (vAllied Universal Holdco LLC); page 0001901164-25-000008 prints 'Allied Universal Holdco LLC (4) S + 3.75 % 8.18 % 5/12/2028 14,961 14,961 15,049 1.08'. Absent from trzd ledger."},
+  {"finding_id": "RVQ_BLK_c5f01283fd04", "rule": "pik_printed 2024-12-31", "outcome": "supported", "rationale": "trza flagged ROW-865305e72366e556 (Granicus, Inc. 1, unfunded 4,469, fv -23k). Page 0001901164-25-000002 prints '( 2.25 % PIK)' on that line; pik_rate 2.25, cash 7.59 = 9.84 - 2.25. Absent from trzd ledger."},
+  {"finding_id": "RVQ_BLK_5c13dc434f62", "rule": "pik_printed 2025-09-30", "outcome": "supported", "rationale": "trza flagged 7 rows (Granicus x2, Deerfield Dakota, Iconic Purchaser 3, Pave America x2, Cheval Blanc). Each printed line read on 0001901164-25-000016 and matched by size (12,439 / 4,469 / 39,314 / 292 / 21,617 / 7,500 / 10,149). bdc_holdings pik_rate < 0 exists only at 2025-09-30, 7 rows (-0.145 to -0.0225), in both sandbox trzd and production data/output (14 periods, 6,752 fund rows scanned). Minor: Cheval Blanc interest_rate_cash publishes -1.8e-15 (float residue of 14.50 - 14.50), should be 0. Absent from trzd ledger."}
+ ],
+ "data_change_review": "holdings_field_diff trzd trxd re-run: rows 3672/3672, none added or removed; issuer_name 11, pik_rate 8, corrected_fields 19, position_id 9, interest_rate_cash 8; 95 of 100 columns unchanged. All 19 added row_corrections.csv lines read on their pages (check_lines.py): every quoted line is printed, every corrected value is on its line, and identifier-to-line pairing agrees on size. position_id: the 9 changed rows are Higginbotham (6) and Kaseya (3) only; the report's list (MRI, BCPE, Allied, Coding Solutions) overstates it, those renames did not move a pid. Higginbotham before: chains d3b4cf95 / 3fbe36d7 alternated between the ~7.2M and ~16.3M loans quarter to quarter; after: 01989366 is the ~7.3M loan 2023-06-30..2024-06-30 (7,311 > 7,292 > 7,273 > 7,255 > 7,236) and d3b4cf95 is the 16.4M facility 2023-12-31..2024-06-30 (16,373 > 16,332 > 16,291). The 2023-09-30 undrawn 16,400 line is now a singleton (3fbe36d7); it arguably belongs to the 16.4M chain, but trxd had it wrongly chained to the 7.2M loan, so this is no worse. Kaseya: two fragments (7b3f477f 2023-06-30..2024-03-31, c4efab84 2024-06-30..2024-12-31) joined into one 7-quarter chain, one Kaseya row of that size per quarter, same maturity 6/25/2029, principal rising by PIK. No pid has two rows in a quarter in either build; distinct pids 676 = 676. No chain broken, no distinct positions merged.",
+ "flags_for_correction": [
+  "data/overrides/verdict_retirements/standing_rule_fundloop_0001901164_2026-11-15.json lacks the applied_by field the other standing-rule fund-loop files carry (e.g. 'fund-agent-0002031750-acif-2026-11-14 under the standing rule (owner ruling D-252, 2026-11-10)'). Add applied_by 'agent:fund-trz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)'. standing_rule_fundloop_0001993402_2026-11-14.json has the same gap.",
+  "The retirement file (12:22:32) was written after trzd/findings_ledger.csv (12:21:36), so the trzd ledger still shows RVQ_REV_1d258b6b97b9 as real_error_check_silent; the notes' '2 outstanding ... D06 retired' needs a ledger regeneration to be true.",
+  "Report investigation RVQ_REV_1d258b6b97b9 lists 6 reviewed_rows keys outside affected_rows; the investigation contract fails 'reviewed rows outside declared scope'. Move those keys into hypotheses/evidence or into affected_rows.",
+  "declared_changes position_id 'why' should name only Higginbotham and Kaseya.",
+  "Cheval Blanc 2025-09-30 interest_rate_cash -1.8e-15 should round to 0.",
+  "Observation zero-value-equity-chain-fragmented understates: the Oakswift 0-value line gets a new pid in all five quarters 2025-06-30..2026-06-30, not three."
+ ],
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_1d258b6b97b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-quarter-metric finding (0001901164|2025-12-31|D06); affected key is right. Re-ran check_D06_position_continuity myself (d06.py) on published-basis rows: sandbox trzd PASS 96.0% (120/125), production data/output/private_markets_holdings.parquet PASS 96.0% (120/125), and a plant replacing the quarter's names FAILS on both. So the result holds on production, not only on the sandbox. Verdict file sha256 0be2d542... equals the retirement's verdict_sha256. The verdict's mechanism (suffixed identifiers like '123Dentist Inc. 1' used as issuer) does not hold: published issuer_name is unsuffixed. Cited current rows read on 0001901164-26-000008 and found once each at printed values in 2025-12-31: 123Dentist 1 fv 4,343 / 7.27 / 8/10/2029, AI Titan 1 fv 1,274 / 8.32, Evergreen IX 1 fv 5,728 / 8.42 / 9/30/2030. The three cited 'repeat' lines (123Dentist 10.50 % CAD 27, AI Titan 9.11 % 5,726 (29), Evergreen IX 9.08 % 5/14/2031 5,786) sit after the page heading 'Consolidated Schedule of Investments December 31, 2024' (offsets 647,916-654,996 vs heading at 647,545; current schedule heading at 596,694), i.e. the comparative table, and are published only in the 2024-12-31 quarter. false_alarm and the D-252 retirement are supported; the retirement entry needs applied_by added and the ledger regenerated (see flags_for_correction). The report's reviewed_rows scope defect is separate and will fail the contract until fixed.",
+   "evidence": [
+    {"accession": "0001901164-26-000008", "text": "123Dentist Inc. (4) (5) (8) (9) C + 5.00 % 7.27 % 8/10/2029 CAD 5,953 4,337 4,343 0.27"},
+    {"accession": "0001901164-26-000008", "text": "AI Titan Parent Inc. (4) (5) (6) S + 4.50 % 8.32 % 8/29/2031 5,726 1,283 1,274 0.08"},
+    {"accession": "0001901164-26-000008", "text": "AI Titan Parent Inc. (4) (5) (6) S + 4.75 % 9.11 % 8/29/2031 5,726 - ( 29 ) -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9377d454bc7c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry. (a) Source docs/investigations/v05_readings/unreviewed_2026-10-21/0001901164.json carries this finding with affected_rows ROW-8d3934bd5d3bc366, ROW-64a45a3abbbeae96, and its review unreviewed_2026-10-21/reviews/0001901164.json marks it supported (coverage and source comparison true); decision DC-0001901164-7b5274e465 is in data/decisions/0001901164.jsonl. (b) trzd shadow/page_rule_findings.csv flags exactly ROW-64a45a3abbbeae96 (fv 432k) and ROW-8d3934bd5d3bc366 (fv 69k), equal to the carried affected_rows. The 19 new corrections do not touch 2023-06-30. Carry stands; owner ruling still pending.",
+   "evidence": [
+    {"accession": "0001628280-23-028716", "text": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 434 432 0.14"},
+    {"accession": "0001628280-23-028716", "text": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 71 69 0.02"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "From the trxd round; fix carried unchanged (no FX column differs trzd vs trxd). Quote is printed and shows a dollar par with no currency cell. The proposed detector (non-USD principal unit whose printed row lacks that currency code) is concrete and uses data the bridge already holds; false positives limited to rows with no printed par (the report names one, Speed Midco undrawn '-'), which the check should skip.",
+   "evidence": [{"accession": "0001901164-24-000009", "text": "TC Signature Holdings LLC (4) (5) (6) S + 5.50 % ( 3.00 % PIK) 15.10 % 3/31/2025 1,552 ( 10 ) ( 31 ) ( 0.01 )"}]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "trzd class mix by quarter matches the claim (e.g. 2025-09-30 preferred 5 rows 42.8M against printed 'Total Preferred Equity $ 42,022 $ 42,845'; 2026-03-31 preferred 6 rows 43.0M, ABS 1 row 16.0M). Section-total-by-class comparison is concrete and recurrence-catching; false positives only where a filer's section totals mix classes, which the comparison would surface rather than hide.",
+   "evidence": [{"accession": "0001901164-25-000016", "text": "Total Preferred Equity $ 42,022 $ 42,845 2.86 %"}]
+  },
+  {
+   "observation_key": "lien-tier-withheld-when-two-contexts-share-a-member",
+   "outcome": "supported",
+   "rationale": "trzd: blank-lien direct-lending rows exist only at 2025-09-30, 17 rows 126.5M; both Crash Champions rows (4,495 and 17,529) have blank lien and maturity. A blank-lien-count jump against neighbouring quarters would catch it with low false-positive risk for a fund that otherwise carries lien on every loan. Parking is reasonable: lien_position is not row-correctable and the fix needs shared bridge code.",
+   "evidence": [{"accession": "0001901164-25-000016", "text": "Crash Champions, LLC 8.75 % 2/15/2029 18,150 16,318 17,529 1.17"}]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Confirmed in trzd: both Crash Champions 2025-09-30 rows publish no maturity. Detector keyed on fair value where the member repeats is concrete. Same root cause as the lien gap; 'left' is honest since one identifier covers two rows.",
+   "evidence": [{"accession": "0001901164-25-000016", "text": "Crash Champions, LLC (4) (8) S + 4.75 % 8.95 % 2/23/2029 4,785 4,308 4,495 0.30"}]
+  },
+  {
+   "observation_key": "maturity-printed-typo-past-date",
+   "outcome": "supported",
+   "rationale": "trzd Vertical Bridge second lien has maturity 2054-05-15 in 2024-06-30, 2024-09-30 and 2025-06-30 onward, blank at 2024-12-31 and 2025-03-31 where the page prints 5/15/2024. not_feasible is fair for a rule that must decide typo vs real date; a cross-quarter maturity-jump flag could find it but would not justify publishing an unprinted value.",
+   "evidence": [{"accession": "0001901164-25-000002", "text": "Vertical Bridge, LLC (4) 8.87 % 5/15/2024 2,900 2,900 3,022 0.25"}]
+  },
+  {
+   "observation_key": "equity-holding-printed-under-another-section-in-one-filing",
+   "outcome": "supported",
+   "rationale": "2025-03-31 has 6 preferred rows and no common rows in trzd; common appears from 2025-06-30, consistent with the claim. Detector (class change with no rate, maturity or unit change) is concrete; expect some true class changes from restructurings, so it is a flag, not a gate.",
+   "evidence": [{"accession": "0001901164-25-000016", "text": "Total Preferred Equity $ 42,022 $ 42,845 2.86 %"}]
+  },
+  {
+   "observation_key": "zero-value-equity-chain-fragmented",
+   "outcome": "supported",
+   "rationale": "Confirmed and understated: in trzd the Oakswift zero-value line has a new position_id in every quarter 2025-06-30..2026-06-30 (ca830231, efd920db, 0888bba0, 02b7107d, 2978c450) while the 4,854 line chains on c90a7d3d. Unit-count chaining for zero-FV equity is a concrete detector/matcher rule.",
+   "evidence": [{"accession": "0001901164-26-000013", "text": "Oakswift Holdings Ltd. (5) (9) 2,582 - - - 4,854 4,854 0.30"}]
+  },
+  {
+   "observation_key": "distribution-per-share-missing-after-share-classes",
+   "outcome": "supported",
+   "rationale": "Fund-level gap unchanged by this run; which class to publish is correctly an owner question. Detector (net assets present, distribution per share absent after a quarter that had one) is concrete and low-noise. I did not re-query fund_financials for this change-only pass.",
+   "evidence": [{"accession": "0001901164-24-000006", "text": "Distributions declared ( 1.49 ) - Impact of issuance of common stock - Class I shares - 25.00"}]
+  },
+  {
+   "observation_key": "negative-signed-pik-tag-nulled-by-build",
+   "outcome": "supported",
+   "rationale": "pik_rate < 0 in bdc_holdings is exactly 7 rows, all 2025-09-30, in sandbox and production; pik_printed_not_published flagged exactly those 7 plus the untagged Granicus 2024-12-31 line in trza, and none in trzd. existing_detector reference is valid and the rule fires on the page cell, so recurrence at other funds is caught. A shared fix (take abs() of a negative PIK fact when the printed row shows a PIK figure) would avoid per-row corrections; that is a proposal, not done here.",
+   "evidence": [{"accession": "0001901164-25-000016", "text": "Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61"}]
+  },
+  {
+   "observation_key": "member-footnote-digit-glued-to-issuer-name",
+   "outcome": "supported",
+   "rationale": "trza flagged 11 issuer_name_printed rows (8 digit/v plus 3 Coding Solution), trzd 0. issuer_name_printed is the right existing detector: it compares against the printed company cell, so glued digits recur-detect at any fund. Fixing by row correction keeps the default ' n' number strip intact (see next observation).",
+   "evidence": [{"accession": "0001901164-24-000011", "text": "MRI Software LLC (4) (5) (6) S + 5.50 % 10.93 % 2/10/2027 1,864 ( 16 ) ( 16 ) -"}]
+  },
+  {
+   "observation_key": "wrapper-issuer-name-strip-disables-default-number-strip",
+   "outcome": "supported",
+   "rationale": "Measured trzb page_rule_findings: 3,314 issuer_name_printed rows for this fund (13 fund-quarter findings) against 11 in trza, so the wrapper setting broke nearly every name, a larger effect than the report's '5 to 13' wording suggests. Reverting was correct. existing_detector holds: issuer_name_printed fired on every damaged row, so a recurrence cannot pass silently. Mechanism not identified by the investigator; pipeline/issuer_instrument_split.py says the shared default deliberately does not cut row numbers and leaves that to the wrapper's issuer_name_strip_re, so a strip_re that does not itself remove ' n' leaves numbers in place.",
+   "evidence": [{"accession": "0001901164-25-000016", "text": "Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83"}]
+  }
+ ],
+ "request_reviews": []
+}

@@ -5885,3 +5885,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Proposals (fund_0001803498.json): Petco row-only (covers ROW-fb32f9352d6dcfba; owner ruling DC-0001803498-c3a4dbc414); F28 x2 not_applicable under owner ruling DC-shared-b3a989952e (pre-XBRL HTML quarters out of scope). All validate; none accepted yet, so the 3 stay outstanding.
 - Tool gap: make_batch_dispositions.py fails its own assertion on a generated F28 entry with no quotes or rows (writes nothing).
 - Verdicts DC-0001803498-6a79acb25d / 1d329e038d; review outcomes DC-0001803498-1c62b9c820 / 2aa6947978. A clean result is not data correct.
+
+### D-282 Fund loop 2026-11-15: T. Rowe Price OHA Select Private Credit Fund (0001901164), sandbox trze
+
+- Filtered packet (scratch/2026-11-15_work_filter/packet_0001901164.csv): 8 findings (7 supported_fix: issuer_name_printed x5, pik_printed x2; 1 unreviewed D06 2025-12-31). Sonnet fund agent `agent:fund-trz-sonnet`, Opus reviewer `agent:review-trzd-opus` (change-only, three rounds; investigation COMPLETE), Sonnet reader (trzd: 1 flag of 20, C002 CAD "C +" published CDOR; legend in all five 2025-06-30..2026-06-30 filings reads "CDOR (C)", as filed). Builds trza..trze; 13/13 totals tie. Gate INCOMPLETE only for the owner's Kaseya pik_printed 2023-06-30.
+- Fixed (19 row corrections, row_corrections.csv): 11 issuer names (glued footnote digits, leading 'v', 'Solution'); 8 pik_rate set from the printed cell (filer tags the PIK margin negative on 7 rows at 2025-09-30; build nulls negatives; one untagged Granicus line). position_id re-paired on Higginbotham (6) and Kaseya (3); chains improved, positions 676 unchanged.
+- D06 2025-12-31: false_alarm (continuity 96.0 pct on sandbox and production; "repeats" are the 2024-12-31 comparative table). Retired VR-FL-1901164-01 under D-252 (applied_by recorded).
+- Observations: wrapper issuer_name_strip_re damaged names (3,314 flagged rows in trzb; reverted); Cheval Blanc interest_rate_cash -1.8e-15 float residue (derived after corrections).
+- A clean result is not data correct.

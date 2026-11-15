@@ -891,5 +891,157 @@
    "instrument_description": "Asset Backed Securities"
   },
   "reason": "Printed in the 'Asset Backed Securities' section, published as a direct-lending loan. Printed: 'Asset Backed Securities Telecommunications Vertical Bridge, LLC (4) (10) 8.87 % 3/15/2056 16,100 16,100 16,054 0.98'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Granicus, Inc. 1",
+  "fields": {
+   "pik_rate": "2.25"
+  },
+  "reason": "pik_printed: No PIK fact is tagged on this unfunded line; the page prints the PIK component. Printed: 'Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.84 % 1/17/2031 4,469 - ( 23 ) -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Granicus, Inc. 3",
+  "fields": {
+   "pik_rate": "2.25"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Granicus, Inc. 4",
+  "fields": {
+   "pik_rate": "2.25"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 4,469 - - -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Deerfield Dakota Holding LLC 1",
+  "fields": {
+   "pik_rate": "2.75"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Iconic Purchaser Corporation 3",
+  "fields": {
+   "pik_rate": "6.50"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Iconic Purchaser Corporation (4) (5) (6) S + 6.50 % ( 6.50 % PIK) 10.50 % 11/16/2028 292 ( 7 ) ( 11 ) -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Pave America LLC 2",
+  "fields": {
+   "pik_rate": "2.88"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Pave America LLC (4) (5) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 21,617 21,510 21,509 1.43'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Pave America LLC 3",
+  "fields": {
+   "pik_rate": "2.88"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Pave America LLC (4) (5) (6) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 7,500 - ( 37 ) -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Unaffiliated Issuer, Cheval Blanc Holdings Company, Debt Securities, First Lien",
+  "fields": {
+   "pik_rate": "14.50"
+  },
+  "reason": "pik_printed: The filer tags the PIK margin with a negative sign (pik_rate -0.0225 etc.) and the build nulls negatives; the page prints it positive as a PIK component of the coupon. Printed: 'Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "BCPE HIPH Parent, Inc.2",
+  "fields": {
+   "issuer_name": "BCPE HIPH Parent, Inc."
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'BCPE HIPH Parent, Inc.'. Printed: 'BCPE HIPH Parent, Inc. (4) (6) (8) S + 5.75 % 11.07 % 10/7/2030 6,287 6,193 6,193 1.25'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Higginbotham Insurance Agency, Inc.1",
+  "fields": {
+   "issuer_name": "Higginbotham Insurance Agency, Inc."
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'Higginbotham Insurance Agency, Inc.'. Printed: 'Higginbotham Insurance Agency, Inc. (4) (5) (6) S + 5.50 % 10.92 % 11/24/2028 16,400 ( 81 ) ( 164 ) ( 0.03 )'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Higginbotham Insurance Agency, Inc.2",
+  "fields": {
+   "issuer_name": "Higginbotham Insurance Agency, Inc."
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'Higginbotham Insurance Agency, Inc.'. Printed: 'Higginbotham Insurance Agency, Inc. (4) (6) (7) S + 5.50 % 10.92 % 11/24/2028 7,292 7,087 7,219 1.46'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Higginbotham Insurance Agency, Inc.2",
+  "fields": {
+   "issuer_name": "Higginbotham Insurance Agency, Inc."
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'Higginbotham Insurance Agency, Inc.'. Printed: 'Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.93 % 11/24/2028 7,255 7,079 7,255 0.87'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Kaseya, Inc.4",
+  "fields": {
+   "issuer_name": "Kaseya, Inc."
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'Kaseya, Inc.'. Printed: 'Kaseya, Inc. (4) (5) (7) S + 6.00 % ( 2.50 % PIK) 11.31 % 6/25/2029 32,123 31,430 32,123 3.85'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Higginbotham Insurance Agency, Inc.2",
+  "fields": {
+   "issuer_name": "Higginbotham Insurance Agency, Inc."
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'Higginbotham Insurance Agency, Inc.'. Printed: 'Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.94 % 11/24/2028 16,291 16,197 16,291 1.63'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "MRI Software LLC4",
+  "fields": {
+   "issuer_name": "MRI Software LLC"
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'MRI Software LLC'. Printed: 'MRI Software LLC (4) (5) (6) S + 5.50 % 10.93 % 2/10/2027 1,864 ( 16 ) ( 16 ) -'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Investment, Unaffiliated Issuer, vAllied Universal Holdco LLC",
+  "fields": {
+   "issuer_name": "Allied Universal Holdco LLC"
+  },
+  "reason": "issuer_name_printed: the member carries a footnote or row digit glued to the legal form (or a stray leading letter); the page prints the company as 'Allied Universal Holdco LLC'. Printed: 'Allied Universal Holdco LLC (4) S + 3.75 % 8.18 % 5/12/2028 14,961 14,961 15,049 1.08'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Coding Solution Acquisition Inc. 1",
+  "fields": {
+   "issuer_name": "Coding Solutions Acquisition Inc."
+  },
+  "reason": "issuer_name_printed: the member drops the 's' of 'Solutions'; the page prints 'Coding Solutions Acquisition Inc.'. Printed: 'Coding Solutions Acquisition Inc. (4) (5) S + 5.00 % 9.25 % 8/7/2031 10,172 10,080 10,070 0.93'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Coding Solution Acquisition Inc. 2",
+  "fields": {
+   "issuer_name": "Coding Solutions Acquisition Inc."
+  },
+  "reason": "issuer_name_printed: the member drops the 's' of 'Solutions'; the page prints 'Coding Solutions Acquisition Inc.'. Printed: 'Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 1,836 ( 13 ) ( 18 ) -'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Coding Solution Acquisition Inc. 3",
+  "fields": {
+   "issuer_name": "Coding Solutions Acquisition Inc."
+  },
+  "reason": "issuer_name_printed: the member drops the 's' of 'Solutions'; the page prints 'Coding Solutions Acquisition Inc.'. Printed: 'Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 992 238 238 0.02'"
  }
 ]
