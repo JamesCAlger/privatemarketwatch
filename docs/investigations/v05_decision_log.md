@@ -5902,3 +5902,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - 18 agentA outstanding are check misfires: REQ-GBZ-1 (engine anchors only on InvestmentOwnedAtFairValue; 2023 10-Qs tag ...NetOfCapitalizedDiscount; dash lines have no FV fact) DC-0001572694-7999cf72a7 (14 ids); REQ-GBZ-2 field_unreadable (MPI two dates, Lithium, MedeAnalytics fixed PIK) DC-0001572694-9f4f24805d. Proposals withdrawn.
 - Observations: gate totals tolerance 500,000 dollars hid the 327k double count (propose strict tie); CANADIAN_PRIME missing from the schema.
 - A clean result is not data correct.
+
+### D-284 Fund loop 2026-11-15: Carlyle Credit Solutions (0001702510), sandbox cazb
+
+- Filtered packet: 10 findings (8 supported_fix: issuer_name_printed 4, units_printed 3, pik_printed 1; 2 unreviewed: pct_of_net_assets_identity, C107); none closed at HEAD. Sonnet fund agent `agent:fund-caz-sonnet`, Opus reviewer `agent:review-cazb-opus` (two rounds; investigation COMPLETE), Sonnet reader (0/20). Builds caza, cazb; totals equal the filed total to the dollar 14/14. Outstanding 1: industry_coverage 2026-06-30 (confirmed error, carried, supported review).
+- Fixed: Atlas US Finco name from 2024-03-31 (one chain for the 1,445 tranche), Vensure glued industry, 10 trailing-comma names no rule flagged (wrapper issuer_name_strip_re); 3 unit counts the pow10 normaliser replaced (wrapper shares_pow10_normalise false; Talon 145,631,000 = filer tag; unit scale of the page ambiguous fund-wide, noted); Big Bus PIK/spread/coupon type 2025-09-30.
+- Retired under D-252: pct_of_net_assets_identity 2026-03-31, C107 2026-03-31, F16 2025-12-31 (checks pass on cazb and production, plants fail).
+- Requests: CAZ-R1 acceptance_change for the owner (C107 bracketed printed cost: Route A keep the as_filed disposition DS-FUNDLOOP-C107, Route B change what C107 accepts); CAZ-R2 verification_bug make_batch_dispositions assertion. PD-C107 withdrawn.
+- Reviewer note: C115 only catches spreads above 15, so it misses fixed coupons and equity all-in rates below that. A clean result is not data correct.

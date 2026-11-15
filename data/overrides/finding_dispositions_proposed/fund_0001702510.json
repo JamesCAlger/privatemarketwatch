@@ -7,16 +7,57 @@
    "class": "rule_problem",
    "engine": "fund_financials",
    "rule_name": "F16",
-   "ciks": ["0001702510"],
-   "quarters": ["2022-03-31", "2022-06-30", "2022-09-30", "2022-12-31", "2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "ciks": [
+    "0001702510"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "reason_key": "f16-income-ratio-printed-not-annualised",
    "statement": "The filer prints its ratio of net investment income to average net assets for the year to date and says it is not annualised (10-Qs; the 10-K prints the year). The company-facts step splits that running ratio into quarters, so income_yield_pct holds one quarter's unannualised ratio (2.13 to 3.22). F16 compares it, times 1.5, with distribution_rate, which is annualised (four times the quarter's distribution over NAV, 9.7 to 11.9). On one basis the check would not fire in any quarter: four times the quarter's ratio times 1.5 is 12.8 or more against a distribution rate of 11.9 at most. Published equals the page split by quarter; no distribution or income figure is wrong. Fix belongs in the check or in the field's basis across funds (most filers print an annualised ratio, published as filed), which is a shared decision, not this fund's.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001702510-26-000049", "verbatim": "Ratio to average net assets: (4) Expenses before incentive fees 1.13 % 1.09 % Expenses after incentive fees 1.44 % 1.42 % Net investment income (loss) 2.20 % 2.33 %", "quote": "10-Q 2026-03-31: the quarter's ratio 2.20 % is published as income_yield_pct 2.20; distribution 0.49 a quarter on NAV 18.39 publishes as a distribution rate of 10.66"},
-    {"source": "filing", "accession": "0001702510-26-000049", "verbatim": "These ratios to average net assets attributable to Common Stockholders have not been annualized.", "quote": "footnote (4) of the financial highlights: the ratios are not annualised"},
-    {"source": "filing", "accession": "0001702510-23-000039", "verbatim": "These ratios to average net assets have not been annualized.", "quote": "the same footnote in the 2023 layout (10-Q 2023-03-31; ratio 3.10 % for 2023-Q1 and 2.42 % for 2022-Q1)"},
-    {"source": "filing", "accession": "0001702510-26-000084", "verbatim": "Net investment income (loss) 4.33 % 4.75 % Interest expense and credit facility fees 1.62 % 1.50 %", "quote": "10-Q 2026-06-30: six months 4.33 %, published for the quarter as 4.33 - 2.20 = 2.13"}
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000049",
+     "verbatim": "Ratio to average net assets: (4) Expenses before incentive fees 1.13 % 1.09 % Expenses after incentive fees 1.44 % 1.42 % Net investment income (loss) 2.20 % 2.33 %",
+     "quote": "10-Q 2026-03-31: the quarter's ratio 2.20 % is published as income_yield_pct 2.20; distribution 0.49 a quarter on NAV 18.39 publishes as a distribution rate of 10.66"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000049",
+     "verbatim": "These ratios to average net assets attributable to Common Stockholders have not been annualized.",
+     "quote": "footnote (4) of the financial highlights: the ratios are not annualised"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-23-000039",
+     "verbatim": "These ratios to average net assets have not been annualized.",
+     "quote": "the same footnote in the 2023 layout (10-Q 2023-03-31; ratio 3.10 % for 2023-Q1 and 2.42 % for 2022-Q1)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000084",
+     "verbatim": "Net investment income (loss) 4.33 % 4.75 % Interest expense and credit facility fees 1.62 % 1.50 %",
+     "quote": "10-Q 2026-06-30: six months 4.33 %, published for the quarter as 4.33 - 2.20 = 2.13"
+    }
    ],
    "addresses_verdict": {
     "2025-12-31": "The reviewer found the distribution is not excessive (1.96 declared against 1.79 of income a share, NII ratio 9.48 % for the year) and called the F16 value an extraction error. The first half stands; no published figure is wrong: income_yield_pct is the year's 9.48 % less the nine-month 7.17 %, an unannualised quarter, as the filer's running ratio splits. The flag comes from comparing that with an annualised distribution rate, which is this disposition."
@@ -28,15 +69,37 @@
    "engine": "row_validation",
    "rule_name": "X01",
    "rerun": "python scripts/v05_evidence/page_line.py 0001702510 0001702510-25-000139 \"Integrity Marketing Group, LLC (a) (6) Diversified Financial Services 10.50 % ( 100 % PIK) 12/21/2021 22,253 22,238 21,750 1.47\" 1 137 && python scripts/v05_evidence/page_line.py 0001702510 0001702510-25-000139 \"HIG Intermediate, Inc. (a) (6) Diversified Financial Services 10.50 % 12/10/2024 8 7,521 7,535 0.51\" 1 109 && python scripts/v05_evidence/page_line.py 0001702510 0001702510-25-000023 \"Titan DI Preferred Holdings, Inc. (a) (6) Energy: Oil & Gas 13.50 % ( 100 % PIK) 2/11/2020 12,031 11,932 12,031 0.81\" 1 126",
-   "ciks": ["0001702510"],
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"],
+   "ciks": [
+    "0001702510"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
    "reason_key": "equity-row-with-printed-pik-dividend-rate",
    "statement": "The flagged rows (7 or 8 a quarter) are rows of the equity table that print a rate in its 'All-In Rate' column: Integrity Marketing Group 10.50 % ( 100 % PIK), Blackbird Holdco 12.50 % ( 100 % PIK), HIG Intermediate 10.50 %, Titan DI Preferred Holdings 13.50 % ( 100 % PIK), Appriss Health, Buckeye Group, FS NU Investors, NEFCO, Your.World / Project Carbo. The filer tags the cell as a spread; this run publishes it as the rate (row corrections with the printed line). The page does not say whether each is common or preferred: until 2025-09-30 the section is 'Equity Investments' (classed common, so X01 fires), from 2025-12-31 'Common and Preferred Equity Investments' (classed preferred, X01 is silent). The published rate is the printed one.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001702510-25-000139", "verbatim": "Integrity Marketing Group, LLC (a) (6) Diversified Financial Services 10.50 % ( 100 % PIK) 12/21/2021 22,253 22,238 21,750 1.47", "quote": "2025-09-30: rate 10.50 printed in the equity table's All-In Rate column, published interest_rate 10.5 and pik_rate 10.5"},
-    {"source": "filing", "accession": "0001702510-25-000139", "verbatim": "HIG Intermediate, Inc. (a) (6) Diversified Financial Services 10.50 % 12/10/2024 8 7,521 7,535 0.51", "quote": "2025-09-30: a cash-pay rate on an equity row, published 10.5"},
-    {"source": "filing", "accession": "0001702510-25-000023", "verbatim": "Titan DI Preferred Holdings, Inc. (a) (6) Energy: Oil & Gas 13.50 % ( 100 % PIK) 2/11/2020 12,031 11,932 12,031 0.81", "quote": "2024-12-31"}
+    {
+     "source": "filing",
+     "accession": "0001702510-25-000139",
+     "verbatim": "Integrity Marketing Group, LLC (a) (6) Diversified Financial Services 10.50 % ( 100 % PIK) 12/21/2021 22,253 22,238 21,750 1.47",
+     "quote": "2025-09-30: rate 10.50 printed in the equity table's All-In Rate column, published interest_rate 10.5 and pik_rate 10.5"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-25-000139",
+     "verbatim": "HIG Intermediate, Inc. (a) (6) Diversified Financial Services 10.50 % 12/10/2024 8 7,521 7,535 0.51",
+     "quote": "2025-09-30: a cash-pay rate on an equity row, published 10.5"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-25-000023",
+     "verbatim": "Titan DI Preferred Holdings, Inc. (a) (6) Energy: Oil & Gas 13.50 % ( 100 % PIK) 2/11/2020 12,031 11,932 12,031 0.81",
+     "quote": "2024-12-31"
+    }
    ]
   },
   {
@@ -45,33 +108,32 @@
    "engine": "weak",
    "rule_name": "maturity_not_past",
    "rerun": "python scripts/v05_evidence/page_line.py 0001702510 0001702510-23-000039 \"American Physician Partners, LLC +# (2)(3)(8)(11) (12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 11.25 % 1/7/2019 8/5/2022 42,669 41,124 23,019 2.05\" 1 171 && python scripts/v05_evidence/page_line.py 0001702510 0001702510-24-000011 \"American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -\" 1 162",
-   "ciks": ["0001702510"],
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31"],
+   "ciks": [
+    "0001702510"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
    "reason_key": "maturity-not-past-defaulted-loan-printed-with-original-maturity",
    "statement": "The flagged rows are the two American Physician Partners first-lien loans (fair value 23.0M and 2.6M at 2023-03-31, nil from 2023-06-30), printed with maturities 8/5/2022, 2/15/2023 and later 6/30/2023, already past at each report date: the borrower was in default and the fund kept the loans at their stated maturity. The filer tags no maturity; this run publishes the printed date (row corrections), which raises the finding. Published equals the page.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001702510-23-000039", "verbatim": "American Physician Partners, LLC +# (2)(3)(8)(11) (12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 11.25 % 1/7/2019 8/5/2022 42,669 41,124 23,019 2.05", "quote": "2023-03-31: maturity 8/5/2022, before the report date; published 2022-08-05"},
-    {"source": "filing", "accession": "0001702510-24-000011", "verbatim": "American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -", "quote": "2023-12-31: maturity 6/30/2023, value nil"}
+    {
+     "source": "filing",
+     "accession": "0001702510-23-000039",
+     "verbatim": "American Physician Partners, LLC +# (2)(3)(8)(11) (12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 11.25 % 1/7/2019 8/5/2022 42,669 41,124 23,019 2.05",
+     "quote": "2023-03-31: maturity 8/5/2022, before the report date; published 2022-08-05"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-24-000011",
+     "verbatim": "American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -",
+     "quote": "2023-12-31: maturity 6/30/2023, value nil"
+    }
    ]
-  },
-  {
-   "disposition_id": "PD-C107-1702510-1",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "C107",
-   "rerun": "python scripts/v05_evidence/page_line.py 0001702510 0001702510-26-000049 \"Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.0\" 1 140",
-   "ciks": ["0001702510"],
-   "quarters": ["2026-03-31"],
-   "reason_key": "c107-negative-cost-undrawn",
-   "statement": "The one flagged row is the undrawn Bitnova Midco delayed-draw line: par a dash, cost ( 40 ), fair value ( 41 ), as printed and tagged; published cost -40,000 and fair value -41,000, both verified by the provenance re-verifier. It is the reason already accepted by check (R-C107-negative-cost-undrawn); the check does not clear it here only because an earlier reviewer's real-error verdict is on record.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0001702510-26-000049", "verbatim": "Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.0", "quote": "the flagged row: cost ( 40 ) and fair value ( 41 ), published -40,000 and -41,000"}
-   ],
-   "addresses_verdict": {
-    "2026-03-31": "The reviewer cited the Mindbody revolver in the unfunded-commitments table ('Mindbody, Inc. | Revolver | 0.50 | 2,684 | ( 40 )') and concluded a fair value was stored as cost. The flagged row is not Mindbody: it is Bitnova Midco (context c-61), whose schedule line prints cost ( 40 ) and fair value ( 41 ); both published values equal the page. The verdict matched the wrong row on the figure 40 and does not stand."
-   }
   }
  ]
 }

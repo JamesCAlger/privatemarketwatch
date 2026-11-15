@@ -1,0 +1,110 @@
+{
+ "_note": "Carlyle Credit Solutions (fund loop 2026-11-15, batch b1112b packet): retirements under the owner's standing rule D-252. Check: scratch/fund_runs/0001702510/retire_check.py (read-only; run on data/output and on sandbox cazb).",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1702510-01",
+   "review_id": "RVQ_BLK_e46c56a6fe7c",
+   "cik": "0001702510",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "report_date": "2026-03-31",
+   "reason": "The verdict says the affiliated subtotal (32,227 thousand) is published on top of the schedule grand total (sum 2,636.306M against 2,604.079M). The published-basis fair-value sum of the quarter is 2,604,079,000, equal to the printed Total investments fair value, and no published row is the subtotal.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001702510/retire_check.py (read-only): the printed total is read from the page; published-basis sum must equal it within 500 dollars and no published row may be the 32,227 subtotal or a 'Total investments' line; passes on data/output/private_markets_holdings.parquet and on sandbox cazb; plants (subtotal row added, a position dropped, one row off by 1,000) all fail"
+    },
+    {
+     "source": "query",
+     "quote": "0001702510 2026-03-31 published-basis fair value sum 2,604,079,000 (278 rows) against printed 2,604,079,000, data/output (build of 2026-11-13) and sandbox cazb"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000049",
+     "quote": "Total investments-non-controlled/affiliated $ 32,648 $ 32,227 1.79 % Total investments $ 2,654,429 $ 2,604,079 145.11 %",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001702510/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "verdict_sha256": "ecb331de8219c154cd338196b5b194d2f513a94eebe8db9347c5c1669b7c5f5b",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-caz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1702510-02",
+   "review_id": "RVQ_REV_7e9e060873c6",
+   "cik": "0001702510",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "report_date": "2026-03-31",
+   "reason": "The verdict says the Mindbody revolver's (40) was stored as cost -40,000 and that the funded row reads cost 21,113. The (40) is the fair value of an undrawn commitment in the unfunded table, which is not a position; the published Mindbody row is par 21,475, cost 21,113, fair value 21,113, each equal to its printed cell, and no Mindbody row has a negative cost. The cost -40,000 the check flags is the Bitnova Midco undrawn line (c-61), published at its printed cost ( 40 ) and fair value ( 41 ).",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001702510/retire_check.py (read-only): the published Mindbody row must equal its printed par, cost and fair value and carry no negative cost; the published Bitnova undrawn line must equal its printed ( 40 ) ( 41 ); passes on data/output and on sandbox cazb; plants (Mindbody cost -40,000, Mindbody value -40,000, Mindbody row missing, Bitnova cost sign lost, Bitnova value zeroed) all fail"
+    },
+    {
+     "source": "query",
+     "quote": "0001702510 2026-03-31 Mindbody, Inc. c-146 par 21475000 cost 21113000 fair_value 21113000; Bitnova Midco S.p.A. (Italy) c-61 cost -40000 fair_value -41000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000049",
+     "quote": "Mindbody, Inc. (c) (2)(3)(15) Leisure Products & Services SOFR 6.00 % 9.70 % 3/30/2026 3/30/2033 21,475 21,113 21,113 1.18",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000049",
+     "quote": "Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.00",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001702510/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "verdict_sha256": "0b97bf23c4f81be0647e81df7ed7e0b2b6bcee311dd8eb306c21904028ddfa52",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-caz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1702510-03",
+   "review_id": "RVQ_REV_fbba1dfdd9aa",
+   "cik": "0001702510",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "report_date": "2025-12-31",
+   "reason": "The verdict (metric 6.949 against an anchor of 1.10) cites the 10-K highlights: net investment income ratio 9.48 percent and dividends declared 1.96 per share. The published income_yield_pct is 9.48, the printed year ratio; the published distribution_rate 10.414 equals 1.96 over the printed NAV per share 18.82; distribution_rate is 1.10 times income_yield_pct, below the 1.5 limit. The F16 basis repair (8a5da7bc, 499e5f9c, ae480a4a) no longer fires on it.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001702510/f16_check.py (read-only): published income_yield_pct must equal the printed ratio, distribution_rate must equal printed dividends over printed NAV within 0.02 points and be at most 1.5 x income_yield_pct; passes on data/output and on sandbox cazb; plants (distribution 6.949 x yield, yield 2.37, distribution 12.0) all fail"
+    },
+    {
+     "source": "query",
+     "quote": "0001702510 2025-12-31 fund_financials: income_yield_pct 9.48, distribution_rate 10.414452709883102 in data/output and in sandbox cazb"
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000021",
+     "quote": "Net investment income (loss) 9.48 % 11.41 % 12.58 % 10.15 % 9.82 %",
+     "verbatim": true
+    },
+    {
+     "source": "filing",
+     "accession": "0001702510-26-000021",
+     "quote": "Dividends declared (2) ( 1.96 ) ( 2.02 ) ( 2.04 ) ( 2.11 ) ( 1.93 )",
+     "verbatim": true
+    }
+   ],
+   "rerun": "python scratch/fund_runs/0001702510/f16_check.py data/output --plant",
+   "verdict_sha256": "152c4dbe6f3e613f66a5b359dd6a5e4fc83bd44a067ae94ced9ca0ec5fecab07",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-caz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

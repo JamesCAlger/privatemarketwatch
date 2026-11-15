@@ -1,0 +1,137 @@
+{
+ "reviewer_id": "agent:review-cazb-opus",
+ "report_digest": "273ed7bfed474b44e35fbfe49a7a3bfda4a0f9677280d2b981c290240a5b41df",
+ "label": "cazb",
+ "cik": "0001702510",
+ "reviewed_on": "2026-11-15",
+ "review_round": "2 (change-only: rejected items and claimed changes re-verified; the rest carried from round 1 of this review)",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_2743c14885c2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Carried from round 1 (no rebuild; cazb unchanged). Carry check passes: (a) carried source DC-0001702510-abe50eb07e is a recorded verdict, review_outcome supported, reviewed_by /root/remaining_carlyle_check_sol, distinct from its author, with one printed-line quote per flagged row; (b) pipeline.candidate_rules.industry_not_published re-run on cazb (review/industry_pop.py) flags 58 rows at 2026-06-30 (29 no_industry_at_all, 29 filer_industry_not_mapped printing 'Structured Credit'), none elsewhere; row_id set equals the report's affected_rows exactly. Printed lines carry an industry for the no-industry rows (Matterhorn 'Software'), so confirmed_error stands.",
+   "evidence": [
+    {"accession": "0001702510-26-000084", "text": "Matterhorn Finco, Inc. (c) (2)(3)(15) Software SOFR 5.50 % 9.23 % 3/5/2026 3/5/2033 18,056 17,854 17,856 1.04"},
+    {"accession": "0001702510-26-000084", "text": "OHA Credit Funding 14-R Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 3/28/2025 4/20/2038 6,000 6,000 5,905 0.34"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "affiliate-rollforward-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "Round 2: decision now existing_detector fv_conservation (RVQ_BLK_030c70236b3c), which fired in ccxa on the 2026-06-30 +37.9M over-count; matches the ccxa ledger. Fix holds: totals tie to the dollar in all 14 quarters. Residual: fv_conservation fires only when a quarter's total breaks, so quarters masked by pinned rules stay unseen; the suggested check remains recorded.",
+   "evidence": [{"accession": "0001702510-26-000084", "text": "Align Precision Group, LLC $ 20,296 $ 1,078 $ - $ - $ - $ 21,374 $ 1,073"}]
+  },
+  {
+   "observation_key": "pik-tag-one-read-as-one-percent",
+   "outcome": "supported",
+   "rationale": "Carried. Rationale now lists the rules that fired in ccxa (C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag), consistent with the ccxa ledger; none tests pik_rate 1.0. Proposed check is narrow and keyed on the printed '100 % PIK'.",
+   "evidence": [{"accession": "0001702510-26-000084", "text": "Material Holdings, LLC (c) (2)(3)(8)(11) Business Services SOFR 6.00 % ( 100 % PIK) 9.73 % 8/19/2021 8/19/2027 4,040 1,312 - -"}]
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "outcome": "supported",
+   "rationale": "Round 2: existing_detector C115 (RVQ_REV_1599494ef66f). Verified: the SCP JV Class B line prints 'FIXED 18.70 % 18.70 %' and ccxa published it Floating/SOFR with spread 18.7 = rate; cazb publishes Fixed, rate 18.7, no spread. Residual the orchestrator should know: C115 only fires above 15, so FIXED coupons under 15 % (Associations 14.25 %, World 50 11.50 %) recur undetected; the observation's suggested check (floating row whose spread equals its rate) is the real recurrence detector and stays recorded.",
+   "evidence": [{"accession": "0001702510-26-000084", "text": "Structured Credit Partners JV, LLC, Class B (a) (7)(14) Investment Funds FIXED 18.70 % 18.70 % 2/11/2026 7,709 7,709 7,709 0.45"}]
+  },
+  {
+   "observation_key": "equity-all-in-rate-tagged-as-spread",
+   "outcome": "supported",
+   "rationale": "Round 2: existing_detector C115 citing the seven FS NU findings (spread 20.0, 2024-12-31 to 2026-06-30); matches ccxa row_validation_issues. Same residual as above: C115 catches only the equity rows whose all-in rate exceeds 15 (FS NU of 52 rows); the suggested check (equity row with a spread and no rate) remains the recurrence detector.",
+   "evidence": [{"accession": "0001702510-25-000139", "text": "Integrity Marketing Group, LLC (a) (6) Diversified Financial Services 10.50 % ( 100 % PIK) 12/21/2021 22,253 22,238 21,750 1.47"}]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "Carried. Printed industry 'Structured Credit' on every CLO line; proposed check keyed on the filer's own label versus class is concrete and low-noise. Rationale now names the ccxa rules, none of which tests class.",
+   "evidence": [{"accession": "0001702510-25-000109", "text": "Regatta 30 Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.40 % 9.69 % 11/25/2024 1/25/2038 1,970 1,970 1,986 0.13"}]
+  },
+  {
+   "observation_key": "reference-rate-guessed-on-unvalidated-printed-row",
+   "outcome": "supported",
+   "rationale": "Carried. Code scan reproduced on cazb (2,408 loan rows, 2,244 read, 0 mismatches, 164 no line); 6 of the 164 read on the page all publish the printed code (misses are '$'-prefixed lines). Proposed report is a reasonable detector.",
+   "evidence": [{"accession": "0001702510-25-000109", "text": "Tufin Software North America, Inc. (a)(b)(c)(e) (2)(3)(11)(14) Software SOFR 5.18 % 9.50 % 8/17/2022 8/17/2028 $ 30,396 $ 30,024 $ 30,221 2.03 %"}]
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annualised-distribution",
+   "outcome": "supported",
+   "rationale": "Round 2: decision now existing_detector F16 (17 findings in ccxa; basis repaired 2026-11-12) with the last finding retired as VR-FL-1702510-03, which I re-ran (see retirement note below). Wording caveat: 'income_yield_pct holds ... split into quarters (2.1 to 3.2)' describes ccxa; in cazb the field is now annualised (2025-03-31 9.32 to 2026-06-30 8.66; 2026-03-31 8.80 = 4 x printed 2.20), so 'published values equal the page' holds for the 10-K quarter only. Detection decision is correct.",
+   "evidence": [{"accession": "0001702510-26-000049", "text": "These ratios to average net assets attributable to Common Stockholders have not been annualized."}]
+  },
+  {
+   "observation_key": "equity-class-read-from-combined-section-heading",
+   "outcome": "supported",
+   "rationale": "Carried. The heading prints no class per line; leaving the class is right. Proposed check (class changes while the printed line does not) catches the 2025-09-30 to 2025-12-31 flip.",
+   "evidence": [{"accession": "0001702510-26-000084", "text": "Common and Preferred Equity Investments ( 4.1 % of fair value) 48Forty TopCo LLC (a) (6)(12) Transportation: Cargo 1/14/2026 1 $ 6,500 $ 5,627 0.33 %"}]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Carried. Printed line carries both dates; proposed check is concrete.",
+   "evidence": [{"accession": "0001702510-24-000011", "text": "American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -"}]
+  },
+  {
+   "observation_key": "pik-fact-on-another-line-of-the-issuer",
+   "outcome": "supported",
+   "rationale": "Carried. Printed '( 100 % PIK)' with no PIK fact; proposed check is direct.",
+   "evidence": [{"accession": "0001702510-26-000021", "text": "Jeg's Automotive, LLC (c) (2)(3)(8) Auto Aftermarket & Services SOFR 7.00 % ( 100 % PIK) 10.65 % 12/22/2021 12/31/2029 $ 907 $ 833 $ 907 0.05"}]
+  },
+  {
+   "observation_key": "instrument-description-empty-old-member-format",
+   "outcome": "supported",
+   "rationale": "Carried. No instrument column printed; fund-quarter all-empty report is cheap and low-noise.",
+   "evidence": [{"accession": "0001702510-24-000084", "text": "Generator Buyer, Inc. (Canada) ^+ (2)(3)(7)(13) Energy: Electricity CORRA 5.25 % 9.22 % 7/22/2024 7/22/2030 C$ 8,042 5,715 5,817 0.55"}]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Round 2: now propose_detector (name ending in an industry label or a repeated legal form), noting issuer_name_printed was not run on Buckeye/Generator unfixed. Either decision is defensible: issuer_name_printed did catch the same industry-glued shape on Vensure in caza. The proposed check is concrete.",
+   "evidence": [{"accession": "0001702510-24-000084", "text": "Vensure Employer Services, Inc. ^+ (2)(3)(13) Business Services SOFR 5.00 % 9.59 % 9/27/2024 9/27/2031 19,807 19,554 19,426 1.84"}]
+  },
+  {
+   "observation_key": "cost-tagged-in-foreign-unit-printed-in-dollars",
+   "outcome": "supported",
+   "rationale": "Round 2: existing_detector FX03 (RVQ_REV_8b7ec513c322, RVQ_REV_1b07eee196f6), which fired in ccxa on exactly Project Carbo 2026-03-31 and Talon MidCo 2026-06-30 (cost unit EUR). Correct.",
+   "evidence": [{"accession": "0001702510-26-000049", "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 1 EUR 4,528 4,903 0.28"}]
+  },
+  {
+   "observation_key": "issuer-name-trailing-comma-empty-industry-cell",
+   "outcome": "supported",
+   "rationale": "Carried. Dry run of HEAD vs working issuer_name_strip_re over all 1,576 distinct as-filed members: 7 members / 12 raw rows change, all '<name>, , <industry>'; published effect 10 rows (the two Associations 2024-06-30 rows already published without a comma). No as-filed name ends in a comma after the change.",
+   "evidence": [{"accession": "0001702510-24-000011", "text": "Vensure Employee Services, Inc. ^ (2)(3)(13) Business Services SOFR 5.25 % 10.63 % 12/15/2023 3/26/2027 610 536 535 0.05"}]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Carried. units_printed fired on all three rows in caza; pow10 touched exactly these 3 rows in caza, ccxd and production, 0 in cazb. shares_pow10_normalise is existing, schema-registered, tested shared code (2b7b3d25, D-209). Published counts equal the filer's tag; whether the 'Shares/ Units' column is itself in thousands is a fund-wide ambiguity recorded in not_done.",
+   "evidence": [{"accession": "0001702510-23-000039", "text": "Talon MidCo 1 Limited ^ (7) Software 8/17/2022 145,631 1,456 1,725 0.15"}]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "CAZ-R1",
+   "outcome": "supported",
+   "rationale": "Round 2: reclassified acceptance_change (DC-0001702510-42bbf00084, authority owner) with Route A (keep the as_filed disposition DS-FUNDLOOP-C107-1702510) and Route B (change what C107 accepts, measured on every accepted sandbox first). Coherent with the closure: the finding is closed as_filed now and nothing is weakened pending the owner. PD-C107-1702510-1 withdrawn: semantic diff of the proposals file against HEAD shows only that entry removed, 3 others unchanged, top-level keys equal.",
+   "evidence": [{"accession": "0001702510-26-000049", "text": "Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.00"}]
+  },
+  {
+   "request_id": "CAZ-R2",
+   "outcome": "supported",
+   "rationale": "New: make_batch_dispositions.py asserting on its C107 entry is a tooling defect that stops an accepted reason being regenerated by check; verification_bug is the right class (DC-0001702510-30918f70f0) and the next action includes a test that the entry validates and writes. It does not change what any check accepts.",
+   "evidence": [{"accession": "0001702510-26-000049", "text": "Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.00"}]
+  }
+ ],
+ "retirement_reviews": [
+  {"retirement_id": "VR-FL-1702510-01", "finding_id": "RVQ_BLK_e46c56a6fe7c", "outcome": "supported", "rationale": "Round 1: retire_check.py passes on data/output and cazb (2,604,079,000 = printed), all plants fail; verdict sha256 matches; applied_by present."},
+  {"retirement_id": "VR-FL-1702510-02", "finding_id": "RVQ_REV_7e9e060873c6", "outcome": "supported", "rationale": "Round 1: same script; Mindbody at printed 21,475/21,113/21,113, flagged row is Bitnova c-61 at printed ( 40 ) ( 41 ); closes as_filed."},
+  {"retirement_id": "VR-FL-1702510-03", "finding_id": "RVQ_REV_fbba1dfdd9aa", "outcome": "supported", "rationale": "Round 2: f16_check.py re-run on data/output and cazb: printed ratio 9.48, dividends 1.96, NAV 18.82 (regex-read from 0001702510-26-000021); published income_yield_pct 9.48, distribution_rate 10.414 = 100 x 1.96 / 18.82; ratio 1.10 below 1.5; PASS on both; plants (distribution 6.949x yield, yield 2.37, distribution 12.0) all fail; exit 0. verdict_sha256 152c4dbe... equals data/output/review_queue/verdicts and data/decisions/verdict_files copies. applied_by present. New false_alarm verdict DC-0001702510-cbfaa9225a recorded."}
+ ],
+ "change_checks": [
+  "declared_changes now list the same 12 columns and counts as holdings_field_diff cazb ccxd (issuer_name 14, corrected_fields 5, shares_held 3, shares_held_source 3, src_transforms 3, pik_rate 1, basis_spread 1, coupon_type 1, interest_rate_cash 1, position_id 6, canonical_name 6, entity_id 2). Wording residue, not blocking: position_id says '2023-03-31 to 2025-03-31 ... with the 2025-06-30 and later US Finco rows' but the six rows are 2023-03-31 to 2024-06-30 and the 2024-09-30 and later rows already carried 86951121; canonical_name says all six become 'Atlas AU Bidco Pty Ltd' but the two renamed 2024 rows become 'Atlas US Finco, Inc.'.",
+  "Retirement file _note now names Carlyle Credit Solutions.",
+  "Seven row-correction lines now dated 2026-11-15; Atlas 2024-06-30 rationale now reads 'SOFR 5.75 % that quarter'."
+ ]
+}

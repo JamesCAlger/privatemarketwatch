@@ -2641,5 +2641,47 @@
    "pik_rate": "10.65"
   },
   "reason": "Printed '( 100 % PIK)': the whole coupon is paid in kind; the filer's PIK fact (1) sits on another line of the issuer, so none was published. Printed (0001702510-26-000021): 'Jeg's Automotive, LLC (c) (2)(3)(8) Auto Aftermarket & Services SOFR 7.00 % ( 100 % PIK) 10.65 % 12/22/2021 12/31/2029 $ 907 $ 833 $ 907 0.05 %'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "First Lien Debt , Atlas AU Bidco Pty Ltd (Australia), High Tech Industries",
+  "fields": {
+   "issuer_name": "Atlas US Finco, Inc."
+  },
+  "reason": "The member names the borrower 'Atlas AU Bidco Pty Ltd (Australia)'; from this quarter the page prints the same SOFR 7.25 % 12/15/2022 tranche (par 1,445) under 'Atlas US Finco, Inc.' (the next quarter's member and the second tranche already say so). Printed (0001702510-24-000033): 'Atlas US Finco, Inc. ^ (2)(3)(7)(11) High Tech Industries SOFR 7.25 % 12.55 % 12/15/2022 12/12/2029 1,445 1,404 1,457 0.13'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "First Lien Debt , Atlas AU Bidco Pty Ltd (Australia), High Tech Industries",
+  "fields": {
+   "issuer_name": "Atlas US Finco, Inc."
+  },
+  "reason": "The member names the borrower 'Atlas AU Bidco Pty Ltd (Australia)'; from this quarter the page prints the same 12/15/2022 tranche (par 1,445; SOFR 5.75 % that quarter) under 'Atlas US Finco, Inc.' (the next quarter's member and the second tranche already say so). Printed (0001702510-24-000056): 'Atlas US Finco, Inc. ^ (2)(3)(7)(13) High Tech Industries SOFR 5.75 % 11.08 % 12/15/2022 12/12/2029 1,445 1,406 1,458 0.14'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "First Lien Debt, Vensure Employer Services, Inc. Business Services",
+  "fields": {
+   "issuer_name": "Vensure Employer Services, Inc."
+  },
+  "reason": "The member lacks the comma before the industry, so 'Business Services' stayed in the issuer name. Printed (0001702510-24-000084): 'Vensure Employer Services, Inc. ^+ (2)(3)(13) Business Services SOFR 5.00 % 9.59 % 9/27/2024 9/27/2031 19,807 19,554 19,426 1.84'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "First Lien Debt, Vensure Employer Services, Inc. Business Services",
+  "fields": {
+   "issuer_name": "Vensure Employer Services, Inc."
+  },
+  "reason": "The member lacks the comma before the industry, so 'Business Services' stayed in the issuer name. Printed (0001702510-25-000023): 'Vensure Employer Services, Inc. (a)(b)(e) (2)(14) Business Services SOFR 5.00 % 9.34 % 9/27/2024 9/27/2031 21,058 20,816 21,029 1.41'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investment, Non-Affiliated Issuer, First Lien Debt, Big Bus Tours Group Limited (United Kingdom), Leisure Products & Services 2",
+  "fields": {
+   "pik_rate": "0.25",
+   "basis_spread": "8.1",
+   "coupon_type": "Floating"
+  },
+  "reason": "The context carries only the all-in rate (10.28); the margin and PIK facts the sibling lines carry are missing, and the row was typed Fixed. Printed (0001702510-25-000139): 'Big Bus Tours Group Limited (United Kingdom) (d) (2)(7) Leisure Products & Services EURIBOR 8.10 %, 0.25 % PIK 10.28 % 7/17/2025 6/4/2031 EUR 229 265 261 0.02'"
  }
 ]

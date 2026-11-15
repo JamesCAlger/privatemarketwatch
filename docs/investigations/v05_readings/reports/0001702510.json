@@ -1,90 +1,720 @@
 {
  "cik": "0001702510",
- "label": "ccxd",
- "before": "spoff3",
+ "label": "cazb",
+ "before": "ccxd",
  "shared_code": false,
  "declared_changes": [
-  {"column": "issuer_name", "rows": 62, "why": "60 rows of 2024-12-31 and 2025-03-31 lose the section prefix 'Structured Credit Investments, ' (issuer_name_strip_re now accepts it); Buckeye Group 2024-12-31 loses the industry glued on by a missing comma; Generator Buyer 2024-09-30 loses a repeated ', Inc.' (row corrections)"},
-  {"column": "cost", "rows": 1, "why": "Project Carbo 2026-03-31: cost 4,528 thousand tagged with unit EUR and printed 'EUR 4,528' beside a dollar fair value; it is the dollar cost (prior and next quarters print 4,358 and 4,709 with no sign, and the filed cost total includes it). foreign_unit_values reported_in_usd; published null -> 4,528,000"},
-  {"column": "cost_currency", "rows": 1, "why": "same row, EUR -> USD"},
-  {"column": "cost_reported", "rows": 1, "why": "same row"},
-  {"column": "src_facts", "rows": 1, "why": "same row: the cost unit status becomes reported_in_usd"},
-  {"column": "principal_amount", "rows": 11, "why": "CVC Cordatus Loan Fund X and XXVI DAC (CLO notes classed as funds, so no par was kept): printed par EUR 1,100 / 3,490 thousand set by row correction (12 rows with 2026-06-30)"},
-  {"column": "principal_amount_usd", "rows": 11, "why": "same rows, par times the build's own EUR rate for the date"},
-  {"column": "principal_fx_status", "rows": 11, "why": "same rows, reference_fx like the fund's other euro CLO notes"},
-  {"column": "asset_category", "rows": 11, "why": "CVC Cordatus rows FUND -> LOAN (CLO notes in the Structured Credit section)"},
-  {"column": "issuer_category", "rows": 11, "why": "same rows FUND -> CORPORATE"},
-  {"column": "exposure_type", "rows": 11, "why": "same rows FUND -> DIRECT"},
-  {"column": "index_classification", "rows": 50, "why": "CLO notes of the 'Structured Credit Investments' section classed by name as DIRECT_LENDING (Bryant Park Funding, CIFC Funding 2014-III, OHA Credit Funding 14-R, RR Ltd., Regatta 30 / XXIV Funding) or PRIVATE_CREDIT_FUND (CVC Cordatus) -> STRUCTURED_CREDIT like the other CLO rows"},
-  {"column": "asset_class", "rows": 50, "why": "same rows -> STRUCTURED_CREDIT"},
-  {"column": "interest_rate", "rows": 57, "why": "FIXED rows (World 50, Associations, Denali Midco, PAM Bidco, JV Class B) and the equity table's 'All-In Rate' rows publish the printed rate; Associations 2024-06-30 x2 had no rate tag, rate set from the page (12.09, 11.82)"},
-  {"column": "interest_rate_reported", "rows": 57, "why": "follows interest_rate"},
-  {"column": "interest_rate_kind", "rows": 48, "why": "rows that gained a rate read as all_in (the fund's filed_rate_reading)"},
-  {"column": "basis_spread", "rows": 74, "why": "the fixed coupon or equity all-in rate tagged as a spread is withdrawn (spread empty); Associations 2024-06-30 x2 gain the printed 6.50"},
-  {"column": "coupon_type", "rows": 72, "why": "FIXED and equity-rate rows Floating -> Fixed"},
-  {"column": "reference_rate_type", "rows": 80, "why": "withdrawn on fixed and equity-rate rows (no benchmark printed); printed code where the date guess differed: Trader Corp CDOR (2023-03-31 to 2024-03-31), Avoca CLO XI, Voya Euro CLO VIII and CVC Cordatus EURIBOR (misdated 2024-12-31 contexts), Thor STIBOR and Eltera NIBOR (2026-06-30)"},
-  {"column": "reference_rate_source", "rows": 100, "why": "same rows, plus 20 rows whose guessed code the printed column confirms (inferred -> ixbrl_field_status)"},
-  {"column": "pik_rate", "rows": 111, "why": "Round 2: Jeg's Automotive 2025-12-31 (10.65) and Material Holdings 2025-09-30 (9.98) print '( 100 % PIK)' and carry no PIK fact (the filer put it on another line of the issuer); set from the page. Round 1: '( 100 % PIK)' is tagged as InvestmentInterestRatePaidInKind = 1 and was published as 1.0; the whole printed coupon is paid in kind, so pik_rate = the printed coupon (loans) or the all-in rate (equity rows)"},
-  {"column": "interest_rate_cash", "rows": 111, "why": "cash leg recomputed: 0 on whole-PIK rows"},
-  {"column": "corrected_fields", "rows": 209, "why": "marks the row-corrected fields"},
-  {"column": "maturity_date", "rows": 30, "why": "Round 2 (page sample C001): the filer tags no maturity; the page reader missed 30 loan rows. Set from the printed line: American Physician Partners x7 (2023-03-31 to 2023-12-31, past-due 8/5/2022, 2/15/2023, 6/30/2023) and the 23 misdated CLO contexts of 2024-12-31 (2037 to 2039). Census after the build: 0 loan rows without a maturity"},
-  {"column": "maturity_status", "rows": 30, "why": "follows maturity_date on the same 30 rows"},
-  {"column": "gics_sub_industry", "rows": 6, "why": "Aimco CLO and Babson CLO rows of 2024-12-31 and 2025-03-31 gain a label once the section prefix is off the name; no row lost a label"},
-  {"column": "gics_sector", "rows": 6, "why": "same rows"},
-  {"column": "position_id", "rows": 228, "why": "not aimed at, explained: chain ids are renamed when a chain's members change. Most chains ending 2026-03-31 in spoff3 now continue into the added 2026-06-30 quarter; the 60 renamed CLO rows of 2024-12-31 / 2025-03-31 now join their later chains. No row's values changed with its id"}
+  {
+   "column": "issuer_name",
+   "rows": 14,
+   "why": "Atlas AU Bidco -> Atlas US Finco, Inc. (2 rows, 2024-03-31 and 2024-06-30, row corrections from the printed line); 'Business Services' removed from Vensure Employer Services, Inc. (2 rows, 2024-09-30 and 2024-12-31, row corrections); trailing comma removed from 10 names (Guidehouse, Sapphire Convention, Vensure Employee Services, Westfall Technik, Yellowstone Buyer Acquisition at 2023-12-31 and 2024-03-31) by the wrapper's issuer_name_strip_re"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 5,
+   "why": "the five rows with a row correction (2 Atlas, 2 Vensure, 1 Big Bus Tours)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 3,
+   "why": "wrapper dispatch.shares_pow10_normalise false: tagged counts kept (Talon MidCo 1 2023-03-31 and 2023-06-30 1,018,000 -> 145,631,000; Project Carbo 2026-06-30 1,000 -> 4,387,000)"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 3,
+   "why": "same three rows: derived_proxy -> null (a tagged count carries no source label)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 3,
+   "why": "same rows, the shares_held:pow10_shares transform no longer applies"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "Big Bus Tours 2025-09-30 c-49 (7/17/2025 euro tranche): none -> 0.25 from the printed '8.10 %, 0.25 % PIK'"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 1,
+   "why": "same row: none -> 8.1"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "same row: Fixed -> Floating"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 1,
+   "why": "same row: derived by the build from the all-in rate 10.28 less the PIK 0.25 (10.03)"
+  },
+  {
+   "column": "position_id",
+   "rows": 6,
+   "why": "the six Atlas rows of the 1,445 tranche (2023-03-31 to 2025-03-31 plus 2024-03-31/06-30 renamed) take one position_id with the 2025-06-30 and later US Finco rows"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 6,
+   "why": "the six Atlas rows of the 1,445 tranche: canonical name follows the position (Atlas AU Bidco Pty Ltd (Australia) -> Atlas AU Bidco Pty Ltd)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 2,
+   "why": "the two renamed Atlas rows (2024-03-31, 2024-06-30) join the US Finco entity"
+  }
  ],
- "rows_added": 292,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "2026-06-30 published 37.9M over the filed total: the affiliate roll-forward note reuses the schedule members ('Investments | Affiliated Issuer | Align Precision Group, LLC 1', '... (Equity)', 'Structured Credit Partners JV, LLC, 1/2') with a fair value and no cost, principal or percent fact. Wrapper setting source_encodings.schedule_row_tags = cost_or_percent_unrounded drops such contexts in every quarter. It removes exactly the rows the two quarter-pinned rules removed at 2025-12-31 (28.6M) and 2026-03-31 (32.2M), so both rules (align_precision_duplicate_axis_exclusion_2025q4, exclude_affiliated_rollforward_20260331) are deleted, plus the five rows of 2026-06-30. Every other published row of the fund carries a cost or percent fact (checked on ccxa). Totals now tie in 14 of 14 quarters.", "kind": "wrapper", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001702510-26-000084", "text": "Align Precision Group, LLC $ 20,296 $ 1,078 $ - $ - $ - $ 21,374 $ 1,073"},
-              {"accession": "0001702510-26-000084", "text": "Structured Credit Partners JV, LLC - 7,709 - - - 7,709 288 Total investments-non-controlled/affiliated $ 28,630"}]},
-  {"what": "FX03 x2: Project Carbo (2026-03-31) and Talon MidCo (2026-06-30) cost tagged with unit EUR; the page prints 'EUR' before a dollar cost (Carbo 4,358 / 4,528 / 4,709 over three quarters, Talon 1,456 unchanged) and the filed cost total includes it. Only these two rows of the fund carry a foreign unit on cost or fair value. Wrapper foreign_unit_values = reported_in_usd.", "kind": "wrapper", "quarters": ["2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001702510-26-000049", "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 1 EUR 4,528 4,903 0.28"},
-              {"accession": "0001702510-26-000084", "text": "Talon MidCo 1 Limited (a) (6)(12) Software 8/17/2022 1,018 EUR 1,456 2,745 0.16"}]},
-  {"what": "Issuer names: 'Structured Credit Investments, <CLO>' on 60 rows (2024-12-31, 2025-03-31); issuer_name_strip_re now takes the section word 'Investments' too. Dry run on all 365 distinct names: only these 36 names change.", "kind": "wrapper", "quarters": ["2024-12-31", "2025-03-31"],
-   "quotes": [{"accession": "0001702510-25-000023", "text": "Avoca CLO XI DAC (a) (2)(7)(13) Structured Credit EURIBOR 6.15 % 8.94 % 11/8/2024 10/15/2038 EUR 1,750 1,876 1,812 0.12"}]},
-  {"what": "C115 x7, fmt_basis_spread x6 and the rows behind them: rates read on the printed row, 237 row-correction specs (938 field rows) in scripts/v05_evidence/row_correction_specs/0001702510.json, each with its printed line, generated from the page by scratch/fund_runs/0001702510/gen_specs.py (a row is corrected only when its printed line, found by issuer name with its cost and fair value, parses). (a) '( 100 % PIK)' tagged as PIK 1 and published 1.0: pik_rate set to the printed coupon (67 loan rows). (b) FIXED coupons tagged as spreads and published floating over a guessed SOFR (30 rows: World 50, Associations, Denali, PAM Bidco, Structured Credit Partners JV Class B 10.74 / 18.70). (c) The equity table's 'All-In Rate' tagged as a spread with no rate (52 rows: FS NU 20.00, Integrity 10.50, Blackbird 12.50, Titan DI 13.50, HIG 10.50, NEFCO 8.00, Appriss, Buckeye, Your.World / Project Carbo). (d) Four manual rows: Associations 2024-06-30 x2 (X02: no rate tag), Buckeye 2024-12-31 name, Generator Buyer 2024-09-30 name.", "kind": "row_correction", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001702510-26-000084", "text": "Material Holdings, LLC (c) (2)(3)(8)(11) Business Services SOFR 6.00 % ( 100 % PIK) 9.73 % 8/19/2021 8/19/2027 4,040 1,312 - -"},
-              {"accession": "0001702510-26-000084", "text": "Structured Credit Partners JV, LLC, Class B (a) (7)(14) Investment Funds FIXED 18.70 % 18.70 % 2/11/2026 7,709 7,709 7,709 0.45"},
-              {"accession": "0001702510-25-000023", "text": "Titan DI Preferred Holdings, Inc. (a) (6) Energy: Oil & Gas 13.50 % ( 100 % PIK) 2/11/2020 12,031 11,932 12,031 0.81"},
-              {"accession": "0001702510-24-000056", "text": "Associations, Inc. ^+ (2)(3)(11)(13) Construction & Building SOFR 6.50 % 12.09 % 5/3/2024 7/2/2028 6,569 6,562 6,562 0.63"},
-              {"accession": "0001702510-24-000084", "text": "Generator Buyer, Inc. (Canada) ^+ (2)(3)(7)(13) Energy: Electricity CORRA 5.25 % 9.22 % 7/22/2024 7/22/2030 C$ 8,042 5,715 5,817 0.55"}]},
-  {"what": "CLO notes of the Structured Credit section classed by name as direct lending (Bryant Park Funding, CIFC Funding, OHA Credit Funding, RR Ltd., Regatta Funding) or as a fund with no par (CVC Cordatus Loan Fund X / XXVI): 58 rows to STRUCTURED_CREDIT; the CVC rows get the printed euro par at the build's rate (the X11 x7 this raised in ccxb are cleared).", "kind": "row_correction", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001702510-25-000109", "text": "Regatta 30 Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.40 % 9.69 % 11/25/2024 1/25/2038 1,970 1,970 1,986 0.13"}]},
-  {"what": "Reference rates still guessed from the date where the page prints the code: Trader Corporation CDOR (5 quarters), the misdated 2024-12-31 CLO contexts (EURIBOR on Avoca, Voya Euro, CVC), STIBOR and NIBOR at 2026-06-30 (Thor, Eltera). 31 rows by row correction; 20 more rows whose printed code confirms the guess are marked as read.", "kind": "row_correction", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-12-31", "2026-06-30"],
-   "quotes": [{"accession": "0001702510-23-000039", "text": "Trader Corporation (Canada) +# (2)(3)(6)(13) Automotive CDOR 6.75 % 11.68 % 12/22/2022 12/22/2029 C$ 1,208 865 873 0.08"}]}
-  ,{"what": "Round 2 (page sample). (1) Maturity printed and not published: census of every loan row of the fund against its printed line (scratch/fund_runs/0001702510/round2.py) found 30, all set by row correction: American Physician Partners x7 (2023, past-due; raises maturity_not_past x4, proposed) and 23 CLO rows of 2024-12-31 on the misdated contexts. After ccxd: 0. (2) '( 100 % PIK)' printed with no PIK rate published because the PIK fact sits on another line of the issuer: 2 rows (Jeg's Automotive 2025-12-31 10.65, Material Holdings 2025-09-30 9.98), set from the page. The census also listed 14 Buckeye Group rows; those are the dash-valued Buckeye lines that print no rate (the matcher took the issuer's rated line), so they were not changed. After ccxd: 0 real rows left.", "kind": "row_correction", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-12-31", "2025-09-30", "2025-12-31"],
-   "quotes": [{"accession": "0001702510-24-000011", "text": "American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -"},
-              {"accession": "0001702510-26-000021", "text": "Jeg's Automotive, LLC (c) (2)(3)(8) Auto Aftermarket & Services SOFR 7.00 % ( 100 % PIK) 10.65 % 12/22/2021 12/31/2029 $ 907 $ 833 $ 907 0.05"},
-              {"accession": "0001702510-25-000139", "text": "Material Holdings, LLC (c) (2)(3)(8)(11) Business Services SOFR 6.00 % ( 100 % PIK) 9.98 % 8/19/2021 8/19/2027"}]}
+  {
+   "what": "Row corrections (7 field rows): Atlas US Finco issuer name 2024-03-31 and 2024-06-30; Vensure Employer Services issuer name 2024-09-30 and 2024-12-31; Big Bus Tours 2025-09-30 c-49 pik_rate 0.25, basis_spread 8.1, coupon_type Floating.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30"
+   ],
+   "finding_ids": [
+    "RVQ_BLK_0fafb7b1aa7c",
+    "RVQ_BLK_55e3cfc50479",
+    "RVQ_BLK_5f3b4c4a2073",
+    "RVQ_BLK_ac1bc4cbd584",
+    "RVQ_BLK_50af55ce6992"
+   ],
+   "quotes": [
+    {
+     "accession": "0001702510-24-000033",
+     "text": "Atlas US Finco, Inc. ^ (2)(3)(7)(11) High Tech Industries SOFR 7.25 % 12.55 % 12/15/2022 12/12/2029 1,445 1,404 1,457 0.13"
+    },
+    {
+     "accession": "0001702510-24-000056",
+     "text": "Atlas US Finco, Inc. ^ (2)(3)(7)(13) High Tech Industries SOFR 5.75 % 11.08 % 12/15/2022 12/12/2029 1,445 1,406 1,458 0.14"
+    },
+    {
+     "accession": "0001702510-24-000084",
+     "text": "Vensure Employer Services, Inc. ^+ (2)(3)(13) Business Services SOFR 5.00 % 9.59 % 9/27/2024 9/27/2031 19,807 19,554 19,426 1.84"
+    },
+    {
+     "accession": "0001702510-25-000023",
+     "text": "Vensure Employer Services, Inc. (a)(b)(e) (2)(14) Business Services SOFR 5.00 % 9.34 % 9/27/2024 9/27/2031 21,058 20,816 21,029 1.41"
+    },
+    {
+     "accession": "0001702510-25-000139",
+     "text": "Big Bus Tours Group Limited (United Kingdom) (d) (2)(7) Leisure Products & Services EURIBOR 8.10 %, 0.25 % PIK 10.28 % 7/17/2025 6/4/2031 EUR 229 265 261 0.02"
+    }
+   ]
+  },
+  {
+   "what": "Wrapper dispatch.shares_pow10_normalise false: the build's power-of-ten share normaliser replaced three tagged unit counts (the only rows of the fund it touched) with another quarter's count.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "finding_ids": [
+    "RVQ_BLK_ff1997e2be0a",
+    "RVQ_BLK_099eb992eb9b",
+    "RVQ_BLK_3448be549782"
+   ],
+   "quotes": [
+    {
+     "accession": "0001702510-23-000039",
+     "text": "Talon MidCo 1 Limited ^ (7) Software 8/17/2022 145,631 1,456 1,725 0.15"
+    },
+    {
+     "accession": "0001702510-23-000068",
+     "text": "Talon MidCo 1 Limited ^ (7) Software 8/17/2022 145,631 1,456 1,717 0.16"
+    },
+    {
+     "accession": "0001702510-26-000084",
+     "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 4,387 4,709 5,082 0.30"
+    }
+   ]
+  },
+  {
+   "what": "Wrapper issuer_name_strip_re accepts an empty industry cell (', ,' before the industry): 10 rows of 5 issuers kept a trailing comma at 2023-12-31 and 2024-03-31.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "finding_ids": [],
+   "quotes": [
+    {
+     "accession": "0001702510-24-000011",
+     "text": "Vensure Employee Services, Inc. ^ (2)(3)(13) Business Services SOFR 5.25 % 10.63 % 12/15/2023 3/26/2027 610 536 535 0.05"
+    }
+   ]
+  },
+  {
+   "what": "Carried from ccxd (D-177), not re-done: schedule_row_tags, foreign_unit_values, 239 row-correction specs (pik 100 pct, fixed coupons, equity rates, CLO classes, reference rates, maturities), Structured Credit name strip.",
+   "kind": "carried",
+   "quarters": [],
+   "finding_ids": [],
+   "quotes": [
+    {
+     "accession": "0001702510-26-000049",
+     "text": "Mindbody, Inc. (c) (2)(3)(15) Leisure Products & Services SOFR 6.00 % 9.70 % 3/30/2026 3/30/2033 21,475 21,113 21,113 1.18"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "CAZ-R1",
+   "classification": "acceptance_change",
+   "file": "pipeline/column_validation.py (C107)",
+   "what": "Owner decision, one route to choose. The finding C107 2026-03-31 (RVQ_REV_7e9e060873c6) is currently CLOSED by an accepted as_filed disposition (DS-FUNDLOOP-C107-1702510) after the stale verdict was retired. Route A: keep the disposition. Route B: change what C107 accepts (a negative cost whose printed cost cell is bracketed passes) and retire the disposition; this changes the check, so it needs the owner and a test that a negative cost with a positive printed cost still fails.",
+   "why": "Published equals printed (Bitnova undrawn line, cost -40,000), so the finding is a misfire; the standing rule says a misfire is repaired, not dispositioned, but a disposition already closes it.",
+   "evidence": [
+    {
+     "accession": "0001702510-26-000049",
+     "text": "Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.00"
+    }
+   ],
+   "quotes": [],
+   "next_action": "Owner chooses A or B; measure B on every accepted sandbox before any change."
+  },
+  {
+   "request_id": "CAZ-R2",
+   "classification": "verification_bug",
+   "file": "scripts/v05_evidence/make_batch_dispositions.py",
+   "what": "make_batch_dispositions.py cazb fundloop 0001702510 asserts on its C107 entry ('needs a filing quote ... rows must name the rows the entry covers, for each member'), so the accepted reason cannot be regenerated by check for a new quarter.",
+   "why": "The entry the script builds fails the disposition validator; the tool is broken for C107 regardless of the route chosen in CAZ-R1.",
+   "evidence": [
+    {
+     "accession": "0001702510-26-000049",
+     "text": "Bitnova Midco S.p.A. (Italy) (e) (2)(7)(15) High Tech Industries EURIBOR 5.50 % 7.58 % 2/19/2026 2/19/2033 EUR - ( 40 ) ( 41 ) 0.00"
+    }
+   ],
+   "quotes": [],
+   "next_action": "Orchestrator: make the script attach the filing quote and rows from the sandbox for each member; test that it validates and writes."
+  }
+ ],
  "observations": [
-  {"observation_key": "affiliate-rollforward-member-published-as-position", "what": "The affiliate roll-forward note is tagged on the identifier axis with fair value only; it was kept out only by two quarter-pinned rules, so each new quarter over-counted (2026-06-30 +37.9M). Fixed with schedule_row_tags.", "field": "fair_value", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 37.9, "cause": "fund", "action": "fixed", "suggested_check": "Flag a published row whose context carries a fair value and no cost, principal, unit or percent fact.", "quote": {"accession": "0001702510-26-000084", "text": "Align Precision Group, LLC $ 20,296 $ 1,078 $ - $ - $ - $ 21,374 $ 1,073"}},
-  {"observation_key": "pik-tag-one-read-as-one-percent", "what": "'( 100 % PIK)' is tagged InvestmentInterestRatePaidInKind = 1 (the share paid in kind, not a rate) and was published as pik_rate 1.0 on 67 loan and 42 equity rows over 14 quarters; no rule flagged it. Fixed by row correction.", "field": "pik_rate", "quarters": ["2023-03-31", "2024-12-31", "2026-06-30"], "fair_value_m": 100.0, "cause": "shared", "action": "fixed", "suggested_check": "Flag pik_rate exactly 1.0 where the PIK fact is 1 (pure) and the printed line reads '100 % PIK'.", "quote": {"accession": "0001702510-26-000084", "text": "Material Holdings, LLC (c) (2)(3)(8)(11) Business Services SOFR 6.00 % ( 100 % PIK) 9.73 % 8/19/2021 8/19/2027 4,040 1,312 - -"}},
-  {"observation_key": "fixed-coupon-tagged-as-spread-published-floating", "what": "Rows printed FIXED are tagged with the spread concept and published as floating over a guessed SOFR with spread = coupon (1 to 4 a quarter). Fixed by row correction.", "field": "basis_spread", "quarters": ["2023-03-31", "2024-12-31", "2026-06-30"], "fair_value_m": 25.0, "cause": "fund", "action": "fixed", "suggested_check": "Flag a floating row whose spread equals its interest rate.", "quote": {"accession": "0001702510-24-000056", "text": "Associations, Inc. ^ (9) Construction & Building FIXED 14.25 % ( 100 % PIK) 14.25 % 5/3/2024 5/3/2030 2,555 2,543 2,543 0.24"}},
-  {"observation_key": "equity-all-in-rate-tagged-as-spread", "what": "The equity table's 'All-In Rate' column is tagged as a spread; equity rows published a spread over a guessed SOFR and no rate (52 rows). Fixed by row correction; the four X01 findings it raises are proposed.", "field": "interest_rate", "quarters": ["2024-12-31", "2025-09-30", "2026-06-30"], "fair_value_m": 60.0, "cause": "fund", "action": "fixed", "suggested_check": "Flag an equity row with a spread and no rate.", "quote": {"accession": "0001702510-25-000139", "text": "Integrity Marketing Group, LLC (a) (6) Diversified Financial Services 10.50 % ( 100 % PIK) 12/21/2021 22,253 22,238 21,750 1.47"}},
-  {"observation_key": "structured-credit-classed-as-direct-lending", "what": "CLO notes whose name lacks 'CLO' are classed direct lending (Bryant Park, CIFC, OHA Credit Funding, RR, Regatta) or as a credit fund with the par dropped (CVC Cordatus 'Loan Fund'), though printed in the Structured Credit section with industry 'Structured Credit'. Fixed by row correction for this fund; the name-based classifier is shared.", "field": "index_classification", "quarters": ["2024-12-31", "2026-06-30"], "fair_value_m": 30.0, "cause": "shared", "action": "fixed", "suggested_check": "Flag a row whose member section or printed industry is 'Structured Credit' and whose class is not STRUCTURED_CREDIT.", "quote": {"accession": "0001702510-25-000109", "text": "Regatta 30 Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.40 % 9.69 % 11/25/2024 1/25/2038 1,970 1,970 1,986 0.13"}},
-  {"observation_key": "reference-rate-guessed-on-unvalidated-printed-row", "what": "The printed reference-rate column reader did not reach rows on re-dated contexts (2024-12-31 misdated CLO rows: two euro CLOs published SOFR), CDOR rows of 2023 (Trader Corp, published LIBOR/SOFR) and codes STIBOR and NIBOR (2026-06-30). Fixed by row correction.", "field": "reference_rate_type", "quarters": ["2023-03-31", "2024-12-31", "2026-06-30"], "fair_value_m": 20.0, "cause": "shared", "action": "fixed", "suggested_check": "Report loans whose reference_rate_source is still inferred in a fund that names its printed reference-rate column.", "quote": {"accession": "0001702510-23-000039", "text": "Trader Corporation (Canada) +# (2)(3)(6)(13) Automotive CDOR 6.75 % 11.68 % 12/22/2022 12/22/2029 C$ 1,208 865 873 0.08"}},
-  {"observation_key": "income-ratio-unannualised-compared-with-annualised-distribution", "what": "income_yield_pct holds the filer's year-to-date, unannualised NII ratio split into quarters (2.1 to 3.2), while filers that print an annualised ratio publish it as filed (9 to 13): the field mixes bases across funds, and F16 compares it with an annualised distribution rate (17 findings here). Left: the page is published; the basis is a shared decision.", "field": "income_yield_pct", "quarters": ["2022-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "left", "suggested_check": "Report funds whose income_yield_pct is below a quarter of their distribution rate.", "quote": {"accession": "0001702510-26-000049", "text": "These ratios to average net assets attributable to Common Stockholders have not been annualized."}},
-  {"observation_key": "equity-class-read-from-combined-section-heading", "what": "Equity rows are classed common to 2025-09-30 (section 'Equity Investments') and preferred from 2025-12-31 (section 'Common and Preferred Equity Investments'), every row; the page does not say which a row is, so the same position switches class (e.g. Blackbird Holdco, Cority Software). Left: no printed class to set.", "field": "asset_category", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 100.0, "cause": "shared", "action": "left", "suggested_check": "Flag a position whose asset_category changes between quarters while its printed line does not.", "quote": {"accession": "0001702510-26-000084", "text": "Common and Preferred Equity Investments ( 4.1 % of fair value) 48Forty TopCo LLC (a) (6)(12) Transportation: Cargo 1/14/2026 1 $ 6,500 $ 5,627 0.33 %"}},
-  {"observation_key": "equity-class-read-from-combined-section-heading", "what": "Page sample C004: Aimbridge Acquisition Co., Inc. 2026-06-30 is published EQUITY_PREFERRED. The page prints it under 'Common and Preferred Equity Investments' with no class word, no rate, footnote (12) 'non-income producing', 53 units from a restructuring on 3/11/2025 (MD&A: 'restructuring of our investment in Aimbridge Acquisition Co., Inc.'). Nothing on the page says preferred; non-income producing suggests common, but that is inference. Left: preferred comes only from the combined heading.", "field": "asset_category", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 2.8, "cause": "shared", "action": "left", "suggested_check": "Flag rows classed preferred only because a combined 'Common and Preferred' heading names both.", "quote": {"accession": "0001702510-26-000084", "text": "Aimbridge Acquisition Co., Inc. (a) (6)(12) Leisure Products & Services 3/11/2025 53 2,599 2,811 0.16"}},
-  {"observation_key": "maturity-printed-not-published", "what": "Page sample C001: the filer tags no maturity; the page reader missed 30 loan rows (American Physician Partners x7 past-due, 23 CLO rows on the 2024-12-31 misdated contexts). Fixed by row correction; census after ccxd 0.", "field": "maturity_date", "quarters": ["2023-03-31", "2023-12-31", "2024-12-31"], "fair_value_m": 90.0, "cause": "shared", "action": "fixed", "suggested_check": "Report loan rows with no maturity whose printed line carries two dates.", "quote": {"accession": "0001702510-24-000011", "text": "American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -"}},
-  {"observation_key": "pik-fact-on-another-line-of-the-issuer", "what": "Page sample C008: two '( 100 % PIK)' loans (Jeg's 2025-12-31, Material Holdings 2025-09-30) carry no PIK fact; the filer put the PIK 1 on the issuer's other line. Fixed by row correction.", "field": "pik_rate", "quarters": ["2025-09-30", "2025-12-31"], "fair_value_m": 0.9, "cause": "row", "action": "fixed", "suggested_check": "Flag a loan whose printed line reads '100 % PIK' and publishes no PIK rate.", "quote": {"accession": "0001702510-26-000021", "text": "Jeg's Automotive, LLC (c) (2)(3)(8) Auto Aftermarket & Services SOFR 7.00 % ( 100 % PIK) 10.65 % 12/22/2021 12/31/2029 $ 907 $ 833 $ 907 0.05"}},
-  {"observation_key": "instrument-description-empty-old-member-format", "what": "From 2023-03-31 to 2025-03-31 instrument_description is empty on every row (about 1,500): the old member form '<lien>, <issuer>, <industry>' is cut by issuer_name_strip_re, which keeps only trailing cut text as the instrument. The page prints no instrument column beyond the section heading (First Lien Debt etc.). Left.", "field": "instrument_description", "quarters": ["2023-03-31", "2025-03-31"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "Report fund-quarters where instrument_description is empty on every row.", "quote": {"accession": "0001702510-24-000084", "text": "Generator Buyer, Inc. (Canada) ^+ (2)(3)(7)(13) Energy: Electricity CORRA 5.25 % 9.22 % 7/22/2024 7/22/2030 C$ 8,042 5,715 5,817 0.55"}},
-  {"observation_key": "issuer-name-differs-from-page", "what": "Two member glitches left a wrong name: Buckeye Group 2024-12-31 carried the industry (no comma), Generator Buyer 2024-09-30 carried ', Inc.' twice. Fixed by row correction.", "field": "issuer_name", "quarters": ["2024-09-30", "2024-12-31"], "fair_value_m": 7.0, "cause": "row", "action": "fixed", "suggested_check": "Flag an issuer name that ends with one of the fund's industry labels or repeats a legal form.", "quote": {"accession": "0001702510-25-000023", "text": "Buckeye Group Holdings, L.P. (c) (6)(8) Auto Aftermarket & Services 11.29 % ( 100 % PIK) 12/31/2024 4,099 1,218 1,218 0.08"}},
-  {"observation_key": "cost-tagged-in-foreign-unit-printed-in-dollars", "what": "A dollar cost tagged with unit EUR (and printed with 'EUR' before it) was withheld as non-dollar: Project Carbo 2026-03-31 cost total short 4,528 against filed. Fixed with foreign_unit_values.", "field": "cost", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 7.6, "cause": "fund", "action": "fixed", "suggested_check": "Flag a row whose cost unit differs from its fair value unit.", "quote": {"accession": "0001702510-26-000049", "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 1 EUR 4,528 4,903 0.28"}}
+  {
+   "observation_key": "affiliate-rollforward-member-published-as-position",
+   "what": "The affiliate roll-forward note is tagged on the identifier axis with fair value only; it was kept out only by two quarter-pinned rules, so each new quarter over-counted (2026-06-30 +37.9M). Fixed with schedule_row_tags.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 37.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published row whose context carries a fair value and no cost, principal, unit or percent fact.",
+   "quote": {
+    "accession": "0001702510-26-000084",
+    "text": "Align Precision Group, LLC $ 20,296 $ 1,078 $ - $ - $ - $ 21,374 $ 1,073"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation fired in the untouched ccxa on the 2026-06-30 over-count from the affiliate roll-forward members (+37.9M).",
+    "reference": "RVQ_BLK_030c70236b3c"
+   }
+  },
+  {
+   "observation_key": "pik-tag-one-read-as-one-percent",
+   "what": "'( 100 % PIK)' is tagged InvestmentInterestRatePaidInKind = 1 (the share paid in kind, not a rate) and was published as pik_rate 1.0 on 67 loan and 42 equity rows over 14 quarters; no rule flagged it. Fixed by row correction.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-03-31",
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 100.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag pik_rate exactly 1.0 where the PIK fact is 1 (pure) and the printed line reads '100 % PIK'.",
+   "quote": {
+    "accession": "0001702510-26-000084",
+    "text": "Material Holdings, LLC (c) (2)(3)(8)(11) Business Services SOFR 6.00 % ( 100 % PIK) 9.73 % 8/19/2021 8/19/2027 4,040 1,312 - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Flag pik_rate exactly 1.0 where the PIK fact is 1 (pure) and the printed line reads '100 % PIK'."
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "what": "Rows printed FIXED are tagged with the spread concept and published as floating over a guessed SOFR with spread = coupon (1 to 4 a quarter). Fixed by row correction.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-03-31",
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 25.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a floating row whose spread equals its interest rate.",
+   "quote": {
+    "accession": "0001702510-24-000056",
+    "text": "Associations, Inc. ^ (9) Construction & Building FIXED 14.25 % ( 100 % PIK) 14.25 % 5/3/2024 5/3/2030 2,555 2,543 2,543 0.24"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C115 (spread outside 0 to 15) fired in ccxa on Structured Credit Partners JV Class B (spread 18.7 equal to the rate), one of the rows of this shape.",
+    "reference": "RVQ_REV_1599494ef66f (2026-06-30); C115 findings 2024-12-31 to 2026-06-30"
+   }
+  },
+  {
+   "observation_key": "equity-all-in-rate-tagged-as-spread",
+   "what": "The equity table's 'All-In Rate' column is tagged as a spread; equity rows published a spread over a guessed SOFR and no rate (52 rows). Fixed by row correction; the four X01 findings it raises are proposed.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an equity row with a spread and no rate.",
+   "quote": {
+    "accession": "0001702510-25-000139",
+    "text": "Integrity Marketing Group, LLC (a) (6) Diversified Financial Services 10.50 % ( 100 % PIK) 12/21/2021 22,253 22,238 21,750 1.47"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C115 fired in ccxa on FS NU Investors (spread 20.0, equity all-in rate tagged as a spread) in seven quarters, 2024-12-31 to 2026-06-30.",
+    "reference": "RVQ_REV_fbd31855e6eb, RVQ_REV_ee738a649076, RVQ_REV_90476e4c25c6, RVQ_REV_2255daeeaed5, RVQ_REV_f16f7aca75c9, RVQ_REV_a6e10a93eb31, RVQ_REV_1599494ef66f"
+   }
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "what": "CLO notes whose name lacks 'CLO' are classed direct lending (Bryant Park, CIFC, OHA Credit Funding, RR, Regatta) or as a credit fund with the par dropped (CVC Cordatus 'Loan Fund'), though printed in the Structured Credit section with industry 'Structured Credit'. Fixed by row correction for this fund; the name-based classifier is shared.",
+   "field": "index_classification",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose member section or printed industry is 'Structured Credit' and whose class is not STRUCTURED_CREDIT.",
+   "quote": {
+    "accession": "0001702510-25-000109",
+    "text": "Regatta 30 Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.40 % 9.69 % 11/25/2024 1/25/2038 1,970 1,970 1,986 0.13"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Flag a row whose member section or printed industry is 'Structured Credit' and whose class is not STRUCTURED_CREDIT."
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-on-unvalidated-printed-row",
+   "what": "The printed reference-rate column reader did not reach rows on re-dated contexts (2024-12-31 misdated CLO rows: two euro CLOs published SOFR), CDOR rows of 2023 (Trader Corp, published LIBOR/SOFR) and codes STIBOR and NIBOR (2026-06-30). Fixed by row correction.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 20.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report loans whose reference_rate_source is still inferred in a fund that names its printed reference-rate column.",
+   "quote": {
+    "accession": "0001702510-23-000039",
+    "text": "Trader Corporation (Canada) +# (2)(3)(6)(13) Automotive CDOR 6.75 % 11.68 % 12/22/2022 12/22/2029 C$ 1,208 865 873 0.08"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Report loans whose reference_rate_source is still inferred in a fund that names its printed reference-rate column."
+   }
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annualised-distribution",
+   "what": "income_yield_pct holds the filer's year-to-date, unannualised NII ratio split into quarters (2.1 to 3.2), while filers that print an annualised ratio publish it as filed: the field mixes bases across funds, and F16 compared it with an annualised distribution rate (17 findings here). Fixed in the shared check: the F16 basis was repaired 2026-11-12 (8a5da7bc, 499e5f9c, ae480a4a) and F16 no longer fires; the last finding (2025-12-31) was retired under D-252 (VR-FL-1702510-03). The published values equal the page.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2022-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report funds whose income_yield_pct is below a quarter of their distribution rate.",
+   "quote": {
+    "accession": "0001702510-26-000049",
+    "text": "These ratios to average net assets attributable to Common Stockholders have not been annualized."
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F16 fired 17 times on this field in ccxa; the shared basis was repaired 2026-11-12 (8a5da7bc, 499e5f9c, ae480a4a) and the check no longer fires live.",
+    "reference": "F16 findings 2022-03-31 to 2026-06-30; RVQ_REV_fbba1dfdd9aa"
+   }
+  },
+  {
+   "observation_key": "equity-class-read-from-combined-section-heading",
+   "what": "Equity rows are classed common to 2025-09-30 (section 'Equity Investments') and preferred from 2025-12-31 (section 'Common and Preferred Equity Investments'), every row; the page does not say which a row is, so the same position switches class (e.g. Blackbird Holdco, Cority Software). Left: no printed class to set. | Page sample C004: Aimbridge Acquisition Co., Inc. 2026-06-30 is published EQUITY_PREFERRED. The page prints it under 'Common and Preferred Equity Investments' with no class word, no rate, footnote (12) 'non-income producing', 53 units from a restructuring on 3/11/2025 (MD&A: 'restructuring of our investment in Aimbridge Acquisition Co., Inc.'). Nothing on the page says preferred; non-income producing suggests common, but that is inference. Left: preferred comes only from the combined heading.",
+   "field": "asset_category",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 100.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a position whose asset_category changes between quarters while its printed line does not.",
+   "quote": {
+    "accession": "0001702510-26-000084",
+    "text": "Common and Preferred Equity Investments ( 4.1 % of fair value) 48Forty TopCo LLC (a) (6)(12) Transportation: Cargo 1/14/2026 1 $ 6,500 $ 5,627 0.33 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Flag a position whose asset_category changes between quarters while its printed line does not."
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "Page sample C001: the filer tags no maturity; the page reader missed 30 loan rows (American Physician Partners x7 past-due, 23 CLO rows on the 2024-12-31 misdated contexts). Fixed by row correction; census after ccxd 0.",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-03-31",
+    "2023-12-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": 90.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report loan rows with no maturity whose printed line carries two dates.",
+   "quote": {
+    "accession": "0001702510-24-000011",
+    "text": "American Physician Partners, LLC ^ (2)(3)(8)(11)(12) Healthcare & Pharmaceuticals SOFR 10.25 % ( 100 % PIK) 15.71 % 12/16/2022 6/30/2023 3,641 3,233 - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Report loan rows with no maturity whose printed line carries two dates."
+   }
+  },
+  {
+   "observation_key": "pik-fact-on-another-line-of-the-issuer",
+   "what": "Page sample C008: two '( 100 % PIK)' loans (Jeg's 2025-12-31, Material Holdings 2025-09-30) carry no PIK fact; the filer put the PIK 1 on the issuer's other line. Fixed by row correction.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.9,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a loan whose printed line reads '100 % PIK' and publishes no PIK rate.",
+   "quote": {
+    "accession": "0001702510-26-000021",
+    "text": "Jeg's Automotive, LLC (c) (2)(3)(8) Auto Aftermarket & Services SOFR 7.00 % ( 100 % PIK) 10.65 % 12/22/2021 12/31/2029 $ 907 $ 833 $ 907 0.05"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Flag a loan whose printed line reads '100 % PIK' and publishes no PIK rate."
+   }
+  },
+  {
+   "observation_key": "instrument-description-empty-old-member-format",
+   "what": "From 2023-03-31 to 2025-03-31 instrument_description is empty on every row (about 1,500): the old member form '<lien>, <issuer>, <industry>' is cut by issuer_name_strip_re, which keeps only trailing cut text as the instrument. The page prints no instrument column beyond the section heading (First Lien Debt etc.). Left.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-03-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Report fund-quarters where instrument_description is empty on every row.",
+   "quote": {
+    "accession": "0001702510-24-000084",
+    "text": "Generator Buyer, Inc. (Canada) ^+ (2)(3)(7)(13) Energy: Electricity CORRA 5.25 % 9.22 % 7/22/2024 7/22/2030 C$ 8,042 5,715 5,817 0.55"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows. The suggested check is the proposed detector.",
+    "reference": "Report fund-quarters where instrument_description is empty on every row."
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "Two member glitches left a wrong name: Buckeye Group 2024-12-31 carried the industry (no comma), Generator Buyer 2024-09-30 carried ', Inc.' twice. Fixed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 7.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag an issuer name that ends with one of the fund's industry labels or repeats a legal form.",
+   "quote": {
+    "accession": "0001702510-25-000023",
+    "text": "Buckeye Group Holdings, L.P. (c) (6)(8) Auto Aftermarket & Services 11.29 % ( 100 % PIK) 12/31/2024 4,099 1,218 1,218 0.08"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Buckeye and Generator Buyer were fixed before the page rule existed in this fund's ledger; issuer_name_printed fired on Atlas and Vensure in caza but was not run on these two rows unfixed. Rules that fired in the untouched ccxa ledger: C103, C107, C115, F16, F28, FX03, X02, fmt_basis_spread, fv_conservation, nonaccrual_flag; none tests this shape on these rows.",
+    "reference": "issuer_name_printed (pipeline/candidate_rules.py)"
+   }
+  },
+  {
+   "observation_key": "cost-tagged-in-foreign-unit-printed-in-dollars",
+   "what": "A dollar cost tagged with unit EUR (and printed with 'EUR' before it) was withheld as non-dollar: Project Carbo 2026-03-31 cost total short 4,528 against filed. Fixed with foreign_unit_values.",
+   "field": "cost",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 7.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose cost unit differs from its fair value unit.",
+   "quote": {
+    "accession": "0001702510-26-000049",
+    "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 1 EUR 4,528 4,903 0.28"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "FX03 fired in ccxa on the Project Carbo and Talon MidCo 1 rows (cost unit EUR).",
+    "reference": "RVQ_REV_8b7ec513c322 (2026-03-31), RVQ_REV_1b07eee196f6 (2026-06-30)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-trailing-comma-empty-industry-cell",
+   "what": "Members of 2023-12-31 and 2024-03-31 end the borrower with ', ,' before the industry; the strip left a trailing comma (Guidehouse LLP, ; Sapphire Convention, Inc., ; Vensure Employee Services, Inc., ; Westfall Technik, Inc., ; Yellowstone Buyer Acquisition, LLC, ), 10 rows. No rule flagged them (the page test ignores punctuation). Fixed in the wrapper strip pattern.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "fair_value_m": 120.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published issuer_name that ends in a comma or a space.",
+   "quote": {
+    "accession": "0001702510-24-000011",
+    "text": "Vensure Employee Services, Inc. ^ (2)(3)(13) Business Services SOFR 5.25 % 10.63 % 12/15/2023 3/26/2027 610 536 535 0.05"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A one-line check on published names (ends with a comma) has no false positives in this fund (count 10 before, 0 after) and no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001702510/name_census.py"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The build's power-of-ten share normaliser replaced the tagged counts of Talon MidCo 1 (145,631,000, 2023-03-31 and 2023-06-30) and Project Carbo (4,387,000, 2026-06-30) with the nearest other quarter's count (1,018,000 and 1,000); the filer re-denominated Talon's units from 2023-09-30. Fixed by the opt-out wrapper key.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 9.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "units_printed already compares the published count with the printed row; no new check needed.",
+   "quote": {
+    "accession": "0001702510-26-000084",
+    "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 4,387 4,709 5,082 0.30"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Rule units_printed (unit_count_differs_from_row_text) fired on all three rows in the untouched sandbox caza and cleared in cazb.",
+    "reference": "RVQ_BLK_ff1997e2be0a, RVQ_BLK_099eb992eb9b, RVQ_BLK_3448be549782"
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 680 passed"],
+ "tests_run": [
+  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 680 passed (ccxd round)",
+  "round 3: wrapper keys only (no code change); no test run"
+ ],
  "not_done": [
-  "Debt census of every row in every quarter: rows were read where a rule, a rate shape or a class shape pointed; unit counts, maturities, percent of net assets and industry were spot-read only on the 2026-06-30 equity table.",
-  "Equity unit counts: the 'Shares/ Units' column is published x1000 (table in thousands); not confirmed against a printed whole-unit count.",
-  
-  "F28/F33 before 2022 (outside the ledger window).",
-  "Findings cleared is not data correct: no rule flagged the 100 pct PIK tag, the equity rates or the CLO classes fixed here; others of that kind may remain."
- ]
+  "Packet findings dropped as closed at HEAD: none (all 10 outstanding in caza).",
+  "Out-of-packet outstanding findings carried not re-read: industry_coverage 2026-06-30 (RVQ_BLK_2743c14885c2). F16 2025-12-31 was retired in run.",
+  "Debt census of every row in every quarter: reference-rate codes were compared for 2,244 loan rows (0 mismatches, 164 rows had no unique printed line); unit counts, maturities, percent of net assets and industry were spot-read only.",
+  "Equity unit counts are published as tagged (the table is in thousands; Talon prints 1,018 and is tagged 1,018,000); not read against a whole-unit count.",
+  "Findings cleared is not data correct: no rule flagged the trailing-comma names; offsetting errors with intact totals are not detectable.",
+  "Totals: all 14 quarters (2023-03-31 to 2026-06-30) equal the filed investments at fair value to the dollar on both bases (strict 500-dollar tolerance; query scratch/fund_runs/0001702510/totals_strict.sql); no quarter has no filed total; there is no 2022 schedule."
+ ],
+ "investigator_id": "agent:fund-caz-sonnet",
+ "builds_used": 2,
+ "retired_in_run": [
+  {
+   "finding_id": "RVQ_BLK_e46c56a6fe7c",
+   "retirement_id": "VR-FL-1702510-01",
+   "check": "scratch/fund_runs/0001702510/retire_check.py",
+   "why": "published-basis sum 2,604,079,000 = printed Total investments fair value (strict 500 dollars), no subtotal row; verdict (sum 2,636.306M) is stale"
+  },
+  {
+   "finding_id": "RVQ_REV_7e9e060873c6",
+   "retirement_id": "VR-FL-1702510-02",
+   "check": "scratch/fund_runs/0001702510/retire_check.py",
+   "why": "Mindbody published at its printed cost 21,113 and fair value 21,113; the flagged -40,000 is the Bitnova undrawn line at its printed ( 40 ) ( 41 ); closes through accepted reason c107-negative-cost-undrawn"
+  },
+  {
+   "finding_id": "RVQ_REV_fbba1dfdd9aa",
+   "retirement_id": "VR-FL-1702510-03",
+   "check": "scratch/fund_runs/0001702510/f16_check.py",
+   "why": "published income_yield_pct 9.48 = printed ratio, distribution_rate 10.414 = printed dividends 1.96 over printed NAV 18.82, 1.10 x yield (limit 1.5); on data/output and cazb; 3 plants fail. Delegated ruling DC-shared-84f99f36ea rejected the proposal and said to retire on evidence."
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_2743c14885c2",
+   "coverage": {
+    "affected_rows": [
+     "2026-06-30 ROW-bd37098e4fd3c49c SIG Parent Holdings, LLC",
+     "2026-06-30 ROW-7bab890d835bba84 Bryant Park Funding Ltd.",
+     "2026-06-30 ROW-5ce34e64e1bb659a CVC Cordatus Loan Fund X DAC",
+     "2026-06-30 ROW-f2d56ac78f6f9ab6 Elmwood CLO II Ltd.",
+     "2026-06-30 ROW-84ab8ce92f1943d7 Pikes Peak CLO 8",
+     "2026-06-30 ROW-4235710e8695f50b Regatta 30 Funding Ltd.",
+     "2026-06-30 ROW-fee510b8186afd6a DCA TopCo LP",
+     "2026-06-30 ROW-14b6568bbca08116 Trintech, Inc.",
+     "2026-06-30 ROW-5f45a82ec628f91f AGL CLO 40 Ltd.",
+     "2026-06-30 ROW-741982efc5cdfba1 Rad CLO 17 Ltd.",
+     "2026-06-30 ROW-2b3f1f48765a8c52 Matterhorn Finco, Inc.",
+     "2026-06-30 ROW-7108ca7ecc14d864 NFO Orange Buyer, LLC",
+     "2026-06-30 ROW-dcf4beb6a7e181a3 API Holdings III LLC",
+     "2026-06-30 ROW-4ae732848a72b20b Eltera Bidco AS (Norway)",
+     "2026-06-30 ROW-a6c8b1c19c80254c Allegro CLO XV Ltd.",
+     "2026-06-30 ROW-19af725979e356cd Advanced Infusion Solutions Acquisition,",
+     "2026-06-30 ROW-c3642701bd7ae082 Structured Credit Partners JV, LLC, Clas",
+     "2026-06-30 ROW-633f146f15360f28 Orbcomm Inc.",
+     "2026-06-30 ROW-531e8620a46b4308 Empower CLO 2025-1 Ltd",
+     "2026-06-30 ROW-d7db17b3e19d7a76 Apidos CLO XVIII-R Ltd.",
+     "2026-06-30 ROW-51e72bb6f17b3ed8 AB BSL CLO 5 Ltd.",
+     "2026-06-30 ROW-22d80fdcd4e4c6cb Birch Grove CLO 11 Ltd.",
+     "2026-06-30 ROW-e12c1e2c6a86875f Reese Park CLO Ltd.",
+     "2026-06-30 ROW-a77adf48e6cec1d7 Sound Point CLO 35 Ltd.",
+     "2026-06-30 ROW-94d6be3ffd0c1400 Bryant Park Funding Ltd.",
+     "2026-06-30 ROW-a5407e678b2f6f9a Elmwood CLO 40 Ltd.",
+     "2026-06-30 ROW-316cdfac113da7df Generate CLO 18 Ltd.",
+     "2026-06-30 ROW-324ac94ffa3308fb Silver Point CLO 7 Ltd.",
+     "2026-06-30 ROW-2998e4655756520d Hermes BidCo Germany GmbH (Germany)",
+     "2026-06-30 ROW-8fcc7cc691fb95c0 TS Imagine Intermediate Inc.",
+     "2026-06-30 ROW-29c4c6da631d31a5 KKR CLO 54 Ltd.",
+     "2026-06-30 ROW-6e82ef676a389de9 GI DI Emerald Intermediate Limited (Unit",
+     "2026-06-30 ROW-d907869ac5ba3d29 CIFC Funding 2014-III Ltd.",
+     "2026-06-30 ROW-f539e262f27837cf Golub Capital Partners CLO 43B Ltd.",
+     "2026-06-30 ROW-36a976b74b750548 Regatta XXIV Funding Ltd",
+     "2026-06-30 ROW-443cfaeee3abdea1 Silver Point CLO 1 Ltd",
+     "2026-06-30 ROW-34d70b401dc4a16d OHA Credit Funding 14-R Ltd.",
+     "2026-06-30 ROW-f669e54baf3c0f02 Silver Point CLO 8 Ltd.",
+     "2026-06-30 ROW-6dbcdf1361209740 BCTO Bobsled Purchaser, Inc.",
+     "2026-06-30 ROW-1c713b330c85580c Onward Acquierco, Inc.",
+     "2026-06-30 ROW-ba3f224e866e2f59 Ethos Bidco, Ltd. (United Kingdom)",
+     "2026-06-30 ROW-2a92238acec478b4 Apollo Purchaser, Inc. (Canada)",
+     "2026-06-30 ROW-8d33f5302ff1aa0c Chartwell Cumming Holding Corporation",
+     "2026-06-30 ROW-82c5be8ac5f68047 Thor (BC) Bidco AB (Sweden)",
+     "2026-06-30 ROW-73d4ae450506dc10 Navacord Intermediate Holdings Inc. (Can",
+     "2026-06-30 ROW-633e1a5a1e971b97 Bitnova Midco S.p.A. (Italy)",
+     "2026-06-30 ROW-2335f0ff80154029 DCA Buyer LLC",
+     "2026-06-30 ROW-6b45285f601a9af3 GI DI Emerald Intermediate Limited (Unit",
+     "2026-06-30 ROW-a4b12ba954cd7615 Goose Borrower, L.P.",
+     "2026-06-30 ROW-95b38b33998820ce RR Ltd.",
+     "2026-06-30 ROW-1a791db14171aa6d Structured Credit Partners JV, LLC, Clas",
+     "2026-06-30 ROW-b3248a4a4937bf96 Apollo Purchaser, Inc. (Canada)",
+     "2026-06-30 ROW-df9215088d6f14a5 48Forty TopCo LLC",
+     "2026-06-30 ROW-3aa1a78e8990f3f6 DCA Buyer LLC",
+     "2026-06-30 ROW-7ed8da04be8eb391 Jawbreaker Parent, Inc.",
+     "2026-06-30 ROW-5dd37114affbe70a 1988 CLO 2 Ltd.",
+     "2026-06-30 ROW-2b91fe88ddc8844e AB BSL CLO 4 Ltd.",
+     "2026-06-30 ROW-b5ccfa1fff86146e Neuberger Berman Loan Advisers CLO 33 Lt"
+    ],
+    "reviewed_rows": [
+     "2026-06-30 ROW-bd37098e4fd3c49c SIG Parent Holdings, LLC",
+     "2026-06-30 ROW-7bab890d835bba84 Bryant Park Funding Ltd.",
+     "2026-06-30 ROW-5ce34e64e1bb659a CVC Cordatus Loan Fund X DAC",
+     "2026-06-30 ROW-f2d56ac78f6f9ab6 Elmwood CLO II Ltd.",
+     "2026-06-30 ROW-84ab8ce92f1943d7 Pikes Peak CLO 8",
+     "2026-06-30 ROW-4235710e8695f50b Regatta 30 Funding Ltd.",
+     "2026-06-30 ROW-fee510b8186afd6a DCA TopCo LP",
+     "2026-06-30 ROW-14b6568bbca08116 Trintech, Inc.",
+     "2026-06-30 ROW-5f45a82ec628f91f AGL CLO 40 Ltd.",
+     "2026-06-30 ROW-741982efc5cdfba1 Rad CLO 17 Ltd.",
+     "2026-06-30 ROW-2b3f1f48765a8c52 Matterhorn Finco, Inc.",
+     "2026-06-30 ROW-7108ca7ecc14d864 NFO Orange Buyer, LLC",
+     "2026-06-30 ROW-dcf4beb6a7e181a3 API Holdings III LLC",
+     "2026-06-30 ROW-4ae732848a72b20b Eltera Bidco AS (Norway)",
+     "2026-06-30 ROW-a6c8b1c19c80254c Allegro CLO XV Ltd.",
+     "2026-06-30 ROW-19af725979e356cd Advanced Infusion Solutions Acquisition,",
+     "2026-06-30 ROW-c3642701bd7ae082 Structured Credit Partners JV, LLC, Clas",
+     "2026-06-30 ROW-633f146f15360f28 Orbcomm Inc.",
+     "2026-06-30 ROW-531e8620a46b4308 Empower CLO 2025-1 Ltd",
+     "2026-06-30 ROW-d7db17b3e19d7a76 Apidos CLO XVIII-R Ltd.",
+     "2026-06-30 ROW-51e72bb6f17b3ed8 AB BSL CLO 5 Ltd.",
+     "2026-06-30 ROW-22d80fdcd4e4c6cb Birch Grove CLO 11 Ltd.",
+     "2026-06-30 ROW-e12c1e2c6a86875f Reese Park CLO Ltd.",
+     "2026-06-30 ROW-a77adf48e6cec1d7 Sound Point CLO 35 Ltd.",
+     "2026-06-30 ROW-94d6be3ffd0c1400 Bryant Park Funding Ltd.",
+     "2026-06-30 ROW-a5407e678b2f6f9a Elmwood CLO 40 Ltd.",
+     "2026-06-30 ROW-316cdfac113da7df Generate CLO 18 Ltd.",
+     "2026-06-30 ROW-324ac94ffa3308fb Silver Point CLO 7 Ltd.",
+     "2026-06-30 ROW-2998e4655756520d Hermes BidCo Germany GmbH (Germany)",
+     "2026-06-30 ROW-8fcc7cc691fb95c0 TS Imagine Intermediate Inc.",
+     "2026-06-30 ROW-29c4c6da631d31a5 KKR CLO 54 Ltd.",
+     "2026-06-30 ROW-6e82ef676a389de9 GI DI Emerald Intermediate Limited (Unit",
+     "2026-06-30 ROW-d907869ac5ba3d29 CIFC Funding 2014-III Ltd.",
+     "2026-06-30 ROW-f539e262f27837cf Golub Capital Partners CLO 43B Ltd.",
+     "2026-06-30 ROW-36a976b74b750548 Regatta XXIV Funding Ltd",
+     "2026-06-30 ROW-443cfaeee3abdea1 Silver Point CLO 1 Ltd",
+     "2026-06-30 ROW-34d70b401dc4a16d OHA Credit Funding 14-R Ltd.",
+     "2026-06-30 ROW-f669e54baf3c0f02 Silver Point CLO 8 Ltd.",
+     "2026-06-30 ROW-6dbcdf1361209740 BCTO Bobsled Purchaser, Inc.",
+     "2026-06-30 ROW-1c713b330c85580c Onward Acquierco, Inc.",
+     "2026-06-30 ROW-ba3f224e866e2f59 Ethos Bidco, Ltd. (United Kingdom)",
+     "2026-06-30 ROW-2a92238acec478b4 Apollo Purchaser, Inc. (Canada)",
+     "2026-06-30 ROW-8d33f5302ff1aa0c Chartwell Cumming Holding Corporation",
+     "2026-06-30 ROW-82c5be8ac5f68047 Thor (BC) Bidco AB (Sweden)",
+     "2026-06-30 ROW-73d4ae450506dc10 Navacord Intermediate Holdings Inc. (Can",
+     "2026-06-30 ROW-633e1a5a1e971b97 Bitnova Midco S.p.A. (Italy)",
+     "2026-06-30 ROW-2335f0ff80154029 DCA Buyer LLC",
+     "2026-06-30 ROW-6b45285f601a9af3 GI DI Emerald Intermediate Limited (Unit",
+     "2026-06-30 ROW-a4b12ba954cd7615 Goose Borrower, L.P.",
+     "2026-06-30 ROW-95b38b33998820ce RR Ltd.",
+     "2026-06-30 ROW-1a791db14171aa6d Structured Credit Partners JV, LLC, Clas",
+     "2026-06-30 ROW-b3248a4a4937bf96 Apollo Purchaser, Inc. (Canada)",
+     "2026-06-30 ROW-df9215088d6f14a5 48Forty TopCo LLC",
+     "2026-06-30 ROW-3aa1a78e8990f3f6 DCA Buyer LLC",
+     "2026-06-30 ROW-7ed8da04be8eb391 Jawbreaker Parent, Inc.",
+     "2026-06-30 ROW-5dd37114affbe70a 1988 CLO 2 Ltd.",
+     "2026-06-30 ROW-2b91fe88ddc8844e AB BSL CLO 4 Ltd.",
+     "2026-06-30 ROW-b5ccfa1fff86146e Neuberger Berman Loan Advisers CLO 33 Lt"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001702510-26-000084",
+     "text": "Matterhorn Finco, Inc. (c) (2)(3)(15) Software SOFR 5.50 % 9.23 % 3/5/2026 3/5/2033 18,056 17,854 17,856 1.04"
+    },
+    {
+     "accession": "0001702510-26-000084",
+     "text": "OHA Credit Funding 14-R Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 3/28/2025 4/20/2038 6,000 6,000 5,905 0.34"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Carried, not re-read (outside the packet; the orchestrator filtered it from this run). The flagged population in cazb (58 rows: 29 no_industry_at_all, 29 filer_industry_not_mapped, all 2026-06-30) equals the carried verdict's 58 cited rows by count and quarter."
+   ],
+   "next_action": "Restore the printed industry through the filer extraction path after tracing the drop; request a separate taxonomy decision for Structured Credit and Investment Funds labels (carried verdict).",
+   "carried_from": "data/decisions/0001702510.jsonl DC-0001702510-abe50eb07e (verdict supported by /root/remaining_carlyle_check_sol)"
+  }
+ ],
+ "detector_accounting": "Packet findings: issuer_name_printed 4, units_printed 3, pik_printed 1 fired in caza (untouched) and cleared in cazb; pct_of_net_assets_identity and C107 verdicts retired."
 }
