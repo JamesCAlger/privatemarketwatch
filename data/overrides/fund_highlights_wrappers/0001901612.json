@@ -17,5 +17,8 @@
    "evidence": "0001901612-24-000038 (10-Q 2024-03-31) balance sheet, in thousands: 'Debt less unamortized debt issuance costs 388,273 175,924 Other short-term borrowings 28,104 -'. Published borrowings held the first line only (388,273,000); the sum is 416,377."
   }
  ],
- "notes": "Fund-clearing loop 2026-10-15 (g4x sandboxes). In two quarters the balance sheet carries 'Other short-term borrowings' beside the debt line; the undimensioned debt fact holds the debt line only, so borrowings and the leverage ratio left the short-term borrowings out (F26 2023-12-31). Every other quarter prints no such line."
+ "first_income_year_ends": [
+  "2022-09-30"
+ ],
+ "notes": "First income year (2026-11-15, g4z): the fund began operating on 2022-04-01, so its first fiscal year ended 2022-09-30 covers six months and one 10-Q (2022-06-30) was filed. 0001901612-23-000079 (10-K 2023-09-30): '(1) Operations commenced on April 1, 2022' and, for the period from April 1, 2022 to September 30, 2022, 'Total investment income 22,829,454 2,168,653 Net expenses 9,368,393 938,285 Net investment income - before tax 13,461,061 1,230,368'; 0001901612-23-000051 (10-Q 2023-06-30) prints the 2022-06-30 quarter 'Total investment income 6,077,368 193,832' and 'Net investment income - before tax 3,668,071 3,046,752 621,319 9,003,540 184,149'. The period figure was published halved (1,084,326.5 and 615,184); the quarter to 2022-09-30 is the period less the one quarter filed (2,168,653 less 193,832 = 1,974,821; 1,230,368 less 184,149 = 1,046,219). Fund-clearing loop 2026-10-15 (g4x sandboxes). In two quarters the balance sheet carries 'Other short-term borrowings' beside the debt line; the undimensioned debt fact holds the debt line only, so borrowings and the leverage ratio left the short-term borrowings out (F26 2023-12-31). Every other quarter prints no such line."
 }

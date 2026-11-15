@@ -5918,3 +5918,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Retired under D-252 (10): C107, PP01 x2, F33, B02, FX01 Purflux (principal fact unit iso4217:USD plus FX co-movement; planted EUR fails), A07 x4 (no percent fact on any position context; plants fail).
 - DIZ-REQ-1 verification_bug: make_batch_dispositions writes entries without quotes/rows then asserts the D-253 bar.
 - A clean result is not data correct.
+
+### D-286 Fund loop 2026-11-15: Golub Capital BDC 4 (0001901612), sandbox g4zd
+
+- Filtered packet: 5 findings (3 supported_fix issuer_name_printed; income_identity, X02 unreviewed); none closed at HEAD. Sonnet fund agent `agent:fund-g4z-sonnet`, Opus reviewer `agent:review-g4zc-opus` (full on g4zc, change-only on g4zd; investigation COMPLETE), Sonnet readers (g4zc 0/20, g4zd 0/20). Builds g4za..g4zd. Sandbox ledger 0 outstanding; strict totals exact 14/14.
+- Fixed: Entomo tranche digit in the issuer (wrapper strip `(?:\s*\d{1,2})?`, one identifier changed) with printed instrument; Integrity Marketing One stop 4/5 2023-09-30 named after a typed member; first six-month income period published halved (existing highlights key first_income_year_ends 2022-09-30). Unflagged: 8 rows publishing the "N/A( 6 )" footnote marker as a 6.0 rate blanked; Consilio all-PIK lines given their printed coupon.
+- X02 2026-03-31: earlier real-error verdict retired (VR-FL-1901612-01); 251 unfunded N/A(6) lines are a check misfire; check_repair_request DC-0001901612-3e03d1bd3f (key on the printed N/A line; four must-fail tests). Stale PD-X02 proposal deleted (already accepted as DS-X02-1901612-4).
+- Observation for the cohort: a mid-year first fiscal period can be published halved (propose_detector: first 10-K income period under 12 months with no first_income_year_ends key).
+- A clean result is not data correct.

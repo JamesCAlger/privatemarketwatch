@@ -1,0 +1,119 @@
+{
+ "reviewer_id": "agent:review-g4zc-opus",
+ "cik": "0001901612",
+ "label": "g4zc",
+ "before": "g4xc",
+ "report_digest": "c918bf0cb42cf9de9706ac2a5afabbecd8d066dab65651773f591ce4e049ed52",
+ "ledger_note": "The g4zc findings ledger (written 14:55) predated the retirement file VR-FL-1901612-01 (14:56). The reviewer regenerated it with 'python scripts/fund_ledger_trial.py --label g4zc --from ledger' (published files touched: none; prior copy kept at scratch/fund_runs/0001901612/review/findings_ledger_g4zc_before_regen.csv). After regeneration RVQ_REV_a17690061974 is dispositioned_as_filed (retirement_id VR-FL-1901612-01, disposition DS-FUNDLOOP-X02-1901612, legacy accepted 2026-10-09; DS-X02-1901612-4, owner 2026-11-04, also covers the quarter) and the fund has 0 outstanding findings. The digest is over that empty outstanding list. The report's X02 investigation is therefore an orphan against the current ledger and must be removed or re-based by the investigator; this review does not edit the report.",
+ "finding_reviews": [],
+ "packet_finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_449966ec3faf",
+   "rule": "issuer_name_printed 2023-12-31",
+   "outcome": "rejected",
+   "rationale": "Issuer name fixed: c-71 publishes 'Entomo Brands Acquisitions, Inc' and the finding no longer fires. But the fix introduced a new error on the same row: instrument_description is 'Senior secured1 Senior secured 1', not the declared 'Senior secured 1'. Mechanism (pipeline/unified_holdings.py _strip_issuer_names): the row correction sets the instrument before the strip runs, the removed text 'Senior secured1' is not a substring of 'Senior secured 1', so the strip puts it in front. holdings_field_diff g4zc g4xc shows 'instrument_description | 2 | None -> Senior secured1 Senior secured 1'. Repair: drop the two instrument_description lines (c-71, c-100), or make the strip compare with whitespace removed; rebuild and re-diff.",
+   "evidence": [{"accession": "0001901612-24-000027", "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"}]
+  },
+  {
+   "finding_id": "RVQ_BLK_dc4f770c247e",
+   "rule": "issuer_name_printed 2024-03-31",
+   "outcome": "rejected",
+   "rationale": "Same as 2023-12-31: c-100 issuer name is correct, instrument_description is 'Senior secured1 Senior secured 1'.",
+   "evidence": [{"accession": "0001901612-24-000038", "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 10.95 % 07/2029 871 859 0.2 871"}]
+  },
+  {
+   "finding_id": "RVQ_BLK_e048da6f80fa",
+   "rule": "issuer_name_printed 2023-09-30",
+   "outcome": "supported",
+   "rationale": "c-239 and c-240 publish 'Integrity Marketing Acquisition, LLC', One stop 4 and 5, spreads 6.5 and 6.0, cost -110 and -30,979, fair value 0 and -63,769, maturity 08/2026. The page prints exactly these two lines under Integrity, while Integrated Specialty Coverages prints its own three lines (c-236 to c-238, 07/2029 and 07/2030). c-240 now shares position_id 6d09a4f3 with the funded Integrity One stop 2 of 2023-12-31 onward (same spread and maturity).",
+   "evidence": [
+    {"accession": "0001901612-23-000079", "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.00 % N/A(6) 08/2026 - ( 30,979 ) - ( 63,769 )"},
+    {"accession": "0001901612-23-000079", "text": "Integrated Specialty Coverages, LLC(5) One stop SF + 6.00 % N/A(6) 07/2030 - ( 2,825 ) - ( 2,898 )"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e89e1b84614c",
+   "rule": "income_identity 2022-09-30",
+   "outcome": "supported",
+   "rationale": "Printed figures check out: TII 2,168,653 - 193,832 = 1,974,821; NII 1,230,368 - 184,149 = 1,046,219; total expenses 1,389,005 - 177,625 = 1,211,380; net expenses 938,285 - 9,683 = 928,602. The fund_financials diff g4xc to g4zc also moved fields the report does not list, all now matching the page: 2022-09-30 interest_expense 528,249 (537,932 - 9,683), management_fee 292,208 (334,220 - 42,012), incentive_fee 96,827; income_yield_pct 2022-09-30 3.395 -> 6.79 and 2022-06-30 1.383 -> 4.15, both equal to the printed ratios. So the claim that no other period moved is not strictly true (2022-06-30 income_yield_pct moved), but the move is a correction to the printed value. Finding no longer fires.",
+   "evidence": [
+    {"accession": "0001901612-23-000079", "text": "Total investment income 22,829,454 2,168,653 Net expenses 9,368,393 938,285 Net investment income - before tax 13,461,061 1,230,368"},
+    {"accession": "0001901612-23-000051", "text": "Total investment income 6,077,368 193,832 15,012,265 193,832"},
+    {"accession": "0001901612-22-000050", "text": "Ratio of net investment income to average net assets * 4.15 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a17690061974",
+   "rule": "X02 2026-03-31",
+   "outcome": "supported",
+   "rationale": "Re-ran retire.py: production and g4zc both PASS (Any Hour c-203 interest_rate 13.0, pik_rate 13.0, fair value 2,391,000; 0 loans with par > 0 and blank rate and spread), and the plant FAILS on both. verdict_sha256 matches the verdict file; applied_by names agent:fund-g4z-sonnet under D-252. The verdict cites only the Any Hour line. Re-ran x02_rows.py: 251/251 matched. My own check (x02_one_to_one.py) found no issuer/instrument/maturity key with more flagged rows than printed N/A(6) lines; 0 flagged rows have par > 0 or null par; 246 of 251 match a printed line on cost and fair value too, and the 5 my regex missed are '$'-prefixed lines at the top of a page (Consor and Equity Methods read by hand, they match). False alarm on the current population is supported. Deleting PD-X02-1901612-4 was correct: it is a stale copy of DS-X02-1901612-4, which the owner accepted on 2026-11-04 for both quarters.",
+   "evidence": [
+    {"accession": "0001901612-26-000020", "text": "Any Hour, LLC(25) One stop N/A 13.00 % PIK 05/2031 3,146 3,110 0.2 2,391"},
+    {"accession": "0001901612-26-000020", "text": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "first-fiscal-period-income-published-halved",
+   "outcome": "rejected",
+   "rationale": "The fix is verified (see the income_identity entry), but the detection decision would not catch recurrence. income_identity (scripts/shadow_identity_engine.py) tests NII ~ TII - net_expenses (or total_expenses). Here it fired only because net_expenses was stored on the true-quarter basis while TII, total expenses and NII were stored halved. A fund that began mid-year and files no net-expenses fact, or whose flows are all scaled the same way, satisfies the identity while every figure is wrong. fourth_quarter_income needs three filed quarters, so it stays silent for a first fiscal year. The suggested_check (TII vs gross_investment_income, 5 pct) also depends on an optional tag. Action should be propose_detector: flag any fund whose first 10-K income period runs under 12 months (duration_months < 12, or the 'Operations commenced' date inside the fiscal year) and that has no first_income_year_ends key. Expected false positives are near zero. The cause is shared (quarter_income_sql), so it should go to the cohort; the report's not_done says no other fund was checked.",
+   "evidence": [
+    {"accession": "0001901612-23-000079", "text": "(1) Operations commenced on April 1, 2022."},
+    {"accession": "0001901612-23-000079", "text": "Total expenses 13,805,233 1,389,005"}
+   ]
+  },
+  {
+   "observation_key": "tranche-digit-attached-to-instrument-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Dry run (scratch/fund_runs/0001901612/review/strip_dryrun.py) of HEAD vs working issuer_name_strip_re over all 2,271 distinct raw investment_identifier values in g4zc bdc_holdings.csv: exactly one changes, 'Entomo Brands Acquisitions, Inc, Senior secured1' (2 rows, 2023-12-31 and 2024-03-31). It is also the only value with a digit glued to an instrument word, and the only g4xc published issuer_name the new pattern would still change. The agent counted 2,128; the conclusion is the same. issuer_name_printed did fire on it, so existing_detector is right. Note: the instrument error that came with this fix (see RVQ_BLK_449966ec3faf) is not caught by any rule.",
+   "evidence": [{"accession": "0001901612-24-000027", "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"}]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "g4z-x02-unfunded-na-commitment-lines",
+   "outcome": "supported",
+   "rationale": "verification_bug is the right class. X02 flags rows whose page prints no rate or spread (footnote 6: unfunded, no interest earned); under the 2026-11-04 ruling a misfiring check clears only by repair, not by disposition. The repair as specified in DC-0001901612-528713db6c keys on the printed line ('N/A' in the rate and spread columns plus a dash for par), not on a published null or par = 0. That is required: a par-only skip would also hide a funded loan whose par extraction failed. The three must-fail tests are the right shapes; add a fourth where the page prints 'N/A(6)' but a rate is published. Two such rows exist at 2026-03-31: the filer tagged footnote 6 as InvestmentInterestRate 6 on c-487 and c-597 (see unflagged_errors). Today the ledger closes the fund's X02 2026-03-31 through legacy dispositions, so this repair is cohort hygiene, not a sign-off blocker for this fund; it still needs measuring on every accepted sandbox.",
+   "evidence": [
+    {"accession": "0001901612-26-000020", "text": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )"},
+    {"accession": "0001901612-26-000020", "text": "commitment was unfunded as of March 31, 2026. As such, no interest is being earned on this investment."}
+   ]
+  }
+ ],
+ "declared_changes_check": "holdings_field_diff g4zc g4xc: rows 7515/7515, none added or removed; issuer_name 4, instrument_description 2, corrected_fields 4, entity_id 2, canonical_name 2, position_id 1; 94 of 100 columns unchanged. Column and row counts equal declared_changes. Content does not: instrument_description is 'None -> Senior secured1 Senior secured 1', not the declared 'None -> Senior secured 1'.",
+ "scans": {
+  "script": "scratch/fund_runs/0001901612/review/scan.py g4zc (output scan_g4zc.txt)",
+  "matched_printed_debt_lines": 6894,
+  "reference_code_mismatches": 0,
+  "spread_mismatches": 0,
+  "par_mismatches": 0,
+  "lien_mismatches": 0,
+  "rate_mismatches": 2,
+  "totals": "Printed 'Total investments' fair value equals the published-basis sum exactly (gap 0 USD) in all 14 quarters, 2023-03-31 to 2026-06-30.",
+  "legend": "Each filing's dated legend was read. Codes used: SF SOFR, P Prime, A AUD (published BBSW), CA CORRA (from 2024-09-30), C CDOR (2024-06-30 legend), E EURIBOR, SN SONIA, L LIBOR (2023-03-31 legend). No unknown code was printed.",
+  "instrument_type": "The fund prints only One stop / Senior secured / Second lien / Subordinated debt; nothing distinguishes delayed draw, term or revolver. instrument_type is null on every row and lien_position matches all 6,894 printed lines. Nothing to compare.",
+  "not_covered": "40 published debt-like rows were not paired by the parser: lines that print the spread as a decimal ('SF + 0.065'), '$'-prefixed lines at the top of a page, the Kaseya preferred lines, and one filer misprint. Spot-read: Pareto 2023-09-30, NSG 2023-12-31, Bloomerang 2025-12-31 and 2026-03-31; all agree except the two 6.0 rows listed. Equity unit counts were not scanned. Holdings start at 2023-03-31: the 2022-06-30, 2022-09-30 and 2022-12-31 schedules (cached) have no published rows, in production as well. Recorded here, not investigated."
+ },
+ "unflagged_errors": [
+  {
+   "what": "Entomo Brands tranche 1 instrument_description published 'Senior secured1 Senior secured 1' (c-71 2023-12-31, c-100 2024-03-31). Introduced by this run: row correction plus strip_to_instrument.",
+   "fair_value_m": 1.74,
+   "evidence": [{"accession": "0001901612-24-000027", "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"}]
+  },
+  {
+   "what": "Two unfunded lines at 2026-03-31 publish interest_rate 6.0 (interest_rate_source xbrl_field, kind all_in) where the page prints 'N/A( 6 )'. The filer tagged footnote marker 6 as us-gaap:InvestmentInterestRate (facts f-2829 on c-487 YE Brands Holding One stop 3, f-3417 on c-597 Movement Holdings One stop 2). Par 0, fair value 0. X02 does not see them because the rate is not blank. Also in g4xc, so it predates this run. Fix: context-keyed row correction blanking interest_rate on c-487 and c-597.",
+   "fair_value_m": 0.0,
+   "evidence": [
+    {"accession": "0001901612-26-000020", "text": "Movement Holdings, LLC(5)(8)(10) One stop N/A( 6 ) 03/2030 - ( 8 ) - -"},
+    {"accession": "0001901612-26-000020", "text": "YE Brands Holding, LLC One stop N/A( 6 ) 10/2027 - - - -"}
+   ]
+  },
+  {
+   "what": "Consilio Midco Limited Subordinated debt all-PIK lines publish interest_rate null with pik_rate 11.38 (c-860, 2026-03-31) and 11.18 (c-886, 2026-06-30). The fund's other all-PIK lines carry the printed coupon in interest_rate (Any Hour 13.0, the 128 all-PIK floating rows corrected in g4x). Inconsistent with the fund's own treatment. Small (par 3k and 4k, fair value -24k and -15k). Predates this run. No rule fires because the spread is present.",
+   "fair_value_m": -0.04,
+   "evidence": [{"accession": "0001901612-26-000020", "text": "Consilio Midco Limited(5)(8)(10)(25) Subordinated debt SF + 7.50 % (j) 11.38 % PIK 04/2033 3 3 - ( 24 )"}]
+  }
+ ],
+ "caveat": "All findings cleared is not data correct. The scans compare printed codes, spreads, par, lien and totals. They do not detect a change in meaning, a wrong rate on a row that has one, or offsetting errors."
+}

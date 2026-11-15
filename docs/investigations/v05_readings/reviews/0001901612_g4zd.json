@@ -1,0 +1,62 @@
+{
+ "reviewer_id": "agent:review-g4zc-opus",
+ "cik": "0001901612",
+ "label": "g4zd",
+ "before": "g4xc",
+ "scope": "Change-only re-review of round 2 (g4zd). Re-verified the round-1 rejections (Entomo instrument; halved-period observation) and every change since g4zc. Carried from the g4zc review: Integrity issuer corrections, income_identity figures, X02 retirement VR-FL-1901612-01 and row matching, wrapper strip dry run, the stale PD-X02-1901612-4 deletion.",
+ "report_digest": "734ae0d63afde9e77d2dbf8a8eddf1dbce0c19801f158505a966591bdd48421d",
+ "ledger_note": "g4zd ledger: 0 outstanding for 0001901612. RVQ_REV_a17690061974 is dispositioned_as_filed (DS-FUNDLOOP-X02-1901612) with retirement VR-FL-1901612-01 recorded. The report now has no investigations, which matches.",
+ "finding_reviews": [],
+ "observation_reviews": [
+  {
+   "observation_key": "first-fiscal-period-income-published-halved",
+   "outcome": "supported",
+   "rationale": "Round-1 rejection resolved: the action is now propose_detector, and the suggested check (first 10-K income period under 12 months, no first_income_year_ends key) finds the cause directly. It does not depend on a mixed-basis coincidence the way income_identity does. The fix is re-verified on g4zd: the fund_financials diff against g4xc is exactly the eight declared changes (2022-09-30 TII 1,974,821, NII 1,046,219, total expenses 1,211,380, interest expense 528,249, management fee 292,208, incentive fee 96,827; income_yield_pct 2022-06-30 4.15 and 2022-09-30 6.79, both equal to the printed ratios). The cause is shared, and other funds remain unchecked (listed in not_done); this should go to the cohort.",
+   "evidence": [
+    {"accession": "0001901612-23-000079", "text": "(1) Operations commenced on April 1, 2022."},
+    {"accession": "0001901612-23-000051", "text": "Ratio of net investment income to average net assets * 13.28 % 4.15 %"}
+   ]
+  },
+  {
+   "observation_key": "tranche-digit-attached-to-instrument-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Carried from g4zc (one identifier changes under the strip dry run; issuer_name_printed fired). The round-2 change was checked: c-71 and c-100 now carry an issuer_name correction as well, so the strip finds nothing and instrument_description is 'Senior secured 1' on both (holdings_field_diff g4zd g4zc: 'Senior secured1 Senior secured 1 -> Senior secured 1'). The round-1 instrument lines left in the file are now redundant but harmless. The observation correctly records the round-1 regression mechanism.",
+   "evidence": [{"accession": "0001901612-24-000038", "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 10.95 % 07/2029 871 859 0.2 871"}]
+  },
+  {
+   "observation_key": "footnote-marker-published-as-interest-rate",
+   "outcome": "supported",
+   "rationale": "All 8 rows read on the page: each prints 'N/A( 6 )' in the rate column. On g4zd all 8 publish interest_rate null and kind unresolved, and keep their printed spread (PPV 5.75, HS Spa 5.25, Excelitas 5.75, Caerus 5.75, Spotless 6.50, Salon Lofts SL5 9.00; YE Brands and Movement print no spread and publish none). For c-487 and c-597 the raw facts f-2829 and f-3417 are us-gaap:InvestmentInterestRate '6'. Scope check by the reviewer: g4zd has no private-credit row with par 0 and a rate, and no integer rate below 8 remains. The full-line scan matched 6,894 printed debt lines with 0 rate mismatches, so a funded line carrying a mis-tagged footnote would have shown. The 40 lines the parser could not pair were read separately: they are the 8 fixed rows plus decimal-spread lines (Pareto, Virginia Green, Yorkshire, NSG, Paisley), Bloomerang c-689 and Kaseya, all agreeing with the page. The scope is sufficient for this fund. propose_detector with a printed-line test (N/A(k) printed, published rate = k) is right; no current rule catches it.",
+   "evidence": [
+    {"accession": "0001901612-26-000020", "text": "YE Brands Holding, LLC One stop N/A( 6 ) 10/2027 - - - -"},
+    {"accession": "0001901612-23-000037", "text": "PPV Intermediate Holdings, LLC(5) One stop SF + 5.75 % N/A( 6 ) 08/2029 - ( 7,107 ) - ( 7,753 )"},
+    {"accession": "0001901612-24-000065", "text": "Salon Lofts Group, LLC(5) Second lien SF + 9.00 % N/A( 6 ) 09/2029 - ( 36 ) - ( 37 )"}
+   ]
+  },
+  {
+   "observation_key": "all-pik-loan-with-spread-published-without-rate",
+   "outcome": "supported",
+   "rationale": "c-860 publishes interest_rate 11.38, pik_rate 11.38, cash 0, kind cash; c-886 publishes 11.18 / 11.18 / 0 / cash. This matches the printed coupons and the fund's other all-PIK lines (Any Hour 13.0). The proposed detector must be limited to loans (asset_category LOAN). As worded, 'PIK rate and basis_spread with blank interest_rate' also fires on this fund's Kaseya preferred stock rows (spread 10.75, PIK 14.35, no rate), which are dividends, not coupons.",
+   "evidence": [
+    {"accession": "0001901612-26-000020", "text": "Consilio Midco Limited(5)(8)(10)(25) Subordinated debt SF + 7.50 % (j) 11.38 % PIK 04/2033 3 3 - ( 24 )"},
+    {"accession": "0001901612-26-000031", "text": "Consilio Midco Limited(5)(8)(10)(25) Subordinated debt SF + 7.50 % (j) 11.18 % PIK 04/2033 4 4 - ( 15 )"}
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "g4z-x02-unfunded-na-commitment-lines",
+   "outcome": "supported",
+   "rationale": "DC-0001901612-3e03d1bd3f (sandbox g4zd) supersedes DC-0001901612-528713db6c and adds the fourth must-fail test I asked for (N/A(6) printed while a rate is published). It keys the repair on the printed line, both 'N/A(6)' and 'N/A( 6 )', not on a null published par. verification_bug is the right class. For this fund the finding is already closed in the ledger, so this is a cohort repair to be measured on every accepted sandbox.",
+   "evidence": [
+    {"accession": "0001901612-26-000020", "text": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )"},
+    {"accession": "0001901612-26-000020", "text": "YE Brands Holding, LLC One stop N/A( 6 ) 10/2027 - - - -"}
+   ]
+  }
+ ],
+ "declared_changes_check": "holdings_field_diff g4zd g4xc: 7515/7515 rows, none added or removed. issuer_name 4, instrument_description 2 (None -> Senior secured 1), interest_rate 10, interest_rate_reported 10, interest_rate_kind 10, interest_rate_cash 2, src_transforms 2, corrected_fields 14, entity_id 2, canonical_name 2, position_id 1. The fund_financials diff against g4xc has the 8 declared fields. All match declared_changes in count and content. holdings_field_diff g4zd g4zc shows only the intended round-2 changes: instrument 2 (Entomo), interest_rate / reported / kind 10 (8 blanked, 2 Consilio), interest_rate_cash 2, src_transforms 2, corrected_fields 12. Nothing else moved.",
+ "scans": "scan.py g4zd: 6,894 printed debt lines matched; 0 reference-code, spread, par, lien or rate mismatches (the 2 Consilio rate mismatches of g4zc are gone). Strict totals gap 0 USD in all 14 quarters.",
+ "page_sample": "Redraw. 12 published rows changed after the g4zc page sample (2 instrument, 10 interest_rate), so a sample drawn on g4zc does not attest g4zd. Drawing 20 rows on g4zd costs little.",
+ "unflagged_errors": [],
+ "caveat": "All findings cleared is not data correct. These checks do not detect a change in meaning, a wrong rate on a row that has one, or offsetting errors."
+}

@@ -63,27 +63,6 @@
    "decided_on": "2026-10-15"
   },
   {
-   "disposition_id": "PD-X02-1901612-4",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "X02",
-   "rerun": "python scripts/v05_evidence/page_line.py 0001901612 0001901612-26-000020 \"People Corporation(5)(8)(9)(12) One stop N/A(6) 02/2031 - ( 13 ) - 9\" 1 78 && python scripts/v05_evidence/page_line.py 0001901612 0001901612-26-000020 \"Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )\" 1 76 && python scripts/v05_evidence/page_line.py 0001901612 0001901612-26-000020 \"Any Hour, LLC(25) One stop N/A 13.00 % PIK 05/2031 3,146 3,110 0.2 2,391\" 1 82 && python scripts/v05_evidence/page_line.py 0001901612 0001901612-26-000031 \"OEConnection, LLC(5) One stop N/A(6) 12/2032 - ( 14 ) - 8\" 1 67",
-   "ciks": ["0001901612"],
-   "quarters": ["2026-03-31", "2026-06-30"],
-   "reason_key": "x02-rate-columns-printed-n-a",
-   "statement": "Every row still flagged is an unfunded commitment printed 'One stop N/A(6)' with a dash for par (footnote 6: 'The entire commitment was unfunded ... no interest is being earned on this investment'); the filing tags no rate or spread. 251 rows at 2026-03-31, 233 at 2026-06-30; a few carry a small positive mark (OEConnection, People Corporation, Signature MD, 0.01M each). The loans that printed a rate and published none are fixed by row correction: Higginbotham's two lines at 2026-06-30 ('SF + 4.50 % (i) 8.14 %') and the all-PIK loans in every quarter.",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "People Corporation(5)(8)(9)(12) One stop N/A(6) 02/2031 - ( 13 ) - 9", "quote": "2026-03-31: rate printed N/A(6), par '-', mark 9"},
-    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )", "quote": "2026-03-31: a typical unfunded line"},
-    {"source": "filing", "accession": "0001901612-26-000020", "verbatim": "Any Hour, LLC(25) One stop N/A 13.00 % PIK 05/2031 3,146 3,110 0.2 2,391", "quote": "2026-03-31: the row of the earlier verdict; published interest_rate 13.0, pik_rate 13.0"},
-    {"source": "filing", "accession": "0001901612-26-000031", "verbatim": "OEConnection, LLC(5) One stop N/A(6) 12/2032 - ( 14 ) - 8", "quote": "2026-06-30: rate printed N/A(6), par '-', mark 8"}
-   ],
-   "addresses_verdict": {"2026-03-31": "The reviewer found Any Hour, LLC's all-PIK line ('N/A 13.00 % PIK') published with no rate. It is fixed: the row publishes interest_rate 13.0 and pik_rate 13.0 (fixed coupon read from the PIK tag); the other rows the reviewer saw are the unfunded N/A(6) lines, as printed."},
-   "decided_by": "PROPOSED by agent 2026-10-15 (fund-clearing g4x); not accepted by the owner",
-   "decided_on": "2026-10-15"
-  },
-  {
    "disposition_id": "PD-B01-1901612-5",
    "class": "as_filed",
    "engine": "oracle",

@@ -1,92 +1,361 @@
 {
  "cik": "0001901612",
- "label": "g4xc",
- "before": "spoff2",
+ "label": "g4zd",
+ "before": "g4xc",
  "shared_code": false,
+ "investigator_id": "agent:fund-g4z-sonnet",
  "declared_changes": [
-  {"column": "interest_rate", "rows": 133, "why": "128 all-PIK floating loans ('SF + 6.50 % (j) 10.15 % PIK') and 2 Consilio lines tagged PIK-only published no rate; row correction sets the cash leg to 0 (kind cash) so the published rate is the printed PIK coupon. 5 loans whose printed rate is not tagged (Salon Lofts 2023-12-31, Island Bidco, LeadsOnline, Higginbotham x2) get the printed rate"},
-  {"column": "interest_rate_reported", "rows": 133, "why": "same rows: 0 (cash leg) for the all-PIK rows, the printed rate for the untagged-rate rows"},
-  {"column": "interest_rate_kind", "rows": 133, "why": "same rows: unresolved to cash (all-PIK) or all_in (untagged rate)"},
-  {"column": "interest_rate_cash", "rows": 133, "why": "same rows: 0.0 for the all-PIK rows"},
-  {"column": "corrected_fields", "rows": 155, "why": "the 155 row-correction specs (133 rate rows, 22 equity class rows)"},
-  {"column": "src_transforms", "rows": 133, "why": "the rate rows' transform string is rewritten by the financial step after the correction (same transforms)"},
-  {"column": "basis_spread", "rows": 5, "why": "untagged printed spread on Salon Lofts senior secured 11 (2023-12-31) and the Higginbotham lines (2026-06-30); set to the printed figure"},
-  {"column": "pik_rate", "rows": 3, "why": "Eclipse Buyer preferred stock 2025-12-31 to 2026-06-30: the printed 12.50 % non-cash dividend, tagged on a separate context"},
-  {"column": "asset_category", "rows": 22, "why": "operating-company LP/LLC interests (Denali Bidco, Rooster BidCo, Transform Bidco, Bridge Growth Partners Seasmoke) published as FUND, Metal Supermarkets LLC interest 1 as OTHER, to EQUITY_COMMON; Eclipse Buyer preferred from EQUITY_COMMON to EQUITY_PREFERRED"},
-  {"column": "index_classification", "rows": 22, "why": "same rows: PRIVATE_EQUITY_FUND / UNCLASSIFIED to COMMON_EQUITY; COMMON_EQUITY to PREFERRED_EQUITY for Eclipse"},
-  {"column": "issuer_category", "rows": 22, "why": "same rows: FUND to CORPORATE"},
-  {"column": "exposure_type", "rows": 22, "why": "same rows: FUND to DIRECT"},
-  {"column": "asset_class", "rows": 22, "why": "same rows: OTHER to PRIVATE_EQUITY (Metal Supermarkets)"},
-  {"column": "position_id", "rows": 600, "why": "583 against spoff2: the 2026-06-30 quarter added re-chains positions across the fund (spoff2 had no Q2), plus 5 Metal Supermarkets equity rows re-paired after the OTHER row was classed (preferred 2025-12-31 now chains to 'LLC interest 2', the line with the same 1 unit and 93 cost)"}
+  {
+   "column": "issuer_name",
+   "rows": 4,
+   "why": "Entomo Brands Acquisitions, Inc, Senior secured1 -> Entomo Brands Acquisitions, Inc (2 rows, 2023-12-31 and 2024-03-31, row corrections by context c-71 and c-100); Integrated Specialty Coverages, LLC. -> Integrity Marketing Acquisition, LLC (2 rows, 2023-09-30, c-239 and c-240)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 2,
+   "why": "Entomo tranche 1 rows: None -> Senior secured 1 (row correction; siblings read Senior secured 2 and 3). The two Integrity rows keep One stop 4 and One stop 5."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 10,
+   "why": "8 unfunded lines published 6.0, the footnote marker of the printed 'N/A( 6 )', now blank (YE Brands c-487 and Movement Holdings c-597 2026-03-31; PPV Intermediate 2023-03-31; HS Spa, Excelitas, Caerus, Spotless 2024-03-31; Salon Lofts Second lien 5 2024-06-30); 2 Consilio Midco all-PIK subordinated lines None -> printed coupon (c-860 2026-03-31 11.38, c-886 2026-06-30 11.18)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 10,
+   "why": "the same 10 rows (follows interest_rate)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 10,
+   "why": "the 8 blanked rows all_in -> unresolved (no rate); the 2 Consilio rows unresolved -> cash (cash leg 0, as the fund's other all-PIK lines)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 2,
+   "why": "the 2 Consilio rows None -> 0.0 (cash leg 0 of an all-PIK coupon)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 2,
+   "why": "the 2 Consilio rows, the label of the rate correction"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 14,
+   "why": "the 14 rows with a row correction in this run (2 Integrity, 2 Entomo, 8 blanked N/A(6) rates, 2 Consilio)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 2,
+   "why": "the two Integrity rows resolve to the entity of the printed company"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 2,
+   "why": "same two rows: Integrated Specialty Coverages, LLC -> Integrity Marketing Acquisition, LLC"
+  },
+  {
+   "column": "position_id",
+   "rows": 1,
+   "why": "the Integrity One stop 5 row's identity follows its entity (2023-09-30)"
+  },
+  {
+   "column": "fund_financials.income_yield_pct",
+   "rows": 2,
+   "why": "2022-06-30 1.383 -> 4.15 and 2022-09-30 3.395 -> 6.79, the printed ratios (first_income_year_ends changes the first-year ratio basis)"
+  },
+  {
+   "column": "fund_financials.total_investment_income",
+   "rows": 1,
+   "why": "2022-09-30 1,084,326.5 -> 1,974,821 (first_income_year_ends)"
+  },
+  {
+   "column": "fund_financials.net_investment_income",
+   "rows": 1,
+   "why": "2022-09-30 615,184 -> 1,046,219 (first_income_year_ends)"
+  },
+  {
+   "column": "fund_financials.management_fee",
+   "rows": 1,
+   "why": "2022-09-30 167,110 -> 292,208 (first_income_year_ends)"
+  },
+  {
+   "column": "fund_financials.incentive_fee",
+   "rows": 1,
+   "why": "2022-09-30 48,413.5 -> 96,827 (first_income_year_ends)"
+  },
+  {
+   "column": "fund_financials.interest_expense",
+   "rows": 1,
+   "why": "2022-09-30 268,966 -> 528,249 (first_income_year_ends)"
+  },
+  {
+   "column": "fund_financials.total_expenses",
+   "rows": 1,
+   "why": "2022-09-30 694,502.5 -> 1,211,380 (first_income_year_ends)"
+  }
  ],
- "rows_added": 936,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "All-PIK floating loans published no interest rate: the filer tags the spread and the PIK rate and no plain rate, and the financial step does not read a PIK tag as the coupon when a spread is filed. 128 rows, 13 quarters (0.3M to 28.9M a quarter). Row correction: cash leg 0, the published rate is the printed PIK coupon. Generated by scratch/fund_runs/0001901612/gen_specs.py, each spec with its printed line (issuer, spread, PIK figure, par, cost and value matched).", "kind": "row_correction",
-   "quarters": ["2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001901612-26-000020", "text": "Transform Bidco Limited#(8)(10)(25) One stop SF + 6.50 % (j) 10.15 % PIK 01/2031 9,296 9,184 0.7 8,924"},
-              {"accession": "0001901612-24-000078", "text": "Salon Lofts Group, LLC(20) Second lien SF + 9.00 % (i) 13.60 % PIK 09/2029 598 592 0.1 598"}]},
-  {"what": "Rates printed and not tagged (5 rows): Salon Lofts senior secured 11 and Island Bidco, LeadsOnline at 2023-12-31; Higginbotham one stop 2 and senior secured at 2026-06-30. Row correction with the printed rate and spread.", "kind": "row_correction",
-   "quarters": ["2023-12-31", "2026-06-30"],
-   "quotes": [{"accession": "0001901612-24-000027", "text": "Salon Lofts Group, LLC Senior secured SF + 6.25 % (i) 11.60 % 08/2028 96 95 - 95"},
-              {"accession": "0001901612-26-000031", "text": "Higginbotham Insurance Agency, Inc. Senior secured SF + 4.50 % (i) 8.14 % 06/2031 514 514 - 512"}]},
-  {"what": "Consilio Midco subordinated debt 2026-03-31 (2 rows): printed coupon without the word PIK, tagged PIK-only; published no rate. Row correction, cash leg 0 as tagged.", "kind": "row_correction",
-   "quarters": ["2026-03-31"],
-   "quotes": [{"accession": "0001901612-26-000020", "text": "Consilio Midco Limited(8)(9)(10)(25) Subordinated debt E + 7.50 % (c)(d) 9.60 % 04/2033 1,398 1,368 0.1 1,342"}]},
-  {"what": "Eclipse Buyer preferred stock published as common with no dividend rate from 2025-12-31 (its values now come from an industry-subtotal context, page_labelled_contexts; the 12.50 % sits on a rate-only context). Row correction: preferred, pik_rate 12.5.", "kind": "row_correction",
-   "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001901612-26-000020", "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 1,752 0.2 1,733"}]},
-  {"what": "Operating-company LP/LLC interests published as private-equity funds (Denali Bidco 11 quarters, Rooster BidCo, Transform Bidco, Bridge Growth Partners Seasmoke) or unclassified (Metal Supermarkets LLC interest 1): printed in the equity section beside common stock. Row correction to common equity (19 rows).", "kind": "row_correction",
-   "quarters": ["2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001901612-26-000020", "text": "Transform Bidco Limited(8)(10) LP interest N/A N/A 04/2025 N/A 895 901 0.1 836"},
-              {"accession": "0001901612-26-000020", "text": "Metal Supermarkets US Buyer, LLC(8)(12) LLC interest N/A N/A 12/2024 N/A - - - 2"}]},
-  {"what": "Fund level: borrowings left out 'Other short-term borrowings' at 2023-12-31 (149.8M) and 2024-03-31 (28.1M); new highlights wrapper data/overrides/fund_highlights_wrappers/0001901612.json corrects borrowings to the printed sum (328.4M, 416.4M). Clears F26 2023-12-31.", "kind": "wrapper",
-   "quarters": ["2023-12-31", "2024-03-31"],
-   "quotes": [{"accession": "0001901612-24-000027", "text": "Debt less unamortized debt issuance costs 178,627 175,924 Other short-term borrowings 149,812 -"}]}
+  {
+   "what": "Entomo Brands tranche 1: the issuer-name strip needed whitespace before the tranche digit, so 'Senior secured1' stayed in the issuer name. The pattern now allows the digit attached (dry run over all 2,128 distinct identifiers of the fund: one changes). In round 1 the instrument corrections regressed the instrument to 'Senior secured1 Senior secured 1' (row corrections run before the strip, which prepends its removed text); round 2 sets issuer_name by row correction as well, so the strip finds nothing and the instrument reads 'Senior secured 1'.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901612-24-000027",
+     "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"
+    },
+    {
+     "accession": "0001901612-24-000038",
+     "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 10.95 % 07/2029 871 859 0.2 871"
+    }
+   ]
+  },
+  {
+   "what": "Integrity Marketing Acquisition, LLC One stop 4 and 5 (2023-09-30): the typed member names 'Integrated Specialty Coverages, LLC.', the schedule prints Integrity Marketing Acquisition, LLC (the same two loans print under that name in the next two quarters). issuer_name set by context-keyed row correction, instrument kept.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901612-23-000079",
+     "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.00 % N/A(6) 08/2026 - ( 30,979 ) - ( 63,769 )"
+    },
+    {
+     "accession": "0001901612-23-000079",
+     "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.50 % N/A(6) 08/2026 - ( 110 ) - -"
+    }
+   ]
+  },
+  {
+   "what": "income_identity 2022-09-30: the fund's first fiscal period (six months from 2022-04-01, one 10-Q filed) was published as the period figure halved. first_income_year_ends 2022-09-30 in the highlights wrapper: total investment income 1,084,326.5 -> 1,974,821 (2,168,653 less 193,832), net investment income 615,184 -> 1,046,219 (1,230,368 less 184,149), total expenses 694,502.5 -> 1,211,380; the net income ratio now equals the printed 4.15 (2022-06-30) and 6.79 (2022-09-30).",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-06-30",
+    "2022-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901612-23-000079",
+     "text": "Total investment income 22,829,454 2,168,653 Net expenses 9,368,393 938,285 Net investment income - before tax 13,461,061 1,230,368"
+    },
+    {
+     "accession": "0001901612-23-000079",
+     "text": "Ratio of net investment income - after tax to average net assets * 13.73 % 6.79 %"
+    },
+    {
+     "accession": "0001901612-23-000051",
+     "text": "Ratio of net investment income to average net assets * 13.28 % 4.15 %"
+    }
+   ]
+  },
+  {
+   "what": "Footnote marker published as a rate: eight unfunded lines whose page prints 'N/A( 6 )' (or 'N/A(6)') in the rate column carried a tagged interest rate of 0.06 and published 6.0. Blanked by context-keyed row correction. Scan: every loan of the fund in every quarter with par 0 or fair value <= 0 and a whole-number interest rate (the footnote number): 8 rows with 6.0, all corrected; the only other whole-number rows have par > 0 (printed 13.00 % PIK, 9.00 %).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901612-26-000020",
+     "text": "YE Brands Holding, LLC One stop N/A( 6 ) 10/2027 - - - -"
+    },
+    {
+     "accession": "0001901612-26-000020",
+     "text": "Movement Holdings, LLC(5)(8)(10) One stop N/A( 6 ) 03/2030 - ( 8 ) - -"
+    },
+    {
+     "accession": "0001901612-23-000037",
+     "text": "PPV Intermediate Holdings, LLC(5) One stop SF + 5.75 % N/A( 6 ) 08/2029 - ( 7,107 ) - ( 7,753 )"
+    },
+    {
+     "accession": "0001901612-24-000038",
+     "text": "HS Spa Holdings, Inc.(5) One stop SF + 5.25 % N/A( 6 ) 06/2029 - ( 3 ) - -"
+    },
+    {
+     "accession": "0001901612-24-000038",
+     "text": "Excelitas Technologies Corp. One stop SF + 5.75 % N/A( 6 ) 08/2029 - - - -"
+    },
+    {
+     "accession": "0001901612-24-000038",
+     "text": "Caerus Midco 3 S.A.R.L.(5)(7)(10) One stop SF + 5.75 % N/A( 6 ) 05/2029 - ( 2 ) - ( 1 )"
+    },
+    {
+     "accession": "0001901612-24-000038",
+     "text": "Spotless Brands, LLC One stop SF + 6.50 % N/A( 6 ) 07/2028 - - - -"
+    },
+    {
+     "accession": "0001901612-24-000065",
+     "text": "Salon Lofts Group, LLC(5) Second lien SF + 9.00 % N/A( 6 ) 09/2029 - ( 36 ) - ( 37 )"
+    }
+   ]
+  },
+  {
+   "what": "Consilio Midco all-PIK subordinated lines (c-860 2026-03-31, c-886 2026-06-30) were published with no interest rate although the page prints the PIK coupon 11.38 % and 11.18 %. Cash leg set to 0 so the published rate is the coupon, as for the fund's other all-PIK lines. Scan: every row of the fund with a PIK rate and a blank rate: only these two loans (the others are preferred stock dividends, reviewed in earlier runs).",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001901612-26-000020",
+     "text": "Consilio Midco Limited(5)(8)(10)(25) Subordinated debt SF + 7.50 % (j) 11.38 % PIK 04/2033 3 3 - ( 24 )"
+    },
+    {
+     "accession": "0001901612-26-000031",
+     "text": "Consilio Midco Limited(5)(8)(10)(25) Subordinated debt SF + 7.50 % (j) 11.18 % PIK 04/2033 4 4 - ( 15 )"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
- "parked": [
-  {"finding": "identity income_identity 2022-09-30",
-   "hypotheses": ["As filed: the check computes total investment income less total expenses, and the fund's expenses are printed gross before waivers ('Total expenses 1,389,005 ... Net expenses 938,285 Net investment income 1,230,368' for April to September 2022); NII = income less net expenses holds on the page.",
-                  "Not proposed because the published quarter is wrong as well: the first 10-K covers April to September 2022 and the shared quarterly-income step halves it (total investment income 1,084,326.5 published) instead of taking the six months less the 10-Q quarter to 2022-06-30 (2,168,653 - 193,832 = 1,974,821). Same shared fallback as D-168 (Ares Core) and D-179 (Fidelity). No setting or correctable field reaches fund-level income; the highlights wrapper corrects balance-sheet figures only."]}
+ "parked": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "g4z-x02-unfunded-na-commitment-lines",
+   "classification": "verification_bug",
+   "file": "pipeline/column_validation.py",
+   "what": "X02 flags unfunded commitment lines whose printed rate and spread columns are both N/A (251 rows at 2026-03-31, 233 at 2026-06-30). Published equals printed. Repair the check, keyed on the printed line (N/A(6) or N/A( 6 )), not on a null published par. Recorded in the decision store as DC-0001901612-3e03d1bd3f (supersedes DC-0001901612-528713db6c).",
+   "why": "No rate or spread is printed, so none can be published. Must fail: a funded loan with a blank rate and spread; an unfunded line that prints a spread with a blank published spread; an all-PIK line published without a rate; a line that prints N/A(6) while a rate is published.",
+   "evidence": [
+    {
+     "accession": "0001901612-26-000020",
+     "text": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )"
+    },
+    {
+     "accession": "0001901612-26-000020",
+     "text": "YE Brands Holding, LLC One stop N/A( 6 ) 10/2027 - - - -"
+    }
+   ],
+   "next_action": "Orchestrator repairs X02 with the five tests (one pass, four fail) and measures on every accepted sandbox.",
+   "quotes": [
+    {
+     "accession": "0001901612-26-000020",
+     "text": "Jeppesen Holdings, LLC(5) One stop N/A(6) 11/2032 - ( 4 ) - ( 20 )"
+    }
+   ]
+  }
  ],
- "orchestrator_requests": [],
  "observations": [
-  {"observation_key": "pik-only-coupon-with-spread-published-without-rate", "what": "Floating loans printed with the whole coupon paid in kind ('SF + 6.50 % (j) 10.15 % PIK') are tagged with a spread and a PIK rate and no plain rate. pipeline/financial_conventions.py reads a PIK tag as the coupon only when no spread is filed (pik_only_tag_reading 'coupon'), so the rate is left empty. 128 rows over 13 quarters here, fixed by row correction; the sister fund 0001930087 has the same wrapper settings and very likely the same gap. A wrapper-gated reading (PIK tag above the spread, no plain rate, fund files whole-coupon PIK) would carry forward to new quarters; row corrections do not.", "field": "interest_rate",
-   "quarters": ["2023-06-30", "2026-06-30"], "fair_value_m": 28.9, "cause": "shared", "action": "fixed",
-   "suggested_check": "A loan row with a PIK rate, a spread, no plain rate and no published interest rate.",
-   "quote": {"accession": "0001901612-26-000020", "text": "Transform Bidco Limited#(8)(10)(25) One stop SF + 6.50 % (j) 10.15 % PIK 01/2031 9,296 9,184 0.7 8,924"}},
-  {"observation_key": "page-labelled-context-row-loses-industry-and-class", "what": "Rows read from industry-subtotal contexts (page_labelled_contexts: the only equity row of its industry, from 2025-12-31) publish no extracted industry (16 rows a quarter) and 8 no GICS label (about 2.4M), although the context carries the industry member; the Eclipse preferred row lost its preferred class and its dividend rate (fixed by row correction). Industry is not a correctable field.", "field": "extracted_industry",
-   "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 10.2, "cause": "shared", "action": "left",
-   "suggested_check": "A published row whose context carries an industry-axis member and whose extracted_industry is empty.",
-   "quote": {"accession": "0001901612-26-000020", "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 1,752 0.2 1,733"}},
-  {"observation_key": "operating-company-lp-interest-classed-as-fund", "what": "LP interests in operating companies that are also the fund's borrowers (Denali Bidco, Transform Bidco, Rooster BidCo) and a sponsor co-invest vehicle (Bridge Growth Partners Seasmoke, LP) were classed PRIVATE_EQUITY_FUND while other 'LP interest' rows of the same table are common equity. Fixed by row correction (17 rows); cause in the shared classifier not traced (the wrapper's 'fund' leaf-marker family lists 'lp interest' but most such rows are not FUND).", "field": "index_classification",
-   "quarters": ["2023-09-30", "2026-06-30"], "fair_value_m": 3.8, "cause": "shared", "action": "fixed",
-   "suggested_check": "An equity-section row of a fund classed PRIVATE_EQUITY_FUND whose issuer is also a borrower of the same fund.",
-   "quote": {"accession": "0001901612-26-000020", "text": "Rooster BidCo Limited(8)(10) LP interest N/A N/A 03/2025 N/A 364 378 0.1 795"}},
-  {"observation_key": "quarterly-income-from-first-annual-period-divided-evenly", "what": "2022-09-30: the first 10-K covers 2022-04-01 to 2022-09-30; the published quarter's total investment income is half the period (1,084,326.5) instead of the period less the 10-Q quarter to 2022-06-30 (1,974,821). Net investment income and expenses likewise.", "field": "total_investment_income",
-   "quarters": ["2022-09-30"], "fair_value_m": 0.0, "cause": "shared", "action": "parked",
-   "suggested_check": "A fund-quarter whose income figures end in .5 or whose year-end quarter differs from the annual figure less the filed quarters.",
-   "quote": {"accession": "0001901612-22-000073", "text": "Total expenses 1,389,005 Base management fee waived (Note 4) (227,963) Incentive fee waived (Note 4) (96,827) Operating expenses reimbursement waived (Note 4) (125,930) Net expenses 938,285 Net investment income 1,230,368"}},
-  {"observation_key": "borrowings-omit-other-short-term-borrowings", "what": "The undimensioned debt fact holds the 'Debt less unamortized debt issuance costs' line only; 'Other short-term borrowings' (149.8M at 2023-12-31, 28.1M at 2024-03-31) was left out of borrowings and the leverage ratio. Fixed by a new highlights wrapper.", "field": "borrowings",
-   "quarters": ["2023-12-31", "2024-03-31"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed",
-   "suggested_check": "Borrowings below total liabilities less payables by more than 10 pct of total assets.",
-   "quote": {"accession": "0001901612-24-000027", "text": "Debt less unamortized debt issuance costs 178,627 175,924 Other short-term borrowings 149,812 -"}},
-  {"observation_key": "money-market-fund-not-published", "what": "The schedule prints a money-market fund after total investments ('Morgan Stanley Institutional Liquidity Funds - Treasury ... 46,041' at 2025-09-30), included in cash and cash equivalents. The build publishes no cash row for it; totals tie on the ex-cash basis (the filed 'Total investments' excludes it). The sister fund publishes such rows from 2025-12-31 only, so the cohort is inconsistent; whether cash equivalents belong in the holdings is an owner question.", "field": "fair_value",
-   "quarters": ["2025-09-30", "2026-06-30"], "fair_value_m": 46.0, "cause": "fund", "action": "left",
-   "suggested_check": "A printed 'Total money market funds' line with no CASH row published for the quarter.",
-   "quote": {"accession": "0001901612-26-000024", "text": "Total money market funds 46,041 4.3 46,041 Total investments and money market funds $ 2,222,488 211.0 % $ 2,255,215"}},
-  {"observation_key": "equity-class-follows-filer-relabel-between-quarters", "what": "The filer relabels the same equity holding between quarters (Rooster BidCo 'Preferred Stock' to 'LLC units' to 'LP interest'; Quick Quack 727 units 'LLC units', 'Preferred stock', 'LLC interest'; Metal Supermarkets 'Preferred stock' at 2025-12-31, 'LLC interest' after). The published class follows the printed label each quarter, so the class of one position flips. Left as printed.", "field": "asset_category",
-   "quarters": ["2025-09-30", "2026-03-31"], "fair_value_m": 6.0, "cause": "fund", "action": "left",
-   "suggested_check": "A position chain whose asset_category changes between quarters with unchanged units and cost.",
-   "quote": {"accession": "0001901612-26-000009", "text": "Metal Supermarkets US Buyer, LLC(8)(12) Preferred stock N/A N/A 12/2024 N/A 1 93 - 101"}}
+  {
+   "observation_key": "first-fiscal-period-income-published-halved",
+   "what": "The first fiscal period of a fund that began mid-year (six months) is stored as the period figure x 3 / months and published as a quarter without subtracting the quarter filed; net_expenses and gross_investment_income were the true quarter, so one fund-quarter mixed bases, and the first-year income ratios (income_yield_pct) were off against the printed ratios. Fixed for this fund by first_income_year_ends. Other funds that began mid-year without the key are not checked.",
+   "field": "total_investment_income",
+   "quarters": [
+    "2022-06-30",
+    "2022-09-30"
+   ],
+   "fair_value_m": 0.9,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a fund whose first 10-K income period is under 12 months and that has no first_income_year_ends key.",
+   "quote": {
+    "accession": "0001901612-23-000079",
+    "text": "Total investment income 22,829,454 2,168,653 Net expenses 9,368,393 938,285 Net investment income - before tax 13,461,061 1,230,368"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "income_identity fired on 2022-09-30 only by accident of basis (net_expenses and gross income were the true quarter, the other fields halved); a fund whose period figures are wrong on one basis and right on another can pass it. The detector that finds the cause is the suggested check.",
+    "reference": "Flag a fund whose first 10-K income period is under 12 months and that has no first_income_year_ends key in its highlights wrapper."
+   }
+  },
+  {
+   "observation_key": "tranche-digit-attached-to-instrument-in-issuer-name",
+   "what": "A member name 'Issuer, Senior secured1' (tranche digit attached, no space) is not stripped by a pattern that expects whitespace; the issuer name published the instrument. One identifier of this fund. A row correction to instrument_description alone is overwritten by the strip, which prepends its removed text (round 1 regression).",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "fair_value_m": 1.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (already fires on it).",
+   "quote": {
+    "accession": "0001901612-24-000027",
+    "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on the Entomo and Integrity quarters in the untouched g4za build (RVQ_BLK_449966ec3faf, RVQ_BLK_dc4f770c247e, RVQ_BLK_e048da6f80fa).",
+    "reference": "issuer_name_printed (page rule, identity engine)"
+   }
+  },
+  {
+   "observation_key": "footnote-marker-published-as-interest-rate",
+   "what": "Eight unfunded lines of this fund printed 'N/A( 6 )' or 'N/A(6)' in the rate column; the filer tagged the marker as an interest rate (0.06), and 6.0 was published. No rule fired. Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan whose printed rate column reads N/A(k) or N/A( k ) and whose published interest_rate equals k.",
+   "quote": {
+    "accession": "0001901612-26-000020",
+    "text": "YE Brands Holding, LLC One stop N/A( 6 ) 10/2027 - - - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these eight rows in the untouched g4za ledger (X02 does not flag a published rate; the rate columns agree with the tag). The page prints N/A in the rate column and the published rate is 6.0, the footnote marker.",
+    "reference": "Flag a loan whose printed rate column reads N/A(k) or N/A( k ) and whose published interest_rate equals k."
+   }
+  },
+  {
+   "observation_key": "all-pik-loan-with-spread-published-without-rate",
+   "what": "Two Consilio Midco all-PIK subordinated lines (2026-03-31, 2026-06-30) carried a spread and a PIK rate and published no interest rate; the fund's earlier all-PIK lines were corrected in the g4x run and these new lines were not. Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan with a PIK rate and a basis_spread whose published interest_rate is blank.",
+   "quote": {
+    "accession": "0001901612-26-000020",
+    "text": "Consilio Midco Limited(5)(8)(10)(25) Subordinated debt SF + 7.50 % (j) 11.38 % PIK 04/2033 3 3 - ( 24 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the two Consilio rows in g4za. X02 does not flag them (they have a spread); no check compares a printed all-PIK coupon with a blank published rate when a spread is present.",
+    "reference": "Flag a loan with a PIK rate and a basis_spread whose published interest_rate is blank."
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 681 passed"],
+ "tests_run": [
+  "none: no shared code changed; wrapper keys already in schemas/bdc_xbrl_wrapper and wrapper_v1.schema.json"
+ ],
  "not_done": [
-  "Industry labels against the page beyond the 18-row sample (filer industries such as 'Automobiles' for car washes taken as printed).",
-  "The 20-row page sample (orchestrator step).",
-  "Unit counts on equity rows beyond Anaplan, Quick Quack, Rooster (shares printed in thousands from 2023-12-31, tagged x1000; consistent with the whole-number counts of 2023).",
-  "Whether the sister fund 0001930087 has the same all-PIK gap (not built: out of scope)."
- ]
+  "Gate (fund_gate.py check) and the 20-row page sample are the orchestrator's.",
+  "Other funds' first fiscal periods were not checked for the halved-income shape.",
+  "X02 check repair not measured on other funds (orchestrator).",
+  "The footnote-marker-as-rate scan covered rows with par 0 or fair value <= 0 and a whole-number rate in this fund only."
+ ],
+ "retired_in_run": [
+  {
+   "finding_id": "RVQ_REV_a17690061974",
+   "retirement_id": "VR-FL-1901612-01",
+   "check": "scratch/fund_runs/0001901612/retire.py",
+   "why": "the verdict cites the Any Hour all-PIK line; it is published with interest_rate 13.0 and pik_rate 13.0 in production data/output and in the sandbox, and no funded loan of the quarter has a blank rate and spread; plant (rate blanked) fails. The 251 flagged rows are unfunded 'N/A(6)' lines published as printed (each matched to its printed line); the ledger regenerated for g4zd shows the finding dispositioned_as_filed (DS-FUNDLOOP-X02-1901612), the check repair is request g4z-x02-unfunded-na-commitment-lines."
+  }
+ ],
+ "investigations": []
 }
