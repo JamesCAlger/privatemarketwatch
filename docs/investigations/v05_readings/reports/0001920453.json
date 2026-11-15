@@ -1,110 +1,1689 @@
 {
  "cik": "0001920453",
- "label": "fpxg",
- "before": "spoff3",
+ "label": "fpzf",
+ "before": "fpxg",
  "shared_code": true,
  "declared_changes": [
-  {"column": "issuer_name", "rows": 125, "why": "Name settings in the wrapper (dispatch.issuer_from_identifier, issuer_name_strip_re with strip_to_instrument): the issuer read from the member where the built name was a section/industry label ('Debt Aerospace & Defense Cadence' -> 'Cadence - Southwick, Inc.' x31; 'Debt <Industry> <Issuer> Type ... Reference Rate and Spread' x~20; 'Money Market Mutual Funds Mutual Funds State Street ...' -> 'State Street Institutional Treasury Plus Money Market Fund' x7; 'Mutual Funds, Fixed Income Mutual Funds, Fidelity Floating Rate Central Fund' x2; 'Life Specialized Consumer Services COP Foundations ...' x2; glued 'Gainwell Acquisition CorpTerm Loan ...', 'RxStrategies, Inc.Term Loan ...', 'Houseworks ... Revolving Credit SOFR ...'; trailing row number 'AB Centers Acquisition Corporation1', 'Belt Power Holdings LLC1'); row corrections (Conair Holdings LLC 2024-06-30, Air Control Concepts 2023 x2, MSE Acquisitions Inc 2024-09-30). Not aimed at, explained: 54 rows change case only by the shared casing vote (staging_bdc CTE 12, most frequent spelling per fund): the added 2026-06-30 filing prints 'Wci-Bxc Purchaser', 'Mobotrex', 'STG Distribution', which tips the vote for WCI-BXC Purchaser, MoboTrex, STG DISTRIBUTION in earlier quarters"},
-  {"column": "instrument_description", "rows": 132, "why": "The text cut from a name moves to the instrument ('Southwick, Inc. Type Term Loan' -> 'Term Loan', 'Interest Rate -' -> 'Revolving Credit Facility'); the instrument strip also removes a member's U+FEFF + 'Maturity Date ...' tail (83 rows, 2024-09-30 to 2025-06-30) and a duplicated 'Term Loan Term Loan'; row corrections set the printed instrument (Conair, Soteria 2024-03-31 revolver, Quick Roofing 2023-12-31, Door Pro 2024-09-30 'Class A Units', USALCO 2024-09-30 'Delayed Draw Term Loan')"},
-  {"column": "cost", "rows": 2, "why": "untagged_values from the printed line: Endurance PT revolver 2024-06-30 (-18,922, tagged on a twin context) and Bebright Mso term loan 2025-06-30 (9,163,529, tagged on the misdated 2025-03-31 context)"},
-  {"column": "cost_reported", "rows": 2, "why": "same two rows"},
-  {"column": "src_facts", "rows": 2, "why": "same two rows (declared value recorded)"},
-  {"column": "shares_held", "rows": 145, "why": "units_tagged_as_par for the seven filings 2023-12-31 to 2025-06-30: every equity row's unit count is tagged as a principal (printed 'Class A-1 Units 22,007', tagged InvestmentOwnedBalancePrincipalAmount 22007), now published as the unit count (sampled against the page: WCI-BXC 587,838, CCI Prime 428, MoboTrex 1,330,000, Door Pro 370, Hitco 35,730); equity_instrument_labels moves 'Class A Interest(s)' rows to equity with their counts; row corrections replace D-111 proxy counts with the printed ones (SCP Mechanical Class B 162 x3, Penta 821, Pillr 21,224 x2, Scp Rigid 592, SCP 3PL Common 1,351 x2, MSE 337) and add counts tagged on a twin context (Door Pro 340, SCP 3PL Class B 128); Air Control 2023 x2 22,007"},
-  {"column": "src_transforms", "rows": 146, "why": "follows shares_held (shares_held:from_principal_tag on the units-as-principal rows)"},
-  {"column": "shares_held_source", "rows": 20, "why": "follows shares_held where the D-111 proxy now fires or no longer fires on a different row"},
-  {"column": "principal_amount", "rows": 22, "why": "equity rows whose unit count was published as par lose the par (16); Premier Dental TL and C2DX DDTL 2025-06-30 gain the printed par (tagged on the misdated context; untagged_values); Dynamic Connections 2025-12-31 x2 from 10,047,242,000 / 3,075,686,000 back to the printed par after the harmful promoted unit_rescale correction was deleted; Air Control 2023 x2 blanked"},
-  {"column": "principal_amount_source", "rows": 2, "why": "Premier Dental and C2DX 2025-06-30 par now present"},
-  {"column": "principal_amount_currency", "rows": 8, "why": "Canadian-dollar pars tagged with unit USD: Senske CDOR loan 2023-12-31, 2024-03-31; Dynamic Connections CORRA loan 2024-12-31 to 2026-03-31 (2026-06-30 is an added row) -> CAD by row correction"},
-  {"column": "principal_amount_usd", "rows": 28, "why": "CAD pars at the build's own FRED H.10 rate for each date (8 rows + 2026-06-30), the equity rows whose par is withdrawn, Premier Dental / C2DX par, Dynamic 2025-12-31 USD loan"},
-  {"column": "principal_fx_rate_to_usd", "rows": 12, "why": "CAD rate on the 8 CAD rows; equity rows whose par is withdrawn"},
-  {"column": "principal_fx_status", "rows": 26, "why": "reference_fx on the CAD rows; equity rows whose par is withdrawn"},
-  {"column": "asset_category", "rows": 16, "why": "'Class A Interest(s)' equity rows (Quick Roofing Topco/Acquisition, Tiger Healthcare Holdings, Sabrosura) 2023-12-31 to 2025-06-30 and Air Control Concepts 2023 x2: LOAN -> EQUITY_COMMON (printed in the equity section)"},
-  {"column": "index_classification", "rows": 22, "why": "same 16 rows DIRECT_LENDING -> COMMON_EQUITY; round 2 (page sample C020): the CIFC CLO note printed under 'Asset-Backed Securities' 2025-06-30 to 2026-03-31 (4 rows here, plus the added 2026-06-30 CIFC and Flatiron rows) DIRECT_LENDING -> STRUCTURED_CREDIT by row correction"},
-  {"column": "asset_class", "rows": 22, "why": "same rows: PRIVATE_CREDIT -> PRIVATE_EQUITY (equity) and PRIVATE_CREDIT -> STRUCTURED_CREDIT (CIFC CLO)"},
-  {"column": "interest_rate", "rows": 4, "why": "rates read from stale member text where no rate is tagged: Constant Contact 2024-06-30 0.00 -> 9.57; Plains All American 2026-03-31 8.70 -> 8.02; New Fortress 2026-03-31 9.57 -> blank (printed '-'); Soteria 2024-03-31 revolver 11.10 -> blank"},
-  {"column": "interest_rate_reported", "rows": 4, "why": "follows interest_rate"},
-  {"column": "interest_rate_kind", "rows": 2, "why": "rows whose rate is withdrawn (Soteria, New Fortress)"},
-  {"column": "basis_spread", "rows": 6, "why": "Quick Roofing 2023-12-31 tagged 0.000575, printed 'SOFR + 0.0575' -> 5.75; Infusion revolver 2024-12-31 5.50 (member text) -> printed 6.50; spreads read from stale member text withdrawn on Soteria 2024-03-31 and three undrawn revolvers 2025-12-31 (ACP Packaging, Currier, Firmapak)"},
-  {"column": "reference_rate_type", "rows": 24, "why": "reference_rate_columns 'Reference Rate and Spread' with codes: CDOR on Senske 2023-12-31 / 2024-03-31, CORRA on Dynamic Connections 2024-12-31 to 2026-03-31 (published SOFR); PRIME read from the issuer name 'CCI Prime, LLC' withdrawn on 10 undrawn rows; benchmark withdrawn where the page prints none (Endurance 2024-06-30 revolver, Soteria 2024-03-31, three 2025-12-31 revolvers)"},
-  {"column": "reference_rate_source", "rows": 28, "why": "same rows, plus rows whose guessed SOFR the printed column confirms (inferred -> ixbrl_field_status)"},
-  {"column": "coupon_type", "rows": 4, "why": "withdrawn on rows whose spread/benchmark is withdrawn (Floating -> none)"},
-  {"column": "corrected_fields", "rows": 56, "why": "marks the row-corrected fields (round 2: +4 CIFC rows in the compared quarters)"},
-  {"column": "gics_sub_industry", "rows": 7, "why": "not aimed at, explained: the seven State Street money-market CASH rows (2023-12-31 to 2025-06-30) lose 'Diversified Financial Services' once their name is the fund's name instead of 'Money Market Mutual Funds Mutual Funds State Street ...' (GICS cache keyed on the built name). Cash rows; no loan or equity row lost a label"},
-  {"column": "gics_sector", "rows": 7, "why": "same seven cash rows"},
-  {"column": "position_id", "rows": 320, "why": "not aimed at, explained: chain ids are renamed when a chain's members change: renamed issuers (Cadence, State Street, Debt-prefixed names), the added 2026-06-30 quarter and the 208 dash-valued rows now published join or extend chains. No row's values changed with its id"}
+  {
+   "column": "issuer_name",
+   "rows": 40,
+   "why": "40 issuer_name corrections to the printed company: 33 (round 1) as listed in the fixes, 5 'Hobbs & Associates Inc' rows printed 'Hobbs & Associates, LLC', one Oscar Acquisitionco row (zero-width space removed) and one Polaris Newco row (stray trailing dot removed)."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 26,
+   "why": "Instrument restored to the printed one: 5 on renamed rows (round 1) and 21 more: undrawn revolvers published as Term Loan (AB Centers x2, Hy-Tek x2), a funded term loan published as Revolving Credit Facility (Identiti x2), MSE Supplies, Trutemp, 'RDelayed', the leaked words One/Two/Three/Interest/Fixed Rate and an STG member text."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 7,
+   "why": "7 undrawn lines that print '-' for the rate published 0.00; now null (interest_rate_reported null and interest_rate_kind unresolved follow)."
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 14,
+   "why": "14 'CCI Prime Holdings, LLC' preferred-unit rows published PRIME read from the issuer name; the lines print no reference rate. Now null."
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 14,
+   "why": "Follows reference_rate_type on the same 14 rows."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 85,
+   "why": "Lists the corrected fields of every row above."
+  },
+  {
+   "column": "entity_id",
+   "rows": 95,
+   "why": "Entity resolution follows the corrected issuer names."
+  },
+  {
+   "column": "canonical_name",
+   "rows": 44,
+   "why": "Follows the corrected issuer_name."
+  },
+  {
+   "column": "instrument_type",
+   "rows": 12,
+   "why": "Follows the corrected instrument_description (revolver/term/delayed draw) on the rows above, and on Soteria, USALCO and Ruppert rows whose corrections were already in the build."
+  },
+  {
+   "column": "position_id",
+   "rows": 78,
+   "why": "Position identity follows the corrected names and entities; the CIFC 2025-III note keeps position 829d22b8 in all five quarters and the Hobbs & Associates tranches keep one position each from 2023-06-30 to 2024-06-30, both through position_identity_contexts. No row added or removed."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 7,
+   "why": "Follows interest_rate on the 7 undrawn lines."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 7,
+   "why": "Follows interest_rate on the 7 undrawn lines (all_in -> unresolved)."
+  },
+  {
+   "column": "fund_financials.total_investment_income",
+   "rows": 7,
+   "why": "Highlights wrapper income_concept_fallback (investmentincomeinterest): 2022-09-30 0, 2023-03-31 539,752, 2023-06-30 4,676,014, 2023-09-30 8,332,754, 2023-12-31 12,842,761, 2024-03-31 19,809,098 filled; 2024-12-31 28,316,788.5 -> 35,908,821."
+  },
+  {
+   "column": "fund_financials rows (2022-03-22, 2022-09-30)",
+   "rows": 2,
+   "why": "Two formation-period fund_financials rows present in the first build at HEAD (fpza), net assets 0 and 2,000; not caused by this run's changes."
+  },
+  {
+   "column": "bdc_fund_income.interest_income",
+   "rows": 6,
+   "why": "Blank in 6 periods where the filer tagged the total as InvestmentIncomeInterest (value equal to the total); the concept is read as total investment income for this filer only. The printed interest income (for example 18,861,133 at 2024-03-31) is therefore blank, not declared (see not_done)."
+  }
  ],
- "rows_added": 563,
- "rows_removed": 2,
+ "rows_added": 0,
+ "rows_removed": 0,
  "fixes": [
-  {"what": "2023-09-30 published 26.7M under the filed total: the State Street money-market position ('..., Money Market Mutual Funds, State Street ... - Investor Class, 5.21%') was dispatched as non-private, not a leaf, and dropped by the aggregate filter (diag: staging with and without the subtotal). dispatch.leaf_marker_re now reads 'Investor Class' as a leaf marker; the row publishes as CASH.", "kind": "wrapper", "quarters": ["2023-09-30"],
-   "quotes": [{"accession": "0000950170-23-063077", "text": "State Street Institutional Treasury Plus Money Market Fund - Investor Class, 5.21 % (h)(o) 26,703,996 26,703,996 26,703,996"}]},
-  {"what": "2023-06-30 published 1.6M over: the affiliated-investments roll-forward note is tagged on the cash-and-cash-equivalents axis (FidelityInvestmentsMoneyMarketGovernmentPortfolioClassIMember), fair value only, repeating the schedule row. Exclusion rule exclude_affiliate_rollforward_cash_axis_2023 (2023-06-30 1,638,582 and 2023-09-30 0, a holding sold out in the quarter). Totals now tie in 14 of 14 quarters.", "kind": "exclusion", "quarters": ["2023-06-30", "2023-09-30"],
-   "quotes": [{"accession": "0000950170-23-041848", "text": "Fidelity Investments Money Market Government Portfolio Class I - 30,965,157 ( 29,326,575 ) - 1,638,582 42,927"}]},
-  {"what": "B01 (9 quarters; earlier verdicts real_error 2026-03-31 and remediation_staged 2025-12-31): 208 schedule rows printed with a dash for fair value (undrawn lines and equity written down to nil) were not published. Declared fair value 0 (and cost 0 where the cost cell is a dash) from each printed line, only where the printed par/units and cost equal the tags (scratch/fund_runs/0001920453/dash_gen.py). The 2026-03-31 verdict's Level 1 gap (central fund and money market) is published natively now (the two row_add rules are superseded, 0 rows).", "kind": "untagged_value", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-214226", "text": "Luminii LLC (f)(i)(l) Revolving Credit Facility - - 3/21/2030 - ( 57,252 ) -"}]},
-  {"what": "Issuer names: section and industry labels, row numbers and glued instruments in the built name (about 77 rows, Cadence - Southwick x31) fixed by dispatch.issuer_from_identifier (issuer read from the member after the fund's own industry labels), issuer_name_strip_re with strip_to_instrument, and an extended instrument_description_strip_re. Dry run on every published name of fpxa (name_dry.py): only intended rows change.", "kind": "wrapper", "quarters": ["2023-06-30", "2023-12-31", "2024-06-30", "2025-03-31", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0000950170-24-035353", "text": "Cadence - Southwick, Inc. (i)(l) Term Loan SOFR + 6.75 % 12.24 % 5/3/2029"}]},
-  {"what": "C04 x6 and X02 x5 (2023-12-31 to 2025-06-30): every equity unit count in these seven filings is tagged as a principal; 'Class A Interest(s)' rows were classed as loans. source_encodings.units_tagged_as_par (7 accessions) and equity_instrument_labels; Air Control Concepts 2023 x2 (equity with no instrument word) by row correction.", "kind": "wrapper", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30"],
-   "quotes": [{"accession": "0000950170-24-035353", "text": "Air Control Concepts Holdings, L.P (m)(n) Class A-1 Units 22,007 $ 220,070 $ 439,040"},
-              {"accession": "0000950170-25-108923", "text": "Quick Roofing Topco, LLC (m)(q) Class A Interest 426,230 426,230 1,261,639"}]},
-  {"what": "F26 x4 (verdict real_error 2026-03-31) and cost_conservation 2025-03-31: fund-level borrowings was LongTermDebt, the notes only (210,000,000) from 2025-06-30 and missing 2024-06-30 to 2025-03-31; total cost 2025-03-31 was the 300,000 asset-backed subtotal. New highlights wrapper figure_corrections (9 borrowings, 1 cost) from the balance sheet and schedule; shared code: borrowings and investments_at_cost added to FIGURE_FIELDS (pipeline/fund_highlights_wrapper.py), with a test that another fund is untouched.", "kind": "shared_code", "quarters": ["2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-214226", "text": "Debt (net of unamortized debt issuance costs $ 2,073,556 and $ 2,230,742 as of March 31, 2026 and December 31, 2025, respectively) 1,152,791,515"},
-              {"accession": "0000950170-25-070240", "text": "Total Asset-Backed Securities 300,000 299,985 0.03 %"}]},
-  {"what": "X11 2025-06-30: Premier Dental term loan and C2DX delayed draw had their par only on the misdated 2025-03-31 context (D-120); par declared from the page (untagged_values). Bebright Mso cost likewise.", "kind": "untagged_value", "quarters": ["2025-06-30"],
-   "quotes": [{"accession": "0000950170-25-108923", "text": "Bebright Mso, LLC (j)(m)(n) Term Loan SOFR + 5.75 % 10.05 % 6/3/2030 9,242,704 9,163,529 9,242,704"}]},
-  {"what": "Canadian-dollar pars tagged with unit USD and published as dollars (Senske CDOR 2023-12-31, 2024-03-31; Dynamic Connections CORRA 2024-12-31 to 2026-06-30): currency CAD and dollar par at the build's FRED H.10 rate by row correction; benchmark CDOR / CORRA from the printed column (reference_rate_columns). A promoted B2 unit_rescale correction that multiplied both Dynamic term-loan pars of 2025-12-31 by 1,000 is deleted (copy in scratch/fund_runs/0001920453/removed_unit_rescale.json).", "kind": "row_correction", "quarters": ["2023-12-31", "2024-03-31", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-214226", "text": "(t) The par value of these investments is stated in Canadian Dollars."},
-              {"accession": "0001193125-26-119488", "text": "Dynamic Connections, Ltd (i)(l)(m)(t) Term Loan CORRA + 5.75 % 8.30 % 11/27/2030 10,047,242"}]},
-  {"what": "reference_rate_printed x2, spread_printed x1 (raised once the printed column was named) and rates read from stale member text where no rate is tagged: row corrections from the printed lines (Soteria 2024-03-31 revolver on the old term-loan member; Endurance 2024-06-30; Infusion 2024-12-31 6.50; Constant Contact 9.57; Plains 2026-03-31 8.02; New Fortress 2026-03-31 rate '-'; three undrawn revolvers 2025-12-31); PRIME read from the name 'CCI Prime, LLC' on 10 undrawn rows withdrawn; 'Fixed' withdrawn on four undrawn 2025-06-30 lines tagged with rate 0.", "kind": "row_correction", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-12-31", "2026-03-31"],
-   "quotes": [{"accession": "0001193125-26-214226", "text": "Plains All American Pipeline LP (g)(l)(m)(u) Floating Rate Note SOFR + 4.11 % 8.02 % 7,000,000 6,988,094 6,983,689"},
-              {"accession": "0000950170-24-035353", "text": "CCI Prime, LLC (f)(i)(l) Delayed Draw Term Loan - - 10/18/2029 - ( 48,327 ) ( 47,926 )"}]},
-  {"what": "Unit counts the shared D-111 proxy took from another line of the same issuer, and counts tagged on a twin context, set from the page (census.py: every published row against its printed row by context, 0 differences left but the intended Quick Roofing spread); MSE Acquisitions preferred filed on a WCI-BXC member; Quick Roofing 2023-12-31 spread tagged and printed as 0.0575; Ruppert 2024-12-31 undrawn revolver published unclassified.", "kind": "row_correction", "quarters": ["2023-12-31", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-214226", "text": "Scp Mechanical Services Holdco, LLC (p) Class B Units 162 161,740 75,578"},
-              {"accession": "0000950170-24-125469", "text": "MSE Acquisitions Inc (l)(n)(o) Series A Preferred Stock 337 337,479 343,862"},
-              {"accession": "0000950170-24-035353", "text": "Quick Roofing Acquisition, LLC (i)(l) Term Loan SOFR + 0.0575 11.21 % 12/22/2029 10,655,738 10,389,935 10,389,344"}]}
-  ,{"what": "Round 2 (page sample C020): CLO notes printed under 'Asset-Backed Securities' classed by name as direct lending: CIFC x5 (2025-06-30 to 2026-06-30) and Flatiron RR CLO 30 2026-06-30 (issuer published 'nvestments' from a cut member word). Row corrections to STRUCTURED_CREDIT (all 17 CLO rows of the fund now STRUCTURED_CREDIT); wrapper issuer_from_identifier accepts the cut word.", "kind": "row_correction", "quarters": ["2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0000950170-25-108923", "text": "Cifc Fdg 2025-Iii Ltd (h)(m)(p)(w) Collateralized Loan Obligation SOFR + 7.25 % 11.58 % 7/21/2038 250,000 250,000 254,647"},
-              {"accession": "0001193125-26-346851", "text": "Flatiron RR CLO 30 Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 5.25 % 8.92 % 4/15/2038 200,000 200,000 200,525"}]}
+  {
+   "what": "2023-09-30 published 26.7M under the filed total: the State Street money-market position ('..., Money Market Mutual Funds, State Street ... - Investor Class, 5.21%') was dispatched as non-private, not a leaf, and dropped by the aggregate filter (diag: staging with and without the subtotal). dispatch.leaf_marker_re now reads 'Investor Class' as a leaf marker; the row publishes as CASH.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-063077",
+     "text": "State Street Institutional Treasury Plus Money Market Fund - Investor Class, 5.21 % (h)(o) 26,703,996 26,703,996 26,703,996"
+    }
+   ]
+  },
+  {
+   "what": "2023-06-30 published 1.6M over: the affiliated-investments roll-forward note is tagged on the cash-and-cash-equivalents axis (FidelityInvestmentsMoneyMarketGovernmentPortfolioClassIMember), fair value only, repeating the schedule row. Exclusion rule exclude_affiliate_rollforward_cash_axis_2023 (2023-06-30 1,638,582 and 2023-09-30 0, a holding sold out in the quarter). Totals now tie in 14 of 14 quarters.",
+   "kind": "exclusion",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-041848",
+     "text": "Fidelity Investments Money Market Government Portfolio Class I - 30,965,157 ( 29,326,575 ) - 1,638,582 42,927"
+    }
+   ]
+  },
+  {
+   "what": "B01 (9 quarters; earlier verdicts real_error 2026-03-31 and remediation_staged 2025-12-31): 208 schedule rows printed with a dash for fair value (undrawn lines and equity written down to nil) were not published. Declared fair value 0 (and cost 0 where the cost cell is a dash) from each printed line, only where the printed par/units and cost equal the tags (scratch/fund_runs/0001920453/dash_gen.py). The 2026-03-31 verdict's Level 1 gap (central fund and money market) is published natively now (the two row_add rules are superseded, 0 rows).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Luminii LLC (f)(i)(l) Revolving Credit Facility - - 3/21/2030 - ( 57,252 ) -"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names: section and industry labels, row numbers and glued instruments in the built name (about 77 rows, Cadence - Southwick x31) fixed by dispatch.issuer_from_identifier (issuer read from the member after the fund's own industry labels), issuer_name_strip_re with strip_to_instrument, and an extended instrument_description_strip_re. Dry run on every published name of fpxa (name_dry.py): only intended rows change.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "Cadence - Southwick, Inc. (i)(l) Term Loan SOFR + 6.75 % 12.24 % 5/3/2029"
+    }
+   ]
+  },
+  {
+   "what": "C04 x6 and X02 x5 (2023-12-31 to 2025-06-30): every equity unit count in these seven filings is tagged as a principal; 'Class A Interest(s)' rows were classed as loans. source_encodings.units_tagged_as_par (7 accessions) and equity_instrument_labels; Air Control Concepts 2023 x2 (equity with no instrument word) by row correction.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "Air Control Concepts Holdings, L.P (m)(n) Class A-1 Units 22,007 $ 220,070 $ 439,040"
+    },
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Quick Roofing Topco, LLC (m)(q) Class A Interest 426,230 426,230 1,261,639"
+    }
+   ]
+  },
+  {
+   "what": "F26 x4 (verdict real_error 2026-03-31) and cost_conservation 2025-03-31: fund-level borrowings was LongTermDebt, the notes only (210,000,000) from 2025-06-30 and missing 2024-06-30 to 2025-03-31; total cost 2025-03-31 was the 300,000 asset-backed subtotal. New highlights wrapper figure_corrections (9 borrowings, 1 cost) from the balance sheet and schedule; shared code: borrowings and investments_at_cost added to FIGURE_FIELDS (pipeline/fund_highlights_wrapper.py), with a test that another fund is untouched.",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Debt (net of unamortized debt issuance costs $ 2,073,556 and $ 2,230,742 as of March 31, 2026 and December 31, 2025, respectively) 1,152,791,515"
+    },
+    {
+     "accession": "0000950170-25-070240",
+     "text": "Total Asset-Backed Securities 300,000 299,985 0.03 %"
+    }
+   ]
+  },
+  {
+   "what": "X11 2025-06-30: Premier Dental term loan and C2DX delayed draw had their par only on the misdated 2025-03-31 context (D-120); par declared from the page (untagged_values). Bebright Mso cost likewise.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Bebright Mso, LLC (j)(m)(n) Term Loan SOFR + 5.75 % 10.05 % 6/3/2030 9,242,704 9,163,529 9,242,704"
+    }
+   ]
+  },
+  {
+   "what": "Canadian-dollar pars tagged with unit USD and published as dollars (Senske CDOR 2023-12-31, 2024-03-31; Dynamic Connections CORRA 2024-12-31 to 2026-06-30): currency CAD and dollar par at the build's FRED H.10 rate by row correction; benchmark CDOR / CORRA from the printed column (reference_rate_columns). A promoted B2 unit_rescale correction that multiplied both Dynamic term-loan pars of 2025-12-31 by 1,000 is deleted (copy in scratch/fund_runs/0001920453/removed_unit_rescale.json).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "(t) The par value of these investments is stated in Canadian Dollars."
+    },
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Dynamic Connections, Ltd (i)(l)(m)(t) Term Loan CORRA + 5.75 % 8.30 % 11/27/2030 10,047,242"
+    }
+   ]
+  },
+  {
+   "what": "reference_rate_printed x2, spread_printed x1 (raised once the printed column was named) and rates read from stale member text where no rate is tagged: row corrections from the printed lines (Soteria 2024-03-31 revolver on the old term-loan member; Endurance 2024-06-30; Infusion 2024-12-31 6.50; Constant Contact 9.57; Plains 2026-03-31 8.02; New Fortress 2026-03-31 rate '-'; three undrawn revolvers 2025-12-31); PRIME read from the name 'CCI Prime, LLC' on 10 undrawn rows withdrawn; 'Fixed' withdrawn on four undrawn 2025-06-30 lines tagged with rate 0.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Plains All American Pipeline LP (g)(l)(m)(u) Floating Rate Note SOFR + 4.11 % 8.02 % 7,000,000 6,988,094 6,983,689"
+    },
+    {
+     "accession": "0000950170-24-035353",
+     "text": "CCI Prime, LLC (f)(i)(l) Delayed Draw Term Loan - - 10/18/2029 - ( 48,327 ) ( 47,926 )"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts the shared D-111 proxy took from another line of the same issuer, and counts tagged on a twin context, set from the page (census.py: every published row against its printed row by context, 0 differences left but the intended Quick Roofing spread); MSE Acquisitions preferred filed on a WCI-BXC member; Quick Roofing 2023-12-31 spread tagged and printed as 0.0575; Ruppert 2024-12-31 undrawn revolver published unclassified.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Scp Mechanical Services Holdco, LLC (p) Class B Units 162 161,740 75,578"
+    },
+    {
+     "accession": "0000950170-24-125469",
+     "text": "MSE Acquisitions Inc (l)(n)(o) Series A Preferred Stock 337 337,479 343,862"
+    },
+    {
+     "accession": "0000950170-24-035353",
+     "text": "Quick Roofing Acquisition, LLC (i)(l) Term Loan SOFR + 0.0575 11.21 % 12/22/2029 10,655,738 10,389,935 10,389,344"
+    }
+   ]
+  },
+  {
+   "what": "Round 2 (page sample C020): CLO notes printed under 'Asset-Backed Securities' classed by name as direct lending: CIFC x5 (2025-06-30 to 2026-06-30) and Flatiron RR CLO 30 2026-06-30 (issuer published 'nvestments' from a cut member word). Row corrections to STRUCTURED_CREDIT (all 17 CLO rows of the fund now STRUCTURED_CREDIT); wrapper issuer_from_identifier accepts the cut word.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Cifc Fdg 2025-Iii Ltd (h)(m)(p)(w) Collateralized Loan Obligation SOFR + 7.25 % 11.58 % 7/21/2038 250,000 250,000 254,647"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Flatiron RR CLO 30 Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 5.25 % 8.92 % 4/15/2038 200,000 200,000 200,525"
+    }
+   ]
+  },
+  {
+   "what": "33 issuer_name corrections (and 5 instrument wordings) by context-exact row corrections for the issuer_name_printed findings: neighbouring names appended by the member (Peraton Corp Centers Acquisition Corporation -> Peraton Corp), typos (KUEGH -> KUEHG, Mcafe -> Mcafee/McAfee), an industry word (Advertising MMGY Global LLC, Application Cytracom LLC), RXS 'Senior' moved from the instrument into the name, and four wrong borrowers: the Door Pro Buyer term loan and delayed draw (12,144,938 and -295,577) published as Conair Holdings, the Principal Lighting Group Holdings revolver as Perimeter Solutions Group, the Roofing Services Solutions loans as Roofing Acquisition, AB Centers Acquisition Corporation's delayed draw as Infusion Services Management.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-097000",
+     "text": "Door Pro Buyer, LLC (i)(l) Term Loan SOFR + 6.50 % 11.93 % 11/2/2029 12,507,660 12,219,042 12,144,938"
+    },
+    {
+     "accession": "0000950170-24-097000",
+     "text": "Conair Holdings LLC (h)(k)(l) Term Loan SOFR + 3.75 % 9.21 % 5/17/2028 2,493,590 2,484,297 2,477,706"
+    },
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Principal Lighting Group Holdings, LLC (f)(i)(l) Revolving Credit Facility - - 11/4/2030 - ( 39,724 ) ( 9,805 )"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.48 % 11/27/2029 10,830,753 10,719,634 9,942,631"
+    },
+    {
+     "accession": "0000950170-24-035353",
+     "text": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.46 % 9/6/2028 3,602,586 3,414,009 3,602,586"
+    },
+    {
+     "accession": "0000950170-24-125469",
+     "text": "RXS Enterprises LLC (l)(o) Senior Preferred Units 119,927 119,927 119,927"
+    },
+    {
+     "accession": "0001193125-26-214226",
+     "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+    }
+   ]
+  },
+  {
+   "what": "income_identity 2024-12-31: highlights wrapper income_concept_fallback total_investment_income: investmentincomeinterest. The filings before 2024-06-30 tag the printed total investment income as InvestmentIncomeInterest, so the 2024 fourth quarter was the year divided by four (28,316,788.5) and is now the year less the three filed quarters, 113,267,154 - 77,358,333 = 35,908,821, equal to gross_investment_income.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-09-30",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-057685",
+     "text": "Total investment income $ 19,809,098 $ 539,752 Net expenses 7,870,581 294,597"
+    }
+   ]
+  },
+  {
+   "what": "Round 2 (reviewer's unflagged errors, found by a full-row census of published name, instrument, reference and rate against the printed row of the same context, every quarter): 5 Hobbs & Associates rows named 'Inc' where the page prints 'Hobbs & Associates, LLC' (the 2023-09-30 8,161,754-par delayed draw, 7,957,710 fair value, among them); 2 name cleanups (Oscar Acquisitionco zero-width space, Polaris Newco stray dot); 21 instrument wordings (undrawn revolvers published as Term Loan, a funded Identiti term loan published as Revolving Credit Facility, stray words One/Two/Three/Interest/Fixed Rate); 14 CCI Prime Holdings preferred-unit rows with PRIME read from the issuer name blanked (the page prints no reference rate); 7 undrawn lines publishing interest_rate 0.00 where the page prints '-', now null.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-063077",
+     "text": "Hobbs & Associates, LLC (i)(l) Delayed Draw Term Loan SOFR + 6.50 % 11.95 % 4/11/2029 8,161,754 7,935,927 7,957,710"
+    },
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Hy-Tek Opco, LLC (f)(i)(l) Revolving Credit Facility - - 9/19/2028 - ( 45,935 ) ( 142,108 )"
+    },
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Identiti Resources LLC (i)(l) Term Loan SOFR + 5.00 % 8.72 % 11/1/2029 5,748,382 5,667,441 5,731,136"
+    },
+    {
+     "accession": "0000950170-24-035353",
+     "text": "CCI Prime Holdings, LLC (n) Series A Preferred Units 428 427,914 435,635"
+    }
+   ]
+  },
+  {
+   "what": "CIFC 2025-III CLO note (250,000 par, SOFR + 7.25 %, 7/21/2038): renaming the 2026-03-31 row from 'Cifc Fdg Ltd' to the printed 'CIFC Funding Ltd' split position 829d22b8 (the name key differs from the earlier quarters' 'Cifc Fdg 2025-Iii Ltd'); the 2026-06-30 row, printed 'CIFC Funding Ltd', had never joined it. Re-joined with the wrapper's reviewed position identity: source_encodings.position_identity_contexts, one tranche key on the 5 contexts of 2025-06-30 to 2026-06-30. Position 829d22b8 now carries all 5 quarters.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Cifc Fdg 2025-Iii Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 11.58 % 7/21/2038 250,000 250,000 256,598"
+    },
+    {
+     "accession": "0001193125-26-214226",
+     "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 250,000 253,089"
+    }
+   ]
+  },
+  {
+   "what": "Hobbs & Associates chains (a consequence of the round-2 rename, found by the re-review): renaming the 2023-06-30 'Inc' rows' neighbours broke the 7.2M term loan chain (2023-06-30 par 7,230,170 'Inc' -> 7,212,095 'LLC' -> 7,194,019 -> 7,175,944 -> 7,157,868, 0.25 pct amortisation each quarter) and had crossed the two delayed draws: position 41cdfc96 jumped from 3.53M (2023-12-31) to 8.12M (2024-03-31) and the 8.10M row at 2024-06-30 had no chain. Read on the page: A = term loan 7.2M (2023-06 to 2024-06); B = term loan 2.0M (2023-09 to 2024-06, 'Inc' then 'LLC'); C = delayed draw 5,098,077 at 2023-06 'Inc', then 8,161,754 'LLC' (2023-09), 8,141,317, 8,120,880, 8,100,443 (0.25 pct amortisation); D = delayed draw 2,859,819 'Inc' (2023-09), 3,526,769, 5,703,653, 5,689,354. Rejoined with source_encodings.position_identity_contexts, four tranche keys on 19 reviewed contexts. The 2023-06-30 delayed-draw row joins C on par continuity and the Inc-to-LLC rename it shares with the term loan A (rate 11.60 pct at 2023-06-30 is the same on every line, so rate does not separate them); that one link is a reading, not a printed fact. The 2024-06-30 spread-5.00 delayed draw (3,000,044) and term loan (3,903,317) are a new facility and are left unmapped.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-041848",
+     "text": "Hobbs & Associates Inc (i)(l) Term Loan SOFR + 6.50 % 11.60 % 4/11/2029 7,230,170 7,019,055 7,021,218"
+    },
+    {
+     "accession": "0000950170-24-057685",
+     "text": "Hobbs & Associates, LLC (i)(l) Delayed Draw Term Loan SOFR + 6.25 % 11.56 % 4/11/2029 8,120,880 7,916,241 8,120,880"
+    },
+    {
+     "accession": "0000950170-24-057685",
+     "text": "Hobbs & Associates, LLC (i)(l) Delayed Draw Term Loan SOFR + 6.25 % 11.59 % 4/11/2029 5,703,653 5,577,139 5,703,653"
+    },
+    {
+     "accession": "0000950170-24-097000",
+     "text": "Hobbs & Associates, LLC (i)(l) Delayed Draw Term Loan SOFR + 6.25 % 11.58 % 4/11/2029 8,100,443 7,906,347 8,100,443"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "round2": "Page sample C020 (Flatiron Rr Clo 30, 2025-06-30, asset_category LOAN). Census of every row printed under 'Asset-Backed Securities' in every quarter: 17 CLO rows (Benefit Street Partners CLO VI-B x6, Flatiron RR CLO 30 x6, CIFC x5) from 2025-03-31. In fpxf 11 already published index_classification and asset_class STRUCTURED_CREDIT (C020's row among them); 6 published DIRECT_LENDING / PRIVATE_CREDIT: CIFC x5 (named 'Cifc Fdg' / 'CIFC Funding', no 'CLO') and Flatiron 2026-06-30, whose member begins with a cut word 'nvestments --' so its issuer published as 'nvestments'. Fixed: 6 row corrections (asset_category LOAN, index_classification / asset_class STRUCTURED_CREDIT, exposure DIRECT, issuer CORPORATE, as Carlyle's spec file) and the wrapper's issuer_from_identifier now accepts a cut first word ([A-Za-z]*vestments); dry run on every name: only that row changes. In fpxg all 17 publish STRUCTURED_CREDIT. asset_category stays LOAN on all 17: the schema's asset_category enum (LOAN, DEBT, EQUITY_COMMON, EQUITY_PREFERRED, FUND, OTHER, CASH) has no structured-credit value, and the pipeline's own class map is (LOAN, STRUCTURED_CREDIT) -> STRUCTURED_CREDIT, which Carlyle followed. If the sample reader means asset_category itself must change, that needs a schema decision. Plains All American floating rate notes (printed under 'Preferred Securities') remain LOAN / DIRECT_LENDING: not asset-backed, not changed.",
  "parked": [
-  {"finding": "identity income_identity 2024-12-31", "hypotheses": [
-    "Published total_investment_income for the 10-K quarter is the annual figure divided by four (28,316,788.5 = 113,267,154 / 4); the quarter is 113,267,154 - 77,358,333 (nine months) = 35,908,821. Net expenses (16,843,175) and NII are the true quarter, so the identity fails. Real error, not as filed.",
-    "Fix route 1: highlights figure_corrections cannot set it: total_investment_income is pinned as not correctable (tests/test_fund_highlights_wrapper.py::test_an_income_statement_total_is_still_not_a_correctable_figure). Changing that pin is the owner's call.",
-    "Fix route 2: bdc_fund_income derives a 10-K quarter as annual minus three quarters only when all three quarters carry the figure; this fund's 2024-03-31 total_investment_income is empty (only interest income 19,809,098 tagged), so it falls back to annual / 4. Same fallback on 2023q4 and 2025q4 (cross_source xs_nii/xs_tii advisories). Shared code; not changed here."]}
+  {
+   "finding": "agentA_cohort_excluded x14 (2023-03-31 to 2026-06-30) and the 18 agentA findings of the earlier packet (masked, not cleared)",
+   "hypotheses": [
+    "At 2026-06-30 the identifier text carries the maturity in a mixed order inside one filing: 240 of 323 dated identifiers read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. A filing-wide day-first or month-first setting misreads one group; the text has no marker.",
+    "A per-date heuristic (month-first unless impossible) fixes the 39 unambiguous rows and brings completeness to 100 pct, but misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031): up to 29 false maturity flags after re-entry.",
+    "The grammar JSON cannot express either order: extractor types are bps, pct, date_mdy, ref_code, text; a map of whole dates would be a plug. Repair is shared code plus an opt-in exact-context declaration: REQ-FPZ-1920453-1 (DC-0001920453-217abf613d), 68 contexts in scratch/fund_runs/0001920453/dmy_contexts.txt."
+   ]
+  }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "REQ-FPZ-1920453-1",
+   "file": "pipeline/identifier_rate.py (_to_iso, grammar type date_mdy), the held-out gate, and an opt-in exact-context identifier-date declaration in the wrapper",
+   "classification": "verification_bug",
+   "what": "(1) Read a date whose first number is above 12 and second 12 or less day-first (39 rows at 2026-06-30). (2) Add an opt-in, exact-context declaration of the filer's day-first identifier contexts ('ACCESSION CONTEXT => dmy', like position_identity_contexts) for the 29 ambiguous rows; no per-date heuristic.",
+   "why": "At 2026-06-30 the filing mixes orders: of 323 dated identifiers 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031' printed 7/2/2031); 78 month-first rows have both numbers 12 or less. Completeness 89.8 pct vs 90.0 excludes the fund. The published maturities are right. A day-first default or the rule '5/6/2029 stays May 6' misreads one of the two groups.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "next_action": "Owner ruling on the check repair. Tests: unambiguous '17/6/2030' -> 2030-06-17 with and without a declaration; ambiguous '2/7/2031' -> 2031-07-02 on a declared context and 2031-02-07 on an undeclared one; 'Maturity Date 1/2/2032' on the undeclared Aeron Buyer context stays 2032-01-02; 31/31/2030 -> None; a fund with no declaration read as before. Measure every accepted sandbox. Production: batch b1112b read the stale 2024-07-24 agent_a_flags.csv (374 flags for this fund); the next batch carries them as cohort_excluded, so the 18 agentA findings return unread until the repair is in and the fund is re-run."
+  },
+  {
+   "request_id": "REQ-FPZ-1920453-2",
+   "file": "scripts/v05_evidence/make_batch_dispositions.py",
+   "classification": "verification_bug",
+   "what": "The F28 not_applicable entry needs a filing quote and fund-quarter rows per member; it asserts and writes nothing for 0001920453.",
+   "why": "F28 2022-03-22 and 2022-09-30 are formation-period rows (operations began 2023-03-13).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    }
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    }
+   ],
+   "next_action": "Orchestrator fixes the entry builder (filing quote of the commencement statement, rows) and re-runs make_batch_dispositions with --write; or the owner accepts the reason by check."
+  }
+ ],
  "observations": [
-  {"observation_key": "affiliate-rollforward-member-published-as-position", "what": "The affiliated-investments roll-forward note is tagged on the cash-and-cash-equivalents axis in 2023 (fair value only) and published as a cash row beside the schedule row: 2023-06-30 counted 1.6M twice. Fixed with a two-quarter exclusion rule (later quarters use that axis for real schedule rows with cost and units).", "field": "fair_value", "quarters": ["2023-06-30", "2023-09-30"], "fair_value_m": 1.6, "cause": "fund", "action": "fixed", "suggested_check": "Flag a cash-axis row with a fair value and no cost, unit or percent fact whose value equals an investment-axis row of the same filing.", "quote": {"accession": "0000950170-23-041848", "text": "Fidelity Investments Money Market Government Portfolio Class I - 30,965,157 ( 29,326,575 ) - 1,638,582 42,927"}},
-  {"observation_key": "cash-and-money-market-rows-not-published", "what": "A money-market position whose member ends in its yield ('... - Investor Class, 5.21%') was dispatched non-private and not a leaf, then dropped by the aggregate filter: 26.7M missing at 2023-09-30 with no rule naming the row (only the conservation family). Fixed with the wrapper leaf marker.", "field": "fair_value", "quarters": ["2023-09-30"], "fair_value_m": 26.7, "cause": "shared", "action": "fixed", "suggested_check": "Report a non-private-market leaf with a fair value that is neither published as cash nor removed by a named rule.", "quote": {"accession": "0000950170-23-063077", "text": "State Street Institutional Treasury Plus Money Market Fund - Investor Class, 5.21 % (h)(o) 26,703,996 26,703,996 26,703,996"}},
-  {"observation_key": "unit-count-tag-concept-and-scale-change-between-filings", "what": "From 2023-12-31 to 2025-06-30 every equity unit count is tagged InvestmentOwnedBalancePrincipalAmount; from 2025-09-30 as a share count. Equity rows published no units (C04) and the Class A Interest rows published the count as par. Fixed with units_tagged_as_par (7 accessions).", "field": "shares_held", "quarters": ["2023-12-31", "2025-06-30"], "fair_value_m": 60.0, "cause": "fund", "action": "fixed", "suggested_check": "Flag equity rows with a principal and no unit count where the printed units column holds the same number.", "quote": {"accession": "0000950170-24-035353", "text": "Air Control Concepts Holdings, L.P (m)(n) Class A-1 Units 22,007 $ 220,070 $ 439,040"}},
-  {"observation_key": "equity-section-rows-published-as-loans", "what": "'Class A Interest(s)' rows printed in the equity section (Quick Roofing, Tiger Healthcare, Sabrosura) and a bare equity member (Air Control 2023) were classed LOAN / DIRECT_LENDING; the word 'interest' wins. Fixed (equity_instrument_labels, row corrections).", "field": "asset_category", "quarters": ["2023-06-30", "2025-06-30"], "fair_value_m": 2.0, "cause": "shared", "action": "fixed", "suggested_check": "Flag a LOAN row with no rate, spread or maturity whose member sits under the equity heading.", "quote": {"accession": "0000950170-25-108923", "text": "Quick Roofing Topco, LLC (m)(q) Class A Interest 426,230 426,230 1,261,639"}},
-  {"observation_key": "unit-count-rescaled-by-issuer-normaliser", "what": "The share-count proxy (D-111) replaced printed counts with another line's of the same issuer: SCP Mechanical Class B 162 -> 1,703, Penta Class A 821 -> 528, Pillr Common 21,224 -> 212, Scp Rigid Common 592 -> 225, SCP 3PL Common 1,351 -> 128, MSE preferred 337 -> 587,838. Fixed by row correction; the proxy is shared and still fires elsewhere.", "field": "shares_held", "quarters": ["2024-09-30", "2026-06-30"], "fair_value_m": 0.5, "cause": "shared", "action": "fixed", "suggested_check": "Flag a derived_proxy unit count where the row's own context or printed line carries a different count.", "quote": {"accession": "0001193125-26-214226", "text": "Scp Mechanical Services Holdco, LLC (p) Class B Units 162 161,740 75,578"}},
-  {"observation_key": "principal-currency-from-unit-tag-not-checked-against-page", "what": "Canadian-dollar pars (footnote '(t) ... stated in Canadian Dollars', CDOR / CORRA loans) are tagged with unit USD and were published as dollar pars (Senske 21.0M CAD beside a 15.5M cost). Fixed by row correction at the build's FRED rate.", "field": "principal_amount_currency", "quarters": ["2023-12-31", "2026-06-30"], "fair_value_m": 22.0, "cause": "fund", "action": "fixed", "suggested_check": "Flag a USD par more than 25 pct above both cost and fair value on a row whose printed reference rate is a non-dollar benchmark.", "quote": {"accession": "0001193125-26-214226", "text": "(t) The par value of these investments is stated in Canadian Dollars."}},
-  {"observation_key": "promoted-unit-rescale-multiplied-par-by-1000", "what": "A promoted B2 unit_rescale correction (Dynamic Connections, 2025-12-31) multiplied the par of both Dynamic term loans by 1,000 (10,047,242,000 and 3,075,686,000); the page prints 10,047,242. No rule flagged it. Deleted.", "field": "principal_amount", "quarters": ["2025-12-31"], "fair_value_m": 10.2, "cause": "fund", "action": "fixed", "suggested_check": "Flag a par more than 100 times cost or fair value.", "quote": {"accession": "0001193125-26-119488", "text": "Dynamic Connections, Ltd (i)(l)(m)(t) Term Loan CORRA + 5.75 % 8.30 % 11/27/2030 10,047,242"}},
-  {"observation_key": "rate-or-spread-read-from-stale-member-text", "what": "Where no rate or spread is tagged, the build reads the member text, which the filer does not update: Plains 2026-03-31 8.70 (printed 8.02), Constant Contact 0.00 (9.57), New Fortress 9.57 (printed '-'), Infusion revolver 5.50 (6.50), spreads on three undrawn revolvers. Fixed by row correction.", "field": "interest_rate", "quarters": ["2024-06-30", "2026-03-31"], "fair_value_m": 15.0, "cause": "shared", "action": "fixed", "suggested_check": "Report rows whose rate or spread comes only from member text in a fund whose wrapper names its printed rate column.", "quote": {"accession": "0001193125-26-214226", "text": "Plains All American Pipeline LP (g)(l)(m)(u) Floating Rate Note SOFR + 4.11 % 8.02 % 7,000,000 6,988,094 6,983,689"}},
-  {"observation_key": "reference-rate-read-from-issuer-name", "what": "'CCI Prime, LLC' undrawn lines published reference rate PRIME read from the issuer name (identifier_text) though the page prints no rate; 10 rows. Fixed by row correction; the text reader is shared.", "field": "reference_rate_type", "quarters": ["2023-12-31", "2025-03-31"], "fair_value_m": 0.1, "cause": "shared", "action": "fixed", "suggested_check": "Flag a benchmark read from identifier text whose word is part of the issuer name.", "quote": {"accession": "0000950170-24-035353", "text": "CCI Prime, LLC (f)(i)(l) Delayed Draw Term Loan - - 10/18/2029 - ( 48,327 ) ( 47,926 )"}},
-  {"observation_key": "zero-rate-tag-on-undrawn-line-published-fixed", "what": "Once the printed reference column is named, undrawn lines tagged with interest rate 0 and printed '- -' are marked coupon 'Fixed' (the bridge counts a 0 rate as a rate). Four rows at 2025-06-30, fixed by row correction.", "field": "coupon_type", "quarters": ["2025-06-30"], "fair_value_m": 0.1, "cause": "shared", "action": "fixed", "suggested_check": "Flag coupon 'Fixed' on a row whose only rate is 0.", "quote": {"accession": "0000950170-25-108923", "text": "Eversmith Brands Intermediate Holding Company (f)(j)(m) Revolving Credit Facility - - 6/17/2030 - ( 11,174 ) ( 6,285 )"}},
-  {"observation_key": "row-tagged-on-another-issuers-member", "what": "MSE Acquisitions preferred stock (2024-09-30) is filed on a 'WCI-BXC Investment Holdings LP Series A Preferred Stock' member; Soteria's undrawn revolver (2024-03-31) on the previous quarter's term-loan member. Name, units and rates fixed by row correction.", "field": "issuer_name", "quarters": ["2024-03-31", "2024-09-30"], "fair_value_m": 0.3, "cause": "row", "action": "fixed", "suggested_check": "Flag a member whose cost equals another issuer's row in the neighbouring quarters.", "quote": {"accession": "0000950170-24-125469", "text": "MSE Acquisitions Inc (l)(n)(o) Series A Preferred Stock 337 337,479 343,862"}},
-  {"observation_key": "spread-tagged-and-printed-as-a-fraction", "what": "Quick Roofing 2023-12-31: spread tagged 0.000575 and printed 'SOFR + 0.0575' (a percent written as a fraction); published 0.0575. The next quarter prints 5.75 %. Fixed by row correction.", "field": "basis_spread", "quarters": ["2023-12-31"], "fair_value_m": 10.4, "cause": "row", "action": "fixed", "suggested_check": "Flag a floating loan whose spread is below 0.5 while its rate is above 5.", "quote": {"accession": "0000950170-24-035353", "text": "Quick Roofing Acquisition, LLC (i)(l) Term Loan SOFR + 0.0575 11.21 % 12/22/2029 10,655,738 10,389,935 10,389,344"}},
-  {"observation_key": "unit-count-on-a-second-context-of-the-member", "what": "Door Pro 2024-09-30 and SCP 3PL Class B 2025-06-30 carry their unit count on a second context of the same member; the published row had none. Fixed by row correction.", "field": "shares_held", "quarters": ["2024-09-30", "2025-06-30"], "fair_value_m": 0.3, "cause": "fund", "action": "fixed", "suggested_check": "Flag an equity row without units where another context of its member carries a share or principal fact.", "quote": {"accession": "0000950170-24-125469", "text": "Door Pro Holdings LLC (l)(o) Class A Units 340 339,744 154,223"}},
-  {"observation_key": "cost-or-par-tagged-on-misdated-context", "what": "In the 10-Q for 2025-06-30 some values sit on contexts dated 2025-03-31 (D-120 declared the fair values); the par of Premier Dental TL and C2DX DDTL and the cost of Bebright Mso were still missing. Declared from the page.", "field": "principal_amount", "quarters": ["2025-06-30"], "fair_value_m": 36.4, "cause": "fund", "action": "fixed", "suggested_check": "Flag a drawn loan with no par or no cost where a prior-dated context of the same member in the same filing carries it.", "quote": {"accession": "0000950170-25-108923", "text": "Bebright Mso, LLC (j)(m)(n) Term Loan SOFR + 5.75 % 10.05 % 6/3/2030 9,242,704 9,163,529 9,242,704"}},
-  {"observation_key": "dash-valued-row-not-published", "what": "Rows printed with a dash for fair value (undrawn lines, equity at nil) have no fair-value fact and were not published: 208 rows over 11 quarters (B01). Declared at 0 from the page.", "field": "fair_value", "quarters": ["2023-12-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed", "suggested_check": "B01 already reports it; a default reading of a printed dash as 0 would remove the per-fund declarations.", "quote": {"accession": "0001193125-26-214226", "text": "Luminii LLC (f)(i)(l) Revolving Credit Facility - - 3/21/2030 - ( 57,252 ) -"}},
-  {"observation_key": "borrowings-exclude-securitization-and-notes", "what": "The reverse case: fund borrowings is the undimensioned LongTermDebt, which this filer uses for the unsecured notes only (210,000,000) while the balance sheet's Debt line includes the credit facilities (1,152,791,515 at 2026-03-31); 2024-06-30 to 2025-03-31 had no figure. F26 flagged the leverage gap. Fixed with highlights figure corrections (shared FIGURE_FIELDS extended).", "field": "borrowings", "quarters": ["2024-06-30", "2026-06-30"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed", "suggested_check": "Flag borrowings below 50 pct of total liabilities for a BDC.", "quote": {"accession": "0001193125-26-214226", "text": "Debt (net of unamortized debt issuance costs $ 2,073,556 and $ 2,230,742 as of March 31, 2026 and December 31, 2025, respectively) 1,152,791,515"}},
-  {"observation_key": "fund-total-cost-is-a-section-subtotal", "what": "The undimensioned InvestmentOwnedAtCost for 2025-03-31 is 300,000, the asset-backed securities subtotal; the cost conservation anchor was off by 584,000 pct. Fixed with a highlights figure correction.", "field": "investments_at_cost", "quarters": ["2025-03-31"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed", "suggested_check": "Flag a fund total cost below 10 pct of the fund total fair value.", "quote": {"accession": "0000950170-25-070240", "text": "Total Asset-Backed Securities 300,000 299,985 0.03 %"}},
-  {"observation_key": "quarter-expenses-missing-so-fourth-quarter-is-a-quarter-of-the-year", "what": "Total investment income of each 10-K quarter is the annual figure divided by four (2024: 28,316,788.5 published, true quarter 35,908,821) because the first quarter's total is not tagged (only interest income); the same fallback on 2023q4 and 2025q4. Parked: total_investment_income is pinned as not correctable.", "field": "total_investment_income", "quarters": ["2023-12-31", "2024-12-31", "2025-12-31"], "fair_value_m": 0.0, "cause": "shared", "action": "parked", "suggested_check": "Flag a 10-K quarter whose income figure has a fractional cent (annual / 4).", "quote": {"accession": "0000950170-25-041963", "text": "Total investment income $ 113,267,154 $ 26,391,281 $ -"}},
-  {"observation_key": "structured-credit-classed-as-direct-lending", "what": "Page sample C020. CLO notes printed in the 'Asset-Backed Securities' section are classed by name: those with 'CLO' in the name publish STRUCTURED_CREDIT, CIFC ('Cifc Fdg', 'CIFC Funding') published DIRECT_LENDING (5 rows) and Flatiron 2026-06-30 too (its name was cut to 'nvestments'). Fixed by row correction; the name classifier is shared (same cause at Carlyle and Sixth Street). asset_category stays LOAN for all CLO notes: the enum has no structured-credit category.", "field": "index_classification", "quarters": ["2025-06-30", "2026-06-30"], "fair_value_m": 1.5, "cause": "shared", "action": "fixed", "suggested_check": "Flag a row whose member section is 'Asset-Backed Securities' or whose instrument is 'Collateralized Loan Obligation' and whose class is not STRUCTURED_CREDIT.", "quote": {"accession": "0000950170-25-108923", "text": "Cifc Fdg 2025-Iii Ltd (h)(m)(p)(w) Collateralized Loan Obligation SOFR + 7.25 % 11.58 % 7/21/2038 250,000 250,000 254,647"}},
-  {"observation_key": "lien-blank-where-member-omits-lien-segment", "what": "Every loan before 2025-09-30 publishes no lien (about 1,400 rows): the member's 'First Lien Debt' section words are cut by the shared double-Investments prefix strip before lien keywords or dispatch.lien_from_identifier (which reads bdc_investment_identifier only) see them. From 2025-09-30 the lien is read. Left: no wrapper setting reads the raw member; a shared change.", "field": "lien_position", "quarters": ["2023-03-31", "2025-06-30"], "fair_value_m": 1700.0, "cause": "shared", "action": "left", "suggested_check": "Report fund-quarters where lien_position is blank on more than half the loans while the fund's other quarters carry it.", "quote": {"accession": "0000950170-24-035353", "text": "Investments -- non-controlled/ non-affiliate First Lien Debt Advertising"}},
-  {"observation_key": "issuer-name-casing-voted-across-quarters", "what": "The shared casing vote (most frequent spelling per fund) rewrites earlier quarters to the latest filings' spelling once a quarter is added: 'WCI-BXC Purchaser, LLC' printed until 2025-03-31 now publishes 'Wci-Bxc Purchaser, LLC' (54 rows: WCI-BXC, MoboTrex, STG DISTRIBUTION). Case only. Left.", "field": "issuer_name", "quarters": ["2023-12-31", "2026-03-31"], "fair_value_m": 70.0, "cause": "shared", "action": "left", "suggested_check": "Report published names that differ from the filing's own member only in case.", "quote": {"accession": "0000950170-24-097000", "text": "WCI-BXC Purchaser, LLC (j)(l)(m) Term Loan SOFR + 6.25 % 11.59 % 11/6/2030"}},
-  {"observation_key": "gics-label-keyed-on-built-issuer-name", "what": "The seven State Street money-market cash rows lost their GICS label when their name became the fund's own name (the cache was keyed on 'Money Market Mutual Funds Mutual Funds State Street ...'). Cash rows; left.", "field": "gics_sub_industry", "quarters": ["2023-12-31", "2025-06-30"], "fair_value_m": 71.0, "cause": "shared", "action": "left", "suggested_check": "Report rows that lose a GICS label between builds while their filed member is unchanged.", "quote": {"accession": "0001193125-25-277125", "text": "State Street Institutional Treasury Plus Money Market Fund - 3.99 % (g)(n)(s) Investor Class Units 2,155,486 2,155,486 2,155,486"}}
+  {
+   "observation_key": "affiliate-rollforward-member-published-as-position",
+   "what": "The affiliated-investments roll-forward note is tagged on the cash-and-cash-equivalents axis in 2023 (fair value only) and published as a cash row beside the schedule row: 2023-06-30 counted 1.6M twice. Fixed with a two-quarter exclusion rule (later quarters use that axis for real schedule rows with cost and units).",
+   "field": "fair_value",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 1.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a cash-axis row with a fair value and no cost, unit or percent fact whose value equals an investment-axis row of the same filing.",
+   "quote": {
+    "accession": "0000950170-23-041848",
+    "text": "Fidelity Investments Money Market Government Portfolio Class I - 30,965,157 ( 29,326,575 ) - 1,638,582 42,927"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a cash-axis row with a fair value and no cost, unit or percent fact whose value equals an investment-axis row of the same filing.",
+    "reference": "affiliate-rollforward-member-published-as-position"
+   }
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "what": "A money-market position whose member ends in its yield ('... - Investor Class, 5.21%') was dispatched non-private and not a leaf, then dropped by the aggregate filter: 26.7M missing at 2023-09-30 with no rule naming the row (only the conservation family). Fixed with the wrapper leaf marker.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 26.7,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report a non-private-market leaf with a fair value that is neither published as cash nor removed by a named rule.",
+   "quote": {
+    "accession": "0000950170-23-063077",
+    "text": "State Street Institutional Treasury Plus Money Market Fund - Investor Class, 5.21 % (h)(o) 26,703,996 26,703,996 26,703,996"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Report a non-private-market leaf with a fair value that is neither published as cash nor removed by a named rule.",
+    "reference": "cash-and-money-market-rows-not-published"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "From 2023-12-31 to 2025-06-30 every equity unit count is tagged InvestmentOwnedBalancePrincipalAmount; from 2025-09-30 as a share count. Equity rows published no units (C04) and the Class A Interest rows published the count as par. Fixed with units_tagged_as_par (7 accessions).",
+   "field": "shares_held",
+   "quarters": [
+    "2023-12-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag equity rows with a principal and no unit count where the printed units column holds the same number.",
+   "quote": {
+    "accession": "0000950170-24-035353",
+    "text": "Air Control Concepts Holdings, L.P (m)(n) Class A-1 Units 22,007 $ 220,070 $ 439,040"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag equity rows with a principal and no unit count where the printed units column holds the same number.",
+    "reference": "unit-count-tag-concept-and-scale-change-between-filings"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "'Class A Interest(s)' rows printed in the equity section (Quick Roofing, Tiger Healthcare, Sabrosura) and a bare equity member (Air Control 2023) were classed LOAN / DIRECT_LENDING; the word 'interest' wins. Fixed (equity_instrument_labels, row corrections).",
+   "field": "asset_category",
+   "quarters": [
+    "2023-06-30",
+    "2025-06-30"
+   ],
+   "fair_value_m": 2.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a LOAN row with no rate, spread or maturity whose member sits under the equity heading.",
+   "quote": {
+    "accession": "0000950170-25-108923",
+    "text": "Quick Roofing Topco, LLC (m)(q) Class A Interest 426,230 426,230 1,261,639"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a LOAN row with no rate, spread or maturity whose member sits under the equity heading.",
+    "reference": "equity-section-rows-published-as-loans"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The share-count proxy (D-111) replaced printed counts with another line's of the same issuer: SCP Mechanical Class B 162 -> 1,703, Penta Class A 821 -> 528, Pillr Common 21,224 -> 212, Scp Rigid Common 592 -> 225, SCP 3PL Common 1,351 -> 128, MSE preferred 337 -> 587,838. Fixed by row correction; the proxy is shared and still fires elsewhere.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a derived_proxy unit count where the row's own context or printed line carries a different count.",
+   "quote": {
+    "accession": "0001193125-26-214226",
+    "text": "Scp Mechanical Services Holdco, LLC (p) Class B Units 162 161,740 75,578"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a derived_proxy unit count where the row's own context or printed line carries a different count.",
+    "reference": "unit-count-rescaled-by-issuer-normaliser"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Canadian-dollar pars (footnote '(t) ... stated in Canadian Dollars', CDOR / CORRA loans) are tagged with unit USD and were published as dollar pars (Senske 21.0M CAD beside a 15.5M cost). Fixed by row correction at the build's FRED rate.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 22.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a USD par more than 25 pct above both cost and fair value on a row whose printed reference rate is a non-dollar benchmark.",
+   "quote": {
+    "accession": "0001193125-26-214226",
+    "text": "(t) The par value of these investments is stated in Canadian Dollars."
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a USD par more than 25 pct above both cost and fair value on a row whose printed reference rate is a non-dollar benchmark.",
+    "reference": "principal-currency-from-unit-tag-not-checked-against-page"
+   }
+  },
+  {
+   "observation_key": "promoted-unit-rescale-multiplied-par-by-1000",
+   "what": "A promoted B2 unit_rescale correction (Dynamic Connections, 2025-12-31) multiplied the par of both Dynamic term loans by 1,000 (10,047,242,000 and 3,075,686,000); the page prints 10,047,242. No rule flagged it. Deleted.",
+   "field": "principal_amount",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 10.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a par more than 100 times cost or fair value.",
+   "quote": {
+    "accession": "0001193125-26-119488",
+    "text": "Dynamic Connections, Ltd (i)(l)(m)(t) Term Loan CORRA + 5.75 % 8.30 % 11/27/2030 10,047,242"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a par more than 100 times cost or fair value.",
+    "reference": "promoted-unit-rescale-multiplied-par-by-1000"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Where no rate or spread is tagged, the build reads the member text, which the filer does not update: Plains 2026-03-31 8.70 (printed 8.02), Constant Contact 0.00 (9.57), New Fortress 9.57 (printed '-'), Infusion revolver 5.50 (6.50), spreads on three undrawn revolvers. Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-06-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 15.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Report rows whose rate or spread comes only from member text in a fund whose wrapper names its printed rate column.",
+   "quote": {
+    "accession": "0001193125-26-214226",
+    "text": "Plains All American Pipeline LP (g)(l)(m)(u) Floating Rate Note SOFR + 4.11 % 8.02 % 7,000,000 6,988,094 6,983,689"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Report rows whose rate or spread comes only from member text in a fund whose wrapper names its printed rate column.",
+    "reference": "rate-or-spread-read-from-stale-member-text"
+   }
+  },
+  {
+   "observation_key": "reference-rate-read-from-issuer-name",
+   "what": "Preferred-unit and undrawn lines published reference rate PRIME read from the issuer name (identifier_text) though the page prints no rate: 10 'CCI Prime, LLC' loan lines (round 1) and 14 'CCI Prime Holdings, LLC' Series A / AA preferred-unit rows 2023-12-31 to 2026-06-30 (round 2, found by the reviewer). Fixed by row correction on all 24; census2.py fpze finds no published reference rate whose token is absent from its printed row once the issuer name is removed. The text reader is shared and not changed.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a benchmark read from identifier text whose word is part of the issuer name.",
+   "quote": {
+    "accession": "0000950170-24-035353",
+    "text": "CCI Prime, LLC (f)(i)(l) Delayed Draw Term Loan - - 10/18/2029 - ( 48,327 ) ( 47,926 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a benchmark read from identifier text whose word is part of the issuer name; census2.py implements the row-level test (reference token must occur in the printed row after the issuer name is removed).",
+    "reference": "reference-rate-read-from-issuer-name"
+   }
+  },
+  {
+   "observation_key": "zero-rate-tag-on-undrawn-line-published-fixed",
+   "what": "Once the printed reference column is named, undrawn lines tagged with interest rate 0 and printed '- -' are marked coupon 'Fixed' (the bridge counts a 0 rate as a rate). Four rows at 2025-06-30, fixed by row correction. Round 2: 7 further undrawn lines (Benefit Plan Administrators x2, Cub Financing, Eversmith 2025-06-30; Hy-Tek, National Power 2025-09-30; Luminii 2026-03-31) published interest_rate 0.00 where the page prints '-'; now null.",
+   "field": "coupon_type",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag coupon 'Fixed' on a row whose only rate is 0.",
+   "quote": {
+    "accession": "0000950170-25-108923",
+    "text": "Eversmith Brands Intermediate Holding Company (f)(j)(m) Revolving Credit Facility - - 6/17/2030 - ( 11,174 ) ( 6,285 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag coupon 'Fixed' on a row whose only rate is 0.",
+    "reference": "zero-rate-tag-on-undrawn-line-published-fixed"
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "MSE Acquisitions preferred stock (2024-09-30) is filed on a 'WCI-BXC Investment Holdings LP Series A Preferred Stock' member; Soteria's undrawn revolver (2024-03-31) on the previous quarter's term-loan member. Name, units and rates fixed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30"
+   ],
+   "fair_value_m": 0.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a member whose cost equals another issuer's row in the neighbouring quarters.",
+   "quote": {
+    "accession": "0000950170-24-125469",
+    "text": "MSE Acquisitions Inc (l)(n)(o) Series A Preferred Stock 337 337,479 343,862"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a member whose cost equals another issuer's row in the neighbouring quarters.",
+    "reference": "row-tagged-on-another-issuers-member"
+   }
+  },
+  {
+   "observation_key": "spread-tagged-and-printed-as-a-fraction",
+   "what": "Quick Roofing 2023-12-31: spread tagged 0.000575 and printed 'SOFR + 0.0575' (a percent written as a fraction); published 0.0575. The next quarter prints 5.75 %. Fixed by row correction.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 10.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a floating loan whose spread is below 0.5 while its rate is above 5.",
+   "quote": {
+    "accession": "0000950170-24-035353",
+    "text": "Quick Roofing Acquisition, LLC (i)(l) Term Loan SOFR + 0.0575 11.21 % 12/22/2029 10,655,738 10,389,935 10,389,344"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a floating loan whose spread is below 0.5 while its rate is above 5.",
+    "reference": "spread-tagged-and-printed-as-a-fraction"
+   }
+  },
+  {
+   "observation_key": "unit-count-on-a-second-context-of-the-member",
+   "what": "Door Pro 2024-09-30 and SCP 3PL Class B 2025-06-30 carry their unit count on a second context of the same member; the published row had none. Fixed by row correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an equity row without units where another context of its member carries a share or principal fact.",
+   "quote": {
+    "accession": "0000950170-24-125469",
+    "text": "Door Pro Holdings LLC (l)(o) Class A Units 340 339,744 154,223"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag an equity row without units where another context of its member carries a share or principal fact.",
+    "reference": "unit-count-on-a-second-context-of-the-member"
+   }
+  },
+  {
+   "observation_key": "cost-or-par-tagged-on-misdated-context",
+   "what": "In the 10-Q for 2025-06-30 some values sit on contexts dated 2025-03-31 (D-120 declared the fair values); the par of Premier Dental TL and C2DX DDTL and the cost of Bebright Mso were still missing. Declared from the page.",
+   "field": "principal_amount",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 36.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a drawn loan with no par or no cost where a prior-dated context of the same member in the same filing carries it.",
+   "quote": {
+    "accession": "0000950170-25-108923",
+    "text": "Bebright Mso, LLC (j)(m)(n) Term Loan SOFR + 5.75 % 10.05 % 6/3/2030 9,242,704 9,163,529 9,242,704"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a drawn loan with no par or no cost where a prior-dated context of the same member in the same filing carries it.",
+    "reference": "cost-or-par-tagged-on-misdated-context"
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "Rows printed with a dash for fair value (undrawn lines, equity at nil) have no fair-value fact and were not published: 208 rows over 11 quarters (B01). Declared at 0 from the page.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "B01 already reports it; a default reading of a printed dash as 0 would remove the per-fund declarations.",
+   "quote": {
+    "accession": "0001193125-26-214226",
+    "text": "Luminii LLC (f)(i)(l) Revolving Credit Facility - - 3/21/2030 - ( 57,252 ) -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Oracle B01 (leaf completeness) reports the unpublished dash rows; it fired on this fund before the declarations.",
+    "reference": "B01"
+   }
+  },
+  {
+   "observation_key": "borrowings-exclude-securitization-and-notes",
+   "what": "The reverse case: fund borrowings is the undimensioned LongTermDebt, which this filer uses for the unsecured notes only (210,000,000) while the balance sheet's Debt line includes the credit facilities (1,152,791,515 at 2026-03-31); 2024-06-30 to 2025-03-31 had no figure. F26 flagged the leverage gap. Fixed with highlights figure corrections (shared FIGURE_FIELDS extended).",
+   "field": "borrowings",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag borrowings below 50 pct of total liabilities for a BDC.",
+   "quote": {
+    "accession": "0001193125-26-214226",
+    "text": "Debt (net of unamortized debt issuance costs $ 2,073,556 and $ 2,230,742 as of March 31, 2026 and December 31, 2025, respectively) 1,152,791,515"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag borrowings below 50 pct of total liabilities for a BDC.",
+    "reference": "borrowings-exclude-securitization-and-notes"
+   }
+  },
+  {
+   "observation_key": "fund-total-cost-is-a-section-subtotal",
+   "what": "The undimensioned InvestmentOwnedAtCost for 2025-03-31 is 300,000, the asset-backed securities subtotal; the cost conservation anchor was off by 584,000 pct. Fixed with a highlights figure correction.",
+   "field": "investments_at_cost",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a fund total cost below 10 pct of the fund total fair value.",
+   "quote": {
+    "accession": "0000950170-25-070240",
+    "text": "Total Asset-Backed Securities 300,000 299,985 0.03 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a fund total cost below 10 pct of the fund total fair value.",
+    "reference": "fund-total-cost-is-a-section-subtotal"
+   }
+  },
+  {
+   "observation_key": "quarter-expenses-missing-so-fourth-quarter-is-a-quarter-of-the-year",
+   "what": "Total investment income of each 10-K quarter was the annual figure divided by four (2024: 28,316,788.5 published, true quarter 35,908,821) because the earlier quarters' total is tagged as InvestmentIncomeInterest. Fixed this run with the highlights wrapper key income_concept_fallback; 2024-12-31 is now 35,908,821 and 2023-12-31 12,842,761 (the 2023 quarters sum to the annual 26,391,281).",
+   "field": "total_investment_income",
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a 10-K quarter whose income figure has a fractional cent (annual / 4).",
+   "quote": {
+    "accession": "0000950170-25-041963",
+    "text": "Total investment income $ 113,267,154 $ 26,391,281 $ -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a 10-K quarter whose income figure has a fractional cent (annual / 4).",
+    "reference": "quarter-expenses-missing-so-fourth-quarter-is-a-quarter-of-the-year"
+   }
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "what": "Page sample C020. CLO notes printed in the 'Asset-Backed Securities' section are classed by name: those with 'CLO' in the name publish STRUCTURED_CREDIT, CIFC ('Cifc Fdg', 'CIFC Funding') published DIRECT_LENDING (5 rows) and Flatiron 2026-06-30 too (its name was cut to 'nvestments'). Fixed by row correction; the name classifier is shared (same cause at Carlyle and Sixth Street). asset_category stays LOAN for all CLO notes: the enum has no structured-credit category.",
+   "field": "index_classification",
+   "quarters": [
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose member section is 'Asset-Backed Securities' or whose instrument is 'Collateralized Loan Obligation' and whose class is not STRUCTURED_CREDIT.",
+   "quote": {
+    "accession": "0000950170-25-108923",
+    "text": "Cifc Fdg 2025-Iii Ltd (h)(m)(p)(w) Collateralized Loan Obligation SOFR + 7.25 % 11.58 % 7/21/2038 250,000 250,000 254,647"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Flag a row whose member section is 'Asset-Backed Securities' or whose instrument is 'Collateralized Loan Obligation' and whose class is not STRUCTURED_CREDIT.",
+    "reference": "structured-credit-classed-as-direct-lending"
+   }
+  },
+  {
+   "observation_key": "lien-blank-where-member-omits-lien-segment",
+   "what": "Every loan before 2025-09-30 publishes no lien (about 1,400 rows): the member's 'First Lien Debt' section words are cut by the shared double-Investments prefix strip before lien keywords or dispatch.lien_from_identifier (which reads bdc_investment_identifier only) see them. From 2025-09-30 the lien is read. Left: no wrapper setting reads the raw member; a shared change.",
+   "field": "lien_position",
+   "quarters": [
+    "2023-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 1700.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report fund-quarters where lien_position is blank on more than half the loans while the fund's other quarters carry it.",
+   "quote": {
+    "accession": "0000950170-24-035353",
+    "text": "Investments -- non-controlled/ non-affiliate First Lien Debt Advertising"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Report fund-quarters where lien_position is blank on more than half the loans while the fund's other quarters carry it.",
+    "reference": "lien-blank-where-member-omits-lien-segment"
+   }
+  },
+  {
+   "observation_key": "issuer-name-casing-voted-across-quarters",
+   "what": "The shared casing vote (most frequent spelling per fund) rewrites earlier quarters to the latest filings' spelling once a quarter is added: 'WCI-BXC Purchaser, LLC' printed until 2025-03-31 now publishes 'Wci-Bxc Purchaser, LLC' (54 rows: WCI-BXC, MoboTrex, STG DISTRIBUTION). Case only. Left.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 70.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report published names that differ from the filing's own member only in case.",
+   "quote": {
+    "accession": "0000950170-24-097000",
+    "text": "WCI-BXC Purchaser, LLC (j)(l)(m) Term Loan SOFR + 6.25 % 11.59 % 11/6/2030"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Report published names that differ from the filing's own member only in case.",
+    "reference": "issuer-name-casing-voted-across-quarters"
+   }
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "what": "The seven State Street money-market cash rows lost their GICS label when their name became the fund's own name (the cache was keyed on 'Money Market Mutual Funds Mutual Funds State Street ...'). Cash rows; left.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-12-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 71.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report rows that lose a GICS label between builds while their filed member is unchanged.",
+   "quote": {
+    "accession": "0001193125-25-277125",
+    "text": "State Street Institutional Treasury Plus Money Market Fund - 3.99 % (g)(n)(s) Investor Class Units 2,155,486 2,155,486 2,155,486"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Report rows that lose a GICS label between builds while their filed member is unchanged.",
+    "reference": "gics-label-keyed-on-built-issuer-name"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "33 published issuer names were not the printed company (neighbouring name appended, typo, industry word, another borrower). The worst: the Door Pro Buyer term loan (12.1M) and delayed draw published as Conair Holdings LLC, whose own line (2.5M) is a different row. Fixed by 33 context-exact row corrections; every published name of the fund then occurs on the page (0 of 1,502 accession-name pairs missing, case-insensitive).",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published row whose issuer name does not occur in the filing page text (case-insensitive) and a row whose fair value equals a printed line of a different issuer.",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "The page rule issuer_name_printed fired on all 33 rows in the untouched build fpza (page_rule_findings.csv); the absence check is a proposed extension for rows it cannot match (blind-spot share up to 10 pct of rows in 2025).",
+    "reference": "issuer_name_printed"
+   },
+   "quote": {
+    "accession": "0000950170-24-097000",
+    "text": "Door Pro Buyer, LLC (i)(l) Term Loan SOFR + 6.50 % 11.93 % 11/2/2029 12,507,660 12,219,042 12,144,938"
+   }
+  },
+  {
+   "observation_key": "total-investment-income-tagged-as-interest-income",
+   "what": "Before 2024-06-30 the filer tags the printed total investment income as InvestmentIncomeInterest, so six periods published no total investment income and the 2024 fourth quarter used the annual figure divided by four. Fixed with income_concept_fallback. The same concept now no longer fills bdc_fund_income.interest_income for the fund (its values equalled the total).",
+   "field": "total_investment_income",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a quarter whose total_investment_income is null while gross_investment_income or the printed income statement has a total.",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "income_identity fired on 2024-12-31 in the untouched build fpza; the null quarters before it did not fire.",
+    "reference": "income_identity"
+   },
+   "quote": {
+    "accession": "0000950170-24-057685",
+    "text": "Total investment income $ 19,809,098 $ 539,752 Net expenses 7,870,581 294,597"
+   }
+  },
+  {
+   "observation_key": "agent-a-date-grammar-month-first-only",
+   "what": "The Agent A grammar reads dates month first; the 2026-06-30 filing mixes orders in its identifier text (68 of 323 day-first only, 39 unambiguous and 29 ambiguous; 78 month-first rows also ambiguous), so completeness falls to 89.8 pct and the fund leaves the cohort, masking all its agentA findings. Left: shared check, request REQ-FPZ-1920453-1.",
+   "field": "maturity_date",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report, beside agentA_cohort_excluded, the identifiers that fail completeness and the field that is None, so a date-format miss is visible at once.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The exclusion record names only the completeness percentage; a list of failing fields would show the cause.",
+    "reference": "REQ-FPZ-1920453-1"
+   },
+   "quote": {
+    "accession": "0001193125-26-346851",
+    "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+   }
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-printed-line",
+   "what": "Instrument wording of 21 rows did not match the printed row: undrawn revolvers published as Term Loan (AB Centers 2025-09-30 and 2025-12-31, Hy-Tek Opco 2025-09-30 and 2025-12-31), a funded term loan published as Revolving Credit Facility (Identiti Resources 2025-09-30 and 2025-12-31), MSE Supplies 2026-03-31, Trutemp 2026-06-30, plus the leaked words One, Two, Three, Interest, Fixed Rate and a stray R. Fixed by row corrections. Left as printed variants (not fixed): 'Term Loan SOFR + 8.25% (7.25% PIK)' style tails, 'Class A-1' hyphen variants and punctuation/accent variants of names (census2.py fpze lists them).",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare the published instrument words with the printed row of the same context (census2.py).",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares instrument_description with the printed row; census2.py does and found the 21 rows.",
+    "reference": "instrument-in-member-differs-from-printed-line"
+   },
+   "quote": {
+    "accession": "0001193125-26-119488",
+    "text": "Identiti Resources LLC (i)(l) Term Loan SOFR + 5.00 % 8.72 % 11/1/2029 5,748,382 5,667,441 5,731,136"
+   }
+  },
+  {
+   "observation_key": "position-chain-split-by-printed-name-change",
+   "what": "Two name corrections split position chains. (1) CIFC: correcting the 2026-03-31 row to its printed name 'CIFC Funding Ltd' split position 829d22b8 (the same 250,000-par SOFR + 7.25 % 7/21/2038 note, printed 'Cifc Fdg 2025-Iii Ltd' until 2025-12-31); the 2026-06-30 row had never joined it. (2) Hobbs & Associates (found by the re-review): the 7.2M term loan chain (par 7,230,170 at 2023-06-30) began again at 2023-09-30, and the two delayed draws crossed (41cdfc96 jumped from 3.53M to 8.12M at 2024-03-31; the 8.10M row at 2024-06-30 had no chain). Both are rejoined with position_identity_contexts (CIFC: one key on 5 contexts; Hobbs: four tranche keys on 19 contexts), verified in fpzf by position_id per quarter. The one Hobbs link read from par continuity and the Inc-to-LLC rename (2023-06-30 delayed draw 5,098,077 into the 8.16M line) is not a printed fact.",
+   "field": "position_id",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.25,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "After a name correction, flag a position whose terms (par, spread, maturity) equal a position of the previous quarter under another position_id.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Chain-completeness checks count singletons but do not tie a new singleton to a lapsed position with equal terms.",
+    "reference": "position-chain-split-by-printed-name-change"
+   },
+   "quote": {
+    "accession": "0001193125-26-214226",
+    "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["tests/test_fund_highlights_wrapper.py -k FigureCorrections: 6 passed (new test included)", "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 681 passed (final wrapper state, rerun after the round-2 wrapper change: 681 passed)"],
+ "tests_run": [
+  "tests/test_fund_highlights_wrapper.py -k FigureCorrections: 6 passed (new test included)",
+  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py: 681 passed (final wrapper state, rerun after the round-2 wrapper change: 681 passed)",
+  "Round 3 (2026-11-15): data-only changes (row corrections, a highlights wrapper key); no code changed, no pytest run. retire.py fpzc: 10 of 10 retirable, plants fail; census.py fpzc: 1 intended difference; name_on_page.py fpzc: 0 of 1,502 names not on the page.",
+  "Round 4 (fpzd, fpze): data-only changes (row corrections, wrapper position_identity_contexts); no pytest run. census2.py fpze: no PRIME without a printed reference, no zero rate without a printed percent, no One/Two/Three/Interest instrument; CIFC position 829d22b8 in 5 of 5 quarters.",
+  "Round 5 (fpzf): wrapper position_identity_contexts for Hobbs (19 contexts, 4 keys); no pytest run; position chains verified by q_hobbs.py fpzf."
+ ],
  "not_done": [
   "The census (census.py, pik_census.py) compares fair value, cost, par, units, spread, rate, maturity, PIK and reference rate of every published row with its printed row; it does not compare industry, nonaccrual flags or percent of net assets.",
   "Lien before 2025-09-30 left blank (observation); not fixed.",
   "No regression build of other funds for the shared FIGURE_FIELDS change (it acts only where a highlights wrapper lists borrowings or investments_at_cost: this fund only).",
-  "Findings cleared is not data correct: no rule flagged the units-as-par, the CAD pars, the PRIME read from a name, the stale member rates or the x1000 promoted correction found here; others of that kind may remain."
+  "Findings cleared is not data correct: no rule flagged the units-as-par, the CAD pars, the PRIME read from a name, the stale member rates or the x1000 promoted correction found here; others of that kind may remain.",
+  "F28 x2 await the not_applicable disposition by check (REQ-FPZ-1920453-2).",
+  "pct_of_net_assets is null on every row of every quarter (the filer tags percent only on sector contexts); not fixable by extraction, noted for A07 retirements.",
+  "The 18 agentA findings of the earlier packet (subtotal_candidate 9, maturity 5, reference 3, spread 2) were not investigated: Agent A does not evaluate the fund while it is excluded (REQ-FPZ-1920453-1). Production batch b1112b read the stale 2024-07-24 agent_a_flags.csv (374 flags for this fund); the next batch carries them as cohort_excluded, so the 18 findings return unread and need a page reading once the check is repaired.",
+  "Printed interest income (for example 18,861,133 at 2024-03-31) is blank in bdc_fund_income.interest_income where the filer mis-tagged it as total; no wrapper key carries a printed interest-income value, so it is not declared.",
+  "Name and instrument census: punctuation, accent and casing variants of the same company (Acrisure LLC / Acrisure, LLC, Societe / Societe, Asurion LLC) and 'Term Loan SOFR + x% (y% PIK)' instrument tails were left as published."
+ ],
+ "investigator_id": "agent:fund-fpz-sonnet",
+ "retired_in_run": [
+  {
+   "finding_id": "RVQ_REV_70dfe48c9c24",
+   "retirement_id": "VR-FL-1920453-01",
+   "rule": "A07",
+   "quarter": "2023-03-31",
+   "why": "no percent-of-net-assets fact sits on a published position context; none published."
+  },
+  {
+   "finding_id": "RVQ_REV_a2f22516e4fb",
+   "retirement_id": "VR-FL-1920453-02",
+   "rule": "A07",
+   "quarter": "2025-12-31",
+   "why": "same: 161 percent facts on 155 contexts, none a published row's context."
+  },
+  {
+   "finding_id": "RVQ_REV_c0081da2d2bc",
+   "retirement_id": "VR-FL-1920453-03",
+   "rule": "A07",
+   "quarter": "2026-03-31",
+   "why": "same: 175 percent facts on 170 contexts, none a published row's context."
+  },
+  {
+   "finding_id": "RVQ_REV_5ad4f829ee15",
+   "retirement_id": "VR-FL-1920453-04",
+   "rule": "B01",
+   "quarter": "2025-12-31",
+   "why": "cited dash-value leaves publish fair value 0; every leaf has a value; the quarter sums to the filed 2,292,614,325."
+  },
+  {
+   "finding_id": "RVQ_REV_924488b656b1",
+   "retirement_id": "VR-FL-1920453-05",
+   "rule": "B01",
+   "quarter": "2026-03-31",
+   "why": "every leaf has a value and the quarter sums to the filed 2,487,588,823 (the cited 196,401,848 is the Level 1 amount, published)."
+  },
+  {
+   "finding_id": "RVQ_BLK_c8a616f1f9ab",
+   "retirement_id": "VR-FL-1920453-06",
+   "rule": "X04",
+   "quarter": "2026-03-31",
+   "why": "Tighitco, Tgnl Purchaser and Keel Platform are published floating over SOFR with the printed spreads."
+  },
+  {
+   "finding_id": "RVQ_REV_8108d7051ec3",
+   "retirement_id": "VR-FL-1920453-07",
+   "rule": "FX01",
+   "quarter": "2025-12-31",
+   "why": "Dynamic Connections CAD loan has principal_amount_usd 7,327,335 at the reference rate."
+  },
+  {
+   "finding_id": "RVQ_REV_692666ec3d56",
+   "retirement_id": "VR-FL-1920453-08",
+   "rule": "dl_rate_fill",
+   "quarter": "2024-09-30",
+   "why": "no Total First/Second Lien Debt subtotal row is published; the quarter sums to the filed total."
+  },
+  {
+   "finding_id": "RVQ_BLK_772a943cbbfb",
+   "retirement_id": "VR-FL-1920453-09",
+   "rule": "agentA_reference_uncorroborated",
+   "quarter": "2025-12-31",
+   "why": "User Zoom, Plains and the three undrawn revolvers are published as printed."
+  },
+  {
+   "finding_id": "RVQ_REV_bcde478210a7",
+   "retirement_id": "VR-FL-1920453-10",
+   "rule": "F26",
+   "quarter": "2026-03-31",
+   "why": "published loan share 0.9136 vs borrowings over net assets 0.8650, a gap of 0.0485."
+  }
+ ],
+ "closed_at_head_before_work": [
+  {
+   "finding_id": "RVQ_BLK_198bed49ec7a",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_3ea8c811ea0a",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_5570a00ebf07",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_796167d4abb8",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_a28662598015",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_a44d6d4d018a",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_b0837038fc51",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_b1ad9ababcf0",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_bb974e7e081b",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_c38f59e039d8",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_c82cff1ad9bc",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_cdb801fa09fe",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_d7aca6ac58f9",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_d8528a84d243",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_e63c9d012663",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_ed2636655635",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_f8d118887349",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  },
+  {
+   "finding_id": "RVQ_BLK_fa1ce479fdfc",
+   "why": "packet finding not outstanding in fpza (first build at HEAD): the Agent A engine excludes this fund from its cohort at 2026-06-30 (completeness 89.8 pct), so no agentA flag is produced. Masked, not cleared: see REQ-FPZ-1920453-1."
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_225a3a31b0b0",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2023-03-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2023-03-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5b4ba4aee3c7",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2023-06-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2023-06-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_f2b3580e8194",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2023-09-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2023-09-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_121ed04a37a5",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2023-12-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2023-12-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_3f2d15c06c4c",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2024-03-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2024-03-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5077d3a5eb41",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2024-06-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2024-06-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5ebfe0c7be02",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2024-09-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2024-09-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5a4bb87ffcf6",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2024-12-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2024-12-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d6c9b9d81dc5",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2025-03-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2025-03-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_46aed117926f",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2025-06-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2025-06-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d2e3aff433bd",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2025-09-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2025-09-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_bf133d07157b",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2025-12-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2025-12-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_20917e231783",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2026-03-31/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2026-03-31/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_BLK_eebdd83fa837",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2026-06-30/agentA_cohort_excluded"
+    ],
+    "reviewed_rows": [
+     "0001920453/2026-06-30/agentA_cohort_excluded"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Which quarter fails the held-out gate: only 2026-06-30 (219 of 244 signature identifiers complete, 89.8 pct); 2025-06-30 to 2026-03-31 are 100 pct (heldout_diag.py). The finding for this quarter is the fund-level exclusion record, carried flags 0.",
+    "Why: every incomplete row has maturity_date None because the identifier text carries the maturity day-first ('Maturity Date 27/3/2030') and date_mdy rejects a month above 12. date_diag.py: of 323 dated identifiers at 2026-06-30, 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous); 78 month-first rows also have both numbers 12 or less. The filing mixes orders with no marker; the printed page and the published maturities agree, so the data are right.",
+    "Alternatives: a filing-wide day-first setting would misread the 78 ambiguous month-first rows; month-first misreads the 29 ambiguous day-first rows (AB Centers '2/7/2031' prints 7/2/2031); the fund's grammar JSON cannot express either (no date-order type); a map of whole dates would be a plug."
+   ],
+   "next_action": "Check repair REQ-FPZ-1920453-1 (DC-0001920453-217abf613d): unambiguous day-first coercion in the shared grammar plus an opt-in exact-context day-first declaration for the 29 ambiguous rows (68 contexts listed), with tests for both cases. Until then Agent A does not evaluate this fund; production b1112b carried the stale 2024-07-24 flags (374 for this fund), the next batch carries them as cohort_excluded, and the 18 earlier agentA findings return unread (not_done)."
+  },
+  {
+   "finding_id": "RVQ_REV_e3ae55e1d106",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2022-03-22/F28/fund_financials"
+    ],
+    "reviewed_rows": [
+     "0001920453/2022-03-22/F28/fund_financials"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    },
+    {
+     "accession": "0000950170-24-035353",
+     "text": "the Fund had not yet commenced operations and cash flows consisted of the seed capital"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "fpzc fund_financials 2022-03-22: net_assets 0 and no income or expense figures (seed capital); first quarter with published holdings is 2023-03-31, so there is nothing for the coverage check to cover (formation-period fund_financials row: the fund commenced operations on 2023-03-13; 2022 rows carry seed capital only.)",
+    "Whether a fund figure is missing that the page prints: the page states the seed capital only; no schedule or income statement exists for 2022."
+   ],
+   "next_action": "not_applicable proposal PD-F28-1920453-1 (data/overrides/finding_dispositions_proposed/fund_0001920453.json) extending the accepted DS-LARGE6-F28-1920453 reason to 2022-03-22 and 2022-09-30, with a filing quote per quarter and fund-level rows; the orchestrator's disposition tool refuses it today (REQ-FPZ-1920453-2). The filing says operations began 2023-03-13 and prints no 2022 schedule. The durable route is an F28 repair that skips quarters before a fund's first schedule, so no per-fund disposition is needed."
+  },
+  {
+   "finding_id": "RVQ_REV_1defca555608",
+   "coverage": {
+    "affected_rows": [
+     "0001920453/2022-09-30/F28/fund_financials"
+    ],
+    "reviewed_rows": [
+     "0001920453/2022-09-30/F28/fund_financials"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    },
+    {
+     "accession": "0000950170-24-035353",
+     "text": "the Fund had not yet commenced operations and cash flows consisted of the seed capital"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "fpzc fund_financials 2022-09-30: net_assets 2,000 and no income or expense figures (seed capital); first quarter with published holdings is 2023-03-31, so there is nothing for the coverage check to cover (formation-period fund_financials row: the fund commenced operations on 2023-03-13; 2022 rows carry seed capital only.)",
+    "Whether a fund figure is missing that the page prints: the page states the seed capital only; no schedule or income statement exists for 2022."
+   ],
+   "next_action": "not_applicable proposal PD-F28-1920453-1 (data/overrides/finding_dispositions_proposed/fund_0001920453.json) extending the accepted DS-LARGE6-F28-1920453 reason to 2022-03-22 and 2022-09-30, with a filing quote per quarter and fund-level rows; the orchestrator's disposition tool refuses it today (REQ-FPZ-1920453-2). The filing says operations began 2023-03-13 and prints no 2022 schedule. The durable route is an F28 repair that skips quarters before a fund's first schedule, so no per-fund disposition is needed."
+  }
  ]
 }

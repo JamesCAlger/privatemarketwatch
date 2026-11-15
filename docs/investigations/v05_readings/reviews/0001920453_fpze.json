@@ -1,0 +1,625 @@
+{
+ "reviewer_id": "agent:review-fpzc-opus",
+ "report_digest": "4b6ffd1efc7c9e5181378eb2383493dd9a561ab551d83bc141f6c246cfff8183",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_121ed04a37a5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_20917e231783",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_225a3a31b0b0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3f2d15c06c4c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_46aed117926f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5077d3a5eb41",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5a4bb87ffcf6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5b4ba4aee3c7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5ebfe0c7be02",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bf133d07157b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d2e3aff433bd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d6c9b9d81dc5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_eebdd83fa837",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f2b3580e8194",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze), now SUPPORTED. Coverage: the finding is the fund-level exclusion record for this quarter, one of 14 agentA_cohort_excluded rows in the fpze ledger, equal to affected_rows. The two round-1 defects are corrected. (1) The hypotheses give the mixed date order, which I recomputed on fpze bdc_holdings for 2026-06-30: 323 dated identifiers; 240 read correctly only month-first, 12 either way, 68 only day-first (39 unambiguous, 29 ambiguous such as AB Centers '2/7/2031', printed 7/2/2031); 78 month-first rows also have both numbers 12 or below. 2026-03-31 has 0 day-first-only identifiers. Neither a filing-wide day-first nor a month-first default is correct, as the report now says. (2) next_action states that production b1112b read the stale 2024-07-24 flags (374 for this fund), that the next batch carries them as cohort_excluded, and that the 18 earlier agentA findings return unread. That matches carry_forward() in shadow_agent_a_engine.py. false_alarm is right: the published maturities agree with the printed month-first page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1defca555608",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze): the facts and the proposal are right; the new conclusion label is not. Verified: fund_financials holds seed-capital rows only (2022-03-22 net assets 0; 2022-09-30 net assets 2,000); the first published holdings quarter is 2023-03-31; the 10-Q states operations began 2023-03-13. PD-F28-1920453-1 (not_applicable, extends the accepted DS-LARGE6-F28-1920453 reason, a filing quote per quarter, fund-level rows) is the right closure, and status rule 5 (a store-class proposal) routes it to owner acceptance whatever the conclusion says. source_ambiguity is not supported: nothing in the filing is ambiguous. It states plainly that the fund had not commenced operations, and no 2022 schedule exists. Choosing a label to obtain a route misstates the evidence. Restore false_alarm, the closest available value (the check fires on a correct state because its premise does not apply before the first schedule), and let the not_applicable proposal carry the closure. The durable alternative is an F28 repair that skips quarters before a fund's first schedule; that would carry forward to every fund, which a per-fund disposition does not.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057685",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e3ae55e1d106",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-review (fpze): the facts and the proposal are right; the new conclusion label is not. Verified: fund_financials holds seed-capital rows only (2022-03-22 net assets 0; 2022-09-30 net assets 2,000); the first published holdings quarter is 2023-03-31; the 10-Q states operations began 2023-03-13. PD-F28-1920453-1 (not_applicable, extends the accepted DS-LARGE6-F28-1920453 reason, a filing quote per quarter, fund-level rows) is the right closure, and status rule 5 (a store-class proposal) routes it to owner acceptance whatever the conclusion says. source_ambiguity is not supported: nothing in the filing is ambiguous. It states plainly that the fund had not commenced operations, and no 2022 schedule exists. Choosing a label to obtain a route misstates the evidence. Restore false_alarm, the closest available value (the check fires on a correct state because its premise does not apply before the first schedule), and let the not_applicable proposal carry the closure. The durable alternative is an F28 repair that skips quarters before a fund's first schedule; that would carry forward to every fund, which a per-fund disposition does not.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057685",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "affiliate-rollforward-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Totals tie exactly in all 14 quarters on fpzc (strict 500-dollar test: difference 0 in each). The detector (cash-axis row with FV only, equal to an investment-axis row) is narrow enough to avoid false positives.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041848",
+     "text": "Fidelity Investments Money Market Government Portfolio Class I - 30,965,157 ( 29,326,575 ) - 1,638,582 42,927"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): 2023-09-30 published sum equals the filed total in fpzc (difference 0; cash 46,362,542 published). The proposed check (non-private leaf neither published as cash nor removed by a named rule) would have caught the 26.7M drop.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063077",
+     "text": "State Street Institutional Treasury Plus Money Market Fund - Investor Class, 5.21 % (h)(o) 26,703,996 26,703,996 26,703,996"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): fpzc Air Control 2023-12-31 Class A-1 Units publishes 22,007 units and no par, as printed. The detector is concrete and page-anchored.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "Air Control Concepts Holdings, L.P (m)(n) Class A-1 Units 22,007 $ 220,070 $ 439,040"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Quick Roofing Topco Class A Interest is EQUITY_COMMON in fpzc. The detector (LOAN without rate, spread or maturity under the equity heading) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Quick Roofing Topco, LLC (m)(q) Class A Interest 426,230 426,230 1,261,639"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): fpzc Scp Mechanical Services Holdco Class B Units 2026-03-31 = 162, as printed. The detector compares the proxy count with the row's own context or line, which is a sound test.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Scp Mechanical Services Holdco, LLC (p) Class B Units 162 161,740 75,578"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): fpzc Senske CDOR loan 2023-12-31 publishes par 21,000,000 in CAD with a USD amount of 15,906,681. The 25 pct par-over-cost-and-FV screen restricted to non-dollar benchmarks is a reasonable detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "(t) The par value of these investments is stated in Canadian Dollars."
+    }
+   ]
+  },
+  {
+   "observation_key": "promoted-unit-rescale-multiplied-par-by-1000",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): The retire.py FX01 rerun shows Dynamic Connections 2025-12-31 par 10,047,242 (not x1000) in fpzc and in production. A par above 100x cost or FV is a cheap detector with few false positives.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Dynamic Connections, Ltd (i)(l)(m)(t) Term Loan CORRA + 5.75 % 8.30 % 11/27/2030 10,047,242"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): The retire.py ref check on fpzc shows the Plains note at 8.70 / SOFR 4.11 for 2025-12-31, as printed in that filing. The detector (rate from member text only, where the wrapper names a printed rate column) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Plains All American Pipeline LP (g)(l)(m)(u) Floating Rate Note SOFR + 4.11 % 8.02 % 7,000,000 6,988,094 6,983,689"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-read-from-issuer-name",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze): fixed. fpze publishes no reference rate on any CCI Prime Holdings, LLC row. The count is 14, not my round-1 15 (Series A 2023-12-31 to 2025-09-30 x8, plus Series A and AA at 2025-12-31, 2026-03-31 and 2026-06-30 x6); my earlier count was wrong. A scan of fpze PRIME/CDOR/CORRA rows leaves only loans that print the benchmark. The detector (benchmark word inside the issuer name) is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "CCI Prime Holdings, LLC (m)(p) Series AA Preferred Units 36 35,508 14,491"
+    }
+   ]
+  },
+  {
+   "observation_key": "zero-rate-tag-on-undrawn-line-published-fixed",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze): the 7 undrawn lines (Benefit Plan x2, Cub, Eversmith 2025-06-30; Hy-Tek, National Power 2025-09-30; Luminii 2026-03-31) now have interest_rate null. holdings_field_diff fpze fpzc shows interest_rate, interest_rate_reported and interest_rate_kind on exactly 7 rows. The detector is fine.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Eversmith Brands Intermediate Holding Company (f)(j)(m) Revolving Credit Facility - - 6/17/2030 - ( 11,174 ) ( 6,285 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Consistent with the fpzc rows reviewed. The cost-equality detector across neighbouring quarters is concrete; expect some false positives from round-number costs.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125469",
+     "text": "MSE Acquisitions Inc (l)(n)(o) Series A Preferred Stock 337 337,479 343,862"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-tagged-and-printed-as-a-fraction",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): fpzc Quick Roofing TL 2023-12-31 basis_spread 5.75. The detector (spread < 0.5 with rate > 5) is cheap and precise.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "Quick Roofing Acquisition, LLC (i)(l) Term Loan SOFR + 0.0575 11.21 % 12/22/2029 10,655,738 10,389,935 10,389,344"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-on-a-second-context-of-the-member",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Door Pro Holdings 2024-09-30 units are populated in fpzc. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125469",
+     "text": "Door Pro Holdings LLC (l)(o) Class A Units 340 339,744 154,223"
+    }
+   ]
+  },
+  {
+   "observation_key": "cost-or-par-tagged-on-misdated-context",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Totals tie at 2025-06-30. The detector (prior-dated context of the same member in the same filing) is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Bebright Mso, LLC (j)(m)(n) Term Loan SOFR + 5.75 % 10.05 % 6/3/2030 9,242,704 9,163,529 9,242,704"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze): relabelled existing_detector with reference B01. Correct: oracle B01 reported these rows before the declarations, and in fpzc it passes 345/345 (2025-12-31) and 382/382 (2026-03-31).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Luminii LLC (f)(i)(l) Revolving Credit Facility - - 3/21/2030 - ( 57,252 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "borrowings-exclude-securitization-and-notes",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): F26 passes in every fpzc quarter (2026-03-31 value 0.0133 under the rule's own formula). The 50 pct of total liabilities screen is a reasonable detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Debt (net of unamortized debt issuance costs $ 2,073,556 and $ 2,230,742 as of March 31, 2026 and December 31, 2025, respectively) 1,152,791,515"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-total-cost-is-a-section-subtotal",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): The cost-below-10-pct-of-FV detector is cheap and would catch a subtotal taken as the fund total.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070240",
+     "text": "Total Asset-Backed Securities 300,000 299,985 0.03 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "quarter-expenses-missing-so-fourth-quarter-is-a-quarter-of-the-year",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze): updated to fixed. fund_financials 2024-12-31 is 35,908,821 and 2023-12-31 is 12,842,761; the 2023 quarters sum to the annual 26,391,281. The fractional-cent detector is good.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041963",
+     "text": "Total investment income $ 113,267,154 $ 26,391,281 $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): All CIFC and Flatiron rows are STRUCTURED_CREDIT in fpzc. The section- or instrument-based detector is precise.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108923",
+     "text": "Cifc Fdg 2025-Iii Ltd (h)(m)(p)(w) Collateralized Loan Obligation SOFR + 7.25 % 11.58 % 7/21/2038 250,000 250,000 254,647"
+    }
+   ]
+  },
+  {
+   "observation_key": "lien-blank-where-member-omits-lien-segment",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Verified: fpzc LOAN rows with a lien are 0 in every quarter from 2023-03-31 to 2025-03-31, 1 of 250 at 2025-06-30, and 245 of 272 at 2025-09-30. This is a large, real gap that was left unfixed. The detector (more than half of a fund-quarter's loans blank while other quarters carry a lien) would catch it.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035353",
+     "text": "Investments -- non-controlled/ non-affiliate First Lien Debt Advertising"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-casing-voted-across-quarters",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Case-only and left. The detector (published name differs from its own filing's member only in case) is precise.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097000",
+     "text": "WCI-BXC Purchaser, LLC (j)(l)(m) Term Loan SOFR + 6.25 % 11.59 % 11/6/2030"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Cash rows only. The build-to-build GICS-loss detector is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277125",
+     "text": "State Street Institutional Treasury Plus Money Market Fund - 3.99 % (g)(n)(s) Investor Class Units 2,155,486 2,155,486 2,155,486"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze): the name changes since fpzc are correct on the page. The 5 Hobbs rows renamed to 'Hobbs & Associates, LLC' (2023-09-30 TL 7,212,095 and DDTL 8,161,754; 2024-03-31 DDTL 8,120,880; 2024-06-30 TL 3,903,317 and DDTL 3,000,044) all print ', LLC'. The two 2023-09-30 rows left as 'Inc' (2,042,728 and 2,859,819) print Inc. The Oscar zero-width space and the Polaris trailing dot are removed. The chain consequence of the Hobbs rename is judged under position-chain-split-by-printed-name-change. The existing_detector reference stands.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063077",
+     "text": "Hobbs & Associates, LLC (i)(l) Term Loan SOFR + 6.50 % 11.95 % 4/11/2029 7,212,095 7,006,545 7,031,792"
+    },
+    {
+     "accession": "0000950170-24-057685",
+     "text": "Hobbs & Associates, LLC (i)(l) Delayed Draw Term Loan SOFR + 6.25 % 11.56 % 4/11/2029 8,120,880 7,916,241 8,120,880"
+    }
+   ]
+  },
+  {
+   "observation_key": "total-investment-income-tagged-as-interest-income",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (observation unchanged since fpzc): Verified on the page: the 10-Q prints interest income 18,861,133 and total 19,809,098. The filer tags 19,809,098 as us-gaap:InvestmentIncomeInterest, so the old bdc_fund_income.interest_income (equal to the total) was wrong for 2024-03-31. Blanking it removes a mislabelled value. Consumers: export_frontend and frontend/src/lib do not read interest_income. rate_convention S2 falls back to a TII-scaled estimate when it is blank, which is better than the old share of 0 for this fund. No F-rule reads it. Not a harmful regression. Optional improvement: declare the printed interest income. income_concept_fallback is an existing, schema-registered key (schemas/fund_highlights_wrapper/wrapper_v1.schema.json, INCOME_FALLBACK_COLUMNS includes total_investment_income, tests/test_income_total_fallback.py, D-210), so it is not new shared code. The existing_detector reference income_identity is valid.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057685",
+     "text": "Interest income $ 18,861,133 $ 539,752 Dividend income 242,491 - Other income 109,884 - From non-controlled / affiliate investments Dividend income 595,590 - Total Investment Income 19,809,098 539,752"
+    }
+   ]
+  },
+  {
+   "observation_key": "agent-a-date-grammar-month-first-only",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze): the description now gives the mixed order (68 day-first only, 39 unambiguous and 29 ambiguous; 78 ambiguous month-first), which matches my recomputation. The detector (list failing identifiers and None fields beside the exclusion record) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-printed-line",
+   "outcome": "supported",
+   "rationale": "New in fpze; verified on the page. AB Centers 2025-09-30 '( 21,959 ) ( 7,113 )' and Hy-Tek 2025-09-30/2025-12-31 are printed as Revolving Credit Facility. Identiti 2025-09-30 (5,762,789) and 2025-12-31 (5,748,382) print Term Loan. MSE Supplies 2026-03-31 776,202 prints Revolving Credit Facility. Trutemp 2026-06-30 5,625,165 prints Term Loan. Pave America, Atlas, Cytracom and X Corp print plain 'Term Loan'. fpze vs fpzc: instrument_description 21 rows and instrument_type 8, all among these. The relabels also repair chains: Identiti ae56644c, MSE revolver 4d406199, Trutemp 899846f8, AB Centers revolver e310869f and Hy-Tek revolver e41fb447 now run unbroken. The detector (compare published instrument words with the printed row) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277125",
+     "text": "Identiti Resources LLC (i)(l) Term Loan SOFR + 5.00 % 9.16 % 11/1/2029 5,762,789 5,678,441 5,687,872"
+    },
+    {
+     "accession": "0001193125-26-119488",
+     "text": "Hy-Tek Opco, LLC (f)(i)(l) Revolving Credit Facility - - 9/19/2028 - ( 45,935 ) ( 142,108 )"
+    },
+    {
+     "accession": "0001193125-26-214226",
+     "text": "Mse Supplies, LLC (f)(i)(l) Revolving Credit Facility SOFR + 5.50 % 9.17 % 8/14/2030 776,202 754,266 663,147"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Trutemp Acquisition LLC (i)(l)(q)(r) Term Loan SOFR + 5.00 % 8.67 % 8/26/2031 5,625,165 5,550,379 5,585,789"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-split-by-printed-name-change",
+   "outcome": "rejected",
+   "rationale": "New in fpze. The CIFC part is verified: 829d22b8 now carries all five quarters. REJECTED because the same failure was introduced in this round and not caught: renaming the 2023-09-30 Hobbs TL (7,212,095 par) to its printed 'Hobbs & Associates, LLC' broke the 7.2M term-loan chain. In fpzc, 39abc999 ran from 2023-06-30 (7,230,170 par, printed 'Hobbs & Associates Inc') to 2024-06-30. In fpze the 2023-06-30 row sits in 57039838, the ~2.0M term-loan chain (2,042,728 par from 2023-09-30), and the 7.2M chain 47fbf765 starts only at 2023-09-30. A position_id now jumps from 7.23M par to 2.04M par at the same spread and maturity. holdings_field_diff fpze fpzc lists these pid changes, but the declared changes describe them as following the corrected names. Fix: a position_identity_contexts join for the 2023-06-30 TL context, as was done for CIFC. Pre-existing and unchanged since fpzc: the Hobbs delayed-draw chains are also crossed (41cdfc96 jumps 3.53M -> 8.12M at 2024-03-31, and 8ac17ad3 at 2024-06-30 8.10M is a singleton), and should be fixed in the same pass. The proposed detector (equal terms in the previous quarter under another position_id) would catch both, so the detector decision is sound; the 'fixed' claim is not.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041848",
+     "text": "Hobbs & Associates Inc (i)(l) Term Loan SOFR + 6.50 % 11.60 % 4/11/2029 7,230,170 7,019,055 7,021,218"
+    },
+    {
+     "accession": "0000950170-23-063077",
+     "text": "Hobbs & Associates, LLC (i)(l) Term Loan SOFR + 6.50 % 11.95 % 4/11/2029 7,212,095 7,006,545 7,031,792"
+    },
+    {
+     "accession": "0001193125-26-214226",
+     "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-FPZ-1920453-1",
+   "outcome": "supported",
+   "rationale": "Re-review (fpze, DC-0001920453-217abf613d), now SUPPORTED. The evidence matches my recomputation (68 day-first only: 39 unambiguous, 29 ambiguous; 78 ambiguous month-first; 2026-03-31 has none). The design is sound. Part (1), unambiguous coercion (first number above 12), is safe in the shared grammar. Part (2), an opt-in declaration of the exact day-first contexts, avoids any per-date heuristic, which would misread one of the two ambiguous groups. The tests cover a declared versus undeclared ambiguous date, an undeclared month-first context, an invalid date and an undeclared fund. Classification as verification_bug is right: published data are correct and the check cannot read the source. Two cautions for the owner. The declaration is pinned to one filing's contexts and will not carry forward: if the filer keeps mixing orders, each new quarter needs a fresh list, and the gate should keep reporting the exclusion until it does. The request should also state that the 18 production agentA findings return at the next batch regardless of this repair (stated in next_action).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Warshaw Opco LLC (i)(l)(q)(r) Term Loan SOFR + 7.00 % ( 0.50 % PIK) 10.73 % 3/27/2030 23,198,325 22,917,843 21,272,864"
+    },
+    {
+     "accession": "0001193125-26-346851",
+     "text": "Ab Centers Acquisition Corporation (f)(j)(l) Delayed Draw Term Loan SOFR + 5.25 % 8.89 % 7/2/2031 1,740,191 1,710,777 1,711,230"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-FPZ-1920453-2",
+   "outcome": "supported",
+   "rationale": "Carried from the fpzc review (request unchanged): Reproduced: make_batch_dispositions.py fpzc <batch> 0001920453 (dry) stops at fd.validate with 'needs a filing quote ... missing: 0001920453 2022-03-22, 0001920453 2022-09-30' and 'rows must name the rows the entry covers'. The F28 branch builds an entry the current store schema rejects. That is a tooling defect blocking a reason the owner already accepted (DS-LARGE6-F28-1920453 for 2022-12-31), not a change to acceptance. The fix needs the test the contract asks for: an entry with the commencement quote passes, and one without a quote or rows fails.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057685",
+     "text": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions."
+    }
+   ]
+  }
+ ]
+}

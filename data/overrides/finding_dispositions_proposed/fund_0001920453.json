@@ -8,16 +8,43 @@
    "engine": "row_validation",
    "rule_name": "X11",
    "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-23-063077 \"Omnia Partners LLC (f)(h)(l) Delayed Draw Term Loan - - 7/19/2030 - ( 179 ) 134\" 1 89 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-035353 \"Omnia Partners LLC (f)(h)(l) Delayed Draw Term Loan - - 7/25/2030 - ( 173 ) 3,590\" 1 91 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-125469 \"USALCO, LLC (f)(h)(k)(l)(n) Delayed Draw Term Loan - - 9/30/2031 - - 154\" 1 82 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-25-041963 \"USALCO, LLC (f)(h)(l)(m)(p) Delayed Draw Term Loan - - 9/30/2031 - - 385\" 1 82",
-   "ciks": ["0001920453"],
-   "quarters": ["2023-09-30", "2023-12-31", "2024-09-30", "2024-12-31"],
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-09-30",
+    "2024-12-31"
+   ],
    "reason_key": "x11-undrawn-line-par-printed-as-dash",
    "statement": "The one row X11 flags in each quarter is an undrawn delayed-draw line printed with a dash for par (and for the reference rate and rate) and a small mark: Omnia Partners LLC at 2023-09-30 and 2023-12-31 (cost (179) / (173), value 134 / 3,590), USALCO, LLC at 2024-09-30 and 2024-12-31 (cost '-', value 154 / 385). No principal is printed or tagged for them; the published row carries none. No fix: there is no par to publish.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-23-063077", "verbatim": "Omnia Partners LLC (f)(h)(l) Delayed Draw Term Loan - - 7/19/2030 - ( 179 ) 134", "quote": "2023-09-30: par printed '-', cost (179), value 134"},
-    {"source": "filing", "accession": "0000950170-24-035353", "verbatim": "Omnia Partners LLC (f)(h)(l) Delayed Draw Term Loan - - 7/25/2030 - ( 173 ) 3,590", "quote": "2023-12-31: par printed '-', cost (173), value 3,590"},
-    {"source": "filing", "accession": "0000950170-24-125469", "verbatim": "USALCO, LLC (f)(h)(k)(l)(n) Delayed Draw Term Loan - - 9/30/2031 - - 154", "quote": "2024-09-30: par and cost printed '-', value 154 (the member calls it 'Term Loan'; instrument set to the printed 'Delayed Draw Term Loan' by row correction)"},
-    {"source": "filing", "accession": "0000950170-25-041963", "verbatim": "USALCO, LLC (f)(h)(l)(m)(p) Delayed Draw Term Loan - - 9/30/2031 - - 385", "quote": "2024-12-31: par and cost printed '-', value 385"}
+    {
+     "source": "filing",
+     "accession": "0000950170-23-063077",
+     "verbatim": "Omnia Partners LLC (f)(h)(l) Delayed Draw Term Loan - - 7/19/2030 - ( 179 ) 134",
+     "quote": "2023-09-30: par printed '-', cost (179), value 134"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035353",
+     "verbatim": "Omnia Partners LLC (f)(h)(l) Delayed Draw Term Loan - - 7/25/2030 - ( 173 ) 3,590",
+     "quote": "2023-12-31: par printed '-', cost (173), value 3,590"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125469",
+     "verbatim": "USALCO, LLC (f)(h)(k)(l)(n) Delayed Draw Term Loan - - 9/30/2031 - - 154",
+     "quote": "2024-09-30: par and cost printed '-', value 154 (the member calls it 'Term Loan'; instrument set to the printed 'Delayed Draw Term Loan' by row correction)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041963",
+     "verbatim": "USALCO, LLC (f)(h)(l)(m)(p) Delayed Draw Term Loan - - 9/30/2031 - - 385",
+     "quote": "2024-12-31: par and cost printed '-', value 385"
+    }
    ]
   },
   {
@@ -26,14 +53,29 @@
    "engine": "row_validation",
    "rule_name": "X02",
    "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-125469 \"USALCO, LLC (f)(h)(k)(l)(n) Delayed Draw Term Loan - - 9/30/2031 - - 154\" 1 82 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-25-041963 \"USALCO, LLC (f)(h)(l)(m)(p) Delayed Draw Term Loan - - 9/30/2031 - - 385\" 1 82",
-   "ciks": ["0001920453"],
-   "quarters": ["2024-09-30", "2024-12-31"],
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
    "reason_key": "x02-no-rate-printed-on-the-row",
    "statement": "The owner's check (no rate in source) passes on every flagged row of these quarters but one: the undrawn USALCO, LLC delayed-draw line, whose positive mark (154 at 2024-09-30, 385 at 2024-12-31) and dash cost make the check's unfunded test fail. The page prints a dash for its reference rate and its rate and the filing tags none. Published with no rate, as printed.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-125469", "verbatim": "USALCO, LLC (f)(h)(k)(l)(n) Delayed Draw Term Loan - - 9/30/2031 - - 154", "quote": "2024-09-30: reference rate and rate printed '-'"},
-    {"source": "filing", "accession": "0000950170-25-041963", "verbatim": "USALCO, LLC (f)(h)(l)(m)(p) Delayed Draw Term Loan - - 9/30/2031 - - 385", "quote": "2024-12-31: reference rate and rate printed '-'"}
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125469",
+     "verbatim": "USALCO, LLC (f)(h)(k)(l)(n) Delayed Draw Term Loan - - 9/30/2031 - - 154",
+     "quote": "2024-09-30: reference rate and rate printed '-'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041963",
+     "verbatim": "USALCO, LLC (f)(h)(l)(m)(p) Delayed Draw Term Loan - - 9/30/2031 - - 385",
+     "quote": "2024-12-31: reference rate and rate printed '-'"
+    }
    ]
   },
   {
@@ -42,15 +84,34 @@
    "engine": "oracle",
    "rule_name": "C04",
    "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-035353 \"Door Pro Holdings LLC (l)(n) Equity Interest 339,744 346,205\" 1 70 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-035353 \"WCI-BXC Investment Holdings LP (l)(m)(n) Equity Interest 588,357 593,716\" 1 82 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-057685 \"WCI-BXC Investment Holdings LP (l)(m)(n) Equity Interest 587,838 588,357 593,716\" 1 90",
-   "ciks": ["0001920453"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "reason_key": "c04-equity-interest-printed-without-unit-count",
    "statement": "Three of the five equity rows at 2023-12-31 publish a unit count (60 pct, the check wants 70). The two without one are printed 'Equity Interest' with an empty units column and no unit or principal fact tagged: Door Pro Holdings LLC (cost 339,744, value 346,205) and WCI-BXC Investment Holdings LP (588,357 / 593,716). From 2024-03-31 the filer prints and tags their counts (WCI-BXC 587,838; Door Pro 340 'Class A Units'), and they are published.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-035353", "verbatim": "Door Pro Holdings LLC (l)(n) Equity Interest 339,744 346,205", "quote": "no unit count printed"},
-    {"source": "filing", "accession": "0000950170-24-035353", "verbatim": "WCI-BXC Investment Holdings LP (l)(m)(n) Equity Interest 588,357 593,716", "quote": "no unit count printed"},
-    {"source": "filing", "accession": "0000950170-24-057685", "verbatim": "WCI-BXC Investment Holdings LP (l)(m)(n) Equity Interest 587,838 588,357 593,716", "quote": "2024-03-31: the count is printed from the next quarter and published"}
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035353",
+     "verbatim": "Door Pro Holdings LLC (l)(n) Equity Interest 339,744 346,205",
+     "quote": "no unit count printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035353",
+     "verbatim": "WCI-BXC Investment Holdings LP (l)(m)(n) Equity Interest 588,357 593,716",
+     "quote": "no unit count printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057685",
+     "verbatim": "WCI-BXC Investment Holdings LP (l)(m)(n) Equity Interest 587,838 588,357 593,716",
+     "quote": "2024-03-31: the count is printed from the next quarter and published"
+    }
    ]
   },
   {
@@ -59,14 +120,28 @@
    "engine": "row_validation",
    "rule_name": "SRC_BDC01",
    "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-25-070240 \"RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %\" 1 130 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-25-070240 \"EDS Buyer, LLC (f)(j)(m) Revolving Credit Facility - - 1/10/2029 - ( 12,398 ) - 8,157,346 8,306,361 0.91 %\" 1 116",
-   "ciks": ["0001920453"],
-   "quarters": ["2025-03-31"],
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
    "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
    "statement": "The source rows reported as missing are two industry subtotals the filer tagged on a second member of a revolver: RxStrategies 52,262,801 (the Health Care Technology subtotal; the revolver itself is (2,500) and is published from its own context) and EDS Buyer 8,306,361 (the Electronic Components subtotal, equal to the term loan). They are removed by rule exclude_industry_subtotals_on_position_members_2025q1 (D-120). With them out, published equals the filed total 1,750,876,439.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-25-070240", "verbatim": "RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %", "quote": "52,262,801 is the industry subtotal printed after the revolver's own (2,500)"},
-    {"source": "filing", "accession": "0000950170-25-070240", "verbatim": "EDS Buyer, LLC (f)(j)(m) Revolving Credit Facility - - 1/10/2029 - ( 12,398 ) - 8,157,346 8,306,361 0.91 %", "quote": "8,306,361 is the industry subtotal; the revolver prints a dash for value"}
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070240",
+     "verbatim": "RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %",
+     "quote": "52,262,801 is the industry subtotal printed after the revolver's own (2,500)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070240",
+     "verbatim": "EDS Buyer, LLC (f)(j)(m) Revolving Credit Facility - - 1/10/2029 - ( 12,398 ) - 8,157,346 8,306,361 0.91 %",
+     "quote": "8,306,361 is the industry subtotal; the revolver prints a dash for value"
+    }
    ]
   },
   {
@@ -75,14 +150,28 @@
    "engine": "source_recon",
    "rule_name": "blocking_source_pct_leaf_parser_mismatch",
    "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-25-070240 \"RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %\" 1 130 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-25-070240 \"Total Investment Portfolio \\$ 1,753,090,392 \\$ 1,750,876,439 191.81 %\" 1 77",
-   "ciks": ["0001920453"],
-   "quarters": ["2025-03-31"],
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
    "reason_key": "src-missing-row-is-an-excluded-printed-subtotal",
    "statement": "The blocking source rows (52.26M) are the same two industry subtotals tagged on revolver members (RxStrategies 52,262,801; EDS Buyer 8,306,361), removed by rule exclude_industry_subtotals_on_position_members_2025q1; each carries the printed industry percent, which is why the source side reads them as percent-bearing leaves. Published equals the filed total 1,750,876,439.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-25-070240", "verbatim": "RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %", "quote": "the subtotal and its 5.72 % sit on the revolver's line"},
-    {"source": "filing", "accession": "0000950170-25-070240", "verbatim": "Total Investment Portfolio $ 1,753,090,392 $ 1,750,876,439 191.81 %", "quote": "filed total, equal to the published sum"}
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070240",
+     "verbatim": "RxStrategies, Inc. (f)(j)(m) Revolving Credit Facility - - 8/12/2030 - ( 33,600 ) ( 2,500 ) 51,887,508 52,262,801 5.72 %",
+     "quote": "the subtotal and its 5.72 % sit on the revolver's line"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070240",
+     "verbatim": "Total Investment Portfolio $ 1,753,090,392 $ 1,750,876,439 191.81 %",
+     "quote": "filed total, equal to the published sum"
+    }
    ]
   },
   {
@@ -91,14 +180,64 @@
    "engine": "fund_financials",
    "rule_name": "F24",
    "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-23-021729 \"Total Investment Portfolio \\$ 103,515,599 \\$ 104,556,936 101.12 %\" 1 73 && python scripts/v05_evidence/page_line.py 0001920453 0000950170-23-041848 \"Total Investment Portfolio 197,224,790 198,706,893 103.77 %\" 1 69",
-   "ciks": ["0001920453"],
-   "quarters": ["2023-06-30"],
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
    "reason_key": "schedule-growth-printed-positions-total-ties",
    "statement": "Positions 16 at 2023-03-31 to 33 at 2023-06-30 (ratio 2.06, the check's bound is 2.0) while the fund ramped up after commencing operations; the published sum equals the printed total in both quarters (104,556,936 and 198,706,893).",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-23-021729", "verbatim": "Total Investment Portfolio $ 103,515,599 $ 104,556,936 101.12 %", "quote": "2023-03-31 printed total, equal to the 16 published rows"},
-    {"source": "filing", "accession": "0000950170-23-041848", "verbatim": "Total Investment Portfolio 197,224,790 198,706,893 103.77 %", "quote": "2023-06-30 printed total, equal to the published sum: 32 loans, 1 equity interest and 2 fund rows (central fund, money market)"}
+    {
+     "source": "filing",
+     "accession": "0000950170-23-021729",
+     "verbatim": "Total Investment Portfolio $ 103,515,599 $ 104,556,936 101.12 %",
+     "quote": "2023-03-31 printed total, equal to the 16 published rows"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041848",
+     "verbatim": "Total Investment Portfolio 197,224,790 198,706,893 103.77 %",
+     "quote": "2023-06-30 printed total, equal to the published sum: 32 loans, 1 equity interest and 2 fund rows (central fund, money market)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-F28-1920453-1",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001920453 0000950170-24-035353 \"On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions.\" 1 200",
+   "ciks": [
+    "0001920453"
+   ],
+   "quarters": [
+    "2022-03-22",
+    "2022-09-30"
+   ],
+   "reason_key": "f28-fund-quarter-before-first-schedule-no-holdings",
+   "statement": "Extends the accepted DS-LARGE6-F28-1920453 reason (2022-12-31: fund-level figures exist but there is no position schedule before the fund's first structured filing) to 2022-03-22 and 2022-09-30. The fund commenced operations on 2023-03-13; its 2022 fund_financials rows carry seed capital only (net assets 0 and 2,000, no income, no expenses), and the first quarter with published holdings is 2023-03-31. There are no holdings to compare for either date. No fix: nothing printed is missing.",
+   "basis": "read",
+   "rows": [
+    {
+     "fund_level": true
+    }
+   ],
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035353",
+     "verbatim": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions.",
+     "quote": "2022-03-22: On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions. (inception 2022-03-23; seed capital only until then)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035353",
+     "verbatim": "On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions.",
+     "quote": "2022-09-30: On March 13, 2023, we commenced operations and accepted $102.1 million of subscriptions. (operations began 2023-03-13, so the 2022 rows hold seed capital only)"
+    }
    ]
   }
  ]

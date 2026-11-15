@@ -5926,3 +5926,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - X02 2026-03-31: earlier real-error verdict retired (VR-FL-1901612-01); 251 unfunded N/A(6) lines are a check misfire; check_repair_request DC-0001901612-3e03d1bd3f (key on the printed N/A line; four must-fail tests). Stale PD-X02 proposal deleted (already accepted as DS-X02-1901612-4).
 - Observation for the cohort: a mid-year first fiscal period can be published halved (propose_detector: first 10-K income period under 12 months with no first_income_year_ends key).
 - A clean result is not data correct.
+
+### D-287 Fund loop 2026-11-15: Fidelity Private Credit Fund (0001920453), sandbox fpzf
+
+- Filtered packet: 42 findings. 18 agentA findings did not fire at HEAD because agentA excludes the fund (grammar parses 89.8 pct of identifiers vs a 90 pct bar; day-first dates); production b1112b read the stale 2024-07-24 agent_a_flags.csv (374 flags for this fund), so they return unread in the next batch. Sonnet fund agent `agent:fund-fpz-sonnet`, Opus reviewer `agent:review-fpzc-opus` (full on fpzc, change-only on fpze/fpzf; investigation COMPLETE), Sonnet reader (0/20). Builds fpza..fpzf; totals tie 14/14 to the dollar. Outstanding 16: 14 agentA_cohort_excluded (check misfire) and F28 x2 (proposal PD-F28-1920453-1, not_applicable).
+- Fixed: 40 issuer names (Door Pro published as Conair, Principal Lighting as Perimeter, Roofing Services as Roofing Acquisition, typos, glued words) with printed instruments; 2024-12-31 income no longer a quarter of the year (existing highlights key income_concept_fallback; interest_income blank for six periods, total had been tagged as interest); unflagged: 14 CCI Prime preferred rows publishing PRIME from the name, 7 undrawn lines at 0.00 rate, 21 instrument wordings incl. two undrawn revolvers as term loans and a term loan as revolver; CIFC and Hobbs chains re-joined (position_identity_contexts; one Hobbs link supported by the unfunded-commitment table).
+- Retired under D-252 (10): A07 x3, B01 x2, X04, FX01, dl_rate_fill, agentA reference, F26.
+- Requests: REQ-FPZ-1920453-1 verification_bug (agentA date grammar: coerce unambiguous day-first; opt-in per-context dmy list for 68 contexts, pinned to one filing); REQ-FPZ-1920453-2 make_batch_dispositions assertion.
+- A clean result is not data correct.

@@ -506,6 +506,31 @@
       "CDOR=CDOR",
       "CORRA=CORRA",
       "PRIME=PRIME"
+    ],
+    "position_identity_contexts": [
+      "0000950170-25-108923 C_d5e4aad9-5ce0-41da-9b5c-3562e039d522 => cifc-2025-iii-clo-note-sofr725-2038",
+      "0001193125-25-277125 C_a44790b2-ebba-4447-88d8-0c3005684ef9 => cifc-2025-iii-clo-note-sofr725-2038",
+      "0001193125-26-119488 C_1542a4d5-ad14-4be0-a1d3-07d640a1842d => cifc-2025-iii-clo-note-sofr725-2038",
+      "0001193125-26-214226 C_db550faa-8755-4e81-903d-fb082063ffed => cifc-2025-iii-clo-note-sofr725-2038",
+      "0001193125-26-346851 C_67370459-3b58-41d1-8a52-9502f80e311d => cifc-2025-iii-clo-note-sofr725-2038",
+      "0000950170-23-041848 C_e479ff95-d5d1-4805-816e-f0950a885a35 => hobbs-term-loan-a-7m-2029",
+      "0000950170-23-063077 C_71ffb10a-82eb-4c16-8d91-a44f7c5a8028 => hobbs-term-loan-a-7m-2029",
+      "0000950170-24-035353 C_dbb8c4a3-f35e-4a16-94d5-1e125d582d0e => hobbs-term-loan-a-7m-2029",
+      "0000950170-24-057685 C_b9ff9e24-78de-47aa-af7a-cdc2076306ff => hobbs-term-loan-a-7m-2029",
+      "0000950170-24-097000 C_d040fa19-d56c-452d-b657-8a5bda03e36a => hobbs-term-loan-a-7m-2029",
+      "0000950170-23-063077 C_64370d61-6b07-4edb-b98e-67d3e5ec38e0 => hobbs-term-loan-b-2m-2029",
+      "0000950170-24-035353 C_eae52fdc-1dba-42a7-afa4-b1c701e10142 => hobbs-term-loan-b-2m-2029",
+      "0000950170-24-057685 C_c005a518-64cb-4625-8b52-9223da92d35f => hobbs-term-loan-b-2m-2029",
+      "0000950170-24-097000 C_5c18f325-7219-45c8-b033-b9a169bae63e => hobbs-term-loan-b-2m-2029",
+      "0000950170-23-041848 C_efeb5806-233f-48d8-9786-9069b719fef7 => hobbs-delayed-draw-c-8m-2029",
+      "0000950170-23-063077 C_5deee663-5e74-4cb0-8510-afea86028d7b => hobbs-delayed-draw-c-8m-2029",
+      "0000950170-24-035353 C_8979a762-de78-41ac-941f-060025b09a88 => hobbs-delayed-draw-c-8m-2029",
+      "0000950170-24-057685 C_bbc065fc-bc24-48b0-87db-e36b0bf45da4 => hobbs-delayed-draw-c-8m-2029",
+      "0000950170-24-097000 C_d23fe91e-f915-45c8-a524-94e03784ddc8 => hobbs-delayed-draw-c-8m-2029",
+      "0000950170-23-063077 C_95ae09f7-c08b-47a3-8f7c-4ab4213af193 => hobbs-delayed-draw-d-6m-2029",
+      "0000950170-24-035353 C_5b61467d-c00e-468a-99d5-7cf85221e60e => hobbs-delayed-draw-d-6m-2029",
+      "0000950170-24-057685 C_1d63c972-21c8-40c3-8566-f3711d1df6e4 => hobbs-delayed-draw-d-6m-2029",
+      "0000950170-24-097000 C_d98a61a0-2203-4217-b818-87aa3fbed1b1 => hobbs-delayed-draw-d-6m-2029"
     ]
   }
 }
