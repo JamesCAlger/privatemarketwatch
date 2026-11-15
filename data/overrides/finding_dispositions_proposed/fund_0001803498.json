@@ -1,70 +1,183 @@
 {
-  "status": "WITHDRAWN: no whole-finding disposition is supported; nothing accepted.",
-  "sandbox": "nvbcd",
-  "dispositions": [],
-  "withdrawal_audit": {
-    "date": "2026-10-20",
-    "authority": "Live orchestrator /root instruction: existing whole-finding contract; no gate changes.",
-    "reason": "Petco candidate covers only one of two flagged rows. Minerva differs from the printed issuer and is a confirmed error. Neither old proposal can represent the whole finding; issuing-vehicle as-filed rationale withdrawn.",
-    "original_dispositions": [
-      {
-        "disposition_id": "PD-0001803498-ISSUERNAME-1",
-        "class": "as_filed",
-        "engine": "identity",
-        "rule_name": "issuer_name_printed",
-        "ciks": [
-          "0001803498"
-        ],
-        "quarters": [
-          "2022-09-30"
-        ],
-        "reason_key": "issuer-name-printed-truncated-same-issuer",
-        "statement": "One row is left at 2022-09-30: the Petco term loan (fair value 4,612 thousand). The current-period line prints the name cut short, 'Petco Health and Wellness Comp'. The filer's member, and the comparative column of the same filing, give the full name 'Petco Health & Wellness Co, Inc.', and that is what we publish. Par, cost and value tie to the printed line. Publishing the cut-off text would make the name worse, and no printed form of the full name spells 'and' the way the rule needs, so no fix applies. Every other flagged row of this finding (the members shifted one line in the 10-Q) is fixed by context-keyed row corrections in sandbox bcpf.",
-        "basis": "read",
-        "evidence": [
-          {
-            "source": "filing",
-            "accession": "0001803498-22-000021",
-            "verbatim": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612",
-            "quote": "2022-09-30 current-period line: name truncated by the page; values = published row"
-          },
-          {
-            "source": "filing",
-            "accession": "0001803498-22-000021",
-            "verbatim": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899",
-            "quote": "2021-12-31 comparative column of the same filing: the full name, as published"
-          }
-        ],
-        "rerun": "python scratch/fund_runs/0001803498/page_findings.py bcpb issuer_name_printed",
-        "decided_by": "PROPOSED by agent fund-agent-bcred-pr-2026-10-18 (2026-10-18, sandbox bcpb); not accepted by the owner",
-        "decided_on": "2026-10-18"
-      },
-      {
-        "disposition_id": "PD-0001803498-ISSUERNAME-2",
-        "class": "as_filed",
-        "engine": "identity",
-        "rule_name": "issuer_name_printed",
-        "ciks": [
-          "0001803498"
-        ],
-        "quarters": [
-          "2022-09-30"
-        ],
-        "reason_key": "issuer-name-is-the-notes-issuing-vehicle",
-        "statement": "Second row left at 2022-09-30: the athenahealth 6.50 % unsecured notes due 2030 (5,663 thousand). The filer's member names the notes' issuing vehicle, 'Minerva Merger Sub, Inc.'. The page prints the parent, 'Athenahealth, Inc.'. Values, rate and maturity tie to the printed line. The fix was tried in sandbox bcpb (issuer_name corrected to the printed name) and taken out: once renamed, the shared position matcher put the notes at the head of the athenahealth term-loan chain (position d9953922, the loan due 2029-02-15 in every later quarter) and moved the 2022-09-30 loan to a new single-row position. That is a worse error than the name, so the name stays as the member files it.",
-        "basis": "read",
-        "evidence": [
-          {
-            "source": "filing",
-            "accession": "0001803498-22-000021",
-            "verbatim": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663",
-            "quote": "2022-09-30 Unsecured Debt line: par, cost, value = the published Minerva Merger Sub row"
-          }
-        ],
-        "rerun": "python scratch/fund_runs/0001803498/pids.py bcpb \"(?i)athenahealth|minerva\"",
-        "decided_by": "PROPOSED by agent fund-agent-bcred-pr-2026-10-18 (2026-10-18, sandbox bcpf); not accepted by the owner",
-        "decided_on": "2026-10-18"
-      }
-    ]
+ "status": "PROPOSED, not accepted. Row-scoped Petco entry, and two fund-level F28 not_applicable entries under owner ruling DC-shared-b3a989952e. The findings ledger does not read this directory.",
+ "sandbox": "bcyb",
+ "dispositions": [
+  {
+   "disposition_id": "PD-issuer_name_printed-1803498-petco-row",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "reason_key": "printed-name-cut-by-filer-full-name-kept",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2022-09-30"
+   ],
+   "statement": "Row-scoped: the Petco term loan only (ROW-fb32f9352d6dcfba, fair value 4,612 thousand). The current-period line prints the name cut short, 'Petco Health and Wellness Comp'; the filer's member and the comparative line give 'Petco Health & Wellness Co, Inc.', which is what we publish; par, cost and value tie to the printed line. Owner ruling DC-0001803498-c3a4dbc414 (2026-11-14). The other flagged row of this finding, Minerva Merger Sub (ROW-6900c35a75241a00), is a confirmed error and is NOT covered.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001803498-22-000021",
+     "quarter": "2022-09-30",
+     "verbatim": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612",
+     "quote": "current-period line: name cut by the filer; values = published row (4,870 par, 4,612 fair value)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001803498-22-000021",
+     "quarter": "2022-09-30",
+     "verbatim": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899",
+     "quote": "comparative column of the same filing: the full name, as published"
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001803498",
+     "quarter": "2022-09-30",
+     "row_id": "ROW-fb32f9352d6dcfba"
+    }
+   ],
+   "addresses_verdict": {
+    "2022-09-30": "Earlier reviewers found Minerva Merger Sub (printed Athenahealth, Inc.) a confirmed error: that row is not named here and stays open. The Petco row was only ever a filer-cut printed name with the right published name; the owner accepted it for this row."
+   },
+   "rerun": "python scripts/v05_evidence/page_line.py 0001803498 0001803498-22-000021 \"Petco Health and Wellness Comp\"",
+   "decided_by": "PROPOSED by agent:fund-bcy-sonnet (fund loop 2026-11-15, sandbox bcyb); not accepted by the owner",
+   "decided_on": "2026-11-15"
+  },
+  {
+   "disposition_id": "PD-F28-1803498-2022-03-31",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "reason_key": "pre-xbrl-html-quarters-out-of-scope-for-now",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2022-03-31"
+   ],
+   "statement": "2022-03-31: the 10-Q prints the full schedule (investments plus cash 39,420,455 thousand, 220.19 pct of net assets) but it is HTML-only (no XBRL cached) and no published step ingests HTML-template rows. Owner ruling DC-shared-b3a989952e (2026-11-14): pre-2022-09-30 plain-HTML quarters are not applicable until an HTML ingestion stage is scheduled. Finding RVQ_REV_e89d777120f0. The gap is real, not a data-correct claim; no fund-level fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001803498-22-000013",
+     "quarter": "2022-03-31",
+     "verbatim": "Other Cash and Cash Equivalents $ 1,642,981 $ 1,642,981 9.18 % Total Portfolio Investments, Cash and Cash Equivalents $ 39,419,602 $ 39,420,455 220.19 %",
+     "quote": "printed total of the schedule that is not published: investments plus cash 39,420,455 thousand, 220.19 pct of net assets"
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001803498",
+     "quarter": "2022-03-31",
+     "fund_level": true
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001803498 0001803498-22-000013 \"Total Portfolio Investments, Cash\"",
+   "decided_by": "PROPOSED by agent:fund-bcy-sonnet (fund loop 2026-11-15, sandbox bcyb); not accepted by the owner",
+   "decided_on": "2026-11-15"
+  },
+  {
+   "disposition_id": "PD-F28-1803498-2022-06-30",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "reason_key": "pre-xbrl-html-quarters-out-of-scope-for-now",
+   "ciks": [
+    "0001803498"
+   ],
+   "quarters": [
+    "2022-06-30"
+   ],
+   "statement": "2022-06-30: the 10-Q prints the full schedule (investments plus cash 47,870,332 thousand, 228.27 pct of net assets) but it is HTML-only (the XBRL file cached for it, 19,982 bytes, holds cover facts only and no schedule facts) and no published step ingests HTML-template rows. Owner ruling DC-shared-b3a989952e (2026-11-14): pre-2022-09-30 plain-HTML quarters are not applicable until an HTML ingestion stage is scheduled. Finding RVQ_REV_8788b4b75ff1. The gap is real, not a data-correct claim; no fund-level fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001803498-22-000017",
+     "quarter": "2022-06-30",
+     "verbatim": "Other Cash and Cash Equivalents 1,503,807 1,503,807 7.17 Total Portfolio Investments, Cash and Cash Equivalents $ 48,785,413 $ 47,870,332 228.27 %",
+     "quote": "printed total of the schedule that is not published: investments plus cash 47,870,332 thousand, 228.27 pct of net assets"
+    }
+   ],
+   "rows": [
+    {
+     "cik": "0001803498",
+     "quarter": "2022-06-30",
+     "fund_level": true
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/page_line.py 0001803498 0001803498-22-000017 \"Total Portfolio Investments, Cash\"",
+   "decided_by": "PROPOSED by agent:fund-bcy-sonnet (fund loop 2026-11-15, sandbox bcyb); not accepted by the owner",
+   "decided_on": "2026-11-15"
   }
+ ],
+ "withdrawal_audit": {
+  "date": "2026-10-20",
+  "authority": "Live orchestrator /root instruction: existing whole-finding contract; no gate changes.",
+  "reason": "Petco candidate covers only one of two flagged rows. Minerva differs from the printed issuer and is a confirmed error. Neither old proposal can represent the whole finding; issuing-vehicle as-filed rationale withdrawn.",
+  "original_dispositions": [
+   {
+    "disposition_id": "PD-0001803498-ISSUERNAME-1",
+    "class": "as_filed",
+    "engine": "identity",
+    "rule_name": "issuer_name_printed",
+    "ciks": [
+     "0001803498"
+    ],
+    "quarters": [
+     "2022-09-30"
+    ],
+    "reason_key": "issuer-name-printed-truncated-same-issuer",
+    "statement": "One row is left at 2022-09-30: the Petco term loan (fair value 4,612 thousand). The current-period line prints the name cut short, 'Petco Health and Wellness Comp'. The filer's member, and the comparative column of the same filing, give the full name 'Petco Health & Wellness Co, Inc.', and that is what we publish. Par, cost and value tie to the printed line. Publishing the cut-off text would make the name worse, and no printed form of the full name spells 'and' the way the rule needs, so no fix applies. Every other flagged row of this finding (the members shifted one line in the 10-Q) is fixed by context-keyed row corrections in sandbox bcpf.",
+    "basis": "read",
+    "evidence": [
+     {
+      "source": "filing",
+      "accession": "0001803498-22-000021",
+      "verbatim": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612",
+      "quote": "2022-09-30 current-period line: name truncated by the page; values = published row"
+     },
+     {
+      "source": "filing",
+      "accession": "0001803498-22-000021",
+      "verbatim": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899",
+      "quote": "2021-12-31 comparative column of the same filing: the full name, as published"
+     }
+    ],
+    "rerun": "python scratch/fund_runs/0001803498/page_findings.py bcpb issuer_name_printed",
+    "decided_by": "PROPOSED by agent fund-agent-bcred-pr-2026-10-18 (2026-10-18, sandbox bcpb); not accepted by the owner",
+    "decided_on": "2026-10-18"
+   },
+   {
+    "disposition_id": "PD-0001803498-ISSUERNAME-2",
+    "class": "as_filed",
+    "engine": "identity",
+    "rule_name": "issuer_name_printed",
+    "ciks": [
+     "0001803498"
+    ],
+    "quarters": [
+     "2022-09-30"
+    ],
+    "reason_key": "issuer-name-is-the-notes-issuing-vehicle",
+    "statement": "Second row left at 2022-09-30: the athenahealth 6.50 % unsecured notes due 2030 (5,663 thousand). The filer's member names the notes' issuing vehicle, 'Minerva Merger Sub, Inc.'. The page prints the parent, 'Athenahealth, Inc.'. Values, rate and maturity tie to the printed line. The fix was tried in sandbox bcpb (issuer_name corrected to the printed name) and taken out: once renamed, the shared position matcher put the notes at the head of the athenahealth term-loan chain (position d9953922, the loan due 2029-02-15 in every later quarter) and moved the 2022-09-30 loan to a new single-row position. That is a worse error than the name, so the name stays as the member files it.",
+    "basis": "read",
+    "evidence": [
+     {
+      "source": "filing",
+      "accession": "0001803498-22-000021",
+      "verbatim": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663",
+      "quote": "2022-09-30 Unsecured Debt line: par, cost, value = the published Minerva Merger Sub row"
+     }
+    ],
+    "rerun": "python scratch/fund_runs/0001803498/pids.py bcpb \"(?i)athenahealth|minerva\"",
+    "decided_by": "PROPOSED by agent fund-agent-bcred-pr-2026-10-18 (2026-10-18, sandbox bcpf); not accepted by the owner",
+    "decided_on": "2026-10-18"
+   }
+  ]
+ }
 }
