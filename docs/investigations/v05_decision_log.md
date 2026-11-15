@@ -5910,3 +5910,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Retired under D-252: pct_of_net_assets_identity 2026-03-31, C107 2026-03-31, F16 2025-12-31 (checks pass on cazb and production, plants fail).
 - Requests: CAZ-R1 acceptance_change for the owner (C107 bracketed printed cost: Route A keep the as_filed disposition DS-FUNDLOOP-C107, Route B change what C107 accepts); CAZ-R2 verification_bug make_batch_dispositions assertion. PD-C107 withdrawn.
 - Reviewer note: C115 only catches spreads above 15, so it misses fixed coupons and equity all-in rates below that. A clean result is not data correct.
+
+### D-285 Fund loop 2026-11-15: Diameter Credit Company (0001916099), sandbox dize
+
+- Filtered packet: 19 findings (8 supported_fix issuer_name_printed; 11 unreviewed: A07 4, PP01 2, A01, B02, C107, FX01, F33); none closed at HEAD. Sonnet fund agent `agent:fund-diz-sonnet`, Opus reviewer `agent:review-dizc-opus` (full on dizc, change-only on dize; investigation COMPLETE), Sonnet readers (dizc 0/20, dize 0/20). Builds diza..dize. Sandbox ledger 0 outstanding; totals equal the printed total 10/10.
+- Fixed: R.R. Donnelley "Corporate Bond" (wrapper strip), HowardSimon, ICAT, Legacy, Purflux names, restored instrument text; A01 total member treated as aggregate (wrapper category_marker_re; also reclassifies 2024-03-31/06-30 bare totals, no published change). Unflagged errors fixed: Bullhorn revolver and Emerald Wave 3 term loan published as delayed draw, Ranger warrant acquisition date as maturity, three 2026-06-30 revolvers with par 1,000x small (reviewer par scan: 0 left on 989 lines).
+- Retired under D-252 (10): C107, PP01 x2, F33, B02, FX01 Purflux (principal fact unit iso4217:USD plus FX co-movement; planted EUR fails), A07 x4 (no percent fact on any position context; plants fail).
+- DIZ-REQ-1 verification_bug: make_batch_dispositions writes entries without quotes/rows then asserts the D-253 bar.
+- A clean result is not data correct.

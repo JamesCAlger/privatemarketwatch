@@ -78,10 +78,10 @@
         "family": "equity"
       }
     ],
-    "category_marker_re": "(?i)^\\s*(?:Investments\\s+Non-Controlled/Non-Affiliated\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Equity(?:\\s+Other\\s+Equity)?)\\s+(?:MSD_INDUSTRY_LABELS)\\s*$|\\bTotal\\s+(?:Investments|Preferred\\s+Equity|Common\\s+Equity|Cash\\s+and\\s+Cash\\s+Equivalents|Portfolio\\s+Investments)\\b|Preferred\\s+EquityInvestments\\s+Non-Controlled/Non-Affiliated\\s+Total\\s+Preferred\\s+Equity",
+    "category_marker_re": "(?i)^\\s*(?:Investments\\s+Non-Controlled/Non-Affiliated\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Equity(?:\\s+Other\\s+Equity)?)\\s+(?:MSD_INDUSTRY_LABELS)\\s*$|\\bTotal\\s+(?:Investments|Preferred\\s+Equity|Common\\s+Equity|Cash\\s+and\\s+Cash\\s+Equivalents|Portfolio\\s+Investments)\\b|Preferred\\s+EquityInvestments\\s+Non-Controlled/Non-Affiliated\\s+Total\\s+Preferred\\s+Equity|^\\s*Investments\\s+Non-Controlled/Non-Affiliated\\s*$",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%\\s*(?:\\(\\d+(?:\\.\\d+)?%\\s+PIK\\)|\\d+(?:\\.\\d+)?%\\s+PIK)?|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})",
-    "issuer_name_strip_re": "(?i)\\s+(?:-\\s+)?(?:(?:Series|Class)\\s+[A-Z0-9][A-Z0-9-]*(?:\\s+(?:Common|Preferred))?\\s+(?:Units|Shares|Stock|Interests|Limited\\s+Liability\\s+Company\\s+Interests)|Series\\s+[A-Z0-9][A-Z0-9-]*$|(?:Convertible\\s+)?Preferred\\s+(?:Shares|Units|Stock)|Common\\s+(?:Units|Shares|Stock)|Warrants(?:\\s+Shares)?|Limited\\s+Partner\\s+Interest|Delayed\\s+Draw\\s+Term\\s+Loan|Term\\s+Loan|Revolving\\s+Line\\s+of\\s+Credit|Bond|\\(\\s*[\\d,]+\\s+(?:shares|units)\\s*\\)|(?:Acquisition|Maturity)\\s+Date)(?![A-Za-z0-9]).*$",
+    "issuer_name_strip_re": "(?i)\\s+(?:-\\s+)?(?:(?:Series|Class)\\s+[A-Z0-9][A-Z0-9-]*(?:\\s+(?:Common|Preferred))?\\s+(?:Units|Shares|Stock|Interests|Limited\\s+Liability\\s+Company\\s+Interests)|Series\\s+[A-Z0-9][A-Z0-9-]*$|(?:Convertible\\s+)?Preferred\\s+(?:Shares|Units|Stock)|Common\\s+(?:Units|Shares|Stock)|Warrants(?:\\s+Shares)?|Limited\\s+Partner\\s+Interest|Delayed\\s+Draw\\s+Term\\s+Loan|Term\\s+Loan|Revolving\\s+Line\\s+of\\s+Credit|Corporate\\s+Bond|Bond|\\(\\s*[\\d,]+\\s+(?:shares|units)\\s*\\)|(?:Acquisition|Maturity)\\s+Date)(?![A-Za-z0-9]).*$",
     "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {

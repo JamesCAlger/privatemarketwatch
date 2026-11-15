@@ -1,0 +1,148 @@
+{
+ "reviewer_id": "agent:review-dizc-opus",
+ "report_digest": "dd1b522e36eb48cb7fb2d8b9b1372b0cdfa981ba4a0a73b5bb0c46a774bacc95",
+ "cik": "0001916099",
+ "label": "dize",
+ "before": "dixc",
+ "review_kind": "change-only re-review of 0001916099_dizc.json: everything rejected there plus every change since dizc re-verified; the rest carried",
+ "summary": "Ledger at dize: 0 outstanding, so there are no finding reviews. All 18 observations and request DIZ-REQ-1 are supported. All 10 D-252 retirements re-run: sandbox and production OK, plants fail where defined. The dizc rejections are resolved: the acquisition-date observation is fixed (no equity row with a maturity in any quarter), and VR-FL-1916099-04 has been re-issued with a check that reads the XBRL unit and fails a planted EUR unit. All three unflagged errors from round 1 are fixed. Correction to my round-1 review: the Ranger warrants unit count 14,456 was already published as shares_held in dizc; I was wrong. All findings cleared is not data correct.",
+ "finding_reviews": [],
+ "observation_reviews": [
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged since. Re-checked: totals still tie in all 10 quarters in dize (scratch/fund_runs/0001916099/review/totals.py dize).",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "Rialto Management Group, LLC (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 12/5/2024 12/5/2030 - ( 9 ) ( 2 )"}]
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "outcome": "supported",
+   "rationale": "Rejected in dizc for one residual row; now resolved. In dize the Ranger Parent I warrants row of 2025-12-31 (context C_603c11ff-b8f1-4973-8110-9d3a737f8b16) has maturity_date null, set by the row correction. Over all 10 quarters, 0 equity rows publish a maturity (obs_spot.py dize). The page prints 'N/A 10/28/2025', so that date is the acquisition date. Its shares_held is 14,456, as printed, in both dizc and dize; my round-1 statement that the count was missing was wrong.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Ranger Parent I, Inc. Warrants Shares N/A 10/28/2025 14,456 $ - $ - 14,456 - - 0.00 %"}]
+  },
+  {
+   "observation_key": "unit-count-in-row-name-not-published",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0000950170-25-067944", "text": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412"}]
+  },
+  {
+   "observation_key": "preferred-dividend-rate-on-period-context-not-published",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "NEP Group Holdings, Inc. (7)(14) Series B Preferred Shares 18.68 % PIK SOFR 15.00 % 10/16/2025 10,000 10,400 10,468"}]
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "outcome": "supported",
+   "rationale": "Re-ran the reference-rate scan on dize (refrate_dize.txt): 0 mismatches in all 10 quarters. Bullhorn 2024-09-30 and Emerald Wave 3 2025-12-31 now match their printed lines; in dizc they were unmatched because of the instrument family. The only unmatched printed rows left are equity lines and the 2025-03-31 comparative block.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "ASP Integrity Acquisition Co LLC (4)(5)(6) Revolving Line of Credit 10.75 % P 5.00 % 3/6/2025 3/6/2031 5,692 5,652 5,540"}]
+  },
+  {
+   "observation_key": "value-tagged-decimals-zero-in-thousands-schedule",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835"}]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported). Also checked in dize: LEG Purchaser 2026-06-30 publishes spread 5.25 and rate 8.91 on both lines, matching the printed '8.91 % SOFR 5.25 %' even though the member text says 5.00 % and 11.00 %.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "LEG Purchaser Inc. (4)(5)(6) Revolving Line of Credit 8.91 % SOFR 5.25 % 1/12/2026 1/12/2032 1,261 1,231 1,261"}]
+  },
+  {
+   "observation_key": "distribution-concept-holds-preferred-dividend",
+   "outcome": "supported",
+   "rationale": "Carried; F33 retirement re-run on dize OK (0.625, 9.11).",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "June 30, 2026 June 30, 2026 August 14, 2026 0.625 34,237 Total distributions $ 1.250 $ 68,380"}]
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc."}]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "MC CIF Wealth Management (UK) Ltd. (7)(10) Series Z2 Preferred Shares 13.50 % PIK N/A 8/12/2025 10,231 10,082 10,334"}]
+  },
+  {
+   "observation_key": "fund-interest-classed-private-equity-under-preferred-section",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949"}]
+  },
+  {
+   "observation_key": "value-tagged-with-wrong-sign",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); C107 retirement re-run on dize OK.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5"}]
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); unchanged.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50"}]
+  },
+  {
+   "observation_key": "issuer-name-keeps-instrument-qualifier-after-strip",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); the wrapper is unchanged since dizc (still the same two edited settings).",
+   "evidence": [{"accession": "0000950170-25-038029", "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508"}]
+  },
+  {
+   "observation_key": "name-row-correction-drops-instrument-text",
+   "outcome": "supported",
+   "rationale": "Carried. The round-2 Bullhorn and Emerald corrections again pair an issuer_name correction with an instrument_description correction, which is the workaround this observation describes. The shared cause is still unfixed.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.51 % EURIBOR 6.50 % 11/03/2025 11/4/2030 54,619 52,265 53,325"}]
+  },
+  {
+   "observation_key": "total-investments-member-classed-as-equity-rollup",
+   "outcome": "supported",
+   "rationale": "Carried. The report now carries the scope note I asked for: the 2024-03-31 and 2024-06-30 bare totals are also reclassified, and A01 clears by scope, with the totals tie as the control. The note gives rollup counts for 2024-06-30 and 2024-09-30 only; 2024-03-31 also goes from 11 to 10. That omission is minor.",
+   "evidence": [{"accession": "0000950170-24-123107", "text": "Total Investments - Non-Controlled/Non-Affiliated $ 791,728 $ 797,208 187.74 %"}]
+  },
+  {
+   "observation_key": "member-names-wrong-instrument-family",
+   "outcome": "supported",
+   "rationale": "New. In dize, Bullhorn 2024-09-30 (context C_e98e0db8-56dc-4183-9abd-8474afc55b48) publishes 'Revolving Line of Credit ...' with type Revolver, cost -7,000 and fair value -2,000, as printed. Emerald Wave 3 2025-12-31 (context C_b5ddb624-8f8b-4a48-afc3-dd5e22a516d5) publishes 'Term Loan ...' with type Term Loan, 41,600,000 / 40,179,000 / 41,808,000, as printed. The separate Emerald delayed draw (fair value 50,000) is untouched. The detector proposal (published instrument against printed instrument words) is concrete. My family-matched scan is a working prototype of it and found exactly these two rows.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Emerald Wave 3 LLC (6)(8) Term Loan 9.75 % N/A 9/25/2025 9/23/2030 41,600 40,179 41,808"}]
+  },
+  {
+   "observation_key": "par-tagged-unscaled-on-undrawn-revolver",
+   "outcome": "supported",
+   "rationale": "New. I verified it independently: par_scan.py compares printed par with published principal on every matched loan line (989 lines, 10 quarters). On dizc it finds exactly these 3 rows (262, 1,261 and 1,145 published against printed 262, 1,261 and 1,145 thousand), so the scan discriminates. On dize it finds 0 mismatches, which supports the claim that no other loan row differs from its printed par. Scope limit: the scan covers loan lines with a rate cell whose cost and fair value match a published row; equity unit counts are not covered. I missed these three rows in round 1 because I did not scan par then.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "Southern Orthodontic Partners Management, LLC (4)(5)(6) Revolving Line of Credit 8.41 % SOFR 4.75 % 3/4/2026 7/27/2029 262 253 253"}]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "DIZ-REQ-1",
+   "outcome": "supported",
+   "rationale": "Carried from dizc review (supported); request unchanged. verification_bug is the right class: the tool cannot write a D-253-compliant entry, and the bar should not be weakened. The request's evidence quote remains unrelated to the defect.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50"}]
+  }
+ ],
+ "retirement_reviews": [
+  {"retirement_id": "VR-FL-1916099-01", "outcome": "supported", "rationale": "Re-run on dize: sandbox OK, production OK. Round-1 plant against dixa failed as required."},
+  {"retirement_id": "VR-FL-1916099-02", "outcome": "supported", "rationale": "Re-run on dize: OK / OK. Fails on dixa (round 1)."},
+  {"retirement_id": "VR-FL-1916099-03", "outcome": "supported", "rationale": "Re-run on dize: OK / OK. Fails on dixa (round 1)."},
+  {"retirement_id": "VR-FL-1916099-04", "outcome": "supported", "rationale": "Re-issued; rejected in round 1. The check now reads the unit of the InvestmentOwnedBalancePrincipalAmount fact on context C_9a49e5b7 (iso4217:USD). I confirmed the 10-K instance defines only one currency unit, U_USD (iso4217:USD appears twice; there is no EUR unit). The check also requires principal to move more than twice as much as cost (4.1 pct against 0.7 pct), the pattern of a translated euro par. The planted EUR unit makes the reader return iso4217:EUR, so the check fails. Sandbox and production OK. Residual: this filer has no non-USD unit at all, and the EUR forward legs are printed but not tagged in EUR, so the unit shows the filer reports in USD rather than proving a conversion. The co-movement test is what ties the figure to a USD translation. This meets the D-252 bar."},
+  {"retirement_id": "VR-FL-1916099-05", "outcome": "supported", "rationale": "Re-run on dize: OK / OK. Fails on dixa (round 1)."},
+  {"retirement_id": "VR-FL-1916099-06", "outcome": "supported", "rationale": "Re-run on dize: OK / OK. By construction it fails if the subtotal or a duplicate is published."},
+  {"retirement_id": "VR-FL-1916099-07", "outcome": "supported", "rationale": "A07 2024-12-31: 31 percent facts, none on any of the 90 published contexts, 0 published rows with a percent; sandbox and production OK. Both plants fail as required: a percent fact on a published position context, and a published row given a percent. This is the D-252 route I recommended, consistent with VR-FL-1812554-10. It is not a disposition, so the 2026-11-04 rule is respected. Residual: a percent fact on an unpublished position context would pass, but the totals tie in every quarter and I found no position-context percent facts (round-1 pct_facts.py)."},
+  {"retirement_id": "VR-FL-1916099-08", "outcome": "supported", "rationale": "A07 2025-09-30: 62 facts, 0 on the 142 published contexts, 0 percents; OK/OK; plants fail."},
+  {"retirement_id": "VR-FL-1916099-09", "outcome": "supported", "rationale": "A07 2025-12-31: 69 facts, 0 on the 166 published contexts, 0 percents; OK/OK; plants fail."},
+  {"retirement_id": "VR-FL-1916099-10", "outcome": "supported", "rationale": "A07 2026-03-31: 86 facts, 0 on the 176 published contexts, 0 percents; OK/OK; plants fail."}
+ ],
+ "change_checks": [
+  "holdings_field_diff dize dizc: instrument_description 2, instrument_type 2 (Bullhorn, Emerald); principal_amount 3, principal_amount_usd 3 (the three revolvers); maturity_date 1 and maturity_status 1 (Ranger warrants); corrected_fields 6; position_id 3. Rows 1087 = 1087. These are only the intended changes.",
+  "declared_changes against holdings_field_diff dize dixc: exact on every column (issuer_name 13, instrument_description 8, instrument_type 3, principal_amount 3, principal_amount_usd 3, maturity_date 1, maturity_status 1, corrected_fields 14, canonical_name 18, entity_id 3, position_id 9; rows added and removed 0 and 0). The round-1 over-declaration is fixed.",
+  "row_corrections.csv: 27 added 0001916099 lines (the round-1 16 plus Bullhorn 2, Emerald 2, Ranger 1 and par 6), all with author agent:fund-diz-sonnet and date_added 2026-11-15. No existing line was modified or deleted. The 12 other added lines belong to 0001911066 (another agent). Every new value matches its printed line (page_line.py).",
+  "A07 proposal PD-A07-1916099-1 has been removed from data/overrides/finding_dispositions_proposed/fund_0001916099.json (0 occurrences).",
+  "Totals: published equals printed in all 10 quarters in dize, unchanged from dizc.",
+  "Page sample: REDRAW recommended. The 20-card sample in docs/investigations/v05_readings/samples/0001916099 was drawn on 2026-10-15, two builds and more than 40 row corrections ago. The review then found 6 published errors the sample did not catch: instrument class x2, par x3 and a warrant maturity. My scans now cover reference rate, instrument family, par and the totals across all rows. They do not cover industry, fair-value level, non-accrual, equity unit scale or fields of equity rows, and those fields are what the sample is for. Twenty cards still miss problems affecting under about 15 pct of rows."
+ ]
+}

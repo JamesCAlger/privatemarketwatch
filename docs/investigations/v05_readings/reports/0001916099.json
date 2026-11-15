@@ -1,147 +1,746 @@
 {
  "cik": "0001916099",
- "label": "dixc",
- "before": "spoff3",
+ "label": "dize",
+ "before": "dixc",
  "shared_code": false,
  "declared_changes": [
-  {"column": "issuer_name", "rows": 48, "why": "wrapper: hierarchy_prefix_re now accepts 'Other Equity' and 'Equity Preferred Equity' (2025-12-31 and 2026 equity members kept the whole hierarchy or 'Preferred Equity <industry>' in the name); issuer_name_strip_re cuts the equity instrument words, unit counts and 'Acquisition/Maturity Date' text into the instrument; row corrections name TCI Buyer (3 rows) and AP Edison Co-Invest (2 rows) whose members name no issuer, and SVP MVP 2025-09-30 (industry left in the name). Some rows also differ from spoff3 through the shared issuer/instrument split of D-166 (spoff3 was built with it off)."},
-  {"column": "instrument_description", "rows": 42, "why": "the text the strip cuts becomes or is put in front of the instrument (same rows); row corrections set 'Common Units' for TCI Buyer, the printed 25,700-share text for AH Parent 2025-09-30 and 'Series Z2' for the MC CIF 2025-12-31 line filed on a second Z1 member; D-166 split as above."},
-  {"column": "cost", "rows": 1, "why": "Action Elevator delayed draw 2025-12-31: tagged -26,471,000, printed 26,471 (row correction)."},
-  {"column": "cost_reported", "rows": 1, "why": "follows cost (same row)."},
-  {"column": "shares_held", "rows": 23, "why": "equity unit counts printed in the name cell and tagged only on a count-only twin context, 2024-12-31 to 2025-09-30 (row corrections, each with its printed line)."},
-  {"column": "interest_rate", "rows": 6, "why": "2025-12-31 preferred rates printed and not published (SVP MVP 12.5, AH Parent 10, HIG 10.5, NEP 15); 2024-09-30 Trystar undrawn lines' unused-fee rate 1.0 and 0.5 withdrawn (page prints no rate)."},
-  {"column": "interest_rate_reported", "rows": 6, "why": "follows interest_rate."},
-  {"column": "interest_rate_kind", "rows": 6, "why": "follows interest_rate: unresolved -> all_in where a rate was set, all_in -> unresolved where it was withdrawn."},
-  {"column": "interest_rate_cash", "rows": 3, "why": "recomputed from the corrected rate and PIK on the PIK preferred rows (value unchanged at 0.0) and MC CIF Z2."},
-  {"column": "basis_spread", "rows": 2, "why": "Accuserve term loan 2025-12-31 5.25 (printed '5.25%' with no space); NEP Group preferred 2026-03-31 15.00 (tagged as a dividend rate on the year-to-date context)."},
-  {"column": "coupon_type", "rows": 1, "why": "Accuserve term loan 2025-12-31 Fixed -> Floating with its spread."},
-  {"column": "pik_rate", "rows": 1, "why": "MC CIF Series Z2 2026-03-31: printed '12.00 % ( 6.00 % PIK)', member says 12.00 PIK."},
-  {"column": "reference_rate_type", "rows": 5, "why": "wrapper reference_rate_columns 'Reference Rate' with codes P=PRIME and STIBOR=STIBOR: ASP Integrity revolver (2025-06-30 to 2026-03-31) SOFR -> PRIME, Intrum 2025-09-30 SOFR -> STIBOR (all were date guesses)."},
-  {"column": "reference_rate_source", "rows": 5, "why": "same rows, inferred_post_libor -> ixbrl_field_status."},
-  {"column": "maturity_date", "rows": 38, "why": "equity rows whose member says 'Maturity Date' for the printed acquisition date, 2024-12-31 to 2025-12-31: withdrawn (the page prints no maturity on equity)."},
-  {"column": "maturity_status", "rows": 38, "why": "follows maturity_date (unresolved -> not_disclosed)."},
-  {"column": "maturity_precision", "rows": 23, "why": "follows maturity_date."},
-  {"column": "corrected_fields", "rows": 49, "why": "rows carrying the new row corrections (2024-09-30 to 2026-03-31; the 2026-06-30 rows are new rows)."},
-  {"column": "position_id", "rows": 145, "why": "chains re-paired after the issuer names changed and 74 zero-value positions were added."}
+  {
+   "column": "issuer_name",
+   "rows": 13,
+   "why": "wrapper strip of 'Corporate Bond' (R.R. Donnelley bond, 5 rows); 8 row corrections to the printed name (HowardSimon 1, ICAT 2, Legacy Service Partners 2, Purflux 3)."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 8,
+   "why": "R.R. Donnelley bond 5 rows now 'Corporate Bond ...'; HowardSimon 2025-09-30 set to 'Term Loan'; Bullhorn revolver 2024-09-30 now 'Revolving Line of Credit ...' (was Delayed Draw); Emerald Wave 3 2025-12-31 now 'Term Loan ...' (was Delayed Draw). The 7 name-corrected rows that lost their instrument words keep the text they had in dixc (restored by row correction, no net change)."
+  },
+  {
+   "column": "instrument_type",
+   "rows": 3,
+   "why": "HowardSimon 2025-09-30 None -> Term Loan; Bullhorn 2024-09-30 Delayed Draw Term Loan -> Revolver; Emerald Wave 3 2025-12-31 Delayed Draw Term Loan -> Term Loan."
+  },
+  {
+   "column": "principal_amount",
+   "rows": 3,
+   "why": "three revolver lines of 2026-06-30 (Southern Orthodontic, LEG Purchaser, Denali): par unscaled (262, 1,261, 1,145) set to the printed thousands (262,000; 1,261,000; 1,145,000)."
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 3,
+   "why": "same three rows."
+  },
+  {
+   "column": "maturity_date",
+   "rows": 1,
+   "why": "Ranger Parent I warrants 2025-12-31: 2025-10-28 (the acquisition date) -> null."
+  },
+  {
+   "column": "maturity_status",
+   "rows": 1,
+   "why": "follows maturity_date (unresolved -> not_disclosed)."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 14,
+   "why": "the rows carrying the new row corrections."
+  },
+  {
+   "column": "canonical_name",
+   "rows": 18,
+   "why": "follows issuer_name."
+  },
+  {
+   "column": "entity_id",
+   "rows": 3,
+   "why": "follows the corrected names: ICAT 2025-09-30 revolver and Purflux 2025-12-31 join the entity of their other quarters."
+  },
+  {
+   "column": "position_id",
+   "rows": 9,
+   "why": "chains re-paired after the names and instruments changed (ICAT, Legacy, HowardSimon, Bullhorn, Emerald rows)."
+  }
  ],
- "rows_added": 252,
- "rows_removed": 1,
+ "rows_added": 0,
+ "rows_removed": 0,
  "fixes": [
-  {"what": "2026-06-30, 23.8M short: L2 Brands term loan and CWC Fund II (Cresset) preferred are tagged with the printed thousands figure at decimals 0 (13,835 and 9,949). Fair value, cost and par set to the printed values by row correction; CWC Fund II, printed under Preferred Equity as Convertible Preferred Stock with no rate, reclassed from FUND to preferred equity and its member-text rate 6.50 withdrawn. Published now equals the filed 2,807,208.",
-   "kind": "row_correction", "quarters": ["2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-342470", "text": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835"},
-              {"accession": "0001193125-26-342470", "text": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949"}]},
-  {"what": "Quantum Leap Buyer delayed draw 2026-06-30 fair value tagged -5,000, printed +5; the printed debt total is met only with +5 (row correction).",
-   "kind": "row_correction", "quarters": ["2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-342470", "text": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5"}]},
-  {"what": "Positions printed with a dash for fair value (undrawn lines carrying a bracketed cost, 2 to 16 a quarter, 76 in all) were dropped as excluded_no_fair_value; three lines printed with dashes throughout (Kelso 2024-12-31, Emerald Wave 2025-09-30, Ranger warrants 2025-12-31) likewise. Declared at 0 from the page in source_encodings.untagged_values (82 lines, one per context; each matched to its printed line by scratch/fund_runs/0001916099/dash_rows.py). Census: every printed schedule row of 2024-03-31 to 2026-06-30 is now published (2024-09-30 parser stops before the preferred section).",
-   "kind": "untagged_value", "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0000950170-24-123107", "text": "Amspec Parent LLC (4)(5)(6) Revolving Line of Credit SOFR 5.50 % 12/5/2029 - ( 16 ) -"},
-              {"accession": "0001193125-25-279909", "text": "Rialto Management Group, LLC (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 12/05/2024 12/5/2030 - ( 7 ) -"},
-              {"accession": "0000950170-25-038029", "text": "Kelso Industries, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.75 % 12/26/2024 12/30/2029 - - -"},
-              {"accession": "0001193125-26-104439", "text": "Ranger Parent I, Inc. Warrants Shares N/A 10/28/2025 14,456 $ - $ - 14,456 - - 0.00 %"},
-              {"accession": "0001193125-26-342470", "text": "HowardSimon LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 12/13/2024 12/13/2030 - ( 37 ) -"}]},
-  {"what": "Issuer names (C206): equity members of 2025-12-31 ('Investments Non-Controlled/Non-Affiliated Other Equity <industry> <issuer> <class> Maturity Date ...') and of 2026 ('Equity Preferred Equity <industry> <issuer> Series B ...', '<issuer> Class R Common Units Acquisition Date ...') now give the issuer alone: wrapper hierarchy_prefix_re and issuer_name_strip_re (dry run over every distinct name: scratch/fund_runs/0001916099/dryrun_names.py, 64 rows). Members naming no issuer (TCI Buyer 2024-12-31 to 2025-06-30, AP Edison Co-Invest 2025-06-30 and 2025-09-30) named from the page by row correction.",
-   "kind": "wrapper", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-104439", "text": "Saguaro Buyer, LLC Class R Common Units N/A 7/03/2025 10,000 10,000 10,000"},
-              {"accession": "0001193125-26-342470", "text": "NEP Group Holdings, Inc. (7)(14) Series B Preferred Shares 18.68 % PIK SOFR 15.00 % 10/16/2025 10,000 10,400 10,468"},
-              {"accession": "0000950170-25-038029", "text": "TCI Buyer LLC - Common Units ( 75,000 units) N/A 11/14/2024 $ 7,500 $ 7,500"},
-              {"accession": "0000950170-25-107866", "text": "AP Edison Co-Invest (UB), L.P. ( 8,487 units) N/A 6/30/2025 8,487 8,487"}]},
-  {"what": "Equity unit counts (C04): printed in the name cell and tagged only on a count-only twin context, so 23 equity rows of 2024-12-31 to 2025-09-30 published none. Set from the page by row correction. Equity maturities: the member's 'Maturity Date' is the printed acquisition date; 38 equity rows withdrawn. Trystar revolver 2025-12-31 (a newly published dash row) given its printed maturity and spread.",
-   "kind": "row_correction", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"],
-   "quotes": [{"accession": "0000950170-25-067944", "text": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412"},
-              {"accession": "0001193125-25-279909", "text": "Blue Cloud Pediatric Surgery Centers, LLC - Class A-1 Common Units ( 1,000,000 units) N/A 8/12/2025"},
-              {"accession": "0001193125-26-104439", "text": "TCI Buyer LLC Common Units N/A 11/14/2024 75,000 7,500 8,399"},
-              {"accession": "0001193125-26-104439", "text": "Trystar, LLC (4)(5)(6) Revolving Line of Credit SOFR 4.25 % 8/06/2024 8/6/2031 - ( 16 ) -"}]},
-  {"what": "Rates and spreads against the page: 2025-12-31 preferred rates (member says 'Dividend Rate', tag on the year-to-date context) for SVP MVP, AH Parent, HIG, NEP; NEP spread 15.00 at 2026-03-31 and 2026-06-30 (X05); MC CIF Z2 PIK 6.00 of 12.00 (2026-03-31, 2026-06-30); MC CIF Z2 2025-12-31 filed on a second 'Series Z1' member; Accuserve term loan spread 5.25 and coupon type 2025-12-31; member-text rates the page does not print withdrawn (Trystar 2024-09-30 unused fees 1.00 and 0.50, Rialto revolver 4.88 and BVI delayed-draw PIK 5.00 at 2026-06-30).",
-   "kind": "row_correction", "quarters": ["2024-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-104439", "text": "SVP MVP Holdings, L.P. Preferred Units 12.50 % PIK N/A 12/04/2024 41,450 41,029 41,090"},
-              {"accession": "0001193125-26-216630", "text": "MC CIF Wealth Management (UK) Ltd. (7)(10) Series Z2 Preferred Shares 12.00 % ( 6.00 % PIK) N/A 8/12/2025 10,000 10,235"},
-              {"accession": "0001193125-26-104439", "text": "Accuserve Solutions, Inc. (6) Term Loan 9.09 % SOFR 5.25% 3/15/2024 3/15/2030 22,274 22,124 20,270"},
-              {"accession": "0000950170-24-123107", "text": "Trystar, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 8/6/2031 - ( 20 ) ( 20 )"},
-              {"accession": "0001193125-26-342470", "text": "BVI Medical, Inc. (4)(5)(6) Delayed Draw Term Loan 9.67 % SOFR 6.00 % 3/7/2025 3/8/2032 2,208 2,174 1,931"}]},
-  {"what": "Action Elevator delayed draw 2025-12-31: cost tagged with the same sign error as its fair value (which promoted rule fv_rescale_action_elevator_ddtl_2025q4 already reverses); cost set to the printed 26,471,000. Answers the C107 2025-12-31 real-error verdict.",
-   "kind": "row_correction", "quarters": ["2025-12-31"],
-   "quotes": [{"accession": "0001193125-26-104439", "text": "Action Elevator Intermediate Holdings, LLC (4)(5)(6) Delayed Draw Term Loan 8.53 % SOFR 4.75 % 10/31/2024 10/31/2030 26,932 26,471 25,957"}]},
-  {"what": "Reference rate codes from the printed 'Reference Rate' column: P (prime) and STIBOR were date-guessed as SOFR (5 rows). Wrapper reference_rate_columns and reference_rate_codes.",
-   "kind": "wrapper", "quarters": ["2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-342470", "text": "ASP Integrity Acquisition Co LLC (4)(5)(6) Revolving Line of Credit 10.75 % P 5.00 %"}]},
-  {"what": "Fair-value-note figures tagged unscaled on a second context of the Constellation Wealth Capital Fund II member (1,249 dollars at 2026-03-31; 10,468 dollars, the 26N Nova figure, at 2026-06-30) were published as extra FUND rows; excluded by rule exclude_fair_value_note_figures_on_constellation_member.",
-   "kind": "exclusion", "quarters": ["2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-342470", "text": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc."},
-              {"accession": "0001193125-26-342470", "text": "Constellation Wealth Capital Fund II, L.P. (14) Limited Partner Interest N/A 10/10/2025 4,623 4,623 4,623"}]},
-  {"what": "F33: distribution_per_share was 0.0 or 0.01 in every quarter (the filer tags the distribution concept on the highlights' preferred-dividend line). New highlights wrapper with figure_corrections from each quarter's printed distribution table (0.45, 0.45, 0.50, 0.825, then 0.625 except 0.675 at 2025-12-31). Answers the F33 2026-03-31 real-error verdict.",
-   "kind": "wrapper", "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-216630", "text": "March 31, 2026 March 31, 2026 May 8, 2026 $ 0.625 $ 34,143 Total distributions $ 0.625 $ 34,143"},
-              {"accession": "0000950170-25-038029", "text": "December 30, 2024 December 31, 2024 January 31, 2025 0.825 18,885 Total distributions $ 2.225 $ 33,910"}]}
+  {
+   "what": "issuer_name_printed (R.R. Donnelley, 5 quarters): the corporate bond's issuer was published as 'R.R. Donnelley & Sons Company Corporate' because the wrapper cut only 'Bond'. issuer_name_strip_re now cuts 'Corporate Bond' (dry run over every distinct name of the fund: only the 5 R.R. Donnelley rows contain the words; 'TSYL Corporate Buyer, Inc.' is untouched).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-038029",
+     "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_printed (HowardSimon 2025-09-30): member text 'HowardSimon LLC Term Interest Rate 8.91% Loan' published issuer 'HowardSimon LLC Term'; issuer and instrument set from the page by row correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-279909",
+     "text": "HowardSimon LLC (6) Term Loan 8.91 % SOFR 4.75 % 12/13/2024 12/13/2030 22,519 22,270 22,654"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_printed (ICAT Intermediate Holdings, 2025-09-30, 2 rows): the member omits 'ICAT'; named from the page.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-279909",
+     "text": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_printed (Legacy Service Partners 2025-12-31, 2 rows): the member says 'Legacy Services Partners LLC'; the page and every other quarter say 'Legacy Service Partners, LLC'.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-104439",
+     "text": "Legacy Service Partners, LLC (6) Term Loan 13.25 %"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_printed (Purflux Holding S.A R.L., 2025-12-31 to 2026-06-30, 3 rows): members spell 'Purflux Holding S.<non-ASCII> R.L.' and 'Purflux Holdings S.A.R.L.'; named as the page prints it (the 2025-12-31 row was not flagged but carried the same defect).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-216630",
+     "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.45 % EURIBOR 6.50 % 11/3/2025 11/4/2030 53,721 52,331 52,565"
+    },
+    {
+     "accession": "0001193125-26-104439",
+     "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.51 % EURIBOR 6.50 % 11/03/2025 11/4/2030 54,619 52,265 53,325"
+    }
+   ]
+  },
+  {
+   "what": "The issuer-name row corrections above made the build drop the instrument words from instrument_description on 7 rows (ICAT x2, Purflux x3, Legacy x2, seen in dizb against dixc); instrument_description restored by row correction to the text published before (dizc: 7 rows, instrument identical to dixc).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-342470",
+     "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.65 % EURIBOR 6.50 % 11/3/2025 11/4/2030 52,472 51,952 52,311"
+    }
+   ]
+  },
+  {
+   "what": "A01 2024-09-30: the 10-Q's bare total member 'Investments Non-Controlled/Non-Affiliated' (797,208) was dispatched as an equity category rollup and compared with the equity rows alone (30,565). The wrapper's category_marker_re now treats that bare member as an aggregate. Published rows unchanged (field diff: no fair value difference); published total 797,208 equals the printed total. The same wrapper change also reclassifies the bare total members of the 2024-03-31 and 2024-06-30 filings (see round 2 note in not_done). A01 clears because that total is no longer tested as a rollup, not because it now ties by the check; the totals tie (published equals the filed total to the printed thousand in all 10 quarters) covers it.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-123107",
+     "text": "Total Investments - Non-Controlled/Non-Affiliated $ 791,728 $ 797,208 187.74 %"
+    }
+   ]
+  },
+  {
+   "what": "Round 2, instrument family (unflagged; also in production): Bullhorn revolver 2024-09-30 (cost -7, fair value -2) was published as a Delayed Draw Term Loan, and Emerald Wave 3 term loan 2025-12-31 (par 41,600, fair value 41,808) as a Delayed Draw Term Loan: the member text names the wrong instrument and the page prints Revolving Line of Credit and Term Loan. issuer_name and instrument_description set from the page by row correction; the class is re-derived from the printed text. Scan: every matched printed debt row of all 10 quarters compared on instrument words (scratch/fund_runs/0001916099/census2.py): these two rows were the only differences.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-123107",
+     "text": "Bullhorn, Inc. (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 10/1/2029 - ( 7 ) ( 2 )"
+    },
+    {
+     "accession": "0001193125-26-104439",
+     "text": "Emerald Wave 3 LLC (6)(8) Term Loan 9.75 % N/A 9/25/2025 9/23/2030 41,600 40,179 41,808"
+    }
+   ]
+  },
+  {
+   "what": "Round 2, Ranger Parent I warrants 2025-12-31: maturity 2025-10-28 is the acquisition date (the page prints 'N/A 10/28/2025' and no maturity on any equity row); maturity set null by row correction. The printed unit count 14,456 is already published as shares_held (dixc, dizc and production all carry 14456.0 on context C_603c11ff-b8f1-4973-8110-9d3a737f8b16), so nothing to add. Scan: the census over all 10 quarters finds no other equity row with a maturity.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-104439",
+     "text": "Ranger Parent I, Inc. Warrants Shares N/A 10/28/2025 14,456 $ - $ - 14,456 - - 0.00 %"
+    }
+   ]
+  },
+  {
+   "what": "Round 2, found by the par scan over every quarter (unflagged): three undrawn-line revolvers of 2026-06-30 published their par unscaled (262, 1,261 and 1,145 dollars for a printed 262, 1,261 and 1,145 thousand) while cost and fair value on the same rows are scaled. Par and principal_amount_usd set to the printed thousands by row correction. No other loan row of the 10 quarters differs from its printed par.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-342470",
+     "text": "Southern Orthodontic Partners Management, LLC (4)(5)(6) Revolving Line of Credit 8.41 % SOFR 4.75 % 3/4/2026 7/27/2029 262 253 253"
+    },
+    {
+     "accession": "0001193125-26-342470",
+     "text": "LEG Purchaser Inc. (4)(5)(6) Revolving Line of Credit 8.91 % SOFR 5.25 % 1/12/2026 1/12/2032 1,261 1,231 1,261"
+    },
+    {
+     "accession": "0001193125-26-342470",
+     "text": "Denali Intermediate Holdings, Inc. (4)(5)(6) Revolving Line of Credit 9.12 % SOFR 5.50 % 8/26/2025 8/26/2032 1,145 1,091 973"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "DIZ-REQ-1",
+   "file": "scripts/v05_evidence/make_batch_dispositions.py",
+   "classification": "verification_bug",
+   "what": "make_batch_dispositions.py asserts on the existing check-accepted entry DS-FUNDLOOP-C107-1916099 when 2025-12-31 passes the C107 check: the D-253 bar (pipeline/finding_dispositions._validate_bar) wants a filing quote and named rows for every member, and the tool writes entries with neither. The tool cannot add a newly passing quarter to a check-accepted as_filed entry for any fund.",
+   "why": "Here C107 2025-12-31 cleared through the verdict retirement and the existing entry, so no run was blocked, but the next newly passing quarter at any fund will stop the tool with AssertionError.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107866",
+     "text": "Kelso Industries, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 5.75 % 12/26/2024 12/30/2029 - - 7"
+    }
+   ],
+   "next_action": "Have the tool emit rows and a filing quote per member (or route such quarters to a proposal), with a test that a new quarter validates.",
+   "quotes": []
+  }
+ ],
  "observations": [
-  {"observation_key": "row-printed-with-par-only-not-published", "what": "Undrawn lines printed with a dash for fair value and a bracketed cost (76) and three lines printed with dashes throughout were not published (excluded_no_fair_value); the position count was short by 2 to 16 a quarter and cost by up to 0.8M. Fixed here by untagged_values; the shared step that drops a context with a cost and no fair value is the cause on other funds too.", "field": "fair_value",
-   "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "what": "Undrawn lines printed with a dash for fair value and a bracketed cost (76) and three lines printed with dashes throughout were not published (excluded_no_fair_value); the position count was short by 2 to 16 a quarter and cost by up to 0.8M. Fixed here by untagged_values; the shared step that drops a context with a cost and no fair value is the cause on other funds too.",
+   "field": "fair_value",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "Flag a schedule context that carries a cost fact and no fair value fact as a dropped position, not as a non-position.",
-   "quote": {"accession": "0001193125-26-342470", "text": "HowardSimon LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 12/13/2024 12/13/2030 - ( 37 ) -"}},
-  {"observation_key": "acquisition-date-in-member-read-as-maturity", "what": "Equity members say 'Maturity Date <date>' where the printed column is the acquisition date; 38 equity rows (2024-12-31 to 2025-12-31) published a maturity, and a dash-row revolver (Trystar 2025-12-31) took its acquisition date as maturity. Fixed by row correction.", "field": "maturity_date",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"], "fair_value_m": 330.0, "cause": "fund", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "HowardSimon LLC (4)(5)(6) Revolving Line of Credit SOFR 4.50 % 12/13/2024 12/13/2030 - ( 37 ) -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Flag a schedule context that carries a cost fact and no fair value fact as a dropped position, not as a non-position."
+   }
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "what": "Equity rows whose member text says 'Maturity Date' for the printed acquisition date (the schedule prints no maturity on any equity row): 38 rows withdrawn in the earlier run, and in round 2 the Ranger Parent I warrants row of 2025-12-31 (maturity 2025-10-28; page 'N/A 10/28/2025'), which the earlier run missed although its own census listed it. Fixed by row correction; the census over all 10 quarters now finds no equity row with a maturity.",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 330.0,
+   "cause": "fund",
+   "action": "fixed",
    "suggested_check": "Flag an equity row with a maturity date, and a loan whose maturity equals its acquisition date.",
-   "quote": {"accession": "0001193125-26-104439", "text": "GSP Topco LLC Common Units N/A 10/17/2025 10,000 10,000 10,000"}},
-  {"observation_key": "unit-count-in-row-name-not-published", "what": "Equity unit counts printed in the name cell ('( 25,707 shares)') and tagged on a separate count-only context of the member: 23 rows of 2024-12-31 to 2025-09-30 published no count. Fixed by row correction.", "field": "shares_held",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"], "fair_value_m": 300.0, "cause": "fund", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-104439",
+    "text": "Ranger Parent I, Inc. Warrants Shares N/A 10/28/2025 14,456 $ - $ - 14,456 - - 0.00 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The page census printed this row ('equity row has maturity') but no rule in the pipeline does; the proposed check would have caught it.",
+    "reference": "an equity-class published row with a maturity_date while the page prints none on equity rows"
+   }
+  },
+  {
+   "observation_key": "unit-count-in-row-name-not-published",
+   "what": "Equity unit counts printed in the name cell ('( 25,707 shares)') and tagged on a separate count-only context of the member: 23 rows of 2024-12-31 to 2025-09-30 published no count. Fixed by row correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 300.0,
+   "cause": "fund",
+   "action": "fixed",
    "suggested_check": "Join a context that carries only a unit count to the value context of the same member before publishing.",
-   "quote": {"accession": "0000950170-25-067944", "text": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412"}},
-  {"observation_key": "preferred-dividend-rate-on-period-context-not-published", "what": "Preferred rates tagged as PreferredStockDividendRatePercentage on the year-to-date context: four 2025-12-31 preferred rows published no rate, and NEP Group's floating preferred (SOFR + 15.00) published no spread at 2026-03-31 and 2026-06-30. Fixed by row correction.", "field": "interest_rate",
-   "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 92.4, "cause": "shared", "action": "fixed",
+   "quote": {
+    "accession": "0000950170-25-067944",
+    "text": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Join a context that carries only a unit count to the value context of the same member before publishing."
+   }
+  },
+  {
+   "observation_key": "preferred-dividend-rate-on-period-context-not-published",
+   "what": "Preferred rates tagged as PreferredStockDividendRatePercentage on the year-to-date context: four 2025-12-31 preferred rows published no rate, and NEP Group's floating preferred (SOFR + 15.00) published no spread at 2026-03-31 and 2026-06-30. Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 92.4,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "Read a preferred dividend rate tagged on the instrument's duration context as the row's rate.",
-   "quote": {"accession": "0001193125-26-104439", "text": "AH Parent, Inc. Series A Preferred Shares 10.00 % N/A 9/27/2024 25,700 25,325 26,060"}},
-  {"observation_key": "reference-rate-code-not-in-legend", "what": "The printed reference-rate codes P (prime) and STIBOR were replaced by a date-guessed SOFR on 5 rows (ASP Integrity revolver, Intrum). Fixed by wrapper reference_rate_columns and codes.", "field": "reference_rate_type",
-   "quarters": ["2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 70.0, "cause": "fund", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-104439",
+    "text": "AH Parent, Inc. Series A Preferred Shares 10.00 % N/A 9/27/2024 25,700 25,325 26,060"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Read a preferred dividend rate tagged on the instrument's duration context as the row's rate."
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "what": "The printed reference-rate codes P (prime) and STIBOR were replaced by a date-guessed SOFR on 5 rows (ASP Integrity revolver, Intrum). Fixed by wrapper reference_rate_columns and codes.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 70.0,
+   "cause": "fund",
+   "action": "fixed",
    "suggested_check": "Compare the published benchmark with the printed reference-rate column wherever the source is a date guess.",
-   "quote": {"accession": "0001193125-26-342470", "text": "ASP Integrity Acquisition Co LLC (4)(5)(6) Revolving Line of Credit 10.75 % P 5.00 %"}},
-  {"observation_key": "value-tagged-decimals-zero-in-thousands-schedule", "what": "Two rows of the 10-Q for 2026-06-30 tagged with the printed thousands figure at decimals 0 (L2 Brands 13,835; CWC Fund II 9,949) were published 1,000 times too small; the quarter was 23.8M short. Fixed by row correction. Same filer error at Stepstone (D-112) and Stone Point (D-117).", "field": "fair_value",
-   "quarters": ["2026-06-30"], "fair_value_m": 23.8, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "ASP Integrity Acquisition Co LLC (4)(5)(6) Revolving Line of Credit 10.75 % P 5.00 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Compare the published benchmark with the printed reference-rate column wherever the source is a date guess."
+   }
+  },
+  {
+   "observation_key": "value-tagged-decimals-zero-in-thousands-schedule",
+   "what": "Two rows of the 10-Q for 2026-06-30 tagged with the printed thousands figure at decimals 0 (L2 Brands 13,835; CWC Fund II 9,949) were published 1,000 times too small; the quarter was 23.8M short. Fixed by row correction. Same filer error at Stepstone (D-112) and Stone Point (D-117).",
+   "field": "fair_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 23.8,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "Flag a schedule fact with decimals 0 whose value is under 100,000 in a filing whose other schedule facts are decimals -3.",
-   "quote": {"accession": "0001193125-26-342470", "text": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835"}},
-  {"observation_key": "rate-or-spread-read-from-stale-member-text", "what": "Rates read from member text the page does not print: Trystar undrawn lines 2024-09-30 published the unused fees 1.00 and 0.50 as rates; Rialto revolver 2026-06-30 4.88; BVI delayed draw 2026-06-30 PIK 5.00 (the term loan's); MC CIF Z2 PIK 12.00 for a printed 6.00 (2026-03-31, 2026-06-30). Fixed by row correction.", "field": "interest_rate",
-   "quarters": ["2024-09-30", "2026-03-31", "2026-06-30"], "fair_value_m": 12.6, "cause": "shared", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Flag a schedule fact with decimals 0 whose value is under 100,000 in a filing whose other schedule facts are decimals -3."
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Rates read from member text the page does not print: Trystar undrawn lines 2024-09-30 published the unused fees 1.00 and 0.50 as rates; Rialto revolver 2026-06-30 4.88; BVI delayed draw 2026-06-30 PIK 5.00 (the term loan's); MC CIF Z2 PIK 12.00 for a printed 6.00 (2026-03-31, 2026-06-30). Fixed by row correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.6,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "Where a rate comes from member text and no rate fact is tagged, compare it with the printed rate cell of the line.",
-   "quote": {"accession": "0001193125-26-342470", "text": "Rialto Management Group, LLC (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 12/5/2024 12/5/2030 - ( 9 ) ( 2 )"}},
-  {"observation_key": "distribution-concept-holds-preferred-dividend", "what": "distribution_per_share held the highlights' preferred-dividend line (us-gaap distribution-per-share concept, 0.0 or 0.01) in every quarter while the common distribution (0.45 to 0.825) is filed under the filer's own concept. Fixed by highlights figure_corrections. The 2023-12-31 value 0.09 (pre-operations) has no printed source found and was left.", "field": "distribution_per_share",
-   "quarters": ["2024-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "Rialto Management Group, LLC (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 12/5/2024 12/5/2030 - ( 9 ) ( 2 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Where a rate comes from member text and no rate fact is tagged, compare it with the printed rate cell of the line."
+   }
+  },
+  {
+   "observation_key": "distribution-concept-holds-preferred-dividend",
+   "what": "distribution_per_share held the highlights' preferred-dividend line (us-gaap distribution-per-share concept, 0.0 or 0.01) in every quarter while the common distribution (0.45 to 0.825) is filed under the filer's own concept. Fixed by highlights figure_corrections. The 2023-12-31 value 0.09 (pre-operations) has no printed source found and was left.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
    "suggested_check": "Compare distribution_per_share with dividends_declared_per_share and flag a ratio under one tenth.",
-   "quote": {"accession": "0001193125-26-342470", "text": "June 30, 2026 June 30, 2026 August 14, 2026 0.625 34,237 Total distributions $ 1.250 $ 68,380"}},
-  {"observation_key": "note-figure-on-investment-member-published-as-position", "what": "Fair-value-note figures (investments at net asset value) tagged unscaled on a second context of the Constellation member were published as extra FUND rows (2026-03-31 1,249 dollars; 2026-06-30 10,468 dollars, the 26N Nova figure). Excluded by rule.", "field": "fair_value",
-   "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.01, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "June 30, 2026 June 30, 2026 August 14, 2026 0.625 34,237 Total distributions $ 1.250 $ 68,380"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Compare distribution_per_share with dividends_declared_per_share and flag a ratio under one tenth."
+   }
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "what": "Fair-value-note figures (investments at net asset value) tagged unscaled on a second context of the Constellation member were published as extra FUND rows (2026-03-31 1,249 dollars; 2026-06-30 10,468 dollars, the 26N Nova figure). Excluded by rule.",
+   "field": "fair_value",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.01,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "Flag a context whose only facts are a fair value in dollars while a twin context of the same member carries the thousands-scaled position.",
-   "quote": {"accession": "0001193125-26-342470", "text": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc."}},
-  {"observation_key": "member-carries-another-rows-name", "what": "10-K 2025-12-31: the MC CIF Series Z2 line (cost 10,082, fair value 10,334, 13.50 % PIK) is filed on a second member named Series Z1. Instrument set to Z2 by row correction.", "field": "instrument_description",
-   "quarters": ["2025-12-31"], "fair_value_m": 10.3, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc."
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Flag a context whose only facts are a fair value in dollars while a twin context of the same member carries the thousands-scaled position."
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "10-K 2025-12-31: the MC CIF Series Z2 line (cost 10,082, fair value 10,334, 13.50 % PIK) is filed on a second member named Series Z1. Instrument set to Z2 by row correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 10.3,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "Flag two rows of one issuer with identical instrument text and different values.",
-   "quote": {"accession": "0001193125-26-104439", "text": "MC CIF Wealth Management (UK) Ltd. (7)(10) Series Z2 Preferred Shares 13.50 % PIK N/A 8/12/2025 10,231 10,082 10,334"}},
-  {"observation_key": "fund-interest-classed-private-equity-under-preferred-section", "what": "CWC Fund II (Cresset) LP, printed under Preferred Equity as Convertible Preferred Stock, was classed FUND / private equity fund from its name; the printed preferred total (151,245) includes it. Reclassed to preferred equity by row correction. Citation Glow Co-Invest LP and Constellation Wealth Capital Fund II (printed under Other Equity) stay FUND: an LP interest in a vehicle, left as is.", "field": "index_classification",
-   "quarters": ["2026-06-30"], "fair_value_m": 9.9, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-104439",
+    "text": "MC CIF Wealth Management (UK) Ltd. (7)(10) Series Z2 Preferred Shares 13.50 % PIK N/A 8/12/2025 10,231 10,082 10,334"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Flag two rows of one issuer with identical instrument text and different values."
+   }
+  },
+  {
+   "observation_key": "fund-interest-classed-private-equity-under-preferred-section",
+   "what": "CWC Fund II (Cresset) LP, printed under Preferred Equity as Convertible Preferred Stock, was classed FUND / private equity fund from its name; the printed preferred total (151,245) includes it. Reclassed to preferred equity by row correction. Citation Glow Co-Invest LP and Constellation Wealth Capital Fund II (printed under Other Equity) stay FUND: an LP interest in a vehicle, left as is.",
+   "field": "index_classification",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 9.9,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "Compare published class totals with the printed section totals of the schedule.",
-   "quote": {"accession": "0001193125-26-342470", "text": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949"}},
-  {"observation_key": "value-tagged-with-wrong-sign", "what": "Quantum Leap delayed draw 2026-06-30 fair value tagged -5,000 for a printed +5 (fixed); Action Elevator 2025-12-31 cost tagged negative (fixed; its fair value was already reversed by a promoted rule).", "field": "fair_value",
-   "quarters": ["2025-12-31", "2026-06-30"], "fair_value_m": 26.0, "cause": "row", "action": "fixed",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Compare published class totals with the printed section totals of the schedule."
+   }
+  },
+  {
+   "observation_key": "value-tagged-with-wrong-sign",
+   "what": "Quantum Leap delayed draw 2026-06-30 fair value tagged -5,000 for a printed +5 (fixed); Action Elevator 2025-12-31 cost tagged negative (fixed; its fair value was already reversed by a promoted rule).",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 26.0,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "Flag a row whose printed value has no brackets while the tag is negative, by matching the published line to the page.",
-   "quote": {"accession": "0001193125-26-342470", "text": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5"}},
-  {"observation_key": "cost-printed-dash-published-null", "what": "Emerald Wave 3 delayed draw 2025-12-31 prints '- - 50' (cost a dash); published cost is empty rather than 0. Left: no value differs materially and the gate does not test it.", "field": "cost",
-   "quarters": ["2025-12-31"], "fair_value_m": 0.05, "cause": "row", "action": "left",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Flag a row whose printed value has no brackets while the tag is negative, by matching the published line to the page."
+   }
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "what": "Emerald Wave 3 delayed draw 2025-12-31 prints '- - 50' (cost a dash); published cost is empty rather than 0. Left: no value differs materially and the gate does not test it.",
+   "field": "cost",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.05,
+   "cause": "row",
+   "action": "left",
    "suggested_check": "Publish 0 where the cost cell prints a dash and the fair value is tagged.",
-   "quote": {"accession": "0001193125-26-104439", "text": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50"}}
+   "quote": {
+    "accession": "0001193125-26-104439",
+    "text": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reported this in an untouched build (it was found by the page census); recurrence on this or another fund is caught only by the check named in suggested_check.",
+    "reference": "Publish 0 where the cost cell prints a dash and the fair value is tagged."
+   }
+  },
+  {
+   "observation_key": "issuer-name-keeps-instrument-qualifier-after-strip",
+   "what": "The issuer-name strip cut 'Bond'/'Term Loan' but left the qualifier before it ('Corporate' for a corporate bond, 'Term' for a garbled 'Term Interest Rate 8.91% Loan'), so the name no longer matched the page. Fixed here (wrapper strip, one row correction); another fund's strip list may leave qualifiers too.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 72.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (rule 1 of pipeline/candidate_rules.py) compares the published issuer with the printed name",
+   "quote": {
+    "accession": "0000950170-25-038029",
+    "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on all 12 rows in the untouched build diza (page_rule_findings.csv).",
+    "reference": "issuer_name_printed, sandbox diza, scratch/fund_sandbox/diza/output/shadow/page_rule_findings.csv"
+   }
+  },
+  {
+   "observation_key": "name-row-correction-drops-instrument-text",
+   "what": "A row correction that sets issuer_name alone removes the instrument words from instrument_description on that row ('Term Loan Interest Rate ...' became 'Interest Rate ...'); 7 rows in dizb. Fixed per row by also correcting instrument_description. The cause sits in the shared step that derives the instrument from the identifier after the issuer; not changed here.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 186.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "After row corrections, a debt row's instrument_description starts with a loan/instrument word (Term Loan, Revolving, Delayed Draw, Bond, Notes) or equity word; field diff of instrument_description across a change that only sets issuer_name.",
+   "quote": {
+    "accession": "0001193125-26-104439",
+    "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.51 % EURIBOR 6.50 % 11/03/2025 11/4/2030 54,619 52,265 53,325"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Found by the holdings field diff (dizb vs dixc), not by a rule; the diff step would catch it only when someone compares builds.",
+    "reference": "instrument_description must start with an instrument word on debt rows"
+   }
+  },
+  {
+   "observation_key": "total-investments-member-classed-as-equity-rollup",
+   "what": "At 2024-09-30 the filer's total-investments fact sits on a bare member ('Investments Non-Controlled/Non-Affiliated'); the dispatch fallback classed it as an equity category rollup, and A01 compared 797,208 with the 30,565 of equity rows. Fixed by the wrapper's category_marker_re (aggregate).",
+   "field": "fair_value",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 797.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A01: a rollup that equals the schedule total should be paired with all published rows, not one family",
+   "quote": {
+    "accession": "0000950170-24-123107",
+    "text": "Total Investments - Non-Controlled/Non-Affiliated $ 791,728 $ 797,208 187.74 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "A01 failed on this rollup in the untouched build diza (17 of 18 rollups pass; 1 failure).",
+    "reference": "oracle A01 0001916099/2024-09-30, scratch/fund_sandbox/diza/output/oracle/check_results.csv"
+   }
+  },
+  {
+   "observation_key": "member-names-wrong-instrument-family",
+   "what": "Bullhorn revolver 2024-09-30 and Emerald Wave 3 term loan 2025-12-31 were published as Delayed Draw Term Loans because the filer's member text names the wrong instrument (the page prints Revolving Line of Credit and Term Loan); 41.8M of fair value was in the wrong class. Present in production; found by the independent review, fixed by row corrections (issuer name and instrument text).",
+   "field": "instrument_type",
+   "quarters": [
+    "2024-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 41.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare the instrument words in the member text with the instrument words printed on the row (page census 'TYPE' compare); a fund's published instrument_type must equal the printed instrument.",
+   "quote": {
+    "accession": "0001193125-26-104439",
+    "text": "Emerald Wave 3 LLC (6)(8) Term Loan 9.75 % N/A 9/25/2025 9/23/2030 41,600 40,179 41,808"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compared the published instrument with the printed one; the independent review and the round-2 census found it.",
+    "reference": "published instrument_type equals the instrument words printed on the row"
+   }
+  },
+  {
+   "observation_key": "par-tagged-unscaled-on-undrawn-revolver",
+   "what": "Three revolver lines of 2026-06-30 carried par tagged with the printed thousands figure unscaled (262 for 262 thousand) while cost and fair value were scaled, so par was 1,000 times too small. Fixed by row correction; the same shape as the L2 Brands / CWC rows of the earlier run (decimals tag).",
+   "field": "principal_amount",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 2.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "On a loan row, principal_amount within a factor 1000 of cost: flag where fair_value/principal exceeds 100 while cost/principal is of the same order.",
+   "quote": {
+    "accession": "0001193125-26-342470",
+    "text": "Southern Orthodontic Partners Management, LLC (4)(5)(6) Revolving Line of Credit 8.41 % SOFR 4.75 % 3/4/2026 7/27/2029 262 253 253"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in the untouched build; the page par scan found them.",
+    "reference": "published principal_amount vs printed par on every matched loan row"
+   }
+  }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_bdc_xbrl_wrapper.py, tests/test_fund_highlights_wrapper.py, tests/test_source_encodings.py: 673 passed, then 1 failed with -x; tests/test_source_encodings.py alone: 96 passed, 1 failed (test_printed_margin_reading_is_set_for_the_two_blue_owl_funds_and_apollo_alone: MidCap 0001278752's wrapper, from another session's commit, now sets printed_margin_reading; not caused by this fund's files)."
+  "No test file run in this session (wrapper settings and row corrections only; no shared code). Build dize: every stage exits 0 except the ledger stage's expected exit 1; field diff dize vs dixc read column by column; 0 unmatched row corrections; retirement checks scratch/fund_runs/0001916099/retire.py 10 of 10 with plants failing."
  ],
  "not_done": [
-  "2024-09-30: the census parser stops before the preferred section, so the two preferred rows of that quarter were not compared on the page (they tie into the filed total).",
+  "Fields not compared on the page beyond the earlier census (fair value, cost, rate, spread, PIK, reference rate, maturity) and the issuer-name rule: industry labels, fair-value level, non-accrual, unit/par scale.",
+  "Reference-rate letter codes: legend lists SOFR/EURIBOR/STIBOR/PRIME codes read in the earlier run; not re-scanned in this run.",
+  "2024-09-30: the census parser stops before the preferred section (two preferred rows tie into the filed total).",
   "distribution_per_share 0.09 at 2023-12-31 (pre-operations) has no printed source found; not corrected.",
-  "Industry labels, fair-value level, non-accrual, and loan unit/par scale were not compared against the page beyond the census fields (fair value, cost, rate, spread, PIK, reference rate, maturity).",
-  "31 rows have no GICS label (mostly the newly published zero-value lines); not investigated.",
-  "Whether 26N Nova (the NEP Group holding per the note) should be named as the issuer of the NEP preferred row was not decided; published as the page prints it (NEP Group Holdings).",
-  "All findings cleared is not data correct: the census tests the fields listed above, not names, classes or what a field means."
- ]
+  "All findings cleared is not data correct: the checks and the census do not detect a change in what a field means, a wrong rate on the right row, or offsetting errors.",
+  "Round 2 scope note: the wrapper's category_marker_re change (bare total member 'Investments Non-Controlled/Non-Affiliated' = aggregate) also reclassifies the bare totals of 2024-03-31 (167,278) and 2024-06-30 (436,224) from equity category rollups to aggregates (oracle rollup counts: 2024-06-30 12 -> 11, 2024-09-30 18 -> 17). A01 clears at 2024-09-30 because that total is no longer tested as a rollup, not because the check ties; the totals tie (published = filed to the printed thousand in all 10 quarters) is the control that covers it.",
+  "Per-position percent of net assets is neither printed nor tagged per position; the A07 findings are closed by D-252 retirements (VR-FL-1916099-07 to -10), not by a disposition (proposal PD-A07-1916099-1 withdrawn: its reason key said 'no longer printed' although a position percent was never printed).",
+  "The independent review said the Ranger warrants unit count 14,456 was not published; shares_held 14456.0 is published in dixc, dizc, dize and production (context C_603c11ff-b8f1-4973-8110-9d3a737f8b16), so only the maturity was wrong.",
+  "Par scan (census2.py) compares loan par to the printed thousands on matched rows only; equity unit counts were compared at x1000 scale and match. Rows not matched on fair value and cost are not scanned for type or par."
+ ],
+ "investigator_id": "agent:fund-diz-sonnet",
+ "retired_in_run": [
+  {
+   "finding_id": "RVQ_REV_40f12eab2b2a",
+   "retirement_id": "VR-FL-1916099-01",
+   "rule": "C107",
+   "quarter": "2025-12-31",
+   "why": "cited Action Elevator delayed-draw cost -26,471,000 is published +26,471,000 (printed 26,471)."
+  },
+  {
+   "finding_id": "RVQ_REV_16ea877d2c65",
+   "retirement_id": "VR-FL-1916099-02",
+   "rule": "PP01",
+   "quarter": "2024-12-31",
+   "why": "TCI Buyer common-units row published with issuer, 75,000 units and no maturity."
+  },
+  {
+   "finding_id": "RVQ_REV_bf721b05cf0f",
+   "retirement_id": "VR-FL-1916099-03",
+   "rule": "PP01",
+   "quarter": "2025-09-30",
+   "why": "AP Edison Co-Invest (UB), L.P. published with issuer and 8,487 units."
+  },
+  {
+   "finding_id": "RVQ_REV_fa8f378a4c10",
+   "retirement_id": "VR-FL-1916099-04",
+   "rule": "FX01",
+   "quarter": "2025-12-31",
+   "why": "Purflux principal_amount_usd published at the printed 54,619 thousand; re-issued in round 2 with a check that reads the unit of the XBRL principal fact (iso4217:USD; no euro unit exists in the instance), shows the USD principal moving with FX while cost barely moves, and fails on a planted EUR unit."
+  },
+  {
+   "finding_id": "RVQ_REV_53b414b1685f",
+   "retirement_id": "VR-FL-1916099-05",
+   "rule": "F33",
+   "quarter": "2026-03-31",
+   "why": "distribution per share 0.625 and a positive rate are published."
+  },
+  {
+   "finding_id": "RVQ_REV_747d2adf2f55",
+   "retirement_id": "VR-FL-1916099-06",
+   "rule": "B02",
+   "quarter": "2025-12-31",
+   "why": "0 duplicate position keys; cited rows published once, subtotals not published."
+  },
+  {
+   "finding_id": "RVQ_REV_9cee52ccafda",
+   "retirement_id": "VR-FL-1916099-07",
+   "rule": "A07",
+   "quarter": "2024-12-31",
+   "why": "no position context carries a percent-of-net-assets fact, no published row carries a percent; plant fails (retire.py)."
+  },
+  {
+   "finding_id": "RVQ_REV_6df6b4e837d8",
+   "retirement_id": "VR-FL-1916099-08",
+   "rule": "A07",
+   "quarter": "2025-09-30",
+   "why": "same check, 2025-09-30."
+  },
+  {
+   "finding_id": "RVQ_REV_6d89e6e86176",
+   "retirement_id": "VR-FL-1916099-09",
+   "rule": "A07",
+   "quarter": "2025-12-31",
+   "why": "same check, 2025-12-31."
+  },
+  {
+   "finding_id": "RVQ_REV_f43438da69aa",
+   "retirement_id": "VR-FL-1916099-10",
+   "rule": "A07",
+   "quarter": "2026-03-31",
+   "why": "same check, 2026-03-31."
+  }
+ ],
+ "investigations": []
 }

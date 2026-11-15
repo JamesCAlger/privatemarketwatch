@@ -1,0 +1,190 @@
+{
+ "reviewer_id": "agent:review-dizc-opus",
+ "report_digest": "084d7858a81abfa2c68a70de4339467f7c99c391a9bc31ff55034502b445cbec",
+ "cik": "0001916099",
+ "label": "dizc",
+ "before": "dixc",
+ "summary": "4 outstanding findings (A07 x4) supported. 15 of 16 observations supported, 1 rejected (acquisition-date-in-member-read-as-maturity: a Ranger Parent I warrants row of 2025-12-31 still publishes its acquisition date as maturity). Request DIZ-REQ-1 supported. Retirements: 5 of 6 supported, VR-FL-1916099-04 (FX01 Purflux) REJECTED as written (its check cannot tell a USD par from a EUR par; the USD reading is supported by the XBRL unit, which the entry does not cite). Unflagged errors found: 3 rows (Emerald Wave 3 term loan 2025-12-31 published as a delayed draw, 41.8M; Bullhorn revolver 2024-09-30 published as a delayed draw; Ranger Parent I warrants 2025-12-31 maturity and unit count). declared_changes over-declares instrument_description (13 declared, 6 changed). All of these were present before this run (in dixc and in production); none was introduced by the dizc changes. All findings cleared is not data correct.",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_9cee52ccafda",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding; the ledger row is the only affected unit (0001916099/2024-12-31/pct_of_net_assets_sum), matching the report. I checked 0000950170-25-038029 myself (scratch/fund_runs/0001916099/review/pct_facts.py): 31 InvestmentOwnedPercentOfNetAssets facts for 2024-12-31, all on aggregate contexts (no instrument word in any member), none on a position; the published quarter has 0 of 90 rows with a percent. Printed position lines end at fair value; the percent is printed on industry subtotals and totals. The verdict's cited lines are the two totals. A07 is silent here because the check skips funds with no published percent (D-002); the finding stays outstanding only through the unretired real-error verdict. The check does not misfire, so this is not a check-repair case under the 2026-11-04 ruling. The condition is real and as filed: there is no per-position percent to extract, and the 2024-03-31 10-Q also tags none (11 aggregate facts), so the fund never printed one. Two caveats for the orchestrator. (1) The precedent for this exact pattern is a D-252 retirement of the verdict, not a disposition: Blue Owl VR-FL-1812554-10 (D-266) and 0001869453 (standing_rule_fundloop_0001869453_2026-11-14.json). That route was open to the investigator and is the cleaner close. (2) The proposal's reason key 'coverage-percent-of-net-assets-no-longer-printed' is factually off for this fund: nothing stopped being printed, because it never was. Re-key it, or route it to the owner rather than letting the check accept it automatically.",
+   "evidence": [
+    {"accession": "0000950170-25-038029", "text": "Total Investments - Non-Controlled/Non-Affiliated Before Cash and Cash Equivalents $ 1,207,142 $ 1,216,443 200.15 %"},
+    {"accession": "0000950170-25-038029", "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508 149,758 145,848 146,363 24.08 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6df6b4e837d8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level key 0001916099/2025-09-30/pct_of_net_assets_sum, matching the ledger. 0001193125-25-279909 has 62 percent facts: 35 for 2025-09-30, all on aggregate contexts, and 27 for other periods; none is on a position context. 0 of 142 published rows carry a percent. The printed ICAT line below ends at fair value 24,994; the next figures are the industry subtotal (25,374 / 24,852 / 24,870) with its 2.18 % share. So the zero position-level sum is the filed state. The verdict misread a total as a missed column. Same route caveats as RVQ_REV_9cee52ccafda: a D-252 retirement is the precedent, and the reason key is mis-worded for this filer.",
+   "evidence": [
+    {"accession": "0001193125-25-279909", "text": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994 25,374 24,852 24,870 2.18 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6d89e6e86176",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level key 0001916099/2025-12-31/pct_of_net_assets_sum, matching the ledger. 0001193125-26-104439 has 69 percent facts: 42 for 2025-12-31, all aggregate, none on a position. 0 of 166 published rows carry a percent. The verdict cites the investment-summary table's 100 % total (percent of fair value), which is not a position. The Purflux line ends at fair value 53,325 and the next line starts, with no percent between them. The published fair value (2,783,476 thousand) equals the printed total. Same route caveats as above.",
+   "evidence": [
+    {"accession": "0001193125-26-104439", "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.51 % EURIBOR 6.50 % 11/03/2025 11/4/2030 54,619 52,265 53,325 Ranger Intermediate II, LLC (6) Term Loan 9.36 % SOFR 5.50 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f43438da69aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level key 0001916099/2026-03-31/pct_of_net_assets_sum, matching the ledger. 0001193125-26-216630 has 86 percent facts: 44 for 2026-03-31, all aggregate, none on a position. 0 of 176 published rows carry a percent. The position line ends at fair value 52,565 and the next position follows. The published total (2,845,622 thousand) equals the printed 'Before Cash' total. Same route caveats as above.",
+   "evidence": [
+    {"accession": "0001193125-26-216630", "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.45 % EURIBOR 6.50 % 11/3/2025 11/4/2030 53,721 52,331 52,565 Ranger Intermediate II, LLC"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "outcome": "supported",
+   "rationale": "Every quarter's published fair value equals the printed total to the printed thousand (10 of 10; scratch/fund_runs/0001916099/review/totals.py). My reference-rate scan matched every printed debt line that has a rate cell, dash-valued undrawn lines included, to a published row in all ten quarters. The cause (a context with cost and no fair value is dropped) is shared code. The proposed detector is concrete and would catch a recurrence; its false-positive risk is low because the population is contexts that carry cost and no fair value.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "Rialto Management Group, LLC (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 12/5/2024 12/5/2030 - ( 9 ) ( 2 )"}]
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "outcome": "rejected",
+   "rationale": "The action 'fixed' is not fully true. dizc still publishes one equity row with its acquisition date as maturity: Ranger Parent I, Inc. warrants at 2025-12-31 (context C_603c11ff-b8f1-4973-8110-9d3a737f8b16) carry maturity_date 2025-10-28, while the page prints 'N/A 10/28/2025' (no maturity; 10/28/2025 is the acquisition date). The same row publishes no unit count against a printed 14,456. GSP Topco 2025-12-31 and Trystar 2025-12-31 are right (no maturity; 2031-08-06). The proposed detector ('an equity row with a maturity date') would have caught this row, which means the investigator did not run its own check over the sandbox. Fix the row, or record it as a residual, then re-review.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Ranger Parent I, Inc. Warrants Shares N/A 10/28/2025 14,456 $ - $ - 14,456 - - 0.00 %"}]
+  },
+  {
+   "observation_key": "unit-count-in-row-name-not-published",
+   "outcome": "supported",
+   "rationale": "AH Parent publishes 25,707 at 2025-03-31 and 25,000 at 2024-12-31, matching the printed '( 25,707 shares)' and '( 25,000 shares)'. The detector is concrete. The unpublished Ranger warrants count of 2025-12-31 (printed in the principal column, not in the name cell) is outside this observation's quarters and mechanism. It is listed under unflagged errors.",
+   "evidence": [{"accession": "0000950170-25-067944", "text": "AH Parent, Inc. - Series A Preferred Shares ( 25,707 shares) 10.50 % PIK N/A 9/27/2024 25,332 25,412"}]
+  },
+  {
+   "observation_key": "preferred-dividend-rate-on-period-context-not-published",
+   "outcome": "supported",
+   "rationale": "AH Parent 2025-12-31 publishes interest_rate 10.0. NEP Group publishes SOFR, spread 15.0 and rate 18.68 at 2026-03-31 and 2026-06-30, against the printed '18.68 % PIK SOFR 15.00 %'. At 2025-12-31 NEP publishes 15.0 with no benchmark, against the printed '15.00 % PIK N/A'. The detector proposal is reasonable.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "NEP Group Holdings, Inc. (7)(14) Series B Preferred Shares 18.68 % PIK SOFR 15.00 % 10/16/2025 10,000 10,400 10,468"}]
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "outcome": "supported",
+   "rationale": "I scanned printed reference-rate cells against published reference_rate_type over every printed debt line in all ten quarters, matching on maturity, spread, family and fair value (scratch/fund_runs/0001916099/review/refrate_scan.py, output refrate_dizc.txt). Result: 0 mismatches. ASP Integrity revolver is PRIME from 2025-06-30 (printed P). Intrum 2025-09-30 has STIBOR on the 68,186 line and EURIBOR on the 11,238 line, as printed. The dated legend (footnote 2) lists SOFR only through 2025-06-30; SOFR, EURIBOR, STIBOR and P from 2025-09-30 to 2026-03-31; and SOFR, EURIBOR and P at 2026-06-30. Every printed code sits inside its own quarter's legend. The key's wording is loose: STIBOR and P were in the legend, and the defect was the wrapper's code map. The substance and the detector stand.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "ASP Integrity Acquisition Co LLC (4)(5)(6) Revolving Line of Credit 10.75 % P 5.00 % 3/6/2025 3/6/2031 5,692 5,652 5,540"}]
+  },
+  {
+   "observation_key": "value-tagged-decimals-zero-in-thousands-schedule",
+   "outcome": "supported",
+   "rationale": "L2 Brands 2026-06-30 publishes cost and fair value of 13,835,000, as printed. CWC Fund II publishes 9,949,000. The 2026-06-30 total ties (2,807,208 thousand). The detector (decimals 0 and value under 100,000 in a decimals -3 filing) is specific and has been seen at other filers.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "L2 Brands Holdings, LLC (6) Term Loan 9.23 % SOFR 5.50 % 4/28/2026 11/16/2028 13,965 13,835 13,835"}]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Rialto revolver 2026-06-30 now has no interest_rate (the line prints none). BVI delayed draw 2026-06-30 has no PIK (only the term loan prints '( 5.00 % PIK)'). MC CIF Z2 2026-03-31 and 2026-06-30 publish interest 12.0 and PIK 6.0, matching the printed '12.00 % ( 6.00 % PIK)'. The detector is concrete.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "Rialto Management Group, LLC (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 12/5/2024 12/5/2030 - ( 9 ) ( 2 )"}]
+  },
+  {
+   "observation_key": "distribution-concept-holds-preferred-dividend",
+   "outcome": "supported",
+   "rationale": "I re-ran the investigator's F33 check: fund_financials 2026-03-31 publishes distribution_per_share 0.625 and rate 9.11 in dizc and in production. The pre-fix sandbox dixa had 0.0 / 0.0, so the check discriminates. The detector (ratio to dividends declared) is reasonable.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "June 30, 2026 June 30, 2026 August 14, 2026 0.625 34,237 Total distributions $ 1.250 $ 68,380"}]
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "In dizc, Constellation Wealth Capital Fund II publishes one row per quarter at thousands scale (1,249,000 at 2026-03-31, 4,623,000 at 2026-06-30). No unscaled dollar-level twin row is published, and both quarters tie to the printed total. The detector is specific.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "The Company's $ 10,468 fair-value interest in 26N Nova Co-Investment Partners -A LP (26N Nova), a co-investment partnership holding preferred equity of NEP Group Holdings, Inc."}]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "MC CIF 2025-12-31 publishes two distinct instruments, Z1 (cost 10,313,000, fair value 10,463,000, 12.00 PIK) and Z2 (10,082,000 / 10,334,000, 13.50 PIK), as printed. The detector (same issuer, identical instrument text, different values) is cheap and specific.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "MC CIF Wealth Management (UK) Ltd. (7)(10) Series Z2 Preferred Shares 13.50 % PIK N/A 8/12/2025 10,231 10,082 10,334"}]
+  },
+  {
+   "observation_key": "fund-interest-classed-private-equity-under-preferred-section",
+   "outcome": "supported",
+   "rationale": "CWC Fund II (Cresset) LP at 2026-06-30 publishes PREFERRED_EQUITY / EQUITY_PREFERRED, consistent with its printed section (Preferred Equity, Convertible Preferred Stock). The detector (published class totals against printed section totals) is a strong, source-anchored check.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "CWC Fund II (Cresset) LP (7)(14) Convertible Preferred Stock N/A 6/3/2026 10,140 10,140 9,949"}]
+  },
+  {
+   "observation_key": "value-tagged-with-wrong-sign",
+   "outcome": "supported",
+   "rationale": "Quantum Leap delayed draw 2026-06-30 publishes fair value +5,000 and cost -22,000, as printed '$ - $ ( 22 ) $ 5'. Action Elevator delayed draw 2025-12-31 publishes cost +26,471,000; that check failed on pre-fix dixa (-26,471,000), so it discriminates. The detector requires a line match, which is feasible for this filer.",
+   "evidence": [{"accession": "0001193125-26-342470", "text": "Quantum Leap Buyer, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 4.50 % 9/5/2025 9/6/2032 $ - $ ( 22 ) $ 5"}]
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "outcome": "supported",
+   "rationale": "Emerald Wave 3 delayed draw 2025-12-31 publishes cost null and fair value 50,000, against the printed '- - 50'. A blank where the page prints a dash is a convention gap, not a wrong value. Leaving it, with a proposed detector, is defensible.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50"}]
+  },
+  {
+   "observation_key": "issuer-name-keeps-instrument-qualifier-after-strip",
+   "outcome": "supported",
+   "rationale": "I dry-ran the old and new issuer_name_strip_re over all 1,838 distinct raw identifiers of the fund (scratch/fund_runs/0001916099/review/wrapper_dryrun.py). The new 'Corporate Bond' alternative can only change a cut where ' Corporate Bond' occurs. It occurs only in R.R. Donnelley identifiers: 9 raw identifiers, which include prior-period comparatives, and 5 published rows. TSYL Corporate Buyer, Inc. (16 published rows) is untouched. The 5 RRD rows now publish 'R.R. Donnelley & Sons Company' with instrument 'Corporate Bond ...'. issuer_name_printed is the right existing detector, since it fired on these rows in diza.",
+   "evidence": [{"accession": "0000950170-25-038029", "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508"}]
+  },
+  {
+   "observation_key": "name-row-correction-drops-instrument-text",
+   "outcome": "supported",
+   "rationale": "The field diff dizc vs dixc shows instrument_description changed on 6 rows only (5 RRD, 1 HowardSimon). So the 7 compensating instrument_description corrections restore the dixc text exactly. The shared cause (instrument derived after the issuer) remains in code. A proposed detector is the right call, but it is a workaround: each future name correction will need a twin instrument correction until the shared step is fixed.",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.51 % EURIBOR 6.50 % 11/03/2025 11/4/2030 54,619 52,265 53,325"}]
+  },
+  {
+   "observation_key": "total-investments-member-classed-as-equity-rollup",
+   "outcome": "supported",
+   "rationale": "Dry run of the new category_marker_re over every raw identifier: it changes the classification of exactly three bare total members, 'Investments Non-Controlled/Non-Affiliated' at 2024-03-31 (167,278), 2024-06-30 (436,224) and 2024-09-30 (797,208). Each equals its quarter's printed total. The report names only 2024-09-30. The other two are harmless (no published row changes), but A01's rollup population drops by one in each of the three quarters (11->10, 12->11, 18->17). Note the mechanism: the 2024-09-30 A01 failure clears because the total is no longer tested by A01, not because A01 now passes on it. That is acceptable only because the totals gate independently ties each quarter to the printed total (10 of 10 verified). The orchestrator should know this is a fund-config change that takes a rollup out of a rule's scope. A01 remains the right detector for the misclassification elsewhere.",
+   "evidence": [{"accession": "0000950170-24-123107", "text": "Total Investments - Non-Controlled/Non-Affiliated $ 791,728 $ 797,208 187.74 %"}]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "DIZ-REQ-1",
+   "outcome": "supported",
+   "rationale": "Confirmed from the code. scripts/v05_evidence/make_batch_dispositions.py builds entries with only a query-evidence string and no rows or filing quotes, and without legacy_unscoped. It then asserts fd.validate(entry) is empty (line 88). pipeline/finding_dispositions._validate_bar requires a filing quote per member and a rows list for any non-legacy as_filed/not_applicable entry. So any newly passing quarter makes the tool stop with AssertionError. The existing entry DS-FUNDLOOP-C107-1916099 is legacy_unscoped and frozen to its members, so it cannot simply absorb a new quarter either. This is a defect in the verification tooling, not a request to weaken the D-253 bar, so verification_bug is the right class. The fix must emit per-member quotes and rows (or route the quarter to a proposal), with a test that a source-backed entry validates and a quote-less one still fails. Weakness: the request's evidence quote (Kelso, 0000950170-25-107866) shows an undrawn line but says nothing about the tool; the evidence is code, not the filing. I did not run the tool (it writes to the store).",
+   "evidence": [{"accession": "0001193125-26-104439", "text": "Emerald Wave 3 LLC (4)(5)(6)(8) Delayed Draw Term Loan N/A 9/25/2025 9/23/2030 - - 50"}]
+  }
+ ],
+ "retirement_reviews": [
+  {"retirement_id": "VR-FL-1916099-01", "review_id": "RVQ_REV_40f12eab2b2a", "outcome": "supported",
+   "rationale": "Re-ran retire.py: dizc OK, production OK (cost +26,471,000, fair value 25,957,000, principal 26,932,000 = printed). Plant: against pre-fix dixa the check FAILS (cost -26,471,000), so it discriminates. The verdict cites only this row."},
+  {"retirement_id": "VR-FL-1916099-02", "review_id": "RVQ_REV_16ea877d2c65", "outcome": "supported",
+   "rationale": "dizc and production OK (TCI Buyer LLC, 75,000 units, 7,500,000, no maturity). Plant: dixa FAILS (issuer 'Maturity Date 11/14/2024', maturity 2024-11-14). The verdict's other cited rows (RRD, BDO) were judged real rows by the verdict itself."},
+  {"retirement_id": "VR-FL-1916099-03", "review_id": "RVQ_REV_bf721b05cf0f", "outcome": "supported",
+   "rationale": "dizc and production OK (AP Edison Co-Invest (UB), L.P., 8,487 units, 8,487,000). Plant: dixa FAILS (issuer 'Maturity Date 6/30/2025', no units)."},
+  {"retirement_id": "VR-FL-1916099-04", "review_id": "RVQ_REV_fa8f378a4c10", "outcome": "rejected",
+   "rationale": "The check does not test the claim. fx01() passes whenever principal_amount_usd equals the printed principal, so it would pass identically if 54,619 were a euro par, and it would fail a correct euro-to-dollar conversion. Plant: it also passes on pre-fix dixa, which already carried 54,619,000. The recorded evidence is price ratios plus the phrase 'a schedule headed Amounts in thousands in US dollars'. The header prints only '(Amounts in thousands, except share data)', with no currency. As written this is the inference the D-252 bar does not allow. My independent reading supports the USD conclusion, so the fix is to re-issue the entry with that evidence and a check that reads it: (a) the XBRL principal fact for context C_9a49e5b7-ed05-4bc3 is tagged unit U_USD (bdc_holdings.csv principal_amount_unit, all three Purflux quarters); (b) principal moves 54,619 -> 53,721 -> 52,472 while cost moves 52,265 -> 52,331 -> 51,952, which is the pattern of a translated euro par, not a paydown; (c) fair value/par is 97.6-99.7 pct each quarter; (d) EUR forwards are sold (35,419 and 35,000 thousand EUR). I expect a re-issued entry to pass. Until then, the finding should not count as cleared by this entry."},
+  {"retirement_id": "VR-FL-1916099-05", "review_id": "RVQ_REV_53b414b1685f", "outcome": "supported",
+   "rationale": "dizc and production OK (0.625, rate 9.11). Plant: dixa FAILS (0.0, 0.0). Printed 'March 31, 2026 May 8, 2026 $ 0.625 $ 34,143' cited by the verdict."},
+  {"retirement_id": "VR-FL-1916099-06", "review_id": "RVQ_REV_747d2adf2f55", "outcome": "supported",
+   "rationale": "dizc and production OK: B02 pass with 0 duplicate keys, Ranger Parent I preferred published once at 21,338,000, MC CIF Z1/Z2 at 10,463,000 / 10,334,000, and the 20,797 subtotal not published. It also passes on dixa, because the claimed defect was already absent there. By construction the check fails if the subtotal row or a duplicate were published (the MC CIF list would have three entries), so it tests the verdict's claim."}
+ ],
+ "unflagged_errors": [
+  {"quarter": "2025-12-31", "row": "Emerald Wave 3 LLC term loan, context C_b5ddb624-8f8b-4a48-afc3-dd5e22a516d5", "field": "instrument_description / instrument_type",
+   "published": "Delayed Draw Term Loan (principal 41,600,000, fair value 41,808,000)", "printed": "Emerald Wave 3 LLC (6)(8) Term Loan 9.75 % N/A 9/25/2025 9/23/2030 41,600 40,179 41,808",
+   "accession": "0001193125-26-104439", "note": "The filer's member text says 'Delayed Draw Term Loan'; 2025-09-30 and 2026-03-31 publish it as Term Loan. Present in dixc and production. 41.8M."},
+  {"quarter": "2024-09-30", "row": "Bullhorn, Inc. revolver, context C_e98e0db8-56dc-4183-9abd-8474afc55b48", "field": "instrument_description / instrument_type",
+   "published": "Delayed Draw Term Loan (cost -7,000, fair value -2,000)", "printed": "Bullhorn, Inc. (4)(5)(6) Revolving Line of Credit SOFR 5.00 % 10/1/2029 - ( 7 ) ( 2 )",
+   "accession": "0000950170-24-123107", "note": "Two published Bullhorn rows are both labelled delayed draw; the printed revolver has none. Present in production."},
+  {"quarter": "2025-12-31", "row": "Ranger Parent I, Inc. warrants, context C_603c11ff-b8f1-4973-8110-9d3a737f8b16", "field": "maturity_date, shares_held",
+   "published": "maturity 2025-10-28, shares_held null", "printed": "Ranger Parent I, Inc. Warrants Shares N/A 10/28/2025 14,456 $ - $ - 14,456 - - 0.00 %",
+   "accession": "0001193125-26-104439", "note": "The acquisition date is read as maturity, and the unit count 14,456 is not published. Present in dixc and production."}
+ ],
+ "other_notes": [
+  "declared_changes: instrument_description is declared as 13 rows, but holdings_field_diff dizc dixc shows 6 (5 RRD + HowardSimon). The gate accepts over-declaration, so the declared changes do not equal the field diff exactly. The report's own 'why' text explains the 6. Every other column matches exactly: issuer_name 13, corrected_fields 8, canonical_name 18, entity_id 3, instrument_type 1, position_id 6; rows added and removed 0 and 0.",
+  "row_corrections.csv: the 16 added 0001916099 lines were each read against the printed line with page_line.py (HowardSimon and ICAT 2025-09-30; Legacy Service Partners, LLC 2025-12-31, second lien; Purflux 2025-12-31, 2026-03-31, 2026-06-30). All names and instruments match the page. Audit-trail defect: every line carries date_added 2026-10-13 and author v05-decision-D-1916099-fundloop, although they were added on 2026-11-15 in the diz run.",
+  "Totals: published-basis fair value equals the printed 'Total Investments' (before cash) figure to the printed thousand in all 10 quarters, 2024-03-31 to 2026-06-30 (167,278 ... 2,807,208 thousand). 'To the dollar' holds only to the precision the page prints (thousands).",
+  "Reference-rate letter-code scan: 0 mismatches in matched printed debt lines across all 10 quarters, each against that quarter's dated legend (footnote 2). The scan also surfaced the two instrument-family errors above.",
+  "Page sample: the 20-card sample in docs/investigations/v05_readings/samples/0001916099 dates from 2026-10-15 (dixc era). It was not redrawn for dizc. The orchestrator should decide whether the dizc changes require it.",
+  "Process: during this review I sent one empty 'python -' heredoc by mistake (background task bf6q71lux). I stopped it with TaskStop and confirmed no python process remained."
+ ]
+}
