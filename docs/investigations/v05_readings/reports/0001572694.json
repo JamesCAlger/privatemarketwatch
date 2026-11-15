@@ -1,168 +1,103 @@
 {
  "cik": "0001572694",
- "label": "gsxf",
- "before": "spoff2",
+ "label": "gbzc",
+ "before": "gsxf",
  "shared_code": false,
  "declared_changes": [
   {
+   "column": "issuer_name",
+   "rows": 66,
+   "why": "printed company name set (member suffix, glued industry, shifted member)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 7,
+   "why": "fixed PIK coupons printed as the rate (4 rows) and Streamland 9.76 set, which the finalizer publishes as null"
+  },
+  {
    "column": "basis_spread",
+   "rows": 14,
+   "why": "SPay 9.25, Whitewater 6.00, Pluralsight 7.50, Vardiman 7.00; margin withdrawn on six fixed PIK coupons"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 26,
+   "why": "6 fixed PIK coupons withdrawn plus 18 printed-code corrections"
+  },
+  {
+   "column": "reference_rate_source",
    "rows": 8,
-   "why": "printed spread on 8 rows of 2023-03-31 whose spread was tagged with the rate-type concept and HOPCo 2023-12-31 'P + 5.00 %'"
-  },
-  {
-   "column": "corrected_fields",
-   "rows": 277,
-   "why": "lists the row-corrected fields"
-  },
-  {
-   "column": "cost",
-   "rows": 33,
-   "why": "30 undrawn lines whose cost the filer tagged positive where the page prints it in brackets (row corrections); 0.0 -> -0.0 on 3 rows"
-  },
-  {
-   "column": "cost_reported",
-   "rows": 33,
-   "why": "follows cost (same 33 rows)"
+   "why": "withdrawn with the reference rate on fixed PIK coupons"
   },
   {
    "column": "coupon_type",
    "rows": 8,
-   "why": "Fixed -> Floating on the rows given their printed spread (9)"
+   "why": "Fixed on fixed PIK coupons"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 63,
+   "why": "withdrawn where the printed line shows no PIK, set where printed"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 153,
+   "why": "provenance of the corrections"
+  },
+  {
+   "column": "entity_id",
+   "rows": 143,
+   "why": "derived from issuer name"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 31,
+   "why": "derived from issuer name"
   },
   {
    "column": "extracted_industry",
-   "rows": 274,
-   "why": "filer's industry read where the member prints it with no 'Industry' word (extended industry_from_identifier_re)"
-  },
-  {
-   "column": "fair_value",
    "rows": 5,
-   "why": "AI Titan Parent 2026-03-31 cross-tagged values corrected from the page (2); 0.0 -> -0.0 sign of zero on 3 undrawn rows"
-  },
-  {
-   "column": "gics_sector",
-   "rows": 125,
-   "why": "follows gics_sub_industry"
+   "why": "industry of the printed line on shifted members"
   },
   {
    "column": "gics_sub_industry",
-   "rows": 169,
-   "why": "from the filer's industry on those rows: 0 lost, about 94 gained, about 76 moved from the name-keyed guess"
-  },
-  {
-   "column": "instrument_description",
-   "rows": 4902,
-   "why": "the deepest printed section heading ('1st Lien/Senior Secured Debt', 'Common Stock', 'Warrants' ...) instead of the top heading 'Debt Investments' or a heading with a stray en dash; class text cut from the issuer name goes in front"
-  },
-  {
-   "column": "interest_rate",
-   "rows": 32,
-   "why": "fixed PIK coupons with only a PIK tag ('10.00 % PIK' Chase/KDOR, '12.00 % PIK' MPI, '3.00 % PIK' MedeAnalytics, '7.00 % PIK' Animal Supply, Wine.com 12 %) now publish the rate (pik_only_tag_reading coupon)"
-  },
-  {
-   "column": "interest_rate_kind",
-   "rows": 32,
-   "why": "follows interest_rate (unresolved -> all_in)"
-  },
-  {
-   "column": "issuer_name",
-   "rows": 1122,
-   "why": "null issuer filled on 15 to 209 rows a quarter (new hierarchy_issuer_re: en dash, '%%', '4.5 %', 'Last-Out' and the equity sections); an industry label printed with no 'Industry' word cut from the end (about 315 rows); a stray 'I ' cut (10 rows, 2025-03-31); equity class cut to the instrument ('- Class A Units'); AQ Helios named on its stale AI Titan member (2); the bare 'Warrants' member of 2023-09-30 named CloudBees; plus the 333 rows newly published"
-  },
-  {
-   "column": "pct_of_net_assets_calculated",
-   "rows": 5,
-   "why": "follows fair value (AI Titan 2, sign of zero 3)"
+   "rows": 13,
+   "why": "follows industry and name"
   },
   {
    "column": "position_id",
-   "rows": 1866,
-   "why": "2026-06-30 added; names filled; dash rows added: chains re-paired"
+   "rows": 114,
+   "why": "derived from entity and terms"
   },
   {
-   "column": "position_key",
-   "rows": 2,
-   "why": "AQ Helios rows renamed from the AI Titan member (2)"
+   "column": "interest_rate_reported",
+   "rows": 7,
+   "why": "follows interest_rate"
   },
   {
-   "column": "principal_amount",
+   "column": "interest_rate_kind",
+   "rows": 7,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 56,
+   "why": "derived from rate and PIK"
+  },
+  {
+   "column": "gics_sector",
    "rows": 12,
-   "why": "12 loans with no principal tag (Bullhorn 2024-03-31; FS WhiteWater, Heartland 2025-06-30): printed par declared"
-  },
-  {
-   "column": "principal_amount_source",
-   "rows": 12,
-   "why": "follows principal_amount"
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 12,
-   "why": "follows principal_amount"
-  },
-  {
-   "column": "principal_fx_rate_to_usd",
-   "rows": 12,
-   "why": "follows principal_amount"
-  },
-  {
-   "column": "principal_fx_status",
-   "rows": 12,
-   "why": "follows principal_amount"
-  },
-  {
-   "column": "reference_rate_source",
-   "rows": 253,
-   "why": "follows reference_rate_type"
-  },
-  {
-   "column": "reference_rate_type",
-   "rows": 253,
-   "why": "181 rows of 2023-03-31/06-30 published the tagged spread ('0.0600') as the reference rate: set from the printed code; 31 date guesses of 2023 Q1/Q2 and 2024-03-31 set from the printed code (SONIA, Prime, CDOR, NIBOR); 'C' rows from 2023-09-30 read with the dated wrapper codes (CDOR to 2024-09-30, CORRA from 2024-12-31, each filing's legend) instead of a SOFR guess"
-  },
-  {
-   "column": "shares_held",
-   "rows": 96,
-   "why": "23 + 11 equity unit counts of 2023-03-31 tagged as principal x1000, set from the page; 2023-09-30 CloudBees warrant 333,980; about 50 rows where the build before published another row's count through the shared pow10_shares proxy because the issuer names were null (now the tagged count); 11 loans of 2025-06-30 whose par was tagged as a share count lose the count"
-  },
-  {
-   "column": "shares_held_source",
-   "rows": 65,
-   "why": "derived_proxy withdrawn on the rows whose count is now the tag (66 -> 4 proxy rows)"
-  },
-  {
-   "column": "src_facts",
-   "rows": 8,
-   "why": "the fact record of the rows whose value was declared from the page or re-signed"
-  },
-  {
-   "column": "src_transforms",
-   "rows": 97,
-   "why": "interest_rate:pik_only on the same rows; shares proxy transforms withdrawn"
+   "why": "follows industry and name"
   }
  ],
- "rows_added": 881,
- "rows_removed": 0,
+ "rows_added": 0,
+ "rows_removed": 1,
  "fixes": [
   {
-   "what": "Issuer names: hierarchy_issuer_re rewritten (any dash, '%%', a space before %, 'Last-Out', equity sections, glued industry labels, stray 'I '). Null issuers 15 to 209 a quarter -> 0 (cash rows aside). Dry run on every identifier of the fund (dry3.py): no name with an 'Industry' word changed except the intended cuts.",
-   "kind": "wrapper",
+   "what": "Issuer names set to the printed company (63 page-rule rows + the Elemica row; row-number suffixes One/Two/Three, ',Two', glued industry words, 'Investment' heading, shifted members Eptam/Elemica, Rubrik/Superman, Wellness/Kaseya, AI Titan/AQ Helios, CivicPlus/CloudBees, Intelligent Medical Objects/MedeAnalytics, Northstar/NAVEX, Broadway/BSI3)",
+   "kind": "row_correction",
    "quarters": [
     "2023-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-25-105134",
-     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
-    }
-   ]
-  },
-  {
-   "what": "Rows printed with a dash for fair value (undrawn lines, loans and equity written to nil) were not published 2023-03-31 to 2025-06-30: 354 contexts declared at 0 (fair value, and cost where printed '-'), each matched to its printed row (dash_gen.py).",
-   "kind": "untagged_value",
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
     "2023-09-30",
     "2023-12-31",
     "2024-03-31",
@@ -173,131 +108,186 @@
     "2025-06-30",
     "2025-09-30",
     "2025-12-31",
+    "2026-03-31",
     "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0000950170-24-094144",
-     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -"
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652"
     },
     {
-     "accession": "0000950170-23-017863",
-     "text": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -"
-    }
-   ]
-  },
-  {
-   "what": "Undrawn-line cost tagged positive where the page prints it in brackets: 30 row corrections (2023-09-30 2, 2025-06-30 28).",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-09-30",
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-25-105134",
-     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
-    }
-   ]
-  },
-  {
-   "what": "AI Titan Parent 2026-03-31 fair values cross-tagged between its two lines: corrected (2). AQ Helios 6,600 line tagged on a stale AI Titan member at 2025-12-31 and 2026-03-31: named AQ Helios (2).",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-12-31",
-    "2026-03-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-26-212431",
-     "text": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294"
-    }
-   ]
-  },
-  {
-   "what": "Unit counts of 2023-03-31 equity rows tagged with the principal concept (x1000): 34 set from the page; the bare 'Warrants' member of 2023-09-30 relabelled as the CloudBees warrant (333,980 units).",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-03-31",
-    "2023-09-30"
-   ],
-   "quotes": [
-    {
      "accession": "0000950170-23-060336",
-     "text": "Kawa Solar Holdings Limited Construction & Engineering 08/17/16 1,399,556 - -"
-    }
-   ]
-  },
-  {
-   "what": "Fixed PIK coupons with only a PIK tag published no rate: pik_only_tag_reading ['coupon'] (41 rows).",
-   "kind": "wrapper",
-   "quarters": [
-    "2023-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
+     "text": "Superman Holdings, LLC (dba Foundation Software) Construction & Engineering 11.52 % S + 6.13 % 08/31/27 31,239"
+    },
     {
-     "accession": "0000950170-23-017863",
-     "text": "MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 16,741 16,741 12,054"
-    }
-   ]
-  },
-  {
-   "what": "Printed par declared for 12 loans with no principal tag; the 11 of 2025-06-30 had the par tagged as a share count, which is withdrawn.",
-   "kind": "untagged_value",
-   "quarters": [
-    "2024-03-31",
-    "2025-06-30"
-   ],
-   "quotes": [
+     "accession": "0000950170-24-054635",
+     "text": "Kaseya Inc. IT Services 10.83 % S + 5.50 % 06/25/29 1,103 265 278"
+    },
     {
-     "accession": "0000950170-25-105134",
-     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+     "accession": "0000950170-24-123412",
+     "text": "Sweep Purchaser LLC Commercial Services & Supplies 10.80 % S + 5.75 % PIK 06/30/27 20,104 19,943 19,903"
     }
    ]
   },
   {
-   "what": "Reference rate: 181 rows published the spread as the rate type ('0.0600'); 31 date guesses in 2023 Q1/Q2 and 2024-03-31; 'C' rows read as CDOR to 2024-09-30 and CORRA from 2024-12-31 (dated wrapper codes, each filing's legend); 9 coupon types and 9 spreads set from the page.",
+   "what": "pik_rate withdrawn on 56 rows whose printed line shows a cash margin only (member text or a mis-tagged PIK fact repeated the spread or a PIK part), set to the printed PIK on 5 rows (Gainsight 2023-06-30/09-30 x4, CivicPlus 2023-03-31)",
    "kind": "row_correction",
    "quarters": [
     "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
     "2026-06-30"
    ],
    "quotes": [
     {
      "accession": "0000950170-24-022198",
-     "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+     "text": "Harrington Industrial Plastics, LLC Trading Companies & Distributors 11.11 % S + 5.75 % 10/07/30 16,556 16,153 16,142"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Kaseya Inc. IT Services 10.83 % S + 5.50 % 06/25/29 1,103 265 278"
+    },
+    {
+     "accession": "0000950170-23-060336",
+     "text": "Gainsight, Inc. Software 12.27 % L + 6.75 % PIK 07/30/27 48,665 48,162 47,692"
     }
    ]
   },
   {
-   "what": "Fund income: net_investment_income held TOTAL investment income in every quarter (InvestmentIncomeNet read as NII); interest_expense held directors fees (NoninterestExpenseDirectorsFees) and, in 10-Ks, the borrowing-rate percent. New highlights wrapper (concept_overrides, income_concept_suppress): NII is now NetInvestmentIncome (2026-03-31 25,767).",
-   "kind": "wrapper",
+   "what": "Margins: SPay 2023-06-30 spread 9.25 / PIK 3.50 (published 3.50 / 9.25), Whitewater 2023-03-31 6.00, Pluralsight 2025-09-30 7.50, Vardiman Black 2026-03-31 7.00",
+   "kind": "row_correction",
    "quarters": [
     "2023-03-31",
-    "2026-06-30"
+    "2023-06-30",
+    "2025-09-30",
+    "2026-03-31"
    ],
    "quotes": [
     {
-     "accession": "0001193125-26-212431",
-     "text": "Net investment income after taxes $ 24,785 $ 49,614"
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619"
+    },
+    {
+     "accession": "0001193125-25-269840",
+     "text": "Pluralsight, Inc. Professional Services 11.70 % S + 7.50 % PIK 08/22/29 16,396 15,456 15,740"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Whitewater Holding Company LLC Diversified Consumer Services 10.82 % L + 6.00 % 12/21/27 2,699 704 681"
+    }
+   ]
+  },
+  {
+   "what": "2023-09-30 fixed PIK coupons (Wine.com x2, Animal Supply, MPI, Chase, ATX): rate = printed coupon, no margin, no reference rate, Fixed",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060336",
+     "text": "MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 17,752 16,741 12,604"
+    },
+    {
+     "accession": "0000950170-23-060336",
+     "text": "ATX Networks Corp. Communications Equipment 10.00 % 10.00 % PIK 09/01/28 $ 2,130 $ 1,888 $ 1,683"
+    }
+   ]
+  },
+  {
+   "what": "Reference rates from the printed code, 18 rows: Trader/Recochem 'C' CDOR, Aryeh 'C' CORRA, Northstar 'SN' SONIA and 'N' NIBOR, Everest 'CDN P' PRIME (Canadian prime), Elemica 'S' SOFR x4 and 'L' LIBOR x1",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652"
+    },
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - -"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "1272775 B.C. LTD. (dba Everest Clinical Research) Professional Services 11.45 % CDN P + 4.75 % 11/06/26 CAD 454 339 331"
+    }
+   ]
+  },
+  {
+   "what": "Total Warrants subtotal row (2023-09-30, 327 thousand) excluded: the earlier relabel as CloudBees double counted the warrant",
+   "kind": "exclusion",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060336",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - - (6) (7) (12) Total Warrants 1,849 327 Total Investments - 214.84 % $ 3,618,855 $ 3,438,696"
     }
    ]
   }
  ],
  "total_exceptions": [],
- "parked": [],
+ "parked": [
+  {
+   "finding": "Streamland Media Midco 2025-09-30 interest_rate (printed 9.76 % S + 6.50 % (Incl. 10.06 % PIK))",
+   "hypotheses": [
+    "Row correction sets interest_rate 9.76 and interest_rate_reported 9.76, but the finalizer publishes interest_rate null (cash leg = total - PIK is negative); a printed PIK part above the printed total is a filer anomaly. Left as published; not a rule finding."
+   ]
+  },
+  {
+   "finding": "agentA_reference_uncorroborated 2026-03-31 (needs_human): whether 'S' is SOFR",
+   "hypotheses": [
+    "Page prints 'S' only; carried from the independent review; owner decision."
+   ]
+  }
+ ],
  "orchestrator_requests": [
   {
-   "file": "pipeline/provenance_reverify.py",
-   "what": "Accept interest_rate:pik_only where the row's PIK rate itself came from the member text (identifier_text) and no PIK fact is tagged: compare the published rate with the PIK figure the member prints.",
-   "why": "anchor_missing x2 (2023-03-31, 2023-06-30): MPI 12.00 % PIK, Chase 10.00 % PIK, Animal Supply 7.00 % PIK publish the printed coupon but the 10-Qs of those quarters tag no PIK rate, so the re-verifier has no fact to anchor.",
-   "quotes": [
+   "request_id": "REQ-GBZ-1",
+   "classification": "verification_bug",
+   "file": "pipeline/bdc_xbrl_html_bridge.py (propose_field_bridges_from_ixbrl) and scripts/shadow_agent_a_engine.py (PageReader.lookup)",
+   "what": "The agentA printed-line lookup finds a row's line only through the row's exact InvestmentOwnedAtFairValue fact (fv_concept). The 2023-03-31 and 2023-06-30 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount, and dash (undrawn or written-off) lines carry no fair-value fact at all; the member-name fallback fails closed when a member has several contexts. Result: line_not_found on rows whose line is plain on the page. Fix: locate the line by any fact of the row's context (each context sits on one <tr>) and accept the NetOfCapitalizedDiscount concept.",
+   "why": "Rows read by hand on their own <tr>: 14 findings (RVQ_BLK_071a3ddd2d74, RVQ_BLK_13b7c1a00741, RVQ_BLK_18a4b0b9649c, RVQ_BLK_2fb1e3e84192, RVQ_BLK_3334cf6cb3dd, RVQ_BLK_47a756a67281, RVQ_BLK_50782587d05b, RVQ_BLK_87f3fb572048, RVQ_BLK_8cf2826e8c0e, RVQ_BLK_8dacec3d66fb, RVQ_BLK_904097e4edd0, RVQ_BLK_b6feaa4407e0, RVQ_BLK_bbf1e5b75a9b, RVQ_BLK_c50debc541b4) where published maturity, reference rate, margin and PIK equal the printed line; a check misfire under the 2026-11-04 ruling, not an as_filed case. RVQ_BLK_071a3ddd2d74 and RVQ_BLK_904097e4edd0 are listed here for their line_not_found rows; their one field_unreadable row each (Lithium, MedeAnalytics) is REQ-GBZ-2. RVQ_BLK_91329263f3ae (MPI 2026-06-30) is REQ-GBZ-2 only. Two further findings (RVQ_BLK_9741055f126e Elemica, RVQ_BLK_8883b499bb71 Trader) had real reference-rate errors, fixed in gbzc; their flags also stay until the repair.",
+   "evidence": [
     {
-     "accession": "0000950170-23-017863",
-     "text": "MPI Engineered Technologies, LLC Auto Components 12.00 % PIK 07/15/25 16,741 16,741 12,054"
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 3,689"
     }
-   ]
+   ],
+   "next_action": "Implement the context-fact anchor. Test: after the repair, Elemica 2023-03-31 (printed 'L + 6.00 %', was published SOFR) and Trader 2023-12-31 (printed 'C + 6.75 %', was published SOFR) must FAIL on reference rate when published as in gbza, and pass as in gbzc. Measure on every accepted sandbox."
+  },
+  {
+   "request_id": "REQ-GBZ-2",
+   "classification": "verification_bug",
+   "file": "pipeline/bdc_xbrl_html_bridge.py (field reading)",
+   "what": "Four rows fail as field_unreadable, one reader failure each: (1) MPI Engineered Technologies 2026-03-31 and 2026-06-30 (RVQ_BLK_60f74779de22, RVQ_BLK_91329263f3ae): the line prints two dates, 'S + 17.00 % PIK 01/15/20 11/17/25', and the maturity reader does not take the later one as maturity when the first is the initial acquisition date. (2) Lithium Technologies 2025-03-31 (RVQ_BLK_071a3ddd2d74): a single date 01/03/25, so not a two-date case; the member is printed on two rows (the current schedule and the prior-year comparative, both 'S + 11.00 % PIK 01/03/25') and the reader marks the maturity validation_needed when the readings of a repeated member disagree; both lines print the same date, so which parsed field disagrees was NOT established here and needs the reader's debug output. (3) MedeAnalytics Parent 2025-06-30 (RVQ_BLK_904097e4edd0): fails on the reference rate: the line is a fixed '3.00 % PIK' coupon with no benchmark, which the reader does not classify as not_applicable.",
+   "why": "Published equals printed on all four (MPI S + 17.00 % PIK; Lithium S + 11.00 % PIK 01/03/25; MedeAnalytics 3.00 % PIK 10/23/28).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 23,049 $ 20,011 $ 6,915"
+    }
+   ],
+   "next_action": "Per failure: MPI read the later of two dates when the first is labelled initial acquisition; Lithium find the disagreeing field of the repeated member and ignore the comparative-period row; MedeAnalytics treat a fixed PIK coupon with no benchmark as reference rate not_applicable. Tests with each printed line."
   }
  ],
  "observations": [
@@ -320,11 +310,16 @@
    "quote": {
     "accession": "0000950170-24-094144",
     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
    }
   },
   {
    "observation_key": "interest-expense-reads-noninterest-expense",
-   "what": "The fund-income and highlights concept maps take any concept containing 'interestexpense', so NoninterestExpenseDirectorsFees (152,000) was published as interest expense, and InterestExpensesOnBorrowingsPercent (a rate, 0.0677) became 0.016925 in the 10-K quarters. Suppressed for this fund; the substring match is shared.",
+   "what": "The fund-income and highlights concept maps take any concept containing 'interestexpense', so NoninterestExpenseDirectorsFees (152,000) was published as interest expense, and InterestExpensesOnBorrowingsPercent (a rate, 0.0677) became 0.016925 in the 10-K quarters. Suppressed for this fund; the substring match is shared. Other filers are exposed: the substring map is shared.",
    "field": "interest_expense",
    "quarters": [
     "2023-03-31",
@@ -335,8 +330,13 @@
    "action": "fixed",
    "suggested_check": "Interest expense below 1 pct of the debt balance, or a figure below 1, is not interest expense.",
    "quote": {
-    "accession": "0001193125-26-212431",
-    "text": "Net investment income after taxes $ 24,785 $ 49,614"
+    "accession": "0000950170-23-017863",
+    "text": "Expenses: Interest and other debt expenses $ 27,264 $ 15,667 Incentive fees 22,302 8,190 Management fees 8,921 8,817 Professional fees 878 878 Directors fees 207 203"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A fund-income check: published interest_expense must equal the printed 'Interest and other debt expenses' line; plus a shared-code proposal to make the concept map exact (bdc_fund_highlights.py lines 110-112).",
+    "reference": "pipeline/bdc_fund_highlights.py:110-112"
    }
   },
   {
@@ -354,6 +354,11 @@
    "quote": {
     "accession": "0001193125-26-212431",
     "text": "Net investment income after taxes $ 24,785 $ 49,614"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
    }
   },
   {
@@ -371,6 +376,11 @@
    "quote": {
     "accession": "0000950170-23-017863",
     "text": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
    }
   },
   {
@@ -388,23 +398,39 @@
    "quote": {
     "accession": "0000950170-24-022198",
     "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
    }
   },
   {
    "observation_key": "reference-rate-code-not-in-legend",
-   "what": "'C' (CDOR, then CORRA), 'SN', 'P', 'N' rows were published with a date-guessed SOFR or LIBOR (about 100 rows). Fixed by dated wrapper codes and row corrections. Left: 2 'CDN P' (Canadian prime) rows of 2023 and 6 rows of 2023-09-30 whose member prints no code (SOFR guess).",
+   "what": "18 loan rows published a benchmark that differs from the code the line prints: Trader 'C' (CDOR) as SOFR x4, Recochem 'C' x2, Aryeh Bidco 'C' (CORRA) x3, Northstar 'SN' and 'N' x2, Everest 'CDN P' as LIBOR x2, Elemica 2023-03-31 'S' as LIBOR x4 and 'L' as SOFR x1. No rule flagged them; found by comparing every published row with the <tr> of its own context (refscan.py, 6,173 rows with a printed code). Fixed in gbzc by 18 row corrections. The Everest 'CDN P' correction maps Canadian prime to PRIME, which is lossy: the filing prints Canadian Prime 6.70 % beside US Prime 8.00 % (130 bp apart, legend: 'Canadian Prime rate (\"CDN P\") was 6.70 %'), and the schema has no Canadian-prime value.",
    "field": "reference_rate_type",
    "quarters": [
     "2023-03-31",
-    "2026-06-30"
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-09-30"
    ],
-   "fair_value_m": 300.0,
+   "fair_value_m": 8.1,
    "cause": "fund",
    "action": "fixed",
-   "suggested_check": "A guessed benchmark on a row whose printed line names a code.",
+   "suggested_check": "Published reference_rate_type equals the benchmark of the code printed on the row's own <tr>, by the filing's dated legend (scratch/fund_runs/0001572694/refscan.py). Also a schema value for Canadian prime (CANADIAN_PRIME) in reference_rate_type, so CDN P is not published as PRIME; until then the two Everest rows are approximate.",
    "quote": {
     "accession": "0000950170-24-022198",
-    "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+    "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - - (6) (7) (8) (9)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No named rule fired on these rows in the untouched build; the scan found all 18 with no false positive over 6,173 rows. The CDN P to PRIME mapping needs the schema value before it can be exact.",
+    "reference": "scratch/fund_runs/0001572694/refscan.py"
    }
   },
   {
@@ -422,6 +448,11 @@
    "quote": {
     "accession": "0001193125-26-212431",
     "text": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
    }
   },
   {
@@ -438,11 +469,90 @@
    "quote": {
     "accession": "0000950170-25-105134",
     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Members naming another borrower than the printed line (Eptam for Elemica 2023-03-31, Rubrik for Superman, Broadway for BSI3, Wellness for Kaseya, AI Titan for AQ Helios, CivicPlus for CloudBees, Northstar for NAVEX) and suffix/glue variants; the page-name rule is suppressed for 2023-03-31 and 2023-06-30 (reader finds no printed rows) so the Elemica row had no finding.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 160.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Match every published row to its printed line by par, cost and value and compare the name (namecheck.py), including quarters the page reader cannot read.",
+   "quote": {
+    "accession": "0000950170-23-017863",
+    "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed fired on 63 rows from 2023-09-30 but is blind in 2023-03/06; the par/cost/value match covers all quarters.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
+   }
+  },
+  {
+   "observation_key": "pik-rate-published-where-page-prints-none",
+   "what": "61 rows published pik_rate (equal to the spread, or a PIK part) where the printed line has no PIK: the filer's member text said PIK or a PIK-concept fact repeated the spread. No rule tests the reverse of pik_printed.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 600.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A published pik_rate with no PIK on the row's own printed line is an error (ratecheck2.py).",
+   "quote": {
+    "accession": "0000950170-24-022198",
+    "text": "Harrington Industrial Plastics, LLC Trading Companies & Distributors 11.11 % S + 5.75 % 10/07/30 16,556 16,153 16,142"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No named rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/ratecheck2.py"
+   }
+  },
+  {
+   "observation_key": "margin-and-pik-swapped-on-incl-pik-line",
+   "what": "SPay 2023-06-30 published spread 3.50 and PIK 9.25 for the printed 'S + 9.25 % (incl. 3.50 % PIK)'.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "fair_value_m": 32.9,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Published basis_spread and pik_rate each equal the margin and the '(Incl. x % PIK)' figure printed on the row's own line (scratch/fund_runs/0001572694/ratecheck2.py). Not 'spread >= pik': this filer prints PIK parts above the margin (e.g. 'S + 7.00 % (Incl. 7.44 % PIK)') on 26 correct rows.",
+   "quote": {
+    "accession": "0000950170-23-037958",
+    "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Printed-line comparison of each of the two figures; the inequality detector is dropped (26 false positives).",
+    "reference": "scratch/fund_runs/0001572694/ratecheck2.py"
    }
   },
   {
    "observation_key": "cash-and-money-market-rows-not-published",
-   "what": "The money-market row's issuer is published as 'Investment Goldman Sachs Financial Square Government Fund' (member prefix kept) in 7 quarters. Left: cash rows are outside the published basis checked here.",
+   "what": "Revised: in the final sandbox gbzc the printed money-market name is published in every quarter ('Goldman Sachs Financial Square Government Fund - Institutional Shares', or without the class suffix), by row correction; no 'Investment ' prefix remains there. Production data/output still has the 'Investment ' prefix (2024-12-31, 2025-12-31, 2026-03-31) until the next batch applies the corrections; it also defeats name-based filters on the production data.",
    "field": "issuer_name",
    "quarters": [
     "2025-06-30",
@@ -455,18 +565,611 @@
    "quote": {
     "accession": "0001193125-26-212431",
     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 2,475,640 $ 2,476 $ 2,476"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Recurrence needs a printed-line comparison on every published row; no rule fired on these rows in the untouched build.",
+    "reference": "scratch/fund_runs/0001572694/namecheck.py"
+   }
+  },
+  {
+   "observation_key": "totals-gate-tolerance-hides-double-count",
+   "what": "The fund gate ties published to filed investments at 500,000 dollars ('14 of 14 quarters tie'). The 327,000 CloudBees double count at 2023-09-30 (Total Warrants subtotal relabelled as a position) sat inside that tolerance; at 500 dollars exactly one quarter was off. Fixed in gbzc by exclusion; production has the error until the batch.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 0.327,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A strict per-quarter tie of the published ex-cash sum to the filed investments at 500 dollars (or a band of 0.001 pct of the total) as a flag beside the gate's 500,000-dollar bar.",
+   "quote": {
+    "accession": "0000950170-23-060336",
+    "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - - (6) (7) (12) Total Warrants 1,849 327 Total Investments - 214.84 % $ 3,618,855 $ 3,438,696"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A strict per-quarter tie at 500 dollars flagged exactly this quarter and no other of 14 (strict_totals.py).",
+    "reference": "scratch/fund_runs/0001572694/strict_totals.py"
    }
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "none: no shared code changed (wrapper, highlights wrapper, row corrections, one data block in scripts/v05_evidence/make_row_corrections.py)"
+  "no pytest (data, corrections and one exclusion rule only)"
  ],
  "not_done": [
-  "Interval of the C-code switch is taken from each filing's legend (CDOR to 2024-09-30, CORRA from 2024-12-31), not from the loan agreements.",
-  "Cost row by row beyond the sign check; the 2 'CDN P' rows and 6 code-less 2023-09-30 rows keep a guessed benchmark.",
-  "Quarters before 2023-03-31 are not in the build (no holdings published for 2022).",
-  "Page sample beyond 16 random rows (spot.py) not done; 'all findings cleared' is not 'data correct'.",
-  "The en-dash/glued-name regex was dry-run on this fund's identifiers only; no other fund uses it."
+  "Rows whose printed line could not be matched by maturity/par/cost/value were not compared for rate (about 15 pct per quarter, mostly dash and negative-cost lines; names for all quarters were compared on a looser second pass).",
+  "20 random-row page sample is the orchestrator's.",
+  "Streamland interest_rate left null by the finalizer (parked).",
+  "Totals: the fund gate's 500,000-dollar tolerance hid the 327,000 double count at 2023-09-30; re-checked at 500 dollars (strict_totals.py): all 14 quarters tie in gbzc.",
+  "Retirement checks (15 verdicts) read the sandbox; fv_conservation, html_agg and SRC_BDC01 must be re-run on the batch output (money-market row excluded by context id)."
+ ],
+ "investigator_id": "agent:fund-gbz-sonnet",
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_9741055f126e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-017863/C_144d1b61-77bf-420e-88a6-d6ce5aceea84"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-017863/C_144d1b61-77bf-420e-88a6-d6ce5aceea84"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652 (6) (7)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Maturity: published 2025-09-18 equals the printed 09/18/25.",
+    "Reference rate: the printed line is 'L + 6.00 %' (LIBOR) but the row was published SOFR from the Eptam member text; four more Elemica lines print 'S + 6.00 %' and were published LIBOR. The earlier name fix did not carry the right reference rate. Found by refscan.py (every published row against the <tr> holding any fact of its context)."
+   ],
+   "next_action": "Fixed in gbzc by 5 row corrections (reference_rate_type). The flag itself remains until the reader repair (REQ-GBZ-1): the engine cannot find this row's printed line."
+  },
+  {
+   "finding_id": "RVQ_BLK_c50debc541b4",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-037958/C_10300d87-0521-4f00-b778-b71f86900b0b",
+     "0000950170-23-037958/C_47f5b13a-4d76-49c6-ba05-6b21ce3c4652",
+     "0000950170-23-037958/C_5d08cb32-ad20-4c14-a5fb-2928a0ef7e64",
+     "0000950170-23-037958/C_5f48a4f8-0690-4c83-9959-4334316c26ff",
+     "0000950170-23-037958/C_dee6b455-ae39-402a-9fe7-940de1ec7866"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-037958/C_10300d87-0521-4f00-b778-b71f86900b0b",
+     "0000950170-23-037958/C_47f5b13a-4d76-49c6-ba05-6b21ce3c4652",
+     "0000950170-23-037958/C_5d08cb32-ad20-4c14-a5fb-2928a0ef7e64",
+     "0000950170-23-037958/C_5f48a4f8-0690-4c83-9959-4334316c26ff",
+     "0000950170-23-037958/C_dee6b455-ae39-402a-9fe7-940de1ec7866"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "LS Clinical Services Holdings, Inc (dba CATO) Pharmaceuticals 12.14 % S + 6.75 % 12/16/26 2,200 2,160 2,139 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619 (6) (7) (10)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.46 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 2,258 2,162 2,145 (6) (7)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_8883b499bb71",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-022198/C_b86c446a-013d-4d32-ba59-d5f4117de818"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-022198/C_b86c446a-013d-4d32-ba59-d5f4117de818"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - - (6) (7) (8) (9)"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Maturity: published 2028-12-22 equals the printed 12/22/28.",
+    "Reference rate: the line prints 'C + 6.75 %' and this filing's legend reads C as CDOR; the row (undrawn CAD 24) was published SOFR. Same shape on Trader 2023-09-30, 2024-06-30, 2024-09-30, Recochem x2, Aryeh Bidco x3, Northstar x2, Everest x2 (18 rows in all)."
+   ],
+   "next_action": "Fixed in gbzc by row corrections (reference_rate_type CDOR). The flag remains until the reader repair (REQ-GBZ-1)."
+  },
+  {
+   "finding_id": "RVQ_BLK_8dacec3d66fb",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-054635/C_a85aecb9-a494-4906-84d9-a9829cb504fe",
+     "0000950170-24-054635/C_e4786d90-5934-4529-a15d-75b0037a1969",
+     "0000950170-24-054635/C_ee981de7-8190-48d4-b021-af03826e613d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-054635/C_a85aecb9-a494-4906-84d9-a9829cb504fe",
+     "0000950170-24-054635/C_e4786d90-5934-4529-a15d-75b0037a1969",
+     "0000950170-24-054635/C_ee981de7-8190-48d4-b021-af03826e613d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Coretrust Purchasing Group LLC Financial Services S + 6.50 % 10/01/29 $ 113 $ ( 1 ) $ - (7) (8) (9)"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 3,689 - - (7) (9)"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 10,028 - - (7) (9)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_87f3fb572048",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094144/C_c76090ae-2a32-443f-9ea0-e092db750244"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094144/C_c76090ae-2a32-443f-9ea0-e092db750244"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Superman Holdings, LLC (dba Foundation Software) Construction & Engineering S + 5.75 % 08/31/26 122 ( 1 ) - (6) (8) (9)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_bbf1e5b75a9b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-123412/C_5f1d331f-0316-4cf5-abff-ebaf8242b96e"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-123412/C_5f1d331f-0316-4cf5-abff-ebaf8242b96e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Runway Bidco, LLC (dba Redwood Software) Software S + 5.00 % 10/01/29 1,809 - - (6) (9)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_904097e4edd0",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-105134/C_4d799c38-0bb5-4387-9568-a0edffcc2b5e",
+     "0000950170-25-105134/C_80bf8b55-3b94-4ac4-939b-b41e2d95ce4d",
+     "0000950170-25-105134/C_80e20af9-c8f0-4abe-9c09-4c5f5b95d431",
+     "0000950170-25-105134/C_82beb628-0bf2-4dde-856d-b42d2c141eec"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-105134/C_4d799c38-0bb5-4387-9568-a0edffcc2b5e",
+     "0000950170-25-105134/C_80bf8b55-3b94-4ac4-939b-b41e2d95ce4d",
+     "0000950170-25-105134/C_80e20af9-c8f0-4abe-9c09-4c5f5b95d431",
+     "0000950170-25-105134/C_82beb628-0bf2-4dde-856d-b42d2c141eec"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "MedeAnalytics Parent, Inc. Health Care Technology 3.00 % PIK 10/23/28 233 142 158 (6) (7) (10) (11)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 $ 13,203 $ - $ - (6) (9)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 4,042 - - (6) (9)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 2,021 - - (6) (9)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Split by reader failure. line_not_found rows go to REQ-GBZ-1: 0000950170-25-105134/C_4d799c38-0bb5-4387-9568-a0edffcc2b5e; 0000950170-25-105134/C_80e20af9-c8f0-4abe-9c09-4c5f5b95d431; 0000950170-25-105134/C_82beb628-0bf2-4dde-856d-b42d2c141eec. The field_unreadable row goes to REQ-GBZ-2: 0000950170-25-105134/C_80bf8b55-3b94-4ac4-939b-b41e2d95ce4d (MedeAnalytics). Check misfires, not dispositions (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_3334cf6cb3dd",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-017863/C_20e9f890-b2e4-457b-8471-1a92b0c9466a",
+     "0000950170-23-017863/C_29d0aebc-bde7-46ab-8b14-45e7d9884cef",
+     "0000950170-23-017863/C_39ee67a2-5e48-445d-8400-b51fc4d7bd6c",
+     "0000950170-23-017863/C_85febbf1-31d7-4e69-9166-39e5c09902ee",
+     "0000950170-23-017863/C_a9946c59-3e9a-4aff-8828-dc6b999f5bd6",
+     "0000950170-23-017863/C_b960fb59-ea25-4d0c-8550-afebbacf34df"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-017863/C_20e9f890-b2e4-457b-8471-1a92b0c9466a",
+     "0000950170-23-017863/C_29d0aebc-bde7-46ab-8b14-45e7d9884cef",
+     "0000950170-23-017863/C_39ee67a2-5e48-445d-8400-b51fc4d7bd6c",
+     "0000950170-23-017863/C_85febbf1-31d7-4e69-9166-39e5c09902ee",
+     "0000950170-23-017863/C_a9946c59-3e9a-4aff-8828-dc6b999f5bd6",
+     "0000950170-23-017863/C_b960fb59-ea25-4d0c-8550-afebbacf34df"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "EDB Parent, LLC (dba Enterprise DB) Software 11.90 % S + 7.00 % PIK 07/07/28 19,504 19,030 19,016 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "EDB Parent, LLC (dba Enterprise DB) Software 11.90 % S + 7.00 % PIK 07/07/28 7,591 1,662 1,472 (6) (7) (8)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Ansira Partners, Inc. Professional Services L + 6.50 % PIK 12/20/24 5,712 5,276 1,628 (7) (9)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Ansira Partners, Inc. Professional Services L + 6.50 % PIK 12/20/24 347 325 99 (7) (9)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_50782587d05b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-037958/C_39066ba2-46ef-4286-b328-13a22845eacb",
+     "0000950170-23-037958/C_5f48a4f8-0690-4c83-9959-4334316c26ff",
+     "0000950170-23-037958/C_9e1c1a8e-607b-4180-a77d-5583a980e76c"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-037958/C_39066ba2-46ef-4286-b328-13a22845eacb",
+     "0000950170-23-037958/C_5f48a4f8-0690-4c83-9959-4334316c26ff",
+     "0000950170-23-037958/C_9e1c1a8e-607b-4180-a77d-5583a980e76c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Bayside Opco, LLC (dba Pro-PT) Health Care Providers & Services S + 10.00 % PIK 05/31/26 945 82 83 (7) (9)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "CivicPlus LLC Software 17.09 % S + 11.75 % PIK 06/09/34 7,312 7,132 7,129 (6) (7)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_13b7c1a00741",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-022198/C_55e0ff24-e528-4987-a545-7c87a9456c6f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-022198/C_55e0ff24-e528-4987-a545-7c87a9456c6f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,993 - - (7) (8) (13)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_8cf2826e8c0e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-054635/C_3000b8ab-903d-4bfe-8b20-df402e87f4b3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-054635/C_3000b8ab-903d-4bfe-8b20-df402e87f4b3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 13,686 $ - $ - (7) (8) (13)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_47a756a67281",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094144/C_22856013-7c88-4857-bc2e-f6fd69d5ef1a",
+     "0000950170-24-094144/C_618eb38b-75ae-4edc-a860-6daa5f5ddeb4",
+     "0000950170-24-094144/C_ceeeb659-e8d4-4c61-ad87-198a1ad8eea3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094144/C_22856013-7c88-4857-bc2e-f6fd69d5ef1a",
+     "0000950170-24-094144/C_618eb38b-75ae-4edc-a860-6daa5f5ddeb4",
+     "0000950170-24-094144/C_ceeeb659-e8d4-4c61-ad87-198a1ad8eea3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 14,396 $ - $ - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 10,850 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 8,304 3,020 - (6) (8) (13)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_b6feaa4407e0",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-123412/C_317e0c5d-582a-4f50-a209-2fe0099ccd02",
+     "0000950170-24-123412/C_6458cc6f-cfd7-4ced-8f60-e91342185690",
+     "0000950170-24-123412/C_a3bf64ec-f483-4f0a-a030-52dc4ab6c3c6"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-123412/C_317e0c5d-582a-4f50-a209-2fe0099ccd02",
+     "0000950170-24-123412/C_6458cc6f-cfd7-4ced-8f60-e91342185690",
+     "0000950170-24-123412/C_a3bf64ec-f483-4f0a-a030-52dc4ab6c3c6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 32,560 $ - $ - (6) (8) (14) (16)"
+    },
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 18,780 6,488 - (6) (8) (14) (16)"
+    },
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 11,421 15,229 - (6) (8) (14)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_2fb1e3e84192",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-029231/C_504430b9-a9f7-4c35-954d-1715d912068b",
+     "0000950170-25-029231/C_b978d605-2d42-449e-95b5-94a0e628181c",
+     "0000950170-25-029231/C_cfbc08bb-c479-4f2d-a977-3fcd015e2d86"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-029231/C_504430b9-a9f7-4c35-954d-1715d912068b",
+     "0000950170-25-029231/C_b978d605-2d42-449e-95b5-94a0e628181c",
+     "0000950170-25-029231/C_cfbc08bb-c479-4f2d-a977-3fcd015e2d86"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 34,265 $ - $ - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 19,764 6,488 - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,019 15,229 - (6) (8) (13)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_071a3ddd2d74",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-067098/C_4eb6ad69-5fd9-45d9-a2dc-d540e3ea7a42",
+     "0000950170-25-067098/C_85e56b6d-c94b-4952-8412-64b78b260cec",
+     "0000950170-25-067098/C_d4edfc9a-5a75-49db-aff0-ff94214c97b7",
+     "0000950170-25-067098/C_ea8ff00f-8f68-4333-b3e2-abbf9f1dad08"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-067098/C_4eb6ad69-5fd9-45d9-a2dc-d540e3ea7a42",
+     "0000950170-25-067098/C_85e56b6d-c94b-4952-8412-64b78b260cec",
+     "0000950170-25-067098/C_d4edfc9a-5a75-49db-aff0-ff94214c97b7",
+     "0000950170-25-067098/C_ea8ff00f-8f68-4333-b3e2-abbf9f1dad08"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 35,999 $ - $ - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 20,764 6,488 - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,627 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 110,068 97,010 26,967 (6) (8) (12) (13)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Split by reader failure. line_not_found rows go to REQ-GBZ-1: 0000950170-25-067098/C_85e56b6d-c94b-4952-8412-64b78b260cec; 0000950170-25-067098/C_d4edfc9a-5a75-49db-aff0-ff94214c97b7; 0000950170-25-067098/C_ea8ff00f-8f68-4333-b3e2-abbf9f1dad08. The field_unreadable row goes to REQ-GBZ-2: 0000950170-25-067098/C_4eb6ad69-5fd9-45d9-a2dc-d540e3ea7a42 (Lithium). Check misfires, not dispositions (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_18a4b0b9649c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-105134/C_0f61ed0c-7fcc-4cc1-8c51-346f065cc58d",
+     "0000950170-25-105134/C_49ab645d-dabc-4356-a1ca-2d1bb95998d8",
+     "0000950170-25-105134/C_6a915111-7892-4a74-82a1-211ebcabe22f"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-105134/C_0f61ed0c-7fcc-4cc1-8c51-346f065cc58d",
+     "0000950170-25-105134/C_49ab645d-dabc-4356-a1ca-2d1bb95998d8",
+     "0000950170-25-105134/C_6a915111-7892-4a74-82a1-211ebcabe22f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 37,740 $ - $ - (6) (7) (11) (15)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 21,768 6,488 - (6) (7) (11) (15)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 13,237 15,230 - (6) (7) (11)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check repair REQ-GBZ-1 (locate the line by any fact of the row's context). Not a disposition (owner ruling 2026-11-04)."
+  },
+  {
+   "finding_id": "RVQ_BLK_60f74779de22",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-212431/C_82852d20-4f67-463e-898b-1f97d93056ce"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-212431/C_82852d20-4f67-463e-898b-1f97d93056ce"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 23,049 $ 20,011 $ 6,915 (8) (12) (14)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The finding now flags one row, MPI Engineered Technologies (2026-03-31). Published SOFR, margin 17.0, PIK 17.0, maturity 2025-11-17 equal its printed line 'S + 17.00 % PIK 01/15/20 11/17/25 $ 23,049 $ 20,011 $ 6,915'.",
+    "The filing defines the code: 'SOFR, including SOFR adjustment, if any, (S)', so S = SOFR and no owner decision is needed. The reader returns field_unreadable because the line carries two dates (initial acquisition 01/15/20 and maturity 11/17/25)."
+   ],
+   "next_action": "Check misfire (REQ-GBZ-2, two dates on the line). The needs_human question is answered by the filing's legend ('SOFR, including SOFR adjustment, if any, (S)'): S = SOFR, no owner decision needed; not a disposition."
+  },
+  {
+   "finding_id": "RVQ_BLK_91329263f3ae",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-338331/C_ad0b2223-db12-4b74-9890-37fffa74041c"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-338331/C_ad0b2223-db12-4b74-9890-37fffa74041c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-338331",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012 $ 7,355 (7) (11) (12) (15)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row was read on its own <tr> (the one holding any fact of its context): published maturity, reference rate, margin and PIK equal the printed line.",
+    "The flag survives only because the agentA engine fails closed (line_not_found or field_unreadable): it anchors the printed line on the exact InvestmentOwnedAtFairValue fact, the 2023 10-Qs tag ...NetOfCapitalizedDiscount and dash lines carry no fair-value fact."
+   ],
+   "next_action": "Check misfire, reader failure field_unreadable on its only flagged row (MPI two dates): REQ-GBZ-2, not REQ-GBZ-1."
+  }
  ]
 }

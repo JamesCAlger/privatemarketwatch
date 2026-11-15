@@ -5893,3 +5893,12 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - D06 2025-12-31: false_alarm (continuity 96.0 pct on sandbox and production; "repeats" are the 2024-12-31 comparative table). Retired VR-FL-1901164-01 under D-252 (applied_by recorded).
 - Observations: wrapper issuer_name_strip_re damaged names (3,314 flagged rows in trzb; reverted); Cheval Blanc interest_rate_cash -1.8e-15 float residue (derived after corrections).
 - A clean result is not data correct.
+
+### D-283 Fund loop 2026-11-15: Goldman Sachs BDC (0001572694), sandbox gbzc
+
+- Filtered packet (scratch/2026-11-15_work_filter/packet_0001572694.csv): 46 findings (12 supported_fix, 34 unreviewed); none closed at HEAD. Sonnet fund agent `agent:fund-gbz-sonnet`, Opus reviewer `agent:review-gbzb-opus` (full review on gbzb, change-only rounds 2-4 on gbzc; investigation COMPLETE), Sonnet reader (gbzb 0/20). Builds gbza..gbzc; strict totals tie 14/14 at 500 dollars. Gate NEEDS_ORCHESTRATOR for REQ-GBZ-1/2 only.
+- Fixed (182 context-keyed corrections, 1 exclusion rule): 64 issuer names + 3 industries; 61 pik_rate (56 withdrawn where the page prints none, 5 set); 4 margins (SPay spread/PIK swap, Whitewater, Pluralsight, Vardiman Black); 6 fixed PIK coupons 2023-09-30; 18 reference rates no rule flagged (CDOR/CORRA "C" published SOFR, SN/N, "CDN P" -> PRIME lossy, Elemica x5); CloudBees "Total Warrants" subtotal relabelled as a position (double count 327k at 2023-09-30, also in production) excluded.
+- Retired 15 real-error verdicts under D-252 (D06 x3, C201 x2, FX01-03, A07 x2, fv_conservation, html_agg, SRC_BDC01, X07, C103); checks pass on sandbox and production (money-market row excluded by context id); re-run on batch output.
+- 18 agentA outstanding are check misfires: REQ-GBZ-1 (engine anchors only on InvestmentOwnedAtFairValue; 2023 10-Qs tag ...NetOfCapitalizedDiscount; dash lines have no FV fact) DC-0001572694-7999cf72a7 (14 ids); REQ-GBZ-2 field_unreadable (MPI two dates, Lithium, MedeAnalytics fixed PIK) DC-0001572694-9f4f24805d. Proposals withdrawn.
+- Observations: gate totals tolerance 500,000 dollars hid the 327k double count (propose strict tie); CANADIAN_PRIME missing from the schema.
+- A clean result is not data correct.

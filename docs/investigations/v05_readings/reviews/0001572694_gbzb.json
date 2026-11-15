@@ -1,0 +1,536 @@
+{
+ "reviewer_id": "agent:review-gbzb-opus",
+ "report_digest": "443d6a9d1943023f4d9e851384784a0ab831d460e3fe07d95437650d0f80ede5",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_9741055f126e",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the gbzb flagged row (0000950170-23-017863/C_144d1b61..., published as Elemica after the name correction). Maturity 2025-09-18 equals the printed 09/18/25, but conclusion false_alarm is wrong: the row's own line prints 'L + 6.00 %' (legend: LIBOR (\"L\")) and gbzb publishes reference_rate_type SOFR, carried from the Eptam member text 'S+5.25%'. The name fix left the reference rate of the shifted member. Same filing: four other Elemica lines printed 'S + 6.00 %' publish LIBOR (C_9f06997d, C_871c224c, C_3ea3b67d, C_45266d8f), unflagged. The report's 'published equals printed for every flagged row' and 'a repaired reader would clear them' are false for this row. confirmed_error; fix by row correction (reference_rate_type LIBOR here, SOFR on the four), not a disposition.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 10.86 % S + 6.00 % 09/18/25 930 742 730 (6) (7) (8)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "the reference to either LIBOR (\"L\"), Euribor (\"E\"), SOFR including SOFR adjustment, if any, (\"S\")"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8883b499bb71",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage equals the flagged row (0000950170-24-022198/C_b86c446a..., Trader Corporation undrawn CAD 24). Maturity 2028-12-22 equals the printed 12/22/28, but the line prints 'C + 6.75 %' and this filing's legend reads CDOR (\"C\"); gbzb publishes reference_rate_type SOFR (date guess on a dash row declared from the page). The report's evidence quotes no Trader line. confirmed_error, not false_alarm. My whole-population scan (refscan.py: each published row against the <tr> holding any fact of its context) finds the same defect on 17 more gbzb rows the fund agent did not compare (dash rows were outside ratecheck2): Trader C 2023-09-30/2024-06-30/2024-09-30, Recochem C 2024-06-30/09-30, Aryeh Bidco C 2025-09-30 x3, Northstar SN and N 2024-03-31, Everest CDN P 2023-03-31/06-30 (published LIBOR), Elemica x5.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - - (6) (7) (8) (9)"
+    },
+    {
+     "accession": "0000950170-24-022198",
+     "text": "SONIA (\"SN\"), CDOR (\"C\") or alternate base rate"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3e026bfdb7d1",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The flagged context C_d37f2d20 is tagged only on the printed 'Total Warrants 1,849 327' line (cost and fair value, no shares). The CloudBees warrant line has its own context C_39e6b65d (cost, fair value, 333,980 shares), and gbzb publishes BOTH as 'CloudBees, Inc.' Warrants at 327,000: the earlier relabel correction turned the subtotal into a second copy. The 2023-09-30 published sum is 3,439,023,000 against printed Total Investments 3,438,696 thousand: over by exactly 327,000 (production identical). The report's 'published once' is false; the subtotal rule is right. confirmed_error; fix by excluding C_d37f2d20 and withdrawing its relabel correction. PD-gbz-agenta-sub-1 must be withdrawn. The '14 of 14 totals tie' claim needs re-checking for the tolerance that hid this.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060336",
+     "text": "Total Warrants 1,849 327"
+    },
+    {
+     "accession": "0000950170-23-060336",
+     "text": "CloudBees, Inc. Software 11/24/21 333,980 $ 1,849 $ 327 (6) (7) (12)"
+    },
+    {
+     "accession": "0000950170-23-060336",
+     "text": "Total Investments - 214.84 % $ 3,618,855 $ 3,438,696"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_60f74779de22",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Carried entry fails both carry tests. (b) Rows: the carried verdict (data/output/review_queue/verdicts/RVQ_BLK_60f74779de22.json) is about the Thrasio line ('S + 8.00 %'); the finding now flags only 0001193125-26-212431/C_82852d20, which is MPI Engineered Technologies (printed_check field_unreadable, mismatch maturity_date: the line prints acquisition date 01/15/20 and maturity 11/17/25). The report lists the MPI context as affected but quotes Thrasio. (a) Substance: the verdict's 'no SOFR legend' is wrong; this filing's legend reads 'SOFR, including SOFR adjustment, if any, (S)', so S = SOFR is decided by the source and needs no owner. MPI publishes SOFR 17.0, PIK 17.0, maturity 2025-11-17, equal to its line. Re-investigate as a reader limit (two dates) routed to the check repair; the needs_human question can be answered from the filing.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 23,049 $ 20,011"
+    },
+    {
+     "accession": "0001193125-26-212431",
+     "text": "SOFR, including SOFR adjustment, if any, (S), SONIA (SN), NIBOR (N), CORRA (C)"
+    },
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Thrasio, LLC Broadline Retail 11.93 % S + 8.00 % 06/18/29 5,067 5,001 5,016"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c50debc541b4",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_maturity_vs_xbrl 2023-06-30: affected_rows equal the 5 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619 (6) (7) (10)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.49 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 1,135 1,100 1,078 (6) (7) (10)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.46 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 2,258 2,162 2,145 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8dacec3d66fb",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_maturity_vs_xbrl 2024-03-31: affected_rows equal the 3 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Coretrust Purchasing Group LLC Financial Services S + 6.50 % 10/01/29 $ 113 $ ( 1 )"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 3,689 - - (7) (9)"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 10,028 - - (7) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_87f3fb572048",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_maturity_vs_xbrl 2024-06-30: affected_rows equal the 1 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Superman Holdings, LLC (dba Foundation Software) Construction & Engineering S + 5.75 % 08/31/26 122 ( 1 ) - (6) (8) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bbf1e5b75a9b",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_maturity_vs_xbrl 2024-09-30: affected_rows equal the 1 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Runway Bidco, LLC (dba Redwood Software) Software S + 5.00 % 10/01/29 1,809 - - (6) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_904097e4edd0",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_maturity_vs_xbrl 2025-06-30: affected_rows equal the 4 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 4,042 - - (6) (9)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "MedeAnalytics Parent, Inc. Health Care Technology 3.00 % PIK 10/23/28 233 142 158 (6) (7) (10) (11)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 $ 13,203 $ - $"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 2,021 - - (6) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3334cf6cb3dd",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2023-03-31: affected_rows equal the 6 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "EDB Parent, LLC (dba Enterprise DB) Software 11.90 % S + 7.00 % PIK 07/07/28 7,591 1,662 1,472 (6) (7) (8)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "CivicPlus LLC Software 16.54 % S + 11.75 % PIK 06/09/34 6,748 6,566 6,512 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "EDB Parent, LLC (dba Enterprise DB) Software 11.90 % S + 7.00 % PIK 07/07/28 19,504 19,030 19,016 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Ansira Partners, Inc. Professional Services L + 6.50 % PIK 12/20/24 5,712 5,276 1,628 (7) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_50782587d05b",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2023-06-30: affected_rows equal the 3 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Bayside Opco, LLC (dba Pro-PT) Health Care Providers & Services S + 10.00 % PIK 05/31/26 945 82 83 (7) (9)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "CivicPlus LLC Software 17.09 % S + 11.75 % PIK 06/09/34 7,312 7,132 7,129 (6) (7)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_13b7c1a00741",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2023-12-31: affected_rows equal the 1 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,993 - - (7) (8) (13)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8cf2826e8c0e",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2024-03-31: affected_rows equal the 1 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 13,686 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_47a756a67281",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2024-06-30: affected_rows equal the 3 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 10,850 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 8,304 3,020 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 14,396 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b6feaa4407e0",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2024-09-30: affected_rows equal the 3 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 32,560 $ - $"
+    },
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 18,780 6,488 - (6) (8) (14) (16)"
+    },
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 11,421 15,229 - (6) (8) (14)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2fb1e3e84192",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2024-12-31: affected_rows equal the 3 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 19,764 6,488 - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,019 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 34,265 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_071a3ddd2d74",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2025-03-31: affected_rows equal the 4 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 110,068 97,010 26,967 (6) (8) (12) (13)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 20,764 6,488 - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,627 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 35,999 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_18a4b0b9649c",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2025-06-30: affected_rows equal the 3 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 21,768 6,488 - (6) (7) (11) (15)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 13,237 15,230 - (6) (7) (11)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 37,740 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_91329263f3ae",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "agentA_reference_uncorroborated 2026-06-30: affected_rows equal the 1 flagged row(s) in gbzb shadow/agent_a_flags.csv. I read every one on its own <tr> (ctxrow.py): published maturity, reference rate, margin and PIK equal the printed line on all of them, so the conclusion false_alarm holds for the data. Route rejected: the flag survives only because the agentA engine fails closed (printed_check line_not_found / field_unreadable in gbzb shadow/agent_a_flags.csv). That is the check misfiring, not a filing fact, so under the 2026-11-04 owner ruling it clears by repairing the check, not by an as_filed disposition. Cause I found (not the report's): the engine anchors the printed line on the exact InvestmentOwnedAtFairValue fact (pipeline/bdc_xbrl_html_bridge.py propose_field_bridges_from_ixbrl fv_concept); the 2023 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and the dash (undrawn/written-off) lines carry no fair-value fact at all, and the member-name fallback fails closed when a member has several contexts. Every flagged row's context sits on exactly one <tr> holding its cost/par/maturity facts. next_action should be the check repair (anchor on any fact of the row's context; accept the NetOfCapitalizedDiscount concept) with a test that Trader 2023-12-31 and Elemica 2023-03-31 then FAIL on reference rate; the proposal should be withdrawn. Evidence in the report is a shared quote set, not quotes of this finding's rows.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338331",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Fixed upstream by the names; the suggested check (a proxied unit count must equal the row's tagged count) is concrete, internal and low false-positive. The rationale/reference text is boilerplate copied across observations (namecheck.py does not test unit counts); the detector itself is sound.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "rejected",
+   "rationale": "The quote is the NII line; it does not show directors' fees or the borrowing-rate percent being read as interest expense. The detection rationale and reference (printed-line comparison, namecheck.py) are copied from the row-level observations and do not describe a fund-level income check. The shared 'interestexpense' substring match is the cause and other filers are exposed; the fund-only suppression needs a shared-code proposal beside the detector. Supply a quote of the interest-expense line and a correct reference.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Net investment income after taxes $ 24,785 $ 49,614"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "Fund-level; the printed NII (24,785) is the target and the suggested check (NII equal to printed total investment income) would catch a recurrence with little false-positive risk. Reference to namecheck.py is wrong (boilerplate) but propose_detector needs only the check.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Net investment income after taxes $ 24,785 $ 49,614"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "outcome": "supported",
+   "rationale": "Dash lines are real positions (IHS line quoted). Caveat found in review: the dash rows declared from the page get a date-guessed reference rate; most of the 18 reference mismatches I found in gbzb are such rows (Trader, Recochem, Aryeh, Northstar). The declaration should carry the printed benchmark code.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-type-tag-holds-the-spread",
+   "outcome": "supported",
+   "rationale": "gbzb has 0 rows with a numeric reference_rate_type (obsq.sql). The suggested check (benchmark name, never a number) is concrete, cheap and has no plausible false positives.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "outcome": "rejected",
+   "rationale": "Says fixed with only 2 CDN P rows and 6 uncoded 2023-09-30 rows left. My scan of all 6,747 gbzb rows against their own lines finds 18 rows whose printed code differs from the published benchmark: Trader 'C' -> SOFR x4 (2023-09-30..2024-09-30), Recochem 'C' x2, Aryeh Bidco 'C' 2025-09-30 x3, Northstar 'SN' and 'N' 2024-03-31, Everest 'CDN P' -> LIBOR x2, Elemica 2023-03-31 'S' -> LIBOR x4 and 'L' -> SOFR x1. The suggested detector is right; the statement of what is left is not, and these rows need corrections.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Trader Corporation Automobiles C + 5.50 % 12/22/28 CAD 24"
+    },
+    {
+     "accession": "0001193125-25-269840",
+     "text": "Aryeh Bidco Investment Ltd. (dba Dentalcorp) Health Care Providers & Services C + 5.00 % 09/26/32 CAD 25,305"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "outcome": "supported",
+   "rationale": "AQ Helios / AI Titan rename read; X07 retirement row (AI Titan 1,433 / 315 / 294) is at printed values. Suggested check (member section percents differ from the filing's headings) is concrete; false-positive rate unmeasured.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "gbzb has 0 lien rows carrying both a unit count and a principal (obsq.sql). 'A loan with a unit count and no principal' is a precise detector with low false-positive risk.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "outcome": "rejected",
+   "rationale": "Stale for the build under review: gbzb publishes the printed money-market name in every quarter ('Goldman Sachs Financial Square Government Fund - Institutional Shares' or without the class suffix); no 'Investment ' prefix remains. The prefix exists only in production data/output (2024-12-31, 2025-12-31, 2026-03-31), where it also defeats retire.py's name filter. Restate as fixed-in-sandbox, pending batch.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 2,475,640 $ 2,476 $ 2,476"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "All 64 issuer_name corrections checked against the first cell of each row's own <tr>: 64/64 equal (corrcheck.py). The par/cost/value matcher as a detector covers quarters the page rule is blind to; context-anchored reading is stricter and should be preferred.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-published-where-page-prints-none",
+   "outcome": "supported",
+   "rationale": "53 withdrawals: the row's own line carries no 'PIK' in every case; 8 sets match the printed PIK (corrcheck.py). The detector (published pik_rate with no PIK on the row's line) is precise.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Harrington Industrial Plastics, LLC Trading Companies & Distributors 11.11 % S + 5.75 % 10/07/30 16,556 16,153 16,142"
+    }
+   ]
+  },
+  {
+   "observation_key": "margin-and-pik-swapped-on-incl-pik-line",
+   "outcome": "rejected",
+   "rationale": "The SPay fix is right, but the proposed detector 'spread >= pik_rate where both set' would fire on 26 correct gbzb rows: this filer prints PIK parts above the margin, e.g. 'S + 7.00 % (Incl. 7.44 % PIK)' (LCG Vardiman Black), 'SN + 8.75 % (Incl. 9.85 % PIK)' (Clearcourse), 'S + 7.25 % (Incl. 10.25 % PIK)' (LS Clinical), Streamland. Unacceptable false positives; the premise 'spread includes PIK' does not hold here.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "LCG Vardiman Black, LLC (dba Specialty Dental Brands) Health Care Providers & Services 12.44 % S + 7.00 % (Incl. 7.44 % PIK) 03/18/27 744 731 730"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-GBZ-1",
+   "outcome": "rejected",
+   "rationale": "Classification verification_bug is right, the repair is warranted, but the request is wrong as written. (1) Cause: the engine anchors on the exact InvestmentOwnedAtFairValue fact; 2023-03-31/06-30 10-Qs tag InvestmentOwnedAtFairValueNetOfCapitalizedDiscount and dash lines carry no fair-value fact. It is not the One/Two member suffixes (those matter only in the member fallback). Each flagged context is on exactly one <tr>; anchor on any fact of the context, not a par/cost/value match (fuzzier, and dash rows share par patterns). (2) Four rows are field_unreadable, not line_not_found (MPI 2026-03-31/06-30 two dates, Lithium, MedeAnalytics): a separate reader fix. (3) 'All 60 flagged rows equal' is false: Elemica 2023-03-31 and Trader 2023-12-31 publish the wrong reference rate, so the required test must show those FAIL after the repair. Resubmit with that diagnosis and test.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    },
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - - (6) (7) (8) (9)"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+  "cik": "1572694",
+  "rule_id": "exclude_2023q3_total_warrants_subtotal",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-09-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2023-09-30' AND row_id = 'ROW-694ec4f99f287382'",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0000950170-23-060336",
+      "quote": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - - (6) (7) (12) Total Warrants 1,849 327 Total Investments - 214.84 % $ 3,618,855 $ 3,438,696"
+    },
+    {
+      "source": "filing",
+      "accession": "0000950170-23-060336",
+      "quote": "CloudBees, Inc. Software 11/24/21 333,980 $ 1,849 $ 327 (6) (7) (12)"
+    },
+    {
+      "source": "query",
+      "quote": "Context C_d37f2d20-61a6-4cb6-a079-78c0f3a37831 (member 'Warrants') carries only cost 1,849 and fair value 327, the 'Total Warrants' subtotal. An earlier row correction relabelled it CloudBees, Inc.; the CloudBees warrant's own line (333,980 warrants, 1,849 / 327) is a separate published row. Published sum at 2023-09-30 is 3,439,023 thousand against the printed Total Investments 3,438,696: over by exactly 327."
+    }
+  ],
+  "rationale": "The row is the Total Warrants subtotal printed after the last warrant line, tagged on the bare 'Warrants' member. The position it totals is published from its own context, so the subtotal double counts 327 of fair value and 1,849 of cost. It is not a position; excluding it makes the published sum equal the printed total.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2023-09-30": {
+      "rows": 1,
+      "fv": 327000.0,
+      "cost": 1849000.0
+    }
+  }
+}

@@ -1,0 +1,533 @@
+{
+ "reviewer_id": "agent:review-gbzb-opus",
+ "report_digest": "b79bcefd15c3a85fc44769e642b677c1542c4db68dd68749911854f92a9ee395",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_9741055f126e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. Coverage equals the gbzc flagged row (C_144d1b61, Elemica). Conclusion now confirmed_error with the reference-rate mechanism I found; gbzc publishes LIBOR on this row (printed 'L + 6.00 %') and SOFR on the four Elemica lines printed 'S + 6.00 %' (my refscan.py on gbzc: 0 mismatches over 6,746 rows). Field diff gbzc vs gbzb: reference_rate_type 18 rows plus provenance, 1 row removed, nothing else. The flag stays until REQ-GBZ-1 lands, correctly stated; with the context-fact anchor the engine will compare and find it equal.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 10.86 % S + 6.00 % 09/18/25 930 742 730 (6) (7) (8)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8883b499bb71",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. Coverage equals the flagged row (C_b86c446a, Trader 2023-12-31). confirmed_error; gbzc publishes CDOR for the printed 'C + 6.75 %' (legend CDOR (\"C\") in this filing), as on the other 17 rows corrected. Flag waits on REQ-GBZ-1, correctly stated.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - - (6) (7) (8) (9)"
+    },
+    {
+     "accession": "0000950170-24-022198",
+     "text": "SONIA (\"SN\"), CDOR (\"C\") or alternate base rate"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_60f74779de22",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. No longer carried: investigated fresh on the row the finding now flags (C_82852d20, MPI 2026-03-31, printed_check field_unreadable on maturity_date). Published SOFR / 17.0 / PIK 17.0 / 2025-11-17 equal the line; the legend defines S as SOFR, so no owner decision is needed. Routed to REQ-GBZ-2 (reader limit on a line with an acquisition date and a maturity). Ledger state needs_human cannot be changed by the investigator; the orchestrator should answer it from the filing.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 23,049 $ 20,011"
+    },
+    {
+     "accession": "0001193125-26-212431",
+     "text": "SOFR, including SOFR adjustment, if any, (S), SONIA (SN), NIBOR (N), CORRA (C)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c50debc541b4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_maturity_vs_xbrl 2023-06-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619 (6) (7) (10)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.49 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 1,135 1,100 1,078 (6) (7) (10)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.46 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 2,258 2,162 2,145 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8dacec3d66fb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_maturity_vs_xbrl 2024-03-31: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Coretrust Purchasing Group LLC Financial Services S + 6.50 % 10/01/29 $ 113 $ ( 1 )"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 3,689 - - (7) (9)"
+    },
+    {
+     "accession": "0000950170-24-054635",
+     "text": "USA DeBusk, LLC Commercial Services & Supplies S + 5.25 % 03/19/31 10,028 - - (7) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_87f3fb572048",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_maturity_vs_xbrl 2024-06-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Superman Holdings, LLC (dba Foundation Software) Construction & Engineering S + 5.75 % 08/31/26 122 ( 1 ) - (6) (8) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bbf1e5b75a9b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_maturity_vs_xbrl 2024-09-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Runway Bidco, LLC (dba Redwood Software) Software S + 5.00 % 10/01/29 1,809 - - (6) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3334cf6cb3dd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2023-03-31: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "EDB Parent, LLC (dba Enterprise DB) Software 11.90 % S + 7.00 % PIK 07/07/28 7,591 1,662 1,472 (6) (7) (8)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "CivicPlus LLC Software 16.54 % S + 11.75 % PIK 06/09/34 6,748 6,566 6,512 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "EDB Parent, LLC (dba Enterprise DB) Software 11.90 % S + 7.00 % PIK 07/07/28 19,504 19,030 19,016 (6) (7)"
+    },
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Ansira Partners, Inc. Professional Services L + 6.50 % PIK 12/20/24 5,712 5,276 1,628 (7) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_50782587d05b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2023-06-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Bayside Opco, LLC (dba Pro-PT) Health Care Providers & Services S + 10.00 % PIK 05/31/26 945 82 83 (7) (9)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    },
+    {
+     "accession": "0000950170-23-037958",
+     "text": "CivicPlus LLC Software 17.09 % S + 11.75 % PIK 06/09/34 7,312 7,132 7,129 (6) (7)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_13b7c1a00741",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2023-12-31: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,993 - - (7) (8) (13)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8cf2826e8c0e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2024-03-31: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-054635",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 13,686 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_47a756a67281",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2024-06-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 10,850 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 8,304 3,020 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-24-094144",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 14,396 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b6feaa4407e0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2024-09-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 32,560 $ - $"
+    },
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 18,780 6,488 - (6) (8) (14) (16)"
+    },
+    {
+     "accession": "0000950170-24-123412",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 11,421 15,229 - (6) (8) (14)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2fb1e3e84192",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2024-12-31: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 19,764 6,488 - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,019 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-25-029231",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 34,265 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_18a4b0b9649c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 2. agentA_reference_uncorroborated 2025-06-30: affected_rows equal the gbzc flagged rows, every one printed_check line_not_found. Data re-verified in round 1 (each row on its own <tr>: maturity, reference, margin, PIK equal the line) and unchanged by gbzc (field diff touches only the 18 reference corrections, none on these rows). Route is now the check repair REQ-GBZ-1 (DC-0001572694-79f85a677b), not a disposition; the as_filed proposal is withdrawn. Evidence now quotes this finding's own rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 21,768 6,488 - (6) (7) (11) (15)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 13,237 15,230 - (6) (7) (11)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 37,740 $ - $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_91329263f3ae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 3. next_action now routes the only flagged row (MPI 2026-06-30, field_unreadable on maturity_date, two dates) to REQ-GBZ-2 only; DC-0001572694-7999cf72a7 (REQ-GBZ-1, supersedes 79f85a677b) no longer lists it and DC-0001572694-9f4f24805d (REQ-GBZ-2) does. Data verified in round 2 (published equals the line), no rebuild since.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-338331",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 24,519 $ 20,012"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_904097e4edd0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 4. next_action now splits the rows by reader failure, matching gbzc shadow/agent_a_flags.csv: Zeppelin C_4d799c38, C_80e20af9, C_82beb628 are line_not_found (REQ-GBZ-1); MedeAnalytics C_80bf8b55 is field_unreadable on reference_rate_type (REQ-GBZ-2). Both decision records list the id. Data verified in round 2, no rebuild since.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 4,042 - - (6) (9)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "MedeAnalytics Parent, Inc. Health Care Technology 3.00 % PIK 10/23/28 233 142 158 (6) (7) (10) (11)"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 $ 13,203 $ - $"
+    },
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Zeppelin US Buyer Inc. (dba Global Critical Logistics) Air Freight & Logistics S + 4.75 % 08/02/32 2,021 - - (6) (9)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_071a3ddd2d74",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Round 4. next_action now splits the rows by reader failure, matching the engine output: Wine.com C_85e56b6d, C_d4edfc9a, C_ea8ff00f are line_not_found (REQ-GBZ-1); Lithium C_4eb6ad69 is field_unreadable on maturity_date (REQ-GBZ-2). Both decision records list the id. Data verified in round 2, no rebuild since.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 110,068 97,010 26,967 (6) (8) (12) (13)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 20,764 6,488 - (6) (8) (13) (16)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 12,627 15,229 - (6) (8) (13)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 35,999 $ - $"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. Suggested check (proxied unit count equals the tagged count) is concrete and low false-positive.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094144",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. Suggested check (NII equal to printed total investment income) catches recurrence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Net investment income after taxes $ 24,785 $ 49,614"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-printed-with-par-only-not-published",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. The guessed benchmarks on declared dash rows are now corrected (18 rows); the declaration should carry the printed code in future.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "IHS Intermediate Inc. (dba Interactive Health Solutions) Health Care Providers & Services L + 8.25 % 07/20/22 10,000 9,902 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-type-tag-holds-the-spread",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. 0 numeric reference_rate_type rows; detector has no plausible false positives.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "The Center for Orthopedic and Research Excellence, Inc. (dba HOPCo) Health Care Providers & Services 13.50 % P + 5.00 % 08/15/25 4,565 59 ( 23 ) (7) (8) (9)"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. AQ Helios / AI Titan rename read; detector concrete, false-positive rate unmeasured.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 7,167 7,108 7,024 (7) (8) AI Titan Parent, Inc. (dba Prometheus) Software 8.17 % S + 4.50 % 08/29/31 1,433 315 294"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. 0 lien rows with a unit count and a principal; precise detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "Ideal Components Acquisition, LLC (dba Ideal Tridon) Machinery S + 5.00 % 06/30/32 2,684 ( 13 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. 64/64 name corrections equal the first cell of each row's own <tr>.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Elemica Parent, Inc. Chemicals 11.00 % L + 6.00 % 09/18/25 6,930 6,630 6,652"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-published-where-page-prints-none",
+   "outcome": "supported",
+   "rationale": "Carried from the gbzb review (agent:review-gbzb-opus): observation text unchanged since gbzb. 53 withdrawals and 8 sets match the printed line.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Harrington Industrial Plastics, LLC Trading Companies & Distributors 11.11 % S + 5.75 % 10/07/30 16,556 16,153 16,142"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "supported",
+   "rationale": "Round 2 revision. The quote now shows the printed 'Interest and other debt expenses $ 27,264' beside 'Directors fees 207', the evidence the first version lacked. The detector (published interest_expense equals the printed interest line) is precise, and the shared-code cause is named: pipeline/bdc_fund_highlights.py maps the bare substring 'interestexpense' (line 112), which also matches NoninterestExpense*.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "Expenses: Interest and other debt expenses $ 27,264 $ 15,667 Incentive fees 22,302 8,190 Management fees 8,921 8,817 Professional fees 878 878 Directors fees 207 203"
+    }
+   ]
+  },
+  {
+   "observation_key": "margin-and-pik-swapped-on-incl-pik-line",
+   "outcome": "supported",
+   "rationale": "Round 2 revision. The inequality detector is dropped with the measured 26 false positives, replaced by comparing each published figure with the margin and the '(Incl. x % PIK)' part on the row's own line. Sound for this filer's wording.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "SPay, Inc. (dba Stack Sports) Interactive Media & Services 14.45 % S + 9.25 % (incl. 3.50 % PIK) 03/14/25 31,178 30,111 29,619"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-not-in-legend",
+   "outcome": "supported",
+   "rationale": "Round 3. The lossy CDN P -> PRIME mapping is now recorded with the filing's figures (Canadian Prime 6.70 % beside US Prime 8.00 %) and a proposed schema value (CANADIAN_PRIME); the two Everest rows are labelled approximate. The 18 corrections were verified in round 2 (0 mismatches over 6,746 gbzc rows on my independent scan).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-017863",
+     "text": "P was 8.00 %, 3 Month CDOR was 5.03 % and Canadian Prime rate (\"CDN P\") was 6.70 %"
+    },
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "outcome": "supported",
+   "rationale": "Round 3. Restated correctly: gbzc publishes the printed money-market name in every quarter; the 'Investment ' prefix remains only in production until the batch, and it defeats name filters there (as seen in the retirement re-run). Detector (issuer name starting with the axis word 'Investment') is precise.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-212431",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 2,475,640 $ 2,476 $ 2,476"
+    }
+   ]
+  },
+  {
+   "observation_key": "totals-gate-tolerance-hides-double-count",
+   "outcome": "supported",
+   "rationale": "Round 3, new. Verified: gbzb's 2023-09-30 published sum was 3,439,023,000 against the printed 3,438,696 thousand (over by 327,000, inside the gate's 500,000 bar); gbzc ties 14/14 at 500 dollars (strict_totals.py, reproduced). Facts are exact tagged values, so a 500-dollar strict tie should not produce rounding false positives on filers that tag in whole dollars; measure on the cohort before enforcing.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060336",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 294 - - (6) (7) (12) Total Warrants 1,849 327 Total Investments - 214.84 % $ 3,618,855 $ 3,438,696"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-GBZ-1",
+   "outcome": "supported",
+   "rationale": "Round 3. Diagnosis and test unchanged from round 2 (supported). Record corrected: DC-0001572694-7999cf72a7 supersedes 79f85a677b and lists 14 findings, without RVQ_BLK_91329263f3ae.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-037958",
+     "text": "Arrow Buyer, Inc. (dba Archer Technologies) Software 11.74 % S + 6.50 % 06/28/30 2,942 2,868 2,868 (6)"
+    },
+    {
+     "accession": "0000950170-24-022198",
+     "text": "Trader Corporation Automobiles C + 6.75 % 12/22/28 CAD 24 - - (6) (7) (8) (9)"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-GBZ-2",
+   "outcome": "supported",
+   "rationale": "Round 3. Rewritten per failure and matches the engine output: MPI x2 maturity_date (two dates), Lithium maturity_date (one date, member printed twice incl. the comparative; cause explicitly not established and the reader's debug output requested, a legitimate open item), MedeAnalytics reference_rate_type (fixed PIK coupon, no benchmark). DC-0001572694-9f4f24805d lists the four finding ids. Tests per printed line requested.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-105134",
+     "text": "MedeAnalytics Parent, Inc. Health Care Technology 3.00 % PIK 10/23/28 233 142 158 (6) (7) (10) (11)"
+    },
+    {
+     "accession": "0000950170-25-067098",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 110,068 97,010 26,967 (6) (8) (12) (13)"
+    },
+    {
+     "accession": "0001193125-26-212431",
+     "text": "MPI Engineered Technologies, LLC Automobile Components S + 17.00 % PIK 01/15/20 11/17/25 $ 23,049 $ 20,011"
+    }
+   ]
+  }
+ ]
+}
