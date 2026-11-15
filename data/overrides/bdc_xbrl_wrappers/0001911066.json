@@ -51,13 +51,14 @@
       "first american government obligations fund",
       "blackrock liquidity funds treasury",
       "blackrock liquidity funds t-fund",
+      "blackrock t-fund",
       "u.s. treasury",
       "us treasury",
       "treasury"
     ],
     "fallback_family_patterns": [
       {
-        "regex": "(?i)\\b(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|government\\s+obligations\\s+fund|first\\s+american\\s+government\\s+obligations\\s+fund|blackrock\\s+liquidity\\s+funds\\s+(?:treasury|t-fund)|u\\.s\\.\\s+treasury|us\\s+treasury)\\b",
+        "regex": "(?i)\\b(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|government\\s+obligations\\s+fund|first\\s+american\\s+government\\s+obligations\\s+fund|blackrock\\s+liquidity\\s+funds\\s+(?:treasury|t-fund)|blackrock\\s+t-fund|u\\.s\\.\\s+treasury|us\\s+treasury)\\b",
         "family": "cash"
       },
       {
@@ -205,6 +206,9 @@
     ],
     "investments_total_excludes": [
       "cash_rows"
+    ],
+    "cash_identifiers": [
+      "Blackrock T-Fund Inst"
     ],
     "reference_rate_columns": [
       "Spread Above Reference Rate"

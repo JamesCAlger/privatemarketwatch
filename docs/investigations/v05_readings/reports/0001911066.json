@@ -1,110 +1,863 @@
 {
  "cik": "0001911066",
- "label": "ncxf",
- "before": "spoff2",
+ "label": "nczd",
+ "before": "ncxf",
  "shared_code": false,
  "declared_changes": [
-  {"column": "issuer_name", "rows": 478, "why": "older members (to 2025-09-30) no longer split at a comma inside the company name ('ADPD Holdings' / 'LLC (a/k/a NearU) ...'); tranche words and row numbers cut to the instrument by issuer_name_strip_re; 6 row corrections on members rotated against their printed lines"},
-  {"column": "instrument_description", "rows": 472, "why": "the false instrument text ('LLC', 'Inc.)', 'LLC (dba ...) (Delayed Draw) 1') replaced by the cut tranche words ('(Delayed Draw) 1') or left empty; 5 row corrections"},
-  {"column": "cost", "rows": 6, "why": "money-market rows 2025-09-30 to 2026-03-31: printed cost declared by row correction (2026-06-30 rows are new against spoff2)"},
-  {"column": "shares_held", "rows": 281, "why": "printed Share / Unit figure: equity unit counts tagged at 1,000 times the printed count or replaced by the shared share-count step (row corrections), money-market unit counts"},
-  {"column": "asset_category", "rows": 68, "why": "preferred units printed in the instrument column, published as common (row corrections)"},
-  {"column": "index_classification", "rows": 68, "why": "same rows: PREFERRED_EQUITY"},
-  {"column": "interest_rate", "rows": 22, "why": "coupons printed wholly as PIK beside a spread (no rate published), PIK-only coupons with no rate tag, Fresh Edge all-in rate counted twice, untagged rates, rotated members"},
-  {"column": "basis_spread", "rows": 4, "why": "rotated members 2025-12-31 (3) and Fresh Edge 2023-12-31"},
-  {"column": "coupon_type", "rows": 1, "why": "Fresh Edge 2023-12-31 printed 'S+ 4.50 %' was typed fixed for want of a spread"},
-  {"column": "pik_rate", "rows": 7, "why": "printed PIK coupons not published as PIK; Env Automation 2026-03-31 PIK withdrawn (printed rate carries no PIK label)"},
-  {"column": "maturity_date", "rows": 6, "why": "printed maturities not published (INEOS x4, Solaray x2 past-dated)"},
-  {"column": "src_transforms", "rows": 18, "why": "follows the unit-count and rate corrections (pow10_shares and rate transforms no longer applied)"},
-  {"column": "shares_held_source", "rows": 16, "why": "follows the unit-count corrections"},
-  {"column": "corrected_fields", "rows": 330, "why": "rows carrying a row correction"},
-  {"column": "position_id", "rows": 500, "why": "re-chained with the cleaned names and the new quarter"},
-  {"column": "cost_reported", "rows": 6, "why": "follows the money-market cost corrections"},
-  {"column": "interest_rate_reported", "rows": 21, "why": "follows the rate corrections"},
-  {"column": "interest_rate_kind", "rows": 19, "why": "corrected rates declared all-in, so the fund's cash-leg reading does not add the PIK rate again"},
-  {"column": "interest_rate_cash", "rows": 17, "why": "follows the all-in declaration (cash part 0 on wholly PIK coupons)"},
-  {"column": "maturity_status", "rows": 6, "why": "follows the maturity corrections"}
+  {
+   "column": "issuer_name",
+   "rows": 1,
+   "why": "BlackRock Liquidity Funds T-Fund - Institutional Class 2024-06-30: printed name by row correction"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 14,
+   "why": "11 undrawn lines at 2025-06-30 (printed instrument) and 3 lien rows (ICE USA, ERA Industries 2026-03-31 empty; II-VI 2026-06-30 'Subordinated Debt'): set to the printed instrument by row corrections"
+  },
+  {
+   "column": "lien_position",
+   "rows": 3,
+   "why": "ICE USA and ERA Industries 2026-03-31 (empty -> First Lien) and II-VI 2026-06-30 (Unsecured -> First Lien), re-derived from the corrected printed instrument text"
+  },
+  {
+   "column": "instrument_type",
+   "rows": 12,
+   "why": "11 rows derived from the corrected instrument text (Delayed Draw Term Loan / Revolver); 1 row (New Era Technology 2025-06-30) changes through HEAD code (the shared re-derivation of the class from corrected text, D-263), not through a correction of this run"
+  },
+  {
+   "column": "asset_category",
+   "rows": 1,
+   "why": "Blackrock T-Fund Inst 2024-03-31: FUND -> CASH (wrapper cash_identifiers)"
+  },
+  {
+   "column": "asset_class",
+   "rows": 1,
+   "why": "same row: OTHER -> CASH"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 1,
+   "why": "same row: FUND -> LIQUID"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 16,
+   "why": "rows carrying a correction of this run (issuer_name 1, instrument_description 14, lien_position 3 and instrument_type recorded on re-derived rows)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 1,
+   "why": "follows the renamed 2024-06-30 money-market row"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 1,
+   "why": "follows the renamed 2024-06-30 money-market row"
+  }
  ],
- "rows_added": 716,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Fund-level investments at fair value and at cost put on one basis (the balance-sheet line without cash equivalents) for the 10 quarters where the undimensioned us-gaap fact included them; new highlights wrapper data/overrides/fund_highlights_wrappers/0001911066.json. Published non-cash rows now equal the filed figure in 14 of 14 quarters (fair value and cost); clears 9 fv_conservation, 5 gav_reconciliation, 5 F20, 4 GAV_BDC02, 1 GAV_BDC03.",
+  {
+   "what": "Fund-level investments at fair value and at cost put on one basis (the balance-sheet line without cash equivalents) for the 10 quarters where the undimensioned us-gaap fact included them; new highlights wrapper data/overrides/fund_highlights_wrappers/0001911066.json. Published non-cash rows now equal the filed figure in 14 of 14 quarters (fair value and cost); clears 9 fv_conservation, 5 gav_reconciliation, 5 F20, 4 GAV_BDC02, 1 GAV_BDC03.",
    "kind": "wrapper",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2025-03-31", "2025-06-30", "2025-09-30"],
-   "quotes": [{"accession": "0001628280-23-016990", "text": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 382,694 and $ 352,998 , respectively) $ 378,184 $ 349,518"},
-              {"accession": "0001628280-25-039316", "text": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 1,881,881 and $ 1,687,681 , respectively) $ 1,864,305 $ 1,681,609"},
-              {"accession": "0001911066-25-000038", "text": "Non-controlled/non-affiliate company investments, at fair value (cost of $ 1,968,153 and $ 1,687,681 , respectively) $ 1,957,256 $ 1,681,609"}]},
-  {"what": "Issuer names of the older member form (to 2025-09-30): the staging comma split now applies only where an instrument word follows the comma (none in this filer's members), and issuer_name_strip_re (with issuer_name_strip_to_instrument) cuts '(Delayed Draw)', '(Incremental)', '(Revolver)', 'LLC Intrest' and the row number into the instrument text ('Delta 2' kept). Dry run on every distinct name: 1,476 names to 813, 1,987 rows. Published names now equal the printed company cell on every row except where the page prints '(Delayed Draw)' inside that cell.",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-23-016990",
+     "text": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 382,694 and $ 352,998 , respectively) $ 378,184 $ 349,518"
+    },
+    {
+     "accession": "0001628280-25-039316",
+     "text": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 1,881,881 and $ 1,687,681 , respectively) $ 1,864,305 $ 1,681,609"
+    },
+    {
+     "accession": "0001911066-25-000038",
+     "text": "Non-controlled/non-affiliate company investments, at fair value (cost of $ 1,968,153 and $ 1,687,681 , respectively) $ 1,957,256 $ 1,681,609"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names of the older member form (to 2025-09-30): the staging comma split now applies only where an instrument word follows the comma (none in this filer's members), and issuer_name_strip_re (with issuer_name_strip_to_instrument) cuts '(Delayed Draw)', '(Incremental)', '(Revolver)', 'LLC Intrest' and the row number into the instrument text ('Delta 2' kept). Dry run on every distinct name: 1,476 names to 813, 1,987 rows. Published names now equal the printed company cell on every row except where the page prints '(Delayed Draw)' inside that cell.",
    "kind": "wrapper",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"],
-   "quotes": [{"accession": "0001628280-25-010237", "text": "CMP Ren Partners I-A LP (LMI Consulting, LLC) (4) (8) Equity Co-Invest 6/30/2022 106,984 107 186 0.02 %"}]},
-  {"what": "Deleted the promoted rule agent_investigate_rules/1911066/1911066_2025q3_add_cash_equivalents.json: it added nothing in ncxa (the two money-market rows are read from CashEquivalentsFairValueDisclosure through fair_value_concepts in this and the next three quarters). Copy kept in scratch/fund_runs/0001911066/.",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-010237",
+     "text": "CMP Ren Partners I-A LP (LMI Consulting, LLC) (4) (8) Equity Co-Invest 6/30/2022 106,984 107 186 0.02 %"
+    }
+   ]
+  },
+  {
+   "what": "Deleted the promoted rule agent_investigate_rules/1911066/1911066_2025q3_add_cash_equivalents.json: it added nothing in ncxa (the two money-market rows are read from CashEquivalentsFairValueDisclosure through fair_value_concepts in this and the next three quarters). Copy kept in scratch/fund_runs/0001911066/.",
    "kind": "exclusion",
-   "quarters": ["2025-09-30"],
-   "quotes": [{"accession": "0001911066-25-000038", "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.00 % 61,066,744 $ 61,067 $ 61,067 4.85 %"}]},
-  {"what": "Equity unit counts: 274 rows (2023-03-31 to 2026-06-30) set to the printed Share / Unit figure; the filer tags most at 1,000 times the printed count (BroadcastMed 43,679,000 for 43,679) and some carried another quarter's or row's count from the shared share-count step (Kofile, LH Equity, Brainlabs).",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001911066-25-000038",
+     "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.00 % 61,066,744 $ 61,067 $ 61,067 4.85 %"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts: 274 rows (2023-03-31 to 2026-06-30) set to the printed Share / Unit figure; the filer tags most at 1,000 times the printed count (BroadcastMed 43,679,000 for 43,679) and some carried another quarter's or row's count from the shared share-count step (Kofile, LH Equity, Brainlabs).",
    "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2026-06-30"],
-   "quotes": [{"accession": "0001628280-23-016990", "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"}]},
-  {"what": "Preferred units published as common equity: 68 rows (BroadcastMed Series A-3, EFC, Fresh Edge / WPP Fairway Class A, Ultima, FCP-Cranium Series A and B, Worldwide Clinical Trials, Trench Safety, New Era) set to PREFERRED_EQUITY from the printed instrument column (the older members name no class).",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-23-016990",
+     "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"
+    }
+   ]
+  },
+  {
+   "what": "Preferred units published as common equity: 68 rows (BroadcastMed Series A-3, EFC, Fresh Edge / WPP Fairway Class A, Ultima, FCP-Cranium Series A and B, Worldwide Clinical Trials, Trench Safety, New Era) set to PREFERRED_EQUITY from the printed instrument column (the older members name no class).",
    "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"],
-   "quotes": [{"accession": "0001628280-23-016990", "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"}]},
-  {"what": "Coupons printed wholly as PIK beside a spread (New You, Caldwell & Gregory, New Era, Arise) published no rate; PIK-only coupons with no tag (Marco APE 2023-03-31, BroadcastMed 2023-09-30: the two X02 findings); single PIK figures not published as PIK (Armstrong 2024-06-30, Esquire, New You, Arise 2026-06-30); Fresh Edge's tagged all-in rate published with the PIK added again (2023-09-30) or as the margin total (2023-12-31); untagged rates (ICON 2023-12-31, Lavie 2026-06-30); Env Automation 2026-03-31 tagged as PIK where the page prints a plain rate. Corrected rates declared all-in (interest_rate_kind).",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-23-016990",
+     "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"
+    }
+   ]
+  },
+  {
+   "what": "Coupons printed wholly as PIK beside a spread (New You, Caldwell & Gregory, New Era, Arise) published no rate; PIK-only coupons with no tag (Marco APE 2023-03-31, BroadcastMed 2023-09-30: the two X02 findings); single PIK figures not published as PIK (Armstrong 2024-06-30, Esquire, New You, Arise 2026-06-30); Fresh Edge's tagged all-in rate published with the PIK added again (2023-09-30) or as the margin total (2023-12-31); untagged rates (ICON 2023-12-31, Lavie 2026-06-30); Env Automation 2026-03-31 tagged as PIK where the page prints a plain rate. Corrected rates declared all-in (interest_rate_kind).",
    "kind": "row_correction",
-   "quarters": ["2023-03-31", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001628280-23-016990", "text": "Marco APE Opco Holdings, LLC (4) Subordinated Debt N/A 14.75% (PIK) 9/2/2026 8,951 8,451 7,547 2.91 %"},
-              {"accession": "0001911066-26-000066", "text": "New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.10 % (PIK) 6/30/2030 5,454 5,454 5,454 0.38 %"}]},
-  {"what": "Members rotated against their printed lines: 2025-12-31 Trucordia / Truist / Smith & Howard (names and rates of the three lines shifted by one) and 2025-06-30 'Micronics' carrying New Era's delayed-draw line and 'New Era 2' carrying Solaray's (the printed Micronics line there is the comparative schedule's); CMP Terrapin Partners I 2025-06-30. Names, instruments and rates set from the printed line.",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-23-016990",
+     "text": "Marco APE Opco Holdings, LLC (4) Subordinated Debt N/A 14.75% (PIK) 9/2/2026 8,951 8,451 7,547 2.91 %"
+    },
+    {
+     "accession": "0001911066-26-000066",
+     "text": "New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.10 % (PIK) 6/30/2030 5,454 5,454 5,454 0.38 %"
+    }
+   ]
+  },
+  {
+   "what": "Members rotated against their printed lines: 2025-12-31 Trucordia / Truist / Smith & Howard (names and rates of the three lines shifted by one) and 2025-06-30 'Micronics' carrying New Era's delayed-draw line and 'New Era 2' carrying Solaray's (the printed Micronics line there is the comparative schedule's); CMP Terrapin Partners I 2025-06-30. Names, instruments and rates set from the printed line.",
    "kind": "row_correction",
-   "quarters": ["2025-06-30", "2025-12-31"],
-   "quotes": [{"accession": "0001911066-26-000012", "text": "Trucordia (PCF Insurance Services of the West) (6) (11) First Lien Debt S + 3.25 % 6.97 % 6/17/2032 1,027 1,025 1,022 0.07 %"},
-              {"accession": "0001628280-25-039316", "text": "Solaray, LLC (4) (6) (7) First Lien Debt S + 6.75 % 10.98 % 12/15/2025 6,420 6,420 5,678 0.52 %"}]},
-  {"what": "Printed maturities not published: INEOS US Finance x2 (2024-06-30), INEOS US Petrochem x2 (2024-12-31), Solaray 2023-09-30 and 2025-12-31 (dates before the report date; proposed under maturity_not_past).",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001911066-26-000012",
+     "text": "Trucordia (PCF Insurance Services of the West) (6) (11) First Lien Debt S + 3.25 % 6.97 % 6/17/2032 1,027 1,025 1,022 0.07 %"
+    },
+    {
+     "accession": "0001628280-25-039316",
+     "text": "Solaray, LLC (4) (6) (7) First Lien Debt S + 6.75 % 10.98 % 12/15/2025 6,420 6,420 5,678 0.52 %"
+    }
+   ]
+  },
+  {
+   "what": "Printed maturities not published: INEOS US Finance x2 (2024-06-30), INEOS US Petrochem x2 (2024-12-31), Solaray 2023-09-30 and 2025-12-31 (dates before the report date; proposed under maturity_not_past).",
    "kind": "row_correction",
-   "quarters": ["2023-09-30", "2024-06-30", "2024-12-31", "2025-12-31"],
-   "quotes": [{"accession": "0001628280-23-035967", "text": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %"}]},
-  {"what": "Money-market rows: unit counts tagged at 1,000 times the printed figure (BlackRock 2024-09-30 to 2025-03-31) or carried from another quarter (2025-06-30, First American x3); cost and unit count of the rows read from the filer's cash-equivalent concepts (2025-09-30 to 2026-06-30) and the 2025-09-30 rate.",
+   "quarters": [
+    "2023-09-30",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-23-035967",
+     "text": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %"
+    }
+   ]
+  },
+  {
+   "what": "Money-market rows: unit counts tagged at 1,000 times the printed figure (BlackRock 2024-09-30 to 2025-03-31) or carried from another quarter (2025-06-30, First American x3); cost and unit count of the rows read from the filer's cash-equivalent concepts (2025-09-30 to 2026-06-30) and the 2025-09-30 rate.",
    "kind": "row_correction",
-   "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001628280-24-046755", "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.83 % 26,526,567 $ 26,527 $ 26,527 3.42 %"}]}
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-046755",
+     "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.83 % 26,526,567 $ 26,527 $ 26,527 3.42 %"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_printed 2024-06-30: row correction sets the money-market issuer name to the printed company cell (member 'BlackRock Liquidity Funds Treasury' -> 'BlackRock Liquidity Funds T-Fund - Institutional Class').",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-036317",
+     "text": "Cash Equivalents BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"
+    }
+   ]
+  },
+  {
+   "what": "fv_conservation 2024-03-31: wrapper source_encodings.cash_identifiers lists 'Blackrock T-Fund Inst' (plus non_private_markers / cash family pattern 'blackrock t-fund'), so the money-market line is published as CASH (was FUND/OTHER, counted as an investment). Published sum stays 633,650 = printed Total Investments incl. cash equivalents; ex-cash 626,799 = filed investments.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-022649",
+     "text": "Cash Equivalents Blackrock T-Fund Inst 5.20 % 6,838 6,838 6,838 1.45 % First American Government Obligations Fund - Class Z 5.20 % 13 13 13 - % Total Cash Equivalents 6,851 6,851 1.45 % Total Investments $ 640,120 $ 633,650"
+    }
+   ]
+  },
+  {
+   "what": "C103 2025-06-30: the 11 flagged undrawn lines (negative fair value, cost a dash) published no instrument, so the check's unfunded-position text test could not see 'Delayed Draw' / 'Revolving'. Row corrections set the printed instrument (instrument_description) on the 11 rows; values unchanged.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-039316",
+     "text": "AmerCareRoyal, LLC (4) (11) First Lien Debt (Delayed Draw) S + 5.00 % 9.33 % 9/10/2030 3,307 - ( 96 ) ( 0.01 ) %"
+    },
+    {
+     "accession": "0001628280-25-039316",
+     "text": "RailPros Parent, LLC (4) (7) (11) Revolving Loan S + 4.50 % 8.83 % 5/24/2032 1,579 - ( 15 ) - %"
+    }
+   ]
+  },
+  {
+   "what": "Lien printed but not published: II-VI INCORPORATED 2026-06-30 (published Unsecured from the member text 'Subordinated Debt'; page prints First Lien Debt), ICE USA Infrastructure and ERA Industries 2026-03-31 (no lien published). Row corrections set instrument_description to the printed 'First Lien Debt'; the corrected-text step re-derives lien_position. Scan of all 14 quarters (scratch/fund_runs/0001911066/lienscan.py: published lien against the lien printed on the row's own page line, 5,807 of 5,828 rows joined to a current-period printed line) found these 3 rows and no other mismatch; 21 rows have no printed line in the page reader and were not compared.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-055912",
+     "text": "II-VI INCORPORATED (6) (11) (12) First Lien Debt S + 1.75 % 5.39 % 7/2/2029 1,091 1,094 1,093 0.06 %"
+    },
+    {
+     "accession": "0001911066-26-000066",
+     "text": "ICE USA Infrastructure, Inc. (15) First Lien Debt S + 5.75 % 9.42 % 3/15/2030 1,598 1,560 1,588 0.11 %"
+    },
+    {
+     "accession": "0001911066-26-000066",
+     "text": "ERA Industries, LLC (BTX Precision) (15) First Lien Debt S + 5.00 % 8.67 % 7/25/2030 1,368 1,354 1,374 0.09 %"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "conservation fv_conservation 2024-03-31",
-   "hypotheses": [
-    "Cause found: the money-market line 'Blackrock T-Fund Inst' (6,838) is published with asset_category FUND, asset_class OTHER, exposure FUND (index class CASH), so the like-for-like split (investments_total_excludes) does not take it out of the non-cash sum: residual 1.09 pct = 6,838 / 626,799. A real classification defect, not as filed.",
-    "Tried 1 (ncxc, ncxd): row corrections of asset_category, then also asset_class and exposure_type, to CASH. A later step of the unified build puts asset_class OTHER / exposure FUND back after the correction step, and the final schema check (cash_classification_consistency) stops the build. Withdrawn.",
-    "Tried 2 (diagnostic run of the unified stage only): adding 'blackrock\\s+t-fund' to the wrapper's cash family pattern drops the row altogether (6.8M lost). Withdrawn.",
-    "Not tried: finding which step after the row corrections rewrites asset_class / exposure_type for an index-class CASH row whose issuer_category is FUND; needs a code read beyond this run."]},
-  {"finding": "un-itemised cash equivalents 2023-03-31, 2023-06-30, 2023-09-30 (not a ledger finding)",
+  {
+   "finding": "un-itemised cash equivalents 2023-03-31, 2023-06-30, 2023-09-30 (not a ledger finding)",
    "hypotheses": [
     "The page prints one line 'Cash Equivalents (14)' (16,012; 6,606; 5,417) tagged on InvestmentTypeAxis=CashEquivalentsMember with no identifier member, so no row is built. Totals are unaffected (the filed investments figure is now the balance-sheet line without cash).",
     "Tried (ncxc, ncxd): source_encodings.context_identifiers naming the three contexts 'Cash Equivalents' plus cash_identifiers ['Cash Equivalents']: the rows reach bdc_holdings but staging removes them (source reconciliation: excluded_money_market_fund). Both settings withdrawn so the wrapper carries nothing that has no effect.",
-    "Not tried: which staging filter removes a named cash context while the identifier-member money-market rows of later quarters survive."]}
+    "Not tried: which staging filter removes a named cash context while the identifier-member money-market rows of later quarters survive."
+   ]
+  }
  ],
- "orchestrator_requests": [],
+ "orchestrator_requests": [
+  {
+   "request_id": "NCZ-R1",
+   "classification": "acceptance_change",
+   "file": "pipeline/staging_bdc.py / pipeline/bdc_xbrl_html_bridge.py (shared; opt-in wrapper key, schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json)",
+   "what": "An opt-in wrapper key that fills a blank instrument_description from the tranche cell of the row's own printed line (the page reader already returns printed_row for 5,807 of this fund's 5,828 rows), so instrument_type and lien derive from it. Off for every other fund, with a focused test and a false-positive test (a row whose printed cell is a company or an industry label). This is a shared extractor change (a new opt-in wrapper key and its code), not an acceptance change: no gate or threshold moves. It is labelled acceptance_change only because the contract offers two classes; it routes to the owner.",
+   "why": "Nuveen Churchill PCIF publishes no instrument text on about 2,840 loan rows in 11 quarters (members name the company only); no existing wrapper key reads the instrument from the page; 2,000+ row corrections would be the only alternative and are not wanted.",
+   "quotes": [
+    {
+     "accession": "0001628280-25-039316",
+     "text": "Thompson Safety LLC (4) (11) Revolving Loan S + 5.00 % 9.30 % 6/25/2032 1,364 ( 7 ) ( 7 ) - %"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0001628280-25-039316",
+     "text": "Thompson Safety LLC (4) (11) Revolving Loan S + 5.00 % 9.30 % 6/25/2032 1,364 ( 7 ) ( 7 ) - %"
+    }
+   ],
+   "next_action": "Owner decision on a shared opt-in key; the fund agent does not change shared code."
+  }
+ ],
  "observations": [
-  {"observation_key": "unit-count-tag-concept-and-scale-change-between-filings", "what": "Equity unit counts tagged at 1,000 times the printed Share / Unit figure in most 10-Qs from 2023-03-31 to 2025-09-30 (BroadcastMed 43,679,000 for 43,679; Arax 1,117,012,000), at the printed figure in others (ADPD 1,419). 274 rows corrected to the printed figure.", "field": "shares_held", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"], "fair_value_m": 75.0, "cause": "fund", "action": "fixed", "suggested_check": "Unit count above 1,000 times fair value on an equity row whose printed unit cell is 1,000 times smaller.", "quote": {"accession": "0001628280-23-016990", "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"}},
-  {"observation_key": "unit-count-rescaled-by-issuer-normaliser", "what": "The shared share-count step put another quarter's or row's count on rows keyed by issuer name: BlackRock 2025-06-30 published 67,269,346,000 (the previous quarter's count x1000) for a tagged and printed 115,767,950; First American 11,000 in three quarters for 10,821 / 7,226 / 4,214; Kofile 2023-12-31 moved from 100 to 100,000 once its name was cleaned. Corrected by row correction.", "field": "shares_held", "quarters": ["2023-12-31", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30"], "fair_value_m": 115.8, "cause": "shared", "action": "fixed", "suggested_check": "A unit count that differs from the row's own tagged count while the row has one.", "quote": {"accession": "0001628280-24-046755", "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.83 % 26,526,567 $ 26,527 $ 26,527 3.42 %"}},
-  {"observation_key": "preferred-equity-published-as-common", "what": "68 preferred-unit rows published COMMON_EQUITY: the older member names the company only and the class is printed in the instrument column. No rule flags a printed 'Preferred' against a common class.", "field": "index_classification", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"], "fair_value_m": 25.3, "cause": "fund", "action": "fixed", "suggested_check": "Printed instrument cell containing 'Preferred' on a row published as common equity.", "quote": {"accession": "0001628280-23-016990", "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"}},
-  {"observation_key": "pik-only-coupon-with-spread-published-without-rate", "what": "Floating loans printed with the whole coupon paid in kind ('S + 6.25 % 10.10 % (PIK)') are tagged with the spread and the PIK rate only; pik_only_tag_reading = coupon covers only rows without a spread, so 1 to 4 rows a quarter published no rate (New You, Caldwell & Gregory, New Era, Arise). Row corrections; a wrapper-level reading would carry forward.", "field": "interest_rate", "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 61.0, "cause": "shared", "action": "fixed", "suggested_check": "Loan with a spread and a PIK rate but no interest rate.", "quote": {"accession": "0001911066-26-000066", "text": "New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.10 % (PIK) 6/30/2030 5,454 5,454 5,454 0.38 %"}},
-  {"observation_key": "member-carries-another-rows-name", "what": "Three 2025-12-31 members are rotated by one line against the printed rows (the Smith & Howard member carries Trucordia's values, Trucordia's carries Truist's, Truist's carries Smith & Howard's); two at 2025-06-30 (Micronics / New Era 2). Values, maturity and the tags on the row agree with the printed line; name and rate were the neighbour's.", "field": "issuer_name", "quarters": ["2025-06-30", "2025-12-31"], "fair_value_m": 15.6, "cause": "row", "action": "fixed", "suggested_check": "Published issuer name differs from the printed company cell of the line that carries the row's fair-value tag.", "quote": {"accession": "0001911066-26-000012", "text": "Trucordia (PCF Insurance Services of the West) (6) (11) First Lien Debt S + 3.25 % 6.97 % 6/17/2032 1,027 1,025 1,022 0.07 %"}},
-  {"observation_key": "maturity-printed-not-published", "what": "Printed maturities dropped: a maturity before the report date (Solaray 2023-09-30, 2025-12-31) and four INEOS lines whose maturity is printed but not tagged.", "field": "maturity_date", "quarters": ["2023-09-30", "2024-06-30", "2024-12-31", "2025-12-31"], "fair_value_m": 18.3, "cause": "shared", "action": "fixed", "suggested_check": "Loan with a printed maturity date and none published.", "quote": {"accession": "0001628280-23-035967", "text": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %"}},
-  {"observation_key": "cash-and-money-market-rows-not-published", "what": "The 2023 10-Qs print one un-itemised 'Cash Equivalents (14)' line (16,012; 6,606; 5,417), tagged on the investment-type axis with no identifier member; no row is published. Totals are unaffected. Parked (see parked).", "field": "fair_value", "quarters": ["2023-03-31", "2023-06-30", "2023-09-30"], "fair_value_m": 16.0, "cause": "shared", "action": "parked", "suggested_check": "A printed schedule line tagged on a type-axis-only context with no published row.", "quote": {"accession": "0001628280-23-016990", "text": "Cash Equivalents (14) 16,012 16,012 6.16 %"}},
-  {"observation_key": "money-market-fund-not-published", "what": "Blackrock T-Fund Inst (2024-03-31, 6,838) is published with asset_category FUND, asset_class OTHER and exposure FUND under index class CASH; the cash checks read the category and miss it (fv_conservation 2024-03-31, parked). A row correction of the three fields is undone after the correction step.", "field": "asset_category", "quarters": ["2024-03-31"], "fair_value_m": 6.8, "cause": "shared", "action": "parked", "suggested_check": "Index class CASH with an asset_category other than CASH.", "quote": {"accession": "0001628280-24-022649", "text": "Blackrock T-Fund Inst 5.20 % 6,838 6,838 6,838 1.45 %"}},
-  {"observation_key": "operating-company-lp-interest-classed-as-fund", "what": "Single-company co-investment interests printed under Equity Investments (BayPine Monarch Co-Invest, LH Equity Investors, R Arax Co-Invest UB) are published PRIVATE_EQUITY_FUND / FUND; other co-invest LPs of the same kind (CMP Ren, CMP Terrapin) are COMMON_EQUITY. Not changed: the class of an aggregator-held co-investment is an owner question.", "field": "index_classification", "quarters": ["2024-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 52.7, "cause": "shared", "action": "left", "suggested_check": "A fund class on a row printed under Equity Investments that names one portfolio company.", "quote": {"accession": "0001911066-26-000066", "text": "BayPine Monarch Co-Invest, LP (6) (8) (13) Limited Partnership Interests 6/3/2025 1,000,000 1,018 1,112 0.08 %"}},
-  {"observation_key": "distribution-per-share-missing-after-share-classes", "what": "nav_per_share and shares_outstanding are blank from 2023-12-31 (10 quarters): the page prints them per share class (S, D, I) only. Which class to publish is an owner question (as at T. Rowe Price OHA, D-173). Left.", "field": "nav_per_share", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "Fund-level NAV per share blank in a quarter that prints a per-class NAV.", "quote": {"accession": "0001911066-26-000066", "text": "Net Asset Value per Share Class S Shares: Net assets $ 45,238 $ 42,872 Net asset value per share $ 23.94 $ 24.25"}},
-  {"observation_key": "issuer-name-differs-from-page", "what": "2024-09-30 'Dragon - NCR Voyix' is cut by the shared issuer/instrument split into issuer 'Dragon' and instrument 'NCR Voyix' (the company is NCR Voyix; the instrument is printed as First Lien Term Loan). One row, 7.0M. Also 2025-03-31: the page prints both CMP Terrapin lines as Partners I although the 383,427-unit line is Partners II in the quarters around it; published as printed. Left.", "field": "issuer_name", "quarters": ["2024-09-30", "2025-03-31"], "fair_value_m": 7.0, "cause": "shared", "action": "left", "suggested_check": "Instrument text that names a company after a ' - ' split.", "quote": {"accession": "0001628280-24-046755", "text": "Dragon - NCR Voyix (4) (6) First Lien Term Loan S + 3.25 % 7.85 % 9/30/2031 7,000 6,965 6,965 0.90 %"}},
-  {"observation_key": "cash-rate-tag-read-as-all-in", "what": "With filed_rate_reading = cash_leg, any rate a row correction sets is read as the cash leg and the PIK rate is added on top (Marco APE 14.75 became 29.5 in ncxb). Corrections that set the whole coupon must also set interest_rate_kind = all_in; done here.", "field": "interest_rate", "quarters": ["2023-03-31", "2024-06-30", "2026-06-30"], "fair_value_m": 12.6, "cause": "shared", "action": "fixed", "suggested_check": "interest_rate equal to twice pik_rate on a row whose printed coupon is the PIK figure.", "quote": {"accession": "0001628280-23-016990", "text": "Marco APE Opco Holdings, LLC (4) Subordinated Debt N/A 14.75% (PIK) 9/2/2026 8,951 8,451 7,547 2.91 %"}}
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Equity unit counts tagged at 1,000 times the printed Share / Unit figure in most 10-Qs from 2023-03-31 to 2025-09-30 (BroadcastMed 43,679,000 for 43,679; Arax 1,117,012,000), at the printed figure in others (ADPD 1,419). 274 rows corrected to the printed figure.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 75.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Unit count above 1,000 times fair value on an equity row whose printed unit cell is 1,000 times smaller.",
+   "quote": {
+    "accession": "0001628280-23-016990",
+    "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Unit count above 1,000 times fair value on an equity row whose printed unit cell is 1,000 times smaller.",
+    "reference": "proposed check: Unit count above 1,000 times fair value on an equity row whose printed unit cell is 1,000 times smaller."
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The shared share-count step put another quarter's or row's count on rows keyed by issuer name: BlackRock 2025-06-30 published 67,269,346,000 (the previous quarter's count x1000) for a tagged and printed 115,767,950; First American 11,000 in three quarters for 10,821 / 7,226 / 4,214; Kofile 2023-12-31 moved from 100 to 100,000 once its name was cleaned. Corrected by row correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-12-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 115.8,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A unit count that differs from the row's own tagged count while the row has one.",
+   "quote": {
+    "accession": "0001628280-24-046755",
+    "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.83 % 26,526,567 $ 26,527 $ 26,527 3.42 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A unit count that differs from the row's own tagged count while the row has one.",
+    "reference": "proposed check: A unit count that differs from the row's own tagged count while the row has one."
+   }
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "what": "68 preferred-unit rows published COMMON_EQUITY: the older member names the company only and the class is printed in the instrument column. No rule flags a printed 'Preferred' against a common class.",
+   "field": "index_classification",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 25.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Printed instrument cell containing 'Preferred' on a row published as common equity.",
+   "quote": {
+    "accession": "0001628280-23-016990",
+    "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Printed instrument cell containing 'Preferred' on a row published as common equity.",
+    "reference": "proposed check: Printed instrument cell containing 'Preferred' on a row published as common equity."
+   }
+  },
+  {
+   "observation_key": "pik-only-coupon-with-spread-published-without-rate",
+   "what": "Floating loans printed with the whole coupon paid in kind ('S + 6.25 % 10.10 % (PIK)') are tagged with the spread and the PIK rate only; pik_only_tag_reading = coupon covers only rows without a spread, so 1 to 4 rows a quarter published no rate (New You, Caldwell & Gregory, New Era, Arise). Row corrections; a wrapper-level reading would carry forward.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 61.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Loan with a spread and a PIK rate but no interest rate.",
+   "quote": {
+    "accession": "0001911066-26-000066",
+    "text": "New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.10 % (PIK) 6/30/2030 5,454 5,454 5,454 0.38 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Loan with a spread and a PIK rate but no interest rate.",
+    "reference": "proposed check: Loan with a spread and a PIK rate but no interest rate."
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "Three 2025-12-31 members are rotated by one line against the printed rows (the Smith & Howard member carries Trucordia's values, Trucordia's carries Truist's, Truist's carries Smith & Howard's); two at 2025-06-30 (Micronics / New Era 2). Values, maturity and the tags on the row agree with the printed line; name and rate were the neighbour's.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 15.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Published issuer name differs from the printed company cell of the line that carries the row's fair-value tag.",
+   "quote": {
+    "accession": "0001911066-26-000012",
+    "text": "Trucordia (PCF Insurance Services of the West) (6) (11) First Lien Debt S + 3.25 % 6.97 % 6/17/2032 1,027 1,025 1,022 0.07 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Published issuer name differs from the printed company cell of the line that carries the row's fair-value tag.",
+    "reference": "proposed check: Published issuer name differs from the printed company cell of the line that carries the row's fair-value tag."
+   }
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "what": "Printed maturities dropped: a maturity before the report date (Solaray 2023-09-30, 2025-12-31) and four INEOS lines whose maturity is printed but not tagged.",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-09-30",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 18.3,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Loan with a printed maturity date and none published.",
+   "quote": {
+    "accession": "0001628280-23-035967",
+    "text": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Loan with a printed maturity date and none published.",
+    "reference": "proposed check: Loan with a printed maturity date and none published."
+   }
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "what": "The 2023 10-Qs print one un-itemised 'Cash Equivalents (14)' line (16,012; 6,606; 5,417), tagged on the investment-type axis with no identifier member; no row is published. Totals are unaffected. Parked (see parked).",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 16.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "A printed schedule line tagged on a type-axis-only context with no published row.",
+   "quote": {
+    "accession": "0001628280-23-016990",
+    "text": "Cash Equivalents (14) 16,012 16,012 6.16 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A printed total-cash line with no published cash row: compare the printed 'Total Cash Equivalents' figure with the sum of published CASH rows per quarter.",
+    "reference": "A printed schedule line tagged on a type-axis-only context with no published row."
+   }
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "what": "Blackrock T-Fund Inst (2024-03-31, 6,838) is published with asset_category FUND, asset_class OTHER and exposure FUND under index class CASH; the cash checks read the category and miss it (fv_conservation 2024-03-31, parked). A row correction of the three fields is undone after the correction step. Fixed in nczc by wrapper cash_identifiers (the row is published as CASH).",
+   "field": "asset_category",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 6.8,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Index class CASH with an asset_category other than CASH.",
+   "quote": {
+    "accession": "0001628280-24-022649",
+    "text": "Blackrock T-Fund Inst 5.20 % 6,838 6,838 6,838 1.45 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation fired on this row's quarter in the untouched build ncza (2024-03-31, residual 1.09 pct) and cleared in nczc when the row became CASH.",
+    "reference": "fv_conservation (shadow_conservation_engine)"
+   }
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "what": "Single-company co-investment interests printed under Equity Investments (BayPine Monarch Co-Invest, LH Equity Investors, R Arax Co-Invest UB) are published PRIVATE_EQUITY_FUND / FUND; other co-invest LPs of the same kind (CMP Ren, CMP Terrapin) are COMMON_EQUITY. Not changed: the class of an aggregator-held co-investment is an owner question.",
+   "field": "index_classification",
+   "quarters": [
+    "2024-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 52.7,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A fund class on a row printed under Equity Investments that names one portfolio company.",
+   "quote": {
+    "accession": "0001911066-26-000066",
+    "text": "BayPine Monarch Co-Invest, LP (6) (8) (13) Limited Partnership Interests 6/3/2025 1,000,000 1,018 1,112 0.08 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A fund class on a row printed under Equity Investments that names one portfolio company.",
+    "reference": "proposed check: A fund class on a row printed under Equity Investments that names one portfolio company."
+   }
+  },
+  {
+   "observation_key": "distribution-per-share-missing-after-share-classes",
+   "what": "nav_per_share and shares_outstanding are blank from 2023-12-31 (10 quarters): the page prints them per share class (S, D, I) only. Which class to publish is an owner question (as at T. Rowe Price OHA, D-173). Left.",
+   "field": "nav_per_share",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Fund-level NAV per share blank in a quarter that prints a per-class NAV.",
+   "quote": {
+    "accession": "0001911066-26-000066",
+    "text": "Net Asset Value per Share Class S Shares: Net assets $ 45,238 $ 42,872 Net asset value per share $ 23.94 $ 24.25"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Fund-level NAV per share blank in a quarter that prints a per-class NAV.",
+    "reference": "proposed check: Fund-level NAV per share blank in a quarter that prints a per-class NAV."
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "2024-09-30 'Dragon - NCR Voyix' is cut by the shared issuer/instrument split into issuer 'Dragon' and instrument 'NCR Voyix' (the company is NCR Voyix; the instrument is printed as First Lien Term Loan). One row, 7.0M. Also 2025-03-31: the page prints both CMP Terrapin lines as Partners I although the 383,427-unit line is Partners II in the quarters around it; published as printed. Left.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "fair_value_m": 7.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Instrument text that names a company after a ' - ' split.",
+   "quote": {
+    "accession": "0001628280-24-046755",
+    "text": "Dragon - NCR Voyix (4) (6) First Lien Term Loan S + 3.25 % 7.85 % 9/30/2031 7,000 6,965 6,965 0.90 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Instrument text that names a company after a ' - ' split.",
+    "reference": "proposed check: Instrument text that names a company after a ' - ' split."
+   }
+  },
+  {
+   "observation_key": "cash-rate-tag-read-as-all-in",
+   "what": "With filed_rate_reading = cash_leg, any rate a row correction sets is read as the cash leg and the PIK rate is added on top (Marco APE 14.75 became 29.5 in ncxb). Corrections that set the whole coupon must also set interest_rate_kind = all_in; done here.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-03-31",
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "interest_rate equal to twice pik_rate on a row whose printed coupon is the PIK figure.",
+   "quote": {
+    "accession": "0001628280-23-016990",
+    "text": "Marco APE Opco Holdings, LLC (4) Subordinated Debt N/A 14.75% (PIK) 9/2/2026 8,951 8,451 7,547 2.91 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "interest_rate equal to twice pik_rate on a row whose printed coupon is the PIK figure.",
+    "reference": "proposed check: interest_rate equal to twice pik_rate on a row whose printed coupon is the PIK figure."
+   }
+  },
+  {
+   "observation_key": "instrument-description-not-published-from-page",
+   "what": "From 2023-03-31 to 2025-09-30 the members name the company only ('Company N') and the page prints the tranche. In nczd 2,876 loan rows whose own current-period printed line shows a lien, subordinated/unsecured, delayed-draw, revolver or term-loan text publish no instrument_description (a lien-or-tranche-only pattern gives the reviewer's 2,836), and 612 rows whose printed line says delayed draw or revolver publish no instrument_type (scratch/fund_runs/0001911066/gapcount.py nczd; join on accession plus identifier restricted to current-period page rows, one row per row_id). Cause: the instrument cell of the schedule is read by no step (the page reader supplies maturity, rate type, lien and sector only); no wrapper key reads it. Not fixed by row correction (owner brief); shared change proposed as request NCZ-R1. The 11 rows C103 flagged were fixed by correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "Loan row with a printed tranche text on its line and an empty instrument_description.",
+   "quote": {
+    "accession": "0001628280-25-039316",
+    "text": "Thompson Safety LLC (4) (11) Revolving Loan S + 5.00 % 9.30 % 6/25/2032 1,364 ( 7 ) ( 7 ) - %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Compare each row's printed tranche words with its instrument_description; none exists today (the page rules cover names, unit counts, PIK, industry, preferred).",
+    "reference": "proposed check: loan row with printed tranche text and empty instrument_description"
+   }
+  },
+  {
+   "observation_key": "lien-printed-not-published",
+   "what": "II-VI INCORPORATED 2026-06-30 published Unsecured (member 'Subordinated Debt') where the page prints First Lien Debt; ICE USA Infrastructure and ERA Industries 2026-03-31 publish no lien where First Lien Debt is printed (page reader lien_status validation_needed). No rule flagged them. Fixed by row correction.",
+   "field": "lien_position",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.055,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Published lien_position differs from the lien printed on the row's own page line.",
+   "quote": {
+    "accession": "0001628280-26-055912",
+    "text": "II-VI INCORPORATED (6) (11) (12) First Lien Debt S + 1.75 % 5.39 % 7/2/2029 1,091 1,094 1,093 0.06 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the published lien with the printed one; scratch/fund_runs/0001911066/lienscan.py is the working comparison (3 mismatches in 5,807 joined rows, no false positive).",
+    "reference": "proposed check: published lien_position against lien words on the row's printed line"
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["tests/test_bdc_xbrl_wrapper.py, test_fund_highlights_wrapper.py, test_source_encodings.py, test_issuer_instrument_split.py, test_wrapper_content_signatures.py, test_wrapper_v1_quality_gate.py, test_bdc_xbrl_wrapper_oracle.py: 863 passed"],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py, test_fund_highlights_wrapper.py, test_source_encodings.py, test_issuer_instrument_split.py, test_wrapper_content_signatures.py, test_wrapper_v1_quality_gate.py, test_bdc_xbrl_wrapper_oracle.py: 863 passed",
+  "No code changed this run; wrapper and row-correction edits only. scratch/fund_runs/0001911066/retire_check.py and retire_check_pik.py run on data/output and ncza with plants; lienscan.py and gapcount.py are read-only counts saved for the report."
+ ],
  "not_done": [
   "Industry and lien of the rotated-member rows (2025-06-30, 2025-12-31) were not compared with the page.",
   "Unit counts on rows that print no count (derived_proxy, 1 to 50 a quarter) were not read one by one; the page comparison found no difference on rows that print one.",
   "Instrument text on older equity rows stays empty (the class is printed only in the instrument column; set where it decides preferred vs common).",
   "Full test suite not run; no shared code changed.",
-  "Build count: six builds (ncxa to ncxf), two of which (ncxc, ncxd) stopped at the rebuild stage on the schema check described under parked."
+  "Not worked: findings outside the filtered packet (none outstanding in nczc).",
+  "Full test suite not run; no shared code changed.",
+  "Build count this run: four (ncza at HEAD, nczb, nczc, nczd).",
+  "instrument_description left empty on 2,876 loan rows (broad pattern; 2,836 lien-or-tranche only) and instrument_type on 612 printed delayed-draw/revolver rows (observation instrument-description-not-published-from-page, request NCZ-R1).",
+  "Lien scan compared 5,807 of 5,828 rows; 21 rows have no printed line in the page reader."
+ ],
+ "investigator_id": "agent:fund-ncz-sonnet",
+ "investigations": [],
+ "closed_finding_notes": [
+  {
+   "finding_id": "RVQ_BLK_69fe30660d88",
+   "coverage": {
+    "affected_rows": [
+     "0001911066|2024-06-30|ROW-4a736dabc3f7aae0|c-427"
+    ],
+    "reviewed_rows": [
+     "0001911066|2024-06-30|ROW-4a736dabc3f7aae0|c-427"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-24-036317",
+     "text": "Cash Equivalents BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Page rule output (page_rule_findings.csv, ncza): one row, kind not_the_printed_name, published 'BlackRock Liquidity Funds Treasury' against printed 'BlackRock Liquidity Funds T-Fund - Institutional Class'. Confirmed on the page.",
+    "Other quarters publish 'BlackRock Liquidity Funds T-Fund Institutional Class' (dash dropped); the rule does not flag them and the one-row population is the whole finding."
+   ],
+   "next_action": "Fixed in nczc by one row correction (issuer_name); the finding is gone from the ledger."
+  },
+  {
+   "finding_id": "RVQ_BLK_b14ee9d9deb1",
+   "coverage": {
+    "affected_rows": [
+     "0001911066|2024-03-31|fv_conservation|fair_value"
+    ],
+    "reviewed_rows": [
+     "0001911066|2024-03-31|fv_conservation|fair_value",
+     "0001911066|2024-03-31|c-368"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-24-022649",
+     "text": "Cash Equivalents Blackrock T-Fund Inst 5.20 % 6,838 6,838 6,838 1.45 % First American Government Obligations Fund - Class Z 5.20 % 13 13 13 - % Total Cash Equivalents 6,851 6,851 1.45 % Total Investments $ 640,120 $ 633,650"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Residual 1.091 pct = 6,838 / 626,799: the money-market row c-368 was published asset_category FUND (index class CASH), so the ex-cash split did not remove it. Confirmed by ncza rows.",
+    "Wrapper non_private_markers alone (nczb) dropped the row in staging (6.8M lost): rejected.",
+    "source_encodings.cash_identifiers 'Blackrock T-Fund Inst' (nczc): row kept as CASH/CASH/LIQUID, finding cleared; published sum 633,650 = printed Total Investments incl. cash equivalents."
+   ],
+   "next_action": "Fixed in nczc by wrapper cash_identifiers; no further action."
+  },
+  {
+   "finding_id": "RVQ_BLK_f9998836edb6",
+   "coverage": {
+    "affected_rows": [
+     "0001911066|2024-03-31|ROW-431ec17beb75ea61|c-286"
+    ],
+    "reviewed_rows": [
+     "0001911066|2024-03-31|ROW-431ec17beb75ea61|c-286"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-24-022649",
+     "text": "American Student Transportaton Partners, Inc (4) Subordinated Debt N/A 6.00 % (Cash) 8.50 % (PIK) 9/11/2029 1,640 1,600 1,569 0.33 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Verdict says interest_rate 6.0 (cash leg) with PIK 8.5, all-in 14.5. Published row has interest_rate 14.5, pik_rate 8.5 on data/output and in ncza/nczc; the rule itself was retired 2026-06-19.",
+    "retire_check_pik.py: cited row equals cash + PIK from its printed line and no published row of the quarter has pik_rate above interest_rate; four plants fail."
+   ],
+   "next_action": "Verdict retired under the standing rule (VR-FL-1911066-01); ledger state verdict_retired."
+  },
+  {
+   "finding_id": "RVQ_REV_5f723d58f7d8",
+   "coverage": {
+    "affected_rows": [
+     "0001911066|2025-06-30|c-84",
+     "0001911066|2025-06-30|c-426",
+     "0001911066|2025-06-30|c-448",
+     "0001911066|2025-06-30|c-447",
+     "0001911066|2025-06-30|c-410",
+     "0001911066|2025-06-30|c-411",
+     "0001911066|2025-06-30|c-479",
+     "0001911066|2025-06-30|c-418",
+     "0001911066|2025-06-30|c-134",
+     "0001911066|2025-06-30|c-510",
+     "0001911066|2025-06-30|c-126"
+    ],
+    "reviewed_rows": [
+     "0001911066|2025-06-30|c-84",
+     "0001911066|2025-06-30|c-426",
+     "0001911066|2025-06-30|c-448",
+     "0001911066|2025-06-30|c-447",
+     "0001911066|2025-06-30|c-410",
+     "0001911066|2025-06-30|c-411",
+     "0001911066|2025-06-30|c-479",
+     "0001911066|2025-06-30|c-418",
+     "0001911066|2025-06-30|c-134",
+     "0001911066|2025-06-30|c-510",
+     "0001911066|2025-06-30|c-126"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-25-039316",
+     "text": "Cohnreznick Advisory LLC (4) (6) (11) First Lien Debt (Delayed Draw) S + 4.00 % 8.30 % 3/31/2032 3,477 ( 11 ) - - %"
+    },
+    {
+     "accession": "0001628280-25-039316",
+     "text": "AmerCareRoyal, LLC (4) (11) First Lien Debt (Delayed Draw) S + 5.00 % 9.33 % 9/10/2030 3,307 - ( 96 ) ( 0.01 ) %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Verdict's cited row (Cohnreznick, fair value -11,000 vs printed dash) is published fair_value 0, cost -11,000 as printed, on data/output and in nczc (retire_check.py, four plants fail): verdict retired (VR-FL-1911066-02).",
+    "The 11 rows the check flags in ncza are undrawn delayed-draw / revolving lines whose printed fair value is bracketed (e.g. (96), (68), (1)) and published at those values; the cause of the flag is an empty instrument_description (check's unfunded-text test sees no 'delayed draw').",
+    "Row corrections set the printed instrument on the 11 rows (values unchanged); the finding is gone in nczc."
+   ],
+   "next_action": "Verdict retired; data fix applied; no further action. Other empty instrument rows recorded as observation instrument-description-not-published-from-page."
+  }
+ ],
+ "retired_in_run": [
+  "RVQ_BLK_f9998836edb6",
+  "RVQ_REV_5f723d58f7d8"
  ]
 }

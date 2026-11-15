@@ -5942,3 +5942,11 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Shared defect (observation): row corrections run before _strip_issuer_names (pipeline/unified_holdings.py ~1532 vs ~1569), so a corrected issuer name blanks the instrument tail; patched here by explicit corrections only.
 - Proposed detectors: dash line with no value and no declaration; published lien vs printed lien; non-USD benchmark with USD currency.
 - A clean result is not data correct.
+
+### D-289 Fund loop 2026-11-15: Nuveen Churchill Private Capital Income Fund (0001911066), sandbox nczd
+
+- Filtered packet: 4 findings (issuer_name_printed supported_fix; fv_conservation, pik_le_interest_rate, C103 unreviewed); none closed at HEAD. Sonnet fund agent `agent:fund-ncz-sonnet`, Opus reviewer `agent:review-nczc-opus` (full on nczc, change-only on nczd; investigation COMPLETE), Sonnet reader (nczc 0/20; the three nczd-changed rows are not in the sample). Builds ncza..nczd. Sandbox ledger 0 outstanding; totals tie 14/14.
+- Fixed: money-market T-Fund line 2024-03-31 published as a fund and counted as an investment, now CASH (wrapper cash_identifiers; matches 346 money-market rows in 46 cohort funds; headline unchanged); printed money-market name 2024-06-30; printed instrument on 11 undrawn lines (C103); unflagged liens II-VI (Unsecured -> First Lien), ICE USA and ERA (blank -> First Lien).
+- Retired under D-252: pik_le_interest_rate 2024-03-31 (published = printed), C103 2025-06-30 (cited row at filed values).
+- Parked with request NCZ-R1 (shared extractor change, routed to the owner as acceptance_change): 2,836 loan rows print a lien or tranche but publish no instrument text and 612 delayed-draw/revolver rows have no instrument_type, 2023-03-31..2025-09-30; needs an opt-in wrapper key that reads the printed tranche cell.
+- A clean result is not data correct.

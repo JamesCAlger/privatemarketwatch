@@ -1,0 +1,75 @@
+{
+ "_note": "Nuveen Churchill PCIF (fund loop 2026-11-15, batch b1112b packet): retirements under the owner's standing rule D-252. Checks: scratch/fund_runs/0001911066/retire_check_pik.py and retire_check.py (both read-only; run on data/output and on sandbox ncza).",
+ "retirements": [
+  {
+   "retirement_id": "VR-FL-1911066-01",
+   "review_id": "RVQ_BLK_f9998836edb6",
+   "verdict_sha256": "8fa3cf1e0ea8492bf770ae8645c7d787418ae620bba3b171cee988558d436ce1",
+   "cik": "0001911066",
+   "engine": "identity",
+   "rule_name": "pik_le_interest_rate",
+   "report_date": "2024-03-31",
+   "reason": "The verdict found American Student Transportaton Partners published with interest_rate 6.0 (the cash leg only) where the line prints 6.00 % (Cash) 8.50 % (PIK). The row is published with interest_rate 14.5 (cash + PIK) and pik_rate 8.5, as printed. The identity rule itself was retired 2026-06-19; this tests the verdict's claim, not the rule, and also requires that no published row of the quarter has pik_rate above interest_rate.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001911066/retire_check_pik.py (read-only): interest_rate must equal the cash + PIK legs read from the cited row's printed line and pik_rate the printed PIK leg, and no published row of the quarter may have pik_rate above interest_rate; passes on data/output/private_markets_holdings.parquet and on sandbox ncza; plants (cash leg only, PIK dropped, row missing, another row with PIK above its rate) all fail"
+    },
+    {
+     "source": "query",
+     "quote": "0001911066 2024-03-31 published basis 296 rows (data/output and sandbox ncza); American Student Transportaton Partners, Inc interest_rate 14.5 pik_rate 8.5 fair_value 1569000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-022649",
+     "quote": "American Student Transportaton Partners, Inc (4) Subordinated Debt N/A 6.00 % (Cash) 8.50 % (PIK) 9/11/2029 1,640 1,600 1,569 0.33 %",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-431ec17beb75ea61"
+   ],
+   "published_rows": 296,
+   "rerun": "python scratch/fund_runs/0001911066/retire_check_pik.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-ncz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  },
+  {
+   "retirement_id": "VR-FL-1911066-02",
+   "review_id": "RVQ_REV_5f723d58f7d8",
+   "verdict_sha256": "3f26fcd23dcede662ea07d6f4c41867d718febf6b789fcea1457463ef490bbfe",
+   "cik": "0001911066",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "report_date": "2025-06-30",
+   "reason": "The verdict says the Cohnreznick Advisory delayed-draw line was published with fair_value -11000 where the page prints a dash for fair value and (11) for cost. The line is published with fair_value 0 and cost -11000, as printed. The verdict's other two cited rows (PT Intermediate, Thermostat Purchaser) it calls rule-scope false positives, not data errors. The 11 negative fair values the check still flags at this quarter are undrawn delayed-draw and revolving lines printed with bracketed fair values; these were handled by row corrections that publish the printed instrument (so the check's unfunded-text test sees 'Delayed Draw' / 'Revolving'), not by this retirement; no check repair request was raised.",
+   "evidence": [
+    {
+     "source": "code",
+     "quote": "scratch/fund_runs/0001911066/retire_check.py (read-only): the published Cohnreznick undrawn line must have fair_value 0 and cost -11000, and no Cohnreznick row may carry a negative fair value; passes on data/output/private_markets_holdings.parquet and on sandbox ncza; plants (fair value -11000, undrawn row missing, cost sign lost, fair value nonzero) all fail"
+    },
+    {
+     "source": "query",
+     "quote": "0001911066 2025-06-30 Cohnreznick Advisory LLC ROW-402e23d5ac7c9aa0 fair_value 0 cost -11000 (undrawn line); ROW-3a3e845d027149a0 fair_value 15023000 cost 14973000"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-039316",
+     "quote": "Cohnreznick Advisory LLC (4) (6) (11) First Lien Debt (Delayed Draw) S + 4.00 % 8.30 % 3/31/2032 3,477 ( 11 ) - - %",
+     "verbatim": true
+    }
+   ],
+   "cited_rows": [
+    "ROW-402e23d5ac7c9aa0"
+   ],
+   "published_rows": 2,
+   "rerun": "python scratch/fund_runs/0001911066/retire_check.py data/output/private_markets_holdings.parquet --plant",
+   "owner_words": "Standing rule D-252 (owner 2026-11-10, 'run as recommended'): an agent retires a real-error verdict when a deterministic check shows the cited rows at filed values",
+   "decided_by": "owner",
+   "decided_on": "2026-11-15",
+   "applied_by": "agent:fund-ncz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)"
+  }
+ ]
+}

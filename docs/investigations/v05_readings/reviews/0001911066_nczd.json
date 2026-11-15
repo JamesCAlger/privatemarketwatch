@@ -1,0 +1,170 @@
+{
+ "reviewer_id": "agent:review-nczc-opus",
+ "cik": "0001911066",
+ "label": "nczd",
+ "before": "ncxf",
+ "head_build": "ncza",
+ "review_mode": "change-only re-review of nczd against the nczc review (0001911066_nczc.json). Re-verified: the one nczc rejection, every report change, holdings_field_diff nczd nczc, both retirement checks on nczd (PASS, all plants caught), the wrapper (unchanged since nczc). Packet-finding and unchanged observation reviews carried from nczc; nczd ledger has 0 outstanding (8 verdict_retired, 20 as_filed, 5 informational, 4 not_applicable, 5 adjudicated_false_alarm, 1 remediated_promoted).",
+ "report_digest": "c99d16a1a65dc89f4b34879b5c31e83948c654c9e225e2bd6a0843956e0c7ab4",
+ "finding_reviews": [],
+ "packet_finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_69fe30660d88",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "issuer_name_printed 2024-06-30, one row (ROW-4a736dabc3f7aae0 / c-427). ncza published 'BlackRock Liquidity Funds Treasury'; the printed company cell is 'BlackRock Liquidity Funds T-Fund - Institutional Class' (read with page_line.py). nczc publishes the printed name via one row correction (the only issuer_name difference nczc vs ncxf). Finding absent from the nczc ledger. Other quarters' published names match their printed cells (e.g. 2024-09-30 'BlackRock Liquidity Funds T-Fund Institutional Class').",
+   "evidence": [{"accession": "0001628280-24-036317", "text": "Cash Equivalents BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"}]
+  },
+  {
+   "finding_id": "RVQ_BLK_b14ee9d9deb1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fv_conservation 2024-03-31. In ncza the money-market row 'Blackrock T-Fund Inst' (6,838,000) was FUND/OTHER/FUND under index class CASH, so the ex-cash side carried it: 6,838/626,799 = 1.09 pct. The wrapper adds cash_identifiers ['Blackrock T-Fund Inst'] (exact full-identifier match, CIK-restricted, source_encodings.py) plus 'blackrock t-fund' to non_private_markers and the cash fallback pattern. Dry run on nczc bdc_holdings: the exact identifier matches only the 2024-03-31 row; the substring 'blackrock t-fund' also matches only that row (all other quarters read 'BlackRock Liquidity Funds T-Fund ...'). nczc vs ncxf: asset_category, asset_class, exposure_type change on that one row only. Every other money-market row of this fund is CASH/CASH/LIQUID/CASH, and production has 346 money-market rows in 46 funds on CASH/CASH/LIQUID/CASH; this row was the only FUND/OTHER/FUND/CASH one. index_classification was already CASH, so the published headline (sum over all index classes, published basis) is unchanged: 633,650,000 in both builds. Strict totals: published non-cash FV and cost equal the printed balance-sheet figures to the dollar in 14 of 14 quarters (626,799 / 633,269 at 2024-03-31).",
+   "evidence": [
+    {"accession": "0001628280-24-022649", "text": "Cash Equivalents Blackrock T-Fund Inst 5.20 % 6,838 6,838 6,838 1.45 % First American Government Obligations Fund - Class Z 5.20 % 13 13 13 - % Total Cash Equivalents 6,851 6,851 1.45 % Total Investments $ 640,120 $ 633,650"},
+    {"accession": "0001628280-24-022649", "text": "Non-controlled/non-affiliate company investments, at fair value (amortized cost of $ 633,269 and $ 516,168 , respectively) $ 626,799 $ 512,036"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f9998836edb6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pik_le_interest_rate 2024-03-31, verdict claimed interest_rate 6.0 (cash leg). Re-ran retire_check_pik.py on data/output and nczc: PASS (American Student Transportaton interest_rate 14.5, pik_rate 8.5 = printed 6.00 cash + 8.50 PIK; no row of the 296-row quarter has pik_rate above interest_rate); all four plants caught on both. Read the cited line on the page. nczc ledger: verdict_retired, retirement_id VR-FL-1911066-01. Retirement record applied_by 'agent:fund-ncz-sonnet under the standing rule (owner ruling D-252, 2026-11-10)'; decided_by 'owner' follows the format of the existing standing-rule store. Carried to nczd: retire_check_pik.py on nczd PASS, plants caught.",
+   "evidence": [{"accession": "0001628280-24-022649", "text": "American Student Transportaton Partners, Inc (4) Subordinated Debt N/A 6.00 % (Cash) 8.50 % (PIK) 9/11/2029 1,640 1,600 1,569 0.33 %"}]
+  },
+  {
+   "finding_id": "RVQ_REV_5f723d58f7d8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C103 2025-06-30. (a) Retirement: retire_check.py on data/output and nczc PASS (Cohnreznick undrawn line ROW-402e23d5ac7c9aa0 fair_value 0, cost -11,000, as printed '3,477 ( 11 ) - -'); four plants caught; ledger verdict_retired VR-FL-1911066-02, applied_by the investigator under D-252. Sound. (b) The 11 rows: read all 11 printed lines; each is an undrawn 'First Lien Debt (Delayed Draw)' or 'Revolving Loan' with bracketed fair value, cost a dash (PT Intermediate cost 1); published fair values equal the printed figures. C103 excludes rows whose issuer/instrument/identifier text names a revolver or delayed draw (_unfunded_position_sql); the older members carry the company name only, so the text was missing. Setting instrument_description to the printed instrument changes what C103 sees, but towards the page: the values are untouched and the rows are what C103 is designed to pass (sign-consistent unfunded marks). It is a real, page-backed data fix, not a check workaround. Caveats: (1) it is selective: 617 loan rows print 'Revolving' or 'Delayed Draw' and still publish no instrument text, so C103 will misfire again on any future undrawn line of the old member form (see rejected observation instrument-description-not-published-from-page); (2) nczd: VR-FL-1911066-02's reason text is now corrected ('handled by row corrections that publish the printed instrument ... no check repair request was raised'); retire_check.py on nczd PASS, plants caught.",
+   "evidence": [
+    {"accession": "0001628280-25-039316", "text": "Cohnreznick Advisory LLC (4) (6) (11) First Lien Debt (Delayed Draw) S + 4.00 % 8.30 % 3/31/2032 3,477 ( 11 ) - - %"},
+    {"accession": "0001628280-25-039316", "text": "RailPros Parent, LLC (4) (7) (11) Revolving Loan S + 4.50 % 8.83 % 5/24/2032 1,579 - ( 15 ) - %"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Reviewer scan of every nczc row against the printed line carrying its fair-value tag: 700 equity rows with a printed unit count, 0 differ from the published shares_held. The x1,000 tagging is real (BroadcastMed printed 43,679). Proposed detector is concrete; it needs the page reader, which exists.",
+   "evidence": [{"accession": "0001628280-23-016990", "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"}]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "nczc money-market unit counts now equal the printed counts (2024-09-30 BlackRock 26,526,567, First American 10,821; 2025-06-30 BlackRock 115,767,950). Cause attributed to the shared share-count step; detector (unit count differs from the row's own tagged count) is concrete and low false-positive.",
+   "evidence": [{"accession": "0001628280-24-046755", "text": "BlackRock Liquidity Funds T-Fund Institutional Class 4.83 % 26,526,567 $ 26,527 $ 26,527 3.42 %"}]
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "outcome": "supported",
+   "rationale": "Scan: 0 rows printing 'Preferred' in the instrument cell published COMMON_EQUITY, and 0 PREFERRED_EQUITY rows without 'Preferred' printed (106 preferred rows). Detector is a simple text-versus-class check.",
+   "evidence": [{"accession": "0001628280-23-016990", "text": "BroadcastMed Holdco, LLC (4) (8) (9) Series A-3 Preferred Units 10/4/2022 43,679 655 826 0.32 %"}]
+  },
+  {
+   "observation_key": "pik-only-coupon-with-spread-published-without-rate",
+   "outcome": "supported",
+   "rationale": "Scan: 5,016 loan rows compared; no loan prints a rate figure and publishes none; published rates equal a printed figure or cash + PIK on all but 5 rows, each explained (KENG / Ingram print the rate as a decimal 0.0936 / 0.0705; KENG 2025-12-31 prints 8.34 without '%'; Tau Buyer prints cash 6.23 + PIK 2.50 = published 8.73). The pik_only_tag_reading gap for spread rows is shared code; the detector 'spread and PIK rate but no interest rate' is concrete.",
+   "evidence": [{"accession": "0001911066-26-000066", "text": "New Era Technology, LLC (6) (7) First Lien Debt (Delayed Draw) S + 6.25 % 10.10 % (PIK) 6/30/2030 5,454 5,454 5,454 0.38 %"}]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Fair value, cost and par of every row equal its printed line (0 differences on 5,828 rows), and liens of the rotated 2025-06-30 / 2025-12-31 rows agree with the printed instrument. Industry of those rows not checked by me either. Detector (published name versus printed company cell of the tagged line) is concrete.",
+   "evidence": [{"accession": "0001911066-26-000012", "text": "Trucordia (PCF Insurance Services of the West) (6) (11) First Lien Debt S + 3.25 % 6.97 % 6/17/2032 1,027 1,025 1,022 0.07 %"}]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "nczc: 0 loan rows without maturity_date in all 14 quarters. Solaray 2023-09-30 prints a maturity before the report date, as the observation says.",
+   "evidence": [{"accession": "0001628280-23-035967", "text": "Solaray, LLC (4) (6) (7) First Lien Term Loan S + 6.50 % 11.90 % 9/9/2023 6,907 6,902 6,731 2.23 %"}]
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "outcome": "supported",
+   "rationale": "nczc publishes no CASH row at 2023-03-31, 2023-06-30, 2023-09-30 while the page prints one un-itemised cash-equivalents line. Non-cash totals tie to the dollar, so only the cash side (and the all-class headline) is short by 16.0 / 6.6 / 5.4M in those quarters. Parked with hypotheses tested; the proposed check (printed Total Cash Equivalents versus sum of published CASH rows) is concrete.",
+   "evidence": [{"accession": "0001628280-23-016990", "text": "Cash Equivalents (14) 16,012 16,012 6.16 %"}]
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "outcome": "supported",
+   "rationale": "Verified: ncza row FUND/OTHER/FUND under index CASH; nczc CASH/CASH/LIQUID. fv_conservation did fire and clear. Caveat on recurrence: fv_conservation only catches it when the money-market line is large enough to break its tolerance; the observation's own suggested_check (index CASH with asset_category not CASH) is the more reliable detector and production still holds 23 such rows in other funds (17 OTHER, 6 FUND).",
+   "evidence": [{"accession": "0001628280-24-022649", "text": "Blackrock T-Fund Inst 5.20 % 6,838 6,838 6,838 1.45 %"}]
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "outcome": "supported",
+   "rationale": "Reviewer scan agrees: co-invest LPs printed under equity are split between PRIVATE_EQUITY_FUND (e.g. INS Co-Invest, GrowthCurve, Hermod, Starlight, HMA) and COMMON_EQUITY (CMP Ren). Classing a single-company co-invest is an owner question; leaving it is right.",
+   "evidence": [{"accession": "0001911066-26-000066", "text": "BayPine Monarch Co-Invest, LP (6) (8) (13) Limited Partnership Interests 6/3/2025 1,000,000 1,018 1,112 0.08 %"}]
+  },
+  {
+   "observation_key": "distribution-per-share-missing-after-share-classes",
+   "outcome": "supported",
+   "rationale": "The per-class NAV print is real (quote). Which class to publish is an owner question with a precedent (D-173). Limited check: I did not re-derive the blank published nav_per_share per quarter. The key name says distribution but the content is NAV per share; harmless.",
+   "evidence": [{"accession": "0001911066-26-000066", "text": "Net Asset Value per Share Class S Shares: Net assets $ 45,238 $ 42,872 Net asset value per share $ 23.94 $ 24.25"}]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Read the line: the company cell prints 'Dragon - NCR Voyix', instrument 'First Lien Term Loan'. One row; left. Detector concrete.",
+   "evidence": [{"accession": "0001628280-24-046755", "text": "Dragon - NCR Voyix (4) (6) First Lien Term Loan S + 3.25 % 7.85 % 9/30/2031 7,000 6,965 6,965 0.90 %"}]
+  },
+  {
+   "observation_key": "cash-rate-tag-read-as-all-in",
+   "outcome": "supported",
+   "rationale": "Marco APE 2023-03-31 published 14.75 with PIK 14.75, matching the printed coupon; the rate scan shows no doubled rates. The trap (cash_leg reading adds PIK onto a corrected all-in rate) is real and the detector is concrete.",
+   "evidence": [{"accession": "0001628280-23-016990", "text": "Marco APE Opco Holdings, LLC (4) Subordinated Debt N/A 14.75% (PIK) 9/2/2026 8,951 8,451 7,547 2.91 %"}]
+  },
+  {
+   "observation_key": "instrument-description-not-published-from-page",
+   "outcome": "supported",
+   "rationale": "Round 3 (restated counts): supported. gapcount.py now joins only current-period page rows (period_role = 'current') with one row per row_id. I re-ran it on nczd: 2,876 loan rows print tranche or lien text and publish no instrument_description, within the 2,885 loan rows that have empty instrument text at all, so there is no double-counting. It finds 612 printed delayed-draw or revolver rows without instrument_type, equal to my contextRef count. The lien-or-tranche-only figure, 2,836, also equals mine. Scope, cause (no step reads the printed instrument cell), parked action and request NCZ-R1 are now consistent and satisfy fix, flag, propose rule given the owner brief against mass row corrections. Earlier round, kept for the record: nczd change-only check of my nczc rejection. Resolved then: the scope now covers 2023-03-31 to 2025-09-30; the cause is stated (no step or wrapper key reads the printed instrument cell); the action is parked with request NCZ-R1. With the owner brief against thousands of row corrections, parked plus a concrete shared-code request satisfies fix, flag, propose rule: a fund agent may not change shared code, and the escalation is specific. Not resolved: the headline counts are wrong. 'In nczd 4,529 loan rows ... publish no instrument_description' cannot be true. nczd has 5,016 loan rows, and only 2,885 have an empty instrument_description of any kind (gap_nczd.sql). gapcount.py joins holdings to bdc_ixbrl_field_status on accession + identifier. Each 10-Q carries current and comparative contexts under the same identifier, so rows fan out; that is also why its join reports '9,070 of 9,107 rows' for a fund with 5,828. The same fan-out probably inflates the 977 instrument_type figure. My contextRef join (one printed line per row, 5,828 of 5,828 mapped) gives 2,836 loan rows that print a lien or tranche word with no instrument_description, and 612 printed delayed-draw or revolver rows with no instrument_type. Fix: deduplicate the join (accession + src_context_id, or take the current-period row only) and restate both counts; then this is supported. The detector proposal is fine.",
+   "evidence": [
+    {"accession": "0001628280-25-010237", "text": "CRCI Longhorn Holdings, Inc. (CRCI Holdings Inc) (4) (7) (11) Revolving Loan S + 5.00 % 9.36 % 8/27/2031 2,567 1,131 1,162 0.14 %"},
+    {"accession": "0001628280-25-039316", "text": "Thompson Safety LLC (4) (11) Revolving Loan S + 5.00 % 9.30 % 6/25/2032 1,364 ( 7 ) ( 7 ) - %"}
+   ]
+  },
+  {
+   "observation_key": "lien-printed-not-published",
+   "outcome": "supported",
+   "rationale": "New in nczd; these are the three rows I reported as unflagged errors at nczc. holdings_field_diff nczd nczc: only these 3 rows change (instrument_description, lien_position, corrected_fields): ROW-043bacd5679e57da ERA 2026-03-31 null -> First Lien, ROW-0918e36503f02498 ICE USA 2026-03-31 null -> First Lien, ROW-4543041c3137bdef II-VI 2026-06-30 Unsecured -> First Lien. Read the three new row-correction lines; each quotes the printed line and sets 'First Lien Debt' as printed (II-VI's member text did say 'Subordinated Debt', a filer tag error). My independent contextRef scan of all 5,828 nczd rows: no loan printed 'First Lien' is now published with another or no lien, and no other lien mismatch exists. That agrees with the investigator's 3, though lienscan.py's 9,070 'joined rows' include fan-out duplicates and are not distinct rows. The proposed detector (published lien against printed lien words) is concrete and gave no false positive here.",
+   "evidence": [
+    {"accession": "0001628280-26-055912", "text": "II-VI INCORPORATED (6) (11) (12) First Lien Debt S + 1.75 % 5.39 % 7/2/2029 1,091 1,094 1,093 0.06 %"},
+    {"accession": "0001911066-26-000066", "text": "ICE USA Infrastructure, Inc. (15) First Lien Debt S + 5.75 % 9.42 % 3/15/2030 1,598 1,560 1,588 0.11 %"}
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "NCZ-R1",
+   "outcome": "supported",
+   "rationale": "Round 3: supported. 'what' now says it is a shared extractor change (new opt-in wrapper key and code), not an acceptance change, labelled acceptance_change only because the contract has two classes and that one routes to the owner. 'why' now says about 2,840 loan rows (2,836 to 2,876 by pattern) and 5,807 of 5,828 rows joined to a printed line, consistent with my counts and the fund's row total. Before implementation it still needs shared-code review, focused and false-positive tests, and a cohort semantic diff. Earlier round, kept for the record: Substance supported: an opt-in wrapper key that fills a blank instrument_description from the tranche cell of the row's own printed line is the right mechanism. It carries forward, unlike 2,800 row corrections, and the false-positive test (company or industry text in the cell) is the right guard. Two defects. (1) Classification: this is not an acceptance change. Nothing in a gate or threshold changes; it is a new shared extractor or staging key, which needs shared-code review and a cohort semantic diff. 'acceptance_change' gets it to the owner, which is the right destination, but it mislabels the request. The contract offers only verification_bug or acceptance_change; record it as acceptance_change with the note 'shared extractor change, not a gate change', or have the owner add a shared_code class. (2) The 'why' tells the owner '4,529 loan rows' and '9,070 of this fund's 9,107 rows'. The fund has 5,828 published rows and 2,885 loan rows with empty instrument text; the figures come from an accession + identifier join that fans out over comparative contexts. Restate as about 2,836 loan rows with printed lien or tranche text (612 delayed-draw or revolver rows without instrument_type) before it goes to the owner. Fix the count and the gap note, and this is supported.",
+   "evidence": [{"accession": "0001628280-25-039316", "text": "Thompson Safety LLC (4) (11) Revolving Loan S + 5.00 % 9.30 % 6/25/2032 1,364 ( 7 ) ( 7 ) - %"}]
+  }
+ ],
+ "unflagged_errors": [
+  {
+   "row": "0001911066|2023-03-31..2025-09-30|612 rows",
+   "field": "instrument_type / instrument_description",
+   "published": "null",
+   "printed": "First Lien Term Loan (Delayed Draw) / Subordinated Debt (Delayed Draw) / Revolving Loan",
+   "fair_value": null,
+   "note": "Still open in nczd (parked, request NCZ-R1). The three lien errors reported at nczc are fixed in nczd.",
+   "evidence": [{"accession": "0001628280-25-010237", "text": "CRCI Longhorn Holdings, Inc. (CRCI Holdings Inc) (4) (7) (11) Revolving Loan S + 5.00 % 9.36 % 8/27/2031 2,567 1,131 1,162 0.14 %"}]
+  }
+ ],
+ "scans": {
+  "rerun_on_nczd": "Re-ran the contextRef printed-line scan on nczd (5,828 of 5,828 rows mapped): fair value, cost, par and equity units 0 differences; rates 5 explained exceptions as at nczc; lien mismatches 0 (were 3). Other scans (reference codes, strict totals, footnote markers) carried: nczd differs from nczc only on the 3 lien rows.",
+  "holdings_field_diff_nczd_nczc": "instrument_description 3, lien_position 3, corrected_fields 3; 0 rows added or removed; nothing else. Only the intended changes.",
+  "declared_changes": "holdings_field_diff nczd ncxf: issuer_name 1, instrument_description 14, lien_position 3, instrument_type 12, asset_category 1, asset_class 1, exposure_type 1, corrected_fields 16, entity_id 1, canonical_name 1; rows added 0, removed 0. The report's declared_changes and rows_added/rows_removed equal this exactly. The New Era instrument_type row is now attributed to HEAD code.",
+  "row_corrections": "15 added CIK 0001911066 lines in total: the 12 read at nczc plus 3 lien rows (II-VI 2026-06-30, ICE USA and ERA 2026-03-31). Each quoted line read on the page.",
+  "wrapper": "data/overrides/bdc_xbrl_wrappers/0001911066.json unchanged since nczc (cash_identifiers 'Blackrock T-Fund Inst' plus marker and pattern); nczc assessment carried.",
+  "page_sample": "No redraw needed. The 20-card nczc sample (docs/investigations/v05_readings/samples/0001911066-nczc/sample.csv) contains none of the 3 changed rows, and every other row is identical in nczd. Caveat: the sample scores instrument_and_class 0 pct wrong although card C001 (Nouryon 2024-03-31) has an empty instrument_description. It does not measure the instrument-text gap, so a clean sample is not evidence against it."
+ },
+ "layout": "investigations is empty and the packet write-ups sit in closed_finding_notes. The gate requires investigations only for outstanding ledger findings; nczd has 0, so it passes and the gate ignores closed_finding_notes. packet_finding_reviews here covers them."
+}
