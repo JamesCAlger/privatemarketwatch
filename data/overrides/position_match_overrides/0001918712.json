@@ -37,6 +37,22 @@
       "residual_risk": "Natural key (name, date, FV within 1 pct or 1,000); exactly one 2025-06-30 row is named Pallas NZ Funding Trust No. 1 after the corrections.",
       "created_by": "fund-agent-0001918712-nbas-2026-11-11",
       "review_id": "RVQ_BLK_380f28aac563"
+    },
+    {
+      "begin_report_date": "2024-12-31",
+      "end_report_date": "2025-03-31",
+      "begin_issuer_name": "Hyperion Refinance S.a r.l.",
+      "end_issuer_name": "Hyperion Refinance S.a r.l.",
+      "begin_fair_value": 48641300.0,
+      "end_fair_value": 41367700.0,
+      "match_method": "A_within_filing",
+      "action": "reject",
+      "mechanism": "fpfix (b1114b force_pair collision): A_within_filing joins the 2025-03-31 10-Q (0001918712-25-000030) current and comparative contexts on the shifted Keystone member. The current context c-542 carries Hyperion's printed values; the comparative 2024-12-31 context carries Keystone's own first lien term loan (48,641.3, SOFR 5.00, 05/2027). The nbas row correction that names c-542 Hyperion is keyed on the identifier with no src_context_id, so it also renames the comparative Keystone row, and the matcher pairs Keystone's term loan with Hyperion's loan (other borrower, spread and maturity). The existing force_pair already gives the Hyperion end line its true predecessor (Hyperion 2024-12-31, 40,438.1). Reject the within-filing pair.",
+      "evidence": "Printed 2024-12-31 comparative in 0001918712-25-000030: 'Keystone Agency Partners LLC (10) First lien senior secured revolving loan 9.33 % SOFR (Q) 5.00 % 05/2027 58.8 57.5 58.8 (2)(7)(12) First lien senior secured loan 9.33 % SOFR (Q) 5.00 % 05/2027 48,641.3 48,194.6 48,641.3 (2)(7)(12)'. Printed 2025-03-31: 'Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)' and 'Keystone Agency Partners LLC (10) First lien senior secured loan 9.05 % SOFR (Q) 4.75 % 05/2027 51,790.1 51,391.6 51,790.1 (2)(7)(12)'.",
+      "confidence": 0.95,
+      "residual_risk": "Root cause is the row correction's missing src_context_id (row_corrections.csv, 0001918712 2025-03-31 Keystone -> Hyperion); while it stands, the comparative Keystone row in this 10-Q carries the Hyperion name. Natural key (name, date, FV within 1 pct or 1,000).",
+      "created_by": "fund-agent-0001918712-fpfix-2026-11-16",
+      "review_id": "RVQ_BLK_dd84118d0209"
     }
   ]
 }
